@@ -1,2 +1,5 @@
 # TensorFlow.NET
-TensorFlow binding for .NET Standard
+TensorFlow.NET provides .NET Standard binding for [TensorFlow](https://www.tensorflow.org/).
+
+
+TensorFlow.NET is a member project of SciSharp stack.

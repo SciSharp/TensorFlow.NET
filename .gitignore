@@ -328,3 +328,9 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+/tensorflowlib/win7-x64/native/libtensorflow.dll
+/tensorflowlib/osx/native/libtensorflow_framework.dylib
+/tensorflowlib/osx/native/libtensorflow.dylib
+/tensorflowlib/linux/native/libtensorflow_framework.so
+/tensorflowlib/linux/native/libtensorflow.so
+/src/TensorFlowNET.Core/libtensorflow.dll
