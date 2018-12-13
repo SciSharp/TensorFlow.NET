@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -26,7 +27,7 @@ namespace TensorFlowNET.Core
             _nodes_by_name = new Dictionary<string, Operation>();
         }
 
-        public unsafe Operation create_op(object inputs, string op_type = "", string name = "")
+        public unsafe Operation create_op(string op_type, object inputs, TF_DataType[] dtypes, TF_DataType[] input_types = null, string name = "")
         {
             if (String.IsNullOrEmpty(name))
             {
@@ -51,9 +52,9 @@ namespace TensorFlowNET.Core
             return ++_next_id_counter;
         }
 
-        public void get_operations()
+        public Operation[] get_operations()
         {
-
+            return _nodes_by_name.Values.Select(x => x).ToArray();
         }
     }
 }

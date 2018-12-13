@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-
-
 namespace TensorFlowNET.Core
 {
     public static class Tensorflow
@@ -14,7 +12,7 @@ namespace TensorFlowNET.Core
         public static unsafe Tensor constant(object value)
         {
             var g = ops.get_default_graph();
-            g.create_op(value, "Const");
+            g.create_op("Const", value, new TF_DataType[] { TF_DataType.TF_DOUBLE });
 
             return new Tensor();
         }
@@ -28,6 +26,11 @@ namespace TensorFlowNET.Core
         }
 
         public static string VERSION => Marshal.PtrToStringAnsi(c_api.TF_Version());
+
+        public static Graph get_default_graph()
+        {
+            return ops.get_default_graph();
+        }
 
         public static Graph Graph()
         {
