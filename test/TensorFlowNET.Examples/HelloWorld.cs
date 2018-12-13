@@ -19,8 +19,7 @@ namespace TensorFlowNET.Examples
               The value returned by the constructor represents the output
               of the Constant op.*/
             var graph = tf.get_default_graph();
-            var hello = tf.constant(4.0);
-            //var hello = tf.constant("Hello, TensorFlow!");
+            var hello = tf.constant("Hello, TensorFlow!");
 
             // Start tf session
             // var sess = tf.Session();

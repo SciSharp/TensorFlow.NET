@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-
+using Tensorflow;
 using TF_DataType = Tensorflow.DataType;
 
 namespace TensorFlowNET.Core
@@ -19,6 +19,7 @@ namespace TensorFlowNET.Core
         public IntPtr handle;
         private Dictionary<int, Operation> _nodes_by_id;
         private Dictionary<string, Operation> _nodes_by_name;
+        private Dictionary<string, int> _names_in_use;
         public int _version;
         private int _next_id_counter;
 
@@ -27,17 +28,20 @@ namespace TensorFlowNET.Core
             this.handle = graph;
             _nodes_by_id = new Dictionary<int, Operation>();
             _nodes_by_name = new Dictionary<string, Operation>();
+            _names_in_use = new Dictionary<string, int>();
         }
 
-        public unsafe Operation create_op(string op_type, object inputs, TF_DataType[] dtypes, TF_DataType[] input_types = null, string name = "")
+        public unsafe Operation create_op(string op_type, object inputs, TF_DataType[] dtypes, TF_DataType[] input_types = null, Dictionary<string, AttrValue> attrs = null, string name = "Const")
         {
             if (String.IsNullOrEmpty(name))
             {
-                op_type = name;
+                name = op_type;
             }
 
-            var op = new Operation(this, inputs);
-            op.name = name;
+            name = unique_name(name);
+            var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
+
+            var op = new Operation(node_def, this, inputs, dtypes);
 
             return op;
         }
@@ -52,6 +56,22 @@ namespace TensorFlowNET.Core
         public int _next_id()
         {
             return ++_next_id_counter;
+        }
+
+        public string unique_name(string name)
+        {
+            var name_key = name.ToLower();
+            if (_names_in_use.ContainsKey(name_key))
+            {
+                _names_in_use[name_key]++;
+            }
+            else
+            {
+                _names_in_use[name_key] = 1;
+            }
+                
+
+            return $"{name}_{_names_in_use[name_key]}";
         }
 
         public Operation[] get_operations()
