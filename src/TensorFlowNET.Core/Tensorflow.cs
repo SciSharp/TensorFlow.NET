@@ -3,36 +3,35 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
+
+
 namespace TensorFlowNET.Core
 {
     public static class Tensorflow
     {
-        public const string TensorFlowLibName = "libtensorflow";
+        public delegate void Deallocator(IntPtr data, IntPtr size, IntPtr deallocatorData);
 
-        [DllImport(TensorFlowLibName)]
-        public static extern unsafe IntPtr TF_Version();
-
-        public static string VERSION => Marshal.PtrToStringAnsi(TF_Version());
-
-        [DllImport(TensorFlowLibName)]
-        static extern unsafe IntPtr TF_NewOperation(IntPtr graph, string opType, string oper_name);
-
-        [DllImport(TensorFlowLibName)]
-        static extern unsafe IntPtr TF_FinishOperation(IntPtr desc, IntPtr status);
-
-        public static IntPtr constant<T>(T value)
+        public static unsafe Tensor constant(object value)
         {
-            var g = Graph();
-            return TF_NewOperation(g.TFGraph, "Const", "Const");
+            var g = ops.get_default_graph();
+            g.create_op(value, "Const");
+
+            return new Tensor();
         }
 
-        [DllImport(TensorFlowLibName)]
-        static extern unsafe IntPtr TF_NewGraph();
+        public static Deallocator FreeTensorDataDelegate = FreeTensorData;
+
+        [MonoPInvokeCallback(typeof(Deallocator))]
+        internal static void FreeTensorData(IntPtr data, IntPtr len, IntPtr closure)
+        {
+            Marshal.FreeHGlobal(data);
+        }
+
+        public static string VERSION => Marshal.PtrToStringAnsi(c_api.TF_Version());
 
         public static Graph Graph()
         {
-            Graph g = new Graph();
-            g.TFGraph = TF_NewGraph();
+            Graph g = new Graph(c_api.TF_NewGraph());
             return g;
         }
     }

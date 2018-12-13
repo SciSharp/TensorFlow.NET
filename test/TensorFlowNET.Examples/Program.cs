@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 
 namespace TensorFlowNET.Examples
 {
@@ -6,7 +8,12 @@ namespace TensorFlowNET.Examples
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var assembly = Assembly.GetEntryAssembly();
+            foreach(Type type in assembly.GetTypes().Where(x => x.GetInterfaces().Contains(typeof(IExample))))
+            {
+                var example = (IExample)Activator.CreateInstance(type);
+                example.Run();
+            }
         }
     }
 }

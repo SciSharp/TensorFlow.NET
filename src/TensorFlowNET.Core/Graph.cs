@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace TensorFlowNET.Core
@@ -12,11 +13,21 @@ namespace TensorFlowNET.Core
     /// </summary>
     public class Graph
     {
-        public IntPtr TFGraph { get; set; }
+        public IntPtr handle;
 
-        public Operation create_op()
+        public Graph(IntPtr graph)
         {
-            var op = new Operation(this);
+            this.handle = graph;
+        }
+
+        public unsafe Operation create_op(object inputs, string op_type = "", string name = "")
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                op_type = name;
+            }
+
+            var op = new Operation(this, inputs);
 
             return op;
         }
