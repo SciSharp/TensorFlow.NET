@@ -10,6 +10,8 @@ using TF_Operation = System.IntPtr;
 using TF_Status = System.IntPtr;
 using TF_Tensor = System.IntPtr;
 
+using TF_DataType = Tensorflow.DataType;
+
 using static TensorFlowNET.Core.Tensorflow;
 
 namespace TensorFlowNET.Core

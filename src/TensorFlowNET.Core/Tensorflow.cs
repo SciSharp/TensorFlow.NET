@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using TF_DataType = Tensorflow.DataType;
 
 namespace TensorFlowNET.Core
 {
@@ -12,7 +13,7 @@ namespace TensorFlowNET.Core
         public static unsafe Tensor constant(object value)
         {
             var g = ops.get_default_graph();
-            g.create_op("Const", value, new TF_DataType[] { TF_DataType.TF_DOUBLE });
+            g.create_op("Const", value, new TF_DataType[] { TF_DataType.DtDouble });
 
             return new Tensor();
         }

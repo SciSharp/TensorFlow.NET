@@ -4,6 +4,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using TF_DataType = Tensorflow.DataType;
+
 namespace TensorFlowNET.Core
 {
     /// <summary>
