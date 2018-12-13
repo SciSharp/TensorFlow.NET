@@ -14,10 +14,16 @@ namespace TensorFlowNET.Core
     public class Graph
     {
         public IntPtr handle;
+        private Dictionary<int, Operation> _nodes_by_id;
+        private Dictionary<string, Operation> _nodes_by_name;
+        public int _version;
+        private int _next_id_counter;
 
         public Graph(IntPtr graph)
         {
             this.handle = graph;
+            _nodes_by_id = new Dictionary<int, Operation>();
+            _nodes_by_name = new Dictionary<string, Operation>();
         }
 
         public unsafe Operation create_op(object inputs, string op_type = "", string name = "")
@@ -28,8 +34,26 @@ namespace TensorFlowNET.Core
             }
 
             var op = new Operation(this, inputs);
+            op.name = name;
 
             return op;
+        }
+
+        public void _add_op(Operation op)
+        {
+            _nodes_by_id[op._id] = op;
+            //_nodes_by_name[op.name] = op;
+            _version = Math.Max(_version, op._id);
+        }
+
+        public int _next_id()
+        {
+            return ++_next_id_counter;
+        }
+
+        public void get_operations()
+        {
+
         }
     }
 }

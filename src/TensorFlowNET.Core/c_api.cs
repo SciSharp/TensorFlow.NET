@@ -31,7 +31,7 @@ namespace TensorFlowNET.Core
         public static unsafe extern TF_Status TF_NewStatus();
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe TF_Tensor TF_NewTensor(TF_DataType dataType, IntPtr zeroDims, int num_dims, IntPtr data, size_t len, Deallocator deallocator, IntPtr deallocator_arg);
+        public static extern unsafe TF_Tensor TF_NewTensor(TF_DataType dataType, Int64 dims, int num_dims, IntPtr data, size_t len, Deallocator deallocator, IntPtr deallocator_arg);
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SetAttrTensor(TF_OperationDescription desc, string attr_name, TF_Tensor value, TF_Status status);

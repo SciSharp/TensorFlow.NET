@@ -4,6 +4,8 @@ TensorFlow.NET provides .NET Standard binding for [TensorFlow](https://www.tenso
 
 TensorFlow.NET is a member project of SciSharp stack.
 
+![tensors_flowing](docs/assets/tensors_flowing.gif)
+
 ### How to use
 ```cs
 using tf = TensorFlowNET.Core.Tensorflow;
@@ -14,7 +16,7 @@ namespace TensorFlowNET.Examples
     {
         public void Run()
         {
-
+            var hello = tf.constant("Hello, TensorFlow!");
         }
     }
 }

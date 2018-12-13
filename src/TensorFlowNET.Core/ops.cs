@@ -26,7 +26,7 @@ namespace TensorFlowNET.Core
                 case double value:
                     var v = (double*)Marshal.AllocHGlobal(sizeof(double));
                     *v = value;
-                    tensor = c_api.TF_NewTensor(TF_DataType.TF_DOUBLE, IntPtr.Zero, 0, data: (IntPtr)v, len: (UIntPtr)sizeof(double), deallocator: Tensorflow.FreeTensorDataDelegate, deallocator_arg: IntPtr.Zero);
+                    tensor = c_api.TF_NewTensor(TF_DataType.TF_DOUBLE, 0, 0, data: (IntPtr)v, len: (UIntPtr)sizeof(double), deallocator: Tensorflow.FreeTensorDataDelegate, deallocator_arg: IntPtr.Zero);
                     c_api.TF_SetAttrType(op_desc, "dtype", TF_DataType.TF_DOUBLE);
                     break;
             }
