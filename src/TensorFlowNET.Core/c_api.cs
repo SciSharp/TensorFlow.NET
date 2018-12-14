@@ -11,7 +11,7 @@ using TF_Status = System.IntPtr;
 using TF_Tensor = System.IntPtr;
 
 using TF_DataType = Tensorflow.DataType;
-
+using Tensorflow;
 using static TensorFlowNET.Core.Tensorflow;
 
 namespace TensorFlowNET.Core
@@ -22,6 +22,12 @@ namespace TensorFlowNET.Core
 
         [DllImport(TensorFlowLibName)]
         public static unsafe extern TF_Operation TF_FinishOperation(TF_OperationDescription desc, TF_Status status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe TF_Code TF_GetCode(TF_Status s);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe string TF_Message(TF_Status s);
 
         [DllImport(TensorFlowLibName)]
         public static unsafe extern IntPtr TF_NewGraph();
@@ -39,7 +45,7 @@ namespace TensorFlowNET.Core
         public static extern unsafe int TF_OperationNumOutputs(TF_Operation oper);
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_SetAttrValueProto(TF_OperationDescription desc, string attr_name, void* proto, size_t proto_len, TF_Status status);
+        public static extern unsafe void TF_SetAttrValueProto(TF_OperationDescription desc, string attr_name, IntPtr proto, size_t proto_len, TF_Status status);
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SetAttrTensor(TF_OperationDescription desc, string attr_name, TF_Tensor value, TF_Status status);

@@ -333,5 +333,4 @@ ASALocalRun/
 /tensorflowlib/osx/native/libtensorflow.dylib
 /tensorflowlib/linux/native/libtensorflow_framework.so
 /tensorflowlib/linux/native/libtensorflow.so
-/src/TensorFlowNET.Core/libtensorflow.dll
 /src/TensorFlowNET.Core/tensorflow.dll
