@@ -51,5 +51,10 @@ namespace TensorFlowNET.Core
             Graph g = new Graph(c_api.TF_NewGraph());
             return g;
         }
+
+        public static Session Session()
+        {
+            return new Session();
+        }
     }
 }

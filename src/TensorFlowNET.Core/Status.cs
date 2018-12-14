@@ -10,8 +10,14 @@ namespace TensorFlowNET.Core
         private IntPtr _handle;
         public IntPtr Handle => _handle;
 
-        public string ErrorMessage => c_api.TF_Message(_handle);
+        /// <summary>
+        /// Error message
+        /// </summary>
+        public string Message => c_api.TF_Message(_handle);
 
+        /// <summary>
+        /// Error code
+        /// </summary>
         public TF_Code Code => c_api.TF_GetCode(_handle);
 
         public Status()
