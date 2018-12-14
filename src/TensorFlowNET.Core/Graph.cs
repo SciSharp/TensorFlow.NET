@@ -16,7 +16,8 @@ namespace TensorFlowNET.Core
     /// </summary>
     public class Graph
     {
-        public IntPtr handle;
+        private IntPtr _c_graph;
+        public IntPtr Handle => _c_graph;
         private Dictionary<int, Operation> _nodes_by_id;
         private Dictionary<string, Operation> _nodes_by_name;
         private Dictionary<string, int> _names_in_use;
@@ -25,7 +26,7 @@ namespace TensorFlowNET.Core
 
         public Graph(IntPtr graph)
         {
-            this.handle = graph;
+            this._c_graph = graph;
             _nodes_by_id = new Dictionary<int, Operation>();
             _nodes_by_name = new Dictionary<string, Operation>();
             _names_in_use = new Dictionary<string, int>();

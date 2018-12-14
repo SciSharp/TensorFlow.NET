@@ -22,6 +22,9 @@ namespace TensorFlowNET.Examples
 
             // Start tf session
             var sess = tf.Session();
+
+            // Run the op
+            sess.run(hello);
         }
     }
 }

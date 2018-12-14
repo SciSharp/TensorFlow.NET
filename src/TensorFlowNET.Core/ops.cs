@@ -20,7 +20,7 @@ namespace TensorFlowNET.Core
 
         public static unsafe IntPtr _create_c_op(Graph graph, NodeDef node_def, object inputs)
         {
-            var op_desc = c_api.TF_NewOperation(graph.handle, node_def.Op, node_def.Name);
+            var op_desc = c_api.TF_NewOperation(graph.Handle, node_def.Op, node_def.Name);
             var status = new Status();
 
             foreach (var attr in node_def.Attr)

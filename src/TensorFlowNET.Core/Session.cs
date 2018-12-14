@@ -4,7 +4,13 @@ using System.Text;
 
 namespace TensorFlowNET.Core
 {
-    public class Session
+    public class Session : BaseSession
     {
+        public override byte[] run(Tensor fetches)
+        {
+            var ret = base.run(fetches);
+
+            return ret;
+        }
     }
 }

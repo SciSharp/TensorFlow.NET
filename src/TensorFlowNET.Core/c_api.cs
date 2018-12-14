@@ -9,6 +9,8 @@ using TF_OperationDescription = System.IntPtr;
 using TF_Operation = System.IntPtr;
 using TF_Status = System.IntPtr;
 using TF_Tensor = System.IntPtr;
+using TF_Session = System.IntPtr;
+using TF_SessionOptions = System.IntPtr;
 
 using TF_DataType = Tensorflow.DataType;
 using Tensorflow;
@@ -19,6 +21,9 @@ namespace TensorFlowNET.Core
     public static class c_api
     {
         public const string TensorFlowLibName = "tensorflow";
+
+        [DllImport(TensorFlowLibName)]
+        public static unsafe extern void TF_DeleteSessionOptions(TF_SessionOptions opts);
 
         [DllImport(TensorFlowLibName)]
         public static unsafe extern TF_Operation TF_FinishOperation(TF_OperationDescription desc, TF_Status status);
@@ -52,6 +57,12 @@ namespace TensorFlowNET.Core
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SetAttrType(TF_OperationDescription desc, string attr_name, TF_DataType value);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_Session TF_NewSession(TF_Graph graph, TF_SessionOptions opts, TF_Status status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_SessionOptions TF_NewSessionOptions();
 
         [DllImport(TensorFlowLibName)]
         public static unsafe extern IntPtr TF_Version();
