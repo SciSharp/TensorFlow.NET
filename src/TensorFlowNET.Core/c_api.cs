@@ -28,7 +28,13 @@ namespace TensorFlowNET.Core
         public static unsafe extern TF_Operation TF_FinishOperation(TF_OperationDescription desc, TF_Status status);
 
         [DllImport(TensorFlowLibName)]
+        public static extern string TF_GetBuffer(IntPtr buffer);
+
+        [DllImport(TensorFlowLibName)]
         public static extern unsafe TF_Code TF_GetCode(TF_Status s);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_GraphGetOpDef(TF_Graph graph, string op_name, IntPtr output_op_def, TF_Status status);
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe string TF_Message(TF_Status s);

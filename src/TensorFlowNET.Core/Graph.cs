@@ -32,7 +32,9 @@ namespace TensorFlowNET.Core
             _names_in_use = new Dictionary<string, int>();
         }
 
-        public unsafe Operation create_op(string op_type, object inputs, TF_DataType[] dtypes, TF_DataType[] input_types = null, Dictionary<string, AttrValue> attrs = null, string name = "Const")
+        public unsafe Operation create_op(string op_type, object inputs, TF_DataType[] dtypes, 
+            TF_DataType[] input_types = null, string name = "", 
+            Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)
         {
             if (String.IsNullOrEmpty(name))
             {

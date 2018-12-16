@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using size_t = System.IntPtr;
 
 namespace Tensorflow
 {
@@ -10,7 +9,7 @@ namespace Tensorflow
     public struct TF_Buffer
     {
         public IntPtr data;
-        public size_t length;
+        public int length;
         public IntPtr data_deallocator;
     }
 }

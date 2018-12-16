@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
-using np = NumSharp.Core.NumPy;
 using tensor_pb2 = Tensorflow;
 
 namespace TensorFlowNET.Core

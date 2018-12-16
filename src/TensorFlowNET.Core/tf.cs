@@ -10,14 +10,13 @@ namespace TensorFlowNET.Core
 {
     public static class tf
     {
-        public static Type float32 = typeof(float);
+        public static DataType float32 = DataType.DtFloat;
 
         public delegate void Deallocator(IntPtr data, IntPtr size, IntPtr deallocatorData);
 
-        public static unsafe Tensor placeholder(Type dtype, TensorShape shape = null)
+        public static unsafe Tensor placeholder(DataType dtype, TensorShape shape = null)
         {
-
-            return null;
+            return gen_array_ops.placeholder(dtype, shape);
         }
 
         public static unsafe Tensor constant(object value)

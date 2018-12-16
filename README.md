@@ -8,7 +8,7 @@ TensorFlow.NET is a member project of SciSharp stack.
 
 ### How to use
 ```cs
-using tf = TensorFlowNET.Core.Tensorflow;
+using TensorFlowNET.Core;
 
 namespace TensorFlowNET.Examples
 {
