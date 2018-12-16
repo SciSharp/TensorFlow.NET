@@ -5,7 +5,6 @@ using System.Text;
 
 using size_t = System.UIntPtr;
 using TF_Graph = System.IntPtr;
-using TF_OperationDescription = System.IntPtr;
 using TF_Operation = System.IntPtr;
 using TF_Status = System.IntPtr;
 using TF_Tensor = System.IntPtr;
@@ -14,7 +13,7 @@ using TF_SessionOptions = System.IntPtr;
 
 using TF_DataType = Tensorflow.DataType;
 using Tensorflow;
-using static TensorFlowNET.Core.Tensorflow;
+using static TensorFlowNET.Core.tf;
 
 namespace TensorFlowNET.Core
 {
@@ -54,6 +53,14 @@ namespace TensorFlowNET.Core
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SetAttrTensor(TF_OperationDescription desc, string attr_name, TF_Tensor value, TF_Status status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe void TF_SessionRun(TF_Session session, TF_Buffer* run_options,
+                   TF_Input[] inputs, TF_Tensor[] input_values,
+                   int ninputs, TF_Output[] outputs,
+                   TF_Tensor[] output_values, int noutputs,
+                   TF_Operation[] target_opers, int ntargets,
+                   TF_Buffer* run_metadata, TF_Status status);
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SetAttrType(TF_OperationDescription desc, string attr_name, TF_DataType value);

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TensorFlowNET.Core;
-using tf = TensorFlowNET.Core.Tensorflow;
 
 namespace TensorFlowNET.UnitTest
 {

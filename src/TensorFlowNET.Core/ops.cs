@@ -4,8 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Tensorflow;
-using tf = TensorFlowNET.Core.Tensorflow;
-using TF_DataType = Tensorflow.DataType;
+using tf = TensorFlowNET.Core.tf;
 using node_def_pb2 = Tensorflow;
 using Google.Protobuf;
 

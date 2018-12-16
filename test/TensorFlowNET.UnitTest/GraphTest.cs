@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using tf = TensorFlowNET.Core.Tensorflow;
+using TensorFlowNET.Core;
 
 namespace TensorFlowNET.UnitTest
 {

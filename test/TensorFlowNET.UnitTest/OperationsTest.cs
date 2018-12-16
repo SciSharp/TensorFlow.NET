@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using tf = TensorFlowNET.Core.Tensorflow;
+using TensorFlowNET.Core;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -13,6 +13,12 @@ namespace TensorFlowNET.UnitTest
         public void constant()
         {
             tf.constant(4.0);
+        }
+
+        [TestMethod]
+        public void placeholder()
+        {
+            var x = tf.placeholder(tf.float32, shape: new TensorShape(1024, 1024));
         }
     }
 }
