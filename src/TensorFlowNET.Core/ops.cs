@@ -49,6 +49,18 @@ namespace TensorFlowNET.Core
             return node_def;
         }
 
+        public static string _name_from_scope_name(string name)
+        {
+            if (name.EndsWith("/"))
+            {
+                return name.Substring(0, name.Length - 1);
+            }
+            else
+            {
+                return name;
+            }
+        }
+
         public static int uid()
         {
             return 1;

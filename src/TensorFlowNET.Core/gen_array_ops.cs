@@ -12,7 +12,13 @@ namespace TensorFlowNET.Core
 
         public static Tensor placeholder(DataType dtype, TensorShape shape = null)
         {
-            var op = _op_def_lib._apply_op_helper("Placeholder", dtype: dtype, shape: shape);
+            var _op = _op_def_lib._apply_op_helper("Placeholder", dtype: dtype, shape: shape);
+            var _result = _op.outputs;
+            var _inputs_flat = _op.inputs;
+            var _attrs = new Dictionary<string, object>();
+
+            _attrs["dtype"] = _op.get_attr("dtype");
+            _attrs["shape"] = _op.get_attr("shape");
 
             return null;
         }

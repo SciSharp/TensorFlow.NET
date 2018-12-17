@@ -86,8 +86,8 @@ namespace TensorFlowNET.Core
             var op = g.create_op(op_type_name, null, output_types.ToArray(),
                 name: "Placeholder_1/",
                 input_types: new DataType[] { },
-                attrs: null,
-                op_def: null);
+                attrs: attr_protos,
+                op_def: op_def);
 
             return op;
         }

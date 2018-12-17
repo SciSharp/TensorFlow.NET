@@ -15,8 +15,9 @@ namespace TensorFlowNET.Core
         public string name;
         private Tensor[] _outputs;
         public Tensor[] outputs => _outputs;
+        public Tensor[] inputs;
 
-        public Operation(NodeDef node_def, Graph g, object inputs = null, TF_DataType[] output_types = null, object control_inputs = null, TF_DataType[] input_types = null, string original_op = "", string op_def = "")
+        public Operation(NodeDef node_def, Graph g, object inputs = null, TF_DataType[] output_types = null, object control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
             _graph = g;
 
@@ -31,6 +32,25 @@ namespace TensorFlowNET.Core
             }
 
             _graph._add_op(this);
+        }
+
+        public object get_attr(string name)
+        {
+            object ret = null;
+
+            var fields = new string[] { "s", "i", "f", "b", "type", "shape", "tensor", "func" };
+
+            switch (name)
+            {
+                case "dtype":
+                    ret = _outputs[0];
+                    break;
+                case "shape":
+                    ret = new TensorShapeProto();
+                    break;
+            }
+
+            return ret;
         }
     }
 }

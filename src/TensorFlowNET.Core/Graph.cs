@@ -41,10 +41,13 @@ namespace TensorFlowNET.Core
                 name = op_type;
             }
 
-            name = unique_name(name);
+            name = name.EndsWith("/") ? ops._name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
 
-            var op = new Operation(node_def, this, inputs, dtypes);
+            var op = new Operation(node_def, this,
+                inputs: inputs,
+                output_types: dtypes,
+                op_def: op_def);
 
             return op;
         }
