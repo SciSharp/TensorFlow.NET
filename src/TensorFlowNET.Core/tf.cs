@@ -5,6 +5,7 @@ using System.Text;
 using TF_DataType = Tensorflow.DataType;
 using attr_value_pb2 = Tensorflow;
 using Tensorflow;
+using TensorFlowNET.Core.Eager;
 
 namespace TensorFlowNET.Core
 {
@@ -12,11 +13,25 @@ namespace TensorFlowNET.Core
     {
         public static DataType float32 = DataType.DtFloat;
 
+        public static Context context = new Context();
+
+        public static Graph g = new Graph(c_api.TF_NewGraph());
+
         public delegate void Deallocator(IntPtr data, IntPtr size, IntPtr deallocatorData);
+
+        public static unsafe Tensor add(Tensor a, Tensor b)
+        {
+            return null;
+        }
 
         public static unsafe Tensor placeholder(DataType dtype, TensorShape shape = null)
         {
-            return gen_array_ops.placeholder(dtype, shape);
+            var g = ops.get_default_graph();
+            var op = new Operation(g, "Placeholder", "feed");
+
+            var tensor = new Tensor(op, 0, dtype);
+            //return gen_array_ops.placeholder(dtype, shape);
+            return tensor;
         }
 
         public static unsafe Tensor constant(object value)
@@ -38,6 +53,11 @@ namespace TensorFlowNET.Core
             return const_tensor;
         }
 
+        public static void enable_eager_execution()
+        {
+            context.default_execution_mode = Context.EAGER_MODE;
+        }
+
         public static Deallocator FreeTensorDataDelegate = FreeTensorData;
 
         [MonoPInvokeCallback(typeof(Deallocator))]
@@ -55,7 +75,6 @@ namespace TensorFlowNET.Core
 
         public static Graph Graph()
         {
-            Graph g = new Graph(c_api.TF_NewGraph());
             return g;
         }
 

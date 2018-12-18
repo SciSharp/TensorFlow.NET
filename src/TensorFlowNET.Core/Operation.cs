@@ -17,6 +17,17 @@ namespace TensorFlowNET.Core
         public Tensor[] outputs => _outputs;
         public Tensor[] inputs;
 
+        public Operation(Graph g, string opType, string oper_name)
+        {
+            _graph = g;
+
+            var status = new Status();
+
+            var desc = c_api.TF_NewOperation(g.Handle, opType, oper_name);
+            c_api.TF_SetAttrType(desc, "dtype", DataType.DtInt32);
+            c_api.TF_FinishOperation(desc, status.Handle);
+        }
+
         public Operation(NodeDef node_def, Graph g, object inputs = null, TF_DataType[] output_types = null, object control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
             _graph = g;
