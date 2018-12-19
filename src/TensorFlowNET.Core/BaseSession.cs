@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -44,6 +45,24 @@ namespace Tensorflow
 
         private unsafe byte[] _run(Tensor fetches, Dictionary<Tensor, object> feed_dict = null)
         {
+            var feed_dict_tensor = new Dictionary<Tensor, NDArray>();
+
+            if (feed_dict != null)
+            {
+                NDArray np_val = null;
+                foreach (var feed in feed_dict)
+                {
+                    switch (feed.Value)
+                    {
+                        case float value:
+                            np_val = np.asarray(value);
+                            break;
+                    }
+
+                    feed_dict_tensor[feed.Key] = np_val;
+                }
+            }
+            
             var status = new Status();
 
             c_api.TF_SessionRun(_session,
