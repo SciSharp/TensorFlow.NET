@@ -27,7 +27,10 @@
     <None Update="tensorflow.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Tensorflow\op_list_proto_bytes.bin">
+    <None Update="Tensorflow\op_list_proto_array.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Tensorflow\op_list_proto_math.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

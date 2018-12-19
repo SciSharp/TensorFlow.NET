@@ -20,18 +20,11 @@ namespace Tensorflow
 
         public static unsafe Tensor add(Tensor a, Tensor b)
         {
-            return null;
+            return gen_math_ops.add(a, b);
         }
 
         public static unsafe Tensor placeholder(DataType dtype, TensorShape shape = null)
         {
-            /*var g = ops.get_default_graph();
-            var op = new Operation(g, "Placeholder", "feed");
-
-            var tensor = new Tensor(op, 0, dtype);
-            
-            return tensor;*/
-
             return gen_array_ops.placeholder(dtype, shape);
         }
 
