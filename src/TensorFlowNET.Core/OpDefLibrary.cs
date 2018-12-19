@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using Tensorflow;
 using static Tensorflow.OpDef.Types;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public class OpDefLibrary
     {
@@ -39,7 +38,9 @@ namespace TensorFlowNET.Core
                 name = op_type_name;
             }
 
-            foreach(var attr_def in op_def.Attr)
+            string scope = g.unique_name(name) + "/";
+
+            foreach (var attr_def in op_def.Attr)
             {
                 if (attr_def.Type != "type") continue;
                 var key = attr_def.Name;
@@ -84,7 +85,7 @@ namespace TensorFlowNET.Core
             }
 
             var op = g.create_op(op_type_name, null, output_types.ToArray(),
-                name: "Placeholder_1/",
+                name: scope,
                 input_types: new DataType[] { },
                 attrs: attr_protos,
                 op_def: op_def);

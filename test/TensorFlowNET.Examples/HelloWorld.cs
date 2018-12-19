@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using tf = TensorFlowNET.Core.tf;
+using Tensorflow;
 
 namespace TensorFlowNET.Examples
 {

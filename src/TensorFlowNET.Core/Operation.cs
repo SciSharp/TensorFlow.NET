@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Tensorflow;
 using TF_DataType = Tensorflow.DataType;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public class Operation
     {

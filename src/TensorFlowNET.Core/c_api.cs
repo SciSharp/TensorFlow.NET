@@ -12,10 +12,8 @@ using TF_Session = System.IntPtr;
 using TF_SessionOptions = System.IntPtr;
 
 using TF_DataType = Tensorflow.DataType;
-using Tensorflow;
-using static TensorFlowNET.Core.tf;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public static class c_api
     {
@@ -40,7 +38,7 @@ namespace TensorFlowNET.Core
         public static extern unsafe string TF_Message(TF_Status s);
 
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern IntPtr TF_NewGraph();
+        public static unsafe extern TF_Graph TF_NewGraph();
 
         [DllImport(TensorFlowLibName)]
         public static unsafe extern TF_OperationDescription TF_NewOperation(TF_Graph graph, string opType, string oper_name);
@@ -49,7 +47,7 @@ namespace TensorFlowNET.Core
         public static unsafe extern TF_Status TF_NewStatus();
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe TF_Tensor TF_NewTensor(TF_DataType dataType, Int64 dims, int num_dims, IntPtr data, size_t len, Deallocator deallocator, IntPtr deallocator_arg);
+        public static extern unsafe TF_Tensor TF_NewTensor(TF_DataType dataType, Int64 dims, int num_dims, IntPtr data, size_t len, tf.Deallocator deallocator, IntPtr deallocator_arg);
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe int TF_OperationNumOutputs(TF_Operation oper);

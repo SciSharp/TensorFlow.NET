@@ -4,11 +4,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Tensorflow;
-using tf = TensorFlowNET.Core.tf;
 using node_def_pb2 = Tensorflow;
 using Google.Protobuf;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public static class ops
     {

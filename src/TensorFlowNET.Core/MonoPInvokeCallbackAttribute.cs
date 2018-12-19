@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public sealed class MonoPInvokeCallbackAttribute : Attribute
     {

@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Tensorflow;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public static class gen_array_ops
     {
@@ -20,7 +20,8 @@ namespace TensorFlowNET.Core
             _attrs["dtype"] = _op.get_attr("dtype");
             _attrs["shape"] = _op.get_attr("shape");
 
-            return null;
+            var tensor = new Tensor(_op, 0, dtype);
+            return tensor;
         }
 
         private static OpDefLibrary _InitOpDefLibrary()

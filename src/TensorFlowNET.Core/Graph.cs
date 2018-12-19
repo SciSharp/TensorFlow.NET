@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using Tensorflow;
 using TF_DataType = Tensorflow.DataType;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     /// <summary>
     /// TensorFlow uses a dataflow graph to represent your computation in terms of the dependencies between individual operations. 

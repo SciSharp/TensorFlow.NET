@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TensorFlowNET.Core;
+using Tensorflow;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest
         public void GetVersion()
         {
             var ver = tf.VERSION;
-            Assert.IsTrue(ver.Contains("."));
+            Assert.IsTrue(ver.StartsWith("1."));
         }
     }
 }

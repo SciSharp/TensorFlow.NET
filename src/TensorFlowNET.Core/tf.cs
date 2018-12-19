@@ -4,10 +4,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using TF_DataType = Tensorflow.DataType;
 using attr_value_pb2 = Tensorflow;
-using Tensorflow;
-using TensorFlowNET.Core.Eager;
+using Tensorflow.Eager;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public static class tf
     {
@@ -26,12 +25,14 @@ namespace TensorFlowNET.Core
 
         public static unsafe Tensor placeholder(DataType dtype, TensorShape shape = null)
         {
-            var g = ops.get_default_graph();
+            /*var g = ops.get_default_graph();
             var op = new Operation(g, "Placeholder", "feed");
 
             var tensor = new Tensor(op, 0, dtype);
-            //return gen_array_ops.placeholder(dtype, shape);
-            return tensor;
+            
+            return tensor;*/
+
+            return gen_array_ops.placeholder(dtype, shape);
         }
 
         public static unsafe Tensor constant(object value)

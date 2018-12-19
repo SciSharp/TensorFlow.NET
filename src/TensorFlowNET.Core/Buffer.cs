@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using Tensorflow;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public class Buffer
     {

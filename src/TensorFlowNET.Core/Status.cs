@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Tensorflow;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public class Status
     {

@@ -3,10 +3,8 @@ using NumSharp.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Tensorflow;
-using tensor_shape_pb2 = Tensorflow;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public class TensorShape : Shape
     {

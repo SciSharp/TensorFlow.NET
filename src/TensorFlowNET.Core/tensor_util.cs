@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Tensorflow;
 using tensor_pb2 = Tensorflow;
 
-namespace TensorFlowNET.Core
+namespace Tensorflow
 {
     public static class tensor_util
     {
@@ -13,7 +12,7 @@ namespace TensorFlowNET.Core
         {
             NDArray nparray;
             TensorProto tensor_proto = null;
-            TensorShape tensor_shape = new TensorShape();
+            TensorShape tensor_shape = new TensorShape(0);
 
             switch (values)
             {
