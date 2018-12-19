@@ -17,7 +17,9 @@ namespace Tensorflow
 
             var _op = _op_def_lib._apply_op_helper("Add", name: "add", keywords: keywords);
 
-            return null;
+            var tensor = new Tensor(_op, 0, DataType.DtFloat);
+
+            return tensor;
         }
 
         private static OpDefLibrary _InitOpDefLibrary()

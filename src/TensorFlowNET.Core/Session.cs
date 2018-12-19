@@ -6,11 +6,5 @@ namespace Tensorflow
 {
     public class Session : BaseSession
     {
-        public override byte[] run(Tensor fetches)
-        {
-            var ret = base.run(fetches);
-
-            return ret;
-        }
     }
 }

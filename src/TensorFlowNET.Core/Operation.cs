@@ -8,7 +8,7 @@ namespace Tensorflow
     public class Operation
     {
         private Graph _graph;
-        private IntPtr _c_op;
+        public IntPtr _c_op;
         public int _id => _id_value;
         private int _id_value;
         public string name;
@@ -27,7 +27,7 @@ namespace Tensorflow
             c_api.TF_FinishOperation(desc, status.Handle);
         }
 
-        public Operation(NodeDef node_def, Graph g, object inputs = null, TF_DataType[] output_types = null, object control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
+        public Operation(NodeDef node_def, Graph g, List<Tensor> inputs = null, TF_DataType[] output_types = null, object control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
             _graph = g;
 
@@ -38,7 +38,7 @@ namespace Tensorflow
             _outputs = new Tensor[num_outputs];
             for (int i = 0; i < num_outputs; i++)
             {
-                _outputs[i] = new Tensor(this, i, TF_DataType.DtDouble);
+                _outputs[i] = new Tensor(this, i, TF_DataType.DtFloat);
             }
 
             _graph._add_op(this);

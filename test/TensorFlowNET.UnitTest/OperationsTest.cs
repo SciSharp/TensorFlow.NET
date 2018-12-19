@@ -28,8 +28,14 @@ namespace TensorFlowNET.UnitTest
             var b = tf.placeholder(tf.float32);
             var c = tf.add(a, b);
 
-            //sess.run(adder_node, { a: 3, b: 4.5})
-            //sess.run(adder_node, {a: [1,3], b: [2, 4]})
+            using(var sess = tf.Session())
+            {
+                var feed_dict = new Dictionary<Tensor, object>();
+                feed_dict.Add(a, 3);
+                feed_dict.Add(b, 2);
+
+                sess.run(c, feed_dict);
+            }
         }
     }
 }

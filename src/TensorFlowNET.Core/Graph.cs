@@ -31,7 +31,7 @@ namespace Tensorflow
             _names_in_use = new Dictionary<string, int>();
         }
 
-        public unsafe Operation create_op(string op_type, object inputs, TF_DataType[] dtypes, 
+        public unsafe Operation create_op(string op_type, List<Tensor> inputs, TF_DataType[] dtypes, 
             TF_DataType[] input_types = null, string name = "", 
             Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)
         {
@@ -43,9 +43,13 @@ namespace Tensorflow
             name = name.EndsWith("/") ? ops._name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
 
-            var op = new Operation(node_def, this,
+            var op = new Operation(node_def, 
+                this,
                 inputs: inputs,
                 output_types: dtypes,
+                control_inputs: new object[] { },
+                input_types: input_types,
+                original_op: null,
                 op_def: op_def);
 
             return op;
@@ -73,6 +77,7 @@ namespace Tensorflow
             else
             {
                 _names_in_use[name_key] = 1;
+                return name;
             }
                 
 

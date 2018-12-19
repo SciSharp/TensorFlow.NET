@@ -47,17 +47,11 @@ namespace Tensorflow
             }
 
             var attrs = new Dictionary<string, object>();
+
+            // Perform input type inference
             var inputs = new List<Tensor>();
             var input_types = new List<DataType>();
-
-            foreach (var attr in op_def.Attr)
-            {
-                if (keywords.ContainsKey(attr.Name))
-                {
-                    attrs[attr.Name] = keywords[attr.Name];
-                }
-            }
-
+            
             foreach (var input_arg in op_def.InputArg)
             {
                 var input_name = input_arg.Name;
@@ -70,18 +64,38 @@ namespace Tensorflow
                 {
                     attrs[input_arg.TypeAttr] = DataType.DtFloat;
                 }
+
+                if (input_arg.IsRef)
+                {
+
+                }
+                else
+                {
+                    input_types.Add((keywords[input_name] as Tensor).dtype);
+                }
             }
 
+            // Process remaining attrs
+            foreach (var attr in op_def.Attr)
+            {
+                if (keywords.ContainsKey(attr.Name))
+                {
+                    attrs[attr.Name] = keywords[attr.Name];
+                }
+            }
+
+            // Convert attr values to AttrValue protos.
             var attr_protos = new Dictionary<string, AttrValue>();
             foreach (var attr_def in op_def.Attr)
             {
                 var key = attr_def.Name;
+                var value = attrs[key];
                 var attr_value = new AttrValue();
                 
                 switch (attr_def.Type)
                 {
                     case "type":
-                        attr_value.Type = (DataType)keywords["dtype"];
+                        attr_value.Type = _MakeType(value, attr_def);
                         break;
                     case "shape":
                         attr_value.Shape = new TensorShapeProto();
@@ -91,6 +105,7 @@ namespace Tensorflow
                 attr_protos[key] = attr_value;
             }
 
+            // Determine output types (possibly using attrs)
             var output_types = new List<DataType>();
 
             foreach (var arg in op_def.OutputArg)
@@ -105,6 +120,7 @@ namespace Tensorflow
                 }
             }
 
+            // Add Op to graph
             var op = g.create_op(op_type_name, inputs, output_types.ToArray(),
                 name: scope,
                 input_types: input_types.ToArray(),
@@ -112,6 +128,11 @@ namespace Tensorflow
                 op_def: op_def);
 
             return op;
+        }
+
+        public DataType _MakeType(Object v, AttrDef attr_def)
+        {
+            return DataType.DtFloat;
         }
     }
 }

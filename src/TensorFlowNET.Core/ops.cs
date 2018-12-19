@@ -16,20 +16,34 @@ namespace Tensorflow
             return tf.Graph();
         }
 
-        public static unsafe IntPtr _create_c_op(Graph graph, NodeDef node_def, object inputs)
+        public static unsafe IntPtr _create_c_op(Graph graph, NodeDef node_def, List<Tensor> inputs)
         {
             var op_desc = c_api.TF_NewOperation(graph.Handle, node_def.Op, node_def.Name);
+
+            // Add inputs
+            foreach(var op_input in inputs)
+            {
+                c_api.TF_AddInput(op_desc, op_input._as_tf_output());
+            }
+
             var status = new Status();
 
+            // Add control inputs
+
+            // Add attrs
             foreach (var attr in node_def.Attr)
             {
                 var bytes = attr.Value.ToByteArray();
                 var proto = Marshal.AllocHGlobal(bytes.Length);
                 Marshal.Copy(bytes, 0, proto, bytes.Length);
                 c_api.TF_SetAttrValueProto(op_desc, attr.Key, proto, proto_len: (UIntPtr)bytes.Length, status: status.Handle);
+
+                if(status.Code != TF_Code.TF_OK) throw new Exception(status.Message);
             }
 
             var c_op = c_api.TF_FinishOperation(op_desc, status.Handle);
+
+            if (status.Code != TF_Code.TF_OK) throw new Exception(status.Message);
 
             return c_op;
         }

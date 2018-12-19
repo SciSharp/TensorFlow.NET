@@ -19,6 +19,14 @@ namespace Tensorflow
     {
         public const string TensorFlowLibName = "tensorflow";
 
+        /// <summary>
+        /// For inputs that take a single tensor.
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <param name="input"></param>
+        [DllImport(TensorFlowLibName)]
+        public static unsafe extern void TF_AddInput(TF_OperationDescription desc, TF_Output input);
+
         [DllImport(TensorFlowLibName)]
         public static unsafe extern void TF_DeleteSessionOptions(TF_SessionOptions opts);
 
@@ -60,11 +68,11 @@ namespace Tensorflow
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SessionRun(TF_Session session, TF_Buffer* run_options,
-                   TF_Input[] inputs, TF_Tensor[] input_values,
-                   int ninputs, TF_Output[] outputs,
-                   TF_Tensor[] output_values, int noutputs,
+                   TF_Output[] inputs, TF_Tensor[] input_values, int ninputs, 
+                   TF_Output[] outputs, TF_Tensor[] output_values, int noutputs,
                    TF_Operation[] target_opers, int ntargets,
-                   TF_Buffer* run_metadata, TF_Status status);
+                   TF_Buffer* run_metadata, 
+                   TF_Status status);
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SetAttrType(TF_OperationDescription desc, string attr_name, TF_DataType value);

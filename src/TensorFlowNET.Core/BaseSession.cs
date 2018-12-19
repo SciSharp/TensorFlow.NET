@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class BaseSession
+    public class BaseSession : IDisposable
     {
         private Graph _graph;
         private bool _opened;
@@ -32,18 +32,23 @@ namespace Tensorflow
             c_api.TF_DeleteSessionOptions(opts);
         }
 
-        public virtual byte[] run(Tensor fetches)
+        public void Dispose()
         {
-            return _run(fetches);
+            
         }
 
-        private unsafe byte[] _run(Tensor fetches)
+        public virtual byte[] run(Tensor fetches, Dictionary<Tensor, object> feed_dict = null)
+        {
+            return _run(fetches, feed_dict);
+        }
+
+        private unsafe byte[] _run(Tensor fetches, Dictionary<Tensor, object> feed_dict = null)
         {
             var status = new Status();
 
             c_api.TF_SessionRun(_session,
                 run_options: null,
-                inputs: new TF_Input[] { },
+                inputs: new TF_Output[] { },
                 input_values: new IntPtr[] { },
                 ninputs: 1,
                 outputs: new TF_Output[] { },
