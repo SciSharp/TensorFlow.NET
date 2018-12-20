@@ -62,7 +62,10 @@ namespace Tensorflow
                     feed_dict_tensor[feed.Key] = np_val;
                 }
             }
-            
+
+            // Create a fetch handler to take care of the structure of fetches.
+            var fetch_handler = new _FetchHandler();
+
             var status = new Status();
 
             c_api.TF_SessionRun(_session,
@@ -70,7 +73,7 @@ namespace Tensorflow
                 inputs: new TF_Output[] { },
                 input_values: new IntPtr[] { },
                 ninputs: 0,
-                outputs: new TF_Output[] { },
+                outputs: new TF_Output[] { new TF_Output() },
                 output_values: new IntPtr[] { },
                 noutputs: 1,
                 target_opers: new IntPtr[] { },
