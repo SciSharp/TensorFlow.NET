@@ -1,6 +1,7 @@
 # TensorFlow.NET
 TensorFlow.NET provides .NET Standard binding for [TensorFlow](https://www.tensorflow.org/).
 
+[![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Tensorflow-NET)
 
 TensorFlow.NET is a member project of SciSharp stack.
 
