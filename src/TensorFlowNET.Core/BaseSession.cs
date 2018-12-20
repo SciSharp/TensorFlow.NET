@@ -66,16 +66,16 @@ namespace Tensorflow
             var status = new Status();
 
             c_api.TF_SessionRun(_session,
-                run_options: null,
+                run_options: IntPtr.Zero,
                 inputs: new TF_Output[] { },
                 input_values: new IntPtr[] { },
-                ninputs: 1,
+                ninputs: 0,
                 outputs: new TF_Output[] { },
                 output_values: new IntPtr[] { },
                 noutputs: 1,
                 target_opers: new IntPtr[] { },
                 ntargets: 1,
-                run_metadata: null,
+                run_metadata: IntPtr.Zero,
                 status: status.Handle);
 
             return null;

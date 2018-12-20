@@ -16,6 +16,15 @@ namespace Tensorflow
 
             switch (values)
             {
+                case float val:
+                    nparray = np.array(new float[] { val }, np.float32);
+                    tensor_proto = new tensor_pb2.TensorProto
+                    {
+                        Dtype = DataType.DtFloat,
+                        TensorShape = tensor_shape.as_shape().as_proto()
+                    };
+                    tensor_proto.FloatVal.Add(val);
+                    break;
                 case double val:
                     nparray = np.array(new double[] { val }, np.float64);
                     tensor_proto = new tensor_pb2.TensorProto
@@ -25,7 +34,6 @@ namespace Tensorflow
                     };
                     tensor_proto.DoubleVal.Add(val);
                     break;
-
                 case string val:
                     nparray = np.array(new string[] { val }, np.chars);
                     tensor_proto = new tensor_pb2.TensorProto

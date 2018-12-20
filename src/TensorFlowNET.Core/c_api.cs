@@ -67,11 +67,11 @@ namespace Tensorflow
         public static extern unsafe void TF_SetAttrTensor(TF_OperationDescription desc, string attr_name, TF_Tensor value, TF_Status status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_SessionRun(TF_Session session, TF_Buffer* run_options,
+        public static extern unsafe void TF_SessionRun(TF_Session session, IntPtr run_options,
                    TF_Output[] inputs, TF_Tensor[] input_values, int ninputs, 
                    TF_Output[] outputs, TF_Tensor[] output_values, int noutputs,
                    TF_Operation[] target_opers, int ntargets,
-                   TF_Buffer* run_metadata, 
+                   IntPtr run_metadata, 
                    TF_Status status);
 
         [DllImport(TensorFlowLibName)]

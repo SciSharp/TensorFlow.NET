@@ -21,9 +21,12 @@ namespace Tensorflow
             var op_desc = c_api.TF_NewOperation(graph.Handle, node_def.Op, node_def.Name);
 
             // Add inputs
-            foreach(var op_input in inputs)
+            if(inputs != null)
             {
-                c_api.TF_AddInput(op_desc, op_input._as_tf_output());
+                foreach (var op_input in inputs)
+                {
+                    c_api.TF_AddInput(op_desc, op_input._as_tf_output());
+                }
             }
 
             var status = new Status();
