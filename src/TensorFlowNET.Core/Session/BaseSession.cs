@@ -64,7 +64,7 @@ namespace Tensorflow
             }
 
             // Create a fetch handler to take care of the structure of fetches.
-            var fetch_handler = new _FetchHandler();
+            var fetch_handler = new _FetchHandler(_graph, fetches);
 
             var status = new Status();
 
