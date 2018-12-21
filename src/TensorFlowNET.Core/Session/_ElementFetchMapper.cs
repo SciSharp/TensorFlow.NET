@@ -20,5 +20,10 @@ namespace Tensorflow
                 _unique_fetches.Add(fetch);
             }
         }
+
+        public List<Object> unique_fetches()
+        {
+            return _unique_fetches;
+        }
     }
 }

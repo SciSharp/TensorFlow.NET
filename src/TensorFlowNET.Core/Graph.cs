@@ -22,6 +22,7 @@ namespace Tensorflow
         private Dictionary<string, int> _names_in_use;
         public int _version;
         private int _next_id_counter;
+        private List<String> _unfetchable_ops = new List<string>();
 
         public Graph(IntPtr graph)
         {
@@ -109,6 +110,20 @@ namespace Tensorflow
         public int _next_id()
         {
             return ++_next_id_counter;
+        }
+
+        public bool is_fetchable<T>(T tensor_or_op)
+        {
+            if (tensor_or_op is Tensor)
+            {
+                return !_unfetchable_ops.Contains((tensor_or_op as Tensor).name); ;
+            }
+            else if (tensor_or_op is Operation)
+            {
+                return !_unfetchable_ops.Contains((tensor_or_op as Operation).name);
+            }
+
+            return false;
         }
 
         public string unique_name(string name)
