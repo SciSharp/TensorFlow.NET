@@ -31,6 +31,50 @@ namespace Tensorflow
             _names_in_use = new Dictionary<string, int>();
         }
 
+        public T as_graph_element<T>(T obj, bool allow_tensor = true, bool allow_operation = true)
+        {
+            return _as_graph_element_locked(obj, allow_tensor, allow_operation);
+        }
+
+        private Func<object> _as_graph_element(object obj)
+        {
+            return null;
+        }
+
+        private T _as_graph_element_locked<T>(T obj, bool allow_tensor = true, bool allow_operation = true)
+        {
+            string types_str = "";
+
+            if (allow_tensor && allow_operation)
+            {
+                types_str = "Tensor or Operation";
+            }
+            else if (allow_tensor)
+            {
+                types_str = "Tensor";
+            }
+            else if (allow_operation)
+            {
+                types_str = "Operation";
+            }
+
+            var temp_obj = _as_graph_element(obj);
+
+            if(obj is Tensor && allow_tensor)
+            {
+                if ((obj as Tensor).graph.Equals(this))
+                {
+                    return obj;
+                }
+                else
+                {
+                    throw new Exception($"Tensor {obj} is not an element of this graph.");
+                }
+            }
+
+            throw new Exception($"Can not convert a {typeof(T).Name} into a {types_str}.");
+        }
+
         public unsafe Operation create_op(string op_type, List<Tensor> inputs, TF_DataType[] dtypes, 
             TF_DataType[] input_types = null, string name = "", 
             Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)

@@ -13,6 +13,8 @@ namespace Tensorflow
         private DataType _dtype;
         public DataType dtype => _dtype;
 
+        public Graph graph => _op.graph;
+
         public string name;
 
         public Tensor(Operation op, int value_index, DataType dtype)

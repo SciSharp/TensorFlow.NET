@@ -8,6 +8,7 @@ namespace Tensorflow
     public class Operation
     {
         private Graph _graph;
+        public Graph graph => _graph;
         public IntPtr _c_op;
         public int _id => _id_value;
         private int _id_value;
