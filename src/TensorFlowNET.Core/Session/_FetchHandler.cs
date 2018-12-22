@@ -13,6 +13,7 @@ namespace Tensorflow
         private List<object> _fetches = new List<object>();
         private List<bool> _ops = new List<bool>();
         private List<object> _final_fetches = new List<object>();
+        private List<object> _targets = new List<object>();
 
         public _FetchHandler(Graph graph, Tensor fetches, object feeds = null, object feed_handles = null)
         {
@@ -33,12 +34,27 @@ namespace Tensorflow
             _final_fetches = _fetches;
         }
 
+        public object build_results(Session session, object[] results)
+        {
+            return _fetch_mapper.build_results(results);
+        }
+
         private void _assert_fetchable(Graph graph, Operation op)
         {
             if (!graph.is_fetchable(op))
             {
                 throw new Exception($"Operation {op.name} has been marked as not fetchable.");
             }
+        }
+
+        public List<Object> fetches()
+        {
+            return _final_fetches;
+        }
+
+        public List<Object> targets()
+        {
+            return _targets;
         }
     }
 }

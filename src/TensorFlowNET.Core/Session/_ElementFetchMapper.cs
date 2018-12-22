@@ -21,6 +21,11 @@ namespace Tensorflow
             }
         }
 
+        public object build_results(object[] values)
+        {
+            return values[0];
+        }
+
         public List<Object> unique_fetches()
         {
             return _unique_fetches;

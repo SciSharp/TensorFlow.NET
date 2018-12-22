@@ -78,6 +78,9 @@ namespace Tensorflow
         public static extern unsafe void TF_SetAttrType(TF_OperationDescription desc, string attr_name, TF_DataType value);
 
         [DllImport(TensorFlowLibName)]
+        public static extern unsafe IntPtr TF_TensorData(TF_Tensor tensor);
+
+        [DllImport(TensorFlowLibName)]
         public static extern TF_Session TF_NewSession(TF_Graph graph, TF_SessionOptions opts, TF_Status status);
 
         [DllImport(TensorFlowLibName)]

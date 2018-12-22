@@ -17,6 +17,15 @@ namespace Tensorflow
 
         public string name;
 
+        private readonly IntPtr _handle;
+        public IntPtr handle => _handle;
+        public IntPtr buffer => c_api.TF_TensorData(_handle);
+
+        public Tensor(IntPtr handle)
+        {
+            _handle = handle;
+        }
+
         public Tensor(Operation op, int value_index, DataType dtype)
         {
             _op = op;

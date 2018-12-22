@@ -12,13 +12,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void constant()
         {
-            var a = tf.constant(4.0f);
-            var b = tf.constant(5.0f);
-            var c = tf.add(a, b);
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c);
-            }
+            var x = tf.constant(4.0f);
         }
 
         [TestMethod]
@@ -28,7 +22,7 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
-        public void add()
+        public void addInPlaceholder()
         {
             var a = tf.placeholder(tf.float32);
             var b = tf.placeholder(tf.float32);
@@ -41,6 +35,20 @@ namespace TensorFlowNET.UnitTest
                 feed_dict.Add(b, 2.0f);
 
                 var o = sess.run(c, feed_dict);
+            }
+        }
+
+        [TestMethod]
+        public void addInConstant()
+        {
+            var a = tf.constant(4.0f);
+            var b = tf.constant(5.0f);
+            var c = tf.add(a, b);
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(c);
+                Assert.AreEqual(o, 9.0f);
             }
         }
     }
