@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Tensorflow
@@ -113,10 +114,9 @@ namespace Tensorflow
                 run_metadata: IntPtr.Zero,
                 status: status.Handle);
 
-            var result = output_values.Select(x => new Tensor(x).buffer).Select(x =>
-            {
-                return (object)*(float*)x;
-            }).ToArray();
+            var result = output_values.Select(x => c_api.TF_TensorData(x))
+                .Select(x => (object)*(float*)x)
+                .ToArray();
 
             return result;
         }

@@ -7,11 +7,8 @@ using size_t = System.UIntPtr;
 using TF_Graph = System.IntPtr;
 using TF_Operation = System.IntPtr;
 using TF_Status = System.IntPtr;
-using TF_Tensor = System.IntPtr;
 using TF_Session = System.IntPtr;
 using TF_SessionOptions = System.IntPtr;
-
-using TF_DataType = Tensorflow.DataType;
 
 namespace Tensorflow
 {
@@ -54,8 +51,19 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static unsafe extern TF_Status TF_NewStatus();
 
+        /// <summary>
+        /// Return a new tensor that holds the bytes data[0,len-1]
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <param name="dims"></param>
+        /// <param name="num_dims"></param>
+        /// <param name="data"></param>
+        /// <param name="len">num_bytes, ex: 6 * sizeof(float)</param>
+        /// <param name="deallocator"></param>
+        /// <param name="deallocator_arg"></param>
+        /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe TF_Tensor TF_NewTensor(TF_DataType dataType, Int64 dims, int num_dims, IntPtr data, size_t len, tf.Deallocator deallocator, IntPtr deallocator_arg);
+        public static extern unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, size_t len, tf.Deallocator deallocator, IntPtr deallocator_arg);
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe int TF_OperationNumOutputs(TF_Operation oper);
@@ -66,10 +74,25 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SetAttrTensor(TF_OperationDescription desc, string attr_name, TF_Tensor value, TF_Status status);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="run_options"></param>
+        /// <param name="inputs"></param>
+        /// <param name="input_values"></param>
+        /// <param name="ninputs"></param>
+        /// <param name="outputs"></param>
+        /// <param name="output_values"></param>
+        /// <param name="noutputs"></param>
+        /// <param name="target_opers"></param>
+        /// <param name="ntargets"></param>
+        /// <param name="run_metadata"></param>
+        /// <param name="status"></param>
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SessionRun(TF_Session session, IntPtr run_options,
-                   TF_Output[] inputs, TF_Tensor[] input_values, int ninputs, 
-                   TF_Output[] outputs, TF_Tensor[] output_values, int noutputs,
+                   TF_Output[] inputs, IntPtr[] input_values, int ninputs, 
+                   TF_Output[] outputs, IntPtr[] output_values, int noutputs,
                    TF_Operation[] target_opers, int ntargets,
                    IntPtr run_metadata, 
                    TF_Status status);
@@ -78,7 +101,10 @@ namespace Tensorflow
         public static extern unsafe void TF_SetAttrType(TF_OperationDescription desc, string attr_name, TF_DataType value);
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe IntPtr TF_TensorData(TF_Tensor tensor);
+        public static extern unsafe IntPtr TF_TensorData(IntPtr tensor);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe TF_DataType TF_TensorType(IntPtr tensor);
 
         [DllImport(TensorFlowLibName)]
         public static extern TF_Session TF_NewSession(TF_Graph graph, TF_SessionOptions opts, TF_Status status);

@@ -50,7 +50,7 @@ namespace Tensorflow
 
             // Perform input type inference
             var inputs = new List<Tensor>();
-            var input_types = new List<DataType>();
+            var input_types = new List<TF_DataType>();
             
             foreach (var input_arg in op_def.InputArg)
             {
@@ -106,7 +106,7 @@ namespace Tensorflow
             }
 
             // Determine output types (possibly using attrs)
-            var output_types = new List<DataType>();
+            var output_types = new List<TF_DataType>();
 
             foreach (var arg in op_def.OutputArg)
             {
@@ -116,7 +116,7 @@ namespace Tensorflow
                 }
                 else if (!String.IsNullOrEmpty(arg.TypeAttr))
                 {
-                    output_types.Add(attr_protos[arg.TypeAttr].Type);
+                    output_types.Add((TF_DataType)attr_protos[arg.TypeAttr].Type);
                 }
             }
 

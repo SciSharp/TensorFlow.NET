@@ -24,7 +24,7 @@ namespace Tensorflow
             var status = new Status();
 
             var desc = c_api.TF_NewOperation(g.Handle, opType, oper_name);
-            c_api.TF_SetAttrType(desc, "dtype", DataType.DtInt32);
+            c_api.TF_SetAttrType(desc, "dtype", TF_DataType.TF_INT32);
             c_api.TF_FinishOperation(desc, status.Handle);
         }
 
@@ -39,7 +39,7 @@ namespace Tensorflow
             _outputs = new Tensor[num_outputs];
             for (int i = 0; i < num_outputs; i++)
             {
-                _outputs[i] = new Tensor(this, i, TF_DataType.DtFloat);
+                _outputs[i] = new Tensor(this, i, TF_DataType.TF_FLOAT);
             }
 
             _graph._add_op(this);

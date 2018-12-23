@@ -10,7 +10,7 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = _InitOpDefLibrary();
 
-        public static Tensor placeholder(DataType dtype, TensorShape shape = null)
+        public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null)
         {
             /*var g = ops.get_default_graph();
             var op = new Operation(g, "Placeholder", "feed");

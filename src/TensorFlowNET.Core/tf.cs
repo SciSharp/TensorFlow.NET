@@ -10,7 +10,7 @@ namespace Tensorflow
 {
     public static class tf
     {
-        public static DataType float32 = DataType.DtFloat;
+        public static TF_DataType float32 = TF_DataType.TF_FLOAT;
 
         public static Context context = new Context();
 
@@ -23,7 +23,7 @@ namespace Tensorflow
             return gen_math_ops.add(a, b);
         }
 
-        public static unsafe Tensor placeholder(DataType dtype, TensorShape shape = null)
+        public static unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null)
         {
             return gen_array_ops.placeholder(dtype, shape);
         }
@@ -42,7 +42,7 @@ namespace Tensorflow
             var attrs = new Dictionary<string, AttrValue>();
             attrs["dtype"] = dtype_value;
             attrs["value"] = tensor_value;
-            var const_tensor = g.create_op("Const", null, new TF_DataType[] { dtype_value.Type }, attrs: attrs).outputs[0];
+            var const_tensor = g.create_op("Const", null, new TF_DataType[] { (TF_DataType)dtype_value.Type }, attrs: attrs).outputs[0];
 
             return const_tensor;
         }
@@ -55,7 +55,7 @@ namespace Tensorflow
         public static Deallocator FreeTensorDataDelegate = FreeTensorData;
 
         [MonoPInvokeCallback(typeof(Deallocator))]
-        internal static void FreeTensorData(IntPtr data, IntPtr len, IntPtr closure)
+        public static void FreeTensorData(IntPtr data, IntPtr len, IntPtr closure)
         {
             Marshal.FreeHGlobal(data);
         }
