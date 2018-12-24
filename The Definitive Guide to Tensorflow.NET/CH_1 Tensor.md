@@ -10,6 +10,16 @@
 
 ##### Tensor 是什么?
 
+Tensor holds a multi-dimensional array of elements of a single data type which is very similar with numpy's ndarray. 
+
+Tensor是一个具有单一数据类型的多维数组容器，非常类似于numpy里的ndarray。如果你对numpy非常熟悉的话，那么对Tensor的理解会相当容易。
+
+
+
+##### How to create a Tensor?
+
+##### 如何创建一个Tensor?
+
 
 
 
@@ -26,6 +36,6 @@ var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape(2, 3);
 
 
 
-![1545631998951](assets/column-major order.png)
+![column-major order](assets/column-major-order.png)
 
-![1545631998951](assets/row-major order.png)
+![row-major order](assets/row-major-order.png)

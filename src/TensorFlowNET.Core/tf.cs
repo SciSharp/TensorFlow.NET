@@ -52,14 +52,6 @@ namespace Tensorflow
             context.default_execution_mode = Context.EAGER_MODE;
         }
 
-        public static Deallocator FreeTensorDataDelegate = FreeTensorData;
-
-        [MonoPInvokeCallback(typeof(Deallocator))]
-        public static void FreeTensorData(IntPtr data, IntPtr len, IntPtr closure)
-        {
-            Marshal.FreeHGlobal(data);
-        }
-
         public static string VERSION => Marshal.PtrToStringAnsi(c_api.TF_Version());
 
         public static Graph get_default_graph()

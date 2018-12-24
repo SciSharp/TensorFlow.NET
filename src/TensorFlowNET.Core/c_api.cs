@@ -28,6 +28,13 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static unsafe extern void TF_DeleteSessionOptions(IntPtr opts);
 
+        /// <summary>
+        /// Destroy a tensor.
+        /// </summary>
+        /// <param name="tensor"></param>
+        [DllImport(TensorFlowLibName)]
+        public static unsafe extern void TF_DeleteTensor(IntPtr tensor);
+
         [DllImport(TensorFlowLibName)]
         public static extern unsafe long TF_Dim(IntPtr tensor, int dim_index);
 
@@ -66,7 +73,7 @@ namespace Tensorflow
         /// <param name="deallocator"></param>
         /// <param name="deallocator_arg"></param>
         /// <returns></returns>
-        [DllImport(TensorFlowLibName)]
+        [DllImport(TensorFlowLibName, CallingConvention = CallingConvention.StdCall)]
         public static extern unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len, tf.Deallocator deallocator, IntPtr deallocator_arg);
 
         /// <summary>
