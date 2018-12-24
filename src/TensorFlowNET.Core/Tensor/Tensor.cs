@@ -21,15 +21,14 @@ namespace Tensorflow
         private readonly IntPtr _handle;
         public IntPtr handle => _handle;
 
-        private TF_Tensor tensor;
-
-        public IntPtr buffer => c_api.TF_TensorData(tensor.buffer);
+        private readonly int _ndim;
+        public int ndim => _ndim;
 
         public Tensor(IntPtr handle)
         {
             _handle = handle;
-            tensor = Marshal.PtrToStructure<TF_Tensor>(handle);
-            _dtype = tensor.dtype;
+            _dtype = c_api.TF_TensorType(_handle);
+            _ndim = c_api.TF_NumDims(_handle);
         }
 
         public Tensor(Operation op, int value_index, TF_DataType dtype)
@@ -42,6 +41,16 @@ namespace Tensorflow
         public TF_Output _as_tf_output()
         {
             return c_api_util.tf_output(_op._c_op, _value_index);
+        }
+
+        public T Data<T>()
+        {
+            /*var buffer = new byte[6 * sizeof(float)];
+            var h1 = c_api.TF_TensorData(handle);
+            var bytes = Marshal.PtrToStructure<float>(h1);
+            Marshal.Copy(h1, buffer, 0, 24);*/
+
+            return default(T);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest
     public class TensorTest
     {
         [TestMethod]
-        public unsafe void NewTF_Tensor()
+        public void TF_NewTensor()
         {
             var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape(2, 3);
 
@@ -33,6 +33,9 @@ namespace TensorFlowNET.UnitTest
             var tensor = new Tensor(handle);
 
             Assert.AreEqual(tensor.dtype, TF_DataType.TF_FLOAT);
+            Assert.AreEqual(tensor.ndim, nd.ndim);
+            Assert.AreEqual(nd.shape[0], c_api.TF_Dim(handle, 0));
+            Assert.AreEqual(nd.shape[1], c_api.TF_Dim(handle, 1));
         }
     }
 }
