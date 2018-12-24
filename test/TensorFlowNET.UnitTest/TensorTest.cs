@@ -36,6 +36,15 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual(tensor.ndim, nd.ndim);
             Assert.AreEqual(nd.shape[0], c_api.TF_Dim(handle, 0));
             Assert.AreEqual(nd.shape[1], c_api.TF_Dim(handle, 1));
+            Assert.AreEqual(tensor.bytesize, (uint)nd.size * sizeof(float));
+
+            // Column major order
+            // https://en.wikipedia.org/wiki/File:Row_and_column_major_order.svg
+            // matrix:[[1, 2, 3], [4, 5, 6]]
+            // index:   0  2  4    1  3  5
+            // result:  1  4  2    5  3  6
+            var array = tensor.Data<float>();
+            Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), array));
         }
     }
 }

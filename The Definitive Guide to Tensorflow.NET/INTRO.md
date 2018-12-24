@@ -23,3 +23,11 @@ TensorFlow is an open source project for machine learning especially for deep le
 
 
 为了避免混淆，本书中对TensorFlow中定义的特有类不进行翻译，比如Tensor, Graph, Shape这些词都会保留英文名称。
+
+
+
+术语简称：
+
+TF: Google TensorFlow
+
+TF.NET: Tensorflow.NET

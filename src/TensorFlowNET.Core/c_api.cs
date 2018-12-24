@@ -17,6 +17,14 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static unsafe extern void TF_AddInput(TF_OperationDescription desc, TF_Output input);
 
+        /// <summary>
+        /// returns the sizeof() for the underlying type corresponding to the given TF_DataType enum value.
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static unsafe extern ulong TF_DataTypeSize(TF_DataType dt);
+
         [DllImport(TensorFlowLibName)]
         public static unsafe extern void TF_DeleteSessionOptions(IntPtr opts);
 
@@ -103,6 +111,14 @@ namespace Tensorflow
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SetAttrType(TF_OperationDescription desc, string attr_name, TF_DataType value);
+
+        /// <summary>
+        /// Return the size of the underlying data in bytes.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe ulong TF_TensorByteSize(IntPtr tensor);
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe IntPtr TF_TensorData(IntPtr tensor);

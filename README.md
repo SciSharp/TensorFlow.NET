@@ -2,6 +2,7 @@
 TensorFlow.NET provides .NET Standard binding for [TensorFlow](https://www.tensorflow.org/).
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Tensorflow-NET)
+![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/tensorflow-net-p7kmsjyo10ey?svg=true)
 
 TensorFlow.NET is a member project of SciSharp stack.
 
@@ -10,11 +11,12 @@ TensorFlow.NET is a member project of SciSharp stack.
 ### How to use
 Download the pre-compiled dll [here](tensorflowlib) and place it in the bin folder.
 
+Import tensorflow.net.
 ```cs
-// import tensorflow.net
-using using Tensorflow;
+using Tensorflow;
 ```
 
+Add two constants.
 ```cs
 // Create a Constant op
 var a = tf.constant(4.0f);
@@ -27,6 +29,7 @@ using (var sess = tf.Session())
 }
 ```
 
+Feed placeholder.
 ```cs
 // Create a placeholder op
 var a = tf.placeholder(tf.float32);
