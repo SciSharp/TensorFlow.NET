@@ -73,8 +73,10 @@ namespace Tensorflow
         /// <param name="deallocator"></param>
         /// <param name="deallocator_arg"></param>
         /// <returns></returns>
-        [DllImport(TensorFlowLibName, CallingConvention = CallingConvention.StdCall)]
-        public static extern unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len, tf.Deallocator deallocator, IntPtr deallocator_arg);
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len, Deallocator deallocator, ref bool deallocator_arg);
+
+        public delegate void Deallocator(IntPtr data, IntPtr size, ref bool deallocatorData);
 
         /// <summary>
         /// Return the number of dimensions that the tensor has.

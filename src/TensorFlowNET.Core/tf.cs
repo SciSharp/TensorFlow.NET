@@ -16,8 +16,6 @@ namespace Tensorflow
 
         public static Graph g = new Graph(c_api.TF_NewGraph());
 
-        public delegate void Deallocator(IntPtr data, IntPtr size, IntPtr deallocatorData);
-
         public static unsafe Tensor add(Tensor a, Tensor b)
         {
             return gen_math_ops.add(a, b);

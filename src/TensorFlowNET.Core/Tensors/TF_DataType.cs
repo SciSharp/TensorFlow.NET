@@ -6,6 +6,7 @@ namespace Tensorflow
 {
     public enum TF_DataType
     {
+        DtInvalid = 0,
         TF_FLOAT = 1,
         TF_DOUBLE = 2,
         TF_INT32 = 3,  // Int32 tensors are always in 'host' memory.
