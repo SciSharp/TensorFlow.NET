@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class Status
+    public class Status : IDisposable
     {
-        private IntPtr _handle;
+        private readonly IntPtr _handle;
         public IntPtr Handle => _handle;
 
         /// <summary>
@@ -22,6 +22,16 @@ namespace Tensorflow
         public Status()
         {
             _handle = c_api.TF_NewStatus();
+        }
+
+        public void SetStatus(TF_Code code, string msg)
+        {
+            c_api.TF_SetStatus(_handle, code, msg);
+        }
+
+        public void Dispose()
+        {
+            c_api.TF_DeleteStatus(_handle);
         }
     }
 }

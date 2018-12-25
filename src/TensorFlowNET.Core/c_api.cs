@@ -29,6 +29,13 @@ namespace Tensorflow
         public static unsafe extern void TF_DeleteSessionOptions(IntPtr opts);
 
         /// <summary>
+        /// Delete a previously created status object.
+        /// </summary>
+        /// <param name="s"></param>
+        [DllImport(TensorFlowLibName)]
+        public static unsafe extern void TF_DeleteStatus(IntPtr s);
+
+        /// <summary>
         /// Destroy a tensor.
         /// </summary>
         /// <param name="tensor"></param>
@@ -59,6 +66,10 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static unsafe extern TF_OperationDescription TF_NewOperation(IntPtr graph, string opType, string oper_name);
 
+        /// <summary>
+        /// Return a new status object.
+        /// </summary>
+        /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static unsafe extern IntPtr TF_NewStatus();
 
@@ -120,6 +131,9 @@ namespace Tensorflow
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SetAttrType(TF_OperationDescription desc, string attr_name, TF_DataType value);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetStatus(IntPtr s, TF_Code code, string msg);
 
         /// <summary>
         /// Return the size of the underlying data in bytes.
