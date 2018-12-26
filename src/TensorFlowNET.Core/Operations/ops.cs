@@ -16,6 +16,18 @@ namespace Tensorflow
             return tf.Graph();
         }
 
+        public static Tensor convert_to_tensor()
+        {
+            return internal_convert_to_tensor();
+        }
+
+        private static Tensor internal_convert_to_tensor()
+        {
+            return null;
+        }
+
+
+
         public static unsafe IntPtr _create_c_op(Graph graph, NodeDef node_def, List<Tensor> inputs)
         {
             var op_desc = c_api.TF_NewOperation(graph.Handle, node_def.Op, node_def.Name);

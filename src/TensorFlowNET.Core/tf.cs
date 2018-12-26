@@ -11,10 +11,16 @@ namespace Tensorflow
     public static class tf
     {
         public static TF_DataType float32 = TF_DataType.TF_FLOAT;
+        public static TF_DataType chars = TF_DataType.TF_STRING;
 
         public static Context context = new Context();
 
         public static Graph g = new Graph(c_api.TF_NewGraph());
+
+        public static object Variable<T>(T data, TF_DataType dtype)
+        {
+            return new Variable(null, TF_DataType.DtInvalid);
+        }
 
         public static unsafe Tensor add(Tensor a, Tensor b)
         {
