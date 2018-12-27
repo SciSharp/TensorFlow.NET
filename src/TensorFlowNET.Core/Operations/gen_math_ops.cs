@@ -25,7 +25,7 @@ namespace Tensorflow
         private static OpDefLibrary _InitOpDefLibrary()
         {
             // c_api.TF_GraphGetOpDef(g.Handle, op_type_name, buffer.Handle, status.Handle);
-            var bytes = File.ReadAllBytes("Tensorflow/op_list_proto_math.bin");
+            var bytes = File.ReadAllBytes("Operations/op_list_proto_math.bin");
             var op_list = OpList.Parser.ParseFrom(bytes);
             var op_def_lib = new OpDefLibrary();
             op_def_lib.add_op_list(op_list);

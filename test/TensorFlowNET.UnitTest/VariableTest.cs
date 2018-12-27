@@ -9,6 +9,7 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class VariableTest
     {
+        [TestMethod]
         public void Creating()
         {
             var mammal = tf.Variable("Elephant", tf.chars);

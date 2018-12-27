@@ -13,12 +13,12 @@ namespace Tensorflow
     /// </summary>
     public class Tensor
     {
-        public Operation op { get; }
-        public int value_index { get; }
-
         public Graph graph => op.graph;
+        public Operation op { get; }
 
         public string name;
+        public object value;
+        public int value_index { get; }
 
         public TF_DataType dtype { get; }
         public IntPtr handle { get; }

@@ -6,23 +6,14 @@ using System.Text;
 
 namespace Tensorflow
 {
+    /// <summary>
+    /// Represents the shape of a `Tensor`.
+    /// </summary>
     public class TensorShape : Shape
     {
-        public TensorShape(params int[] shape) : base(shape)
+        public TensorShape(params int[] dims) : base(dims)
         {
 
-        }
-
-        public TensorShape as_shape()
-        {
-            return this;
-        }
-
-        public TensorShapeProto as_proto()
-        {
-            TensorShapeProto dim = new TensorShapeProto();
-
-            return new TensorShapeProto(dim);
         }
     }
 }

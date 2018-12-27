@@ -10,12 +10,6 @@ namespace TensorFlowNET.UnitTest
     public class OperationsTest
     {
         [TestMethod]
-        public void constant()
-        {
-            var x = tf.constant(4.0f);
-        }
-
-        [TestMethod]
         public void placeholder()
         {
             var x = tf.placeholder(tf.float32);

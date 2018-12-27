@@ -7,6 +7,7 @@ namespace Tensorflow
     public class RefVariable : Variable
     {
         public bool _in_graph_mode = true;
+        public Tensor _initial_value;
 
         public RefVariable(object initial_value, 
             TF_DataType trainable, 
@@ -16,9 +17,10 @@ namespace Tensorflow
 
         }
 
-        private void _init_from_args()
+        private void _init_from_args(object initial_value,
+            TF_DataType trainable)
         {
-
+            _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value");
         }
     }
 }

@@ -8,44 +8,84 @@ namespace Tensorflow
 {
     public static class tensor_util
     {
-        public static TensorProto make_tensor_proto(object values, Type dtype = null)
+        public static TensorProto make_tensor_proto(object values, TF_DataType dtype = TF_DataType.DtInvalid, Shape shape = null, bool verify_shape = false)
         {
             NDArray nparray;
             TensorProto tensor_proto = null;
-            TensorShape tensor_shape = new TensorShape(0);
+            TF_DataType numpy_dtype;
+            if(shape is null)
+            {
+                shape = new Shape();
+            }
 
             switch (values)
             {
-                case float val:
-                    nparray = np.array(new float[] { val }, np.float32);
+                case int val:
+                    nparray = np.asarray(val);
+                    numpy_dtype = dtypes.as_dtype(nparray.dtype);
                     tensor_proto = new tensor_pb2.TensorProto
                     {
-                        Dtype = DataType.DtFloat,
-                        TensorShape = tensor_shape.as_shape().as_proto()
+                        Dtype = numpy_dtype.as_datatype_enum(),
+                        TensorShape = shape.as_shape(nparray.shape).as_proto()
+                    };
+                    tensor_proto.IntVal.Add(val);
+                    break;
+                case float val:
+                    nparray = np.asarray(val);
+                    numpy_dtype = dtypes.as_dtype(nparray.dtype);
+                    tensor_proto = new tensor_pb2.TensorProto
+                    {
+                        Dtype = numpy_dtype.as_datatype_enum(),
+                        TensorShape = shape.as_shape(nparray.shape).as_proto()
                     };
                     tensor_proto.FloatVal.Add(val);
                     break;
                 case double val:
-                    nparray = np.array(new double[] { val }, np.float64);
+                    nparray = np.asarray(val);
+                    numpy_dtype = dtypes.as_dtype(nparray.dtype);
                     tensor_proto = new tensor_pb2.TensorProto
                     {
-                        Dtype = DataType.DtDouble,
-                        TensorShape = tensor_shape.as_shape().as_proto()
+                        Dtype = numpy_dtype.as_datatype_enum(),
+                        TensorShape = shape.as_shape(nparray.shape).as_proto()
                     };
                     tensor_proto.DoubleVal.Add(val);
                     break;
                 case string val:
-                    nparray = np.array(new string[] { val }, np.chars);
+                    nparray = np.asarray(val);
+                    numpy_dtype = dtypes.as_dtype(nparray.dtype);
                     tensor_proto = new tensor_pb2.TensorProto
                     {
-                        Dtype = DataType.DtString,
-                        TensorShape = tensor_shape.as_shape().as_proto()
+                        Dtype = numpy_dtype.as_datatype_enum(),
+                        TensorShape = shape.as_shape(nparray.shape).as_proto()
                     };
                     tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFrom(val, Encoding.UTF8));
                     break;
+                default:
+                    throw new Exception("Not Implemented");
             }
 
             return tensor_proto;
+        }
+
+        public static TensorShape as_shape(this Shape shape, int[] dims)
+        {
+            return new TensorShape(dims);
+        }
+
+        public static TensorShapeProto as_proto(this TensorShape tshape)
+        {
+            TensorShapeProto shape = new TensorShapeProto();
+
+            for (int i = 0; i < tshape.NDim; i++)
+            {
+                var dim = new TensorShapeProto.Types.Dim();
+                dim.Size = tshape.Dimensions[i];
+                dim.Name = $"{dim}_1";
+
+                shape.Dim.Add(dim);
+            }
+
+            return shape;
         }
     }
 }

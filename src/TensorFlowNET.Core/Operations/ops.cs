@@ -16,17 +16,15 @@ namespace Tensorflow
             return tf.Graph();
         }
 
-        public static Tensor convert_to_tensor()
+        public static Tensor convert_to_tensor(object value, string name = "")
         {
-            return internal_convert_to_tensor();
+            return internal_convert_to_tensor(value, name);
         }
 
-        private static Tensor internal_convert_to_tensor()
+        private static Tensor internal_convert_to_tensor(object value, string name = "")
         {
-            return null;
+            return tf.constant(value);
         }
-
-
 
         public static unsafe IntPtr _create_c_op(Graph graph, NodeDef node_def, List<Tensor> inputs)
         {

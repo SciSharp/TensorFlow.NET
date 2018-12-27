@@ -39,7 +39,7 @@ namespace Tensorflow
             _outputs = new Tensor[num_outputs];
             for (int i = 0; i < num_outputs; i++)
             {
-                _outputs[i] = new Tensor(this, i, TF_DataType.TF_FLOAT);
+                _outputs[i] = new Tensor(this, i, output_types[i]);
             }
 
             _graph._add_op(this);
