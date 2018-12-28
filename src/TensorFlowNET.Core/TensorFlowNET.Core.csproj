@@ -4,11 +4,27 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
+    <Version>0.0.2</Version>
+    <Authors>Haiping Chen</Authors>
+    <Company>SciSharp.org</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Apache 2.0</Copyright>
+    <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/SciSharp</PackageProjectUrl>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+    <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET</PackageTags>
+    <Description>TensorFlow binding for .NET Standard.</Description>
+    <AssemblyVersion>0.0.2.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +33,7 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.6.1" />
+    <PackageReference Include="NumSharp" Version="0.6.2" />
   </ItemGroup>
 
   <ItemGroup>

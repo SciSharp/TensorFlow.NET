@@ -1,4 +1,5 @@
 ﻿using NumSharp.Core;
+using NumSharp.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,57 +9,30 @@ namespace Tensorflow
 {
     public static class tensor_util
     {
-        public static TensorProto make_tensor_proto(object values, TF_DataType dtype = TF_DataType.DtInvalid, Shape shape = null, bool verify_shape = false)
+        public static TensorProto make_tensor_proto(NDArray nd, bool verify_shape = false)
         {
-            NDArray nparray;
-            TensorProto tensor_proto = null;
-            TF_DataType numpy_dtype;
-            if(shape is null)
-            {
-                shape = new Shape();
-            }
+            var shape = nd.Storage.Shape;
 
-            switch (values)
+            var numpy_dtype = dtypes.as_dtype(nd.dtype);
+            var tensor_proto = new tensor_pb2.TensorProto
             {
-                case int val:
-                    nparray = np.asarray(val);
-                    numpy_dtype = dtypes.as_dtype(nparray.dtype);
-                    tensor_proto = new tensor_pb2.TensorProto
-                    {
-                        Dtype = numpy_dtype.as_datatype_enum(),
-                        TensorShape = shape.as_shape(nparray.shape).as_proto()
-                    };
-                    tensor_proto.IntVal.Add(val);
+                Dtype = numpy_dtype.as_datatype_enum(),
+                TensorShape = shape.as_shape(nd.shape).as_proto()
+            };
+
+            switch (nd.dtype.Name)
+            {
+                case "Int32":
+                    tensor_proto.IntVal.AddRange(nd.Data<int>());
                     break;
-                case float val:
-                    nparray = np.asarray(val);
-                    numpy_dtype = dtypes.as_dtype(nparray.dtype);
-                    tensor_proto = new tensor_pb2.TensorProto
-                    {
-                        Dtype = numpy_dtype.as_datatype_enum(),
-                        TensorShape = shape.as_shape(nparray.shape).as_proto()
-                    };
-                    tensor_proto.FloatVal.Add(val);
+                case "Single":
+                    tensor_proto.FloatVal.AddRange(nd.Data<float>());
                     break;
-                case double val:
-                    nparray = np.asarray(val);
-                    numpy_dtype = dtypes.as_dtype(nparray.dtype);
-                    tensor_proto = new tensor_pb2.TensorProto
-                    {
-                        Dtype = numpy_dtype.as_datatype_enum(),
-                        TensorShape = shape.as_shape(nparray.shape).as_proto()
-                    };
-                    tensor_proto.DoubleVal.Add(val);
+                case "Double":
+                    tensor_proto.DoubleVal.AddRange(nd.Data<double>());
                     break;
-                case string val:
-                    nparray = np.asarray(val);
-                    numpy_dtype = dtypes.as_dtype(nparray.dtype);
-                    tensor_proto = new tensor_pb2.TensorProto
-                    {
-                        Dtype = numpy_dtype.as_datatype_enum(),
-                        TensorShape = shape.as_shape(nparray.shape).as_proto()
-                    };
-                    tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFrom(val, Encoding.UTF8));
+                case "String":
+                    tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFrom(nd.Data<string>()[0], Encoding.UTF8));
                     break;
                 default:
                     throw new Exception("Not Implemented");
@@ -67,7 +41,38 @@ namespace Tensorflow
             return tensor_proto;
         }
 
-        public static TensorShape as_shape(this Shape shape, int[] dims)
+        public static NDArray convert_to_numpy_ndarray(object values)
+        {
+            NDArray nd;
+
+            switch (values)
+            {
+                case NDArray val:
+                    nd = val;
+                    break;
+                case int val:
+                    nd = np.asarray(val);
+                    break;
+                case int[] val:
+                    nd = np.array(val);
+                    break;
+                case float val:
+                    nd = np.asarray(val);
+                    break;
+                case double val:
+                    nd = np.asarray(val);
+                    break;
+                case string val:
+                    nd = np.asarray(val);
+                    break;
+                default:
+                    throw new Exception("Not Implemented");
+            }
+
+            return nd;
+        }
+
+        public static TensorShape as_shape(this IShape shape, int[] dims)
         {
             return new TensorShape(dims);
         }
@@ -80,7 +85,7 @@ namespace Tensorflow
             {
                 var dim = new TensorShapeProto.Types.Dim();
                 dim.Size = tshape.Dimensions[i];
-                dim.Name = $"{dim}_1";
+                dim.Name = $"dim_{i}";
 
                 shape.Dim.Add(dim);
             }

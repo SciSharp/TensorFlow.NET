@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,6 +24,18 @@ namespace TensorFlowNET.UnitTest
         public void StringConst()
         {
             tensor = tf.constant("Elephant");
+        }
+
+        [TestMethod]
+        public void NDimConst()
+        {
+            var nd = np.array(new int[][]
+            {
+                new int[]{ 1, 2, 3 },
+                new int[]{ 4, 5, 6 }
+            });
+
+            tensor = tf.constant(nd);
         }
     }
 }
