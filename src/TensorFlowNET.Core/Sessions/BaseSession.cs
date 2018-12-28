@@ -40,35 +40,35 @@ namespace Tensorflow
             
         }
 
-        public virtual object run(Tensor fetches, Dictionary<Tensor, object> feed_dict = null)
+        public virtual object run(Tensor fetches, FeedDict feed_dict = null)
         {
             var result = _run(fetches, feed_dict);
 
             return result;
         }
 
-        private unsafe object _run(Tensor fetches, Dictionary<Tensor, object> feed_dict = null)
+        private unsafe object _run(Tensor fetches, FeedDict feed_dict = null)
         {
-            var feed_dict_tensor = new Dictionary<Tensor, NDArray>();
+            var feed_dict_tensor = new FeedDict();
 
             if (feed_dict != null)
             {
                 NDArray np_val = null;
-                foreach (var feed in feed_dict)
+                foreach (FeedValue feed in feed_dict)
                 {
-                    switch (feed.Value)
+                    switch (feed.feed_val)
                     {
                         case float value:
                             np_val = np.asarray(value);
                             break;
                     }
 
-                    feed_dict_tensor[feed.Key] = np_val;
+                    feed_dict_tensor[feed.feed] = np_val;
                 }
             }
 
             // Create a fetch handler to take care of the structure of fetches.
-            var fetch_handler = new _FetchHandler(_graph, fetches);
+            var fetch_handler = new _FetchHandler(_graph, fetches, feed_dict_tensor);
 
             // Run request and get response.
             // We need to keep the returned movers alive for the following _do_run().
@@ -80,19 +80,20 @@ namespace Tensorflow
 
             // We only want to really perform the run if fetches or targets are provided,
             // or if the call is a partial run that specifies feeds.
-            var results = _do_run(final_fetches);
+            var results = _do_run(final_fetches, feed_dict_tensor);
 
             return fetch_handler.build_results(null, results);
         }
 
-        private object[] _do_run(List<object> fetch_list)
+        private object[] _do_run(List<Tensor> fetch_list, FeedDict feed_dict)
         {
-            var fetches = fetch_list.Select(x => (x as Tensor)._as_tf_output()).ToArray();
+            var feeds = feed_dict.items().Select(x => new KeyValuePair<TF_Output, Tensor>(x.Key._as_tf_output(), new Tensor(x.Value as NDArray))).ToArray();
+            var fetches = fetch_list.Select(x => x._as_tf_output()).ToArray();
 
-            return _call_tf_sessionrun(fetches);
+            return _call_tf_sessionrun(feeds, fetches);
         }
 
-        private unsafe object[] _call_tf_sessionrun(TF_Output[] fetch_list)
+        private unsafe object[] _call_tf_sessionrun(KeyValuePair<TF_Output, Tensor>[] feed_dict, TF_Output[] fetch_list)
         {
             // Ensure any changes to the graph are reflected in the runtime.
             _extend_graph();
@@ -103,7 +104,7 @@ namespace Tensorflow
 
             c_api.TF_SessionRun(_session,
                 run_options: IntPtr.Zero,
-                inputs: new TF_Output[] { },
+                inputs: feed_dict.Select(f => f.Key).ToArray(),
                 input_values: new IntPtr[] { },
                 ninputs: 0,
                 outputs: fetch_list,

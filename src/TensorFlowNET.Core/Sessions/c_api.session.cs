@@ -38,8 +38,8 @@ namespace Tensorflow
         /// </summary>
         /// <param name="session"></param>
         /// <param name="run_options"></param>
-        /// <param name="inputs"></param>
-        /// <param name="input_values"></param>
+        /// <param name="inputs">TF_Output</param>
+        /// <param name="input_values">TF_Tensor</param>
         /// <param name="ninputs"></param>
         /// <param name="outputs"></param>
         /// <param name="output_values"></param>

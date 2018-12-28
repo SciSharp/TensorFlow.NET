@@ -10,12 +10,12 @@ namespace Tensorflow
     public class _FetchHandler
     {
         private _ElementFetchMapper _fetch_mapper;
-        private List<object> _fetches = new List<object>();
+        private List<Tensor> _fetches = new List<Tensor>();
         private List<bool> _ops = new List<bool>();
-        private List<object> _final_fetches = new List<object>();
+        private List<Tensor> _final_fetches = new List<Tensor>();
         private List<object> _targets = new List<object>();
 
-        public _FetchHandler(Graph graph, Tensor fetches, object feeds = null, object feed_handles = null)
+        public _FetchHandler(Graph graph, Tensor fetches, FeedDict feeds = null, object feed_handles = null)
         {
             _fetch_mapper = new _FetchMapper().for_fetch(fetches);
             foreach(var fetch in _fetch_mapper.unique_fetches())
@@ -24,7 +24,7 @@ namespace Tensorflow
                 {
                     case Tensor val:
                         _assert_fetchable(graph, val.op);
-                        _fetches.Add(fetch);
+                        _fetches.Add(val);
                         _ops.Add(false);
                         break;
                 }
@@ -47,7 +47,7 @@ namespace Tensorflow
             }
         }
 
-        public List<Object> fetches()
+        public List<Tensor> fetches()
         {
             return _final_fetches;
         }

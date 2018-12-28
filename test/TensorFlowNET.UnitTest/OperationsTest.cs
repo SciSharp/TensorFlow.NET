@@ -10,12 +10,6 @@ namespace TensorFlowNET.UnitTest
     public class OperationsTest
     {
         [TestMethod]
-        public void placeholder()
-        {
-            var x = tf.placeholder(tf.float32);
-        }
-
-        [TestMethod]
         public void addInPlaceholder()
         {
             var a = tf.placeholder(tf.float32);
@@ -24,9 +18,9 @@ namespace TensorFlowNET.UnitTest
 
             using(var sess = tf.Session())
             {
-                var feed_dict = new Dictionary<Tensor, object>();
-                feed_dict.Add(a, 3.0f);
-                feed_dict.Add(b, 2.0f);
+                var feed_dict = new FeedDict()
+                    .Add(a, 3.0f)
+                    .Add(b, 2.0f);
 
                 var o = sess.run(c, feed_dict);
             }
