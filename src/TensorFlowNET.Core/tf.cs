@@ -17,9 +17,9 @@ namespace Tensorflow
 
         public static Graph g = new Graph(c_api.TF_NewGraph());
 
-        public static object Variable<T>(T data, TF_DataType dtype)
+        public static object Variable<T>(T data, TF_DataType dtype = TF_DataType.DtInvalid)
         {
-            return new Variable(null, TF_DataType.DtInvalid);
+            return new RefVariable(data, dtype);
         }
 
         public static unsafe Tensor add(Tensor a, Tensor b)

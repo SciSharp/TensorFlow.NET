@@ -14,12 +14,13 @@ namespace Tensorflow
             bool validate_shape = true) : 
             base(initial_value, trainable, validate_shape)
         {
-
+            _init_from_args(initial_value, trainable);
         }
 
         private void _init_from_args(object initial_value,
             TF_DataType trainable)
         {
+            var name = ops.name_scope("", "Variable", initial_value);
             _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value");
         }
     }

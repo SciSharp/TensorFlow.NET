@@ -71,6 +71,20 @@ namespace Tensorflow
             return node_def;
         }
 
+        public static string name_scope(string name, string default_name = "", object values = null)
+        {
+            string _name = "";
+            if (String.IsNullOrEmpty(name))
+            {
+                _name = default_name;
+            }
+
+            var g = get_default_graph();
+            var _name_scope = g.name_scope(_name);
+
+            return _name_scope;
+        }
+
         public static string _name_from_scope_name(string name)
         {
             if (name.EndsWith("/"))

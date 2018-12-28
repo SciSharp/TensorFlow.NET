@@ -24,6 +24,8 @@ namespace Tensorflow
         private int _next_id_counter;
         private List<String> _unfetchable_ops = new List<string>();
 
+        private string _name_stack;
+
         public Graph(IntPtr graph)
         {
             this._c_graph = graph;
@@ -126,8 +128,31 @@ namespace Tensorflow
             return false;
         }
 
+        public string name_scope(string name)
+        {
+            string new_stack = "";
+
+            if (name.EndsWith("/"))
+            {
+                new_stack = ops._name_from_scope_name(name);
+            }
+            else
+            {
+                new_stack = unique_name(name);
+            }
+
+            _name_stack = new_stack;
+
+            return String.IsNullOrEmpty(new_stack) ? "" : new_stack + "/";
+        }
+
         public string unique_name(string name)
         {
+            if (!String.IsNullOrEmpty(_name_stack))
+            {
+                name = _name_stack + "/" + name;
+            }
+
             var name_key = name.ToLower();
             if (_names_in_use.ContainsKey(name_key))
             {
@@ -138,7 +163,6 @@ namespace Tensorflow
                 _names_in_use[name_key] = 1;
                 return name;
             }
-                
 
             return $"{name}_{_names_in_use[name_key]}";
         }

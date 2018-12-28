@@ -33,7 +33,13 @@ namespace Tensorflow
             var attrs = new Dictionary<string, AttrValue>();
             attrs["dtype"] = dtype_value;
             attrs["value"] = tensor_value;
-            var const_tensor = g.create_op("Const", null, new TF_DataType[] { (TF_DataType)dtype_value.Type }, attrs: attrs).outputs[0];
+
+            var const_tensor = g.create_op("Const", 
+                null, 
+                new TF_DataType[] { (TF_DataType)dtype_value.Type }, 
+                attrs: attrs,
+                name: name).outputs[0];
+
             const_tensor.value = nd.Data();
 
             return const_tensor;
