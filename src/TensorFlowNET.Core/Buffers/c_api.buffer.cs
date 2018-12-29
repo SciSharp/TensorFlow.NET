@@ -7,6 +7,9 @@ namespace Tensorflow
 {
     public static partial class c_api
     {
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_DeleteBuffer(IntPtr buffer);
+
         /// <summary>
         /// Useful for passing *out* a protobuf.
         /// </summary>

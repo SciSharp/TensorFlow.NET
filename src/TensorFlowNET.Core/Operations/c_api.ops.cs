@@ -31,6 +31,15 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern string TF_OperationDevice(IntPtr oper);
 
+        /// <summary>
+        /// Sets `output_attr_value` to the binary-serialized AttrValue proto
+        /// representation of the value of the `attr_name` attr of `oper`.
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationGetAttrValueProto(IntPtr oper, string attr_name, IntPtr output_attr_value, IntPtr status);
+
         [DllImport(TensorFlowLibName)]
         public static extern string TF_OperationName(IntPtr oper);
 

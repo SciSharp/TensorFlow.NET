@@ -5,23 +5,43 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class Buffer
+    public class Buffer : IDisposable
     {
         private IntPtr _handle;
 
-        private TF_Buffer buffer;
+        private TF_Buffer buffer => Marshal.PtrToStructure<TF_Buffer>(_handle);
 
-        public byte[] Data;
+        public byte[] Data 
+        {
+            get 
+            {
+                var data = new byte[buffer.length];
+                if (buffer.length > 0)
+                    Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
+                return data;
+            }
+        }
 
         public int Length => (int)buffer.length;
 
-        public unsafe Buffer(IntPtr handle)
+        public Buffer()
+        {
+            _handle = c_api.TF_NewBuffer();
+        }
+
+        public Buffer(IntPtr handle)
         {
             _handle = handle;
-            buffer = Marshal.PtrToStructure<TF_Buffer>(_handle);
-            Data = new byte[buffer.length];
-            if (buffer.length > 0)
-                Marshal.Copy(buffer.data, Data, 0, (int)buffer.length);
+        }
+
+        public static implicit operator IntPtr(Buffer buffer)
+        {
+            return buffer._handle;
+        }
+
+        public void Dispose()
+        {
+            c_api.TF_DeleteBuffer(_handle);
         }
     }
 }

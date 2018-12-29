@@ -9,10 +9,12 @@ namespace TensorFlowNET.UnitTest
 {
     public static class c_test_util
     {
-        public static bool GetAttrValue(Operation oper, string attr_name, AttrValue attr_value, Status s)
+        public static bool GetAttrValue(Operation oper, string attr_name, ref AttrValue attr_value, Status s)
         {
-            var buffer = c_api.TF_NewBuffer();
-
+            var buffer = new Buffer();
+            c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer, s);
+            attr_value = AttrValue.Parser.ParseFrom(buffer.Data);
+            buffer.Dispose();
             return s.Code == TF_Code.TF_OK;
         }
 

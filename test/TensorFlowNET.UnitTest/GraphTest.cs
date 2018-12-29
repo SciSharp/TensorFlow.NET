@@ -28,8 +28,8 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual(0, feed.NumControlInputs);
             Assert.AreEqual(0, feed.NumControlOutputs);
 
-            var attr_value = new AttrValue();
-            c_test_util.GetAttrValue(feed, "dtype", attr_value, s);
+            AttrValue attr_value = null;
+            c_test_util.GetAttrValue(feed, "dtype", ref attr_value, s);
         }
     }
 }
