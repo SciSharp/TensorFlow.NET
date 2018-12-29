@@ -64,7 +64,7 @@ namespace Tensorflow
 
             if(obj is Tensor && allow_tensor)
             {
-                if ((obj as Tensor).graph.Equals(this))
+                if ((obj as Tensor).Graph.Equals(this))
                 {
                     return obj;
                 }

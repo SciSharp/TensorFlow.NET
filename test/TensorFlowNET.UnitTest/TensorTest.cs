@@ -87,7 +87,7 @@ namespace TensorFlowNET.UnitTest
             // Test for a scalar.
             var three = c_test_util.ScalarConst(3, graph, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
-            var three_out_0 = new TF_Output { oper = three.Handle };
+            var three_out_0 = new TF_Output { oper = three };
             num_dims = c_api.TF_GraphGetTensorNumDims(graph, three_out_0, s);
             Assert.AreEqual(0, num_dims);
         }

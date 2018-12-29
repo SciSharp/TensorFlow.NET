@@ -8,7 +8,6 @@ namespace Tensorflow
     public class Buffer
     {
         private IntPtr _handle;
-        public IntPtr Handle => _handle;
 
         private TF_Buffer buffer;
 
@@ -21,7 +20,8 @@ namespace Tensorflow
             _handle = handle;
             buffer = Marshal.PtrToStructure<TF_Buffer>(_handle);
             Data = new byte[buffer.length];
-            Marshal.Copy(buffer.data, Data, 0, (int)buffer.length);
+            if (buffer.length > 0)
+                Marshal.Copy(buffer.data, Data, 0, (int)buffer.length);
         }
     }
 }

@@ -10,9 +10,26 @@ namespace TensorFlowNET.UnitTest
     public class GraphTest
     {
         [TestMethod]
-        public void ConstructGraph()
+        public void Graph()
         {
-            var g = tf.Graph();
+            var s = new Status();
+            var graph = tf.get_default_graph();
+
+            // Make a placeholder operation.
+            var feed = c_test_util.Placeholder(graph, s);
+            Assert.AreEqual("feed", feed.name);
+            Assert.AreEqual("Placeholder", feed.optype);
+            //Assert.AreEqual("", feed.device);
+            Assert.AreEqual(1, feed.NumOutputs);
+            Assert.AreEqual(TF_DataType.TF_INT32, feed.OutputType);
+            Assert.AreEqual(1, feed.OutputListLength);
+            Assert.AreEqual(0, feed.NumInputs);
+            Assert.AreEqual(0, feed.NumConsumers);
+            Assert.AreEqual(0, feed.NumControlInputs);
+            Assert.AreEqual(0, feed.NumControlOutputs);
+
+            var attr_value = new AttrValue();
+            c_test_util.GetAttrValue(feed, "dtype", attr_value, s);
         }
     }
 }

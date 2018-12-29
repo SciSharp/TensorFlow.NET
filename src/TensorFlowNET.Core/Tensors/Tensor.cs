@@ -13,9 +13,9 @@ namespace Tensorflow
     /// </summary>
     public class Tensor
     {
-        public IntPtr Handle { get; }
+        private readonly IntPtr _handle;
 
-        public Graph graph => op.graph;
+        public Graph Graph => op.Graph;
         public Operation op { get; }
 
         public string name;
@@ -46,7 +46,7 @@ namespace Tensorflow
 
         public Tensor(IntPtr handle)
         {
-            Handle = handle;
+            _handle = handle;
             dtype = c_api.TF_TensorType(handle);
             rank = c_api.TF_NumDims(handle);
             bytesize = c_api.TF_TensorByteSize(handle);
@@ -60,16 +60,16 @@ namespace Tensorflow
 
         public Tensor(NDArray nd)
         {
-            Handle = Allocate(nd);
-            dtype = c_api.TF_TensorType(Handle);
-            rank = c_api.TF_NumDims(Handle);
-            bytesize = c_api.TF_TensorByteSize(Handle);
-            buffer = c_api.TF_TensorData(Handle);
+            _handle = Allocate(nd);
+            dtype = c_api.TF_TensorType(_handle);
+            rank = c_api.TF_NumDims(_handle);
+            bytesize = c_api.TF_TensorByteSize(_handle);
+            buffer = c_api.TF_TensorData(_handle);
             dataTypeSize = c_api.TF_DataTypeSize(dtype);
 
             shape = new long[rank];
             for (int i = 0; i < rank; i++)
-                shape[i] = c_api.TF_Dim(Handle, i);
+                shape[i] = c_api.TF_Dim(_handle, i);
         }
 
         private IntPtr Allocate(NDArray nd)
@@ -117,7 +117,7 @@ namespace Tensorflow
 
         public TF_Output _as_tf_output()
         {
-            return c_api_util.tf_output(op._c_op, value_index);
+            return c_api_util.tf_output(op, value_index);
         }
 
         public T[] Data<T>()
@@ -162,7 +162,7 @@ namespace Tensorflow
 
         public static implicit operator IntPtr(Tensor tensor)
         {
-            return tensor.Handle;
+            return tensor._handle;
         }
     }
 }

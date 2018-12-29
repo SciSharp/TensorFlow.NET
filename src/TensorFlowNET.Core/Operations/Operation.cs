@@ -6,28 +6,37 @@ namespace Tensorflow
 {
     public class Operation
     {
-        public IntPtr Handle { get; }
+        private readonly IntPtr _handle;
 
-        private Graph _graph;
-        public Graph graph => _graph;
-        public IntPtr _c_op;
+        public Graph Graph { get; }
         public int _id => _id_value;
         private int _id_value;
-        public string name;
+
+        private Status status = new Status();
+
+        public string name => c_api.TF_OperationName(_handle);
+        public string optype => c_api.TF_OperationOpType(_handle);
+        public string device => c_api.TF_OperationDevice(_handle);
+        public int NumOutputs => c_api.TF_OperationNumOutputs(_handle);
+        public TF_DataType OutputType => c_api.TF_OperationOutputType(new TF_Output(_handle, 0));
+        public int OutputListLength => c_api.TF_OperationOutputListLength(_handle, "output", status);
+        public int NumInputs => c_api.TF_OperationNumInputs(_handle);
+        public int NumConsumers => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, 0));
+        public int NumControlInputs => c_api.TF_OperationNumControlInputs(_handle);
+        public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);
+
         private Tensor[] _outputs;
         public Tensor[] outputs => _outputs;
         public Tensor[] inputs;
 
         public Operation(IntPtr handle)
         {
-            Handle = handle;
+            _handle = handle;
         }
 
         public Operation(Graph g, string opType, string oper_name)
         {
-            _graph = g;
-
-            var status = new Status();
+            Graph = g;
 
             var desc = c_api.TF_NewOperation(g, opType, oper_name);
             c_api.TF_SetAttrType(desc, "dtype", TF_DataType.TF_INT32);
@@ -36,19 +45,18 @@ namespace Tensorflow
 
         public Operation(NodeDef node_def, Graph g, List<Tensor> inputs = null, TF_DataType[] output_types = null, object control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
-            _graph = g;
+            Graph = g;
 
-            _id_value = _graph._next_id();
-            _c_op = ops._create_c_op(g, node_def, inputs);
-            var num_outputs = c_api.TF_OperationNumOutputs(_c_op);
+            _id_value = Graph._next_id();
+            _handle = ops._create_c_op(g, node_def, inputs);
 
-            _outputs = new Tensor[num_outputs];
-            for (int i = 0; i < num_outputs; i++)
+            _outputs = new Tensor[NumOutputs];
+            for (int i = 0; i < NumOutputs; i++)
             {
                 _outputs[i] = new Tensor(this, i, output_types[i]);
             }
 
-            _graph._add_op(this);
+            Graph._add_op(this);
         }
 
         public object get_attr(string name)
@@ -68,6 +76,16 @@ namespace Tensorflow
             }
 
             return ret;
+        }
+
+        public static implicit operator Operation(IntPtr handle)
+        {
+            return new Operation(handle);
+        }
+
+        public static implicit operator IntPtr(Operation op)
+        {
+            return op._handle;
         }
     }
 }

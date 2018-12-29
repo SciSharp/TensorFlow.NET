@@ -12,7 +12,7 @@ namespace Tensorflow
         /// </summary>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern IntPtr TF_GetAllOpList();
+        public static extern IntPtr TF_GetAllOpList();
 
         /// <summary>
         /// For inputs that take a single tensor.
@@ -20,24 +20,78 @@ namespace Tensorflow
         /// <param name="desc"></param>
         /// <param name="input"></param>
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern void TF_AddInput(IntPtr desc, TF_Output input);
+        public static extern void TF_AddInput(IntPtr desc, TF_Output input);
 
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern IntPtr TF_FinishOperation(IntPtr desc, IntPtr status);
+        public static extern IntPtr TF_FinishOperation(IntPtr desc, IntPtr status);
 
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern IntPtr TF_NewOperation(IntPtr graph, string opType, string oper_name);
+        public static extern IntPtr TF_NewOperation(IntPtr graph, string opType, string oper_name);
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe int TF_OperationNumOutputs(IntPtr oper);
+        public static extern string TF_OperationDevice(IntPtr oper);
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_SetAttrValueProto(IntPtr desc, string attr_name, IntPtr proto, UIntPtr proto_len, IntPtr status);
+        public static extern string TF_OperationName(IntPtr oper);
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_SetAttrTensor(IntPtr desc, string attr_name, IntPtr value, IntPtr status);
+        public static extern int TF_OperationNumInputs(IntPtr oper);
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_SetAttrType(IntPtr desc, string attr_name, TF_DataType value);
+        public static extern string TF_OperationOpType(IntPtr oper);
+
+        /// <summary>
+        /// Get the number of control inputs to an operation.
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationNumControlInputs(IntPtr oper);
+
+        /// <summary>
+        /// Get the number of operations that have `*oper` as a control input.
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationNumControlOutputs(IntPtr oper);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationNumOutputs(IntPtr oper);
+
+        /// <summary>
+        /// Get the number of current consumers of a specific output of an
+        /// operation.  Note that this number can change when new operations
+        /// are added to the graph.
+        /// </summary>
+        /// <param name="oper_out"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationOutputNumConsumers(TF_Output oper_out);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_DataType TF_OperationOutputType(TF_Output oper_out);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationOutputListLength(IntPtr oper, string arg_name, IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetAttrValueProto(IntPtr desc, string attr_name, IntPtr proto, UIntPtr proto_len, IntPtr status);
+
+        /// <summary>
+        /// Set `num_dims` to -1 to represent "unknown rank".
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <param name="attr_name"></param>
+        /// <param name="dims"></param>
+        /// <param name="num_dims"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetAttrShape(IntPtr desc, string attr_name, long[] dims, int num_dims);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetAttrTensor(IntPtr desc, string attr_name, IntPtr value, IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetAttrType(IntPtr desc, string attr_name, TF_DataType value);
     }
 }
