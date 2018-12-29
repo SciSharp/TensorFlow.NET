@@ -3,12 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using Buffer = Tensorflow.Buffer;
 
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
     public class OperationsTest
     {
+        [TestMethod]
+        public void GetAllOpList()
+        {
+            var handle = c_api.TF_GetAllOpList();
+            var buffer = new Buffer(handle);
+            Assert.IsTrue(buffer.Length == buffer.Data.Length);
+        }
+
         [TestMethod]
         public void addInPlaceholder()
         {
@@ -18,9 +27,9 @@ namespace TensorFlowNET.UnitTest
 
             using(var sess = tf.Session())
             {
-                var feed_dict = new FeedDict()
-                    .Add(a, 3.0f)
-                    .Add(b, 2.0f);
+                var feed_dict = new Dictionary<Tensor, object>();
+                feed_dict.Add(a, 3.0f);
+                feed_dict.Add(b, 2.0f);
 
                 var o = sess.run(c, feed_dict);
             }

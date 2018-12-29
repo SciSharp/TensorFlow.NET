@@ -13,6 +13,8 @@ namespace Tensorflow
     /// </summary>
     public class Tensor
     {
+        public IntPtr Handle { get; }
+
         public Graph graph => op.graph;
         public Operation op { get; }
 
@@ -21,7 +23,6 @@ namespace Tensorflow
         public int value_index { get; }
 
         public TF_DataType dtype { get; }
-        public IntPtr handle { get; }
         public ulong bytesize { get; }
         public ulong dataTypeSize { get;}
         public ulong size => bytesize / dataTypeSize;
@@ -45,7 +46,7 @@ namespace Tensorflow
 
         public Tensor(IntPtr handle)
         {
-            this.handle = handle;
+            Handle = handle;
             dtype = c_api.TF_TensorType(handle);
             rank = c_api.TF_NumDims(handle);
             bytesize = c_api.TF_TensorByteSize(handle);
@@ -59,33 +60,52 @@ namespace Tensorflow
 
         public Tensor(NDArray nd)
         {
-            var data = Marshal.AllocHGlobal(sizeof(float) * nd.size);
-            Marshal.Copy(nd.Data<float>(), 0, data, nd.size);
-            var dataType = ToTFDataType(nd.dtype);
-
-            var handle = c_api.TF_NewTensor(dataType,
-                nd.shape.Select(x => (long)x).ToArray(), // shape
-                nd.ndim,
-                data,
-                (UIntPtr)(nd.size * sizeof(float)),
-                (IntPtr values, IntPtr len, ref bool closure) =>
-                {
-                    // Free the original buffer and set flag
-                    Marshal.FreeHGlobal(data);
-                    closure = true;
-                },
-                ref deallocator_called);
-
-            this.handle = handle;
-            dtype = c_api.TF_TensorType(handle);
-            rank = c_api.TF_NumDims(handle);
-            bytesize = c_api.TF_TensorByteSize(handle);
-            buffer = c_api.TF_TensorData(handle);
+            Handle = Allocate(nd);
+            dtype = c_api.TF_TensorType(Handle);
+            rank = c_api.TF_NumDims(Handle);
+            bytesize = c_api.TF_TensorByteSize(Handle);
+            buffer = c_api.TF_TensorData(Handle);
             dataTypeSize = c_api.TF_DataTypeSize(dtype);
 
             shape = new long[rank];
             for (int i = 0; i < rank; i++)
-                shape[i] = c_api.TF_Dim(handle, i);
+                shape[i] = c_api.TF_Dim(Handle, i);
+        }
+
+        private IntPtr Allocate(NDArray nd)
+        {
+            var dotHandle = Marshal.AllocHGlobal(nd.dtypesize * nd.size);
+
+            switch (nd.dtype.Name)
+            {
+                case "Int32":
+                    Marshal.Copy(nd.Data<int>(), 0, dotHandle, nd.size);
+                    break;
+                case "Single":
+                    Marshal.Copy(nd.Data<float>(), 0, dotHandle, nd.size);
+                    break;
+                case "Double":
+                    Marshal.Copy(nd.Data<double>(), 0, dotHandle, nd.size);
+                    break;
+                default:
+                    throw new NotImplementedException("Marshal.Copy failed.");
+            }
+
+            var dataType = ToTFDataType(nd.dtype);
+            var tfHandle = c_api.TF_NewTensor(dataType,
+                nd.shape.Select(x => (long)x).ToArray(), // shape
+                nd.ndim,
+                dotHandle,
+                (UIntPtr)(nd.size * nd.dtypesize),
+                (IntPtr values, IntPtr len, ref bool closure) =>
+                {
+                    // Free the original buffer and set flag
+                    Marshal.FreeHGlobal(dotHandle);
+                    closure = true;
+                },
+                ref deallocator_called);
+
+            return tfHandle;
         }
 
         public Tensor(Operation op, int value_index, TF_DataType dtype)
@@ -129,11 +149,20 @@ namespace Tensorflow
         {
             switch (type.Name)
             {
+                case "Int32":
+                    return TF_DataType.TF_INT32;
                 case "Single":
                     return TF_DataType.TF_FLOAT;
+                case "Double":
+                    return TF_DataType.TF_DOUBLE;
             }
 
             return TF_DataType.DtInvalid;
+        }
+
+        public static implicit operator IntPtr(Tensor tensor)
+        {
+            return tensor.Handle;
         }
     }
 }

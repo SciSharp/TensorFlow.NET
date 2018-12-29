@@ -24,7 +24,7 @@ namespace Tensorflow
 
         public static unsafe IntPtr _create_c_op(Graph graph, NodeDef node_def, List<Tensor> inputs)
         {
-            var op_desc = c_api.TF_NewOperation(graph.Handle, node_def.Op, node_def.Name);
+            var op_desc = c_api.TF_NewOperation(graph, node_def.Op, node_def.Name);
 
             // Add inputs
             if(inputs != null)
@@ -45,12 +45,12 @@ namespace Tensorflow
                 var bytes = attr.Value.ToByteArray();
                 var proto = Marshal.AllocHGlobal(bytes.Length);
                 Marshal.Copy(bytes, 0, proto, bytes.Length);
-                c_api.TF_SetAttrValueProto(op_desc, attr.Key, proto, proto_len: (UIntPtr)bytes.Length, status: status.Handle);
+                c_api.TF_SetAttrValueProto(op_desc, attr.Key, proto, proto_len: (UIntPtr)bytes.Length, status: status);
 
                 if(status.Code != TF_Code.TF_OK) throw new Exception(status.Message);
             }
 
-            var c_op = c_api.TF_FinishOperation(op_desc, status.Handle);
+            var c_op = c_api.TF_FinishOperation(op_desc, status);
 
             if (status.Code != TF_Code.TF_OK) throw new Exception(status.Message);
 

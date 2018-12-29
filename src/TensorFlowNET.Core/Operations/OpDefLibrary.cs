@@ -28,9 +28,6 @@ namespace Tensorflow
         {
             var op_def = _ops[op_type_name];
 
-            var status = new Status();
-            var buffer = new Buffer();
-
             var g = ops.get_default_graph();
 
             if (String.IsNullOrEmpty(name))

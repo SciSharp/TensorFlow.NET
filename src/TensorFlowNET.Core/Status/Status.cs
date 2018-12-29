@@ -4,10 +4,13 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class Status : IDisposable
+    /// <summary>
+    /// TF_Status holds error information. It either has an OK code, or
+    /// else an error code with an associated error message.
+    /// </summary>
+    public class Status
     {
         private readonly IntPtr _handle;
-        public IntPtr Handle => _handle;
 
         /// <summary>
         /// Error message
@@ -27,6 +30,23 @@ namespace Tensorflow
         public void SetStatus(TF_Code code, string msg)
         {
             c_api.TF_SetStatus(_handle, code, msg);
+        }
+
+        /// <summary>
+        /// Check status 
+        /// Throw exception with error message if code != TF_OK
+        /// </summary>
+        public void Check()
+        {
+            if(Code != TF_Code.TF_OK)
+            {
+                throw new Exception(Message);
+            }
+        }
+
+        public static implicit operator IntPtr(Status status)
+        {
+            return status._handle;
         }
 
         public void Dispose()

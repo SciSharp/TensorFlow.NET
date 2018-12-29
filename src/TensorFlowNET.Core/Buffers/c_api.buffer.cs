@@ -8,6 +8,6 @@ namespace Tensorflow
     public static partial class c_api
     {
         [DllImport(TensorFlowLibName)]
-        public static extern string TF_GetBuffer(IntPtr buffer);
+        public static extern IntPtr TF_GetBuffer(TF_Buffer buffer);
     }
 }

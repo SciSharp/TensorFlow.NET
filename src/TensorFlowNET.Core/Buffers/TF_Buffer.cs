@@ -9,7 +9,7 @@ namespace Tensorflow
     public struct TF_Buffer
     {
         public IntPtr data;
-        public int length;
+        public ulong length;
         public IntPtr data_deallocator;
     }
 }
