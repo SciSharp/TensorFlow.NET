@@ -17,6 +17,7 @@ namespace Tensorflow
     /// TF_XX* => IntPtr (TF_Graph* graph) => (IntPtr graph)
     /// struct => struct (TF_Output output) => (TF_Output output)
     /// struct* => struct (TF_Output* output) => (TF_Output[] output)
+    /// struct* => ref IntPtr (TF_Input* consumers) => (ref IntPtr handle), if output is struct[]
     /// const char* => string
     /// int32_t => int
     /// int64_t* => long[]

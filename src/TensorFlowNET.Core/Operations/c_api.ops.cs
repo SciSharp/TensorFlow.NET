@@ -49,6 +49,22 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern int TF_OperationGetAttrValueProto(IntPtr oper, string attr_name, IntPtr output_attr_value, IntPtr status);
 
+        /// <summary>
+        /// TF_Output producer = TF_OperationInput(consumer);
+        /// There is an edge from producer.oper's output (given by
+        /// producer.index) to consumer.oper's input (given by consumer.index).
+        /// </summary>
+        /// <param name="oper_in"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_Output TF_OperationInput(TF_Input oper_in);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationInputListLength(IntPtr oper, string arg_name, IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_DataType TF_OperationInputType(TF_Input oper_in);
+
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_OperationName(IntPtr oper);
 
@@ -86,6 +102,17 @@ namespace Tensorflow
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern int TF_OperationOutputNumConsumers(TF_Output oper_out);
+
+        /// <summary>
+        /// Get list of all current consumers of a specific output of an
+        /// operation.
+        /// </summary>
+        /// <param name="oper_out"></param>
+        /// <param name="consumers"></param>
+        /// <param name="max_consumers"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationOutputConsumers(TF_Output oper_out, ref IntPtr consumers, int max_consumers);
 
         [DllImport(TensorFlowLibName)]
         public static extern TF_DataType TF_OperationOutputType(TF_Output oper_out);

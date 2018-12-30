@@ -126,7 +126,7 @@ namespace Tensorflow
             }
             else if (tensor_or_op is Operation)
             {
-                return !_unfetchable_ops.Contains((tensor_or_op as Operation).name);
+                return !_unfetchable_ops.Contains((tensor_or_op as Operation).Name);
             }
 
             return false;

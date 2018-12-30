@@ -15,14 +15,31 @@ namespace Tensorflow
 
         private Status status = new Status();
 
-        public string name => c_api.StringPiece(c_api.TF_OperationName(_handle));
-        public string optype => c_api.StringPiece(c_api.TF_OperationOpType(_handle));
-        public string device => c_api.StringPiece(c_api.TF_OperationDevice(_handle));
+        public string Name => c_api.StringPiece(c_api.TF_OperationName(_handle));
+        public string OpType => c_api.StringPiece(c_api.TF_OperationOpType(_handle));
+        public string Device => c_api.StringPiece(c_api.TF_OperationDevice(_handle));
         public int NumOutputs => c_api.TF_OperationNumOutputs(_handle);
-        public TF_DataType OutputType => c_api.TF_OperationOutputType(new TF_Output(_handle, 0));
-        public int OutputListLength => c_api.TF_OperationOutputListLength(_handle, "output", status);
+        public TF_DataType OutputType(int index) => c_api.TF_OperationOutputType(new TF_Output(_handle, index));
+        public int OutputListLength(string name) => c_api.TF_OperationOutputListLength(_handle, name, status);
+        public TF_Output Input(int index) => c_api.TF_OperationInput(new TF_Input(_handle, index));
+        public TF_DataType InputType(int index) => c_api.TF_OperationInputType(new TF_Input(_handle, index));
+        public int InputListLength(string name) => c_api.TF_OperationInputListLength(_handle, name, status);
         public int NumInputs => c_api.TF_OperationNumInputs(_handle);
-        public int NumConsumers => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, 0));
+        public int OutputNumConsumers(int index) => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, index));
+        public TF_Input[] OutputConsumers(int index, int max_consumers)
+        {
+            IntPtr handle = IntPtr.Zero;
+            int size = Marshal.SizeOf<TF_Input>();
+            int num = c_api.TF_OperationOutputConsumers(new TF_Output(_handle, index), ref handle, max_consumers);
+            var consumers = new TF_Input[num];
+            for(int i = 0; i < num; i++)
+            {
+                consumers[0] = Marshal.PtrToStructure<TF_Input>(handle + i * size);
+            }
+
+            return consumers;
+        }
+
         public int NumControlInputs => c_api.TF_OperationNumControlInputs(_handle);
         public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);
 
@@ -91,6 +108,17 @@ namespace Tensorflow
         public static implicit operator IntPtr(Operation op)
         {
             return op._handle;
+        }
+
+        public override bool Equals(object obj)
+        {
+            switch (obj)
+            {
+                case IntPtr val:
+                    return val == _handle;
+            }
+
+            return base.Equals(obj);
         }
     }
 }

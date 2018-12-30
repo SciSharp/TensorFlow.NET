@@ -21,14 +21,14 @@ namespace TensorFlowNET.UnitTest
 
             // Make a placeholder operation.
             var feed = c_test_util.Placeholder(graph, s);
-            Assert.AreEqual("feed", feed.name);
-            Assert.AreEqual("Placeholder", feed.optype);
-            Assert.AreEqual("", feed.device);
+            Assert.AreEqual("feed", feed.Name);
+            Assert.AreEqual("Placeholder", feed.OpType);
+            Assert.AreEqual("", feed.Device);
             Assert.AreEqual(1, feed.NumOutputs);
-            Assert.AreEqual(TF_DataType.TF_INT32, feed.OutputType);
-            Assert.AreEqual(1, feed.OutputListLength);
+            Assert.AreEqual(TF_DataType.TF_INT32, feed.OutputType(0));
+            Assert.AreEqual(1, feed.OutputListLength("output"));
             Assert.AreEqual(0, feed.NumInputs);
-            Assert.AreEqual(0, feed.NumConsumers);
+            Assert.AreEqual(0, feed.OutputNumConsumers(0));
             Assert.AreEqual(0, feed.NumControlInputs);
             Assert.AreEqual(0, feed.NumControlOutputs);
 
@@ -44,9 +44,45 @@ namespace TensorFlowNET.UnitTest
 
             // Make a constant oper with the scalar "3".
             var three = c_test_util.ScalarConst(3, graph, s);
+            Assert.AreEqual(TF_Code.TF_OK, s.Code);
 
             // Add oper.
             var add = c_test_util.Add(feed, three, graph, s);
+            Assert.AreEqual(TF_Code.TF_OK, s.Code);
+
+            // Test TF_Operation*() query functions.
+            Assert.AreEqual("add", add.Name);
+            Assert.AreEqual("AddN", add.OpType);
+            Assert.AreEqual("", add.Device);
+            Assert.AreEqual(1, add.NumOutputs);
+            Assert.AreEqual(TF_DataType.TF_INT32, add.OutputType(0));
+            Assert.AreEqual(1, add.OutputListLength("sum"));
+            Assert.AreEqual(TF_Code.TF_OK, s.Code);
+            Assert.AreEqual(2, add.InputListLength("inputs"));
+            Assert.AreEqual(TF_Code.TF_OK, s.Code);
+            Assert.AreEqual(TF_DataType.TF_INT32, add.InputType(0));
+            Assert.AreEqual(TF_DataType.TF_INT32, add.InputType(1));
+            var add_in_0 = add.Input(0);
+            Assert.AreEqual(feed, add_in_0.oper);
+            Assert.AreEqual(0, add_in_0.index);
+            var add_in_1 = add.Input(1);
+            Assert.AreEqual(three, add_in_1.oper);
+            Assert.AreEqual(0, add_in_1.index);
+            Assert.AreEqual(0, add.OutputNumConsumers(0));
+            Assert.AreEqual(0, add.NumControlInputs);
+            Assert.AreEqual(0, add.NumControlOutputs);
+
+            Assert.IsTrue(c_test_util.GetAttrValue(add, "T", ref attr_value, s));
+            Assert.AreEqual(DataType.DtInt32, attr_value.Type);
+            Assert.IsTrue(c_test_util.GetAttrValue(add, "N", ref attr_value, s));
+            Assert.AreEqual(2, attr_value.I);
+
+            // Placeholder oper now has a consumer.
+            Assert.AreEqual(1, feed.OutputNumConsumers(0));
+            TF_Input[] feed_port = feed.OutputConsumers(0, 1);
+            Assert.AreEqual(1, feed_port.Length);
+            Assert.AreEqual(add, feed_port[0].oper);
+            Assert.AreEqual(0, feed_port[0].index);
         }
     }
 }
