@@ -14,16 +14,16 @@ namespace Tensorflow
 
         private Status status = new Status();
 
-        public string name => c_api.TF_OperationName(_handle);
-        public string optype => c_api.TF_OperationOpType(_handle);
-        public string device => c_api.TF_OperationDevice(_handle);
-        public int NumOutputs => c_api.TF_OperationNumOutputs(_handle);
-        public TF_DataType OutputType => c_api.TF_OperationOutputType(new TF_Output(_handle, 0));
-        public int OutputListLength => c_api.TF_OperationOutputListLength(_handle, "output", status);
-        public int NumInputs => c_api.TF_OperationNumInputs(_handle);
-        public int NumConsumers => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, 0));
-        public int NumControlInputs => c_api.TF_OperationNumControlInputs(_handle);
-        public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);
+        public string name { get; }
+        public string optype { get; }
+        public string device { get; }
+        public int NumOutputs { get; }
+        public TF_DataType OutputType { get; }
+        public int OutputListLength { get; }
+        public int NumInputs { get; }
+        public int NumConsumers { get; }
+        public int NumControlInputs { get; }
+        public int NumControlOutputs { get; }
 
         private Tensor[] _outputs;
         public Tensor[] outputs => _outputs;
@@ -31,7 +31,21 @@ namespace Tensorflow
 
         public Operation(IntPtr handle)
         {
+            if (handle == IntPtr.Zero)
+                return;
+
             _handle = handle;
+
+            name = c_api.TF_OperationName(_handle);
+            optype = c_api.TF_OperationOpType(_handle);
+            device = "";// c_api.TF_OperationDevice(_handle);
+            NumOutputs = c_api.TF_OperationNumOutputs(_handle);
+            OutputType = c_api.TF_OperationOutputType(new TF_Output(_handle, 0));
+            OutputListLength = c_api.TF_OperationOutputListLength(_handle, "output", status);
+            NumInputs = c_api.TF_OperationNumInputs(_handle);
+            NumConsumers = c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, 0));
+            NumControlInputs = c_api.TF_OperationNumControlInputs(_handle);
+            NumControlOutputs = c_api.TF_OperationNumControlOutputs(_handle);
         }
 
         public Operation(Graph g, string opType, string oper_name)

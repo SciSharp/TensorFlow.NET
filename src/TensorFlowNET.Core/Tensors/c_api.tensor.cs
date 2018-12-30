@@ -7,20 +7,23 @@ namespace Tensorflow
 {
     public static partial class c_api
     {
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_AllocateTensor(TF_DataType dtype, long[] dims, int num_dims, ulong len);
+
         /// <summary>
         /// returns the sizeof() for the underlying type corresponding to the given TF_DataType enum value.
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern ulong TF_DataTypeSize(TF_DataType dt);
+        public static extern ulong TF_DataTypeSize(TF_DataType dt);
 
         /// <summary>
         /// Destroy a tensor.
         /// </summary>
         /// <param name="tensor"></param>
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern void TF_DeleteTensor(IntPtr tensor);
+        public static extern void TF_DeleteTensor(IntPtr tensor);
 
         /// <summary>
         /// Return the length of the tensor in the "dim_index" dimension.
@@ -30,7 +33,7 @@ namespace Tensorflow
         /// <param name="dim_index"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe long TF_Dim(IntPtr tensor, int dim_index);
+        public static extern long TF_Dim(IntPtr tensor, int dim_index);
 
         /// <summary>
         /// Return a new tensor that holds the bytes data[0,len-1]
@@ -44,7 +47,7 @@ namespace Tensorflow
         /// <param name="deallocator_arg"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len, Deallocator deallocator, ref bool deallocator_arg);
+        public static extern IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len, Deallocator deallocator, ref bool deallocator_arg);
 
         /// <summary>
         /// Return the number of dimensions that the tensor has.
@@ -52,7 +55,7 @@ namespace Tensorflow
         /// <param name="tensor"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe int TF_NumDims(IntPtr tensor);
+        public static extern int TF_NumDims(IntPtr tensor);
 
         /// <summary>
         /// Return the size of the underlying data in bytes.
@@ -60,7 +63,7 @@ namespace Tensorflow
         /// <param name="tensor"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe ulong TF_TensorByteSize(IntPtr tensor);
+        public static extern ulong TF_TensorByteSize(IntPtr tensor);
 
         /// <summary>
         /// Return a pointer to the underlying data buffer.
@@ -68,7 +71,7 @@ namespace Tensorflow
         /// <param name="tensor"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe IntPtr TF_TensorData(IntPtr tensor);
+        public static extern IntPtr TF_TensorData(IntPtr tensor);
 
         /// <summary>
         /// Return the type of a tensor element.
@@ -76,6 +79,6 @@ namespace Tensorflow
         /// <param name="tensor"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe TF_DataType TF_TensorType(IntPtr tensor);
+        public static extern TF_DataType TF_TensorType(IntPtr tensor);
     }
 }

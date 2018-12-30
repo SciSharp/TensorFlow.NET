@@ -22,6 +22,15 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern void TF_AddInput(IntPtr desc, TF_Output input);
 
+        /// <summary>
+        /// For inputs that take a list of tensors.
+        /// inputs must point to TF_Output[num_inputs].
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <param name="inputs"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_AddInputList(IntPtr desc, TF_Output[] inputs, int num_inputs);
+
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_FinishOperation(IntPtr desc, IntPtr status);
 

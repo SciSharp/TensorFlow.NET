@@ -11,7 +11,7 @@ namespace Tensorflow
     /// A tensor is a generalization of vectors and matrices to potentially higher dimensions. 
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
-    public class Tensor
+    public class Tensor : IDisposable
     {
         private readonly IntPtr _handle;
 
@@ -38,6 +38,7 @@ namespace Tensorflow
         /// n	n-Tensor (you get the idea)
         /// </summary>
         public int rank;
+        public int NDims => rank;
 
         /// <summary>
         /// if original buffer is free.
@@ -96,7 +97,7 @@ namespace Tensorflow
                 nd.shape.Select(x => (long)x).ToArray(), // shape
                 nd.ndim,
                 dotHandle,
-                (UIntPtr)(nd.size * nd.dtypesize),
+                (ulong)(nd.size * nd.dtypesize),
                 (IntPtr values, IntPtr len, ref bool closure) =>
                 {
                     // Free the original buffer and set flag
@@ -160,9 +161,19 @@ namespace Tensorflow
             return TF_DataType.DtInvalid;
         }
 
+        public void Dispose()
+        {
+            c_api.TF_DeleteTensor(_handle);
+        }
+
         public static implicit operator IntPtr(Tensor tensor)
         {
             return tensor._handle;
+        }
+
+        public static implicit operator Tensor(IntPtr handle)
+        {
+            return new Tensor(handle);
         }
     }
 }

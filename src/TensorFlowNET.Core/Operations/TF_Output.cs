@@ -14,7 +14,7 @@ namespace Tensorflow
             this.index = index;
         }
 
-        public IntPtr oper;
+        public unsafe IntPtr oper;
         public int index;
     }
 }

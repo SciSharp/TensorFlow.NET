@@ -7,6 +7,7 @@ namespace Tensorflow
 {
     /// <summary>
     /// C API for TensorFlow.
+    /// Port from tensorflow\c\c_api.h
     /// 
     /// The API leans towards simplicity and uniformity instead of convenience
     /// since most usage will be by language specific wrappers.

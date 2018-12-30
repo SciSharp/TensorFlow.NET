@@ -7,8 +7,32 @@ using Buffer = Tensorflow.Buffer;
 
 namespace TensorFlowNET.UnitTest
 {
+    /// <summary>
+    /// Port from `tensorflow\c\c_test_util.cc`
+    /// </summary>
     public static class c_test_util
     {
+        public static Operation Add(Operation l, Operation r, Graph graph, Status s, string name = "add")
+        {
+            Operation op = null;
+            AddOpHelper(l, r, graph, s, name, ref op, true);
+            return op;
+        }
+
+        public static void AddOpHelper(Operation l, Operation r, Graph graph, Status s, string name, ref Operation op, bool check)
+        {
+            var desc = c_api.TF_NewOperation(graph, "AddN", name);
+
+            c_api.TF_AddInputList(desc, new TF_Output[]
+            {
+                new TF_Output(l, 0),
+                new TF_Output(r, 0),
+            }, 2);
+
+            op = c_api.TF_FinishOperation(desc, s);
+            s.Check();
+        }
+
         public static bool GetAttrValue(Operation oper, string attr_name, ref AttrValue attr_value, Status s)
         {
             var buffer = new Buffer();
@@ -58,7 +82,7 @@ namespace TensorFlowNET.UnitTest
             return op;
         }
 
-        public static Operation ScalarConst(int v, Graph graph, Status s, string name = "Const")
+        public static Operation ScalarConst(int v, Graph graph, Status s, string name = "scalar")
         {
             return Const(new Tensor(v), graph, s, name);
         }

@@ -10,8 +10,12 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class OperationsTest
     {
+        /// <summary>
+        /// Port from tensorflow\c\c_api_test.cc
+        /// `TEST(CAPI, GetAllOpList)`
+        /// </summary>
         [TestMethod]
-        public void GetAllOpList()
+        public void c_api_GetAllOpList()
         {
             var handle = c_api.TF_GetAllOpList();
             var buffer = new Buffer(handle);

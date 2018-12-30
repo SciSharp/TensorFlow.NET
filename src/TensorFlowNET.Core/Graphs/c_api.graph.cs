@@ -7,6 +7,14 @@ namespace Tensorflow
 {
     public static partial class c_api
     {
+        /// <summary>
+        /// Destroy an options object.  Graph will be deleted once no more
+        /// TFSession's are referencing it.
+        /// </summary>
+        /// <param name="graph"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_DeleteGraph(IntPtr graph);
+
         [DllImport(TensorFlowLibName)]
         public static extern void TF_GraphGetOpDef(IntPtr graph, string op_name, IntPtr output_op_def, IntPtr status);
 
@@ -21,14 +29,14 @@ namespace Tensorflow
         /// <param name="num_dims"></param>
         /// <param name="status"></param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_GraphGetTensorShape(IntPtr graph, TF_Output output, int[] dims, int num_dims, IntPtr status);
+        public static extern void TF_GraphGetTensorShape(IntPtr graph, TF_Output output, long[] dims, int num_dims, IntPtr status);
 
         /// <summary>
         /// Sets the shape of the Tensor referenced by `output` in `graph` to
         /// the shape described by `dims` and `num_dims`.
         /// </summary>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_GraphSetTensorShape(IntPtr graph, TF_Output output, int[] dims, int num_dims, IntPtr status);
+        public static extern void TF_GraphSetTensorShape(IntPtr graph, TF_Output output, long[] dims, int num_dims, IntPtr status);
 
         /// <summary>
         /// Returns the number of dimensions of the Tensor referenced by `output`

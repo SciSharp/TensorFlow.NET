@@ -4,7 +4,7 @@ TensorFlow.NET provides .NET Standard binding for [TensorFlow](https://www.tenso
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 ![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/tensorflow-net-p7kmsjyo10ey?svg=true)
 
-TensorFlow.NET is a member project of SciSharp stack.
+TensorFlow.NET is a member project of [SciSharp](https://github.com/SciSharp) stack.
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
@@ -45,3 +45,5 @@ using(var sess = tf.Session())
     var o = sess.run(c, feed_dict);
 }
 ```
+
+Star me or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET) feel free.

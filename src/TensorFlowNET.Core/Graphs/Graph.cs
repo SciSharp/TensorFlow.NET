@@ -13,7 +13,7 @@ namespace Tensorflow
     /// then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
     /// https://www.tensorflow.org/guide/graphs
     /// </summary>
-    public class Graph
+    public class Graph : IDisposable
     {
         private IntPtr _handle;
         private Dictionary<int, Operation> _nodes_by_id;
@@ -24,6 +24,11 @@ namespace Tensorflow
         private List<String> _unfetchable_ops = new List<string>();
 
         private string _name_stack;
+
+        public Graph()
+        {
+            _handle = c_api.TF_NewGraph();
+        }
 
         public Graph(IntPtr graph)
         {
@@ -169,6 +174,11 @@ namespace Tensorflow
         public Operation[] get_operations()
         {
             return _nodes_by_name.Values.Select(x => x).ToArray();
+        }
+
+        public void Dispose()
+        {
+            c_api.TF_DeleteGraph(_handle);
         }
 
         public static implicit operator IntPtr(Graph graph)
