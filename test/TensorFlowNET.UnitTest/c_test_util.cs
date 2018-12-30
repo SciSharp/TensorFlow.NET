@@ -39,9 +39,18 @@ namespace TensorFlowNET.UnitTest
         {
             var buffer = new Buffer();
             c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer, s);
-            attr_value = AttrValue.Parser.ParseFrom(buffer.Data);
+            attr_value = AttrValue.Parser.ParseFrom(buffer);
             buffer.Dispose();
             return s.Code == TF_Code.TF_OK;
+        }
+
+        public static GraphDef GetGraphDef(Graph graph)
+        {
+            var s = new Status();
+            var buffer = new Buffer();
+            c_api.TF_GraphToGraphDef(graph, buffer, s);
+            s.Check();
+            return GraphDef.Parser.ParseFrom(buffer);
         }
 
         public static bool GetNodeDef(Operation oper, ref NodeDef node_def)
@@ -51,6 +60,37 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_OperationToNodeDef(oper, buffer, s);
 
             return s.Code == TF_Code.TF_OK;
+        }
+
+        public static bool IsPlaceholder(NodeDef node_def)
+        {
+            if (node_def.Op != "Placeholder" || node_def.Name != "feed")
+            {
+                return false;
+            }
+
+            bool found_dtype = false;
+            bool found_shape = false;
+            foreach (var attr in node_def.Attr)
+            {
+                if (attr.Key == "dtype")
+                {
+                    if (attr.Value.Type == DataType.DtInt32)
+                    {
+                        found_dtype = true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else if (attr.Key == "shape")
+                {
+                    found_shape = true;
+                }
+            }
+
+            return found_dtype && found_shape;
         }
 
         public static void PlaceholderHelper(Graph graph, Status s, string name, TF_DataType dtype, long[] dims, ref Operation op)

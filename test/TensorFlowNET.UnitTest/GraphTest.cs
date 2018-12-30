@@ -83,6 +83,42 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual(1, feed_port.Length);
             Assert.AreEqual(add, feed_port[0].oper);
             Assert.AreEqual(0, feed_port[0].index);
+
+            // The scalar const oper also has a consumer.
+            Assert.AreEqual(1, three.OutputNumConsumers(0));
+            TF_Input[] three_port = three.OutputConsumers(0, 1);
+            Assert.AreEqual(add, three_port[0].oper);
+            Assert.AreEqual(1, three_port[0].index);
+
+            // Serialize to GraphDef.
+            var graph_def = c_test_util.GetGraphDef(graph);
+
+            // Validate GraphDef is what we expect.
+            bool found_placeholder = false;
+            bool found_scalar_const = false;
+            bool found_add = false;
+            foreach (var n in graph_def.Node)
+            {
+                if (c_test_util.IsPlaceholder(n))
+                {
+                    Assert.IsFalse(found_placeholder);
+                    found_placeholder = true;
+                }
+                /*else if (IsScalarConst(n, 3))
+                {
+                    Assert.IsFalse(found_scalar_const);
+                    found_scalar_const = true;
+                }
+                else if (IsAddN(n, 2))
+                {
+                    Assert.IsFalse(found_add);
+                    found_add = true;
+                }
+                else
+                {
+                    ADD_FAILURE() << "Unexpected NodeDef: " << ProtoDebugString(n);
+                }*/
+            }
         }
     }
 }

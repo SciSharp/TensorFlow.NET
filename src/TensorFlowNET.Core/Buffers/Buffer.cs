@@ -39,6 +39,11 @@ namespace Tensorflow
             return buffer._handle;
         }
 
+        public static implicit operator byte[](Buffer buffer)
+        {
+            return buffer.Data;
+        }
+
         public void Dispose()
         {
             c_api.TF_DeleteBuffer(_handle);

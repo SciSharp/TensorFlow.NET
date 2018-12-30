@@ -26,15 +26,15 @@ namespace Tensorflow
         public int InputListLength(string name) => c_api.TF_OperationInputListLength(_handle, name, status);
         public int NumInputs => c_api.TF_OperationNumInputs(_handle);
         public int OutputNumConsumers(int index) => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, index));
-        public TF_Input[] OutputConsumers(int index, int max_consumers)
+        public unsafe TF_Input[] OutputConsumers(int index, int max_consumers)
         {
-            IntPtr handle = IntPtr.Zero;
             int size = Marshal.SizeOf<TF_Input>();
-            int num = c_api.TF_OperationOutputConsumers(new TF_Output(_handle, index), ref handle, max_consumers);
+            var handle = (TF_Input*)Marshal.AllocHGlobal(size);
+            int num = c_api.TF_OperationOutputConsumers(new TF_Output(_handle, index), handle, max_consumers);
             var consumers = new TF_Input[num];
             for(int i = 0; i < num; i++)
             {
-                consumers[0] = Marshal.PtrToStructure<TF_Input>(handle + i * size);
+                consumers[i] = new TF_Input((*handle).oper + i * size, (*handle).index);
             }
 
             return consumers;

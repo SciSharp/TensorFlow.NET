@@ -19,7 +19,7 @@ namespace TensorFlowNET.UnitTest
         {
             var handle = c_api.TF_GetAllOpList();
             var buffer = new Buffer(handle);
-            Assert.IsTrue(buffer.Length == buffer.Data.Length);
+            Assert.IsTrue(buffer.Length == buffer.Length);
         }
 
         [TestMethod]

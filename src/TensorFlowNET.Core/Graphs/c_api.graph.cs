@@ -39,6 +39,16 @@ namespace Tensorflow
         public static extern void TF_GraphSetTensorShape(IntPtr graph, TF_Output output, long[] dims, int num_dims, IntPtr status);
 
         /// <summary>
+        /// Write out a serialized representation of `graph` (as a GraphDef protocol
+        /// message) to `output_graph_def` (allocated by TF_NewBuffer()).
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="output_graph_def"></param>
+        /// <param name="status"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_GraphToGraphDef(IntPtr graph, IntPtr output_graph_def, IntPtr status);
+        
+        /// <summary>
         /// Returns the number of dimensions of the Tensor referenced by `output`
         /// in `graph`.
         /// 
