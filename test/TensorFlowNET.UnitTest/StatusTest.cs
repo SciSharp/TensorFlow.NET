@@ -23,7 +23,7 @@ namespace TensorFlowNET.UnitTest
             var s = new Status();
             s.SetStatus(TF_Code.TF_CANCELLED, "cancel");
             Assert.AreEqual(s.Code, TF_Code.TF_CANCELLED);
-            // Assert.AreEqual(s.Message, "cancel");
+            Assert.AreEqual(s.Message, "cancel");
         }
 
         [TestMethod]

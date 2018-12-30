@@ -22,6 +22,7 @@ namespace Tensorflow
     /// int32_t => int
     /// int64_t* => long[]
     /// size_t* => unlong[]
+    /// size_t* => ref uint
     /// void* => IntPtr
     /// string => IntPtr c_api.StringPiece(IntPtr)
     /// </summary>

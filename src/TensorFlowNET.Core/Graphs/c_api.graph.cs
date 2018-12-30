@@ -32,6 +32,25 @@ namespace Tensorflow
         public static extern void TF_GraphGetTensorShape(IntPtr graph, TF_Output output, long[] dims, int num_dims, IntPtr status);
 
         /// <summary>
+        /// Iterate through the operations of a graph.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_GraphNextOperation(IntPtr graph, ref uint pos);
+
+        /// <summary>
+        /// Returns the operation in the graph with `oper_name`. Returns nullptr if
+        /// no operation found.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="oper_name"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_GraphOperationByName(IntPtr graph, string oper_name);
+
+        /// <summary>
         /// Sets the shape of the Tensor referenced by `output` in `graph` to
         /// the shape described by `dims` and `num_dims`.
         /// </summary>

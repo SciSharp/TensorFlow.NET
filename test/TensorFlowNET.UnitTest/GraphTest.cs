@@ -104,21 +104,98 @@ namespace TensorFlowNET.UnitTest
                     Assert.IsFalse(found_placeholder);
                     found_placeholder = true;
                 }
-                /*else if (IsScalarConst(n, 3))
+                else if (c_test_util.IsScalarConst(n, 3))
                 {
                     Assert.IsFalse(found_scalar_const);
                     found_scalar_const = true;
                 }
-                else if (IsAddN(n, 2))
+                else if (c_test_util.IsAddN(n, 2))
                 {
                     Assert.IsFalse(found_add);
                     found_add = true;
                 }
                 else
                 {
-                    ADD_FAILURE() << "Unexpected NodeDef: " << ProtoDebugString(n);
-                }*/
+                    Assert.Fail($"Unexpected NodeDef: {n}");
+                }
             }
+            Assert.IsTrue(found_placeholder);
+            Assert.IsTrue(found_scalar_const);
+            Assert.IsTrue(found_add);
+
+            // Add another oper to the graph.
+            var neg = c_test_util.Neg(add, graph, s);
+            Assert.AreEqual(TF_Code.TF_OK, s.Code);
+
+            // Serialize to NodeDef.
+            var node_def = c_test_util.GetNodeDef(neg);
+
+            // Validate NodeDef is what we expect.
+            Assert.IsTrue(c_test_util.IsNeg(node_def, "add"));
+
+            // Serialize to GraphDef.
+            var graph_def2 = c_test_util.GetGraphDef(graph);
+
+            // Compare with first GraphDef + added NodeDef.
+            graph_def.Node.Add(node_def);
+            Assert.AreEqual(graph_def.ToString(), graph_def2.ToString());
+
+            // Look up some nodes by name.
+            Operation neg2 = c_api.TF_GraphOperationByName(graph, "neg");
+            Assert.AreEqual(neg, neg2);
+            var node_def2 = c_test_util.GetNodeDef(neg2);
+            Assert.AreEqual(node_def.ToString(), node_def2.ToString());
+
+            Operation feed2 = c_api.TF_GraphOperationByName(graph, "feed");
+            Assert.AreEqual(feed, feed2);
+            node_def = c_test_util.GetNodeDef(feed);
+            node_def2 = c_test_util.GetNodeDef(feed2);
+            Assert.AreEqual(node_def.ToString(), node_def2.ToString());
+
+            // Test iterating through the nodes of a graph.
+            found_placeholder = false;
+            found_scalar_const = false;
+            found_add = false;
+            bool found_neg = false;
+            uint pos = 0;
+            Operation oper;
+
+            while((oper = c_api.TF_GraphNextOperation(graph, ref pos)) != IntPtr.Zero)
+            {
+                if (oper.Equals(feed))
+                {
+                    Assert.IsFalse(found_placeholder);
+                    found_placeholder = true;
+                }
+                else if (oper.Equals(three))
+                {
+                    Assert.IsFalse(found_scalar_const);
+                    found_scalar_const = true;
+                }
+                else if (oper.Equals(add))
+                {
+                    Assert.IsFalse(found_add);
+                    found_add = true;
+                }
+                else if (oper.Equals(neg))
+                {
+                    Assert.IsFalse(found_neg);
+                    found_neg = true;
+                }
+                else
+                {
+                    node_def = c_test_util.GetNodeDef(oper);
+                    Assert.Fail($"Unexpected Node: {node_def.ToString()}");
+                }
+            }
+
+            Assert.IsTrue(found_placeholder);
+            Assert.IsTrue(found_scalar_const);
+            Assert.IsTrue(found_add);
+            Assert.IsTrue(found_neg);
+
+            graph.Dispose();
+            s.Dispose();
         }
     }
 }

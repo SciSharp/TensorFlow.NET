@@ -116,6 +116,8 @@ namespace Tensorflow
             {
                 case IntPtr val:
                     return val == _handle;
+                case Operation val:
+                    return val._handle == _handle;
             }
 
             return base.Equals(obj);

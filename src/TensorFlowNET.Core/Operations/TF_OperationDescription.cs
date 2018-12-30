@@ -9,6 +9,7 @@ namespace Tensorflow
     public struct TF_OperationDescription
     {
         public IntPtr node_builder;
-        //public TF_Graph graph;
+        public IntPtr graph;
+        public IntPtr colocation_constraints;
     }
 }
