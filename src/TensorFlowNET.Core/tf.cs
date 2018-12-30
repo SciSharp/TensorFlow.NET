@@ -37,7 +37,7 @@ namespace Tensorflow
             context.default_execution_mode = Context.EAGER_MODE;
         }
 
-        public static string VERSION => Marshal.PtrToStringAnsi(c_api.TF_Version());
+        public static string VERSION => c_api.StringPiece(c_api.TF_Version());
 
         public static Graph get_default_graph()
         {

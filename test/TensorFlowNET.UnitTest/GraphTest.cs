@@ -39,17 +39,14 @@ namespace TensorFlowNET.UnitTest
             // Test not found errors in TF_Operation*() query functions.
             Assert.AreEqual(-1, c_api.TF_OperationOutputListLength(feed, "bogus", s));
             Assert.AreEqual(TF_Code.TF_INVALID_ARGUMENT, s.Code);
-            //Assert.IsFalse(c_test_util.GetAttrValue(feed, "missing", ref attr_value, s));
-            //Assert.AreEqual("Operation '' has no attr named 'missing'.", s.Message);
+            Assert.IsFalse(c_test_util.GetAttrValue(feed, "missing", ref attr_value, s));
+            Assert.AreEqual("Operation 'feed' has no attr named 'missing'.", s.Message);
 
             // Make a constant oper with the scalar "3".
             var three = c_test_util.ScalarConst(3, graph, s);
 
             // Add oper.
             var add = c_test_util.Add(feed, three, graph, s);
-
-            NodeDef node_def = null;
-            c_test_util.GetNodeDef(feed, ref node_def);
         }
     }
 }

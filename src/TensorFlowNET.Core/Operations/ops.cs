@@ -30,12 +30,12 @@ namespace Tensorflow
             // Add inputs
             if(inputs != null && inputs.Count > 0)
             {
-                /*foreach (var op_input in inputs)
+                foreach (var op_input in inputs)
                 {
                     c_api.TF_AddInput(op_desc, op_input._as_tf_output());
-                }*/
+                }
 
-                c_api.TF_AddInputList(op_desc, inputs.Select(x => x._as_tf_output()).ToArray(), inputs.Count);
+                //c_api.TF_AddInputList(op_desc, inputs.Select(x => x._as_tf_output()).ToArray(), inputs.Count);
             }
 
             var status = new Status();

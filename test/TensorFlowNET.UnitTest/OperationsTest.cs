@@ -43,7 +43,7 @@ namespace TensorFlowNET.UnitTest
         public void addInConstant()
         {
             var a = tf.constant(4.0f);
-            var b = tf.placeholder(tf.float32);
+            var b = tf.constant(5.0f);
             var c = tf.add(a, b);
 
             using (var sess = tf.Session())

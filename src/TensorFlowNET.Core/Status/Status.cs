@@ -15,7 +15,7 @@ namespace Tensorflow
         /// <summary>
         /// Error message
         /// </summary>
-        public string Message => c_api.TF_Message(_handle);
+        public string Message => c_api.StringPiece(c_api.TF_Message(_handle));
 
         /// <summary>
         /// Error code

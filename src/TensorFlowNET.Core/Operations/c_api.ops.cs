@@ -38,7 +38,7 @@ namespace Tensorflow
         public static extern IntPtr TF_NewOperation(IntPtr graph, string opType, string oper_name);
 
         [DllImport(TensorFlowLibName)]
-        public static extern string TF_OperationDevice(IntPtr oper);
+        public static extern IntPtr TF_OperationDevice(IntPtr oper);
 
         /// <summary>
         /// Sets `output_attr_value` to the binary-serialized AttrValue proto
@@ -50,13 +50,13 @@ namespace Tensorflow
         public static extern int TF_OperationGetAttrValueProto(IntPtr oper, string attr_name, IntPtr output_attr_value, IntPtr status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern string TF_OperationName(IntPtr oper);
+        public static extern IntPtr TF_OperationName(IntPtr oper);
 
         [DllImport(TensorFlowLibName)]
         public static extern int TF_OperationNumInputs(IntPtr oper);
 
         [DllImport(TensorFlowLibName)]
-        public static extern string TF_OperationOpType(IntPtr oper);
+        public static extern IntPtr TF_OperationOpType(IntPtr oper);
 
         /// <summary>
         /// Get the number of control inputs to an operation.

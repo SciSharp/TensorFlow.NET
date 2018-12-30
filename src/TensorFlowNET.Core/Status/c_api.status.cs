@@ -12,7 +12,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="s"></param>
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern void TF_DeleteStatus(IntPtr s);
+        public static extern void TF_DeleteStatus(IntPtr s);
 
         /// <summary>
         /// Return the code record in *s.
@@ -20,7 +20,7 @@ namespace Tensorflow
         /// <param name="s"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe TF_Code TF_GetCode(IntPtr s);
+        public static extern TF_Code TF_GetCode(IntPtr s);
 
         /// <summary>
         /// Return a pointer to the (null-terminated) error message in *s.
@@ -30,7 +30,7 @@ namespace Tensorflow
         /// <param name="s"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe string TF_Message(IntPtr s);
+        public static extern IntPtr TF_Message(IntPtr s);
 
         /// <summary>
         /// Return a new status object.

@@ -23,11 +23,13 @@ namespace TensorFlowNET.UnitTest
         {
             var desc = c_api.TF_NewOperation(graph, "AddN", name);
 
-            c_api.TF_AddInputList(desc, new TF_Output[]
+            var inputs = new TF_Output[]
             {
                 new TF_Output(l, 0),
                 new TF_Output(r, 0),
-            }, 2);
+            };
+
+            c_api.TF_AddInputList(desc, inputs, inputs.Length);
 
             op = c_api.TF_FinishOperation(desc, s);
             s.Check();
