@@ -118,7 +118,7 @@ namespace Tensorflow
 
         public TF_Output _as_tf_output()
         {
-            return c_api_util.tf_output(op, value_index);
+            return new TF_Output(op, value_index);
         }
 
         public T[] Data<T>()

@@ -139,7 +139,7 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, null, num_dims, s);
             //Assert.IsTrue(s.Code == TF_Code.TF_OK);
 
-            graph.Dispose();
+            // graph.Dispose();
             s.Dispose();
         }
     }

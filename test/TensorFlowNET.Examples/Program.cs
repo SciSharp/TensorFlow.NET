@@ -12,7 +12,16 @@ namespace TensorFlowNET.Examples
             foreach(Type type in assembly.GetTypes().Where(x => x.GetInterfaces().Contains(typeof(IExample))))
             {
                 var example = (IExample)Activator.CreateInstance(type);
-                example.Run();
+
+                try
+                {
+                    example.Run();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    Console.ReadLine();
+                }
             }
         }
     }

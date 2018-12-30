@@ -91,6 +91,9 @@ namespace Tensorflow
         public static extern TF_DataType TF_OperationOutputType(TF_Output oper_out);
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TF_OperationToNodeDef(IntPtr oper, IntPtr buffer, IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
         public static extern int TF_OperationOutputListLength(IntPtr oper, string arg_name, IntPtr status);
 
         [DllImport(TensorFlowLibName)]

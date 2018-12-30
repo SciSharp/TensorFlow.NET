@@ -42,6 +42,15 @@ namespace TensorFlowNET.UnitTest
             return s.Code == TF_Code.TF_OK;
         }
 
+        public static bool GetNodeDef(Operation oper, ref NodeDef node_def)
+        {
+            var s = new Status();
+            var buffer = new Buffer();
+            c_api.TF_OperationToNodeDef(oper, buffer, s);
+
+            return s.Code == TF_Code.TF_OK;
+        }
+
         public static void PlaceholderHelper(Graph graph, Status s, string name, TF_DataType dtype, long[] dims, ref Operation op)
         {
             var desc = c_api.TF_NewOperation(graph, "Placeholder", name);
@@ -69,10 +78,6 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_SetAttrType(desc, "dtype", t.dtype);
             op = c_api.TF_FinishOperation(desc, s);
             s.Check();
-            if(op == null)
-            {
-                throw new Exception("c_api.TF_FinishOperation failed.");
-            }
         }
 
         public static Operation Const(Tensor t, Graph graph, Status s, string name)

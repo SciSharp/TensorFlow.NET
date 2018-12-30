@@ -40,7 +40,8 @@ namespace Tensorflow
         {
             if(Code != TF_Code.TF_OK)
             {
-                throw new Exception(Message);
+                Console.WriteLine(Message);
+                // throw new Exception(Message);
             }
         }
 

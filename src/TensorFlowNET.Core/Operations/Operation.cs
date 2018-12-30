@@ -63,6 +63,7 @@ namespace Tensorflow
 
             _id_value = Graph._next_id();
             _handle = ops._create_c_op(g, node_def, inputs);
+            NumOutputs = c_api.TF_OperationNumOutputs(_handle);
 
             _outputs = new Tensor[NumOutputs];
             for (int i = 0; i < NumOutputs; i++)
