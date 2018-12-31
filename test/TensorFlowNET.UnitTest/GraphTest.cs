@@ -356,5 +356,11 @@ namespace TensorFlowNET.UnitTest
             //graph.Dispose();
             s.Dispose();
         }
+
+        [TestMethod]
+        public void c_api_ImportGraphDef_WithReturnOutputs()
+        {
+
+        }
     }
 }
