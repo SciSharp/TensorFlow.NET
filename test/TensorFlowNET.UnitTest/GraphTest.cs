@@ -228,9 +228,9 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
-            Operation scalar = c_api.TF_GraphOperationByName(graph, "imported/scalar");
-            Operation feed = c_api.TF_GraphOperationByName(graph, "imported/feed");
-            Operation neg = c_api.TF_GraphOperationByName(graph, "imported/neg");
+            Operation scalar = graph.OperationByName("imported/scalar");
+            Operation feed = graph.OperationByName("imported/feed");
+            Operation neg = graph.OperationByName("imported/neg");
 
             // Test basic structure of the imported graph.
             EXPECT_EQ(0, scalar.NumInputs);
@@ -243,19 +243,19 @@ namespace TensorFlowNET.UnitTest
 
             // Test that we can't see control edges involving the source and sink nodes.
             EXPECT_EQ(0, scalar.NumControlInputs);
-            EXPECT_EQ(0, scalar.ControlInputs(100).Length);
+            EXPECT_EQ(0, scalar.GetControlInputs().Length);
             EXPECT_EQ(0, scalar.NumControlOutputs);
-            EXPECT_EQ(0, scalar.ControlOutputs(100).Length);
+            EXPECT_EQ(0, scalar.GetControlOutputs().Length);
 
             EXPECT_EQ(0, feed.NumControlInputs);
-            EXPECT_EQ(0, feed.ControlInputs(100).Length);
+            EXPECT_EQ(0, feed.GetControlInputs().Length);
             EXPECT_EQ(0, feed.NumControlOutputs);
-            EXPECT_EQ(0, feed.ControlOutputs(100).Length);
+            EXPECT_EQ(0, feed.GetControlOutputs().Length);
 
             EXPECT_EQ(0, neg.NumControlInputs);
-            EXPECT_EQ(0, neg.ControlInputs(100).Length);
+            EXPECT_EQ(0, neg.GetControlInputs().Length);
             EXPECT_EQ(0, neg.NumControlOutputs);
-            EXPECT_EQ(0, neg.ControlOutputs(100).Length);
+            EXPECT_EQ(0, neg.GetControlOutputs().Length);
 
             // Import it again, with an input mapping, return outputs, and a return
             // operation, into the same graph.
@@ -271,9 +271,9 @@ namespace TensorFlowNET.UnitTest
             var results = c_api.TF_GraphImportGraphDefWithResults(graph, graph_def, opts, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
-            Operation scalar2 = c_api.TF_GraphOperationByName(graph, "imported2/scalar");
-            Operation feed2 = c_api.TF_GraphOperationByName(graph, "imported2/feed");
-            Operation neg2 = c_api.TF_GraphOperationByName(graph, "imported2/neg");
+            Operation scalar2 = graph.OperationByName("imported2/scalar");
+            Operation feed2 = graph.OperationByName("imported2/feed");
+            Operation neg2 = graph.OperationByName("imported2/neg");
 
             // Check input mapping
             neg_input = neg.Input(0);
@@ -289,8 +289,72 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(0, return_outputs[1].index);
 
             // Check return operation
-            var num_return_opers = graph.ReturnOperations(results);
-            ASSERT_EQ(1, num_return_opers);
+            var return_opers = graph.ReturnOperations(results);
+            ASSERT_EQ(1, return_opers.Length);
+            EXPECT_EQ(scalar2, return_opers[0]);  // not remapped
+            c_api.TF_DeleteImportGraphDefResults(results);
+
+            // Import again, with control dependencies, into the same graph.
+            c_api.TF_DeleteImportGraphDefOptions(opts);
+            opts = c_api.TF_NewImportGraphDefOptions();
+            c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported3");
+            c_api.TF_ImportGraphDefOptionsAddControlDependency(opts, feed);
+            c_api.TF_ImportGraphDefOptionsAddControlDependency(opts, feed2);
+            c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
+            EXPECT_EQ(TF_Code.TF_OK, s.Code);
+
+            var scalar3 = graph.OperationByName("imported3/scalar");
+            var feed3 = graph.OperationByName("imported3/feed");
+            var neg3 = graph.OperationByName("imported3/neg");
+            ASSERT_TRUE(scalar3 != IntPtr.Zero);
+            ASSERT_TRUE(feed3 != IntPtr.Zero);
+            ASSERT_TRUE(neg3 != IntPtr.Zero);
+
+            // Check that newly-imported scalar and feed have control deps (neg3 will
+            // inherit them from input)
+            var control_inputs = scalar3.GetControlInputs();
+            ASSERT_EQ(2, scalar3.NumControlInputs);
+            EXPECT_EQ(feed, control_inputs[0]);
+            EXPECT_EQ(feed2, control_inputs[1]);
+
+            control_inputs = feed3.GetControlInputs();
+            ASSERT_EQ(2, feed3.NumControlInputs);
+            EXPECT_EQ(feed, control_inputs[0]);
+            EXPECT_EQ(feed2, control_inputs[1]);
+
+            // Export to a graph def so we can import a graph with control dependencies
+            graph_def.Dispose();
+            graph_def = new Buffer();
+            c_api.TF_GraphToGraphDef(graph, graph_def, s);
+            EXPECT_EQ(TF_Code.TF_OK, s.Code);
+
+            // Import again, with remapped control dependency, into the same graph
+            c_api.TF_DeleteImportGraphDefOptions(opts);
+            opts = c_api.TF_NewImportGraphDefOptions();
+            c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported4");
+            c_api.TF_ImportGraphDefOptionsRemapControlDependency(opts, "imported/feed", feed);
+            c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
+            ASSERT_EQ(TF_Code.TF_OK, s.Code);
+
+            var scalar4 = graph.OperationByName("imported4/imported3/scalar");
+            var feed4 = graph.OperationByName("imported4/imported2/feed");
+
+            // Check that imported `imported3/scalar` has remapped control dep from
+            // original graph and imported control dep
+            control_inputs = scalar4.GetControlInputs();
+            ASSERT_EQ(2, scalar4.NumControlInputs);
+            EXPECT_EQ(feed, control_inputs[0]);
+            EXPECT_EQ(feed4, control_inputs[1]);
+
+            c_api.TF_DeleteImportGraphDefOptions(opts);
+            c_api.TF_DeleteBuffer(graph_def);
+
+            // Can add nodes to the imported graph without trouble.
+            c_test_util.Add(feed, scalar, graph, s);
+            ASSERT_EQ(TF_Code.TF_OK, s.Code);
+
+            //graph.Dispose();
+            s.Dispose();
         }
     }
 }

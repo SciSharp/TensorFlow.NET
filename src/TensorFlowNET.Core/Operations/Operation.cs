@@ -18,13 +18,16 @@ namespace Tensorflow
         public string Name => c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => c_api.StringPiece(c_api.TF_OperationOpType(_handle));
         public string Device => c_api.StringPiece(c_api.TF_OperationDevice(_handle));
+
         public int NumOutputs => c_api.TF_OperationNumOutputs(_handle);
         public TF_DataType OutputType(int index) => c_api.TF_OperationOutputType(new TF_Output(_handle, index));
         public int OutputListLength(string name) => c_api.TF_OperationOutputListLength(_handle, name, status);
+
         public TF_Output Input(int index) => c_api.TF_OperationInput(new TF_Input(_handle, index));
         public TF_DataType InputType(int index) => c_api.TF_OperationInputType(new TF_Input(_handle, index));
         public int InputListLength(string name) => c_api.TF_OperationInputListLength(_handle, name, status);
         public int NumInputs => c_api.TF_OperationNumInputs(_handle);
+
         public int OutputNumConsumers(int index) => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, index));
         public unsafe TF_Input[] OutputConsumers(int index, int max_consumers)
         {
@@ -42,21 +45,41 @@ namespace Tensorflow
 
         public int NumControlInputs => c_api.TF_OperationNumControlInputs(_handle);
 
-        public Operation[] ControlInputs(int max_control_inputs)
+        public unsafe Operation[] GetControlInputs()
         {
             var control_inputs = new Operation[NumControlInputs];
-            var control_input_handles = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>() * NumControlInputs);
-            c_api.TF_OperationGetControlInputs(_handle, control_input_handles, max_control_inputs);
+
+            if(NumControlInputs > 0)
+            {
+                IntPtr control_input_handle = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>());
+                c_api.TF_OperationGetControlInputs(_handle, control_input_handle, NumControlInputs);
+                for (int i = 0; i < NumControlInputs; i++)
+                {
+                    var handle = control_input_handle + Marshal.SizeOf<IntPtr>() * i;
+                    control_inputs[i] = new Operation(*(IntPtr*)handle);
+                }
+            }
+
             return control_inputs;
         }
 
         public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);
 
-        public Operation[] ControlOutputs(int max_control_outputs)
+        public unsafe Operation[] GetControlOutputs()
         {
             var control_outputs = new Operation[NumControlOutputs];
-            var control_output_handles = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>() * NumControlOutputs);
-            c_api.TF_OperationGetControlInputs(_handle, control_output_handles, max_control_outputs);
+
+            if(NumControlOutputs > 0)
+            {
+                IntPtr control_output_handle = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>());
+                c_api.TF_OperationGetControlOutputs(_handle, control_output_handle, NumControlInputs);
+                for (int i = 0; i < NumControlInputs; i++)
+                {
+                    var handle = control_output_handle + Marshal.SizeOf<IntPtr>() * i;
+                    control_outputs[i] = new Operation(*(IntPtr*)handle);
+                }
+            }
+
             return control_outputs;
         }
 

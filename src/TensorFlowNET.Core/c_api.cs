@@ -16,7 +16,7 @@ namespace Tensorflow
     /// TF_XX** => ref IntPtr (TF_Operation** op) => (ref IntPtr op)
     /// TF_XX* => IntPtr (TF_Graph* graph) => (IntPtr graph)
     /// struct => struct (TF_Output output) => (TF_Output output)
-    /// struct* => struct (TF_Output* output) => (TF_Output[] output)
+    /// struct* => struct[] (TF_Output* output) => (TF_Output[] output)
     /// struct* => struct* for ref
     /// const char* => string
     /// int32_t => int

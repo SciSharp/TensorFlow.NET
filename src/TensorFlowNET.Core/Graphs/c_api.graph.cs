@@ -22,6 +22,13 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern void TF_DeleteImportGraphDefOptions(IntPtr opts);
 
+        /// <summary>
+        /// Deletes a results object returned by TF_GraphImportGraphDefWithResults().
+        /// </summary>
+        /// <param name="results"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_DeleteImportGraphDefResults(IntPtr results);
+
         [DllImport(TensorFlowLibName)]
         public static extern void TF_GraphGetOpDef(IntPtr graph, string op_name, IntPtr output_op_def, IntPtr status);
 
@@ -91,9 +98,9 @@ namespace Tensorflow
         /// Write out a serialized representation of `graph` (as a GraphDef protocol
         /// message) to `output_graph_def` (allocated by TF_NewBuffer()).
         /// </summary>
-        /// <param name="graph"></param>
-        /// <param name="output_graph_def"></param>
-        /// <param name="status"></param>
+        /// <param name="graph">TF_Graph*</param>
+        /// <param name="output_graph_def">TF_Buffer*</param>
+        /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_GraphToGraphDef(IntPtr graph, IntPtr output_graph_def, IntPtr status);
         
@@ -109,6 +116,15 @@ namespace Tensorflow
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern int TF_GraphGetTensorNumDims(IntPtr graph, TF_Output output, IntPtr status);
+
+        /// <summary>
+        /// Cause the imported graph to have a control dependency on `oper`. `oper`
+        /// should exist in the graph being imported into.
+        /// </summary>
+        /// <param name="opts"></param>
+        /// <param name="oper"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_ImportGraphDefOptionsAddControlDependency(IntPtr opts, IntPtr oper);
 
         /// <summary>
         /// Set any imported nodes with input `src_name:src_index` to have that input
@@ -164,6 +180,18 @@ namespace Tensorflow
         public static extern int TF_ImportGraphDefOptionsNumReturnOutputs(IntPtr opts);
 
         /// <summary>
+        /// Set any imported nodes with control input `src_name` to have that input
+        /// replaced with `dst`. `src_name` refers to a node in the graph to be imported,
+        /// `dst` references an operation already existing in the graph being imported
+        /// into. `src_name` is copied and has no lifetime requirements. 
+        /// </summary>
+        /// <param name="opts">TF_ImportGraphDefOptions*</param>
+        /// <param name="src_name">const char*</param>
+        /// <param name="dst">TF_Operation*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_ImportGraphDefOptionsRemapControlDependency(IntPtr opts, string src_name, IntPtr dst);
+
+        /// <summary>
         /// Set the prefix to be prepended to the names of nodes in `graph_def` that will
         /// be imported into `graph`. `prefix` is copied and has no lifetime
         /// requirements.
@@ -182,7 +210,7 @@ namespace Tensorflow
         /// <param name="num_opers">int*</param>
         /// <param name="opers">TF_Operation***</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_ImportGraphDefResultsReturnOperations(IntPtr results, ref int num_opers, ref IntPtr opers);
+        public static extern void TF_ImportGraphDefResultsReturnOperations(IntPtr results, ref int num_opers, ref TF_Operation opers);
 
         /// <summary>
         /// Fetches the return outputs requested via
