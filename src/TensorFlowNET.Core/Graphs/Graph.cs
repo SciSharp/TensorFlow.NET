@@ -171,6 +171,34 @@ namespace Tensorflow
             return $"{name}_{_names_in_use[name_key]}";
         }
 
+        public TF_Output[] ReturnOutputs(IntPtr results)
+        {
+            IntPtr return_output_handle = IntPtr.Zero;
+            int num_return_outputs = 0;
+            c_api.TF_ImportGraphDefResultsReturnOutputs(results, ref num_return_outputs, ref return_output_handle);
+            TF_Output[] return_outputs = new TF_Output[num_return_outputs];
+            for (int i = 0; i < num_return_outputs; i++)
+            {
+                return_outputs[i] = Marshal.PtrToStructure<TF_Output>(return_output_handle + (Marshal.SizeOf<TF_Output>() * i));
+            }
+
+            return return_outputs;
+        }
+
+        public Operation[] ReturnOperations(IntPtr results)
+        {
+            IntPtr return_oper_handle = IntPtr.Zero;
+            int num_return_opers = 0;
+            c_api.TF_ImportGraphDefResultsReturnOutputs(results, ref num_return_opers, ref return_oper_handle);
+            Operation[] return_opers = new Operation[num_return_opers];
+            for (int i = 0; i < num_return_opers; i++)
+            {
+                // return_opers[i] = Marshal.PtrToStructure<TF_Output>(return_oper_handle + (Marshal.SizeOf<TF_Output>() * i));
+            }
+
+            return return_opers;
+        }
+
         public Operation[] get_operations()
         {
             return _nodes_by_name.Values.Select(x => x).ToArray();

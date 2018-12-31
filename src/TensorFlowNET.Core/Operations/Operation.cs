@@ -41,7 +41,24 @@ namespace Tensorflow
         }
 
         public int NumControlInputs => c_api.TF_OperationNumControlInputs(_handle);
+
+        public Operation[] ControlInputs(int max_control_inputs)
+        {
+            var control_inputs = new Operation[NumControlInputs];
+            var control_input_handles = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>() * NumControlInputs);
+            c_api.TF_OperationGetControlInputs(_handle, control_input_handles, max_control_inputs);
+            return control_inputs;
+        }
+
         public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);
+
+        public Operation[] ControlOutputs(int max_control_outputs)
+        {
+            var control_outputs = new Operation[NumControlOutputs];
+            var control_output_handles = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>() * NumControlOutputs);
+            c_api.TF_OperationGetControlInputs(_handle, control_output_handles, max_control_outputs);
+            return control_outputs;
+        }
 
         private Tensor[] _outputs;
         public Tensor[] outputs => _outputs;

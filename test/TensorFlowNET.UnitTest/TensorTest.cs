@@ -10,7 +10,7 @@ using Tensorflow;
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class TensorTest
+    public class TensorTest : CApiTest
     {
         /// <summary>
         /// Port from c_api_test.cc
@@ -22,10 +22,10 @@ namespace TensorFlowNET.UnitTest
             ulong num_bytes = 6 * sizeof(float);
             long[] dims = { 2, 3 };
             Tensor t = c_api.TF_AllocateTensor(TF_DataType.TF_FLOAT, dims, 2, num_bytes);
-            Assert.AreEqual(TF_DataType.TF_FLOAT, t.dtype);
-            Assert.AreEqual(2, t.NDims);
+            EXPECT_EQ(TF_DataType.TF_FLOAT, t.dtype);
+            EXPECT_EQ(2, t.NDims);
             Assert.IsTrue(Enumerable.SequenceEqual(dims, t.shape));
-            Assert.AreEqual(num_bytes, t.bytesize);
+            EXPECT_EQ(num_bytes, t.bytesize);
             t.Dispose();
         }
 
@@ -41,11 +41,11 @@ namespace TensorFlowNET.UnitTest
             var tensor = new Tensor(nd);
             var array = tensor.Data<float>();
 
-            Assert.AreEqual(tensor.dtype, TF_DataType.TF_FLOAT);
-            Assert.AreEqual(tensor.rank, nd.ndim);
-            Assert.AreEqual(tensor.shape[0], nd.shape[0]);
-            Assert.AreEqual(tensor.shape[1], nd.shape[1]);
-            Assert.AreEqual(tensor.bytesize, (uint)nd.size * sizeof(float));
+            EXPECT_EQ(tensor.dtype, TF_DataType.TF_FLOAT);
+            EXPECT_EQ(tensor.rank, nd.ndim);
+            EXPECT_EQ(tensor.shape[0], nd.shape[0]);
+            EXPECT_EQ(tensor.shape[1], nd.shape[1]);
+            EXPECT_EQ(tensor.bytesize, (uint)nd.size * sizeof(float));
             Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), array));
         }
 
@@ -66,20 +66,20 @@ namespace TensorFlowNET.UnitTest
             int num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s);
 
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
-            Assert.AreEqual(-1, num_dims);
+            EXPECT_EQ(-1, num_dims);
 
             // Set the shape to be unknown, expect no change.
             c_api.TF_GraphSetTensorShape(graph, feed_out_0, null, -1, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s);
-            Assert.AreEqual(-1, num_dims);
+            EXPECT_EQ(-1, num_dims);
 
             // Set the shape to be 2 x Unknown
             long[] dims = { 2, -1 };
             c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, dims.Length, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s);
-            Assert.AreEqual(2, num_dims);
+            EXPECT_EQ(2, num_dims);
 
             // Get the dimension vector appropriately.
             var returned_dims = new long[dims.Length];
@@ -103,9 +103,9 @@ namespace TensorFlowNET.UnitTest
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
-            Assert.AreEqual(2, num_dims);
-            Assert.AreEqual(2, returned_dims[0]);
-            Assert.AreEqual(3, returned_dims[1]);
+            EXPECT_EQ(2, num_dims);
+            EXPECT_EQ(2, returned_dims[0]);
+            EXPECT_EQ(3, returned_dims[1]);
 
             // Try to set 'unknown' with same rank on the shape and see that
             // it doesn't change.
@@ -115,9 +115,9 @@ namespace TensorFlowNET.UnitTest
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
-            Assert.AreEqual(2, num_dims);
-            Assert.AreEqual(2, returned_dims[0]);
-            Assert.AreEqual(3, returned_dims[1]);
+            EXPECT_EQ(2, num_dims);
+            EXPECT_EQ(2, returned_dims[0]);
+            EXPECT_EQ(3, returned_dims[1]);
 
             // Try to fetch a shape with the wrong num_dims
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, 5, s);
@@ -135,7 +135,7 @@ namespace TensorFlowNET.UnitTest
 
             num_dims = c_api.TF_GraphGetTensorNumDims(graph, three_out_0, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
-            Assert.AreEqual(0, num_dims);
+            EXPECT_EQ(0, num_dims);
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, null, num_dims, s);
             //Assert.IsTrue(s.Code == TF_Code.TF_OK);
 

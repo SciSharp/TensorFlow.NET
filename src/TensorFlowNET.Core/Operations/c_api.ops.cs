@@ -50,6 +50,35 @@ namespace Tensorflow
         public static extern int TF_OperationGetAttrValueProto(IntPtr oper, string attr_name, IntPtr output_attr_value, IntPtr status);
 
         /// <summary>
+        /// Get list of all control inputs to an operation.  `control_inputs` must
+        /// point to an array of length `max_control_inputs` (ideally set to
+        /// TF_OperationNumControlInputs(oper)).  Returns the number of control
+        /// inputs (should match TF_OperationNumControlInputs(oper)).
+        /// </summary>
+        /// <param name="oper">TF_Operation*</param>
+        /// <param name="control_inputs">TF_Operation**</param>
+        /// <param name="max_control_inputs"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationGetControlInputs(IntPtr oper, IntPtr control_inputs, int max_control_inputs);
+
+        /// <summary>
+        /// Get the list of operations that have `*oper` as a control input.
+        /// `control_outputs` must point to an array of length at least
+        /// `max_control_outputs` (ideally set to
+        /// TF_OperationNumControlOutputs(oper)). Beware that a concurrent
+        /// modification of the graph can increase the number of control
+        /// outputs.  Returns the number of control outputs (should match
+        /// TF_OperationNumControlOutputs(oper)).
+        /// </summary>
+        /// <param name="oper">TF_Operation*</param>
+        /// <param name="control_outputs">TF_Operation**</param>
+        /// <param name="max_control_outputs"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationGetControlOutputs(IntPtr oper, IntPtr control_outputs, int max_control_outputs);
+
+        /// <summary>
         /// TF_Output producer = TF_OperationInput(consumer);
         /// There is an edge from producer.oper's output (given by
         /// producer.index) to consumer.oper's input (given by consumer.index).
@@ -105,14 +134,19 @@ namespace Tensorflow
 
         /// <summary>
         /// Get list of all current consumers of a specific output of an
-        /// operation.
+        /// operation.  `consumers` must point to an array of length at least
+        /// `max_consumers` (ideally set to
+        /// TF_OperationOutputNumConsumers(oper_out)).  Beware that a concurrent
+        /// modification of the graph can increase the number of consumers of
+        /// an operation.  Returns the number of output consumers (should match
+        /// TF_OperationOutputNumConsumers(oper_out)).
         /// </summary>
         /// <param name="oper_out"></param>
         /// <param name="consumers"></param>
         /// <param name="max_consumers"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe int TF_OperationOutputConsumers(TF_Output oper_out, TF_Input * consumers, int max_consumers);
+        public static extern unsafe int TF_OperationOutputConsumers(TF_Output oper_out, TF_Input* consumers, int max_consumers);
 
         [DllImport(TensorFlowLibName)]
         public static extern TF_DataType TF_OperationOutputType(TF_Output oper_out);
