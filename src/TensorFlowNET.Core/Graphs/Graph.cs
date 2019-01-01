@@ -13,7 +13,7 @@ namespace Tensorflow
     /// then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
     /// https://www.tensorflow.org/guide/graphs
     /// </summary>
-    public class Graph : IDisposable
+    public partial class Graph : IDisposable
     {
         private IntPtr _handle;
         private Dictionary<int, Operation> _nodes_by_id;
@@ -209,18 +209,6 @@ namespace Tensorflow
         public Operation[] get_operations()
         {
             return _nodes_by_name.Values.Select(x => x).ToArray();
-        }
-
-        public GraphDef ToGraphDef()
-        {
-            var s = new Status();
-            var buffer = new Buffer();
-            c_api.TF_GraphToGraphDef(_handle, buffer, s);
-            s.Check();
-            var def = GraphDef.Parser.ParseFrom(buffer);
-            buffer.Dispose();
-            s.Dispose();
-            return def;
         }
 
         public void Dispose()

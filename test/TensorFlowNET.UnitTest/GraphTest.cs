@@ -357,10 +357,55 @@ namespace TensorFlowNET.UnitTest
             s.Dispose();
         }
 
+        /// <summary>
+        /// Port from c_api_test.cc
+        /// `TEST(CAPI, ImportGraphDef_WithReturnOutputs)`
+        /// </summary>
         [TestMethod]
         public void c_api_ImportGraphDef_WithReturnOutputs()
         {
+            var s = new Status();
+            var graph = new Graph();
 
+            // Create a graph with two nodes: x and 3
+            var feed = c_test_util.Placeholder(graph, s);
+            EXPECT_EQ(feed, graph.OperationByName("feed"));
+            var scalar = c_test_util.ScalarConst(3, graph, s);
+            EXPECT_EQ(scalar, graph.OperationByName("scalar"));
+            var neg = c_test_util.Neg(scalar, graph, s);
+            EXPECT_EQ(neg, graph.OperationByName("neg"));
+
+            // Export to a GraphDef.
+            var graph_def = graph.ToGraphDef(s);
+            ASSERT_EQ(TF_Code.TF_OK, s.Code);
+
+            // Import it in a fresh graph with return outputs.
+            graph.Dispose();
+            graph = new Graph();
+            var opts = new ImportGraphDefOptions();
+            opts.AddReturnOutput("feed", 0);
+            opts.AddReturnOutput("scalar", 0);
+            EXPECT_EQ(2, opts.NumReturnOutputs);
+            var return_outputs = graph.ImportGraphDefWithReturnOutputs(graph_def, opts, s);
+            ASSERT_EQ(TF_Code.TF_OK, s.Code);
+
+            scalar = graph.OperationByName("scalar");
+            feed = graph.OperationByName("feed");
+            neg = graph.OperationByName("neg");
+            ASSERT_TRUE(scalar != IntPtr.Zero);
+            ASSERT_TRUE(feed != IntPtr.Zero);
+            ASSERT_TRUE(neg != IntPtr.Zero);
+
+            // Check return outputs
+            EXPECT_EQ(feed, return_outputs[0].oper);
+            EXPECT_EQ(0, return_outputs[0].index);
+            EXPECT_EQ(scalar, return_outputs[1].oper);
+            EXPECT_EQ(0, return_outputs[1].index);
+
+            opts.Dispose();
+            graph_def.Dispose();
+            graph.Dispose();
+            s.Dispose();
         }
     }
 }

@@ -46,6 +46,24 @@ namespace Tensorflow
         public static extern void TF_GraphGetTensorShape(IntPtr graph, TF_Output output, long[] dims, int num_dims, IntPtr status);
 
         /// <summary>
+        /// Import the graph serialized in `graph_def` into `graph`.
+        /// Convenience function for when only return outputs are needed.
+        ///
+        /// `num_return_outputs` must be the number of return outputs added (i.e. the
+        /// result of TF_ImportGraphDefOptionsNumReturnOutputs()).  If
+        /// `num_return_outputs` is non-zero, `return_outputs` must be of length
+        /// `num_return_outputs`. Otherwise it can be null.
+        /// </summary>
+        /// <param name="graph">TF_Graph* graph</param>
+        /// <param name="graph_def">const TF_Buffer*</param>
+        /// <param name="options">const TF_ImportGraphDefOptions*</param>
+        /// <param name="return_outputs">TF_Output*</param>
+        /// <param name="num_return_outputs">int</param>
+        /// <param name="status">TF_Status*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe void TF_GraphImportGraphDefWithReturnOutputs(IntPtr graph, IntPtr graph_def, IntPtr options, TF_Output* return_outputs, int num_return_outputs, IntPtr status);
+
+        /// <summary>
         /// Import the graph serialized in `graph_def` into `graph`.  Returns nullptr and
         /// a bad status on error. Otherwise, returns a populated
         /// TF_ImportGraphDefResults instance. The returned instance must be deleted via
