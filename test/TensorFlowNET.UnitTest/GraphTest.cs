@@ -16,7 +16,7 @@ namespace TensorFlowNET.UnitTest
         /// `TEST(CAPI, Graph)`
         /// </summary>
         [TestMethod]
-        public void c_api_Graph()
+        public void Graph()
         {
             var s = new Status();
             var graph = new Graph();
@@ -205,7 +205,7 @@ namespace TensorFlowNET.UnitTest
         /// `TEST(CAPI, ImportGraphDef)`
         /// </summary>
         [TestMethod]
-        public void c_api_ImportGraphDef()
+        public void ImportGraphDef()
         {
             var s = new Status();
             var graph = new Graph();
@@ -362,7 +362,7 @@ namespace TensorFlowNET.UnitTest
         /// `TEST(CAPI, ImportGraphDef_WithReturnOutputs)`
         /// </summary>
         [TestMethod]
-        public void c_api_ImportGraphDef_WithReturnOutputs()
+        public void ImportGraphDef_WithReturnOutputs()
         {
             var s = new Status();
             var graph = new Graph();
@@ -407,5 +407,16 @@ namespace TensorFlowNET.UnitTest
             graph.Dispose();
             s.Dispose();
         }
+
+        /// <summary>
+        /// `TEST(CAPI, ImportGraphDef_MissingUnusedInputMappings)`
+        /// </summary>
+        [TestMethod]
+        public void ImportGraphDef_MissingUnusedInputMappings()
+        {
+
+        }
+
+
     }
 }

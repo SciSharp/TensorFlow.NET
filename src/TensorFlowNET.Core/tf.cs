@@ -51,7 +51,7 @@ namespace Tensorflow
 
         public static Session Session()
         {
-            return new Session();
+            return (Session)new BaseSession();
         }
     }
 }

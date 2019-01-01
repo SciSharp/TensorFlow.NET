@@ -15,7 +15,7 @@ namespace TensorFlowNET.UnitTest
         /// `TEST(CAPI, GetAllOpList)`
         /// </summary>
         [TestMethod]
-        public void c_api_GetAllOpList()
+        public void GetAllOpList()
         {
             var handle = c_api.TF_GetAllOpList();
             var buffer = new Buffer(handle);

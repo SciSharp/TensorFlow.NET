@@ -28,11 +28,11 @@ namespace Tensorflow
             }
 
             _target = UTF8Encoding.UTF8.GetBytes(target);
-            var opts = c_api.TF_NewSessionOptions();
-            var status = new Status();
-            _session = c_api.TF_NewSession(_graph, opts, status);
+            //var opts = c_api.TF_NewSessionOptions();
+            //var status = new Status();
+            //_session = c_api.TF_NewSession(_graph, opts, status);
 
-            c_api.TF_DeleteSessionOptions(opts);
+            //c_api.TF_DeleteSessionOptions(opts);
         }
 
         public void Dispose()
@@ -102,7 +102,7 @@ namespace Tensorflow
 
             var output_values = fetch_list.Select(x => IntPtr.Zero).ToArray();
 
-            c_api.TF_SessionRun(_session,
+            /*c_api.TF_SessionRun(_session,
                 run_options: IntPtr.Zero,
                 inputs: feed_dict.Select(f => f.Key).ToArray(),
                 input_values: new IntPtr[] { },
@@ -113,7 +113,7 @@ namespace Tensorflow
                 target_opers: new IntPtr[] { },
                 ntargets: 0,
                 run_metadata: IntPtr.Zero,
-                status: status);
+                status: status);*/
 
             var result = output_values.Select(x => c_api.TF_TensorData(x))
                 .Select(x => (object)*(float*)x)

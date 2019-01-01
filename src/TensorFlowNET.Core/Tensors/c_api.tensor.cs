@@ -74,6 +74,15 @@ namespace Tensorflow
         public static extern IntPtr TF_TensorData(IntPtr tensor);
 
         /// <summary>
+        /// Deletes `tensor` and returns a new TF_Tensor with the same content if
+        /// possible. Returns nullptr and leaves `tensor` untouched if not.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_TensorMaybeMove(IntPtr tensor);
+
+        /// <summary>
         /// Return the type of a tensor element.
         /// </summary>
         /// <param name="tensor"></param>

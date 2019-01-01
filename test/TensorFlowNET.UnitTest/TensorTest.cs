@@ -17,7 +17,7 @@ namespace TensorFlowNET.UnitTest
         /// `TEST(CAPI, AllocateTensor)`
         /// </summary>
         [TestMethod]
-        public void c_api_AllocateTensor()
+        public void AllocateTensor()
         {
             ulong num_bytes = 6 * sizeof(float);
             long[] dims = { 2, 3 };
@@ -31,10 +31,24 @@ namespace TensorFlowNET.UnitTest
 
         /// <summary>
         /// Port from c_api_test.cc
+        /// `TEST(CAPI, MaybeMove)`
+        /// </summary>
+        [TestMethod]
+        public void MaybeMove()
+        {
+            NDArray nd = np.array(2, 3);
+            Tensor t = new Tensor(nd);
+            Tensor o = t.MaybeMove();
+            ASSERT_TRUE(o == IntPtr.Zero);  // It is unsafe to move memory TF might not own.
+            t.Dispose();
+        }
+
+        /// <summary>
+        /// Port from c_api_test.cc
         /// `TEST(CAPI, Tensor)`
         /// </summary>
         [TestMethod]
-        public void c_api_Tensor()
+        public void Tensor()
         {
             var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape(2, 3);
 
@@ -54,7 +68,7 @@ namespace TensorFlowNET.UnitTest
         /// `TEST(CAPI, SetShape)`
         /// </summary>
         [TestMethod]
-        public void c_api_SetShape()
+        public void SetShape()
         {
             var s = new Status();
             var graph = new Graph();

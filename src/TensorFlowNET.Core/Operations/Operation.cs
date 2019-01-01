@@ -140,15 +140,8 @@ namespace Tensorflow
             return ret;
         }
 
-        public static implicit operator Operation(IntPtr handle)
-        {
-            return new Operation(handle);
-        }
-
-        public static implicit operator IntPtr(Operation op)
-        {
-            return op._handle;
-        }
+        public static implicit operator Operation(IntPtr handle) => new Operation(handle);
+        public static implicit operator IntPtr(Operation op) => op._handle;
 
         public override bool Equals(object obj)
         {

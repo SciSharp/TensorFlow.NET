@@ -236,5 +236,19 @@ namespace TensorFlowNET.UnitTest
         {
             return Const(new Tensor(v), graph, s, name);
         }
+
+        public static unsafe IntPtr Int32Tensor(int v)
+        {
+            bool deallocator_called = false;
+            const int num_bytes = sizeof(int);
+            var dotHandle = Marshal.AllocHGlobal(num_bytes * 1);
+            *(int*)dotHandle = v;
+            return c_api.TF_NewTensor(TF_DataType.TF_INT32, new long[0], 0, dotHandle, num_bytes,
+                                (IntPtr values, IntPtr len, ref bool closure) =>
+                                {
+                                    // Free the original buffer and set flag
+                                    Marshal.FreeHGlobal(dotHandle);
+                                }, ref deallocator_called);
+        }
     }
 }

@@ -22,12 +22,22 @@ namespace Tensorflow
         public object value;
         public int value_index { get; }
 
-        public TF_DataType dtype { get; }
-        public ulong bytesize { get; }
-        public ulong dataTypeSize { get;}
-        public ulong size => bytesize / dataTypeSize;
-        public IntPtr buffer { get; }
-        public long[] shape { get; }
+        public TF_DataType dtype => _handle == IntPtr.Zero ? TF_DataType.DtInvalid : c_api.TF_TensorType(_handle);
+        public ulong bytesize => _handle == IntPtr.Zero ? 0 : c_api.TF_TensorByteSize(_handle);
+        public ulong dataTypeSize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
+        public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / dataTypeSize;
+        public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
+        public long[] shape
+        {
+            get
+            {
+                var dims = new long[rank];
+                for (int i = 0; i < rank; i++)
+                    shape[i] = c_api.TF_Dim(_handle, i);
+
+                return dims;
+            }
+        }
         
         /// <summary>
         /// number of dimensions
@@ -37,7 +47,7 @@ namespace Tensorflow
         /// 3	3-Tensor (cube of numbers)
         /// n	n-Tensor (you get the idea)
         /// </summary>
-        public int rank;
+        public int rank => _handle == IntPtr.Zero ? 0 : c_api.TF_NumDims(_handle);
         public int NDims => rank;
 
         /// <summary>
@@ -48,29 +58,12 @@ namespace Tensorflow
         public Tensor(IntPtr handle)
         {
             _handle = handle;
-            dtype = c_api.TF_TensorType(handle);
-            rank = c_api.TF_NumDims(handle);
-            bytesize = c_api.TF_TensorByteSize(handle);
-            buffer = c_api.TF_TensorData(handle);
-            dataTypeSize = c_api.TF_DataTypeSize(dtype);
-
-            shape = new long[rank];
-            for (int i = 0; i < rank; i++)
-                shape[i] = c_api.TF_Dim(handle, i);
         }
 
         public Tensor(NDArray nd)
         {
             _handle = Allocate(nd);
-            dtype = c_api.TF_TensorType(_handle);
-            rank = c_api.TF_NumDims(_handle);
-            bytesize = c_api.TF_TensorByteSize(_handle);
-            buffer = c_api.TF_TensorData(_handle);
-            dataTypeSize = c_api.TF_DataTypeSize(dtype);
-
-            shape = new long[rank];
-            for (int i = 0; i < rank; i++)
-                shape[i] = c_api.TF_Dim(_handle, i);
+            value = nd.Data();
         }
 
         private IntPtr Allocate(NDArray nd)
@@ -113,7 +106,6 @@ namespace Tensorflow
         {
             this.op = op;
             this.value_index = value_index;
-            this.dtype = dtype;
         }
 
         public TF_Output _as_tf_output()
@@ -144,6 +136,12 @@ namespace Tensorflow
             Marshal.Copy(buffer, data, 0, (int)bytesize);
 
             return data;
+        }
+
+        public Tensor MaybeMove()
+        {
+            var tensor = c_api.TF_TensorMaybeMove(_handle);
+            return tensor;
         }
 
         public TF_DataType ToTFDataType(Type type)
