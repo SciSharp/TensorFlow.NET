@@ -57,9 +57,9 @@ namespace TensorFlowNET.UnitTest
 
             EXPECT_EQ(tensor.dtype, TF_DataType.TF_FLOAT);
             EXPECT_EQ(tensor.rank, nd.ndim);
-            EXPECT_EQ(tensor.shape[0], nd.shape[0]);
-            EXPECT_EQ(tensor.shape[1], nd.shape[1]);
-            EXPECT_EQ(tensor.bytesize, (uint)nd.size * sizeof(float));
+            EXPECT_EQ((int)tensor.shape[0], nd.shape[0]);
+            EXPECT_EQ((int)tensor.shape[1], nd.shape[1]);
+            EXPECT_EQ(tensor.bytesize, (ulong)nd.size * sizeof(float));
             Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), array));
         }
 
@@ -118,8 +118,8 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(2, num_dims);
-            EXPECT_EQ(2, returned_dims[0]);
-            EXPECT_EQ(3, returned_dims[1]);
+            EXPECT_EQ(2, (int)returned_dims[0]);
+            EXPECT_EQ(3, (int)returned_dims[1]);
 
             // Try to set 'unknown' with same rank on the shape and see that
             // it doesn't change.
@@ -130,8 +130,8 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(2, num_dims);
-            EXPECT_EQ(2, returned_dims[0]);
-            EXPECT_EQ(3, returned_dims[1]);
+            EXPECT_EQ(2, (int)returned_dims[0]);
+            EXPECT_EQ(3, (int)returned_dims[1]);
 
             // Try to fetch a shape with the wrong num_dims
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, 5, s);

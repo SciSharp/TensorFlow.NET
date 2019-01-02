@@ -79,17 +79,17 @@ namespace TensorFlowNET.UnitTest
             IntPtr inputs_ptr = inputs_.Count == 0 ? IntPtr.Zero : inputs_[0];
             IntPtr input_values_ptr = inputs_.Count == 0 ? IntPtr.Zero : input_values_[0];
             IntPtr outputs_ptr = outputs_.Count == 0 ? IntPtr.Zero : outputs_[0];
-            IntPtr output_values_ptr = output_values_.Count == 0 ? IntPtr.Zero : output_values_[0];
+            IntPtr[] output_values_ptr = output_values_.ToArray();// output_values_.Count == 0 ? IntPtr.Zero : output_values_[0];
             IntPtr targets_ptr = IntPtr.Zero;
 
-            c_api.TF_SessionRun(session_, null, inputs_ptr, input_values_ptr, inputs_.Count,
-                outputs_ptr, ref output_values_ptr, outputs_.Count, 
+            c_api.TF_SessionRun(session_, null, inputs_ptr, input_values_ptr, 0,
+                outputs_ptr, output_values_ptr, outputs_.Count, 
                 targets_ptr, targets_.Count,
                 IntPtr.Zero, s);
 
             s.Check();
 
-            output_values_[0] = output_values_ptr;
+            output_values_[0] = output_values_ptr[0];
         }
 
         public IntPtr output_tensor(int i)

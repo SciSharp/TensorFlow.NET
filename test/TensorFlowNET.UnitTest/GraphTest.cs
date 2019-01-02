@@ -77,7 +77,7 @@ namespace TensorFlowNET.UnitTest
             ASSERT_TRUE(c_test_util.GetAttrValue(add, "T", ref attr_value, s));
             EXPECT_EQ(DataType.DtInt32, attr_value.Type);
             ASSERT_TRUE(c_test_util.GetAttrValue(add, "N", ref attr_value, s));
-            EXPECT_EQ(2, attr_value.I);
+            EXPECT_EQ(2, (int)attr_value.I);
 
             // Placeholder oper now has a consumer.
             EXPECT_EQ(1, feed.OutputNumConsumers(0));
@@ -353,7 +353,7 @@ namespace TensorFlowNET.UnitTest
             c_test_util.Add(feed, scalar, graph, s);
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
 
-            //graph.Dispose();
+            graph.Dispose();
             s.Dispose();
         }
 
@@ -368,12 +368,12 @@ namespace TensorFlowNET.UnitTest
             var graph = new Graph();
 
             // Create a graph with two nodes: x and 3
-            var feed = c_test_util.Placeholder(graph, s);
-            EXPECT_EQ(feed, graph.OperationByName("feed"));
-            var scalar = c_test_util.ScalarConst(3, graph, s);
-            EXPECT_EQ(scalar, graph.OperationByName("scalar"));
-            var neg = c_test_util.Neg(scalar, graph, s);
-            EXPECT_EQ(neg, graph.OperationByName("neg"));
+            c_test_util.Placeholder(graph, s);
+            ASSERT_TRUE(graph.OperationByName("feed") != null);
+            var oper = c_test_util.ScalarConst(3, graph, s);
+            ASSERT_TRUE(graph.OperationByName("scalar") != null);
+            c_test_util.Neg(oper, graph, s);
+            ASSERT_TRUE(graph.OperationByName("neg") != null);
 
             // Export to a GraphDef.
             var graph_def = graph.ToGraphDef(s);
@@ -389,9 +389,9 @@ namespace TensorFlowNET.UnitTest
             var return_outputs = graph.ImportGraphDefWithReturnOutputs(graph_def, opts, s);
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
 
-            scalar = graph.OperationByName("scalar");
-            feed = graph.OperationByName("feed");
-            neg = graph.OperationByName("neg");
+            var scalar = graph.OperationByName("scalar");
+            var feed = graph.OperationByName("feed");
+            var neg = graph.OperationByName("neg");
             ASSERT_TRUE(scalar != IntPtr.Zero);
             ASSERT_TRUE(feed != IntPtr.Zero);
             ASSERT_TRUE(neg != IntPtr.Zero);

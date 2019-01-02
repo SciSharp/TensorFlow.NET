@@ -61,7 +61,7 @@ namespace Tensorflow
         /// <param name="num_return_outputs">int</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_GraphImportGraphDefWithReturnOutputs(IntPtr graph, IntPtr graph_def, IntPtr options, TF_Output* return_outputs, int num_return_outputs, IntPtr status);
+        public static extern unsafe void TF_GraphImportGraphDefWithReturnOutputs(IntPtr graph, IntPtr graph_def, IntPtr options, IntPtr return_outputs, int num_return_outputs, IntPtr status);
 
         /// <summary>
         /// Import the graph serialized in `graph_def` into `graph`.  Returns nullptr and

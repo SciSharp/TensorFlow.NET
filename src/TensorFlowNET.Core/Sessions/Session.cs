@@ -8,6 +8,10 @@ namespace Tensorflow
     {
         private IntPtr _handle;
 
+        public Session(string target = "", Graph graph = null)
+        {
+        }
+
         public Session(IntPtr handle)
         {
             _handle = handle;

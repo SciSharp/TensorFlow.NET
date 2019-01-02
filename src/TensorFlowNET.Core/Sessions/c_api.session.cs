@@ -72,8 +72,16 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
         public static extern unsafe void TF_SessionRun(IntPtr session, TF_Buffer* run_options,
+                   TF_Output[] inputs, IntPtr[] input_values, int ninputs,
+                   TF_Output[] outputs, IntPtr[] output_values, int noutputs,
+                   IntPtr target_opers, int ntargets,
+                   IntPtr run_metadata,
+                   IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe void TF_SessionRun(IntPtr session, TF_Buffer* run_options,
                    IntPtr inputs, IntPtr input_values, int ninputs,
-                   IntPtr outputs, ref IntPtr output_values, int noutputs,
+                   IntPtr outputs, IntPtr[] output_values, int noutputs,
                    IntPtr target_opers, int ntargets,
                    IntPtr run_metadata,
                    IntPtr status);

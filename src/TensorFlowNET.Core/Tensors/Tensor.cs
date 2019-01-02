@@ -33,7 +33,7 @@ namespace Tensorflow
             {
                 var dims = new long[rank];
                 for (int i = 0; i < rank; i++)
-                    shape[i] = c_api.TF_Dim(_handle, i);
+                    dims[i] = c_api.TF_Dim(_handle, i);
 
                 return dims;
             }

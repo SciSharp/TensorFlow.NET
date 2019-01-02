@@ -13,13 +13,13 @@ namespace Tensorflow
             var num_return_outputs = opts.NumReturnOutputs;
             var return_outputs = new TF_Output[num_return_outputs];
             int size = Marshal.SizeOf<TF_Output>();
-            TF_Output* return_output_handle = (TF_Output*)Marshal.AllocHGlobal(size * num_return_outputs);
+            var return_output_handle = Marshal.AllocHGlobal(size * num_return_outputs);
 
             c_api.TF_GraphImportGraphDefWithReturnOutputs(_handle, graph_def, opts, return_output_handle, num_return_outputs, s);
             for (int i = 0; i < num_return_outputs; i++)
             {
                 var handle = return_output_handle + i * size;
-                return_outputs[i] = new TF_Output((*handle).oper, (*handle).index);
+                return_outputs[i] = Marshal.PtrToStructure<TF_Output>(handle);
             }
 
             return return_outputs;

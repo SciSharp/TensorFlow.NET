@@ -9,12 +9,12 @@ namespace Tensorflow
 {
     public class BaseSession : IDisposable
     {
-        private Graph _graph;
-        private bool _opened;
-        private bool _closed;
-        private int _current_version;
-        private byte[] _target;
-        private IntPtr _session;
+        protected Graph _graph;
+        protected bool _opened;
+        protected bool _closed;
+        protected int _current_version;
+        protected byte[] _target;
+        protected IntPtr _session;
 
         public BaseSession(string target = "", Graph graph = null)
         {
@@ -28,11 +28,11 @@ namespace Tensorflow
             }
 
             _target = UTF8Encoding.UTF8.GetBytes(target);
-            //var opts = c_api.TF_NewSessionOptions();
-            //var status = new Status();
-            //_session = c_api.TF_NewSession(_graph, opts, status);
+            var opts = c_api.TF_NewSessionOptions();
+            var status = new Status();
+            _session = c_api.TF_NewSession(_graph, opts, status);
 
-            //c_api.TF_DeleteSessionOptions(opts);
+            c_api.TF_DeleteSessionOptions(opts);
         }
 
         public void Dispose()
@@ -102,18 +102,18 @@ namespace Tensorflow
 
             var output_values = fetch_list.Select(x => IntPtr.Zero).ToArray();
 
-            /*c_api.TF_SessionRun(_session,
-                run_options: IntPtr.Zero,
+            c_api.TF_SessionRun(_session,
+                run_options: null,
                 inputs: feed_dict.Select(f => f.Key).ToArray(),
                 input_values: new IntPtr[] { },
                 ninputs: 0,
                 outputs: fetch_list,
                 output_values: output_values,
                 noutputs: fetch_list.Length,
-                target_opers: new IntPtr[] { },
+                target_opers: IntPtr.Zero,
                 ntargets: 0,
                 run_metadata: IntPtr.Zero,
-                status: status);*/
+                status: status);
 
             var result = output_values.Select(x => c_api.TF_TensorData(x))
                 .Select(x => (object)*(float*)x)
