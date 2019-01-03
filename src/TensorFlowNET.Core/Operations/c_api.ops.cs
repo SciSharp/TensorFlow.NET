@@ -41,6 +41,33 @@ namespace Tensorflow
         public static extern IntPtr TF_OperationDevice(IntPtr oper);
 
         /// <summary>
+        /// Fills in `value` with the value of the attribute `attr_name`.  `value` must
+        /// point to an array of length at least `max_length` (ideally set to
+        /// TF_AttrMetadata.total_size from TF_OperationGetAttrMetadata(oper,
+        /// attr_name)).
+        /// </summary>
+        /// <param name="oper">TF_Operation*</param>
+        /// <param name="attr_name">const char*</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_AttrMetadata TF_OperationGetAttrMetadata(IntPtr oper, string attr_name, IntPtr status);
+
+        /// <summary>
+        /// Fills in `value` with the value of the attribute `attr_name`.  `value` must
+        /// point to an array of length at least `max_length` (ideally set to
+        /// TF_AttrMetadata.total_size from TF_OperationGetAttrMetadata(oper,
+        /// attr_name)). 
+        /// </summary>
+        /// <param name="oper">TF_Operation*</param>
+        /// <param name="attr_name">const char*</param>
+        /// <param name="value">void* </param>
+        /// <param name="max_length">size_t</param>
+        /// <param name="status">TF_Status*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_OperationGetAttrString(IntPtr oper, string attr_name, IntPtr value, uint max_length, IntPtr status);
+        
+        /// <summary>
         /// Sets `output_attr_value` to the binary-serialized AttrValue proto
         /// representation of the value of the `attr_name` attr of `oper`.
         /// </summary>
@@ -169,6 +196,20 @@ namespace Tensorflow
         /// <param name="num_dims"></param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_SetAttrShape(IntPtr desc, string attr_name, long[] dims, int num_dims);
+
+        /// <summary>
+        /// Call some TF_SetAttr*() function for every attr that is not
+        /// inferred from an input and doesn't have a default value you wish to
+        /// keep.
+        /// 
+        /// `value` must point to a string of length `length` bytes.
+        /// </summary>
+        /// <param name="desc">TF_OperationDescription*</param>
+        /// <param name="attr_name">const char*</param>
+        /// <param name="value">const void*</param>
+        /// <param name="length">size_t</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetAttrString(IntPtr desc, string attr_name, string value, uint length);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TF_SetAttrTensor(IntPtr desc, string attr_name, IntPtr value, IntPtr status);

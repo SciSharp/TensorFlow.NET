@@ -177,11 +177,6 @@ namespace TensorFlowNET.UnitTest
 
         public static Operation Neg(Operation n, Graph graph, Status s, string name = "neg")
         {
-            return NegHelper(n, graph, s, name);
-        }
-
-        public static Operation NegHelper(Operation n, Graph graph, Status s, string name)
-        {
             OperationDescription desc = c_api.TF_NewOperation(graph, "Neg", name);
             var neg_input = new TF_Output(n, 0);
             c_api.TF_AddInput(desc, neg_input);
@@ -220,20 +215,6 @@ namespace TensorFlowNET.UnitTest
         public static Operation ScalarConst(int v, Graph graph, Status s, string name = "scalar")
         {
             return Const(new Tensor(v), graph, s, name);
-        }
-
-        public static unsafe IntPtr Int32Tensor(int v)
-        {
-            bool deallocator_called = false;
-            const int num_bytes = sizeof(int);
-            var dotHandle = Marshal.AllocHGlobal(num_bytes * 1);
-            *(int*)dotHandle = v;
-            return c_api.TF_NewTensor(TF_DataType.TF_INT32, new long[0], 0, dotHandle, num_bytes,
-                                (IntPtr values, IntPtr len, ref bool closure) =>
-                                {
-                                    // Free the original buffer and set flag
-                                    // Marshal.FreeHGlobal(dotHandle);
-                                }, ref deallocator_called);
         }
     }
 }
