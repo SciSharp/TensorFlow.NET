@@ -32,8 +32,8 @@ namespace TensorFlowNET.UnitTest
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
 
             // Run the graph.
-            var inputs = new Dictionary<IntPtr, IntPtr>();
-            inputs.Add(feed, c_test_util.Int32Tensor(3));
+            var inputs = new Dictionary<Operation, Tensor>();
+            inputs.Add(feed, new Tensor(3));
             csession.SetInputs(inputs);
 
             var outputs = new List<IntPtr> { add };
@@ -46,6 +46,33 @@ namespace TensorFlowNET.UnitTest
             ASSERT_EQ((ulong)sizeof(uint), outTensor.bytesize);
             var output_contents = outTensor.Data<int>();
             EXPECT_EQ(3 + 2, output_contents[0]);
+
+            // Add another operation to the graph.
+            var neg = c_test_util.Neg(add, graph, s);
+            ASSERT_EQ(TF_Code.TF_OK, s.Code);
+
+            // Run up to the new operation.
+            inputs = new Dictionary<Operation, Tensor>();
+            inputs.Add(feed, new Tensor(7));
+            csession.SetInputs(inputs);
+            outputs = new List<IntPtr> { neg };
+            csession.SetOutputs(outputs);
+            csession.Run(s);
+            ASSERT_EQ(TF_Code.TF_OK, s.Code);
+
+            outTensor = csession.output_tensor(0);
+            ASSERT_TRUE(outTensor != IntPtr.Zero);
+            EXPECT_EQ(TF_DataType.TF_INT32, outTensor.dtype);
+            EXPECT_EQ(0, outTensor.NDims);  // scalar
+            ASSERT_EQ((ulong)sizeof(uint), outTensor.bytesize);
+            output_contents = outTensor.Data<int>();
+            EXPECT_EQ(-(7 + 2), output_contents[0]);
+
+            // Clean up
+            csession.CloseAndDelete(s);
+            ASSERT_EQ(TF_Code.TF_OK, s.Code);
+            graph.Dispose();
+            s.Dispose();
         }
     }
 }
