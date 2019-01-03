@@ -256,7 +256,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(0, neg.GetControlInputs().Length);
             EXPECT_EQ(0, neg.NumControlOutputs);
             EXPECT_EQ(0, neg.GetControlOutputs().Length);
-
+            
             // Import it again, with an input mapping, return outputs, and a return
             // operation, into the same graph.
             c_api.TF_DeleteImportGraphDefOptions(opts);
@@ -270,7 +270,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(1, c_api.TF_ImportGraphDefOptionsNumReturnOperations(opts));
             var results = c_api.TF_GraphImportGraphDefWithResults(graph, graph_def, opts, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
-
+            
             Operation scalar2 = graph.OperationByName("imported2/scalar");
             Operation feed2 = graph.OperationByName("imported2/feed");
             Operation neg2 = graph.OperationByName("imported2/neg");
@@ -287,7 +287,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(0, return_outputs[0].index);
             EXPECT_EQ(scalar, return_outputs[1].oper);  // remapped
             EXPECT_EQ(0, return_outputs[1].index);
-
+            
             // Check return operation
             var return_opers = graph.ReturnOperations(results);
             ASSERT_EQ(1, return_opers.Length);
@@ -302,26 +302,26 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_ImportGraphDefOptionsAddControlDependency(opts, feed2);
             c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
-
+            
             var scalar3 = graph.OperationByName("imported3/scalar");
             var feed3 = graph.OperationByName("imported3/feed");
             var neg3 = graph.OperationByName("imported3/neg");
             ASSERT_TRUE(scalar3 != IntPtr.Zero);
             ASSERT_TRUE(feed3 != IntPtr.Zero);
             ASSERT_TRUE(neg3 != IntPtr.Zero);
-
+            
             // Check that newly-imported scalar and feed have control deps (neg3 will
             // inherit them from input)
             var control_inputs = scalar3.GetControlInputs();
             ASSERT_EQ(2, scalar3.NumControlInputs);
             EXPECT_EQ(feed, control_inputs[0]);
             EXPECT_EQ(feed2, control_inputs[1]);
-
+            
             control_inputs = feed3.GetControlInputs();
             ASSERT_EQ(2, feed3.NumControlInputs);
             EXPECT_EQ(feed, control_inputs[0]);
             EXPECT_EQ(feed2, control_inputs[1]);
-
+            
             // Export to a graph def so we can import a graph with control dependencies
             graph_def.Dispose();
             graph_def = new Buffer();

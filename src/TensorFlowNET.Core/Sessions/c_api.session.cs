@@ -77,13 +77,5 @@ namespace Tensorflow
                    IntPtr target_opers, int ntargets,
                    IntPtr run_metadata,
                    IntPtr status);
-
-        [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_SessionRun(IntPtr session, TF_Buffer* run_options,
-                   IntPtr inputs, IntPtr input_values, int ninputs,
-                   IntPtr outputs, IntPtr[] output_values, int noutputs,
-                   IntPtr target_opers, int ntargets,
-                   IntPtr run_metadata,
-                   IntPtr status);
     }
 }

@@ -20,10 +20,10 @@ namespace TensorFlowNET.UnitTest
             var graph = new Graph();
 
             // Make a placeholder operation.
-            var feed = c_test_util.ScalarConst(3, graph, s, "scalar1"); //c_test_util.Placeholder(graph, s);
+            var feed = c_test_util.Placeholder(graph, s);
 
             // Make a constant operation with the scalar "2".
-            var two = c_test_util.ScalarConst(2, graph, s, "scalar2");
+            var two = c_test_util.ScalarConst(2, graph, s);
 
             // Add operation.
             var add = c_test_util.Add(feed, two, graph, s);
@@ -34,7 +34,7 @@ namespace TensorFlowNET.UnitTest
             // Run the graph.
             var inputs = new Dictionary<IntPtr, IntPtr>();
             inputs.Add(feed, c_test_util.Int32Tensor(3));
-            //csession.SetInputs(inputs);
+            csession.SetInputs(inputs);
 
             var outputs = new List<IntPtr> { add };
             csession.SetOutputs(outputs);

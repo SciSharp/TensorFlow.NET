@@ -51,7 +51,7 @@ namespace Tensorflow
 
             if(NumControlInputs > 0)
             {
-                IntPtr control_input_handle = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>());
+                IntPtr control_input_handle = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>() * NumControlInputs);
                 c_api.TF_OperationGetControlInputs(_handle, control_input_handle, NumControlInputs);
                 for (int i = 0; i < NumControlInputs; i++)
                 {
@@ -71,7 +71,7 @@ namespace Tensorflow
 
             if(NumControlOutputs > 0)
             {
-                IntPtr control_output_handle = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>());
+                IntPtr control_output_handle = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>() * NumControlOutputs);
                 c_api.TF_OperationGetControlOutputs(_handle, control_output_handle, NumControlInputs);
                 for (int i = 0; i < NumControlInputs; i++)
                 {
