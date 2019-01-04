@@ -38,6 +38,11 @@ namespace Tensorflow
             _names_in_use = new Dictionary<string, int>();
         }
 
+        public OperationDescription NewOperation(string opType, string opName)
+        {
+            return c_api.TF_NewOperation(_handle, opType, opName);
+        }
+
         public T as_graph_element<T>(T obj, bool allow_tensor = true, bool allow_operation = true)
         {
             return _as_graph_element_locked(obj, allow_tensor, allow_operation);

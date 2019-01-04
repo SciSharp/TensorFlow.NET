@@ -13,6 +13,11 @@ namespace Tensorflow
             _handle = handle;
         }
 
+        public void AddInputList(params TF_Output[] inputs)
+        {
+            c_api.TF_AddInputList(_handle, inputs, inputs.Length);
+        }
+
         public static implicit operator OperationDescription(IntPtr handle)
         {
             return new OperationDescription(handle);
