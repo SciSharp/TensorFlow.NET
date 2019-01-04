@@ -109,12 +109,17 @@ namespace Tensorflow
             Graph = g;
 
             _id_value = Graph._next_id();
+            if(op_def == null)
+                op_def = g.GetOpDef(node_def.Op);
 
             _handle = ops._create_c_op(g, node_def, inputs);
-
+            
             _outputs = new Tensor[NumOutputs];
+            output_types = new TF_DataType[NumOutputs];
+
             for (int i = 0; i < NumOutputs; i++)
             {
+                output_types[i] = OutputType(i);
                 _outputs[i] = new Tensor(this, i, output_types[i]);
             }
 

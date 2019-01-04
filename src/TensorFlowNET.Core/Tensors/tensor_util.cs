@@ -2,6 +2,7 @@
 using NumSharp.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using tensor_pb2 = Tensorflow;
 
@@ -32,7 +33,7 @@ namespace Tensorflow
                     tensor_proto.DoubleVal.AddRange(nd.Data<double>());
                     break;
                 case "String":
-                    tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFrom(nd.Data<string>()[0], Encoding.UTF8));
+                    tensor_proto.StringVal.AddRange(nd.Data<string>().Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
                     break;
                 default:
                     throw new Exception("Not Implemented");

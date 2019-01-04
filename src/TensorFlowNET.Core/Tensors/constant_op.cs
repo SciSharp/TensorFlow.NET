@@ -22,17 +22,21 @@ namespace Tensorflow
         public static Tensor Create(NDArray nd, string name = "Const", bool verify_shape = false)
         {
             Graph g = ops.get_default_graph();
-            var tensor_value = new AttrValue();
             var tensor_pb = tensor_util.make_tensor_proto(nd, verify_shape);
-            tensor_value.Tensor = tensor_pb;
+            var tensor_value = new AttrValue
+            {
+                Type = tensor_pb.Dtype,
+                Tensor = tensor_pb
+            };
+            
             var dtype_value = new AttrValue
             {
                 Type = tensor_value.Tensor.Dtype,
             };
 
             var attrs = new Dictionary<string, AttrValue>();
-            attrs["dtype"] = dtype_value;
             attrs["value"] = tensor_value;
+            attrs["dtype"] = dtype_value;
 
             var op = g.create_op("Const",
                 null,

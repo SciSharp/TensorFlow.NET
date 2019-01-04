@@ -8,7 +8,7 @@ namespace Tensorflow
     /// TF_Status holds error information. It either has an OK code, or
     /// else an error code with an associated error message.
     /// </summary>
-    public class Status
+    public class Status : IDisposable
     {
         private readonly IntPtr _handle;
 

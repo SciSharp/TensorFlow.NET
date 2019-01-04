@@ -197,7 +197,7 @@ namespace Tensorflow
         public static extern int TF_OperationOutputListLength(IntPtr oper, string arg_name, IntPtr status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_SetAttrValueProto(IntPtr desc, string attr_name, IntPtr proto, UIntPtr proto_len, IntPtr status);
+        public static extern void TF_SetAttrValueProto(IntPtr desc, string attr_name, IntPtr proto, uint proto_len, IntPtr status);
 
         /// <summary>
         /// Set `num_dims` to -1 to represent "unknown rank".

@@ -106,7 +106,13 @@ namespace Tensorflow
                 original_op: null,
                 op_def: op_def);
 
+            _create_op_helper(op, true);
             return op;
+        }
+
+        private void _create_op_helper(Operation op, bool compute_device = true)
+        {
+
         }
 
         public void _add_op(Operation op)

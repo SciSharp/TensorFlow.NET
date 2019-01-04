@@ -8,22 +8,22 @@ namespace Tensorflow
 {
     public partial class Graph
     {
-        public Operation NewOperation(string opType, string opName, Tensor tensor)
+        public OpDef GetOpDef(string type)
         {
-            var desc = c_api.TF_NewOperation(_handle, opType, opName);
+            using (var buffer = new Buffer())
+            using (var status = new Status())
+            {
+                c_api.TF_GraphGetOpDef(_handle, type, buffer, status);
+                return OpDef.Parser.ParseFrom(buffer.Data);
+            }
+        }
 
-            if (tensor.dtype == TF_DataType.TF_STRING)
-            {
-                var value = "Hello World!";
-                var bytes = Encoding.UTF8.GetBytes(value);
-                var buf = Marshal.AllocHGlobal(bytes.Length + 1);
-                Marshal.Copy(bytes, 0, buf, bytes.Length);
-                c_api.TF_SetAttrString(desc, "value", buf, (uint)value.Length);
-            }
-            else
-            {
-                c_api.TF_SetAttrTensor(desc, "value", tensor, Status);
-            }
+        public OperationDescription NewOperation(string opType, string opName)
+        {
+            OperationDescription desc = c_api.TF_NewOperation(_handle, opType, opName);
+            return desc;
+
+            /*c_api.TF_SetAttrTensor(desc, "value", tensor, Status);
             
             Status.Check();
 
@@ -32,7 +32,7 @@ namespace Tensorflow
             var op = c_api.TF_FinishOperation(desc, Status);
             Status.Check();
 
-            return op;
+            return op;*/
         }
     }
 }

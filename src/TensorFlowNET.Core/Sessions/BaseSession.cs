@@ -115,12 +115,27 @@ namespace Tensorflow
                 run_metadata: IntPtr.Zero,
                 status: status);
 
-            var result = output_values.Select(x => c_api.TF_TensorData(x))
-                .Select(x => (object)*(float*)x)
-                .ToArray();
+            object[] result = new object[fetch_list.Length];
 
-            var op = new Operation(fetch_list[0].oper);
-            //var metadata = c_api.TF_OperationGetAttrMetadata(fetch_list[0].oper, "dtype", status);
+            for (int i = 0; i < fetch_list.Length; i++)
+            {
+                var tensor = new Tensor(output_values[i]);
+                
+                switch (tensor.dtype)
+                {
+                    case TF_DataType.TF_STRING:
+                        // wired, don't know why we have to start from offset 9.
+                        var bytes = tensor.Data();
+                        result[i] = UTF8Encoding.Default.GetString(bytes, 9, bytes.Length - 9);
+                        break;
+                    case TF_DataType.TF_FLOAT:
+                        result[i] = *(float*)c_api.TF_TensorData(output_values[i]);
+                        break;
+                    default:
+                        throw new NotImplementedException("can't get output");
+                        break;
+                }
+            }
 
             return result;
         }

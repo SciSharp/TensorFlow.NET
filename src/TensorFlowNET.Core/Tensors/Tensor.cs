@@ -146,7 +146,6 @@ namespace Tensorflow
         {
             var data = new byte[bytesize];
             Marshal.Copy(buffer, data, 0, (int)bytesize);
-
             return data;
         }
 
