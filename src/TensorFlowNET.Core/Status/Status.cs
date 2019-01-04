@@ -36,12 +36,15 @@ namespace Tensorflow
         /// Check status 
         /// Throw exception with error message if code != TF_OK
         /// </summary>
-        public void Check()
+        public void Check(bool throwException = false)
         {
             if(Code != TF_Code.TF_OK)
             {
                 Console.WriteLine(Message);
-                // throw new Exception(Message);
+                if (throwException)
+                {
+                    throw new Exception(Message);
+                }
             }
         }
 

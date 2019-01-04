@@ -7,9 +7,9 @@ namespace Tensorflow
 {
     public static partial class tf
     {
-        public static Tensor constant(NDArray value, string name = "Const", bool verify_shape = false)
+        public static Tensor constant(NDArray nd, string name = "Const", bool verify_shape = false)
         {
-            return constant_op.Create(value, name, verify_shape);
+            return constant_op.Create(nd, name, verify_shape);
         }
     }
 }

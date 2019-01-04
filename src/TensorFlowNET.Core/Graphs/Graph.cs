@@ -24,23 +24,36 @@ namespace Tensorflow
         private List<String> _unfetchable_ops = new List<string>();
 
         private string _name_stack;
+        public Status Status { get; }
 
         public Graph()
         {
             _handle = c_api.TF_NewGraph();
+            Status = new Status();
         }
 
         public Graph(IntPtr graph)
         {
             _handle = graph;
+            Status = new Status();
             _nodes_by_id = new Dictionary<int, Operation>();
             _nodes_by_name = new Dictionary<string, Operation>();
             _names_in_use = new Dictionary<string, int>();
         }
 
-        public OperationDescription NewOperation(string opType, string opName)
+        public Operation NewOperation(string opType, string opName, Tensor t)
         {
-            return c_api.TF_NewOperation(_handle, opType, opName);
+            var desc = c_api.TF_NewOperation(_handle, opType, opName);
+            
+            c_api.TF_SetAttrTensor(desc, "value", t, Status);
+            Status.Check();
+
+            c_api.TF_SetAttrType(desc, "dtype", t.dtype);
+
+            var op = c_api.TF_FinishOperation(desc, Status);
+            Status.Check();
+
+            return op;
         }
 
         public T as_graph_element<T>(T obj, bool allow_tensor = true, bool allow_operation = true)

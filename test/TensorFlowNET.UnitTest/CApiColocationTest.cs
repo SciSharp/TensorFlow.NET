@@ -25,12 +25,17 @@ namespace TensorFlowNET.UnitTest
         public void SetUp()
         {
             feed1_ = c_test_util.Placeholder(graph_, s_, "feed1");
+            s_.Check();
             feed2_ = c_test_util.Placeholder(graph_, s_, "feed2");
+            s_.Check();
             constant_ = c_test_util.ScalarConst(10, graph_, s_);
-            desc_ = graph_.NewOperation("AddN", "add");
+            s_.Check();
+            desc_ = c_api.TF_NewOperation(graph_, "AddN", "add");
+            s_.Check();
 
             TF_Output[] inputs = { new TF_Output(feed1_, 0), new TF_Output(constant_, 0) };
             desc_.AddInputList(inputs);
+            s_.Check();
         }
 
         private void SetViaStringList(OperationDescription desc, string[] list)
@@ -85,7 +90,8 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void ColocateWith()
         {
-
+            c_api.TF_ColocateWith(desc_, feed1_);
+            FinishAndVerify(desc_, new string[] { "loc:@feed1" });
         }
 
         [TestMethod]

@@ -23,6 +23,8 @@ namespace TensorFlowNET.Examples
                     Console.ReadLine();
                 }
             }
+
+            Console.ReadLine();
         }
     }
 }

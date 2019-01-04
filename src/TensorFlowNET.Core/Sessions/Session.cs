@@ -7,9 +7,19 @@ namespace Tensorflow
     public class Session : BaseSession
     {
         private IntPtr _handle;
+        public Status Status { get; }
+        public SessionOptions Options { get; }
 
         public Session(string target = "", Graph graph = null)
         {
+            Status = new Status();
+            if(graph == null)
+            {
+                graph = tf.get_default_graph();
+            }
+            Options = new SessionOptions();
+            _handle = c_api.TF_NewSession(graph, Options, Status);
+            Status.Check();
         }
 
         public Session(IntPtr handle)

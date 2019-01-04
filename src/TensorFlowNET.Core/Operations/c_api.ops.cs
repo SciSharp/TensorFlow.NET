@@ -8,6 +8,18 @@ namespace Tensorflow
     public static partial class c_api
     {
         /// <summary>
+        /// Request that `desc` be co-located on the device where `op`
+        /// is placed.
+        ///
+        /// Use of this is discouraged since the implementation of device placement is
+        /// subject to change. Primarily intended for internal libraries 
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <param name="op"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_ColocateWith(IntPtr desc, IntPtr op);
+
+        /// <summary>
         /// Get the OpList of all OpDefs defined in this address space.
         /// </summary>
         /// <returns></returns>
@@ -209,7 +221,7 @@ namespace Tensorflow
         /// <param name="value">const void*</param>
         /// <param name="length">size_t</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_SetAttrString(IntPtr desc, string attr_name, string value, uint length);
+        public static extern void TF_SetAttrString(IntPtr desc, string attr_name, IntPtr value, uint length);
 
         /// <summary>
         /// 

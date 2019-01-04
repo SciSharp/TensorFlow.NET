@@ -119,6 +119,9 @@ namespace Tensorflow
                 .Select(x => (object)*(float*)x)
                 .ToArray();
 
+            var op = new Operation(fetch_list[0].oper);
+            //var metadata = c_api.TF_OperationGetAttrMetadata(fetch_list[0].oper, "dtype", status);
+
             return result;
         }
 
