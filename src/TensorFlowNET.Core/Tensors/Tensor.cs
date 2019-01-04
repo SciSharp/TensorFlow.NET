@@ -83,8 +83,14 @@ namespace Tensorflow
                     Marshal.Copy(nd.Data<double>(), 0, dotHandle, nd.size);
                     break;
                 case "String":
-                    dotHandle = Marshal.StringToHGlobalAuto(nd.Data<string>()[0]);
-                    size = (ulong)nd.Data<string>()[0].Length;
+                    var value = nd.Data<string>()[0];
+                    var bytes = Encoding.UTF8.GetBytes(value);
+                    var buf = Marshal.AllocHGlobal(bytes.Length + 1);
+                    Marshal.Copy(bytes, 0, buf, bytes.Length);
+
+                    //c_api.TF_SetAttrString(op, "value", buf, (uint)bytes.Length);
+
+                    size = (ulong)bytes.Length;
                     break;
                 default:
                     throw new NotImplementedException("Marshal.Copy failed.");

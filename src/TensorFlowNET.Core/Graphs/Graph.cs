@@ -41,21 +41,6 @@ namespace Tensorflow
             _names_in_use = new Dictionary<string, int>();
         }
 
-        public Operation NewOperation(string opType, string opName, Tensor t)
-        {
-            var desc = c_api.TF_NewOperation(_handle, opType, opName);
-            
-            c_api.TF_SetAttrTensor(desc, "value", t, Status);
-            Status.Check();
-
-            c_api.TF_SetAttrType(desc, "dtype", t.dtype);
-
-            var op = c_api.TF_FinishOperation(desc, Status);
-            Status.Check();
-
-            return op;
-        }
-
         public T as_graph_element<T>(T obj, bool allow_tensor = true, bool allow_operation = true)
         {
             return _as_graph_element_locked(obj, allow_tensor, allow_operation);
