@@ -36,6 +36,6 @@ var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape(2, 3);
 
 
 
-![column-major order](assets/column-major-order.png)
+![column-major order](_static/column-major-order.png)
 
-![row-major order](assets/row-major-order.png)
+![row-major order](_static/row-major-order.png)

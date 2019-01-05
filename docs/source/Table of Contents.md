@@ -10,7 +10,9 @@
 
 ​     Installing Tensorflow.NET                                                                                                                   
 ​     Running Tensorflow.NET
-​     Talking to Tensorflow.NET                                                                                                                  
+​     Talking to Tensorflow.NET
+
+##### 2. Hello World
 
 ## Part II. Tensorflow.NET in Depth
 
