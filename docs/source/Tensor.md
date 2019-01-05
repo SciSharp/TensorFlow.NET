@@ -1,4 +1,4 @@
-# 第一章: Tensor
+# Chapter 1. Tensor 第一章: Tensor
 
 ### Represents one of the outputs of an Operation
 

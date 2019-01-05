@@ -16,8 +16,6 @@ Indices and tables
 ==================
 
 * :ref:`Front Cover <front-cover>`
-* :ref:`modindex`
-* :ref:`search`
 
 .. _front-cover:
 
@@ -26,4 +24,7 @@ Indices and tables
    :caption: Get Started with TensorFlow.NET:
 
    FrontCover
+   Foreword
+   Preface
    HelloWorld
+   Tensor
