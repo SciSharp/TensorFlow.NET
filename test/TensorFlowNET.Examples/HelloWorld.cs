@@ -13,18 +13,20 @@ namespace TensorFlowNET.Examples
     {
         public void Run()
         {
-            /* # Create a Constant op
-              The op is added as a node to the default graph.
+            /* Create a Constant op
+               The op is added as a node to the default graph.
             
-              The value returned by the constructor represents the output
-              of the Constant op.*/
+               The value returned by the constructor represents the output
+               of the Constant op. */
             var hello = tf.constant("Hello, TensorFlow!");
 
             // Start tf session
-            var sess = tf.Session();
-
-            // Run the op
-            Console.WriteLine(sess.run(hello));
+            using (var sess = tf.Session())
+            {
+                // Run the op
+                var result = sess.run(hello);
+                Console.WriteLine(result);
+            }
         }
     }
 }
