@@ -130,7 +130,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             // Serialize to NodeDef.
-            var node_def = c_test_util.GetNodeDef(neg);
+            var node_def = neg.GetNodeDef();
 
             // Validate NodeDef is what we expect.
             ASSERT_TRUE(c_test_util.IsNeg(node_def, "add"));
@@ -145,13 +145,13 @@ namespace TensorFlowNET.UnitTest
             // Look up some nodes by name.
             Operation neg2 = c_api.TF_GraphOperationByName(graph, "neg");
             EXPECT_EQ(neg, neg2);
-            var node_def2 = c_test_util.GetNodeDef(neg2);
+            var node_def2 = neg2.GetNodeDef();
             EXPECT_EQ(node_def.ToString(), node_def2.ToString());
 
             Operation feed2 = c_api.TF_GraphOperationByName(graph, "feed");
             EXPECT_EQ(feed, feed2);
-            node_def = c_test_util.GetNodeDef(feed);
-            node_def2 = c_test_util.GetNodeDef(feed2);
+            node_def = feed.GetNodeDef();
+            node_def2 = feed2.GetNodeDef();
             EXPECT_EQ(node_def.ToString(), node_def2.ToString());
 
             // Test iterating through the nodes of a graph.
@@ -162,7 +162,7 @@ namespace TensorFlowNET.UnitTest
             uint pos = 0;
             Operation oper;
 
-            while((oper = c_api.TF_GraphNextOperation(graph, ref pos)) != IntPtr.Zero)
+            while ((oper = c_api.TF_GraphNextOperation(graph, ref pos)) != IntPtr.Zero)
             {
                 if (oper.Equals(feed))
                 {
@@ -186,7 +186,7 @@ namespace TensorFlowNET.UnitTest
                 }
                 else
                 {
-                    node_def = c_test_util.GetNodeDef(oper);
+                    node_def = oper.GetNodeDef();
                     Assert.Fail($"Unexpected Node: {node_def.ToString()}");
                 }
             }
@@ -256,7 +256,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(0, neg.GetControlInputs().Length);
             EXPECT_EQ(0, neg.NumControlOutputs);
             EXPECT_EQ(0, neg.GetControlOutputs().Length);
-            
+
             // Import it again, with an input mapping, return outputs, and a return
             // operation, into the same graph.
             c_api.TF_DeleteImportGraphDefOptions(opts);
@@ -270,7 +270,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(1, c_api.TF_ImportGraphDefOptionsNumReturnOperations(opts));
             var results = c_api.TF_GraphImportGraphDefWithResults(graph, graph_def, opts, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
-            
+
             Operation scalar2 = graph.OperationByName("imported2/scalar");
             Operation feed2 = graph.OperationByName("imported2/feed");
             Operation neg2 = graph.OperationByName("imported2/neg");
@@ -287,7 +287,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(0, return_outputs[0].index);
             EXPECT_EQ(scalar, return_outputs[1].oper);  // remapped
             EXPECT_EQ(0, return_outputs[1].index);
-            
+
             // Check return operation
             var return_opers = graph.ReturnOperations(results);
             ASSERT_EQ(1, return_opers.Length);
@@ -302,26 +302,26 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_ImportGraphDefOptionsAddControlDependency(opts, feed2);
             c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
-            
+
             var scalar3 = graph.OperationByName("imported3/scalar");
             var feed3 = graph.OperationByName("imported3/feed");
             var neg3 = graph.OperationByName("imported3/neg");
             ASSERT_TRUE(scalar3 != IntPtr.Zero);
             ASSERT_TRUE(feed3 != IntPtr.Zero);
             ASSERT_TRUE(neg3 != IntPtr.Zero);
-            
+
             // Check that newly-imported scalar and feed have control deps (neg3 will
             // inherit them from input)
             var control_inputs = scalar3.GetControlInputs();
             ASSERT_EQ(2, scalar3.NumControlInputs);
             EXPECT_EQ(feed, control_inputs[0]);
             EXPECT_EQ(feed2, control_inputs[1]);
-            
+
             control_inputs = feed3.GetControlInputs();
             ASSERT_EQ(2, feed3.NumControlInputs);
             EXPECT_EQ(feed, control_inputs[0]);
             EXPECT_EQ(feed2, control_inputs[1]);
-            
+
             // Export to a graph def so we can import a graph with control dependencies
             graph_def.Dispose();
             graph_def = new Buffer();

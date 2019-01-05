@@ -20,19 +20,7 @@ namespace Tensorflow
 
         public OperationDescription NewOperation(string opType, string opName)
         {
-            OperationDescription desc = c_api.TF_NewOperation(_handle, opType, opName);
-            return desc;
-
-            /*c_api.TF_SetAttrTensor(desc, "value", tensor, Status);
-            
-            Status.Check();
-
-            c_api.TF_SetAttrType(desc, "dtype", tensor.dtype);
-
-            var op = c_api.TF_FinishOperation(desc, Status);
-            Status.Check();
-
-            return op;*/
+            return c_api.TF_NewOperation(_handle, opType, opName);
         }
     }
 }

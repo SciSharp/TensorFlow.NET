@@ -232,7 +232,7 @@ namespace Tensorflow
         /// <param name="lengths"></param>
         /// <param name="num_values"></param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_SetAttrStringList(IntPtr desc, string attr_name, string[] values, uint[] lengths, int num_values);
+        public static extern void TF_SetAttrStringList(IntPtr desc, string attr_name, IntPtr[] values, uint[] lengths, int num_values);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TF_SetAttrTensor(IntPtr desc, string attr_name, IntPtr value, IntPtr status);

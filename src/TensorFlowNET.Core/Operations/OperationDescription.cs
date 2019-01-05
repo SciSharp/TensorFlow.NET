@@ -18,6 +18,11 @@ namespace Tensorflow
             c_api.TF_AddInputList(_handle, inputs, inputs.Length);
         }
 
+        public Operation FinishOperation(Status status)
+        {
+            return c_api.TF_FinishOperation(_handle, status);
+        }
+
         public static implicit operator OperationDescription(IntPtr handle)
         {
             return new OperationDescription(handle);
