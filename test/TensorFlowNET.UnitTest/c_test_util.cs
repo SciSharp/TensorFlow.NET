@@ -51,18 +51,6 @@ namespace TensorFlowNET.UnitTest
             return def;
         }
 
-        public static NodeDef GetNodeDef(Operation oper)
-        {
-            var s = new Status();
-            var buffer = new Buffer();
-            c_api.TF_OperationToNodeDef(oper, buffer, s);
-            s.Check();
-            var ret = NodeDef.Parser.ParseFrom(buffer);
-            buffer.Dispose();
-            s.Dispose();
-            return ret;
-        }
-
         public static bool IsAddN(NodeDef node_def, int n)
         {
             if (node_def.Op != "AddN" || node_def.Name != "add" ||

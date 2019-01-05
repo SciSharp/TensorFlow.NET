@@ -145,6 +145,17 @@ namespace Tensorflow
             return ret;
         }
 
+        public NodeDef GetNodeDef()
+        {
+            using (var s = new Status())
+            using (var buffer = new Buffer())
+            {
+                c_api.TF_OperationToNodeDef(_handle, buffer, s);
+                s.Check();
+                return NodeDef.Parser.ParseFrom(buffer);
+            }
+        }
+
         public static implicit operator Operation(IntPtr handle) => new Operation(handle);
         public static implicit operator IntPtr(Operation op) => op._handle;
 
