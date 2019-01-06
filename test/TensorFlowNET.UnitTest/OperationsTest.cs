@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +32,7 @@ namespace TensorFlowNET.UnitTest
 
             using(var sess = tf.Session())
             {
-                var feed_dict = new Dictionary<Tensor, object>();
+                var feed_dict = new Dictionary<Tensor, NDArray>();
                 feed_dict.Add(a, 3.0f);
                 feed_dict.Add(b, 2.0f);
 

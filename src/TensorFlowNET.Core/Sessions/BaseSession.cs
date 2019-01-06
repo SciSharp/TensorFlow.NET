@@ -40,30 +40,22 @@ namespace Tensorflow
             
         }
 
-        public virtual object run(Tensor fetches, Dictionary<Tensor, object> feed_dict = null)
+        public virtual object run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
         {
             var result = _run(fetches, feed_dict);
 
             return result;
         }
 
-        private unsafe object _run(Tensor fetches, Dictionary<Tensor, object> feed_dict = null)
+        private unsafe object _run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
         {
-            var feed_dict_tensor = new Dictionary<Tensor, object>();
+            var feed_dict_tensor = new Dictionary<Tensor, NDArray>();
 
             if (feed_dict != null)
             {
-                NDArray np_val = null;
                 foreach (var feed in feed_dict)
                 {
-                    switch (feed.Value)
-                    {
-                        case float value:
-                            np_val = np.asarray(value);
-                            break;
-                    }
-
-                    feed_dict_tensor[feed.Key] = np_val;
+                    feed_dict_tensor[feed.Key] = feed.Value;
                 }
             }
 
@@ -85,9 +77,9 @@ namespace Tensorflow
             return fetch_handler.build_results(null, results);
         }
 
-        private object[] _do_run(List<Tensor> fetch_list, Dictionary<Tensor, object> feed_dict)
+        private object[] _do_run(List<Tensor> fetch_list, Dictionary<Tensor, NDArray> feed_dict)
         {
-            var feeds = feed_dict.Select(x => new KeyValuePair<TF_Output, Tensor>(x.Key._as_tf_output(), new Tensor(x.Value as NDArray))).ToArray();
+            var feeds = feed_dict.Select(x => new KeyValuePair<TF_Output, Tensor>(x.Key._as_tf_output(), new Tensor(x.Value))).ToArray();
             var fetches = fetch_list.Select(x => x._as_tf_output()).ToArray();
 
             return _call_tf_sessionrun(feeds, fetches);
@@ -133,12 +125,14 @@ namespace Tensorflow
                     case TF_DataType.TF_FLOAT:
                         result[i] = *(float*)c_api.TF_TensorData(output_values[i]);
                         break;
+                    case TF_DataType.TF_INT16:
+                        result[i] = *(short*)c_api.TF_TensorData(output_values[i]);
+                        break;
                     case TF_DataType.TF_INT32:
                         result[i] = *(int*)c_api.TF_TensorData(output_values[i]);
                         break;
                     default:
                         throw new NotImplementedException("can't get output");
-                        break;
                 }
             }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
@@ -43,11 +44,24 @@ namespace TensorFlowNET.Examples
             // Launch the default graph.
             using(sess = tf.Session())
             {
-                // var feed_dict = new Dictionary<string, >
+                var feed_dict = new Dictionary<Tensor, NDArray>();
+                feed_dict.Add(a, (short)2);
+                feed_dict.Add(b, (short)3);
                 // Run every operation with variable input
-                // Console.WriteLine($"Addition with variables: {sess.run(add, feed_dict: {a: 2, b: 3})}");
-                // Console.WriteLine($"Multiplication with variables: {}");
+                Console.WriteLine($"Addition with variables: {sess.run(add, feed_dict)}");
+                Console.WriteLine($"Multiplication with variables: {sess.run(mul, feed_dict)}");
             }
+
+            // ----------------
+            // More in details:
+            // Matrix Multiplication from TensorFlow official tutorial
+
+            // Create a Constant op that produces a 1x2 matrix.  The op is
+            // added as a node to the default graph.
+            //
+            // The value returned by the constructor represents the output
+            // of the Constant op.
+
         }
     }
 }

@@ -74,6 +74,9 @@ namespace Tensorflow
 
             switch (nd.dtype.Name)
             {
+                case "Int16":
+                    Marshal.Copy(nd.Data<short>(), 0, dotHandle, nd.size);
+                    break;
                 case "Int32":
                     Marshal.Copy(nd.Data<int>(), 0, dotHandle, nd.size);
                     break;
@@ -161,6 +164,8 @@ namespace Tensorflow
         {
             switch (type.Name)
             {
+                case "Int16":
+                    return TF_DataType.TF_INT16;
                 case "Int32":
                     return TF_DataType.TF_INT32;
                 case "Single":
@@ -169,9 +174,9 @@ namespace Tensorflow
                     return TF_DataType.TF_DOUBLE;
                 case "String":
                     return TF_DataType.TF_STRING;
+                default:
+                    throw new NotImplementedException("ToTFDataType error");
             }
-
-            return TF_DataType.DtInvalid;
         }
 
         public void Dispose()
