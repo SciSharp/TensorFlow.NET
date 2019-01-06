@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Tensorflow;
 
@@ -63,8 +64,9 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void String()
         {
-            //var desc = init("string");
-            //c_api.TF_SetAttrString(desc, "v", "bunny", 5);
+            var desc = init("string");
+            var handle = Marshal.StringToHGlobalAnsi("bunny");
+            c_api.TF_SetAttrString(desc, "v", handle, 5);
 
             //var oper = c_api.TF_FinishOperation(desc, s_);
             //ASSERT_EQ(TF_Code.TF_OK, s_.Code);

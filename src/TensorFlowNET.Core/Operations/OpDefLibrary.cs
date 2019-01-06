@@ -78,6 +78,9 @@ namespace Tensorflow
                     case "type":
                         attr_value.Type = _MakeType((TF_DataType)value, attr_def);
                         break;
+                    case "bool":
+                        attr_value.B = (bool)value;
+                        break;
                     case "shape":
                         attr_value.Shape = new TensorShapeProto();
                         break;
