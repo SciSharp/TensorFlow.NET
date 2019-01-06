@@ -12,13 +12,6 @@ namespace Tensorflow
 
         public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null)
         {
-            /*var g = ops.get_default_graph();
-            var op = new Operation(g, "Placeholder", "feed");
-
-            var tensor = new Tensor(op, 0, dtype);
-
-            return tensor;*/
-
             var keywords = new Dictionary<string, object>();
             keywords.Add("dtype", dtype);
             keywords.Add("shape", shape);
@@ -31,8 +24,7 @@ namespace Tensorflow
             _attrs["dtype"] = _op.get_attr("dtype");
             _attrs["shape"] = _op.get_attr("shape");
 
-            var tensor = new Tensor(_op, 0, dtype);
-            return tensor;
+            return new Tensor(_op, 0, dtype);
         }
     }
 }

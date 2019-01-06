@@ -35,7 +35,8 @@ namespace TensorFlowNET.UnitTest
                 feed_dict.Add(a, 3.0f);
                 feed_dict.Add(b, 2.0f);
 
-                //var o = sess.run(c, feed_dict);
+                var o = sess.run(c, feed_dict);
+                Assert.AreEqual(o, 5.0f);
             }
         }
 

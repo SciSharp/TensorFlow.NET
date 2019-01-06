@@ -37,20 +37,9 @@ namespace Tensorflow
 
             switch (type)
             {
-                case TF_DataType.TF_INT32:
-                    dtype = DataType.DtInt32;
-                    break;
-                case TF_DataType.TF_FLOAT:
-                    dtype = DataType.DtFloat;
-                    break;
-                case TF_DataType.TF_DOUBLE:
-                    dtype = DataType.DtDouble;
-                    break;
-                case TF_DataType.TF_STRING:
-                    dtype = DataType.DtString;
-                    break;
                 default:
-                    throw new Exception("Not Implemented");
+                    Enum.TryParse(((int)type).ToString(), out dtype);
+                    break;
             }
 
             return dtype;

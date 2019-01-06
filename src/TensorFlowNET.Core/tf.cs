@@ -10,6 +10,7 @@ namespace Tensorflow
 {
     public static partial class tf
     {
+        public static TF_DataType int16 = TF_DataType.TF_INT16;
         public static TF_DataType float32 = TF_DataType.TF_FLOAT;
         public static TF_DataType chars = TF_DataType.TF_STRING;
 
@@ -20,11 +21,6 @@ namespace Tensorflow
         public static object Variable<T>(T data, TF_DataType dtype = TF_DataType.DtInvalid)
         {
             return new RefVariable(data, dtype);
-        }
-
-        public static unsafe Tensor add(Tensor a, Tensor b)
-        {
-            return gen_math_ops.add(a, b);
         }
 
         public static unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null)

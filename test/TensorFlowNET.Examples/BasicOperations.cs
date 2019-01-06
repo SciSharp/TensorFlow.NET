@@ -11,6 +11,8 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BasicOperations : IExample
     {
+        private Session sess;
+
         public void Run()
         {
             // Basic constant operations
@@ -18,13 +20,33 @@ namespace TensorFlowNET.Examples
             // of the Constant op.
             var a = tf.constant(2);
             var b = tf.constant(3);
-            var c = a * b;
+            
             // Launch the default graph.
-            using (var sess = tf.Session())
+            using (sess = tf.Session())
             {
                 Console.WriteLine("a=2, b=3");
                 Console.WriteLine($"Addition with constants: {sess.run(a + b)}");
                 Console.WriteLine($"Multiplication with constants: {sess.run(a * b)}");
+            }
+
+            // Basic Operations with variable as graph input
+            // The value returned by the constructor represents the output
+            // of the Variable op. (define as input when running session)
+            // tf Graph input
+            a = tf.placeholder(tf.int16);
+            b = tf.placeholder(tf.int16);
+
+            // Define some operations
+            var add = tf.add(a, b);
+            var mul = tf.multiply(a, b);
+
+            // Launch the default graph.
+            using(sess = tf.Session())
+            {
+                // var feed_dict = new Dictionary<string, >
+                // Run every operation with variable input
+                // Console.WriteLine($"Addition with variables: {sess.run(add, feed_dict: {a: 2, b: 3})}");
+                // Console.WriteLine($"Multiplication with variables: {}");
             }
         }
     }

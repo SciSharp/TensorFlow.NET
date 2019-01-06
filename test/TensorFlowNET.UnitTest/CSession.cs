@@ -78,7 +78,7 @@ namespace TensorFlowNET.UnitTest
             var output_values_ptr = output_values_.Select(x => (IntPtr)x).ToArray();
             IntPtr targets_ptr = IntPtr.Zero;
 
-            c_api.TF_SessionRun(session_, null, inputs_ptr, input_values_ptr, 1,
+            c_api.TF_SessionRun(session_, null, inputs_ptr, input_values_ptr, inputs_ptr.Length,
                 outputs_ptr, output_values_ptr, outputs_.Count, 
                 targets_ptr, targets_.Count,
                 IntPtr.Zero, s);

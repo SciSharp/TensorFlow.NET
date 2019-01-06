@@ -105,8 +105,8 @@ namespace Tensorflow
             c_api.TF_SessionRun(_session,
                 run_options: null,
                 inputs: feed_dict.Select(f => f.Key).ToArray(),
-                input_values: new IntPtr[] { },
-                ninputs: 0,
+                input_values: feed_dict.Select(f => (IntPtr)f.Value).ToArray(),
+                ninputs: feed_dict.Length,
                 outputs: fetch_list,
                 output_values: output_values,
                 noutputs: fetch_list.Length,
@@ -114,6 +114,8 @@ namespace Tensorflow
                 ntargets: 0,
                 run_metadata: IntPtr.Zero,
                 status: status);
+
+            status.Check(true);
 
             object[] result = new object[fetch_list.Length];
 
