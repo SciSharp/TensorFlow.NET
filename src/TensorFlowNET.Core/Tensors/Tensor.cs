@@ -11,7 +11,7 @@ namespace Tensorflow
     /// A tensor is a generalization of vectors and matrices to potentially higher dimensions. 
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
-    public class Tensor : IDisposable
+    public partial class Tensor : IDisposable
     {
         private readonly IntPtr _handle;
 
@@ -22,7 +22,8 @@ namespace Tensorflow
         public object value;
         public int value_index { get; }
 
-        public TF_DataType dtype => _handle == IntPtr.Zero ? TF_DataType.DtInvalid : c_api.TF_TensorType(_handle);
+        private TF_DataType _dtype = TF_DataType.DtInvalid;
+        public TF_DataType dtype => _handle == IntPtr.Zero ? _dtype : c_api.TF_TensorType(_handle);
         public ulong bytesize => _handle == IntPtr.Zero ? 0 : c_api.TF_TensorByteSize(_handle);
         public ulong dataTypeSize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
         public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / dataTypeSize;
@@ -118,6 +119,7 @@ namespace Tensorflow
         {
             this.op = op;
             this.value_index = value_index;
+            this._dtype = dtype;
         }
 
         public TF_Output _as_tf_output()

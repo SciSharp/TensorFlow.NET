@@ -18,6 +18,7 @@
 Docs: https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.0.2.0</AssemblyVersion>
     <PackageReleaseNotes></PackageReleaseNotes>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

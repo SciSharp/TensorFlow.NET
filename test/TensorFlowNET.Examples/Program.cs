@@ -11,6 +11,9 @@ namespace TensorFlowNET.Examples
             var assembly = Assembly.GetEntryAssembly();
             foreach(Type type in assembly.GetTypes().Where(x => x.GetInterfaces().Contains(typeof(IExample))))
             {
+                if (args.Length > 0 && !args.Contains(type.Name))
+                    continue;
+                
                 var example = (IExample)Activator.CreateInstance(type);
 
                 try
@@ -22,6 +25,8 @@ namespace TensorFlowNET.Examples
                     Console.WriteLine(ex);
                 }
             }
+
+            Console.ReadLine();
         }
     }
 }

@@ -28,14 +28,20 @@ namespace Tensorflow
             var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
 
             // Add inputs
-            if(inputs != null && inputs.Count > 0)
+            if(inputs != null)
             {
-                /*foreach (var op_input in inputs)
+                foreach (var op_input in inputs)
                 {
-                    c_api.TF_AddInput(op_desc, op_input._as_tf_output());
-                }*/
-
-                c_api.TF_AddInputList(op_desc, inputs.Select(x => x._as_tf_output()).ToArray(), inputs.Count);
+                    bool isList = false;
+                    if (!isList)
+                    {
+                        c_api.TF_AddInput(op_desc, op_input._as_tf_output());
+                    }
+                    else
+                    {
+                        c_api.TF_AddInputList(op_desc, inputs.Select(x => x._as_tf_output()).ToArray(), inputs.Count);
+                    }
+                }
             }
 
             var status = new Status();

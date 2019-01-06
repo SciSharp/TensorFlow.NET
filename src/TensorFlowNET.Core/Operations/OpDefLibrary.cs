@@ -59,7 +59,7 @@ namespace Tensorflow
 
                 if (!String.IsNullOrEmpty(input_arg.TypeAttr))
                 {
-                    attrs[input_arg.TypeAttr] = DataType.DtFloat;
+                    attrs[input_arg.TypeAttr] = (keywords[input_name] as Tensor).dtype;
                 }
 
                 if (input_arg.IsRef)
@@ -92,7 +92,7 @@ namespace Tensorflow
                 switch (attr_def.Type)
                 {
                     case "type":
-                        attr_value.Type = _MakeType(value, attr_def);
+                        attr_value.Type = _MakeType((TF_DataType)value, attr_def);
                         break;
                     case "shape":
                         attr_value.Shape = new TensorShapeProto();
@@ -127,9 +127,9 @@ namespace Tensorflow
             return op;
         }
 
-        public DataType _MakeType(Object v, AttrDef attr_def)
+        public DataType _MakeType(TF_DataType v, AttrDef attr_def)
         {
-            return DataType.DtFloat;
+            return v.as_datatype_enum();
         }
     }
 }

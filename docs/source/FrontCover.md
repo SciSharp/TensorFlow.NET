@@ -1,5 +1,5 @@
-# The Definitive Guide to Tensorflow.NET
-# Tensorflow.NET 权威指南
+# The Definitive Guide to TensorFlow.NET
+# TensorFlow.NET 权威指南
 
 
 

@@ -131,6 +131,9 @@ namespace Tensorflow
                     case TF_DataType.TF_FLOAT:
                         result[i] = *(float*)c_api.TF_TensorData(output_values[i]);
                         break;
+                    case TF_DataType.TF_INT32:
+                        result[i] = *(int*)c_api.TF_TensorData(output_values[i]);
+                        break;
                     default:
                         throw new NotImplementedException("can't get output");
                         break;
