@@ -9,26 +9,10 @@ namespace Tensorflow
 {
     public class OpDefLibrary
     {
-        public Dictionary<string, OpDef> _ops = new Dictionary<string, OpDef>();
-
-        public void add_op_list(OpList op_list)
-        {
-            foreach(var op_def in op_list.Op)
-            {
-                add_op(op_def);
-            }
-        }
-
-        public void add_op(OpDef op_def)
-        {
-            _ops[op_def.Name] = op_def;
-        }
-
         public unsafe Operation _apply_op_helper(string op_type_name, string name = "", Dictionary<string, object> keywords = null)
         {
-            var op_def = _ops[op_type_name];
-
             var g = ops.get_default_graph();
+            var op_def = g.GetOpDef(op_type_name);
 
             if (String.IsNullOrEmpty(name))
             {

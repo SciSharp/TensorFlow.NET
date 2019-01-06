@@ -8,7 +8,7 @@ namespace Tensorflow
 {
     public static class gen_array_ops
     {
-        public static OpDefLibrary _op_def_lib = _InitOpDefLibrary();
+        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
         public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null)
         {
@@ -33,16 +33,6 @@ namespace Tensorflow
 
             var tensor = new Tensor(_op, 0, dtype);
             return tensor;
-        }
-
-        private static OpDefLibrary _InitOpDefLibrary()
-        {
-            var bytes = File.ReadAllBytes("Operations/op_list_proto_array.bin");
-            var op_list = OpList.Parser.ParseFrom(bytes);
-            var op_def_lib = new OpDefLibrary();
-            op_def_lib.add_op_list(op_list);
-
-            return op_def_lib;
         }
     }
 }
