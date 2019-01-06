@@ -114,22 +114,36 @@ namespace Tensorflow
             for (int i = 0; i < fetch_list.Length; i++)
             {
                 var tensor = new Tensor(output_values[i]);
-                
+                Type type = tensor.dtype.as_numpy_datatype();
+                var ndims = tensor.shape.Select(x => (int)x).ToArray();
+
                 switch (tensor.dtype)
                 {
                     case TF_DataType.TF_STRING:
-                        // wired, don't know why we have to start from offset 9.
-                        var bytes = tensor.Data();
-                        result[i] = UTF8Encoding.Default.GetString(bytes, 9, bytes.Length - 9);
+                        {
+                            // wired, don't know why we have to start from offset 9.
+                            var bytes = tensor.Data();
+                            var output = UTF8Encoding.Default.GetString(bytes, 9, bytes.Length - 9);
+                            result[i] = tensor.NDims == 0 ? output : np.array(output).reshape(ndims);
+                        }
                         break;
                     case TF_DataType.TF_FLOAT:
-                        result[i] = *(float*)c_api.TF_TensorData(output_values[i]);
+                        {
+                            var output = *(float*)c_api.TF_TensorData(output_values[i]);
+                            result[i] = tensor.NDims == 0 ? output : np.array(output).reshape(ndims);
+                        }
                         break;
                     case TF_DataType.TF_INT16:
-                        result[i] = *(short*)c_api.TF_TensorData(output_values[i]);
+                        {
+                            var output = *(short*)c_api.TF_TensorData(output_values[i]);
+                            result[i] = tensor.NDims == 0 ? output : np.array(output).reshape(ndims);
+                        }
                         break;
                     case TF_DataType.TF_INT32:
-                        result[i] = *(int*)c_api.TF_TensorData(output_values[i]);
+                        {
+                            var output = *(int*)c_api.TF_TensorData(output_values[i]);
+                            result[i] = tensor.NDims == 0 ? output : np.array(output).reshape(ndims);
+                        }
                         break;
                     default:
                         throw new NotImplementedException("can't get output");

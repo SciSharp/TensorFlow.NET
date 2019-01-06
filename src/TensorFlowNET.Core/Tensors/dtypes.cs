@@ -6,6 +6,16 @@ namespace Tensorflow
 {
     public static class dtypes
     {
+        public static Type as_numpy_datatype(this TF_DataType type)
+        {
+            switch (type)
+            {
+                case TF_DataType.TF_INT32:
+                    return typeof(int);
+                default:
+                    throw new NotImplementedException("as_numpy_datatype failed");
+            }
+        }
         public static TF_DataType as_dtype(Type type)
         {
             TF_DataType dtype = TF_DataType.DtInvalid;

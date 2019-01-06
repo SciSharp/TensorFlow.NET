@@ -19,7 +19,7 @@ namespace TensorFlowNET.Examples
             // Basic constant operations
             // The value returned by the constructor represents the output
             // of the Constant op.
-            var a = tf.constant(2);
+            /*var a = tf.constant(2);
             var b = tf.constant(3);
             
             // Launch the default graph.
@@ -50,7 +50,7 @@ namespace TensorFlowNET.Examples
                 // Run every operation with variable input
                 Console.WriteLine($"Addition with variables: {sess.run(add, feed_dict)}");
                 Console.WriteLine($"Multiplication with variables: {sess.run(mul, feed_dict)}");
-            }
+            }*/
 
             // ----------------
             // More in details:
@@ -61,7 +61,39 @@ namespace TensorFlowNET.Examples
             //
             // The value returned by the constructor represents the output
             // of the Constant op.
+            var nd1 = np.array(3, 3).reshape(1, 2);
+            var matrix1 = tf.constant(nd1);
 
+            // Create another Constant that produces a 2x1 matrix.
+            var nd2 = np.array(2, 2).reshape(2, 1);
+            var matrix2 = tf.constant(nd2);
+
+            // Create a Matmul op that takes 'matrix1' and 'matrix2' as inputs.
+            // The returned value, 'product', represents the result of the matrix
+            // multiplication.
+            var product = tf.matmul(matrix1, matrix2);
+
+            // To run the matmul op we call the session 'run()' method, passing 'product'
+            // which represents the output of the matmul op.  This indicates to the call
+            // that we want to get the output of the matmul op back.
+            //
+            // All inputs needed by the op are run automatically by the session.  They
+            // typically are run in parallel.
+            //
+            // The call 'run(product)' thus causes the execution of threes ops in the
+            // graph: the two constants and matmul.
+            //
+            // The output of the op is returned in 'result' as a numpy `ndarray` object.
+            using (sess = tf.Session())
+            {
+                var result = sess.run(product);
+                Console.WriteLine(result);
+                if((result as NDArray).Data<int>()[0] != 12)
+                {
+                    throw new Exception("BasicOperations error");
+                }
+                // ==> [[ 12.]]
+            }
         }
     }
 }

@@ -22,6 +22,8 @@ namespace Tensorflow
         public object value;
         public int value_index { get; }
 
+        private Status status = new Status();
+
         private TF_DataType _dtype = TF_DataType.DtInvalid;
         public TF_DataType dtype => _handle == IntPtr.Zero ? _dtype : c_api.TF_TensorType(_handle);
         public ulong bytesize => _handle == IntPtr.Zero ? 0 : c_api.TF_TensorByteSize(_handle);
@@ -33,8 +35,17 @@ namespace Tensorflow
             get
             {
                 var dims = new long[rank];
-                for (int i = 0; i < rank; i++)
-                    dims[i] = c_api.TF_Dim(_handle, i);
+
+                if (_handle == IntPtr.Zero)
+                {
+                    c_api.TF_GraphGetTensorShape(op.Graph, _as_tf_output(), dims, rank, status);
+                    status.Check();
+                }
+                else
+                {
+                    for (int i = 0; i < rank; i++)
+                        dims[i] = c_api.TF_Dim(_handle, i);
+                }
 
                 return dims;
             }
@@ -48,7 +59,22 @@ namespace Tensorflow
         /// 3	3-Tensor (cube of numbers)
         /// n	n-Tensor (you get the idea)
         /// </summary>
-        public int rank => _handle == IntPtr.Zero ? 0 : c_api.TF_NumDims(_handle);
+        public int rank
+        {
+            get
+            {
+                if (_handle == IntPtr.Zero)
+                {
+                    var output = _as_tf_output();
+                    return c_api.TF_GraphGetTensorNumDims(op.Graph, output, status);
+                }
+                else
+                {
+                    return c_api.TF_NumDims(_handle);
+                }
+            }
+        }
+
         public int NDims => rank;
 
         /// <summary>
@@ -182,6 +208,7 @@ namespace Tensorflow
         public void Dispose()
         {
             c_api.TF_DeleteTensor(_handle);
+            status.Dispose();
         }
 
         public static implicit operator IntPtr(Tensor tensor)
