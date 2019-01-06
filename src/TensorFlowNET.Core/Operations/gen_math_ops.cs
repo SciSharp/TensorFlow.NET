@@ -19,5 +19,16 @@ namespace Tensorflow
 
             return new Tensor(_op, 0, _op.OutputType(0));
         }
+
+        public static Tensor mul(Tensor x, Tensor y)
+        {
+            var keywords = new Dictionary<string, object>();
+            keywords.Add("x", x);
+            keywords.Add("y", y);
+
+            var _op = _op_def_lib._apply_op_helper("Mul", name: "mul", keywords: keywords);
+
+            return new Tensor(_op, 0, _op.OutputType(0));
+        }
     }
 }

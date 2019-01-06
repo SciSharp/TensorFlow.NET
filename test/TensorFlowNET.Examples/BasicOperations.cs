@@ -18,13 +18,13 @@ namespace TensorFlowNET.Examples
             // of the Constant op.
             var a = tf.constant(2);
             var b = tf.constant(3);
-
+            var c = a * b;
             // Launch the default graph.
             using (var sess = tf.Session())
             {
                 Console.WriteLine("a=2, b=3");
                 Console.WriteLine($"Addition with constants: {sess.run(a + b)}");
-                //Console.WriteLine($"Multiplication with constants: {sess.run(a * b)}");
+                Console.WriteLine($"Multiplication with constants: {sess.run(a * b)}");
             }
         }
     }
