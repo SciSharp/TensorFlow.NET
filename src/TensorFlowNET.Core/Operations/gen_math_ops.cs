@@ -7,7 +7,7 @@ namespace Tensorflow
 {
     public static class gen_math_ops
     {
-        public static OpDefLibrary _op_def_lib = _InitOpDefLibrary();
+        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
         public static Tensor add(Tensor a, Tensor b)
         {
@@ -18,17 +18,6 @@ namespace Tensorflow
             var _op = _op_def_lib._apply_op_helper("Add", name: "add", keywords: keywords);
 
             return new Tensor(_op, 0, _op.OutputType(0));
-        }
-
-        private static OpDefLibrary _InitOpDefLibrary()
-        {
-            // c_api.TF_GraphGetOpDef(g.Handle, op_type_name, buffer.Handle, status.Handle);
-            var bytes = File.ReadAllBytes("Operations/op_list_proto_math.bin");
-            var op_list = OpList.Parser.ParseFrom(bytes);
-            var op_def_lib = new OpDefLibrary();
-            op_def_lib.add_op_list(op_list);
-
-            return op_def_lib;
         }
     }
 }
