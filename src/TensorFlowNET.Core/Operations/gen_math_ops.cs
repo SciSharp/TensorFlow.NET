@@ -20,6 +20,17 @@ namespace Tensorflow
             return new Tensor(_op, 0, _op.OutputType(0));
         }
 
+        public static Tensor add(Tensor a, RefVariable b)
+        {
+            var keywords = new Dictionary<string, object>();
+            keywords.Add("x", a);
+            keywords.Add("y", b);
+
+            var _op = _op_def_lib._apply_op_helper("Add", name: "add", keywords: keywords);
+
+            return new Tensor(_op, 0, _op.OutputType(0));
+        }
+
         public static Tensor mul(Tensor x, Tensor y)
         {
             var keywords = new Dictionary<string, object>();

@@ -36,7 +36,11 @@ namespace TensorFlowNET.Examples
             var W = tf.Variable(rng.randn<double>(), name: "weight");
             var b = tf.Variable(rng.randn<double>(), name: "bias");
 
-            var aa = tf.multiply(X, W);
+            var part1 = tf.multiply(X, W);
+            var pred = tf.add(part1, b);
+
+            // Mean squared error
+            var cost = tf.reduce_sum(tf.pow(pred - Y, 2)) / (2 * n_samples);
         }
     }
 }
