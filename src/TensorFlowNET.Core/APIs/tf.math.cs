@@ -11,6 +11,11 @@ namespace Tensorflow
             return gen_math_ops.add(a, b);
         }
 
+        public static unsafe Tensor sub(Tensor a, Tensor b)
+        {
+            return gen_math_ops.sub(a, b);
+        }
+
         public static unsafe Tensor multiply(Tensor x, Tensor y)
         {
             return gen_math_ops.mul(x, y);
