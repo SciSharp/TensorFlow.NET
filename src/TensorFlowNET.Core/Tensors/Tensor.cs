@@ -211,6 +211,11 @@ namespace Tensorflow
             status.Dispose();
         }
 
+        public static implicit operator Tensor(int scalar)
+        {
+            return new Tensor(scalar);
+        }
+
         public static implicit operator IntPtr(Tensor tensor)
         {
             return tensor._handle;
@@ -219,6 +224,11 @@ namespace Tensorflow
         public static implicit operator Tensor(IntPtr handle)
         {
             return new Tensor(handle);
+        }
+
+        public static implicit operator Tensor(RefVariable var)
+        {
+            return var._initial_value;
         }
     }
 }

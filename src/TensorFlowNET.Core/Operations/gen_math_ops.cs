@@ -20,17 +20,6 @@ namespace Tensorflow
             return new Tensor(_op, 0, _op.OutputType(0));
         }
 
-        public static Tensor add(Tensor a, RefVariable b)
-        {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("x", a);
-            keywords.Add("y", b);
-
-            var _op = _op_def_lib._apply_op_helper("Add", name: "add", keywords: keywords);
-
-            return new Tensor(_op, 0, _op.OutputType(0));
-        }
-
         public static Tensor sub(Tensor x, Tensor y)
         {
             var keywords = new Dictionary<string, object>();
@@ -53,17 +42,6 @@ namespace Tensorflow
             return new Tensor(_op, 0, _op.OutputType(0));
         }
 
-        public static Tensor mul(Tensor x, RefVariable y)
-        {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("x", x);
-            keywords.Add("y", y);
-
-            var _op = _op_def_lib._apply_op_helper("Mul", name: "mul", keywords: keywords);
-
-            return new Tensor(_op, 0, _op.OutputType(0));
-        }
-
         public static Tensor mat_mul(Tensor a, Tensor b, bool transpose_a = false, bool transpose_b = false)
         {
             var keywords = new Dictionary<string, object>();
@@ -73,6 +51,28 @@ namespace Tensorflow
             keywords.Add("transpose_b", transpose_b);
 
             var _op = _op_def_lib._apply_op_helper("MatMul", name: "MatMul", keywords: keywords);
+
+            return new Tensor(_op, 0, _op.OutputType(0));
+        }
+
+        public static Tensor pow(Tensor x, Tensor y)
+        {
+            var keywords = new Dictionary<string, object>();
+            keywords.Add("x", x);
+            keywords.Add("y", y);
+
+            var _op = _op_def_lib._apply_op_helper("Pow", name: "Pow", keywords: keywords);
+
+            return new Tensor(_op, 0, _op.OutputType(0));
+        }
+
+        public static Tensor sum(Tensor x, Tensor y)
+        {
+            var keywords = new Dictionary<string, object>();
+            keywords.Add("x", x);
+            keywords.Add("y", y);
+
+            var _op = _op_def_lib._apply_op_helper("Pow", name: "Pow", keywords: keywords);
 
             return new Tensor(_op, 0, _op.OutputType(0));
         }

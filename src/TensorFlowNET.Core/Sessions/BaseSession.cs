@@ -47,7 +47,7 @@ namespace Tensorflow
             return result;
         }
 
-        private unsafe object _run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
+        private object _run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
         {
             var feed_dict_tensor = new Dictionary<Tensor, NDArray>();
 

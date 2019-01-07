@@ -40,7 +40,8 @@ namespace TensorFlowNET.Examples
             var pred = tf.add(part1, b);
 
             // Mean squared error
-            var cost = tf.reduce_sum(tf.pow(pred - Y, 2)) / (2 * n_samples);
+            var pow = tf.pow(pred - Y, 2);
+            //var cost = tf.reduce_sum(pow) / (2 * n_samples);
         }
     }
 }
