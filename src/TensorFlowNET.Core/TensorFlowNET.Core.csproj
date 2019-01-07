@@ -36,15 +36,11 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.6.1" />
-    <PackageReference Include="NumSharp" Version="0.6.3" />
+    <PackageReference Include="NumSharp" Version="0.6.4" />
   </ItemGroup>
 
   <ItemGroup>
     <Content CopyToOutputDirectory="PreserveNewest" Include="./runtimes/win-x64/native/tensorflow.dll" Link="tensorflow.dll" Pack="true" PackagePath="runtimes/win-x64/native/tensorflow.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
   </ItemGroup>
 
 </Project>

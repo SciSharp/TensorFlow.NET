@@ -124,25 +124,25 @@ namespace Tensorflow
                             // wired, don't know why we have to start from offset 9.
                             var bytes = tensor.Data();
                             var output = UTF8Encoding.Default.GetString(bytes, 9, bytes.Length - 9);
-                            result[i] = tensor.NDims == 0 ? output : np.array(output).reshape(ndims);
+                            result[i] = fetchValue(tensor, ndims, output);
                         }
                         break;
                     case TF_DataType.TF_FLOAT:
                         {
                             var output = *(float*)c_api.TF_TensorData(output_values[i]);
-                            result[i] = tensor.NDims == 0 ? output : np.array(output).reshape(ndims);
+                            result[i] = fetchValue(tensor, ndims, output);
                         }
                         break;
                     case TF_DataType.TF_INT16:
                         {
                             var output = *(short*)c_api.TF_TensorData(output_values[i]);
-                            result[i] = tensor.NDims == 0 ? output : np.array(output).reshape(ndims);
+                            result[i] = fetchValue(tensor, ndims, output);
                         }
                         break;
                     case TF_DataType.TF_INT32:
                         {
                             var output = *(int*)c_api.TF_TensorData(output_values[i]);
-                            result[i] = tensor.NDims == 0 ? output : np.array(output).reshape(ndims);
+                            result[i] = fetchValue(tensor, ndims, output);
                         }
                         break;
                     default:
@@ -151,6 +151,18 @@ namespace Tensorflow
             }
 
             return result;
+        }
+
+        private object fetchValue<T>(Tensor tensor, int[] ndims, T output)
+        {
+            if (tensor.NDims == 0)
+            {
+                return output;
+            }
+            else
+            {
+                return np.array(output).reshape(ndims);
+            }
         }
 
         /// <summary>

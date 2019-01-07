@@ -10,17 +10,19 @@ namespace Tensorflow
         public Tensor _initial_value;
 
         public RefVariable(object initial_value, 
-            TF_DataType trainable, 
+            string name = "",
+            TF_DataType trainable = TF_DataType.DtInvalid,
             bool validate_shape = true) : 
-            base(initial_value, trainable, validate_shape)
+            base(initial_value, name, trainable, validate_shape)
         {
-            _init_from_args(initial_value, trainable);
+            _init_from_args(initial_value, name, trainable);
         }
 
         private void _init_from_args(object initial_value,
-            TF_DataType trainable)
+            string name = "",
+            TF_DataType trainable = TF_DataType.DtInvalid)
         {
-            var name = ops.name_scope("", "Variable", initial_value);
+            name = ops.name_scope("", "Variable", initial_value);
             _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value");
         }
     }

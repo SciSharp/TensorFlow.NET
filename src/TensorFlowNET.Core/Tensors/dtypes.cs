@@ -12,6 +12,14 @@ namespace Tensorflow
             {
                 case TF_DataType.TF_INT32:
                     return typeof(int);
+                case TF_DataType.TF_INT16:
+                    return typeof(short);
+                case TF_DataType.TF_FLOAT:
+                    return typeof(float);
+                case TF_DataType.TF_DOUBLE:
+                    return typeof(double);
+                case TF_DataType.TF_STRING:
+                    return typeof(string);
                 default:
                     throw new NotImplementedException("as_numpy_datatype failed");
             }

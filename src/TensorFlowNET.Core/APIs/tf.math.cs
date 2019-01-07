@@ -15,5 +15,10 @@ namespace Tensorflow
         {
             return gen_math_ops.mul(x, y);
         }
+
+        public static unsafe Tensor multiply(Tensor x, RefVariable y)
+        {
+            return gen_math_ops.mul(x, y);
+        }
     }
 }

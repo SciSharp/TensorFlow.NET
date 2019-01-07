@@ -36,24 +36,50 @@ namespace Tensorflow
             foreach (var input_arg in op_def.InputArg)
             {
                 var input_name = input_arg.Name;
-                if (keywords.ContainsKey(input_name))
+                switch (keywords[input_name])
                 {
-                    inputs.Add(keywords[input_name] as Tensor);
+                    case Tensor value:
+                        if (keywords.ContainsKey(input_name))
+                        {
+                            inputs.Add(value);
+                        }
+
+                        if (!String.IsNullOrEmpty(input_arg.TypeAttr))
+                        {
+                            attrs[input_arg.TypeAttr] = value.dtype;
+                        }
+
+                        if (input_arg.IsRef)
+                        {
+
+                        }
+                        else
+                        {
+                            input_types.Add(value.dtype);
+                        }
+                        break;
+                    case RefVariable value:
+                        if (keywords.ContainsKey(input_name))
+                        {
+                            inputs.Add(value._initial_value);
+                        }
+
+                        if (!String.IsNullOrEmpty(input_arg.TypeAttr))
+                        {
+                            attrs[input_arg.TypeAttr] = value._initial_value.dtype;
+                        }
+
+                        if (input_arg.IsRef)
+                        {
+
+                        }
+                        else
+                        {
+                            input_types.Add(value._initial_value.dtype);
+                        }
+                        break;
                 }
 
-                if (!String.IsNullOrEmpty(input_arg.TypeAttr))
-                {
-                    attrs[input_arg.TypeAttr] = (keywords[input_name] as Tensor).dtype;
-                }
-
-                if (input_arg.IsRef)
-                {
-
-                }
-                else
-                {
-                    input_types.Add((keywords[input_name] as Tensor).dtype);
-                }
             }
 
             // Process remaining attrs

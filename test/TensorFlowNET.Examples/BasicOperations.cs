@@ -19,7 +19,7 @@ namespace TensorFlowNET.Examples
             // Basic constant operations
             // The value returned by the constructor represents the output
             // of the Constant op.
-            /*var a = tf.constant(2);
+            var a = tf.constant(2);
             var b = tf.constant(3);
             
             // Launch the default graph.
@@ -50,7 +50,7 @@ namespace TensorFlowNET.Examples
                 // Run every operation with variable input
                 Console.WriteLine($"Addition with variables: {sess.run(add, feed_dict)}");
                 Console.WriteLine($"Multiplication with variables: {sess.run(mul, feed_dict)}");
-            }*/
+            }
 
             // ----------------
             // More in details:

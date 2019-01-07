@@ -24,6 +24,7 @@ namespace Tensorflow
         private List<String> _unfetchable_ops = new List<string>();
 
         private string _name_stack;
+        public string _graph_key;
         public Status Status { get; }
 
         public Graph()
