@@ -17,7 +17,7 @@
     <Description>Google's TensorFlow binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.0.2.0</AssemblyVersion>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>API updated</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
