@@ -20,5 +20,10 @@ namespace Tensorflow
         {
             return gen_math_ops.mul(t1, t2);
         }
+
+        public static Tensor operator /(Tensor t1, Tensor t2)
+        {
+            return gen_math_ops.real_div(t1, t2);
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace Tensorflow
             _final_fetches = _fetches;
         }
 
-        public object build_results(Session session, object[] results)
+        public NDArray build_results(Session session, NDArray[] results)
         {
             return _fetch_mapper.build_results(results);
         }

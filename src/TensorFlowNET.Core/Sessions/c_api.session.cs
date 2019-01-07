@@ -8,11 +8,24 @@ namespace Tensorflow
     public static partial class c_api
     {
         /// <summary>
+        /// Destroy a session object.
+        ///
+        /// Even if error information is recorded in *status, this call discards all
+        /// local resources associated with the session.  The session may not be used
+        /// during or after this call (and the session drops its reference to the
+        /// corresponding graph). 
+        /// </summary>
+        /// <param name="session">TF_Session*</param>
+        /// <param name="status">TF_Status*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_DeleteSession(IntPtr session, IntPtr status);
+
+        /// <summary>
         /// Destroy an options object.
         /// </summary>
         /// <param name="opts">TF_SessionOptions*</param>
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern void TF_DeleteSessionOptions(IntPtr opts);
+        public static extern void TF_DeleteSessionOptions(IntPtr opts);
 
         /// <summary>
         /// Return a new execution session with the associated graph, or NULL on

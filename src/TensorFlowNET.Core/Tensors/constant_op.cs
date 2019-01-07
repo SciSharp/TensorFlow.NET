@@ -19,7 +19,7 @@ namespace Tensorflow
         /// <param name="name">Optional name for the tensor.</param>
         /// <param name="verify_shape">Boolean that enables verification of a shape of values.</param>
         /// <returns></returns>
-        public static Tensor Create(NDArray nd, string name = "Const", bool verify_shape = false)
+        public static Tensor Constant(NDArray nd, string name = "Const", bool verify_shape = false)
         {
             Graph g = ops.get_default_graph();
             var tensor_pb = tensor_util.make_tensor_proto(nd, verify_shape);
@@ -44,10 +44,7 @@ namespace Tensorflow
                 attrs: attrs,
                 name: name);
 
-            var const_tensor = op.outputs[0];
-            const_tensor.value = nd.Data();
-
-            return const_tensor;
+            return op.outputs[0];
         }
     }
 }

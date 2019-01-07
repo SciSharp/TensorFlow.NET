@@ -26,6 +26,10 @@ namespace TensorFlowNET.Examples
                 // Run the op
                 var result = sess.run(hello);
                 Console.WriteLine(result);
+                if(!result.ToString().Equals("Hello, TensorFlow!"))
+                {
+                    throw new Exception("HelloWorld error");
+                }
             }
         }
     }

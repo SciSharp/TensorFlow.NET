@@ -40,8 +40,14 @@ namespace TensorFlowNET.Examples
             var pred = tf.add(part1, b);
 
             // Mean squared error
-            var pow = tf.pow(pred - Y, 2);
-            //var cost = tf.reduce_sum(pow) / (2 * n_samples);
+            var sub = pred - Y;
+            var pow = tf.pow(sub, 2);
+            var reduce = tf.reduce_sum(pow);
+            var cost = reduce / (2d * n_samples);
+
+            // radient descent
+            // Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
+            // var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
         }
     }
 }

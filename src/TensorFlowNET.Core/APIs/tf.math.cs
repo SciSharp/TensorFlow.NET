@@ -21,14 +21,14 @@ namespace Tensorflow
             return gen_math_ops.mul(x, y);
         }
 
-        public static Tensor pow(Tensor x, Tensor y)
+        public static Tensor pow(Tensor x, double y)
         {
             return gen_math_ops.pow(x, y);
         }
 
-        public static Tensor reduce_sum(Tensor input, int? axis = null)
+        public static Tensor reduce_sum(Tensor input, int[] axis = null)
         {
-            return gen_math_ops.sum(input, input);
+            return gen_math_ops.sum(input, axis);
         }
     }
 }

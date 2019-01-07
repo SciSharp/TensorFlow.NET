@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class Session : BaseSession
+    public class Session : BaseSession, IDisposable
     {
         private IntPtr _handle;
         public Status Status { get; }
@@ -34,5 +34,12 @@ namespace Tensorflow
 
         public static implicit operator IntPtr(Session session) => session._handle;
         public static implicit operator Session(IntPtr handle) => new Session(handle);
+
+        public void Dispose()
+        {
+            Options.Dispose();
+            Status.Dispose();
+            c_api.TF_DeleteSession(_handle, Status);
+        }
     }
 }

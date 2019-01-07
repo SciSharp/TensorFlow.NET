@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -21,7 +22,7 @@ namespace Tensorflow
             }
         }
 
-        public object build_results(object[] values)
+        public NDArray build_results(NDArray[] values)
         {
             return values[0];
         }

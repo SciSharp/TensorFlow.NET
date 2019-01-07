@@ -9,7 +9,7 @@ namespace Tensorflow
     {
         public static Tensor constant(NDArray nd, string name = "Const", bool verify_shape = false)
         {
-            return constant_op.Create(nd, name, verify_shape);
+            return constant_op.Constant(nd, name, verify_shape);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class BaseSession : IDisposable
+    public class BaseSession
     {
         protected Graph _graph;
         protected bool _opened;
@@ -35,19 +35,12 @@ namespace Tensorflow
             c_api.TF_DeleteSessionOptions(opts);
         }
 
-        public void Dispose()
+        public virtual NDArray run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
         {
-            
+            return _run(fetches, feed_dict);
         }
 
-        public virtual object run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
-        {
-            var result = _run(fetches, feed_dict);
-
-            return result;
-        }
-
-        private object _run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
+        private NDArray _run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
         {
             var feed_dict_tensor = new Dictionary<Tensor, NDArray>();
 
@@ -77,7 +70,7 @@ namespace Tensorflow
             return fetch_handler.build_results(null, results);
         }
 
-        private object[] _do_run(List<Tensor> fetch_list, Dictionary<Tensor, NDArray> feed_dict)
+        private NDArray[] _do_run(List<Tensor> fetch_list, Dictionary<Tensor, NDArray> feed_dict)
         {
             var feeds = feed_dict.Select(x => new KeyValuePair<TF_Output, Tensor>(x.Key._as_tf_output(), new Tensor(x.Value))).ToArray();
             var fetches = fetch_list.Select(x => x._as_tf_output()).ToArray();
@@ -85,7 +78,7 @@ namespace Tensorflow
             return _call_tf_sessionrun(feeds, fetches);
         }
 
-        private unsafe object[] _call_tf_sessionrun(KeyValuePair<TF_Output, Tensor>[] feed_dict, TF_Output[] fetch_list)
+        private unsafe NDArray[] _call_tf_sessionrun(KeyValuePair<TF_Output, Tensor>[] feed_dict, TF_Output[] fetch_list)
         {
             // Ensure any changes to the graph are reflected in the runtime.
             _extend_graph();
@@ -109,14 +102,12 @@ namespace Tensorflow
 
             status.Check(true);
 
-            object[] result = new object[fetch_list.Length];
+            var result = new NDArray[fetch_list.Length];
 
             for (int i = 0; i < fetch_list.Length; i++)
             {
                 var tensor = new Tensor(output_values[i]);
-                Type type = tensor.dtype.as_numpy_datatype();
-                var ndims = tensor.shape.Select(x => (int)x).ToArray();
-
+                
                 switch (tensor.dtype)
                 {
                     case TF_DataType.TF_STRING:
@@ -124,25 +115,25 @@ namespace Tensorflow
                             // wired, don't know why we have to start from offset 9.
                             var bytes = tensor.Data();
                             var output = UTF8Encoding.Default.GetString(bytes, 9, bytes.Length - 9);
-                            result[i] = fetchValue(tensor, ndims, output);
+                            result[i] = fetchValue(tensor, output);
                         }
                         break;
                     case TF_DataType.TF_FLOAT:
                         {
                             var output = *(float*)c_api.TF_TensorData(output_values[i]);
-                            result[i] = fetchValue(tensor, ndims, output);
+                            result[i] = fetchValue(tensor, output);
                         }
                         break;
                     case TF_DataType.TF_INT16:
                         {
                             var output = *(short*)c_api.TF_TensorData(output_values[i]);
-                            result[i] = fetchValue(tensor, ndims, output);
+                            result[i] = fetchValue(tensor, output);
                         }
                         break;
                     case TF_DataType.TF_INT32:
                         {
                             var output = *(int*)c_api.TF_TensorData(output_values[i]);
-                            result[i] = fetchValue(tensor, ndims, output);
+                            result[i] = fetchValue(tensor, output);
                         }
                         break;
                     default:
@@ -153,16 +144,22 @@ namespace Tensorflow
             return result;
         }
 
-        private object fetchValue<T>(Tensor tensor, int[] ndims, T output)
+        private NDArray fetchValue<T>(Tensor tensor, T output)
         {
+            NDArray nd;
+            Type type = tensor.dtype.as_numpy_datatype();
+            var ndims = tensor.shape.Select(x => (int)x).ToArray();
+
             if (tensor.NDims == 0)
             {
-                return output;
+                nd = np.array(output).reshape();
             }
             else
             {
-                return np.array(output).reshape(ndims);
+                nd = np.array(output).reshape(ndims);
             }
+
+            return nd;
         }
 
         /// <summary>

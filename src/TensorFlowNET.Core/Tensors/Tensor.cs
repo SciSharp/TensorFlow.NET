@@ -19,7 +19,7 @@ namespace Tensorflow
         public Operation op { get; }
 
         public string name;
-        public object value;
+
         public int value_index { get; }
 
         private Status status = new Status();
@@ -90,7 +90,6 @@ namespace Tensorflow
         public Tensor(NDArray nd)
         {
             _handle = Allocate(nd);
-            value = nd.Data();
         }
 
         private IntPtr Allocate(NDArray nd)
@@ -205,30 +204,24 @@ namespace Tensorflow
             }
         }
 
+        public override string ToString()
+        {
+            if(NDims == 0)
+            {
+                switch (dtype)
+                {
+                    case TF_DataType.TF_INT32:
+                        return Data<int>()[0].ToString();
+                }
+            }
+
+            return "";
+        }
+
         public void Dispose()
         {
             c_api.TF_DeleteTensor(_handle);
             status.Dispose();
-        }
-
-        public static implicit operator Tensor(int scalar)
-        {
-            return new Tensor(scalar);
-        }
-
-        public static implicit operator IntPtr(Tensor tensor)
-        {
-            return tensor._handle;
-        }
-
-        public static implicit operator Tensor(IntPtr handle)
-        {
-            return new Tensor(handle);
-        }
-
-        public static implicit operator Tensor(RefVariable var)
-        {
-            return var._initial_value;
         }
     }
 }

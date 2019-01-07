@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -21,21 +22,30 @@ namespace Tensorflow
 
             string scope = g.unique_name(name) + "/";
 
+            var default_type_attr_map = new Dictionary<string, object>();
             foreach (var attr_def in op_def.Attr)
             {
                 if (attr_def.Type != "type") continue;
                 var key = attr_def.Name;
+                if(attr_def.DefaultValue != null)
+                {
+                    default_type_attr_map[key] = attr_def.DefaultValue.Type;
+                }
             }
 
             var attrs = new Dictionary<string, object>();
-
-            // Perform input type inference
             var inputs = new List<Tensor>();
             var input_types = new List<TF_DataType>();
-            
+
+            // Perform input type inference
             foreach (var input_arg in op_def.InputArg)
             {
                 var input_name = input_arg.Name;
+                if (keywords[input_name] is double int_value)
+                {
+                    keywords[input_name] = constant_op.Constant(int_value, input_name);
+                }
+
                 if (keywords[input_name] is Tensor value)
                 {
                     if (keywords.ContainsKey(input_name))

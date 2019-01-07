@@ -88,7 +88,7 @@ namespace TensorFlowNET.Examples
             {
                 var result = sess.run(product);
                 Console.WriteLine(result);
-                if((result as NDArray).Data<int>()[0] != 12)
+                if(result.Data<int>()[0] != 12)
                 {
                     throw new Exception("BasicOperations error");
                 }
