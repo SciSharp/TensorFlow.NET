@@ -9,11 +9,11 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
-        public static Tensor add(Tensor a, Tensor b)
+        public static Tensor add(Tensor x, Tensor y)
         {
             var keywords = new Dictionary<string, object>();
-            keywords.Add("x", a);
-            keywords.Add("y", b);
+            keywords.Add("x", x);
+            keywords.Add("y", y);
 
             var _op = _op_def_lib._apply_op_helper("Add", name: "add", keywords: keywords);
 
@@ -27,6 +27,17 @@ namespace Tensorflow
             keywords.Add("y", b);
 
             var _op = _op_def_lib._apply_op_helper("Add", name: "add", keywords: keywords);
+
+            return new Tensor(_op, 0, _op.OutputType(0));
+        }
+
+        public static Tensor sub(Tensor x, Tensor y)
+        {
+            var keywords = new Dictionary<string, object>();
+            keywords.Add("x", x);
+            keywords.Add("y", y);
+
+            var _op = _op_def_lib._apply_op_helper("Sub", name: "sub", keywords: keywords);
 
             return new Tensor(_op, 0, _op.OutputType(0));
         }
