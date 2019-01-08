@@ -11,6 +11,11 @@ namespace TensorFlowNET.UnitTest
         protected TF_Code TF_OK = TF_Code.TF_OK;
         protected TF_DataType TF_FLOAT = TF_DataType.TF_FLOAT;
 
+        protected void EXPECT_TRUE(bool expected)
+        {
+            Assert.IsTrue(expected);
+        }
+
         protected void EXPECT_EQ(object expected, object actual)
         {
             Assert.AreEqual(expected, actual);

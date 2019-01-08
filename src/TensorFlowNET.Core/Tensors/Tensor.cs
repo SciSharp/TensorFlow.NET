@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using static Tensorflow.c_api;
 
 namespace Tensorflow
 {
@@ -94,9 +95,15 @@ namespace Tensorflow
 
         private IntPtr Allocate(NDArray nd)
         {
-            var dotHandle = Marshal.AllocHGlobal(nd.dtypesize * nd.size);
-            ulong size = (ulong)(nd.size * nd.dtypesize);
+            IntPtr dotHandle = IntPtr.Zero;
+            ulong size = 0;
 
+            if (nd.dtype.Name != "String")
+            {
+                dotHandle = Marshal.AllocHGlobal(nd.dtypesize * nd.size);
+                size = (ulong)(nd.size * nd.dtypesize);
+            }
+            
             switch (nd.dtype.Name)
             {
                 case "Int16":
@@ -114,11 +121,8 @@ namespace Tensorflow
                 case "String":
                     var value = nd.Data<string>()[0];
                     var bytes = Encoding.UTF8.GetBytes(value);
-                    var buf = Marshal.AllocHGlobal(bytes.Length + 1);
-                    Marshal.Copy(bytes, 0, buf, bytes.Length);
-
-                    //c_api.TF_SetAttrString(op, "value", buf, (uint)bytes.Length);
-
+                    dotHandle = Marshal.AllocHGlobal(bytes.Length + 1);
+                    Marshal.Copy(bytes, 0, dotHandle, bytes.Length);
                     size = (ulong)bytes.Length;
                     break;
                 default:
@@ -126,18 +130,21 @@ namespace Tensorflow
             }
 
             var dataType = ToTFDataType(nd.dtype);
-            
+            // shape
+            var dims = nd.shape.Select(x => (long)x).ToArray();
+            // Free the original buffer and set flag
+            Deallocator deallocator = (IntPtr values, IntPtr len, ref bool closure) =>
+            {
+                Marshal.FreeHGlobal(dotHandle);
+                closure = true;
+            };
+
             var tfHandle = c_api.TF_NewTensor(dataType,
-                nd.shape.Select(x => (long)x).ToArray(), // shape
+                dims, 
                 nd.ndim,
                 dotHandle,
                 size,
-                (IntPtr values, IntPtr len, ref bool closure) =>
-                {
-                    // Free the original buffer and set flag
-                    Marshal.FreeHGlobal(dotHandle);
-                    closure = true;
-                },
+                deallocator,
                 ref deallocator_called);
 
             return tfHandle;

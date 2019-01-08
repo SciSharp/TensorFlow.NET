@@ -7,6 +7,14 @@ namespace Tensorflow
 {
     public static partial class c_api
     {
+        /// <summary>
+        /// Allocate and return a new Tensor.
+        /// </summary>
+        /// <param name="dtype">TF_DataType</param>
+        /// <param name="dims">const int64_t*</param>
+        /// <param name="num_dims">int</param>
+        /// <param name="len">size_t</param>
+        /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_AllocateTensor(TF_DataType dtype, long[] dims, int num_dims, ulong len);
 

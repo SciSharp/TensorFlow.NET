@@ -37,7 +37,7 @@ namespace TensorFlowNET.UnitTest
                 feed_dict.Add(b, 2.0f);
 
                 var o = sess.run(c, feed_dict);
-                Assert.AreEqual(o, 5.0f);
+                Assert.AreEqual((float)o, 5.0f);
             }
         }
 
@@ -51,7 +51,7 @@ namespace TensorFlowNET.UnitTest
             using (var sess = tf.Session())
             {
                 var o = sess.run(c);
-                Assert.AreEqual(o, 9.0f);
+                Assert.AreEqual((float)o, 9.0f);
             }
         }
     }

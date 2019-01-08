@@ -2,9 +2,11 @@
 using NumSharp.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Tensorflow;
+using Buffer = Tensorflow.Buffer;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -27,6 +29,97 @@ namespace TensorFlowNET.UnitTest
             var expected_grad_outputs = new TF_Output[2];
 
             BuildSuccessGraph(inputs, outputs);
+            BuildExpectedGraph(grad_inputs_provided, expected_grad_outputs);
+
+            AddGradients(grad_inputs_provided, string.Empty, inputs, 2, outputs, 1,
+                 grad_outputs);
+            // EXPECT_EQ(TF_OK, TF_GetCode(s_));
+
+            // Compare that the graphs match.
+            GraphDef expected_gdef;
+            GraphDef gdef;
+            EXPECT_TRUE(GetGraphDef(expected_graph_, out expected_gdef));
+            EXPECT_TRUE(GetGraphDef(graph_, out gdef));
+            //TF_EXPECT_GRAPH_EQ(expected_gdef, gdef);
+
+            // Compare that the output of the gradients of both graphs match.
+            RunGraphsAndCompareOutputs(grad_outputs, expected_grad_outputs);
+        }
+
+        private bool GetGraphDef(Graph graph, out GraphDef graph_def)
+        {
+            graph_def = null;
+            var s = new Status();
+            var buffer = new Buffer();
+            c_api.TF_GraphToGraphDef(graph, buffer, s);
+            bool ret = TF_GetCode(s) == TF_OK;
+            EXPECT_EQ(TF_OK, TF_GetCode(s));
+            if (ret) graph_def = GraphDef.Parser.ParseFrom(buffer.Data);
+            buffer.Dispose();
+            s.Dispose();
+            return ret;
+        }
+
+        private void RunGraphsAndCompareOutputs(TF_Output[] grad_outputs, TF_Output[] expected_grad_outputs)
+        {
+            var csession = new CSession(graph_, s_);
+            var expected_csession = new CSession(expected_graph_, s_);
+
+            var grad_outputs_vec = new List<IntPtr>();
+            grad_outputs_vec.AddRange(grad_outputs.Select(x => x.oper));
+            csession.SetOutputs(grad_outputs_vec);
+            csession.Run(s_);
+            ASSERT_EQ(TF_OK, TF_GetCode(s_));
+            var out0 = csession.output_tensor(0);
+            var out1 = csession.output_tensor(1);
+
+            var expected_grad_outputs_vec = new List<IntPtr>();
+            expected_grad_outputs_vec.AddRange(expected_grad_outputs.Select(x => x.oper));
+            expected_csession.SetOutputs(expected_grad_outputs_vec);
+            expected_csession.Run(s_);
+            ASSERT_EQ(TF_OK, TF_GetCode(s_));
+            var expected_out0 = expected_csession.output_tensor(0);
+            var expected_out1 = expected_csession.output_tensor(1);
+
+            //CompareTensors(out0, expected_out0);
+            //CompareTensors(out1, expected_out1);
+        }
+        /*void TestGradientsError(bool grad_inputs_provided)
+        {
+            var inputs = new TF_Output[1];
+            var outputs = new TF_Output[1];
+            var grad_outputs = new TF_Output[1];
+
+            BuildErrorGraph(inputs, outputs);
+
+            AddGradients(grad_inputs_provided, nullptr, inputs, 1, outputs, 1,
+                         grad_outputs);
+
+            string expected_msg =
+                "No gradient defined for op: TestOpWithNoGradient. Please see "
+        "https://www.tensorflow.org/code/"
+        "tensorflow/cc/gradients/README.md"
+        " for instructions on how to add C++ gradients.";
+            EXPECT_EQ(expected_msg, TF_Message(s_));
+        }*/
+
+        private void AddGradients(bool grad_inputs_provided, string prefix, TF_Output[] inputs, int ninputs,
+            TF_Output[] outputs, int noutputs, TF_Output[] grad_outputs)
+        {
+            if (grad_inputs_provided)
+            {
+                var grad_inputs = new TF_Output[1];
+                float[] grad_inputs_val = { 1.0f, 1.0f, 1.0f, 1.0f };
+                var grad_inputs_op = FloatConst2x2(graph_, s_, grad_inputs_val, "GradInputs");
+                grad_inputs[0] = new TF_Output(grad_inputs_op, 0);
+                c_api.TF_AddGradientsWithPrefix(graph_, prefix, outputs, noutputs, inputs,
+                                      ninputs, grad_inputs, s_, grad_outputs);
+            }
+            else
+            {
+                c_api.TF_AddGradientsWithPrefix(graph_, prefix, outputs, noutputs, inputs,
+                                        ninputs, null, s_, grad_outputs);
+            }
         }
 
         private void BuildSuccessGraph(TF_Output[] inputs, TF_Output[] outputs)
@@ -55,6 +148,67 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(TF_OK, TF_GetCode(s_));
         }
 
+        private void BuildExpectedGraph(bool grad_inputs_provided, TF_Output[] expected_grad_outputs)
+        {
+            // The expected graph looks like this if grad_inputs_provided.
+            // If grad_inputs_provided is false, Const_0 will be a OnesLike op.
+            //      ^             ^
+            //    dy|           dx|        // MatMul Gradient Graph
+            //      |             |
+            //   MatMul_2      MatMul_1
+            //   ^   ^          ^    ^
+            //   |   |----------|    |
+            //   |        ^          |
+            //   |      dz|          |
+            //   |        |          |
+            //   |     Const_3       |
+            //   |                   |
+            //   |        ^          |
+            //   |       z|          |     // MatMul Forward Graph
+            //   |        |          |
+            //   |      MatMul       |
+            //   |     /       \     |
+            //   |    ^         ^    |
+            //   |    |         |    |
+            //   |---x|        y|----|
+            //        |         |
+            //        |         |
+            //      Const_0   Const_1
+            //
+            float[] const0_val = { 1.0f, 2.0f, 3.0f, 4.0f };
+            float[] const1_val = { 1.0f, 0.0f, 0.0f, 1.0f };
+            var const0 = FloatConst2x2(expected_graph_, s_, const0_val, "Const_0");
+            var const1 = FloatConst2x2(expected_graph_, s_, const1_val, "Const_1");
+            var matmul = MatMul(expected_graph_, s_, const0, const1, "MatMul");
+
+            Operation const3;
+            if (grad_inputs_provided)
+            {
+                float[] const3_val = { 1.0f, 1.0f, 1.0f, 1.0f };
+                const3 = FloatConst2x2(expected_graph_, s_, const3_val, "GradInputs");
+            }
+            else
+            {
+                const3 = OnesLike(expected_graph_, s_, matmul, "gradients/OnesLike");
+            }
+
+            var matmul1 = MatMul(expected_graph_, s_, const3, const1,
+                                   "gradients/MatMul", false, true);
+            var matmul2 = MatMul(expected_graph_, s_, const0, const3,
+                                           "gradients/MatMul_1", true, false);
+            expected_grad_outputs[0] = new TF_Output(matmul1, 0);
+            expected_grad_outputs[1] = new TF_Output( matmul2, 0);
+        }
+
+        private Operation OnesLike(Graph graph, Status s, Operation input, string name)
+        {
+            var desc = TF_NewOperation(graph, "OnesLike", name);
+            TF_AddInput(desc, new TF_Output(input, 0));
+            var op = TF_FinishOperation(desc, s);
+            EXPECT_EQ(TF_OK, TF_GetCode(s));
+            return op;
+        }
+
         private Operation FloatConst2x2(Graph graph, Status s, float[] values, string name)
         {
             var tensor = FloatTensor2x2(values);
@@ -69,9 +223,10 @@ namespace TensorFlowNET.UnitTest
 
         private Tensor FloatTensor2x2(float[] values)
         {
-            long[] dims = { 2, 2 };
-            Tensor t = c_api.TF_AllocateTensor(TF_FLOAT, dims, 2, sizeof(float) * 4);
-            Marshal.Copy(values, 0, t, 4);
+            //long[] dims = { 2, 2 };
+            //Tensor t = c_api.TF_AllocateTensor(TF_FLOAT, dims, 2, sizeof(float) * 4);
+            //Marshal.Copy(values, 0, t, 4);
+            Tensor t = new Tensor(new NDArray(values).reshape(2, 2));
             return t;
         }
 
@@ -104,6 +259,18 @@ namespace TensorFlowNET.UnitTest
         public void Gradients_NoGradInputs()
         {
             TestGradientsSuccess(false);
+        }
+
+        [TestMethod]
+        public void OpWithNoGradientRegistered_GradInputs()
+        {
+            //TestGradientsError(true);
+        }
+
+        [TestMethod]
+        public void OpWithNoGradientRegistered_NoGradInputs()
+        {
+            //TestGradientsError(false);
         }
 
         public void Dispose()
