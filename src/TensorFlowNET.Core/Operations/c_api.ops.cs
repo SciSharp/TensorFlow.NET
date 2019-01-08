@@ -197,6 +197,9 @@ namespace Tensorflow
         public static extern int TF_OperationOutputListLength(IntPtr oper, string arg_name, IntPtr status);
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetAttrBool(IntPtr desc, string attr_name, bool value);
+
+        [DllImport(TensorFlowLibName)]
         public static extern void TF_SetAttrValueProto(IntPtr desc, string attr_name, IntPtr proto, uint proto_len, IntPtr status);
 
         /// <summary>
