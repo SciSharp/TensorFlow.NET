@@ -42,6 +42,13 @@ namespace TensorFlowNET.Examples
             // Mean squared error
             var sub = pred - Y;
             var pow = tf.pow(sub, 2);
+
+
+
+
+
+
+
             var reduce = tf.reduce_sum(pow);
             var cost = reduce / (2d * n_samples);
 

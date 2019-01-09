@@ -65,17 +65,27 @@ namespace TensorFlowNET.UnitTest
         public void String()
         {
             var desc = init("string");
-            var handle = Marshal.StringToHGlobalAnsi("bunny");
-            c_api.TF_SetAttrString(desc, "v", handle, 5);
+            c_api.TF_SetAttrString(desc, "v", "bunny", 5);
 
-            //var oper = c_api.TF_FinishOperation(desc, s_);
-            //ASSERT_EQ(TF_Code.TF_OK, s_.Code);
-            //EXPECT_TF_META(oper, "v", -1, TF_AttrType.TF_ATTR_STRING, 5);
+            var oper = c_api.TF_FinishOperation(desc, s_);
+            ASSERT_EQ(TF_Code.TF_OK, s_.Code);
+            EXPECT_TF_META(oper, "v", -1, TF_AttrType.TF_ATTR_STRING, 5);
             //var value = new char[5];
 
             //c_api.TF_OperationGetAttrString(oper, "v", value, 5, s_);
             //EXPECT_EQ(TF_Code.TF_OK, s_.Code);
             //EXPECT_EQ("bunny", value, 5));
+        }
+
+        [TestMethod]
+        public void GetAttributesTest()
+        {
+            var desc = graph_.NewOperation("Placeholder", "node");
+            desc.SetAttrType("dtype", TF_DataType.TF_FLOAT);
+            long[] ref_shape = new long[3] { 1, 2, 3 };
+            desc.SetAttrShape("shape", ref_shape);
+            var oper = desc.FinishOperation(s_);
+            var metadata = oper.GetAttributeMetadata("shape", s_);
         }
 
         public void Dispose()

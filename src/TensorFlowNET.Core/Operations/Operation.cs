@@ -145,6 +145,11 @@ namespace Tensorflow
             return ret;
         }
 
+        public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)
+        {
+            return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s);
+        }
+
         public NodeDef GetNodeDef()
         {
             using (var s = new Status())

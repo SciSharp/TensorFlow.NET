@@ -18,7 +18,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_OperationGetAttrMetadata(IntPtr oper, string attr_name, IntPtr status);
+        public static extern TF_AttrMetadata TF_OperationGetAttrMetadata(IntPtr oper, string attr_name, IntPtr status);
 
         /// <summary>
         /// Fills in `value` with the value of the attribute `attr_name`.  `value` must
@@ -71,7 +71,7 @@ namespace Tensorflow
         /// <param name="value">const void*</param>
         /// <param name="length">size_t</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_SetAttrString(IntPtr desc, string attr_name, IntPtr value, uint length);
+        public static extern void TF_SetAttrString(IntPtr desc, string attr_name, string value, uint length);
 
         /// <summary>
         /// 

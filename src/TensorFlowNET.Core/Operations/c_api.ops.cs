@@ -46,6 +46,16 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_FinishOperation(IntPtr desc, IntPtr status);
 
+        /// <summary>
+        /// Operation will only be added to *graph when TF_FinishOperation() is
+        /// called (assuming TF_FinishOperation() does not return an error).
+        /// *graph must not be deleted until after TF_FinishOperation() is
+        /// called.
+        /// </summary>
+        /// <param name="graph">TF_Graph*</param>
+        /// <param name="opType">const char*</param>
+        /// <param name="oper_name">const char*</param>
+        /// <returns>TF_OperationDescription*</returns>
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_NewOperation(IntPtr graph, string opType, string oper_name);
 

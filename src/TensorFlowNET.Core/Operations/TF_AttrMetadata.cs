@@ -6,7 +6,7 @@ namespace Tensorflow
 {
     public struct TF_AttrMetadata
     {
-        public char is_list;
+        public byte is_list;
         public long list_size;
         public TF_AttrType type;
         public long total_size;
