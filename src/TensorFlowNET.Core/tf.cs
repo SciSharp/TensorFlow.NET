@@ -22,7 +22,7 @@ namespace Tensorflow
 
         public static RefVariable Variable<T>(T data, string name = "", TF_DataType dtype = TF_DataType.DtInvalid)
         {
-            return new RefVariable(data, name, dtype);
+            return variable_scope.default_variable_creator(data, name: name, dtype: TF_DataType.DtInvalid);
         }
 
         public static unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null)

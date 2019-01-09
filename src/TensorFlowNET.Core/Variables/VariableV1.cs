@@ -14,9 +14,9 @@ namespace Tensorflow
     /// the variable are fixed. The value can be changed using one of the assign methods.
     /// https://tensorflow.org/guide/variables
     /// </summary>
-    public class Variable
+    public class VariableV1
     {
-        public Variable(object initial_value, string name = "", TF_DataType trainable = TF_DataType.DtInvalid, bool validate_shape = true)
+        public VariableV1(object initial_value, string name = "", TF_DataType trainable = TF_DataType.DtInvalid, bool validate_shape = true)
         {
 
         }

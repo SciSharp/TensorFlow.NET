@@ -10,8 +10,19 @@ using System.Linq;
 
 namespace Tensorflow
 {
-    public static class ops
+    public partial class ops
     {
+        public static void add_to_collection(string name, object value)
+        {
+            var graph = tf.get_default_graph();
+            graph.add_to_collection(name, value);
+        }
+
+        public static _VariableScopeStore get_collection(string key)
+        {
+            return null;// get_default_graph().get_collection(key);
+        }
+
         public static Graph get_default_graph()
         {
             return tf.Graph();

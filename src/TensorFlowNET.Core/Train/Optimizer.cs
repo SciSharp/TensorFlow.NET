@@ -49,6 +49,7 @@ namespace Tensorflow
                 
             }
 
+            var var_list = variables.trainable_variables();
             return null;
         }
     }

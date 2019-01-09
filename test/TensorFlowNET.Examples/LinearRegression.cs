@@ -43,18 +43,13 @@ namespace TensorFlowNET.Examples
             var sub = pred - Y;
             var pow = tf.pow(sub, 2);
 
-
-
-
-
-
-
             var reduce = tf.reduce_sum(pow);
             var cost = reduce / (2d * n_samples);
 
             // radient descent
             // Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
-            var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
+            var optimizer = tf.train.GradientDescentOptimizer(learning_rate);
+            optimizer.minimize(cost);
         }
     }
 }

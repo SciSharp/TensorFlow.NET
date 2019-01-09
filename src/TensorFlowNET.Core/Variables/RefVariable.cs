@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class RefVariable : Variable
+    public class RefVariable : VariableV1
     {
         public bool _in_graph_mode = true;
         public Tensor _initial_value;

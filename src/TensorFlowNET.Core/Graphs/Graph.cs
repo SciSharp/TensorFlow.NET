@@ -27,6 +27,11 @@ namespace Tensorflow
         public string _graph_key;
         public Status Status { get; }
 
+        /// <summary>
+        /// Arbitrary collections of objects.
+        /// </summary>
+        private Dictionary<string, object> _collections = new Dictionary<string, object>();
+
         public Graph()
         {
             _handle = c_api.TF_NewGraph();
@@ -84,6 +89,11 @@ namespace Tensorflow
             }
 
             throw new Exception($"Can not convert a {typeof(T).Name} into a {types_str}.");
+        }
+
+        public void add_to_collection(string name, object value)
+        {
+            _collections[name] = value;
         }
 
         public unsafe Operation create_op(string op_type, List<Tensor> inputs, TF_DataType[] dtypes, 
@@ -219,6 +229,11 @@ namespace Tensorflow
         public Operation[] get_operations()
         {
             return _nodes_by_name.Values.Select(x => x).ToArray();
+        }
+
+        public Dictionary<string, object> get_collection(string name)
+        {
+            return _collections;
         }
 
         public void Dispose()

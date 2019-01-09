@@ -25,6 +25,7 @@ namespace Tensorflow
     /// size_t* => ref uint
     /// void* => IntPtr
     /// string => IntPtr c_api.StringPiece(IntPtr)
+    /// unsigned char => byte
     /// </summary>
     public static partial class c_api
     {
