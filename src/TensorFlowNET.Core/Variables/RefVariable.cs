@@ -78,6 +78,11 @@ namespace Tensorflow
             ops.add_to_collections(collections, this);
         }
 
+        public Tensor _ref()
+        {
+            return _variable;
+        }
+
         public static implicit operator _VariableScopeStore(RefVariable variable)
         {
             return null;

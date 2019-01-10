@@ -222,7 +222,7 @@ namespace Tensorflow
                 }
             }
 
-            return "";
+            return $"{name} {dtype} {rank} {string.Join(",", shape)}";
         }
 
         public void Dispose()
