@@ -91,9 +91,18 @@ namespace Tensorflow
             throw new Exception($"Can not convert a {typeof(T).Name} into a {types_str}.");
         }
 
-        public void add_to_collection(string name, object value)
+        public void add_to_collection<T>(string name, T value)
         {
-            _collections[name] = value;
+            if (_collections.ContainsKey(name))
+                (_collections[name] as List<T>).Add(value);
+            else
+                _collections[name] = new List<T> { value };
+        }
+
+        public void add_to_collections<T>(List<string> names, T value)
+        {
+            foreach (string name in names)
+                add_to_collection(name, value);
         }
 
         public unsafe Operation create_op(string op_type, List<Tensor> inputs, TF_DataType[] dtypes, 
@@ -236,9 +245,9 @@ namespace Tensorflow
             return _nodes_by_name.Values.Select(x => x).ToArray();
         }
 
-        public Dictionary<string, object> get_collection(string name)
+        public object get_collection(string name)
         {
-            return _collections;
+            return _collections.ContainsKey(name) ? _collections[name] : null;
         }
 
         public void Dispose()

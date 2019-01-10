@@ -23,6 +23,8 @@ namespace Tensorflow
             var keywords = new Dictionary<string, object>();
             keywords.Add("dtype", dtype);
             keywords.Add("shape", shape);
+            keywords.Add("container", container);
+            keywords.Add("shared_name", shared_name);
 
             var _op = _op_def_lib._apply_op_helper("VariableV2", name: name, keywords: keywords);
 

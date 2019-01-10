@@ -73,6 +73,22 @@ namespace Tensorflow
             return nd;
         }
 
+        public static TensorShapeProto as_shape(long[] dims)
+        {
+            TensorShapeProto shape = new TensorShapeProto();
+
+            for (int i = 0; i < dims.Length; i++)
+            {
+                var dim = new TensorShapeProto.Types.Dim();
+                dim.Size = dims[i];
+                dim.Name = $"dim_{i}";
+
+                shape.Dim.Add(dim);
+            }
+
+            return shape;
+        }
+
         public static TensorShape as_shape(this IShape shape, int[] dims)
         {
             return new TensorShape(dims);

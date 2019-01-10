@@ -20,7 +20,7 @@ namespace Tensorflow
                 name = op_type_name;
             }
 
-            string scope = g.unique_name(name) + "/";
+            string scope = new ops.name_scope(name);
 
             var default_type_attr_map = new Dictionary<string, object>();
             foreach (var attr_def in op_def.Attr)
@@ -88,6 +88,9 @@ namespace Tensorflow
                 
                 switch (attr_def.Type)
                 {
+                    case "string":
+                        attr_value.S =  Google.Protobuf.ByteString.CopyFromUtf8((string)value);
+                        break;
                     case "type":
                         attr_value.Type = _MakeType((TF_DataType)value, attr_def);
                         break;
@@ -95,8 +98,12 @@ namespace Tensorflow
                         attr_value.B = (bool)value;
                         break;
                     case "shape":
-                        attr_value.Shape = new TensorShapeProto();
+                        attr_value.Shape = value == null ? 
+                            attr_def.DefaultValue.Shape : 
+                            tensor_util.as_shape((long[])value);
                         break;
+                    default:
+                        throw new InvalidDataException($"attr_def.Type {attr_def.Type}");
                 }
 
                 attr_protos[key] = attr_value;

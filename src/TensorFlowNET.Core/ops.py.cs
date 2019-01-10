@@ -12,15 +12,21 @@ namespace Tensorflow
 {
     public partial class ops
     {
-        public static void add_to_collection(string name, object value)
+        public static void add_to_collection<T>(string name, T value)
         {
             var graph = tf.get_default_graph();
             graph.add_to_collection(name, value);
         }
 
-        public static _VariableScopeStore get_collection(string key)
+        public static void add_to_collections<T>(List<string> names, T value)
         {
-            return null;// get_default_graph().get_collection(key);
+            var graph = tf.get_default_graph();
+            graph.add_to_collections(names, value);
+        }
+
+        public static object get_collection(string key)
+        {
+            return get_default_graph().get_collection(key);
         }
 
         public static Graph get_default_graph()

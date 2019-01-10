@@ -14,7 +14,7 @@ namespace Tensorflow
             public Context _ctx;
             public string _name_scope;
 
-            public name_scope(string name, string default_name, List<object> values)
+            public name_scope(string name, string default_name = "", List<object> values = null)
             {
                 _name = name;
                 _default_name = default_name;

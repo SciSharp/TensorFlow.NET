@@ -27,12 +27,12 @@ namespace TensorFlowNET.Examples
             var train_Y = np.array(1.7, 2.76, 2.09, 3.19, 1.694, 1.573, 3.366, 2.596, 2.53, 1.221,
                          2.827, 3.465, 1.65, 2.904, 2.42, 2.94, 1.3);
             var n_samples = train_X.shape[0];
-
+            
             // tf Graph Input
             var X = tf.placeholder(tf.float64);
             var Y = tf.placeholder(tf.float64);
 
-            // Set model weights
+            // Set model weights 
             var W = tf.Variable(rng.randn<double>(), name: "weight");
             var b = tf.Variable(rng.randn<double>(), name: "bias");
 

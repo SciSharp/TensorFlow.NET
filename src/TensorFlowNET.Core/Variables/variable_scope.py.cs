@@ -39,18 +39,30 @@ namespace Tensorflow
 
         public static _VariableScopeStore get_variable_scope_store()
         {
+            _VariableScopeStore ret = null;
             var scope_store = ops.get_collection(_VARSCOPESTORE_KEY);
             if (scope_store == null)
             {
-                scope_store = new _VariableScopeStore();
-                ops.add_to_collection(_VARSCOPESTORE_KEY, scope_store);
+                ret = new _VariableScopeStore();
+                ops.add_to_collection(_VARSCOPESTORE_KEY, ret);
             }
             else
             {
-                // scope_store = scope_store[0];
+                switch (scope_store)
+                {
+                    case List<RefVariable> values:
+                        ret = values[0];
+                        break;
+                    case List<_VariableScopeStore> values:
+                        ret = values[0];
+                        break;
+                    default:
+                        throw new InvalidOperationException("get_variable_scope_store");
+                }
+                
             }
 
-            return scope_store;
+            return ret;
         }
 
         public static bool _get_trainable_value(VariableSynchronization synchronization, bool? trainable = null)

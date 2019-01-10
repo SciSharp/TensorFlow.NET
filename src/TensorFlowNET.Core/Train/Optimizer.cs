@@ -30,9 +30,14 @@ namespace Tensorflow
         /// </summary>
         /// <param name="loss"></param>
         /// <returns></returns>
-        public Optimizer minimize(Tensor loss, GateGradientType gate_gradients = GateGradientType.GATE_OP)
+        public Optimizer minimize(Tensor loss, 
+            GateGradientType gate_gradients = GateGradientType.GATE_OP,
+            bool colocate_gradients_with_ops = false)
         {
-            compute_gradients(loss, gate_gradients);
+            compute_gradients(loss, 
+                gate_gradients: gate_gradients, 
+                colocate_gradients_with_ops: colocate_gradients_with_ops);
+
             return this;
         }
 
@@ -41,7 +46,10 @@ namespace Tensorflow
         /// </summary>
         /// <param name="loss"></param>
         /// <param name="gate_gradients"></param>
-        public List<KeyValuePair<object, object>> compute_gradients(Tensor loss, GateGradientType gate_gradients = GateGradientType.GATE_OP)
+        public List<KeyValuePair<object, object>> compute_gradients(Tensor loss,
+            List<RefVariable> var_list = null,
+            GateGradientType gate_gradients = GateGradientType.GATE_OP,
+            bool colocate_gradients_with_ops = false)
         {
             int num_towers = 1;
             if(distribute_lib.get_loss_reduction() == VariableAggregationType.MEAN)
@@ -49,7 +57,19 @@ namespace Tensorflow
                 
             }
 
-            var var_list = variables.trainable_variables();
+            var tmp = variables.trainable_variables();
+            switch (tmp)
+            {
+                case List<RefVariable> values:
+                    var_list = values;
+                    break;
+            }
+
+            foreach(var v in var_list)
+            {
+
+            }
+
             return null;
         }
     }

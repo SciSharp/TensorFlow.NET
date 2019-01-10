@@ -64,6 +64,28 @@ namespace Tensorflow
             var shape = _initial_value.shape;
             dtype = _initial_value.dtype;
             _variable = gen_state_ops.variable_v2(shape, dtype, name);
+
+            // Manually overrides the variable's shape with the initial value's.
+            if (validate_shape)
+            {
+                var initial_value_shape = _initial_value.shape;
+            }
+
+            // If 'initial_value' makes use of other variables, make sure we don't
+            // have an issue if these other variables aren't initialized first by
+            // using their initialized_value() method.
+
+            ops.add_to_collections(collections, this);
+        }
+
+        public static implicit operator _VariableScopeStore(RefVariable variable)
+        {
+            return null;
+        }
+
+        public static implicit operator RefVariable(_VariableScopeStore store)
+        {
+            return null;
         }
     }
 }
