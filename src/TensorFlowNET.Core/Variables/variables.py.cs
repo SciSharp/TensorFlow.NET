@@ -12,7 +12,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static object trainable_variables()
         {
-            return ops.get_collection(ops.GraphKey.TRAINABLE_VARIABLES);
+            return ops.get_collection(ops.GraphKeys.TRAINABLE_VARIABLES);
         }
     }
 }

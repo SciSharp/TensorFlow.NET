@@ -97,20 +97,6 @@ namespace Tensorflow
             return node_def;
         }
 
-        public static string name_scope(string name, string default_name = "", object values = null)
-        {
-            string _name = "";
-            if (String.IsNullOrEmpty(name))
-            {
-                _name = default_name;
-            }
-
-            var g = get_default_graph();
-            var _name_scope = g.name_scope(_name);
-
-            return _name_scope;
-        }
-
         public static string _name_from_scope_name(string name)
         {
             if (name.EndsWith("/"))
@@ -121,6 +107,27 @@ namespace Tensorflow
             {
                 return name;
             }
+        }
+
+        /// <summary>
+        /// A context manager that lifts ops out of control-flow scopes and function-building graphs.
+        /// </summary>
+        /// <returns></returns>
+        public static void init_scope()
+        {
+            // Retrieve the active name scope: entering an `init_scope` preserves
+            // the name scope of the current context.
+            var default_graph = get_default_graph();
+            var scope = default_graph.get_name_scope();
+            if (!String.IsNullOrEmpty(scope) && !scope.EndsWith("/"))
+                // Names that end with trailing slashes are treated by `name_scope` as
+                // absolute.
+                scope += "/";
+            // inner_device_stack = default_graph._device_function_stack
+            // var outer_context = default_graph.as_default;
+
+            var outer_graph = get_default_graph();
+            // outer_device_stack = None
         }
 
         public static int uid()

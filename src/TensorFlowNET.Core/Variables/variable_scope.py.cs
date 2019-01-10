@@ -26,7 +26,9 @@ namespace Tensorflow
             }
             else
             {
-                return new RefVariable(initial_value);
+                return new RefVariable(initial_value, 
+                    name: name,
+                    dtype: dtype);
             }
         }
 

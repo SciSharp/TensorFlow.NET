@@ -16,7 +16,13 @@ namespace Tensorflow
     /// </summary>
     public class VariableV1
     {
-        public VariableV1(object initial_value, string name = "", TF_DataType trainable = TF_DataType.DtInvalid, bool validate_shape = true)
+        public VariableV1(object initial_value,
+            bool trainable = true,
+            List<string> collections = null,
+            bool validate_shape = true,
+            string caching_device = "",
+            string name = "",
+            TF_DataType dtype = TF_DataType.DtInvalid)
         {
 
         }

@@ -15,12 +15,18 @@ namespace Tensorflow
         /// specified, but it is also possible to pass an explicit list of
         /// variables.
         /// </summary>
-        public static class GraphKey
+        public static class GraphKeys
         {
             /// <summary>
             /// the subset of `Variable` objects that will be trained by an optimizer.
             /// </summary>
             public static string TRAINABLE_VARIABLES = "trainable_variables";
+
+            /// <summary>
+            /// Key to collect Variable objects that are global (shared across machines).
+            /// Default collection for all variables, except local ones.
+            /// </summary>
+            public static string GLOBAL_VARIABLES = "variables";
         }
     }
 }

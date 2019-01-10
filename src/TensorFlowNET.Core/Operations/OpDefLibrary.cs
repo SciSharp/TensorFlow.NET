@@ -10,7 +10,7 @@ namespace Tensorflow
 {
     public class OpDefLibrary
     {
-        public unsafe Operation _apply_op_helper(string op_type_name, string name = "", Dictionary<string, object> keywords = null)
+        public Operation _apply_op_helper(string op_type_name, string name = "", Dictionary<string, object> keywords = null)
         {
             var g = ops.get_default_graph();
             var op_def = g.GetOpDef(op_type_name);

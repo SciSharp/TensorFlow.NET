@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
-using TF_DataType = Tensorflow.DataType;
-using attr_value_pb2 = Tensorflow;
-using Tensorflow.Eager;
 
 namespace Tensorflow
 {

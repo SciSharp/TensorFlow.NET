@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Eager
+namespace Tensorflow
 {
     public class Context
     {

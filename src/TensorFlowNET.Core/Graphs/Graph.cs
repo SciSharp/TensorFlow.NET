@@ -152,6 +152,11 @@ namespace Tensorflow
             return false;
         }
 
+        public string get_name_scope()
+        {
+            return _name_stack;
+        }
+
         public string name_scope(string name)
         {
             string new_stack = "";
