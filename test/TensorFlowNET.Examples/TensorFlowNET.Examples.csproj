@@ -6,12 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NumSharp" Version="0.6.4" />
+    <PackageReference Include="NumSharp" Version="0.6.5" />
     <PackageReference Include="TensorFlow.NET" Version="0.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
   </ItemGroup>
 
