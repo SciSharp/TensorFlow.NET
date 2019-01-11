@@ -34,6 +34,17 @@ namespace Tensorflow
             return tf.Graph();
         }
 
+        public static Graph _get_graph_from_inputs(List<Tensor> op_input_list, Graph graph = null)
+        {
+            foreach(var op_input in op_input_list)
+            {
+                // Determine if this is a valid graph_element.
+                var graph_element = op_input;
+            }
+
+            return get_default_graph();
+        }
+
         public static Tensor convert_to_tensor(object value, string name = "")
         {
             var nd = tensor_util.convert_to_numpy_ndarray(value);

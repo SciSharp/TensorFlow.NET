@@ -20,7 +20,9 @@ namespace Tensorflow
                 name = op_type_name;
             }
 
-            string scope = new ops.name_scope(name);
+            string scope = "";
+            using (var namescope = new ops.name_scope<object>(name))
+                scope = namescope;
 
             var default_type_attr_map = new Dictionary<string, object>();
             foreach (var attr_def in op_def.Attr)

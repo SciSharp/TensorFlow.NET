@@ -6,15 +6,16 @@ namespace Tensorflow
 {
     public partial class ops
     {
-        public class name_scope
+        public class name_scope<T> : IDisposable
         {
             public string _name;
             public string _default_name;
             public object _values;
             public Context _ctx;
             public string _name_scope;
+            private object _g_manager;
 
-            public name_scope(string name, string default_name = "", List<object> values = null)
+            public name_scope(string name, string default_name = "", List<T> values = null)
             {
                 _name = name;
                 _default_name = default_name;
@@ -31,11 +32,23 @@ namespace Tensorflow
                     _name = _default_name;
                 }
 
-                var g = get_default_graph();
-                return g.name_scope(_name);
+                Graph g = null;
+                if (_values is List<Tensor> values)
+                    g = _get_graph_from_inputs(values);
+
+                if (g == null)
+                    g = get_default_graph();
+                
+                return g.name_scope(_name); ;
             }
 
-            public static implicit operator string(name_scope ns)
+            public void Dispose()
+            {
+                var g = get_default_graph();
+                g._name_stack = g.old_stack;
+            }
+
+            public static implicit operator string(name_scope<T> ns)
             {
                 return ns._name_scope;
             }

@@ -51,31 +51,36 @@ namespace Tensorflow
                 collections.Add(ops.GraphKeys.TRAINABLE_VARIABLES);
 
             ops.init_scope();
-            name = new ops.name_scope(name, "Variable", init_from_fn ? new List<object>() : new List<object> { initial_value });
-            if (init_from_fn)
+            var values = init_from_fn ? new List<object>() : new List<object> { initial_value };
+            using (var namescope = new ops.name_scope<object>(name, "Variable", values))
             {
+                name = namescope;
 
+                if (init_from_fn)
+                {
+
+                }
+                else
+                {
+                    _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value");
+                }
+
+                var shape = _initial_value.shape;
+                dtype = _initial_value.dtype;
+                _variable = gen_state_ops.variable_v2(shape, dtype, name);
+
+                // Manually overrides the variable's shape with the initial value's.
+                if (validate_shape)
+                {
+                    var initial_value_shape = _initial_value.shape;
+                }
+
+                // If 'initial_value' makes use of other variables, make sure we don't
+                // have an issue if these other variables aren't initialized first by
+                // using their initialized_value() method.
+
+                ops.add_to_collections(collections, this);
             }
-            else
-            {
-                _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value");
-            }
-
-            var shape = _initial_value.shape;
-            dtype = _initial_value.dtype;
-            _variable = gen_state_ops.variable_v2(shape, dtype, name);
-
-            // Manually overrides the variable's shape with the initial value's.
-            if (validate_shape)
-            {
-                var initial_value_shape = _initial_value.shape;
-            }
-
-            // If 'initial_value' makes use of other variables, make sure we don't
-            // have an issue if these other variables aren't initialized first by
-            // using their initialized_value() method.
-
-            ops.add_to_collections(collections, this);
         }
 
         public Tensor _ref()

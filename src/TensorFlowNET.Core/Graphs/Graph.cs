@@ -23,7 +23,8 @@ namespace Tensorflow
         private int _next_id_counter;
         private List<String> _unfetchable_ops = new List<string>();
 
-        private string _name_stack;
+        public string _name_stack = "";
+        public string old_stack = "";
         public string _graph_key;
         public Status Status { get; }
 
@@ -168,23 +169,22 @@ namespace Tensorflow
 
         public string name_scope(string name)
         {
+            old_stack = _name_stack;
+
             string new_stack = "";
 
+
             if (name.EndsWith("/"))
-            {
                 new_stack = ops._name_from_scope_name(name);
-            }
             else
-            {
                 new_stack = unique_name(name);
-            }
 
             _name_stack = new_stack;
 
             return String.IsNullOrEmpty(new_stack) ? "" : new_stack + "/";
         }
 
-        public string unique_name(string name)
+        public string unique_name(string name, bool mark_as_used = true)
         {
             if (!String.IsNullOrEmpty(_name_stack))
             {
@@ -192,17 +192,45 @@ namespace Tensorflow
             }
 
             var name_key = name.ToLower();
+            int i = 0;
             if (_names_in_use.ContainsKey(name_key))
             {
-                _names_in_use[name_key]++;
-            }
-            else
-            {
-                _names_in_use[name_key] = 1;
-                return name;
+                foreach (var item in _names_in_use)
+                {
+                    if (item.Key == name_key)
+                    {
+                        i = _names_in_use[name_key];
+                        break;
+                    }
+                    
+                    i++;
+                }
             }
 
-            return $"{name}_{_names_in_use[name_key]}";
+            if (mark_as_used)
+                if (_names_in_use.ContainsKey(name_key))
+                    _names_in_use[name_key]++;
+                else
+                    _names_in_use[name_key] = i + 1;
+            
+            if (i > 0)
+            {
+                var base_name_key = name_key;
+
+                // Make sure the composed name key is not already used.
+                if (_names_in_use.ContainsKey(name_key))
+                {
+                    name_key = $"{base_name_key}_{i}";
+                    i += 1;
+                }
+
+                if (mark_as_used)
+                    _names_in_use[name_key] = 1;
+
+                name = $"{name}_{i - 1}";
+            }
+
+            return name;
         }
 
         public TF_Output[] ReturnOutputs(IntPtr results)
