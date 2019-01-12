@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="NumSharp" Version="0.6.5" />
-    <PackageReference Include="TensorFlow.NET" Version="0.0.2" />
+    <PackageReference Include="TensorFlow.NET" Version="0.0.3" />
   </ItemGroup>
 
   <ItemGroup>

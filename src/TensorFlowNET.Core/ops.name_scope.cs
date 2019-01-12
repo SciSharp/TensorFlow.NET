@@ -21,8 +21,6 @@ namespace Tensorflow
                 _default_name = default_name;
                 _values = values;
                 _ctx = new Context();
-
-                _name_scope = __enter__();
             }
 
             public string __enter__()
@@ -38,8 +36,10 @@ namespace Tensorflow
 
                 if (g == null)
                     g = get_default_graph();
-                
-                return g.name_scope(_name); ;
+
+                _name_scope = g.name_scope(_name);
+
+                return _name_scope;
             }
 
             public void Dispose()
@@ -48,9 +48,13 @@ namespace Tensorflow
                 g._name_stack = g.old_stack;
             }
 
+            /// <summary>
+            /// __enter__()
+            /// </summary>
+            /// <param name="ns"></param>
             public static implicit operator string(name_scope<T> ns)
             {
-                return ns._name_scope;
+                return ns.__enter__();
             }
         }
     }

@@ -4,6 +4,10 @@ using System.Text;
 
 namespace Tensorflow
 {
+    /// <summary>
+    /// TF_DataType holds the type for a scalar value.  E.g., one slot in a tensor.
+    /// The enum values here are identical to corresponding values in types.proto.
+    /// </summary>
     public enum TF_DataType
     {
         DtInvalid = 0,
@@ -30,6 +34,8 @@ namespace Tensorflow
         TF_RESOURCE = 20,
         TF_VARIANT = 21,
         TF_UINT32 = 22,
-        TF_UINT64 = 23
+        TF_UINT64 = 23,
+
+        DtDoubleRef = 102, // DT_DOUBLE_REF
     }
 }

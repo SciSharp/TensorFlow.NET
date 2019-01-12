@@ -17,6 +17,10 @@ namespace Tensorflow
         public string Name { get; set; }
         public double LearningRate { get; set; }
         public Tensor LearningRateTensor { get; set; }
+        public bool _use_locking;
+        public Dictionary<string, object> _slots;
+        public Dictionary<string, object> _non_slot_dict;
+        public Dictionary<string, object> _deferred_slot_restorations;
 
         public Optimizer(double learning_rate, bool use_locking, string name = "")
         {
@@ -24,6 +28,11 @@ namespace Tensorflow
                 throw new NotImplementedException("Must specify the optimizer name");
 
             Name = name;
+            _use_locking = use_locking;
+            // Dictionary of slots.
+            _slots = new Dictionary<string, object>();
+            _non_slot_dict = new Dictionary<string, object>();
+            _deferred_slot_restorations = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -68,7 +77,7 @@ namespace Tensorflow
                     break;
             }
 
-            var processors = var_list.Select(v => optimizer._get_processor(v));
+            var processors = var_list.Select(v => optimizer._get_processor(v)).ToList();
             var var_refs = processors.Select(x => x.target()).ToList();
 
             gradients_impl.gradients(loss, var_refs, grad_ys: grad_loss,

@@ -19,7 +19,10 @@ namespace Tensorflow
         public Graph Graph => op.Graph;
         public Operation op { get; }
 
-        public string name;
+        /// <summary>
+        /// The string name of this tensor.
+        /// </summary>
+        public string name => $"{(op == null ? "Operation was not named" : $"{op.Name}:{value_index}")}";
 
         public int value_index { get; }
 
@@ -222,7 +225,7 @@ namespace Tensorflow
                 }
             }
 
-            return $"{name} {dtype} {rank} {string.Join(",", shape)}";
+            return $"{name} {dtype.ToString()} {rank} {string.Join(",", shape)}";
         }
 
         public void Dispose()

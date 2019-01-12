@@ -173,7 +173,6 @@ namespace Tensorflow
 
             string new_stack = "";
 
-
             if (name.EndsWith("/"))
                 new_stack = ops._name_from_scope_name(name);
             else

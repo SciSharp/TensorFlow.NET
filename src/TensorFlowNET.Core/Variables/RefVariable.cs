@@ -79,6 +79,17 @@ namespace Tensorflow
                 // have an issue if these other variables aren't initialized first by
                 // using their initialized_value() method.
 
+                var _initializer_op = gen_state_ops.assign(_variable, _initial_value, validate_shape).op;
+
+                if (!String.IsNullOrEmpty(caching_device))
+                {
+
+                }
+                else
+                {
+
+                }
+
                 ops.add_to_collections(collections, this);
             }
         }

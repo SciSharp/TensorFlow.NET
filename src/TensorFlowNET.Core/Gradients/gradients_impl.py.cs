@@ -30,6 +30,10 @@ namespace Tensorflow
             if (src_graph == null)
                 src_graph = ops.get_default_graph();
 
+            // If src_graph is a _FuncGraph (i.e. a function body), gather it and all
+            // ancestor graphs. This is necessary for correctly handling captured values.
+            var curr_graph = src_graph;
+
             var ys1 = _AsList(ys);
             var xs1 = _AsList(xs);
             List<Tensor> grad_ys1 = null;
@@ -47,7 +51,10 @@ namespace Tensorflow
 
             string grad_scope = "";
             using (var namescope = new ops.name_scope<Tensor>(name, "gradients", values: all))
+            {
                 grad_scope = namescope;
+
+            }
         }
 
         private static List<Tensor> _AsList(object ys)
