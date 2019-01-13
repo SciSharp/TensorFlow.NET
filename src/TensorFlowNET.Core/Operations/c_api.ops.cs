@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public static partial class c_api
+    public partial class c_api
     {
         /// <summary>
         /// Request that `desc` be co-located on the device where `op`
@@ -154,12 +154,15 @@ namespace Tensorflow
         /// an operation.  Returns the number of output consumers (should match
         /// TF_OperationOutputNumConsumers(oper_out)).
         /// </summary>
-        /// <param name="oper_out"></param>
-        /// <param name="consumers"></param>
-        /// <param name="max_consumers"></param>
+        /// <param name="oper_out">TF_Output</param>
+        /// <param name="consumers">TF_Input*</param>
+        /// <param name="max_consumers">int</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe int TF_OperationOutputConsumers(TF_Output oper_out, TF_Input* consumers, int max_consumers);
+        public static extern unsafe int TF_OperationOutputConsumers(TF_Output oper_out, IntPtr consumers, int max_consumers);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_OperationOutputConsumers(TF_Output oper_out);
 
         [DllImport(TensorFlowLibName)]
         public static extern TF_DataType TF_OperationOutputType(TF_Output oper_out);

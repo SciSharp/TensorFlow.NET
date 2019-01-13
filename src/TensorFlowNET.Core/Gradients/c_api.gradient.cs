@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public static partial class c_api
+    public partial class c_api
     {
         /// <summary>
         /// Adds operations to compute the partial derivatives of sum of `y`s w.r.t `x`s,

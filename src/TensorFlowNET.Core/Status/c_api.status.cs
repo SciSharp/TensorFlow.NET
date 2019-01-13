@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public static partial class c_api
+    public partial class c_api
     {
         /// <summary>
         /// Delete a previously created status object.

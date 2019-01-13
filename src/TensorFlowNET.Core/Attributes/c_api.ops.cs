@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public static partial class c_api
+    public partial class c_api
     {
         /// <summary>
         /// Fills in `value` with the value of the attribute `attr_name`.  `value` must

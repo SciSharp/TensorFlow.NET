@@ -32,12 +32,12 @@ namespace Tensorflow
         public unsafe TF_Input[] OutputConsumers(int index, int max_consumers)
         {
             int size = Marshal.SizeOf<TF_Input>();
-            var handle = (TF_Input*)Marshal.AllocHGlobal(size);
+            var handle = Marshal.AllocHGlobal(size);
             int num = c_api.TF_OperationOutputConsumers(new TF_Output(_handle, index), handle, max_consumers);
             var consumers = new TF_Input[num];
             for(int i = 0; i < num; i++)
             {
-                consumers[i] = new TF_Input((*handle).oper + i * size, (*handle).index);
+                consumers[i] = Marshal.PtrToStructure<TF_Input>(handle + i * size);
             }
 
             return consumers;
@@ -159,6 +159,11 @@ namespace Tensorflow
                 s.Check();
                 return NodeDef.Parser.ParseFrom(buffer);
             }
+        }
+
+        public override string ToString()
+        {
+            return $"'{Name}' type={OpType}";
         }
 
         public static implicit operator Operation(IntPtr handle) => new Operation(handle);

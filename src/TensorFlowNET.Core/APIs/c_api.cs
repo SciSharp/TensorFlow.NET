@@ -27,7 +27,7 @@ namespace Tensorflow
     /// string => IntPtr c_api.StringPiece(IntPtr)
     /// unsigned char => byte
     /// </summary>
-    public static partial class c_api
+    public partial class c_api
     {
         public const string TensorFlowLibName = "tensorflow";
 

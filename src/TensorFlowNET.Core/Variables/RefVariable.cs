@@ -11,6 +11,7 @@ namespace Tensorflow
         public string _graph_key;
         public bool _trainable;
         public Tensor _variable;
+        public Tensor _snapshot;
 
         public RefVariable(object initial_value,
             bool trainable = true,
@@ -87,8 +88,11 @@ namespace Tensorflow
                 }
                 else
                 {
-
+                    _snapshot = gen_array_ops.identity(_variable, name = "read");
                 }
+
+                // clear g._name_stack
+                ops.get_default_graph().old_stack = "";
 
                 ops.add_to_collections(collections, this);
             }

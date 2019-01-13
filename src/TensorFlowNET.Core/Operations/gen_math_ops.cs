@@ -16,7 +16,7 @@ namespace Tensorflow
             keywords.Add("x", x);
             keywords.Add("y", y);
 
-            var _op = _op_def_lib._apply_op_helper("Add", name: "add", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Add", keywords: keywords);
 
             return new Tensor(_op, 0, _op.OutputType(0));
         }
@@ -38,7 +38,7 @@ namespace Tensorflow
             keywords.Add("x", x);
             keywords.Add("y", y);
 
-            var _op = _op_def_lib._apply_op_helper("Mul", name: "mul", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Mul", keywords: keywords);
 
             return new Tensor(_op, 0, _op.OutputType(0));
         }
@@ -62,7 +62,7 @@ namespace Tensorflow
             keywords.Add("transpose_a", transpose_a);
             keywords.Add("transpose_b", transpose_b);
 
-            var _op = _op_def_lib._apply_op_helper("MatMul", name: "MatMul", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("MatMul", keywords: keywords);
 
             return new Tensor(_op, 0, _op.OutputType(0));
         }
@@ -73,7 +73,7 @@ namespace Tensorflow
             keywords.Add("x", x);
             keywords.Add("y", y);
 
-            var _op = _op_def_lib._apply_op_helper("Pow", name: "Pow", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Pow", keywords: keywords);
 
             return new Tensor(_op, 0, _op.OutputType(0));
         }

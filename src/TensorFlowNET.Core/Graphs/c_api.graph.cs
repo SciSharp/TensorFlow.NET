@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public static partial class c_api
+    public partial class c_api
     {
         /// <summary>
         /// Destroy an options object.  Graph will be deleted once no more

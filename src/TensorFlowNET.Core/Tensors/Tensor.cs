@@ -34,6 +34,7 @@ namespace Tensorflow
         public ulong dataTypeSize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
         public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / dataTypeSize;
         public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
+        public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
         public long[] shape
         {
             get
@@ -160,6 +161,13 @@ namespace Tensorflow
             this._dtype = dtype;
         }
 
+        public List<Operation> consumers()
+        {
+            var output = _as_tf_output();
+            var consumer_names = c_api.TF_OperationOutputConsumers_wrapper(output);
+            return consumer_names.Select(x => Graph.OperationByName(x)).ToList();
+        }
+
         public TF_Output _as_tf_output()
         {
             return new TF_Output(op, value_index);
@@ -225,7 +233,7 @@ namespace Tensorflow
                 }
             }
 
-            return $"{name} {dtype.ToString()} {rank} {string.Join(",", shape)}";
+            return $"{name} shape=({string.Join(",", shape)}) dtype={dtype.ToString()}";
         }
 
         public void Dispose()

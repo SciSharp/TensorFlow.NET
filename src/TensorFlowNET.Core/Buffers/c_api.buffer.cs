@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public static partial class c_api
+    public partial class c_api
     {
         [DllImport(TensorFlowLibName)]
         public static extern void TF_DeleteBuffer(IntPtr buffer);

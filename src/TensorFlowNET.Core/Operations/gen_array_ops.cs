@@ -26,5 +26,20 @@ namespace Tensorflow
 
             return new Tensor(_op, 0, dtype);
         }
+
+        /// <summary>
+        /// Return a tensor with the same shape and contents as the input tensor or value.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        public static Tensor identity(Tensor input, string name = "")
+        {
+            var keywords = new Dictionary<string, object>();
+            keywords.Add("input", input);
+
+            var _op = _op_def_lib._apply_op_helper("Identity", name, keywords);
+
+            return _op.outputs[0];
+        }
     }
 }
