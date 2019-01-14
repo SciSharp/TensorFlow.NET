@@ -41,5 +41,15 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+
+        public static Tensor rank(Tensor input, string name = "")
+        {
+            var keywords = new Dictionary<string, object>();
+            keywords.Add("input", input);
+
+            var _op = _op_def_lib._apply_op_helper("Rank", name: name, keywords: keywords);
+
+            return _op.outputs[0];
+        }
     }
 }
