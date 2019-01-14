@@ -163,7 +163,7 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            return $"'{Name}' type={OpType}";
+            return _handle == IntPtr.Zero ? "Undefined" : $"'{Name}' type={OpType}";
         }
 
         public static implicit operator Operation(IntPtr handle) => new Operation(handle);

@@ -47,8 +47,14 @@ namespace Tensorflow
 
         public static Tensor convert_to_tensor(object value, string name = "")
         {
-            var nd = tensor_util.convert_to_numpy_ndarray(value);
-            return tf.constant(nd, name);
+            switch (value)
+            {
+                case Tensor val:
+                    return val;
+                default:
+                    var nd = tensor_util.convert_to_numpy_ndarray(value);
+                    return tf.constant(nd, name);
+            }
         }
 
         public static unsafe IntPtr _create_c_op(Graph graph, NodeDef node_def, List<Tensor> inputs)
@@ -90,7 +96,7 @@ namespace Tensorflow
 
             var c_op = c_api.TF_FinishOperation(op_desc, status);
 
-            if (status.Code != TF_Code.TF_OK) throw new Exception(status.Message);
+            status.Check(true);
 
             return c_op;
         }

@@ -46,6 +46,8 @@ namespace Tensorflow
             {
                 var g = get_default_graph();
                 g._name_stack = g.old_stack;
+                // clear g._name_stack
+                g.old_stack = "";
             }
 
             /// <summary>
@@ -54,7 +56,10 @@ namespace Tensorflow
             /// <param name="ns"></param>
             public static implicit operator string(name_scope<T> ns)
             {
-                return ns.__enter__();
+                if (string.IsNullOrEmpty(ns._name_scope))
+                    return ns.__enter__();
+                else
+                    return ns._name_scope;
             }
         }
     }

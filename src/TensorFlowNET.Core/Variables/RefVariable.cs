@@ -91,9 +91,6 @@ namespace Tensorflow
                     _snapshot = gen_array_ops.identity(_variable, name = "read");
                 }
 
-                // clear g._name_stack
-                ops.get_default_graph().old_stack = "";
-
                 ops.add_to_collections(collections, this);
             }
         }

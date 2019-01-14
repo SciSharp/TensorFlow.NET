@@ -35,13 +35,25 @@ namespace Tensorflow
         public static Tensor reduce_sum(Tensor input, int[] axis = null)
         {
             Tensor rank;
+            string name;
             using (var namescop = new ops.name_scope<Tensor>("", "Rank", new List<Tensor> { input }))
             {
-                string name = namescop;
-                rank = gen_array_ops.rank(input, name);
+                name = namescop;
+                rank = gen_array_ops.rank(input, namescop);
             }
+
+            using (var namescope = new ops.name_scope<Tensor>("range", "Range", new List<Tensor> { 0D, input, 1D }))
+            {
+                name = namescope;
+                var start = ops.convert_to_tensor(0D);
+                var limit = ops.convert_to_tensor(input);
+                var delta = ops.convert_to_tensor(1D);
+
+                var t = gen_math_ops.range(start, limit, delta, name);
+            }
+                
             var s = gen_math_ops.sum(input, rank);
-            return gen_math_ops.range(0, s);
+            return s;
         }
     }
 }

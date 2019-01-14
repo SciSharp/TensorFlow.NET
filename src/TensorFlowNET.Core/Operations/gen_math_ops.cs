@@ -98,23 +98,16 @@ namespace Tensorflow
         /// <param name="delta"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor range(int start, Tensor limit, int delta = 1)
+        public static Tensor range(Tensor start, Tensor limit, Tensor delta, string name = "")
         {
-            using (var namescope = new ops.name_scope<Tensor>("", "Range", new List<Tensor> { start, limit, delta }))
-            {
-                var start1 = ops.convert_to_tensor(start, "start");
-                var limit1 = ops.convert_to_tensor(limit, "limit");
-                var delta1 = ops.convert_to_tensor(delta, "delta");
+            var keywords = new Dictionary<string, object>();
+            keywords.Add("start", start);
+            keywords.Add("limit", limit);
+            keywords.Add("delta", delta);
 
-                var keywords = new Dictionary<string, object>();
-                keywords.Add("start", start1);
-                keywords.Add("limit", limit1);
-                keywords.Add("delta", delta1);
+            var _op = _op_def_lib._apply_op_helper("Range", name, keywords);
 
-                var _op = _op_def_lib._apply_op_helper("Range", namescope, keywords);
-
-                return _op.outputs[0];
-            }
+            return _op.outputs[0];
         }
     }
 }

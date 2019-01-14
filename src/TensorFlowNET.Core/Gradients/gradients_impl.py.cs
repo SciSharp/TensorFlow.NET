@@ -57,6 +57,8 @@ namespace Tensorflow
                 // cluster ops for compilation.
                 var gradient_uid = ops.get_default_graph().unique_name("uid");
 
+                // Initialize the pending count for ops in the connected subgraph from ys
+                // to the xs.
                 var to_ops = ys1.Select(x => x.op).ToList();
                 var from_ops = xs1.Select(x => x.op).ToList();
                 var stop_gradient_ops = stop_gradients1.Select(x => x.op).ToList();
