@@ -335,3 +335,8 @@ ASALocalRun/
 /tensorflowlib/linux/native/libtensorflow.so
 /src/TensorFlowNET.Core/tensorflow.dll
 /docs/build
+src/TensorFlowNET.Native/libtensorflow.dll
+src/TensorFlowNET.Native/bazel-*
+/src/TensorFlowNET.Native/libtensorflow.lib
+src/TensorFlowNET.Native/c_api.h
+/.vscode
