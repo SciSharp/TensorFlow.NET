@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -126,11 +127,11 @@ namespace Tensorflow
             Graph._add_op(this);
         }
 
-        public object get_attr(string name)
+        public object get_attr<T>(string name)
         {
             AttrValue x = null;
 
-            var fields = new string[] { "s", "i", "f", "b", "type", "shape", "tensor", "func" };
+            var fields = new string[] { "s", "i", "f", "b", "Type", "Shape", "Tensor", "func" };
 
             using (var buf = new Buffer())
             {
@@ -141,12 +142,21 @@ namespace Tensorflow
 
             switch (name)
             {
+                case "T":
                 case "dtype":
                     return x.Type;
                 case "shape":
                     return x.Shape;
                 default:
-                    throw new NotImplementedException($"{name}");
+                    switch (typeof(T).Name)
+                    {
+                        case "Boolean":
+                            return x.B;
+                        case "String":
+                            return x.S;
+                        default:
+                            throw new NotImplementedException($"Unsupported field type in {x.ToString()}");
+                    }
             }
         }
 

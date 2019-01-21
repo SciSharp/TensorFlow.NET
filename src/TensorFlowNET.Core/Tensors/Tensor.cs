@@ -16,6 +16,9 @@ namespace Tensorflow
     {
         private readonly IntPtr _handle;
 
+        private int _id;
+        public int Id => _id;
+
         public Graph Graph => op.Graph;
         public Operation op { get; }
 

@@ -21,12 +21,13 @@ namespace Tensorflow
             var _op = _op_def_lib._apply_op_helper("Placeholder", keywords: keywords);
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
-            var _attrs = new Dictionary<string, object>();
 
-            _attrs["dtype"] = _op.get_attr("dtype");
-            _attrs["shape"] = _op.get_attr("shape");
+            var _attrs = new Dictionary<string, object>();
+            _attrs["dtype"] = _op.get_attr<DataType>("dtype");
+            _attrs["shape"] = _op.get_attr<int[]>("shape");
 
             _execute.record_gradient("Placeholder", _inputs_flat, _attrs, _result, name);
+
             return new Tensor(_op, 0, dtype);
         }
 

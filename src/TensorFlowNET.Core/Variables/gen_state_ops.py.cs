@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Eager;
 
 namespace Tensorflow
 {
     public class gen_state_ops
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
+        public static Execute _execute = new Execute();
 
         /// <summary>
         /// Holds state in the form of a tensor that persists across steps.
@@ -31,6 +33,14 @@ namespace Tensorflow
 
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
+
+            var _attrs = new Dictionary<string, object>();
+            _attrs["dtype"] = _op.get_attr<DataType>("dtype");
+            _attrs["shape"] = _op.get_attr<int[]>("shape");
+            _attrs["container"] = _op.get_attr<string>("container");
+            _attrs["shared_name"] = _op.get_attr<string>("shared_name");
+
+            _execute.record_gradient("Placeholder", _inputs_flat, _attrs, _result, name);
 
             return new Tensor(_op, 0, dtype);
         }
@@ -56,9 +66,17 @@ namespace Tensorflow
 
             var _op = _op_def_lib._apply_op_helper("Assign", name: name, keywords: keywords);
 
-            var _result = _op.outputs[0];
+            var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
-            return _result;
+
+            var _attrs = new Dictionary<string, object>();
+            _attrs["T"] = _op.get_attr<DataType>("T");
+            _attrs["validate_shape"] = _op.get_attr<bool>("validate_shape");
+            _attrs["use_locking"] = _op.get_attr<bool>("use_locking");
+
+            _execute.record_gradient("Placeholder", _inputs_flat, _attrs, _result, name);
+
+            return _result[0];
         }
     }
 }
