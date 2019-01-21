@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Tensorflow;
+using Tensorflow.Eager;
 
 namespace Tensorflow
 {
     public static class gen_array_ops
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
+        public static Execute _execute = new Execute();
 
-        public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null)
+        public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = "")
         {
             var keywords = new Dictionary<string, object>();
             keywords.Add("dtype", dtype);
@@ -24,6 +26,7 @@ namespace Tensorflow
             _attrs["dtype"] = _op.get_attr("dtype");
             _attrs["shape"] = _op.get_attr("shape");
 
+            _execute.record_gradient("Placeholder", _inputs_flat, _attrs, _result, name);
             return new Tensor(_op, 0, dtype);
         }
 

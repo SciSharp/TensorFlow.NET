@@ -12,15 +12,15 @@ TensorFlow.NET is a member project of [SciSharp](https://github.com/SciSharp) st
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
 ### How to use
-Download the pre-compiled dll [here](tensorflow.so) and place it in the working folder. 
-This is only need for Linux and Mac OS, and already packed for Windows.
-
 Install TensorFlow.NET through NuGet.
 ```sh
 PM> Install-Package TensorFlow.NET
 ```
 
+If you are using Linux or Mac OS, please download the pre-compiled dll [here](tensorflow.so) and place it in the working folder. This is only need for Linux and Mac OS, and already packed into NuGet for Windows.
+
 Import tensorflow.net.
+
 ```cs
 using Tensorflow;
 ```

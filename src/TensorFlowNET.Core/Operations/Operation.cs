@@ -113,7 +113,7 @@ namespace Tensorflow
                 op_def = g.GetOpDef(node_def.Op);
 
             _handle = ops._create_c_op(g, node_def, inputs);
-            
+
             _outputs = new Tensor[NumOutputs];
             output_types = new TF_DataType[NumOutputs];
 
@@ -128,21 +128,26 @@ namespace Tensorflow
 
         public object get_attr(string name)
         {
-            object ret = null;
+            AttrValue x = null;
 
             var fields = new string[] { "s", "i", "f", "b", "type", "shape", "tensor", "func" };
+
+            using (var buf = new Buffer())
+            {
+                c_api.TF_OperationGetAttrValueProto(_handle, name, buf, status);
+                status.Check(true);
+                x = AttrValue.Parser.ParseFrom(buf);
+            }
 
             switch (name)
             {
                 case "dtype":
-                    ret = _outputs[0];
-                    break;
+                    return x.Type;
                 case "shape":
-                    ret = new TensorShapeProto();
-                    break;
+                    return x.Shape;
+                default:
+                    throw new NotImplementedException($"{name}");
             }
-
-            return ret;
         }
 
         public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)
