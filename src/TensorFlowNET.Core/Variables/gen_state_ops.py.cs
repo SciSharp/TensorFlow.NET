@@ -40,7 +40,7 @@ namespace Tensorflow
             _attrs["container"] = _op.get_attr<string>("container");
             _attrs["shared_name"] = _op.get_attr<string>("shared_name");
 
-            _execute.record_gradient("Placeholder", _inputs_flat, _attrs, _result, name);
+            _execute.record_gradient("VariableV2", _inputs_flat, _attrs, _result, name);
 
             return new Tensor(_op, 0, dtype);
         }
@@ -74,7 +74,7 @@ namespace Tensorflow
             _attrs["validate_shape"] = _op.get_attr<bool>("validate_shape");
             _attrs["use_locking"] = _op.get_attr<bool>("use_locking");
 
-            _execute.record_gradient("Placeholder", _inputs_flat, _attrs, _result, name);
+            _execute.record_gradient("Assign", _inputs_flat, _attrs, _result, name);
 
             return _result[0];
         }

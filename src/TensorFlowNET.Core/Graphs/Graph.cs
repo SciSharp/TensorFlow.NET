@@ -118,17 +118,33 @@ namespace Tensorflow
             name = name.EndsWith("/") ? ops._name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
 
+            if (inputs == null)
+                inputs = new List<Tensor>();
+
+            var input_ops = inputs.Select(x => x.op).ToArray();
+            var control_inputs = _control_dependencies_for_inputs(input_ops);
+
             var op = new Operation(node_def, 
                 this,
                 inputs: inputs,
                 output_types: dtypes,
-                control_inputs: new object[] { },
+                control_inputs: control_inputs,
                 input_types: input_types,
                 original_op: null,
                 op_def: op_def);
 
             _create_op_helper(op, true);
             return op;
+        }
+
+        /// <summary>
+        /// For an op that takes `input_ops` as inputs, compute control inputs.
+        /// </summary>
+        /// <param name="input_ops">The data input ops for an op to be created.</param>
+        /// <returns>A list of control inputs for the op to be created.</returns>
+        private Operation[] _control_dependencies_for_inputs(Operation[] input_ops)
+        {
+            return new Operation[0];
         }
 
         private void _create_op_helper(Operation op, bool compute_device = true)

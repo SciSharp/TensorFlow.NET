@@ -85,8 +85,42 @@ namespace Tensorflow
         }
 
         private Tensor[] _outputs;
-        public Tensor[] outputs => _outputs;
-        public Tensor[] inputs;
+        public Tensor[] outputs
+        {
+            get
+            {
+                if(_outputs == null)
+                {
+                    _outputs = new Tensor[NumOutputs];
+
+                    for (int i = 0; i < NumOutputs; i++)
+                        _outputs[i] = new Tensor(this, i, OutputType(i));
+                }
+
+                return _outputs;
+            }
+        }
+
+        private Tensor[] _inputs;
+        public Tensor[] inputs
+        {
+            get
+            {
+                if(_inputs == null)
+                {
+                    _inputs = new Tensor[NumInputs];
+
+                    for (int i = 0; i < NumInputs; i++)
+                    {
+                        var tf_outpus = Input(i);
+                        var op = new Operation(tf_outpus.oper);
+                        _inputs[i] = op.outputs[tf_outpus.index];
+                    }
+                }
+
+                return _inputs;
+            }
+        }
 
         public Operation(IntPtr handle)
         {
@@ -115,14 +149,10 @@ namespace Tensorflow
 
             _handle = ops._create_c_op(g, node_def, inputs);
 
-            _outputs = new Tensor[NumOutputs];
             output_types = new TF_DataType[NumOutputs];
 
             for (int i = 0; i < NumOutputs; i++)
-            {
                 output_types[i] = OutputType(i);
-                _outputs[i] = new Tensor(this, i, output_types[i]);
-            }
 
             Graph._add_op(this);
         }
@@ -130,8 +160,6 @@ namespace Tensorflow
         public object get_attr<T>(string name)
         {
             AttrValue x = null;
-
-            var fields = new string[] { "s", "i", "f", "b", "Type", "Shape", "Tensor", "func" };
 
             using (var buf = new Buffer())
             {
