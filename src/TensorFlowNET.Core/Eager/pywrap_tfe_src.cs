@@ -25,6 +25,9 @@ namespace Tensorflow.Eager
                 }
             }
             if (!should_record) return;
+
+            var op_outputs = results;
+            var op_inputs = inputs;
         }
     }
 }

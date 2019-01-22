@@ -101,21 +101,23 @@ namespace Tensorflow
             }
         }
 
-        private Tensor[] _inputs;
-        public Tensor[] inputs
+        private InputList _inputs;
+        public InputList inputs
         {
             get
             {
                 if(_inputs == null)
                 {
-                    _inputs = new Tensor[NumInputs];
+                    var retval = new Tensor[NumInputs];
 
                     for (int i = 0; i < NumInputs; i++)
                     {
                         var tf_outpus = Input(i);
                         var op = new Operation(tf_outpus.oper);
-                        _inputs[i] = op.outputs[tf_outpus.index];
+                        retval[i] = op.outputs[tf_outpus.index];
                     }
+
+                    _inputs = new InputList(retval);
                 }
 
                 return _inputs;
