@@ -18,9 +18,9 @@ namespace Tensorflow.Eager
             c_api.TFE_DeleteContextOptions(_handle);
         }
 
-        public static implicit operator IntPtr(ContextOptions ctx)
+        public static implicit operator IntPtr(ContextOptions opts)
         {
-            return ctx._handle;
+            return opts._handle;
         }
     }
 }

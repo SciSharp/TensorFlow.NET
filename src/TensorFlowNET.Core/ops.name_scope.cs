@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Eager;
 
 namespace Tensorflow
 {
@@ -20,7 +21,7 @@ namespace Tensorflow
                 _name = name;
                 _default_name = default_name;
                 _values = values;
-                _ctx = new Context();
+                // _ctx = new Context();
             }
 
             public string __enter__()

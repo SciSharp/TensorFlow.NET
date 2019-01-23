@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Eager;
 
 namespace Tensorflow
 {
@@ -12,7 +13,7 @@ namespace Tensorflow
         public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
         public static TF_DataType chars = TF_DataType.TF_STRING;
 
-        public static Context context = new Context();
+        public static Context context;
 
         public static Graph g = new Graph(c_api.TF_NewGraph());
 
@@ -28,6 +29,7 @@ namespace Tensorflow
 
         public static void enable_eager_execution()
         {
+            // contex = new Context();
             context.default_execution_mode = Context.EAGER_MODE;
         }
 
