@@ -102,16 +102,21 @@ namespace Tensorflow
         /// <param name="func_graphs"></param>
         private static void _MarkReachedOps(List<Operation> from_ops, List<Operation> reached_ops, List<object> func_graphs)
         {
-            foreach(var op in from_ops)
+            Queue<Operation> queue = new Queue<Operation>(from_ops);
+            while (queue.Count > 0)
             {
-                reached_ops.Add(op);
-                foreach(var output in op.outputs)
+                var op = queue.Dequeue();
+
+                if (!reached_ops.Contains(op))
                 {
-                    reached_ops.AddRange(_Consumers(output, func_graphs));
+                    reached_ops.Add(op);
+                    foreach (var output in op.outputs)
+                    {
+                        var c = _Consumers(output, func_graphs).ToList();
+                        c.ForEach(x => queue.Enqueue(x));
+                    }
                 }
             }
-
-            reached_ops.Reverse();
         }
 
         /// <summary>

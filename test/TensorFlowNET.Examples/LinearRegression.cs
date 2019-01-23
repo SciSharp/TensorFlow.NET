@@ -50,6 +50,8 @@ namespace TensorFlowNET.Examples
             // Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
             var optimizer = tf.train.GradientDescentOptimizer(learning_rate);
             optimizer.minimize(cost);
+
+
         }
     }
 }

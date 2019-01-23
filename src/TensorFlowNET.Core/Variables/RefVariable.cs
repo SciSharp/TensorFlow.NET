@@ -12,6 +12,7 @@ namespace Tensorflow
         public bool _trainable;
         public Tensor _variable;
         public Tensor _snapshot;
+        public Operation op;
 
         public RefVariable(object initial_value,
             bool trainable = true,
@@ -91,6 +92,7 @@ namespace Tensorflow
                     _snapshot = gen_array_ops.identity(_variable, name = "read");
                 }
 
+                op = _initializer_op;
                 ops.add_to_collections(collections, this);
             }
         }
