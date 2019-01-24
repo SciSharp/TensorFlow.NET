@@ -12,7 +12,10 @@ namespace Tensorflow
         public bool _trainable;
         public Tensor _variable;
         public Tensor _snapshot;
-        public Operation op;
+
+        private Operation _initializer_op;
+        public Operation initializer => _initializer_op;
+        public Operation op => _initializer_op;
 
         public RefVariable(object initial_value,
             bool trainable = true,
@@ -81,7 +84,7 @@ namespace Tensorflow
                 // have an issue if these other variables aren't initialized first by
                 // using their initialized_value() method.
 
-                var _initializer_op = gen_state_ops.assign(_variable, _initial_value, validate_shape).op;
+                _initializer_op = gen_state_ops.assign(_variable, _initial_value, validate_shape).op;
 
                 if (!String.IsNullOrEmpty(caching_device))
                 {
@@ -92,7 +95,6 @@ namespace Tensorflow
                     _snapshot = gen_array_ops.identity(_variable, name = "read");
                 }
 
-                op = _initializer_op;
                 ops.add_to_collections(collections, this);
             }
         }

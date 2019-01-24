@@ -24,9 +24,23 @@ namespace Tensorflow
             graph.add_to_collections(names, value);
         }
 
-        public static object get_collection(string key)
+        /// <summary>
+        /// Wrapper for `Graph.get_collection()` using the default graph.
+        /// contains many standard names for collections.
+        /// </summary>
+        /// <param name="key">
+        /// The key for the collection. For example, the `GraphKeys` class
+        /// </param>
+        /// <param name="scope"></param>
+        /// <returns>
+        /// The list of values in the collection with the given `name`, or
+        /// an empty list if no value has been added to that collection. The
+        /// list contains the values in the order under which they were
+        /// collected.
+        /// </returns>
+        public static object get_collection(string key, string scope = "")
         {
-            return get_default_graph().get_collection(key);
+            return get_default_graph().get_collection(key, scope);
         }
 
         public static Graph get_default_graph()

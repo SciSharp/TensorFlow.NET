@@ -288,7 +288,7 @@ namespace Tensorflow
             return _nodes_by_name.Values.Select(x => x).ToArray();
         }
 
-        public object get_collection(string name)
+        public object get_collection(string name, string scope = "")
         {
             return _collections.ContainsKey(name) ? _collections[name] : null;
         }
