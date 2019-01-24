@@ -27,9 +27,11 @@ namespace Tensorflow
         /// special tokens filters by prefix.
         /// </param>
         /// <returns>A list of `Variable` objects.</returns>
-        public static object global_variables(string scope = "")
+        public static List<RefVariable> global_variables(string scope = "")
         {
-            return ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope);
+            var result = ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope);
+
+            return result as List<RefVariable>;
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace Tensorflow
         /// <returns>An Op that run the initializers of all the specified variables.</returns>
         public static Operation variables_initializer(RefVariable[] var_list, string name = "init")
         {
-            return control_flow_ops.group(var_list.Select(x => x.initializer).ToArray());
+            return control_flow_ops.group(var_list.Select(x => x.initializer).ToList());
         }
     }
 }

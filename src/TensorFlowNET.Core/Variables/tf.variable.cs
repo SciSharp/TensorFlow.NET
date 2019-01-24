@@ -9,7 +9,7 @@ namespace Tensorflow
         public static Operation global_variables_initializer()
         {
             var g = variables.global_variables();
-            return variables.variables_initializer(g as RefVariable[]);
+            return variables.variables_initializer(g.ToArray());
         }
     }
 }
