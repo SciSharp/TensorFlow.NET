@@ -17,6 +17,8 @@ namespace Tensorflow
         public Operation initializer => _initializer_op;
         public Operation op => _initializer_op;
 
+        public string name => _variable.name;
+
         public RefVariable(object initial_value,
             bool trainable = true,
             List<string> collections = null,
