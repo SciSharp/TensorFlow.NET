@@ -40,7 +40,12 @@ namespace Tensorflow
             return _run(fetches, feed_dict);
         }
 
-        private NDArray _run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
+        public virtual NDArray run(Operation fetches, Dictionary<Tensor, NDArray> feed_dict = null)
+        {
+            return _run(fetches, feed_dict);
+        }
+
+        private NDArray _run<T>(T fetches, Dictionary<Tensor, NDArray> feed_dict = null)
         {
             var feed_dict_tensor = new Dictionary<Tensor, NDArray>();
 
@@ -53,7 +58,7 @@ namespace Tensorflow
             }
 
             // Create a fetch handler to take care of the structure of fetches.
-            var fetch_handler = new _FetchHandler(_graph, fetches, feed_dict_tensor);
+            var fetch_handler = new _FetchHandler<T>(_graph, fetches, feed_dict_tensor);
 
             // Run request and get response.
             // We need to keep the returned movers alive for the following _do_run().
@@ -65,20 +70,34 @@ namespace Tensorflow
 
             // We only want to really perform the run if fetches or targets are provided,
             // or if the call is a partial run that specifies feeds.
-            var results = _do_run(final_fetches, feed_dict_tensor);
+            var results = _do_run(final_targets.Select(x => (Operation)(object)x).ToList(), final_fetches, feed_dict_tensor);
 
             return fetch_handler.build_results(null, results);
         }
 
-        private NDArray[] _do_run(List<Tensor> fetch_list, Dictionary<Tensor, NDArray> feed_dict)
+        /// <summary>
+        /// Runs a step based on the given fetches and feeds.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target_list">A list of operations to be run, but not fetched.</param>
+        /// <param name="fetch_list"></param>
+        /// <param name="feed_dict"></param>
+        /// <returns>
+        /// A list of numpy ndarrays, corresponding to the elements of
+        /// `fetch_list`.  If the ith element of `fetch_list` contains the
+        /// name of an operation, the first Tensor output of that operation
+        /// will be returned for that element.
+        /// </returns>
+        private NDArray[] _do_run(List<Operation> target_list, List<Tensor> fetch_list, Dictionary<Tensor, NDArray> feed_dict)
         {
             var feeds = feed_dict.Select(x => new KeyValuePair<TF_Output, Tensor>(x.Key._as_tf_output(), new Tensor(x.Value))).ToArray();
             var fetches = fetch_list.Select(x => x._as_tf_output()).ToArray();
+            var targets = target_list;
 
-            return _call_tf_sessionrun(feeds, fetches);
+            return _call_tf_sessionrun(feeds, fetches, target_list);
         }
 
-        private unsafe NDArray[] _call_tf_sessionrun(KeyValuePair<TF_Output, Tensor>[] feed_dict, TF_Output[] fetch_list)
+        private unsafe NDArray[] _call_tf_sessionrun(KeyValuePair<TF_Output, Tensor>[] feed_dict, TF_Output[] fetch_list, List<Operation> target_list)
         {
             // Ensure any changes to the graph are reflected in the runtime.
             _extend_graph();
@@ -95,8 +114,8 @@ namespace Tensorflow
                 outputs: fetch_list,
                 output_values: output_values,
                 noutputs: fetch_list.Length,
-                target_opers: IntPtr.Zero,
-                ntargets: 0,
+                target_opers: target_list.Select(f => (IntPtr)f).ToArray(),
+                ntargets: target_list.Count,
                 run_metadata: IntPtr.Zero,
                 status: status);
 

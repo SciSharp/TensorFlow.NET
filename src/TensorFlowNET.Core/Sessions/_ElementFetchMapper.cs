@@ -8,26 +8,37 @@ namespace Tensorflow
     /// <summary>
     /// Fetch mapper for singleton tensors and ops.
     /// </summary>
-    public class _ElementFetchMapper : _FetchMapper
+    public class _ElementFetchMapper<T> : _FetchMapper<T>
     {
-        private List<Object> _unique_fetches = new List<object>();
-        private Action _contraction_fn;
+        private List<object> _unique_fetches = new List<object>();
+        private Func<List<object>> _contraction_fn;
 
-        public _ElementFetchMapper(List<Tensor> fetches, Action contraction_fn)
+        public _ElementFetchMapper(List<T> fetches, Func<List<object>> contraction_fn)
         {
-            foreach(var tensor in fetches)
+            foreach(var fetch in fetches)
             {
-                var fetch = ops.get_default_graph().as_graph_element(tensor, allow_tensor: true, allow_operation: true);
-                _unique_fetches.Add(fetch);
+                var g = ops.get_default_graph();
+                var el = g.as_graph_element(fetch, allow_tensor: true, allow_operation: true);
+                _unique_fetches.Add(el);
             }
+
+            _contraction_fn = contraction_fn;
         }
 
-        public NDArray build_results(NDArray[] values)
+        /// <summary>
+        /// Build results matching the original fetch shape.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public NDArray build_results(List<object> values)
         {
-            return values[0];
+            if (values.Count == 0)
+                return null;
+            else
+                return _contraction_fn(values);
         }
 
-        public List<Object> unique_fetches()
+        public List<object> unique_fetches()
         {
             return _unique_fetches;
         }

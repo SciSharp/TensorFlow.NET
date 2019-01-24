@@ -77,15 +77,26 @@ namespace Tensorflow
 
             var temp_obj = _as_graph_element(obj);
 
-            if(obj is Tensor && allow_tensor)
+            if (obj is Tensor tensor && allow_tensor)
             {
-                if ((obj as Tensor).Graph.Equals(this))
+                if (tensor.Graph.Equals(this))
                 {
                     return obj;
                 }
                 else
                 {
                     throw new Exception($"Tensor {obj} is not an element of this graph.");
+                }
+            }
+            else if (obj is Operation op && allow_operation)
+            {
+                if (op.Graph.Equals(this))
+                {
+                    return obj;
+                }
+                else
+                {
+                    throw new Exception($"Operation {obj} is not an element of this graph.");
                 }
             }
 

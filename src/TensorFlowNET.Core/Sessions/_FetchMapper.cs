@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class _FetchMapper
+    public class _FetchMapper<T>
     {
-        public _ElementFetchMapper for_fetch(Tensor fetch)
+        public _ElementFetchMapper<T> for_fetch(T fetch)
         {
-            var fetches = new List<Tensor> { fetch };
+            var fetches = new List<T> { fetch };
 
-            return new _ElementFetchMapper(fetches, null);
+            return new _ElementFetchMapper<T>(fetches, null);
         }
     }
 }
