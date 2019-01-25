@@ -42,7 +42,7 @@ namespace Tensorflow
 
             _execute.record_gradient("VariableV2", _inputs_flat, _attrs, _result, name);
 
-            return new Tensor(_op, 0, dtype);
+            return _result[0];
         }
 
         /// <summary>

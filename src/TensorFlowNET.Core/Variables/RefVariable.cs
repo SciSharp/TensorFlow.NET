@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
@@ -69,14 +70,15 @@ namespace Tensorflow
                 {
 
                 }
+                // Or get the initial value from a Tensor or Python object.
                 else
                 {
                     _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value");
-                }
 
-                var shape = _initial_value.shape;
-                dtype = _initial_value.dtype;
-                _variable = gen_state_ops.variable_v2(shape, dtype, name);
+                    var shape = _initial_value.shape;
+                    dtype = _initial_value.dtype;
+                    _variable = gen_state_ops.variable_v2(shape, dtype, name);
+                }
 
                 // Manually overrides the variable's shape with the initial value's.
                 if (validate_shape)
@@ -87,8 +89,9 @@ namespace Tensorflow
                 // If 'initial_value' makes use of other variables, make sure we don't
                 // have an issue if these other variables aren't initialized first by
                 // using their initialized_value() method.
+                var _initial_value2 = _try_guard_against_uninitialized_dependencies(_initial_value);
 
-                _initializer_op = gen_state_ops.assign(_variable, _initial_value, validate_shape).op;
+                _initializer_op = gen_state_ops.assign(_variable, _initial_value2, validate_shape).op;
 
                 if (!String.IsNullOrEmpty(caching_device))
                 {
@@ -111,6 +114,52 @@ namespace Tensorflow
         public Tensor _AsTensor()
         {
             return _snapshot;
+        }
+
+        /// <summary>
+        /// Attempt to guard against dependencies on uninitialized variables.
+        /// </summary>
+        /// <param name="initial_value"></param>
+        private Tensor _try_guard_against_uninitialized_dependencies(Tensor initial_value)
+        {
+            return _safe_initial_value_from_tensor(initial_value, new Dictionary<string, Operation>());
+        }
+
+        /// <summary>
+        /// Replace dependencies on variables with their initialized values.
+        /// </summary>
+        /// <param name="tensor">A `Tensor`. The tensor to replace.</param>
+        /// <param name="op_cache">A dict mapping operation names to `Operation`s.</param>
+        /// <returns>A `Tensor` compatible with `tensor`.</returns>
+        private Tensor _safe_initial_value_from_tensor(Tensor tensor, Dictionary<string, Operation> op_cache)
+        {
+            var op = tensor.op;
+            var new_op = op_cache.ContainsKey(op.Name) ? op_cache[op.Name] : null;
+            if(new_op == null)
+            {
+                new_op = _safe_initial_value_from_op(op, op_cache);
+                op_cache[op.Name] = new_op;
+            }
+            return new_op.outputs[tensor.value_index];
+        }
+
+        private Operation _safe_initial_value_from_op(Operation op, Dictionary<string, Operation> op_cache)
+        {
+            var op_type = op.node_def.Op;
+            switch (op_type)
+            {
+                case "IsVariableInitialized":
+                case "VarIsInitializedOp":
+                case "ReadVariableOp":
+                    return op;
+                case "Variable":
+                case "VariableV2":
+                case "VarHandleOp":
+                    break;
+            }
+
+            // Recursively build initializer expressions for inputs.
+            return op;
         }
     }
 }

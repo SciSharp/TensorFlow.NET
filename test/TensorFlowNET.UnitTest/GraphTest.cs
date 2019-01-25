@@ -130,7 +130,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             // Serialize to NodeDef.
-            var node_def = neg.GetNodeDef();
+            var node_def = neg.node_def;
 
             // Validate NodeDef is what we expect.
             ASSERT_TRUE(c_test_util.IsNeg(node_def, "add"));
@@ -145,13 +145,13 @@ namespace TensorFlowNET.UnitTest
             // Look up some nodes by name.
             Operation neg2 = c_api.TF_GraphOperationByName(graph, "neg");
             EXPECT_EQ(neg, neg2);
-            var node_def2 = neg2.GetNodeDef();
+            var node_def2 = neg2.node_def;
             EXPECT_EQ(node_def.ToString(), node_def2.ToString());
 
             Operation feed2 = c_api.TF_GraphOperationByName(graph, "feed");
             EXPECT_EQ(feed, feed2);
-            node_def = feed.GetNodeDef();
-            node_def2 = feed2.GetNodeDef();
+            node_def = feed.node_def;
+            node_def2 = feed2.node_def;
             EXPECT_EQ(node_def.ToString(), node_def2.ToString());
 
             // Test iterating through the nodes of a graph.
@@ -186,7 +186,7 @@ namespace TensorFlowNET.UnitTest
                 }
                 else
                 {
-                    node_def = oper.GetNodeDef();
+                    node_def = oper.node_def;
                     Assert.Fail($"Unexpected Node: {node_def.ToString()}");
                 }
             }

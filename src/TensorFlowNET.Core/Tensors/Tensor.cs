@@ -162,6 +162,7 @@ namespace Tensorflow
             this.op = op;
             this.value_index = value_index;
             this._dtype = dtype;
+            _id = ops.uid();
         }
 
         public List<Operation> consumers()

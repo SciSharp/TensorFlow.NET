@@ -36,6 +36,8 @@ namespace Tensorflow
         TF_UINT32 = 22,
         TF_UINT64 = 23,
 
+        DtFloatRef = 101, // DT_FLOAT_REF
         DtDoubleRef = 102, // DT_DOUBLE_REF
+        DtInt32Ref = 103, // DT_INT32_REF
     }
 }

@@ -36,7 +36,7 @@ namespace Tensorflow
             var handle = Marshal.AllocHGlobal(size);
             int num = c_api.TF_OperationOutputConsumers(new TF_Output(_handle, index), handle, max_consumers);
             var consumers = new TF_Input[num];
-            for(int i = 0; i < num; i++)
+            for (int i = 0; i < num; i++)
             {
                 consumers[i] = Marshal.PtrToStructure<TF_Input>(handle + i * size);
             }
@@ -50,7 +50,7 @@ namespace Tensorflow
         {
             var control_inputs = new Operation[NumControlInputs];
 
-            if(NumControlInputs > 0)
+            if (NumControlInputs > 0)
             {
                 IntPtr control_input_handle = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>() * NumControlInputs);
                 c_api.TF_OperationGetControlInputs(_handle, control_input_handle, NumControlInputs);
@@ -70,7 +70,7 @@ namespace Tensorflow
         {
             var control_outputs = new Operation[NumControlOutputs];
 
-            if(NumControlOutputs > 0)
+            if (NumControlOutputs > 0)
             {
                 IntPtr control_output_handle = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>() * NumControlOutputs);
                 c_api.TF_OperationGetControlOutputs(_handle, control_output_handle, NumControlInputs);
@@ -89,7 +89,7 @@ namespace Tensorflow
         {
             get
             {
-                if(_outputs == null)
+                if (_outputs == null)
                 {
                     _outputs = new Tensor[NumOutputs];
 
@@ -106,7 +106,7 @@ namespace Tensorflow
         {
             get
             {
-                if(_inputs == null)
+                if (_inputs == null)
                 {
                     var retval = new Tensor[NumInputs];
 
@@ -121,6 +121,18 @@ namespace Tensorflow
                 }
 
                 return _inputs;
+            }
+        }
+
+        private NodeDef _node_def;
+        public NodeDef node_def
+        {
+            get
+            {
+                if(_node_def == null)
+                    _node_def = GetNodeDef();
+
+                return _node_def;
             }
         }
 
@@ -195,7 +207,7 @@ namespace Tensorflow
             return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s);
         }
 
-        public NodeDef GetNodeDef()
+        private NodeDef GetNodeDef()
         {
             using (var s = new Status())
             using (var buffer = new Buffer())
