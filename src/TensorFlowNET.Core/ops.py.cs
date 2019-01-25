@@ -174,9 +174,16 @@ namespace Tensorflow
             // outer_device_stack = None
         }
 
+        private static int uid_number = 0;
+
+        /// <summary>
+        /// A unique (within this program execution) integer.
+        /// Not thread safe
+        /// </summary>
+        /// <returns></returns>
         public static int uid()
         {
-            return 1;
+            return uid_number++;
         }
     }
 }

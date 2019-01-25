@@ -37,15 +37,10 @@ namespace Tensorflow
         {
             _handle = c_api.TF_NewGraph();
             Status = new Status();
-        }
-
-        public Graph(IntPtr graph)
-        {
-            _handle = graph;
-            Status = new Status();
             _nodes_by_id = new Dictionary<int, Operation>();
             _nodes_by_name = new Dictionary<string, Operation>();
             _names_in_use = new Dictionary<string, int>();
+            _graph_key = $"grap-key-{ops.uid()}/";
         }
 
         public T as_graph_element<T>(T obj, bool allow_tensor = true, bool allow_operation = true)

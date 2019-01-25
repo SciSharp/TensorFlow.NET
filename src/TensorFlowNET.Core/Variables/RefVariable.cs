@@ -28,6 +28,8 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid) : 
             base(initial_value, trainable, collections, validate_shape, caching_device, name, dtype)
         {
+            _in_graph_mode = true;
+
             _init_from_args(initial_value, trainable, collections, validate_shape, caching_device, name, dtype);
         }
 

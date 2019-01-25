@@ -15,7 +15,7 @@ namespace Tensorflow
 
         public static Context context;
 
-        public static Graph g = new Graph(c_api.TF_NewGraph());
+        public static Graph g = new Graph();
 
         public static RefVariable Variable<T>(T data, string name = "", TF_DataType dtype = TF_DataType.DtInvalid)
         {
