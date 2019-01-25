@@ -124,6 +124,8 @@ namespace Tensorflow
             }
         }
 
+        private TF_DataType[] _input_types => _inputs._inputs.Select(x => x.dtype).ToArray();
+
         private NodeDef _node_def;
         public NodeDef node_def
         {

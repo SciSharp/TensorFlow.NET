@@ -72,7 +72,13 @@ namespace Tensorflow
                         }
                         else
                         {
-                            input_types.Add(value.dtype);
+                            var base_type = value.dtype;
+                            // base type
+                            if ((int)value.dtype > 100)
+                            {
+                                base_type = (TF_DataType)Enum.Parse(typeof(TF_DataType), ((int)value.dtype - 100).ToString());
+                            }
+                            input_types.Add(base_type);
                         }
                     }
                 }

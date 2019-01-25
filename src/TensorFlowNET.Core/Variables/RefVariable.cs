@@ -99,6 +99,8 @@ namespace Tensorflow
                 }
                 else
                 {
+                    ops.colocate_with(_initializer_op);
+
                     _snapshot = gen_array_ops.identity(_variable, name = "read");
                 }
 

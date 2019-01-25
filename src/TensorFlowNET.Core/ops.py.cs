@@ -185,5 +185,16 @@ namespace Tensorflow
         {
             return uid_number++;
         }
+
+        public static void colocate_with(Operation op, bool ignore_existing = false)
+        {
+            _colocate_with_for_gradient(op, null, ignore_existing);
+        }
+
+        private static void _colocate_with_for_gradient(Operation op, int? gradient_uid, bool ignore_existing = false)
+        {
+            var default_graph = get_default_graph();
+            default_graph._colocate_with_for_gradient(op, gradient_uid, ignore_existing);
+        }
     }
 }
