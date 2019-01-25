@@ -25,10 +25,5 @@ namespace Tensorflow
         {
             return new Tensor(handle);
         }
-
-        public static implicit operator Tensor(RefVariable var)
-        {
-            return var._initial_value;
-        }
     }
 }

@@ -11,9 +11,9 @@ namespace Tensorflow
     public class _ElementFetchMapper<T> : _FetchMapper<T>
     {
         private List<object> _unique_fetches = new List<object>();
-        private Func<List<object>, NDArray> _contraction_fn;
+        private Func<List<object>, object> _contraction_fn;
 
-        public _ElementFetchMapper(List<T> fetches, Func<List<object>, NDArray> contraction_fn)
+        public _ElementFetchMapper(List<T> fetches, Func<List<object>, object> contraction_fn)
         {
             foreach(var fetch in fetches)
             {
@@ -32,10 +32,22 @@ namespace Tensorflow
         /// <returns></returns>
         public NDArray build_results(List<object> values)
         {
-            if (values.Count == 0)
-                return null;
-            else
-                return _contraction_fn(values);
+            NDArray result = null;
+
+            if (values.Count > 0)
+            {
+                var ret = _contraction_fn(values);
+                switch (ret)
+                {
+                    case NDArray value:
+                        result = value;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return result;
         }
 
         public List<object> unique_fetches()

@@ -38,8 +38,8 @@ namespace TensorFlowNET.UnitTest
                 session.run(model);
                 for(int i = 0; i < 5; i++)
                 {
-                    // x = x + 1;
-                    var result = session.run(x);
+                    var x1 = x + 1;
+                    var result = session.run(x1);
                     print(result);
                 }
             }

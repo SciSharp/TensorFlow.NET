@@ -59,7 +59,14 @@ namespace Tensorflow
             return get_default_graph();
         }
 
-        public static Tensor convert_to_tensor(object value, string name = "")
+        /// <summary>
+        /// Converts the given `value` to a `Tensor`.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
         {
             switch (value)
             {
@@ -67,7 +74,7 @@ namespace Tensorflow
                     return val;
                 default:
                     var nd = tensor_util.convert_to_numpy_ndarray(value);
-                    return tf.constant(nd, name);
+                    return constant_op.Constant(nd, name);
             }
         }
 

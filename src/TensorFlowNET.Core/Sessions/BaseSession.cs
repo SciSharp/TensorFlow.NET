@@ -72,7 +72,7 @@ namespace Tensorflow
             // or if the call is a partial run that specifies feeds.
             var results = _do_run(final_targets.Select(x => (Operation)(object)x).ToList(), final_fetches, feed_dict_tensor);
 
-            return fetch_handler.build_results(null, results);
+            return fetch_handler.build_results(this, results);
         }
 
         /// <summary>

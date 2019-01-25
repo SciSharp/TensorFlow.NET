@@ -10,7 +10,10 @@ namespace Tensorflow
         {
             var fetches = new List<T> { fetch };
 
-            return new _ElementFetchMapper<T>(fetches, null);
+            return new _ElementFetchMapper<T>(fetches, (List<object> fetched_vals) =>
+            {
+                return fetched_vals[0];
+            });
         }
     }
 }

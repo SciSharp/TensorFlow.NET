@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class RefVariable : VariableV1
+    public partial class RefVariable : VariableV1
     {
         public bool _in_graph_mode = true;
         public Tensor _initial_value;
@@ -106,14 +106,9 @@ namespace Tensorflow
             return _variable;
         }
 
-        public static implicit operator _VariableScopeStore(RefVariable variable)
+        public Tensor _AsTensor()
         {
-            return null;
-        }
-
-        public static implicit operator RefVariable(_VariableScopeStore store)
-        {
-            return null;
+            return _snapshot;
         }
     }
 }
