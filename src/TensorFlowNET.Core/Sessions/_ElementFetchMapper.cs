@@ -11,9 +11,9 @@ namespace Tensorflow
     public class _ElementFetchMapper<T> : _FetchMapper<T>
     {
         private List<object> _unique_fetches = new List<object>();
-        private Func<List<object>> _contraction_fn;
+        private Func<List<object>, NDArray> _contraction_fn;
 
-        public _ElementFetchMapper(List<T> fetches, Func<List<object>> contraction_fn)
+        public _ElementFetchMapper(List<T> fetches, Func<List<object>, NDArray> contraction_fn)
         {
             foreach(var fetch in fetches)
             {
