@@ -49,7 +49,7 @@ namespace TensorFlowNET.UnitTest
 
             using (var session = tf.Session())
             {
-                var sm = session.run(model);
+                session.run(x.initializer);
                 for(int i = 0; i < 5; i++)
                 {
                     var x1 = x + 1;
