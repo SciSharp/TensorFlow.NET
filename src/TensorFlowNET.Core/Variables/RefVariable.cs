@@ -18,6 +18,7 @@ namespace Tensorflow
         public Operation initializer => _initializer_op;
         public Operation op => _variable.op;
         public TF_DataType dtype => _variable.dtype;
+        public TensorShape shape => tensor_util.to_shape(_variable.shape);
 
         public string name => _variable.name;
 

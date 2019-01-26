@@ -89,6 +89,11 @@ namespace Tensorflow
             return shape;
         }
 
+        public static TensorShape to_shape(long[] dims)
+        {
+            return new TensorShape(dims.Select(x => (int)x).ToArray());
+        }
+
         public static TensorShape as_shape(this IShape shape, int[] dims)
         {
             return new TensorShape(dims);
