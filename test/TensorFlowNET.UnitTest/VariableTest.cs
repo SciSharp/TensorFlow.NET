@@ -3,12 +3,26 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using NumSharp.Core;
 
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
     public class VariableTest : Python
     {
+        [TestMethod]
+        public void Initializer()
+        {
+            var x = tf.Variable(10, name: "x");
+            
+            using (var session = tf.Session())
+            {
+                session.run(x.initializer);
+                var result = session.run(x);
+                Assert.AreEqual(10, (int)result);
+            }
+        }
+
         [TestMethod]
         public void StringVar()
         {
@@ -43,7 +57,6 @@ namespace TensorFlowNET.UnitTest
                     print(result);
                 }
             }
-
         }
     }
 }
