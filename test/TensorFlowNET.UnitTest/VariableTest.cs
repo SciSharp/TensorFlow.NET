@@ -29,7 +29,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void Add()
         {
-            var x = tf.Variable(0, name: "x");
+            var x = tf.Variable(10, name: "x");
 
             var model = tf.global_variables_initializer();
 

@@ -72,12 +72,8 @@ namespace Tensorflow
                         }
                         else
                         {
-                            var base_type = value.dtype;
-                            // base type
-                            if ((int)value.dtype > 100)
-                            {
-                                base_type = (TF_DataType)Enum.Parse(typeof(TF_DataType), ((int)value.dtype - 100).ToString());
-                            }
+                            var base_type = value.dtype.as_base_dtype();
+                            
                             input_types.Add(base_type);
                         }
                     }
@@ -151,7 +147,7 @@ namespace Tensorflow
 
         public DataType _MakeType(TF_DataType v, AttrDef attr_def)
         {
-            return v.as_datatype_enum();
+            return v.as_base_dtype().as_datatype_enum();
         }
     }
 }

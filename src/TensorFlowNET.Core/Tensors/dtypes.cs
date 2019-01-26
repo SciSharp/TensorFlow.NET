@@ -24,6 +24,7 @@ namespace Tensorflow
                     throw new NotImplementedException("as_numpy_datatype failed");
             }
         }
+
         public static TF_DataType as_dtype(Type type)
         {
             TF_DataType dtype = TF_DataType.DtInvalid;
@@ -61,6 +62,13 @@ namespace Tensorflow
             }
 
             return dtype;
+        }
+
+        public static TF_DataType as_base_dtype(this TF_DataType type)
+        {
+            return (int)type > 100 ?
+                (TF_DataType)Enum.Parse(typeof(TF_DataType), ((int)type - 100).ToString()) :
+                type;
         }
     }
 }
