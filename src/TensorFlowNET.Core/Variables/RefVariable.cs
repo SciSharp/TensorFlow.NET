@@ -17,6 +17,7 @@ namespace Tensorflow
         private Operation _initializer_op;
         public Operation initializer => _initializer_op;
         public Operation op => _variable.op;
+        public Graph graph => _variable.Graph;
         public TF_DataType dtype => _variable.dtype;
         public TensorShape shape => tensor_util.to_shape(_variable.shape);
 
