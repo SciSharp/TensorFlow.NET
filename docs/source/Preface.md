@@ -1,6 +1,6 @@
 
 
-# Preface 序
+# Preface
 
 
 
@@ -32,4 +32,4 @@ TensorFlow is an open source project for machine learning especially for deep le
 
 TF: Google TensorFlow
 
-TF.NET: Tensorflow.NET
+TF.NET: TensorFlow.NET

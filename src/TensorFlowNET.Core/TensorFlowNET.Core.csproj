@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
-    <Version>0.0.3</Version>
+    <Version>0.1.0</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -16,8 +16,9 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET</PackageTags>
     <Description>Google's TensorFlow binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.0.3.0</AssemblyVersion>
-    <PackageReleaseNotes>API updated</PackageReleaseNotes>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <PackageReleaseNotes>Implemented the tf.Variable().
+TensorFlow 1.13 RC.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 

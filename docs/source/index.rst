@@ -28,3 +28,8 @@ Indices and tables
    Preface
    HelloWorld
    Tensor
+   Constant
+   Variable
+   Operation
+   Graph
+   Session

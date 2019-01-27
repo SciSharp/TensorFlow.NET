@@ -1,10 +1,16 @@
 # 	Get started with TensorFlow.NET
 
-让我们先运行一个经典的HelloWorld程序，看看TensorFlow在.NET上面运行的效果，我想不出有比做个HelloWorld更简单的方式了。
+I would describe TensorFlow as an open source machine learning framework developed by Google which can be used to build neural networks and perform a variety of machine learning tasks. it works on data flow graph where nodes are the mathematical operations and the edges are the data in the form of tensor, hence the name Tensor-Flow. 
+
+按照我的理解，TensorFlow是Google公司开发的一个开源机器学习框架，可以用来搭建神经网络模型和其它传统机器学习模型，它采用了图计算模型，图的节点和边分别代表了操作和数据输入或输出，数据在图的单个方向传递，因此这个过程形象地取名叫做TensorFlow。
 
 Let's run a classic HelloWorld program first and see if TensorFlow is running on .NET. I can't think of a simpler way to be a HelloWorld.
 
-### Install the TensorFlow.NET SDK 安装开发环境
+让我们先运行一个经典的HelloWorld程序，看看TensorFlow在.NET上面运行的效果，我想不出有比做个HelloWorld更简单的方式了。
+
+
+
+### Install the TensorFlow.NET SDK
 
 TensorFlow.NET uses the .NET Standard 2.0 standard, so your new project Target Framework can be .NET Framework or .NET Core.  All the examples in this book are using .NET Core 2.2 and Microsoft Visual Studio Community 2017. To start building TensorFlow program you just need to download and install the .NET SDK (Software Development Kit). You have to download the latest .NET Core SDK from offical website: https://dotnet.microsoft.com/download.
 
@@ -24,7 +30,7 @@ TensorFlow.NET采用.NET标准库2.0版本，因此你的新建工程可以是.N
 PM> Install-Package TensorFlow.NET
 ```
 
-### Start coding Hello World 开始编写Hello World
+### Start coding Hello World
 
 After installing the TensorFlow.NET package, you can use the `using Tensorflow` to introduce the TensorFlow library.
 
@@ -67,4 +73,8 @@ After CTRL + F5 run, you will get the output.
 Hello, TensorFlow!
 Press any key to continue . . .
 ```
+
+This sample code can be found at [here](https://github.com/SciSharp/TensorFlow.NET/blob/master/test/TensorFlowNET.Examples/HelloWorld.cs).
+
+此示例代码可以在[这里](https://github.com/SciSharp/TensorFlow.NET/blob/master/test/TensorFlowNET.Examples/HelloWorld.cs)找到。
 
