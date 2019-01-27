@@ -16,6 +16,11 @@ namespace Tensorflow
             return constant_op.Constant(scalar);
         }
 
+        public static implicit operator int(Tensor tensor)
+        {
+            return tensor.Data<int>()[0];
+        }
+
         public static implicit operator IntPtr(Tensor tensor)
         {
             return tensor._handle;

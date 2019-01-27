@@ -38,6 +38,10 @@ namespace Tensorflow
                 return;
 
             _handle = handle;
+
+            _outputs = new Tensor[NumOutputs];
+            for (int i = 0; i < NumOutputs; i++)
+                _outputs[i] = new Tensor(this, i, OutputType(i));
         }
 
         public Operation(Graph g, string opType, string oper_name)
@@ -99,7 +103,6 @@ namespace Tensorflow
 
             // Initialize self._outputs.
             output_types = new TF_DataType[NumOutputs];
-
             for (int i = 0; i < NumOutputs; i++)
                 output_types[i] = OutputType(i);
 

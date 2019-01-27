@@ -43,7 +43,8 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void Add()
         {
-            var x = tf.Variable(10, name: "x");
+            int result = 0;
+            Tensor x = tf.Variable(10, name: "x");
 
             var model = tf.global_variables_initializer();
             using (var session = tf.Session())
@@ -52,10 +53,12 @@ namespace TensorFlowNET.UnitTest
                 for(int i = 0; i < 5; i++)
                 {
                     x = x + 1;
-                    var result = session.run(x);
+                    result = session.run(x);
                     print(result);
                 }
             }
+
+            Assert.AreEqual(15, result);
         }
     }
 }
