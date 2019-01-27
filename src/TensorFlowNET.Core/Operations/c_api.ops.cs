@@ -35,6 +35,14 @@ namespace Tensorflow
         public static extern void TF_AddInput(IntPtr desc, TF_Output input);
 
         /// <summary>
+        /// Call once per control input to `desc`.
+        /// </summary>
+        /// <param name="desc">TF_OperationDescription*</param>
+        /// <param name="input">TF_Operation*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_AddControlInput(IntPtr desc, IntPtr input);
+
+        /// <summary>
         /// For inputs that take a list of tensors.
         /// inputs must point to TF_Output[num_inputs].
         /// </summary>

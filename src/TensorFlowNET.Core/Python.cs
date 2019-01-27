@@ -13,5 +13,30 @@ namespace Tensorflow
         {
             Console.WriteLine(obj.ToString());
         }
+
+        public static void with(IPython py, Action action)
+        {
+            try
+            {
+                py.__enter__();
+                action();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                py.__exit__();
+                py.Dispose();
+            }
+        }
+    }
+
+    public interface IPython : IDisposable
+    {
+        void __enter__();
+
+        void __exit__();
     }
 }

@@ -49,15 +49,53 @@ namespace Tensorflow
             c_api.TF_FinishOperation(desc, status);
         }
 
-        public Operation(NodeDef node_def, Graph g, List<Tensor> inputs = null, TF_DataType[] output_types = null, object control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
+        /// <summary>
+        /// Creates an `Operation`.
+        /// </summary>
+        /// <param name="node_def">`node_def_pb2.NodeDef`.  `NodeDef` for the `Operation`.</param>
+        /// <param name="g">`Graph`. The parent graph.</param>
+        /// <param name="inputs">list of `Tensor` objects. The inputs to this `Operation`.</param>
+        /// <param name="output_types">list of `DType` objects.</param>
+        /// <param name="control_inputs">
+        /// list of operations or tensors from which to have a
+        /// control dependency.
+        /// </param>
+        /// <param name="input_types">
+        /// List of `DType` objects representing the
+        /// types of the tensors accepted by the `Operation`. By default
+        /// uses `[x.dtype.base_dtype for x in inputs]`.  Operations that expect
+        /// reference-typed inputs must specify these explicitly.
+        /// </param>
+        /// <param name="original_op"></param>
+        /// <param name="op_def"></param>
+        public Operation(NodeDef node_def, Graph g, List<Tensor> inputs = null, TF_DataType[] output_types = null, Operation[] control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
             Graph = g;
+
+            // Build the list of control inputs.
+            var control_input_ops = new List<Operation>();
+            if(control_inputs != null)
+            {
+                foreach(var c in control_inputs)
+                {
+                    switch (c)
+                    {
+                        case Operation c1:
+                            control_input_ops.Add(c1);
+                            break;
+                        default:
+                            throw new NotImplementedException($"Control input must be an Operation, a Tensor, or IndexedSlices: {c}");
+                    }
+                }
+            }
+
+            // This will be set by self.inputs.
 
             _id_value = Graph._next_id();
             if(op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
 
-            _handle = ops._create_c_op(g, node_def, inputs);
+            _handle = ops._create_c_op(g, node_def, inputs, control_input_ops.ToArray());
 
             output_types = new TF_DataType[NumOutputs];
 

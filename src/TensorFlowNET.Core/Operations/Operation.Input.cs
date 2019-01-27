@@ -39,6 +39,14 @@ namespace Tensorflow
 
         public int NumControlInputs => c_api.TF_OperationNumControlInputs(_handle);
 
+        public Operation[] control_inputs
+        {
+            get
+            {
+                return GetControlInputs();
+            }
+        }
+
         public unsafe Operation[] GetControlInputs()
         {
             var control_inputs = new Operation[NumControlInputs];

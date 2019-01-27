@@ -20,5 +20,10 @@ namespace Tensorflow
         {
             return var._AsTensor();
         }
+
+        public static implicit operator RefVariable(Tensor var)
+        {
+            return null;
+        }
     }
 }

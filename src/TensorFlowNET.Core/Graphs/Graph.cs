@@ -142,19 +142,9 @@ namespace Tensorflow
             return op;
         }
 
-        /// <summary>
-        /// For an op that takes `input_ops` as inputs, compute control inputs.
-        /// </summary>
-        /// <param name="input_ops">The data input ops for an op to be created.</param>
-        /// <returns>A list of control inputs for the op to be created.</returns>
-        private Operation[] _control_dependencies_for_inputs(Operation[] input_ops)
-        {
-            return new Operation[0];
-        }
-
         private void _create_op_helper(Operation op, bool compute_device = true)
         {
-
+            _record_op_seen_by_control_dependencies(op);
         }
 
         public void _add_op(Operation op)

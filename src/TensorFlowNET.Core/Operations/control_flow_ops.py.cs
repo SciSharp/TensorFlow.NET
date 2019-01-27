@@ -13,9 +13,8 @@ namespace Tensorflow
             {
                 name = namescope;
 
-                var ops_on_device = new Dictionary<string, Operation[]>();
-
                 // Sorts *inputs according to their devices.
+                var ops_on_device = new Dictionary<string, Operation[]>();
                 foreach (var inp in inputs)
                 {
                     ops_on_device[inp.Device] = new Operation[] { inp };
@@ -24,7 +23,9 @@ namespace Tensorflow
                 // 1-level tree. The root node is the returned NoOp node.
                 if (ops_on_device.Count == 1)
                 {
-                    return _GroupControlDeps(ops_on_device.Keys.First(), ops_on_device.Values.First(), name);
+                    var dev = ops_on_device.Keys.First();
+                    var deps = ops_on_device.Values.First();
+                    return _GroupControlDeps(dev, deps, name);
                 }
 
                 // 2-level tree. The root node is the returned NoOp node.
@@ -35,12 +36,21 @@ namespace Tensorflow
 
         private static Operation _GroupControlDeps(string dev, Operation[] deps, string name = "")
         {
-            if (string.IsNullOrEmpty(dev))
-            {
-                return gen_control_flow_ops.no_op(name);
-            }
+            Operation result = null;
 
-            return null;
+            Python.with(ops.control_dependencies(deps), delegate
+            {
+                if (string.IsNullOrEmpty(dev))
+                {
+                    result = gen_control_flow_ops.no_op(name);
+                }
+                else
+                {
+                    result = gen_control_flow_ops.no_op(name);
+                }
+            });
+
+            return result;
         }
     }
 }

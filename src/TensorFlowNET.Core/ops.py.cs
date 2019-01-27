@@ -78,7 +78,29 @@ namespace Tensorflow
             }
         }
 
-        public static unsafe IntPtr _create_c_op(Graph graph, NodeDef node_def, List<Tensor> inputs)
+        /// <summary>
+        /// Wrapper for `Graph.control_dependencies()` using the default graph.
+        /// </summary>
+        /// <param name="control_inputs"></param>
+        public static _ControlDependenciesController control_dependencies(Operation[] control_inputs)
+        {
+            return get_default_graph().control_dependencies(control_inputs);
+        }
+
+        /// <summary>
+        /// Creates a TF_Operation.
+        /// </summary>
+        /// <param name="graph">a `Graph`.</param>
+        /// <param name="node_def">`node_def_pb2.NodeDef` for the operation to create.</param>
+        /// <param name="inputs">
+        /// A list of `Tensor`s (corresponding to scalar inputs) and lists of
+        /// `Tensor`s (corresponding to sequence inputs, e.g. "int64 * N",
+        /// "list(int64)"). The length of the list should be equal to the number of
+        /// inputs specified by this operation's op def.
+        /// </param>
+        /// <param name="control_inputs">A list of `Operation`s to set as control dependencies.</param>
+        /// <returns>A wrapped TF_Operation*.</returns>
+        public static IntPtr _create_c_op(Graph graph, NodeDef node_def, List<Tensor> inputs, Operation[] control_inputs)
         {
             var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
 
@@ -102,6 +124,8 @@ namespace Tensorflow
             var status = new Status();
 
             // Add control inputs
+            foreach (var control_input in control_inputs)
+                c_api.TF_AddControlInput(op_desc, control_input);
 
             // Add attrs
             foreach (var attr in node_def.Attr)
@@ -170,8 +194,11 @@ namespace Tensorflow
             // inner_device_stack = default_graph._device_function_stack
             // var outer_context = default_graph.as_default;
 
-            var outer_graph = get_default_graph();
-            // outer_device_stack = None
+            Python.with(ops.control_dependencies(null), delegate
+            {
+                var outer_graph = get_default_graph();
+                // outer_device_stack = None
+            });
         }
 
         private static int uid_number = 0;

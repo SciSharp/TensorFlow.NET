@@ -166,5 +166,10 @@ namespace Tensorflow
             // Recursively build initializer expressions for inputs.
             return op;
         }
+
+        public override string ToString()
+        {
+            return $"tf.Variable '{name}' shape={shape} dtype={dtype}";
+        }
     }
 }
