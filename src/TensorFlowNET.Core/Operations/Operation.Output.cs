@@ -12,21 +12,7 @@ namespace Tensorflow
         public int OutputListLength(string name) => c_api.TF_OperationOutputListLength(_handle, name, status);
 
         private Tensor[] _outputs;
-        public Tensor[] outputs
-        {
-            get
-            {
-                if (_outputs == null)
-                {
-                    _outputs = new Tensor[NumOutputs];
-
-                    for (int i = 0; i < NumOutputs; i++)
-                        _outputs[i] = new Tensor(this, i, OutputType(i));
-                }
-
-                return _outputs;
-            }
-        }
+        public Tensor[] outputs => _outputs;
 
         public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);
         public int OutputNumConsumers(int index) => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, index));

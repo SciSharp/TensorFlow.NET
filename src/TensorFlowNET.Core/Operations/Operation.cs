@@ -8,7 +8,7 @@ namespace Tensorflow
 {
     public partial class Operation
     {
-        private readonly IntPtr _handle;
+        private readonly IntPtr _handle; // _c_op in python
 
         public Graph Graph { get; }
         public int _id => _id_value;
@@ -97,12 +97,20 @@ namespace Tensorflow
 
             _handle = ops._create_c_op(g, node_def, inputs, control_input_ops.ToArray());
 
+            // Initialize self._outputs.
             output_types = new TF_DataType[NumOutputs];
 
             for (int i = 0; i < NumOutputs; i++)
                 output_types[i] = OutputType(i);
 
+            _outputs = new Tensor[NumOutputs];
+            for (int i = 0; i < NumOutputs; i++)
+                _outputs[i] = new Tensor(this, i, OutputType(i));
+
             Graph._add_op(this);
+
+            if (_handle != IntPtr.Zero)
+                _control_flow_post_processing();
         }
 
         public object get_attr<T>(string name)

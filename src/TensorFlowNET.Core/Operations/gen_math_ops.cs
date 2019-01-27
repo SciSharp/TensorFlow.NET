@@ -18,7 +18,7 @@ namespace Tensorflow
 
             var _op = _op_def_lib._apply_op_helper("Add", keywords: keywords);
 
-            return new Tensor(_op, 0, _op.OutputType(0));
+            return _op.outputs[0];
         }
 
         public static Tensor sub(Tensor x, Tensor y)
@@ -29,7 +29,7 @@ namespace Tensorflow
 
             var _op = _op_def_lib._apply_op_helper("Sub", name: "sub", keywords: keywords);
 
-            return new Tensor(_op, 0, _op.OutputType(0));
+            return _op.outputs[0];
         }
 
         public static Tensor mul(Tensor x, Tensor y)
@@ -40,7 +40,7 @@ namespace Tensorflow
 
             var _op = _op_def_lib._apply_op_helper("Mul", keywords: keywords);
 
-            return new Tensor(_op, 0, _op.OutputType(0));
+            return _op.outputs[0];
         }
 
         public static Tensor real_div(Tensor x, Tensor y)
@@ -51,7 +51,7 @@ namespace Tensorflow
 
             var _op = _op_def_lib._apply_op_helper("RealDiv", name: "truediv", keywords: keywords);
 
-            return new Tensor(_op, 0, _op.OutputType(0));
+            return _op.outputs[0];
         }
 
         public static Tensor mat_mul(Tensor a, Tensor b, bool transpose_a = false, bool transpose_b = false)
@@ -64,7 +64,7 @@ namespace Tensorflow
 
             var _op = _op_def_lib._apply_op_helper("MatMul", keywords: keywords);
 
-            return new Tensor(_op, 0, _op.OutputType(0));
+            return _op.outputs[0];
         }
 
         public static Tensor pow(Tensor x, double y)
@@ -75,7 +75,7 @@ namespace Tensorflow
 
             var _op = _op_def_lib._apply_op_helper("Pow", keywords: keywords);
 
-            return new Tensor(_op, 0, _op.OutputType(0));
+            return _op.outputs[0];
         }
 
         public static Tensor sum(Tensor input, Tensor axis = null)
@@ -87,7 +87,7 @@ namespace Tensorflow
 
             var _op = _op_def_lib._apply_op_helper("Sum", keywords: keywords);
 
-            return new Tensor(_op, 0, _op.OutputType(0));
+            return _op.outputs[0];
         }
 
         /// <summary>
