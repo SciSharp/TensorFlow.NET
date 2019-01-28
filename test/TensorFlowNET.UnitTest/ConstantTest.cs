@@ -2,6 +2,7 @@
 using NumSharp.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow;
 
@@ -24,6 +25,17 @@ namespace TensorFlowNET.UnitTest
         public void StringConst()
         {
             tensor = tf.constant("Elephant");
+        }
+
+        [TestMethod]
+        public void ZerosConst()
+        {
+            tensor = tf.zeros(new Shape(3, 2), TF_DataType.TF_INT32, "x");
+            Assert.AreEqual(tensor.shape[0], 3);
+            Assert.AreEqual(tensor.shape[0], 2);
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 0, 0 }, tensor.Data<int>()));
+
+            tensor = tf.zeros(new Shape(200, 300), TF_DataType.TF_INT32, "x");
         }
 
         [TestMethod]

@@ -65,7 +65,7 @@ namespace Tensorflow
 
             ops.init_scope();
             var values = init_from_fn ? new List<object>() : new List<object> { initial_value };
-            using (var namescope = new ops.name_scope<object>(name, "Variable", values))
+            using (var namescope = new ops.name_scope(name, "Variable", values))
             {
                 name = namescope;
 

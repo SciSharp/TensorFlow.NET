@@ -50,7 +50,7 @@ namespace Tensorflow
             all.AddRange(grad_ys1);
 
             string grad_scope = "";
-            using (var namescope = new ops.name_scope<Tensor>(name, "gradients", values: all))
+            using (var namescope = new ops.name_scope(name, "gradients", values: all))
             {
                 grad_scope = namescope;
                 // Get a uid for this call to gradients that can be used to help

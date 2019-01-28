@@ -46,5 +46,37 @@ namespace Tensorflow
 
             return op.outputs[0];
         }
+
+        /// <summary>
+        /// Function to convert TensorShape to Tensor.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <param name="as_ref"></param>
+        /// <returns></returns>
+        public static Tensor _tensor_shape_tensor_conversion_function(TensorShape s, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
+        {
+            var s_list = s.Dimensions;
+            var int64_value = 0;
+            foreach(var dim in s_list)
+            {
+                if (dim > Math.Pow(2, 31))
+                {
+                    int64_value = dim;
+                    break;
+                }
+            }
+
+            if(int64_value > 0)
+            {
+                dtype = TF_DataType.TF_INT32;
+            }
+
+            if (string.IsNullOrEmpty(name))
+                name = "shape_as_tensor";
+
+            return constant_op.Constant(s_list, name);
+        }
     }
 }

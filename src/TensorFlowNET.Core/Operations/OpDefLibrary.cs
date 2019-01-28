@@ -41,7 +41,7 @@ namespace Tensorflow
             var input_types = new List<TF_DataType>();
 
             string scope = "";
-            using (var namescope = new ops.name_scope<object>(name))
+            using (var namescope = new ops.name_scope(name))
             {
                 scope = namescope;
 

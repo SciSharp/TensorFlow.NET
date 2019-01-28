@@ -36,13 +36,13 @@ namespace Tensorflow
         {
             Tensor rank;
             string name;
-            using (var namescop = new ops.name_scope<Tensor>("", "Rank", new List<Tensor> { input }))
+            using (var namescop = new ops.name_scope("", "Rank", new List<Tensor> { input }))
             {
                 name = namescop;
                 rank = gen_array_ops.rank(input, namescop);
             }
 
-            using (var namescope = new ops.name_scope<Tensor>("range", "Range", new List<Tensor> { 0D, input, 1D }))
+            using (var namescope = new ops.name_scope("range", "Range", new List<Tensor> { 0D, input, 1D }))
             {
                 name = namescope;
                 var start = ops.convert_to_tensor(0D);

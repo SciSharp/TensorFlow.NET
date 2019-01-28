@@ -55,5 +55,24 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+
+        /// <summary>
+        /// Creates a tensor filled with a scalar value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dims"></param>
+        /// <param name="value"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor fill<T>(int[] dims, T value, string name = "")
+        {
+            var keywords = new Dictionary<string, object>();
+            keywords.Add("dims", dims);
+            keywords.Add("value", value);
+
+            var _op = _op_def_lib._apply_op_helper("Fill", name);
+
+            return _op.outputs[0];
+        }
     }
 }

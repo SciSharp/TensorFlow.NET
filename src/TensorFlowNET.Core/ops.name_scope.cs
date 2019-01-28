@@ -7,7 +7,7 @@ namespace Tensorflow
 {
     public partial class ops
     {
-        public class name_scope<T> : IDisposable
+        public class name_scope : IPython
         {
             public string _name;
             public string _default_name;
@@ -16,7 +16,7 @@ namespace Tensorflow
             public string _name_scope;
             private object _g_manager;
 
-            public name_scope(string name, string default_name = "", List<T> values = null)
+            public name_scope(string name, string default_name = "", object values = null)
             {
                 _name = name;
                 _default_name = default_name;
@@ -24,7 +24,7 @@ namespace Tensorflow
                 // _ctx = new Context();
             }
 
-            public string __enter__()
+            public void __enter__()
             {
                 if (String.IsNullOrEmpty(_name))
                 {
@@ -39,8 +39,6 @@ namespace Tensorflow
                     g = get_default_graph();
 
                 _name_scope = g.name_scope(_name);
-
-                return _name_scope;
             }
 
             public void Dispose()
@@ -51,16 +49,17 @@ namespace Tensorflow
                 g.old_stack = "";
             }
 
+            public void __exit__()
+            {
+            }
+
             /// <summary>
             /// __enter__()
             /// </summary>
             /// <param name="ns"></param>
-            public static implicit operator string(name_scope<T> ns)
+            public static implicit operator string(name_scope ns)
             {
-                if (string.IsNullOrEmpty(ns._name_scope))
-                    return ns.__enter__();
-                else
-                    return ns._name_scope;
+                return ns._name_scope;
             }
         }
     }

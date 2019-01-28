@@ -48,3 +48,13 @@ var tensor = tf.constant(nd);
 Now let's explore how constant works.
 
 现在让我探究一下`tf.constant`是怎么工作的。
+
+
+
+##### Other functions to create a Constant
+
+* tf.zeros
+* tf.zeros_like
+* tf.ones
+* tf.ones_like
+* tf.fill

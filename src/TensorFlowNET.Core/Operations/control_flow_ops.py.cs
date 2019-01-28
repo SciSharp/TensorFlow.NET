@@ -9,7 +9,7 @@ namespace Tensorflow
     {
         public static Operation group(List<Operation> inputs, string name = "")
         {
-            using(var namescope = new ops.name_scope<Operation>(name, "group_deps", inputs))
+            using(var namescope = new ops.name_scope(name, "group_deps", inputs))
             {
                 name = namescope;
 

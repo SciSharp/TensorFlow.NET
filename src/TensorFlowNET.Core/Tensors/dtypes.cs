@@ -70,5 +70,12 @@ namespace Tensorflow
                 (TF_DataType)Enum.Parse(typeof(TF_DataType), ((int)type - 100).ToString()) :
                 type;
         }
+
+        public static DataType as_base_dtype(this DataType type)
+        {
+            return (int)type > 100 ?
+                (DataType)Enum.Parse(typeof(DataType), ((int)type - 100).ToString()) :
+                type;
+        }
     }
 }

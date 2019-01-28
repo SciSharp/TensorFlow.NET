@@ -11,5 +11,10 @@ namespace Tensorflow
         {
             return constant_op.Constant(nd, name, verify_shape);
         }
+
+        public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = "")
+        {
+            return array_ops.zeros(shape, dtype, name);
+        }
     }
 }

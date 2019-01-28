@@ -14,12 +14,12 @@ namespace Tensorflow
             Console.WriteLine(obj.ToString());
         }
 
-        public static void with(IPython py, Action action)
+        public static void with(IPython py, Action<IPython> action)
         {
             try
             {
                 py.__enter__();
-                action();
+                action(py);
             }
             catch (Exception ex)
             {

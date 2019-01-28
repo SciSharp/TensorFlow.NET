@@ -18,7 +18,7 @@ namespace Tensorflow
             var tensor_proto = new tensor_pb2.TensorProto
             {
                 Dtype = numpy_dtype.as_datatype_enum(),
-                TensorShape = shape.as_shape(nd.shape).as_proto()
+                TensorShape = shape.reshape(nd.shape).as_proto()
             };
 
             switch (nd.dtype.Name)
@@ -94,7 +94,12 @@ namespace Tensorflow
             return new TensorShape(dims.Select(x => (int)x).ToArray());
         }
 
-        public static TensorShape as_shape(this IShape shape, int[] dims)
+        public static TensorShape as_shape(this IShape shape)
+        {
+            return new TensorShape(shape.Dimensions);
+        }
+
+        public static TensorShape reshape(this IShape shape, int[] dims)
         {
             return new TensorShape(dims);
         }
