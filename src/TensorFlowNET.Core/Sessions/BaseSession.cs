@@ -125,57 +125,47 @@ namespace Tensorflow
 
             for (int i = 0; i < fetch_list.Length; i++)
             {
-                var tensor = new Tensor(output_values[i]);
-                
-                switch (tensor.dtype)
-                {
-                    case TF_DataType.TF_STRING:
-                        {
-                            // wired, don't know why we have to start from offset 9.
-                            var bytes = tensor.Data();
-                            var output = UTF8Encoding.Default.GetString(bytes, 9, bytes.Length - 9);
-                            result[i] = fetchValue(tensor, output);
-                        }
-                        break;
-                    case TF_DataType.TF_FLOAT:
-                        {
-                            var output = *(float*)c_api.TF_TensorData(output_values[i]);
-                            result[i] = fetchValue(tensor, output);
-                        }
-                        break;
-                    case TF_DataType.TF_INT16:
-                        {
-                            var output = *(short*)c_api.TF_TensorData(output_values[i]);
-                            result[i] = fetchValue(tensor, output);
-                        }
-                        break;
-                    case TF_DataType.TF_INT32:
-                        {
-                            var output = *(int*)c_api.TF_TensorData(output_values[i]);
-                            result[i] = fetchValue(tensor, output);
-                        }
-                        break;
-                    default:
-                        throw new NotImplementedException("can't get output");
-                }
+                result[i] = fetchValue(output_values[i]);
             }
 
             return result;
         }
 
-        private NDArray fetchValue<T>(Tensor tensor, T output)
+        private unsafe NDArray fetchValue(IntPtr output)
         {
-            NDArray nd;
+            var tensor = new Tensor(output);
+            NDArray nd = null;
             Type type = tensor.dtype.as_numpy_datatype();
             var ndims = tensor.shape.Select(x => (int)x).ToArray();
 
-            if (tensor.NDims == 0)
+            switch (tensor.dtype)
             {
-                nd = np.array(output).reshape();
-            }
-            else
-            {
-                nd = np.array(output).reshape(ndims);
+                case TF_DataType.TF_STRING:
+                    var bytes = tensor.Data();
+                    // wired, don't know why we have to start from offset 9.
+                    var str = UTF8Encoding.Default.GetString(bytes, 9, bytes.Length - 9);
+                    nd = np.array(str).reshape();
+                    break;
+                case TF_DataType.TF_INT32:
+                    var ints = new int[tensor.size];
+                    for (ulong i = 0; i < tensor.size; i++)
+                        ints[i] = *(int*)(c_api.TF_TensorData(output) + (int)(tensor.dataTypeSize * i));
+                    nd = np.array(ints).reshape(ndims);
+                    break;
+                case TF_DataType.TF_FLOAT:
+                    var floats = new float[tensor.size];
+                    for (ulong i = 0; i < tensor.size; i++)
+                        floats[i] = *(float*)(c_api.TF_TensorData(output) + (int)(tensor.dataTypeSize * i));
+                    nd = np.array(floats).reshape(ndims);
+                    break;
+                case TF_DataType.TF_DOUBLE:
+                    var doubles = new double[tensor.size];
+                    for (ulong i = 0; i < tensor.size; i++)
+                        doubles[i] = *(double*)(c_api.TF_TensorData(output) + (int)(tensor.dataTypeSize * i));
+                    nd = np.array(doubles).reshape(ndims);
+                    break;
+                default:
+                    throw new NotImplementedException("can't fetch output");
             }
 
             return nd;

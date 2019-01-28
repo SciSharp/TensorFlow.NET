@@ -14,11 +14,7 @@ namespace Tensorflow
 
         public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = "")
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("dtype", dtype);
-            keywords.Add("shape", shape);
-
-            var _op = _op_def_lib._apply_op_helper("Placeholder", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Placeholder", args: new { dtype, shape });
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
 
@@ -38,20 +34,14 @@ namespace Tensorflow
         /// <param name="name"></param>
         public static Tensor identity(Tensor input, string name = "")
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("input", input);
-
-            var _op = _op_def_lib._apply_op_helper("Identity", name, keywords);
+            var _op = _op_def_lib._apply_op_helper("Identity", name, new { input });
 
             return _op.outputs[0];
         }
 
         public static Tensor rank(Tensor input, string name = "")
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("input", input);
-
-            var _op = _op_def_lib._apply_op_helper("Rank", name: name, keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Rank", name: name, args: new { input });
 
             return _op.outputs[0];
         }
@@ -59,18 +49,13 @@ namespace Tensorflow
         /// <summary>
         /// Creates a tensor filled with a scalar value.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dims"></param>
-        /// <param name="value"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static Tensor fill<T>(int[] dims, T value, string name = "")
+        /// <param name="dims">A `Tensor`.</param>
+        /// <param name="value">A `Tensor`.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>A `Tensor`. Has the same type as `value`.</returns>
+        public static Tensor fill(Tensor dims, Tensor value, string name = "")
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("dims", dims);
-            keywords.Add("value", value);
-
-            var _op = _op_def_lib._apply_op_helper("Fill", name);
+            var _op = _op_def_lib._apply_op_helper("Fill", name, new { dims, value });
 
             return _op.outputs[0];
         }

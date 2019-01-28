@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class Session : BaseSession, IDisposable
+    public class Session : BaseSession, IPython
     {
         private IntPtr _handle;
         public Status Status { get; }
@@ -40,6 +40,16 @@ namespace Tensorflow
             Options.Dispose();
             Status.Dispose();
             c_api.TF_DeleteSession(_handle, Status);
+        }
+
+        public void __enter__()
+        {
+            
+        }
+
+        public void __exit__()
+        {
+            
         }
     }
 }

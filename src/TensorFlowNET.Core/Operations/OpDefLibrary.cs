@@ -1,6 +1,7 @@
-﻿using NumSharp.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,8 +11,9 @@ namespace Tensorflow
 {
     public class OpDefLibrary
     {
-        public Operation _apply_op_helper(string op_type_name, string name = "", Dictionary<string, object> keywords = null)
+        public Operation _apply_op_helper(string op_type_name, string name = "", dynamic args = null)
         {
+            var keywords = ConvertToDict(args);
             var g = ops.get_default_graph();
             var op_def = g.GetOpDef(op_type_name);
 
@@ -20,9 +22,9 @@ namespace Tensorflow
                 name = op_type_name;
 
             // Check for deprecation
-            if(op_def.Deprecation != null && op_def.Deprecation.Version > 0)
+            if (op_def.Deprecation != null && op_def.Deprecation.Version > 0)
             {
-                
+
             }
 
             var default_type_attr_map = new Dictionary<string, object>();
@@ -30,7 +32,7 @@ namespace Tensorflow
             {
                 if (attr_def.Type != "type") continue;
                 var key = attr_def.Name;
-                if(attr_def.DefaultValue != null)
+                if (attr_def.DefaultValue != null)
                 {
                     default_type_attr_map[key] = attr_def.DefaultValue.Type;
                 }
@@ -40,11 +42,9 @@ namespace Tensorflow
             var inputs = new List<Tensor>();
             var input_types = new List<TF_DataType>();
 
-            string scope = "";
-            using (var namescope = new ops.name_scope(name))
+            Operation op = null;
+            Python.with<ops.name_scope>(new ops.name_scope(name), scope =>
             {
-                scope = namescope;
-
                 // Perform input type inference
                 foreach (var input_arg in op_def.InputArg)
                 {
@@ -73,7 +73,7 @@ namespace Tensorflow
                         else
                         {
                             var base_type = value.dtype.as_base_dtype();
-                            
+
                             input_types.Add(base_type);
                         }
                     }
@@ -135,19 +135,34 @@ namespace Tensorflow
                 }
 
                 // Add Op to graph
-                var op = g.create_op(op_type_name, inputs, output_types.ToArray(),
+                op = g.create_op(op_type_name, inputs, output_types.ToArray(),
                     name: scope,
                     input_types: input_types.ToArray(),
                     attrs: attr_protos,
                     op_def: op_def);
+            });
 
-                return op;
-            }
+            return op;
         }
 
         public DataType _MakeType(TF_DataType v, AttrDef attr_def)
         {
             return v.as_base_dtype().as_datatype_enum();
+        }
+
+        private Dictionary<string, object> ConvertToDict(dynamic dyn)
+        {
+            var dictionary = new Dictionary<string, object>();
+            foreach (PropertyDescriptor propertyDescriptor in TypeDescriptor.GetProperties(dyn))
+            {
+                object obj = propertyDescriptor.GetValue(dyn);
+                string name = propertyDescriptor.Name;
+                // avoid .net keyword
+                if (name == "_ref_")
+                    name = "ref";
+                dictionary.Add(name, obj);
+            }
+            return dictionary;
         }
     }
 }

@@ -23,13 +23,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor variable_v2(long[] shape, TF_DataType dtype, string name = "", string container = "", string shared_name = "")
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("dtype", dtype);
-            keywords.Add("shape", shape);
-            keywords.Add("container", container);
-            keywords.Add("shared_name", shared_name);
-
-            var _op = _op_def_lib._apply_op_helper("VariableV2", name: name, keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("VariableV2", name: name, args: new { dtype, shape, container, shared_name });
 
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
@@ -58,13 +52,7 @@ namespace Tensorflow
             bool use_locking = true,
             string name = "")
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("ref", tensor);
-            keywords.Add("value", value);
-            keywords.Add("validate_shape", validate_shape);
-            keywords.Add("use_locking", use_locking);
-
-            var _op = _op_def_lib._apply_op_helper("Assign", name: name, keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { _ref_ = tensor, value, validate_shape, use_locking });
 
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;

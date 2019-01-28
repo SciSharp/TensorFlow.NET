@@ -24,18 +24,42 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void StringConst()
         {
-            tensor = tf.constant("Elephant");
+            string str = "Hello, TensorFlow.NET!";
+            tensor = tf.constant(str);
+            Python.with<Session>(tf.Session(), sess =>
+            {
+                var result = sess.run(tensor);
+                Assert.IsTrue(result.Data<string>()[0] == str);
+            });
         }
 
         [TestMethod]
         public void ZerosConst()
         {
-            tensor = tf.zeros(new Shape(3, 2), TF_DataType.TF_INT32, "x");
-            Assert.AreEqual(tensor.shape[0], 3);
-            Assert.AreEqual(tensor.shape[0], 2);
-            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 0, 0 }, tensor.Data<int>()));
+            // small size
+            tensor = tf.zeros(new Shape(3, 2), TF_DataType.TF_INT32, "small");
+            Python.with<Session>(tf.Session(), sess =>
+            {
+                var result = sess.run(tensor);
 
-            tensor = tf.zeros(new Shape(200, 300), TF_DataType.TF_INT32, "x");
+                Assert.AreEqual(result.shape[0], 3);
+                Assert.AreEqual(result.shape[1], 2);
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 0, 0 }, result.Data<int>()));
+            });
+
+            // big size
+            tensor = tf.zeros(new Shape(200, 100), TF_DataType.TF_INT32, "big");
+            Python.with<Session>(tf.Session(), sess =>
+            {
+                var result = sess.run(tensor);
+
+                Assert.AreEqual(result.shape[0], 200);
+                Assert.AreEqual(result.shape[1], 100);
+
+                var data = result.Data<int>();
+                Assert.AreEqual(0, data[0]);
+                Assert.AreEqual(0, data[result.size - 1]);
+            });
         }
 
         [TestMethod]

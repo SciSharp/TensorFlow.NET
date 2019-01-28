@@ -65,10 +65,8 @@ namespace Tensorflow
 
             ops.init_scope();
             var values = init_from_fn ? new List<object>() : new List<object> { initial_value };
-            using (var namescope = new ops.name_scope(name, "Variable", values))
+            Python.with<ops.name_scope>(new ops.name_scope(name, "Variable", values), scope =>
             {
-                name = namescope;
-
                 if (init_from_fn)
                 {
 
@@ -108,7 +106,7 @@ namespace Tensorflow
                 }
 
                 ops.add_to_collections(collections, this);
-            }
+            });
         }
 
         public Tensor _ref()

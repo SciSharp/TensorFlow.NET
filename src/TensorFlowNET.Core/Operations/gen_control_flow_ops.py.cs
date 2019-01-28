@@ -10,7 +10,7 @@ namespace Tensorflow
 
         public static Operation no_op(string name = "")
         {
-            var _op = _op_def_lib._apply_op_helper("NoOp", name);
+            var _op = _op_def_lib._apply_op_helper("NoOp", name, null);
 
             return _op;
         }

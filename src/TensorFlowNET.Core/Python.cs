@@ -23,6 +23,26 @@ namespace Tensorflow
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
+                throw ex;
+            }
+            finally
+            {
+                py.__exit__();
+                py.Dispose();
+            }
+        }
+
+        public static void with<T>(IPython py, Action<T> action) where T : IPython
+        {
+            try
+            {
+                py.__enter__();
+                action((T)py);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
                 throw ex;
             }
             finally

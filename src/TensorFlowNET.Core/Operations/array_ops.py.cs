@@ -47,9 +47,9 @@ namespace Tensorflow
             }
             else
             {
-                tShape = constant_op._tensor_shape_tensor_conversion_function(shape.as_shape(), dtype, name);
-                var c = constant_op.Constant(nd, name);
-                return gen_array_ops.fill<T>(shape, value, name);
+                tShape = constant_op._tensor_shape_tensor_conversion_function(shape.as_shape());
+                var c = constant_op.Constant(0);
+                return gen_array_ops.fill(tShape, c, name);
             }
         }
     }

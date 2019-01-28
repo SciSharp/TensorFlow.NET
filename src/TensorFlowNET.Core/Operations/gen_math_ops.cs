@@ -12,80 +12,49 @@ namespace Tensorflow
 
         public static Tensor add(Tensor x, Tensor y)
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("x", x);
-            keywords.Add("y", y);
-
-            var _op = _op_def_lib._apply_op_helper("Add", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Add", args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor sub(Tensor x, Tensor y)
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("x", x);
-            keywords.Add("y", y);
-
-            var _op = _op_def_lib._apply_op_helper("Sub", name: "sub", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Sub", name: "sub", args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor mul(Tensor x, Tensor y)
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("x", x);
-            keywords.Add("y", y);
-
-            var _op = _op_def_lib._apply_op_helper("Mul", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Mul", args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor real_div(Tensor x, Tensor y)
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("x", x);
-            keywords.Add("y", y);
-
-            var _op = _op_def_lib._apply_op_helper("RealDiv", name: "truediv", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("RealDiv", name: "truediv", args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor mat_mul(Tensor a, Tensor b, bool transpose_a = false, bool transpose_b = false)
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("a", a);
-            keywords.Add("b", b);
-            keywords.Add("transpose_a", transpose_a);
-            keywords.Add("transpose_b", transpose_b);
-
-            var _op = _op_def_lib._apply_op_helper("MatMul", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("MatMul", args: new { a, b, transpose_a, transpose_b });
 
             return _op.outputs[0];
         }
 
         public static Tensor pow(Tensor x, double y)
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("x", x);
-            keywords.Add("y", y);
-
-            var _op = _op_def_lib._apply_op_helper("Pow", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Pow", args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor sum(Tensor input, Tensor axis = null)
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("input", input);
-            keywords.Add("reduction_indices", axis);
-            keywords.Add("keep_dims", false);
-
-            var _op = _op_def_lib._apply_op_helper("Sum", keywords: keywords);
+            var _op = _op_def_lib._apply_op_helper("Sum", args: new { input, reduction_indices = axis, keep_dims = false });
 
             return _op.outputs[0];
         }
@@ -100,12 +69,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor range(Tensor start, Tensor limit, Tensor delta, string name = "")
         {
-            var keywords = new Dictionary<string, object>();
-            keywords.Add("start", start);
-            keywords.Add("limit", limit);
-            keywords.Add("delta", delta);
-
-            var _op = _op_def_lib._apply_op_helper("Range", name, keywords);
+            var _op = _op_def_lib._apply_op_helper("Range", name, new { start, limit, delta });
 
             return _op.outputs[0];
         }
