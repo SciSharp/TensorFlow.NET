@@ -23,8 +23,6 @@
 
 #### An Open Source Machine Learning Framework for Everyone
 
-#### 
-
 
 
 
@@ -36,9 +34,10 @@
 
 
 <p style='float:right;'> 
-<b>Haiping Chen & Christian Kahr</b><br/>
+<b>Haiping Chen</b><br/>
 <b>Christmas, 2018</b><br/>
 </p>
+
 
 
 

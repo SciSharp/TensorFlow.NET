@@ -2,7 +2,7 @@
 
 One of the most nerve-wracking periods when releasing the first version of an open source project occurs when the [gitter](https://gitter.im/sci-sharp/community) community is created. You are all alone, eagerly hoping and wishing for the first user to come along. I still vividly remember those days. 
 
-最让人紧张的时刻是当我为自己的开源项目发布第一个版本并在gitter里开放一个聊天社区，而里面只有你一个人，饥渴地期待第一个进入聊天室的用户，我仍然清楚地记得那个时期。
+最让人紧张的时刻是当我为自己的开源项目发布第一个版本并在gitter里开放一个聊天社区，而里面只有你一个人，饥渴地等待第一个进入聊天室的用户，我仍然清楚地记得那个时期。
 
 
 

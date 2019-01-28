@@ -6,22 +6,10 @@
 Welcome to TensorFlow.NET's documentation!
 ==========================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-
-
-Indices and tables
-==================
-
-* :ref:`Front Cover <front-cover>`
-
-.. _front-cover:
 
 .. toctree::
    :maxdepth: 3
-   :caption: Get Started with TensorFlow.NET:
+   :caption: The Definitive Guide to TensorFlow.NET
 
    FrontCover
    Foreword
@@ -29,6 +17,7 @@ Indices and tables
    HelloWorld
    Tensor
    Constant
+   Placeholder
    Variable
    Operation
    Graph
