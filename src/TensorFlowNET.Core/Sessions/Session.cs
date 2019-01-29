@@ -35,6 +35,11 @@ namespace Tensorflow
         public static implicit operator IntPtr(Session session) => session._handle;
         public static implicit operator Session(IntPtr handle) => new Session(handle);
 
+        public void close()
+        {
+            Dispose();
+        }
+
         public void Dispose()
         {
             Options.Dispose();

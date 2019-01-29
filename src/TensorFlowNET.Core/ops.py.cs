@@ -7,6 +7,7 @@ using Tensorflow;
 using node_def_pb2 = Tensorflow;
 using Google.Protobuf;
 using System.Linq;
+using NumSharp.Core;
 
 namespace Tensorflow
 {
@@ -222,6 +223,38 @@ namespace Tensorflow
         {
             var default_graph = get_default_graph();
             default_graph._colocate_with_for_gradient(op, gradient_uid, ignore_existing);
+        }
+
+        /// <summary>
+        /// Uses the default session to evaluate one or more tensors.
+        /// </summary>
+        /// <param name="tensors">A single Tensor, or a list of Tensor objects.</param>
+        /// <param name="feed_dict">
+        /// A dictionary that maps Tensor objects (or tensor names) to lists,
+        /// numpy ndarrays, TensorProtos, or strings.
+        /// </param>
+        /// <param name="graph">The graph in which the tensors are defined.</param>
+        /// <param name="session">A different session to use to evaluate "tensors".</param>
+        /// <returns>
+        /// Either a single numpy ndarray if "tensors" is a single tensor; or a list
+        /// of numpy ndarrays that each correspond to the respective element in
+        /// "tensors".
+        /// </returns>
+        public static NDArray[] _eval_using_default_session(Tensor[] tensors, dynamic feed_dict, Graph graph, Session session = null)
+        {
+            if (session == null)
+                session = get_default_session();
+
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the default session for the current thread.
+        /// </summary>
+        /// <returns>The default `Session` being used in the current thread.</returns>
+        public static Session get_default_session()
+        {
+            return null;
         }
     }
 }

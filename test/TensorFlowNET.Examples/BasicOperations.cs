@@ -87,7 +87,7 @@ namespace TensorFlowNET.Examples
             using (sess = tf.Session())
             {
                 var result = sess.run(product);
-                Console.WriteLine(result);
+                Console.WriteLine(result.ToString());
                 if(result.Data<int>()[0] != 12)
                 {
                     throw new Exception("BasicOperations error");

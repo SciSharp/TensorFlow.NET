@@ -33,8 +33,17 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void ScalarVar()
         {
-            var x = tf.Variable(3);
-            var y = tf.Variable(6f);
+            var x = tf.constant(3, name: "x");
+            var y = tf.Variable(x + 1, name: "y");
+
+            var model = tf.global_variables_initializer();
+
+            using (var session = tf.Session())
+            {
+                session.run(model);
+                int result = session.run(y);
+                Assert.AreEqual(result, 4);
+            }
         }
 
         /// <summary>

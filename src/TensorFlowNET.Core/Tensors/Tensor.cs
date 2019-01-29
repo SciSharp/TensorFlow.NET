@@ -207,6 +207,17 @@ namespace Tensorflow
             return tensor;
         }
 
+        /// <summary>
+        /// Evaluates this tensor in a `Session`.
+        /// </summary>
+        /// <param name="feed_dict">A dictionary that maps `Tensor` objects to feed values.</param>
+        /// <param name="session">The `Session` to be used to evaluate this tensor.</param>
+        /// <returns></returns>
+        public NDArray eval(dynamic feed_dict = null, Session session = null)
+        {
+            return ops._eval_using_default_session(new Tensor[] { this }, feed_dict, Graph, session)[0];
+        }
+
         public TF_DataType ToTFDataType(Type type)
         {
             switch (type.Name)

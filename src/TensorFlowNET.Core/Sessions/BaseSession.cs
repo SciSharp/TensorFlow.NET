@@ -146,6 +146,12 @@ namespace Tensorflow
                     var str = UTF8Encoding.Default.GetString(bytes, 9, bytes.Length - 9);
                     nd = np.array(str).reshape();
                     break;
+                case TF_DataType.TF_INT16:
+                    var shorts = new short[tensor.size];
+                    for (ulong i = 0; i < tensor.size; i++)
+                        shorts[i] = *(short*)(c_api.TF_TensorData(output) + (int)(tensor.dataTypeSize * i));
+                    nd = np.array(shorts).reshape(ndims);
+                    break;
                 case TF_DataType.TF_INT32:
                     var ints = new int[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)

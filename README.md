@@ -58,3 +58,7 @@ using(var sess = tf.Session())
 Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html).
 
 Star me or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET) feel free.
+
+Scan QR code to join TIM group:
+
+![SciSharp STACK](C:\Users\haipi\Documents\Projects\TensorFlow.NET\docs\TIM.png)
