@@ -213,9 +213,9 @@ namespace Tensorflow
         /// <param name="feed_dict">A dictionary that maps `Tensor` objects to feed values.</param>
         /// <param name="session">The `Session` to be used to evaluate this tensor.</param>
         /// <returns></returns>
-        public NDArray eval(dynamic feed_dict = null, Session session = null)
+        public NDArray eval(Dictionary<Tensor, NDArray> feed_dict = null, Session session = null)
         {
-            return ops._eval_using_default_session(new Tensor[] { this }, feed_dict, Graph, session)[0];
+            return ops._eval_using_default_session(this, feed_dict, Graph, session);
         }
 
         public TF_DataType ToTFDataType(Type type)

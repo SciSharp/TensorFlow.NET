@@ -8,12 +8,12 @@ namespace Tensorflow
     {
         public static implicit operator Tensor(double scalar)
         {
-            return constant_op.Constant(scalar);
+            return constant_op.constant(scalar);
         }
 
         public static implicit operator Tensor(int scalar)
         {
-            return constant_op.Constant(scalar);
+            return constant_op.constant(scalar);
         }
 
         public static implicit operator int(Tensor tensor)

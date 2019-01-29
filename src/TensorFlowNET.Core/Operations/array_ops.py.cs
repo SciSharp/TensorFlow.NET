@@ -43,12 +43,12 @@ namespace Tensorflow
             var nd = np.zeros<T>(shape);
             if (shape.Size < 1000)
             {
-                return constant_op.Constant(nd, name);
+                return constant_op.constant(nd, name);
             }
             else
             {
                 tShape = constant_op._tensor_shape_tensor_conversion_function(shape.as_shape());
-                var c = constant_op.Constant(0);
+                var c = constant_op.constant(0);
                 return gen_array_ops.fill(tShape, c, name);
             }
         }

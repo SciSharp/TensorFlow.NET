@@ -19,7 +19,7 @@ namespace Tensorflow
         /// <param name="name">Optional name for the tensor.</param>
         /// <param name="verify_shape">Boolean that enables verification of a shape of values.</param>
         /// <returns></returns>
-        public static Tensor Constant(NDArray nd, string name = "Const", bool verify_shape = false)
+        public static Tensor constant(NDArray nd, string name = "Const", bool verify_shape = false)
         {
             Graph g = ops.get_default_graph();
             var tensor_pb = tensor_util.make_tensor_proto(nd, verify_shape);
@@ -76,7 +76,7 @@ namespace Tensorflow
             if (string.IsNullOrEmpty(name))
                 name = "shape_as_tensor";
 
-            return constant_op.Constant(s_list, name);
+            return constant_op.constant(s_list, name);
         }
     }
 }

@@ -75,7 +75,7 @@ namespace Tensorflow
                     return val;
                 default:
                     var nd = tensor_util.convert_to_numpy_ndarray(value);
-                    return constant_op.Constant(nd, name);
+                    return constant_op.constant(nd, name);
             }
         }
 
@@ -240,12 +240,34 @@ namespace Tensorflow
         /// of numpy ndarrays that each correspond to the respective element in
         /// "tensors".
         /// </returns>
-        public static NDArray[] _eval_using_default_session(Tensor[] tensors, dynamic feed_dict, Graph graph, Session session = null)
+        public static NDArray _eval_using_default_session(Tensor tensor, Dictionary<Tensor, NDArray> feed_dict, Graph graph, Session session = null)
         {
             if (session == null)
+            {
                 session = get_default_session();
 
-            return null;
+                if (session == null)
+                    throw new ValueError("Cannot evaluate tensor using `eval()`: No default " +
+                           "session is registered. Use `with " +
+                           "sess.as_default()` or pass an explicit session to " +
+                           "`eval(session=sess)`");
+
+                if (session.graph != graph)
+                    throw new ValueError("Cannot use the default session to evaluate tensor: " +
+                           "the tensor's graph is different from the session's " +
+                           "graph. Pass an explicit session to " +
+                           "`eval(session=sess)`.");
+            }
+            else
+            {
+                if (session.graph != graph)
+                    throw new ValueError("Cannot use the default session to evaluate tensor: " +
+                           "the tensor's graph is different from the session's " +
+                           "graph. Pass an explicit session to " +
+                           "`eval(session=sess)`.");
+            }
+
+            return session.run(tensor, feed_dict);
         }
 
         /// <summary>
@@ -254,7 +276,7 @@ namespace Tensorflow
         /// <returns>The default `Session` being used in the current thread.</returns>
         public static Session get_default_session()
         {
-            return null;
+            return tf.Session();
         }
     }
 }

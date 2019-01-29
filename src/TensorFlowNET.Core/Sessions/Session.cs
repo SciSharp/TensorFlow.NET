@@ -7,16 +7,17 @@ namespace Tensorflow
     public class Session : BaseSession, IPython
     {
         private IntPtr _handle;
-        public Status Status { get; }
+        public Status Status  = new Status();
         public SessionOptions Options { get; }
+        public Graph graph;
 
         public Session(string target = "", Graph graph = null)
         {
-            Status = new Status();
             if(graph == null)
             {
                 graph = tf.get_default_graph();
             }
+            this.graph = graph;
             Options = new SessionOptions();
             _handle = c_api.TF_NewSession(graph, Options, Status);
             Status.Check();
@@ -27,9 +28,12 @@ namespace Tensorflow
             _handle = handle;
         }
 
-        public Session(Graph graph, SessionOptions opts, Status s)
+        public Session(Graph graph, SessionOptions opts, Status s = null)
         {
+            if (s == null)
+                s = Status;
             _handle = c_api.TF_NewSession(graph, opts, s);
+            Status.Check(true);
         }
 
         public static implicit operator IntPtr(Session session) => session._handle;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -73,6 +74,19 @@ namespace TensorFlowNET.UnitTest
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
             graph.Dispose();
             s.Dispose();
+        }
+
+        [TestMethod]
+        public void EvalTensor()
+        {
+            var a = constant_op.constant(np.array(3.0).reshape(1, 1));
+            var b = constant_op.constant(np.array(2.0).reshape(1, 1));
+            var c = math_ops.matmul(a, b, name: "matmul");
+            Python.with(tf.Session(), delegate
+            {
+                var result = c.eval();
+                Assert.AreEqual(6, result.Data<double>()[0]);
+            });
         }
     }
 }

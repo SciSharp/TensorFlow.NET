@@ -51,7 +51,7 @@ namespace Tensorflow
                     var input_name = input_arg.Name;
                     if (keywords[input_name] is double int_value)
                     {
-                        keywords[input_name] = constant_op.Constant(int_value, input_name);
+                        keywords[input_name] = constant_op.constant(int_value, input_name);
                     }
 
                     if (keywords[input_name] is Tensor value)

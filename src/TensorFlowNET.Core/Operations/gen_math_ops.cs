@@ -38,9 +38,18 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor mat_mul(Tensor a, Tensor b, bool transpose_a = false, bool transpose_b = false)
+        /// <summary>
+        /// Multiply the matrix "a" by the matrix "b".
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="transpose_a"></param>
+        /// <param name="transpose_b"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor mat_mul(Tensor a, Tensor b, bool transpose_a = false, bool transpose_b = false, string name = "")
         {
-            var _op = _op_def_lib._apply_op_helper("MatMul", args: new { a, b, transpose_a, transpose_b });
+            var _op = _op_def_lib._apply_op_helper("MatMul", name, args: new { a, b, transpose_a, transpose_b });
 
             return _op.outputs[0];
         }
