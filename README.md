@@ -61,4 +61,4 @@ Star me or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET) f
 
 Scan QR code to join TIM group:
 
-![SciSharp STACK](C:\Users\haipi\Documents\Projects\TensorFlow.NET\docs\TIM.png)
+![SciSharp STACK](docs/TIM.png)
