@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -50,6 +51,16 @@ namespace Tensorflow
                 py.__exit__();
                 py.Dispose();
             }
+        }
+
+        public static (T, T) zip<T>(T t1, T t2, int index = 0) where T : IList<T>
+        {
+            return (t1[index], t2[index]);
+        }
+
+        public static (T, T) zip<T>(NDArray t1, NDArray t2, int index = 0)
+        {
+            return (t1.Data<T>(index), t2.Data<T>(index));
         }
     }
 

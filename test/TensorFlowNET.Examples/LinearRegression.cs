@@ -59,6 +59,18 @@ namespace TensorFlowNET.Examples
             {
                 // Run the initializer
                 sess.run(init);
+
+                // Fit all training data
+                for (int i = 0; i < training_epochs; i++)
+                {
+                    for(int index = 0; index < train_X.size; index++)
+                    {
+                        (double x, double y) = Python.zip<double>(train_X, train_Y, index);
+                        var feed_dict = new Dictionary<Tensor, NDArray>();
+
+                        // sess.run(optimizer, feed_dict);
+                    }
+                }
             });
         }
     }
