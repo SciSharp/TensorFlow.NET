@@ -38,7 +38,7 @@ namespace Tensorflow
                 return;
 
             _handle = handle;
-
+            this.Graph = ops.get_default_graph();
             _outputs = new Tensor[NumOutputs];
             for (int i = 0; i < NumOutputs; i++)
                 _outputs[i] = new Tensor(this, i, OutputType(i));

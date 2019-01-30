@@ -9,7 +9,7 @@ namespace Tensorflow
     {
         public static string[] TF_OperationOutputConsumers_wrapper(TF_Output oper_out)
         {
-            int num_consumers = TF_OperationOutputConsumers(oper_out);
+            int num_consumers = TF_OperationOutputNumConsumers(oper_out);
             int size = Marshal.SizeOf<TF_Input>();
             var handle = Marshal.AllocHGlobal(size * num_consumers);
             int num = TF_OperationOutputConsumers(oper_out, handle, num_consumers);

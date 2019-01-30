@@ -51,7 +51,15 @@ namespace TensorFlowNET.Examples
             var optimizer = tf.train.GradientDescentOptimizer(learning_rate);
             optimizer.minimize(cost);
 
+            // Initialize the variables (i.e. assign their default value)
+            var init = tf.global_variables_initializer();
 
+            // Start training
+            Python.with<Session>(tf.Session(), sess => 
+            {
+                // Run the initializer
+                sess.run(init);
+            });
         }
     }
 }

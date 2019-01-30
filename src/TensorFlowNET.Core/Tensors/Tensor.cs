@@ -19,7 +19,7 @@ namespace Tensorflow
         private int _id;
         public int Id => _id;
 
-        public Graph Graph => op.Graph;
+        public Graph Graph => op?.Graph;
         public Operation op { get; }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Tensorflow
 {
@@ -49,10 +50,9 @@ namespace Tensorflow
             all.AddRange(stop_gradients1);
             all.AddRange(grad_ys1);
 
-            string grad_scope = "";
-            using (var namescope = new ops.name_scope(name, "gradients", values: all))
+            Python.with<ops.name_scope>(new ops.name_scope(name, "gradients", values: all), scope =>
             {
-                grad_scope = namescope;
+                string grad_scope = scope;
                 // Get a uid for this call to gradients that can be used to help
                 // cluster ops for compilation.
                 var gradient_uid = ops.get_default_graph().unique_name("uid");
@@ -63,7 +63,7 @@ namespace Tensorflow
                 var from_ops = xs1.Select(x => x.op).ToList();
                 var stop_gradient_ops = stop_gradients1.Select(x => x.op).ToList();
                 _PendingCount(to_ops, from_ops, colocate_gradients_with_ops, new List<object>(), xs1);
-            }
+            });
         }
 
         /// <summary>

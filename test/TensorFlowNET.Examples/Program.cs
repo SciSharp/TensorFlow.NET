@@ -13,7 +13,9 @@ namespace TensorFlowNET.Examples
             {
                 if (args.Length > 0 && !args.Contains(type.Name))
                     continue;
-                
+
+                Console.WriteLine($"{DateTime.UtcNow} Starting {type.Name}");
+
                 var example = (IExample)Activator.CreateInstance(type);
 
                 try
@@ -24,6 +26,8 @@ namespace TensorFlowNET.Examples
                 {
                     Console.WriteLine(ex);
                 }
+
+                Console.WriteLine($"{DateTime.UtcNow} Completed {type.Name}");
             }
 
             Console.ReadLine();
