@@ -49,13 +49,13 @@ namespace TensorFlowNET.UnitTest
             input_values_.Clear();
         }
 
-        public void SetOutputs(List<IntPtr> outputs)
+        public void SetOutputs(TF_Output[] outputs)
         {
             ResetOutputValues();
             outputs_.Clear();
             foreach (var output in outputs)
             {
-                outputs_.Add(new TF_Output(output, 0));
+                outputs_.Add(output);
                 output_values_.Add(IntPtr.Zero);
             }
         }
@@ -75,7 +75,7 @@ namespace TensorFlowNET.UnitTest
             var inputs_ptr = inputs_.ToArray();
             var input_values_ptr = input_values_.Select(x => (IntPtr)x).ToArray();
             var outputs_ptr = outputs_.ToArray();
-            var output_values_ptr = output_values_.Select(x => (IntPtr)x).ToArray();
+            var output_values_ptr = output_values_.Select(x => IntPtr.Zero).ToArray();
             IntPtr[] targets_ptr = new IntPtr[0];
 
             c_api.TF_SessionRun(session_, null, inputs_ptr, input_values_ptr, inputs_ptr.Length,

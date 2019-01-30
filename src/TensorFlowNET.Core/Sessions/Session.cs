@@ -47,8 +47,8 @@ namespace Tensorflow
         public void Dispose()
         {
             Options.Dispose();
-            Status.Dispose();
             c_api.TF_DeleteSession(_handle, Status);
+            Status.Dispose();
         }
 
         public void __enter__()

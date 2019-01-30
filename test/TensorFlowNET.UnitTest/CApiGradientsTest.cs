@@ -31,16 +31,16 @@ namespace TensorFlowNET.UnitTest
             BuildSuccessGraph(inputs, outputs);
             BuildExpectedGraph(grad_inputs_provided, expected_grad_outputs);
 
-            AddGradients(grad_inputs_provided, string.Empty, inputs, 2, outputs, 1,
+            AddGradients(grad_inputs_provided, "test", inputs, 2, outputs, 1,
                  grad_outputs);
-            // EXPECT_EQ(TF_OK, TF_GetCode(s_));
+            EXPECT_EQ(TF_OK, TF_GetCode(s_));
 
             // Compare that the graphs match.
             GraphDef expected_gdef;
             GraphDef gdef;
             EXPECT_TRUE(GetGraphDef(expected_graph_, out expected_gdef));
             EXPECT_TRUE(GetGraphDef(graph_, out gdef));
-            //TF_EXPECT_GRAPH_EQ(expected_gdef, gdef);
+            // Assert.IsTrue(expected_gdef.ToString().Equals(gdef.ToString()));
 
             // Compare that the output of the gradients of both graphs match.
             RunGraphsAndCompareOutputs(grad_outputs, expected_grad_outputs);
@@ -65,16 +65,14 @@ namespace TensorFlowNET.UnitTest
             var csession = new CSession(graph_, s_);
             var expected_csession = new CSession(expected_graph_, s_);
 
-            var grad_outputs_vec = new List<IntPtr>();
-            grad_outputs_vec.AddRange(grad_outputs.Select(x => x.oper));
+            var grad_outputs_vec = grad_outputs;
             csession.SetOutputs(grad_outputs_vec);
             csession.Run(s_);
             ASSERT_EQ(TF_OK, TF_GetCode(s_));
             var out0 = csession.output_tensor(0);
             var out1 = csession.output_tensor(1);
 
-            var expected_grad_outputs_vec = new List<IntPtr>();
-            expected_grad_outputs_vec.AddRange(expected_grad_outputs.Select(x => x.oper));
+            var expected_grad_outputs_vec = expected_grad_outputs;
             expected_csession.SetOutputs(expected_grad_outputs_vec);
             expected_csession.Run(s_);
             ASSERT_EQ(TF_OK, TF_GetCode(s_));
@@ -197,7 +195,7 @@ namespace TensorFlowNET.UnitTest
             var matmul2 = MatMul(expected_graph_, s_, const0, const3,
                                            "gradients/MatMul_1", true, false);
             expected_grad_outputs[0] = new TF_Output(matmul1, 0);
-            expected_grad_outputs[1] = new TF_Output( matmul2, 0);
+            expected_grad_outputs[1] = new TF_Output(matmul2, 0);
         }
 
         private Operation OnesLike(Graph graph, Status s, Operation input, string name)

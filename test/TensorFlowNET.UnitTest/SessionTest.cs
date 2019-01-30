@@ -37,7 +37,7 @@ namespace TensorFlowNET.UnitTest
             inputs.Add(feed, new Tensor(3));
             csession.SetInputs(inputs);
 
-            var outputs = new List<IntPtr> { add };
+            var outputs = new TF_Output[] { new TF_Output(add, 0) };
             csession.SetOutputs(outputs);
 
             csession.Run(s);
@@ -56,7 +56,7 @@ namespace TensorFlowNET.UnitTest
             inputs = new Dictionary<Operation, Tensor>();
             inputs.Add(feed, new Tensor(7));
             csession.SetInputs(inputs);
-            outputs = new List<IntPtr> { neg };
+            outputs = new TF_Output[] { new TF_Output(neg, 0) };
             csession.SetOutputs(outputs);
             csession.Run(s);
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
