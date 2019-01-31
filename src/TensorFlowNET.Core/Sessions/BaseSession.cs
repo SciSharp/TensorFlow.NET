@@ -35,14 +35,24 @@ namespace Tensorflow
             c_api.TF_DeleteSessionOptions(opts);
         }
 
-        public virtual NDArray run(Tensor fetches, Dictionary<Tensor, NDArray> feed_dict = null)
+        public virtual NDArray run(Tensor fetches, FeedItem[] feed_dict = null)
         {
-            return _run(fetches, feed_dict);
+            var feed = new Dictionary<Tensor, NDArray>();
+
+            if (feed_dict != null)
+                feed_dict.ToList().ForEach(x => feed.Add(x.Key, x.Value));
+
+            return _run(fetches, feed);
         }
 
-        public virtual NDArray run(Operation fetches, Dictionary<Tensor, NDArray> feed_dict = null)
+        public virtual NDArray run(Operation fetches, FeedItem[] feed_dict = null)
         {
-            return _run(fetches, feed_dict);
+            var feed = new Dictionary<Tensor, NDArray>();
+
+            if (feed_dict != null)
+                feed_dict.ToList().ForEach(x => feed.Add(x.Key, x.Value));
+
+            return _run(fetches, feed);
         }
 
         private NDArray _run<T>(T fetches, Dictionary<Tensor, NDArray> feed_dict = null)

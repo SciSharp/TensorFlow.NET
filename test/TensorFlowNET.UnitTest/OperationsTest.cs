@@ -32,11 +32,11 @@ namespace TensorFlowNET.UnitTest
 
             using(var sess = tf.Session())
             {
-                var feed_dict = new Dictionary<Tensor, NDArray>();
-                feed_dict.Add(a, 3.0f);
-                feed_dict.Add(b, 2.0f);
-
-                var o = sess.run(c, feed_dict);
+                var o = sess.run(c, feed_dict: new FeedItem[]
+                {
+                    new FeedItem(a, 3.0f),
+                    new FeedItem(b, 2.0f)
+                });
                 Assert.AreEqual((float)o, 5.0f);
             }
         }

@@ -97,5 +97,41 @@ namespace Tensorflow
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern TF_DataType TF_TensorType(IntPtr tensor);
+
+        /// <summary>
+        /// Return the size in bytes required to encode a string `len` bytes long into a
+        /// TF_STRING tensor.
+        /// </summary>
+        /// <param name="len">size_t</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern ulong TF_StringEncodedSize(ulong len);
+
+        /// <summary>
+        /// Encode the string `src` (`src_len` bytes long) into `dst` in the format
+        /// required by TF_STRING tensors. Does not write to memory more than `dst_len`
+        /// bytes beyond `*dst`. `dst_len` should be at least
+        /// TF_StringEncodedSize(src_len).
+        /// </summary>
+        /// <param name="src">const char*</param>
+        /// <param name="src_len">size_t</param>
+        /// <param name="dst">char*</param>
+        /// <param name="dst_len">size_t</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns>On success returns the size in bytes of the encoded string.</returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern ulong TF_StringEncode(string src, ulong src_len, string dst, ulong dst_len, IntPtr status);
+
+        /// <summary>
+        /// Decode a string encoded using TF_StringEncode.
+        /// </summary>
+        /// <param name="src">const char*</param>
+        /// <param name="src_len">size_t</param>
+        /// <param name="dst">const char**</param>
+        /// <param name="dst_len">size_t*</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern ulong TF_StringDecode(string src, ulong src_len, IntPtr dst, ref ulong dst_len, IntPtr status);
     }
 }

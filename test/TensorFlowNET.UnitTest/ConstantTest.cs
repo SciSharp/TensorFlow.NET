@@ -11,6 +11,8 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class ConstantTest
     {
+        Status status = new Status();
+
         [TestMethod]
         public void ScalarConst()
         {
@@ -93,6 +95,19 @@ namespace TensorFlowNET.UnitTest
             sess.close();
 
             Assert.AreEqual(6.0, result);
+        }
+
+        [TestMethod]
+        public void StringEncode()
+        {
+            string str = "Hello, TensorFlow.NET!";
+            ulong dst_len = c_api.TF_StringEncodedSize((ulong)str.Length);
+            Assert.AreEqual(dst_len, (ulong)23);
+            string dst = "";
+            c_api.TF_StringEncode(str, (ulong)str.Length, dst, dst_len, status);
+            Assert.AreEqual(status.Code, TF_Code.TF_OK);
+
+            //c_api.TF_StringDecode(str, (ulong)str.Length, IntPtr.Zero, ref dst_len, status);
         }
     }
 }

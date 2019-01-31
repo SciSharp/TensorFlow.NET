@@ -44,9 +44,11 @@ namespace TensorFlowNET.Examples
             // Launch the default graph.
             using(sess = tf.Session())
             {
-                var feed_dict = new Dictionary<Tensor, NDArray>();
-                feed_dict.Add(a, (short)2);
-                feed_dict.Add(b, (short)3);
+                var feed_dict = new FeedItem[]
+                {
+                    new FeedItem(a, (short)2),
+                    new FeedItem(b, (short)3)
+                };
                 // Run every operation with variable input
                 Console.WriteLine($"Addition with variables: {sess.run(add, feed_dict)}");
                 Console.WriteLine($"Multiplication with variables: {sess.run(mul, feed_dict)}");
@@ -87,12 +89,11 @@ namespace TensorFlowNET.Examples
             using (sess = tf.Session())
             {
                 var result = sess.run(product);
-                Console.WriteLine(result.ToString());
-                if(result.Data<int>()[0] != 12)
+                Console.WriteLine(result.ToString()); // ==> [[ 12.]]
+                if (result.Data<int>()[0] != 12)
                 {
-                    throw new Exception("BasicOperations error");
+                    throw new ValueError("BasicOperations");
                 }
-                // ==> [[ 12.]]
             }
         }
     }

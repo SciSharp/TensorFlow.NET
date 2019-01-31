@@ -39,16 +39,19 @@ namespace Tensorflow
         /// Add operations to minimize `loss` by updating `var_list`
         /// </summary>
         /// <param name="loss"></param>
-        /// <returns></returns>
-        public Optimizer minimize(Tensor loss, 
+        /// <returns>
+        /// An Operation that updates the variables in `var_list`.  If `global_step`
+        /// was not `None`, that operation also increments `global_step`.
+        /// </returns>
+        public Operation minimize(Tensor loss, 
             GateGradientType gate_gradients = GateGradientType.GATE_OP,
             bool colocate_gradients_with_ops = false)
         {
-            compute_gradients(loss, 
+            var grads_and_vars = compute_gradients(loss, 
                 gate_gradients: gate_gradients, 
                 colocate_gradients_with_ops: colocate_gradients_with_ops);
 
-            return this;
+            return null;
         }
 
         /// <summary>
@@ -56,6 +59,10 @@ namespace Tensorflow
         /// </summary>
         /// <param name="loss"></param>
         /// <param name="gate_gradients"></param>
+        /// <returns>
+        /// A list of (gradient, variable) pairs. Variable is always present, but
+        /// gradient can be `None`.
+        /// </returns>
         public List<KeyValuePair<object, object>> compute_gradients(Tensor loss,
             List<RefVariable> var_list = null,
             int? aggregation_method = null,

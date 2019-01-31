@@ -240,7 +240,7 @@ namespace Tensorflow
         /// of numpy ndarrays that each correspond to the respective element in
         /// "tensors".
         /// </returns>
-        public static NDArray _eval_using_default_session(Tensor tensor, Dictionary<Tensor, NDArray> feed_dict, Graph graph, Session session = null)
+        public static NDArray _eval_using_default_session(Tensor tensor, FeedItem[] feed_dict, Graph graph, Session session = null)
         {
             if (session == null)
             {

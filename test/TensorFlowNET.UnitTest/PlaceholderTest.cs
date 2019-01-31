@@ -12,7 +12,17 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void placeholder()
         {
-            var x = tf.placeholder(tf.float32);
+            var x = tf.placeholder(tf.int32);
+            var y = x * 3;
+
+            Python.with<Session>(tf.Session(), sess =>
+            {
+                var result = sess.run(y, feed_dict: new FeedItem[]
+                {
+                    new FeedItem(x, 2)
+                });
+                Assert.AreEqual((int)result, 6);
+            });
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Tensorflow
 
                     var shape = _initial_value.shape;
                     dtype = _initial_value.dtype;
-                    _variable = gen_state_ops.variable_v2(shape, dtype.as_base_dtype(), name);
+                    _variable = gen_state_ops.variable_v2(shape, dtype.as_base_dtype(), scope);
                 }
 
                 // Manually overrides the variable's shape with the initial value's.

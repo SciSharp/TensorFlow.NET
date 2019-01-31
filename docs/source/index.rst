@@ -19,6 +19,9 @@ Welcome to TensorFlow.NET's documentation!
    Constant
    Placeholder
    Variable
+   Attribute
    Operation
    Graph
    Session
+   Gradient
+   EagerMode

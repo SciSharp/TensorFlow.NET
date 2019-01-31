@@ -21,8 +21,8 @@ namespace Tensorflow
     /// const char* => string
     /// int32_t => int
     /// int64_t* => long[]
-    /// size_t* => unlong[]
-    /// size_t* => ref uint
+    /// size_t* => ulong[]
+    /// size_t* => ref ulong
     /// void* => IntPtr
     /// string => IntPtr c_api.StringPiece(IntPtr)
     /// unsigned char => byte
