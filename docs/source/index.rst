@@ -17,11 +17,11 @@ Welcome to TensorFlow.NET's documentation!
    HelloWorld
    Tensor
    Constant
-   Placeholder
    Variable
-   Attribute
-   Operation
-   Graph
+   Placeholder
    Session
+   Graph
+   Operation
+   Attribute
    Gradient
    EagerMode

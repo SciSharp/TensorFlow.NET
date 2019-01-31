@@ -63,7 +63,7 @@ namespace Tensorflow
         /// A list of (gradient, variable) pairs. Variable is always present, but
         /// gradient can be `None`.
         /// </returns>
-        public List<KeyValuePair<object, object>> compute_gradients(Tensor loss,
+        public List<KeyValuePair<Tensor, RefVariable>> compute_gradients(Tensor loss,
             List<RefVariable> var_list = null,
             int? aggregation_method = null,
             GateGradientType gate_gradients = GateGradientType.GATE_OP,

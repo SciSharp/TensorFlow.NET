@@ -48,8 +48,8 @@ namespace TensorFlowNET.Examples
 
             // radient descent
             // Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
-            var optimizer = tf.train.GradientDescentOptimizer(learning_rate);
-            optimizer.minimize(cost);
+            var grad = tf.train.GradientDescentOptimizer(learning_rate);
+            var optimizer = grad.minimize(cost);
 
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
@@ -68,7 +68,7 @@ namespace TensorFlowNET.Examples
                         (double x, double y) = Python.zip<double>(train_X, train_Y, index);
                         var feed_dict = new Dictionary<Tensor, NDArray>();
 
-                        // sess.run(optimizer, feed_dict);
+                        //sess.run(optimizer, feed_dict);
                     }
                 }
             });
