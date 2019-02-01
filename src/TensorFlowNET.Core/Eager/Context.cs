@@ -24,6 +24,11 @@ namespace Tensorflow.Eager
             c_api.TFE_DeleteContext(_handle);
         }
 
+        public bool executing_eagerly()
+        {
+            return false;
+        }
+
         public static implicit operator IntPtr(Context ctx)
         {
             return ctx._handle;

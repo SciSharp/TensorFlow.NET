@@ -21,6 +21,11 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor constant(NDArray nd, string name = "Const", bool verify_shape = false)
         {
+            if (tf.context.executing_eagerly())
+            {
+
+            }
+
             Graph g = ops.get_default_graph();
             var tensor_pb = tensor_util.make_tensor_proto(nd, verify_shape);
             var tensor_value = new AttrValue

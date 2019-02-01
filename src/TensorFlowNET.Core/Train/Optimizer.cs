@@ -68,7 +68,7 @@ namespace Tensorflow
             int? aggregation_method = null,
             GateGradientType gate_gradients = GateGradientType.GATE_OP,
             bool colocate_gradients_with_ops = false,
-            List<Tensor> grad_loss = null)
+            Tensor[] grad_loss = null)
         {
             int num_towers = 1;
             if(distribute_lib.get_loss_reduction() == VariableAggregationType.MEAN)
@@ -85,9 +85,9 @@ namespace Tensorflow
             }
 
             var processors = var_list.Select(v => optimizer._get_processor(v)).ToList();
-            var var_refs = processors.Select(x => x.target()).ToList();
+            var var_refs = processors.Select(x => x.target()).ToArray();
 
-            gradients_impl.gradients(loss, var_refs, grad_ys: grad_loss,
+            gradients_impl.gradients(new Tensor[] { loss }, var_refs, grad_ys: grad_loss,
                 gate_gradients: (gate_gradients == GateGradientType.GATE_OP),
                 aggregation_method: aggregation_method,
                 colocate_gradients_with_ops: colocate_gradients_with_ops);

@@ -14,7 +14,7 @@ namespace Tensorflow
         public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
         public static TF_DataType chars = TF_DataType.TF_STRING;
 
-        public static Context context;
+        public static Context context = new Context(new ContextOptions(), new Status());
 
         public static Graph g = new Graph();
 

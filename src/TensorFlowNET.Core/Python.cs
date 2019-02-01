@@ -53,7 +53,7 @@ namespace Tensorflow
             }
         }
 
-        public static (T, T) zip<T>(T t1, T t2, int index = 0) where T : IList<T>
+        public static (T, T) zip<T>(IList<T> t1, IList<T> t2, int index = 0)
         {
             return (t1[index], t2[index]);
         }

@@ -278,5 +278,11 @@ namespace Tensorflow
         {
             return tf.Session();
         }
+
+        public static object get_gradient_function(Operation op)
+        {
+            if (op.inputs == null) return null;
+            return null;
+        }
     }
 }

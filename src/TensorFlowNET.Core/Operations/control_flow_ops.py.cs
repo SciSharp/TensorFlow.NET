@@ -52,5 +52,34 @@ namespace Tensorflow
 
             return result;
         }
+
+        /// <summary>
+        /// Create the state for all the while loops involved in one gradients().
+        /// </summary>
+        /// <param name="between_op_list"></param>
+        /// <param name="between_ops"></param>
+        /// <param name="colocate_gradients_with_ops"></param>
+        public static object MaybeCreateControlFlowState(List<Operation> between_op_list, List<Operation> between_ops, bool colocate_gradients_with_ops)
+        {
+            object loop_state = null;
+
+            foreach (var op in between_op_list)
+            {
+                if (IsLoopExit(op))
+                {
+                    if(loop_state == null)
+                    {
+                        // loop_state = ControlFlowState();
+                    }
+                }
+            }
+
+            return loop_state;
+        }
+
+        private static bool IsLoopExit(Operation op)
+        {
+            return op.OpType == "Exit" || op.OpType == "RefExit";
+        }
     }
 }
