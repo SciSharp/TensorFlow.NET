@@ -46,7 +46,15 @@ namespace Tensorflow
             all.AddRange(stop_gradients);
             all.AddRange(grad_ys);
 
-            var grads = new Dictionary<string, object>();
+            // Iterate over the collected ops.
+            /**
+             * grads: op => list of gradients received on each output endpoint of the
+             * op.  The gradients for each endpoint are initially collected as a list.
+             * When it is time to call the op's gradient function, for each endpoint we
+             * aggregate the list of received gradients into a Add() Operation if there
+             * is more than one.
+             **/
+            var grads = new Dictionary<string, Tensor[][]>();
 
             Python.with<ops.name_scope>(new ops.name_scope(name, "gradients", values: all), scope =>
             {
@@ -71,21 +79,9 @@ namespace Tensorflow
                 var from_ops = xs.Select(x => x.op).ToList();
                 var stop_gradient_ops = stop_gradients.Select(x => x.op).ToList();
                 (var reachable_to_ops, var pending_count, var loop_state) = _PendingCount(to_ops, from_ops, colocate_gradients_with_ops, new List<object>(), xs);
-
-                // Iterate over the collected ops.
-                /**
-                 * grads: op => list of gradients received on each output endpoint of the
-                 * op.  The gradients for each endpoint are initially collected as a list.
-                 * When it is time to call the op's gradient function, for each endpoint we
-                 * aggregate the list of received gradients into a Add() Operation if there
-                 * is more than one.
-                 **/
                 
-                for(int i = 0; i < ys.Count(); i++)
-                {
-                    (var y, var grad_y) = Python.zip(ys, grad_ys, i);
+                foreach(var (y, grad_y) in Python.zip(ys, grad_ys))
                     _SetGrad(grads, y, grad_y);
-                }
 
                 // Initialize queue with to_ops.
                 var queue = new Queue<Operation>();
@@ -141,10 +137,9 @@ namespace Tensorflow
                         }
                     }
 
-                    for(int i =0; i< in_grads.Length; i++)
+                    var inputs = (List<Tensor>)_NonEagerInputs(op, xs);
+                    foreach (var (t_in, in_grad) in Python.zip(inputs, in_grads))
                     {
-                        var inputs = (List<Tensor>)_NonEagerInputs(op, xs);
-                        var (t_in, in_grad) = Python.zip(inputs, in_grads, i);
                         if(in_grad != null)
                         {
                             in_grad.shape = t_in.shape;
@@ -188,9 +183,9 @@ namespace Tensorflow
             return op.OpType == "PartitionedCall" || op.OpType == "StatefulPartitionedCall";
         }
 
-        private static Tensor[] _AggregatedGrads(Dictionary<string, object> grads, Operation op, string gradient_uid, object loop_state, int aggregation_method = 0)
+        private static Tensor[] _AggregatedGrads(Dictionary<string, Tensor[][]> grads, Operation op, string gradient_uid, object loop_state, int aggregation_method = 0)
         {
-            var out_grads = _GetGrads(grads, op) as object[];
+            var out_grads = _GetGrads(grads, op);
             for(int i = 0; i < out_grads.Length; i++)
             {
                 var out_grad = out_grads[i];
@@ -255,12 +250,12 @@ namespace Tensorflow
             return t_grad[0];
         }
 
-        private static object _GetGrads(Dictionary<string, object> grads, Operation op)
+        private static Tensor[][] _GetGrads(Dictionary<string, Tensor[][]> grads, Operation op)
         {
             if (grads.ContainsKey(op.Name))
                 return grads[op.Name];
             else
-                return op.outputs.Select(x => new object[0]).ToArray();
+                return op.outputs.Select(x => new Tensor[0]).ToArray();
         }
 
         /// <summary>
@@ -269,16 +264,16 @@ namespace Tensorflow
         /// <param name="grads"></param>
         /// <param name="t"></param>
         /// <param name="grad"></param>
-        private static void _SetGrad(Dictionary<string, object> grads, Tensor t, Tensor grad)
+        private static void _SetGrad(Dictionary<string, Tensor[][]> grads, Tensor t, Tensor grad)
         {
             var op = t.op;
-            object op_grads = null;
+            Tensor[][] op_grads = null;
             if (!grads.ContainsKey(op.Name))
             {
-                op_grads = op.outputs.Select(x => new object[1]).ToList();
+                op_grads = op.outputs.Select(x => new Tensor[1]).ToArray();
                 grads[op.Name] = op_grads;
             }
-            var t_grads = (op_grads as object[])[t.value_index];
+            var t_grads = op_grads[t.value_index];
             // t_grads[0] = grad;
         }
 

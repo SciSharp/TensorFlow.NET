@@ -53,14 +53,16 @@ namespace Tensorflow
             }
         }
 
-        public static (T, T) zip<T>(IList<T> t1, IList<T> t2, int index = 0)
+        public static IEnumerable<(T, T)> zip<T>(NDArray t1, NDArray t2)
         {
-            return (t1[index], t2[index]);
+            int index = 0;
+            yield return(t1.Data<T>(index), t2.Data<T>(index));
         }
 
-        public static (T, T) zip<T>(NDArray t1, NDArray t2, int index = 0)
+        public static IEnumerable<(T, T)> zip<T>(IList<T> t1, IList<T> t2)
         {
-            return (t1.Data<T>(index), t2.Data<T>(index));
+            int index = 0;
+            yield return (t1[index], t2[index]);
         }
     }
 
