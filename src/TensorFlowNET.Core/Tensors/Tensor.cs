@@ -57,6 +57,11 @@ namespace Tensorflow
 
                 return dims;
             }
+
+            set
+            {
+                // c_api.TF_GraphSetTensorShape_wrapper
+            }
         }
         
         /// <summary>

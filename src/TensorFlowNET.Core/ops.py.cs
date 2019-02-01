@@ -279,10 +279,14 @@ namespace Tensorflow
             return tf.Session();
         }
 
-        public static object get_gradient_function(Operation op)
+        public static Func<Operation, Tensor, (Tensor, Tensor)> get_gradient_function(Operation op)
         {
             if (op.inputs == null) return null;
-            return null;
+
+            return (oper, out_grads) =>
+            {
+                return math_grad._AddGrad(op, out_grads);
+            };
         }
     }
 }
