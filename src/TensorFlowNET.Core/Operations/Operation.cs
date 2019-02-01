@@ -14,6 +14,8 @@ namespace Tensorflow
         public int _id => _id_value;
         private int _id_value;
 
+        public string type => OpType;
+
         private Status status = new Status();
 
         public string Name => c_api.StringPiece(c_api.TF_OperationName(_handle));

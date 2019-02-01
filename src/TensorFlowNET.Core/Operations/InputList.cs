@@ -9,6 +9,7 @@ namespace Tensorflow
     public class InputList : IEnumerable
     {
         public Tensor[] _inputs;
+        public int Length => _inputs.Length;
         public Tensor this[int index] => _inputs[index];
 
         public InputList(Tensor[] inputs)

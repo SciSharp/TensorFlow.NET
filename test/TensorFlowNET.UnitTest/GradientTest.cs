@@ -14,7 +14,8 @@ namespace TensorFlowNET.UnitTest
         {
             var a = tf.constant(0.0);
             var b = 2.0 * a;
-            var g = tf.gradients(a + b, new Tensor[] { a, b }, stop_gradients: new Tensor[] { a, b });
+            var c = a + b;
+            var g = tf.gradients(c, new Tensor[] { a, b }, stop_gradients: new Tensor[] { a, b });
         }
     }
 }

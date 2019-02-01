@@ -24,7 +24,7 @@ namespace Tensorflow
                 stop_gradients: stop_gradients);
         }
 
-        public static object gradients(Tensor ys,
+        public static Tensor[] gradients(Tensor ys,
             Tensor[] xs,
             Tensor[] grad_ys = null,
             string name = "gradients",

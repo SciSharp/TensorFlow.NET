@@ -6,9 +6,16 @@ namespace Tensorflow
 {
     public partial class Tensor
     {
-        public static Tensor operator +(Tensor t1, Tensor t2)
+        public static Tensor operator +(Tensor x, Tensor y)
         {
-            return gen_math_ops.add(t1, t2);
+            Tensor t = null;
+
+            Python.with<ops.name_scope>(new ops.name_scope("", "add", new Tensor[] { x, y }), scope =>
+            {
+                t = gen_math_ops.add(x, y, scope);
+            });
+
+            return t;
         }
 
         public static Tensor operator -(Tensor t1, Tensor t2)
@@ -16,9 +23,16 @@ namespace Tensorflow
             return gen_math_ops.sub(t1, t2);
         }
 
-        public static Tensor operator *(Tensor t1, Tensor t2)
+        public static Tensor operator *(Tensor x, Tensor y)
         {
-            return gen_math_ops.mul(t1, t2);
+            Tensor t = null;
+
+            Python.with<ops.name_scope>(new ops.name_scope("", "mul", new Tensor[] { x, y }), scope =>
+            {
+                t = gen_math_ops.mul(x, y, name: scope);
+            });
+
+            return t;
         }
 
         public static Tensor operator /(Tensor t1, Tensor t2)

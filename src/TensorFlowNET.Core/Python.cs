@@ -61,8 +61,8 @@ namespace Tensorflow
 
         public static IEnumerable<(T, T)> zip<T>(IList<T> t1, IList<T> t2)
         {
-            int index = 0;
-            yield return (t1[index], t2[index]);
+            for (int i = 0; i < t1.Count; i++)
+                yield return (t1[i], t2[i]);
         }
     }
 
