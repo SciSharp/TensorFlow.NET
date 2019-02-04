@@ -82,5 +82,15 @@ namespace Tensorflow
         {
             return type == TF_DataType.TF_COMPLEX || type == TF_DataType.TF_COMPLEX64 || type == TF_DataType.TF_COMPLEX128;
         }
+
+        public static bool is_integer(this TF_DataType type)
+        {
+            return type == TF_DataType.TF_INT8 || type == TF_DataType.TF_INT16 || type == TF_DataType.TF_INT32 || type == TF_DataType.TF_INT64;
+        }
+
+        public static bool is_floating(this TF_DataType type)
+        {
+            return type == TF_DataType.TF_HALF || type == TF_DataType.TF_FLOAT || type == TF_DataType.TF_DOUBLE;
+        }
     }
 }

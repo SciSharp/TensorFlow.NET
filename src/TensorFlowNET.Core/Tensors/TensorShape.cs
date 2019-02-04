@@ -23,7 +23,7 @@ namespace Tensorflow
         /// <returns></returns>
         public bool is_fully_defined()
         {
-            return Dimensions != null; 
+            return Dimensions != null && Dimensions.Count(x => x > 0) > 0;
         }
     }
 }

@@ -181,7 +181,11 @@ namespace Tensorflow
         {
             foreach(var x in _NonEagerInputs(op, xs))
             {
-                pending_count[x.op.Name] -= 1;
+                if (!pending_count.ContainsKey(x.op.Name))
+                    pending_count[x.op.Name] = 0;
+                else
+                    pending_count[x.op.Name] -= 1;
+
                 var ready = pending_count[x.op.Name] == 0;
 
                 if(loop_state != null && !ready)
@@ -440,10 +444,32 @@ namespace Tensorflow
                     reached_ops.Add(op);
                     foreach (var output in op.outputs)
                     {
-                        var c = _Consumers(output, func_graphs).ToList();
-                        c.ForEach(x => queue.Enqueue(x));
+                        if (_IsBackpropagatable(output))
+                        {
+                            var c = _Consumers(output, func_graphs).ToList();
+                            c.ForEach(x => queue.Enqueue(x));
+                        }
                     }
                 }
+            }
+        }
+
+        private static bool _IsTrainable(Tensor tensor)
+        {
+            var dtype = tensor.dtype.as_base_dtype();
+            return new TF_DataType[] {TF_DataType.TF_HALF, TF_DataType.TF_FLOAT, TF_DataType.TF_DOUBLE,
+                TF_DataType.TF_COMPLEX64, TF_DataType.TF_COMPLEX128, TF_DataType.TF_RESOURCE}.Contains(dtype);
+        }
+        private static bool _IsBackpropagatable(Tensor tensor)
+        {
+            if(_IsTrainable(tensor))
+            {
+                return true;
+            }
+            else
+            {
+                var dtype = tensor.dtype.as_base_dtype();
+                return new TF_DataType[] { TF_DataType.TF_BFLOAT16, TF_DataType.TF_VARIANT }.Contains(dtype);
             }
         }
 
@@ -452,10 +478,9 @@ namespace Tensorflow
         /// </summary>
         /// <param name="t"></param>
         /// <param name="func_graphs"></param>
-        private static List<Operation> _Consumers(Tensor t, List<object> func_graphs)
+        private static Operation[] _Consumers(Tensor t, List<object> func_graphs)
         {
-            var consumers = t.consumers();
-            return consumers;
+            return t.consumers();
         }
 
         private static List<Tensor> _AsList(object ys)

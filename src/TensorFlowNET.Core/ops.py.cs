@@ -220,6 +220,11 @@ namespace Tensorflow
             _colocate_with_for_gradient(op, null, ignore_existing);
         }
 
+        public static void colocate_with(Tensor tensor, bool ignore_existing = false)
+        {
+            _colocate_with_for_gradient(tensor.op, null, ignore_existing);
+        }
+
         private static void _colocate_with_for_gradient(Operation op, int? gradient_uid, bool ignore_existing = false)
         {
             var default_graph = get_default_graph();
@@ -290,10 +295,12 @@ namespace Tensorflow
                 {
                     case "Add":
                         return math_grad._AddGrad(op, out_grads);
+                    case "Sum":
+                        return math_grad._SumGrad(op, out_grads);
                     case "RealDiv":
                         return math_grad._RealDivGrad(op, out_grads);
                     default:
-                        throw new NotImplementedException("get_gradient_function");
+                        throw new NotImplementedException($"get_gradient_function {oper.type}");
                 }
                 /*var result = typeof(math_grad).GetMethod($"_{op.type}Grad").Invoke(null, new object[] { op, out_grads });
                 var p1 = result.GetType().GetProperty("Item1");

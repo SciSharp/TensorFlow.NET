@@ -53,6 +53,11 @@ namespace Tensorflow
             }
         }
 
+        public static Tensor rank(Tensor input, string name = "")
+        {
+            return math_ops.rank_internal(input, name, optimize: true);
+        }
+
         /// <summary>
         /// Returns the shape of a tensor.
         /// </summary>
@@ -68,11 +73,14 @@ namespace Tensorflow
             return shape_internal(input, name, optimize: true, out_type: out_type);
         }
 
+        public static Tensor size(Tensor input, string name = "", TF_DataType out_type = TF_DataType.TF_INT32)
+        {
+            return size_internal(input, name, optimize: true, out_type: out_type);
+        }
+
         private static Tensor shape_internal(Tensor input, string name = "", bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
-            Tensor result = null;
-
-            Python.with<ops.name_scope>(new ops.name_scope(name, "Shape", new Tensor[] { input }), scope =>
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "Shape", new Tensor[] { input }), scope =>
             {
                 name = scope;
 
@@ -83,16 +91,46 @@ namespace Tensorflow
                     if (optimize && input_shape.is_fully_defined())
                     {
                         var nd = np.array(input_tensor.shape, out_type.as_numpy_datatype());
-                        result = constant_op.constant(nd, name);
+                        return constant_op.constant(nd, name);
                     }
                 }
                 else
                 {
                     // result = gen_array_ops.shape();
                 }
-            });
 
-            return result;
+                return null;
+            });
+        }
+
+        private static Tensor size_internal(Tensor input, string name = "", bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
+        {
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "Size", new Tensor[] { input }), scope =>
+            {
+                name = scope;
+
+                if (!tf.context.executing_eagerly())
+                {
+                    var input_tensor = ops.convert_to_tensor(input);
+                    var input_shape = tensor_util.to_shape(input_tensor.shape);
+                    if (optimize)
+                    {
+                        if (input_shape.is_fully_defined())
+                        {
+                            var nd = np.array(input_tensor.shape, out_type.as_numpy_datatype());
+                            return constant_op.constant(nd, name);
+                        }
+                    }
+
+                    return gen_array_ops.size(input, name: name, out_type: out_type);
+                }
+                else
+                {
+                    // result = gen_array_ops.shape();
+                }
+
+                return null;
+            });
         }
     }
 }

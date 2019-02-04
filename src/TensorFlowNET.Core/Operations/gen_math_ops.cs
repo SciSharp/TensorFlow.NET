@@ -17,9 +17,16 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor sub(Tensor x, Tensor y)
+        public static Tensor neg(Tensor x, string name = "")
         {
-            var _op = _op_def_lib._apply_op_helper("Sub", name: "sub", args: new { x, y });
+            var _op = _op_def_lib._apply_op_helper("Neg", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor sub(Tensor x, Tensor y, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Sub", name, args: new { x, y });
 
             return _op.outputs[0];
         }
@@ -31,9 +38,9 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor real_div(Tensor x, Tensor y)
+        public static Tensor real_div(Tensor x, Tensor y, string name = "")
         {
-            var _op = _op_def_lib._apply_op_helper("RealDiv", name: "truediv", args: new { x, y });
+            var _op = _op_def_lib._apply_op_helper("RealDiv", name, args: new { x, y });
 
             return _op.outputs[0];
         }
@@ -61,9 +68,9 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor sum(Tensor input, Tensor axis = null)
+        public static Tensor sum(Tensor input, Tensor axis = null, bool keep_dims = false, string name = "")
         {
-            var _op = _op_def_lib._apply_op_helper("Sum", args: new { input, reduction_indices = axis, keep_dims = false });
+            var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }

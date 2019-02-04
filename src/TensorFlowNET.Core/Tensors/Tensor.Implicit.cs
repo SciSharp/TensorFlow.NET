@@ -6,15 +6,19 @@ namespace Tensorflow
 {
     public partial class Tensor
     {
-        public static implicit operator Tensor(double scalar)
+        /// <summary>
+        /// Issue unresolved, will cause name_scope problem.
+        /// </summary>
+        /// <param name="scalar"></param>
+        /*public static implicit operator Tensor(double scalar)
         {
             return constant_op.constant(scalar);
-        }
+        }*/
 
-        public static implicit operator Tensor(int scalar)
+        /*public static implicit operator Tensor(int scalar)
         {
             return constant_op.constant(scalar);
-        }
+        }*/
 
         public static implicit operator int(Tensor tensor)
         {

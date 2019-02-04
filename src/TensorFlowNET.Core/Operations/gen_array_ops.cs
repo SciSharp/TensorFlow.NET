@@ -60,9 +60,30 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Return the reduction indices for computing gradients of s0 op s1 with broadcast.
+        /// </summary>
+        /// <param name="s0">A `Tensor`. Must be one of the following types: `int32`, `int64`.</param>
+        /// <param name="s1">A `Tensor`. Must have the same type as `s0`.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>A tuple of `Tensor` objects (r0, r1).</returns>
         public static (Tensor, Tensor) broadcast_gradient_args(Tensor s0, Tensor s1, string name = "")
         {
-            return (null, null);
+            var _op = _op_def_lib._apply_op_helper("BroadcastGradientArgs", name, new { s0, s1 });
+
+            return (_op.outputs[0], _op.outputs[1]);
+        }
+
+        public static Tensor reshape(Tensor tensor, Tensor shape, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
+            return _op.outputs[0];
+        }
+
+        public static Tensor size(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Size", name, new { input, out_type });
+            return _op.outputs[0];
         }
     }
 }

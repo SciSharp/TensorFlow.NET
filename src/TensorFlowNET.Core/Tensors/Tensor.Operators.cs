@@ -8,14 +8,24 @@ namespace Tensorflow
     {
         public static Tensor operator +(Tensor x, Tensor y)
         {
-            Tensor t = null;
-
-            Python.with<ops.name_scope>(new ops.name_scope("", "add", new Tensor[] { x, y }), scope =>
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "add", new Tensor[] { x, y }), scope =>
             {
-                t = gen_math_ops.add(x, y, scope);
+                return gen_math_ops.add(x, y, scope);
             });
+        }
 
-            return t;
+        public static Tensor operator +(Tensor x, int y)
+        {
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "add", new object[] { x, y }), scope =>
+            {
+                var y1 = ops.convert_to_tensor(y, x.dtype.as_base_dtype(), name: "y");
+                return gen_math_ops.add(x, y1, scope);
+            });
+        }
+
+        public static Tensor operator -(Tensor t1)
+        {
+            return gen_math_ops.neg(t1);
         }
 
         public static Tensor operator -(Tensor t1, Tensor t2)
@@ -35,19 +45,41 @@ namespace Tensorflow
 
         public static Tensor operator *(Tensor x, Tensor y)
         {
-            Tensor t = null;
-
-            Python.with<ops.name_scope>(new ops.name_scope("", "mul", new Tensor[] { x, y }), scope =>
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "mul", new Tensor[] { x, y }), scope =>
             {
-                t = gen_math_ops.mul(x, y, name: scope);
+                return gen_math_ops.mul(x, y, name: scope);
             });
-
-            return t;
         }
 
-        public static Tensor operator /(Tensor t1, Tensor t2)
+        public static Tensor operator *(Tensor x, int y)
         {
-            return gen_math_ops.real_div(t1, t2);
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "mul", new object[] { x, y }), scope =>
+            {
+                var y1 = ops.convert_to_tensor(y, x.dtype.as_base_dtype(), name: "y");
+                return gen_math_ops.mul(x, y1, name: scope);
+            });
+        }
+
+        public static Tensor operator /(Tensor x, Tensor y)
+        {
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("truediv/", "truediv", new Tensor[] { x, y }), scope =>
+            {
+                return gen_math_ops.real_div(x, y, scope);
+            });
+        }
+
+        public static Tensor operator /(Tensor x, double y)
+        {
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("truediv/", "truediv", new object[] { x, y }), scope =>
+            {
+                var y1 = ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y");
+                return gen_math_ops.real_div(x, y1, scope);
+            });
+        }
+
+        public static Tensor operator %(Tensor x, Tensor y)
+        {
+            throw new NotImplementedException("math mod is not implemented");
         }
     }
 }

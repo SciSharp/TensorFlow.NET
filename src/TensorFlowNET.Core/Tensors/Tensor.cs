@@ -38,6 +38,7 @@ namespace Tensorflow
         public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / dataTypeSize;
         public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
+
         public long[] shape
         {
             get
@@ -60,7 +61,10 @@ namespace Tensorflow
 
             set
             {
-                // c_api.TF_GraphSetTensorShape_wrapper
+                if (value == null)
+                    c_api.TF_GraphSetTensorShape(this.Graph, this._as_tf_output(), null, -1, status);
+                else
+                    c_api.TF_GraphSetTensorShape(this.Graph, this._as_tf_output(), value, value.Length, status);
             }
         }
         
@@ -170,11 +174,12 @@ namespace Tensorflow
             _id = ops.uid();
         }
 
-        public List<Operation> consumers()
+        public Operation[] Consumers => consumers();
+        public Operation[] consumers()
         {
             var output = _as_tf_output();
             var consumer_names = c_api.TF_OperationOutputConsumers_wrapper(output);
-            return consumer_names.Select(x => Graph.OperationByName(x)).ToList();
+            return consumer_names.Select(x => Graph.OperationByName(x)).ToArray();
         }
 
         public TF_Output _as_tf_output()
