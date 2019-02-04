@@ -146,7 +146,7 @@ namespace Tensorflow
                     var inputs = _NonEagerInputs(op, xs).ToList();
                     foreach (var (t_in, in_grad) in Python.zip(inputs, in_grads))
                     {
-                        if(in_grad != null)
+                        if(in_grad.op != null)
                         {
                             in_grad.shape = t_in.shape;
                             _SetGrad(grads, t_in, in_grad);

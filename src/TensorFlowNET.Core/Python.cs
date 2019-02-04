@@ -53,6 +53,25 @@ namespace Tensorflow
             }
         }
 
+        public static TOut with<TIn, TOut>(IPython py, Func<TIn, TOut> action) where TIn : IPython
+        {
+            try
+            {
+                py.__enter__();
+                return action((TIn)py);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw ex;
+            }
+            finally
+            {
+                py.__exit__();
+                py.Dispose();
+            }
+        }
+
         public static IEnumerable<(T, T)> zip<T>(NDArray t1, NDArray t2)
         {
             int index = 0;

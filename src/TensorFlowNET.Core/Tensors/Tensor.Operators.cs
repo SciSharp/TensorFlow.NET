@@ -23,6 +23,16 @@ namespace Tensorflow
             return gen_math_ops.sub(t1, t2);
         }
 
+        public static Tensor operator *(double x, Tensor y)
+        {
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "mul", new { x, y }),
+                scope =>
+                {
+                    var x1 = ops.convert_to_tensor(x, y.dtype.as_base_dtype(), name: "x");
+                    return gen_math_ops.mul(x1, y, name: scope);
+                });
+        }
+
         public static Tensor operator *(Tensor x, Tensor y)
         {
             Tensor t = null;
