@@ -8,6 +8,7 @@ using node_def_pb2 = Tensorflow;
 using Google.Protobuf;
 using System.Linq;
 using NumSharp.Core;
+using System.ComponentModel;
 
 namespace Tensorflow
 {
@@ -285,7 +286,20 @@ namespace Tensorflow
 
             return (oper, out_grads) =>
             {
-                return math_grad._AddGrad(op, out_grads);
+                switch (oper.type)
+                {
+                    case "Add":
+                        return math_grad._AddGrad(op, out_grads);
+                    case "RealDiv":
+                        return math_grad._RealDivGrad(op, out_grads);
+                    default:
+                        throw new NotImplementedException("get_gradient_function");
+                }
+                /*var result = typeof(math_grad).GetMethod($"_{op.type}Grad").Invoke(null, new object[] { op, out_grads });
+                var p1 = result.GetType().GetProperty("Item1");
+                var p2 = result.GetType().GetProperty("Item2");
+
+                return (p1.GetValue(result, null) as Tensor, p2.GetValue(result, null) as Tensor);*/
             };
         }
     }

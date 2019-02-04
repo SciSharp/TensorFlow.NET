@@ -42,7 +42,7 @@ namespace Tensorflow
         {
             get
             {
-                var dims = new long[rank];
+                var dims = new long[rank < 0 ? 0 : rank];
 
                 if (_handle == IntPtr.Zero)
                 {

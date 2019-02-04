@@ -37,6 +37,8 @@ namespace Tensorflow
             // ancestor graphs. This is necessary for correctly handling captured values.
             var curr_graph = src_graph;
 
+            if (stop_gradients == null)
+                stop_gradients = new Tensor[0];
             if (grad_ys == null)
                 grad_ys = new Tensor[ys.Length];
 
@@ -45,7 +47,7 @@ namespace Tensorflow
             all.AddRange(xs);
             all.AddRange(stop_gradients);
             all.AddRange(grad_ys);
-
+            
             // Iterate over the collected ops.
             /**
              * grads: op => list of gradients received on each output endpoint of the

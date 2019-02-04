@@ -111,12 +111,11 @@ namespace TensorFlowNET.UnitTest
                 var grad_inputs_op = FloatConst2x2(graph_, s_, grad_inputs_val, "GradInputs");
                 grad_inputs[0] = new TF_Output(grad_inputs_op, 0);
 
-                IntPtr handle = IntPtr.Zero;
+                IntPtr[] handles = new IntPtr[2] { IntPtr.Zero, IntPtr.Zero };
                 c_api.TF_AddGradientsWithPrefix(graph_, prefix, outputs, noutputs, inputs,
-                                      ninputs, grad_inputs, s_, ref handle);
-
-                grad_outputs[0] = Marshal.PtrToStructure<TF_Output>(handle);
-                var op = new Operation(handle);
+                                      ninputs, grad_inputs, s_, handles);
+                
+                var op = new Operation(handles[0]);
             }
             else
             {

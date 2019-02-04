@@ -59,5 +59,10 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+
+        public static (Tensor, Tensor) broadcast_gradient_args(Tensor s0, Tensor s1, string name = "")
+        {
+            return (null, null);
+        }
     }
 }

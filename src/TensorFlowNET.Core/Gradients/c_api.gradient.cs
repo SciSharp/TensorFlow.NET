@@ -24,6 +24,6 @@ namespace Tensorflow
         /// <param name="dy">TF_Output*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_AddGradientsWithPrefix(IntPtr g, string prefix, TF_Output[] y, int ny,
-            TF_Output[] x, int nx, TF_Output[] dx, IntPtr status, ref IntPtr dy);
+            TF_Output[] x, int nx, TF_Output[] dx, IntPtr status, IntPtr[] dy);
     }
 }
