@@ -83,6 +83,12 @@ namespace Tensorflow
             for (int i = 0; i < t1.Count; i++)
                 yield return (t1[i], t2[i]);
         }
+
+        public static IEnumerable<(int, T)> enumerate<T>(IList<T> values)
+        {
+            for (int i = 0; i < values.Count; i++)
+                yield return (i, values[i]);
+        }
     }
 
     public interface IPython : IDisposable

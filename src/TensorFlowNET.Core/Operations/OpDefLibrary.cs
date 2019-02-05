@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Tensorflow.OpDef.Types;
@@ -41,6 +42,7 @@ namespace Tensorflow
             var attrs = new Dictionary<string, object>();
             var inputs = new List<Tensor>();
             var input_types = new List<TF_DataType>();
+            var base_types = new List<TF_DataType>();
 
             Operation op = null;
             Python.with<ops.name_scope>(new ops.name_scope(name), scope =>
@@ -49,34 +51,67 @@ namespace Tensorflow
                 foreach (var input_arg in op_def.InputArg)
                 {
                     var input_name = input_arg.Name;
-                    if (keywords[input_name] is double int_value)
+                    var values = keywords[input_name];
+                    // Goals:
+                    // * Convert values to Tensors if it contains constants.
+                    // * Verify that values is a list if that matches the input_arg's
+                    // type.
+                    // * If the input_arg's type is determined by attrs, either set
+                    // those attrs and validate those attr values are legal (if
+                    // they have not yet been set) or validate the input matches
+                    // the type indicated by the attrs (if they have already been
+                    // inferred via an earlier input).
+                    // * If the input_arg has an explicit type, make sure the input
+                    // conforms.
+
+                    if (_IsListParameter(input_arg))
                     {
-                        keywords[input_name] = constant_op.constant(int_value, input_name);
+                        DataType dtype = DataType.DtInvalid;
+                        DataType default_dtype = DataType.DtInvalid;
+
+                        if (!_IsListValue(values))
+                            throw new TypeError($"Expected list for '{input_name}' argument to '{op_type_name}' Op, not {values}.");
+                        if(input_arg.Type != DataType.DtInvalid)
+                        {
+                            dtype = input_arg.Type;
+                        }
+                        else if (!String.IsNullOrEmpty(input_arg.NumberAttr))
+                        {
+
+                        }
+
+                        if(input_arg.IsRef && dtype != DataType.DtInvalid)
+                            dtype = dtype.as_base_dtype();
+
+                        values = ops.internal_convert_n_to_tensor(values, name: input_arg.Name, dtype: dtype, preferred_dtype: default_dtype, as_ref: input_arg.IsRef);
+                        
+                        inputs.AddRange(values as Tensor[]);
+                    }
+                    else
+                    {
+                        if (!(values is Tensor))
+                        {
+                            keywords[input_name] = constant_op.constant(values, input_name);
+                        }
+
+                        if (keywords[input_name] is Tensor value)
+                        {
+                            if (keywords.ContainsKey(input_name))
+                            {
+                                inputs.Add(value);
+                            }
+
+                            if (!String.IsNullOrEmpty(input_arg.TypeAttr))
+                            {
+                                attrs[input_arg.TypeAttr] = value.dtype;
+                            }
+
+                            values = new Tensor[] { value };
+                        }
                     }
 
-                    if (keywords[input_name] is Tensor value)
-                    {
-                        if (keywords.ContainsKey(input_name))
-                        {
-                            inputs.Add(value);
-                        }
-
-                        if (!String.IsNullOrEmpty(input_arg.TypeAttr))
-                        {
-                            attrs[input_arg.TypeAttr] = value.dtype;
-                        }
-
-                        if (input_arg.IsRef)
-                        {
-
-                        }
-                        else
-                        {
-                            var base_type = value.dtype.as_base_dtype();
-
-                            input_types.Add(base_type);
-                        }
-                    }
+                    base_types.AddRange((values as Tensor[]).Select(x => x.dtype.as_base_dtype()));
+                    input_types.AddRange(base_types);
                 }
 
                 // Process remaining attrs
@@ -150,6 +185,27 @@ namespace Tensorflow
         public DataType _MakeType(TF_DataType v, AttrDef attr_def)
         {
             return v.as_base_dtype().as_datatype_enum();
+        }
+
+        private bool _IsListParameter(ArgDef arg)
+        {
+            if (!String.IsNullOrEmpty(arg.NumberAttr))
+                return true;
+            else if (!String.IsNullOrEmpty(arg.TypeListAttr))
+                return true;
+            else
+                return false;
+        }
+
+        private bool _IsListValue(object v)
+        {
+            switch (v)
+            {
+                case Tensor[] val:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         private Dictionary<string, object> ConvertToDict(dynamic dyn)

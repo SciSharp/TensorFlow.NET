@@ -50,10 +50,10 @@ namespace Tensorflow
         /// Creates a tensor filled with a scalar value.
         /// </summary>
         /// <param name="dims">A `Tensor`.</param>
-        /// <param name="value">A `Tensor`.</param>
+        /// <param name="value">A `Tensor`. 0-D (scalar). Value to fill the returned tensor.</param>
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `value`.</returns>
-        public static Tensor fill(Tensor dims, Tensor value, string name = "")
+        public static Tensor fill<T>(Tensor dims, T value, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Fill", name, new { dims, value });
 

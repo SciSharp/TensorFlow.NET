@@ -309,5 +309,33 @@ namespace Tensorflow
                 return (p1.GetValue(result, null) as Tensor, p2.GetValue(result, null) as Tensor);*/
             };
         }
+
+        public static T[] internal_convert_n_to_tensor<T>(T[] values, DataType dtype = DataType.DtInvalid, 
+            string name = "", DataType preferred_dtype = DataType.DtInvalid, 
+            bool as_ref = false)
+        {
+            var ret = new List<T>();
+
+            foreach((int i, T value) in Python.enumerate(values))
+            {
+                string n = string.IsNullOrEmpty(name) ? "" : $"{name}_{i}";
+                ret.Add(internal_convert_to_tensor(value, dtype: dtype, name: n, as_ref: as_ref, preferred_dtype: preferred_dtype));
+            }
+
+            return ret.ToArray();
+        }
+
+        public static T internal_convert_to_tensor<T>(T value, DataType dtype = DataType.DtInvalid,
+            string name = "", DataType preferred_dtype = DataType.DtInvalid,
+            bool as_ref = false)
+        {
+            switch (typeof(T).Name)
+            {
+                case "Tensor":
+                    return value;
+                default:
+                    throw new NotImplementedException("internal_convert_to_tensor");
+            }
+        }
     }
 }

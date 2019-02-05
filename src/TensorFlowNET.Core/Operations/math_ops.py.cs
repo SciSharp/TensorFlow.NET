@@ -20,8 +20,10 @@ namespace Tensorflow
             var input_rank = array_ops.size(input_shape);
             axes = (axes + input_rank) % input_rank;
             var axes_shape = array_ops.shape(axes);
+            var a1 = new Tensor[] { input_rank, axes };
+            var a2 = new Tensor[] { input_shape, gen_array_ops.fill(axes_shape, 1) };
 
-            return null;
+            return gen_data_flow_ops.dynamic_stitch(a1, a2);
         }
 
         /// <summary>
