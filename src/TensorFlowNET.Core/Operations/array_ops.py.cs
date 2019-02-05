@@ -99,7 +99,7 @@ namespace Tensorflow
                     // result = gen_array_ops.shape();
                 }
 
-                return null;
+                return gen_array_ops.shape(input);
             });
         }
 

@@ -80,6 +80,12 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Shape", name, new { input, out_type });
+            return _op.outputs[0];
+        }
+
         public static Tensor size(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Size", name, new { input, out_type });

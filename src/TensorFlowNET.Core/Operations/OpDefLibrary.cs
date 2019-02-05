@@ -93,6 +93,8 @@ namespace Tensorflow
                 foreach (var attr_def in op_def.Attr)
                 {
                     var key = attr_def.Name;
+                    if (!attrs.ContainsKey(key))
+                        Console.WriteLine($"{key} not found in attr_def.");
                     var value = attrs[key];
                     var attr_value = new AttrValue();
 

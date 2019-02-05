@@ -129,15 +129,23 @@ namespace Tensorflow
                             // for ops that do not have gradients.
                             var grad_fn = ops.get_gradient_function(op);
 
-                            Python.with<ops.name_scope>(new ops.name_scope(op.Name + "_grad"), delegate
+                            Python.with<ops.name_scope>(new ops.name_scope(op.Name + "_grad"), scope1 =>
                             {
+                                string name1 = scope1;
                                 if (grad_fn != null)
                                 {
                                     in_grads = _MaybeCompile(grad_scope, op, out_grads[0], null, grad_fn);
                                     _VerifyGeneratedGradients(in_grads, op);
                                 }
+
+                                if (gate_gradients)
+                                {
+
+                                }
                             });
-                            
+
+                            // temp fix name scope
+                            op.Graph._name_stack = "gradients";
                         }
                     }
                     else

@@ -45,6 +45,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor floor_mod(Tensor x, Tensor y, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("FloorMod", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
         /// <summary>
         /// Multiply the matrix "a" by the matrix "b".
         /// </summary>

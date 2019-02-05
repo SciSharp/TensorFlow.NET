@@ -19,6 +19,7 @@ namespace Tensorflow
 
             var input_rank = array_ops.size(input_shape);
             axes = (axes + input_rank) % input_rank;
+            var axes_shape = array_ops.shape(axes);
 
             return null;
         }

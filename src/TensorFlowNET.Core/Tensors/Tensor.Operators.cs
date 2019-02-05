@@ -79,7 +79,10 @@ namespace Tensorflow
 
         public static Tensor operator %(Tensor x, Tensor y)
         {
-            throw new NotImplementedException("math mod is not implemented");
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "mod", new object[] { x, y }), scope =>
+            {
+                return gen_math_ops.floor_mod(x, y, scope);
+            });
         }
     }
 }
