@@ -23,7 +23,6 @@ namespace Tensorflow
         private List<String> _unfetchable_ops = new List<string>();
 
         public string _name_stack = "";
-        public string old_stack = "";
         public string _graph_key;
         public Status Status { get; }
 
@@ -180,8 +179,6 @@ namespace Tensorflow
 
         public string name_scope(string name)
         {
-            old_stack = _name_stack;
-
             string new_stack = "";
 
             if (name.EndsWith("/"))

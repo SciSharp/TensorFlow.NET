@@ -294,11 +294,11 @@ namespace Tensorflow
                 switch (oper.type)
                 {
                     case "Add":
-                        return math_grad._AddGrad(op, out_grads);
+                        return math_grad._AddGrad(oper, out_grads);
                     case "Sum":
-                        return math_grad._SumGrad(op, out_grads);
+                        return math_grad._SumGrad(oper, out_grads);
                     case "RealDiv":
-                        return math_grad._RealDivGrad(op, out_grads);
+                        return math_grad._RealDivGrad(oper, out_grads);
                     default:
                         throw new NotImplementedException($"get_gradient_function {oper.type}");
                 }

@@ -48,7 +48,8 @@ namespace Tensorflow
             var reduce_sum1 = math_ops.reduce_sum(realdiv1, rx);
             var realdiv2 = gen_math_ops.real_div(-x, y);
             var realdiv3 = gen_math_ops.real_div(realdiv2, y);
-            var reduce_sum2 = math_ops.reduce_sum(grad * realdiv3, ry);
+            var mul = grad * realdiv3;
+            var reduce_sum2 = math_ops.reduce_sum(mul, ry);
 
             return (gen_array_ops.reshape(reduce_sum1, sx), gen_array_ops.reshape(reduce_sum2, sy));
         }

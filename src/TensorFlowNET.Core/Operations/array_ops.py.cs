@@ -94,10 +94,6 @@ namespace Tensorflow
                         return constant_op.constant(nd, name);
                     }
                 }
-                else
-                {
-                    // result = gen_array_ops.shape();
-                }
 
                 return gen_array_ops.shape(input);
             });

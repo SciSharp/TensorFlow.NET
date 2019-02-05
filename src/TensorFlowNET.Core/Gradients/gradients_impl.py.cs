@@ -143,9 +143,6 @@ namespace Tensorflow
 
                                 }
                             });
-
-                            // temp fix name scope
-                            op.Graph._name_stack = "gradients";
                         }
                     }
                     else

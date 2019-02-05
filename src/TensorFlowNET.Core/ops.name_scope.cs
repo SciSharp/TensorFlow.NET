@@ -14,6 +14,7 @@ namespace Tensorflow
             public object _values;
             public Context _ctx;
             public string _name_scope;
+            public string old_stack = "";
             private object _g_manager;
 
             public name_scope(string name, string default_name = "", object values = null)
@@ -38,15 +39,14 @@ namespace Tensorflow
                 if (g == null)
                     g = get_default_graph();
 
+                old_stack = g._name_stack;
                 _name_scope = g.name_scope(_name);
             }
 
             public void Dispose()
             {
                 var g = get_default_graph();
-                g._name_stack = g.old_stack;
-                // clear g._name_stack
-                g.old_stack = "";
+                g._name_stack = old_stack;
             }
 
             public void __exit__()
