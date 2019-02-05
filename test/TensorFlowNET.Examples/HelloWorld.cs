@@ -18,7 +18,8 @@ namespace TensorFlowNET.Examples
             
                The value returned by the constructor represents the output
                of the Constant op. */
-            var hello = tf.constant("Hello, TensorFlow!");
+            var str = "Hello, TensorFlow!";
+            var hello = tf.constant(str);
 
             // Start tf session
             using (var sess = tf.Session())
@@ -26,9 +27,9 @@ namespace TensorFlowNET.Examples
                 // Run the op
                 var result = sess.run(hello);
                 Console.WriteLine(result.ToString());
-                if(!result.ToString().Equals("Hello, TensorFlow!"))
+                if(!result.ToString().Equals(str))
                 {
-                    throw new ValueError("HelloWorld");
+                    throw new ValueError("HelloWorld example acts in unexpected way.");
                 }
             }
         }
