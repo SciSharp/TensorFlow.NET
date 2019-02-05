@@ -84,32 +84,25 @@ namespace Tensorflow
                             dtype = dtype.as_base_dtype();
 
                         values = ops.internal_convert_n_to_tensor(values, name: input_arg.Name, dtype: dtype, preferred_dtype: default_dtype, as_ref: input_arg.IsRef);
-                        
-                        inputs.AddRange(values as Tensor[]);
                     }
                     else
                     {
-                        if (!(values is Tensor))
+                        if (keywords[input_name] is Tensor)
                         {
-                            keywords[input_name] = constant_op.constant(values, input_name);
+                        }
+                        else
+                        {
+                            keywords[input_name] = ops.internal_convert_to_tensor(values, name: input_name);
                         }
 
-                        if (keywords[input_name] is Tensor value)
+                        if (!String.IsNullOrEmpty(input_arg.TypeAttr))
                         {
-                            if (keywords.ContainsKey(input_name))
-                            {
-                                inputs.Add(value);
-                            }
-
-                            if (!String.IsNullOrEmpty(input_arg.TypeAttr))
-                            {
-                                attrs[input_arg.TypeAttr] = value.dtype;
-                            }
-
-                            values = new Tensor[] { value };
+                            attrs[input_arg.TypeAttr] = (keywords[input_name] as Tensor).dtype;
                         }
+                        values = new Tensor[] { keywords[input_name] as Tensor };
                     }
 
+                    inputs.AddRange(values as Tensor[]);
                     base_types.AddRange((values as Tensor[]).Select(x => x.dtype.as_base_dtype()));
                     input_types.AddRange(base_types);
                 }

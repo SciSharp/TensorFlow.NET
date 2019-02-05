@@ -310,11 +310,11 @@ namespace Tensorflow
             };
         }
 
-        public static T[] internal_convert_n_to_tensor<T>(T[] values, DataType dtype = DataType.DtInvalid, 
+        public static Tensor[] internal_convert_n_to_tensor<T>(T[] values, DataType dtype = DataType.DtInvalid, 
             string name = "", DataType preferred_dtype = DataType.DtInvalid, 
             bool as_ref = false)
         {
-            var ret = new List<T>();
+            var ret = new List<Tensor>();
 
             foreach((int i, T value) in Python.enumerate(values))
             {
@@ -325,16 +325,16 @@ namespace Tensorflow
             return ret.ToArray();
         }
 
-        public static T internal_convert_to_tensor<T>(T value, DataType dtype = DataType.DtInvalid,
+        public static Tensor internal_convert_to_tensor<T>(T value, DataType dtype = DataType.DtInvalid,
             string name = "", DataType preferred_dtype = DataType.DtInvalid,
             bool as_ref = false)
         {
             switch (typeof(T).Name)
             {
                 case "Tensor":
-                    return value;
+                    return value as Tensor;
                 default:
-                    throw new NotImplementedException("internal_convert_to_tensor");
+                    return constant_op.constant(np.array(value), name);
             }
         }
     }
