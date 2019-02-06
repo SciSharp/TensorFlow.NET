@@ -84,5 +84,15 @@ namespace Tensorflow
                 return gen_math_ops.floor_mod(x, y, scope);
             });
         }
+
+        public static Tensor operator >(Tensor x, int y)
+        {
+            return gen_array_ops.greater(x, y);
+        }
+
+        public static Tensor operator <(Tensor x, int y)
+        {
+            return gen_array_ops.less(x, y);
+        }
     }
 }

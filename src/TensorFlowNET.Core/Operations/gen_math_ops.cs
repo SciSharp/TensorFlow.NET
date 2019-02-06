@@ -52,6 +52,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor floor_div(Tensor x, Tensor y, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("FloorDiv", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
         /// <summary>
         /// Multiply the matrix "a" by the matrix "b".
         /// </summary>
@@ -68,9 +75,23 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor pow(Tensor x, double y)
+        /// <summary>
+        /// Returns the max of x and y (i.e. x > y ? x : y) element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor maximum<T1, T2>(T1 x, T2 y, string name = "")
         {
-            var _op = _op_def_lib._apply_op_helper("Pow", args: new { x, y });
+            var _op = _op_def_lib._apply_op_helper("Maximum", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor pow(Tensor x, double y, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Pow", name, args: new { x, y });
 
             return _op.outputs[0];
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -74,7 +75,7 @@ namespace Tensorflow
         /// </param>
         /// <param name="original_op"></param>
         /// <param name="op_def"></param>
-        public Operation(NodeDef node_def, Graph g, List<Tensor> inputs = null, TF_DataType[] output_types = null, Operation[] control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
+        public Operation(NodeDef node_def, Graph g, Tensor[] inputs = null, TF_DataType[] output_types = null, Operation[] control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
             Graph = g;
 
@@ -101,7 +102,8 @@ namespace Tensorflow
             if(op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
 
-            _handle = ops._create_c_op(g, node_def, inputs, control_input_ops.ToArray());
+            var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
+            _handle = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
 
             // Initialize self._outputs.
             output_types = new TF_DataType[NumOutputs];
@@ -116,6 +118,41 @@ namespace Tensorflow
 
             if (_handle != IntPtr.Zero)
                 _control_flow_post_processing();
+        }
+
+        private object[] _reconstruct_sequence_inputs(OpDef op_def, Tensor[] inputs, MapField<string, AttrValue> attrs)
+        {
+            var grouped_inputs = new List<object>();
+            int i = 0;
+            int input_len = 0;
+            bool is_sequence = false;
+            foreach (var input_arg in op_def.InputArg)
+            {
+                if (!string.IsNullOrEmpty(input_arg.NumberAttr))
+                {
+                    input_len = (int)attrs[input_arg.NumberAttr].I;
+                    is_sequence = true;
+                }
+                else if (!string.IsNullOrEmpty(input_arg.TypeListAttr))
+                {
+                    input_len = attrs[input_arg.TypeListAttr].List.Type.Count;
+                    is_sequence = true;
+                }
+                else
+                {
+                    input_len = 1;
+                    is_sequence = false;
+                }
+
+                if (is_sequence)
+                    grouped_inputs.Add(inputs.Skip(i).Take(input_len).ToArray());
+                else
+                    grouped_inputs.Add(inputs[i]);
+
+                i += input_len;
+            }
+
+            return grouped_inputs.ToArray();
         }
 
         public object get_attr<T>(string name)

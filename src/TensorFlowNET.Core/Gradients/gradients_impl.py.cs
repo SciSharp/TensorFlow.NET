@@ -138,7 +138,7 @@ namespace Tensorflow
                                     _VerifyGeneratedGradients(in_grads, op);
                                 }
 
-                                if (gate_gradients)
+                                if (gate_gradients && in_grads.Count(x => x != null) > 1)
                                 {
 
                                 }
@@ -153,9 +153,13 @@ namespace Tensorflow
                     var inputs = _NonEagerInputs(op, xs).ToList();
                     foreach (var (t_in, in_grad) in Python.zip(inputs, in_grads))
                     {
-                        if(in_grad.op != null)
+                        if(in_grad != null)
                         {
-                            in_grad.shape = t_in.shape;
+                            if(in_grad is Tensor && t_in.dtype != TF_DataType.TF_RESOURCE)
+                            {
+                                in_grad.shape = t_in.shape;
+                            }
+                            
                             _SetGrad(grads, t_in, in_grad);
                         }
                     }

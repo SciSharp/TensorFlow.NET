@@ -110,10 +110,18 @@ namespace Tensorflow
                 add_to_collection(name, value);
         }
 
-        public unsafe Operation create_op(string op_type, List<Tensor> inputs, TF_DataType[] dtypes, 
+        public unsafe Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes, 
             TF_DataType[] input_types = null, string name = "", 
             Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)
         {
+            if (inputs == null)
+                inputs = new Tensor[0];
+
+            foreach ((int idx, Tensor a) in Python.enumerate(inputs))
+            {
+
+            }
+
             if (String.IsNullOrEmpty(name))
             {
                 name = op_type;
@@ -121,9 +129,6 @@ namespace Tensorflow
 
             name = name.EndsWith("/") ? ops._name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
-
-            if (inputs == null)
-                inputs = new List<Tensor>();
 
             var input_ops = inputs.Select(x => x.op).ToArray();
             var control_inputs = _control_dependencies_for_inputs(input_ops);
