@@ -294,8 +294,16 @@ namespace Tensorflow
                 {
                     case "Add":
                         return math_grad._AddGrad(oper, out_grads);
+                    case "Identity":
+                        return math_grad._IdGrad(oper, out_grads);
+                    case "Mul":
+                        return math_grad._MulGrad(oper, out_grads);
                     case "Sum":
                         return math_grad._SumGrad(oper, out_grads);
+                    case "Sub":
+                        return math_grad._SubGrad(oper, out_grads);
+                    case "Pow":
+                        return math_grad._PowGrad(oper, out_grads);
                     case "RealDiv":
                         return math_grad._RealDivGrad(oper, out_grads);
                     default:

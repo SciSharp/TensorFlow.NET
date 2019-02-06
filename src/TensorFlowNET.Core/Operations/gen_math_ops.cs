@@ -24,7 +24,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor sub(Tensor x, Tensor y, string name = "")
+        public static Tensor sub<Tx, Ty>(Tx x, Ty y, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Sub", name, args: new { x, y });
 
@@ -89,7 +89,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor pow(Tensor x, double y, string name = "")
+        public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Pow", name, args: new { x, y });
 

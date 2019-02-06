@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
@@ -13,8 +14,67 @@ namespace Tensorflow
         {
             var x = op.inputs[0];
             var y = op.inputs[1];
+            if (grad is Tensor && _ShapesFullySpecifiedAndEqual(x, y, grad))
+                return (grad, grad);
 
-            return (grad, grad);
+            var sx = array_ops.shape(x);
+            var sy = array_ops.shape(y);
+            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+
+            var r1 = gen_array_ops.reshape(math_ops.reduce_sum(grad, rx), sx);
+            var r2 = gen_array_ops.reshape(math_ops.reduce_sum(grad, ry), sy);
+
+            return (r1, r2);
+        }
+
+        public static (Tensor, Tensor) _IdGrad(Operation op, Tensor grad)
+        {
+            return (grad, null);
+        }
+
+        public static (Tensor, Tensor) _MulGrad(Operation op, Tensor grad)
+        {
+            var x = op.inputs[0];
+            var y = op.inputs[1];
+            if (grad is Tensor && _ShapesFullySpecifiedAndEqual(x, y, grad) &&
+                new TF_DataType[] { tf.int32, tf.float32 }.Contains(grad.dtype))
+                return (gen_math_ops.mul(grad, y), gen_math_ops.mul(grad, x));
+
+            var sx = array_ops.shape(x);
+            var sy = array_ops.shape(y);
+            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+
+            x = math_ops.conj(x);
+            y = math_ops.conj(y);
+
+            var r1 = math_ops.reduce_sum(gen_math_ops.mul(grad, y), rx);
+            var r2 = math_ops.reduce_sum(gen_math_ops.mul(x, grad), ry);
+
+            return (gen_array_ops.reshape(r1, sx), gen_array_ops.reshape(r2, sy));
+        }
+
+        public static (Tensor, Tensor) _SubGrad(Operation op, Tensor grad)
+        {
+            var x = op.inputs[0];
+            var y = op.inputs[1];
+            if (grad is Tensor && _ShapesFullySpecifiedAndEqual(x, y, grad))
+                return (grad, -grad);
+
+            var sx = array_ops.shape(x);
+            var sy = array_ops.shape(y);
+            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+
+            var r1 = gen_array_ops.reshape(math_ops.reduce_sum(grad, rx), sx);
+            var r2 = gen_array_ops.reshape(-math_ops.reduce_sum(grad, ry), sy);
+
+            return (r1, r2);
+        }
+
+        public static bool _ShapesFullySpecifiedAndEqual(Tensor x, Tensor y, Tensor grad)
+        {
+            return false;
+            /*return string.Join(",", x.shape).Equals(string.Join(",", y.shape)) &&
+                   string.Join(",", x.shape).Equals(string.Join(",", grad.shape));*/
         }
 
         public static (Tensor, Tensor) _SumGrad(Operation op, Tensor grad)
@@ -71,8 +131,7 @@ namespace Tensorflow
             x = math_ops.conj(x);
             y = math_ops.conj(y);
             y = math_ops.conj(z);
-
-            var gx = gen_array_ops.reshape(math_ops.reduce_sum(grad * y * gen_math_ops.pow(x, y - 1), rx), sx);
+            var gx = gen_array_ops.reshape(math_ops.reduce_sum(grad * y * gen_math_ops.pow(x, y - 1.0), rx), sx);
             Tensor log_x = null;
             // Avoid false singularity at x = 0
             if (x.dtype.is_complex())
@@ -81,7 +140,9 @@ namespace Tensorflow
             }
             else
             {
-                log_x = array_ops.where(x > 0, gen_array_ops.log(x), array_ops.zeros_like(x));
+                var x1 = gen_array_ops.log(x);
+                var y1 = array_ops.zeros_like(x);
+                log_x = array_ops.where(x > 0.0, x1, y1);
             }
 
             var gy = gen_array_ops.reshape(math_ops.reduce_sum(grad * z * log_x, ry), sy);

@@ -192,8 +192,8 @@ namespace Tensorflow
             {
                 if (!pending_count.ContainsKey(x.op.Name))
                     pending_count[x.op.Name] = 0;
-                else
-                    pending_count[x.op.Name] -= 1;
+
+                pending_count[x.op.Name] -= 1;
 
                 var ready = pending_count[x.op.Name] == 0;
 
@@ -288,7 +288,7 @@ namespace Tensorflow
                     }
                 }
                 if (is_stop_op)
-                    stop_ops.Add(op);
+                    stop_ops.Insert(0, op);
             }
             stop_ops.AddRange(stop_gradient_ops.Where(x => !stop_ops.Contains(x)));
             return stop_ops.ToArray();

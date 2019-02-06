@@ -147,7 +147,27 @@ namespace Tensorflow
 
         public static Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool optimize = true)
         {
-            throw new NotImplementedException("zeros_like");
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "zeros_like", new Tensor[] { tensor }), scope =>
+            {
+                name = scope;
+                tensor = ops.convert_to_tensor(tensor, name: "tensor");
+
+                // is_fully_defined return unexpected value.
+                if (optimize && tensor_util.to_shape(tensor.shape).is_fully_defined() && dtype != TF_DataType.TF_VARIANT)
+                {
+
+                }
+
+                if(dtype != TF_DataType.DtInvalid && dtype != tensor.dtype && dtype != TF_DataType.TF_VARIANT)
+                {
+                    throw new NotImplementedException("zeros_like");
+                    // return zeros(shape_internal(tensor, optimize: optimize), dtype: dtype, name: name);
+                }
+                else
+                {
+                    return gen_array_ops.zeros_like(tensor, name: name);
+                }
+            });
         }
     }
 }

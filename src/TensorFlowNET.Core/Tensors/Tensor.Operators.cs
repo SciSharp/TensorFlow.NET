@@ -23,15 +23,10 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor operator -(Tensor t1)
-        {
-            return gen_math_ops.neg(t1);
-        }
-
-        public static Tensor operator -(Tensor t1, Tensor t2)
-        {
-            return gen_math_ops.sub(t1, t2);
-        }
+        public static Tensor operator -(Tensor t1) => gen_math_ops.neg(t1);
+        public static Tensor operator -(Tensor t1, Tensor t2) => gen_math_ops.sub(t1, t2);
+        public static Tensor operator -(Tensor t1, int t2) => gen_math_ops.sub(t1, t2);
+        public static Tensor operator -(Tensor t1, double t2) => gen_math_ops.sub(t1, t2);
 
         public static Tensor operator *(double x, Tensor y)
         {
@@ -85,14 +80,9 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor operator >(Tensor x, int y)
-        {
-            return gen_array_ops.greater(x, y);
-        }
-
-        public static Tensor operator <(Tensor x, int y)
-        {
-            return gen_array_ops.less(x, y);
-        }
+        public static Tensor operator >(Tensor x, int y) => gen_array_ops.greater(x, y);
+        public static Tensor operator >(Tensor x, double y) => gen_array_ops.greater(x, y);
+        public static Tensor operator <(Tensor x, int y) => gen_array_ops.less(x, y);
+        public static Tensor operator <(Tensor x, double y) => gen_array_ops.less(x, y);
     }
 }

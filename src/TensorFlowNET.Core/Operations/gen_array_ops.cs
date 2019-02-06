@@ -106,9 +106,9 @@ namespace Tensorflow
             throw new NotImplementedException("where");
         }
 
-        public static Tensor select(Tensor condition, Tensor x, Tensor y, string name = "")
+        public static Tensor select(Tensor condition, Tensor t, Tensor e, string name = "")
         {
-            var _op = _op_def_lib._apply_op_helper("Select", name, new { condition, x, y });
+            var _op = _op_def_lib._apply_op_helper("Select", name, new { condition, t, e });
             return _op.outputs[0];
         }
 
