@@ -44,14 +44,13 @@ namespace Tensorflow
             var input_types = new List<TF_DataType>();
             var base_types = new List<TF_DataType>();
 
-            Operation op = null;
-            Python.with<ops.name_scope>(new ops.name_scope(name), scope =>
+            return Python.with<ops.name_scope, Operation>(new ops.name_scope(name), scope =>
             {
                 // Perform input type inference
                 foreach (var input_arg in op_def.InputArg)
                 {
-                    var input_name = input_arg.Name;
-                    var values = keywords[input_name];
+                    var input_arg_name = input_arg.Name;
+                    var values = keywords[input_arg_name];
                     // Goals:
                     // * Convert values to Tensors if it contains constants.
                     // * Verify that values is a list if that matches the input_arg's
@@ -64,13 +63,13 @@ namespace Tensorflow
                     // * If the input_arg has an explicit type, make sure the input
                     // conforms.
 
+                    DataType dtype = DataType.DtInvalid;
+                    DataType default_dtype = DataType.DtInvalid;
+
                     if (_IsListParameter(input_arg))
                     {
-                        DataType dtype = DataType.DtInvalid;
-                        DataType default_dtype = DataType.DtInvalid;
-
                         if (!_IsListValue(values))
-                            throw new TypeError($"Expected list for '{input_name}' argument to '{op_type_name}' Op, not {values}.");
+                            throw new TypeError($"Expected list for '{input_arg_name}' argument to '{op_type_name}' Op, not {values}.");
                         if(input_arg.Type != DataType.DtInvalid)
                         {
                             dtype = input_arg.Type;
@@ -87,19 +86,22 @@ namespace Tensorflow
                     }
                     else
                     {
-                        if (keywords[input_name] is Tensor)
+                        if (default_type_attr_map.ContainsKey(input_arg.TypeAttr))
+                            default_dtype = (DataType)default_type_attr_map[input_arg.TypeAttr];
+
+                        if (keywords[input_arg_name] is Tensor)
                         {
                         }
                         else
                         {
-                            keywords[input_name] = ops.internal_convert_to_tensor(values, name: input_name);
+                            keywords[input_arg_name] = ops.internal_convert_to_tensor(values, name: input_arg_name);
                         }
 
                         if (!String.IsNullOrEmpty(input_arg.TypeAttr))
                         {
-                            attrs[input_arg.TypeAttr] = (keywords[input_name] as Tensor).dtype;
+                            attrs[input_arg.TypeAttr] = (keywords[input_arg_name] as Tensor).dtype;
                         }
-                        values = new Tensor[] { keywords[input_name] as Tensor };
+                        values = new Tensor[] { keywords[input_arg_name] as Tensor };
                     }
 
                     inputs.AddRange(values as Tensor[]);
@@ -122,7 +124,7 @@ namespace Tensorflow
                 {
                     var key = attr_def.Name;
                     if (!attrs.ContainsKey(key))
-                        Console.WriteLine($"{key} not found in attr_def.");
+                        Console.WriteLine($"_apply_op_helper: key '{key}' is not found in '{op_def.Name}' operation's attr_def.");
                     var value = attrs[key];
                     var attr_value = new AttrValue();
 
@@ -165,14 +167,14 @@ namespace Tensorflow
                 }
 
                 // Add Op to graph
-                op = g.create_op(op_type_name, inputs, output_types.ToArray(),
+                var op = g.create_op(op_type_name, inputs, output_types.ToArray(),
                     name: scope,
                     input_types: input_types.ToArray(),
                     attrs: attr_protos,
                     op_def: op_def);
-            });
 
-            return op;
+                return op;
+            });
         }
 
         public DataType _MakeType(TF_DataType v, AttrDef attr_def)

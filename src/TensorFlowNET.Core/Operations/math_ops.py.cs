@@ -20,8 +20,10 @@ namespace Tensorflow
             var input_rank = array_ops.size(input_shape);
             axes = (axes + input_rank) % input_rank;
             var axes_shape = array_ops.shape(axes);
-            var a1 = new Tensor[] { input_rank, axes };
-            var a2 = new Tensor[] { input_shape, gen_array_ops.fill(axes_shape, 1) };
+            var rng = math_ops.range(input_rank);
+            var a1 = new Tensor[] { rng, axes };
+            var fill = gen_array_ops.fill(axes_shape, 1);
+            var a2 = new Tensor[] { input_shape, fill };
 
             return gen_data_flow_ops.dynamic_stitch(a1, a2);
         }
@@ -80,8 +82,17 @@ namespace Tensorflow
             }
         }
 
-        public static Tensor range(object start, Tensor limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range" )
+        public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range" )
         {
+            if(limit == null)
+            {
+                limit = start;
+                start = 0;
+            }
+
+            if (delta == null)
+                delta = 1;
+
             return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "Range", new object[] { start, limit, delta }), scope =>
             {
                 name = scope;

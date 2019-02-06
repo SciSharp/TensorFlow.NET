@@ -333,8 +333,12 @@ namespace Tensorflow
             {
                 case "Tensor":
                     return value as Tensor;
+                case "Int32":
+                    return constant_op.constant(Convert.ToInt32(value), name);
+                case "Double":
+                    return constant_op.constant(Convert.ToDouble(value), name);
                 default:
-                    return constant_op.constant(np.array(value), name);
+                    throw new NotImplementedException($"internal_convert_to_tensor: Can't convert {typeof(T).Name} to Tensor");
             }
         }
     }
