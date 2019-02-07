@@ -40,6 +40,7 @@ namespace Tensorflow
             }
 
             var attrs = new Dictionary<string, object>();
+            var inferred_from = new Dictionary<string, object>();
             var inputs = new List<Tensor>();
             var input_types = new List<TF_DataType>();
             var base_types = new List<TF_DataType>();
@@ -49,8 +50,8 @@ namespace Tensorflow
                 // Perform input type inference
                 foreach (var input_arg in op_def.InputArg)
                 {
-                    var input_arg_name = input_arg.Name;
-                    var values = keywords[input_arg_name];
+                    var input_name = input_arg.Name;
+                    var values = keywords[input_name];
                     // Goals:
                     // * Convert values to Tensors if it contains constants.
                     // * Verify that values is a list if that matches the input_arg's
@@ -69,14 +70,25 @@ namespace Tensorflow
                     if (_IsListParameter(input_arg))
                     {
                         if (!_IsListValue(values))
-                            throw new TypeError($"Expected list for '{input_arg_name}' argument to '{op_type_name}' Op, not {values}.");
+                            throw new TypeError($"Expected list for '{input_name}' argument to '{op_type_name}' Op, not {values}.");
                         if(input_arg.Type != DataType.DtInvalid)
                         {
                             dtype = input_arg.Type;
                         }
                         else if (!String.IsNullOrEmpty(input_arg.NumberAttr))
                         {
+                            if (attrs.ContainsKey(input_arg.TypeAttr))
+                            {
+                                dtype = (DataType)attrs[input_arg.TypeAttr];
+                            }
+                            else
+                            {
+                                if (values is Tensor[] values1)
+                                    dtype = values1[0].dtype.as_datatype_enum();
+                            }
 
+                            if (dtype == DataType.DtInvalid && default_type_attr_map.ContainsKey(input_arg.TypeAttr))
+                                default_dtype = (DataType)default_type_attr_map[input_arg.TypeAttr];
                         }
 
                         if(input_arg.IsRef && dtype != DataType.DtInvalid)
@@ -89,19 +101,48 @@ namespace Tensorflow
                         if (default_type_attr_map.ContainsKey(input_arg.TypeAttr))
                             default_dtype = (DataType)default_type_attr_map[input_arg.TypeAttr];
 
-                        if (keywords[input_arg_name] is Tensor)
+                        if (keywords[input_name] is Tensor)
                         {
                         }
                         else
                         {
-                            keywords[input_arg_name] = ops.internal_convert_to_tensor(values, name: input_arg_name);
+                            keywords[input_name] = ops.internal_convert_to_tensor(values, name: input_name);
                         }
 
                         if (!String.IsNullOrEmpty(input_arg.TypeAttr))
                         {
-                            attrs[input_arg.TypeAttr] = (keywords[input_arg_name] as Tensor).dtype;
+                            attrs[input_arg.TypeAttr] = (keywords[input_name] as Tensor).dtype;
                         }
-                        values = new Tensor[] { keywords[input_arg_name] as Tensor };
+                        values = new Tensor[] { keywords[input_name] as Tensor };
+                    }
+
+                    if (!string.IsNullOrEmpty(input_arg.NumberAttr))
+                    {
+                        if (attrs.ContainsKey(input_arg.NumberAttr))
+                        {
+
+                        }
+                        else
+                        {
+                            attrs[input_arg.NumberAttr] = (values as Tensor[]).Length;
+                            inferred_from[input_arg.NumberAttr] = input_name;
+                            var num_attr = op_def.Attr.First(x => x.Name == input_arg.NumberAttr);
+                            if (num_attr.HasMinimum && (values as Tensor[]).Length < num_attr.Minimum)
+                                throw new ValueError($"List argument '{input_name}' to '{op_type_name}' Op with length {(values as Tensor[]).Length} shorter " +
+                                    $"than minimum length {num_attr.Minimum}");
+                        }
+
+                        // All tensors must have the same base type.
+                        if(input_arg.Type != DataType.DtInvalid)
+                        {
+
+                        }
+                        else
+                        {
+                            attrs[input_arg.TypeAttr] = base_types[0];
+                            inferred_from[input_arg.TypeAttr] = input_name;
+                            var type_attr = op_def.Attr.First(x => x.Name == input_arg.TypeAttr);
+                        }
                     }
 
                     inputs.AddRange(values as Tensor[]);
@@ -125,30 +166,8 @@ namespace Tensorflow
                     var key = attr_def.Name;
                     if (!attrs.ContainsKey(key))
                         Console.WriteLine($"_apply_op_helper: key '{key}' is not found in '{op_def.Name}' operation's attr_def.");
-                    var value = attrs[key];
-                    var attr_value = new AttrValue();
 
-                    switch (attr_def.Type)
-                    {
-                        case "string":
-                            attr_value.S = Google.Protobuf.ByteString.CopyFromUtf8((string)value);
-                            break;
-                        case "type":
-                            attr_value.Type = _MakeType((TF_DataType)value, attr_def);
-                            break;
-                        case "bool":
-                            attr_value.B = (bool)value;
-                            break;
-                        case "shape":
-                            attr_value.Shape = value == null ?
-                                attr_def.DefaultValue.Shape :
-                                tensor_util.as_shape((long[])value);
-                            break;
-                        default:
-                            throw new InvalidDataException($"attr_def.Type {attr_def.Type}");
-                    }
-
-                    attr_protos[key] = attr_value;
+                    attr_protos[key] = SetAttrValue(op_def, attr_def, attrs[key]);
                 }
 
                 // Determine output types (possibly using attrs)
@@ -167,7 +186,7 @@ namespace Tensorflow
                 }
 
                 // Add Op to graph
-                var op = g.create_op(op_type_name, inputs, output_types.ToArray(),
+                var op = g.create_op(op_type_name, inputs.ToArray(), output_types.ToArray(),
                     name: scope,
                     input_types: input_types.ToArray(),
                     attrs: attr_protos,
@@ -180,6 +199,41 @@ namespace Tensorflow
         public DataType _MakeType(TF_DataType v, AttrDef attr_def)
         {
             return v.as_base_dtype().as_datatype_enum();
+        }
+
+        private AttrValue SetAttrValue(OpDef op_def, AttrDef attr_def, object value)
+        {
+            var attr_value = new AttrValue();
+
+            switch (attr_def.Type)
+            {
+                case "string":
+                    attr_value.S = Google.Protobuf.ByteString.CopyFromUtf8((string)value);
+                    break;
+                case "type":
+                    attr_value.Type = _MakeType((TF_DataType)value, attr_def);
+                    break;
+                case "bool":
+                    attr_value.B = (bool)value;
+                    break;
+                case "float":
+                    attr_value.F = (float)value;
+                    break;
+                case "int":
+                    attr_value.I = (int)value;
+                    if (attr_def.HasMinimum && attr_value.I < attr_def.Minimum)
+                        throw new ValueError($"Attr '{attr_def.Name}' of '{op_def.Name}' Op passed {attr_value.I} less than minimum {attr_def.Minimum}.");
+                    break;
+                case "shape":
+                    attr_value.Shape = value == null ?
+                        attr_def.DefaultValue.Shape :
+                        tensor_util.as_shape((long[])value);
+                    break;
+                default:
+                    throw new TypeError($"SetAttrValue: can't not convert attr_def.Type '{attr_def.Type}' to protos.");
+            }
+
+            return attr_value;
         }
 
         private bool _IsListParameter(ArgDef arg)

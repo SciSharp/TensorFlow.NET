@@ -104,6 +104,14 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor floordiv(Tensor x, Tensor y, string name = "")
+        {
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "floordiv", new object[] { }), scope =>
+            {
+                return gen_math_ops.floor_div(x, y, name);
+            });
+        }
+
         public static Tensor rank_internal(Tensor input, string name = "", bool optimize = true)
         {
             return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>

@@ -12,6 +12,20 @@ namespace Tensorflow
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
         public static Execute _execute = new Execute();
 
+        public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Placeholder", args: new { dtype, shape });
@@ -35,6 +49,13 @@ namespace Tensorflow
         public static Tensor identity(Tensor input, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Identity", name, new { input });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor log(Tensor x, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Log", name: name, args: new { x });
 
             return _op.outputs[0];
         }
@@ -80,6 +101,17 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor where()
+        {
+            throw new NotImplementedException("where");
+        }
+
+        public static Tensor select(Tensor condition, Tensor t, Tensor e, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Select", name, new { condition, t, e });
+            return _op.outputs[0];
+        }
+
         public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Shape", name, new { input, out_type });
@@ -89,6 +121,18 @@ namespace Tensorflow
         public static Tensor size(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Size", name, new { input, out_type });
+            return _op.outputs[0];
+        }
+
+        public static Tensor tile(Tensor input, Tensor multiples, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Tile", name, new { input, multiples });
+            return _op.outputs[0];
+        }
+
+        public static Tensor zeros_like(Tensor x, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("ZerosLike", name, new { x });
             return _op.outputs[0];
         }
     }

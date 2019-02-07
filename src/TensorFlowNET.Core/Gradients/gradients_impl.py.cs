@@ -138,7 +138,7 @@ namespace Tensorflow
                                     _VerifyGeneratedGradients(in_grads, op);
                                 }
 
-                                if (gate_gradients)
+                                if (gate_gradients && in_grads.Count(x => x != null) > 1)
                                 {
 
                                 }
@@ -153,9 +153,13 @@ namespace Tensorflow
                     var inputs = _NonEagerInputs(op, xs).ToList();
                     foreach (var (t_in, in_grad) in Python.zip(inputs, in_grads))
                     {
-                        if(in_grad.op != null)
+                        if(in_grad != null)
                         {
-                            in_grad.shape = t_in.shape;
+                            if(in_grad is Tensor && t_in.dtype != TF_DataType.TF_RESOURCE)
+                            {
+                                in_grad.shape = t_in.shape;
+                            }
+                            
                             _SetGrad(grads, t_in, in_grad);
                         }
                     }
@@ -188,8 +192,8 @@ namespace Tensorflow
             {
                 if (!pending_count.ContainsKey(x.op.Name))
                     pending_count[x.op.Name] = 0;
-                else
-                    pending_count[x.op.Name] -= 1;
+
+                pending_count[x.op.Name] -= 1;
 
                 var ready = pending_count[x.op.Name] == 0;
 
@@ -284,7 +288,7 @@ namespace Tensorflow
                     }
                 }
                 if (is_stop_op)
-                    stop_ops.Add(op);
+                    stop_ops.Insert(0, op);
             }
             stop_ops.AddRange(stop_gradient_ops.Where(x => !stop_ops.Contains(x)));
             return stop_ops.ToArray();

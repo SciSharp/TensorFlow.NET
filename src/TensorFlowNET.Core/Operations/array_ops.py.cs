@@ -58,6 +58,22 @@ namespace Tensorflow
             return math_ops.rank_internal(input, name, optimize: true);
         }
 
+        public static Tensor where(Tensor condition, Tensor x = null, Tensor y = null, string name = "")
+        {
+            if( x == null && y == null)
+            {
+                throw new NotImplementedException("where");
+            }
+            else if(x != null && y != null)
+            {
+                return gen_array_ops.select(condition, x, y, name);
+            }
+            else
+            {
+                throw new ValueError("x and y must both be non-None or both be None.");
+            }
+        }
+
         /// <summary>
         /// Returns the shape of a tensor.
         /// </summary>
@@ -126,6 +142,31 @@ namespace Tensorflow
                 }
 
                 return null;
+            });
+        }
+
+        public static Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool optimize = true)
+        {
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "zeros_like", new Tensor[] { tensor }), scope =>
+            {
+                name = scope;
+                tensor = ops.convert_to_tensor(tensor, name: "tensor");
+
+                // is_fully_defined return unexpected value.
+                if (optimize && tensor_util.to_shape(tensor.shape).is_fully_defined() && dtype != TF_DataType.TF_VARIANT)
+                {
+
+                }
+
+                if(dtype != TF_DataType.DtInvalid && dtype != tensor.dtype && dtype != TF_DataType.TF_VARIANT)
+                {
+                    throw new NotImplementedException("zeros_like");
+                    // return zeros(shape_internal(tensor, optimize: optimize), dtype: dtype, name: name);
+                }
+                else
+                {
+                    return gen_array_ops.zeros_like(tensor, name: name);
+                }
             });
         }
     }

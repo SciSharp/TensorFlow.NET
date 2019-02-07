@@ -102,7 +102,7 @@ namespace Tensorflow
         /// </param>
         /// <param name="control_inputs">A list of `Operation`s to set as control dependencies.</param>
         /// <returns>A wrapped TF_Operation*.</returns>
-        public static IntPtr _create_c_op(Graph graph, NodeDef node_def, List<Tensor> inputs, Operation[] control_inputs)
+        public static IntPtr _create_c_op<T>(Graph graph, NodeDef node_def, T[] inputs, Operation[] control_inputs)
         {
             var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
 
@@ -111,15 +111,12 @@ namespace Tensorflow
             {
                 foreach (var op_input in inputs)
                 {
-                    bool isList = false;
-                    if (!isList)
-                    {
-                        c_api.TF_AddInput(op_desc, op_input._as_tf_output());
-                    }
+                    if (op_input is Tensor[] op_inputs)
+                        c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), inputs.Length);
+                    else if (op_input is Tensor op_input1)
+                        c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
                     else
-                    {
-                        c_api.TF_AddInputList(op_desc, inputs.Select(x => x._as_tf_output()).ToArray(), inputs.Count);
-                    }
+                        throw new NotImplementedException("_create_c_op");
                 }
             }
 
@@ -291,17 +288,28 @@ namespace Tensorflow
 
             return (oper, out_grads) =>
             {
+                Console.WriteLine($"get_gradient_function: {oper.type} '{oper.Name}'");
+
                 switch (oper.type)
                 {
                     case "Add":
                         return math_grad._AddGrad(oper, out_grads);
+                    case "Identity":
+                        return math_grad._IdGrad(oper, out_grads);
+                    case "Mul":
+                        return math_grad._MulGrad(oper, out_grads);
                     case "Sum":
                         return math_grad._SumGrad(oper, out_grads);
+                    case "Sub":
+                        return math_grad._SubGrad(oper, out_grads);
+                    case "Pow":
+                        return math_grad._PowGrad(oper, out_grads);
                     case "RealDiv":
                         return math_grad._RealDivGrad(oper, out_grads);
                     default:
                         throw new NotImplementedException($"get_gradient_function {oper.type}");
                 }
+                
                 /*var result = typeof(math_grad).GetMethod($"_{op.type}Grad").Invoke(null, new object[] { op, out_grads });
                 var p1 = result.GetType().GetProperty("Item1");
                 var p2 = result.GetType().GetProperty("Item2");
