@@ -6,6 +6,7 @@ namespace Tensorflow
 {
     public class variable_scope
     {
+        public static string _VARSTORE_KEY = "__variable_store";
         public static string _VARSCOPESTORE_KEY = "__varscope";
         public static bool _DEFAULT_USE_RESOURCE = false;
 
@@ -30,6 +31,17 @@ namespace Tensorflow
                     name: name,
                     dtype: dtype);
             }
+        }
+
+        public static _VariableStore _get_default_variable_store()
+        {
+            var store = ops.get_collection(_VARSTORE_KEY);
+            if (store != null)
+                return (store as List<_VariableStore>)[0];
+
+            var store1 = new _VariableStore();
+            ops.add_to_collection(_VARSTORE_KEY, store1);
+            return store1;
         }
 
         public static VariableScope get_variable_scope()
@@ -65,24 +77,18 @@ namespace Tensorflow
             return ret;
         }
 
-        public static bool _get_trainable_value(VariableSynchronization synchronization, bool? trainable = null)
+        public static bool _get_trainable_value(VariableSynchronization synchronization, bool trainable = true)
         {
-            if(synchronization == VariableSynchronization.ON_READ)
+            if (synchronization == VariableSynchronization.ON_READ)
             {
-                if (trainable.Value)
+                if (trainable)
                     throw new ValueError("Synchronization value can be set to " +
                         "VariableSynchronization.ON_READ only for non-trainable variables. " +
                         "You have specified trainable=True and " +
                         "synchronization=VariableSynchronization.ON_READ.");
-                else
-                    trainable = false;
             }
-            else if (!trainable.HasValue)
-            {
-                trainable = true;
-            }
-
-            return trainable.Value;
+            
+            return trainable;
         }
     }
 }

@@ -71,6 +71,11 @@ namespace Tensorflow
                 type;
         }
 
+        public static int name(this TF_DataType type)
+        {
+            return (int)type;
+        }
+
         public static DataType as_base_dtype(this DataType type)
         {
             return (int)type > 100 ?
