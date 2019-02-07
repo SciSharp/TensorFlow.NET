@@ -80,9 +80,9 @@ namespace TensorFlowNET.Examples
                             new FeedItem(X, train_X),
                             new FeedItem(Y, train_Y)
                         });
-
+                        var rW = sess.run(W);
                         Console.WriteLine($"Epoch: {epoch + 1} cost={c} " +
-                                    $"W={sess.run(W)} b={sess.run(b)}");
+                                    $"W={rW} b={sess.run(b)}");
                     }
                 }
 

@@ -64,6 +64,8 @@ namespace Tensorflow
                 // Get a uid for this call to gradients that can be used to help
                 // cluster ops for compilation.
                 var gradient_uid = ops.get_default_graph().unique_name("uid");
+                ys = ops.convert_n_to_tensor_or_indexed_slices(ys, name: "y");
+                xs = ops.internal_convert_n_to_tensor_or_indexed_slices(xs, name: "x", as_ref: true);
                 grad_ys = _DefaultGradYs(grad_ys, ys, colocate_gradients_with_ops, gradient_uid);
 
                 /** 
@@ -148,7 +150,7 @@ namespace Tensorflow
                     }
                     else
                     {
-                        in_grads = _NonEagerInputs(op, xs).Select(x => new Tensor(IntPtr.Zero)).ToArray();
+                        in_grads = new Tensor[_NonEagerInputs(op, xs).Count()];
                     }
 
                     var inputs = _NonEagerInputs(op, xs).ToList();
@@ -226,6 +228,7 @@ namespace Tensorflow
 
         private static Tensor[] _MaybeCompile(string scope, Operation op, Tensor out_grads, Action func, Func<Operation, Tensor, Tensor[]> grad_fn)
         {
+            scope = scope.EndsWith("/") ? scope.Substring(0, scope.Length - 1) : scope;
             return grad_fn(op, out_grads);
         }
 

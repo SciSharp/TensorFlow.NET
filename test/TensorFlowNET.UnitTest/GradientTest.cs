@@ -23,8 +23,7 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual(ys.op.inputs[0].name, "Const:0");
             Assert.AreEqual(ys.op.inputs[1].name, "mul:0");
 
-            var xs = new Tensor[] { a, b };
-            var g = tf.gradients(ys, xs, stop_gradients: new Tensor[] { a, b });
+            var g = tf.gradients(ys, new Tensor[] { a, b }, stop_gradients: new Tensor[] { a, b });
             Assert.AreEqual(g[0].name, "gradients/Fill:0");
             Assert.AreEqual(g[1].name, "gradients/Fill:0");
         }

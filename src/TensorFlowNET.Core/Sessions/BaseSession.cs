@@ -35,6 +35,11 @@ namespace Tensorflow
             c_api.TF_DeleteSessionOptions(opts);
         }
 
+        public virtual NDArray run(RefVariable fetches, FeedItem[] feed_dict = null)
+        {
+            return _run(fetches, feed_dict);
+        }
+
         public virtual NDArray run(Tensor fetches, FeedItem[] feed_dict = null)
         {
             return _run(fetches, feed_dict);

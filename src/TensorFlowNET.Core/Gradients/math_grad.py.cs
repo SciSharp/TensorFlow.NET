@@ -72,9 +72,10 @@ namespace Tensorflow
 
         public static bool _ShapesFullySpecifiedAndEqual(Tensor x, Tensor y, Tensor grad)
         {
-            return false;
-            /*return string.Join(",", x.shape).Equals(string.Join(",", y.shape)) &&
-                   string.Join(",", x.shape).Equals(string.Join(",", grad.shape));*/
+            if (x.NDims == 0 && y.NDims == 0 && grad.NDims == 0) return true;
+
+            return string.Join(",", x.shape).Equals(string.Join(",", y.shape)) &&
+                   string.Join(",", x.shape).Equals(string.Join(",", grad.shape));
         }
 
         public static (Tensor, Tensor) _SumGrad(Operation op, Tensor grad)

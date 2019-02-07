@@ -329,6 +329,11 @@ namespace Tensorflow
             };
         }
 
+        public static Tensor[] convert_n_to_tensor_or_indexed_slices(Tensor[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
+        {
+            return internal_convert_n_to_tensor_or_indexed_slices(values, dtype: dtype, name: name);
+        }
+
         public static Tensor convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
         {
             return internal_convert_to_tensor_or_indexed_slices(value: value, dtype: dtype, name: name, as_ref: false);
@@ -337,6 +342,26 @@ namespace Tensorflow
         public static Tensor internal_convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
         {
             return value;
+        }
+
+        public static Tensor[] internal_convert_n_to_tensor_or_indexed_slices(Tensor[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
+        {
+            var ret = new List<Tensor>();
+
+            foreach(var (i, value) in Python.enumerate(values))
+            {
+                if (value == null)
+                {
+                    ret.Add(value);
+                }
+                else
+                {
+                    var n = string.IsNullOrEmpty(name) ? "" : $"{name}_{i}";
+                    ret.Add(internal_convert_to_tensor_or_indexed_slices(value, dtype: dtype, name: n, as_ref: as_ref));
+                }
+            }
+
+            return ret.ToArray();
         }
 
         public static Tensor[] internal_convert_n_to_tensor<T>(T[] values, DataType dtype = DataType.DtInvalid, 

@@ -109,20 +109,13 @@ namespace Tensorflow
             });
         }
 
-        public Tensor _ref()
-        {
-            return _variable;
-        }
+        public Tensor _ref() => _variable;
 
-        public Tensor value()
-        {
-            return _snapshot;
-        }
+        public Tensor value() => _snapshot;
 
-        public Tensor _AsTensor()
-        {
-            return _snapshot;
-        }
+        public Tensor _AsTensor() => _snapshot;
+
+        public Tensor _as_graph_element() => _variable;
 
         public Tensor _TensorConversionFunction(bool as_ref = false)
         {
