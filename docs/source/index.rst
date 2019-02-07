@@ -26,4 +26,5 @@ Welcome to TensorFlow.NET's documentation!
    NameScope
    ControlDependency
    Gradient
+   Train
    EagerMode

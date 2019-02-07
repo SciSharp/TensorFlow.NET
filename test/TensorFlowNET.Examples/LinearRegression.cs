@@ -61,15 +61,32 @@ namespace TensorFlowNET.Examples
                 sess.run(init);
 
                 // Fit all training data
-                for (int i = 0; i < training_epochs; i++)
+                for (int epoch = 0; epoch < training_epochs; epoch++)
                 {
-                    foreach(var (x, y) in Python.zip<double>(train_X, train_Y))
+                    foreach (var (x, y) in Python.zip<double>(train_X, train_Y))
                     {
-                        var feed_dict = new Dictionary<Tensor, NDArray>();
+                        sess.run(optimizer, feed_dict: new FeedItem[]
+                        {
+                            new FeedItem(X, x),
+                            new FeedItem(Y, y)
+                        });
+                    }
 
-                        // sess.run(optimizer, feed_dict);
+                    // Display logs per epoch step
+                    if ((epoch + 1) % display_step == 0)
+                    {
+                        var c = sess.run(cost, feed_dict: new FeedItem[] 
+                        {
+                            new FeedItem(X, train_X),
+                            new FeedItem(Y, train_Y)
+                        });
+
+                        Console.WriteLine($"Epoch: {epoch + 1} cost={c} " +
+                                    $"W={sess.run(W)} b={sess.run(b)}");
                     }
                 }
+
+                Console.WriteLine("Optimization Finished!");
             });
         }
     }
