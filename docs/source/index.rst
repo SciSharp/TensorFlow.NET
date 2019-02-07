@@ -23,5 +23,7 @@ Welcome to TensorFlow.NET's documentation!
    Graph
    Operation
    Attribute
+   NameScope
+   ControlDependency
    Gradient
    EagerMode

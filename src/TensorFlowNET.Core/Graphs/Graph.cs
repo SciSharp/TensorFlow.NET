@@ -138,6 +138,12 @@ namespace Tensorflow
                 op_def: op_def);
 
             _create_op_helper(op, true);
+
+            Console.Write($"create_op: {op_type} '{node_def.Name}'");
+            Console.Write($", inputs: {(inputs.Count == 0 ? "empty" : String.Join(",", inputs.Select(x => x.name)))}");
+            Console.Write($", outputs: {(op.outputs.Length == 0 ? "empty" : String.Join(",", op.outputs.Select(x => x.name)))}");
+            Console.WriteLine();
+
             return op;
         }
 
