@@ -42,7 +42,7 @@ namespace Tensorflow
         /// <returns>An Op that run the initializers of all the specified variables.</returns>
         public static Operation variables_initializer(RefVariable[] var_list, string name = "init")
         {
-            return control_flow_ops.group(var_list.Select(x => x.initializer).ToList(), name);
+            return control_flow_ops.group(var_list.Select(x => x.initializer).ToArray(), name);
         }
     }
 }

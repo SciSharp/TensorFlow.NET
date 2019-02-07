@@ -106,7 +106,7 @@ namespace Tensorflow
                         }
                         else
                         {
-                            keywords[input_name] = ops.internal_convert_to_tensor(values, name: input_name);
+                            keywords[input_name] = ops.internal_convert_to_tensor(values, name: input_name, as_ref: input_arg.IsRef);
                         }
 
                         if (!String.IsNullOrEmpty(input_arg.TypeAttr))

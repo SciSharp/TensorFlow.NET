@@ -63,11 +63,11 @@ namespace TensorFlowNET.Examples
                 // Fit all training data
                 for (int i = 0; i < training_epochs; i++)
                 {
-                    foreach((double x, double y) in Python.zip<double>(train_X, train_Y))
+                    foreach(var (x, y) in Python.zip<double>(train_X, train_Y))
                     {
                         var feed_dict = new Dictionary<Tensor, NDArray>();
 
-                        //sess.run(optimizer, feed_dict);
+                        // sess.run(optimizer, feed_dict);
                     }
                 }
             });

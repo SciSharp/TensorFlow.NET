@@ -56,7 +56,99 @@ namespace Tensorflow
                 gate_gradients: gate_gradients, 
                 colocate_gradients_with_ops: colocate_gradients_with_ops);
 
-            return null;
+            var vars_with_grad = grads_and_vars.Where(x => x.Item1 != null).Select(x => x.Item2).ToArray();
+            if (vars_with_grad.Length == 0)
+                throw new ValueError($"No gradients provided for any variable, check your graph for ops" +
+                    $" that do not support gradients, between variables {string.Join(",", vars_with_grad.Select(x => x.name))} and loss {loss}.");
+
+            return apply_gradients(grads_and_vars);
+        }
+
+        public Operation apply_gradients(Tuple<Tensor, RefVariable>[] grads_and_vars, Tensor global_step = null, string name = "")
+        {
+            // No DistributionStrategy case.
+            var converted_grads_and_vars = new List<Tuple<Tensor, RefVariable, _OptimizableVariable>>();
+            foreach (var (g, v) in grads_and_vars)
+            {
+                if(g != null)
+                {
+                    // Convert the grad to Tensor or IndexedSlices if necessary.
+                    var gR = ops.convert_to_tensor_or_indexed_slices(g);
+                    var p = _get_processor(v);
+                    converted_grads_and_vars.Add(new Tuple<Tensor, RefVariable, _OptimizableVariable>(gR, v, p));
+                }
+            }
+
+            var var_list = converted_grads_and_vars.Where(x => x.Item1 != null).Select(x => x.Item2).ToArray();
+            if (var_list.Length == 0)
+                throw new ValueError($"No gradients provided for any variable");
+
+            ops.init_scope();
+            _create_slots(var_list);
+
+            var update_ops = new List<Operation>();
+            return Python.with<ops.name_scope, Operation>(new ops.name_scope(name, Name), scope =>
+            {
+                name = scope;
+                _prepare();
+
+                foreach(var (grad, var, processor) in converted_grads_and_vars)
+                {
+                    if (grad == null)
+                        continue;
+
+                    var scope_name = var.op.Name;
+                    Python.with<ops.name_scope>(new ops.name_scope("update_" + scope_name), scope2 =>
+                    {
+                        update_ops.Add(processor.update_op(this, grad));
+                    });
+                }
+
+                Operation apply_updates = null;
+                if (global_step == null)
+                {
+                    apply_updates = _finish(update_ops.ToArray(), name);
+                }
+                else
+                {
+
+                }
+
+                return apply_updates;
+            });
+        }
+
+        private void _create_slots(RefVariable[] var_list)
+        {
+
+        }
+
+        public virtual Operation _finish(Operation[] update_ops, string name_scope)
+        {
+            return control_flow_ops.group(update_ops, name_scope);
+        }
+
+        public virtual Operation _apply_dense(Tensor grad, RefVariable var)
+        {
+            var alpha = math_ops.cast(LearningRateTensor, var.dtype.as_base_dtype());
+            return gen_training_ops.apply_gradient_descent(var, alpha, grad, use_locking: _use_locking).op;
+        }
+
+        public virtual void _prepare()
+        {
+
+        }
+
+        private _OptimizableVariable _get_processor(RefVariable v)
+        {
+            if(v is RefVariable)
+            {
+                return new _RefVariableProcessor(v);
+            }
+            else
+            {
+                throw new NotImplementedException("_get_processor");
+            }
         }
 
         /// <summary>
@@ -68,7 +160,7 @@ namespace Tensorflow
         /// A list of (gradient, variable) pairs. Variable is always present, but
         /// gradient can be `None`.
         /// </returns>
-        public List<KeyValuePair<Tensor, RefVariable>> compute_gradients(Tensor loss,
+        public Tuple<Tensor, RefVariable>[] compute_gradients(Tensor loss,
             List<RefVariable> var_list = null,
             int? aggregation_method = null,
             GateGradientType gate_gradients = GateGradientType.GATE_OP,
@@ -97,11 +189,19 @@ namespace Tensorflow
                 aggregation_method: aggregation_method,
                 colocate_gradients_with_ops: colocate_gradients_with_ops);
 
-            //if ((int)gate_gradients == Optimizer.GATE_GRAPH)
-                //grads = control_flow_ops.tuple(grads);
+            if ((int)gate_gradients == Optimizer.GATE_GRAPH)
+                grads = control_flow_ops.tuple(grads);
 
+            var grads_and_vars = Python.zip(grads, var_list)
+                .Select(x => new Tuple<Tensor, RefVariable>(x.Item1, x.Item2))
+                .ToArray();
 
-            return null;
+            return grads_and_vars;
+        }
+
+        protected T _call_if_callable<T>(T param)
+        {
+            return param;
         }
     }
 }

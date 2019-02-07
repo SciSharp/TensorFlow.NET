@@ -6,6 +6,15 @@ namespace Tensorflow
 {
     public class math_ops
     {
+        public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
+        {
+            var base_type = dtype.as_base_dtype();
+            if(base_type == x.dtype)
+                return x;
+
+            throw new NotImplementedException("math_ops.cast");
+        }
+
         /// <summary>
         /// Helper function for reduction ops.
         /// </summary>

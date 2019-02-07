@@ -27,9 +27,9 @@ namespace Tensorflow
             return (r1, r2);
         }
 
-        public static (Tensor, Tensor) _IdGrad(Operation op, Tensor grad)
+        public static Tensor _IdGrad(Operation op, Tensor grad)
         {
-            return (grad, null);
+            return grad;
         }
 
         public static (Tensor, Tensor) _MulGrad(Operation op, Tensor grad)

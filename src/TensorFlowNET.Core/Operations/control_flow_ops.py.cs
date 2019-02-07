@@ -7,17 +7,20 @@ namespace Tensorflow
 {
     public class control_flow_ops
     {
-        public static Operation group(List<Operation> inputs, string name = "")
+        public static Operation group(Operation[] inputs, string name = "")
         {
-            using(var namescope = new ops.name_scope(name, "group_deps", inputs))
+            return Python.with<ops.name_scope, Operation>(new ops.name_scope(name, "group_deps", inputs), scope =>
             {
-                name = namescope;
+                name = scope;
 
                 // Sorts *inputs according to their devices.
-                var ops_on_device = new Dictionary<string, Operation[]>();
+                var ops_on_device = new Dictionary<string, List<Operation>>();
                 foreach (var inp in inputs)
                 {
-                    ops_on_device[inp.Device] = new Operation[] { inp };
+                    if (ops_on_device.ContainsKey(inp.Device))
+                        ops_on_device[inp.Device].Add(inp);
+                    else
+                        ops_on_device[inp.Device] = new List<Operation> { inp };
                 }
 
                 // 1-level tree. The root node is the returned NoOp node.
@@ -25,32 +28,28 @@ namespace Tensorflow
                 {
                     var dev = ops_on_device.Keys.First();
                     var deps = ops_on_device.Values.First();
-                    return _GroupControlDeps(dev, deps, name);
+                    return _GroupControlDeps(dev, deps.ToArray(), name);
                 }
 
                 // 2-level tree. The root node is the returned NoOp node.
                 // deps contains 1 NoOp node for each device.
                 return null;
-            }
+            });
         }
 
         private static Operation _GroupControlDeps(string dev, Operation[] deps, string name = "")
         {
-            Operation result = null;
-
-            Python.with(ops.control_dependencies(deps), delegate
+            return Python.with<_ControlDependenciesController, Operation>(ops.control_dependencies(deps), ctl =>
             {
-                if (string.IsNullOrEmpty(dev))
+                if (dev == null)
                 {
-                    result = gen_control_flow_ops.no_op(name);
+                    return gen_control_flow_ops.no_op(name);
                 }
                 else
                 {
-                    result = gen_control_flow_ops.no_op(name);
+                    return gen_control_flow_ops.no_op(name);
                 }
             });
-
-            return result;
         }
 
         /// <summary>
@@ -80,6 +79,61 @@ namespace Tensorflow
         private static bool IsLoopExit(Operation op)
         {
             return op.OpType == "Exit" || op.OpType == "RefExit";
+        }
+
+        public static Tensor[] tuple(Tensor[] tensors, string name = "", Operation[] control_inputs = null)
+        {
+            return Python.with<ops.name_scope, Tensor[]>(new ops.name_scope(name, "tuple", tensors), scope =>
+            {
+                name = scope;
+                var gating_ops = tensors.Select(x => x.op).ToList();
+
+                if(control_inputs != null)
+                {
+                    foreach (var c in control_inputs)
+                        gating_ops.Add(c);
+                }
+
+                // Note that in order to ensure ordering in the pbtxt, we must take care to
+                // ensure the order here.
+                gating_ops = gating_ops.OrderBy(x => x._id).ToList();
+                var gate = group(gating_ops.ToArray());
+
+                var tpl = new List<Tensor>();
+                foreach(var t in tensors)
+                {
+                    tpl.Add(with_dependencies(new Operation[] { gate }, t));
+                }
+
+                return tpl.ToArray();
+            });
+        }
+
+        public static Tensor with_dependencies(Operation[] dependencies, Tensor output_tensor, string name = "")
+        {
+            var values = new List<object>();
+            values.AddRange(dependencies);
+            values.Add(output_tensor);
+
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "control_dependency", values), scope =>
+            {
+                name = scope;
+
+                return Python.with<_ControlDependenciesController, Tensor>(ops.control_dependencies(dependencies), ctl =>
+                {
+                    output_tensor = ops.convert_to_tensor_or_composite(output_tensor);
+                    return _Identity(output_tensor, name: name);
+                });
+            });
+        }
+
+        public static Tensor _Identity(Tensor data, string name = "")
+        {
+            data = ops.internal_convert_to_tensor_or_composite(data, as_ref: true);
+            if ((int)data.dtype > 100)
+                throw new NotImplementedException("_Identity");
+            else
+                return gen_array_ops.identity(data, name: name);
         }
     }
 }

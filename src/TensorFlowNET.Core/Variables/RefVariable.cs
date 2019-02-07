@@ -114,9 +114,22 @@ namespace Tensorflow
             return _variable;
         }
 
+        public Tensor value()
+        {
+            return _snapshot;
+        }
+
         public Tensor _AsTensor()
         {
             return _snapshot;
+        }
+
+        public Tensor _TensorConversionFunction(bool as_ref = false)
+        {
+            if (as_ref)
+                return _ref();
+            else
+                return value();
         }
 
         /// <summary>

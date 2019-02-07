@@ -80,6 +80,16 @@ namespace Tensorflow
             }
         }
 
+        public static Tensor convert_to_tensor_or_composite(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
+        {
+            return internal_convert_to_tensor_or_composite(value: value, dtype: dtype, name: name, as_ref: false);
+        }
+
+        public static Tensor internal_convert_to_tensor_or_composite(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
+        {
+            return internal_convert_to_tensor<Tensor>(value, dtype: dtype.as_datatype_enum(), name: name, as_ref: as_ref);
+        }
+
         /// <summary>
         /// Wrapper for `Graph.control_dependencies()` using the default graph.
         /// </summary>
@@ -222,7 +232,7 @@ namespace Tensorflow
             _colocate_with_for_gradient(tensor.op, null, ignore_existing);
         }
 
-        private static void _colocate_with_for_gradient(Operation op, int? gradient_uid, bool ignore_existing = false)
+        public static void _colocate_with_for_gradient(Operation op, string gradient_uid, bool ignore_existing = false)
         {
             var default_graph = get_default_graph();
             default_graph._colocate_with_for_gradient(op, gradient_uid, ignore_existing);
@@ -282,7 +292,7 @@ namespace Tensorflow
             return tf.Session();
         }
 
-        public static Func<Operation, Tensor, (Tensor, Tensor)> get_gradient_function(Operation op)
+        public static Func<Operation, Tensor, Tensor[]> get_gradient_function(Operation op)
         {
             if (op.inputs == null) return null;
 
@@ -293,29 +303,40 @@ namespace Tensorflow
                 switch (oper.type)
                 {
                     case "Add":
-                        return math_grad._AddGrad(oper, out_grads);
+                        var add = math_grad._AddGrad(oper, out_grads);
+                        return new Tensor[] { add.Item1, add.Item2 };
                     case "Identity":
-                        return math_grad._IdGrad(oper, out_grads);
+                        var id = math_grad._IdGrad(oper, out_grads);
+                        return new Tensor[] { id };
                     case "Mul":
-                        return math_grad._MulGrad(oper, out_grads);
+                        var mul = math_grad._MulGrad(oper, out_grads);
+                        return new Tensor[] { mul.Item1, mul.Item2 };
                     case "Sum":
-                        return math_grad._SumGrad(oper, out_grads);
+                        var sum = math_grad._SumGrad(oper, out_grads);
+                        return new Tensor[] { sum.Item1, sum.Item2 };
                     case "Sub":
-                        return math_grad._SubGrad(oper, out_grads);
+                        var sub = math_grad._SubGrad(oper, out_grads);
+                        return new Tensor[] { sub.Item1, sub.Item2 };
                     case "Pow":
-                        return math_grad._PowGrad(oper, out_grads);
+                        var pow = math_grad._PowGrad(oper, out_grads);
+                        return new Tensor[] { pow.Item1, pow.Item2 };
                     case "RealDiv":
-                        return math_grad._RealDivGrad(oper, out_grads);
+                        var realdiv = math_grad._RealDivGrad(oper, out_grads);
+                        return new Tensor[] { realdiv.Item1, realdiv.Item2 };
                     default:
                         throw new NotImplementedException($"get_gradient_function {oper.type}");
                 }
-                
-                /*var result = typeof(math_grad).GetMethod($"_{op.type}Grad").Invoke(null, new object[] { op, out_grads });
-                var p1 = result.GetType().GetProperty("Item1");
-                var p2 = result.GetType().GetProperty("Item2");
-
-                return (p1.GetValue(result, null) as Tensor, p2.GetValue(result, null) as Tensor);*/
             };
+        }
+
+        public static Tensor convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
+        {
+            return internal_convert_to_tensor_or_indexed_slices(value: value, dtype: dtype, name: name, as_ref: false);
+        }
+
+        public static Tensor internal_convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
+        {
+            return value;
         }
 
         public static Tensor[] internal_convert_n_to_tensor<T>(T[] values, DataType dtype = DataType.DtInvalid, 
@@ -345,6 +366,8 @@ namespace Tensorflow
                     return constant_op.constant(Convert.ToInt32(value), name);
                 case "Double":
                     return constant_op.constant(Convert.ToDouble(value), name);
+                case "RefVariable":
+                    return (value as RefVariable)._TensorConversionFunction(as_ref: as_ref);
                 default:
                     throw new NotImplementedException($"internal_convert_to_tensor: Can't convert {typeof(T).Name} to Tensor");
             }

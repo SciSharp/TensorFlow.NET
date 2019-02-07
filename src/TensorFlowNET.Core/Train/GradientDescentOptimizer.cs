@@ -12,5 +12,11 @@ namespace Tensorflow
             LearningRate = learning_rate;
             LearningRateTensor = null;
         }
+
+        public override void _prepare()
+        {
+            LearningRate = _call_if_callable(LearningRate);
+            LearningRateTensor = ops.convert_to_tensor(LearningRate, name: "learning_rate");
+        }
     }
 }

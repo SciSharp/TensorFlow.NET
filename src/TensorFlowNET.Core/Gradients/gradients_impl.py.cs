@@ -140,7 +140,8 @@ namespace Tensorflow
 
                                 if (gate_gradients && in_grads.Count(x => x != null) > 1)
                                 {
-
+                                    ops._colocate_with_for_gradient(null, gradient_uid, ignore_existing: true);
+                                    in_grads = control_flow_ops.tuple(in_grads);
                                 }
                             });
                         }
@@ -223,10 +224,9 @@ namespace Tensorflow
                     $"inputs {op.inputs._inputs.Count()}");
         }
 
-        private static Tensor[] _MaybeCompile(string scope, Operation op, Tensor out_grads, Action func, Func<Operation, Tensor, (Tensor, Tensor)> grad_fn)
+        private static Tensor[] _MaybeCompile(string scope, Operation op, Tensor out_grads, Action func, Func<Operation, Tensor, Tensor[]> grad_fn)
         {
-            var in_grads = grad_fn(op, out_grads);
-            return new Tensor[] { in_grads.Item1, in_grads.Item2 };
+            return grad_fn(op, out_grads);
         }
 
         private static bool _IsPartitionedCall(Operation op)

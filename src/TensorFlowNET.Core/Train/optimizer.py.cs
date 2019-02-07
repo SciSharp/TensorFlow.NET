@@ -26,9 +26,11 @@ namespace Tensorflow
             return _v._ref();
         }
 
-        public void update_op(Graph g)
+        public Operation update_op(Optimizer optimizer, Tensor g)
         {
-            
+            var update_op = optimizer._apply_dense(g, _v);
+
+            return update_op;
         }
     }
 }
