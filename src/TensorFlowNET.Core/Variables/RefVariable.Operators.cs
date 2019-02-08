@@ -6,11 +6,21 @@ namespace Tensorflow
 {
     public partial class RefVariable
     {
-        public static Tensor operator +(RefVariable t1, int t2)
+        public static Tensor operator +(RefVariable x, int y) => op_helper("add", x, y);
+        public static Tensor operator +(RefVariable x, float y) => op_helper("add", x, y);
+        public static Tensor operator +(RefVariable x, double y) => op_helper("add", x, y);
+        
+        public static Tensor operator -(RefVariable x, int y) => op_helper("sub", x, y);
+        public static Tensor operator -(RefVariable x, float y) => op_helper("sub", x, y);
+        public static Tensor operator -(RefVariable x, double y) => op_helper("sub", x, y);
+        
+        private static Tensor op_helper<T>(string default_name, RefVariable x, T y)
         {
-            var tensor1 = t1._AsTensor();
-            var tensor2 = ops.convert_to_tensor(t2, tensor1.dtype, "y");
-            return gen_math_ops.add(tensor1, tensor2);
+            var tensor1 = x.value();
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", default_name, new object[] { tensor1, y }), scope => {
+                var tensor2 = ops.convert_to_tensor(y, tensor1.dtype.as_base_dtype(), "y");
+                return gen_math_ops.add(tensor1, tensor2, scope);
+            });
         }
     }
 }

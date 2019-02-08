@@ -171,6 +171,34 @@ namespace Tensorflow
             return op;
         }
 
+        /// <summary>
+        /// Assigns a new value to the variable.
+        /// </summary>
+        /// <param name="value">The new value for this variable.</param>
+        /// <param name="use_locking">If `True`, use locking during the assignment.</param>
+        /// <param name="name">The name of the operation to be created</param>
+        /// <param name="read_value">
+        /// if True, will return something which evaluates to the
+        /// new value of the variable; if False will return the assign op.
+        /// </param>
+        /// <returns>
+        /// A `Tensor` that will hold the new value of this variable after
+        /// the assignment has completed.
+        /// </returns>
+        public T assign<T>(Tensor value, bool use_locking = false, string name = "", bool read_value = true)
+            where T : IReturnTensorOrOperation
+        {
+            var assign = gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
+            if (read_value)
+                return (T)Convert.ChangeType(assign, typeof(T));
+            return (T)Convert.ChangeType(assign.op, typeof(T));
+        }
+
+        public Tensor assign(Tensor value, bool use_locking = false, string name = "")
+        {
+            return gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
+        }
+
         public override string ToString()
         {
             return $"tf.Variable '{name}' shape={shape} dtype={dtype}";
