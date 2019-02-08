@@ -10,9 +10,16 @@ namespace Tensorflow
         public static string _VARSCOPESTORE_KEY = "__varscope";
         public static bool _DEFAULT_USE_RESOURCE = false;
 
-        public static RefVariable default_variable_creator(object initial_value, string name = "", TF_DataType dtype = TF_DataType.DtInvalid, bool ? use_resource = null, VariableSynchronization synchronization = VariableSynchronization.AUTO)
+        public static RefVariable default_variable_creator(object initial_value,
+            string name = "",
+            bool? trainable = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            bool validate_shape = false,
+            bool ? use_resource = null, 
+            VariableSynchronization synchronization = VariableSynchronization.AUTO,
+            VariableAggregation aggregation = VariableAggregation.NONE)
         {
-            var trainable = _get_trainable_value(synchronization);
+            trainable = _get_trainable_value(synchronization, trainable);
             if (!use_resource.HasValue)
             {
                 use_resource = get_variable_scope().use_resource;
@@ -77,18 +84,22 @@ namespace Tensorflow
             return ret;
         }
 
-        public static bool _get_trainable_value(VariableSynchronization synchronization, bool trainable = true)
+        public static bool _get_trainable_value(VariableSynchronization synchronization, bool? trainable = true)
         {
             if (synchronization == VariableSynchronization.ON_READ)
             {
-                if (trainable)
+                if (trainable.Value)
                     throw new ValueError("Synchronization value can be set to " +
                         "VariableSynchronization.ON_READ only for non-trainable variables. " +
                         "You have specified trainable=True and " +
                         "synchronization=VariableSynchronization.ON_READ.");
             }
+            else if (!trainable.HasValue)
+            {
+                trainable = true;
+            }
             
-            return trainable;
+            return trainable.Value;
         }
     }
 }

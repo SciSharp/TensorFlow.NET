@@ -9,32 +9,24 @@ namespace Tensorflow
     {
         public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = "")
         {
-            Tensor output = null;
-
             dtype = dtype.as_base_dtype();
-            Python.with(new ops.name_scope(name, "zeros", shape), self =>
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "zeros", shape), scope =>
             {
-                name = self as ops.name_scope;
+                name = scope;
                 switch (dtype)
                 {
                     case TF_DataType.TF_BOOL:
-                        output = _constant_if_small(false, shape, dtype, name);
-                        break;
+                        return _constant_if_small(false, shape, dtype, name);
                     case TF_DataType.TF_DOUBLE:
-                        output = _constant_if_small(0.0D, shape, dtype, name);
-                        break;
+                        return _constant_if_small(0.0D, shape, dtype, name);
                     case TF_DataType.TF_FLOAT:
-                        output = _constant_if_small(0.0F, shape, dtype, name);
-                        break;
+                        return _constant_if_small(0.0F, shape, dtype, name);
                     case TF_DataType.TF_INT32:
-                        output = _constant_if_small(0, shape, dtype, name);
-                        break;
+                        return _constant_if_small(0, shape, dtype, name);
                     default:
-                        break;
+                        throw new TypeError("can't find type for zeros");
                 }
             });
-
-            return output;
         }
 
         private static Tensor _constant_if_small<T>(T value, Shape shape, TF_DataType dtype, string name)

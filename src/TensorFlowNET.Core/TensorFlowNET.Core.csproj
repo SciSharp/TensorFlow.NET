@@ -32,6 +32,12 @@ TensorFlow 1.13 RC.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="runtimes\**" />
+    <EmbeddedResource Remove="runtimes\**" />
+    <None Remove="runtimes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Protobuf\README.md" />
   </ItemGroup>
 

@@ -24,7 +24,7 @@ namespace Tensorflow
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
-            bool trainable = false,
+            bool? trainable = null,
             bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
             VariableAggregation aggregation = VariableAggregation.NONE)
@@ -44,14 +44,23 @@ namespace Tensorflow
 
         private RefVariable _true_getter(string name,
             TensorShape shape = null,
-            TF_DataType dtype = TF_DataType.DtInvalid,
+            TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
-            bool trainable = false,
+            bool? trainable = null,
             bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
             VariableAggregation aggregation = VariableAggregation.NONE)
         {
-            return _get_single_variable(name: name);
+            bool is_scalar = shape.NDim == 0;
+
+            return _get_single_variable(name: name, 
+                shape: shape, 
+                dtype: dtype,
+                initializer: initializer,
+                trainable: trainable,
+                validate_shape: validate_shape,
+                synchronization: synchronization,
+                aggregation: aggregation);
         }
 
         private RefVariable _get_single_variable(string name,
@@ -59,11 +68,14 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
             bool reuse = false,
-            bool trainable = false,
+            bool? trainable = null,
             bool validate_shape = false,
+            bool? use_resource = null,
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
             VariableAggregation aggregation = VariableAggregation.NONE)
         {
+            bool initializing_from_value = false;
+
             if (_vars.ContainsKey(name))
             {
                 if (!reuse)
@@ -74,7 +86,35 @@ namespace Tensorflow
                 throw new NotImplementedException("_get_single_variable");
             }
 
-            throw new NotImplementedException("_get_single_variable");
+            Tensor init_val = null;
+            ops.init_scope();
+            {
+                if (initializing_from_value)
+                {
+
+                }
+                else
+                {
+                    init_val = initializer.call(shape, dtype);
+                    var variable_dtype = dtype.as_base_dtype();
+                }
+            }
+
+            // Create the variable.
+            if (use_resource == null)
+                use_resource = false;
+
+            var v = variable_scope.default_variable_creator(init_val, 
+                name: name, 
+                trainable: trainable, 
+                dtype: TF_DataType.DtInvalid,
+                validate_shape: validate_shape,
+                synchronization: synchronization,
+                aggregation: aggregation);
+
+            _vars[name] = v;
+
+            return v;
         }
     }
 }

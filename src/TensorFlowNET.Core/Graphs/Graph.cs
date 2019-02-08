@@ -197,7 +197,9 @@ namespace Tensorflow
         {
             string new_stack = "";
 
-            if (name.EndsWith("/"))
+            if (string.IsNullOrEmpty(name))
+                new_stack = "";
+            else if (name.EndsWith("/"))
                 new_stack = ops._name_from_scope_name(name);
             else
                 new_stack = unique_name(name);
