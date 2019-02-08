@@ -106,6 +106,19 @@ namespace Tensorflow
             throw new NotImplementedException("where");
         }
 
+        /// <summary>
+        /// A placeholder op that passes through `input` when its output is not fed.
+        /// </summary>
+        /// <param name="input">The default value to produce when output is not fed.</param>
+        /// <param name="shape"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor placeholder_with_default<T>(T input, TensorShape shape, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("PlaceholderWithDefault", name, new { input, shape, name });
+            return _op.outputs[0];
+        }
+
         public static Tensor select(Tensor condition, Tensor t, Tensor e, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Select", name, new { condition, t, e });

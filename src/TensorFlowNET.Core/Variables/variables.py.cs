@@ -17,6 +17,26 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Returns all variables and `SaveableObject`s that must be checkpointed.
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        public static RefVariable[] _all_saveable_objects(string scope = "")
+        {
+            var all = new List<RefVariable>();
+
+            var collection = ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope);
+            if(collection != null)
+                all.AddRange(collection as List<RefVariable>);
+
+            collection = ops.get_collection(ops.GraphKeys.SAVEABLE_OBJECTS, scope);
+            if (collection != null)
+                all.AddRange(collection as List<RefVariable>);
+
+            return all.ToArray();
+        }
+
+        /// <summary>
         /// Returns global variables.
         /// </summary>
         /// <param name="scope">

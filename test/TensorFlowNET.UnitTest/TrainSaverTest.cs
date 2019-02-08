@@ -7,7 +7,7 @@ using Tensorflow;
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class TrainSaverTest
+    public class TrainSaverTest : Python
     {
         [TestMethod]
         public void Save()
@@ -20,6 +20,14 @@ namespace TensorFlowNET.UnitTest
 
             // Add an op to initialize the variables.
             var init_op = tf.global_variables_initializer();
+
+            // Add ops to save and restore all the variables.
+            var saver = tf.train.Saver();
+
+            with<Session>(tf.Session(), sess =>
+            {
+                sess.run(init_op);
+            });
         }
     }
 }

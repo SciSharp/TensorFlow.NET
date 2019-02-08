@@ -116,6 +116,10 @@ namespace Tensorflow
                         values = new Tensor[] { keywords[input_name] as Tensor };
                     }
 
+                    inputs.AddRange(values as Tensor[]);
+                    base_types.AddRange((values as Tensor[]).Select(x => x.dtype.as_base_dtype()));
+                    input_types.AddRange(base_types);
+
                     if (!string.IsNullOrEmpty(input_arg.NumberAttr))
                     {
                         if (attrs.ContainsKey(input_arg.NumberAttr))
@@ -144,10 +148,32 @@ namespace Tensorflow
                             var type_attr = op_def.Attr.First(x => x.Name == input_arg.TypeAttr);
                         }
                     }
+                    else if (!string.IsNullOrEmpty(input_arg.TypeAttr))
+                    {
+                        var attr_value = base_types[0];
+                        if (attrs.ContainsKey(input_arg.TypeAttr))
+                        {
 
-                    inputs.AddRange(values as Tensor[]);
-                    base_types.AddRange((values as Tensor[]).Select(x => x.dtype.as_base_dtype()));
-                    input_types.AddRange(base_types);
+                        }
+                        else
+                        {
+                            attrs[input_arg.TypeAttr] = attr_value;
+                            inferred_from[input_arg.TypeAttr] = input_name;
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(input_arg.TypeListAttr))
+                    {
+                        var attr_value = base_types;
+                        if (attrs.ContainsKey(input_arg.TypeListAttr))
+                        {
+
+                        }
+                        else
+                        {
+                            attrs[input_arg.TypeListAttr] = attr_value;
+                            inferred_from[input_arg.TypeListAttr] = input_name;
+                        }
+                    }
                 }
 
                 // Process remaining attrs
@@ -213,6 +239,11 @@ namespace Tensorflow
                 case "type":
                     attr_value.Type = _MakeType((TF_DataType)value, attr_def);
                     break;
+                case "list(type)":
+                    if (attr_value.List == null)
+                        attr_value.List = new AttrValue.Types.ListValue();
+                    attr_value.List.Type.AddRange((value as IList<TF_DataType>).Select(x => _MakeType(x, attr_def)));
+                    break;
                 case "bool":
                     attr_value.B = (bool)value;
                     break;
@@ -225,9 +256,14 @@ namespace Tensorflow
                         throw new ValueError($"Attr '{attr_def.Name}' of '{op_def.Name}' Op passed {attr_value.I} less than minimum {attr_def.Minimum}.");
                     break;
                 case "shape":
-                    attr_value.Shape = value == null ?
-                        attr_def.DefaultValue.Shape :
-                        tensor_util.as_shape((long[])value);
+                    if (value == null && attr_def.DefaultValue != null)
+                        attr_value.Shape = attr_def.DefaultValue.Shape;
+
+                    if(value is TensorShape val1)
+                        attr_value.Shape = val1.as_proto();
+                    else if(value is long[] val2)
+                        attr_value.Shape = tensor_util.as_shape(val2);
+
                     break;
                 default:
                     throw new TypeError($"SetAttrValue: can't not convert attr_def.Type '{attr_def.Type}' to protos.");

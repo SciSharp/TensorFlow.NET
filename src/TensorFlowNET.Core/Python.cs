@@ -15,6 +15,15 @@ namespace Tensorflow
             Console.WriteLine(obj.ToString());
         }
 
+        public static T New<T>(object args) where T : IPyClass
+        {
+            var instance = Activator.CreateInstance<T>();
+
+            instance.__init__(instance, args);
+
+            return instance;
+        }
+
         public static void with(IPython py, Action<IPython> action)
         {
             try
@@ -63,7 +72,7 @@ namespace Tensorflow
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw ex;
+                return default(TOut);
             }
             finally
             {
@@ -96,5 +105,10 @@ namespace Tensorflow
         void __enter__();
 
         void __exit__();
+    }
+
+    public class PyObject<T> where T : IPyClass
+    {
+        public T Instance { get; set; }
     }
 }

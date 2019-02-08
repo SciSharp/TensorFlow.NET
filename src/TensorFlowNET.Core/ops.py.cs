@@ -387,6 +387,10 @@ namespace Tensorflow
             {
                 case "Tensor":
                     return value as Tensor;
+                case "String":
+                    return constant_op.constant(Convert.ToString(value), name);
+                case "String[]":
+                    return constant_op.constant(value as string[], name);
                 case "Int32":
                     return constant_op.constant(Convert.ToInt32(value), name);
                 case "Double":

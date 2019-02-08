@@ -27,6 +27,11 @@ namespace Tensorflow
             /// Default collection for all variables, except local ones.
             /// </summary>
             public static string GLOBAL_VARIABLES = "variables";
+
+            /// <summary>
+            /// Key to collect BaseSaverBuilder.SaveableObject instances for checkpointing.
+            /// </summary>
+            public static string SAVEABLE_OBJECTS = "saveable_objects";
         }
     }
 }
