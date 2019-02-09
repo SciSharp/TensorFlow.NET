@@ -122,7 +122,7 @@ namespace Tensorflow
                 foreach (var op_input in inputs)
                 {
                     if (op_input is Tensor[] op_inputs)
-                        c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), inputs.Length);
+                        c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), op_inputs.Length);
                     else if (op_input is Tensor op_input1)
                         c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
                     else

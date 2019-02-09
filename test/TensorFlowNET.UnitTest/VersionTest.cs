@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest
         public void GetVersion()
         {
             var ver = tf.VERSION;
-            Assert.IsTrue(ver.StartsWith("1."));
+            Assert.IsTrue(ver.StartsWith("1.13."));
         }
     }
 }

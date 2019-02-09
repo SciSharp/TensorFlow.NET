@@ -28,7 +28,7 @@ namespace TensorFlowNET.UnitTest
 
             var mul = tf.multiply(X, W);
             EXPECT_EQ(1, X.op.OutputNumConsumers(0));
-            // EXPECT_EQ(1, W.op.OutputNumConsumers(0));
+            //EXPECT_EQ(1, W.op.OutputNumConsumers(0));
         }
     }
 }
