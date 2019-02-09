@@ -186,7 +186,7 @@ namespace Tensorflow
         /// the assignment has completed.
         /// </returns>
         public T assign<T>(Tensor value, bool use_locking = false, string name = "", bool read_value = true)
-            where T : IReturnTensorOrOperation
+            where T : ITensorOrOperation
         {
             var assign = gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
             if (read_value)

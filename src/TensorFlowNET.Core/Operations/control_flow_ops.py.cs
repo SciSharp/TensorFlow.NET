@@ -7,20 +7,20 @@ namespace Tensorflow
 {
     public class control_flow_ops
     {
-        public static Operation group(Operation[] inputs, string name = "")
+        public static Operation group<T>(T[] inputs, string name = "") where T : ITensorOrOperation
         {
             return Python.with<ops.name_scope, Operation>(new ops.name_scope(name, "group_deps", inputs), scope =>
             {
                 name = scope;
 
                 // Sorts *inputs according to their devices.
-                var ops_on_device = new Dictionary<string, List<Operation>>();
+                var ops_on_device = new Dictionary<string, List<T>>();
                 foreach (var inp in inputs)
                 {
                     if (ops_on_device.ContainsKey(inp.Device))
                         ops_on_device[inp.Device].Add(inp);
                     else
-                        ops_on_device[inp.Device] = new List<Operation> { inp };
+                        ops_on_device[inp.Device] = new List<T> { inp };
                 }
 
                 // 1-level tree. The root node is the returned NoOp node.
@@ -28,12 +28,15 @@ namespace Tensorflow
                 {
                     var dev = ops_on_device.Keys.First();
                     var deps = ops_on_device.Values.First();
-                    return _GroupControlDeps(dev, deps.ToArray(), name);
+                    if (typeof(T).Name == "Operation")
+                        return _GroupControlDeps(dev, deps.Select(x => x as Operation).ToArray(), name);
+                    else
+                        throw new NotImplementedException("control_flow_ops.group");
                 }
 
                 // 2-level tree. The root node is the returned NoOp node.
                 // deps contains 1 NoOp node for each device.
-                return null;
+                throw new NotImplementedException("control_flow_ops.group");
             });
         }
 

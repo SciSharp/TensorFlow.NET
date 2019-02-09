@@ -14,5 +14,12 @@ namespace Tensorflow
 
             return _op;
         }
+
+        public static Tensor[] restore_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, TF_DataType[] dtypes, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("RestoreV2", name: name, args: new { prefix, tensor_names, shape_and_slices, dtypes });
+
+            return _op.outputs;
+        }
     }
 }

@@ -8,7 +8,8 @@ namespace Tensorflow
     /// in order to limit function return value 
     /// is Tensor or Operation
     /// </summary>
-    public interface IReturnTensorOrOperation
+    public interface ITensorOrOperation
     {
+        string Device { get; }
     }
 }

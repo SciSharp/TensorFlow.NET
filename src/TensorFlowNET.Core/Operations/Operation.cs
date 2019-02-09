@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public partial class Operation : IReturnTensorOrOperation
+    public partial class Operation : ITensorOrOperation
     {
         private readonly IntPtr _handle; // _c_op in python
 
