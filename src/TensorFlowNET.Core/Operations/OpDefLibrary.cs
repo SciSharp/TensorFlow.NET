@@ -107,7 +107,9 @@ namespace Tensorflow
 
                         values = ops.internal_convert_to_tensor(values, 
                             name: input_name, 
-                            as_ref: input_arg.IsRef);
+                            dtype: dtype,
+                            as_ref: input_arg.IsRef,
+                            preferred_dtype: default_dtype);
 
                         //if (!String.IsNullOrEmpty(input_arg.TypeAttr))
                             //attrs[input_arg.TypeAttr] = values.dtype;
@@ -163,14 +165,20 @@ namespace Tensorflow
 
                 foreach (var arg in op_def.OutputArg)
                 {
+                    types = new List<TF_DataType>();
                     if (!string.IsNullOrEmpty(arg.NumberAttr))
                     {
 
                     }
                     else if (!string.IsNullOrEmpty(arg.TypeAttr))
                     {
-                        output_types.Add((TF_DataType)attr_protos[arg.TypeAttr].Type);
+                        types = new List<TF_DataType>() { (TF_DataType)attr_protos[arg.TypeAttr].Type };
                     }
+
+                    if (arg.IsRef)
+                        types = types.Select(x => x.as_ref()).ToList();
+
+                    output_types.AddRange(types);
                 }
 
                 // Add Op to graph

@@ -27,6 +27,13 @@ namespace TensorFlowNET.UnitTest
             with<Session>(tf.Session(), sess =>
             {
                 sess.run(init_op);
+                // o some work with the model.
+                inc_v1.op.run();
+                dec_v2.op.run();
+
+                // Save the variables to disk.
+                var save_path = saver.save(sess, "/tmp/model.ckpt");
+                Console.WriteLine($"Model saved in path: {save_path}");
             });
         }
     }

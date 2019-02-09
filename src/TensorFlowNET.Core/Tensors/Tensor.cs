@@ -261,7 +261,7 @@ namespace Tensorflow
                 }
             }
 
-            return $"tf.Tensor {name} shape=({string.Join(",", shape)}) dtype={dtype.ToString()}";
+            return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype.ToString()}";
         }
 
         public void Dispose()

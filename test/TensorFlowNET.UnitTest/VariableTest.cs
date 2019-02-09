@@ -46,6 +46,24 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
+        [TestMethod]
+        public void Assign()
+        {
+            var v1 = tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);
+
+            var inc_v1 = v1.assign(v1 + 1.0f);
+
+            // Add an op to initialize the variables.
+            var init_op = tf.global_variables_initializer();
+
+            with<Session>(tf.Session(), sess =>
+            {
+                sess.run(init_op);
+                // o some work with the model.
+                inc_v1.op.run();
+            });
+        }
+
         /// <summary>
         /// https://databricks.com/tensorflow/variables
         /// </summary>

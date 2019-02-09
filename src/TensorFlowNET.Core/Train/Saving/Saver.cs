@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Tensorflow
@@ -13,30 +14,33 @@ namespace Tensorflow
         private bool _reshape;
         private bool _sharded;
         private int _max_to_keep;
-        private double _keep_checkpoint_every_n_hours;
+        private float _keep_checkpoint_every_n_hours;
         private string _name;
         private bool _restore_sequentially;
         private SaverDef _saver_def;
         private ISaverBuilder _builder;
         private bool _allow_empty;
         private bool _is_built;
-        private int _write_version;
+        private SaverDef.Types.CheckpointFormatVersion _write_version;
         private bool _pad_step_number;
         private string _filename;
         private bool _is_empty;
+        private float _next_checkpoint_time;
+        private bool _save_relative_paths;
+        private bool? _object_restore_saver;
 
         public Saver(RefVariable[] var_list = null,
             bool reshape = false,
             bool sharded = false,
             int max_to_keep = 5,
-            double keep_checkpoint_every_n_hours = 10000,
+            float keep_checkpoint_every_n_hours = 10000,
             string name = "",
             bool restore_sequentially = false,
             SaverDef saver_def = null,
             ISaverBuilder builder = null,
             bool defer_build = false,
             bool allow_empty = false,
-            int write_version = 2,
+            SaverDef.Types.CheckpointFormatVersion write_version = SaverDef.Types.CheckpointFormatVersion.V2,
             bool pad_step_number = false,
             bool save_relative_paths = false,
             string filename = "")
@@ -56,6 +60,14 @@ namespace Tensorflow
 
             if (!defer_build)
                 build();
+            if(_saver_def != null)
+            {
+                _check_saver_def();
+                _write_version = _saver_def.Version;
+            }
+
+            _save_relative_paths = save_relative_paths;
+            _object_restore_saver = null;
         }
 
         public void build()
@@ -106,8 +118,56 @@ namespace Tensorflow
             {
                 throw new NotImplementedException("");
             }
-            
 
+            _check_saver_def();
+
+            _next_checkpoint_time = (float)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds + _saver_def.KeepCheckpointEveryNHours * 3600;
+        }
+
+        private void _check_saver_def()
+        {
+            if (!tf.context.executing_eagerly())
+            {
+                if (string.IsNullOrEmpty(_saver_def.SaveTensorName))
+                    throw new ValueError($"saver_def must specify the save_tensor_name: {_saver_def}");
+                if (string.IsNullOrEmpty(_saver_def.RestoreOpName))
+                    throw new ValueError($"saver_def must specify the restore_op_name: {_saver_def}");
+            }
+        }
+
+        public string save(Session sess,
+            string save_path,
+            string global_step = "",
+            string meta_graph_suffix = "meta",
+            bool write_meta_graph = true,
+            bool write_state = true,
+            bool strip_default_attrs = false)
+        {
+            string latest_filename = "checkpoint";
+            string model_checkpoint_path = "";
+            string checkpoint_file = "";
+
+            if (!string.IsNullOrEmpty(global_step))
+            {
+
+            }
+            else
+            {
+                checkpoint_file = save_path;
+            }
+
+            var save_path_parent = Path.GetDirectoryName(save_path);
+
+            if (!_is_empty)
+            {
+                /*model_checkpoint_path = sess.run(_saver_def.SaveTensorName, new FeedItem[] {
+                    new FeedItem(_saver_def.FilenameTensorName, checkpoint_file)
+                });*/
+            }
+
+            throw new NotImplementedException("");
+
+            return model_checkpoint_path;
         }
     }
 }

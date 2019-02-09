@@ -28,10 +28,7 @@ namespace Tensorflow
                 {
                     var dev = ops_on_device.Keys.First();
                     var deps = ops_on_device.Values.First();
-                    if (typeof(T).Name == "Operation")
-                        return _GroupControlDeps(dev, deps.Select(x => x as Operation).ToArray(), name);
-                    else
-                        throw new NotImplementedException("control_flow_ops.group");
+                    return _GroupControlDeps(dev, deps.Select(x => x.op).ToArray(), name);
                 }
 
                 // 2-level tree. The root node is the returned NoOp node.

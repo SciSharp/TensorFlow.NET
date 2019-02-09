@@ -14,7 +14,7 @@ namespace Tensorflow
             bool reshape = false, 
             bool sharded = false, 
             int max_to_keep = 5,
-            double keep_checkpoint_every_n_hours = 10000,
+            float keep_checkpoint_every_n_hours = 10000,
             string name = "",
             bool restore_sequentially = false,
             string filename = "model",

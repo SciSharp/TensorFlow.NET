@@ -298,6 +298,11 @@ namespace Tensorflow
             return _nodes_by_name.Values.Select(x => x).ToArray();
         }
 
+        public string[] get_all_collection_keys()
+        {
+            return _collections.Keys.Where(x => !x.StartsWith("__")).ToArray();
+        }
+
         public object get_collection(string name, string scope = "")
         {
             return _collections.ContainsKey(name) ? _collections[name] : null;

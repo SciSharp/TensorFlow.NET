@@ -16,6 +16,7 @@ namespace Tensorflow
         private int _id_value;
 
         public string type => OpType;
+        public Operation op => this;
 
         private Status status = new Status();
 
@@ -75,7 +76,7 @@ namespace Tensorflow
         /// </param>
         /// <param name="original_op"></param>
         /// <param name="op_def"></param>
-        public Operation(NodeDef node_def, Graph g, Tensor[] inputs = null, TF_DataType[] output_types = null, Operation[] control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
+        public Operation(NodeDef node_def, Graph g, Tensor[] inputs = null, TF_DataType[] output_types = null, ITensorOrOperation[] control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
             Graph = g;
 
@@ -118,6 +119,11 @@ namespace Tensorflow
 
             if (_handle != IntPtr.Zero)
                 _control_flow_post_processing();
+        }
+
+        public void run(FeedItem[] feed_dict = null, Session session = null)
+        {
+            ops._run_using_default_session(this, feed_dict, Graph, session);
         }
 
         private object[] _reconstruct_sequence_inputs(OpDef op_def, Tensor[] inputs, MapField<string, AttrValue> attrs)
@@ -204,7 +210,7 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            return _handle == IntPtr.Zero ? "Undefined" : $"'{Name}' type={OpType}";
+            return _handle == IntPtr.Zero ? "tf.Operation Undefined" : $"tf.Operation '{Name}' type={OpType}";
         }
 
         public static implicit operator Operation(IntPtr handle) => new Operation(handle);

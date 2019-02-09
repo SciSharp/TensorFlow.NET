@@ -6,7 +6,7 @@ namespace Tensorflow
 {
     public class BulkSaverBuilder : BaseSaverBuilder, ISaverBuilder
     {
-        public BulkSaverBuilder(int write_version = 2) : base(write_version)
+        public BulkSaverBuilder(SaverDef.Types.CheckpointFormatVersion write_version = SaverDef.Types.CheckpointFormatVersion.V2) : base(write_version)
         {
 
         }

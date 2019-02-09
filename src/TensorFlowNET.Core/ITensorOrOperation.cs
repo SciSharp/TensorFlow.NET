@@ -11,5 +11,6 @@ namespace Tensorflow
     public interface ITensorOrOperation
     {
         string Device { get; }
+        Operation op { get; }
     }
 }

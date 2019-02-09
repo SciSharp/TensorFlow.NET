@@ -7,9 +7,9 @@ namespace Tensorflow
 {
     public class BaseSaverBuilder
     {
-        protected int _write_version;
+        protected SaverDef.Types.CheckpointFormatVersion _write_version;
 
-        public BaseSaverBuilder(int write_version = 2)
+        public BaseSaverBuilder(SaverDef.Types.CheckpointFormatVersion write_version = SaverDef.Types.CheckpointFormatVersion.V2)
         {
             _write_version = write_version;
         }
@@ -30,7 +30,7 @@ namespace Tensorflow
                 }
             }
 
-            if (_write_version == 2)
+            if (_write_version == SaverDef.Types.CheckpointFormatVersion.V2)
             {
                 return gen_io_ops.save_v2(filename_tensor, tensor_names.ToArray(), tensor_slices.ToArray(), tensors.ToArray());
             }
@@ -60,7 +60,7 @@ namespace Tensorflow
             bool reshape = false,
             bool sharded = false,
             int max_to_keep = 5,
-            double keep_checkpoint_every_n_hours = 10000,
+            float keep_checkpoint_every_n_hours = 10000,
             string name = "",
             bool restore_sequentially = false,
             string filename = "model",
@@ -76,7 +76,10 @@ namespace Tensorflow
             if (max_to_keep < 0)
                 max_to_keep = 0;
 
-            Python.with<ops.name_scope>(new ops.name_scope(name, "save", saveables.Select(x => x.op).ToArray()), scope =>
+            Tensor save_tensor = null;
+            Operation restore_op = null;
+
+            return Python.with<ops.name_scope, SaverDef>(new ops.name_scope(name, "save", saveables.Select(x => x.op).ToArray()), scope =>
             {
                 name = scope;
 
@@ -93,14 +96,35 @@ namespace Tensorflow
                 else
                 {
                     if (build_save)
-                        _AddSaveOps(filename_tensor, saveables);
+                        save_tensor = _AddSaveOps(filename_tensor, saveables);
 
                     if (build_restore)
-                        _AddRestoreOps(filename_tensor, saveables, restore_sequentially, reshape);
+                        restore_op = _AddRestoreOps(filename_tensor, saveables, restore_sequentially, reshape);
                 }
+
+                var graph = ops.get_default_graph();
+                var check_collection_list = graph.get_all_collection_keys();
+                foreach (var collection_type in check_collection_list)
+                {
+                    foreach (var element in graph.get_collection(collection_type) as IList<RefVariable>)
+                    {
+
+                    }
+                }
+
+                return new SaverDef()
+                {
+                    FilenameTensorName = filename_tensor.name,
+                    SaveTensorName = save_tensor.name,
+                    RestoreOpName = restore_op.Name,
+                    MaxToKeep = max_to_keep,
+                    Sharded = sharded,
+                    KeepCheckpointEveryNHours = keep_checkpoint_every_n_hours,
+                    Version = _write_version
+                };
             });
 
-            throw new NotImplementedException("");
+            
         }
 
         public Tensor _AddSaveOps(Tensor filename_tensor, SaveableObject[] saveables)

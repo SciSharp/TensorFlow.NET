@@ -30,6 +30,11 @@ namespace Tensorflow
             return tensor._handle;
         }
 
+        public static implicit operator Operation(Tensor tensor)
+        {
+            return tensor.op;
+        }
+
         public static implicit operator Tensor(IntPtr handle)
         {
             return new Tensor(handle);

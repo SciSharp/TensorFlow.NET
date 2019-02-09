@@ -292,6 +292,27 @@ namespace Tensorflow
             return tf.Session();
         }
 
+        public static void _run_using_default_session(Operation operation, FeedItem[] feed_dict, Graph graph, Session session)
+        {
+            if (session == null)
+            {
+                session = get_default_session();
+                if (session == null)
+                    throw new ValueError("Cannot execute operation using `run()`: No default " +
+                       "session is registered. Use `with " +
+                       "sess.as_default():` or pass an explicit session to " +
+                       "`run(session=sess)`");
+            }
+
+            if (session.graph != graph)
+                throw new ValueError("Cannot use the default session to execute operation: " +
+                   "the operation's graph is different from the " +
+                   "session's graph. Pass an explicit session to " +
+                   "run(session=sess).");
+
+            session.run(operation, feed_dict);
+        }
+
         public static Func<Operation, Tensor, Tensor[]> get_gradient_function(Operation op)
         {
             if (op.inputs == null) return null;

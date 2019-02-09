@@ -11,20 +11,20 @@ namespace Tensorflow
     public class _ControlDependenciesController : IPython
     {
         private Graph _graph;
-        private List<Operation> _control_inputs_val;
-        private List<Operation> _seen_nodes;
+        private List<ITensorOrOperation> _control_inputs_val;
+        private List<ITensorOrOperation> _seen_nodes;
         private Queue<_ControlDependenciesController> _old_stack;
         private bool _new_stack;
         private Context _old_control_flow_context;
 
-        public Operation[] control_inputs => _control_inputs_val.ToArray();
+        public ITensorOrOperation[] control_inputs => _control_inputs_val.ToArray();
 
-        public _ControlDependenciesController(Graph graph, List<Operation> control_inputs)
+        public _ControlDependenciesController(Graph graph, List<ITensorOrOperation> control_inputs)
         {
             _graph = graph;
             if (control_inputs == null)
             {
-                _control_inputs_val = new List<Operation>();
+                _control_inputs_val = new List<ITensorOrOperation>();
                 _new_stack = true;
             }
             else
@@ -33,15 +33,15 @@ namespace Tensorflow
                 _new_stack = false;
             }
 
-            _seen_nodes = new List<Operation>();
+            _seen_nodes = new List<ITensorOrOperation>();
         }
 
-        public void add_op(Operation op)
+        public void add_op(ITensorOrOperation op)
         {
             _seen_nodes.Add(op);
         }
 
-        public bool op_in_group(Operation op)
+        public bool op_in_group(ITensorOrOperation op)
         {
             return _seen_nodes.Contains(op);
         }

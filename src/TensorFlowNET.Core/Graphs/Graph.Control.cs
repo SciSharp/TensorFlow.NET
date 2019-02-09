@@ -28,9 +28,9 @@ namespace Tensorflow
         /// </summary>
         /// <param name="input_ops">The data input ops for an op to be created.</param>
         /// <returns>A list of control inputs for the op to be created.</returns>
-        private Operation[] _control_dependencies_for_inputs(Operation[] input_ops)
+        private ITensorOrOperation[] _control_dependencies_for_inputs(ITensorOrOperation[] input_ops)
         {
-            Operation[] ret = new Operation[0];
+            var ret = new ITensorOrOperation[0];
 
             foreach(var controller in _control_dependencies_stack)
             {
@@ -54,12 +54,12 @@ namespace Tensorflow
             return ret;
         }
 
-        public _ControlDependenciesController control_dependencies(Operation[] control_inputs)
+        public _ControlDependenciesController control_dependencies(ITensorOrOperation[] control_inputs)
         {
             if (control_inputs == null)
                 return new _ControlDependenciesController(this, null);
 
-            var control_ops = new List<Operation>();
+            var control_ops = new List<ITensorOrOperation>();
             foreach (var c in control_inputs)
             {
                 control_ops.Add(c);

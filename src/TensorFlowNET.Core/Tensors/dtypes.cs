@@ -83,6 +83,13 @@ namespace Tensorflow
                 type;
         }
 
+        public static TF_DataType as_ref(this TF_DataType type)
+        {
+            return (int)type < 100 ?
+                (TF_DataType)Enum.Parse(typeof(TF_DataType), ((int)type + 100).ToString()) :
+                type;
+        }
+
         public static bool is_complex(this TF_DataType type)
         {
             return type == TF_DataType.TF_COMPLEX || type == TF_DataType.TF_COMPLEX64 || type == TF_DataType.TF_COMPLEX128;
