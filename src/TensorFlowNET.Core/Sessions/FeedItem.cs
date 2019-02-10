@@ -10,13 +10,13 @@ namespace Tensorflow
     /// </summary>
     public class FeedItem
     {
-        public Tensor Key { get; }
-        public NDArray Value { get; }
+        public object Key { get; }
+        public object Value { get; }
 
-        public FeedItem(Tensor tensor, NDArray nd)
+        public FeedItem(object key, object val)
         {
-            Key = tensor;
-            Value = nd;
+            Key = key;
+            Value = val;
         }
     }
 }

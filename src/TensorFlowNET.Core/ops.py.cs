@@ -289,7 +289,7 @@ namespace Tensorflow
         /// <returns>The default `Session` being used in the current thread.</returns>
         public static Session get_default_session()
         {
-            return tf.Session();
+            return tf.defaultSession;
         }
 
         public static void _run_using_default_session(Operation operation, FeedItem[] feed_dict, Graph graph, Session session)

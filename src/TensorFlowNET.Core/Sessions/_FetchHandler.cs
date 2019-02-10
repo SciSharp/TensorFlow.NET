@@ -16,7 +16,7 @@ namespace Tensorflow
         private List<Tensor> _final_fetches = new List<Tensor>();
         private List<T> _targets = new List<T>();
 
-        public _FetchHandler(Graph graph, T fetches, Dictionary<Tensor, NDArray> feeds = null, Action feed_handles = null)
+        public _FetchHandler(Graph graph, T fetches, Dictionary<object, object> feeds = null, Action feed_handles = null)
         {
             _fetch_mapper = new _FetchMapper<T>().for_fetch(fetches);
             foreach(var fetch in _fetch_mapper.unique_fetches())

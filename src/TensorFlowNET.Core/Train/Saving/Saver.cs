@@ -160,9 +160,9 @@ namespace Tensorflow
 
             if (!_is_empty)
             {
-                /*model_checkpoint_path = sess.run(_saver_def.SaveTensorName, new FeedItem[] {
+                var model_checkpoint_path1 = sess.run(_saver_def.SaveTensorName, new FeedItem[] {
                     new FeedItem(_saver_def.FilenameTensorName, checkpoint_file)
-                });*/
+                });
             }
 
             throw new NotImplementedException("");
