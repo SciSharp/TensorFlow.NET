@@ -47,6 +47,11 @@ namespace Tensorflow
             return g;
         }
 
+        public static void ResetGraph()
+        {
+            g = new Graph();
+        }
+
         public static Session Session()
         {
             defaultSession = new Session();

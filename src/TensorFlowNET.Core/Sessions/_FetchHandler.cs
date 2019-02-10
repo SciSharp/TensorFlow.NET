@@ -8,24 +8,24 @@ namespace Tensorflow
     /// <summary>
     /// Handler for structured fetches.
     /// </summary>
-    public class _FetchHandler<T>
+    public class _FetchHandler
     {
-        private _ElementFetchMapper<T> _fetch_mapper;
+        private _ElementFetchMapper _fetch_mapper;
         private List<Tensor> _fetches = new List<Tensor>();
         private List<bool> _ops = new List<bool>();
         private List<Tensor> _final_fetches = new List<Tensor>();
-        private List<T> _targets = new List<T>();
+        private List<object> _targets = new List<object>();
 
-        public _FetchHandler(Graph graph, T fetches, Dictionary<object, object> feeds = null, Action feed_handles = null)
+        public _FetchHandler(Graph graph, object fetches, Dictionary<object, object> feeds = null, Action feed_handles = null)
         {
-            _fetch_mapper = new _FetchMapper<T>().for_fetch(fetches);
+            _fetch_mapper = new _FetchMapper().for_fetch(fetches);
             foreach(var fetch in _fetch_mapper.unique_fetches())
             {
                 switch (fetch)
                 {
                     case Operation val:
                         _assert_fetchable(graph, val);
-                        _targets.Add((T)(object)val);
+                        _targets.Add(val);
                         _ops.Add(true);
                         break;
                     case Tensor val:
@@ -82,7 +82,7 @@ namespace Tensorflow
             return _final_fetches;
         }
 
-        public List<T> targets()
+        public List<object> targets()
         {
             return _targets;
         }

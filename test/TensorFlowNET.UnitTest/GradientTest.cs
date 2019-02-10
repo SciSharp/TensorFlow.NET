@@ -12,6 +12,8 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void Gradients()
         {
+            tf.ResetGraph();
+
             var a = tf.constant(0.0);
             var b = 2.0 * a;
             Assert.AreEqual(b.name, "mul:0");

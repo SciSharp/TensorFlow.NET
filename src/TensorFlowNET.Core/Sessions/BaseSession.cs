@@ -36,12 +36,12 @@ namespace Tensorflow
         }
 
 
-        public virtual NDArray run<T>(T fetches, FeedItem[] feed_dict = null)
+        public virtual NDArray run(object fetches, FeedItem[] feed_dict = null)
         {
             return _run(fetches, feed_dict);
         }
 
-        private NDArray _run<T>(T fetches, FeedItem[] feed_dict = null)
+        private NDArray _run(object fetches, FeedItem[] feed_dict = null)
         {
             var feed_dict_tensor = new Dictionary<object, object>();
 
@@ -49,7 +49,7 @@ namespace Tensorflow
                 feed_dict.ToList().ForEach(x => feed_dict_tensor.Add(x.Key, x.Value));
 
             // Create a fetch handler to take care of the structure of fetches.
-            var fetch_handler = new _FetchHandler<T>(_graph, fetches, feed_dict_tensor);
+            var fetch_handler = new _FetchHandler(_graph, fetches, feed_dict_tensor);
 
             // Run request and get response.
             // We need to keep the returned movers alive for the following _do_run().

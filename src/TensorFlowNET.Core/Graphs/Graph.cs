@@ -15,8 +15,8 @@ namespace Tensorflow
     public partial class Graph : IDisposable
     {
         private IntPtr _handle;
-        private Dictionary<int, Operation> _nodes_by_id;
-        private Dictionary<string, Operation> _nodes_by_name;
+        private Dictionary<int, ITensorOrOperation> _nodes_by_id;
+        public Dictionary<string, ITensorOrOperation> _nodes_by_name;
         private Dictionary<string, int> _names_in_use;
         public int _version;
         private int _next_id_counter;
@@ -35,13 +35,13 @@ namespace Tensorflow
         {
             _handle = c_api.TF_NewGraph();
             Status = new Status();
-            _nodes_by_id = new Dictionary<int, Operation>();
-            _nodes_by_name = new Dictionary<string, Operation>();
+            _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
+            _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
             _names_in_use = new Dictionary<string, int>();
             _graph_key = $"grap-key-{ops.uid()}/";
         }
 
-        public object as_graph_element(object obj, bool allow_tensor = true, bool allow_operation = true)
+        public ITensorOrOperation as_graph_element(ITensorOrOperation obj, bool allow_tensor = true, bool allow_operation = true)
         {
             return _as_graph_element_locked(obj, allow_tensor, allow_operation);
         }
@@ -54,7 +54,7 @@ namespace Tensorflow
             return null;
         }
 
-        private object _as_graph_element_locked(object obj, bool allow_tensor = true, bool allow_operation = true)
+        private ITensorOrOperation _as_graph_element_locked(ITensorOrOperation obj, bool allow_tensor = true, bool allow_operation = true)
         {
             string types_str = "";
 
@@ -294,7 +294,7 @@ namespace Tensorflow
             return c_api.TF_GraphOperationByName(_handle, operName);
         }
 
-        public Operation[] get_operations()
+        public ITensorOrOperation[] get_operations()
         {
             return _nodes_by_name.Values.Select(x => x).ToArray();
         }
