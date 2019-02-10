@@ -47,7 +47,7 @@ namespace Tensorflow
         /// <param name="validate_shape"></param>
         /// <param name="use_locking"></param>
         /// <param name="name"></param>
-        public static Tensor assign(Tensor tensor, Tensor value, 
+        public static Tensor assign(Tensor tensor, object value, 
             bool validate_shape = true, 
             bool use_locking = true,
             string name = "")

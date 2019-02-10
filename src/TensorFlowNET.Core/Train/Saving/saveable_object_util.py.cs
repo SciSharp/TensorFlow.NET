@@ -84,9 +84,9 @@ namespace Tensorflow
                         }
 
                         if (var.op.type == "ReadVariableOp")
-                            name = var.op.inputs[0].op.Name;
+                            name = var.op.inputs[0].op.name;
                         else
-                            name = var.op.Name;
+                            name = var.op.name;
 
                         if (names_to_saveables.ContainsKey(name))
                             throw new ValueError($"At least two variables have the same name: {name}");

@@ -49,8 +49,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void Assign()
         {
-            var v1 = tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);
-
+            var v1 = tf.Variable(10.0f, name: "v1"); //tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);
             var inc_v1 = v1.assign(v1 + 1.0f);
 
             // Add an op to initialize the variables.
@@ -73,10 +72,10 @@ namespace TensorFlowNET.UnitTest
             int result = 0;
             Tensor x = tf.Variable(10, name: "x");
 
-            var model = tf.global_variables_initializer();
+            var init_op = tf.global_variables_initializer();
             using (var session = tf.Session())
             {
-                session.run(model);
+                session.run(init_op);
                 for(int i = 0; i < 5; i++)
                 {
                     x = x + 1;

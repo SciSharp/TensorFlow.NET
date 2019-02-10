@@ -73,7 +73,7 @@ namespace Tensorflow
         {
             if (!graph.is_fetchable(op))
             {
-                throw new Exception($"Operation {op.Name} has been marked as not fetchable.");
+                throw new Exception($"Operation {op.name} has been marked as not fetchable.");
             }
         }
 

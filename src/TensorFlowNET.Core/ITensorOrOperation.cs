@@ -12,5 +12,6 @@ namespace Tensorflow
     {
         string Device { get; }
         Operation op { get; }
+        string name { get; }
     }
 }

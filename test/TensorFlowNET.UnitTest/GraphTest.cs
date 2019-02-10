@@ -23,7 +23,7 @@ namespace TensorFlowNET.UnitTest
 
             // Make a placeholder operation.
             var feed = c_test_util.Placeholder(graph, s);
-            EXPECT_EQ("feed", feed.Name);
+            EXPECT_EQ("feed", feed.name);
             EXPECT_EQ("Placeholder", feed.OpType);
             EXPECT_EQ("", feed.Device);
             EXPECT_EQ(1, feed.NumOutputs);
@@ -53,7 +53,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             // Test TF_Operation*() query functions.
-            EXPECT_EQ("add", add.Name);
+            EXPECT_EQ("add", add.name);
             EXPECT_EQ("AddN", add.OpType);
             EXPECT_EQ("", add.Device);
             EXPECT_EQ(1, add.NumOutputs);

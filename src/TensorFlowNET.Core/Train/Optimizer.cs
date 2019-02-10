@@ -97,7 +97,7 @@ namespace Tensorflow
                     if (grad == null)
                         continue;
 
-                    var scope_name = var.op.Name;
+                    var scope_name = var.op.name;
                     Python.with<ops.name_scope>(new ops.name_scope("update_" + scope_name), scope2 =>
                     {
                         update_ops.Add(processor.update_op(this, grad));

@@ -20,7 +20,7 @@ namespace Tensorflow
 
         private Status status = new Status();
 
-        public string Name => c_api.StringPiece(c_api.TF_OperationName(_handle));
+        public string name => c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => c_api.StringPiece(c_api.TF_OperationOpType(_handle));
         public string Device => c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 
@@ -210,7 +210,7 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            return _handle == IntPtr.Zero ? "tf.Operation Undefined" : $"tf.Operation '{Name}' type={OpType}";
+            return _handle == IntPtr.Zero ? "tf.Operation Undefined" : $"tf.Operation '{name}' type={OpType}";
         }
 
         public static implicit operator Operation(IntPtr handle) => new Operation(handle);

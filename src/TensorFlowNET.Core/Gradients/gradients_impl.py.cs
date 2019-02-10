@@ -95,9 +95,9 @@ namespace Tensorflow
                 {
                     // 'ready' handles the case where one output gradient relies on
                     // another output's gradient.
-                    if (!pending_count.ContainsKey(op.Name))
-                        pending_count[op.Name] = 0;
-                    bool ready = pending_count[op.Name] == 0;
+                    if (!pending_count.ContainsKey(op.name))
+                        pending_count[op.name] = 0;
+                    bool ready = pending_count[op.name] == 0;
                     if(ready && !to_ops_set.Contains(op) && reachable_to_ops.Contains(op))
                     {
                         to_ops_set.Add(op);
@@ -131,7 +131,7 @@ namespace Tensorflow
                             // for ops that do not have gradients.
                             var grad_fn = ops.get_gradient_function(op);
 
-                            Python.with<ops.name_scope>(new ops.name_scope(op.Name + "_grad"), scope1 =>
+                            Python.with<ops.name_scope>(new ops.name_scope(op.name + "_grad"), scope1 =>
                             {
                                 string name1 = scope1;
                                 if (grad_fn != null)
@@ -193,12 +193,12 @@ namespace Tensorflow
         {
             foreach(var x in _NonEagerInputs(op, xs))
             {
-                if (!pending_count.ContainsKey(x.op.Name))
-                    pending_count[x.op.Name] = 0;
+                if (!pending_count.ContainsKey(x.op.name))
+                    pending_count[x.op.name] = 0;
 
-                pending_count[x.op.Name] -= 1;
+                pending_count[x.op.name] -= 1;
 
-                var ready = pending_count[x.op.Name] == 0;
+                var ready = pending_count[x.op.name] == 0;
 
                 if(loop_state != null && !ready)
                 {
@@ -281,10 +281,10 @@ namespace Tensorflow
                 bool is_stop_op = true;
                 foreach(var inp in _NonEagerInputs(op, xs))
                 {
-                    if (!pending_count.ContainsKey(inp.op.Name))
-                        pending_count[inp.op.Name] = 0;
+                    if (!pending_count.ContainsKey(inp.op.name))
+                        pending_count[inp.op.name] = 0;
 
-                    if (pending_count[inp.op.Name] > 0)
+                    if (pending_count[inp.op.name] > 0)
                     {
                         is_stop_op = false;
                         break;
@@ -300,17 +300,17 @@ namespace Tensorflow
         private static Tensor _GetGrad(Dictionary<string, Tensor[][]> grads, Tensor t)
         {
             var op = t.op;
-            if (!grads.ContainsKey(op.Name))
+            if (!grads.ContainsKey(op.name))
                 return null;
-            Tensor[][] op_grads = grads[op.Name];
+            Tensor[][] op_grads = grads[op.name];
             var t_grad = op_grads[t.value_index];
             return t_grad[0];
         }
 
         private static Tensor[][] _GetGrads(Dictionary<string, Tensor[][]> grads, Operation op)
         {
-            if (grads.ContainsKey(op.Name))
-                return grads[op.Name];
+            if (grads.ContainsKey(op.name))
+                return grads[op.name];
             else
                 return op.outputs.Select(x => new Tensor[0]).ToArray();
         }
@@ -324,11 +324,11 @@ namespace Tensorflow
         private static void _SetGrad(Dictionary<string, Tensor[][]> grads, Tensor t, Tensor grad)
         {
             var op = t.op;
-            Tensor[][] op_grads = grads.ContainsKey(op.Name) ? grads[op.Name] : null;
+            Tensor[][] op_grads = grads.ContainsKey(op.name) ? grads[op.name] : null;
             if (op_grads == null)
             {
                 op_grads = op.outputs.Select(x => new Tensor[1]).ToArray();
-                grads[op.Name] = op_grads;
+                grads[op.name] = op_grads;
             }
             var t_grads = op_grads[t.value_index];
             t_grads[0] = grad;
@@ -421,10 +421,10 @@ namespace Tensorflow
                 {
                     if (between_ops.Contains(x.op))
                     {
-                        if (!pending_count.ContainsKey(x.op.Name))
-                            pending_count[x.op.Name] = 0;
+                        if (!pending_count.ContainsKey(x.op.name))
+                            pending_count[x.op.name] = 0;
 
-                        pending_count[x.op.Name] += 1;
+                        pending_count[x.op.name] += 1;
                     }
                 }
             }

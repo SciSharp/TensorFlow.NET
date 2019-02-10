@@ -116,7 +116,7 @@ namespace Tensorflow
                 {
                     FilenameTensorName = filename_tensor.name,
                     SaveTensorName = save_tensor.name,
-                    RestoreOpName = restore_op.Name,
+                    RestoreOpName = restore_op.name,
                     MaxToKeep = max_to_keep,
                     Sharded = sharded,
                     KeepCheckpointEveryNHours = keep_checkpoint_every_n_hours,

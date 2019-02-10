@@ -25,7 +25,7 @@ namespace Tensorflow
         /// <summary>
         /// The string name of this tensor.
         /// </summary>
-        public string name => $"{(op == null ? "Operation was not named" : $"{op.Name}:{value_index}")}";
+        public string name => $"{(op == null ? "Operation was not named" : $"{op.name}:{value_index}")}";
 
         public int value_index { get; }
 

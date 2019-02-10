@@ -319,7 +319,7 @@ namespace Tensorflow
 
             return (oper, out_grads) =>
             {
-                Console.WriteLine($"get_gradient_function: {oper.type} '{oper.Name}'");
+                Console.WriteLine($"get_gradient_function: {oper.type} '{oper.name}'");
 
                 switch (oper.type)
                 {
@@ -414,6 +414,8 @@ namespace Tensorflow
                     return constant_op.constant(value as string[], name);
                 case "Int32":
                     return constant_op.constant(Convert.ToInt32(value), name);
+                case "Single":
+                    return constant_op.constant(Convert.ToSingle(value), name);
                 case "Double":
                     return constant_op.constant(Convert.ToDouble(value), name);
                 case "RefVariable":

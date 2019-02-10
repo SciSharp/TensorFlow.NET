@@ -143,11 +143,11 @@ namespace Tensorflow
         private Tensor _safe_initial_value_from_tensor(Tensor tensor, Dictionary<string, Operation> op_cache)
         {
             var op = tensor.op;
-            var new_op = op_cache.ContainsKey(op.Name) ? op_cache[op.Name] : null;
+            var new_op = op_cache.ContainsKey(op.name) ? op_cache[op.name] : null;
             if(new_op == null)
             {
                 new_op = _safe_initial_value_from_op(op, op_cache);
-                op_cache[op.Name] = new_op;
+                op_cache[op.name] = new_op;
             }
             return new_op.outputs[tensor.value_index];
         }
@@ -185,7 +185,7 @@ namespace Tensorflow
         /// A `Tensor` that will hold the new value of this variable after
         /// the assignment has completed.
         /// </returns>
-        public ITensorOrOperation assign(Tensor value, bool use_locking = false, string name = "", bool read_value = true)
+        public ITensorOrOperation assign(object value, bool use_locking = false, string name = "", bool read_value = true)
         {
             var assign = gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
             if (read_value)
