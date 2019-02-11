@@ -17,7 +17,7 @@ namespace Tensorflow
 
         public string type => OpType;
         public Operation op => this;
-
+        public TF_DataType dtype => TF_DataType.DtInvalid;
         private Status status = new Status();
 
         public string name => c_api.StringPiece(c_api.TF_OperationName(_handle));

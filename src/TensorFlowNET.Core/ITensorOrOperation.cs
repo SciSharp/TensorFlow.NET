@@ -13,5 +13,7 @@ namespace Tensorflow
         string Device { get; }
         Operation op { get; }
         string name { get; }
+        TF_DataType dtype { get; }
+        Tensor[] outputs { get; }
     }
 }

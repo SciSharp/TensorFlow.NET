@@ -21,6 +21,7 @@ namespace Tensorflow
 
         public Graph Graph => op?.Graph;
         public Operation op { get; }
+        public Tensor[] outputs => op.outputs;
 
         /// <summary>
         /// The string name of this tensor.

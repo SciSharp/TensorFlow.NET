@@ -20,21 +20,7 @@ namespace Tensorflow
 
             foreach(var fetch in fetches)
             {
-                switch(fetch)
-                {
-                    case Tensor tensor:
-                        el = g.as_graph_element(tensor, allow_tensor: true, allow_operation: true);
-                        break;
-                    case Operation op:
-                        el = g.as_graph_element(op, allow_tensor: true, allow_operation: true);
-                        break;
-                    case String str:
-                        // Looks like a Tensor name and can be a Tensor.
-                        el = g._nodes_by_name[str];
-                        break;
-                    default:
-                        throw new NotImplementedException("_ElementFetchMapper");
-                }
+                el = g.as_graph_element(fetch, allow_tensor: true, allow_operation: true);
             }
 
             _unique_fetches.Add(el);

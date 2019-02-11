@@ -41,7 +41,7 @@ namespace Tensorflow
             _graph_key = $"grap-key-{ops.uid()}/";
         }
 
-        public ITensorOrOperation as_graph_element(ITensorOrOperation obj, bool allow_tensor = true, bool allow_operation = true)
+        public ITensorOrOperation as_graph_element(object obj, bool allow_tensor = true, bool allow_operation = true)
         {
             return _as_graph_element_locked(obj, allow_tensor, allow_operation);
         }
@@ -54,7 +54,7 @@ namespace Tensorflow
             return null;
         }
 
-        private ITensorOrOperation _as_graph_element_locked(ITensorOrOperation obj, bool allow_tensor = true, bool allow_operation = true)
+        private ITensorOrOperation _as_graph_element_locked(object obj, bool allow_tensor = true, bool allow_operation = true)
         {
             string types_str = "";
 
@@ -74,6 +74,19 @@ namespace Tensorflow
             var temp_obj = _as_graph_element(obj);
             if (temp_obj != null)
                 obj = temp_obj;
+
+            // If obj appears to be a name...
+            if (obj is String str)
+            {
+                if(str.Contains(":") && allow_tensor)
+                {
+                    string op_name = str.Split(':')[0];
+                    int out_n = int.Parse(str.Split(':')[1]);
+
+                    if (_nodes_by_name.ContainsKey(op_name))
+                        return _nodes_by_name[op_name].outputs[out_n];
+                }
+            }
 
             if (obj is Tensor tensor && allow_tensor)
             {
@@ -166,7 +179,7 @@ namespace Tensorflow
         public void _add_op(Operation op)
         {
             _nodes_by_id[op._id] = op;
-            //_nodes_by_name[op.name] = op;
+            _nodes_by_name[op.name] = op;
             _version = Math.Max(_version, op._id);
         }
 

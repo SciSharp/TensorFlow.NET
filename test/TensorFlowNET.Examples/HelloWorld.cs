@@ -18,7 +18,7 @@ namespace TensorFlowNET.Examples
             
                The value returned by the constructor represents the output
                of the Constant op. */
-            var str = "Hello, TensorFlow!";
+            var str = "Hello, TensorFlow.NET!";
             var hello = tf.constant(str);
 
             // Start tf session

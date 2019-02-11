@@ -44,9 +44,24 @@ namespace Tensorflow
         private NDArray _run(object fetches, FeedItem[] feed_dict = null)
         {
             var feed_dict_tensor = new Dictionary<object, object>();
+            var feed_map = new Dictionary<object, object>();
 
+            // Validate and process feed_dict.
             if (feed_dict != null)
-                feed_dict.ToList().ForEach(x => feed_dict_tensor.Add(x.Key, x.Value));
+            {
+                foreach(var subfeed in feed_dict)
+                {
+                    var subfeed_t = _graph.as_graph_element(subfeed.Key, allow_tensor: true, allow_operation: false);
+                    var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype();
+                    switch(subfeed.Value)
+                    {
+                        case string str:
+                            feed_dict_tensor[subfeed_t] = np.array(str);
+                            feed_map[subfeed_t.name] = new Tuple<object, object>(subfeed_t, subfeed.Value);
+                            break;
+                    }
+                }
+            }
 
             // Create a fetch handler to take care of the structure of fetches.
             var fetch_handler = new _FetchHandler(_graph, fetches, feed_dict_tensor);
