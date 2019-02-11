@@ -17,5 +17,18 @@ namespace Tensorflow
 
             return buffer;
         }
+
+        public GraphDef _as_graph_def()
+        {
+            var buffer = ToGraphDef(Status);
+            Status.Check();
+            var def = GraphDef.Parser.ParseFrom(buffer);
+            buffer.Dispose();
+
+            // Strip the experimental library field iff it's empty.
+            // if(def.Library.Function.Count == 0)
+
+            return def;
+        }
     }
 }

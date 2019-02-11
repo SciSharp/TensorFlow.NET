@@ -53,7 +53,7 @@ namespace Tensorflow
 
             return null;
         }
-
+       
         private ITensorOrOperation _as_graph_element_locked(object obj, bool allow_tensor = true, bool allow_operation = true)
         {
             string types_str = "";

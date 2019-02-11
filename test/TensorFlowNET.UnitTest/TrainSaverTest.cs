@@ -10,6 +10,14 @@ namespace TensorFlowNET.UnitTest
     public class TrainSaverTest : Python
     {
         [TestMethod]
+        public void WriteGraph()
+        {
+            var v = tf.Variable(0, name: "my_variable");
+            var sess = tf.Session();
+            tf.train.write_graph(sess.graph, "/tmp/my-model", "train.pbtxt");
+        }
+
+        [TestMethod]
         public void Save()
         {
             var v1 = tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);
