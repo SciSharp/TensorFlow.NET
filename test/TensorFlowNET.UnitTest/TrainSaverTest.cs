@@ -18,6 +18,35 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
+        public void ImportGraph()
+        {
+            var v = tf.Variable(0, name: "my_variable");
+            var sess = tf.Session();
+            tf.train.write_graph(sess.graph, "/tmp/my-model", "train.pbtxt");
+        }
+
+        [TestMethod]
+        public void SaveSimple()
+        {
+            var w1 = tf.Variable(tf.random_normal(new int[] { 2 }), name: "w1");
+            var w2 = tf.Variable(tf.random_normal(new int[] { 5 }), name: "w2");
+
+            var init_op = tf.global_variables_initializer();
+
+            // Add ops to save and restore all the variables.
+            var saver = tf.train.Saver();
+
+            with<Session>(tf.Session(), sess =>
+            {
+                sess.run(init_op);
+
+                // Save the variables to disk.
+                var save_path = saver.save(sess, "/tmp/model.ckpt");
+                Console.WriteLine($"Model saved in path: {save_path}");
+            });
+        }
+
+        [TestMethod]
         public void Save()
         {
             var v1 = tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);

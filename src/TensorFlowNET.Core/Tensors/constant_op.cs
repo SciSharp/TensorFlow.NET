@@ -19,7 +19,12 @@ namespace Tensorflow
         /// <param name="name">Optional name for the tensor.</param>
         /// <param name="verify_shape">Boolean that enables verification of a shape of values.</param>
         /// <returns></returns>
-        public static Tensor constant(NDArray nd, string name = "Const", bool verify_shape = false)
+        public static Tensor constant(object value, TF_DataType dtype = TF_DataType.DtInvalid, int[] shape = null, string name = "Const")
+        {
+            return _constant_impl(value, dtype, shape, name, verify_shape: false, allow_broadcast: true);
+        }
+
+        private static Tensor _constant_impl(object value, TF_DataType dtype, int[] shape, string name, bool verify_shape, bool allow_broadcast)
         {
             if (tf.context.executing_eagerly())
             {
@@ -27,13 +32,13 @@ namespace Tensorflow
             }
 
             Graph g = ops.get_default_graph();
-            var tensor_pb = tensor_util.make_tensor_proto(nd, verify_shape);
-            var tensor_value = new AttrValue
-            {
-                Type = tensor_pb.Dtype,
-                Tensor = tensor_pb
-            };
-            
+            var tensor_value = new AttrValue();
+            tensor_value.Tensor = tensor_util.make_tensor_proto(value, 
+                dtype: dtype,
+                shape: shape,
+                verify_shape: verify_shape, 
+                allow_broadcast: allow_broadcast);
+
             var dtype_value = new AttrValue
             {
                 Type = tensor_value.Tensor.Dtype,
@@ -44,8 +49,8 @@ namespace Tensorflow
             attrs["dtype"] = dtype_value;
 
             var op = g.create_op("Const",
-                null,
-                new TF_DataType[] { (TF_DataType)dtype_value.Type },
+                new Tensor[0],
+                new TF_DataType[] { dtype_value.Type.as_tf_dtype() },
                 attrs: attrs,
                 name: name);
 
@@ -81,7 +86,7 @@ namespace Tensorflow
             if (string.IsNullOrEmpty(name))
                 name = "shape_as_tensor";
 
-            return constant_op.constant(s_list, name);
+            return constant_op.constant(s_list, name: name);
         }
     }
 }

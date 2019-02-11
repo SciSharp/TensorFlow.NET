@@ -55,11 +55,19 @@ namespace Tensorflow
                     var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype();
                     switch(subfeed.Value)
                     {
-                        case string str:
-                            feed_dict_tensor[subfeed_t] = np.array(str);
-                            feed_map[subfeed_t.name] = new Tuple<object, object>(subfeed_t, subfeed.Value);
+                        case float floatVal:
+                            feed_dict_tensor[subfeed_t] = (NDArray)floatVal;
                             break;
+                        case int intVal:
+                            feed_dict_tensor[subfeed_t] = (NDArray)intVal;
+                            break;
+                        case string str:
+                            feed_dict_tensor[subfeed_t] = (NDArray)str;
+                            break;
+                        default:
+                            throw new NotImplementedException("_run subfeed");
                     }
+                    feed_map[subfeed_t.name] = new Tuple<object, object>(subfeed_t, subfeed.Value);
                 }
             }
 

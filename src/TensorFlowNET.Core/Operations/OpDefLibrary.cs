@@ -14,7 +14,7 @@ namespace Tensorflow
     {
         public Operation _apply_op_helper(string op_type_name, string name = "", dynamic args = null)
         {
-            var keywords = ConvertToDict(args);
+            Dictionary<string, object> keywords = ConvertToDict(args);
             var g = ops.get_default_graph();
             var op_def = g.GetOpDef(op_type_name);
 
@@ -42,7 +42,8 @@ namespace Tensorflow
             var attrs = new Dictionary<string, object>();
             var inputs = new List<Tensor>();
             var input_types = new List<TF_DataType>();
-            
+            dynamic values = null;
+
             return Python.with<ops.name_scope, Operation>(new ops.name_scope(name), scope =>
             {
                 var inferred_from = new Dictionary<string, object>();
@@ -53,7 +54,17 @@ namespace Tensorflow
                 foreach (var input_arg in op_def.InputArg)
                 {
                     var input_name = input_arg.Name;
-                    var values = keywords[input_name];
+                    
+                    if (keywords.ContainsKey(input_name))
+                        values = keywords[input_name];
+                    else if (keywords.ContainsKey(input_name + "_"))
+                    {
+                        input_name += "_";
+                        values = keywords[input_name];
+                    }
+                    else
+                        throw new TypeError("No argument for input " + input_name);
+                        
                     // Goals:
                     // * Convert values to Tensors if it contains constants.
                     // * Verify that values is a list if that matches the input_arg's
@@ -92,8 +103,8 @@ namespace Tensorflow
 
                         values = ops.internal_convert_n_to_tensor(values, 
                             name: input_arg.Name, 
-                            dtype: dtype, 
-                            preferred_dtype: default_dtype, 
+                            dtype: dtype.as_tf_dtype(), 
+                            preferred_dtype: default_dtype.as_tf_dtype(), 
                             as_ref: input_arg.IsRef);
                     }
                     else
@@ -107,9 +118,9 @@ namespace Tensorflow
 
                         values = ops.internal_convert_to_tensor(values, 
                             name: input_name, 
-                            dtype: dtype,
+                            dtype: dtype.as_tf_dtype(),
                             as_ref: input_arg.IsRef,
-                            preferred_dtype: default_dtype);
+                            preferred_dtype: default_dtype.as_tf_dtype());
 
                         //if (!String.IsNullOrEmpty(input_arg.TypeAttr))
                             //attrs[input_arg.TypeAttr] = values.dtype;

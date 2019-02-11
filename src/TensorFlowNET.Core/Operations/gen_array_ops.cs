@@ -113,7 +113,7 @@ namespace Tensorflow
         /// <param name="shape"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor placeholder_with_default<T>(T input, TensorShape shape, string name = "")
+        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("PlaceholderWithDefault", name, new { input, shape, name });
             return _op.outputs[0];

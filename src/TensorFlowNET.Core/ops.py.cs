@@ -68,16 +68,14 @@ namespace Tensorflow
         /// <param name="dtype"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
+        public static Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", TF_DataType preferred_dtype = TF_DataType.DtInvalid)
         {
-            switch (value)
-            {
-                case Tensor val:
-                    return val;
-                default:
-                    var nd = tensor_util.convert_to_numpy_ndarray(value);
-                    return constant_op.constant(nd, name);
-            }
+            return convert_to_tensor_v2(value, dtype, preferred_dtype, name);
+        }
+
+        public static Tensor convert_to_tensor_v2(object value, TF_DataType dtype = TF_DataType.DtInvalid, TF_DataType dtype_hint = TF_DataType.DtInvalid, string name = "")
+        {
+            return internal_convert_to_tensor(value, dtype: dtype, name: name, preferred_dtype: dtype_hint, as_ref: false);
         }
 
         public static Tensor convert_to_tensor_or_composite(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
@@ -87,7 +85,7 @@ namespace Tensorflow
 
         public static Tensor internal_convert_to_tensor_or_composite(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
         {
-            return internal_convert_to_tensor<Tensor>(value, dtype: dtype.as_datatype_enum(), name: name, as_ref: as_ref);
+            return internal_convert_to_tensor(value, dtype: dtype, name: name, as_ref: as_ref);
         }
 
         /// <summary>
@@ -117,17 +115,14 @@ namespace Tensorflow
             var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
 
             // Add inputs
-            if(inputs != null)
+            foreach (var op_input in inputs)
             {
-                foreach (var op_input in inputs)
-                {
-                    if (op_input is Tensor[] op_inputs)
-                        c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), op_inputs.Length);
-                    else if (op_input is Tensor op_input1)
-                        c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
-                    else
-                        throw new NotImplementedException("_create_c_op");
-                }
+                if (op_input is Tensor[] op_inputs)
+                    c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), op_inputs.Length);
+                else if (op_input is Tensor op_input1)
+                    c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
+                else
+                    throw new NotImplementedException("_create_c_op");
             }
 
             var status = new Status();
@@ -142,8 +137,8 @@ namespace Tensorflow
                 var bytes = attr.Value.ToByteArray();
                 var proto = Marshal.AllocHGlobal(bytes.Length);
                 Marshal.Copy(bytes, 0, proto, bytes.Length);
-                
-                c_api.TF_SetAttrValueProto(op_desc, attr.Key, proto, proto_len: (uint)bytes.Length, status: status);
+                uint len = (uint)bytes.Length;
+                c_api.TF_SetAttrValueProto(op_desc, attr.Key, proto, proto_len: len, status: status);
 
                 status.Check(true);
             }
@@ -385,8 +380,8 @@ namespace Tensorflow
             return ret.ToArray();
         }
 
-        public static Tensor[] internal_convert_n_to_tensor<T>(T[] values, DataType dtype = DataType.DtInvalid, 
-            string name = "", DataType preferred_dtype = DataType.DtInvalid, 
+        public static Tensor[] internal_convert_n_to_tensor<T>(T[] values, TF_DataType dtype = TF_DataType.DtInvalid, 
+            string name = "", TF_DataType preferred_dtype = TF_DataType.DtInvalid, 
             bool as_ref = false)
         {
             var ret = new List<Tensor>();
@@ -400,28 +395,30 @@ namespace Tensorflow
             return ret.ToArray();
         }
 
-        public static Tensor internal_convert_to_tensor<T>(T value, DataType dtype = DataType.DtInvalid,
-            string name = "", DataType preferred_dtype = DataType.DtInvalid,
+        public static Tensor internal_convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid,
+            string name = "", TF_DataType preferred_dtype = TF_DataType.DtInvalid,
             bool as_ref = false)
         {
-            switch (typeof(T).Name)
+            switch (value)
             {
-                case "Tensor":
-                    return value as Tensor;
-                case "String":
-                    return constant_op.constant(Convert.ToString(value), name);
-                case "String[]":
-                    return constant_op.constant(value as string[], name);
-                case "Int32":
-                    return constant_op.constant(Convert.ToInt32(value), name);
-                case "Single":
-                    return constant_op.constant(Convert.ToSingle(value), name);
-                case "Double":
-                    return constant_op.constant(Convert.ToDouble(value), name);
-                case "RefVariable":
-                    return (value as RefVariable)._TensorConversionFunction(as_ref: as_ref);
+                case Tensor tensor:
+                    return tensor;
+                case string str:
+                    return constant_op.constant(str, dtype: dtype, name: name);
+                case string[] strArray:
+                    return constant_op.constant(strArray, dtype: dtype, name: name);
+                case int intVal:
+                    return constant_op.constant(intVal, dtype: dtype, name: name);
+                case int[] intArray:
+                    return constant_op.constant(intArray, dtype: dtype, name: name);
+                case float floatVal:
+                    return constant_op.constant(floatVal, dtype: dtype, name: name);
+                case double doubleVal:
+                    return constant_op.constant(doubleVal, dtype: dtype, name: name);
+                case RefVariable varVal:
+                    return varVal._TensorConversionFunction(as_ref: as_ref);
                 default:
-                    throw new NotImplementedException($"internal_convert_to_tensor: Can't convert {typeof(T).Name} to Tensor");
+                    throw new NotImplementedException($"internal_convert_to_tensor: Can't convert {value.GetType().Name} to Tensor");
             }
         }
     }

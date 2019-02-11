@@ -84,8 +84,8 @@ namespace Tensorflow
                 name = scope;
 
                 // Add a placeholder string tensor for the filename.
-                var filename_tensor = gen_array_ops.placeholder_with_default( string.IsNullOrEmpty(filename) ? "model" : filename, shape: new TensorShape(), name: "filename");
-                filename_tensor = gen_array_ops.placeholder_with_default(filename_tensor, shape: new TensorShape(), name: "Const");
+                var filename_tensor = array_ops.placeholder_with_default(string.IsNullOrEmpty(filename) ? "model" : filename, shape: new int[0], name: "filename");
+                filename_tensor = gen_array_ops.placeholder_with_default(filename_tensor, shape: new int[0], name: "Const");
                 // Keep the name "Const" for backwards compatibility.
 
                 // Add the save ops.

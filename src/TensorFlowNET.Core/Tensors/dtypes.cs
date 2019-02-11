@@ -83,6 +83,20 @@ namespace Tensorflow
                 type;
         }
 
+        public static TF_DataType as_tf_dtype(this DataType type)
+        {
+            TF_DataType dtype = TF_DataType.DtInvalid;
+
+            switch (type)
+            {
+                default:
+                    Enum.TryParse(((int)type).ToString(), out dtype);
+                    break;
+            }
+
+            return dtype;
+        }
+
         public static TF_DataType as_ref(this TF_DataType type)
         {
             return (int)type < 100 ?

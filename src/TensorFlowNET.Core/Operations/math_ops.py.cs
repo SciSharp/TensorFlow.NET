@@ -6,6 +6,8 @@ namespace Tensorflow
 {
     public class math_ops
     {
+        public static Tensor add(Tensor x, Tensor y, string name = "") => gen_math_ops.add(x, y, name);
+
         public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
         {
             var base_type = dtype.as_base_dtype();

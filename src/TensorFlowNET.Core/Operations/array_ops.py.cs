@@ -7,6 +7,8 @@ namespace Tensorflow
 {
     public class array_ops
     {
+        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = "") => gen_array_ops.placeholder_with_default(input, shape, name);
+
         public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = "")
         {
             dtype = dtype.as_base_dtype();
@@ -35,13 +37,13 @@ namespace Tensorflow
             var nd = np.zeros<T>(shape);
             if (shape.Size < 1000)
             {
-                return constant_op.constant(nd, name);
+                return constant_op.constant(nd, name: name);
             }
             else
             {
                 tShape = constant_op._tensor_shape_tensor_conversion_function(shape.as_shape());
                 var c = constant_op.constant(0);
-                return gen_array_ops.fill(tShape, c, name);
+                return gen_array_ops.fill(tShape, c, name: name);
             }
         }
 
@@ -99,7 +101,7 @@ namespace Tensorflow
                     if (optimize && input_shape.is_fully_defined())
                     {
                         var nd = np.array(input_tensor.shape, out_type.as_numpy_datatype());
-                        return constant_op.constant(nd, name);
+                        return constant_op.constant(nd, name: name);
                     }
                 }
 
@@ -122,7 +124,7 @@ namespace Tensorflow
                         if (input_shape.is_fully_defined())
                         {
                             var nd = np.array(input_tensor.shape, out_type.as_numpy_datatype());
-                            return constant_op.constant(nd, name);
+                            return constant_op.constant(nd, name: name);
                         }
                     }
 

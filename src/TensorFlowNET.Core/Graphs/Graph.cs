@@ -141,10 +141,9 @@ namespace Tensorflow
             }
 
             if (String.IsNullOrEmpty(name))
-            {
                 name = op_type;
-            }
-
+            // If a names ends with a '/' it is a "name scope" and we use it as-is,
+            // after removing the trailing '/'.
             name = name.EndsWith("/") ? ops._name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
 
