@@ -219,6 +219,18 @@ namespace Tensorflow
         public static extern void TF_ImportGraphDefOptionsSetPrefix(IntPtr ops, string prefix);
 
         /// <summary>
+        /// Set whether to uniquify imported operation names. If true, imported operation
+        /// names will be modified if their name already exists in the graph. If false,
+        /// conflicting names will be treated as an error. Note that this option has no
+        /// effect if a prefix is set, since the prefix will guarantee all names are
+        /// unique. Defaults to false.
+        /// </summary>
+        /// <param name="ops">TF_ImportGraphDefOptions*</param>
+        /// <param name="uniquify_prefix">unsigned char</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_ImportGraphDefOptionsSetUniquifyNames(IntPtr ops, char uniquify_prefix);
+
+        /// <summary>
         /// Fetches the return operations requested via
         /// TF_ImportGraphDefOptionsAddReturnOperation(). The number of fetched
         /// operations is returned in `num_opers`. The array of return operations is

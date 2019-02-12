@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using static Tensorflow.MetaGraphDef.Types;
@@ -8,6 +9,59 @@ namespace Tensorflow
 {
     public class meta_graph
     {
+        public static MetaGraphDef read_meta_graph_file(string filename)
+        {
+            var bytes = File.ReadAllBytes(filename);
+            var meta_graph_def = MetaGraphDef.Parser.ParseFrom(bytes);
+            return meta_graph_def;
+        }
+
+        public static void import_scoped_meta_graph_with_return_elements(MetaGraphDef meta_graph_or_file,
+            bool clear_devices = false,
+            string import_scope = "",
+            Dictionary<string, Tensor> input_map = null,
+            string unbound_inputs_col_name = "unbound_inputs",
+            string[] return_elements = null)
+        {
+            var meta_graph_def = meta_graph_or_file;
+
+            if (!string.IsNullOrEmpty(unbound_inputs_col_name))
+            {
+                foreach(var col in meta_graph_def.CollectionDef)
+                {
+                    if(col.Key == unbound_inputs_col_name)
+                    {
+                        throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
+                    }
+                }
+            }
+
+            // Sets graph to default graph if it's not passed in.
+            var graph = ops.get_default_graph();
+
+            // Gathers the list of nodes we are interested in.
+            OpList producer_op_list = null;
+            if (meta_graph_def.MetaInfoDef.StrippedOpList != null)
+                producer_op_list = meta_graph_def.MetaInfoDef.StrippedOpList;
+            var input_graph_def = meta_graph_def.GraphDef;
+            // Remove all the explicit device specifications for this node. This helps to
+            // make the graph more portable.
+            if (clear_devices)
+                foreach (var node in input_graph_def.Node)
+                    node.Device = "";
+
+            var scope_to_prepend_to_names = graph.unique_name("", mark_as_used: false);
+            importer.import_graph_def(input_graph_def,
+                name: scope_to_prepend_to_names,
+                input_map: input_map,
+                producer_op_list: producer_op_list,
+                return_elements: return_elements);
+
+            // Restores all the other collections.
+            var variable_objects = new Dictionary<string, RefVariable>();
+
+        }
+
         /// <summary>
         /// Returns `MetaGraphDef` proto. Optionally writes it to filename.
         /// </summary>

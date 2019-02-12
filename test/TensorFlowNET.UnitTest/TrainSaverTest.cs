@@ -20,9 +20,10 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void ImportGraph()
         {
-            var v = tf.Variable(0, name: "my_variable");
-            var sess = tf.Session();
-            tf.train.write_graph(sess.graph, "/tmp/my-model", "train2.pbtxt");
+            with<Session>(tf.Session(), sess =>
+            {
+                var new_saver = tf.train.import_meta_graph("C:/tmp/my-model.meta");
+            });
         }
 
         [TestMethod]
@@ -45,6 +46,7 @@ namespace TensorFlowNET.UnitTest
             });
         }
 
+        [TestMethod]
         public void Save2()
         {
             var v1 = tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);
