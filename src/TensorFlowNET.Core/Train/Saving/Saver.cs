@@ -162,12 +162,12 @@ namespace Tensorflow
 
             if (!_is_empty)
             {
-                var model_checkpoint_path1 = sess.run(_saver_def.SaveTensorName, new FeedItem[] {
+                model_checkpoint_path = sess.run(_saver_def.SaveTensorName, new FeedItem[] {
                     new FeedItem(_saver_def.FilenameTensorName, checkpoint_file)
                 });
             }
 
-            throw new NotImplementedException("");
+            throw new NotImplementedException("Saver.save");
 
             return model_checkpoint_path;
         }
