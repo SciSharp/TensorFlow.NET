@@ -18,7 +18,7 @@ namespace Tensorflow
             return buffer;
         }
 
-        public GraphDef _as_graph_def()
+        public GraphDef _as_graph_def(bool add_shapes = false)
         {
             var buffer = ToGraphDef(Status);
             Status.Check();

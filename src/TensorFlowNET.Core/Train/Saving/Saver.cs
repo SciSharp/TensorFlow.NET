@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
@@ -28,6 +29,8 @@ namespace Tensorflow
         private float _next_checkpoint_time;
         private bool _save_relative_paths;
         private bool? _object_restore_saver;
+        private Dictionary<string, float> _last_checkpoints;
+        private Dictionary<string, float> _checkpoints_to_be_deleted;
 
         public Saver(RefVariable[] var_list = null,
             bool reshape = false,
@@ -68,6 +71,9 @@ namespace Tensorflow
 
             _save_relative_paths = save_relative_paths;
             _object_restore_saver = null;
+
+            _last_checkpoints = new Dictionary<string, float>();
+            _checkpoints_to_be_deleted = new Dictionary<string, float>();
         }
 
         public void build()
@@ -121,7 +127,7 @@ namespace Tensorflow
 
             _check_saver_def();
 
-            _next_checkpoint_time = (float)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds + _saver_def.KeepCheckpointEveryNHours * 3600;
+            _next_checkpoint_time = Python.time() + _saver_def.KeepCheckpointEveryNHours * 3600;
         }
 
         private void _check_saver_def()
@@ -165,11 +171,119 @@ namespace Tensorflow
                 model_checkpoint_path = sess.run(_saver_def.SaveTensorName, new FeedItem[] {
                     new FeedItem(_saver_def.FilenameTensorName, checkpoint_file)
                 });
+
+                if (write_state)
+                {
+                    _RecordLastCheckpoint(model_checkpoint_path);
+                    checkpoint_management.update_checkpoint_state_internal(
+                        save_dir: save_path_parent,
+                        model_checkpoint_path: model_checkpoint_path,
+                        all_model_checkpoint_paths: _last_checkpoints.Keys.Select(x => x).ToList(),
+                        latest_filename: latest_filename,
+                        save_relative_paths: _save_relative_paths);
+                    _MaybeDeleteOldCheckpoints(meta_graph_suffix: meta_graph_suffix);
+                }
             }
 
-            throw new NotImplementedException("Saver.save");
+            if (write_meta_graph)
+            {
+                string meta_graph_filename = checkpoint_management.meta_graph_filename(checkpoint_file, meta_graph_suffix: meta_graph_suffix);
+            }
 
-            return model_checkpoint_path;
+            return _is_empty ? string.Empty : model_checkpoint_path;
+        }
+
+        /// <summary>
+        /// Writes `MetaGraphDef` to save_path/filename.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="collection_list"></param>
+        /// <param name="as_text"></param>
+        /// <param name="export_scope"></param>
+        /// <param name="clear_devices"></param>
+        /// <param name="clear_extraneous_savers"></param>
+        /// <param name="strip_default_attrs"></param>
+        public MetaGraphDef export_meta_graph(string filename= "",
+                        string[] collection_list = null,
+                        string export_scope = "",
+                        bool as_text= false,
+                        bool clear_devices= false,
+                        bool clear_extraneous_savers= false,
+                        bool strip_default_attrs= false)
+        {
+            return export_meta_graph(
+                filename: filename,
+                graph_def: ops.get_default_graph()._as_graph_def(add_shapes: true),
+                saver_def: _saver_def,
+                collection_list: collection_list,
+                as_text: as_text,
+                export_scope: export_scope,
+                clear_devices: clear_devices,
+                clear_extraneous_savers: clear_extraneous_savers,
+                strip_default_attrs: strip_default_attrs);
+        }
+
+        public MetaGraphDef export_meta_graph(string filename = "",
+            byte[] meta_info_def = null,
+            GraphDef graph_def = null,
+            SaverDef saver_def = null,
+            string[] collection_list = null,
+            bool as_text = false,
+            bool clear_devices= false,
+            bool clear_extraneous_savers= false,
+            bool strip_default_attrs= false,
+            string export_scope = "")
+        {
+            var meta_graph_def = meta_graph.export_scoped_meta_graph(
+                filename: filename,
+                meta_info_def: meta_info_def,
+                graph_def: graph_def,
+                saver_def: saver_def,
+                // collection_list: collection_list,
+                as_text: as_text,
+                clear_devices: clear_devices,
+                clear_extraneous_savers: clear_extraneous_savers,
+                strip_default_attrs: strip_default_attrs);
+            return meta_graph_def;
+        }
+
+        /// <summary>
+        /// Manages the list of the latest checkpoints.
+        /// </summary>
+        /// <param name="latest_save_path"></param>
+        private void _RecordLastCheckpoint(string latest_save_path)
+        {
+            if (_saver_def.MaxToKeep <= 0) return;
+
+            // Remove first from list if the same name was used before.
+            foreach (var p in _last_checkpoints)
+                if (latest_save_path == _CheckpointFilename((p.Key, p.Value)))
+                    _last_checkpoints.Remove(p.Key);
+
+            // Append new path to list
+            _last_checkpoints.Add(latest_save_path, Python.time());
+
+            // If more than max_to_keep, remove oldest.
+            if(_last_checkpoints.Count > _saver_def.MaxToKeep)
+            {
+                var first = _last_checkpoints.First();
+                _last_checkpoints.Remove(first.Key);
+                _checkpoints_to_be_deleted[first.Key] = first.Value;
+            }
+        }
+
+        private string _CheckpointFilename((string, float) p)
+        {
+            return p.Item1;
+        }
+
+        /// <summary>
+        /// Deletes old checkpoints if necessary.
+        /// </summary>
+        /// <param name="meta_graph_suffix"></param>
+        private void _MaybeDeleteOldCheckpoints(string meta_graph_suffix = "meta")
+        {
+
         }
     }
 }

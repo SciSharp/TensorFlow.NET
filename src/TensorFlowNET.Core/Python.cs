@@ -81,6 +81,11 @@ namespace Tensorflow
             }
         }
 
+        public static float time()
+        {
+            return (float)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+        }
+
         public static IEnumerable<(T, T)> zip<T>(NDArray t1, NDArray t2)
         {
             int index = 0;
