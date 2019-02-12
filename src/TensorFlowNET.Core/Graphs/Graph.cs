@@ -76,12 +76,12 @@ namespace Tensorflow
                 obj = temp_obj;
 
             // If obj appears to be a name...
-            if (obj is String str)
+            if (obj is string name)
             {
-                if(str.Contains(":") && allow_tensor)
+                if(name.Contains(":") && allow_tensor)
                 {
-                    string op_name = str.Split(':')[0];
-                    int out_n = int.Parse(str.Split(':')[1]);
+                    string op_name = name.Split(':')[0];
+                    int out_n = int.Parse(name.Split(':')[1]);
 
                     if (_nodes_by_name.ContainsKey(op_name))
                         return _nodes_by_name[op_name].outputs[out_n];

@@ -45,7 +45,6 @@ namespace TensorFlowNET.UnitTest
             });
         }
 
-        [TestMethod]
         public void Save2()
         {
             var v1 = tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);

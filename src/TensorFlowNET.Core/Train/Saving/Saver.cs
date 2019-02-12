@@ -138,12 +138,14 @@ namespace Tensorflow
         public string save(Session sess,
             string save_path,
             string global_step = "",
+            string latest_filename = "",
             string meta_graph_suffix = "meta",
             bool write_meta_graph = true,
             bool write_state = true,
             bool strip_default_attrs = false)
         {
-            string latest_filename = "checkpoint";
+            if (string.IsNullOrEmpty(latest_filename))
+                latest_filename = "checkpoint";
             string model_checkpoint_path = "";
             string checkpoint_file = "";
 

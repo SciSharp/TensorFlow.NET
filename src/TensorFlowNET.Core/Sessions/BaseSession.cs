@@ -67,7 +67,7 @@ namespace Tensorflow
                         default:
                             throw new NotImplementedException("_run subfeed");
                     }
-                    feed_map[subfeed_t.name] = new Tuple<object, object>(subfeed_t, subfeed.Value);
+                    feed_map[subfeed_t.name] = (subfeed_t, subfeed.Value);
                 }
             }
 
@@ -178,7 +178,8 @@ namespace Tensorflow
                 case TF_DataType.TF_STRING:
                     var bytes = tensor.Data();
                     // wired, don't know why we have to start from offset 9.
-                    var str = UTF8Encoding.Default.GetString(bytes, 9, bytes.Length - 9);
+                    // length in the begin
+                    var str = UTF8Encoding.Default.GetString(bytes, 9, bytes[8]);
                     nd = np.array(str).reshape();
                     break;
                 case TF_DataType.TF_INT16:
