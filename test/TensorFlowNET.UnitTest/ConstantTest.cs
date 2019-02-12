@@ -58,6 +58,7 @@ namespace TensorFlowNET.UnitTest
 
                 var data = result.Data<int>();
                 Assert.AreEqual(0, data[0]);
+                Assert.AreEqual(0, data[500]);
                 Assert.AreEqual(0, data[result.size - 1]);
             });
         }
@@ -108,6 +109,16 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual(status.Code, TF_Code.TF_OK);
 
             //c_api.TF_StringDecode(str, (ulong)str.Length, IntPtr.Zero, ref dst_len, status);
+        }
+
+        /// <summary>
+        /// tensorflow\c\c_api_test.cc
+        /// TestEncodeDecode
+        /// </summary>
+        [TestMethod]
+        public void EncodeDecode()
+        {
+
         }
     }
 }

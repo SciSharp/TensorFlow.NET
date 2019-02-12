@@ -56,9 +56,9 @@ namespace Tensorflow
 
                 switch (values)
                 {
-                    /*case bool boolVal:
+                    case bool boolVal:
                         nparray = boolVal;
-                        break;*/
+                        break;
                     case int intVal:
                         nparray = intVal;
                         break;
@@ -73,6 +73,9 @@ namespace Tensorflow
                         break;
                     case string strVal:
                         nparray = strVal;
+                        break;
+                    case string[] strVals:
+                        nparray = strVals;
                         break;
                     default:
                         throw new Exception("make_tensor_proto Not Implemented");
@@ -100,7 +103,8 @@ namespace Tensorflow
             }
             else
             {
-                throw new NotImplementedException("make_tensor_proto shape not implemented");
+                shape_size = new TensorShape(shape).Size;
+                is_same_size = shape_size == nparray.size;
             }
 
             var tensor_proto = new tensor_pb2.TensorProto
@@ -111,41 +115,17 @@ namespace Tensorflow
 
             if (is_same_size && _TENSOR_CONTENT_TYPES.Contains(numpy_dtype) && shape_size > 1)
             {
-                var bytes = new List<byte>();
-                var nd2 = nparray.ravel();
-                switch (nparray.dtype.Name)
-                {
-                    case "Int32":
-                        nd2.Data<int>().Select(x => 
-                        {
-                            bytes.AddRange(BitConverter.GetBytes(x));
-                            return x;
-                        }).ToArray();
-                        break;
-                    case "Single":
-                        nd2.Data<float>().Select(x =>
-                        {
-                            bytes.AddRange(BitConverter.GetBytes(x));
-                            return x;
-                        }).ToArray();
-                        break;
-                    case "Double":
-                        nd2.Data<double>().Select(x =>
-                        {
-                            bytes.AddRange(BitConverter.GetBytes(x));
-                            return x;
-                        }).ToArray();
-                        break;
-                    default:
-                        throw new Exception("make_tensor_proto Not Implemented");
-                }
+                byte[] bytes = nparray.ToByteArray();
                 tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes.ToArray());
                 return tensor_proto;
             }
 
-            if (numpy_dtype == TF_DataType.TF_STRING && !(values is NDArray) && values is string str)
+            if (numpy_dtype == TF_DataType.TF_STRING && !(values is NDArray))
             {
-                tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFromUtf8(str));
+                if (values is string str)
+                    tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFromUtf8(str));
+                else if (values is string[] str_values)
+                    tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
                 return tensor_proto;
             }
 

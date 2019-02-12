@@ -123,8 +123,6 @@ namespace Tensorflow
                     Version = _write_version
                 };
             });
-
-            
         }
 
         public Tensor _AddSaveOps(Tensor filename_tensor, SaveableObject[] saveables)

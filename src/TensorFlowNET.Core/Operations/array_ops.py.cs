@@ -34,10 +34,9 @@ namespace Tensorflow
         private static Tensor _constant_if_small<T>(T value, Shape shape, TF_DataType dtype, string name)
         {
             Tensor tShape = null;
-            var nd = np.zeros<T>(shape);
             if (shape.Size < 1000)
             {
-                return constant_op.constant(nd, name: name);
+                return constant_op.constant(value, shape: shape, dtype: dtype, name: name);
             }
             else
             {

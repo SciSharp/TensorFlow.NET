@@ -322,6 +322,8 @@ namespace Tensorflow
                         attr_value.Shape = val1.as_proto();
                     else if(value is long[] val2)
                         attr_value.Shape = tensor_util.as_shape(val2);
+                    else if (value is int[] val3)
+                        attr_value.Shape = tensor_util.as_shape(val3);
 
                     break;
                 default:
