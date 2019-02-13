@@ -42,11 +42,27 @@ namespace Tensorflow
             _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements);
 
             var bytes = graph_def.ToByteString().ToArray();
+            IntPtr buffer = c_api_util.tf_buffer(bytes);
 
             var status = new Status();
-            c_api.TF_GraphImportGraphDefWithResults(graph, IntPtr.Zero, scoped_options, status);
+            // need to create a class ImportGraphDefWithResults with IDisposal
+            var results = c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status);
+            status.Check(true);
 
-            throw new NotImplementedException("importer.import_graph_def");
+            _ProcessNewOps(graph);
+
+            if (return_elements == null)
+                return null;
+            else
+                throw new NotImplementedException("import_graph_def return_elements");
+        }
+
+        private static void _ProcessNewOps(Graph graph)
+        {
+            foreach(var new_op in graph._add_new_tf_operations())
+            {
+                var original_device = new_op.Device;
+            }
         }
 
         public static void _PopulateTFImportGraphDefOptions(ImportGraphDefOptions options, 

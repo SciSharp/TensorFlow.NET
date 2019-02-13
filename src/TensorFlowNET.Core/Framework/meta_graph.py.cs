@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using static Tensorflow.CollectionDef;
 using static Tensorflow.MetaGraphDef.Types;
 
 namespace Tensorflow
@@ -16,7 +17,7 @@ namespace Tensorflow
             return meta_graph_def;
         }
 
-        public static void import_scoped_meta_graph_with_return_elements(MetaGraphDef meta_graph_or_file,
+        public static (RefVariable[], string[]) import_scoped_meta_graph_with_return_elements(MetaGraphDef meta_graph_or_file,
             bool clear_devices = false,
             string import_scope = "",
             Dictionary<string, Tensor> input_map = null,
@@ -51,7 +52,7 @@ namespace Tensorflow
                     node.Device = "";
 
             var scope_to_prepend_to_names = graph.unique_name("", mark_as_used: false);
-            importer.import_graph_def(input_graph_def,
+            var imported_return_elements = importer.import_graph_def(input_graph_def,
                 name: scope_to_prepend_to_names,
                 input_map: input_map,
                 producer_op_list: producer_op_list,
@@ -59,7 +60,41 @@ namespace Tensorflow
 
             // Restores all the other collections.
             var variable_objects = new Dictionary<string, RefVariable>();
+            foreach(var col in meta_graph_def.CollectionDef.OrderBy(x => x.Key))
+            {
+                // Don't add unbound_inputs to the new graph.
+                if (col.Key == unbound_inputs_col_name)
+                    continue;
 
+                switch (col.Value.KindCase)
+                {
+                    case KindOneofCase.NodeList:
+                        foreach(var value in col.Value.NodeList.Value)
+                        {
+                            var col_op = graph.as_graph_element(ops.prepend_name_scope(value, scope_to_prepend_to_names));
+                            graph.add_to_collection(col.Key, col_op);
+                        }
+                        break;
+                    case KindOneofCase.BytesList:
+                        //var proto_type = ops.get_collection_proto_type(key)
+                        if (ops.GraphKeys._VARIABLE_COLLECTIONS.Contains(col.Key))
+                        {
+                            foreach (var value in col.Value.BytesList.Value)
+                            {
+                                var proto = VariableDef.Parser.ParseFrom(value);
+                                throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
+                            }
+                        }
+                        else
+                        {
+                            throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
+                        }
+                        
+                        break;
+                }
+            }
+
+            return (null, null);
         }
 
         /// <summary>

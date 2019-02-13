@@ -16,5 +16,13 @@ namespace Tensorflow
 
             }
         }
+
+        public void _add_control_inputs(Operation[] ops)
+        {
+            foreach(var op in ops)
+            {
+                c_api.TF_AddControlInput(graph, op);
+            }
+        }
     }
 }

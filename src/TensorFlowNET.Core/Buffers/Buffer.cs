@@ -34,6 +34,14 @@ namespace Tensorflow
             _handle = handle;
         }
 
+        public Buffer(byte[] data)
+        {
+            var dst = Marshal.AllocHGlobal(data.Length);
+            Marshal.Copy(data, 0, dst, data.Length);
+
+            _handle = c_api.TF_NewBufferFromString(dst, (ulong)data.Length);
+        }
+
         public static implicit operator IntPtr(Buffer buffer)
         {
             return buffer._handle;

@@ -10,13 +10,25 @@ namespace Tensorflow
 
         public static ImportGraphDefOptions ScopedTFImportGraphDefOptions() => new ImportGraphDefOptions();
 
-        public static IntPtr tf_buffer(byte[] data)
+        public static Buffer tf_buffer(byte[] data) => new Buffer(data);
+
+        public static IEnumerable<Operation> new_tf_operations(Graph graph)
         {
-            if (data != null)
-                throw new NotImplementedException("");
-            // var buf = c_api.TF_NewBufferFromString(data);
-            else
-                throw new NotImplementedException("");
+            foreach (var c_op in tf_operations(graph))
+            {
+                if (graph._get_operation_by_tf_operation(c_op) == null)
+                    yield return c_op;
+            }
+        }
+
+        public static IEnumerable<Operation> tf_operations(Graph graph)
+        {
+            uint pos = 0;
+            IntPtr c_op;
+            while ((c_op = c_api.TF_GraphNextOperation(graph, ref pos)) != IntPtr.Zero)
+            {
+                yield return c_op;
+            }
         }
     }
 }

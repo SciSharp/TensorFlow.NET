@@ -86,6 +86,16 @@ namespace Tensorflow
                     if (_nodes_by_name.ContainsKey(op_name))
                         return _nodes_by_name[op_name].outputs[out_n];
                 }
+                else if(!name.Contains(":") & allow_operation)
+                {
+                    if (!_nodes_by_name.ContainsKey(name))
+                        throw new KeyError($"The name {name} refers to an Operation not in the graph.");
+                    return _nodes_by_name[name];
+                }
+                else if (!name.Contains(":") & !allow_operation)
+                {
+                    throw new NotImplementedException("_as_graph_element_locked");
+                }
             }
 
             if (obj is Tensor tensor && allow_tensor)
@@ -101,7 +111,7 @@ namespace Tensorflow
             }
             else if (obj is Operation op && allow_operation)
             {
-                if (op.Graph.Equals(this))
+                if (op.graph.Equals(this))
                 {
                     return op;
                 }

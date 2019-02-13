@@ -11,7 +11,7 @@ namespace Tensorflow
     {
         private readonly IntPtr _handle; // _c_op in python
 
-        public Graph Graph { get; }
+        public Graph graph { get; }
         public int _id => _id_value;
         private int _id_value;
 
@@ -42,15 +42,17 @@ namespace Tensorflow
                 return;
 
             _handle = handle;
-            this.Graph = ops.get_default_graph();
+            this.graph = ops.get_default_graph();
             _outputs = new Tensor[NumOutputs];
             for (int i = 0; i < NumOutputs; i++)
                 _outputs[i] = new Tensor(this, i, OutputType(i));
+
+            graph._add_op(this);
         }
 
         public Operation(Graph g, string opType, string oper_name)
         {
-            Graph = g;
+            graph = g;
 
             var desc = c_api.TF_NewOperation(g, opType, oper_name);
             c_api.TF_SetAttrType(desc, "dtype", TF_DataType.TF_INT32);
@@ -78,7 +80,7 @@ namespace Tensorflow
         /// <param name="op_def"></param>
         public Operation(NodeDef node_def, Graph g, Tensor[] inputs = null, TF_DataType[] output_types = null, ITensorOrOperation[] control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
-            Graph = g;
+            graph = g;
 
             // Build the list of control inputs.
             var control_input_ops = new List<Operation>();
@@ -99,7 +101,7 @@ namespace Tensorflow
 
             // This will be set by self.inputs.
 
-            _id_value = Graph._next_id();
+            _id_value = graph._next_id();
             if(op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
 
@@ -115,7 +117,7 @@ namespace Tensorflow
             for (int i = 0; i < NumOutputs; i++)
                 _outputs[i] = new Tensor(this, i, OutputType(i));
 
-            Graph._add_op(this);
+            graph._add_op(this);
 
             if (_handle != IntPtr.Zero)
                 _control_flow_post_processing();
@@ -123,7 +125,7 @@ namespace Tensorflow
 
         public void run(FeedItem[] feed_dict = null, Session session = null)
         {
-            ops._run_using_default_session(this, feed_dict, Graph, session);
+            ops._run_using_default_session(this, feed_dict, graph, session);
         }
 
         private object[] _reconstruct_sequence_inputs(OpDef op_def, Tensor[] inputs, MapField<string, AttrValue> attrs)

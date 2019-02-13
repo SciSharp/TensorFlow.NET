@@ -287,6 +287,25 @@ namespace Tensorflow
             return tf.defaultSession;
         }
 
+        /// <summary>
+        /// Prepends name scope to a name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="import_scope"></param>
+        /// <returns></returns>
+        public static string prepend_name_scope(string name, string import_scope)
+        {
+            if (!string.IsNullOrEmpty(import_scope))
+            {
+                if (import_scope.EndsWith("/"))
+                    import_scope = import_scope.Substring(0, import_scope.Length - 1);
+
+                throw new NotImplementedException("prepend_name_scope");
+            }
+            else
+                return name;
+        }
+
         public static void _run_using_default_session(Operation operation, FeedItem[] feed_dict, Graph graph, Session session)
         {
             if (session == null)

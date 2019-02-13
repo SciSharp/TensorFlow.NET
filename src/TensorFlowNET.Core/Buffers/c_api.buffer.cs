@@ -19,5 +19,15 @@ namespace Tensorflow
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_GetBuffer(TF_Buffer buffer);
+
+        /// <summary>
+        /// Makes a copy of the input and sets an appropriate deallocator.  Useful for
+        /// passing in read-only, input protobufs.
+        /// </summary>
+        /// <param name="proto">const void*</param>
+        /// <param name="proto_len">size_t</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_NewBufferFromString(IntPtr proto, ulong proto_len);
     }
 }

@@ -26,5 +26,10 @@ namespace Tensorflow
         {
             return input._inputs.ToList();
         }
+
+        public static implicit operator Tensor[](InputList input)
+        {
+            return input._inputs;
+        }
     }
 }

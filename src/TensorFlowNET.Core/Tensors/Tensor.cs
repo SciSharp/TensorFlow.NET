@@ -19,7 +19,7 @@ namespace Tensorflow
         private int _id;
         public int Id => _id;
 
-        public Graph Graph => op?.Graph;
+        public Graph Graph => op?.graph;
         public Operation op { get; }
         public Tensor[] outputs => op.outputs;
 
@@ -48,7 +48,7 @@ namespace Tensorflow
 
                 if (_handle == IntPtr.Zero)
                 {
-                    c_api.TF_GraphGetTensorShape(op.Graph, _as_tf_output(), dims, rank, status);
+                    c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, status);
                     status.Check();
                 }
                 else
@@ -84,7 +84,7 @@ namespace Tensorflow
                 if (_handle == IntPtr.Zero)
                 {
                     var output = _as_tf_output();
-                    return c_api.TF_GraphGetTensorNumDims(op.Graph, output, status);
+                    return c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
                 }
                 else
                 {
