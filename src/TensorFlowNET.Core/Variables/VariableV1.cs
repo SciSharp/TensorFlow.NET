@@ -16,7 +16,7 @@ namespace Tensorflow
     /// </summary>
     public class VariableV1
     {
-        public VariableV1(object initial_value,
+        public VariableV1(object initial_value = null,
             bool trainable = true,
             List<string> collections = null,
             bool validate_shape = true,

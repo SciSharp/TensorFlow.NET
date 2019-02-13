@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -59,7 +60,7 @@ namespace Tensorflow
                 return_elements: return_elements);
 
             // Restores all the other collections.
-            var variable_objects = new Dictionary<string, RefVariable>();
+            var variable_objects = new Dictionary<ByteString, RefVariable>();
             foreach(var col in meta_graph_def.CollectionDef.OrderBy(x => x.Key))
             {
                 // Don't add unbound_inputs to the new graph.
@@ -81,8 +82,15 @@ namespace Tensorflow
                         {
                             foreach (var value in col.Value.BytesList.Value)
                             {
-                                var proto = VariableDef.Parser.ParseFrom(value);
-                                throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
+                                RefVariable variable = null;
+                                if (!variable_objects.ContainsKey(value))
+                                {
+                                    var proto = VariableDef.Parser.ParseFrom(value);
+                                    variable = new RefVariable(variable_def: proto, import_scope: scope_to_prepend_to_names);
+                                    variable_objects[value] = variable;
+                                }
+                                
+                                graph.add_to_collection(col.Key, variable);
                             }
                         }
                         else
