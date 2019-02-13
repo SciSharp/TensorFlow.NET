@@ -440,5 +440,17 @@ namespace Tensorflow
                     throw new NotImplementedException($"internal_convert_to_tensor: Can't convert {value.GetType().Name} to Tensor");
             }
         }
+
+        public static string strip_name_scope(string name, string export_scope = "")
+        {
+            if (!string.IsNullOrEmpty(export_scope))
+            {
+                throw new NotImplementedException("ops.strip_name_scope");
+            }
+            else
+            {
+                return name;
+            }
+        }
     }
 }

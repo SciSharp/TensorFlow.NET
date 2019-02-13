@@ -27,6 +27,12 @@ namespace Tensorflow
         public Status Status { get; }
 
         /// <summary>
+        /// True if the graph is considered "finalized".  In that case no
+        /// new operations can be added.
+        /// </summary>
+        private bool _finalized = false;
+
+        /// <summary>
         /// Arbitrary collections of objects.
         /// </summary>
         private Dictionary<string, object> _collections = new Dictionary<string, object>();
@@ -126,6 +132,7 @@ namespace Tensorflow
 
         public void add_to_collection<T>(string name, T value)
         {
+            _check_not_finalized();
             if (_collections.ContainsKey(name))
                 (_collections[name] as List<T>).Add(value);
             else
@@ -136,6 +143,12 @@ namespace Tensorflow
         {
             foreach (string name in names)
                 add_to_collection(name, value);
+        }
+
+        private void _check_not_finalized()
+        {
+            if (_finalized)
+                throw new RuntimeError("Graph is finalized and cannot be modified.");
         }
 
         public unsafe Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes, 

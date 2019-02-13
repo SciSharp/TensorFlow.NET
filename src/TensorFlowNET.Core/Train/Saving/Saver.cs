@@ -193,7 +193,7 @@ namespace Tensorflow
             return _is_empty ? string.Empty : model_checkpoint_path;
         }
 
-        public Saver import_meta_graph(string meta_graph_or_file, 
+        public (Saver, object) import_meta_graph(string meta_graph_or_file, 
             bool clear_devices = false,
             string import_scope = "")
         {

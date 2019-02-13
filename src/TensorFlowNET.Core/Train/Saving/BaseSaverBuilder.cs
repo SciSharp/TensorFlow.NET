@@ -85,8 +85,8 @@ namespace Tensorflow
 
                 // Add a placeholder string tensor for the filename.
                 var filename_tensor = array_ops.placeholder_with_default(string.IsNullOrEmpty(filename) ? "model" : filename, shape: new int[0], name: "filename");
-                filename_tensor = gen_array_ops.placeholder_with_default(filename_tensor, shape: new int[0], name: "Const");
                 // Keep the name "Const" for backwards compatibility.
+                filename_tensor = gen_array_ops.placeholder_with_default(filename_tensor, shape: new int[0], name: "Const");
 
                 // Add the save ops.
                 if (sharded)
@@ -106,10 +106,19 @@ namespace Tensorflow
                 var check_collection_list = graph.get_all_collection_keys();
                 foreach (var collection_type in check_collection_list)
                 {
-                    foreach (var element in graph.get_collection(collection_type) as IList<RefVariable>)
+                    var cols = graph.get_collection(collection_type);
+                    switch (cols)
                     {
-
+                        case List<RefVariable> values:
+                            foreach (var element in values) ;
+                            break;
+                        case List<ITensorOrOperation> values:
+                            foreach (var element in values) ;
+                            break;
+                        default:
+                            throw new NotImplementedException("_build_internal.check_collection_list");
                     }
+                    
                 }
 
                 return new SaverDef()

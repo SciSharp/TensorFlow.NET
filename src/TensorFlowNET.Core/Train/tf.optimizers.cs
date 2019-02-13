@@ -19,7 +19,7 @@ namespace Tensorflow
                 bool clear_devices = false,
                 string import_scope = "") => saver._import_meta_graph_with_return_elements(meta_graph_or_file,
                     clear_devices,
-                    import_scope);
+                    import_scope).Item1;
         }
     }
 }

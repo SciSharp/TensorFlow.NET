@@ -18,7 +18,7 @@ namespace Tensorflow
             return meta_graph_def;
         }
 
-        public static (RefVariable[], string[]) import_scoped_meta_graph_with_return_elements(MetaGraphDef meta_graph_or_file,
+        public static (Dictionary<string, RefVariable>, ITensorOrOperation[]) import_scoped_meta_graph_with_return_elements(MetaGraphDef meta_graph_or_file,
             bool clear_devices = false,
             string import_scope = "",
             Dictionary<string, Tensor> input_map = null,
@@ -89,7 +89,7 @@ namespace Tensorflow
                                     variable = new RefVariable(variable_def: proto, import_scope: scope_to_prepend_to_names);
                                     variable_objects[value] = variable;
                                 }
-                                
+                                variable = variable_objects[value];
                                 graph.add_to_collection(col.Key, variable);
                             }
                         }
@@ -102,7 +102,12 @@ namespace Tensorflow
                 }
             }
 
-            return (null, null);
+            var variables = graph.get_collection(ops.GraphKeys.GLOBAL_VARIABLES,
+                                     scope: scope_to_prepend_to_names) as List<RefVariable>;
+            var var_list = new Dictionary<string, RefVariable>();
+            variables.ForEach(v => var_list[ops.strip_name_scope(v.name, scope_to_prepend_to_names)] = v);
+
+            return (var_list, imported_return_elements);
         }
 
         /// <summary>
