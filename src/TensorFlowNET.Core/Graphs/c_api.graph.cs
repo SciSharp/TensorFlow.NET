@@ -254,6 +254,25 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern void TF_ImportGraphDefResultsReturnOutputs(IntPtr results, ref int num_outputs, ref IntPtr outputs);
 
+        /// <summary>
+        /// This function creates a new TF_Session (which is created on success) using
+        /// `session_options`, and then initializes state (restoring tensors and other
+        /// assets) using `run_options`.
+        /// </summary>
+        /// <param name="session_options">const TF_SessionOptions*</param>
+        /// <param name="run_options">const TF_Buffer*</param>
+        /// <param name="export_dir">const char*</param>
+        /// <param name="tags">const char* const*</param>
+        /// <param name="tags_len">int</param>
+        /// <param name="graph">TF_Graph*</param>
+        /// <param name="meta_graph_def">TF_Buffer*</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_LoadSessionFromSavedModel(IntPtr session_options, IntPtr run_options,
+            string export_dir, string[] tags, int tags_len,
+            IntPtr graph, ref TF_Buffer meta_graph_def, IntPtr status);
+
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_NewGraph();
 

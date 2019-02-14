@@ -47,6 +47,16 @@ namespace Tensorflow
             _graph_key = $"grap-key-{ops.uid()}/";
         }
 
+        public Graph(IntPtr handle)
+        {
+            _handle = handle;
+            Status = new Status();
+            _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
+            _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
+            _names_in_use = new Dictionary<string, int>();
+            _graph_key = $"grap-key-{ops.uid()}/";
+        }
+
         public ITensorOrOperation as_graph_element(object obj, bool allow_tensor = true, bool allow_operation = true)
         {
             return _as_graph_element_locked(obj, allow_tensor, allow_operation);

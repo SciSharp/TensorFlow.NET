@@ -17,11 +17,23 @@ namespace Tensorflow
                 (logits, labels, weights)),
                 namescope =>
                 {
-
+                    (labels, logits, weights) = _remove_squeezable_dimensions(
+        labels, logits, weights, expected_rank_diff: 1);
 
                 });
 
             throw new NotImplementedException("sparse_softmax_cross_entropy");
+        }
+
+        public (Tensor, Tensor, float) _remove_squeezable_dimensions(Tensor labels,
+            Tensor predictions,
+            float weights = 0,
+            int expected_rank_diff = 0)
+        {
+            (labels, predictions, weights) = confusion_matrix.remove_squeezable_dimensions(
+                labels, predictions, expected_rank_diff: expected_rank_diff);
+
+            throw new NotImplementedException("_remove_squeezable_dimensions");
         }
     }
 }

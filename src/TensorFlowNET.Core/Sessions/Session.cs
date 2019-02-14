@@ -36,6 +36,25 @@ namespace Tensorflow
             Status.Check(true);
         }
 
+        public static Session LoadFromSavedModel(string path)
+        {
+            var graph = c_api.TF_NewGraph();
+            var status = new Status();
+            var opt = c_api.TF_NewSessionOptions();
+
+            var buffer = new TF_Buffer();
+            var sess = c_api.TF_LoadSessionFromSavedModel(opt, IntPtr.Zero, path, new string[0], 0, graph, ref buffer, status);
+
+            //var bytes = new Buffer(buffer.data).Data;
+            //var meta_graph = MetaGraphDef.Parser.ParseFrom(bytes);
+
+            status.Check();
+
+            tf.g = new Graph(graph);
+
+            return sess;
+        }
+
         public static implicit operator IntPtr(Session session) => session._handle;
         public static implicit operator Session(IntPtr handle) => new Session(handle);
 

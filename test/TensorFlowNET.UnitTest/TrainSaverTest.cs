@@ -27,6 +27,15 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
+        public void ImportSavedModel()
+        {
+            with<Session>(Session.LoadFromSavedModel("mobilenet"), sess =>
+            {
+                
+            });
+        }
+
+        [TestMethod]
         public void Save1()
         {
             var w1 = tf.Variable(0, name: "save1");
