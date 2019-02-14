@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Tensorflow;
 
@@ -33,6 +34,13 @@ namespace TensorFlowNET.UnitTest
             {
                 
             });
+        }
+
+        [TestMethod]
+        public void ImportGraphDefFromPbFile()
+        {
+            var g = new Graph();
+            var status = g.Import("mobilenet/saved_model.pb");
         }
 
         [TestMethod]

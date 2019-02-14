@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -23,6 +24,15 @@ namespace Tensorflow
             }
 
             return return_outputs;
+        }
+
+        public Status Import(string file_path)
+        {
+            var bytes = File.ReadAllBytes(file_path);
+            var graph_def = new Tensorflow.Buffer(bytes);
+            var opts = c_api.TF_NewImportGraphDefOptions();
+            c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, Status);
+            return Status;
         }
     }
 }
