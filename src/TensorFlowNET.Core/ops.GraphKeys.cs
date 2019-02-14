@@ -23,6 +23,11 @@ namespace Tensorflow
             public static string TRAINABLE_VARIABLES = "trainable_variables";
 
             /// <summary>
+            /// Key to collect losses
+            /// </summary>
+            public static string LOSSES = "losses";
+
+            /// <summary>
             /// Key to collect Variable objects that are global (shared across machines).
             /// Default collection for all variables, except local ones.
             /// </summary>

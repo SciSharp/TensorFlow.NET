@@ -20,9 +20,9 @@ namespace TensorFlowNET.Examples
                 new_saver.restore(sess, dir + "my-model-10000");
                 var labels = tf.constant(0, dtype: tf.int32, shape: new int[] { 100 }, name: "labels");
                 var batch_size = tf.size(labels);
-                var logits = (tf.get_collection("logits") as List<ITensorOrOperation>)[0];
-                var loss = tf.losses.sparse_softmax_cross_entropy(labels = labels,
-                                                logits = logits);
+                var logits = (tf.get_collection("logits") as List<ITensorOrOperation>)[0] as Tensor;
+                var loss = tf.losses.sparse_softmax_cross_entropy(labels: labels,
+                                                logits: logits);
             });
         }
     }
