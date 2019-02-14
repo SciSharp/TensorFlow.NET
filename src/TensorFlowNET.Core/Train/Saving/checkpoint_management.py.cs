@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using static Tensorflow.SaverDef.Types;
 
 namespace Tensorflow
 {
@@ -104,6 +105,24 @@ namespace Tensorflow
             string basename = checkpoint_filename;
             string suffixed_filename = basename + "." + meta_graph_suffix;
             return suffixed_filename;
+        }
+
+        public static bool checkpoint_exists(string checkpoint_prefix)
+        {
+            string pathname = _prefix_to_checkpoint_path(checkpoint_prefix, CheckpointFormatVersion.V2);
+            if (File.Exists(pathname))
+                return true;
+            else if (File.Exists(checkpoint_prefix))
+                return true;
+            else
+                return false;
+        }
+
+        private static string _prefix_to_checkpoint_path(string prefix, CheckpointFormatVersion format_version)
+        {
+            if (format_version == CheckpointFormatVersion.V2)
+                return prefix + ".index";
+            return prefix;
         }
     }
 }

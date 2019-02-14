@@ -82,9 +82,9 @@ namespace Tensorflow
             return shape_internal(input, name, optimize: true, out_type: out_type);
         }
 
-        public static Tensor size(Tensor input, string name = "", TF_DataType out_type = TF_DataType.TF_INT32)
+        public static Tensor size(Tensor input, string name = "", bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
-            return size_internal(input, name, optimize: true, out_type: out_type);
+            return size_internal(input, name, optimize: optimize, out_type: out_type);
         }
 
         private static Tensor shape_internal(Tensor input, string name = "", bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
@@ -132,6 +132,7 @@ namespace Tensorflow
                 else
                 {
                     // result = gen_array_ops.shape();
+                    throw new NotImplementedException("array_ops.size_internal");
                 }
 
                 return null;

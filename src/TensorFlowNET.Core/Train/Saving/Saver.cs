@@ -55,6 +55,7 @@ namespace Tensorflow
             _keep_checkpoint_every_n_hours = keep_checkpoint_every_n_hours;
             _name = name;
             _restore_sequentially = restore_sequentially;
+            _saver_def = saver_def;
             _builder = builder;
             _is_built = false;
             _allow_empty = allow_empty;
@@ -122,7 +123,7 @@ namespace Tensorflow
             }
             else if (_saver_def != null && !string.IsNullOrEmpty(_name))
             {
-                throw new NotImplementedException("");
+                throw new NotImplementedException("Saver._build");
             }
 
             _check_saver_def();
@@ -198,6 +199,38 @@ namespace Tensorflow
             string import_scope = "")
         {
             return saver._import_meta_graph_with_return_elements(meta_graph_or_file, clear_devices, import_scope);
+        }
+
+        /// <summary>
+        /// Restores previously saved variables.
+        /// 
+        /// This method runs the ops added by the constructor for restoring variables.
+        /// It requires a session in which the graph was launched.  The variables to
+        /// restore do not have to have been initialized, as restoring is itself a way
+        /// to initialize variables.
+        /// </summary>
+        /// <param name="sess">A `Session` to use to restore the parameters. None in eager mode.</param>
+        /// <param name="save_path">Path where parameters were previously saved.</param>
+        public void restore(Session sess, string save_path)
+        {
+            if (_is_empty)
+                return;
+
+            if (string.IsNullOrEmpty(save_path))
+                throw new ValueError("Can't load save_path when it is None.");
+
+            if (!checkpoint_management.checkpoint_exists(save_path))
+                throw new ValueError($"The passed save_path is not a valid checkpoint: {save_path}");
+
+            Console.WriteLine($"Restoring parameters from {save_path}");
+
+            if (tf.context.executing_eagerly())
+                ;
+            else
+                sess.run(_saver_def.RestoreOpName, new FeedItem[]
+                {
+                    new FeedItem(_saver_def.FilenameTensorName, save_path)
+                });
         }
 
         /// <summary>

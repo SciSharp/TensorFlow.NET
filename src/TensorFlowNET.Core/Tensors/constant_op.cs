@@ -24,7 +24,7 @@ namespace Tensorflow
             return _constant_impl(value, dtype, shape, name, verify_shape: false, allow_broadcast: true);
         }
 
-        private static Tensor _constant_impl(object value, TF_DataType dtype, int[] shape, string name, bool verify_shape, bool allow_broadcast)
+        public static Tensor _constant_impl(object value, TF_DataType dtype, int[] shape, string name, bool verify_shape, bool allow_broadcast)
         {
             if (tf.context.executing_eagerly())
             {

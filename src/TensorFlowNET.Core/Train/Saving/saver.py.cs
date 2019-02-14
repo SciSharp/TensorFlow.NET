@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
@@ -13,11 +14,13 @@ namespace Tensorflow
         {
             var meta_graph_def = meta_graph.read_meta_graph_file(meta_graph_or_file);
 
-            var imported_vars = meta_graph.import_scoped_meta_graph_with_return_elements(
+            var meta = meta_graph.import_scoped_meta_graph_with_return_elements(
                         meta_graph_def,
                         clear_devices: clear_devices,
                         import_scope: import_scope,
                         return_elements: return_elements);
+
+            var (imported_vars, imported_return_elements) = meta;
 
             var saver = _create_saver_from_imported_meta_graph(
                 meta_graph_def, import_scope, imported_vars);
@@ -25,13 +28,29 @@ namespace Tensorflow
             return (saver, null);
         }
 
+        /// <summary>
+        /// Return a saver for restoring variable values to an imported MetaGraph.
+        /// </summary>
+        /// <param name="meta_graph_def"></param>
+        /// <param name="import_scope"></param>
+        /// <param name="imported_vars"></param>
+        /// <returns></returns>
         public static Saver _create_saver_from_imported_meta_graph(MetaGraphDef meta_graph_def, 
             string import_scope, 
-            (Dictionary<string, RefVariable>, ITensorOrOperation[]) imported_vars)
+            Dictionary<string, RefVariable> imported_vars)
         {
             if(meta_graph_def.SaverDef != null)
             {
-                throw new NotImplementedException("_create_saver_from_imported_meta_graph");
+                // Infer the scope that is prepended by `import_scoped_meta_graph`.
+                string scope = import_scope;
+                var var_names = imported_vars.Keys.ToArray();
+                if(var_names.Length > 0)
+                {
+                    var sample_key = var_names[0];
+                    var sample_var = imported_vars[sample_key];
+                    scope = string.Join("", sample_var.name.Skip(sample_key.Length));
+                }
+                return new Saver(saver_def: meta_graph_def.SaverDef, name: scope);
             }
             else
             {

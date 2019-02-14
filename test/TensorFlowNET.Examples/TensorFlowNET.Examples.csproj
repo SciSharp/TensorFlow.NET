@@ -14,8 +14,4 @@
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="python\" />
-  </ItemGroup>
-
 </Project>

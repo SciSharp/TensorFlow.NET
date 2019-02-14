@@ -46,28 +46,36 @@ namespace Tensorflow
             var feed_dict_tensor = new Dictionary<object, object>();
             var feed_map = new Dictionary<object, object>();
 
+            Func<FeedItem, IEnumerable<(object, object)>> feed_fn = (item) =>
+            {
+                return new (object, object)[] { (item.Key, item.Value) };
+            };
+
             // Validate and process feed_dict.
             if (feed_dict != null)
             {
-                foreach(var subfeed in feed_dict)
+                foreach (var feed in feed_dict)
                 {
-                    var subfeed_t = _graph.as_graph_element(subfeed.Key, allow_tensor: true, allow_operation: false);
-                    var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype();
-                    switch(subfeed.Value)
+                    foreach (var (subfeed, subfeed_val) in feed_fn(feed))
                     {
-                        case float floatVal:
-                            feed_dict_tensor[subfeed_t] = (NDArray)floatVal;
-                            break;
-                        case int intVal:
-                            feed_dict_tensor[subfeed_t] = (NDArray)intVal;
-                            break;
-                        case string str:
-                            feed_dict_tensor[subfeed_t] = (NDArray)str;
-                            break;
-                        default:
-                            throw new NotImplementedException("_run subfeed");
+                        var subfeed_t = _graph.as_graph_element(subfeed, allow_tensor: true, allow_operation: false);
+                        var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype();
+                        switch (subfeed_val)
+                        {
+                            case float floatVal:
+                                feed_dict_tensor[subfeed_t] = (NDArray)floatVal;
+                                break;
+                            case int intVal:
+                                feed_dict_tensor[subfeed_t] = (NDArray)intVal;
+                                break;
+                            case string str:
+                                feed_dict_tensor[subfeed_t] = (NDArray)str;
+                                break;
+                            default:
+                                throw new NotImplementedException("_run subfeed");
+                        }
+                        feed_map[subfeed_t.name] = (subfeed_t, subfeed_val);
                     }
-                    feed_map[subfeed_t.name] = (subfeed_t, subfeed.Value);
                 }
             }
 
