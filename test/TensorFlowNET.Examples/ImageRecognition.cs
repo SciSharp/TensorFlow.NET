@@ -14,8 +14,7 @@ namespace TensorFlowNET.Examples
         public void Run()
         {
             var graph = new Graph();
-            // 从文件加载序列化的GraphDef
-            //导入GraphDef
+            //import GraphDef from pb file
             graph.Import("tmp/tensorflow_inception_graph.pb");
             with<Session>(tf.Session(graph), sess =>
             {
