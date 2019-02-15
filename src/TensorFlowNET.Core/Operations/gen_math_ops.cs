@@ -17,6 +17,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate= false, string name= "")
+        {
+            var _op = _op_def_lib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor neg(Tensor x, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Neg", name, args: new { x });

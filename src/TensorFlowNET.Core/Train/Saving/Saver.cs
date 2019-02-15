@@ -169,9 +169,9 @@ namespace Tensorflow
 
             if (!_is_empty)
             {
-                model_checkpoint_path = sess.run(_saver_def.SaveTensorName, new FeedItem[] {
+                model_checkpoint_path = sess.run(_saver_def.SaveTensorName,
                     new FeedItem(_saver_def.FilenameTensorName, checkpoint_file)
-                });
+                );
 
                 if (write_state)
                 {
@@ -227,10 +227,8 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
                 ;
             else
-                sess.run(_saver_def.RestoreOpName, new FeedItem[]
-                {
-                    new FeedItem(_saver_def.FilenameTensorName, save_path)
-                });
+                sess.run(_saver_def.RestoreOpName,
+                    new FeedItem(_saver_def.FilenameTensorName, save_path));
         }
 
         /// <summary>

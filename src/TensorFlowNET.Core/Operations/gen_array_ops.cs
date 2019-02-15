@@ -12,6 +12,13 @@ namespace Tensorflow
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
         public static Execute _execute = new Execute();
 
+        public static Tensor expand_dims(Tensor input, int axis, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("ExpandDims", name: name, args: new { input, dim = axis });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = "")
         {
             var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });

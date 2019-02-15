@@ -65,21 +65,17 @@ namespace TensorFlowNET.Examples
                 {
                     foreach (var (x, y) in Python.zip<double>(train_X, train_Y))
                     {
-                        sess.run(optimizer, feed_dict: new FeedItem[]
-                        {
+                        sess.run(optimizer,
                             new FeedItem(X, x),
-                            new FeedItem(Y, y)
-                        });
+                            new FeedItem(Y, y));
                     }
 
                     // Display logs per epoch step
                     if ((epoch + 1) % display_step == 0)
                     {
-                        var c = sess.run(cost, feed_dict: new FeedItem[] 
-                        {
+                        var c = sess.run(cost, 
                             new FeedItem(X, train_X),
-                            new FeedItem(Y, train_Y)
-                        });
+                            new FeedItem(Y, train_Y));
                         var rW = sess.run(W);
                         Console.WriteLine($"Epoch: {epoch + 1} cost={c} " +
                                     $"W={rW} b={sess.run(b)}");

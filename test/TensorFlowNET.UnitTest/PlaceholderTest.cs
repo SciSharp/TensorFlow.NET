@@ -17,10 +17,8 @@ namespace TensorFlowNET.UnitTest
 
             Python.with<Session>(tf.Session(), sess =>
             {
-                var result = sess.run(y, feed_dict: new FeedItem[]
-                {
-                    new FeedItem(x, 2)
-                });
+                var result = sess.run(y, 
+                    new FeedItem(x, 2));
                 Assert.AreEqual((int)result, 6);
             });
         }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class math_ops
+    public class math_ops : Python
     {
         public static Tensor add(Tensor x, Tensor y, string name = "") => gen_math_ops.add(x, y, name);
 
@@ -14,7 +14,14 @@ namespace Tensorflow
             if(base_type == x.dtype)
                 return x;
 
-            throw new NotImplementedException("math_ops.cast");
+            return with<ops.name_scope, Tensor>(new ops.name_scope(name, "Cast", new { x }), scope =>
+            {
+                x = ops.convert_to_tensor(x, name: "x");
+                if (x.dtype.as_base_dtype() != base_type)
+                    x = gen_math_ops.cast(x, base_type, name: name);
+
+                return x;
+            });
         }
 
         /// <summary>

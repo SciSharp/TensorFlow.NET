@@ -44,6 +44,7 @@ namespace Tensorflow
 
             // We first convert value to a numpy array or scalar.
             NDArray nparray = null;
+            var np_dt = dtype.as_numpy_datatype();
 
             if (values is NDArray nd)
             {
@@ -54,31 +55,61 @@ namespace Tensorflow
                 if (values == null)
                     throw new ValueError("None values not supported.");
 
-                switch (values)
+                if(np_dt == null)
                 {
-                    case bool boolVal:
-                        nparray = boolVal;
-                        break;
-                    case int intVal:
-                        nparray = intVal;
-                        break;
-                    case int[] intVals:
-                        nparray = np.array(intVals);
-                        break;
-                    case float floatVal:
-                        nparray = floatVal;
-                        break;
-                    case double doubleVal:
-                        nparray = doubleVal;
-                        break;
-                    case string strVal:
-                        nparray = strVal;
-                        break;
-                    case string[] strVals:
-                        nparray = strVals;
-                        break;
-                    default:
-                        throw new Exception("make_tensor_proto Not Implemented");
+                    switch (values)
+                    {
+                        case bool boolVal:
+                            nparray = boolVal;
+                            break;
+                        case int intVal:
+                            nparray = intVal;
+                            break;
+                        case int[] intVals:
+                            nparray = np.array(intVals);
+                            break;
+                        case float floatVal:
+                            nparray = floatVal;
+                            break;
+                        case double doubleVal:
+                            nparray = doubleVal;
+                            break;
+                        case string strVal:
+                            nparray = strVal;
+                            break;
+                        case string[] strVals:
+                            nparray = strVals;
+                            break;
+                        default:
+                            throw new NotImplementedException("make_tensor_proto Not Implemented");
+                    }
+                }
+                else
+                {
+                    // convert data type
+                    switch (np_dt.Name)
+                    {
+                        case "Int32":
+                            if (values.GetType().IsArray)
+                                nparray = np.array((int[])values, np_dt);
+                            else
+                                nparray = (int)values;
+                            break;
+                        case "Single":
+                            if (values.GetType().IsArray)
+                                nparray = np.array((float[])values, np_dt);
+                            else
+                                nparray = (float)values;
+                            break;
+                        case "Double":
+                            nparray = (double)values;
+                            break;
+                        case "String":
+                            nparray = values.ToString();
+                            break;
+                        default:
+                            throw new NotImplementedException("make_tensor_proto Not Implemented");
+                    }
                 }
             }
 

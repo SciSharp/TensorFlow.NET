@@ -35,8 +35,7 @@ namespace Tensorflow
             c_api.TF_DeleteSessionOptions(opts);
         }
 
-
-        public virtual NDArray run(object fetches, FeedItem[] feed_dict = null)
+        public virtual NDArray run(object fetches, params FeedItem[] feed_dict)
         {
             return _run(fetches, feed_dict);
         }
@@ -62,6 +61,9 @@ namespace Tensorflow
                         var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype();
                         switch (subfeed_val)
                         {
+                            case NDArray nd:
+                                feed_dict_tensor[subfeed_t] = nd;
+                                break;
                             case float floatVal:
                                 feed_dict_tensor[subfeed_t] = (NDArray)floatVal;
                                 break;
@@ -193,25 +195,25 @@ namespace Tensorflow
                 case TF_DataType.TF_INT16:
                     var shorts = new short[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)
-                        shorts[i] = *(short*)(c_api.TF_TensorData(output) + (int)(tensor.dataTypeSize * i));
+                        shorts[i] = *(short*)(c_api.TF_TensorData(output) + (int)(tensor.itemsize * i));
                     nd = np.array(shorts).reshape(ndims);
                     break;
                 case TF_DataType.TF_INT32:
                     var ints = new int[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)
-                        ints[i] = *(int*)(c_api.TF_TensorData(output) + (int)(tensor.dataTypeSize * i));
+                        ints[i] = *(int*)(c_api.TF_TensorData(output) + (int)(tensor.itemsize * i));
                     nd = np.array(ints).reshape(ndims);
                     break;
                 case TF_DataType.TF_FLOAT:
                     var floats = new float[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)
-                        floats[i] = *(float*)(c_api.TF_TensorData(output) + (int)(tensor.dataTypeSize * i));
+                        floats[i] = *(float*)(c_api.TF_TensorData(output) + (int)(tensor.itemsize * i));
                     nd = np.array(floats).reshape(ndims);
                     break;
                 case TF_DataType.TF_DOUBLE:
                     var doubles = new double[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)
-                        doubles[i] = *(double*)(c_api.TF_TensorData(output) + (int)(tensor.dataTypeSize * i));
+                        doubles[i] = *(double*)(c_api.TF_TensorData(output) + (int)(tensor.itemsize * i));
                     nd = np.array(doubles).reshape(ndims);
                     break;
                 default:

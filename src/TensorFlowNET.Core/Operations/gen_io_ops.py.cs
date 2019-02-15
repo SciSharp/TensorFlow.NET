@@ -21,5 +21,12 @@ namespace Tensorflow
 
             return _op.outputs;
         }
+
+        public static Tensor read_file(string filename, string name = "")
+        {
+            var _op = _op_def_lib._apply_op_helper("ReadFile", name: name, args: new { filename });
+
+            return _op.outputs[0];
+        }
     }
 }

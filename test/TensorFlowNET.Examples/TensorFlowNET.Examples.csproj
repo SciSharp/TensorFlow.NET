@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowNET.Utility\TensorFlowNET.Utility.csproj" />
   </ItemGroup>
 
 </Project>

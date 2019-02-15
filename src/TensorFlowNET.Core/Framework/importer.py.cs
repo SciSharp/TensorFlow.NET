@@ -28,8 +28,8 @@ namespace Tensorflow
             var graph = ops.get_default_graph();
             Python.with<ops.name_scope>(new ops.name_scope(name, "import", input_map.Values), scope =>
             {
-                /*prefix = scope;
-                if (!string.IsNullOrEmpty(prefix))
+                prefix = scope;
+                /*if (!string.IsNullOrEmpty(prefix))
                     prefix = prefix.Substring(0, prefix.Length - 1);
                 else
                     prefix = "";*/
@@ -113,9 +113,16 @@ namespace Tensorflow
                 var key = attr_def.Name;
                 if(attr_def.DefaultValue != null)
                 {
-                    var value = node_def.Attr[key];
-                    if (value == null)
+                    if (node_def.Attr.ContainsKey(key))
+                    {
+                        var value = node_def.Attr[key];
+                        if (value == null)
+                            node_def.Attr[key] = attr_def.DefaultValue;
+                    }
+                    else
+                    {
                         node_def.Attr[key] = attr_def.DefaultValue;
+                    }
                 }
             }
         }

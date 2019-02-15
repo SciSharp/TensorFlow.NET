@@ -33,11 +33,9 @@ namespace TensorFlowNET.UnitTest
 
             using(var sess = tf.Session())
             {
-                var o = sess.run(c, feed_dict: new FeedItem[]
-                {
+                var o = sess.run(c, 
                     new FeedItem(a, 3.0f),
-                    new FeedItem(b, 2.0f)
-                });
+                    new FeedItem(b, 2.0f));
                 Assert.AreEqual((float)o, 5.0f);
             }
         }

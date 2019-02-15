@@ -24,6 +24,9 @@ namespace Tensorflow
             return c_api.TF_NewOperation(_handle, opType, opName);
         }
 
+        public Operation get_operation_by_name(string name) 
+            => as_graph_element(name, allow_tensor: false, allow_operation: true) as Operation;
+
         public ITensorOrOperation _get_operation_by_name_unsafe(string name)
         {
             return _nodes_by_name.ContainsKey(name) ? _nodes_by_name[name] : null;

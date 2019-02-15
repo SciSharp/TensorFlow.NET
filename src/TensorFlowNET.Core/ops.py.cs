@@ -418,6 +418,9 @@ namespace Tensorflow
             string name = "", TF_DataType preferred_dtype = TF_DataType.DtInvalid,
             bool as_ref = false)
         {
+            if (dtype == TF_DataType.DtInvalid)
+                dtype = preferred_dtype;
+
             switch (value)
             {
                 case Tensor tensor:
@@ -432,6 +435,8 @@ namespace Tensorflow
                     return constant_op.constant(intArray, dtype: dtype, name: name);
                 case float floatVal:
                     return constant_op.constant(floatVal, dtype: dtype, name: name);
+                case float[] floatArray:
+                    return constant_op.constant(floatArray, dtype: dtype, name: name);
                 case double doubleVal:
                     return constant_op.constant(doubleVal, dtype: dtype, name: name);
                 case RefVariable varVal:

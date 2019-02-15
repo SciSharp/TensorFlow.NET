@@ -35,8 +35,8 @@ namespace Tensorflow
         private TF_DataType _dtype = TF_DataType.DtInvalid;
         public TF_DataType dtype => _handle == IntPtr.Zero ? _dtype : c_api.TF_TensorType(_handle);
         public ulong bytesize => _handle == IntPtr.Zero ? 0 : c_api.TF_TensorByteSize(_handle);
-        public ulong dataTypeSize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
-        public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / dataTypeSize;
+        public ulong itemsize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
+        public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / itemsize;
         public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
 
@@ -122,7 +122,7 @@ namespace Tensorflow
 
             for (ulong i = 0; i < size; i++)
             {
-                data[i] = Marshal.PtrToStructure<T>(buffer + (int)(i * dataTypeSize));
+                data[i] = Marshal.PtrToStructure<T>(buffer + (int)(i * itemsize));
             }
 
             return data;

@@ -46,6 +46,10 @@ namespace Tensorflow
             }
         }
 
+        public static Tensor expand_dims(Tensor input, int axis = -1, string name = "", int dim = -1) => expand_dims_v2(input, axis, name);
+
+        private static Tensor expand_dims_v2(Tensor input, int axis, string name = "") => gen_array_ops.expand_dims(input, axis, name);
+
         public static Tensor rank(Tensor input, string name = "")
         {
             return math_ops.rank_internal(input, name, optimize: true);

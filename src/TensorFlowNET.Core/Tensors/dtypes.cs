@@ -21,7 +21,7 @@ namespace Tensorflow
                 case TF_DataType.TF_STRING:
                     return typeof(string);
                 default:
-                    throw new NotImplementedException("as_numpy_datatype failed");
+                    return null;
             }
         }
 
