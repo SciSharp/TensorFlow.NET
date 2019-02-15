@@ -164,6 +164,7 @@ namespace Tensorflow
                     return TF_DataType.TF_FLOAT;
                 case "Double":
                     return TF_DataType.TF_DOUBLE;
+                case "Byte":
                 case "String":
                     return TF_DataType.TF_STRING;
                 default:

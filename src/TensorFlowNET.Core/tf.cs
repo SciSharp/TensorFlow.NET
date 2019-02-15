@@ -57,5 +57,12 @@ namespace Tensorflow
             defaultSession = new Session();
             return defaultSession;
         }
+
+        public static Session Session(Graph graph)
+        {
+            g = graph;
+            defaultSession = new Session();
+            return defaultSession;
+        }
     }
 }

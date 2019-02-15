@@ -120,7 +120,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>On success returns the size in bytes of the encoded string.</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern ulong TF_StringEncode(string src, ulong src_len, IntPtr dst, ulong dst_len, IntPtr status);
+        public static extern ulong TF_StringEncode(IntPtr src, ulong src_len, IntPtr dst, ulong dst_len, IntPtr status);
 
         /// <summary>
         /// Decode a string encoded using TF_StringEncode.

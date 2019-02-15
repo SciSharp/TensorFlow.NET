@@ -54,9 +54,27 @@ namespace Tensorflow
                 case "Double":
                     Marshal.Copy(nd.Data<double>(), 0, dotHandle, nd.size);
                     break;
+                case "Byte":
+                    var bb = nd.Data<byte>();
+                    var bytes = Marshal.AllocHGlobal(bb.Length) ;
+                    ulong bytes_len = c_api.TF_StringEncodedSize((ulong)bb.Length);
+                    var dataTypeByte = ToTFDataType(nd.dtype);
+                    // shape
+                    var dims2 = nd.shape.Select(x => (long)x).ToArray();
+
+                    var tfHandle2 = c_api.TF_AllocateTensor(dataTypeByte,
+                        dims2,
+                        nd.ndim,
+                        bytes_len + sizeof(Int64));
+
+                    dotHandle = c_api.TF_TensorData(tfHandle2);
+                    Marshal.WriteInt64(dotHandle, 0);
+                    c_api.TF_StringEncode(bytes, (ulong)bb.Length, dotHandle + sizeof(Int64), bytes_len, status);
+                    return tfHandle2;
                 case "String":
-                    var str = nd.Data<string>()[0];
-                    ulong dst_len = c_api.TF_StringEncodedSize((ulong)str.Length);
+                    string ss = nd.Data<string>()[0];
+                    var str = Marshal.StringToHGlobalAnsi(ss);
+                    ulong dst_len = c_api.TF_StringEncodedSize((ulong)ss.Length);
                     var dataType1 = ToTFDataType(nd.dtype);
                     // shape
                     var dims1 = nd.shape.Select(x => (long)x).ToArray();
@@ -68,7 +86,7 @@ namespace Tensorflow
 
                     dotHandle = c_api.TF_TensorData(tfHandle1);
                     Marshal.WriteInt64(dotHandle, 0);
-                    c_api.TF_StringEncode(str, (ulong)str.Length, dotHandle + sizeof(Int64), dst_len, status);
+                    c_api.TF_StringEncode(str, (ulong)ss.Length, dotHandle + sizeof(Int64), dst_len, status);
                     return tfHandle1;
                 default:
                     throw new NotImplementedException("Marshal.Copy failed.");
