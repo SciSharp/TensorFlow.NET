@@ -29,8 +29,8 @@ namespace Tensorflow
         /// <summary>
         /// For inputs that take a single tensor.
         /// </summary>
-        /// <param name="desc"></param>
-        /// <param name="input"></param>
+        /// <param name="desc">TF_OperationDescription*</param>
+        /// <param name="input">TF_Output</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_AddInput(IntPtr desc, TF_Output input);
 

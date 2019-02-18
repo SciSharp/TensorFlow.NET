@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Examples", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Core", "src\TensorFlowNET.Core\TensorFlowNET.Core.csproj", "{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TensorFlowNET.Utility", "src\TensorFlowNET.Utility\TensorFlowNET.Utility.csproj", "{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Utility", "src\TensorFlowNET.Utility\TensorFlowNET.Utility.csproj", "{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

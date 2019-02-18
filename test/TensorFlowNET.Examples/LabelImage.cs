@@ -26,38 +26,39 @@ namespace TensorFlowNET.Examples
         int input_width = 299;
         int input_mean = 0;
         int input_std = 255;
-        string input_layer = "input";
-        string output_layer = "InceptionV3/Predictions/Reshape_1";
+        string input_name = "import/input";
+        string output_name = "import/InceptionV3/Predictions/Reshape_1";
 
         public void Run()
         {
             PrepareData();
-            var graph = LoadGraph(Path.Join(dir, pbFile));
-            var t = ReadTensorFromImageFile(Path.Join(dir, picFile),
+
+            var labels = LoadLabels(Path.Join(dir, labelFile));
+            
+            var nd = ReadTensorFromImageFile(Path.Join(dir, picFile),
                 input_height: input_height,
                 input_width: input_width,
                 input_mean: input_mean,
                 input_std: input_std);
 
-            var input_name = "import/" + input_layer;
-            var output_name = "import/" + output_layer;
-
+            var graph = LoadGraph(Path.Join(dir, pbFile));
             var input_operation = graph.get_operation_by_name(input_name);
             var output_operation = graph.get_operation_by_name(output_name);
 
-            NDArray results = null;
-            with<Session>(tf.Session(graph), sess =>
-            {
-                results = sess.run(output_operation.outputs[0], new FeedItem(input_operation.outputs[0], t));
-            });
+            var results = with<Session, NDArray>(tf.Session(graph),
+                sess => sess.run(output_operation.outputs[0],
+                    new FeedItem(input_operation.outputs[0], nd)));
 
-            // equivalent np.squeeze
-            results.reshape(results.shape.Where(x => x > 1).ToArray());
-            // top_k = results.argsort()[-5:][::-1]
-            var top_k = results.Data<int>().Take(5).ToArray();
-            var labels = LoadLabels(Path.Join(dir, labelFile));
-            foreach (var i in top_k)
-                Console.WriteLine($"{labels[i]}, {results[i]}");
+            results = np.squeeze(results);
+
+            var argsort = results.argsort<float>();
+            var top_k = argsort.Data<float>()
+                .Skip(results.size - 5)
+                .Reverse()
+                .ToArray();
+
+            foreach (float idx in top_k)
+                Console.WriteLine($"{picFile}: {idx} {labels[(int)idx]}, {results[(int)idx]}");
         }
 
         private string[] LoadLabels(string file)
@@ -67,9 +68,9 @@ namespace TensorFlowNET.Examples
 
         private Graph LoadGraph(string modelFile)
         {
-            var graph = tf.Graph();
+            var graph = tf.Graph().as_default();
             var graph_def = GraphDef.Parser.ParseFrom(File.ReadAllBytes(modelFile));
-            importer.import_graph_def(graph_def);
+            tf.import_graph_def(graph_def);
             return graph;
         }
 
@@ -79,22 +80,18 @@ namespace TensorFlowNET.Examples
                                 int input_mean = 0,
                                 int input_std = 255)
         {
-            string input_name = "file_reader";
-            string output_name = "normalized";
-            Tensor image_reader = null;
-
-            var file_reader = tf.read_file(file_name, input_name);
-            image_reader = tf.image.decode_jpeg(file_reader, channels: 3, name: "jpeg_reader");
-
-            var float_caster = tf.cast(image_reader, tf.float32);
-            var dims_expander = tf.expand_dims(float_caster, 0);
-            var resized = tf.image.resize_bilinear(dims_expander, new int[] { input_height, input_width });
-            var normalized = tf.divide(tf.subtract(resized, new float[] { input_mean }), new float[] { input_std });
-
-            return with<Session, NDArray>(tf.Session(), sess =>
+            return with<Graph, NDArray>(tf.Graph().as_default(), graph =>
             {
-                var result = sess.run(normalized);
-                return result;
+                var file_reader = tf.read_file(file_name, "file_reader");
+                var image_reader = tf.image.decode_jpeg(file_reader, channels: 3, name: "jpeg_reader");
+                var caster = tf.cast(image_reader, tf.float32);
+                var dims_expander = tf.expand_dims(caster, 0);
+                var resize = tf.constant(new int[] { input_height, input_width });
+                var bilinear = tf.image.resize_bilinear(dims_expander, resize);
+                var sub = tf.subtract(bilinear, new float[] { input_mean });
+                var normalized = tf.divide(sub, new float[] { input_std });
+
+                return with<Session, NDArray>(tf.Session(graph), sess => sess.run(normalized));
             });
         }
 

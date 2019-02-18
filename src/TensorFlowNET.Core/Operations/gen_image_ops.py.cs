@@ -39,7 +39,7 @@ namespace Tensorflow
             }
         }
 
-        public Tensor resize_bilinear(Tensor images, int[] size, bool align_corners = false, string name = "")
+        public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = "")
         {
             if (tf.context.executing_eagerly())
             {

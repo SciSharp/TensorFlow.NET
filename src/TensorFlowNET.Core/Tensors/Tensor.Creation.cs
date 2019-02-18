@@ -25,6 +25,19 @@ namespace Tensorflow
             _handle = Allocate(nd);
         }
 
+        public unsafe Tensor(byte[] buffer)
+        {
+            var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
+            _handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
+
+            IntPtr tensor = c_api.TF_TensorData(_handle);
+            Marshal.WriteInt64(tensor, 0);
+            fixed (byte* src = &buffer[0])
+                c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
+
+            status.Check(true);
+        }
+
         private IntPtr Allocate(NDArray nd)
         {
             IntPtr dotHandle = IntPtr.Zero;
@@ -43,20 +56,21 @@ namespace Tensorflow
             switch (nd.dtype.Name)
             {
                 case "Int16":
-                    Marshal.Copy(nd.Data<short>(), 0, dotHandle, nd.size);
+                    Marshal.Copy(nd.ravel().Data<short>(), 0, dotHandle, nd.size);
                     break;
                 case "Int32":
-                    Marshal.Copy(nd.Data<int>(), 0, dotHandle, nd.size);
+                    Marshal.Copy(nd.ravel().Data<int>(), 0, dotHandle, nd.size);
                     break;
                 case "Single":
-                    Marshal.Copy(nd.Data<float>(), 0, dotHandle, nd.size);
+                    Marshal.Copy(nd.ravel().Data<float>(), 0, dotHandle, nd.size);
                     break;
                 case "Double":
-                    Marshal.Copy(nd.Data<double>(), 0, dotHandle, nd.size);
+                    Marshal.Copy(nd.ravel().Data<double>(), 0, dotHandle, nd.size);
                     break;
-                case "Byte":
-                    var bb = nd.Data<byte>();
-                    var bytes = Marshal.AllocHGlobal(bb.Length) ;
+                //case "Byte":
+                    /*var bb = nd.Data<byte>();
+                    var bytes = Marshal.AllocHGlobal(bb.Length);
+                    Marshal.Copy(bb, 0, bytes, bb.Length);
                     ulong bytes_len = c_api.TF_StringEncodedSize((ulong)bb.Length);
                     var dataTypeByte = ToTFDataType(nd.dtype);
                     // shape
@@ -70,9 +84,10 @@ namespace Tensorflow
                     dotHandle = c_api.TF_TensorData(tfHandle2);
                     Marshal.WriteInt64(dotHandle, 0);
                     c_api.TF_StringEncode(bytes, (ulong)bb.Length, dotHandle + sizeof(Int64), bytes_len, status);
-                    return tfHandle2;
-                case "String":
-                    string ss = nd.Data<string>()[0];
+                    return tfHandle2;*/
+                    break;
+                //case "String":
+                    /*string ss = nd.Data<string>()[0];
                     var str = Marshal.StringToHGlobalAnsi(ss);
                     ulong dst_len = c_api.TF_StringEncodedSize((ulong)ss.Length);
                     var dataType1 = ToTFDataType(nd.dtype);
@@ -87,7 +102,8 @@ namespace Tensorflow
                     dotHandle = c_api.TF_TensorData(tfHandle1);
                     Marshal.WriteInt64(dotHandle, 0);
                     c_api.TF_StringEncode(str, (ulong)ss.Length, dotHandle + sizeof(Int64), dst_len, status);
-                    return tfHandle1;
+                    return tfHandle1;*/
+                    break;
                 default:
                     throw new NotImplementedException("Marshal.Copy failed.");
             }
@@ -101,7 +117,7 @@ namespace Tensorflow
 
             var tfHandle = c_api.TF_NewTensor(dataType,
                 dims,
-                nd.ndim,
+                dims.Length,
                 dotHandle,
                 size,
                 deallocator,

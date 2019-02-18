@@ -16,7 +16,7 @@ namespace Tensorflow
         /// <param name="len">size_t</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_AllocateTensor(TF_DataType dtype, long[] dims, int num_dims, ulong len);
+        public static extern IntPtr TF_AllocateTensor(TF_DataType dtype, IntPtr dims, int num_dims, UIntPtr len);
 
         /// <summary>
         /// returns the sizeof() for the underlying type corresponding to the given TF_DataType enum value.
@@ -105,7 +105,7 @@ namespace Tensorflow
         /// <param name="len">size_t</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern ulong TF_StringEncodedSize(ulong len);
+        public static extern UIntPtr TF_StringEncodedSize(UIntPtr len);
 
         /// <summary>
         /// Encode the string `src` (`src_len` bytes long) into `dst` in the format
@@ -120,7 +120,10 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>On success returns the size in bytes of the encoded string.</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern ulong TF_StringEncode(IntPtr src, ulong src_len, IntPtr dst, ulong dst_len, IntPtr status);
+        public static extern unsafe ulong TF_StringEncode(byte* src, UIntPtr src_len, sbyte* dst, UIntPtr dst_len, IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe ulong TF_StringEncode(IntPtr src, ulong src_len, IntPtr dst, ulong dst_len, IntPtr status);
 
         /// <summary>
         /// Decode a string encoded using TF_StringEncode.

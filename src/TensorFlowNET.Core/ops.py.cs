@@ -45,9 +45,17 @@ namespace Tensorflow
             return get_default_graph().get_collection(key, scope);
         }
 
+        private static Graph default_graph;
         public static Graph get_default_graph()
         {
-            return tf.Graph();
+            if (default_graph == null)
+                default_graph = tf.Graph();
+            return default_graph;
+        }
+        public static Graph set_default_graph(Graph graph)
+        {
+            default_graph = graph;
+            return default_graph;
         }
 
         public static Graph _get_graph_from_inputs(List<Tensor> op_input_list, Graph graph = null)
@@ -120,7 +128,12 @@ namespace Tensorflow
                 if (op_input is Tensor[] op_inputs)
                     c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), op_inputs.Length);
                 else if (op_input is Tensor op_input1)
-                    c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
+                {
+                    if (op_input1.op == null)
+                        c_api.TF_AddInput(op_desc, new TF_Output(op_desc, 0));
+                    else
+                        c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
+                }
                 else
                     throw new NotImplementedException("_create_c_op");
             }

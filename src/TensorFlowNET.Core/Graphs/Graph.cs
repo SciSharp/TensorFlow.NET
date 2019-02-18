@@ -12,7 +12,7 @@ namespace Tensorflow
     /// then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
     /// https://www.tensorflow.org/guide/graphs
     /// </summary>
-    public partial class Graph : IDisposable
+    public partial class Graph : IPython, IDisposable
     {
         private IntPtr _handle;
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
@@ -61,6 +61,8 @@ namespace Tensorflow
         {
             return _as_graph_element_locked(obj, allow_tensor, allow_operation);
         }
+
+        public Graph as_default() => ops.set_default_graph(this);
 
         private Tensor _as_graph_element(object obj)
         {
@@ -357,6 +359,15 @@ namespace Tensorflow
         public void Dispose()
         {
             c_api.TF_DeleteGraph(_handle);
+        }
+
+        public void __enter__()
+        {
+        }
+
+        public void __exit__()
+        {
+            
         }
 
         public static implicit operator IntPtr(Graph graph)

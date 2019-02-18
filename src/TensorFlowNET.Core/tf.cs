@@ -16,7 +16,6 @@ namespace Tensorflow
 
         public static Context context = new Context(new ContextOptions(), new Status());
 
-        public static Graph g = new Graph();
         public static Session defaultSession;
 
         public static RefVariable Variable<T>(T data, string name = "", TF_DataType dtype = TF_DataType.DtInvalid)
@@ -42,15 +41,7 @@ namespace Tensorflow
             return ops.get_default_graph();
         }
 
-        public static Graph Graph()
-        {
-            return g;
-        }
-
-        public static void ResetGraph()
-        {
-            g = new Graph();
-        }
+        public static Graph Graph() => new Graph();
 
         public static Session Session()
         {
@@ -60,9 +51,7 @@ namespace Tensorflow
 
         public static Session Session(Graph graph)
         {
-            g = graph;
-            defaultSession = new Session();
-            return defaultSession;
+            return new Session(graph);
         }
     }
 }

@@ -28,11 +28,13 @@ namespace Tensorflow
             _handle = handle;
         }
 
-        public Session(Graph graph, SessionOptions opts, Status s = null)
+        public Session(Graph g, SessionOptions opts = null, Status s = null)
         {
             if (s == null)
                 s = Status;
-            _handle = c_api.TF_NewSession(graph, opts, s);
+            graph = g;
+            Options = opts == null ? new SessionOptions() : opts;
+            _handle = c_api.TF_NewSession(graph, Options, s);
             Status.Check(true);
         }
 
@@ -50,7 +52,7 @@ namespace Tensorflow
 
             status.Check();
 
-            tf.g = new Graph(graph);
+            new Graph(graph).as_default();
 
             return sess;
         }

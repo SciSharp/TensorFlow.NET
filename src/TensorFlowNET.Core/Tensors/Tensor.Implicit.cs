@@ -27,6 +27,8 @@ namespace Tensorflow
 
         public static implicit operator IntPtr(Tensor tensor)
         {
+            if (tensor._handle == IntPtr.Zero)
+                Console.WriteLine("tensor is not allocated.");
             return tensor._handle;
         }
 

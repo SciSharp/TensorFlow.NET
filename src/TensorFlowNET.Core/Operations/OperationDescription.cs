@@ -7,6 +7,7 @@ namespace Tensorflow
     public class OperationDescription
     {
         private IntPtr _handle;
+        public IntPtr op => _handle;
 
         public OperationDescription(Graph graph, string opType, string opName)
         {

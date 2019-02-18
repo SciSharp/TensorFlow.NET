@@ -61,6 +61,9 @@ namespace Tensorflow
                         var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype();
                         switch (subfeed_val)
                         {
+                            case IntPtr pointer:
+                                feed_dict_tensor[subfeed_t] = pointer;
+                                break;
                             case NDArray nd:
                                 feed_dict_tensor[subfeed_t] = nd;
                                 break;
@@ -72,6 +75,9 @@ namespace Tensorflow
                                 break;
                             case string str:
                                 feed_dict_tensor[subfeed_t] = (NDArray)str;
+                                break;
+                            case byte[] bytes:
+                                feed_dict_tensor[subfeed_t] = (NDArray)bytes;
                                 break;
                             default:
                                 throw new NotImplementedException("_run subfeed");
@@ -120,6 +126,8 @@ namespace Tensorflow
                 {
                     switch (x.Value)
                     {
+                        case IntPtr pointer:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), pointer);
                         case Tensor t1:
                             return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), t1);
                         case NDArray nd:
@@ -131,7 +139,7 @@ namespace Tensorflow
                         case double doubleVal:
                             return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(doubleVal));
                         default:
-                            break;
+                            throw new NotImplementedException("feed_dict data type");
                     }
                 }
                 throw new NotImplementedException("_do_run.feed_dict");
@@ -182,6 +190,7 @@ namespace Tensorflow
             NDArray nd = null;
             Type type = tensor.dtype.as_numpy_datatype();
             var ndims = tensor.shape.Select(x => (int)x).ToArray();
+            var offset = c_api.TF_TensorData(output);
 
             switch (tensor.dtype)
             {
@@ -195,25 +204,25 @@ namespace Tensorflow
                 case TF_DataType.TF_INT16:
                     var shorts = new short[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)
-                        shorts[i] = *(short*)(c_api.TF_TensorData(output) + (int)(tensor.itemsize * i));
+                        shorts[i] = *(short*)(offset + (int)(tensor.itemsize * i));
                     nd = np.array(shorts).reshape(ndims);
                     break;
                 case TF_DataType.TF_INT32:
                     var ints = new int[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)
-                        ints[i] = *(int*)(c_api.TF_TensorData(output) + (int)(tensor.itemsize * i));
+                        ints[i] = *(int*)(offset + (int)(tensor.itemsize * i));
                     nd = np.array(ints).reshape(ndims);
                     break;
                 case TF_DataType.TF_FLOAT:
                     var floats = new float[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)
-                        floats[i] = *(float*)(c_api.TF_TensorData(output) + (int)(tensor.itemsize * i));
+                        floats[i] = *(float*)(offset + (int)(tensor.itemsize * i));
                     nd = np.array(floats).reshape(ndims);
                     break;
                 case TF_DataType.TF_DOUBLE:
                     var doubles = new double[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)
-                        doubles[i] = *(double*)(c_api.TF_TensorData(output) + (int)(tensor.itemsize * i));
+                        doubles[i] = *(double*)(offset + (int)(tensor.itemsize * i));
                     nd = np.array(doubles).reshape(ndims);
                     break;
                 default:

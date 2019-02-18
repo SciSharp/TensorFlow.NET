@@ -80,6 +80,9 @@ namespace Tensorflow
                         case string[] strVals:
                             nparray = strVals;
                             break;
+                        case byte[] byteValues:
+                            nparray = byteValues;
+                            break;
                         default:
                             throw new NotImplementedException("make_tensor_proto Not Implemented");
                     }
@@ -157,6 +160,9 @@ namespace Tensorflow
                     tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFromUtf8(str));
                 else if (values is string[] str_values)
                     tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
+                else if(values is byte[] byte_values)
+                    tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(byte_values);
+                
                 return tensor_proto;
             }
 

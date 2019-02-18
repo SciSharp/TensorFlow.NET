@@ -43,6 +43,9 @@ namespace Tensorflow
                 case "String":
                     dtype = TF_DataType.TF_STRING;
                     break;
+                case "Byte":
+                    dtype = TF_DataType.TF_STRING;
+                    break;
                 default:
                     throw new Exception("Not Implemented");
             }
