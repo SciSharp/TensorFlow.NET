@@ -106,8 +106,7 @@ namespace TensorFlowNET.Examples
             string zipFile = Path.Join(dir, $"{pbFile}.tar.gz");
             Utility.Web.Download(url, zipFile);
 
-            if (!File.Exists(Path.Join(dir, pbFile)))
-                Utility.Compress.ExtractTGZ(zipFile, dir);
+            Utility.Compress.ExtractTGZ(zipFile, dir);
 
             // download sample picture
             string pic = "grace_hopper.jpg";

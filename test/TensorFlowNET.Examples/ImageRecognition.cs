@@ -88,8 +88,7 @@ namespace TensorFlowNET.Examples
             string zipFile = Path.Join(dir, "inception5h.zip");
             Utility.Web.Download(url, zipFile);
 
-            if (!File.Exists(Path.Join(dir, pbFile)))
-                Utility.Compress.UnZip(zipFile, dir);
+            Utility.Compress.UnZip(zipFile, dir);
 
             // download sample picture
             string pic = Path.Join(dir, "img", "grace_hopper.jpg");
