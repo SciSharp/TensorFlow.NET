@@ -34,5 +34,13 @@ namespace Tensorflow
             c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, Status);
             return Status;
         }
+
+        public static Graph ImportFromPB(string file_path)
+        {
+            var graph = tf.Graph().as_default();
+            var graph_def = GraphDef.Parser.ParseFrom(File.ReadAllBytes(file_path));
+            importer.import_graph_def(graph_def);
+            return graph;
+        }
     }
 }

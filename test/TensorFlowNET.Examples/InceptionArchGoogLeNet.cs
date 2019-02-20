@@ -14,9 +14,10 @@ using Tensorflow;
 namespace TensorFlowNET.Examples
 {
     /// <summary>
+    /// Inception Architecture for Computer Vision
     /// Port from tensorflow\examples\label_image\label_image.py
     /// </summary>
-    public class LabelImage : Python, IExample
+    public class InceptionArchGoogLeNet : Python, IExample
     {
         string dir = "label_image_data";
         string pbFile = "inception_v3_2016_08_28_frozen.pb";
@@ -33,7 +34,7 @@ namespace TensorFlowNET.Examples
         {
             PrepareData();
 
-            var labels = LoadLabels(Path.Join(dir, labelFile));
+            var labels = File.ReadAllLines(Path.Join(dir, labelFile));
             
             var nd = ReadTensorFromImageFile(Path.Join(dir, picFile),
                 input_height: input_height,
@@ -41,7 +42,7 @@ namespace TensorFlowNET.Examples
                 input_mean: input_mean,
                 input_std: input_std);
 
-            var graph = LoadGraph(Path.Join(dir, pbFile));
+            var graph = Graph.ImportFromPB(Path.Join(dir, pbFile));
             var input_operation = graph.get_operation_by_name(input_name);
             var output_operation = graph.get_operation_by_name(output_name);
 
@@ -59,19 +60,6 @@ namespace TensorFlowNET.Examples
 
             foreach (float idx in top_k)
                 Console.WriteLine($"{picFile}: {idx} {labels[(int)idx]}, {results[(int)idx]}");
-        }
-
-        private string[] LoadLabels(string file)
-        {
-            return File.ReadAllLines(file);
-        }
-
-        private Graph LoadGraph(string modelFile)
-        {
-            var graph = tf.Graph().as_default();
-            var graph_def = GraphDef.Parser.ParseFrom(File.ReadAllBytes(modelFile));
-            tf.import_graph_def(graph_def);
-            return graph;
         }
 
         private NDArray ReadTensorFromImageFile(string file_name,
@@ -97,7 +85,6 @@ namespace TensorFlowNET.Examples
 
         private void PrepareData()
         {
-            
             Directory.CreateDirectory(dir);
 
             // get model file

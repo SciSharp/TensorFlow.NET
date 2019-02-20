@@ -28,3 +28,4 @@ Welcome to TensorFlow.NET's documentation!
    Gradient
    Train
    EagerMode
+   ImageRecognition

@@ -17,9 +17,8 @@
     <Description>Google's TensorFlow binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.3.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Added a bunch of APIs.
-Fixed String tensor creation bug.
-Upgraded to TensorFlow 1.13 RC-1.
+    <PackageReleaseNotes>Added image prediction example.
+Upgraded to TensorFlow 1.13 RC2.
 </PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
     <FileVersion>0.3.0.0</FileVersion>

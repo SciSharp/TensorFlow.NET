@@ -70,6 +70,9 @@ namespace Tensorflow
                             case float floatVal:
                                 feed_dict_tensor[subfeed_t] = (NDArray)floatVal;
                                 break;
+                            case double doubleVal:
+                                feed_dict_tensor[subfeed_t] = (NDArray)doubleVal;
+                                break;
                             case int intVal:
                                 feed_dict_tensor[subfeed_t] = (NDArray)intVal;
                                 break;
@@ -80,6 +83,7 @@ namespace Tensorflow
                                 feed_dict_tensor[subfeed_t] = (NDArray)bytes;
                                 break;
                             default:
+                                Console.WriteLine($"can't handle data type of subfeed_val");
                                 throw new NotImplementedException("_run subfeed");
                         }
                         feed_map[subfeed_t.name] = (subfeed_t, subfeed_val);
