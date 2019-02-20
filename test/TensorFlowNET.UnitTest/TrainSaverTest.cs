@@ -10,7 +10,6 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class TrainSaverTest : Python
     {
-        [TestMethod]
         public void ExportGraph()
         {
             var v = tf.Variable(0, name: "my_variable");
@@ -18,7 +17,6 @@ namespace TensorFlowNET.UnitTest
             tf.train.write_graph(sess.graph, "/tmp/my-model", "train1.pbtxt");
         }
 
-        [TestMethod]
         public void ImportGraph()
         {
             with<Session>(tf.Session(), sess =>
@@ -27,7 +25,6 @@ namespace TensorFlowNET.UnitTest
             });
         }
 
-        [TestMethod]
         public void ImportSavedModel()
         {
             with<Session>(Session.LoadFromSavedModel("mobilenet"), sess =>
@@ -36,14 +33,12 @@ namespace TensorFlowNET.UnitTest
             });
         }
 
-        [TestMethod]
         public void ImportGraphDefFromPbFile()
         {
             var g = new Graph();
             var status = g.Import("mobilenet/saved_model.pb");
         }
 
-        [TestMethod]
         public void Save1()
         {
             var w1 = tf.Variable(0, name: "save1");
@@ -63,7 +58,6 @@ namespace TensorFlowNET.UnitTest
             });
         }
 
-        [TestMethod]
         public void Save2()
         {
             var v1 = tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);

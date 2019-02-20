@@ -212,6 +212,7 @@ namespace Tensorflow
 
         public void _add_op(Operation op)
         {
+            op._id_value = _next_id();
             _nodes_by_id[op._id] = op;
             _nodes_by_name[op.name] = op;
             _version = Math.Max(_version, op._id);

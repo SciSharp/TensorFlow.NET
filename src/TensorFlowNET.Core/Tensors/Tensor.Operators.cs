@@ -6,83 +6,70 @@ namespace Tensorflow
 {
     public partial class Tensor
     {
-        public static Tensor operator +(Tensor x, Tensor y)
-        {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "add", new Tensor[] { x, y }), scope =>
-            {
-                return gen_math_ops.add(x, y, scope);
-            });
-        }
-
-        public static Tensor operator +(Tensor x, int y)
-        {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "add", new object[] { x, y }), scope =>
-            {
-                var y1 = ops.convert_to_tensor(y, x.dtype.as_base_dtype(), name: "y");
-                return gen_math_ops.add(x, y1, scope);
-            });
-        }
+        public static Tensor operator +(Tensor x, Tensor y) => BinaryOpWrapper("add", x, y);
+        public static Tensor operator +(Tensor x, int y) => BinaryOpWrapper("add", x, y);
 
         public static Tensor operator -(Tensor t1) => gen_math_ops.neg(t1);
-        public static Tensor operator -(Tensor t1, Tensor t2) => gen_math_ops.sub(t1, t2);
-        public static Tensor operator -(Tensor t1, int t2) => gen_math_ops.sub(t1, t2);
-        public static Tensor operator -(Tensor t1, double t2) => gen_math_ops.sub(t1, t2);
 
-        public static Tensor operator *(double x, Tensor y)
-        {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "mul", new { x, y }),
-                scope =>
-                {
-                    var x1 = ops.convert_to_tensor(x, y.dtype.as_base_dtype(), name: "x");
-                    return gen_math_ops.mul(x1, y, name: scope);
-                });
-        }
+        public static Tensor operator -(Tensor x, Tensor y) => BinaryOpWrapper("sub", x, y);
+        public static Tensor operator -(Tensor x, int y) => BinaryOpWrapper("sub", x, y);
+        public static Tensor operator -(Tensor x, double y) => BinaryOpWrapper("sub", x, y);
 
-        public static Tensor operator *(Tensor x, Tensor y)
-        {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "mul", new Tensor[] { x, y }), scope =>
-            {
-                return gen_math_ops.mul(x, y, name: scope);
-            });
-        }
+        public static Tensor operator *(float x, Tensor y) => BinaryOpWrapper("mul", x, y);
+        public static Tensor operator *(double x, Tensor y) => BinaryOpWrapper("mul", x, y);
+        public static Tensor operator *(Tensor x, Tensor y) => BinaryOpWrapper("mul", x, y);
+        public static Tensor operator *(Tensor x, int y) => BinaryOpWrapper("mul", x, y);
 
-        public static Tensor operator *(Tensor x, int y)
-        {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "mul", new object[] { x, y }), scope =>
-            {
-                var y1 = ops.convert_to_tensor(y, x.dtype.as_base_dtype(), name: "y");
-                return gen_math_ops.mul(x, y1, name: scope);
-            });
-        }
+        public static Tensor operator /(Tensor x, Tensor y) => BinaryOpWrapper("truediv", x, y);
+        public static Tensor operator /(Tensor x, float y) => BinaryOpWrapper("truediv", x, y);
+        public static Tensor operator /(Tensor x, double y) => BinaryOpWrapper("truediv", x, y);
 
-        public static Tensor operator /(Tensor x, Tensor y)
-        {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("truediv/", "truediv", new Tensor[] { x, y }), scope =>
-            {
-                return gen_math_ops.real_div(x, y, scope);
-            });
-        }
-
-        public static Tensor operator /(Tensor x, double y)
-        {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("truediv/", "truediv", new object[] { x, y }), scope =>
-            {
-                var y1 = ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y");
-                return gen_math_ops.real_div(x, y1, scope);
-            });
-        }
-
-        public static Tensor operator %(Tensor x, Tensor y)
-        {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", "mod", new object[] { x, y }), scope =>
-            {
-                return gen_math_ops.floor_mod(x, y, scope);
-            });
-        }
+        public static Tensor operator %(Tensor x, Tensor y) => BinaryOpWrapper("mod", x, y);
 
         public static Tensor operator >(Tensor x, int y) => gen_array_ops.greater(x, y);
         public static Tensor operator >(Tensor x, double y) => gen_array_ops.greater(x, y);
         public static Tensor operator <(Tensor x, int y) => gen_array_ops.less(x, y);
         public static Tensor operator <(Tensor x, double y) => gen_array_ops.less(x, y);
+
+        private static Tensor BinaryOpWrapper<Tx, Ty>(string name, Tx x, Ty y)
+        {
+            TF_DataType dtype = TF_DataType.DtInvalid;
+            if (x is Tensor tl)
+                dtype = tl.dtype.as_base_dtype();
+            if( y is Tensor tr)
+                dtype = tr.dtype.as_base_dtype();
+            
+            var namescope = new ops.name_scope("", name, new { x, y });
+            return Python.with<ops.name_scope, Tensor>(namescope, scope =>
+            {
+                Tensor result = null;
+                var x1 = ops.convert_to_tensor(x, dtype: dtype, name: "x");
+                var y1 = ops.convert_to_tensor(y, dtype: dtype, name: "y");
+
+                switch (name)
+                {
+                    case "add":
+                        result = gen_math_ops.add(x1, y1, name: scope);
+                        break;
+                    case "truediv":
+                        result = gen_math_ops.real_div(x1, y1, name: scope);
+                        break;
+                    case "mul":
+                        result = gen_math_ops.mul(x1, y1, name: scope);
+                        break;
+                    case "sub":
+                        result = gen_math_ops.sub(x1, y1, name: scope);
+                        break;
+                    case "mod":
+                        result = gen_math_ops.floor_mod(x1, y1, name: scope);
+                        break;
+                    default:
+                        throw new NotImplementedException($"BinaryOpWrapper: {name} - {typeof(Tx).Name}, {typeof(Ty)}");
+                }
+
+                return result;
+            });
+            
+        }
     }
 }

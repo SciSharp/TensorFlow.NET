@@ -45,7 +45,7 @@ Upgraded to TensorFlow 1.13 RC2.
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.6.1" />
-    <PackageReference Include="NumSharp" Version="0.7.2" />
+    <PackageReference Include="NumSharp" Version="0.7.3" />
   </ItemGroup>
 
   <ItemGroup>

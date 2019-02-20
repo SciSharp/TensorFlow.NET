@@ -96,19 +96,19 @@ namespace Tensorflow
                             if (values.GetType().IsArray)
                                 nparray = np.array((int[])values, np_dt);
                             else
-                                nparray = (int)values;
+                                nparray = Convert.ToInt32(values);
                             break;
                         case "Single":
                             if (values.GetType().IsArray)
                                 nparray = np.array((float[])values, np_dt);
                             else
-                                nparray = (float)values;
+                                nparray = Convert.ToSingle(values);
                             break;
                         case "Double":
-                            nparray = (double)values;
+                            nparray = Convert.ToDouble(values);
                             break;
                         case "String":
-                            nparray = values.ToString();
+                            nparray = Convert.ToString(values);
                             break;
                         default:
                             throw new NotImplementedException("make_tensor_proto Not Implemented");

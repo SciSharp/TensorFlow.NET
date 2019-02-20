@@ -13,7 +13,7 @@ namespace Tensorflow
 
         public Graph graph { get; }
         public int _id => _id_value;
-        private int _id_value;
+        public int _id_value;
 
         public string type => OpType;
         public Operation op => this;
@@ -46,8 +46,6 @@ namespace Tensorflow
             _outputs = new Tensor[NumOutputs];
             for (int i = 0; i < NumOutputs; i++)
                 _outputs[i] = new Tensor(this, i, OutputType(i));
-
-            graph._add_op(this);
         }
 
         public Operation(Graph g, string opType, string oper_name)
@@ -100,8 +98,6 @@ namespace Tensorflow
             }
 
             // This will be set by self.inputs.
-
-            _id_value = graph._next_id();
             if(op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
 

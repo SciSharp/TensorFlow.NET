@@ -41,6 +41,7 @@ namespace Tensorflow
         public Operation _create_op_from_tf_operation(IntPtr c_op, bool compute_device = true)
         {
             var ret = new Operation(c_op);
+            _add_op(ret);
 
             var name_key = ret.name.ToLower();
             if (!_names_in_use.ContainsKey(name_key))

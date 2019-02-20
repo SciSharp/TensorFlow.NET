@@ -59,6 +59,7 @@ namespace Tensorflow
                     {
                         var subfeed_t = _graph.as_graph_element(subfeed, allow_tensor: true, allow_operation: false);
                         var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype();
+
                         switch (subfeed_val)
                         {
                             case IntPtr pointer:
@@ -86,6 +87,7 @@ namespace Tensorflow
                                 Console.WriteLine($"can't handle data type of subfeed_val");
                                 throw new NotImplementedException("_run subfeed");
                         }
+                        
                         feed_map[subfeed_t.name] = (subfeed_t, subfeed_val);
                     }
                 }

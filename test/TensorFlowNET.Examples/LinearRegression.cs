@@ -10,41 +10,47 @@ namespace TensorFlowNET.Examples
     /// A linear regression learning algorithm example using TensorFlow library.
     /// https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/2_BasicModels/linear_regression.py
     /// </summary>
-    public class LinearRegression : IExample
+    public class LinearRegression : Python, IExample
     {
         private NumPyRandom rng = np.random;
 
         public void Run()
         {
+            var graph = tf.Graph().as_default();
+
             // Parameters
-            double learning_rate = 0.01;
+            float learning_rate = 0.01f;
             int training_epochs = 1000;
-            int display_step = 50;
+            int display_step = 1;
 
             // Training Data
-            var train_X = np.array(3.3, 4.4, 5.5, 6.71, 6.93, 4.168, 9.779, 6.182, 7.59, 2.167,
-                         7.042, 10.791, 5.313, 7.997, 5.654, 9.27, 3.1);
-            var train_Y = np.array(1.7, 2.76, 2.09, 3.19, 1.694, 1.573, 3.366, 2.596, 2.53, 1.221,
-                         2.827, 3.465, 1.65, 2.904, 2.42, 2.94, 1.3);
+            var train_X = np.array(3.3f, 4.4f, 5.5f, 6.71f, 6.93f, 4.168f, 9.779f, 6.182f, 7.59f, 2.167f,
+                         7.042f, 10.791f, 5.313f, 7.997f, 5.654f, 9.27f, 3.1f);
+            var train_Y = np.array(1.7f, 2.76f, 2.09f, 3.19f, 1.694f, 1.573f, 3.366f, 2.596f, 2.53f, 1.221f,
+                         2.827f, 3.465f, 1.65f, 2.904f, 2.42f, 2.94f, 1.3f);
             var n_samples = train_X.shape[0];
             
             // tf Graph Input
-            var X = tf.placeholder(tf.float64);
-            var Y = tf.placeholder(tf.float64);
+            var X = tf.placeholder(tf.float32);
+            var Y = tf.placeholder(tf.float32);
 
             // Set model weights 
-            var W = tf.Variable(rng.randn<double>(), name: "weight");
-            var b = tf.Variable(rng.randn<double>(), name: "bias");
+            //var rnd1 = rng.randn<float>();
+            //var rnd2 = rng.randn<float>();
+            var W = tf.Variable(-0.06f, name: "weight");
+            var b = tf.Variable(-0.73f, name: "bias");
 
             var mul = tf.multiply(X, W);
             var pred = tf.add(mul, b);
 
             // Mean squared error
             var sub = pred - Y;
-            var pow = tf.pow(sub, 2);
+            var pow = tf.pow(sub, 2.0f);
 
             var reduce = tf.reduce_sum(pow);
-            var cost = reduce / (2d * n_samples);
+            var cost = reduce / (2.0f * n_samples);
+
+            // import graph
 
             // radient descent
             // Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
@@ -55,7 +61,7 @@ namespace TensorFlowNET.Examples
             var init = tf.global_variables_initializer();
 
             // Start training
-            Python.with<Session>(tf.Session(), sess => 
+            Python.with<Session>(tf.Session(graph), sess => 
             {
                 // Run the initializer
                 sess.run(init);
@@ -63,11 +69,12 @@ namespace TensorFlowNET.Examples
                 // Fit all training data
                 for (int epoch = 0; epoch < training_epochs; epoch++)
                 {
-                    foreach (var (x, y) in Python.zip<double>(train_X, train_Y))
+                    foreach (var (x, y) in zip<float>(train_X, train_Y))
                     {
                         sess.run(optimizer,
                             new FeedItem(X, x),
                             new FeedItem(Y, y));
+                        var w = sess.run(W);
                     }
 
                     // Display logs per epoch step

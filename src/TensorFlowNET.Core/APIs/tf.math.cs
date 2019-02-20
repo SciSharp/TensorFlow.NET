@@ -18,7 +18,7 @@ namespace Tensorflow
         public static Tensor divide<T>(Tensor x, T[] y, string name = "") where T : struct
             => x / ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y");
 
-        public static Tensor pow(Tensor x, double y) => gen_math_ops.pow(x, y);
+        public static Tensor pow<T1, T2>(T1 x, T2 y) => gen_math_ops.pow(x, y);
 
         /// <summary>
         /// Computes the sum of elements across dimensions of a tensor.
