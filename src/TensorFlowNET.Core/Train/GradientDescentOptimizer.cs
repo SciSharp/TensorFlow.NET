@@ -6,7 +6,7 @@ namespace Tensorflow
 {
     public class GradientDescentOptimizer : Optimizer
     {
-        public GradientDescentOptimizer(double learning_rate, bool use_locking = false, string name = "GradientDescent") 
+        public GradientDescentOptimizer(float learning_rate, bool use_locking = false, string name = "GradientDescent") 
             : base(learning_rate, use_locking, name)
         {
             LearningRate = learning_rate;

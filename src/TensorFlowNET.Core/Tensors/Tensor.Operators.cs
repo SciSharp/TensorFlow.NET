@@ -27,8 +27,10 @@ namespace Tensorflow
         public static Tensor operator %(Tensor x, Tensor y) => BinaryOpWrapper("mod", x, y);
 
         public static Tensor operator >(Tensor x, int y) => gen_array_ops.greater(x, y);
+        public static Tensor operator >(Tensor x, float y) => gen_array_ops.greater(x, y);
         public static Tensor operator >(Tensor x, double y) => gen_array_ops.greater(x, y);
         public static Tensor operator <(Tensor x, int y) => gen_array_ops.less(x, y);
+        public static Tensor operator <(Tensor x, float y) => gen_array_ops.less(x, y);
         public static Tensor operator <(Tensor x, double y) => gen_array_ops.less(x, y);
 
         private static Tensor BinaryOpWrapper<Tx, Ty>(string name, Tx x, Ty y)

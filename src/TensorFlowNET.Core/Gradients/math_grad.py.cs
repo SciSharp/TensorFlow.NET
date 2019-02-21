@@ -72,10 +72,7 @@ namespace Tensorflow
 
         public static bool _ShapesFullySpecifiedAndEqual(Tensor x, Tensor y, Tensor grad)
         {
-            if (x.NDims == 0 && y.NDims == 0 && grad.NDims == 0) return true;
-
-            return string.Join(",", x.shape).Equals(string.Join(",", y.shape)) &&
-                   string.Join(",", x.shape).Equals(string.Join(",", grad.shape));
+            return x.NDims == y.NDims && y.NDims == grad.NDims && x.NDims > -1;
         }
 
         public static (Tensor, Tensor) _SumGrad(Operation op, Tensor grad)
@@ -110,14 +107,15 @@ namespace Tensorflow
             x = math_ops.conj(x);
             y = math_ops.conj(y);
 
-            var realdiv1 = gen_math_ops.real_div(grad, y);
-            var reduce_sum1 = math_ops.reduce_sum(realdiv1, rx);
-            var realdiv2 = gen_math_ops.real_div(-x, y);
-            var realdiv3 = gen_math_ops.real_div(realdiv2, y);
-            var mul = grad * realdiv3;
-            var reduce_sum2 = math_ops.reduce_sum(mul, ry);
+            var realdiv1 = gen_math_ops.real_div(-x, y);
+            var realdiv2 = gen_math_ops.real_div(realdiv1, y);
+            var reduce_sum1 = math_ops.reduce_sum(grad * realdiv2, ry);
+            var reshape1 = gen_array_ops.reshape(reduce_sum1, sy);
+            var realdiv3 = gen_math_ops.real_div(grad, y);
+            var reduce_sum2 = math_ops.reduce_sum(realdiv3, rx);
+            var reshape2 = gen_array_ops.reshape(reduce_sum2, sx);
 
-            return (gen_array_ops.reshape(reduce_sum1, sx), gen_array_ops.reshape(reduce_sum2, sy));
+            return (reshape2, reshape1);
         }
 
         public static (Tensor, Tensor) _PowGrad(Operation op, Tensor grad)
@@ -135,17 +133,16 @@ namespace Tensorflow
             var gx = gen_array_ops.reshape(math_ops.reduce_sum(grad * y * gen_math_ops.pow(x, y - 1.0), rx), sx);
             Tensor log_x = null;
             // Avoid false singularity at x = 0
+            Tensor mask = null;
             if (x.dtype.is_complex())
-            {
                 throw new NotImplementedException("x.dtype.is_complex()");
-            }
             else
-            {
-                var x1 = gen_array_ops.log(x);
-                var y1 = array_ops.zeros_like(x);
-                log_x = array_ops.where(x > 0.0, x1, y1);
-            }
-
+                mask = x > 0.0f;
+            var ones = array_ops.ones_like(x);
+            var safe_x = array_ops.where(mask, x, ones);
+            var x1 = gen_array_ops.log(safe_x);
+            var y1 = array_ops.zeros_like(x);
+            log_x = array_ops.where(mask, x1, y1);
             var gy = gen_array_ops.reshape(math_ops.reduce_sum(grad * z * log_x, ry), sy);
 
             return (gx, gy);

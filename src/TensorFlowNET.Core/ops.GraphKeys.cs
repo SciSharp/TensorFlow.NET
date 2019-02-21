@@ -33,6 +33,8 @@ namespace Tensorflow
             /// </summary>
             public static string GLOBAL_VARIABLES = "variables";
 
+            public static string TRAIN_OP = "train_op";
+
             public static string[] _VARIABLE_COLLECTIONS = new string[] { "variables", "trainable_variables" }; 
             /// <summary>
             /// Key to collect BaseSaverBuilder.SaveableObject instances for checkpointing.

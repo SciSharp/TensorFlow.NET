@@ -357,6 +357,13 @@ namespace Tensorflow
             return _collections.ContainsKey(name) ? _collections[name] : null;
         }
 
+        public object get_collection_ref(string name)
+        {
+            if (!_collections.ContainsKey(name))
+                _collections[name] = new List<object>();
+            return _collections[name];
+        }
+
         public void Dispose()
         {
             c_api.TF_DeleteGraph(_handle);

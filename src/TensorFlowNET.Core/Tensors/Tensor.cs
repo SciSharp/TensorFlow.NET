@@ -68,7 +68,12 @@ namespace Tensorflow
                     c_api.TF_GraphSetTensorShape(this.Graph, this._as_tf_output(), value, value.Length, status);
             }
         }
-        
+
+        public int[] _shape_tuple()
+        {
+            return null;
+        }
+
         /// <summary>
         /// number of dimensions
         /// 0	Scalar (magnitude only)

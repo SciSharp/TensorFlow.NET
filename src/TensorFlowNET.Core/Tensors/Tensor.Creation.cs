@@ -63,31 +63,6 @@ namespace Tensorflow
                     break;
                 case "Single":
                     Marshal.Copy(nd1.Data<float>(), 0, dotHandle, nd.size);
-                    /*if (nd.size > 1)
-                    {
-                        var bb = nd.Data<byte>();
-                        var bytes = Marshal.AllocHGlobal(bb.Length);
-                        Marshal.Copy(bb, 0, bytes, bb.Length);
-                        ulong bytes_len = c_api.TF_StringEncodedSize((ulong)bb.Length);
-                        var dataTypeByte = ToTFDataType(nd.dtype);
-                        // shape
-                        var dims2 = nd.shape.Select(x => (long)x).ToArray();
-
-                        var tfHandle2 = c_api.TF_AllocateTensor(dataTypeByte,
-                            dims2,
-                            nd.ndim,
-                            bytes_len + sizeof(Int64));
-
-                        dotHandle = c_api.TF_TensorData(tfHandle2);
-                        Marshal.WriteInt64(dotHandle, 0);
-                        c_api.TF_StringEncode(bytes, (ulong)bb.Length, dotHandle + sizeof(Int64), bytes_len, status);
-                        return tfHandle2;
-                    }
-                    else
-                    {
-                        Marshal.Copy(nd1.Data<float>(), 0, dotHandle, nd.size);
-                    }*/
-                    
                     break;
                 case "Double":
                     Marshal.Copy(nd1.Data<double>(), 0, dotHandle, nd.size);

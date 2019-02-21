@@ -45,6 +45,11 @@ namespace Tensorflow
             return get_default_graph().get_collection(key, scope);
         }
 
+        public static object get_collection_ref(string key)
+        {
+            return get_default_graph().get_collection_ref(key);
+        }
+
         private static Graph default_graph;
         public static Graph get_default_graph()
         {

@@ -20,14 +20,14 @@ namespace Tensorflow
         public static int GATE_GRAPH = 2;
 
         public string Name { get; set; }
-        public double LearningRate { get; set; }
+        public float LearningRate { get; set; }
         public Tensor LearningRateTensor { get; set; }
         public bool _use_locking;
         public Dictionary<string, object> _slots;
         public Dictionary<string, object> _non_slot_dict;
         public Dictionary<string, object> _deferred_slot_restorations;
 
-        public Optimizer(double learning_rate, bool use_locking, string name = "")
+        public Optimizer(float learning_rate, bool use_locking, string name = "")
         {
             if (String.IsNullOrEmpty(name))
                 throw new NotImplementedException("Must specify the optimizer name");
@@ -112,6 +112,13 @@ namespace Tensorflow
                 else
                 {
 
+                }
+
+                if (!tf.context.executing_eagerly())
+                {
+                    var train_op = ops.get_collection_ref(ops.GraphKeys.TRAIN_OP) as List<object>;
+                    if (!train_op.Contains(apply_updates))
+                        train_op.Add(apply_updates);
                 }
 
                 return apply_updates;

@@ -55,6 +55,43 @@ namespace Tensorflow
             return math_ops.rank_internal(input, name, optimize: true);
         }
 
+        /// <summary>
+        /// Creates a tensor with all elements set to 1.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <param name="optimize"></param>
+        /// <returns></returns>
+        public static Tensor ones_like<T>(T tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool optimize = true)
+            => ones_like_impl(tensor, dtype, name, optimize);
+
+        private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
+        {
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "ones_like", new { tensor }), scope =>
+            {
+                name = scope;
+                var tensor1 = ops.convert_to_tensor(tensor, name: "tensor");
+                var ones_shape = shape_internal(tensor1, optimize: optimize);
+                if (dtype == TF_DataType.DtInvalid)
+                    dtype = tensor1.dtype;
+                var ret = ones(ones_shape, dtype: dtype, name: name);
+                ret.shape = tensor1.shape;
+                return ret;
+            });
+        }
+
+        public static Tensor ones(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = "")
+        {
+            dtype = dtype.as_base_dtype();
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "ones", new { shape }), scope =>
+            {
+                name = scope;
+                var output = gen_array_ops.fill(shape, constant_op.constant(1.0f, dtype: dtype), name: name);
+                return output;
+            });
+        }
+
         public static Tensor where(Tensor condition, Tensor x = null, Tensor y = null, string name = "")
         {
             if( x == null && y == null)

@@ -111,7 +111,7 @@ namespace Tensorflow
             if (delta == null)
                 delta = 1;
 
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "Range", new object[] { start, limit, delta }), scope =>
+            return with<ops.name_scope, Tensor>(new ops.name_scope(name, "Range", new object[] { start, limit, delta }), scope =>
             {
                 name = scope;
                 var start1 = ops.convert_to_tensor(start, name: "start");
@@ -124,15 +124,15 @@ namespace Tensorflow
 
         public static Tensor floordiv(Tensor x, Tensor y, string name = "")
         {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "floordiv", new object[] { }), scope =>
+            return with<ops.name_scope, Tensor>(new ops.name_scope("", "floordiv", new { x, y }), scope =>
             {
-                return gen_math_ops.floor_div(x, y, name);
+                return gen_math_ops.floor_div(x, y, scope);
             });
         }
 
         public static Tensor rank_internal(Tensor input, string name = "", bool optimize = true)
         {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
+            return with<ops.name_scope, Tensor>(new ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
             {
                 name = scope;
                 var input_tensor = ops.convert_to_tensor(input);
