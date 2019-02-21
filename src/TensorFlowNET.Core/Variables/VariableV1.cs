@@ -21,7 +21,7 @@ namespace Tensorflow
             List<string> collections = null,
             bool validate_shape = true,
             string caching_device = "",
-            string name = "",
+            string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid)
         {
 

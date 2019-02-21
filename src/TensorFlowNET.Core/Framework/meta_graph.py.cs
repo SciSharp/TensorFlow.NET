@@ -123,7 +123,7 @@ namespace Tensorflow
         /// <param name="strip_default_attrs"></param>
         /// <param name="meta_info_def"></param>
         /// <returns></returns>
-        public static MetaGraphDef export_scoped_meta_graph(string filename = "",
+        public static (MetaGraphDef, Dictionary<string, RefVariable>) export_scoped_meta_graph(string filename = "",
             GraphDef graph_def = null,
             bool as_text = false,
             string unbound_inputs_col_name = "unbound_inputs",
@@ -138,7 +138,7 @@ namespace Tensorflow
             var var_list = new Dictionary<string, RefVariable>();
             var variables = graph.get_collection(ops.GraphKeys.GLOBAL_VARIABLES);
 
-            foreach(var v in variables as RefVariable[])
+            foreach(var v in variables as List<RefVariable>)
             {
                 var_list[v.name] = v;
             }
@@ -151,7 +151,10 @@ namespace Tensorflow
                 saver_def: saver_def,
                 strip_default_attrs: strip_default_attrs);
 
-            throw new NotImplementedException("meta_graph.export_scoped_meta_graph");
+            if (!string.IsNullOrEmpty(filename))
+                graph_io.write_graph(scoped_meta_graph_def, "", filename, as_text: as_text);
+
+            return (scoped_meta_graph_def, var_list);
         }
 
         private static bool _should_include_node()
@@ -159,7 +162,7 @@ namespace Tensorflow
             return true;
         }
 
-        private static byte[] create_meta_graph_def(MetaInfoDef meta_info_def = null,
+        private static MetaGraphDef create_meta_graph_def(MetaInfoDef meta_info_def = null,
             GraphDef graph_def = null,
             string export_scope = "",
             string exclude_nodes = "",
@@ -168,7 +171,7 @@ namespace Tensorflow
             bool strip_default_attrs = false)
         {
             // Sets graph to default graph if it's not passed in.
-            var graph = ops.get_default_graph();
+            var graph = ops.get_default_graph().as_default();
             // Creates a MetaGraphDef proto.
             var meta_graph_def = new MetaGraphDef();
             if (meta_info_def == null)
@@ -186,10 +189,55 @@ namespace Tensorflow
                 meta_graph_def.GraphDef = graph_def;
 
             // Fills in meta_info_def.stripped_op_list using the ops from graph_def.
-            if (meta_graph_def.MetaInfoDef.StrippedOpList.Op.Count == 0)
+            if (meta_graph_def.MetaInfoDef.StrippedOpList == null || 
+                meta_graph_def.MetaInfoDef.StrippedOpList.Op.Count == 0)
                 meta_graph_def.MetaInfoDef.StrippedOpList = stripped_op_list_for_graph(meta_graph_def.GraphDef);
 
-            throw new NotImplementedException("create_meta_graph_def");
+            var clist = graph.get_all_collection_keys();
+            foreach(var ctype in clist)
+            {
+                if (clear_extraneous_savers)
+                {
+                    throw new NotImplementedException("create_meta_graph_def clear_extraneous_savers");
+                }
+                else
+                {
+                    add_collection_def(meta_graph_def, ctype, graph);
+                }
+            }
+
+            return meta_graph_def;
+        }
+
+        private static void add_collection_def(MetaGraphDef meta_graph_def, 
+            string key, 
+            Graph graph = null,
+            string export_scope = "")
+        {
+            if (!meta_graph_def.CollectionDef.ContainsKey(key))
+                meta_graph_def.CollectionDef[key] = new CollectionDef();
+            var col_def = meta_graph_def.CollectionDef[key];
+
+            switch (graph.get_collection(key))
+            {
+                case List<RefVariable> collection_list:
+                    col_def.BytesList = new Types.BytesList();
+                    foreach (var x in collection_list)
+                    {
+                        var proto = x.to_proto(export_scope);
+                        col_def.BytesList.Value.Add(proto.ToByteString());
+                    }
+                    
+                    break;
+                case List<object> collection_list:
+                    col_def.NodeList = new Types.NodeList();
+                    foreach (var x in collection_list)
+                        if (x is ITensorOrOperation x2)
+                            col_def.NodeList.Value.Add(ops.strip_name_scope(x2.name, export_scope));
+                    break;
+                case List<Operation> collection_list:
+                    break;
+            }
         }
 
         private static OpList stripped_op_list_for_graph(GraphDef graph_def)

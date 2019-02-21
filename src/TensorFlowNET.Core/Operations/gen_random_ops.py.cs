@@ -17,7 +17,7 @@ namespace Tensorflow
         /// <param name="seed2"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor random_standard_normal(Tensor shape, TF_DataType dtype = TF_DataType.DtInvalid, int? seed = null, int? seed2 = null, string name = "")
+        public static Tensor random_standard_normal(Tensor shape, TF_DataType dtype = TF_DataType.DtInvalid, int? seed = null, int? seed2 = null, string name = null)
         {
             if (!seed.HasValue)
                 seed = 0;

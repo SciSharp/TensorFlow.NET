@@ -6,9 +6,9 @@ namespace Tensorflow
 {
     public class math_ops : Python
     {
-        public static Tensor add(Tensor x, Tensor y, string name = "") => gen_math_ops.add(x, y, name);
+        public static Tensor add(Tensor x, Tensor y, string name = null) => gen_math_ops.add(x, y, name);
 
-        public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
+        public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             var base_type = dtype.as_base_dtype();
             if(base_type == x.dtype)
@@ -64,7 +64,7 @@ namespace Tensorflow
         /// <param name="dtype"></param>
         /// <param name="name"></param>
         /// <returns>A `Tensor` or `SparseTensor` or `IndexedSlices` with same shape as `x` and same type as `dtype`.</returns>
-        public static Tensor __case__(Tensor x, TF_DataType dtype, string name = "")
+        public static Tensor __case__(Tensor x, TF_DataType dtype, string name = null)
         {
             var base_type = dtype.as_base_dtype();
             if (x is Tensor && base_type == x.dtype)
@@ -122,15 +122,15 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor floordiv(Tensor x, Tensor y, string name = "")
+        public static Tensor floordiv(Tensor x, Tensor y, string name = null)
         {
-            return with<ops.name_scope, Tensor>(new ops.name_scope("", "floordiv", new { x, y }), scope =>
+            return with<ops.name_scope, Tensor>(new ops.name_scope(name, "floordiv", new { x, y }), scope =>
             {
                 return gen_math_ops.floor_div(x, y, scope);
             });
         }
 
-        public static Tensor rank_internal(Tensor input, string name = "", bool optimize = true)
+        public static Tensor rank_internal(Tensor input, string name = null, bool optimize = true)
         {
             return with<ops.name_scope, Tensor>(new ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
             {
@@ -148,7 +148,7 @@ namespace Tensorflow
             bool transpose_a = false, bool transpose_b = false,
             bool adjoint_a = false, bool adjoint_b = false,
             bool a_is_sparse = false, bool b_is_sparse = false,
-            string name = "")
+            string name = null)
         {
             Tensor result = null;
 
@@ -176,7 +176,7 @@ namespace Tensorflow
         /// <param name="x">`Tensor` to conjugate.  Must have numeric or variant type.</param>
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor` that is the conjugate of `x` (with the same type).</returns>
-        public static Tensor conj(Tensor x, string name = "")
+        public static Tensor conj(Tensor x, string name = null)
         {
             var dt = x.dtype;
             if (dt.is_floating() || dt.is_integer())

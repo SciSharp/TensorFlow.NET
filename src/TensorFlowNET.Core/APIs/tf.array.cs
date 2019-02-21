@@ -17,7 +17,7 @@ namespace Tensorflow
         /// A `Tensor` with the same data as `input`, but its shape has an additional
         /// dimension of size 1 added.
         /// </returns>
-        public static Tensor expand_dims(Tensor input, int axis = -1, string name = "", int dim = -1)
+        public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1)
             => array_ops.expand_dims(input, axis, name, dim);
     }
 }

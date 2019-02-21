@@ -17,7 +17,7 @@ namespace Tensorflow
         private static Tensor op_helper<T>(string default_name, RefVariable x, T y)
         {
             var tensor1 = x.value();
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope("", default_name, new object[] { tensor1, y }), scope => {
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(null, default_name, new object[] { tensor1, y }), scope => {
                 var tensor2 = ops.convert_to_tensor(y, tensor1.dtype.as_base_dtype(), "y");
                 return gen_math_ops.add(tensor1, tensor2, scope);
             });

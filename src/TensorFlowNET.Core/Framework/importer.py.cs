@@ -12,7 +12,7 @@ namespace Tensorflow
         public static ITensorOrOperation[] import_graph_def(GraphDef graph_def,
             Dictionary<string, Tensor> input_map = null,
             string[] return_elements = null,
-            string name = "",
+            string name = null,
             OpList producer_op_list = null)
         {
             var op_dict = op_def_registry.get_registered_ops();

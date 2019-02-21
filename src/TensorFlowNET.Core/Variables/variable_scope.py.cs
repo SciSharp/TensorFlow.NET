@@ -11,7 +11,7 @@ namespace Tensorflow
         public static bool _DEFAULT_USE_RESOURCE = false;
 
         public static RefVariable default_variable_creator(object initial_value,
-            string name = "",
+            string name = null,
             bool? trainable = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool validate_shape = false,

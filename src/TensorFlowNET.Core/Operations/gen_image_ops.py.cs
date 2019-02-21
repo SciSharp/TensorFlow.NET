@@ -15,7 +15,7 @@ namespace Tensorflow
             bool try_recover_truncated = false,
             float acceptable_fraction = 1,
             string dct_method = "",
-            string name = "")
+            string name = null)
         {
             // Add nodes to the TensorFlow graph.
             if (tf.context.executing_eagerly())
@@ -39,7 +39,7 @@ namespace Tensorflow
             }
         }
 
-        public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = "")
+        public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
         {
             if (tf.context.executing_eagerly())
             {

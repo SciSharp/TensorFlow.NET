@@ -8,7 +8,7 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
-        public static Operation no_op(string name = "")
+        public static Operation no_op(string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("NoOp", name, null);
 

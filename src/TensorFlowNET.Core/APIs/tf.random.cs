@@ -21,6 +21,6 @@ namespace Tensorflow
             float stddev = 1.0f,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             int? seed = null,
-            string name = "") => random_ops.random_normal(shape, mean, stddev, dtype, seed, name);
+            string name = null) => random_ops.random_normal(shape, mean, stddev, dtype, seed, name);
     }
 }

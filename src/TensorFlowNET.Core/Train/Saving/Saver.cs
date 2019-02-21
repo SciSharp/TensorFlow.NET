@@ -282,7 +282,7 @@ namespace Tensorflow
                 clear_devices: clear_devices,
                 clear_extraneous_savers: clear_extraneous_savers,
                 strip_default_attrs: strip_default_attrs);
-            return meta_graph_def;
+            return meta_graph_def.Item1;
         }
 
         /// <summary>

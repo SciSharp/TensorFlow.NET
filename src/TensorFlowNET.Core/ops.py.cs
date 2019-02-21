@@ -81,22 +81,22 @@ namespace Tensorflow
         /// <param name="dtype"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", TF_DataType preferred_dtype = TF_DataType.DtInvalid)
+        public static Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid)
         {
             return convert_to_tensor_v2(value, dtype, preferred_dtype, name);
         }
 
-        public static Tensor convert_to_tensor_v2(object value, TF_DataType dtype = TF_DataType.DtInvalid, TF_DataType dtype_hint = TF_DataType.DtInvalid, string name = "")
+        public static Tensor convert_to_tensor_v2(object value, TF_DataType dtype = TF_DataType.DtInvalid, TF_DataType dtype_hint = TF_DataType.DtInvalid, string name = null)
         {
             return internal_convert_to_tensor(value, dtype: dtype, name: name, preferred_dtype: dtype_hint, as_ref: false);
         }
 
-        public static Tensor convert_to_tensor_or_composite(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
+        public static Tensor convert_to_tensor_or_composite(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             return internal_convert_to_tensor_or_composite(value: value, dtype: dtype, name: name, as_ref: false);
         }
 
-        public static Tensor internal_convert_to_tensor_or_composite(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
+        public static Tensor internal_convert_to_tensor_or_composite(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
         {
             return internal_convert_to_tensor(value, dtype: dtype, name: name, as_ref: as_ref);
         }
@@ -382,22 +382,22 @@ namespace Tensorflow
             };
         }
 
-        public static Tensor[] convert_n_to_tensor_or_indexed_slices(Tensor[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
+        public static Tensor[] convert_n_to_tensor_or_indexed_slices(Tensor[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             return internal_convert_n_to_tensor_or_indexed_slices(values, dtype: dtype, name: name);
         }
 
-        public static Tensor convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "")
+        public static Tensor convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             return internal_convert_to_tensor_or_indexed_slices(value: value, dtype: dtype, name: name, as_ref: false);
         }
 
-        public static Tensor internal_convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
+        public static Tensor internal_convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
         {
             return value;
         }
 
-        public static Tensor[] internal_convert_n_to_tensor_or_indexed_slices(Tensor[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
+        public static Tensor[] internal_convert_n_to_tensor_or_indexed_slices(Tensor[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
         {
             var ret = new List<Tensor>();
 
@@ -418,7 +418,7 @@ namespace Tensorflow
         }
 
         public static Tensor[] internal_convert_n_to_tensor<T>(T[] values, TF_DataType dtype = TF_DataType.DtInvalid, 
-            string name = "", TF_DataType preferred_dtype = TF_DataType.DtInvalid, 
+            string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid, 
             bool as_ref = false)
         {
             var ret = new List<Tensor>();
@@ -433,7 +433,7 @@ namespace Tensorflow
         }
 
         public static Tensor internal_convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid,
-            string name = "", TF_DataType preferred_dtype = TF_DataType.DtInvalid,
+            string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid,
             bool as_ref = false)
         {
             if (dtype == TF_DataType.DtInvalid)

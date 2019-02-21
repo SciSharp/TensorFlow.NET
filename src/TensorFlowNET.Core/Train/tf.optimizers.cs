@@ -20,6 +20,16 @@ namespace Tensorflow
                 string import_scope = "") => saver._import_meta_graph_with_return_elements(meta_graph_or_file,
                     clear_devices,
                     import_scope).Item1;
+
+            public static (MetaGraphDef, Dictionary<string, RefVariable>) export_meta_graph(string filename = "",
+                bool as_text = false,
+                bool clear_devices = false,
+                bool clear_extraneous_savers = false,
+                bool strip_default_attrs = false) => meta_graph.export_scoped_meta_graph(filename: filename,
+                    as_text: as_text,
+                    clear_devices: clear_devices,
+                    clear_extraneous_savers: clear_extraneous_savers,
+                    strip_default_attrs: strip_default_attrs);
         }
     }
 }

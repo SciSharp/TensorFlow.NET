@@ -21,7 +21,7 @@ namespace Tensorflow
         /// <param name="container"></param>
         /// <param name="shared_name"></param>
         /// <returns></returns>
-        public static Tensor variable_v2(long[] shape, TF_DataType dtype, string name = "", string container = "", string shared_name = "")
+        public static Tensor variable_v2(long[] shape, TF_DataType dtype, string name = null, string container = "", string shared_name = "")
         {
             var _op = _op_def_lib._apply_op_helper("VariableV2", name: name, args: new { dtype, shape, container, shared_name });
 
@@ -50,7 +50,7 @@ namespace Tensorflow
         public static Tensor assign(Tensor tensor, object value, 
             bool validate_shape = true, 
             bool use_locking = true,
-            string name = "")
+            string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { _ref_ = tensor, value, validate_shape, use_locking });
 

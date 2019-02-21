@@ -1,4 +1,5 @@
-﻿using NumSharp.Core;
+﻿using Newtonsoft.Json;
+using NumSharp.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,13 @@ namespace Tensorflow
         private readonly IntPtr _handle;
 
         private int _id;
+        [JsonIgnore]
         public int Id => _id;
-
-        public Graph Graph => op?.graph;
+        [JsonIgnore]
+        public Graph graph => op?.graph;
+        [JsonIgnore]
         public Operation op { get; }
+        [JsonIgnore]
         public Tensor[] outputs => op.outputs;
 
         /// <summary>
@@ -63,9 +67,9 @@ namespace Tensorflow
             set
             {
                 if (value == null)
-                    c_api.TF_GraphSetTensorShape(this.Graph, this._as_tf_output(), null, -1, status);
+                    c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
                 else
-                    c_api.TF_GraphSetTensorShape(this.Graph, this._as_tf_output(), value, value.Length, status);
+                    c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value, value.Length, status);
             }
         }
 
@@ -100,6 +104,7 @@ namespace Tensorflow
 
         public int NDims => rank;
 
+        [JsonIgnore]
         public Operation[] Consumers => consumers();
 
         public string Device => op.Device;
@@ -108,7 +113,7 @@ namespace Tensorflow
         {
             var output = _as_tf_output();
             var consumer_names = c_api.TF_OperationOutputConsumers_wrapper(output);
-            return consumer_names.Select(x => Graph.OperationByName(x)).ToArray();
+            return consumer_names.Select(x => graph.OperationByName(x)).ToArray();
         }
 
         public TF_Output _as_tf_output()
@@ -154,7 +159,7 @@ namespace Tensorflow
         /// <returns></returns>
         public NDArray eval(FeedItem[] feed_dict = null, Session session = null)
         {
-            return ops._eval_using_default_session(this, feed_dict, Graph, session);
+            return ops._eval_using_default_session(this, feed_dict, graph, session);
         }
 
         public TF_DataType ToTFDataType(Type type)

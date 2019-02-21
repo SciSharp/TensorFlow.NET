@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Collections;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,16 @@ namespace Tensorflow
     {
         private readonly IntPtr _handle; // _c_op in python
 
-        public Graph graph { get; }
+        private Graph _graph;
+        [JsonIgnore]
+        public Graph graph => _graph;
+        [JsonIgnore]
         public int _id => _id_value;
+        [JsonIgnore]
         public int _id_value;
 
         public string type => OpType;
+        [JsonIgnore]
         public Operation op => this;
         public TF_DataType dtype => TF_DataType.DtInvalid;
         private Status status = new Status();
@@ -42,7 +48,7 @@ namespace Tensorflow
                 return;
 
             _handle = handle;
-            this.graph = ops.get_default_graph();
+            _graph = ops.get_default_graph();
             _outputs = new Tensor[NumOutputs];
             for (int i = 0; i < NumOutputs; i++)
                 _outputs[i] = new Tensor(this, i, OutputType(i));
@@ -50,7 +56,7 @@ namespace Tensorflow
 
         public Operation(Graph g, string opType, string oper_name)
         {
-            graph = g;
+            _graph = g;
 
             var desc = c_api.TF_NewOperation(g, opType, oper_name);
             c_api.TF_SetAttrType(desc, "dtype", TF_DataType.TF_INT32);
@@ -78,7 +84,7 @@ namespace Tensorflow
         /// <param name="op_def"></param>
         public Operation(NodeDef node_def, Graph g, Tensor[] inputs = null, TF_DataType[] output_types = null, ITensorOrOperation[] control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
-            graph = g;
+            _graph = g;
 
             // Build the list of control inputs.
             var control_input_ops = new List<Operation>();

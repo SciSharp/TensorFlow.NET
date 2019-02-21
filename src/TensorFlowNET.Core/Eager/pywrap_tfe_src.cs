@@ -10,7 +10,7 @@ namespace Tensorflow.Eager
     /// </summary>
     public class pywrap_tfe_src
     {
-        public static void RecordGradient(string op_name, Tensor[] inputs, Dictionary<string, object> attrs, Tensor[] results, string name = "")
+        public static void RecordGradient(string op_name, Tensor[] inputs, Dictionary<string, object> attrs, Tensor[] results, string name = null)
         {
             var input_ids = inputs.Select(x => x.Id).ToArray();
             var input_dtypes = inputs.Select(x => x.dtype).ToArray();

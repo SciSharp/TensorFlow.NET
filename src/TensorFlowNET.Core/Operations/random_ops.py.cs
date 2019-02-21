@@ -11,7 +11,7 @@ namespace Tensorflow
             float stddev = 1.0f, 
             TF_DataType dtype = TF_DataType.TF_FLOAT, 
             int? seed = null, 
-            string name = "")
+            string name = null)
         {
             return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "random_normal", new object[] { shape, mean, stddev }), scope =>
             {

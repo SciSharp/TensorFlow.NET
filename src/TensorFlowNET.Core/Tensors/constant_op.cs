@@ -65,7 +65,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="as_ref"></param>
         /// <returns></returns>
-        public static Tensor _tensor_shape_tensor_conversion_function(TensorShape s, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool as_ref = false)
+        public static Tensor _tensor_shape_tensor_conversion_function(TensorShape s, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
         {
             var s_list = s.Dimensions;
             var int64_value = 0;

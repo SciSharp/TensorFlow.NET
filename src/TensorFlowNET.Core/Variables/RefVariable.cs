@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public partial class RefVariable : VariableV1
+    public partial class RefVariable : VariableV1, IProtoBuf
     {
         public bool _in_graph_mode = true;
         public Tensor _initial_value;
@@ -13,11 +13,12 @@ namespace Tensorflow
         public bool _trainable;
         public Tensor _variable;
         public Tensor _snapshot;
+        public bool _save_slice_info;
 
         private Operation _initializer_op;
         public Operation initializer => _initializer_op;
         public Operation op => _variable.op;
-        public Graph graph => _variable.Graph;
+        public Graph graph => _variable.graph;
         public TF_DataType dtype => _variable.dtype;
         public TensorShape shape => tensor_util.to_shape(_variable.shape);
 
@@ -28,7 +29,7 @@ namespace Tensorflow
             List<string> collections = null,
             bool validate_shape = true,
             string caching_device = "",
-            string name = "",
+            string name = null,
             VariableDef variable_def = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             string import_scope = "") : base(initial_value,
@@ -92,7 +93,7 @@ namespace Tensorflow
             List<string> collections = null,
             bool validate_shape = true,
             string caching_device = "",
-            string name = "",
+            string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid)
         {
             if (initial_value is null)
@@ -235,7 +236,7 @@ namespace Tensorflow
         /// A `Tensor` that will hold the new value of this variable after
         /// the assignment has completed.
         /// </returns>
-        public ITensorOrOperation assign(object value, bool use_locking = false, string name = "", bool read_value = true)
+        public ITensorOrOperation assign(object value, bool use_locking = false, string name = null, bool read_value = true)
         {
             var assign = gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
             if (read_value)
@@ -246,6 +247,31 @@ namespace Tensorflow
         public override string ToString()
         {
             return $"tf.Variable '{name}' shape={shape} dtype={dtype}";
+        }
+
+        public VariableDef to_proto(string export_scope)
+        {
+            if(string.IsNullOrEmpty(export_scope) || _variable.name.StartsWith(export_scope))
+            {
+                var var_def = new VariableDef();
+                var_def.VariableName = ops.strip_name_scope(_variable.name, export_scope);
+                if (_initial_value != null)
+                    var_def.InitialValueName = ops.strip_name_scope(_initial_value.name, export_scope);
+                var_def.Trainable = _trainable;
+                var_def.InitializerName = ops.strip_name_scope(initializer.name, export_scope);
+                var_def.SnapshotName = ops.strip_name_scope(_snapshot.name, export_scope);
+                if (_save_slice_info)
+                    throw new NotImplementedException("to_proto _save_slice_info");
+
+                return var_def;
+            }
+
+            throw new NotImplementedException("to_proto RefVariable");
+        }
+
+        public T from_proto<T>(VariableDef variable_def, string import_scope)
+        {
+            throw new NotImplementedException();
         }
     }
 }

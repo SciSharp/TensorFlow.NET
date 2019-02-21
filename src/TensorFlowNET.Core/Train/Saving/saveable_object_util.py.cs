@@ -75,7 +75,7 @@ namespace Tensorflow
                     }
                     else
                     {
-                        string name = "";
+                        string name = null;
                         Tensor tensor = null;
 
                         if (convert_variable_to_tensor)

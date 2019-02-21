@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class control_flow_ops
+    public class control_flow_ops : Python
     {
-        public static Operation group<T>(T[] inputs, string name = "") where T : ITensorOrOperation
+        public static Operation group<T>(T[] inputs, string name = null) where T : ITensorOrOperation
         {
-            return Python.with<ops.name_scope, Operation>(new ops.name_scope(name, "group_deps", inputs), scope =>
+            return with<ops.name_scope, Operation>(new ops.name_scope(name, "group_deps", inputs), scope =>
             {
                 name = scope;
 
@@ -37,7 +37,7 @@ namespace Tensorflow
             });
         }
 
-        private static Operation _GroupControlDeps(string dev, Operation[] deps, string name = "")
+        private static Operation _GroupControlDeps(string dev, Operation[] deps, string name = null)
         {
             return Python.with<_ControlDependenciesController, Operation>(ops.control_dependencies(deps), ctl =>
             {
@@ -81,7 +81,7 @@ namespace Tensorflow
             return op.OpType == "Exit" || op.OpType == "RefExit";
         }
 
-        public static Tensor[] tuple(Tensor[] tensors, string name = "", Operation[] control_inputs = null)
+        public static Tensor[] tuple(Tensor[] tensors, string name = null, Operation[] control_inputs = null)
         {
             return Python.with<ops.name_scope, Tensor[]>(new ops.name_scope(name, "tuple", tensors), scope =>
             {
@@ -109,7 +109,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor with_dependencies(Operation[] dependencies, Tensor output_tensor, string name = "")
+        public static Tensor with_dependencies(Operation[] dependencies, Tensor output_tensor, string name = null)
         {
             var values = new List<object>();
             values.AddRange(dependencies);
@@ -127,7 +127,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor _Identity(Tensor data, string name = "")
+        public static Tensor _Identity(Tensor data, string name = null)
         {
             data = ops.internal_convert_to_tensor_or_composite(data, as_ref: true);
             if ((int)data.dtype > 100)

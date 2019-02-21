@@ -9,7 +9,7 @@ namespace Tensorflow
         public static (Tensor, Tensor, float) remove_squeezable_dimensions(Tensor labels,
             Tensor predictions,
             int expected_rank_diff = 0,
-            string name = "")
+            string name = null)
         {
             throw new NotImplementedException("remove_squeezable_dimensions");
         }

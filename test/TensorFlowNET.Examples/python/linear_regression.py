@@ -49,7 +49,7 @@ if False:
     # tf.train.export_meta_graph(filename='save_model.meta');
 else:
     # tf Graph Input
-    new_saver = tf.train.import_meta_graph("save_model.meta")
+    new_saver = tf.train.import_meta_graph("linear_regression.meta")
     nodes = tf.get_default_graph()._nodes_by_name;
     optimizer = nodes["GradientDescent"]
     cost = nodes["truediv"].outputs[0]

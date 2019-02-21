@@ -27,7 +27,7 @@ namespace Tensorflow
         public Dictionary<string, object> _non_slot_dict;
         public Dictionary<string, object> _deferred_slot_restorations;
 
-        public Optimizer(float learning_rate, bool use_locking, string name = "")
+        public Optimizer(float learning_rate, bool use_locking, string name = null)
         {
             if (String.IsNullOrEmpty(name))
                 throw new NotImplementedException("Must specify the optimizer name");
@@ -64,7 +64,7 @@ namespace Tensorflow
             return apply_gradients(grads_and_vars);
         }
 
-        public Operation apply_gradients(Tuple<Tensor, RefVariable>[] grads_and_vars, Tensor global_step = null, string name = "")
+        public Operation apply_gradients(Tuple<Tensor, RefVariable>[] grads_and_vars, Tensor global_step = null, string name = null)
         {
             // No DistributionStrategy case.
             var converted_grads_and_vars = new List<Tuple<Tensor, RefVariable, _OptimizableVariable>>();

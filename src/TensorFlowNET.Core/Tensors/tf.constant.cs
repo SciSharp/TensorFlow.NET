@@ -20,10 +20,10 @@ namespace Tensorflow
                 verify_shape: verify_shape,
                 allow_broadcast: false);
 
-        public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = "") => array_ops.zeros(shape, dtype, name);
+        public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) => array_ops.zeros(shape, dtype, name);
 
         public static Tensor size(Tensor input,
-            string name = "",
+            string name = null,
             TF_DataType out_type = TF_DataType.TF_INT32) => array_ops.size(input,
                 name,
                 optimize: true,

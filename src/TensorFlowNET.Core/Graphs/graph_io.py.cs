@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -9,12 +10,22 @@ namespace Tensorflow
     {
         public static string write_graph(Graph graph, string logdir, string name, bool as_text = true)
         {
-            var def = graph._as_graph_def();
+            var graph_def = graph._as_graph_def();
             string path = Path.Combine(logdir, name);
-            string text = def.ToString();
             if (as_text)
-                File.WriteAllText(path, text);
+                File.WriteAllText(path, graph_def.ToString());
+            else
+                File.WriteAllBytes(path, graph_def.ToByteArray());
+            return path;
+        }
 
+        public static string write_graph(MetaGraphDef graph_def, string logdir, string name, bool as_text = true)
+        {
+            string path = Path.Combine(logdir, name);
+            if (as_text)
+                File.WriteAllText(path, graph_def.ToString());
+            else
+                File.WriteAllBytes(path, graph_def.ToByteArray());
             return path;
         }
     }

@@ -118,7 +118,7 @@ namespace Tensorflow
 
             if (obj is Tensor tensor && allow_tensor)
             {
-                if (tensor.Graph.Equals(this))
+                if (tensor.graph.Equals(this))
                 {
                     return tensor;
                 }
@@ -164,7 +164,7 @@ namespace Tensorflow
         }
 
         public unsafe Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes, 
-            TF_DataType[] input_types = null, string name = "", 
+            TF_DataType[] input_types = null, string name = null, 
             Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)
         {
             if (inputs == null)

@@ -1,4 +1,5 @@
-﻿using NumSharp.Core;
+﻿using Newtonsoft.Json;
+using NumSharp.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +32,7 @@ namespace TensorFlowNET.Examples
             var n_samples = train_X.shape[0];
 
             // tf Graph Input
-            /*var X = tf.placeholder(tf.float32);
+            var X = tf.placeholder(tf.float32);
             var Y = tf.placeholder(tf.float32);
 
             // Set model weights 
@@ -50,25 +51,32 @@ namespace TensorFlowNET.Examples
             var reduce = tf.reduce_sum(pow);
             var cost = reduce / (2.0f * n_samples);
 
-            // import graph
-
             // radient descent
             // Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
             var grad = tf.train.GradientDescentOptimizer(learning_rate);
-            var optimizer = grad.minimize(cost);*/
+            var optimizer = grad.minimize(cost);
 
-            var new_saver = tf.train.import_meta_graph("linear_regression.meta");
+            //tf.train.export_meta_graph(filename: "linear_regression.meta.bin");
+            // import meta
+            // var new_saver = tf.train.import_meta_graph("linear_regression.meta.bin");
+            var text = JsonConvert.SerializeObject(graph, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented
+            });
 
-            var X = graph.OperationByName("Placeholder");
-            var Y = graph.OperationByName("Placeholder_1");
-            var W = graph.OperationByName("weight");
+            /*var cost = graph.OperationByName("truediv").output;
+            var pred = graph.OperationByName("Add").output;
             var optimizer = graph.OperationByName("GradientDescent");
+            var X = graph.OperationByName("Placeholder").output;
+            var Y = graph.OperationByName("Placeholder_1").output;
+            var W = graph.OperationByName("weight").output;
+            var b = graph.OperationByName("bias").output;*/
 
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
 
             // Start training
-            Python.with<Session>(tf.Session(graph), sess => 
+            with<Session>(tf.Session(graph), sess => 
             {
                 // Run the initializer
                 sess.run(init);
@@ -78,11 +86,10 @@ namespace TensorFlowNET.Examples
                 {
                     foreach (var (x, y) in zip<float>(train_X, train_Y))
                     {
-                        var w = sess.run(W);
-                        sess.run(optimizer,
+                        sess.run(optimizer, 
                             new FeedItem(X, x),
                             new FeedItem(Y, y));
-                        w = sess.run(W);
+                        var rW = sess.run(W);
                     }
 
                     // Display logs per epoch step

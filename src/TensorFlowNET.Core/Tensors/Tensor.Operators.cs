@@ -41,7 +41,7 @@ namespace Tensorflow
             if( y is Tensor tr)
                 dtype = tr.dtype.as_base_dtype();
             
-            var namescope = new ops.name_scope("", name, new { x, y });
+            var namescope = new ops.name_scope(null, name, new { x, y });
             return Python.with<ops.name_scope, Tensor>(namescope, scope =>
             {
                 Tensor result = null;

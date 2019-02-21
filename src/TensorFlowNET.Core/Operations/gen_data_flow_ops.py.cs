@@ -8,7 +8,7 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
-        public static Tensor dynamic_stitch(Tensor[] indices, Tensor[] data, string name = "")
+        public static Tensor dynamic_stitch(Tensor[] indices, Tensor[] data, string name = null)
         {
             var _attr_N = indices.Length;
             var _op = _op_def_lib._apply_op_helper("DynamicStitch", name, new { indices, data });

@@ -7,9 +7,9 @@ namespace Tensorflow
 {
     public class array_ops
     {
-        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = "") => gen_array_ops.placeholder_with_default(input, shape, name);
+        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null) => gen_array_ops.placeholder_with_default(input, shape, name);
 
-        public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = "")
+        public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
             return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "zeros", shape), scope =>
@@ -46,11 +46,11 @@ namespace Tensorflow
             }
         }
 
-        public static Tensor expand_dims(Tensor input, int axis = -1, string name = "", int dim = -1) => expand_dims_v2(input, axis, name);
+        public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1) => expand_dims_v2(input, axis, name);
 
-        private static Tensor expand_dims_v2(Tensor input, int axis, string name = "") => gen_array_ops.expand_dims(input, axis, name);
+        private static Tensor expand_dims_v2(Tensor input, int axis, string name = null) => gen_array_ops.expand_dims(input, axis, name);
 
-        public static Tensor rank(Tensor input, string name = "")
+        public static Tensor rank(Tensor input, string name = null)
         {
             return math_ops.rank_internal(input, name, optimize: true);
         }
@@ -63,7 +63,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="optimize"></param>
         /// <returns></returns>
-        public static Tensor ones_like<T>(T tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool optimize = true)
+        public static Tensor ones_like<T>(T tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
             => ones_like_impl(tensor, dtype, name, optimize);
 
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
@@ -81,7 +81,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor ones(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = "")
+        public static Tensor ones(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
             return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "ones", new { shape }), scope =>
@@ -92,7 +92,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor where(Tensor condition, Tensor x = null, Tensor y = null, string name = "")
+        public static Tensor where(Tensor condition, Tensor x = null, Tensor y = null, string name = null)
         {
             if( x == null && y == null)
             {
@@ -118,19 +118,19 @@ namespace Tensorflow
         /// (`int32` or `int64`). Defaults to `tf.int32`.
         /// </param>
         /// <returns>A `Tensor` of type `out_type`.</returns>
-        public static Tensor shape(Tensor input, string name = "", TF_DataType out_type = TF_DataType.TF_INT32)
+        public static Tensor shape(Tensor input, string name = null, TF_DataType out_type = TF_DataType.TF_INT32)
         {
             return shape_internal(input, name, optimize: true, out_type: out_type);
         }
 
-        public static Tensor size(Tensor input, string name = "", bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
+        public static Tensor size(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
             return size_internal(input, name, optimize: optimize, out_type: out_type);
         }
 
-        private static Tensor shape_internal(Tensor input, string name = "", bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
+        private static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "Shape", new Tensor[] { input }), scope =>
+            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "Shape", new { input }), scope =>
             {
                 name = scope;
 
@@ -138,18 +138,18 @@ namespace Tensorflow
                 {
                     var input_tensor = ops.convert_to_tensor(input);
                     var input_shape = tensor_util.to_shape(input_tensor.shape);
-                    if (optimize && input_shape.is_fully_defined())
+                    if (optimize && input_tensor.NDims > -1 && input_shape.is_fully_defined())
                     {
                         var nd = np.array(input_tensor.shape, out_type.as_numpy_datatype());
                         return constant_op.constant(nd, name: name);
                     }
                 }
 
-                return gen_array_ops.shape(input);
+                return gen_array_ops.shape(input, name: name, out_type: out_type);
             });
         }
 
-        private static Tensor size_internal(Tensor input, string name = "", bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
+        private static Tensor size_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
             return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "Size", new Tensor[] { input }), scope =>
             {
@@ -180,7 +180,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = "", bool optimize = true)
+        public static Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
         {
             return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "zeros_like", new Tensor[] { tensor }), scope =>
             {

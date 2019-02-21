@@ -10,12 +10,12 @@ namespace Tensorflow
 
         public static Tensor sub(Tensor a, Tensor b) => gen_math_ops.sub(a, b);
 
-        public static Tensor subtract<T>(Tensor x, T[] y, string name = "") where T : struct
+        public static Tensor subtract<T>(Tensor x, T[] y, string name = null) where T : struct
             => gen_math_ops.sub(x, ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y"), name);
 
         public static Tensor multiply(Tensor x, Tensor y) => gen_math_ops.mul(x, y);
 
-        public static Tensor divide<T>(Tensor x, T[] y, string name = "") where T : struct
+        public static Tensor divide<T>(Tensor x, T[] y, string name = null) where T : struct
             => x / ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y");
 
         public static Tensor pow<T1, T2>(T1 x, T2 y) => gen_math_ops.pow(x, y);
@@ -28,7 +28,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor reduce_sum(Tensor input, int[] axis = null) => math_ops.reduce_sum(input);
 
-        public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = "") 
+        public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null) 
             => math_ops.cast(x, dtype, name);
     }
 }

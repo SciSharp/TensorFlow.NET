@@ -12,7 +12,7 @@ namespace Tensorflow
 {
     public class OpDefLibrary
     {
-        public Operation _apply_op_helper(string op_type_name, string name = "", dynamic args = null)
+        public Operation _apply_op_helper(string op_type_name, string name = null, dynamic args = null)
         {
             Dictionary<string, object> keywords = ConvertToDict(args);
             var g = ops.get_default_graph();

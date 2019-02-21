@@ -12,28 +12,28 @@ namespace Tensorflow
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
         public static Execute _execute = new Execute();
 
-        public static Tensor expand_dims(Tensor input, int axis, string name = "")
+        public static Tensor expand_dims(Tensor input, int axis, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("ExpandDims", name: name, args: new { input, dim = axis });
 
             return _op.outputs[0];
         }
 
-        public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = "")
+        public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
-        public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = "")
+        public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
-        public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = "")
+        public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Placeholder", args: new { dtype, shape });
             var _result = _op.outputs;
@@ -53,21 +53,21 @@ namespace Tensorflow
         /// </summary>
         /// <param name="input"></param>
         /// <param name="name"></param>
-        public static Tensor identity(Tensor input, string name = "")
+        public static Tensor identity(Tensor input, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Identity", name, new { input });
 
             return _op.outputs[0];
         }
 
-        public static Tensor log(Tensor x, string name = "")
+        public static Tensor log(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Log", name: name, args: new { x });
 
             return _op.outputs[0];
         }
 
-        public static Tensor rank(Tensor input, string name = "")
+        public static Tensor rank(Tensor input, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Rank", name: name, args: new { input });
 
@@ -81,7 +81,7 @@ namespace Tensorflow
         /// <param name="value">A `Tensor`. 0-D (scalar). Value to fill the returned tensor.</param>
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `value`.</returns>
-        public static Tensor fill<T>(Tensor dims, T value, string name = "")
+        public static Tensor fill<T>(Tensor dims, T value, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Fill", name, new { dims, value });
 
@@ -102,7 +102,7 @@ namespace Tensorflow
             return (_op.outputs[0], _op.outputs[1]);
         }
 
-        public static Tensor reshape(Tensor tensor, Tensor shape, string name = "")
+        public static Tensor reshape(Tensor tensor, Tensor shape, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
             return _op.outputs[0];
@@ -120,37 +120,37 @@ namespace Tensorflow
         /// <param name="shape"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = "")
+        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("PlaceholderWithDefault", name, new { input, shape, name });
             return _op.outputs[0];
         }
 
-        public static Tensor select(Tensor condition, Tensor t, Tensor e, string name = "")
+        public static Tensor select(Tensor condition, Tensor t, Tensor e, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Select", name, new { condition, t, e });
             return _op.outputs[0];
         }
 
-        public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = "")
+        public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Shape", name, new { input, out_type });
             return _op.outputs[0];
         }
 
-        public static Tensor size(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = "")
+        public static Tensor size(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Size", name, new { input, out_type });
             return _op.outputs[0];
         }
 
-        public static Tensor tile(Tensor input, Tensor multiples, string name = "")
+        public static Tensor tile(Tensor input, Tensor multiples, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Tile", name, new { input, multiples });
             return _op.outputs[0];
         }
 
-        public static Tensor zeros_like(Tensor x, string name = "")
+        public static Tensor zeros_like(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("ZerosLike", name, new { x });
             return _op.outputs[0];
