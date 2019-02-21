@@ -27,10 +27,7 @@ namespace Tensorflow
 
             public void __enter__()
             {
-                if (String.IsNullOrEmpty(_name))
-                {
-                    _name = _default_name;
-                }
+                _name = _name == null ? _default_name : _name;
 
                 Graph g = null;
                 if (_values is List<Tensor> values)

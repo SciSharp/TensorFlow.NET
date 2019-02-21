@@ -193,7 +193,9 @@ namespace Tensorflow
                 }
 
                 // Add Op to graph
-                var op = g.create_op(op_type_name, inputs.ToArray(), output_types.ToArray(),
+                var op = g.create_op(op_type_name, 
+                    inputs.ToArray(), 
+                    output_types.ToArray(),
                     name: scope,
                     input_types: input_types.ToArray(),
                     attrs: attr_protos,

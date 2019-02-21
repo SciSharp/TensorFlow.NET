@@ -61,7 +61,7 @@ namespace Tensorflow
             bool sharded = false,
             int max_to_keep = 5,
             float keep_checkpoint_every_n_hours = 10000,
-            string name = "",
+            string name = null,
             bool restore_sequentially = false,
             string filename = "model",
             bool build_save = true,

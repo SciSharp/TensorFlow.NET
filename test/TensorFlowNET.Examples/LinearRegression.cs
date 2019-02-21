@@ -57,7 +57,7 @@ namespace TensorFlowNET.Examples
             var grad = tf.train.GradientDescentOptimizer(learning_rate);
             var optimizer = grad.minimize(cost);*/
 
-            var new_saver = tf.train.import_meta_graph("save_model.meta", import_scope: "import");
+            var new_saver = tf.train.import_meta_graph("linear_regression.meta");
 
             var X = graph.OperationByName("Placeholder");
             var Y = graph.OperationByName("Placeholder_1");
