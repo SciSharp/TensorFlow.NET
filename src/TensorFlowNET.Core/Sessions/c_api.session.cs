@@ -90,5 +90,18 @@ namespace Tensorflow
                    IntPtr[] target_opers, int ntargets,
                    IntPtr run_metadata,
                    IntPtr status);
+
+        /// <summary>
+        /// Set the config in TF_SessionOptions.options.
+        /// config should be a serialized tensorflow.ConfigProto proto.
+        /// If config was not parsed successfully as a ConfigProto, record the
+        /// error information in *status.
+        /// </summary>
+        /// <param name="options">TF_SessionOptions*</param>
+        /// <param name="proto">const void*</param>
+        /// <param name="proto_len">size_t</param>
+        /// <param name="status">TF_Status*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe void TF_SetConfig(IntPtr options, IntPtr proto, ulong proto_len, IntPtr status);
     }
 }

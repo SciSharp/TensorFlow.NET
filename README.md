@@ -7,7 +7,7 @@ TensorFlow.NET provides .NET Standard binding for [TensorFlow](https://www.tenso
 [![NuGet](https://img.shields.io/nuget/dt/TensorFlow.NET.svg)](https://www.nuget.org/packages/TensorFlow.NET)
 [![Documentation Status](https://readthedocs.org/projects/tensorflownet/badge/?version=latest)](https://tensorflownet.readthedocs.io/en/latest/?badge=latest)
 
-TensorFlow.NET is a member project of [SciSharp](https://github.com/SciSharp) stack.
+TensorFlow.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
@@ -56,6 +56,15 @@ using(var sess = tf.Session())
 ```
 
 Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html).
+
+More examples:
+
+* [Hello World](test/TensorFlowNET.Examples/HelloWorld.cs)
+
+* [Basic Operations](test/TensorFlowNET.Examples/BasicOperations.cs)
+* [Image Recognition](test/TensorFlowNET.Examples/ImageRecognition.cs)
+* [Linear Regression](test/TensorFlowNET.Examples/LinearRegression.cs)
+* [Text Classification with Movie Review](test/TensorFlowNET.Examples/TextClassificationWithMovieReviews.cs)
 
 Star me or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET) feel free.
 

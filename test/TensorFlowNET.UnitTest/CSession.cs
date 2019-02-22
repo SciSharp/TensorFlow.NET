@@ -26,6 +26,7 @@ namespace TensorFlowNET.UnitTest
         public CSession(Graph graph, Status s, bool user_XLA = false)
         {
             var opts = new SessionOptions();
+            opts.SetConfig(new ConfigProto { InterOpParallelismThreads = 4 });
             session_ = new Session(graph, opts, s);
         }
 
