@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -16,12 +16,11 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET</PackageTags>
     <Description>Google's TensorFlow binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.3.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Added image prediction example.
-Upgraded to TensorFlow 1.13 RC2.
+    <AssemblyVersion>0.4.0.0</AssemblyVersion>
+    <PackageReleaseNotes>Added Linear Regression example.
 </PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.3.0.0</FileVersion>
+    <FileVersion>0.4.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

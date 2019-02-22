@@ -28,8 +28,6 @@ namespace TensorFlowNET.Examples
                          2.827f, 3.465f, 1.65f, 2.904f, 2.42f, 2.94f, 1.3f);
             var n_samples = train_X.shape[0];
 
-            var graph = tf.Graph().as_default();
-
             // tf Graph Input
             var X = tf.placeholder(tf.float32);
             var Y = tf.placeholder(tf.float32);
@@ -47,7 +45,7 @@ namespace TensorFlowNET.Examples
             // Mean squared error
             var cost = tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * n_samples);
 
-            // radient descent
+            // Gradient descent
             // Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
             var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
 
@@ -55,7 +53,7 @@ namespace TensorFlowNET.Examples
             var init = tf.global_variables_initializer();
 
             // Start training
-            with<Session>(tf.Session(graph), sess => 
+            with<Session>(tf.Session(), sess => 
             {
                 // Run the initializer
                 sess.run(init);

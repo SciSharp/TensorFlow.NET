@@ -29,3 +29,4 @@ Welcome to TensorFlow.NET's documentation!
    Train
    EagerMode
    ImageRecognition
+   LinearRegression
