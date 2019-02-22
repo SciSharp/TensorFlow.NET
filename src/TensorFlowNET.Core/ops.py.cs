@@ -351,7 +351,7 @@ namespace Tensorflow
 
             return (oper, out_grads) =>
             {
-                Console.WriteLine($"get_gradient_function: {oper.type} '{oper.name}'");
+                // Console.WriteLine($"get_gradient_function: {oper.type} '{oper.name}'");
 
                 switch (oper.type)
                 {

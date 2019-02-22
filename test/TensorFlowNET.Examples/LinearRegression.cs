@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using NumSharp.Core;
+﻿using NumSharp.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,17 +12,15 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class LinearRegression : Python, IExample
     {
-        private NumPyRandom rng = np.random;
+        NumPyRandom rng = np.random;
+
+        // Parameters
+        float learning_rate = 0.01f;
+        int training_epochs = 1000;
+        int display_step = 50;
 
         public void Run()
         {
-            var graph = tf.Graph().as_default();
-
-            // Parameters
-            float learning_rate = 0.01f;
-            int training_epochs = 1000;
-            int display_step = 10;
-
             // Training Data
             var train_X = np.array(3.3f, 4.4f, 5.5f, 6.71f, 6.93f, 4.168f, 9.779f, 6.182f, 7.59f, 2.167f,
                          7.042f, 10.791f, 5.313f, 7.997f, 5.654f, 9.27f, 3.1f);
@@ -31,46 +28,28 @@ namespace TensorFlowNET.Examples
                          2.827f, 3.465f, 1.65f, 2.904f, 2.42f, 2.94f, 1.3f);
             var n_samples = train_X.shape[0];
 
+            var graph = tf.Graph().as_default();
+
             // tf Graph Input
             var X = tf.placeholder(tf.float32);
             var Y = tf.placeholder(tf.float32);
 
             // Set model weights 
-            //var rnd1 = rng.randn<float>();
-            //var rnd2 = rng.randn<float>();
+            // We can set a fixed init value in order to debug
+            // var rnd1 = rng.randn<float>();
+            // var rnd2 = rng.randn<float>();
             var W = tf.Variable(-0.06f, name: "weight");
             var b = tf.Variable(-0.73f, name: "bias");
 
-            var mul = tf.multiply(X, W);
-            var pred = tf.add(mul, b);
+            // Construct a linear model
+            var pred = tf.add(tf.multiply(X, W), b);
 
             // Mean squared error
-            var sub = pred - Y;
-            var pow = tf.pow(sub, 2.0f);
-
-            var reduce = tf.reduce_sum(pow);
-            var cost = reduce / (2.0f * n_samples);
+            var cost = tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * n_samples);
 
             // radient descent
             // Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
-            var grad = tf.train.GradientDescentOptimizer(learning_rate);
-            var optimizer = grad.minimize(cost);
-
-            //tf.train.export_meta_graph(filename: "linear_regression.meta.bin");
-            // import meta
-            // var new_saver = tf.train.import_meta_graph("linear_regression.meta.bin");
-            var text = JsonConvert.SerializeObject(graph, new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented
-            });
-
-            /*var cost = graph.OperationByName("truediv").output;
-            var pred = graph.OperationByName("Add").output;
-            var optimizer = graph.OperationByName("GradientDescent");
-            var X = graph.OperationByName("Placeholder").output;
-            var Y = graph.OperationByName("Placeholder_1").output;
-            var W = graph.OperationByName("weight").output;
-            var b = graph.OperationByName("bias").output;*/
+            var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
 
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
@@ -89,22 +68,33 @@ namespace TensorFlowNET.Examples
                         sess.run(optimizer, 
                             new FeedItem(X, x),
                             new FeedItem(Y, y));
-                        var rW = sess.run(W);
                     }
 
                     // Display logs per epoch step
-                    /*if ((epoch + 1) % display_step == 0)
+                    if ((epoch + 1) % display_step == 0)
                     {
                         var c = sess.run(cost, 
                             new FeedItem(X, train_X),
                             new FeedItem(Y, train_Y));
-                        var rW = sess.run(W);
-                        Console.WriteLine($"Epoch: {epoch + 1} cost={c} " +
-                                    $"W={rW} b={sess.run(b)}");
-                    }*/
+                        Console.WriteLine($"Epoch: {epoch + 1} cost={c} " + $"W={sess.run(W)} b={sess.run(b)}");
+                    }
                 }
 
                 Console.WriteLine("Optimization Finished!");
+                var training_cost = sess.run(cost,
+                    new FeedItem(X, train_X),
+                    new FeedItem(Y, train_Y));
+                Console.WriteLine($"Training cost={training_cost} W={sess.run(W)} b={sess.run(b)}");
+
+                // Testing example
+                var test_X = np.array(6.83f, 4.668f, 8.9f, 7.91f, 5.7f, 8.7f, 3.1f, 2.1f);
+                var test_Y = np.array(1.84f, 2.273f, 3.2f, 2.831f, 2.92f, 3.24f, 1.35f, 1.03f);
+                Console.WriteLine("Testing... (Mean square loss Comparison)");
+                var testing_cost = sess.run(tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * test_X.shape[0]),
+                    new FeedItem(X, test_X), 
+                    new FeedItem(Y, test_Y));
+                Console.WriteLine($"Testing cost={testing_cost}");
+                Console.WriteLine($"Absolute mean square loss difference: {Math.Abs((float)training_cost - (float)testing_cost)}");
             });
         }
     }

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -15,7 +14,7 @@ namespace Tensorflow
 
         private Tensor[] _outputs;
         public Tensor[] outputs => _outputs;
-        [JsonIgnore]
+        //[JsonIgnore]
         public Tensor output => _outputs.FirstOrDefault();
 
         public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);

@@ -196,11 +196,11 @@ namespace Tensorflow
 
             _create_op_helper(op, true);
 
-            Console.Write($"create_op: {op_type} '{node_def.Name}'");
+            /*Console.Write($"create_op: {op_type} '{node_def.Name}'");
             Console.Write($", inputs: {(inputs.Length == 0 ? "empty" : String.Join(", ", inputs.Select(x => x.name)))}");
             Console.Write($", control_inputs: {(control_inputs.Length == 0 ? "empty" : String.Join(", ", control_inputs.Select(x => x.name)))}");
             Console.Write($", outputs: {(op.outputs.Length == 0 ? "empty" : String.Join(", ", op.outputs.Select(x => x.name)))}");
-            Console.WriteLine();
+            Console.WriteLine();*/
 
             return op;
         }

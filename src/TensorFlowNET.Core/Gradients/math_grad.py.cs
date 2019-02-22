@@ -47,10 +47,14 @@ namespace Tensorflow
             x = math_ops.conj(x);
             y = math_ops.conj(y);
 
-            var r1 = math_ops.reduce_sum(gen_math_ops.mul(grad, y), rx);
-            var r2 = math_ops.reduce_sum(gen_math_ops.mul(x, grad), ry);
+            var mul1 = gen_math_ops.mul(grad, y);
+            var mul2 = gen_math_ops.mul(x, grad);
+            var reduce_sum1 = math_ops.reduce_sum(mul1, rx);
+            var reduce_sum2 = math_ops.reduce_sum(mul2, ry);
+            var reshape1 = gen_array_ops.reshape(reduce_sum1, sx);
+            var reshape2 = gen_array_ops.reshape(reduce_sum2, sy);
 
-            return (gen_array_ops.reshape(r1, sx), gen_array_ops.reshape(r2, sy));
+            return (reshape1, reshape2);
         }
 
         public static (Tensor, Tensor) _SubGrad(Operation op, Tensor grad)
@@ -129,9 +133,12 @@ namespace Tensorflow
             var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
             x = math_ops.conj(x);
             y = math_ops.conj(y);
-            y = math_ops.conj(z);
-            var gx = gen_array_ops.reshape(math_ops.reduce_sum(grad * y * gen_math_ops.pow(x, y - 1.0), rx), sx);
-            Tensor log_x = null;
+            z = math_ops.conj(z);
+            var pow = gen_math_ops.pow(x, y - 1.0f);
+            var mul = grad * y * pow;
+            var reduce_sum = math_ops.reduce_sum(mul, rx);
+            var gx = gen_array_ops.reshape(reduce_sum, sx);
+
             // Avoid false singularity at x = 0
             Tensor mask = null;
             if (x.dtype.is_complex())
@@ -142,8 +149,10 @@ namespace Tensorflow
             var safe_x = array_ops.where(mask, x, ones);
             var x1 = gen_array_ops.log(safe_x);
             var y1 = array_ops.zeros_like(x);
-            log_x = array_ops.where(mask, x1, y1);
-            var gy = gen_array_ops.reshape(math_ops.reduce_sum(grad * z * log_x, ry), sy);
+            var log_x = array_ops.where(mask, x1, y1);
+            var mul1 = grad * z * log_x;
+            var reduce_sum1 = math_ops.reduce_sum(mul1, ry);
+            var gy = gen_array_ops.reshape(reduce_sum1, sy);
 
             return (gx, gy);
         }

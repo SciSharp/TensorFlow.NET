@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using NumSharp.Core;
+﻿using NumSharp.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +17,13 @@ namespace Tensorflow
         private readonly IntPtr _handle;
 
         private int _id;
-        [JsonIgnore]
+        //[JsonIgnore]
         public int Id => _id;
-        [JsonIgnore]
+        //[JsonIgnore]
         public Graph graph => op?.graph;
-        [JsonIgnore]
+        //[JsonIgnore]
         public Operation op { get; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public Tensor[] outputs => op.outputs;
 
         /// <summary>
@@ -104,7 +103,7 @@ namespace Tensorflow
 
         public int NDims => rank;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public Operation[] Consumers => consumers();
 
         public string Device => op.Device;

@@ -23,6 +23,23 @@ namespace TensorFlowNET.UnitTest
             {
                 var new_saver = tf.train.import_meta_graph("C:/tmp/my-model.meta");
             });
+
+            //tf.train.export_meta_graph(filename: "linear_regression.meta.bin");
+            // import meta
+            /*tf.train.import_meta_graph("linear_regression.meta.bin");
+
+            var cost = graph.OperationByName("truediv").output;
+            var pred = graph.OperationByName("Add").output;
+            var optimizer = graph.OperationByName("GradientDescent");
+            var X = graph.OperationByName("Placeholder").output;
+            var Y = graph.OperationByName("Placeholder_1").output;
+            var W = graph.OperationByName("weight").output;
+            var b = graph.OperationByName("bias").output;*/
+
+            /*var text = JsonConvert.SerializeObject(graph, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented
+            });*/
         }
 
         public void ImportSavedModel()
