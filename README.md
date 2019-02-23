@@ -60,14 +60,15 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 More examples:
 
 * [Hello World](test/TensorFlowNET.Examples/HelloWorld.cs)
-
 * [Basic Operations](test/TensorFlowNET.Examples/BasicOperations.cs)
 * [Image Recognition](test/TensorFlowNET.Examples/ImageRecognition.cs)
 * [Linear Regression](test/TensorFlowNET.Examples/LinearRegression.cs)
-* [Text Classification with Movie Review](test/TensorFlowNET.Examples/TextClassificationWithMovieReviews.cs)
+* [Text Classification](test/TensorFlowNET.Examples/TextClassificationWithMovieReviews.cs)
+* [Naive Bayes Classification](test/TensorFlowNET.Examples/NaiveBayesClassifier.cs)
+* [Named Entity Recognition](test/TensorFlowNET.Examples/NamedEntityRecognition.cs)
 
 Star me or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET) feel free.
 
-Scan QR code to join TIM group:
+Scan QR code to join Tencent TIM group:
 
 ![SciSharp STACK](docs/TIM.jpg)
