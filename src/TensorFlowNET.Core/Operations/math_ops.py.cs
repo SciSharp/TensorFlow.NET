@@ -23,6 +23,35 @@ namespace Tensorflow
                 return x;
             });
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input_tensor"></param>
+        /// <param name="axes"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        public static Tensor reduce_mean(Tensor input_tensor, int[] axes = null, bool keepdims = false, string name = null)
+        {
+            throw new NotFiniteNumberException();
+        }
+        /// <summary>
+        /// Reduction Operation
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="axis"></param>
+        /// <param name="reduction_indices"></param>
+        public void _ReductionDims(Tensor x, int[] axis, int[] reduction_indices = null)
+        {
+            if (reduction_indices != null || reduction_indices.Length != 0)
+            {
+                if (axis != null)
+                {
+                    
+                }
+            }
+
+            throw new NotSupportedException("Can't specify both axis' and 'reduction_indices'.");
+        }
 
         /// <summary>
         /// Helper function for reduction ops.
