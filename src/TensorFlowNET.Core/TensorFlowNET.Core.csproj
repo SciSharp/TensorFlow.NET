@@ -52,7 +52,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="APIs\Keras\" />
+    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
