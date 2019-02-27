@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Core", "src\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Utility", "src\TensorFlowNET.Utility\TensorFlowNET.Utility.csproj", "{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KerasNET.Core", "..\Keras.NET\src\KerasNET.Core\KerasNET.Core.csproj", "{07E37E81-3BCD-4BBB-AE5D-28527F1C7745}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Visualization", "TensorFlowNET.Visualization\TensorFlowNET.Visualization.csproj", "{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TensorFlowNET.Visualization", "TensorFlowNET.Visualization\TensorFlowNET.Visualization.csproj", "{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KerasNET.Core", "..\Keras.NET\src\KerasNET.Core\KerasNET.Core.csproj", "{E2F0C39C-D706-4CF5-AE00-81FB447F949D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +37,14 @@ Global
 		{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07E37E81-3BCD-4BBB-AE5D-28527F1C7745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07E37E81-3BCD-4BBB-AE5D-28527F1C7745}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07E37E81-3BCD-4BBB-AE5D-28527F1C7745}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07E37E81-3BCD-4BBB-AE5D-28527F1C7745}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2F0C39C-D706-4CF5-AE00-81FB447F949D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2F0C39C-D706-4CF5-AE00-81FB447F949D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2F0C39C-D706-4CF5-AE00-81FB447F949D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2F0C39C-D706-4CF5-AE00-81FB447F949D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

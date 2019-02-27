@@ -7,6 +7,7 @@ using NumSharp.Core;
 using Newtonsoft.Json;
 using System.Linq;
 using Keras;
+using System.Text.RegularExpressions;
 
 namespace TensorFlowNET.Examples
 {
@@ -42,27 +43,45 @@ namespace TensorFlowNET.Examples
             Utility.Compress.UnZip(zipFile, dir);
 
             // prepare training dataset
-            NDArray x_train = File.ReadAllLines(Path.Join(dir, "x_train.txt"));
-            NDArray labels_train = File.ReadAllLines(Path.Join(dir, "y_train.txt"));
-            NDArray indices_train = File.ReadAllLines(Path.Join(dir, "indices_train.txt"));
+            var x_train = ReadData(Path.Join(dir, "x_train.txt"));
+            var labels_train = ReadData(Path.Join(dir, "y_train.txt"));
+            var indices_train = ReadData(Path.Join(dir, "indices_train.txt"));
             // x_train = x_train[indices_train];
             // labels_train = labels_train[indices_train];
 
-            NDArray x_test = File.ReadAllLines(Path.Join(dir, "x_test.txt"));
-            NDArray labels_test = File.ReadAllLines(Path.Join(dir, "y_test.txt"));
-            NDArray indices_test = File.ReadAllLines(Path.Join(dir, "indices_test.txt"));
+            var x_test = ReadData(Path.Join(dir, "x_test.txt"));
+            var labels_test = ReadData(Path.Join(dir, "y_test.txt"));
+            var indices_test = ReadData(Path.Join(dir, "indices_test.txt"));
             // x_test = x_test[indices_test];
             // labels_test = labels_test[indices_test];
 
             // not completed
-            var xs = x_train.hstack(x_test);
+            /*var xs = x_train.hstack(x_test);
             var labels = labels_train.hstack(labels_test);
 
             var idx = x_train.size;
             var y_train = labels_train;
             var y_test = labels_test;
 
-            return ((x_train, y_train), (x_test, y_test));
+            return ((x_train, y_train), (x_test, y_test));*/
+
+            throw new NotImplementedException();
+        }
+
+        private int[][] ReadData(string file)
+        {
+            var lines = new List<int[]>();
+
+            foreach(var line in File.ReadAllLines(file))
+            {
+                var matches = Regex.Matches(line, @"\d+,*");
+                var data = new int[matches.Count];
+                for (int i = 0; i < data.Length; i++)
+                    data[i] = Convert.ToInt32(matches[i].Value.Trim(','));
+                lines.Add(data.ToArray());
+            }
+
+            return lines.ToArray();
         }
 
         private Dictionary<string, int> GetWordIndex()
