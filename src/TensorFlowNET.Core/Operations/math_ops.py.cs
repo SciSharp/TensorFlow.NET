@@ -23,6 +23,17 @@ namespace Tensorflow
                 return x;
             });
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input_tensor"></param>
+        /// <param name="axes"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        public static void reduce_mean(Tensor input_tensor, int[] axes = null, bool keepdims = false, string name = null)
+        {
+
+        }
 
         /// <summary>
         /// Helper function for reduction ops.
