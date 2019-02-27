@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Keras.NET\src\KerasNET.Core\KerasNET.Core.csproj" />
+    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Utility\TensorFlowNET.Utility.csproj" />
   </ItemGroup>
