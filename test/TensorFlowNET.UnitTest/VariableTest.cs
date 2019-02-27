@@ -47,7 +47,27 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
-        public void Assign()
+        public void Assign1()
+        {
+            with<Graph>(tf.Graph().as_default(), graph =>
+            {
+                var variable = tf.Variable(31, name: "tree");
+                var init = tf.global_variables_initializer();
+
+                var sess = tf.Session(graph);
+                sess.run(init);
+
+                var result = sess.run(variable);
+                Assert.IsTrue((int)result == 31);
+
+                var assign = variable.assign(12);
+                result = sess.run(assign);
+                Assert.IsTrue((int)result == 12);
+            });
+        }
+
+        [TestMethod]
+        public void Assign2()
         {
             var v1 = tf.Variable(10.0f, name: "v1"); //tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);
             var inc_v1 = v1.assign(v1 + 1.0f);

@@ -1,5 +1,5 @@
 # TensorFlow.NET
-TensorFlow.NET provides .NET Standard binding for [TensorFlow](https://www.tensorflow.org/).
+TensorFlow.NET provides .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It's the full complete binding in CSharp language for TensorFlow API. It allows .NET developers to develop, train and deploy Machine Learning models in .NET standard which is running on cross-platform.
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/wx4td43v2d3f2xj6?svg=true)](https://ci.appveyor.com/project/Haiping-Chen/tensorflow-net)

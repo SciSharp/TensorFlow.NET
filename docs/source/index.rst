@@ -19,8 +19,8 @@ Welcome to TensorFlow.NET's documentation!
    Constant
    Variable
    Placeholder
-   Session
    Graph
+   Session
    Operation
    Attribute
    NameScope
