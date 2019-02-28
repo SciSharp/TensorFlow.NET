@@ -22,9 +22,8 @@ Welcome to TensorFlow.NET's documentation!
    Graph
    Session
    Operation
-   ControlDependency
    Gradient
    Train
    EagerMode
-   ImageRecognition
    LinearRegression
+   ImageRecognition
