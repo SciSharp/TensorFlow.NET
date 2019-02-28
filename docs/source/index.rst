@@ -22,8 +22,6 @@ Welcome to TensorFlow.NET's documentation!
    Graph
    Session
    Operation
-   Attribute
-   NameScope
    ControlDependency
    Gradient
    Train

@@ -18,12 +18,24 @@ TensorFlow是一个用于机器学习的开源项目，尤其适用于深度学�
 
 In order to avoid confusion, the unique classes defined in TensorFlow are not translated in this book. For example, Tensor, Graph, Shape will retain the English name.
 
-为了避免混淆，本书中对TensorFlow中定义的特有类不进行翻译，比如Tensor, Graph, Shape这些词都会保留英文名称。
+为了避免混淆，本书中对TensorFlow中定义的特有类不进行翻译，比如Tensor, Graph, Session, Shape这些词都会保留英文名称。
 
 
 
-Terminology:
+Terminology 术语:
 
 TF: Google TensorFlow
 
 TF.NET: TensorFlow.NET
+
+Graph: 计算图
+
+Session: 会话
+
+Variable: 变量
+
+Tensor: 张量
+
+Operation: 操作
+
+Node: 节点

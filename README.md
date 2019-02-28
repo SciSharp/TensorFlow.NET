@@ -11,7 +11,16 @@ TensorFlow.NET is a member project of [SciSharp STACK](https://github.com/SciSha
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
+### Why should we use TensorFlow.NET ?
+
+`SciSharp STASK`'s mission is to create a zero learning curve on the .NET based technology stack Machine Learning tool library. Let's take a look at a comparison picture and you can see why TensorFlow.NET is the tool that is the most comfortable for you.
+
+![pythn vs csharp](docs/assets/syntax-comparision.png)
+
+SciSharp's philosophy allows a large number of machine learning code written in python to be quickly migrated to .NET, allowing a large number of .NET Developers to use more updated models.
+
 ### How to use
+
 Install TensorFlow.NET through NuGet.
 ```sh
 PM> Install-Package TensorFlow.NET
