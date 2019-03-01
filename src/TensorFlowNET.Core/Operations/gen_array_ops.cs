@@ -155,5 +155,28 @@ namespace Tensorflow
             var _op = _op_def_lib._apply_op_helper("ZerosLike", name, new { x });
             return _op.outputs[0];
         }
+        public static Tensor stop_gradient(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StopGradient", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+        /// <summary>
+        /// Removes dimensions of size 1 from the shape of a tensor.
+        /// Given a tensor `input`, this operation returns a tensor of the same type with
+        /// all dimensions of size 1 removed.If you don't want to remove all size 1
+        /// dimensions, you can remove specific size 1 dimensions by specifying
+        /// `axis`.
+        /// </summary>
+        /// <param name="input"> A `Tensor`. The `input` to squeeze.</param>
+        /// <param name="axis"> An optional list of `ints`. Defaults to `[]`. If specified, only squeezes the dimensions listed.</param>
+        /// <param name="name"> A name for the operation (optional).</param>
+        /// <returns> A `Tensor`. Has the same type as `input`.</returns>
+        public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Squeeze", name, args: new { input, axis, name });
+
+            return _op.outputs[0];
+        }
     }
 }

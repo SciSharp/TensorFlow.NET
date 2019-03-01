@@ -204,5 +204,40 @@ namespace Tensorflow
                 }
             });
         }
+
+        /// <summary>
+        ///   When building ops to compute gradients, this op prevents the contribution of
+        ///   its inputs to be taken into account.Normally, the gradient generator adds ops        ///   to a graph to compute the derivatives of a specified 'loss' by recursively        ///   finding out inputs that contributed to its computation.If you insert this op        ///   in the graph it inputs are masked from the gradient generator.  They are not
+        ///   taken into account for computing gradients.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor stop_gradient(Tensor input, string name = null)
+        {
+            return gen_array_ops.stop_gradient(input,  name);
+        }
+
+        /// <summary>
+        /// Removes dimensions of size 1 from the shape of a tensor.
+        /// Given a tensor `input`, this operation returns a tensor of the same type with
+        /// all dimensions of size 1 removed.If you don't want to remove all size 1
+        /// dimensions, you can remove specific size 1 dimensions by specifying
+        /// `axis`.
+        /// </summary>
+        /// <param name="input"> A `Tensor`. The `input` to squeeze.</param>
+        /// <param name="axis"> An optional list of `ints`. Defaults to `[]`.
+        /// If specified, only squeezes the dimensions listed.The dimension
+        /// index starts at 0. It is an error to squeeze a dimension that is not 1.
+        /// Must be in the range `[-rank(input), rank(input))`.</param>
+        /// <param name="name"> A name for the operation (optional).</param>
+        /// <param name="squeeze_dims" >Deprecated keyword argument that is now axis.</param>
+        /// <returns>A `Tensor`. Has the same type as `input`.
+        /// Contains the same data as `input`, but has one or more dimensions of
+        /// size 1 removed.</returns>
+        public static Tensor squeeze(Tensor input, int[] axis = null, string name = null, int[] squeeze_dims = null)
+        {
+            return gen_array_ops.squeeze(input, axis, name);
+        }
     }
 }
