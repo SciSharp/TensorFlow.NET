@@ -7,6 +7,9 @@ namespace Tensorflow
 {
     public partial class ops
     {
+        /// <summary>
+        /// Returns a context manager that creates hierarchical names for operations.
+        /// </summary>
         public class name_scope : IPython
         {
             public string _name;

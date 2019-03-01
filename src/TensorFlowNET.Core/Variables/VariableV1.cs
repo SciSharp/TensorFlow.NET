@@ -14,7 +14,7 @@ namespace Tensorflow
     /// the variable are fixed. The value can be changed using one of the assign methods.
     /// https://tensorflow.org/guide/variables
     /// </summary>
-    public class VariableV1
+    public class VariableV1 : Python
     {
         public VariableV1(object initial_value = null,
             bool trainable = true,
