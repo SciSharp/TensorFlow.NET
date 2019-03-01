@@ -24,33 +24,34 @@ namespace Tensorflow
             });
         }
         /// <summary>
-        /// 
+        /// Computes the mean of elements across dimensions of a tensor.
+        /// Reduces `input_tensor` along the dimensions given in `axis`.
+        /// Unless `keepdims` is true, the rank of the tensor is reduced by 1 for each
+        /// entry in `axis`. If `keepdims` is true, the reduced dimensionsare retained with length 1.
+        /// If `axis` is None, all dimensions are reduced, and a tensor with a single element is returned.
         /// </summary>
-        /// <param name="input_tensor"></param>
-        /// <param name="axes"></param>
-        /// <param name="keepdims"></param>
-        /// <param name="name"></param>
-        public static Tensor reduce_mean(Tensor input_tensor, int[] axes = null, bool keepdims = false, string name = null)
+        /// <param name="input_tensor"> The tensor to reduce. Should have numeric type.</param>
+        /// <param name="axis">The dimensions to reduce. If `None` (the default), reduces all
+        /// dimensions.Must be in the range `[-rank(input_tensor), rank(input_tensor))`.</param>
+        /// <param name="keepdims"> If true, retains reduced dimensions with length 1.</param>
+        /// <param name="name"> A name for the operation (optional).</param>
+        public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
         {
-            throw new NotFiniteNumberException();
+            var r = _ReductionDims(input_tensor, new Tensor(axis));
+            var m = gen_math_ops.mean(input_tensor, r);
+            return _may_reduce_to_scalar(keepdims, m);
         }
         /// <summary>
-        /// Reduction Operation
+        /// Returns (x - y)(x - y) element-wise.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="axis"></param>
-        /// <param name="reduction_indices"></param>
-        public void _ReductionDims(Tensor x, int[] axis, int[] reduction_indices = null)
+        /// <param name="x"> A `Tensor`. Must be one of the following types: `bfloat16`, `half`, `float32`, `float64`, `int32`, `int64`, `complex64`, `complex128`.</param>
+        /// <param name="y"> A `Tensor`. Must have the same type as `x`.</param>
+        /// <param name="name"> A name for the operation (optional).</param>
+        /// <returns>A `Tensor`. Has the same type as `x`.</returns>
+        public static Tensor square_difference(Tensor x, Tensor y, string name = null)
         {
-            if (reduction_indices != null || reduction_indices.Length != 0)
-            {
-                if (axis != null)
-                {
-                    
-                }
-            }
-
-            throw new NotSupportedException("Can't specify both axis' and 'reduction_indices'.");
+            var m = gen_math_ops.squared_difference(x, y);
+            return m;
         }
 
         /// <summary>

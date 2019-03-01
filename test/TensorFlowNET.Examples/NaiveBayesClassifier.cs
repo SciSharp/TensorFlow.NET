@@ -19,20 +19,41 @@ namespace TensorFlowNET.Examples
 
         public void fit(NDArray X, NDArray y)
         {
-            // separate training points by class
-            // shape : nb_class * nb_samples * nb_features
             NDArray unique_y = y.unique<long>();
-            NDArray points_by_class = np.array(y.Data<long>().Where(ys => unique_y.Data<long>().Contains(ys)));
-
-            foreach (long cls in unique_y)
+            
+            Dictionary<int, List<NDArray>> dic = new Dictionary<int, List<NDArray>>();
+            // Init uy in dic
+            foreach (int uy in unique_y.Data<int>())
             {
-
+                dic.Add(uy, new List<NDArray>());
             }
-
+            // Separate training points by class 
+            // Shape : nb_classes * nb_samples * nb_features
+            int maxCount = 0;
+            foreach (var (x, t) in zip(X.Data<float>(), y.Data<int>()))
+            {
+                int curClass = (y[t, 0] as NDArray).Data<int>().First();
+                List<NDArray> l = dic[curClass];
+                l.Add(x);
+                if (l.Count > maxCount)
+                {
+                    maxCount = l.Count;
+                }
+                dic.Add(curClass, l);
+            }
+            NDArray points_by_class = np.zeros(dic.Count,maxCount,X.shape[1]);
+            foreach (KeyValuePair<int, List<NDArray>> kv in dic)
+            {
+                var cls = kv.Value.ToArray();
+                for (int i = 0; i < dic.Count; i++)
+                {
+                    points_by_class[i] = dic[i];
+                }
+            }
 
             // estimate mean and variance for each class / feature
             // shape : nb_classes * nb_features
-            
+            var cons = tf.constant(points_by_class);
         }
     }
 }
