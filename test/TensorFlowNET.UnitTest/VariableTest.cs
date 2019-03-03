@@ -31,6 +31,18 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
+        public void SimpleScope()
+        {
+            with(tf.variable_scope("foo"), delegate
+            {
+                with(tf.variable_scope("bar"), delegate
+                {
+                    var v = tf.get_variable("v", new TensorShape(1));
+                });
+            });
+        }
+
+        [TestMethod]
         public void ScalarVar()
         {
             var x = tf.constant(3, name: "x");

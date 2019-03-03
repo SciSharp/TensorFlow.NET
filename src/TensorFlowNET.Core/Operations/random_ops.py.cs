@@ -4,8 +4,18 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class random_ops
+    public class random_ops : Python
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="mean"></param>
+        /// <param name="stddev"></param>
+        /// <param name="dtype"></param>
+        /// <param name="seed"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static Tensor random_normal(int[] shape, 
             float mean = 0.0f, 
             float stddev = 1.0f, 
@@ -23,6 +33,30 @@ namespace Tensorflow
                 var mul = rnd * stddev_tensor;
                 var value = math_ops.add(mul, mean_tensor, name: name);
                 return value;
+            });
+        }
+
+        /// <summary>
+        /// Outputs random values from a uniform distribution.
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="minval"></param>
+        /// <param name="maxval"></param>
+        /// <param name="dtype">The type of the output</param>
+        /// <param name="seed">Used to create a random seed for the distribution.</param>
+        /// <param name="name">A name for the operation</param>
+        /// <returns>A tensor of the specified shape filled with random uniform values.</returns>
+        public static Tensor random_uniform(int[] shape, 
+            float minval = 0,
+            float? maxval = null,
+            TF_DataType dtype = TF_DataType.TF_FLOAT, 
+            int? seed = null, 
+            string name = null)
+        {
+            return with<ops.name_scope, Tensor>(new ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
+            {
+                name = scope;
+                return null;
             });
         }
 

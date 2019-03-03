@@ -87,6 +87,14 @@ namespace Tensorflow
             }
 
             Tensor init_val = null;
+
+            // Create the tensor to initialize the variable with default value.
+            if (initializer == null)
+            {
+                if (dtype.is_floating())
+                    initializer = tf.glorot_uniform;
+            }
+
             ops.init_scope();
             {
                 if (initializing_from_value)
