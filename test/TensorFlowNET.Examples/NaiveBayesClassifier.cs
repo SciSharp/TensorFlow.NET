@@ -54,6 +54,22 @@ namespace TensorFlowNET.Examples
             // estimate mean and variance for each class / feature
             // shape : nb_classes * nb_features
             var cons = tf.constant(points_by_class);
+            Tuple<Tensor, Tensor> tup = tf.nn.moments(cons, new int[]{1});
+            var mean = tup.Item1;
+            var variance = tup.Item2;
+            // Create a 3x2 univariate normal distribution with the 
+            // Known mean and variance           
+            // var dist = tf.distributions.Normal(loc=mean, scale=tf.sqrt(variance));
+
+        }
+
+        public void predict (NDArray X)
+        {
+            // assert self.dist is not None
+            // nb_classes, nb_features = map(int, self.dist.scale.shape)
+
+
+            throw new NotFiniteNumberException();
         }
     }
 }
