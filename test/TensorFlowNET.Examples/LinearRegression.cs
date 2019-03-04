@@ -16,7 +16,7 @@ namespace TensorFlowNET.Examples
 
         // Parameters
         float learning_rate = 0.01f;
-        int training_epochs = 10000;
+        int training_epochs = 1000;
         int display_step = 50;
 
         public void Run()

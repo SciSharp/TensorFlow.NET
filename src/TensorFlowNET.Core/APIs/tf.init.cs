@@ -7,7 +7,7 @@ namespace Tensorflow
     public static partial class tf
     {
         public static IInitializer zeros_initializer => new Zeros();
-        public static IInitializer glorot_uniform => new GlorotUniform();
+        public static IInitializer glorot_uniform_initializer => new GlorotUniform();
         
         public static variable_scope variable_scope(string name_or_scope,
                string default_name = null,

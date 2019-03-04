@@ -30,14 +30,18 @@ namespace TensorFlowNET.UnitTest
             var mammal2 = tf.Variable("Tiger");
         }
 
+        /// <summary>
+        /// https://www.tensorflow.org/api_docs/python/tf/variable_scope
+        /// </summary>
         [TestMethod]
-        public void SimpleScope()
+        public void VarCreation1()
         {
             with(tf.variable_scope("foo"), delegate
             {
                 with(tf.variable_scope("bar"), delegate
                 {
                     var v = tf.get_variable("v", new TensorShape(1));
+                    Assert.AreEqual(v.name, "foo/bar/v:0");
                 });
             });
         }

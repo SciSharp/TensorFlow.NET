@@ -77,6 +77,11 @@ namespace Tensorflow
             return null;
         }
 
+        public TensorShape getShape()
+        {
+            return tensor_util.to_shape(shape);
+        }
+
         /// <summary>
         /// number of dimensions
         /// 0	Scalar (magnitude only)

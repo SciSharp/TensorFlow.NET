@@ -66,7 +66,7 @@ using(var sess = tf.Session())
 
 Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html).
 
-More examples:
+### More examples:
 
 * [Hello World](test/TensorFlowNET.Examples/HelloWorld.cs)
 * [Basic Operations](test/TensorFlowNET.Examples/BasicOperations.cs)

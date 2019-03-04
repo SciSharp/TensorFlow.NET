@@ -74,7 +74,9 @@ namespace Tensorflow
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
             VariableAggregation aggregation = VariableAggregation.NONE)
         {
-            bool initializing_from_value = false;
+            bool initializing_from_value = true;
+            if (use_resource == null)
+                use_resource = false;
 
             if (_vars.ContainsKey(name))
             {
@@ -86,15 +88,18 @@ namespace Tensorflow
                 throw new NotImplementedException("_get_single_variable");
             }
 
-            Tensor init_val = null;
-
+            RefVariable v = null;
             // Create the tensor to initialize the variable with default value.
             if (initializer == null)
             {
                 if (dtype.is_floating())
-                    initializer = tf.glorot_uniform;
+                {
+                    initializer = tf.glorot_uniform_initializer;
+                    initializing_from_value = false;
+                }
             }
 
+            // Create the variable.
             ops.init_scope();
             {
                 if (initializing_from_value)
@@ -103,22 +108,18 @@ namespace Tensorflow
                 }
                 else
                 {
-                    init_val = initializer.call(shape, dtype);
+                    Func<Tensor> init_val = () => initializer.call(shape, dtype);
                     var variable_dtype = dtype.as_base_dtype();
+
+                    v = variable_scope.default_variable_creator(init_val,
+                        name: name,
+                        trainable: trainable,
+                        dtype: TF_DataType.DtInvalid,
+                        validate_shape: validate_shape,
+                        synchronization: synchronization,
+                        aggregation: aggregation);
                 }
             }
-
-            // Create the variable.
-            if (use_resource == null)
-                use_resource = false;
-
-            var v = variable_scope.default_variable_creator(init_val, 
-                name: name, 
-                trainable: trainable, 
-                dtype: TF_DataType.DtInvalid,
-                validate_shape: validate_shape,
-                synchronization: synchronization,
-                aggregation: aggregation);
 
             _vars[name] = v;
 
