@@ -178,5 +178,21 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+
+        /// <summary>
+        /// Return the shape of s0 op s1 with broadcast.
+        /// Given `s0` and `s1`, tensors that represent shapes, compute `r0`, the
+        /// broadcasted shape. `s0`, `s1` and `r0` are all integer vectors.
+        /// </summary>
+        /// <param name="s0"> A `Tensor`. Must be one of the following types: `int32`, `int64`.</param>
+        /// <param name="s1"> A `Tensor`. Must have the same type as `s0`.</param>
+        /// <param name="name"> A name for the operation (optional).</param>
+        /// <returns> `Tensor`. Has the same type as `s0`.</returns>
+        public static Tensor broadcast_args(Tensor s0, Tensor s1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("BroadcastArgs", name, args: new { s0, s1, name });
+
+            return _op.outputs[0];
+        }
     }
 }
