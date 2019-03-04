@@ -98,6 +98,12 @@ namespace Tensorflow
                 yield return (t1[i], t2[i]);
         }
 
+        public static IEnumerable<(T1, T2)> zip<T1, T2>(NDArray t1, NDArray t2)
+        {
+            for (int i = 0; i < t1.size; i++)
+                yield return (t1.Data<T1>(i), t2.Data<T2>(i));
+        }
+
         public static IEnumerable<(int, T)> enumerate<T>(IList<T> values)
         {
             for (int i = 0; i < values.Count; i++)
