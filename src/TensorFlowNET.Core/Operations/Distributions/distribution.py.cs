@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    abstract class _BaseDistribution : Object
+    abstract class _BaseDistribution : Python
     {
         // Abstract base class needed for resolving subclass hierarchy.
     }
@@ -22,8 +22,8 @@ namespace Tensorflow
         public ReparameterizationType _reparameterization_type {get;set;}
         public bool _validate_args {get;set;}
         public bool _allow_nan_stats {get;set;}
-        public Dictionary<object, object> _parameters  {get;set;}
-        public List<object> _graph_parents  {get;set;}
+        public Dictionary<string, object> _parameters  {get;set;}
+        public List<Tensor> _graph_parents  {get;set;}
         public string _name  {get;set;}
 
         /// <summary>
@@ -82,7 +82,21 @@ namespace Tensorflow
     /// </summary>
     class ReparameterizationType
     {
+        public string _rep_type { get; set; }
+        public ReparameterizationType(string rep_type)
+        {
+            this._rep_type = rep_type;
+        }
 
+        public void repr()
+        {
+            Console.WriteLine($"<Reparameteriation Type: {this._rep_type}>" );
+        }
+
+        public bool eq (ReparameterizationType other)
+        {
+            return this.Equals(other);
+        }
     }
 
 
