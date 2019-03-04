@@ -14,16 +14,17 @@ namespace Tensorflow
         public bool resue;
 
         private TF_DataType _dtype;
-        public string name { get; set; }
-        public string name_scope { get; set; }
+        public string _name { get; set; }
+        public string _name_scope { get; set; }
+        public string original_name_scope => _name_scope;
 
         public VariableScope(bool reuse, 
             string name = "", 
             string name_scope = "",
             TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
-            this.name = name;
-            this.name_scope = name_scope;
+            _name = name;
+            _name_scope = name_scope;
             _reuse = _ReuseMode.AUTO_REUSE;
             _dtype = dtype;
         }
@@ -37,7 +38,7 @@ namespace Tensorflow
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
             VariableAggregation aggregation= VariableAggregation.NONE)
         {
-            string full_name = !string.IsNullOrEmpty(this.name) ? this.name + "/" + name : name;
+            string full_name = !string.IsNullOrEmpty(this._name) ? this._name + "/" + name : name;
             return with(new ops.name_scope(null), scope =>
             {
                 if (dtype == TF_DataType.DtInvalid)

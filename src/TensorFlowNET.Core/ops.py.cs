@@ -475,5 +475,11 @@ namespace Tensorflow
                 return name;
             }
         }
+
+        public static string get_name_scope()
+        {
+            var g = get_default_graph();
+            return g.get_name_scope();
+        }
     }
 }

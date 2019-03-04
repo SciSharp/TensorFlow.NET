@@ -47,10 +47,28 @@ namespace TensorFlowNET.UnitTest
             });
         }
 
+        /// <summary>
+        /// how to reenter a premade variable scope safely
+        /// </summary>
         [TestMethod]
         public void ReenterVariableScope()
         {
+            variable_scope vs = null;
+            with(tf.variable_scope("foo"), v => vs = v);
 
+            // Re-enter the variable scope.
+            with(tf.variable_scope(vs, auxiliary_name_scope: false), v =>
+            {
+                var vs1 = (VariableScope)v;
+                // Restore the original name_scope.
+                with(tf.name_scope(vs1.original_name_scope), delegate
+                {
+                    var v1 = tf.get_variable("v", new TensorShape(1));
+                    Assert.AreEqual(v1.name, "foo/v:0");
+                    var c1 = tf.constant(new int[] { 1 }, name: "c");
+                    Assert.AreEqual(c1.name, "foo/c:0");
+                });
+            });
         }
 
         [TestMethod]

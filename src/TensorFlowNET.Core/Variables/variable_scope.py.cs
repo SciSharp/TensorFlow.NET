@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
@@ -12,42 +13,83 @@ namespace Tensorflow
 
         private bool _use_resource;
         public bool UseResource => _use_resource;
-        private string _name_or_scope;
+        private string _name;
+        private VariableScope _scope;
         private string _default_name;
         private object _values;
-        private string _current_name_scope;
+        private ops.name_scope _current_name_scope;
+        private bool _auxiliary_name_scope;
         private PureVariableScope _cached_pure_variable_scope;
 
-        public variable_scope(string name_or_scope, string default_name = "", object values = null)
+        public variable_scope(string name, 
+            string default_name = "", 
+            object values = null,
+            bool auxiliary_name_scope = true)
         {
-            _name_or_scope = name_or_scope;
+            _name = name;
             _default_name = default_name;
             _values = values;
             _current_name_scope = null;
 
             _use_resource = false;
-            if (_default_name == null && _name_or_scope == null)
-                throw new TypeError("If default_name is None then name_or_scope is required");
+            if (_default_name == null && _name == null)
+                throw new TypeError("If default_name is None then name is required");
+
+            _auxiliary_name_scope = auxiliary_name_scope;
+        }
+
+        public variable_scope(VariableScope scope,
+            string default_name = "",
+            object values = null,
+            bool auxiliary_name_scope = true)
+        {
+            _scope = scope;
+            _default_name = default_name;
+            _values = values;
+            _current_name_scope = null;
+
+            _use_resource = false;
+            if (_default_name == null && _scope == null)
+                throw new TypeError("If default_name is None then scope is required");
+
+            _auxiliary_name_scope = auxiliary_name_scope;
         }
 
         public void __enter__()
         {
-            _enter_scope_uncached();
+            _scope = _enter_scope_uncached();
         }
 
-        public VariableScope _enter_scope_uncached()
+        private VariableScope _enter_scope_uncached()
         {
-            ops.name_scope current_name_scope = null;
-            if(_name_or_scope != null)
+            ops.name_scope current_name_scope;
+            if (_auxiliary_name_scope)
+                // Create a new name scope later
+                current_name_scope = null;
+            else
             {
-                var name_scope = _name_or_scope;
+                // Reenter the current name scope
+                string name_scope = ops.get_name_scope();
+                if(!string.IsNullOrEmpty(name_scope))
+                    // Hack to reenter
+                    name_scope += "/";
+                current_name_scope = new ops.name_scope(name_scope);
+            }
+
+            if (_name != null || _scope != null)
+            {
+                var name_scope = _name == null ? _scope._name.Split('/').Last() : _name;
                 if (name_scope != null || current_name_scope != null)
                     current_name_scope = new ops.name_scope(name_scope);
                 current_name_scope.__enter__();
-                string current_name_scope_name = current_name_scope;
+                var current_name_scope_name = current_name_scope;
                 _current_name_scope = current_name_scope;
                 string old_name_scope = current_name_scope_name;
-                var pure_variable_scope = new PureVariableScope(_name_or_scope, old_name_scope: old_name_scope);
+                PureVariableScope pure_variable_scope = null;
+                if(_scope == null)
+                    pure_variable_scope = new PureVariableScope(_name, old_name_scope: old_name_scope);
+                else
+                    pure_variable_scope = new PureVariableScope(_scope, old_name_scope: old_name_scope);
                 pure_variable_scope.__enter__();
                 VariableScope entered_pure_variable_scope = pure_variable_scope;
                 _cached_pure_variable_scope = pure_variable_scope;
@@ -149,14 +191,21 @@ namespace Tensorflow
             return trainable.Value;
         }
 
+        public static implicit operator VariableScope(variable_scope scope)
+        {
+            return scope._scope;
+        }
+
         public void __exit__()
         {
-            
+            if (_current_name_scope != null)
+                _current_name_scope.__exit__();
         }
 
         public void Dispose()
         {
-            
+            if (_current_name_scope != null)
+                _current_name_scope.Dispose();
         }
     }
 }
