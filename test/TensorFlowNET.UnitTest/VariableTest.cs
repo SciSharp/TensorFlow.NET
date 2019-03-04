@@ -32,9 +32,10 @@ namespace TensorFlowNET.UnitTest
 
         /// <summary>
         /// https://www.tensorflow.org/api_docs/python/tf/variable_scope
+        /// how to create a new variable
         /// </summary>
         [TestMethod]
-        public void VarCreation1()
+        public void VarCreation()
         {
             with(tf.variable_scope("foo"), delegate
             {
@@ -44,6 +45,12 @@ namespace TensorFlowNET.UnitTest
                     Assert.AreEqual(v.name, "foo/bar/v:0");
                 });
             });
+        }
+
+        [TestMethod]
+        public void ReenterVariableScope()
+        {
+
         }
 
         [TestMethod]
@@ -65,7 +72,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void Assign1()
         {
-            with<Graph>(tf.Graph().as_default(), graph =>
+            with(tf.Graph().as_default(), graph =>
             {
                 var variable = tf.Variable(31, name: "tree");
                 var init = tf.global_variables_initializer();
@@ -91,7 +98,7 @@ namespace TensorFlowNET.UnitTest
             // Add an op to initialize the variables.
             var init_op = tf.global_variables_initializer();
 
-            with<Session>(tf.Session(), sess =>
+            with(tf.Session(), sess =>
             {
                 sess.run(init_op);
                 // o some work with the model.

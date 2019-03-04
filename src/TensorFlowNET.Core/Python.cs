@@ -43,12 +43,12 @@ namespace Tensorflow
             }
         }
 
-        public static void with<T>(IPython py, Action<T> action) where T : IPython
+        public static void with<T>(T py, Action<T> action) where T : IPython
         {
             try
             {
                 py.__enter__();
-                action((T)py);
+                action(py);
             }
             catch (Exception ex)
             {
@@ -62,12 +62,12 @@ namespace Tensorflow
             }
         }
 
-        public static TOut with<TIn, TOut>(IPython py, Func<TIn, TOut> action) where TIn : IPython
+        public static TOut with<TIn, TOut>(TIn py, Func<TIn, TOut> action) where TIn : IPython
         {
             try
             {
                 py.__enter__();
-                return action((TIn)py);
+                return action(py);
             }
             catch (Exception ex)
             {

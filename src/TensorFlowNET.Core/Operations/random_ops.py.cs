@@ -23,7 +23,7 @@ namespace Tensorflow
             int? seed = null, 
             string name = null)
         {
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "random_normal", new object[] { shape, mean, stddev }), scope =>
+            return with(new ops.name_scope(name, "random_normal", new { shape, mean, stddev }), scope =>
             {
                 var shape_tensor = _ShapeTensor(shape);
                 var mean_tensor = ops.convert_to_tensor(mean, dtype: dtype, name: "mean");
@@ -53,7 +53,7 @@ namespace Tensorflow
             int? seed = null, 
             string name = null)
         {
-            return with<ops.name_scope, Tensor>(new ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
+            return with(new ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
             {
                 name = scope;
                 var tensorShape = _ShapeTensor(shape);

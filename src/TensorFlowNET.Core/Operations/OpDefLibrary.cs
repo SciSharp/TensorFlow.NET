@@ -10,7 +10,7 @@ using static Tensorflow.OpDef.Types;
 
 namespace Tensorflow
 {
-    public class OpDefLibrary
+    public class OpDefLibrary : Python
     {
         public Operation _apply_op_helper(string op_type_name, string name = null, dynamic args = null)
         {
@@ -44,7 +44,7 @@ namespace Tensorflow
             var input_types = new List<TF_DataType>();
             dynamic values = null;
 
-            return Python.with<ops.name_scope, Operation>(new ops.name_scope(name), scope =>
+            return with(new ops.name_scope(name), scope =>
             {
                 var inferred_from = new Dictionary<string, object>();
                 var base_types = new List<TF_DataType>();

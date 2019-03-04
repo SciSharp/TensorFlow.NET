@@ -39,7 +39,7 @@ namespace TensorFlowNET.Examples
 
                 var idx = 0;
                 float propability = 0;
-                with<Session>(tf.Session(graph), sess =>
+                with(tf.Session(graph), sess =>
                 {
                     var results = sess.run(output_operation.outputs[0], new FeedItem(input_operation.outputs[0], tensor));
                     var probabilities = results.Data<float>();
@@ -63,7 +63,7 @@ namespace TensorFlowNET.Examples
                                 int input_mean = 117,
                                 int input_std = 1)
         {
-            return with<Graph, NDArray>(tf.Graph().as_default(), graph =>
+            return with(tf.Graph().as_default(), graph =>
             {
                 var file_reader = tf.read_file(file_name, "file_reader");
                 var decodeJpeg = tf.image.decode_jpeg(file_reader, channels: 3, name: "DecodeJpeg");
@@ -74,7 +74,7 @@ namespace TensorFlowNET.Examples
                 var sub = tf.subtract(bilinear, new float[] { input_mean });
                 var normalized = tf.divide(sub, new float[] { input_std });
 
-                return with<Session, NDArray>(tf.Session(graph), sess => sess.run(normalized));
+                return with(tf.Session(graph), sess => sess.run(normalized));
             });
         }
 

@@ -53,7 +53,7 @@ namespace TensorFlowNET.Examples
             var init = tf.global_variables_initializer();
 
             // Start training
-            with<Session>(tf.Session(), sess => 
+            with(tf.Session(), sess => 
             {
                 // Run the initializer
                 sess.run(init);

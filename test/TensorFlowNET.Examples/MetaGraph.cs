@@ -16,7 +16,7 @@ namespace TensorFlowNET.Examples
 
         private void ImportMetaGraph(string dir)
         {
-            with<Session>(tf.Session(), sess =>
+            with(tf.Session(), sess =>
             {
                 var new_saver = tf.train.import_meta_graph(dir + "my-model-10000.meta");
                 new_saver.restore(sess, dir + "my-model-10000");

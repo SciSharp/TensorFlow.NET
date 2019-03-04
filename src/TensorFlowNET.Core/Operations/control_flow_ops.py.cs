@@ -9,7 +9,7 @@ namespace Tensorflow
     {
         public static Operation group<T>(T[] inputs, string name = null) where T : ITensorOrOperation
         {
-            return with<ops.name_scope, Operation>(new ops.name_scope(name, "group_deps", inputs), scope =>
+            return with(new ops.name_scope(name, "group_deps", inputs), scope =>
             {
                 name = scope;
 
@@ -39,7 +39,7 @@ namespace Tensorflow
 
         private static Operation _GroupControlDeps(string dev, Operation[] deps, string name = null)
         {
-            return Python.with<_ControlDependenciesController, Operation>(ops.control_dependencies(deps), ctl =>
+            return with(ops.control_dependencies(deps), ctl =>
             {
                 if (dev == null)
                 {
@@ -83,7 +83,7 @@ namespace Tensorflow
 
         public static Tensor[] tuple(Tensor[] tensors, string name = null, Operation[] control_inputs = null)
         {
-            return Python.with<ops.name_scope, Tensor[]>(new ops.name_scope(name, "tuple", tensors), scope =>
+            return with(new ops.name_scope(name, "tuple", tensors), scope =>
             {
                 name = scope;
                 var gating_ops = tensors.Select(x => x.op).ToList();
@@ -115,11 +115,11 @@ namespace Tensorflow
             values.AddRange(dependencies);
             values.Add(output_tensor);
 
-            return Python.with<ops.name_scope, Tensor>(new ops.name_scope(name, "control_dependency", values), scope =>
+            return with(new ops.name_scope(name, "control_dependency", values), scope =>
             {
                 name = scope;
 
-                return Python.with<_ControlDependenciesController, Tensor>(ops.control_dependencies(dependencies), ctl =>
+                return with(ops.control_dependencies(dependencies), ctl =>
                 {
                     output_tensor = ops.convert_to_tensor_or_composite(output_tensor);
                     return _Identity(output_tensor, name: name);

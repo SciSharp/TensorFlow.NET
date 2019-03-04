@@ -7,7 +7,7 @@ using static Tensorflow.OpDef.Types;
 
 namespace Tensorflow
 {
-    public class importer
+    public class importer : Python
     {
         public static ITensorOrOperation[] import_graph_def(GraphDef graph_def,
             Dictionary<string, Tensor> input_map = null,
@@ -26,7 +26,7 @@ namespace Tensorflow
 
             string prefix = "";
             var graph = ops.get_default_graph();
-            Python.with<ops.name_scope>(new ops.name_scope(name, "import", input_map.Values), scope =>
+            with(new ops.name_scope(name, "import", input_map.Values), scope =>
             {
                 prefix = scope;
                 /*if (!string.IsNullOrEmpty(prefix))

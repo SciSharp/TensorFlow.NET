@@ -7,7 +7,7 @@ using Tensorflow;
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class PlaceholderTest
+    public class PlaceholderTest : Python
     {
         [TestMethod]
         public void placeholder()
@@ -15,7 +15,7 @@ namespace TensorFlowNET.UnitTest
             var x = tf.placeholder(tf.int32);
             var y = x * 3;
 
-            Python.with<Session>(tf.Session(), sess =>
+            with(tf.Session(), sess =>
             {
                 var result = sess.run(y, 
                     new FeedItem(x, 2));

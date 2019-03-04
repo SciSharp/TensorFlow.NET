@@ -12,7 +12,7 @@ namespace Tensorflow
     /// A tensor is a generalization of vectors and matrices to potentially higher dimensions. 
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
-    public partial class Tensor : IDisposable, ITensorOrOperation
+    public partial class Tensor : Python, IDisposable, ITensorOrOperation
     {
         private readonly IntPtr _handle;
 

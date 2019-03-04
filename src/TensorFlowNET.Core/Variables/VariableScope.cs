@@ -7,7 +7,7 @@ namespace Tensorflow
     /// <summary>
     /// Variable scope object to carry defaults to provide to `get_variable`
     /// </summary>
-    public class VariableScope
+    public class VariableScope : Python
     {
         public bool use_resource { get; set; }
         private _ReuseMode _reuse;
@@ -38,7 +38,7 @@ namespace Tensorflow
             VariableAggregation aggregation= VariableAggregation.NONE)
         {
             string full_name = !string.IsNullOrEmpty(this.name) ? this.name + "/" + name : name;
-            return Python.with<ops.name_scope, RefVariable>(new ops.name_scope(null), scope =>
+            return with(new ops.name_scope(null), scope =>
             {
                 if (dtype == TF_DataType.DtInvalid)
                     dtype = _dtype;

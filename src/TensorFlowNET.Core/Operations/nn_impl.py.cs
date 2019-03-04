@@ -20,7 +20,7 @@ namespace Tensorflow
             bool keep_dims = false)
         {
             Tuple<Tensor, Tensor> t = null;
-            with<ops.name_scope>(new ops.name_scope(name, "moments", new { x, axes }), scope =>
+            with(new ops.name_scope(name, "moments", new { x, axes }), scope =>
             {
                 // The dynamic range of fp16 is too limited to support the collection of
                 // sufficient statistics. As a workaround we simply perform the operations

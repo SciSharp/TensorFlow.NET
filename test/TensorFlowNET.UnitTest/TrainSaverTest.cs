@@ -19,7 +19,7 @@ namespace TensorFlowNET.UnitTest
 
         public void ImportGraph()
         {
-            with<Session>(tf.Session(), sess =>
+            with(tf.Session(), sess =>
             {
                 var new_saver = tf.train.import_meta_graph("C:/tmp/my-model.meta");
             });
@@ -44,7 +44,7 @@ namespace TensorFlowNET.UnitTest
 
         public void ImportSavedModel()
         {
-            with<Session>(Session.LoadFromSavedModel("mobilenet"), sess =>
+            with(Session.LoadFromSavedModel("mobilenet"), sess =>
             {
                 
             });
@@ -65,7 +65,7 @@ namespace TensorFlowNET.UnitTest
             // Add ops to save and restore all the variables.
             var saver = tf.train.Saver();
 
-            with<Session>(tf.Session(), sess =>
+            with(tf.Session(), sess =>
             {
                 sess.run(init_op);
 

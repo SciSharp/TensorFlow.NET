@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class BaseSaverBuilder
+    public class BaseSaverBuilder : Python
     {
         protected SaverDef.Types.CheckpointFormatVersion _write_version;
 
@@ -79,7 +79,7 @@ namespace Tensorflow
             Tensor save_tensor = null;
             Operation restore_op = null;
 
-            return Python.with<ops.name_scope, SaverDef>(new ops.name_scope(name, "save", saveables.Select(x => x.op).ToArray()), scope =>
+            return with(new ops.name_scope(name, "save", saveables.Select(x => x.op).ToArray()), scope =>
             {
                 name = scope;
 
