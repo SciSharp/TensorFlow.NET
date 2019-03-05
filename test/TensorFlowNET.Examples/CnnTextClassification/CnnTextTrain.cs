@@ -1,6 +1,7 @@
 ﻿using NumSharp.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow;
 
@@ -46,7 +47,11 @@ namespace TensorFlowNET.Examples.CnnTextClassification
 
         public (NDArray, NDArray, NDArray, NDArray, NDArray) preprocess()
         {
-            DataHelpers.load_data_and_labels(positive_data_file, negative_data_file);
+            var (x_text, y) = DataHelpers.load_data_and_labels(positive_data_file, negative_data_file);
+
+            // Build vocabulary
+            int max_document_length = x_text.Select(x => x.Split(' ').Length).Max();
+            var vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length)
             throw new NotImplementedException("");
         }
     }

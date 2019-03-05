@@ -17,7 +17,7 @@ namespace TensorFlowNET.Examples.CnnTextClassification
         /// <param name="positive_data_file"></param>
         /// <param name="negative_data_file"></param>
         /// <returns></returns>
-        public static (NDArray, NDArray) load_data_and_labels(string positive_data_file, string negative_data_file)
+        public static (string[], NDArray) load_data_and_labels(string positive_data_file, string negative_data_file)
         {
             Directory.CreateDirectory("CnnTextClassification");
             Utility.Web.Download(positive_data_file, "CnnTextClassification/rt-polarity.pos");
@@ -39,9 +39,8 @@ namespace TensorFlowNET.Examples.CnnTextClassification
 
             var positive_labels = positive_examples.Select(x => new int[2] { 0, 1 }).ToArray();
             var negative_labels = negative_examples.Select(x => new int[2] { 1, 0 }).ToArray();
-            // var y = np.
-            // return (x_text, y);
-            throw new NotImplementedException("load_data_and_labels");
+            var y = np.concatenate(new int[][][] { positive_labels, negative_labels });
+            return (x_text.ToArray(), y);
         }
 
         private static string clean_str(string str)
