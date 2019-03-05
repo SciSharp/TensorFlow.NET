@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
-    <Version>0.4.1</Version>
+    <Version>0.4.2</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -16,11 +16,11 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET</PackageTags>
     <Description>Google's TensorFlow binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.4.1.0</AssemblyVersion>
+    <AssemblyVersion>0.4.2.0</AssemblyVersion>
     <PackageReleaseNotes>Added ConfigProto to control CPU and GPU resource.
 Fixed import name scope issue.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.4.1.0</FileVersion>
+    <FileVersion>0.4.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
