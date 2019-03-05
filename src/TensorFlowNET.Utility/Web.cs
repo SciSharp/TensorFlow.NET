@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -10,24 +11,31 @@ namespace TensorFlowNET.Utility
 {
     public class Web
     {
-        public static bool Download(string url, string file)
+        public static bool Download(string url, string destDir, string destFileName)
         {
-            if (File.Exists(file))
+            if (destFileName == null)
+                destFileName = url.Split(Path.DirectorySeparatorChar).Last();
+
+            Directory.CreateDirectory(destDir);
+
+            string relativeFilePath = Path.Combine(destDir, destFileName);
+
+            if (File.Exists(relativeFilePath))
             {
-                Console.WriteLine($"{file} already exists.");
+                Console.WriteLine($"{relativeFilePath} already exists.");
                 return false;
             }
 
             var wc = new WebClient();
-            Console.WriteLine($"Downloading {file}");
-            var download = Task.Run(() => wc.DownloadFile(url, file));
+            Console.WriteLine($"Downloading {relativeFilePath}");
+            var download = Task.Run(() => wc.DownloadFile(url, relativeFilePath));
             while (!download.IsCompleted)
             {
                 Thread.Sleep(1000);
                 Console.Write(".");
             }
             Console.WriteLine("");
-            Console.WriteLine($"Downloaded {file}");
+            Console.WriteLine($"Downloaded {relativeFilePath}");
 
             return true;
         }

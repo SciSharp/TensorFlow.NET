@@ -85,15 +85,14 @@ namespace TensorFlowNET.Examples
             // get model file
             string url = "https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip";
 
-            string zipFile = Path.Join(dir, "inception5h.zip");
-            Utility.Web.Download(url, zipFile);
+            Utility.Web.Download(url, dir, "inception5h.zip");
 
-            Utility.Compress.UnZip(zipFile, dir);
+            Utility.Compress.UnZip(Path.Join(dir, "inception5h.zip"), dir);
 
             // download sample picture
-            string pic = Path.Join(dir, "img", "grace_hopper.jpg");
             Directory.CreateDirectory(Path.Join(dir, "img"));
-            Utility.Web.Download($"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/grace_hopper.jpg", pic);
+            url = $"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/grace_hopper.jpg";
+            Utility.Web.Download(url, Path.Join(dir, "img"), "grace_hopper.jpg");
         }
     }
 }

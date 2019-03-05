@@ -90,14 +90,14 @@ namespace TensorFlowNET.Examples
             // get model file
             string url = "https://storage.googleapis.com/download.tensorflow.org/models/inception_v3_2016_08_28_frozen.pb.tar.gz";
             
-            string zipFile = Path.Join(dir, $"{pbFile}.tar.gz");
-            Utility.Web.Download(url, zipFile);
+            Utility.Web.Download(url, dir, $"{pbFile}.tar.gz");
 
-            Utility.Compress.ExtractTGZ(zipFile, dir);
+            Utility.Compress.ExtractTGZ(Path.Join(dir, $"{pbFile}.tar.gz"), dir);
 
             // download sample picture
             string pic = "grace_hopper.jpg";
-            Utility.Web.Download($"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/{pic}", Path.Join(dir, pic));
+            url = $"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/{pic}";
+            Utility.Web.Download(url, dir, pic);
         }
     }
 }
