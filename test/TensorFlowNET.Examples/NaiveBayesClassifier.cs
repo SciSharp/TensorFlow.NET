@@ -14,14 +14,22 @@ namespace TensorFlowNET.Examples
     { 
         public void Run()
         {
-           // t/f.nn.moments()
+            np.array<float>(1.0f, 1.0f);
+            // var X = np.array<float>(np.array<float>(1.0f, 1.0f), np.array<float>(2.0f, 2.0f), np.array<float>(1.0f, -1.0f), np.array<float>(2.0f, -2.0f), np.array<float>(-1.0f, -1.0f), np.array<float>(-1.0f, 1.0f),);
+            // var X = np.array<float[]>(new float[][] { new float[] { 1.0f, 1.0f}, new float[] { 2.0f, 2.0f }, new float[] { -1.0f, -1.0f }, new float[] { -2.0f, -2.0f }, new float[] { 1.0f, -1.0f }, new float[] { 2.0f, -2.0f }, });
+            var X = np.array<float>(new float[][] { new float[] { 1.0f, 1.0f }, new float[] { 2.0f, 2.0f }, new float[] { -1.0f, -1.0f }, new float[] { -2.0f, -2.0f }, new float[] { 1.0f, -1.0f }, new float[] { 2.0f, -2.0f }, });
+            var y = np.array<int>(0,0,1,1,2,2);
+
+            fit(X, y);
+            // Create a regular grid and classify each point 
+            
         }
 
         public void fit(NDArray X, NDArray y)
         {
             NDArray unique_y = y.unique<long>();
             
-            Dictionary<int, List<NDArray>> dic = new Dictionary<int, List<NDArray>>();
+            Dictionary<long, List<NDArray>> dic = new Dictionary<long, List<NDArray>>();
             // Init uy in dic
             foreach (int uy in unique_y.Data<int>())
             {
@@ -30,19 +38,19 @@ namespace TensorFlowNET.Examples
             // Separate training points by class 
             // Shape : nb_classes * nb_samples * nb_features
             int maxCount = 0;
-            foreach (var (x, t) in zip(X.Data<float>(), y.Data<int>()))
+            for (int i = 0; i < y.size; i++)
             {
-                int curClass = (y[t, 0] as NDArray).Data<int>().First();
+                long curClass = (long)y[i];
                 List<NDArray> l = dic[curClass];
-                l.Add(x);
+                l.Add(X[i] as NDArray);
                 if (l.Count > maxCount)
                 {
                     maxCount = l.Count;
                 }
-                dic.Add(curClass, l);
+                dic[curClass] = l;
             }
-            NDArray points_by_class = np.zeros(dic.Count,maxCount,X.shape[1]);
-            foreach (KeyValuePair<int, List<NDArray>> kv in dic)
+            NDArray points_by_class = np.zeros(new int[] { dic.Count, maxCount, X.shape[1] });
+            foreach (KeyValuePair<long, List<NDArray>> kv in dic)
             {
                 var cls = kv.Value.ToArray();
                 for (int i = 0; i < dic.Count; i++)
