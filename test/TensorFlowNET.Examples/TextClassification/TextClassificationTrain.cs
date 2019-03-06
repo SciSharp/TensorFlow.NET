@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Tensorflow;
-using TensorFlowNET.Utility;
+using TensorFlowNET.Examples.Utility;
 
 namespace TensorFlowNET.Examples.CnnTextClassification
 {
@@ -24,7 +24,7 @@ namespace TensorFlowNET.Examples.CnnTextClassification
             download_dbpedia();
             Console.WriteLine("Building dataset...");
             var (x, y, alphabet_size) = DataHelpers.build_char_dataset("train", "vdcnn", CHAR_MAX_LEN);
-            var (train_x, valid_x, train_y, valid_y) = train_test_split(x, y, test_size: 0.15);
+            //var (train_x, valid_x, train_y, valid_y) = train_test_split(x, y, test_size: 0.15);
         }
 
         public void download_dbpedia()

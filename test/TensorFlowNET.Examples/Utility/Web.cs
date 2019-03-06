@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TensorFlowNET.Utility
+namespace TensorFlowNET.Examples.Utility
 {
     public class Web
     {
