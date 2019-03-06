@@ -12,20 +12,27 @@ namespace Tensorflow
         public static TF_DataType float16 = TF_DataType.TF_HALF;
         public static TF_DataType float32 = TF_DataType.TF_FLOAT;
         public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
+        public static TF_DataType boolean = TF_DataType.TF_BOOL;
         public static TF_DataType chars = TF_DataType.TF_STRING;
 
         public static Context context = new Context(new ContextOptions(), new Status());
 
         public static Session defaultSession;
 
-        public static RefVariable Variable<T>(T data, string name = null, TF_DataType dtype = TF_DataType.DtInvalid)
+        public static RefVariable Variable<T>(T data, 
+            bool trainable = true,
+            string name = null, 
+            TF_DataType dtype = TF_DataType.DtInvalid)
         {
-            return Tensorflow.variable_scope.default_variable_creator(data, name: name, dtype: TF_DataType.DtInvalid);
+            return Tensorflow.variable_scope.default_variable_creator(data, 
+                trainable: trainable,
+                name: name,
+                dtype: TF_DataType.DtInvalid);
         }
 
-        public static unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null)
+        public static unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
         {
-            return gen_array_ops.placeholder(dtype, shape);
+            return gen_array_ops.placeholder(dtype, shape, name);
         }
 
         public static void enable_eager_execution()

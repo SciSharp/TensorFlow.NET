@@ -22,5 +22,12 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             int? seed = null,
             string name = null) => random_ops.random_normal(shape, mean, stddev, dtype, seed, name);
+
+        public static Tensor random_uniform(int[] shape,
+            float minval = 0,
+            float? maxval = null,
+            TF_DataType dtype = TF_DataType.TF_FLOAT,
+            int? seed = null,
+            string name = null) => random_ops.random_uniform(shape, minval, maxval, dtype, seed, name);
     }
 }

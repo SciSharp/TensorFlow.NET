@@ -15,7 +15,7 @@ namespace Tensorflow
         public static RefVariable get_variable(string name,
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            IInitializer initializer = null,
+            object initializer = null, // IInitializer or Tensor
             bool? trainable = null,
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
             VariableAggregation aggregation = VariableAggregation.NONE)

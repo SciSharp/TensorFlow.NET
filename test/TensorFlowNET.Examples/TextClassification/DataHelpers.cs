@@ -77,7 +77,7 @@ namespace TensorFlowNET.Examples.CnnTextClassification
 
             var positive_labels = positive_examples.Select(x => new int[2] { 0, 1 }).ToArray();
             var negative_labels = negative_examples.Select(x => new int[2] { 1, 0 }).ToArray();
-            var y = np.array(1);// np.concatenate(new int[][][] { positive_labels, negative_labels });
+            var y = np.concatenate(new int[][][] { positive_labels, negative_labels });
             return (x_text.ToArray(), y);
         }
 
