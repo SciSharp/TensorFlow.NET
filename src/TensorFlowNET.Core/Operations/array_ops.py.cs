@@ -268,5 +268,9 @@ namespace Tensorflow
             return Framework.common_shapes.broadcast_shape(shape_x, shape_y);
         }
 
+        public static Tensor gather(Tensor @params, Tensor indices, string name = null, int axis = 0)
+        {
+            return gen_array_ops.gather_v2(@params, indices, axis, name: name);
+        }
     }
 }
