@@ -74,7 +74,7 @@ namespace TensorFlowNET.Examples
 
             // Create a 3x2 univariate normal distribution with the 
             // Known mean and variance           
-            var dist = tf.distributions.Normal(loc=mean, scale=tf.sqrt(variance));
+            var dist = tf.distributions.Normal(mean, tf.sqrt(variance));
 
         }
 

@@ -62,6 +62,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor sqrt(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Sqrt", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor sub<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Sub", name, args: new { x, y });

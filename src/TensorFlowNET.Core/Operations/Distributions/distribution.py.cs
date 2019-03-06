@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    class _BaseDistribution : Python
+    public class _BaseDistribution : Python
     {
         // Abstract base class needed for resolving subclass hierarchy.
     }
@@ -17,10 +17,10 @@ namespace Tensorflow
     /// Distribution is a base class for constructing and organizing properties
     /// (e.g., mean, variance) of random variables (e.g, Bernoulli, Gaussian). 
     /// </summary>
-    class Distribution : _BaseDistribution
+    public class Distribution : _BaseDistribution
     {
         public TF_DataType _dtype {get;set;}
-        public static ReparameterizationType _reparameterization_type {get;set;}
+        //public ReparameterizationType _reparameterization_type {get;set;}
         public bool _validate_args {get;set;}
         public bool _allow_nan_stats {get;set;}
         public Dictionary<string, object> _parameters  {get;set;}

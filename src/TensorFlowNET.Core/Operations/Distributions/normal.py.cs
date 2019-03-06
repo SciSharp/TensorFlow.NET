@@ -3,7 +3,7 @@ using Tensorflow;
 
 namespace Tensorflow
 {
-    class Normal : Distribution
+    public class Normal : Distribution
     {
         public Tensor _loc { get; set; }
         public Tensor _scale { get; set; }
@@ -25,7 +25,7 @@ namespace Tensorflow
         /// <param name="validate_args"></param>
         /// <param name="allow_nan_stats"></param>
         /// <param name="name"></param>
-        Normal (Tensor loc, Tensor scale, bool validate_args=false, bool allow_nan_stats=true, string name="Normal") 
+        public Normal (Tensor loc, Tensor scale, bool validate_args=false, bool allow_nan_stats=true, string name="Normal") 
         {
             parameters.Add("name", name);
             parameters.Add("loc", loc);
