@@ -39,7 +39,7 @@ namespace Tensorflow
         {
             var r = _ReductionDims(input_tensor, new Tensor(axis));
             var m = gen_math_ops.mean(input_tensor, r);
-            return _may_reduce_to_scalar(keepdims, m);
+            return _may_reduce_to_scalar(keepdims,axis, m);
         }
         /// <summary>
         /// Returns (x - y)(x - y) element-wise.
@@ -117,6 +117,12 @@ namespace Tensorflow
             return output;
         }
 
+        private static Tensor _may_reduce_to_scalar(bool keepdims, int[] axos, Tensor output)
+        {
+            output.shape = new long[0];
+            return output;
+        }
+
         private static Tensor _ReductionDims(Tensor x, Tensor axis)
         {
             if (axis != null)
@@ -127,6 +133,24 @@ namespace Tensorflow
             {
                 var rank = array_ops.rank(x);
                 return range(0, rank, 1);
+            }
+        }
+
+        private static int[] _ReductionDims(Tensor x, int[] axis)
+        {
+            if (axis != null)
+            {
+                return axis;
+            }
+            else
+            {
+                var rank = array_ops.rank(x);
+                if (rank != null)
+                {
+                   // return constant_op.constant();
+                }
+                // return range(0, rank, 1);
+                throw new NotFiniteNumberException();
             }
         }
 

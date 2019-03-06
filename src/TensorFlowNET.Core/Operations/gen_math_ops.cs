@@ -22,7 +22,7 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor mean(Tensor input, Tensor axis, bool keep_dims= false, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, axis });
+            var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
 
             return _op.outputs[0];
         }

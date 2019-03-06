@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,11 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NumSharp" Version="0.7.3" />
-    <PackageReference Include="TensorFlow.NET" Version="0.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Utility\TensorFlowNET.Utility.csproj" />
   </ItemGroup>
@@ -18,6 +14,9 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\9.0.1\lib\netstandard1.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NumSharp.Core">
+      <HintPath>C:\Users\bpeng\Desktop\BoloReborn\NumSharp\src\NumSharp.Core\bin\Debug\netstandard2.0\NumSharp.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
 
