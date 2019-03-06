@@ -19,6 +19,7 @@ namespace TensorFlowNET.Examples.TextClassification
         private RefVariable global_step;
         private RefVariable embeddings;
         private Tensor x_emb;
+        private Tensor x_expanded;
 
         public VdCnn(int alphabet_size, int document_max_len, int num_class)
         {
@@ -33,11 +34,23 @@ namespace TensorFlowNET.Examples.TextClassification
             is_training = tf.placeholder(tf.boolean, new TensorShape(), name: "is_training");
             global_step = tf.Variable(0, trainable: false);
 
+            // Embedding Layer
             with(tf.name_scope("embedding"), delegate
             {
                 var init_embeddings = tf.random_uniform(new int[] { alphabet_size, embedding_size }, -1.0f, 1.0f);
                 embeddings = tf.get_variable("embeddings", initializer: init_embeddings);
-                // x_emb = tf.nn.embedding_lookup(embeddings, x);
+                x_emb = tf.nn.embedding_lookup(embeddings, x);
+                x_expanded = tf.expand_dims(x_emb, -1);
+            });
+
+            // First Convolution Layer
+            with(tf.variable_scope("conv-0"), delegate
+            {
+                var conv0 = tf.layers.conv2d(x_expanded,
+                    filters: num_filters[0],
+                    kernel_size: new int[] { filter_sizes[0], embedding_size },
+                    kernel_initializer: cnn_initializer,
+                    activation: tf.nn.relu);
             });
         }
     }

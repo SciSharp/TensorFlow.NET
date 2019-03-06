@@ -19,6 +19,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor gather_v2(Tensor @params, Tensor indices, int axis, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("GatherV2", name: name, new { @params, indices, axis });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
