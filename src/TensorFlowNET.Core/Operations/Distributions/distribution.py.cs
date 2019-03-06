@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 
 
+
 namespace Tensorflow
 {
-    abstract class _BaseDistribution : Python
+    class _BaseDistribution : Python
     {
         // Abstract base class needed for resolving subclass hierarchy.
     }
@@ -19,7 +20,7 @@ namespace Tensorflow
     class Distribution : _BaseDistribution
     {
         public TF_DataType _dtype {get;set;}
-        public ReparameterizationType _reparameterization_type {get;set;}
+        public static ReparameterizationType _reparameterization_type {get;set;}
         public bool _validate_args {get;set;}
         public bool _allow_nan_stats {get;set;}
         public Dictionary<string, object> _parameters  {get;set;}

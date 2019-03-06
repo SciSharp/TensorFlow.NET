@@ -71,9 +71,10 @@ namespace TensorFlowNET.Examples
             var tup = tf.nn.moments(cons, new int[]{1});
             var mean = tup.Item1;
             var variance = tup.Item2;
+
             // Create a 3x2 univariate normal distribution with the 
             // Known mean and variance           
-            // var dist = tf.distributions.Normal(loc=mean, scale=tf.sqrt(variance));
+            var dist = tf.distributions.Normal(loc=mean, scale=tf.sqrt(variance));
 
         }
 

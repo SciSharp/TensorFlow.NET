@@ -27,6 +27,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor mean(Tensor input, int[] axis, bool keep_dims = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims, name });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor add(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
@@ -36,7 +43,7 @@ namespace Tensorflow
 
         public static Tensor squared_difference(Tensor x, Tensor y, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("SquaredDifference", name, args: new { x, y });
+            var _op = _op_def_lib._apply_op_helper("SquaredDifference", name, args: new { x, y, name });
 
             return _op.outputs[0];
         }

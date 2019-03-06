@@ -157,7 +157,7 @@ namespace Tensorflow
         }
         public static Tensor stop_gradient(Tensor x, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("StopGradient", name, args: new { x });
+            var _op = _op_def_lib._apply_op_helper("StopGradient", name, args: new { input = x, name });
 
             return _op.outputs[0];
         }
@@ -174,7 +174,7 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Squeeze", name, args: new { input, axis, name });
+            var _op = _op_def_lib._apply_op_helper("Squeeze", name, args: new { input, squeeze_dims = axis });
 
             return _op.outputs[0];
         }
