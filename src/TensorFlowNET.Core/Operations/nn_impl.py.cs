@@ -14,13 +14,12 @@ namespace Tensorflow
         /// <param name="name"> Name used to scope the operations that compute the moments.</param>
         /// <param name="keep_dims"> Produce moments with the same dimensionality as the input.</param>
         /// <returns> Two `Tensor` objects: `mean` and `variance`.</returns>
-        public Tuple<Tensor, Tensor> moments(Tensor x, 
+        public static (Tensor, Tensor) moments(Tensor x, 
             int[] axes,
             string name = null,
             bool keep_dims = false)
         {
-            Tuple<Tensor, Tensor> t = null;
-            with(new ops.name_scope(name, "moments", new { x, axes }), scope =>
+            return with<ops.name_scope, (Tensor, Tensor)>(new ops.name_scope(name, "moments", new { x, axes }), scope =>
             {
                 // The dynamic range of fp16 is too limited to support the collection of
                 // sufficient statistics. As a workaround we simply perform the operations
@@ -40,15 +39,10 @@ namespace Tensorflow
                 }
                 // TODO: if x.dtype == dtypes.float16:
                 if (x.dtype == TF_DataType.TF_FLOAT)
-                {
-                    t = Tuple.Create(math_ops.cast(mean, x.dtype), math_ops.cast(variance, x.dtype));
-                    return;
-                }
-                else {
-                    t = Tuple.Create(mean, variance);
-                }
+                    return (math_ops.cast(mean, x.dtype), math_ops.cast(variance, x.dtype));
+                else
+                    return (mean, variance);
             });
-            return t;
         }
     }
 }

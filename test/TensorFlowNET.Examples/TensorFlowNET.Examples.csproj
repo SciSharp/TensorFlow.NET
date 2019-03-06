@@ -20,6 +20,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\9.0.1\lib\netstandard1.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NumSharp.Core">
+      <HintPath>C:\Users\bpeng\Desktop\BoloReborn\NumSharp\src\NumSharp.Core\bin\Debug\netstandard2.0\NumSharp.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
