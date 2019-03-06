@@ -62,26 +62,29 @@ namespace Tensorflow
 
                         switch (subfeed_val)
                         {
-                            case IntPtr pointer:
-                                feed_dict_tensor[subfeed_t] = pointer;
+                            case IntPtr val:
+                                feed_dict_tensor[subfeed_t] = val;
                                 break;
-                            case NDArray nd:
-                                feed_dict_tensor[subfeed_t] = nd;
+                            case NDArray val:
+                                feed_dict_tensor[subfeed_t] = val;
                                 break;
-                            case float floatVal:
-                                feed_dict_tensor[subfeed_t] = (NDArray)floatVal;
+                            case float val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
-                            case double doubleVal:
-                                feed_dict_tensor[subfeed_t] = (NDArray)doubleVal;
+                            case double val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
-                            case int intVal:
-                                feed_dict_tensor[subfeed_t] = (NDArray)intVal;
+                            case short val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
-                            case string str:
-                                feed_dict_tensor[subfeed_t] = (NDArray)str;
+                            case int val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
-                            case byte[] bytes:
-                                feed_dict_tensor[subfeed_t] = (NDArray)bytes;
+                            case string val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
+                                break;
+                            case byte[] val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
                             default:
                                 Console.WriteLine($"can't handle data type of subfeed_val");

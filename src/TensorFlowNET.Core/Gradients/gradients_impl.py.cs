@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Tensorflow
 {
-    public class gradients_impl
+    public class gradients_impl : Python
     {
         public static Tensor[] gradients(Tensor[] ys,
             Tensor[] xs, 
@@ -58,7 +58,7 @@ namespace Tensorflow
              **/
             var grads = new Dictionary<string, Tensor[][]>();
 
-            Python.with<ops.name_scope>(new ops.name_scope(name, "gradients", values: all), scope =>
+            with(new ops.name_scope(name, "gradients", values: all), scope =>
             {
                 string grad_scope = scope;
                 // Get a uid for this call to gradients that can be used to help
@@ -131,7 +131,7 @@ namespace Tensorflow
                             // for ops that do not have gradients.
                             var grad_fn = ops.get_gradient_function(op);
 
-                            Python.with<ops.name_scope>(new ops.name_scope(op.name + "_grad"), scope1 =>
+                            with(new ops.name_scope(op.name + "_grad"), scope1 =>
                             {
                                 string name1 = scope1;
                                 if (grad_fn != null)

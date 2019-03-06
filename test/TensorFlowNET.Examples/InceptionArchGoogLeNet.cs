@@ -46,7 +46,7 @@ namespace TensorFlowNET.Examples
             var input_operation = graph.get_operation_by_name(input_name);
             var output_operation = graph.get_operation_by_name(output_name);
 
-            var results = with<Session, NDArray>(tf.Session(graph),
+            var results = with(tf.Session(graph),
                 sess => sess.run(output_operation.outputs[0],
                     new FeedItem(input_operation.outputs[0], nd)));
 
@@ -68,7 +68,7 @@ namespace TensorFlowNET.Examples
                                 int input_mean = 0,
                                 int input_std = 255)
         {
-            return with<Graph, NDArray>(tf.Graph().as_default(), graph =>
+            return with(tf.Graph().as_default(), graph =>
             {
                 var file_reader = tf.read_file(file_name, "file_reader");
                 var image_reader = tf.image.decode_jpeg(file_reader, channels: 3, name: "jpeg_reader");
@@ -79,7 +79,7 @@ namespace TensorFlowNET.Examples
                 var sub = tf.subtract(bilinear, new float[] { input_mean });
                 var normalized = tf.divide(sub, new float[] { input_std });
 
-                return with<Session, NDArray>(tf.Session(graph), sess => sess.run(normalized));
+                return with(tf.Session(graph), sess => sess.run(normalized));
             });
         }
 
@@ -90,14 +90,14 @@ namespace TensorFlowNET.Examples
             // get model file
             string url = "https://storage.googleapis.com/download.tensorflow.org/models/inception_v3_2016_08_28_frozen.pb.tar.gz";
             
-            string zipFile = Path.Join(dir, $"{pbFile}.tar.gz");
-            Utility.Web.Download(url, zipFile);
+            Utility.Web.Download(url, dir, $"{pbFile}.tar.gz");
 
-            Utility.Compress.ExtractTGZ(zipFile, dir);
+            Utility.Compress.ExtractTGZ(Path.Join(dir, $"{pbFile}.tar.gz"), dir);
 
             // download sample picture
             string pic = "grace_hopper.jpg";
-            Utility.Web.Download($"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/{pic}", Path.Join(dir, pic));
+            url = $"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/{pic}";
+            Utility.Web.Download(url, dir, pic);
         }
     }
 }

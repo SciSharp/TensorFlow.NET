@@ -39,7 +39,7 @@ namespace TensorFlowNET.Examples
 
                 var idx = 0;
                 float propability = 0;
-                with<Session>(tf.Session(graph), sess =>
+                with(tf.Session(graph), sess =>
                 {
                     var results = sess.run(output_operation.outputs[0], new FeedItem(input_operation.outputs[0], tensor));
                     var probabilities = results.Data<float>();
@@ -63,7 +63,7 @@ namespace TensorFlowNET.Examples
                                 int input_mean = 117,
                                 int input_std = 1)
         {
-            return with<Graph, NDArray>(tf.Graph().as_default(), graph =>
+            return with(tf.Graph().as_default(), graph =>
             {
                 var file_reader = tf.read_file(file_name, "file_reader");
                 var decodeJpeg = tf.image.decode_jpeg(file_reader, channels: 3, name: "DecodeJpeg");
@@ -74,7 +74,7 @@ namespace TensorFlowNET.Examples
                 var sub = tf.subtract(bilinear, new float[] { input_mean });
                 var normalized = tf.divide(sub, new float[] { input_std });
 
-                return with<Session, NDArray>(tf.Session(graph), sess => sess.run(normalized));
+                return with(tf.Session(graph), sess => sess.run(normalized));
             });
         }
 
@@ -85,15 +85,14 @@ namespace TensorFlowNET.Examples
             // get model file
             string url = "https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip";
 
-            string zipFile = Path.Join(dir, "inception5h.zip");
-            Utility.Web.Download(url, zipFile);
+            Utility.Web.Download(url, dir, "inception5h.zip");
 
-            Utility.Compress.UnZip(zipFile, dir);
+            Utility.Compress.UnZip(Path.Join(dir, "inception5h.zip"), dir);
 
             // download sample picture
-            string pic = Path.Join(dir, "img", "grace_hopper.jpg");
             Directory.CreateDirectory(Path.Join(dir, "img"));
-            Utility.Web.Download($"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/grace_hopper.jpg", pic);
+            url = $"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/grace_hopper.jpg";
+            Utility.Web.Download(url, Path.Join(dir, "img"), "grace_hopper.jpg");
         }
     }
 }

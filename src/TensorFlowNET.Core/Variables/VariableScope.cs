@@ -4,17 +4,27 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class VariableScope
+    /// <summary>
+    /// Variable scope object to carry defaults to provide to `get_variable`
+    /// </summary>
+    public class VariableScope : Python
     {
         public bool use_resource { get; set; }
-        private _ReuseMode _reuse { get; set; }
+        private _ReuseMode _reuse;
+        public bool resue;
 
-        private object _regularizer;
         private TF_DataType _dtype;
-        public string name { get; set; }
+        public string _name { get; set; }
+        public string _name_scope { get; set; }
+        public string original_name_scope => _name_scope;
 
-        public VariableScope(TF_DataType dtype = TF_DataType.TF_FLOAT)
+        public VariableScope(bool reuse, 
+            string name = "", 
+            string name_scope = "",
+            TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
+            _name = name;
+            _name_scope = name_scope;
             _reuse = _ReuseMode.AUTO_REUSE;
             _dtype = dtype;
         }
@@ -28,8 +38,8 @@ namespace Tensorflow
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
             VariableAggregation aggregation= VariableAggregation.NONE)
         {
-            string full_name = !string.IsNullOrEmpty(this.name) ? this.name + "/" + name : name;
-            return Python.with<ops.name_scope, RefVariable>(new ops.name_scope(""), scope =>
+            string full_name = !string.IsNullOrEmpty(this._name) ? this._name + "/" + name : name;
+            return with(new ops.name_scope(null), scope =>
             {
                 if (dtype == TF_DataType.DtInvalid)
                     dtype = _dtype;

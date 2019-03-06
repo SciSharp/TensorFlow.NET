@@ -10,7 +10,7 @@ using Tensorflow;
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class ConstantTest
+    public class ConstantTest : Python
     {
         Status status = new Status();
 
@@ -27,7 +27,7 @@ namespace TensorFlowNET.UnitTest
         {
             string str = "Hello, TensorFlow.NET!";
             var tensor = tf.constant(str);
-            Python.with<Session>(tf.Session(), sess =>
+            with(tf.Session(), sess =>
             {
                 var result = sess.run(tensor);
                 Assert.IsTrue(result.Data<string>()[0] == str);
@@ -39,7 +39,7 @@ namespace TensorFlowNET.UnitTest
         {
             // small size
             var tensor = tf.zeros(new Shape(3, 2), TF_DataType.TF_INT32, "small");
-            Python.with<Session>(tf.Session(), sess =>
+            with(tf.Session(), sess =>
             {
                 var result = sess.run(tensor);
 
@@ -50,7 +50,7 @@ namespace TensorFlowNET.UnitTest
 
             // big size
             tensor = tf.zeros(new Shape(200, 100), TF_DataType.TF_INT32, "big");
-            Python.with<Session>(tf.Session(), sess =>
+            with(tf.Session(), sess =>
             {
                 var result = sess.run(tensor);
 
@@ -74,7 +74,7 @@ namespace TensorFlowNET.UnitTest
             });
 
             var tensor = tf.constant(nd);
-            Python.with<Session>(tf.Session(), sess =>
+            with(tf.Session(), sess =>
             {
                 var result = sess.run(tensor);
                 var data = result.Data<int>();

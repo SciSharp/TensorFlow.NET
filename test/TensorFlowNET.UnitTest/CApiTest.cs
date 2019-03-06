@@ -6,7 +6,7 @@ using Tensorflow;
 
 namespace TensorFlowNET.UnitTest
 {
-    public class CApiTest
+    public class CApiTest : Python
     {
         protected TF_Code TF_OK = TF_Code.TF_OK;
         protected TF_DataType TF_FLOAT = TF_DataType.TF_FLOAT;

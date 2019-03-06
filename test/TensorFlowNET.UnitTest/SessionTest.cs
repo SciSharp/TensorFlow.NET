@@ -82,7 +82,7 @@ namespace TensorFlowNET.UnitTest
             var a = constant_op.constant(np.array(3.0).reshape(1, 1));
             var b = constant_op.constant(np.array(2.0).reshape(1, 1));
             var c = math_ops.matmul(a, b, name: "matmul");
-            Python.with(tf.Session(), delegate
+            with(tf.Session(), delegate
             {
                 var result = c.eval();
                 Assert.AreEqual(6, result.Data<double>()[0]);

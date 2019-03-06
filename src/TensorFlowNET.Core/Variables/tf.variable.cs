@@ -20,8 +20,8 @@ namespace Tensorflow
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
             VariableAggregation aggregation = VariableAggregation.NONE)
         {
-            var scope = variable_scope.get_variable_scope();
-            var store = variable_scope._get_default_variable_store();
+            var scope = Tensorflow.variable_scope.get_variable_scope();
+            var store = Tensorflow.variable_scope._get_default_variable_store();
             return scope.get_variable(store, 
                 name, 
                 shape: shape, 

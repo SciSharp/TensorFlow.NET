@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Google.Protobuf;
+using Google.Protobuf.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -99,7 +101,7 @@ namespace Tensorflow
             if (initial_value is null)
                 throw new ValueError("initial_value must be specified.");
 
-            var init_from_fn = false;
+            var init_from_fn = initial_value.GetType().Name == "Func`1";
 
             if(collections == null)
             {
@@ -115,12 +117,27 @@ namespace Tensorflow
                 collections.Add(ops.GraphKeys.TRAINABLE_VARIABLES);
 
             ops.init_scope();
-            var values = init_from_fn ? new List<object>() : new List<object> { initial_value };
-            Python.with<ops.name_scope>(new ops.name_scope(name, "Variable", values), scope =>
+            var values = init_from_fn ? new object[0] : new object[] { initial_value };
+            with(new ops.name_scope(name, "Variable", values), scope =>
             {
+                name = scope;
                 if (init_from_fn)
                 {
-
+                    // Use attr_scope and device(None) to simulate the behavior of
+                    // colocate_with when the variable we want to colocate with doesn't
+                    // yet exist.
+                    string true_name = ops._name_from_scope_name(name);
+                    var attr = new AttrValue
+                    {
+                        List = new AttrValue.Types.ListValue()
+                    };
+                    attr.List.S.Add(ByteString.CopyFromUtf8($"loc:{true_name}"));
+                    with(new ops.name_scope("Initializer"), scope2 =>
+                    {
+                        _initial_value = (initial_value as Func<Tensor>)();
+                        _initial_value = ops.convert_to_tensor(_initial_value, name: "initial_value", dtype: dtype);
+                        _variable = state_ops.variable_op_v2(_initial_value.shape, _initial_value.dtype.as_base_dtype(), name: name);
+                    });
                 }
                 // Or get the initial value from a Tensor or Python object.
                 else
@@ -135,7 +152,9 @@ namespace Tensorflow
                 // Manually overrides the variable's shape with the initial value's.
                 if (validate_shape)
                 {
-                    var initial_value_shape = _initial_value.shape;
+                    var initial_value_shape = _initial_value.getShape();
+                    if (!initial_value_shape.is_fully_defined())
+                        throw new ValueError($"initial_value must have a shape specified: {_initial_value}");
                 }
 
                 // If 'initial_value' makes use of other variables, make sure we don't

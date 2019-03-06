@@ -46,9 +46,8 @@ namespace TensorFlowNET.Examples
             // get model file
             string url = $"https://github.com/SciSharp/TensorFlow.NET/raw/master/data/{dataFile}";
 
-            string zipFile = Path.Join(dir, $"imdb.zip");
-            Utility.Web.Download(url, zipFile);
-            Utility.Compress.UnZip(zipFile, dir);
+            Utility.Web.Download(url, dir, "imdb.zip");
+            Utility.Compress.UnZip(Path.Join(dir, $"imdb.zip"), dir);
 
             // prepare training dataset
             var x_train = ReadData(Path.Join(dir, "x_train.txt"));

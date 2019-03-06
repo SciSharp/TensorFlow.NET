@@ -12,7 +12,7 @@ namespace Tensorflow
     /// class directly, but instead instantiate one of its subclasses such as
     /// `GradientDescentOptimizer`, `AdagradOptimizer`, or `MomentumOptimizer`.
     /// </summary>
-    public abstract class Optimizer
+    public abstract class Optimizer : Python
     {
         // Values for gate_gradients.
         public static int GATE_NONE = 0;
@@ -87,7 +87,7 @@ namespace Tensorflow
             _create_slots(var_list);
 
             var update_ops = new List<Operation>();
-            return Python.with<ops.name_scope, Operation>(new ops.name_scope(name, Name), scope =>
+            return with(new ops.name_scope(name, Name), scope =>
             {
                 name = scope;
                 _prepare();
@@ -98,7 +98,7 @@ namespace Tensorflow
                         continue;
 
                     var scope_name = var.op.name;
-                    Python.with<ops.name_scope>(new ops.name_scope("update_" + scope_name), scope2 =>
+                    with(new ops.name_scope("update_" + scope_name), scope2 =>
                     {
                         update_ops.Add(processor.update_op(this, grad));
                     });

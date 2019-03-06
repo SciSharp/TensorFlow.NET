@@ -66,13 +66,14 @@ using(var sess = tf.Session())
 
 Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html).
 
-More examples:
+### More examples:
 
 * [Hello World](test/TensorFlowNET.Examples/HelloWorld.cs)
 * [Basic Operations](test/TensorFlowNET.Examples/BasicOperations.cs)
 * [Image Recognition](test/TensorFlowNET.Examples/ImageRecognition.cs)
 * [Linear Regression](test/TensorFlowNET.Examples/LinearRegression.cs)
 * [Text Classification](test/TensorFlowNET.Examples/TextClassificationWithMovieReviews.cs)
+* [CNN Text Classification](test/TensorFlowNET.Examples/CnnTextClassification.cs)
 * [Naive Bayes Classification](test/TensorFlowNET.Examples/NaiveBayesClassifier.cs)
 * [Named Entity Recognition](test/TensorFlowNET.Examples/NamedEntityRecognition.cs)
 

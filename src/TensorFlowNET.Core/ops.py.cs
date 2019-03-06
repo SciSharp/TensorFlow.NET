@@ -12,7 +12,7 @@ using System.ComponentModel;
 
 namespace Tensorflow
 {
-    public partial class ops
+    public partial class ops : Python
     {
         public static void add_to_collection<T>(string name, T value)
         {
@@ -216,7 +216,7 @@ namespace Tensorflow
             // inner_device_stack = default_graph._device_function_stack
             // var outer_context = default_graph.as_default;
 
-            Python.with(ops.control_dependencies(null), delegate
+            with(ops.control_dependencies(null), delegate
             {
                 var outer_graph = get_default_graph();
                 // outer_device_stack = None
@@ -474,6 +474,12 @@ namespace Tensorflow
             {
                 return name;
             }
+        }
+
+        public static string get_name_scope()
+        {
+            var g = get_default_graph();
+            return g.get_name_scope();
         }
     }
 }

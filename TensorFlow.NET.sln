@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Examples", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Core", "src\TensorFlowNET.Core\TensorFlowNET.Core.csproj", "{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Utility", "src\TensorFlowNET.Utility\TensorFlowNET.Utility.csproj", "{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Visualization", "TensorFlowNET.Visualization\TensorFlowNET.Visualization.csproj", "{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NumSharp.Core", "..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj", "{268BF0B6-0AA9-4FD3-A245-7AF336F1E3E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NumSharp.Core", "..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj", "{E8340C61-12C1-4BEE-A340-403E7C1ACD82}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "scikit-learn", "..\scikit-learn.net\src\scikit-learn\scikit-learn.csproj", "{199DDAD8-4A6F-43B3-A560-C0393619E304}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,18 +33,18 @@ Global
 		{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00D9085C-0FC7-453C-A0CC-BAD98F44FEA0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BB2ABD1-635E-41E4-B534-CB5B6A2D754D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{268BF0B6-0AA9-4FD3-A245-7AF336F1E3E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{268BF0B6-0AA9-4FD3-A245-7AF336F1E3E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{268BF0B6-0AA9-4FD3-A245-7AF336F1E3E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{268BF0B6-0AA9-4FD3-A245-7AF336F1E3E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8340C61-12C1-4BEE-A340-403E7C1ACD82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8340C61-12C1-4BEE-A340-403E7C1ACD82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8340C61-12C1-4BEE-A340-403E7C1ACD82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8340C61-12C1-4BEE-A340-403E7C1ACD82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{199DDAD8-4A6F-43B3-A560-C0393619E304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{199DDAD8-4A6F-43B3-A560-C0393619E304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{199DDAD8-4A6F-43B3-A560-C0393619E304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{199DDAD8-4A6F-43B3-A560-C0393619E304}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
