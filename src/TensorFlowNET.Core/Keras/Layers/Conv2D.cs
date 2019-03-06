@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Operations.Activation;
 
-namespace Tensorflow.Layers
+namespace Tensorflow.Keras.Layers
 {
-    public class Conv2D
+    public class Conv2D : Conv
     {
         private int filters;
         private int[] kernel_size;
