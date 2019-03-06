@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
-    <ProjectReference Include="..\..\..\scikit-learn.net\src\scikit-learn\scikit-learn.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
   </ItemGroup>
 
