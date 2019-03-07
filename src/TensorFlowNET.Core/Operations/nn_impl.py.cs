@@ -26,19 +26,19 @@ namespace Tensorflow
                 // on 32-bit floats before converting the mean and variance back to fp16
                 var y = math_ops.cast(x, TF_DataType.TF_FLOAT);
                 // Compute true mean while keeping the dims for proper broadcasting.
-                var mean = math_ops.reduce_mean(y, axes, keep_dims = true, name = "mean");
+                var mean = math_ops.reduce_mean(y, axes, true, name = "mean");
                 // Sample variance, not unbiased variance
                 // Note: stop_gradient does not change the gradient that gets
                 // backpropagated to the mean from the variance calculation,
                 // because that gradient is zero
-                var variance = math_ops.reduce_mean(math_ops.reduce_mean(math_ops.square_difference(y, array_ops.stop_gradient(mean)), axes, keep_dims = true, name = "Variance"));
+                var variance = math_ops.reduce_mean(math_ops.square_difference(y, array_ops.stop_gradient(mean)), axes, true, name = "Variance");
                 if (!keep_dims)
                 {
                     mean = array_ops.squeeze(mean, axes);
                     variance = array_ops.squeeze(variance, axes);
                 }
                 // TODO: if x.dtype == dtypes.float16:
-                if (x.dtype == TF_DataType.TF_FLOAT)
+                if (x.dtype == TF_DataType.TF_HALF)
                     return (math_ops.cast(mean, x.dtype), math_ops.cast(variance, x.dtype));
                 else
                     return (mean, variance);

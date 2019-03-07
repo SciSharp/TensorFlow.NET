@@ -1,13 +1,14 @@
 using System.Collections.Generic;
+using Tensorflow;
 
 namespace Tensorflow
 {
-    class Normal : Distribution
+    public class Normal : Distribution
     {
         public Tensor _loc { get; set; }
         public Tensor _scale { get; set; }
 
-        Dictionary<string, object> parameters = new Dictionary<string, object>();
+        public Dictionary<string, object> parameters = new Dictionary<string, object>();
         /// <summary>
         /// The Normal distribution with location `loc` and `scale` parameters.
         /// Mathematical details
@@ -39,7 +40,7 @@ namespace Tensorflow
                     this._loc = array_ops.identity(loc, name);
                     this._scale = array_ops.identity(scale, name);
                     base._dtype = this._scale.dtype;
-                    base._reparameterization_type = new ReparameterizationType("FULLY_REPARAMETERIZED");
+                    // base._reparameterization_type = new ReparameterizationType("FULLY_REPARAMETERIZED");
                     base._validate_args = validate_args;
                     base._allow_nan_stats = allow_nan_stats;
                     base._parameters = parameters;
@@ -56,7 +57,7 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor loc()
         {
-            return this._loc;
+            return _loc;
         }
         /// <summary>
         /// Distribution parameter for standard deviation."
@@ -64,17 +65,17 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor scale()
         {
-            return this._scale;
+            return _scale;
         }
 
         public Tensor _batch_shape_tensor()
         {
-            return array_ops.broadcast_dynamic_shape(array_ops.shape(this._loc), array_ops.shape(this._scale));
+            return array_ops.broadcast_dynamic_shape(array_ops.shape(_loc), array_ops.shape(_scale));
         }
 
         public Tensor _batch_shape()
         {
-            return array_ops.broadcast_static_shape(new Tensor(this._loc.shape), new Tensor(this._scale.shape));
+            return array_ops.broadcast_static_shape(new Tensor(_loc.shape), new Tensor(_scale.shape));
         }
 
     }

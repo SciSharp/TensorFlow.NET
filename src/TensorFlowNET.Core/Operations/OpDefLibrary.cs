@@ -305,6 +305,9 @@ namespace Tensorflow
                 case "list(type)":
                     attr_value.List.Type.AddRange((value as IList<TF_DataType>).Select(x => _MakeType(x, attr_def)));
                     break;
+                case "list(int)":
+                    attr_value.List.I.AddRange((value as int[]).Select(x => Convert.ToInt64(x)));
+                    break;
                 case "bool":
                     attr_value.B = (bool)value;
                     break;

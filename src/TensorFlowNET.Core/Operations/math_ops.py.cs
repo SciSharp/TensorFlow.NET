@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -37,8 +38,8 @@ namespace Tensorflow
         /// <param name="name"> A name for the operation (optional).</param>
         public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
         {
-            var r = _ReductionDims(input_tensor, new Tensor(axis));
-            var m = gen_math_ops.mean(input_tensor, r);
+            var r = _ReductionDims(input_tensor, axis);
+            var m = gen_math_ops.mean(input_tensor, (int[]) r, keepdims, name);
             return _may_reduce_to_scalar(keepdims,axis, m);
         }
         /// <summary>
@@ -135,8 +136,8 @@ namespace Tensorflow
                 return range(0, rank, 1);
             }
         }
-
-        private static int[] _ReductionDims(Tensor x, int[] axis)
+        
+        private static object _ReductionDims(Tensor x, int[] axis)
         {
             if (axis != null)
             {
@@ -147,12 +148,12 @@ namespace Tensorflow
                 var rank = array_ops.rank(x);
                 if (rank != null)
                 {
-                   // return constant_op.constant();
+                   return constant_op.constant(np.arange(rank), TF_DataType.TF_INT32);
                 }
-                // return range(0, rank, 1);
-                throw new NotFiniteNumberException();
+                return range(0, rank, 1);
             }
         }
+        
 
         public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range" )
         {
