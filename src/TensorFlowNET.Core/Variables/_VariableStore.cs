@@ -77,7 +77,15 @@ namespace Tensorflow
             }
             else
             {
-                throw new NotImplementedException("_true_getter");
+                IInitializer init1 = null;
+                return _get_single_variable(name: name,
+                    shape: shape,
+                    dtype: dtype,
+                    initializer: init1,
+                    trainable: trainable,
+                    validate_shape: validate_shape,
+                    synchronization: synchronization,
+                    aggregation: aggregation);
             }
         }
 
