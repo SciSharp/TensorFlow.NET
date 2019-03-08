@@ -7,10 +7,6 @@ namespace Tensorflow.Keras.Layers
 {
     public class Conv2D : Conv
     {
-        private int filters;
-        private int[] kernel_size;
-        private int[] strides;
-
         public Conv2D(int filters,
             int[] kernel_size,
             int[] strides = null,
@@ -22,14 +18,21 @@ namespace Tensorflow.Keras.Layers
             IInitializer kernel_initializer = null,
             IInitializer bias_initializer = null,
             bool trainable = true,
-            string name = null)
+            string name = null) : base(2, 
+                filters,
+                kernel_size,
+                strides: strides,
+                padding: padding,
+                data_format: data_format,
+                dilation_rate: dilation_rate,
+                activation: activation,
+                use_bias: use_bias,
+                kernel_initializer: kernel_initializer,
+                bias_initializer: bias_initializer,
+                trainable: trainable, 
+                name: name)
         {
 
-        }
-
-        public Tensor apply(Tensor inputs)
-        {
-            throw new NotImplementedException("apply");
         }
     }
 }
