@@ -24,6 +24,7 @@ namespace Tensorflow
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             object initializer = null, // IInitializer or Tensor
+            bool? reuse = null,
             bool? trainable = null,
             bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
@@ -100,7 +101,7 @@ namespace Tensorflow
             VariableSynchronization synchronization = VariableSynchronization.AUTO,
             VariableAggregation aggregation = VariableAggregation.NONE)
         {
-            bool initializing_from_value = true;
+            bool initializing_from_value = false;
             if (use_resource == null)
                 use_resource = false;
 

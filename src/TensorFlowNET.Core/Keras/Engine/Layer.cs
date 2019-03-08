@@ -57,5 +57,21 @@ namespace Tensorflow.Keras.Engine
         {
 
         }
+
+        protected virtual void add_weight(string name,
+            int[] shape,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            IInitializer initializer = null,
+            bool? trainable = null,
+            Func<string, int[], TF_DataType, IInitializer, bool, RefVariable> getter = null)
+        {
+            _add_variable_with_custom_getter(name,
+                shape,
+                dtype: dtype,
+                getter: getter,
+                overwrite: true,
+                initializer: initializer,
+                trainable: trainable.Value);
+        }
     }
 }

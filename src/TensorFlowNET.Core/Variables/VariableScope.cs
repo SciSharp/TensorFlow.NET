@@ -48,6 +48,7 @@ namespace Tensorflow
                     shape: shape, 
                     dtype: dtype,
                     initializer: initializer,
+                    reuse: resue,
                     trainable: trainable,
                     synchronization: synchronization,
                     aggregation: aggregation);

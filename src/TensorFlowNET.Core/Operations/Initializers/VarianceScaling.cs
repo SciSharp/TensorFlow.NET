@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow.Operations.Initializers
@@ -64,7 +65,16 @@ namespace Tensorflow.Operations.Initializers
             if (shape.Length == 2)
                 return (shape[0], shape[1]);
             else
-                throw new NotImplementedException("VarianceScaling._compute_fans");
+            {
+                // Assuming convolution kernels (2D, 3D, or more).
+                // kernel shape: (..., input_depth, depth)
+                int receptive_field_size = 1;
+                foreach (var dim in shape.Take(2))
+                    receptive_field_size *= dim;
+                var fan_in = shape[shape.Length - 2] * receptive_field_size;
+                var fan_out = shape[shape.Length - 1] * receptive_field_size;
+                return (fan_in, fan_out);
+            }
         }
 
         public virtual object get_config()
