@@ -118,7 +118,7 @@ namespace Tensorflow
 
             ops.init_scope();
             var values = init_from_fn ? new object[0] : new object[] { initial_value };
-            with(new ops.name_scope(name, "Variable", values), scope =>
+            with(ops.name_scope(name, "Variable", values), scope =>
             {
                 name = scope;
                 if (init_from_fn)
@@ -132,7 +132,7 @@ namespace Tensorflow
                         List = new AttrValue.Types.ListValue()
                     };
                     attr.List.S.Add(ByteString.CopyFromUtf8($"loc:{true_name}"));
-                    with(new ops.name_scope("Initializer"), scope2 =>
+                    with(ops.name_scope("Initializer"), scope2 =>
                     {
                         _initial_value = (initial_value as Func<Tensor>)();
                         _initial_value = ops.convert_to_tensor(_initial_value, name: "initial_value", dtype: dtype);

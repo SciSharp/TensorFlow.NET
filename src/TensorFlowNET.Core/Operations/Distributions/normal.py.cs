@@ -33,7 +33,7 @@ namespace Tensorflow
             parameters.Add("validate_args", validate_args);
             parameters.Add("allow_nan_stats", allow_nan_stats);
 
-            with(new ops.name_scope(name, "", new { loc, scale }), scope => 
+            with(ops.name_scope(name, "", new { loc, scale }), scope => 
             {
                 with(ops.control_dependencies(validate_args ? new Operation[] { scale.op} : new Operation[] { }), cd =>
                 {

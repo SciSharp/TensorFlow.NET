@@ -20,7 +20,7 @@ namespace Tensorflow
                 string name = null,
                 string max_norm = null)
         {
-            return with(new ops.name_scope(name, "embedding_lookup", new { @params, ids }), scope =>
+            return with(ops.name_scope(name, "embedding_lookup", new { @params, ids }), scope =>
             {
                 name = scope;
                 int np = 1;

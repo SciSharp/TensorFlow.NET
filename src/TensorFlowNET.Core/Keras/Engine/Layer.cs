@@ -31,7 +31,7 @@ namespace Tensorflow.Keras.Engine
             bool build_graph = tf_utils.are_all_symbolic_tensors(input_list);
 
             // Handle Keras mask propagation from previous layer to current layer.
-            Python.with(new ops.name_scope(_name_scope()), delegate
+            Python.with(ops.name_scope(_name_scope()), delegate
             {
                 if (!built)
                 {

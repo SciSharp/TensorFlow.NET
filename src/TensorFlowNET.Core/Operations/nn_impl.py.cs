@@ -19,7 +19,7 @@ namespace Tensorflow
             string name = null,
             bool keep_dims = false)
         {
-            return with<ops.name_scope, (Tensor, Tensor)>(new ops.name_scope(name, "moments", new { x, axes }), scope =>
+            return with(ops.name_scope(name, "moments", new { x, axes }), scope =>
             {
                 // The dynamic range of fp16 is too limited to support the collection of
                 // sufficient statistics. As a workaround we simply perform the operations

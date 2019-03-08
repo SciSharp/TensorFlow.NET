@@ -7,10 +7,14 @@ namespace Tensorflow
 {
     public partial class ops
     {
+        public static NameScope name_scope(string name,
+            string default_name = "",
+            object values = null) => new NameScope(name, default_name, values);
+
         /// <summary>
         /// Returns a context manager that creates hierarchical names for operations.
         /// </summary>
-        public class name_scope : IPython
+        public class NameScope : IPython
         {
             public string _name;
             public string _default_name;
@@ -20,7 +24,7 @@ namespace Tensorflow
             public string old_stack = "";
             private object _g_manager;
 
-            public name_scope(string name, string default_name = "", object values = null)
+            public NameScope(string name, string default_name = "", object values = null)
             {
                 _name = name;
                 _default_name = default_name;
@@ -58,7 +62,7 @@ namespace Tensorflow
             /// __enter__()
             /// </summary>
             /// <param name="ns"></param>
-            public static implicit operator string(name_scope ns)
+            public static implicit operator string(NameScope ns)
             {
                 return ns._name_scope;
             }

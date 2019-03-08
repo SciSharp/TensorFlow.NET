@@ -16,8 +16,8 @@ namespace Tensorflow
         /// <param name="default_name">The default name to use if the name argument is None.</param>
         /// <param name="values">The list of Tensor arguments that are passed to the op function.</param>
         /// <returns>The scope name.</returns>
-        public static ops.name_scope name_scope(string name, 
+        public static ops.NameScope name_scope(string name, 
             string default_name = "", 
-            object values = null) => new ops.name_scope(name, default_name, values);
+            object values = null) => new ops.NameScope(name, default_name, values);
     }
 }

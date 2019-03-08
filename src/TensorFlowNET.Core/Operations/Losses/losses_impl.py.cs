@@ -12,7 +12,7 @@ namespace Tensorflow
             string scope = "",
             string loss_collection= "losses")
         {
-            with(new ops.name_scope(scope,
+            with(ops.name_scope(scope,
                 "sparse_softmax_cross_entropy_loss",
                 (logits, labels, weights)),
                 namescope =>

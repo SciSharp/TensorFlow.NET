@@ -12,7 +12,7 @@ namespace Tensorflow
         public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
-            return with(new ops.name_scope(name, "zeros", shape), scope =>
+            return with(ops.name_scope(name, "zeros", shape), scope =>
             {
                 name = scope;
                 switch (dtype)
@@ -68,7 +68,7 @@ namespace Tensorflow
 
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
         {
-            return with(new ops.name_scope(name, "ones_like", new { tensor }), scope =>
+            return with(ops.name_scope(name, "ones_like", new { tensor }), scope =>
             {
                 name = scope;
                 var tensor1 = ops.convert_to_tensor(tensor, name: "tensor");
@@ -84,7 +84,7 @@ namespace Tensorflow
         public static Tensor ones(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
-            return with(new ops.name_scope(name, "ones", new { shape }), scope =>
+            return with(ops.name_scope(name, "ones", new { shape }), scope =>
             {
                 name = scope;
                 var output = gen_array_ops.fill(shape, constant_op.constant(1.0f, dtype: dtype), name: name);
@@ -130,7 +130,7 @@ namespace Tensorflow
 
         private static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
-            return with(new ops.name_scope(name, "Shape", new { input }), scope =>
+            return with(ops.name_scope(name, "Shape", new { input }), scope =>
             {
                 name = scope;
 
@@ -151,7 +151,7 @@ namespace Tensorflow
 
         private static Tensor size_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
-            return with(new ops.name_scope(name, "Size", new Tensor[] { input }), scope =>
+            return with(ops.name_scope(name, "Size", new Tensor[] { input }), scope =>
             {
                 name = scope;
 
@@ -182,7 +182,7 @@ namespace Tensorflow
 
         public static Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
         {
-            return with(new ops.name_scope(name, "zeros_like", new Tensor[] { tensor }), scope =>
+            return with(ops.name_scope(name, "zeros_like", new Tensor[] { tensor }), scope =>
             {
                 name = scope;
                 tensor = ops.convert_to_tensor(tensor, name: "tensor");

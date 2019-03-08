@@ -87,7 +87,7 @@ namespace Tensorflow
             _create_slots(var_list);
 
             var update_ops = new List<Operation>();
-            return with(new ops.name_scope(name, Name), scope =>
+            return with(ops.name_scope(name, Name), scope =>
             {
                 name = scope;
                 _prepare();
@@ -98,7 +98,7 @@ namespace Tensorflow
                         continue;
 
                     var scope_name = var.op.name;
-                    with(new ops.name_scope("update_" + scope_name), scope2 =>
+                    with(ops.name_scope("update_" + scope_name), scope2 =>
                     {
                         update_ops.Add(processor.update_op(this, grad));
                     });

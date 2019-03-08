@@ -20,7 +20,7 @@ namespace Tensorflow
         private VariableScope _scope;
         private string _default_name;
         private object _values;
-        private ops.name_scope _current_name_scope;
+        private ops.NameScope _current_name_scope;
         private bool _auxiliary_name_scope;
         private PureVariableScope _cached_pure_variable_scope;
         private bool? _reuse;
@@ -68,7 +68,7 @@ namespace Tensorflow
 
         private VariableScope _enter_scope_uncached()
         {
-            ops.name_scope current_name_scope;
+            ops.NameScope current_name_scope;
             PureVariableScope pure_variable_scope = null;
             VariableScope entered_pure_variable_scope;
 
@@ -82,14 +82,14 @@ namespace Tensorflow
                 if(!string.IsNullOrEmpty(name_scope))
                     // Hack to reenter
                     name_scope += "/";
-                current_name_scope = new ops.name_scope(name_scope);
+                current_name_scope = ops.name_scope(name_scope);
             }
 
             if (_name != null || _scope != null)
             {
                 var name_scope = _name == null ? _scope._name.Split('/').Last() : _name;
                 if (name_scope != null || current_name_scope != null)
-                    current_name_scope = new ops.name_scope(name_scope);
+                    current_name_scope = ops.name_scope(name_scope);
                 current_name_scope.__enter__();
                 var current_name_scope_name = current_name_scope;
                 _current_name_scope = current_name_scope;
@@ -106,7 +106,7 @@ namespace Tensorflow
             }
             else
             {
-                current_name_scope = new ops.name_scope(_default_name);
+                current_name_scope = ops.name_scope(_default_name);
                 current_name_scope.__enter__();
                 string current_name_scope_name = current_name_scope;
                 _current_name_scope = current_name_scope;

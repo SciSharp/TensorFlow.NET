@@ -39,7 +39,7 @@ namespace Tensorflow
             VariableAggregation aggregation= VariableAggregation.NONE)
         {
             string full_name = !string.IsNullOrEmpty(this._name) ? this._name + "/" + name : name;
-            return with(new ops.name_scope(null), scope =>
+            return with(ops.name_scope(null), scope =>
             {
                 if (dtype == TF_DataType.DtInvalid)
                     dtype = _dtype;

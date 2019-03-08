@@ -92,7 +92,7 @@ namespace Tensorflow.Layers
                 auxiliary_name_scope: false), scope =>
             {
                 _current_scope = scope;
-                Python.with(new ops.name_scope(_name_scope()), delegate
+                Python.with(ops.name_scope(_name_scope()), delegate
                 {
 
 

@@ -9,7 +9,7 @@ namespace Tensorflow
     {
         public static Operation group<T>(T[] inputs, string name = null) where T : ITensorOrOperation
         {
-            return with(new ops.name_scope(name, "group_deps", inputs), scope =>
+            return with(ops.name_scope(name, "group_deps", inputs), scope =>
             {
                 name = scope;
 
@@ -83,7 +83,7 @@ namespace Tensorflow
 
         public static Tensor[] tuple(Tensor[] tensors, string name = null, Operation[] control_inputs = null)
         {
-            return with(new ops.name_scope(name, "tuple", tensors), scope =>
+            return with(ops.name_scope(name, "tuple", tensors), scope =>
             {
                 name = scope;
                 var gating_ops = tensors.Select(x => x.op).ToList();
@@ -115,7 +115,7 @@ namespace Tensorflow
             values.AddRange(dependencies);
             values.Add(output_tensor);
 
-            return with(new ops.name_scope(name, "control_dependency", values), scope =>
+            return with(ops.name_scope(name, "control_dependency", values), scope =>
             {
                 name = scope;
 
