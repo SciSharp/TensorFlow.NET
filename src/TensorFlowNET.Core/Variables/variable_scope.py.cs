@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Tensorflow
 {
+    /// <summary>
+    /// A context manager for defining ops that creates variables (layers).
+    /// </summary>
     public class variable_scope : IPython
     {
         public static string _VARSTORE_KEY = "__variable_store";
@@ -20,17 +23,19 @@ namespace Tensorflow
         private ops.name_scope _current_name_scope;
         private bool _auxiliary_name_scope;
         private PureVariableScope _cached_pure_variable_scope;
+        private bool? _reuse;
 
         public variable_scope(string name, 
             string default_name = "", 
             object values = null,
+            bool? reuse = null,
             bool auxiliary_name_scope = true)
         {
             _name = name;
             _default_name = default_name;
             _values = values;
             _current_name_scope = null;
-
+            _reuse = reuse;
             _use_resource = false;
             if (_default_name == null && _name == null)
                 throw new TypeError("If default_name is None then name is required");
@@ -41,13 +46,14 @@ namespace Tensorflow
         public variable_scope(VariableScope scope,
             string default_name = "",
             object values = null,
+            bool? reuse = null,
             bool auxiliary_name_scope = true)
         {
             _scope = scope;
             _default_name = default_name;
             _values = values;
             _current_name_scope = null;
-
+            _reuse = reuse;
             _use_resource = false;
             if (_default_name == null && _scope == null)
                 throw new TypeError("If default_name is None then scope is required");
@@ -63,6 +69,9 @@ namespace Tensorflow
         private VariableScope _enter_scope_uncached()
         {
             ops.name_scope current_name_scope;
+            PureVariableScope pure_variable_scope = null;
+            VariableScope entered_pure_variable_scope;
+
             if (_auxiliary_name_scope)
                 // Create a new name scope later
                 current_name_scope = null;
@@ -85,18 +94,40 @@ namespace Tensorflow
                 var current_name_scope_name = current_name_scope;
                 _current_name_scope = current_name_scope;
                 string old_name_scope = current_name_scope_name;
-                PureVariableScope pure_variable_scope = null;
+                
                 if(_scope == null)
                     pure_variable_scope = new PureVariableScope(_name, old_name_scope: old_name_scope);
                 else
                     pure_variable_scope = new PureVariableScope(_scope, old_name_scope: old_name_scope);
                 pure_variable_scope.__enter__();
-                VariableScope entered_pure_variable_scope = pure_variable_scope;
+                entered_pure_variable_scope = pure_variable_scope;
                 _cached_pure_variable_scope = pure_variable_scope;
                 return entered_pure_variable_scope;
             }
+            else
+            {
+                current_name_scope = new ops.name_scope(_default_name);
+                current_name_scope.__enter__();
+                string current_name_scope_name = current_name_scope;
+                _current_name_scope = current_name_scope;
+                string unique_default_name = _get_unique_variable_scope(_default_name);
+                pure_variable_scope = new PureVariableScope(unique_default_name,
+                    old_name_scope: current_name_scope_name);
+                pure_variable_scope.__enter__();
+                entered_pure_variable_scope = pure_variable_scope;
+                _cached_pure_variable_scope = pure_variable_scope;
+                return entered_pure_variable_scope;
+            }
+        }
 
-            throw new NotImplementedException("_enter_scope_uncached");
+        public static string _get_unique_variable_scope(string prefix)
+        {
+            var var_scope_store = get_variable_scope_store();
+            var current_scope = get_variable_scope();
+            string name = !string.IsNullOrEmpty(current_scope._name) ? current_scope._name + "/" + prefix : prefix;
+            if (var_scope_store.variable_scope_count(name) == 0)
+                return prefix;
+            throw new NotImplementedException("_get_unique_variable_scope");
         }
 
         public static RefVariable default_variable_creator(object initial_value,

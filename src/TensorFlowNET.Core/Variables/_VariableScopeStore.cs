@@ -22,5 +22,13 @@ namespace Tensorflow
             else
                 variable_scopes_count[scope_name] = 1;
         }
+
+        public int variable_scope_count(string scope_name)
+        {
+            if (variable_scopes_count.ContainsKey(scope_name))
+                return variable_scopes_count[scope_name];
+            else
+                return 0;
+        }
     }
 }

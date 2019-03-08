@@ -37,6 +37,8 @@ namespace Tensorflow
         /// </summary>
         private Dictionary<string, object> _collections = new Dictionary<string, object>();
 
+        public bool building_function;
+
         public Graph()
         {
             _handle = c_api.TF_NewGraph();

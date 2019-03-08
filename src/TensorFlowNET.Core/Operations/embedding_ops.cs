@@ -28,7 +28,7 @@ namespace Tensorflow
                 if(np == 1)
                 {
                     var gather = array_ops.gather(@params, ids, name: name);
-                    var result = _clip(@params, ids, max_norm);
+                    var result = _clip(gather, ids, max_norm);
 
                     return array_ops.identity(result);
                 }
@@ -37,7 +37,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor _clip(RefVariable @params, Tensor ids, string max_norm = null)
+        public static Tensor _clip(Tensor @params, Tensor ids, string max_norm = null)
         {
             if (max_norm == null)
                 return @params;

@@ -6,7 +6,7 @@ using Tensorflow.Operations.Activation;
 
 namespace Tensorflow.Keras.Layers
 {
-    public class Conv : Layer
+    public class Conv : Tensorflow.Layers.Layer
     {
         protected int rank;
         protected int filters;
@@ -45,6 +45,15 @@ namespace Tensorflow.Keras.Layers
             this.use_bias = use_bias;
             this.kernel_initializer = kernel_initializer;
             this.bias_initializer = bias_initializer;
+            input_spec = new InputSpec(ndim: rank + 2);
+        }
+
+        protected override void build(TensorShape input_shape)
+        {
+            int channel_axis = data_format == "channels_first" ? 1 : -1;
+            int input_dim = input_shape.Dimensions[input_shape.NDim - 1];
+            var kernel_shape = new int[] { kernel_size[0], kernel_size[1], input_dim, filters };
+            add_weight();
         }
     }
 }

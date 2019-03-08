@@ -9,9 +9,12 @@ namespace Tensorflow.Keras.Engine
     /// </summary>
     public class InputSpec
     {
-        public InputSpec(TF_DataType dtype = TF_DataType.DtInvalid)
-        {
+        public int ndim;
 
+        public InputSpec(TF_DataType dtype = TF_DataType.DtInvalid, 
+            int? ndim = null)
+        {
+            this.ndim = ndim.Value;
         }
     }
 }
