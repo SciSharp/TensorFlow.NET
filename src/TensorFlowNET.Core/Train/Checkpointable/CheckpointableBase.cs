@@ -19,7 +19,16 @@ namespace Tensorflow
             bool trainable = false)
         {
             var new_variable = getter(name, shape, dtype, initializer, trainable);
-            throw new NotImplementedException("_add_variable_with_custom_getter");
+            if (!overwrite || new_variable is RefVariable)
+                return _track_checkpointable(new_variable, name: name,
+                                        overwrite: overwrite);
+            else
+                return new_variable;
+        }
+
+        protected RefVariable _track_checkpointable(RefVariable checkpointable, string name, bool overwrite = false)
+        {
+            return checkpointable;
         }
     }
 }

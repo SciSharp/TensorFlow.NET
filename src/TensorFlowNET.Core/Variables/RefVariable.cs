@@ -136,8 +136,8 @@ namespace Tensorflow
                     {
                         _initial_value = (initial_value as Func<Tensor>)();
                         _initial_value = ops.convert_to_tensor(_initial_value, name: "initial_value", dtype: dtype);
-                        _variable = state_ops.variable_op_v2(_initial_value.shape, _initial_value.dtype.as_base_dtype(), name: name);
                     });
+                    _variable = state_ops.variable_op_v2(_initial_value.shape, _initial_value.dtype.as_base_dtype(), name: name);
                 }
                 // Or get the initial value from a Tensor or Python object.
                 else

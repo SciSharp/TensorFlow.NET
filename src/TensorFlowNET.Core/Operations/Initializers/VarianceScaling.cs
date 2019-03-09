@@ -43,7 +43,8 @@ namespace Tensorflow.Operations.Initializers
 
             if (_distribution == "normal" || _distribution == "truncated_normal")
             {
-                throw new NotImplementedException("truncated_normal");
+                float stddev = (float)Math.Sqrt(_scale) / .87962566103423978f;
+                return random_ops.truncated_normal(shape, mean: 0.0f, stddev: stddev, dtype: dtype, seed: _seed);
             }
             else if (_distribution == "untruncated_normal")
             {

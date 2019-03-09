@@ -53,5 +53,28 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+
+        /// <summary>
+        /// Outputs random values from a truncated normal distribution.
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="dtype"></param>
+        /// <param name="seed"></param>
+        /// <param name="seed2"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor truncated_normal(Tensor shape, TF_DataType dtype, int? seed = 0, int? seed2 = 0, string name = null)
+        {
+            if (!seed.HasValue)
+                seed = 0;
+            if (!seed2.HasValue)
+                seed2 = 0;
+
+            var _op = _op_def_lib._apply_op_helper("TruncatedNormal",
+                name: name,
+                args: new { shape, dtype, seed, seed2 });
+
+            return _op.outputs[0];
+        }
     }
 }

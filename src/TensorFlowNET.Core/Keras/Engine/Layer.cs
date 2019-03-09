@@ -19,6 +19,13 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         protected bool built;
 
+        protected List<RefVariable> _trainable_weights;
+
+        public Layer()
+        {
+            _trainable_weights = new List<RefVariable>();
+        }
+
         public Tensor __call__(Tensor inputs,
             VariableScope scope = null)
         {
@@ -36,6 +43,7 @@ namespace Tensorflow.Keras.Engine
                 if (!built)
                 {
                     _maybe_build(inputs);
+                    built = true;
                 }
             });
 
@@ -65,13 +73,15 @@ namespace Tensorflow.Keras.Engine
             bool? trainable = null,
             Func<string, int[], TF_DataType, IInitializer, bool, RefVariable> getter = null)
         {
-            _add_variable_with_custom_getter(name,
+            var variable = _add_variable_with_custom_getter(name,
                 shape,
                 dtype: dtype,
                 getter: getter,
                 overwrite: true,
                 initializer: initializer,
                 trainable: trainable.Value);
+            backend.track_variable(variable);
+            _trainable_weights.Add(variable);
         }
     }
 }

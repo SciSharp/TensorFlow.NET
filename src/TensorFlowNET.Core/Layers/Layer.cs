@@ -29,7 +29,7 @@ namespace Tensorflow.Layers
         public Layer(bool trainable = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            bool? _reuse = null)
+            bool? _reuse = null) : base()
         {
             this.trainable = trainable;
             this.stateful = false;

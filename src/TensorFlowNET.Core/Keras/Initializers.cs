@@ -14,7 +14,7 @@ namespace Tensorflow.Keras
         /// <returns></returns>
         public IInitializer he_normal(int? seed = null)
         {
-            return new VarianceScaling(scale: 20f, mode: "fan_in", distribution: "truncated_normal", seed: seed);
+            return new VarianceScaling(scale: 2.0f, mode: "fan_in", distribution: "truncated_normal", seed: seed);
         }
     }
 }
