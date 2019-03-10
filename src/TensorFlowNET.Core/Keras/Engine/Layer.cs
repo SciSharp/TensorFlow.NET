@@ -66,7 +66,7 @@ namespace Tensorflow.Keras.Engine
 
         }
 
-        protected virtual void add_weight(string name,
+        protected virtual RefVariable add_weight(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
@@ -82,6 +82,8 @@ namespace Tensorflow.Keras.Engine
                 trainable: trainable.Value);
             backend.track_variable(variable);
             _trainable_weights.Add(variable);
+
+            return variable;
         }
     }
 }

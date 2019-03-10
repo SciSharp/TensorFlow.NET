@@ -164,7 +164,7 @@ namespace Tensorflow
             return grouped_inputs.ToArray();
         }
 
-        public object get_attr<T>(string name)
+        public object get_attr(string name)
         {
             AttrValue x = null;
 
@@ -175,24 +175,17 @@ namespace Tensorflow
                 x = AttrValue.Parser.ParseFrom(buf);
             }
 
-            switch (name)
-            {
-                case "T":
-                case "dtype":
-                    return x.Type;
-                case "shape":
-                    return x.Shape;
-                default:
-                    switch (typeof(T).Name)
-                    {
-                        case "Boolean":
-                            return x.B;
-                        case "String":
-                            return x.S;
-                        default:
-                            throw new NotImplementedException($"Unsupported field type in {x.ToString()}");
-                    }
-            }
+            string oneof_value = x.ValueCase.ToString();
+            if (string.IsNullOrEmpty(oneof_value))
+                return null;
+
+            if(oneof_value == "list")
+                throw new NotImplementedException($"Unsupported field type in {x.ToString()}");
+
+            if (oneof_value == "type")
+                return x.Type;
+
+            return x.GetType().GetProperty(oneof_value).GetValue(x);
         }
 
         public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)

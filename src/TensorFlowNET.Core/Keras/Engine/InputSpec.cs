@@ -10,11 +10,16 @@ namespace Tensorflow.Keras.Engine
     public class InputSpec
     {
         public int ndim;
+        Dictionary<int, int> axes;
 
         public InputSpec(TF_DataType dtype = TF_DataType.DtInvalid, 
-            int? ndim = null)
+            int? ndim = null,
+            Dictionary<int, int> axes = null)
         {
             this.ndim = ndim.Value;
+            if (axes == null)
+                axes = new Dictionary<int, int>();
+            this.axes = axes;
         }
     }
 }

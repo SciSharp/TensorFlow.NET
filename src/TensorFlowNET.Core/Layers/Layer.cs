@@ -68,7 +68,7 @@ namespace Tensorflow.Layers
             throw new NotImplementedException("");
         }
 
-        protected virtual void add_weight(string name,
+        protected virtual RefVariable add_weight(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
@@ -93,14 +93,14 @@ namespace Tensorflow.Layers
 
             _set_scope();
             var reuse = built || (_reuse != null && _reuse.Value);
-            Python.with(tf.variable_scope(_scope, 
+            return Python.with(tf.variable_scope(_scope, 
                 reuse: reuse, 
                 auxiliary_name_scope: false), scope =>
             {
                 _current_scope = scope;
-                Python.with(ops.name_scope(_name_scope()), delegate
+                return Python.with(ops.name_scope(_name_scope()), delegate
                 {
-                    base.add_weight(name,
+                    var variable = base.add_weight(name,
                         shape,
                         dtype: dtype,
                         initializer: initializer,
@@ -113,6 +113,12 @@ namespace Tensorflow.Layers
                                 initializer: initializer1,
                                 trainable: trainable1);
                         });
+
+                    if(init_graph != null)
+                    {
+                        var trainable_variables = variables.trainable_variables();
+                    }
+                    return variable;
                 });
             });
         }

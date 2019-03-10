@@ -18,6 +18,42 @@ namespace Tensorflow
         };
 
         /// <summary>
+        /// Returns the constant value of the given tensor, if efficiently calculable.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="partial"></param>
+        /// <returns></returns>
+        public static NDArray constant_value(Tensor tensor, bool partial = false)
+        {
+            NDArray ret = _ConstantValue(tensor, partial);
+            if (!(ret is null))
+                tensor.graph.prevent_feeding(tensor);
+
+            return ret;
+        }
+
+        private static NDArray _ConstantValue(Tensor tensor, bool partial)
+        {
+            if (tensor.op.type == "Const")
+            {
+                return MakeNdarray(tensor.op.get_attr("value") as TensorProto);
+            }
+            throw new NotImplementedException("_ConstantValue");   
+        }
+
+        public static NDArray MakeNdarray(TensorProto tensor)
+        {
+            var shape = tensor.TensorShape.Dim.Select(x => (int)x.Size).ToArray();
+            long num_elements = np.prod(shape);
+            var tensor_dtype =  tensor.Dtype.as_numpy_dtype();
+
+            if (tensor.TensorContent.Length > 0)
+                return np.frombuffer(tensor.TensorContent.ToByteArray(), tensor_dtype)
+                    .reshape(shape);
+            throw new NotImplementedException("MakeNdarray");
+        }
+
+        /// <summary>
         /// Create a TensorProto.
         /// </summary>
         /// <param name="values"></param>

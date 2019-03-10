@@ -113,7 +113,7 @@ namespace Tensorflow
             _graph_key = ops.get_default_graph()._graph_key;
 
             _trainable = trainable;
-            if (!collections.Contains(ops.GraphKeys.TRAINABLE_VARIABLES))
+            if (trainable && !collections.Contains(ops.GraphKeys.TRAINABLE_VARIABLES))
                 collections.Add(ops.GraphKeys.TRAINABLE_VARIABLES);
 
             ops.init_scope();

@@ -12,7 +12,7 @@ namespace Tensorflow
 {
     public class OpDefLibrary : Python
     {
-        public Operation _apply_op_helper(string op_type_name, string name = null, dynamic args = null)
+        public Operation _apply_op_helper(string op_type_name, string name = null, object args = null)
         {
             Dictionary<string, object> keywords = ConvertToDict(args);
             var g = ops.get_default_graph();
@@ -357,26 +357,6 @@ namespace Tensorflow
                 default:
                     return false;
             }
-        }
-
-        private Dictionary<string, object> ConvertToDict(dynamic dyn)
-        {
-            var dictionary = new Dictionary<string, object>();
-            foreach (PropertyDescriptor propertyDescriptor in TypeDescriptor.GetProperties(dyn))
-            {
-                object obj = propertyDescriptor.GetValue(dyn);
-                string name = propertyDescriptor.Name;
-                // avoid .net keyword
-                switch (name)
-                {
-                    case "_ref_":
-                        name = "ref";
-                        break;
-                }
-                    
-                dictionary.Add(name, obj);
-            }
-            return dictionary;
         }
     }
 }

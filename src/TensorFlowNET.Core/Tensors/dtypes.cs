@@ -79,6 +79,11 @@ namespace Tensorflow
             return (int)type;
         }
 
+        public static Type as_numpy_dtype(this DataType type)
+        {
+            return type.as_tf_dtype().as_numpy_datatype();
+        }
+
         public static DataType as_base_dtype(this DataType type)
         {
             return (int)type > 100 ?

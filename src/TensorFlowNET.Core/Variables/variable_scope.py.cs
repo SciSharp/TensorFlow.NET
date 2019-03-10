@@ -155,6 +155,7 @@ namespace Tensorflow
             else
             {
                 return new RefVariable(initial_value, 
+                    trainable: trainable.Value,
                     name: name,
                     dtype: dtype);
             }

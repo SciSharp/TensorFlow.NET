@@ -47,8 +47,8 @@ namespace Tensorflow
             var _inputs_flat = _op.inputs;
 
             var _attrs = new Dictionary<string, object>();
-            _attrs["dtype"] = _op.get_attr<DataType>("dtype");
-            _attrs["shape"] = _op.get_attr<int[]>("shape");
+            _attrs["dtype"] = _op.get_attr("dtype");
+            _attrs["shape"] = _op.get_attr("shape");
 
             _execute.record_gradient("Placeholder", _inputs_flat, _attrs, _result, name);
 

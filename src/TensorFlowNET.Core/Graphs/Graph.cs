@@ -21,6 +21,7 @@ namespace Tensorflow
         public int _version;
         private int _next_id_counter;
         private List<String> _unfetchable_ops = new List<string>();
+        private List<Tensor> _unfeedable_tensors = new List<Tensor>();
 
         public string _name_stack = "";
         public string _graph_key;
@@ -364,6 +365,11 @@ namespace Tensorflow
             if (!_collections.ContainsKey(name))
                 _collections[name] = new List<object>();
             return _collections[name];
+        }
+
+        public void prevent_feeding(Tensor tensor)
+        {
+            _unfeedable_tensors.Add(tensor);
         }
 
         public void Dispose()

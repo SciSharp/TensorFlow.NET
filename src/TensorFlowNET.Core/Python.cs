@@ -1,6 +1,7 @@
 ﻿using NumSharp.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace Tensorflow
@@ -108,6 +109,26 @@ namespace Tensorflow
         {
             for (int i = 0; i < values.Count; i++)
                 yield return (i, values[i]);
+        }
+
+        public static Dictionary<string, object> ConvertToDict(object dyn)
+        {
+            var dictionary = new Dictionary<string, object>();
+            foreach (PropertyDescriptor propertyDescriptor in TypeDescriptor.GetProperties(dyn))
+            {
+                object obj = propertyDescriptor.GetValue(dyn);
+                string name = propertyDescriptor.Name;
+                // avoid .net keyword
+                switch (name)
+                {
+                    case "_ref_":
+                        name = "ref";
+                        break;
+                }
+
+                dictionary.Add(name, obj);
+            }
+            return dictionary;
         }
     }
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Utils;
+using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
 
 namespace Tensorflow.Keras.Layers
@@ -19,6 +21,9 @@ namespace Tensorflow.Keras.Layers
         protected bool use_bias;
         protected IInitializer kernel_initializer;
         protected IInitializer bias_initializer;
+        protected RefVariable kernel;
+        protected RefVariable bias;
+        protected Convolution _convolution_op;
 
         public Conv(int rank, 
             int filters,
@@ -53,11 +58,37 @@ namespace Tensorflow.Keras.Layers
             int channel_axis = data_format == "channels_first" ? 1 : -1;
             int input_dim = input_shape.Dimensions[input_shape.NDim - 1];
             var kernel_shape = new int[] { kernel_size[0], kernel_size[1], input_dim, filters };
-            add_weight(name: "kernel", 
+            kernel = add_weight(name: "kernel",
                 shape: kernel_shape,
                 initializer: kernel_initializer,
                 trainable: true,
                 dtype: _dtype);
+            if (use_bias)
+                bias = add_weight(name: "bias",
+                    shape: new int[] { filters },
+                    initializer: bias_initializer,
+                    trainable: true,
+                    dtype: _dtype);
+
+            var axes = new Dictionary<int, int>();
+            axes.Add(-1, input_dim);
+            input_spec = new InputSpec(ndim: rank + 2, axes: axes);
+
+            string op_padding;
+            if (padding == "causal")
+                op_padding = "valid";
+            else
+                op_padding = padding;
+
+            var df = conv_utils.convert_data_format(data_format, rank + 2);
+            _convolution_op = nn_ops.Convolution(input_shape,
+                kernel.shape,
+                op_padding.ToUpper(),
+                strides,
+                dilation_rate,
+                data_format: df);
+
+            built = true;
         }
     }
 }
