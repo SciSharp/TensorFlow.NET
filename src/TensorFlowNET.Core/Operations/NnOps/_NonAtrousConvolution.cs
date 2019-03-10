@@ -52,5 +52,18 @@ namespace Tensorflow.Operations
                 throw new NotImplementedException("_NonAtrousConvolution conv_dims 3");
             }
         }
+
+        public Tensor __call__(Tensor inp, RefVariable filter)
+        {
+            return conv_op(new
+            {
+                input = inp,
+                filter,
+                strides,
+                padding,
+                data_format,
+                name
+            });
+        }
     }
 }

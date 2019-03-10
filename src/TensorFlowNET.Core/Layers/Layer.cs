@@ -65,7 +65,10 @@ namespace Tensorflow.Layers
             // Actually call layer
             var outputs = base.__call__(inputs);
 
-            throw new NotImplementedException("");
+            // Update global default collections.
+            //_add_elements_to_collection(updates, ops.GraphKeys.UPDATE_OPS);
+
+            return outputs;
         }
 
         protected virtual RefVariable add_weight(string name,

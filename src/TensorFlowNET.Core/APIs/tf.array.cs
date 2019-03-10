@@ -19,5 +19,16 @@ namespace Tensorflow
         /// </returns>
         public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1)
             => array_ops.expand_dims(input, axis, name, dim);
+
+        /// <summary>
+        /// Transposes `a`. Permutes the dimensions according to `perm`.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="perm"></param>
+        /// <param name="name"></param>
+        /// <param name="conjugate"></param>
+        /// <returns></returns>
+        public static Tensor transpose(Tensor a, int[] perm = null, string name = "transpose", bool conjugate = false)
+            => array_ops.transpose(a, perm, name, conjugate);
     }
 }

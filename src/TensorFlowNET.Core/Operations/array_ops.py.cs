@@ -272,5 +272,14 @@ namespace Tensorflow
         {
             return gen_array_ops.gather_v2(@params, indices, axis, name: name);
         }
+
+        public static Tensor transpose(Tensor a, int[] perm = null, string name = "transpose", bool conjugate = false)
+        {
+            return with(ops.name_scope(name, "transpose", new { a }), scope =>
+            {
+                name = scope;
+                return gen_array_ops.transpose(a, perm, name);
+            });
+        }
     }
 }

@@ -90,5 +90,26 @@ namespace Tensorflow.Keras.Layers
 
             built = true;
         }
+
+        protected override Tensor call(Tensor inputs)
+        {
+            var outputs = _convolution_op.__call__(inputs, kernel);
+            if (use_bias)
+            {
+                if (data_format == "channels_first")
+                {
+                    throw new NotImplementedException("call channels_first");
+                }
+                else
+                {
+                    outputs = nn_ops.bias_add(outputs, bias, data_format: "NHWC");
+                }
+            }
+
+            if (activation != null)
+                return activation.Activate(outputs);
+
+            return outputs;
+        }
     }
 }

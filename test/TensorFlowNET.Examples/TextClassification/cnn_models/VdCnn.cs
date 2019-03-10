@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow;
 
@@ -43,14 +44,61 @@ namespace TensorFlowNET.Examples.TextClassification
                 x_expanded = tf.expand_dims(x_emb, -1);
             });
 
+            Tensor conv0 = null;
+            Tensor conv1 = null;
+
             // First Convolution Layer
             with(tf.variable_scope("conv-0"), delegate
             {
-                var conv0 = tf.layers.conv2d(x_expanded,
+                conv0 = tf.layers.conv2d(x_expanded,
                     filters: num_filters[0],
                     kernel_size: new int[] { filter_sizes[0], embedding_size },
                     kernel_initializer: cnn_initializer,
                     activation: tf.nn.relu);
+
+                conv0 = tf.transpose(conv0, new int[] { 0, 1, 3, 2 });
+            });
+
+            with(tf.name_scope("conv-block-1"), delegate {
+                conv1 = conv_block(conv0, 1);
+            });
+            
+        }
+
+        private Tensor conv_block(Tensor input, int i, bool max_pool = true)
+        {
+            return with(tf.variable_scope($"conv-block-{i}"), delegate
+            {
+                Tensor conv = null;
+                // Two "conv-batch_norm-relu" layers.
+                foreach (var j in Enumerable.Range(0, 2))
+                {
+                    with(tf.variable_scope($"conv-{j}"), delegate
+                    {
+                        // convolution
+                        conv = tf.layers.conv2d(
+                            input,
+                            filters: num_filters[i],
+                            kernel_size: new int[] { filter_sizes[i], num_filters[i - 1] },
+                            kernel_initializer: cnn_initializer,
+                            activation: null);
+                        // batch normalization
+                        conv = tf.layers.batch_normalization(conv, training: is_training);
+                        // relu
+                        conv = tf.nn.relu.Activate(conv);
+                        conv = tf.transpose(conv, new int[] { 0, 1, 3, 2 });
+                    });
+                }
+                
+                if (max_pool)
+                {
+                    // Max pooling
+                    throw new NotImplementedException("conv_block");
+                }
+                else
+                {
+                    return conv;
+                }
             });
         }
     }

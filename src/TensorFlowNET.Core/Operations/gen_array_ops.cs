@@ -157,6 +157,12 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor transpose(Tensor x, int[] perm, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Transpose", name, new { x, perm });
+            return _op.outputs[0];
+        }
+
         public static Tensor zeros_like(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("ZerosLike", name, new { x });

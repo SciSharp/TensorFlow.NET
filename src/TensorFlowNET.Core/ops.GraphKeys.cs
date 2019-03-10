@@ -40,6 +40,10 @@ namespace Tensorflow
             /// Key to collect BaseSaverBuilder.SaveableObject instances for checkpointing.
             /// </summary>
             public static string SAVEABLE_OBJECTS = "saveable_objects";
+            /// <summary>
+            /// Key to collect update_ops
+            /// </summary>
+            public static string UPDATE_OPS = "update_ops";
         }
     }
 }

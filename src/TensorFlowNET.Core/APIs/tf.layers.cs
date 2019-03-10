@@ -46,6 +46,45 @@ namespace Tensorflow
 
                 return layer.apply(inputs);
             }
+
+            /// <summary>
+            /// Functional interface for the batch normalization layer.
+            /// http://arxiv.org/abs/1502.03167
+            /// </summary>
+            /// <param name="inputs"></param>
+            /// <param name="axis"></param>
+            /// <param name="momentum"></param>
+            /// <param name="epsilon"></param>
+            /// <param name="center"></param>
+            /// <param name="scale"></param>
+            /// <param name="beta_initializer"></param>
+            /// <param name="gamma_initializer"></param>
+            /// <param name="moving_mean_initializer"></param>
+            /// <param name="moving_variance_initializer"></param>
+            /// <param name="training"></param>
+            /// <param name="trainable"></param>
+            /// <param name="name"></param>
+            /// <param name="renorm"></param>
+            /// <param name="renorm_momentum"></param>
+            /// <returns></returns>
+            public static Tensor batch_normalization(Tensor inputs,
+                int axis = -1,
+                float momentum = 0.99f,
+                float epsilon = 0.001f,
+                bool center = true,
+                bool scale = true,
+                IInitializer beta_initializer = null,
+                IInitializer gamma_initializer = null,
+                IInitializer moving_mean_initializer = null,
+                IInitializer moving_variance_initializer = null,
+                Tensor training = null,
+                bool trainable = true,
+                string name = null,
+                bool renorm = false,
+                float renorm_momentum = 0.99f)
+            {
+                throw new NotImplementedException("batch_normalization");
+            }
         }
     }
 }

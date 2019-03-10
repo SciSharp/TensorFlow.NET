@@ -62,5 +62,10 @@ namespace Tensorflow.Operations
                 strides: strides,
                 name: name);
         }
+
+        public Tensor __call__(Tensor inp, RefVariable filter)
+        {
+            return conv_op.__call__(inp, filter);
+        }
     }
 }

@@ -10,5 +10,10 @@ namespace Tensorflow.Keras
         {
 
         }
+
+        public static Graph get_graph()
+        {
+            return ops.get_default_graph();
+        }
     }
 }

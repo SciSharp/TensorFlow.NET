@@ -51,5 +51,10 @@ namespace Tensorflow.Operations
                 }
             }
         }
+
+        public Tensor __call__(Tensor inp, RefVariable filter)
+        {
+            return call.__call__(inp, filter);
+        }
     }
 }

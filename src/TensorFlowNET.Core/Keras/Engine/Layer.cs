@@ -30,6 +30,7 @@ namespace Tensorflow.Keras.Engine
             VariableScope scope = null)
         {
             var input_list = new Tensor[] { inputs };
+            Tensor outputs = null;
 
             // We will attempt to build a TF graph if & only if all inputs are symbolic.
             // This is always the case in graph mode. It can also be the case in eager
@@ -45,9 +46,42 @@ namespace Tensorflow.Keras.Engine
                     _maybe_build(inputs);
                     built = true;
                 }
+
+                if (build_graph)
+                {
+                    // Symbolic execution on symbolic tensors. We will attempt to build
+                    // the corresponding TF subgraph inside `backend.get_graph()`
+                    var graph = backend.get_graph();
+                    outputs = call(inputs);
+                    _handle_activity_regularization(inputs, outputs);
+                    _set_mask_metadata(inputs, outputs, null);
+                }
             });
 
-            throw new NotImplementedException("");
+            return outputs;
+        }
+
+        private void _handle_activity_regularization(Tensor inputs, Tensor outputs)
+        {
+            //if(_activity_regularizer != null)
+            {
+
+            }
+        }
+
+        private void _set_mask_metadata(Tensor inputs, Tensor outputs, Tensor previous_mask)
+        {
+
+        }
+
+        private Tensor compute_mask(Tensor inputs, Tensor mask = null)
+        {
+            return null;
+        }
+
+        protected virtual Tensor call(Tensor inputs)
+        {
+            throw new NotImplementedException("Layer.call");
         }
 
         protected virtual string _name_scope()
