@@ -83,7 +83,22 @@ namespace Tensorflow
                 bool renorm = false,
                 float renorm_momentum = 0.99f)
             {
-                throw new NotImplementedException("batch_normalization");
+                var layer = new BatchNormalization(
+                    axis: axis,
+                    momentum: momentum,
+                    epsilon: epsilon,
+                    center: center,
+                    scale: scale,
+                    beta_initializer: beta_initializer,
+                    gamma_initializer: gamma_initializer,
+                    moving_mean_initializer: moving_mean_initializer,
+                    moving_variance_initializer: moving_variance_initializer,
+                    renorm: renorm,
+                    renorm_momentum: renorm_momentum,
+                    trainable: trainable,
+                    name: name);
+
+                return layer.apply(inputs, training: training);
             }
         }
     }

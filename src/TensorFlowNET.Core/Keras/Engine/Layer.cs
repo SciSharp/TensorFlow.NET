@@ -18,12 +18,33 @@ namespace Tensorflow.Keras.Engine
         /// the layer's weights.
         /// </summary>
         protected bool built;
-
+        protected bool trainable;
+        protected TF_DataType _dtype;
+        /// <summary>
+        /// A stateful layer is a layer whose updates are run during inference too,
+        /// for instance stateful RNNs.
+        /// </summary>
+        protected bool stateful;
+        /// <summary>
+        /// Provides information about which inputs are compatible with the layer.
+        /// </summary>
+        protected InputSpec input_spec;
+        protected bool supports_masking;
         protected List<RefVariable> _trainable_weights;
+        protected string _name;
+        protected string _base_name;
+        protected bool _compute_previous_mask;
 
-        public Layer()
+        public Layer(bool trainable = true, string name = null, TF_DataType dtype = TF_DataType.DtInvalid)
         {
+            this.trainable = trainable;
+            this._dtype = dtype;
+            stateful = false;
+            built = false;
+            this.supports_masking = false;
+            _init_set_name(name);
             _trainable_weights = new List<RefVariable>();
+            _compute_previous_mask = false;
         }
 
         public Tensor __call__(Tensor inputs,
@@ -97,7 +118,7 @@ namespace Tensorflow.Keras.Engine
 
         protected virtual void build(TensorShape input_shape)
         {
-
+            throw new NotImplementedException("Layer.build");
         }
 
         protected virtual RefVariable add_weight(string name,
@@ -118,6 +139,19 @@ namespace Tensorflow.Keras.Engine
             _trainable_weights.Add(variable);
 
             return variable;
+        }
+
+        protected virtual void _init_set_name(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                (_name, _base_name) = _make_unique_name();
+        }
+
+        protected virtual (string, string) _make_unique_name()
+        {
+            string base_name = "conv2d";
+            string name = base_layer_utils.unique_layer_name(base_name);
+            return (name, base_name);
         }
     }
 }

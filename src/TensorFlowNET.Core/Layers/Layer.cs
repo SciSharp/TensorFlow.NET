@@ -7,39 +7,27 @@ namespace Tensorflow.Layers
 {
     public class Layer : Keras.Engine.Layer
     {
-        protected bool trainable;
-        protected string _name;
-        protected TF_DataType _dtype;
         protected Graph _graph;
-        protected string _base_name;
+        
         protected VariableScope _scope;
         protected VariableScope _current_scope;
-        /// <summary>
-        /// A stateful layer is a layer whose updates are run during inference too,
-        /// for instance stateful RNNs.
-        /// </summary>
-        protected bool stateful;
-        /// <summary>
-        /// Provides information about which inputs are compatible with the layer.
-        /// </summary>
-        protected InputSpec input_spec;
-        protected bool supports_masking;
+        
         protected bool? _reuse;
+        protected bool _use_resource_variables;
+        protected bool _keras_style;
 
         public Layer(bool trainable = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            bool? _reuse = null) : base()
+            bool? _reuse = null) : base(trainable: trainable, name: name, dtype: dtype)
         {
-            this.trainable = trainable;
-            this.stateful = false;
+            this._use_resource_variables = false;
             this._reuse = _reuse;
             this.built = false;
-            this.supports_masking = false;
-            _init_set_name(name);
+            _keras_style = false;
         }
 
-        public Tensor apply(Tensor inputs)
+        public virtual Tensor apply(Tensor inputs, Tensor training = null)
         {
             return __call__(inputs);
         }
@@ -126,18 +114,7 @@ namespace Tensorflow.Layers
             });
         }
 
-        private void _init_set_name(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-                (_name, _base_name) = _make_unique_name();
-        }
 
-        private (string, string) _make_unique_name()
-        {
-            string base_name = "conv2d";
-            string name = base_layer_utils.unique_layer_name(base_name);
-            return (name, base_name);
-        }
 
         protected override string _name_scope()
         {
