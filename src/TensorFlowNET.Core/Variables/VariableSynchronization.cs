@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Tensorflow
 {
+    /// <summary>
+    /// Indicates when a distributed variable will be synced.
+    /// </summary>
     public enum VariableSynchronization
     {
         AUTO = 0,

@@ -135,5 +135,53 @@ namespace Tensorflow
             else
                 return gen_array_ops.identity(data, name: name);
         }
+
+        public static (Tensor, Tensor) cond(Tensor pred, 
+            Action true_fn = null, 
+            Action false_fn = null,
+            bool strict = false,
+            string name = null)
+        {
+            return with(ops.name_scope(name, "cond", new { pred }), delegate
+            {
+                // Add the Switch to the graph.
+                var (p_2, p_1) = @switch(pred, pred);
+                var pivot_1 = array_ops.identity(p_1, name: "switch_t");
+                var pivot_2 = array_ops.identity(p_2, name: "switch_f");
+                pred = array_ops.identity(pred, name: "pred_id");
+
+                // Disable the fetching of tensors that are only on one branch of cond.
+                foreach (var tensor in new Tensor[] { p_1, p_2, pivot_1, pivot_2, pred })
+                    tensor.op.graph.prevent_fetching(tensor.op);
+
+                return (p_2, p_1);
+            });
+        }
+
+        /// <summary>
+        /// Forwards `data` to an output determined by `pred`.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="pred"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        public static (Tensor, Tensor) @switch(Tensor data, 
+            Tensor pred, 
+            TF_DataType dtype = TF_DataType.DtInvalid, 
+            string name = null)
+        {
+            return with(ops.name_scope(name, "Switch", new { data, pred }), scope =>
+            {
+                name = scope;
+                data = ops.internal_convert_to_tensor_or_indexed_slices(data,
+                    dtype: dtype,
+                    name: "data",
+                    as_ref: true);
+
+                pred = ops.convert_to_tensor(pred, name: "pred");
+
+                return gen_control_flow_ops.@switch(data, pred, name: name);
+            });
+        }
     }
 }

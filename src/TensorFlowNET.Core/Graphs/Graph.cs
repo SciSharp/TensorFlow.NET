@@ -20,7 +20,7 @@ namespace Tensorflow
         private Dictionary<string, int> _names_in_use;
         public int _version;
         private int _next_id_counter;
-        private List<String> _unfetchable_ops = new List<string>();
+        private List<Operation> _unfetchable_ops = new List<Operation>();
         private List<Tensor> _unfeedable_tensors = new List<Tensor>();
 
         public string _name_stack = "";
@@ -228,13 +228,13 @@ namespace Tensorflow
 
         public bool is_fetchable<T>(T tensor_or_op)
         {
-            if (tensor_or_op is Tensor)
+            if (tensor_or_op is Tensor tensor)
             {
-                return !_unfetchable_ops.Contains((tensor_or_op as Tensor).name); ;
+                return !_unfetchable_ops.Contains(tensor); ;
             }
-            else if (tensor_or_op is Operation)
+            else if (tensor_or_op is Operation op)
             {
-                return !_unfetchable_ops.Contains((tensor_or_op as Operation).name);
+                return !_unfetchable_ops.Contains(op);
             }
 
             return false;
@@ -372,6 +372,11 @@ namespace Tensorflow
             _unfeedable_tensors.Add(tensor);
         }
 
+        public void prevent_fetching(Operation op)
+        {
+            _unfetchable_ops.Add(op);
+        }
+        
         public void Dispose()
         {
             c_api.TF_DeleteGraph(_handle);

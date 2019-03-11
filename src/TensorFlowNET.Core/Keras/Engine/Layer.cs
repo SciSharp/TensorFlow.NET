@@ -48,6 +48,7 @@ namespace Tensorflow.Keras.Engine
         }
 
         public Tensor __call__(Tensor inputs,
+            Tensor training = null,
             VariableScope scope = null)
         {
             var input_list = new Tensor[] { inputs };
@@ -73,7 +74,7 @@ namespace Tensorflow.Keras.Engine
                     // Symbolic execution on symbolic tensors. We will attempt to build
                     // the corresponding TF subgraph inside `backend.get_graph()`
                     var graph = backend.get_graph();
-                    outputs = call(inputs);
+                    outputs = call(inputs, training: training);
                     _handle_activity_regularization(inputs, outputs);
                     _set_mask_metadata(inputs, outputs, null);
                 }
@@ -100,7 +101,7 @@ namespace Tensorflow.Keras.Engine
             return null;
         }
 
-        protected virtual Tensor call(Tensor inputs)
+        protected virtual Tensor call(Tensor inputs, Tensor training = null)
         {
             throw new NotImplementedException("Layer.call");
         }
@@ -143,13 +144,15 @@ namespace Tensorflow.Keras.Engine
 
         protected virtual void _init_set_name(string name)
         {
-            if (string.IsNullOrEmpty(name))
-                (_name, _base_name) = _make_unique_name();
+            string base_name = name;
+            if (name == null)
+                (_name, base_name) = _make_unique_name();
+            _base_name = base_name;
         }
 
         protected virtual (string, string) _make_unique_name()
         {
-            string base_name = "conv2d";
+            string base_name = generic_utils.to_snake_case(this.GetType().Name);
             string name = base_layer_utils.unique_layer_name(base_name);
             return (name, base_name);
         }

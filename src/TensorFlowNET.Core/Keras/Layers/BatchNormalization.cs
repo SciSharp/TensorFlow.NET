@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Keras.Utils;
 using Tensorflow.Layers;
 
 namespace Tensorflow.Keras.Layers
@@ -25,6 +26,7 @@ namespace Tensorflow.Keras.Layers
         private RefVariable gamma;
         private RefVariable beta;
         private RefVariable moving_mean;
+        private RefVariable moving_variance;
 
         public BatchNormalization(int axis = -1,
             float momentum = 0.99f,
@@ -103,7 +105,56 @@ namespace Tensorflow.Keras.Layers
 
             moving_mean = add_weight("moving_mean",
                 param_shape,
-                dtype: param_dtype);
+                dtype: param_dtype,
+                initializer: moving_mean_initializer,
+                synchronization: VariableSynchronization.ON_READ,
+                trainable: false,
+                aggregation: VariableAggregation.MEAN);
+
+            moving_variance = add_weight("moving_variance",
+              shape: param_shape,
+              dtype: param_dtype,
+              initializer: moving_variance_initializer,
+              synchronization: VariableSynchronization.ON_READ,
+              trainable: false,
+              aggregation: VariableAggregation.MEAN);
+
+            if (renorm)
+                throw new NotImplementedException("build when renorm is true");
+
+            built = true;
+        }
+
+        protected override Tensor call(Tensor inputs, Tensor training = null)
+        {
+            Tensor outputs = null;
+
+            if (fused)
+            {
+                outputs = _fused_batch_norm(inputs, training: training);
+            }
+
+            throw new NotImplementedException("BatchNormalization call");
+        }
+
+        private Tensor _fused_batch_norm(Tensor inputs, Tensor training)
+        {
+            var beta = this.beta;
+            var gamma = this.gamma;
+
+            Action _fused_batch_norm_training = () =>
+            {
+
+            };
+
+            Action _fused_batch_norm_inference = () =>
+            {
+
+            };
+
+            tf_utils.smart_cond(training, _fused_batch_norm_training, _fused_batch_norm_inference);
+
+            throw new NotImplementedException("_fused_batch_norm");
         }
     }
 }

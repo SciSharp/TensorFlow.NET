@@ -29,10 +29,11 @@ namespace Tensorflow.Layers
 
         public virtual Tensor apply(Tensor inputs, Tensor training = null)
         {
-            return __call__(inputs);
+            return __call__(inputs, training: training);
         }
 
         public Tensor __call__(Tensor inputs,
+            Tensor training = null,
             VariableScope scope = null)
         {
             _set_scope(scope);
@@ -51,7 +52,7 @@ namespace Tensorflow.Layers
 
             Python.with(scope_context_manager, scope2 => _current_scope = scope2);
             // Actually call layer
-            var outputs = base.__call__(inputs);
+            var outputs = base.__call__(inputs, training: training);
 
             // Update global default collections.
             //_add_elements_to_collection(updates, ops.GraphKeys.UPDATE_OPS);
@@ -63,7 +64,9 @@ namespace Tensorflow.Layers
             int[] shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
-            bool? trainable = null)
+            bool? trainable = null,
+            VariableSynchronization synchronization = VariableSynchronization.AUTO,
+            VariableAggregation aggregation = VariableAggregation.NONE)
         {
             var default_graph = ops.get_default_graph();
             Graph init_graph = null;

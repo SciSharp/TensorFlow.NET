@@ -42,7 +42,7 @@ namespace Tensorflow
 
         public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Placeholder", args: new { dtype, shape });
+            var _op = _op_def_lib._apply_op_helper("Placeholder", name: name, args: new { dtype, shape });
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
 
