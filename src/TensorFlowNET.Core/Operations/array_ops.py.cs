@@ -66,6 +66,11 @@ namespace Tensorflow
         public static Tensor ones_like<T>(T tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
             => ones_like_impl(tensor, dtype, name, optimize);
 
+        public static Tensor reshape(Tensor tensor, Tensor shape, string name = null)
+        {
+            return gen_array_ops.reshape(tensor, shape, null);
+        }
+
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
         {
             return with(ops.name_scope(name, "ones_like", new { tensor }), scope =>

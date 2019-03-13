@@ -12,6 +12,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class NaiveBayesClassifier : Python, IExample
     { 
+        public Normal dist { get; set; }
         public void Run()
         {
             np.array<float>(1.0f, 1.0f);
@@ -72,16 +73,34 @@ namespace TensorFlowNET.Examples
             // Create a 3x2 univariate normal distribution with the 
             // Known mean and variance           
             var dist = tf.distributions.Normal(mean, tf.sqrt(variance));
-
+            this.dist = dist;
         }
 
-        public void predict (NDArray X)
+        public Tensor predict (NDArray X)
         {
-            // assert self.dist is not None
-            // nb_classes, nb_features = map(int, self.dist.scale.shape)
+            if (dist == null)
+            {
+                throw new ArgumentNullException("cant not find the model (normal distribution)!");
+            }
+            int nb_classes = (int) dist.scale().shape[0];
+            int nb_features = (int)dist.scale().shape[1];
 
+            // Conditional probabilities log P(x|c) with shape
+            // (nb_samples, nb_classes)
+            Tensor tile = tf.tile(new Tensor(X), new Tensor(new int[] { -1, nb_classes, nb_features }));
+            Tensor r = tf.reshape(tile, new Tensor(new int[] { -1, nb_classes, nb_features }));
+            var cond_probs = tf.reduce_sum(dist.log_prob(r));
+            // uniform priors
+            var priors = np.log(np.array<double>((1.0 / nb_classes) * nb_classes));
 
-            throw new NotFiniteNumberException();
+            // posterior log probability, log P(c) + log P(x|c)
+            var joint_likelihood = tf.add(new Tensor(priors), cond_probs);
+            // normalize to get (log)-probabilities
+
+            var norm_factor = tf.reduce_logsumexp(joint_likelihood, new int[] { 1 }, true);
+            var log_prob = joint_likelihood - norm_factor;
+            // exp to get the actual probabilities
+            return tf.exp(log_prob);
         }
     }
 }
