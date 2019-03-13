@@ -88,6 +88,51 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Computes log(sum(exp(elements across dimensions of a tensor))).
+        /// Reduces `input_tensor` along the dimensions given in `axis`.
+        /// Unless `keepdims` is true, the rank of the tensor is reduced by 1 for each
+        /// entry in `axis`. If `keepdims` is true, the reduced dimensions
+        /// are retained with length 1.
+
+        /// If `axis` has no entries, all dimensions are reduced, and a
+        /// tensor with a single element is returned.
+
+        /// This function is more numerically stable than log(sum(exp(input))). It avoids
+        /// overflows caused by taking the exp of large inputs and underflows caused by
+        /// taking the log of small inputs.
+        /// </summary>
+        /// <param name="input_tensor"> The tensor to reduce. Should have numeric type.</param>
+        /// <param name="axis"> The dimensions to reduce. If `None` (the default), reduces all 
+        /// dimensions.Must be in the range `[-rank(input_tensor), rank(input_tensor))`.</param>
+        /// <param name="keepdims"></param>
+        /// <returns> The reduced tensor.</returns>
+        public static Tensor reduce_logsumexp(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        {
+            with(ops.name_scope(name, "ReduceLogSumExp", new { input_tensor }), scope =>
+            {
+                var raw_max = reduce_max(input_tensor, axis, true);
+                var my_max = array_ops.stop_gradient(array_ops.where(gen_math_ops.is_finite(raw_max), raw_max, array_ops.zeros_like(raw_max)));
+                var result = gen_math_ops.log(
+                reduce_sum(
+                    gen_math_ops.exp(gen_math_ops.sub(input_tensor, my_max)),
+                    new Tensor(axis),
+                    keepdims));
+                if (!keepdims)
+                {
+                    my_max = array_ops.reshape(my_max, array_ops.shape(result));
+                }
+                result = gen_math_ops.add(result, my_max);
+                return _may_reduce_to_scalar(keepdims, axis, result);
+            });
+            return null;
+        }
+
+        public static Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        {
+            return _may_reduce_to_scalar(keepdims, axis, gen_math_ops._max(input_tensor, (int[])_ReductionDims(input_tensor, axis), keepdims, name));
+        }
+
+        /// <summary>
         /// Casts a tensor to type `int32`.
         /// </summary>
         /// <param name="x">A `Tensor` or `SparseTensor` or `IndexedSlices`.</param>

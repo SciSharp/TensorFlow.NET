@@ -62,6 +62,32 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Returns which elements of x are finite.
+        /// </summary>
+        /// <param name="x"> A `Tensor`. Must be one of the following types: `bfloat16`, `half`, `float32`, `float64`.</param>
+        /// <param name="name"> A name for the operation (optional).</param>
+        /// <returns> A `Tensor` of type `bool`.</returns>
+        public static Tensor is_finite(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("IsFinite", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Computes exponential of x element-wise.  \\(y = e^x\\).
+        /// </summary>
+        /// <param name="x"> A `Tensor`. Must be one of the following types: `bfloat16`, `half`, `float32`, `float64`, `complex64`, `complex128`.</param>
+        /// <param name="name"> A name for the operation (optional).</param>
+        /// <returns> A `Tensor`. Has the same type as `x`.</returns>
+        public static Tensor exp(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Exp", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
         /// Computes natural logarithm of x element-wise.
         /// </summary>
         /// <param name="x"> A `Tensor`. Must be one of the following types: `bfloat16`, `half`, `float32`, `float64`, `complex64`, `complex128`.</param>
@@ -156,6 +182,13 @@ namespace Tensorflow
         public static Tensor maximum<T1, T2>(T1 x, T2 y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Maximum", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _max(Tensor input, int[] axis, bool keep_dims=false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
