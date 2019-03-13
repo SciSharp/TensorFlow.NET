@@ -27,6 +27,37 @@ namespace Tensorflow
         public List<Tensor> _graph_parents  {get;set;}
         public string _name  {get;set;}
 
+
+        /// <summary>
+        /// Log probability density/mass function.
+        /// </summary>
+        /// <param name="value"> `Tensor`.</param>
+        /// <param name="name"> Python `str` prepended to names of ops created by this function.</param>
+        /// <returns>log_prob: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with values of type `self.dtype`.</returns>
+
+        /*
+        public Tensor log_prob(Tensor value, string name = "log_prob")
+        {
+            return _call_log_prob(value, name);
+        }
+
+        private Tensor _call_log_prob (Tensor value, string name)
+        {
+            with(ops.name_scope(name, "moments", new { value }), scope =>
+            {
+                value = _convert_to_tensor(value, "value", _dtype);
+            });
+
+            throw new NotImplementedException();
+
+        }
+
+        private Tensor _convert_to_tensor(Tensor value, string name = null, TF_DataType preferred_dtype)
+        {
+            throw new NotImplementedException();
+        }
+        */
+
         /// <summary>
         /// Constructs the `Distribution'     
         /// **This is a private method for subclass use.**
@@ -47,7 +78,7 @@ namespace Tensorflow
         /// <param name = "name"> Name prefixed to Ops created by this class. Default: subclass name.</param>
         /// <returns> Two `Tensor` objects: `mean` and `variance`.</returns>
 
-        /* 
+        /*
         private Distribution (
                 TF_DataType dtype,
                 ReparameterizationType reparameterization_type,
@@ -66,6 +97,10 @@ namespace Tensorflow
                     this._name = name;
                 }
         */
+
+
+
+
     }
 
     /// <summary>

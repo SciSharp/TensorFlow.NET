@@ -55,6 +55,11 @@ namespace Tensorflow
             return m;
         }
 
+        public static Tensor square(Tensor x, string name = null)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Helper function for reduction ops.
         /// </summary>

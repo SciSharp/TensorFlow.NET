@@ -78,5 +78,19 @@ namespace Tensorflow
             return array_ops.broadcast_static_shape(new Tensor(_loc.shape), new Tensor(_scale.shape));
         }
 
+        private Tensor _log_prob(Tensor x)
+        {
+            return _log_unnormalized_prob(_z(x));
+        }
+
+        private Tensor _log_unnormalized_prob (Tensor x)
+        {
+            return -0.5 * math_ops.square(_z(x));
+        }
+
+        private Tensor _z (Tensor x)
+        {
+            return (x - this._loc) / this._scale;
+        }
     }
 }
