@@ -15,13 +15,10 @@ namespace TensorFlowNET.Examples
         public void Run()
         {
             np.array<float>(1.0f, 1.0f);
-            // var X = np.array<float>(np.array<float>(1.0f, 1.0f), np.array<float>(2.0f, 2.0f), np.array<float>(1.0f, -1.0f), np.array<float>(2.0f, -2.0f), np.array<float>(-1.0f, -1.0f), np.array<float>(-1.0f, 1.0f),);
-            // var X = np.array<float[]>(new float[][] { new float[] { 1.0f, 1.0f}, new float[] { 2.0f, 2.0f }, new float[] { -1.0f, -1.0f }, new float[] { -2.0f, -2.0f }, new float[] { 1.0f, -1.0f }, new float[] { 2.0f, -2.0f }, });
             var X = np.array<float>(new float[][] { new float[] { 1.0f, 1.0f }, new float[] { 2.0f, 2.0f }, new float[] { -1.0f, -1.0f }, new float[] { -2.0f, -2.0f }, new float[] { 1.0f, -1.0f }, new float[] { 2.0f, -2.0f }, });
             var y = np.array<int>(0,0,1,1,2,2);
             fit(X, y);
             // Create a regular grid and classify each point 
-            
         }
 
         public void fit(NDArray X, NDArray y)
