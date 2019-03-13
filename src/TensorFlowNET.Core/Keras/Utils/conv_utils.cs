@@ -29,5 +29,20 @@ namespace Tensorflow.Keras.Utils
             else
                 throw new ValueError($"Invalid data_format: {data_format}");
         }
+
+        public static int[] normalize_tuple(int[] value, int n, string name)
+        {
+            return value;
+        }
+
+        public static string normalize_padding(string value)
+        {
+            return value.ToLower();
+        }
+
+        public static string normalize_data_format(string value)
+        {
+            return value.ToLower();
+        }
     }
 }

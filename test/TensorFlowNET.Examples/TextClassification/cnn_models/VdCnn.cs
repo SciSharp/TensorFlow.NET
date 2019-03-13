@@ -93,7 +93,11 @@ namespace TensorFlowNET.Examples.TextClassification
                 if (max_pool)
                 {
                     // Max pooling
-                    throw new NotImplementedException("conv_block");
+                    return tf.layers.max_pooling2d(
+                        conv,
+                        pool_size: new int[] { 3, 1 },
+                        strides: new int[] { 2, 1 },
+                        padding: "SAME");
                 }
                 else
                 {

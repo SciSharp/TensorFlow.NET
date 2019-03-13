@@ -53,7 +53,7 @@ namespace Tensorflow.Operations
             return _op.outputs[0];
         }
 
-        public static (Tensor, Tensor, Tensor) _fused_batch_norm(Tensor x,
+        public static Tensor[] _fused_batch_norm(Tensor x,
                 Tensor scale,
                 Tensor offset,
                 Tensor mean,
@@ -75,7 +75,12 @@ namespace Tensorflow.Operations
                 is_training
             });
 
-            return (_op.outputs[0], _op.outputs[1], _op.outputs[2]);
+            return _op.outputs;
+        }
+
+        public static Tensor max_pool()
+        {
+            throw new NotImplementedException("");
         }
     }
 }

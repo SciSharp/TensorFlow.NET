@@ -100,6 +100,32 @@ namespace Tensorflow
 
                 return layer.apply(inputs, training: training);
             }
+
+            /// <summary>
+            /// Max pooling layer for 2D inputs (e.g. images).
+            /// </summary>
+            /// <param name="inputs">The tensor over which to pool. Must have rank 4.</param>
+            /// <param name="pool_size"></param>
+            /// <param name="strides"></param>
+            /// <param name="padding"></param>
+            /// <param name="data_format"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public static Tensor max_pooling2d(Tensor inputs,
+                int[] pool_size,
+                int[] strides,
+                string padding = "valid",
+                string data_format = "channels_last",
+                string name = null)
+            {
+                var layer = new MaxPooling2D(pool_size: pool_size,
+                    strides: strides,
+                    padding: padding,
+                    data_format: data_format,
+                    name: name);
+
+                return layer.apply(inputs);
+            }
         }
     }
 }

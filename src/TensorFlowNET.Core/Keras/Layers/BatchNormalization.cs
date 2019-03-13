@@ -132,6 +132,7 @@ namespace Tensorflow.Keras.Layers
             if (fused)
             {
                 outputs = _fused_batch_norm(inputs, training: training);
+                return outputs;
             }
 
             throw new NotImplementedException("BatchNormalization call");
@@ -142,7 +143,7 @@ namespace Tensorflow.Keras.Layers
             var beta = this.beta;
             var gamma = this.gamma;
 
-            Func<(Tensor, Tensor, Tensor)> _fused_batch_norm_training = () =>
+            Func<Tensor[]> _fused_batch_norm_training = () =>
             {
                 return tf.nn.fused_batch_norm(
                   inputs,
@@ -152,7 +153,7 @@ namespace Tensorflow.Keras.Layers
                   data_format: _data_format);
             };
 
-            Func<(Tensor, Tensor, Tensor)> _fused_batch_norm_inference = () =>
+            Func<Tensor[]> _fused_batch_norm_inference = () =>
             {
                 return tf.nn.fused_batch_norm(
                   inputs,
@@ -165,9 +166,41 @@ namespace Tensorflow.Keras.Layers
                   data_format: _data_format);
             };
 
-            tf_utils.smart_cond(training, _fused_batch_norm_training, _fused_batch_norm_inference);
+            var results = tf_utils.smart_cond(training, _fused_batch_norm_training, _fused_batch_norm_inference);
+            var (output, mean, variance) = (results[0], results[1], results[2]);
+            var training_value = tf_utils.constant_value(training);
 
-            throw new NotImplementedException("_fused_batch_norm");
+            Tensor momentum_tensor;
+            if (training_value == null)
+            {
+                momentum_tensor = tf_utils.smart_cond(training,
+                    () => new float[] { momentum }, () => new float[] { 1.0f })[0];
+            }
+            else
+            {
+                momentum_tensor = ops.convert_to_tensor(momentum);
+            }
+                
+            if(training_value == null)
+            {
+                var mean_update = _assign_moving_average(moving_mean, mean, momentum_tensor);
+                var variance_update = _assign_moving_average(moving_variance, variance, momentum_tensor);
+                add_update(new Tensor[] { mean_update }, inputs: true);
+                add_update(new Tensor[] { variance_update }, inputs: true);
+            }
+
+            return output;
+        }
+
+        public Tensor _assign_moving_average(RefVariable variable, Tensor value, Tensor momentum)
+        {
+            return Python.with(ops.name_scope(null, "AssignMovingAvg", new { variable, value, momentum }), scope =>
+            {
+                // var cm = ops.colocate_with(variable);
+                var decay = ops.convert_to_tensor(1.0f - momentum, name: "decay");
+                var update_delta = (variable - math_ops.cast(value, variable.dtype)) * decay;
+                return state_ops.assign_sub(variable, update_delta, name: scope);
+            });
         }
     }
 }

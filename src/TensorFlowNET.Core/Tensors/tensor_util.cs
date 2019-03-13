@@ -38,7 +38,8 @@ namespace Tensorflow
             {
                 return MakeNdarray(tensor.op.get_attr("value") as TensorProto);
             }
-            throw new NotImplementedException("_ConstantValue");   
+
+            return null;
         }
 
         public static NDArray MakeNdarray(TensorProto tensor)

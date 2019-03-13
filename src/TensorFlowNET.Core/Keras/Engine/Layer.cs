@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Keras.Utils;
 
@@ -34,6 +35,7 @@ namespace Tensorflow.Keras.Engine
         protected string _name;
         protected string _base_name;
         protected bool _compute_previous_mask;
+        protected List<Operation> _updates;
 
         public Layer(bool trainable = true, string name = null, TF_DataType dtype = TF_DataType.DtInvalid)
         {
@@ -45,6 +47,7 @@ namespace Tensorflow.Keras.Engine
             _init_set_name(name);
             _trainable_weights = new List<RefVariable>();
             _compute_previous_mask = false;
+            _updates = new List<Operation>();
         }
 
         public Tensor __call__(Tensor inputs,
@@ -140,6 +143,12 @@ namespace Tensorflow.Keras.Engine
             _trainable_weights.Add(variable);
 
             return variable;
+        }
+
+        protected virtual void add_update(Tensor[] updates, bool inputs = false)
+        {
+            var updates_op = updates.Select(x => x.op).ToArray();
+            _updates.AddRange(updates_op);
         }
 
         protected virtual void _init_set_name(string name)

@@ -137,9 +137,9 @@ namespace Tensorflow
                 return gen_array_ops.identity(data, name: name);
         }
 
-        public static (Tensor, Tensor) cond(Tensor pred,
-            Func<(Tensor, Tensor, Tensor)> true_fn = null,
-            Func<(Tensor, Tensor, Tensor)> false_fn = null,
+        public static Tensor[] cond<T>(Tensor pred,
+            Func<T[]> true_fn = null,
+            Func<T[]> false_fn = null,
             bool strict = false,
             string name = null)
         {
@@ -158,20 +158,46 @@ namespace Tensorflow
                 // Build the graph for the true branch in a new context.
                 var context_t = new CondContext(pred, pivot_1, branch: 1);
                 context_t.Enter();
-                var res_t = context_t.BuildCondBranch(true_fn);
+                var (orig_res_t, res_t) = context_t.BuildCondBranch(true_fn);
                 context_t.Exit();
 
                 // Build the graph for the false branch in a new context.
                 var context_f = new CondContext(pred, pivot_2, branch: 0);
                 context_f.Enter();
-                var res_f = context_f.BuildCondBranch(false_fn);
+                var (orig_res_f, res_f) = context_f.BuildCondBranch(false_fn);
                 context_f.Exit();
 
-                var res_t_flat = new Tensor[] { res_t.Item1, res_t.Item2, res_t.Item3 };
-                var res_f_flat = new Tensor[] { res_f.Item1, res_f.Item2, res_f.Item3 };
+                var res_t_flat = res_t;
+                var res_f_flat = res_f;
 
+                var merges = zip(res_f_flat, res_t_flat)
+                    .Select(pair => merge(new Tensor[] { pair.Item1, pair.Item2 }))
+                    .ToArray();
 
-                return (p_2, p_1);
+                merges = _convert_flows_to_tensorarrays(orig_res_t, merges);
+
+                ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_t);
+                ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_f);
+
+                return merges;
+            });
+        }
+
+        public static Tensor[] _convert_flows_to_tensorarrays<T>(T[] tensors_or_tensorarrays, Tensor[] tensors_or_flows)
+        {
+            // zip(tensors_or_tensorarrays, tensors_or_flows).Select((ta, t_or_flow) => ta).ToArray();
+            return tensors_or_flows;
+        }
+
+        public static Tensor merge(Tensor[] inputs, string name = null)
+        {
+            return with(ops.name_scope(name, "Merge", inputs), scope =>
+            {
+                name = scope;
+                inputs = inputs.Select(inp =>
+                            ops.internal_convert_to_tensor_or_indexed_slices(inp, as_ref: true))
+                        .ToArray();
+                return gen_control_flow_ops.merge(inputs, name).Item1;
             });
         }
 

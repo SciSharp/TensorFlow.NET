@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
 
 namespace Tensorflow
@@ -27,19 +28,21 @@ namespace Tensorflow
 
             public static IActivation relu => new relu();
 
-            public static (Tensor, Tensor, Tensor) fused_batch_norm(Tensor x,
-            RefVariable scale,
-            RefVariable offset,
-            Tensor mean = null,
-            Tensor variance = null,
-            float epsilon = 0.001f,
-            string data_format = "NHWC",
-            bool is_training = true,
-            string name = null) => nn_impl.fused_batch_norm(x, scale, offset, mean, variance,
-                epsilon: epsilon,
-                data_format: data_format,
-                is_training: is_training,
-                name: name);
+            public static Tensor[] fused_batch_norm(Tensor x,
+                RefVariable scale,
+                RefVariable offset,
+                Tensor mean = null,
+                Tensor variance = null,
+                float epsilon = 0.001f,
+                string data_format = "NHWC",
+                bool is_training = true,
+                string name = null) => nn_impl.fused_batch_norm(x, scale, offset, mean, variance,
+                    epsilon: epsilon,
+                    data_format: data_format,
+                    is_training: is_training,
+                    name: name);
+
+            public static Tensor max_pool() => gen_nn_ops.max_pool();
         }
     }
 }

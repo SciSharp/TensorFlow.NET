@@ -118,14 +118,6 @@ namespace Tensorflow
             {
                 object obj = propertyDescriptor.GetValue(dyn);
                 string name = propertyDescriptor.Name;
-                // avoid .net keyword
-                switch (name)
-                {
-                    case "_ref_":
-                        name = "ref";
-                        break;
-                }
-
                 dictionary.Add(name, obj);
             }
             return dictionary;
