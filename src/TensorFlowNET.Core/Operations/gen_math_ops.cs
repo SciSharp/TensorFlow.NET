@@ -48,9 +48,28 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Computes square of x element-wise.
+        /// </summary>
+        /// <param name="x"> A `Tensor`. Must be one of the following types: `bfloat16`, `half`, `float32`, `float64`, `int32`, `int64`, `complex64`, `complex128`.</param>
+        /// <param name="name"> A name for the operation (optional).</param>
+        /// <returns> A `Tensor`. Has the same type as `x`.</returns>
         public static Tensor square(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Square", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Computes natural logarithm of x element-wise.
+        /// </summary>
+        /// <param name="x"> A `Tensor`. Must be one of the following types: `bfloat16`, `half`, `float32`, `float64`, `complex64`, `complex128`.</param>
+        /// <param name="name"> name: A name for the operation (optional).</param>
+        /// <returns> A `Tensor`. Has the same type as `x`.</returns>
+        public static Tensor log(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Log", name, args: new { x });
 
             return _op.outputs[0];
         }

@@ -60,6 +60,11 @@ namespace Tensorflow
             return gen_math_ops.square(x, name);
         }
 
+        public static Tensor log(Tensor x, string name = null)
+        {
+            return gen_math_ops.log(x, name);
+        }
+
         /// <summary>
         /// Helper function for reduction ops.
         /// </summary>

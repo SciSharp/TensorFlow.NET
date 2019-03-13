@@ -35,7 +35,7 @@ namespace Tensorflow
         /// <param name="name"> Python `str` prepended to names of ops created by this function.</param>
         /// <returns>log_prob: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with values of type `self.dtype`.</returns>
 
-        /*
+        
         public Tensor log_prob(Tensor value, string name = "log_prob")
         {
             return _call_log_prob(value, name);
@@ -45,18 +45,39 @@ namespace Tensorflow
         {
             with(ops.name_scope(name, "moments", new { value }), scope =>
             {
-                value = _convert_to_tensor(value, "value", _dtype);
+                try
+                {
+                    return _log_prob(value);
+                }
+                catch (Exception e1)
+                {
+                    try
+                    {
+                        return math_ops.log(_prob(value));
+                    } catch (Exception e2)
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
             });
-
-            throw new NotImplementedException();
-
+            return null;
         }
 
-        private Tensor _convert_to_tensor(Tensor value, string name = null, TF_DataType preferred_dtype)
+        private Tensor _log_prob(Tensor value)
         {
             throw new NotImplementedException();
         }
-        */
+
+        private Tensor _prob(Tensor value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TF_DataType dtype()
+        {
+            return this._dtype;
+        }
+        
 
         /// <summary>
         /// Constructs the `Distribution'     
