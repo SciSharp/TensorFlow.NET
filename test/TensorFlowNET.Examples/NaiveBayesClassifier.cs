@@ -76,7 +76,7 @@ namespace TensorFlowNET.Examples
             this.dist = dist;
         }
 
-        public void predict (NDArray X)
+        public Tensor predict (NDArray X)
         {
             if (dist == null)
             {
@@ -96,13 +96,11 @@ namespace TensorFlowNET.Examples
             // posterior log probability, log P(c) + log P(x|c)
             var joint_likelihood = tf.add(new Tensor(priors), cond_probs);
             // normalize to get (log)-probabilities
-            /*
-            var norm_factor = tf.reduce_logsumexp(joint_likelihood, axis = 1, keep_dims = True)
+
+            var norm_factor = tf.reduce_logsumexp(joint_likelihood, new int[] { 1 }, true);
             var log_prob = joint_likelihood - norm_factor;
             // exp to get the actual probabilities
-            return tf.exp(log_prob)
-            */
-            throw new NotImplementedException();
+            return tf.exp(log_prob);
         }
     }
 }
