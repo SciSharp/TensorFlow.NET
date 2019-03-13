@@ -57,7 +57,7 @@ namespace Tensorflow
 
         public static Tensor square(Tensor x, string name = null)
         {
-            throw new NotImplementedException();
+            return gen_math_ops.square(x, name);
         }
 
         /// <summary>

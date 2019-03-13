@@ -48,6 +48,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor square(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Square", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate= false, string name= "")
         {
             var _op = _op_def_lib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate });
