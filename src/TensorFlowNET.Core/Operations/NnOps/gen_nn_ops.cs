@@ -52,5 +52,30 @@ namespace Tensorflow.Operations
 
             return _op.outputs[0];
         }
+
+        public static (Tensor, Tensor, Tensor) _fused_batch_norm(Tensor x,
+                Tensor scale,
+                Tensor offset,
+                Tensor mean,
+                Tensor variance,
+                float epsilon = 0.0001f,
+                string data_format = "NHWC",
+                bool is_training = true,
+                string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("FusedBatchNorm", name: name, args: new
+            {
+                x,
+                scale,
+                offset,
+                mean,
+                variance,
+                epsilon,
+                data_format,
+                is_training
+            });
+
+            return (_op.outputs[0], _op.outputs[1], _op.outputs[2]);
+        }
     }
 }

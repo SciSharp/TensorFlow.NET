@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {
@@ -136,9 +137,9 @@ namespace Tensorflow
                 return gen_array_ops.identity(data, name: name);
         }
 
-        public static (Tensor, Tensor) cond(Tensor pred, 
-            Action true_fn = null, 
-            Action false_fn = null,
+        public static (Tensor, Tensor) cond(Tensor pred,
+            Func<(Tensor, Tensor, Tensor)> true_fn = null,
+            Func<(Tensor, Tensor, Tensor)> false_fn = null,
             bool strict = false,
             string name = null)
         {
@@ -153,6 +154,22 @@ namespace Tensorflow
                 // Disable the fetching of tensors that are only on one branch of cond.
                 foreach (var tensor in new Tensor[] { p_1, p_2, pivot_1, pivot_2, pred })
                     tensor.op.graph.prevent_fetching(tensor.op);
+
+                // Build the graph for the true branch in a new context.
+                var context_t = new CondContext(pred, pivot_1, branch: 1);
+                context_t.Enter();
+                var res_t = context_t.BuildCondBranch(true_fn);
+                context_t.Exit();
+
+                // Build the graph for the false branch in a new context.
+                var context_f = new CondContext(pred, pivot_2, branch: 0);
+                context_f.Enter();
+                var res_f = context_f.BuildCondBranch(false_fn);
+                context_f.Exit();
+
+                var res_t_flat = new Tensor[] { res_t.Item1, res_t.Item2, res_t.Item3 };
+                var res_f_flat = new Tensor[] { res_f.Item1, res_f.Item2, res_f.Item3 };
+
 
                 return (p_2, p_1);
             });

@@ -15,7 +15,7 @@ namespace Tensorflow
         private List<ITensorOrOperation> _seen_nodes;
         private Queue<_ControlDependenciesController> _old_stack;
         private bool _new_stack;
-        private Context _old_control_flow_context;
+        private IControlFlowContext _old_control_flow_context;
 
         public ITensorOrOperation[] control_inputs => _control_inputs_val.ToArray();
 

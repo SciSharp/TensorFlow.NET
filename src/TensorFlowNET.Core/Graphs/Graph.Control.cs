@@ -8,7 +8,7 @@ namespace Tensorflow
 {
     public partial class Graph
     {
-        public Context _control_flow_context;
+        public IControlFlowContext _control_flow_context;
 
         private Queue<_ControlDependenciesController> _graph_control_dependencies_stack = new Queue<_ControlDependenciesController>();
         public Queue<_ControlDependenciesController> _control_dependencies_stack
@@ -72,7 +72,7 @@ namespace Tensorflow
         /// Returns the current control flow context.
         /// </summary>
         /// <returns>A context object.</returns>
-        public Context _get_control_flow_context()
+        public IControlFlowContext _get_control_flow_context()
         {
             return _control_flow_context;
         }
@@ -81,7 +81,7 @@ namespace Tensorflow
         /// Sets the current control flow context.
         /// </summary>
         /// <param name="ctx">a context object.</param>
-        public void _set_control_flow_context(Context ctx)
+        public void _set_control_flow_context(IControlFlowContext ctx)
         {
             _control_flow_context = ctx;
         }

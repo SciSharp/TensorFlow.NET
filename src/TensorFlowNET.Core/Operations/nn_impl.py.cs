@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {
@@ -43,6 +44,37 @@ namespace Tensorflow
                 else
                     return (mean, variance);
             });
+        }
+
+        public static (Tensor, Tensor, Tensor) fused_batch_norm(Tensor x, 
+            RefVariable scale,
+            RefVariable offset,
+            Tensor mean,
+            Tensor variance,
+            float epsilon = 0.001f,
+            string data_format = "NHWC",
+            bool is_training = true,
+            string name = null)
+        {
+            x = ops.convert_to_tensor(x, name: "input");
+            var scale_tensor = ops.convert_to_tensor(scale, name: "scale");
+            var offset_tensor = ops.convert_to_tensor(offset, name: "offset");
+            if (mean == null)
+                mean = constant_op.constant(new float[0]);
+            if(variance == null)
+                variance = constant_op.constant(new float[0]);
+            var min_epsilon = 1.001e-5f;
+            epsilon = epsilon > min_epsilon ? epsilon : min_epsilon;
+
+            return gen_nn_ops._fused_batch_norm(x,
+                scale_tensor,
+                offset_tensor,
+                mean,
+                variance,
+                epsilon,
+                data_format,
+                is_training,
+                name);
         }
     }
 }

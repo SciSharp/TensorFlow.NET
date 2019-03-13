@@ -142,14 +142,27 @@ namespace Tensorflow.Keras.Layers
             var beta = this.beta;
             var gamma = this.gamma;
 
-            Action _fused_batch_norm_training = () =>
+            Func<(Tensor, Tensor, Tensor)> _fused_batch_norm_training = () =>
             {
-
+                return tf.nn.fused_batch_norm(
+                  inputs,
+                  gamma,
+                  beta,
+                  epsilon: epsilon,
+                  data_format: _data_format);
             };
 
-            Action _fused_batch_norm_inference = () =>
+            Func<(Tensor, Tensor, Tensor)> _fused_batch_norm_inference = () =>
             {
-
+                return tf.nn.fused_batch_norm(
+                  inputs,
+                  gamma,
+                  beta,
+                  mean: moving_mean,
+                  variance: moving_variance,
+                  epsilon: epsilon,
+                  is_training: false,
+                  data_format: _data_format);
             };
 
             tf_utils.smart_cond(training, _fused_batch_norm_training, _fused_batch_norm_inference);

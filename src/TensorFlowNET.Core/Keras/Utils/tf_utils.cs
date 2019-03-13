@@ -18,7 +18,10 @@ namespace Tensorflow.Keras.Utils
             return true;
         }
 
-        public static object smart_cond(Tensor pred, Action true_fn = null, Action false_fn = null, string name = null)
+        public static object smart_cond(Tensor pred, 
+            Func<(Tensor, Tensor, Tensor)> true_fn = null,
+            Func<(Tensor, Tensor, Tensor)> false_fn = null, 
+            string name = null)
         {
             return smart_module.smart_cond(pred,
                 true_fn: true_fn,

@@ -107,6 +107,9 @@ namespace Tensorflow
                         case float floatVal:
                             nparray = floatVal;
                             break;
+                        case float[] floatVals:
+                            nparray = floatVals;
+                            break;
                         case double doubleVal:
                             nparray = doubleVal;
                             break;

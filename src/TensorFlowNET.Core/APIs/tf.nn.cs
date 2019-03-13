@@ -26,6 +26,20 @@ namespace Tensorflow
                     name: name);
 
             public static IActivation relu => new relu();
+
+            public static (Tensor, Tensor, Tensor) fused_batch_norm(Tensor x,
+            RefVariable scale,
+            RefVariable offset,
+            Tensor mean = null,
+            Tensor variance = null,
+            float epsilon = 0.001f,
+            string data_format = "NHWC",
+            bool is_training = true,
+            string name = null) => nn_impl.fused_batch_norm(x, scale, offset, mean, variance,
+                epsilon: epsilon,
+                data_format: data_format,
+                is_training: is_training,
+                name: name);
         }
     }
 }
