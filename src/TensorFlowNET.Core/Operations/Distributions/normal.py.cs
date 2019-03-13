@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Tensorflow;
 
@@ -80,7 +81,7 @@ namespace Tensorflow
 
         private Tensor _log_prob(Tensor x)
         {
-            return _log_unnormalized_prob(_z(x));
+            return _log_unnormalized_prob(_z(x)) -_log_normalization();
         }
 
         private Tensor _log_unnormalized_prob (Tensor x)
@@ -91,6 +92,12 @@ namespace Tensorflow
         private Tensor _z (Tensor x)
         {
             return (x - this._loc) / this._scale;
+        }
+
+        private Tensor _log_normalization()
+        {
+            Tensor t = new Tensor(Math.Log(2.0 * Math.PI));
+            return 0.5 * t + math_ops.log(scale());
         }
     }
 }
