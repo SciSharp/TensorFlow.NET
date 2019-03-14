@@ -11,9 +11,9 @@ namespace Tensorflow.Operations.Initializers
         private int? seed;
         private TF_DataType dtype;
 
-        public TruncatedNormal(float mean = 0.0f, 
-            float stddev = 1.0f, 
-            int? seed = null, 
+        public TruncatedNormal(float mean = 0.0f,
+            float stddev = 1.0f,
+            int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
             this.mean = mean;

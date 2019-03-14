@@ -14,6 +14,7 @@ namespace TensorFlowNET.Examples.TextClassification
         private int[] num_blocks;
         private float learning_rate;
         private IInitializer cnn_initializer;
+        private IInitializer fc_initializer;
         private Tensor x;
         private Tensor y;
         private Tensor is_training;
@@ -30,6 +31,8 @@ namespace TensorFlowNET.Examples.TextClassification
             num_blocks = new int[] { 2, 2, 2, 2 };
             learning_rate = 0.001f;
             cnn_initializer = tf.keras.initializers.he_normal();
+            fc_initializer = tf.truncated_normal_initializer(stddev: 0.05f);
+
             x = tf.placeholder(tf.int32, new TensorShape(-1, document_max_len), name: "x");
             y = tf.placeholder(tf.int32, new TensorShape(-1), name: "y");
             is_training = tf.placeholder(tf.boolean, new TensorShape(), name: "is_training");
@@ -46,6 +49,14 @@ namespace TensorFlowNET.Examples.TextClassification
 
             Tensor conv0 = null;
             Tensor conv1 = null;
+            Tensor conv2 = null;
+            Tensor conv3 = null;
+            Tensor conv4 = null;
+            Tensor h_flat = null;
+            Tensor fc1_out = null;
+            Tensor fc2_out = null;
+            Tensor logits = null;
+            Tensor predictions = null;
 
             // First Convolution Layer
             with(tf.variable_scope("conv-0"), delegate
@@ -62,7 +73,50 @@ namespace TensorFlowNET.Examples.TextClassification
             with(tf.name_scope("conv-block-1"), delegate {
                 conv1 = conv_block(conv0, 1);
             });
-            
+
+            with(tf.name_scope("conv-block-2"), delegate {
+                conv2 = conv_block(conv1, 2);
+            });
+
+            with(tf.name_scope("conv-block-3"), delegate {
+                conv3 = conv_block(conv2, 3);
+            });
+
+            with(tf.name_scope("conv-block-4"), delegate
+            {
+                conv4 = conv_block(conv3, 4, max_pool: false);
+            });
+
+            // ============= k-max Pooling =============
+            with(tf.name_scope("k-max-pooling"), delegate
+            {
+                var h = tf.transpose(tf.squeeze(conv4, new int[] { -1 }), new int[] { 0, 2, 1 });
+                var top_k = tf.nn.top_k(h, k: 8, sorted: false)[0];
+                h_flat = tf.reshape(top_k, new int[] { -1, 512 * 8 });
+            });
+
+            // ============= Fully Connected Layers =============
+            with(tf.name_scope("fc-1"), scope =>
+            {
+                fc1_out = tf.layers.dense(h_flat, 2048, activation: tf.nn.relu, kernel_initializer: fc_initializer);
+            });
+
+            with(tf.name_scope("fc-2"), scope =>
+            {
+                fc2_out = tf.layers.dense(fc1_out, 2048, activation: tf.nn.relu, kernel_initializer: fc_initializer);
+            });
+
+            with(tf.name_scope("fc-3"), scope =>
+            {
+                logits = tf.layers.dense(fc2_out, num_class, activation: null, kernel_initializer: fc_initializer);
+                predictions = tf.argmax(logits, -1, output_type: tf.int32);
+            });
+
+            // ============= Loss and Accuracy =============
+            with(tf.name_scope("loss"), delegate
+            {
+                var y_one_hot = tf.one_hot(y, num_class);
+            });
         }
 
         private Tensor conv_block(Tensor input, int i, bool max_pool = true)

@@ -42,7 +42,10 @@ namespace Tensorflow
                     is_training: is_training,
                     name: name);
 
-            public static Tensor max_pool() => gen_nn_ops.max_pool();
+            public static IPoolFunction max_pool => new MaxPoolFunction();
+
+            public static Tensor[] top_k(Tensor input, int k = 1, bool sorted = true, string name = null)
+                => gen_nn_ops.top_kv2(input, k: k, sorted: sorted, name: name);
         }
     }
 }

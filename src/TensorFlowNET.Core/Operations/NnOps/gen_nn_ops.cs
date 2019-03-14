@@ -78,9 +78,35 @@ namespace Tensorflow.Operations
             return _op.outputs;
         }
 
-        public static Tensor max_pool()
+        public static Tensor max_pool(Tensor input,
+            int[] ksize,
+            int[] strides,
+            string padding,
+            string data_format = "NHWC",
+            string name = null)
         {
-            throw new NotImplementedException("");
+            var _op = _op_def_lib._apply_op_helper("MaxPool", name: name, args: new
+            {
+                input,
+                ksize,
+                strides,
+                padding,
+                data_format,
+            });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor[] top_kv2(Tensor input, int k, bool sorted = true, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TopKV2", name: name, args: new
+            {
+                input,
+                k,
+                sorted
+            });
+
+            return _op.outputs;
         }
     }
 }

@@ -126,6 +126,26 @@ namespace Tensorflow
 
                 return layer.apply(inputs);
             }
+
+            public static Tensor dense(Tensor inputs,
+                int units,
+                IActivation activation = null,
+                bool use_bias = true,
+                IInitializer kernel_initializer = null,
+                IInitializer bias_initializer = null,
+                bool trainable = true,
+                string name = null,
+                bool? reuse = null)
+            {
+                if (bias_initializer == null)
+                    bias_initializer = tf.zeros_initializer;
+
+                var layer = new Dense(units, activation, 
+                    use_bias: use_bias,
+                    kernel_initializer: kernel_initializer);
+
+                return layer.apply(inputs);
+            }
         }
     }
 }

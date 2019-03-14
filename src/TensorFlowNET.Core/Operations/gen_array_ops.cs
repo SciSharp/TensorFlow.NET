@@ -115,6 +115,12 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor reshape(Tensor tensor, int[] shape, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
+            return _op.outputs[0];
+        }
+
         public static Tensor where()
         {
             throw new NotImplementedException("where");

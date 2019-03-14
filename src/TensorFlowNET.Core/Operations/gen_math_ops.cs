@@ -221,5 +221,20 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+
+        /// <summary>
+        /// Returns the index with the largest value across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="dimension"></param>
+        /// <param name="output_type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ArgMax", name, new { input, dimension, output_type });
+
+            return _op.outputs[0];
+        }
     }
 }

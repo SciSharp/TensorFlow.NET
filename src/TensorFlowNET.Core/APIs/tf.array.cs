@@ -30,5 +30,13 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor transpose(Tensor a, int[] perm = null, string name = "transpose", bool conjugate = false)
             => array_ops.transpose(a, perm, name, conjugate);
+
+        public static Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
+            => gen_array_ops.squeeze(input, axis, name);
+
+        public static Tensor one_hot(Tensor indices, int depth)
+        {
+            throw new NotImplementedException("one_hot");
+        }
     }
 }

@@ -122,7 +122,7 @@ namespace Tensorflow.Keras.Engine
 
         protected virtual void build(TensorShape input_shape)
         {
-            throw new NotImplementedException("Layer.build");
+            built = true;
         }
 
         protected virtual RefVariable add_weight(string name,

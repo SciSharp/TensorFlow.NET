@@ -10,5 +10,8 @@ namespace Tensorflow
                 Tensor shape,
                 string name = null) => gen_array_ops.reshape(tensor, shape, name);
 
+        public static Tensor reshape(Tensor tensor,
+                int[] shape,
+                string name = null) => gen_array_ops.reshape(tensor, shape, name);
     }
 }

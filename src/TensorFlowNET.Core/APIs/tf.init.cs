@@ -27,5 +27,13 @@ namespace Tensorflow
                   default_name,
                   values,
                   auxiliary_name_scope);
+
+        public static IInitializer truncated_normal_initializer(float mean = 0.0f,
+            float stddev = 1.0f,
+            int? seed = null,
+            TF_DataType dtype = TF_DataType.DtInvalid) => new TruncatedNormal(mean: mean,
+                stddev: stddev,
+                seed: seed,
+                dtype: dtype);
     }
 }

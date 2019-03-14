@@ -8,14 +8,14 @@ namespace Tensorflow.Keras.Layers
 {
     public class Pooling2D : Tensorflow.Layers.Layer
     {
-        private Func<Tensor> pool_function;
+        private IPoolFunction pool_function;
         private int[] pool_size;
         private int[] strides;
         private string padding;
         private string data_format;
         private InputSpec input_spec;
 
-        public Pooling2D(Func<Tensor> pool_function,
+        public Pooling2D(IPoolFunction pool_function,
             int[] pool_size,
             int[] strides,
             string padding = "valid",
@@ -28,6 +28,30 @@ namespace Tensorflow.Keras.Layers
             this.padding = conv_utils.normalize_padding(padding);
             this.data_format = conv_utils.normalize_data_format(data_format);
             this.input_spec = new InputSpec(ndim: 4);
+        }
+
+        protected override Tensor call(Tensor inputs, Tensor training = null)
+        {
+            int[] pool_shape;
+            if (data_format == "channels_last")
+            {
+                pool_shape = new int[] { 1, pool_size[0], pool_size[1], 1 };
+                strides = new int[] { 1, strides[0], strides[1], 1 };
+            }
+            else
+            {
+                pool_shape = new int[] { 1, 1, pool_size[0], pool_size[1] };
+                strides = new int[] { 1, 1, strides[0], strides[1] };
+            }
+
+            var outputs = pool_function.Apply(
+                inputs,
+                ksize: pool_shape,
+                strides: strides,
+                padding: padding.ToUpper(),
+                data_format: conv_utils.convert_data_format(data_format, 4));
+
+            return outputs;
         }
     }
 }
