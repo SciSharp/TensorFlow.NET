@@ -434,7 +434,8 @@ namespace Tensorflow
 
         public static Tensor internal_convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid,
             string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid,
-            bool as_ref = false)
+            bool as_ref = false,
+            string scope = null)
         {
             if (dtype == TF_DataType.DtInvalid)
                 dtype = preferred_dtype;
@@ -443,6 +444,8 @@ namespace Tensorflow
             {
                 case Tensor tensor:
                     return tensor;
+                case Tensor[] tensors:
+                    return array_ops._autopacking_helper(tensors, dtype, name);
                 case string str:
                     return constant_op.constant(str, dtype: dtype, name: name);
                 case string[] strArray:

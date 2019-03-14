@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Tensorflow.Keras.Engine;
 
 namespace Tensorflow.Layers
 {
-    public class Layer : Keras.Engine.Layer
+    public class Layer : Keras.Layers.Layer
     {
         protected Graph _graph;
         

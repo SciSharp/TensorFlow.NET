@@ -46,6 +46,18 @@ namespace Tensorflow
 
             public static Tensor[] top_k(Tensor input, int k = 1, bool sorted = true, string name = null)
                 => gen_nn_ops.top_kv2(input, k: k, sorted: sorted, name: name);
+
+            public static Tensor bias_add(Tensor value, RefVariable bias, string data_format = null, string name = null)
+            {
+                return Python.with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
+                {
+                    name = scope;
+                    return gen_nn_ops.bias_add(value, bias, data_format: data_format, name: name);
+                });
+            }
+
+            public static Tensor softmax_cross_entropy_with_logits_v2(Tensor labels, Tensor logits, int axis = -1, string name = null)
+                => nn_ops.softmax_cross_entropy_with_logits_v2_helper(labels, logits, axis: axis, name: name);
         }
     }
 }

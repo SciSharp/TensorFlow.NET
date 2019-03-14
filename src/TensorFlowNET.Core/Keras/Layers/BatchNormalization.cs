@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Keras.Utils;
-using Tensorflow.Layers;
 
 namespace Tensorflow.Keras.Layers
 {
-    public class BatchNormalization : Layer
+    public class BatchNormalization : Tensorflow.Layers.Layer
     {
         private bool _USE_V2_BEHAVIOR = true;
         private float momentum;

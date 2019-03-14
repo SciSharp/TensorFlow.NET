@@ -46,6 +46,22 @@ namespace Tensorflow
             }
         }
 
+        public static Tensor _autopacking_helper(Tensor[] list_or_tuple, TF_DataType dtype, string name)
+        {
+            var must_pack = false;
+            var converted_elems = new List<Tensor>();
+            return with(ops.name_scope(name), scope =>
+            {
+                foreach (var (i, elem) in enumerate(list_or_tuple))
+                {
+                    converted_elems.Add(elem);
+                    must_pack = true;
+                }
+
+                return gen_array_ops.pack(converted_elems.ToArray(), name: scope);
+            });
+        }
+
         public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1) => expand_dims_v2(input, axis, name);
 
         private static Tensor expand_dims_v2(Tensor input, int axis, string name = null) => gen_array_ops.expand_dims(input, axis, name);
@@ -106,6 +122,44 @@ namespace Tensorflow
                 var shape = ops.convert_to_tensor(dims, dtype: TF_DataType.TF_INT32);
                 var output = gen_array_ops.fill(shape, constant_op.constant(1.0f, dtype: dtype), name: name);
                 return output;
+            });
+        }
+
+        public static Tensor one_hot(Tensor indices, int depth, 
+            Tensor on_value = null,
+            Tensor off_value = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            int axis = -1,
+            string name = null)
+        {
+            return with(ops.name_scope(name, "one_hot", new { indices, depth, dtype }), scope =>
+            {
+                name = scope;
+                var on_exists = false;
+                var off_exists = false;
+                var on_dtype = TF_DataType.DtInvalid;
+                var off_dtype = TF_DataType.DtInvalid;
+
+                if (dtype == TF_DataType.DtInvalid)
+                    dtype = TF_DataType.TF_FLOAT;
+
+                if(!on_exists)
+                {
+                    on_value = ops.convert_to_tensor(1, dtype, name: "on_value");
+                    on_dtype = dtype;
+                }
+
+                if (!off_exists)
+                {
+                    off_value = ops.convert_to_tensor(0, dtype, name = "off_value");
+                    off_dtype = dtype;
+                }
+
+                return gen_array_ops.one_hot(indices, depth,
+                    on_value: on_value,
+                    off_value: off_value,
+                    axis: axis,
+                    name: name);
             });
         }
 
@@ -298,5 +352,8 @@ namespace Tensorflow
                 return gen_array_ops.transpose(a, perm, name);
             });
         }
+
+        public static Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
+            => gen_array_ops.slice(input, begin, size, name: name);
     }
 }

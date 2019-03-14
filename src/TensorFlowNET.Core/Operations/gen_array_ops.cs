@@ -40,6 +40,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor pack(Tensor[] values, int axis = 0, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Pack", name: name, args: new { values, axis });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Placeholder", name: name, args: new { dtype, shape });
@@ -126,6 +133,17 @@ namespace Tensorflow
             throw new NotImplementedException("where");
         }
 
+        public static Tensor one_hot(Tensor indices, int depth,
+            Tensor on_value = null,
+            Tensor off_value = null,
+            TF_DataType dtype = TF_DataType.DtInvalid, 
+            int axis = -1,
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("OneHot", name, new { indices, depth, on_value, off_value, axis });
+            return _op.outputs[0];
+        }
+
         /// <summary>
         /// A placeholder op that passes through `input` when its output is not fed.
         /// </summary>
@@ -174,12 +192,20 @@ namespace Tensorflow
             var _op = _op_def_lib._apply_op_helper("ZerosLike", name, new { x });
             return _op.outputs[0];
         }
+
         public static Tensor stop_gradient(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("StopGradient", name, args: new { input = x, name });
 
             return _op.outputs[0];
         }
+
+        public static Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Slice", name, new { input, begin, size });
+            return _op.outputs[0];
+        }
+
         /// <summary>
         /// Removes dimensions of size 1 from the shape of a tensor.
         /// Given a tensor `input`, this operation returns a tensor of the same type with

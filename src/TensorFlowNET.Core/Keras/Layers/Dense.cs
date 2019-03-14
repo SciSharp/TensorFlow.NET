@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Operations.Activation;
+using static Tensorflow.tf;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -54,6 +55,27 @@ namespace Tensorflow.Keras.Layers
                   trainable: true);
 
             built = true;
+        }
+
+        protected override Tensor call(Tensor inputs, Tensor training = null)
+        {
+            Tensor outputs = null;
+            var rank = inputs.rank;
+            if(rank > 2)
+            {
+                throw new NotImplementedException("");
+            }
+            else
+            {
+                outputs = gen_math_ops.mat_mul(inputs, kernel);
+            }
+
+            if (use_bias)
+                outputs = nn.bias_add(outputs, bias);
+            if (activation != null)
+                return activation.Activate(outputs);
+
+            return outputs;
         }
     }
 }

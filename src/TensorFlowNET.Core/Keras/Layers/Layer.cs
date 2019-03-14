@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 
-namespace Tensorflow.Keras.Engine
+namespace Tensorflow.Keras.Layers
 {
     /// <summary>
     /// Base layer class.
@@ -106,7 +107,7 @@ namespace Tensorflow.Keras.Engine
 
         protected virtual Tensor call(Tensor inputs, Tensor training = null)
         {
-            throw new NotImplementedException("Layer.call");
+            return inputs;
         }
 
         protected virtual string _name_scope()

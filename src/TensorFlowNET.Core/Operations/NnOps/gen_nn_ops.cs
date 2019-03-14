@@ -108,5 +108,23 @@ namespace Tensorflow.Operations
 
             return _op.outputs;
         }
+
+        /// <summary>
+        /// Computes softmax cross entropy cost and gradients to backpropagate.
+        /// </summary>
+        /// <param name="features"></param>
+        /// <param name="labels"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static (Tensor, Tensor) softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("SoftmaxCrossEntropyWithLogits", name: name, args: new
+            {
+                features,
+                labels
+            });
+
+            return (_op.outputs[0], _op.outputs[1]);
+        }
     }
 }

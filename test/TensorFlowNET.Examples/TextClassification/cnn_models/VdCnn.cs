@@ -22,6 +22,9 @@ namespace TensorFlowNET.Examples.TextClassification
         private RefVariable embeddings;
         private Tensor x_emb;
         private Tensor x_expanded;
+        private Tensor logits;
+        private Tensor predictions;
+        private Tensor loss;
 
         public VdCnn(int alphabet_size, int document_max_len, int num_class)
         {
@@ -55,8 +58,6 @@ namespace TensorFlowNET.Examples.TextClassification
             Tensor h_flat = null;
             Tensor fc1_out = null;
             Tensor fc2_out = null;
-            Tensor logits = null;
-            Tensor predictions = null;
 
             // First Convolution Layer
             with(tf.variable_scope("conv-0"), delegate
@@ -116,6 +117,13 @@ namespace TensorFlowNET.Examples.TextClassification
             with(tf.name_scope("loss"), delegate
             {
                 var y_one_hot = tf.one_hot(y, num_class);
+                loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits: logits, labels: y_one_hot));
+
+                var update_ops = tf.get_collection(ops.GraphKeys.UPDATE_OPS) as List<Operation>;
+                with(tf.control_dependencies(update_ops.ToArray()), delegate
+                {
+
+                });
             });
         }
 

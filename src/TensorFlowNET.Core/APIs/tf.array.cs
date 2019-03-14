@@ -34,9 +34,11 @@ namespace Tensorflow
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
             => gen_array_ops.squeeze(input, axis, name);
 
-        public static Tensor one_hot(Tensor indices, int depth)
-        {
-            throw new NotImplementedException("one_hot");
-        }
+        public static Tensor one_hot(Tensor indices, int depth,
+            Tensor on_value = null,
+            Tensor off_value = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            int axis = -1,
+            string name = null) => array_ops.one_hot(indices, depth, dtype: dtype, axis: axis, name: name);        
     }
 }
