@@ -24,7 +24,7 @@ namespace Tensorflow.Operations.Initializers
 
         public Tensor call(TensorShape shape, TF_DataType dtype)
         {
-            throw new NotImplementedException("");
+            return random_ops.truncated_normal(shape, mean, stddev, dtype : dtype, seed: seed);
         }
 
         public object get_config()
