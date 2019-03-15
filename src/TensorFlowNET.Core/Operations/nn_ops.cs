@@ -42,6 +42,23 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor log_softmax(Tensor logits, int axis = -1, string name = null)
+        {
+            return _softmax(logits, gen_nn_ops.log_softmax, axis, name);
+        }
+
+        public static Tensor _softmax(Tensor logits, Func<Tensor, string, Tensor> compute_op, int dim = -1, string name = null)
+        {
+            logits = ops.convert_to_tensor(logits);
+
+            var shape = logits.shape;
+            bool is_last_dim = dim == -1 || dim == shape.Length - 1;
+            if (is_last_dim)
+                return compute_op(logits, name);
+
+            throw new NotImplementedException("_softmax helper");
+        }
+
         public static Tensor softmax_cross_entropy_with_logits_v2_helper(Tensor labels,
             Tensor logits,
             int axis = -1,

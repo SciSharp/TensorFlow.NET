@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Operations;
+using util = Tensorflow.control_flow_util;
 
 namespace Tensorflow
 {
@@ -225,6 +226,19 @@ namespace Tensorflow
 
                 return gen_control_flow_ops.@switch(data, pred, name: name);
             });
+        }
+
+        public static Tensor ZerosLikeOutsideLoop(Operation op, int index)
+        {
+            var val = op.outputs[index];
+            if (!util.IsSwitch(op))
+            {
+                if (val.dtype == TF_DataType.TF_RESOURCE)
+                    throw new NotImplementedException("ZerosLikeOutsideLoop");
+                return array_ops.zeros_like(val, optimize: false);
+            }
+
+            throw new NotImplementedException("ZerosLikeOutsideLoop");
         }
     }
 }

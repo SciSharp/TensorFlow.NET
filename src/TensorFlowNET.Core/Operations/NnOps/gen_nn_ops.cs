@@ -94,6 +94,16 @@ namespace Tensorflow.Operations
             return _op.outputs;
         }
 
+        public static Tensor log_softmax(Tensor logits, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LogSoftmax", name: name, args: new
+            {
+                logits
+            });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor max_pool(Tensor input,
             int[] ksize,
             int[] strides,

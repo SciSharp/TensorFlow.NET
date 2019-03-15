@@ -426,6 +426,8 @@ namespace Tensorflow
                     return constant_op.constant(doubleVal, dtype: dtype, name: name);
                 case RefVariable varVal:
                     return varVal._TensorConversionFunction(as_ref: as_ref);
+                case object[] objects:
+                    return array_ops._autopacking_helper(objects, dtype: dtype, name: name);
                 default:
                     throw new NotImplementedException($"internal_convert_to_tensor: Can't convert {value.GetType().Name} to Tensor");
             }

@@ -185,7 +185,10 @@ namespace Tensorflow
             if (oneof_value == "type")
                 return x.Type;
 
-            return x.GetType().GetProperty(oneof_value).GetValue(x);
+            object result = x.GetType().GetProperty(oneof_value).GetValue(x);
+            if (result is Google.Protobuf.ByteString byteString)
+                return byteString.ToStringUtf8();
+            return result;
         }
 
         public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)

@@ -131,6 +131,17 @@ namespace Tensorflow
                             // for ops that do not have gradients.
                             var grad_fn = ops.get_gradient_function(op);
 
+                            foreach(var (i, out_grad) in enumerate(out_grads))
+                            {
+                                if(out_grad == null)
+                                {
+                                    if (loop_state != null)
+                                        ;
+                                    else
+                                        out_grads[i] = control_flow_ops.ZerosLikeOutsideLoop(op, i);
+                                }
+                            }
+
                             with(ops.name_scope(op.name + "_grad"), scope1 =>
                             {
                                 string name1 = scope1;
@@ -240,28 +251,27 @@ namespace Tensorflow
         private static Tensor[] _AggregatedGrads(Dictionary<string, Tensor[][]> grads, Operation op, string gradient_uid, object loop_state, int aggregation_method = 0)
         {
             var out_grads = _GetGrads(grads, op);
-            for(int i = 0; i < out_grads.Length; i++)
+            var return_grads = new Tensor[out_grads.Length];
+
+            foreach(var (i, out_grad) in enumerate(out_grads))
             {
-                var out_grad = out_grads[i];
-                if(loop_state != null)
+                if (loop_state != null)
                 {
 
                 }
 
-                // Grads have to be Tensors or IndexedSlices
-
                 // Aggregate multiple gradients, and convert [] to None.
-                if(out_grad != null)
+                if (out_grad != null)
                 {
-                    if(out_grad.Length < 2)
+                    if (out_grad.Length < 2)
                     {
                         string used = "nop";
-                        return new Tensor[] { out_grad[0] };
+                        return_grads[i] = out_grad[0];
                     }
                 }
             }
 
-            return null;
+            return return_grads;
         }
 
         /// <summary>

@@ -14,14 +14,18 @@ namespace Tensorflow
             // map tensorflow\python\ops\math_grad.py
             return (oper, out_grads) =>
             {
-                Console.WriteLine($"get_gradient_function: {oper.type} '{oper.name}'");
+                // Console.WriteLine($"get_gradient_function: {oper.type} '{oper.name}'");
 
                 switch (oper.type)
                 {
                     case "Add":
                         return math_grad._AddGrad(oper, out_grads);
+                    case "BiasAdd":
+                        return nn_grad._BiasAddGrad(oper, out_grads);
                     case "Identity":
                         return math_grad._IdGrad(oper, out_grads);
+                    case "MatMul":
+                        return math_grad._MatMulGrad(oper, out_grads);
                     case "Mul":
                         return math_grad._MulGrad(oper, out_grads);
                     case "Mean":
@@ -36,8 +40,13 @@ namespace Tensorflow
                         return math_grad._RealDivGrad(oper, out_grads);
                     case "Reshape":
                         return array_grad._ReshapeGrad(oper, out_grads);
+                    case "Relu":
+                        return nn_grad._ReluGrad(oper, out_grads);
                     case "SoftmaxCrossEntropyWithLogits":
                         return nn_grad._SoftmaxCrossEntropyWithLogitsGrad(oper, out_grads);
+                    case "TopK":
+                    case "TopKV2":
+                        return nn_grad._TopKGrad(oper, out_grads);
                     default:
                         throw new NotImplementedException($"get_gradient_function {oper.type}");
                 }

@@ -46,10 +46,10 @@ namespace Tensorflow
             }
         }
 
-        public static Tensor _autopacking_helper(Tensor[] list_or_tuple, TF_DataType dtype, string name)
+        public static Tensor _autopacking_helper(object[] list_or_tuple, TF_DataType dtype, string name)
         {
             var must_pack = false;
-            var converted_elems = new List<Tensor>();
+            var converted_elems = new List<object>();
             return with(ops.name_scope(name), scope =>
             {
                 foreach (var (i, elem) in enumerate(list_or_tuple))
@@ -58,7 +58,27 @@ namespace Tensorflow
                     must_pack = true;
                 }
 
-                return gen_array_ops.pack(converted_elems.ToArray(), name: scope);
+                if(must_pack)
+                {
+                    var elems_as_tensors = new List<Tensor>();
+                    foreach (var (i, elem) in enumerate(converted_elems))
+                    {
+                        if (elem is Tensor tensor)
+                            elems_as_tensors.Add(tensor);
+                        else
+                        {
+                            var elem_tensor = constant_op.constant(elem, dtype: dtype, name: i.ToString());
+                            elems_as_tensors.Add(elem_tensor);
+                        }
+                    }
+
+                    return gen_array_ops.pack(elems_as_tensors.ToArray(), name: scope);
+                }
+                else
+                {
+                    // return converted_elems.ToArray();
+                    throw new NotImplementedException("_autopacking_helper.converted_elems");
+                }
             });
         }
 
@@ -355,5 +375,15 @@ namespace Tensorflow
 
         public static Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
             => gen_array_ops.slice(input, begin, size, name: name);
+
+        public static Tensor stack(object values, int axis = 0, string name = "stack")
+        {
+            if (axis == 0)
+                // If the input is a constant list, it can be converted to a constant op
+                return ops.convert_to_tensor(values, name: name);
+
+            throw new NotImplementedException("array_ops.stack");
+        }
+
     }
 }
