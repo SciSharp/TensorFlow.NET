@@ -9,6 +9,7 @@ using Google.Protobuf;
 using System.Linq;
 using NumSharp.Core;
 using System.ComponentModel;
+using Tensorflow.Gradients;
 
 namespace Tensorflow
 {
@@ -380,6 +381,9 @@ namespace Tensorflow
                     case "RealDiv":
                         var realdiv = math_grad._RealDivGrad(oper, out_grads);
                         return new Tensor[] { realdiv.Item1, realdiv.Item2 };
+                    case "Reshape":
+                        var reshape = array_grad._ReshapeGrad(oper, out_grads);
+                        return new Tensor[] { reshape.Item1, reshape.Item2 };
                     default:
                         throw new NotImplementedException($"get_gradient_function {oper.type}");
                 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Tensorflow
+namespace Tensorflow.Gradients
 {
     /// <summary>
     /// Gradients for operators defined in math_ops.py.
@@ -55,6 +55,38 @@ namespace Tensorflow
             var reshape2 = gen_array_ops.reshape(reduce_sum2, sy);
 
             return (reshape1, reshape2);
+        }
+
+        public static (Tensor, Tensor) _MatMulGrad(Operation op, Tensor grad)
+        {
+            Tensor grad_a = null, grad_b = null;
+
+            var t_a = (bool)op.get_attr("transpose_a");
+            var t_b = (bool)op.get_attr("transpose_b");
+            var a = math_ops.conj(op.inputs[0]);
+            var b = math_ops.conj(op.inputs[1]);
+            if(!t_a && !t_b)
+            {
+                grad_a = gen_math_ops.mat_mul(grad, b, transpose_b: true);
+                grad_b = gen_math_ops.mat_mul(a, grad, transpose_a: true);
+            }
+            else if (!t_a && t_b)
+            {
+                grad_a = gen_math_ops.mat_mul(grad, b);
+                grad_b = gen_math_ops.mat_mul(grad, a, transpose_a: true);
+            }
+            else if (t_a && !t_b)
+            {
+                grad_a = gen_math_ops.mat_mul(grad, b);
+                grad_b = gen_math_ops.mat_mul(grad, a, transpose_a: true);
+            }
+            else if (t_a && t_b)
+            {
+                grad_a = gen_math_ops.mat_mul(b, grad, transpose_a: true, transpose_b: true);
+                grad_b = gen_math_ops.mat_mul(grad, a, transpose_a: true, transpose_b: true);
+            }
+
+            return (grad_a, grad_b);
         }
 
         public static (Tensor, Tensor) _MeanGrad(Operation op, Tensor grad)
