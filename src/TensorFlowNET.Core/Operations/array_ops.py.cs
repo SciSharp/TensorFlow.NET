@@ -7,7 +7,8 @@ namespace Tensorflow
 {
     public class array_ops : Python
     {
-        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null) => gen_array_ops.placeholder_with_default(input, shape, name);
+        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null) 
+            => gen_array_ops.placeholder_with_default(input, shape, name);
 
         public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
@@ -111,14 +112,14 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1) => expand_dims_v2(input, axis, name);
+        public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1) 
+            => expand_dims_v2(input, axis, name);
 
-        private static Tensor expand_dims_v2(Tensor input, int axis, string name = null) => gen_array_ops.expand_dims(input, axis, name);
+        private static Tensor expand_dims_v2(Tensor input, int axis, string name = null) 
+            => gen_array_ops.expand_dims(input, axis, name);
 
         public static Tensor rank(Tensor input, string name = null)
-        {
-            return math_ops.rank_internal(input, name, optimize: true);
-        }
+            => math_ops.rank_internal(input, name, optimize: true);
 
         /// <summary>
         /// Creates a tensor with all elements set to 1.
@@ -132,9 +133,7 @@ namespace Tensorflow
             => ones_like_impl(tensor, dtype, name, optimize);
 
         public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
-        {
-            return gen_array_ops.reshape(tensor, shape, null);
-        }
+            => gen_array_ops.reshape(tensor, shape, null);
 
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
         {
@@ -239,14 +238,10 @@ namespace Tensorflow
         /// </param>
         /// <returns>A `Tensor` of type `out_type`.</returns>
         public static Tensor shape(Tensor input, string name = null, TF_DataType out_type = TF_DataType.TF_INT32)
-        {
-            return shape_internal(input, name, optimize: true, out_type: out_type);
-        }
+            => shape_internal(input, name, optimize: true, out_type: out_type);
 
         public static Tensor size(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
-        {
-            return size_internal(input, name, optimize: optimize, out_type: out_type);
-        }
+            => size_internal(input, name, optimize: optimize, out_type: out_type);
 
         private static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
@@ -323,8 +318,46 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor stop_gradient(Tensor input, string name = null)
+            => gen_array_ops.stop_gradient(input,  name);
+
+        /// <summary>
+        /// Extracts a strided slice of a tensor (generalized python array indexing).
+        /// </summary>
+        /// <param name="input_"></param>
+        /// <param name="begin"></param>
+        /// <param name="end"></param>
+        /// <param name="strides"></param>
+        /// <param name="begin_mask"></param>
+        /// <param name="end_mask"></param>
+        /// <param name="ellipsis_mask"></param>
+        /// <param name="new_axis_mask"></param>
+        /// <param name="shrink_axis_mask"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor strided_slice(Tensor input_, Tensor begin, Tensor end, 
+            Tensor strides = null,
+            int begin_mask = 0,
+            int end_mask = 0,
+            int ellipsis_mask = 0,
+            int new_axis_mask = 0,
+            int shrink_axis_mask = 0,
+            string name = null)
         {
-            return gen_array_ops.stop_gradient(input,  name);
+            var op = gen_array_ops.strided_slice(
+                input: input_,
+                begin: begin,
+                end: end,
+                strides: strides,
+                begin_mask: begin_mask,
+                end_mask: end_mask,
+                ellipsis_mask: ellipsis_mask,
+                new_axis_mask: new_axis_mask,
+                shrink_axis_mask: shrink_axis_mask,
+                name: name);
+
+            string parent_name = name;
+
+            return op;
         }
 
         /// <summary>
@@ -345,14 +378,14 @@ namespace Tensorflow
         /// Contains the same data as `input`, but has one or more dimensions of
         /// size 1 removed.</returns>
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null, int[] squeeze_dims = null)
-        {
-            return gen_array_ops.squeeze(input, axis, name);
-        }
+            => gen_array_ops.squeeze(input, axis, name);
 
         public static Tensor identity(Tensor input, string name = null)
-        {
-            return gen_array_ops.identity(input, name);
-        }
+            => gen_array_ops.identity(input, name);
+
+        public static Tensor invert_permutation(Tensor x, string name = null)
+            => gen_array_ops.invert_permutation(x, name: name);
+
         /// <summary>
         /// Computes the shape of a broadcast given symbolic shapes.
         /// When shape_x and shape_y are Tensors representing shapes(i.e.the result of
@@ -368,26 +401,19 @@ namespace Tensorflow
         /// <param name="shape_y"> A rank 1 integer `Tensor`, representing the shape of y.</param>
         /// <returns> A rank 1 integer `Tensor` representing the broadcasted shape.</returns>
         public static Tensor broadcast_dynamic_shape(Tensor shape_x, Tensor shape_y)
-        {
-            return gen_array_ops.broadcast_args(shape_x, shape_y);
-        }
+            => gen_array_ops.broadcast_args(shape_x, shape_y);
 
         public static Tensor broadcast_static_shape(Tensor shape_x, Tensor shape_y)
-        {
-            return Framework.common_shapes.broadcast_shape(shape_x, shape_y);
-        }
+            => Framework.common_shapes.broadcast_shape(shape_x, shape_y);
 
         public static Tensor gather(Tensor @params, Tensor indices, string name = null, int axis = 0)
-        {
-            return gen_array_ops.gather_v2(@params, indices, axis, name: name);
-        }
+            => gen_array_ops.gather_v2(@params, indices, axis, name: name);
 
-        public static Tensor transpose(Tensor a, int[] perm = null, string name = "transpose", bool conjugate = false)
+        public static Tensor transpose<T1, T2>(T1 a, T2 perm, string name = "transpose", bool conjugate = false)
         {
             return with(ops.name_scope(name, "transpose", new { a }), scope =>
             {
-                name = scope;
-                return gen_array_ops.transpose(a, perm, name);
+                return gen_array_ops.transpose(a, perm, name: scope);
             });
         }
 

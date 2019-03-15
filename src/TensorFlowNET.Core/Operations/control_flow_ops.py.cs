@@ -138,6 +138,22 @@ namespace Tensorflow
                 return gen_array_ops.identity(data, name: name);
         }
 
+        /// <summary>
+        /// Forwards `data` to an output determined by `pred`.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="pred"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static (Tensor, Tensor) _SwitchRefOrTensor(Tensor data, Tensor pred, string name = "Switch")
+        {
+            data = ops.convert_to_tensor_or_indexed_slices(data, name: "data");
+
+            ops.colocate_with(data, ignore_existing: true);
+
+            return @switch(data, pred, name: name);
+        }
+
         public static Tensor[] cond<T>(Tensor pred,
             Func<T[]> true_fn = null,
             Func<T[]> false_fn = null,

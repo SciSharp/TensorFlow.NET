@@ -32,5 +32,10 @@ namespace Tensorflow
         {
             _control_flow_context = ctx;
         }
+
+        public CondContext _get_control_flow_context()
+        {
+            return _control_flow_context;
+        }
     }
 }

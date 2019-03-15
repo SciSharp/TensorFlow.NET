@@ -187,6 +187,61 @@ namespace Tensorflow
             }
         }
 
+        public Tensor this[int slice_spec]
+        {
+            get
+            {
+                var slice_spec_s = new int[] { slice_spec };
+                var begin = new List<int>();
+                var end = new List<int>();
+                var strides = new List<int>();
+
+                var index = 0;
+                var (new_axis_mask, shrink_axis_mask) = (0, 0);
+                var (begin_mask, end_mask) = (0, 0);
+                var ellipsis_mask = 0;
+
+                foreach(var s in slice_spec_s)
+                {
+                    {
+                        begin.Add(s);
+                        end.Add(s + 1);
+                        strides.Add(1);
+                        shrink_axis_mask |= (1 << index);
+                    }
+                    
+                    index += 1;
+                }
+
+                return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+                {
+                    string name = scope;
+                    if(begin != null)
+                    {
+                        var (packed_begin, packed_end, packed_strides) =
+                            (array_ops.stack(begin.ToArray()),
+                            array_ops.stack(end.ToArray()),
+                            array_ops.stack(strides.ToArray()));
+
+                        return gen_array_ops.strided_slice(
+                            this,
+                            packed_begin,
+                            packed_end,
+                            packed_strides,
+                            begin_mask: begin_mask,
+                            end_mask: end_mask,
+                            shrink_axis_mask: shrink_axis_mask,
+                            new_axis_mask: new_axis_mask,
+                            ellipsis_mask: ellipsis_mask,
+                            name: name);
+                    }
+
+                    throw new NotImplementedException("");
+                });
+            }
+            
+        }
+
         public override string ToString()
         {
             if(NDims == 0)

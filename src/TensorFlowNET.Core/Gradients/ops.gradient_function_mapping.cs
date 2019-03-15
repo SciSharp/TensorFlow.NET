@@ -26,6 +26,8 @@ namespace Tensorflow
                         return math_grad._IdGrad(oper, out_grads);
                     case "MatMul":
                         return math_grad._MatMulGrad(oper, out_grads);
+                    case "Merge":
+                        return control_flow_grad._MergeGrad(oper, out_grads);
                     case "Mul":
                         return math_grad._MulGrad(oper, out_grads);
                     case "Mean":
@@ -42,8 +44,12 @@ namespace Tensorflow
                         return array_grad._ReshapeGrad(oper, out_grads);
                     case "Relu":
                         return nn_grad._ReluGrad(oper, out_grads);
+                    case "Squeeze":
+                        return array_grad._SqueezeGrad(oper, out_grads);
                     case "SoftmaxCrossEntropyWithLogits":
                         return nn_grad._SoftmaxCrossEntropyWithLogitsGrad(oper, out_grads);
+                    case "Transpose":
+                        return array_grad._TransposeGrad(oper, out_grads);
                     case "TopK":
                     case "TopKV2":
                         return nn_grad._TopKGrad(oper, out_grads);

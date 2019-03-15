@@ -74,6 +74,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor invert_permutation(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("InvertPermutation", name, new { x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor log(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Log", name: name, args: new { x });
@@ -163,6 +170,12 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor scatter_nd(Tensor indices, Tensor updates, Tensor[] shape, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ScatterNd", name, new { indices, updates, shape });
+            return _op.outputs[0];
+        }
+
         public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Shape", name, new { input, out_type });
@@ -181,7 +194,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor transpose(Tensor x, int[] perm, string name = null)
+        public static Tensor transpose<T1, T2>(T1 x, T2 perm, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Transpose", name, new { x, perm });
             return _op.outputs[0];
@@ -196,6 +209,30 @@ namespace Tensorflow
         public static Tensor stop_gradient(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("StopGradient", name, args: new { input = x, name });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides,
+            int begin_mask = 0,
+            int end_mask = 0,
+            int ellipsis_mask = 0,
+            int new_axis_mask = 0,
+            int shrink_axis_mask = 0,
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StridedSlice", name, new
+            {
+                input,
+                begin,
+                end,
+                strides,
+                begin_mask,
+                end_mask,
+                ellipsis_mask,
+                new_axis_mask,
+                shrink_axis_mask
+            });
 
             return _op.outputs[0];
         }

@@ -28,7 +28,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="conjugate"></param>
         /// <returns></returns>
-        public static Tensor transpose(Tensor a, int[] perm = null, string name = "transpose", bool conjugate = false)
+        public static Tensor transpose<T1, T2>(T1 a, T2 perm, string name = "transpose", bool conjugate = false)
             => array_ops.transpose(a, perm, name, conjugate);
 
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)

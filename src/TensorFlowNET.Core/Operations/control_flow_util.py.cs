@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {
@@ -24,6 +25,13 @@ namespace Tensorflow
         public static bool IsSwitch(Operation op)
         {
             return op.type == "Switch" || op.type == "RefSwitch";
+        }
+
+        public static CondContext GetOutputContext(Operation op)
+        {
+            var ctxt = op._get_control_flow_context();
+
+            return ctxt;
         }
     }
 }

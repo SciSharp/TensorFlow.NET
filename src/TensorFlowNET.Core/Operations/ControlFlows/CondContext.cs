@@ -10,22 +10,28 @@ namespace Tensorflow.Operations
     public class CondContext : ControlFlowContext
     {
         private string _name;
+
         /// <summary>
         /// The boolean tensor for the cond predicate
         /// </summary>
         private Tensor _pred;
+        public Tensor pred => _pred;
+
         /// <summary>
         /// The predicate tensor in this branch
         /// </summary>
         private Tensor _pivot;
+
         /// <summary>
         /// 0 or 1 representing this branch
         /// </summary>
         private int _branch;
+
         /// <summary>
         /// 
         /// </summary>
         private List<string> _values = new List<string>();
+
         private Dictionary<string, Tensor> _external_values = new Dictionary<string, Tensor>();
 
         /// <summary>

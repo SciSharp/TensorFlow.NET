@@ -93,7 +93,7 @@ namespace Tensorflow.Gradients
 
             var in_lastdim = array_ops.gather(math_ops.cast(in_shape, TF_DataType.TF_INT64), 
                 array_ops.size(in_shape) - 1);
-            var outerdim = array_ops.shape(ind_2d);
+            var outerdim = array_ops.shape(ind_2d)[0];
 
             // Compute linear indices(flattened to 1D).
             var cast1 = math_ops.cast(outerdim, TF_DataType.TF_INT64);
@@ -102,7 +102,17 @@ namespace Tensorflow.Gradients
             var cast2 = math_ops.cast(dim2, TF_DataType.TF_INT32);
             var ind = array_ops.reshape(ind_2d + cast2, new int[] { -1 });
 
-            throw new NotImplementedException("nn_grad._TopKGrad");
+            // Substitute grad to appropriate locations and fill the rest with zeros,
+            // finally reshaping it to the original input shape.
+            var scatter = gen_array_ops.scatter_nd(array_ops.expand_dims(ind, -1),
+              array_ops.reshape(grad, new int[] { -1 }),
+              new Tensor[] { math_ops.reduce_prod(in_shape) });
+
+            return new Tensor[]
+            {
+                array_ops.reshape(scatter, in_shape),
+                array_ops.zeros(new int[0], dtype: TF_DataType.TF_INT32)
+            };
         }
     }
 }
