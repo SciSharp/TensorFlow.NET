@@ -6,9 +6,9 @@ namespace Tensorflow.Gradients
 {
     public class array_grad
     {
-        public static (Tensor, Tensor) _ReshapeGrad(Operation op, Tensor grad)
+        public static Tensor[] _ReshapeGrad(Operation op, Tensor[] grads)
         {
-            return (array_ops.reshape(grad, array_ops.shape(op.inputs[0])), null);
+            return new Tensor[] { array_ops.reshape(grads[0], array_ops.shape(op.inputs[0])), null };
         }
     }
 }

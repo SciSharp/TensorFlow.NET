@@ -136,7 +136,7 @@ namespace Tensorflow
                                 string name1 = scope1;
                                 if (grad_fn != null)
                                 {
-                                    in_grads = _MaybeCompile(grad_scope, op, out_grads[0], null, grad_fn);
+                                    in_grads = _MaybeCompile(grad_scope, op, out_grads, null, grad_fn);
                                     _VerifyGeneratedGradients(in_grads, op);
                                 }
 
@@ -226,7 +226,7 @@ namespace Tensorflow
                     $"inputs {op.inputs._inputs.Count()}");
         }
 
-        private static Tensor[] _MaybeCompile(string scope, Operation op, Tensor out_grads, Action func, Func<Operation, Tensor, Tensor[]> grad_fn)
+        private static Tensor[] _MaybeCompile(string scope, Operation op, Tensor[] out_grads, Action func, Func<Operation, Tensor[], Tensor[]> grad_fn)
         {
             scope = scope.EndsWith("/") ? scope.Substring(0, scope.Length - 1) : scope;
             return grad_fn(op, out_grads);

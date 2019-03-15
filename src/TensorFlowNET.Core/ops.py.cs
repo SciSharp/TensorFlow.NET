@@ -346,50 +346,6 @@ namespace Tensorflow
             session.run(operation, feed_dict);
         }
 
-        public static Func<Operation, Tensor, Tensor[]> get_gradient_function(Operation op)
-        {
-            if (op.inputs == null) return null;
-
-            // map tensorflow\python\ops\math_grad.py
-            return (oper, out_grads) =>
-            {
-                // Console.WriteLine($"get_gradient_function: {oper.type} '{oper.name}'");
-
-                switch (oper.type)
-                {
-                    case "Add":
-                        var add = math_grad._AddGrad(oper, out_grads);
-                        return new Tensor[] { add.Item1, add.Item2 };
-                    case "Identity":
-                        var id = math_grad._IdGrad(oper, out_grads);
-                        return new Tensor[] { id };
-                    case "Mul":
-                        var mul = math_grad._MulGrad(oper, out_grads);
-                        return new Tensor[] { mul.Item1, mul.Item2 };
-                    case "Mean":
-                        var mean = math_grad._MeanGrad(oper, out_grads);
-                        return new Tensor[] { mean.Item1, mean.Item2 };
-                    case "Sum":
-                        var sum = math_grad._SumGrad(oper, out_grads);
-                        return new Tensor[] { sum.Item1, sum.Item2 };
-                    case "Sub":
-                        var sub = math_grad._SubGrad(oper, out_grads);
-                        return new Tensor[] { sub.Item1, sub.Item2 };
-                    case "Pow":
-                        var pow = math_grad._PowGrad(oper, out_grads);
-                        return new Tensor[] { pow.Item1, pow.Item2 };
-                    case "RealDiv":
-                        var realdiv = math_grad._RealDivGrad(oper, out_grads);
-                        return new Tensor[] { realdiv.Item1, realdiv.Item2 };
-                    case "Reshape":
-                        var reshape = array_grad._ReshapeGrad(oper, out_grads);
-                        return new Tensor[] { reshape.Item1, reshape.Item2 };
-                    default:
-                        throw new NotImplementedException($"get_gradient_function {oper.type}");
-                }
-            };
-        }
-
         public static Tensor[] convert_n_to_tensor_or_indexed_slices(Tensor[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             return internal_convert_n_to_tensor_or_indexed_slices(values, dtype: dtype, name: name);
