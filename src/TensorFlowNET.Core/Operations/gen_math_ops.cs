@@ -20,16 +20,16 @@ namespace Tensorflow
         /// <param name="keep_dims"> An optional `bool`. Defaults to `False`. If true, retain reduced dimensions with length 1.</param>
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
-        public static Tensor mean(Tensor input, Tensor axis, bool keep_dims= false, string name = null)
+        public static Tensor mean<T1, T2>(T1 input, T2 axis, bool keep_dims= false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
 
             return _op.outputs[0];
         }
 
-        public static Tensor mean(Tensor input, int[] axis, bool keep_dims = false, string name = null)
+        public static Tensor prod<T1, T2>(T1 input, T2 axis, bool keep_dims = false, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims, name });
+            var _op = _op_def_lib._apply_op_helper("Prod", name, args: new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
@@ -186,7 +186,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor _max(Tensor input, int[] axis, bool keep_dims=false, string name = null)
+        public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims=false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims });
 

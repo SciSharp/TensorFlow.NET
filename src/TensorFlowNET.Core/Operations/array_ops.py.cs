@@ -82,7 +82,7 @@ namespace Tensorflow
         public static Tensor ones_like<T>(T tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
             => ones_like_impl(tensor, dtype, name, optimize);
 
-        public static Tensor reshape(Tensor tensor, Tensor shape, string name = null)
+        public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
         {
             return gen_array_ops.reshape(tensor, shape, null);
         }

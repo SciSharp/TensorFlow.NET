@@ -116,7 +116,7 @@ namespace Tensorflow
             return (_op.outputs[0], _op.outputs[1]);
         }
 
-        public static Tensor reshape(Tensor tensor, Tensor shape, string name = null)
+        public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
             return _op.outputs[0];

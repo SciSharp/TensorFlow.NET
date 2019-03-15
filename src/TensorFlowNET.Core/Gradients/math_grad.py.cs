@@ -57,6 +57,24 @@ namespace Tensorflow
             return (reshape1, reshape2);
         }
 
+        public static (Tensor, Tensor) _MeanGrad(Operation op, Tensor grad)
+        {
+            var sum_grad = _SumGrad(op, grad).Item1;
+            var input_shape = op.inputs[0]._shape_tuple();
+            var output_shape = op.outputs[0]._shape_tuple();
+
+            var input_shape_tensor = array_ops.shape(op.inputs[0]);
+            var output_shape_tensor = array_ops.shape(op.outputs[0]);
+            var factor = _safe_shape_div(math_ops.reduce_prod(input_shape_tensor), math_ops.reduce_prod(output_shape_tensor));
+
+            return (math_ops.truediv(sum_grad, math_ops.cast(factor, sum_grad.dtype)), null);
+        }
+
+        private static Tensor _safe_shape_div(Tensor x, Tensor y)
+        {
+            return math_ops.floordiv(x, gen_math_ops.maximum(y, 1));
+        }
+
         public static (Tensor, Tensor) _SubGrad(Operation op, Tensor grad)
         {
             var x = op.inputs[0];
@@ -81,23 +99,31 @@ namespace Tensorflow
 
         public static (Tensor, Tensor) _SumGrad(Operation op, Tensor grad)
         {
-            if (op.inputs[0].NDims > -1)
-            {
+            var input_0_shape = op.inputs[0]._shape_tuple();
+            Tensor input_shape = null;
 
+            if (input_0_shape != null)
+            {
+                var axes = tensor_util.constant_value(op.inputs[1]);
+                if(!(axes is null))
+                {
+                    var rank = axes.shape.Rank;
+                    grad = array_ops.reshape(grad, new int[] { 1 });
+                    if (!input_0_shape.Contains(-1))
+                        input_shape = constant_op.constant(input_0_shape);
+                    else
+                        input_shape = array_ops.shape(op.inputs[0]);
+                    return (gen_array_ops.tile(grad, input_shape), null);
+                }
             }
 
-            var input_shape = array_ops.shape(op.inputs[0]);
+            input_shape = array_ops.shape(op.inputs[0]);
             ops.colocate_with(input_shape);
             var output_shape_kept_dims = math_ops.reduced_shape(input_shape, op.inputs[1]);
             var tile_scaling = _safe_shape_div(input_shape, output_shape_kept_dims);
             grad = gen_array_ops.reshape(grad, output_shape_kept_dims);
 
             return (gen_array_ops.tile(grad, tile_scaling), null);
-        }
-
-        public static Tensor _safe_shape_div(Tensor x, Tensor y)
-        {
-            return math_ops.floordiv(x, gen_math_ops.maximum(y, 1));
         }
 
         public static (Tensor, Tensor) _RealDivGrad(Operation op, Tensor grad)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Tensorflow.Train;
 
 namespace Tensorflow
 {
@@ -10,6 +11,8 @@ namespace Tensorflow
         public static class train
         {
             public static Optimizer GradientDescentOptimizer(float learning_rate) => new GradientDescentOptimizer(learning_rate);
+
+            public static Optimizer AdamOptimizer(float learning_rate) => new AdamOptimizer(learning_rate);
 
             public static Saver Saver() => new Saver();
 

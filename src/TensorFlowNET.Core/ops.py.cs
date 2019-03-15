@@ -349,6 +349,7 @@ namespace Tensorflow
         {
             if (op.inputs == null) return null;
 
+            // map tensorflow\python\ops\math_grad.py
             return (oper, out_grads) =>
             {
                 // Console.WriteLine($"get_gradient_function: {oper.type} '{oper.name}'");
@@ -364,6 +365,9 @@ namespace Tensorflow
                     case "Mul":
                         var mul = math_grad._MulGrad(oper, out_grads);
                         return new Tensor[] { mul.Item1, mul.Item2 };
+                    case "Mean":
+                        var mean = math_grad._MeanGrad(oper, out_grads);
+                        return new Tensor[] { mean.Item1, mean.Item2 };
                     case "Sum":
                         var sum = math_grad._SumGrad(oper, out_grads);
                         return new Tensor[] { sum.Item1, sum.Item2 };

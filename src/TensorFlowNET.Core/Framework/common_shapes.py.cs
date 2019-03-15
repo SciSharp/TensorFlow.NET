@@ -29,5 +29,10 @@ namespace Tensorflow.Framework
         {
             throw new NotFiniteNumberException();
         }
+
+        public static int? rank(Tensor tensor)
+        {
+            return tensor.rank;
+        }
     }
 }

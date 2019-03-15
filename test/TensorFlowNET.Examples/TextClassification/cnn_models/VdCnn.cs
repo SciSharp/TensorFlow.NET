@@ -119,10 +119,11 @@ namespace TensorFlowNET.Examples.TextClassification
                 var y_one_hot = tf.one_hot(y, num_class);
                 loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits: logits, labels: y_one_hot));
 
-                var update_ops = tf.get_collection(ops.GraphKeys.UPDATE_OPS) as List<Operation>;
-                with(tf.control_dependencies(update_ops.ToArray()), delegate
+                var update_ops = tf.get_collection(ops.GraphKeys.UPDATE_OPS) as List<object>;
+                with(tf.control_dependencies(update_ops.Select(x => (Operation)x).ToArray()), delegate
                 {
-
+                    var adam = tf.train.AdamOptimizer(learning_rate);
+                    adam.minimize(loss, global_step: global_step);
                 });
             });
         }

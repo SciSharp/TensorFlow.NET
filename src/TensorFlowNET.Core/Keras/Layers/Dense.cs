@@ -63,7 +63,7 @@ namespace Tensorflow.Keras.Layers
             var rank = inputs.rank;
             if(rank > 2)
             {
-                throw new NotImplementedException("");
+                throw new NotImplementedException("call rank > 2");
             }
             else
             {

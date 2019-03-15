@@ -74,7 +74,8 @@ namespace Tensorflow
 
         public int[] _shape_tuple()
         {
-            return null;
+            if (shape == null) return null;
+            return shape.Select(x => (int)x).ToArray();
         }
 
         public TensorShape getShape()

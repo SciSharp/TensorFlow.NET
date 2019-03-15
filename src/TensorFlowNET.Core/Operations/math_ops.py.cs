@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Framework;
 
 namespace Tensorflow
 {
@@ -39,9 +40,41 @@ namespace Tensorflow
         public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
-            var m = gen_math_ops.mean(input_tensor, (int[]) r, keepdims, name);
-            return _may_reduce_to_scalar(keepdims,axis, m);
+            if (axis == null)
+            {
+                var m = gen_math_ops.mean(input_tensor, r, keepdims, name);
+                return _may_reduce_to_scalar(keepdims, axis, m);
+            }
+            else
+            {
+                var m = gen_math_ops.mean(input_tensor, axis, keepdims, name);
+                return _may_reduce_to_scalar(keepdims, axis, m);
+            }
         }
+
+        /// <summary>
+        /// Computes the product of elements across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input_tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor reduce_prod(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        {
+            var r = _ReductionDims(input_tensor, axis);
+            if (axis == null)
+            {
+                var m = gen_math_ops.prod(input_tensor, r, keepdims, name);
+                return _may_reduce_to_scalar(keepdims, axis, m);
+            }
+            else
+            {
+                var m = gen_math_ops.prod(input_tensor, axis, keepdims, name);
+                return _may_reduce_to_scalar(keepdims, axis, m);
+            }
+        }
+        
         /// <summary>
         /// Returns (x - y)(x - y) element-wise.
         /// </summary>
@@ -134,7 +167,10 @@ namespace Tensorflow
 
         public static Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
         {
-            return _may_reduce_to_scalar(keepdims, axis, gen_math_ops._max(input_tensor, (int[])_ReductionDims(input_tensor, axis), keepdims, name));
+            var r = _ReductionDims(input_tensor, axis);
+            var max = (axis != null) ? gen_math_ops._max(input_tensor, axis, keepdims, name) :
+                gen_math_ops._max(input_tensor, r, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
         /// <summary>
@@ -197,18 +233,19 @@ namespace Tensorflow
             }
         }
         
-        private static object _ReductionDims(Tensor x, int[] axis)
+        private static Tensor _ReductionDims(Tensor x, int[] axis)
         {
             if (axis != null)
             {
-                return axis;
+                // should return axis. or check before.
+                return null;
             }
             else
             {
-                var rank = array_ops.rank(x);
+                var rank = common_shapes.rank(x);
                 if (rank != null)
                 {
-                   return constant_op.constant(np.arange(rank), TF_DataType.TF_INT32);
+                   return constant_op.constant(np.arange(rank.Value), TF_DataType.TF_INT32);
                 }
                 return range(0, rank, 1);
             }
@@ -301,6 +338,21 @@ namespace Tensorflow
             {
 
                 return x;
+            });
+        }
+
+        public static Tensor truediv(Tensor x, Tensor y, string name = null)
+            => _truediv_python3(x, y, name);
+
+        public static Tensor _truediv_python3(Tensor x, Tensor y, string name = null)
+        {
+            return with(ops.name_scope(name, "truediv", new { x, y }), scope =>
+            {
+                name = scope;
+                var x_dtype = x.dtype.as_base_dtype();
+                var y_dtype = y.dtype.as_base_dtype();
+
+                return gen_math_ops.real_div(x, y, name: name);
             });
         }
     }

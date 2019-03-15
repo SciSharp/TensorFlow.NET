@@ -51,6 +51,15 @@ namespace Tensorflow
             if (tensor.TensorContent.Length > 0)
                 return np.frombuffer(tensor.TensorContent.ToByteArray(), tensor_dtype)
                     .reshape(shape);
+            else if (tensor.Dtype == DataType.DtHalf || tensor.Dtype == DataType.DtBfloat16)
+                ;
+            else if (tensor.Dtype == DataType.DtFloat)
+                ;
+            else if (new DataType[] { DataType.DtInt32, DataType.DtUint8 }.Contains(tensor.Dtype))
+                if (tensor.IntVal.Count == 1)
+                    return np.repeat(np.array(tensor.IntVal[0]), Convert.ToInt32(num_elements))
+                        .reshape(shape);
+
             throw new NotImplementedException("MakeNdarray");
         }
 
