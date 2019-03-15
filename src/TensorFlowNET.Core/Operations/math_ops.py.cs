@@ -18,6 +18,7 @@ namespace Tensorflow
 
             return with(ops.name_scope(name, "Cast", new { x }), scope =>
             {
+                name = scope;
                 x = ops.convert_to_tensor(x, name: "x");
                 if (x.dtype.as_base_dtype() != base_type)
                     x = gen_math_ops.cast(x, base_type, name: name);
@@ -263,7 +264,7 @@ namespace Tensorflow
             if (delta == null)
                 delta = 1;
 
-            return with(ops.name_scope(name, "Range", new object[] { start, limit, delta }), scope =>
+            return with(ops.name_scope(name, "Range", new { start, limit, delta }), scope =>
             {
                 name = scope;
                 var start1 = ops.convert_to_tensor(start, name: "start");

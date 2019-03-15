@@ -111,6 +111,9 @@ namespace Tensorflow
                         case int intVal:
                             nparray = intVal;
                             break;
+                        case long intVal:
+                            nparray = intVal;
+                            break;
                         case int[] intVals:
                             nparray = np.array(intVals);
                             break;
@@ -230,6 +233,9 @@ namespace Tensorflow
                     break;
                 case "Int32":
                     tensor_proto.IntVal.AddRange(proto_values.Data<int>());
+                    break;
+                case "Int64":
+                    tensor_proto.Int64Val.AddRange(proto_values.Data<long>());
                     break;
                 case "Single":
                     tensor_proto.FloatVal.AddRange(proto_values.Data<float>());

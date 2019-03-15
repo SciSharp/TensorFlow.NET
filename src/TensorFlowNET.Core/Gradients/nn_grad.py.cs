@@ -83,11 +83,24 @@ namespace Tensorflow.Gradients
             var ind_shape = array_ops.shape(op.outputs[1]);
 
             // int32 is not supported on GPU hence up-casting
-            var ind_lastdim = array_ops.gather(math_ops.cast(
-                ind_shape, TF_DataType.TF_INT64), array_ops.size(ind_shape) - 1);
+            var cast = math_ops.cast(ind_shape, TF_DataType.TF_INT64);
+            var size = array_ops.size(ind_shape) - 1;
+            var ind_lastdim = array_ops.gather(cast, size);
 
             // Flatten indices to 2D.
-            var ind_2d = array_ops.reshape(op.outputs[1], array_ops.stack(new object[] { -1, ind_lastdim }));
+            var stack = array_ops.stack(new object[] { -1L, ind_lastdim });
+            var ind_2d = array_ops.reshape(op.outputs[1], stack);
+
+            var in_lastdim = array_ops.gather(math_ops.cast(in_shape, TF_DataType.TF_INT64), 
+                array_ops.size(in_shape) - 1);
+            var outerdim = array_ops.shape(ind_2d);
+
+            // Compute linear indices(flattened to 1D).
+            var cast1 = math_ops.cast(outerdim, TF_DataType.TF_INT64);
+            var range2 = math_ops.range(0L, cast1 * in_lastdim, in_lastdim);
+            var dim2 = array_ops.expand_dims(range2, -1);
+            var cast2 = math_ops.cast(dim2, TF_DataType.TF_INT32);
+            var ind = array_ops.reshape(ind_2d + cast2, new int[] { -1 });
 
             throw new NotImplementedException("nn_grad._TopKGrad");
         }

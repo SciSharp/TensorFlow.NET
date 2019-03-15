@@ -34,6 +34,9 @@ namespace Tensorflow
                 case "Int32":
                     dtype = TF_DataType.TF_INT32;
                     break;
+                case "Int64":
+                    dtype = TF_DataType.TF_INT64;
+                    break;
                 case "Single":
                     dtype = TF_DataType.TF_FLOAT;
                     break;
@@ -47,7 +50,7 @@ namespace Tensorflow
                     dtype = TF_DataType.TF_STRING;
                     break;
                 default:
-                    throw new Exception("Not Implemented");
+                    throw new Exception($"{type.Name} Not Implemented in as_dtype");
             }
 
             return dtype;

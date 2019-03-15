@@ -410,26 +410,12 @@ namespace Tensorflow
                     return tensor;
                 case Tensor[] tensors:
                     return array_ops._autopacking_helper(tensors, dtype, name);
-                case string str:
-                    return constant_op.constant(str, dtype: dtype, name: name);
-                case string[] strArray:
-                    return constant_op.constant(strArray, dtype: dtype, name: name);
-                case int intVal:
-                    return constant_op.constant(intVal, dtype: dtype, name: name);
-                case int[] intArray:
-                    return constant_op.constant(intArray, dtype: dtype, name: name);
-                case float floatVal:
-                    return constant_op.constant(floatVal, dtype: dtype, name: name);
-                case float[] floatArray:
-                    return constant_op.constant(floatArray, dtype: dtype, name: name);
-                case double doubleVal:
-                    return constant_op.constant(doubleVal, dtype: dtype, name: name);
                 case RefVariable varVal:
                     return varVal._TensorConversionFunction(as_ref: as_ref);
                 case object[] objects:
-                    return array_ops._autopacking_helper(objects, dtype: dtype, name: name);
+                    return array_ops._autopacking_conversion_function(objects, dtype: dtype, name: name);
                 default:
-                    throw new NotImplementedException($"internal_convert_to_tensor: Can't convert {value.GetType().Name} to Tensor");
+                    return constant_op.constant(value, dtype: dtype, name: name);
             }
         }
 

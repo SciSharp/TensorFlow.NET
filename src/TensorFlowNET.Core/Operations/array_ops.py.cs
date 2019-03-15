@@ -46,6 +46,35 @@ namespace Tensorflow
             }
         }
 
+        public static Tensor _autopacking_conversion_function(object[] v, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
+        {
+            var inferred_dtype = _get_dtype_from_nested_lists(v);
+            if (dtype == TF_DataType.DtInvalid)
+                dtype = inferred_dtype;
+
+            return _autopacking_helper(v, dtype, name == null ? "packed" : name);
+        }
+
+        private static TF_DataType _get_dtype_from_nested_lists(object[] list_or_tuple)
+        {
+            TF_DataType dtype = TF_DataType.DtInvalid;
+
+            foreach(var obj in list_or_tuple)
+            {
+                switch (obj)
+                {
+                    case Tensor t:
+                        dtype = t.dtype.as_base_dtype();
+                        break;
+                }
+
+                if (dtype != TF_DataType.DtInvalid)
+                    break;
+            }
+
+            return dtype;
+        }
+
         public static Tensor _autopacking_helper(object[] list_or_tuple, TF_DataType dtype, string name)
         {
             var must_pack = false;
@@ -242,32 +271,21 @@ namespace Tensorflow
 
         private static Tensor size_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
-            return with(ops.name_scope(name, "Size", new Tensor[] { input }), scope =>
+            return with(ops.name_scope(name, "Size", new { input }), scope =>
             {
                 name = scope;
 
-                if (!tf.context.executing_eagerly())
+                var input_tensor = ops.convert_to_tensor(input);
+                var input_shape = tensor_util.to_shape(input_tensor.shape);
+                if (optimize)
                 {
-                    var input_tensor = ops.convert_to_tensor(input);
-                    var input_shape = tensor_util.to_shape(input_tensor.shape);
-                    if (optimize)
+                    if (input_shape.is_fully_defined())
                     {
-                        if (input_shape.is_fully_defined())
-                        {
-                            var nd = np.array(input_tensor.shape, out_type.as_numpy_datatype());
-                            return constant_op.constant(nd, name: name);
-                        }
+                        return constant_op.constant(input_shape.Size, dtype: out_type, name: name);
                     }
-
-                    return gen_array_ops.size(input, name: name, out_type: out_type);
-                }
-                else
-                {
-                    // result = gen_array_ops.shape();
-                    throw new NotImplementedException("array_ops.size_internal");
                 }
 
-                return null;
+                return gen_array_ops.size(input, name: name, out_type: out_type);
             });
         }
 
