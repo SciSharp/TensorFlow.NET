@@ -27,7 +27,7 @@ namespace Tensorflow
             return op.type == "Switch" || op.type == "RefSwitch";
         }
 
-        public static CondContext GetOutputContext(Operation op)
+        public static IControlFlowContext GetOutputContext(Operation op)
         {
             var ctxt = op._get_control_flow_context();
 

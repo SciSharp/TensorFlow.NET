@@ -7,7 +7,7 @@ namespace Tensorflow
 {
     public partial class Operation
     {
-        private CondContext _control_flow_context;
+        private IControlFlowContext _control_flow_context;
 
         /// <summary>
         /// Add this op to its control flow context.
@@ -28,12 +28,12 @@ namespace Tensorflow
             }
         }
 
-        public void _set_control_flow_context(CondContext ctx)
+        public void _set_control_flow_context(IControlFlowContext ctx)
         {
             _control_flow_context = ctx;
         }
 
-        public CondContext _get_control_flow_context()
+        public IControlFlowContext _get_control_flow_context()
         {
             return _control_flow_context;
         }
