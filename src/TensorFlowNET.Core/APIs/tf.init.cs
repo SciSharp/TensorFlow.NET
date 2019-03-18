@@ -10,7 +10,8 @@ namespace Tensorflow
         public static IInitializer zeros_initializer => new Zeros();
         public static IInitializer ones_initializer => new Ones();
         public static IInitializer glorot_uniform_initializer => new GlorotUniform();
-        
+        public static IInitializer uniform_initializer => new RandomUniform();
+
         public static variable_scope variable_scope(string name,
                string default_name = null,
                object values = null,

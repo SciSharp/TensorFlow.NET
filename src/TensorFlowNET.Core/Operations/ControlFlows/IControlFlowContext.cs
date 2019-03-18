@@ -6,5 +6,6 @@ namespace Tensorflow
 {
     public interface IControlFlowContext
     {
+        void AddOp(Operation op);
     }
 }

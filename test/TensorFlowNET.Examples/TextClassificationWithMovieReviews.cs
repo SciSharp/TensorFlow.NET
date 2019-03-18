@@ -37,6 +37,7 @@ namespace TensorFlowNET.Examples
             int vocab_size = 10000;
 
             var model = keras.Sequential();
+            model.add(keras.layers.Embedding(vocab_size, 16));
         }
 
         private ((NDArray, NDArray), (NDArray, NDArray)) PrepareData()

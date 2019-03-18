@@ -18,14 +18,20 @@ namespace Tensorflow
             {
 
             }
+
+            if (_control_flow_context != null)
+                _control_flow_context.AddOp(this);
+        }
+
+        public void _add_control_input(Operation op)
+        {
+            c_api.TF_AddControlInput(_handle, op);
         }
 
         public void _add_control_inputs(Operation[] ops)
         {
-            foreach(var op in ops)
-            {
-                c_api.TF_AddControlInput(graph, op);
-            }
+            foreach (var op in ops)
+                _add_control_input(op);
         }
 
         public void _set_control_flow_context(IControlFlowContext ctx)

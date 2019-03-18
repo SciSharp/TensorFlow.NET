@@ -18,11 +18,6 @@ namespace Tensorflow.Operations
         public Tensor pred => _pred;
 
         /// <summary>
-        /// The predicate tensor in this branch
-        /// </summary>
-        private Tensor _pivot;
-
-        /// <summary>
         /// 0 or 1 representing this branch
         /// </summary>
         private int _branch;
