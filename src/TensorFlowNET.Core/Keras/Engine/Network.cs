@@ -10,11 +10,16 @@ namespace Tensorflow.Keras.Engine
         protected bool _is_compiled;
         protected bool _expects_training_arg;
         protected bool _compute_output_and_mask_jointly;
+        /// <summary>
+        /// All layers in order of horizontal graph traversal.
+        /// Entries are unique. Includes input and output layers.
+        /// </summary>
+        protected List<Layer> _layers;
 
         public Network(string name = null) 
             : base(name: name)
         {
-
+            _init_subclassed_network(name);
         }
 
         protected virtual void _init_subclassed_network(string name = null)
@@ -30,6 +35,7 @@ namespace Tensorflow.Keras.Engine
             _expects_training_arg = false;
             _compute_output_and_mask_jointly = false;
             supports_masking = false;
+            _layers = new List<Layer>();
         }
     }
 }

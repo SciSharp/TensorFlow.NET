@@ -21,7 +21,7 @@ namespace Tensorflow.Keras.Layers
         /// </summary>
         protected bool built;
         protected bool trainable;
-        protected TF_DataType _dtype;
+        public TF_DataType _dtype;
         /// <summary>
         /// A stateful layer is a layer whose updates are run during inference too,
         /// for instance stateful RNNs.
@@ -33,12 +33,16 @@ namespace Tensorflow.Keras.Layers
         protected InputSpec input_spec;
         protected bool supports_masking;
         protected List<RefVariable> _trainable_weights;
-        protected string _name;
+        public string _name;
         protected string _base_name;
         protected bool _compute_previous_mask;
         protected List<Operation> _updates;
+        public int[] _batch_input_shape;
 
-        public Layer(bool trainable = true, string name = null, TF_DataType dtype = TF_DataType.DtInvalid)
+        public Layer(bool trainable = true, 
+            string name = null, 
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            int[] input_shape = null)
         {
             this.trainable = trainable;
             this._dtype = dtype;
@@ -49,6 +53,12 @@ namespace Tensorflow.Keras.Layers
             _trainable_weights = new List<RefVariable>();
             _compute_previous_mask = false;
             _updates = new List<Operation>();
+
+            // Manage input shape information if passed.
+
+            _batch_input_shape = new int[] { -1, -1 };
+
+            _dtype = dtype;
         }
 
         public Tensor __call__(Tensor inputs,

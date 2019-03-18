@@ -23,6 +23,18 @@ namespace Tensorflow.Keras.Engine
         {
             built = false;
             var set_inputs = false;
+            if(_layers.Count == 0)
+            {
+                var (batch_shape, dtype) = (layer._batch_input_shape, layer._dtype);
+                if(batch_shape != null)
+                {
+                    // Instantiate an input layer.
+                    var x = keras.layers.Input(
+                      batch_shape: batch_shape,
+                      dtype: dtype,
+                      name: layer._name + "_input");
+                }
+            }
         }
 
         public void __exit__()
