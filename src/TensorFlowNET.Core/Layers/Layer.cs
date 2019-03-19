@@ -52,7 +52,7 @@ namespace Tensorflow.Layers
 
             Python.with(scope_context_manager, scope2 => _current_scope = scope2);
             // Actually call layer
-            var outputs = base.__call__(inputs, training: training);
+            var outputs = base.__call__(new Tensor[] { inputs }, training: training);
 
             // Update global default collections.
             _add_elements_to_collection(_updates.ToArray(), new string[] { ops.GraphKeys.UPDATE_OPS });

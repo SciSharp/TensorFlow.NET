@@ -43,7 +43,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.7.0" />
-    <PackageReference Include="NumSharp" Version="0.7.4" />
+    <PackageReference Include="NumSharp" Version="0.8.0" />
   </ItemGroup>
 
   <ItemGroup>

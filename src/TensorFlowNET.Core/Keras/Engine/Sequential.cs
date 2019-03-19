@@ -33,6 +33,12 @@ namespace Tensorflow.Keras.Engine
                       batch_shape: batch_shape,
                       dtype: dtype,
                       name: layer._name + "_input");
+
+                    // This will build the current layer
+                    // and create the node connecting the current layer
+                    // to the input layer we just created.
+                    layer.__call__(x);
+                    set_inputs = true;
                 }
             }
         }

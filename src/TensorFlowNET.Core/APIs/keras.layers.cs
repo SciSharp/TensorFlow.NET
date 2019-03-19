@@ -18,7 +18,7 @@ namespace Tensorflow
                     embeddings_initializer,
                     mask_zero);
 
-            public static InputLayer Input(int[] batch_shape = null,
+            public static Tensor[] Input(int[] batch_shape = null,
                 TF_DataType dtype = TF_DataType.DtInvalid,
                 string name = null,
                 bool sparse = false,
@@ -35,7 +35,9 @@ namespace Tensorflow
                     sparse: sparse,
                     input_tensor: tensor);
 
-                throw new NotImplementedException("");
+                var outputs = input_layer.inbound_nodes[0].output_tensors;
+
+                return outputs;
             }
         }
     }

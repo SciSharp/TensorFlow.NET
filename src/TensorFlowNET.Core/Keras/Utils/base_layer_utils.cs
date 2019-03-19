@@ -2,10 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Keras.Engine
+namespace Tensorflow.Keras.Utils
 {
     public class base_layer_utils
     {
+        public static RefVariable make_variable(string name,
+            int[] shape,
+            TF_DataType dtype = TF_DataType.TF_FLOAT,
+            IInitializer initializer = null,
+            bool trainable = false)
+        {
+            throw new NotImplementedException("");
+        }
+
         /// <summary>
         /// Makes a layer name (or arbitrary string) unique within a TensorFlow graph.
         /// </summary>

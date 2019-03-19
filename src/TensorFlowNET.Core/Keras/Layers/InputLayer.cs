@@ -11,6 +11,7 @@ namespace Tensorflow.Keras.Layers
     {
         public bool sparse;
         public int? batch_size;
+        public bool is_placeholder;
 
         public InputLayer(int[] input_shape = null,
             int? batch_size = null,
@@ -24,7 +25,7 @@ namespace Tensorflow.Keras.Layers
             this.batch_size = batch_size;
             this.supports_masking = true;
 
-            if(input_tensor == null)
+            if (input_tensor == null)
             {
                 var batch_input_shape = new int[] { batch_size.HasValue ? batch_size.Value : -1, -1 };
 
@@ -39,7 +40,17 @@ namespace Tensorflow.Keras.Layers
                           dtype: dtype,
                           name: name);
                 }
+
+                is_placeholder = true;
+                _batch_input_shape = batch_input_shape;
             }
+
+            new Node(this,
+                inbound_layers: new Layer[0],
+                node_indices: new int[0],
+                tensor_indices: new int[0],
+                input_tensors: new Tensor[] { input_tensor },
+                output_tensors: new Tensor[] { input_tensor });
         }
     }
 }

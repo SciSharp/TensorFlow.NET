@@ -39,6 +39,12 @@ namespace Tensorflow.Keras.Layers
         protected List<Operation> _updates;
         public int[] _batch_input_shape;
 
+        private List<Node> _inbound_nodes;
+        public List<Node> inbound_nodes => _inbound_nodes;
+
+        private List<Node> _outbound_nodes;
+        public List<Node> outbound_nodes => _outbound_nodes;
+
         public Layer(bool trainable = true, 
             string name = null, 
             TF_DataType dtype = TF_DataType.DtInvalid,
@@ -59,13 +65,15 @@ namespace Tensorflow.Keras.Layers
             _batch_input_shape = new int[] { -1, -1 };
 
             _dtype = dtype;
+
+            _inbound_nodes = new List<Node>();
         }
 
-        public Tensor __call__(Tensor inputs,
+        public Tensor __call__(Tensor[] inputs,
             Tensor training = null,
             VariableScope scope = null)
         {
-            var input_list = new Tensor[] { inputs };
+            var input_list = inputs;
             Tensor outputs = null;
 
             // We will attempt to build a TF graph if & only if all inputs are symbolic.
@@ -88,9 +96,9 @@ namespace Tensorflow.Keras.Layers
                     // Symbolic execution on symbolic tensors. We will attempt to build
                     // the corresponding TF subgraph inside `backend.get_graph()`
                     var graph = backend.get_graph();
-                    outputs = call(inputs, training: training);
-                    _handle_activity_regularization(inputs, outputs);
-                    _set_mask_metadata(inputs, outputs, null);
+                    outputs = call(inputs[0], training: training);
+                    _handle_activity_regularization(inputs[0], outputs);
+                    _set_mask_metadata(inputs[0], outputs, null);
                 }
             });
 
@@ -125,10 +133,10 @@ namespace Tensorflow.Keras.Layers
             return null;
         }
 
-        protected void _maybe_build(Tensor inputs)
+        protected void _maybe_build(Tensor[] inputs)
         {
-            var input_list = new Tensor[] { inputs };
-            build(inputs.getShape());
+            var input_list = inputs;
+            build(input_list[0].getShape());
         }
 
         protected virtual void build(TensorShape input_shape)
@@ -143,10 +151,16 @@ namespace Tensorflow.Keras.Layers
             bool? trainable = null,
             Func<string, int[], TF_DataType, IInitializer, bool, RefVariable> getter = null)
         {
+            if (dtype == TF_DataType.DtInvalid)
+                dtype = TF_DataType.TF_FLOAT;
+
+            if (trainable == null)
+                trainable = true;
+
             var variable = _add_variable_with_custom_getter(name,
                 shape,
                 dtype: dtype,
-                getter: getter,
+                getter: getter == null ? base_layer_utils.make_variable : getter,
                 overwrite: true,
                 initializer: initializer,
                 trainable: trainable.Value);
