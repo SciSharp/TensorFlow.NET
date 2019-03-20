@@ -18,6 +18,9 @@ namespace Tensorflow
         public static Tensor subtract<T>(Tensor x, T[] y, string name = null) where T : struct
             => gen_math_ops.sub(x, ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y"), name);
 
+        public static Tensor log(Tensor x, string name = null)
+            => gen_math_ops.log(x, name);
+
         public static Tensor multiply(Tensor x, Tensor y) 
             => gen_math_ops.mul(x, y);
 
@@ -33,11 +36,11 @@ namespace Tensorflow
         /// <param name="input"></param>
         /// <param name="axis"></param>
         /// <returns></returns>
-        public static Tensor reduce_sum(Tensor input, int[] axis = null) 
+        public static Tensor reduce_sum(Tensor input, int[] axis = null, int? reduction_indices = null) 
             => math_ops.reduce_sum(input);
 
-        public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
-            => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name);
+        public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
+            => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);
 
         public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null) 
             => math_ops.cast(x, dtype, name);

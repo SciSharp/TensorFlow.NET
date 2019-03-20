@@ -146,6 +146,16 @@ namespace Tensorflow.Operations
             return _op.outputs[0];
         }
 
+        public static Tensor softmax(Tensor logits, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Softmax", name: name, args: new
+            {
+                logits
+            });
+
+            return _op.outputs[0];
+        }
+
         /// <summary>
         /// Computes softmax cross entropy cost and gradients to backpropagate.
         /// </summary>

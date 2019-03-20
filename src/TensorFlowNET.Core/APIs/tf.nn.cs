@@ -56,6 +56,9 @@ namespace Tensorflow
                 });
             }
 
+            public static Tensor softmax(Tensor logits, int axis = -1, string name = null)
+                => gen_nn_ops.softmax(logits, name);
+
             public static Tensor softmax_cross_entropy_with_logits_v2(Tensor labels, Tensor logits, int axis = -1, string name = null)
                 => nn_ops.softmax_cross_entropy_with_logits_v2_helper(labels, logits, axis: axis, name: name);
         }

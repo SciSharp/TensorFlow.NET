@@ -38,7 +38,7 @@ namespace Tensorflow
         /// dimensions.Must be in the range `[-rank(input_tensor), rank(input_tensor))`.</param>
         /// <param name="keepdims"> If true, retains reduced dimensions with length 1.</param>
         /// <param name="name"> A name for the operation (optional).</param>
-        public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             if (axis == null)
