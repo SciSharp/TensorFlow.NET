@@ -209,6 +209,12 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, m);
         }
 
+        public static Tensor reduce_sum(Tensor input_tensor, int axis, bool keepdims = false)
+        {
+            var m = gen_math_ops.sum(input_tensor, axis);
+            return _may_reduce_to_scalar(keepdims, m);
+        }
+
         private static Tensor _may_reduce_to_scalar(bool keepdims, Tensor output)
         {
             output.shape = new long[0];
@@ -233,7 +239,7 @@ namespace Tensorflow
                 return range(0, rank, 1);
             }
         }
-        
+
         private static Tensor _ReductionDims(Tensor x, int[] axis)
         {
             if (axis != null)
