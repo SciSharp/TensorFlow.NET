@@ -127,6 +127,16 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Computes the reciprocal of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor reciprocal(Tensor x, string name = null)
+            => gen_math_ops.reciprocal(x, name: name);
+        
+
+        /// <summary>
         /// Computes log(sum(exp(elements across dimensions of a tensor))).
         /// Reduces `input_tensor` along the dimensions given in `axis`.
         /// Unless `keepdims` is true, the rank of the tensor is reduced by 1 for each

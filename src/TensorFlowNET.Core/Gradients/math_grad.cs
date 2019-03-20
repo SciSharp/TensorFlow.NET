@@ -8,7 +8,7 @@ namespace Tensorflow.Gradients
     /// <summary>
     /// Gradients for operators defined in math_ops.py.
     /// </summary>
-    public class math_grad
+    public class math_grad : Python
     {
         public static Tensor[] _AddGrad(Operation op, Tensor[] grads)
         {
@@ -31,6 +31,16 @@ namespace Tensorflow.Gradients
         public static Tensor[] _IdGrad(Operation op, Tensor[] grads)
         {
             return new Tensor[] { grads[0] };
+        }
+
+        public static Tensor[] _LogGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+            return with(ops.control_dependencies(new Operation[] { grad }), dp => {
+                x = math_ops.conj(x);
+                return new Tensor[] { grad * math_ops.reciprocal(x) };
+            });
         }
 
         public static Tensor[] _MulGrad(Operation op, Tensor[] grads)
@@ -106,6 +116,11 @@ namespace Tensorflow.Gradients
             return new Tensor[] { math_ops.truediv(sum_grad, math_ops.cast(factor, sum_grad.dtype)), null };
         }
 
+        public static Tensor[] _NegGrad(Operation op, Tensor[] grads)
+        {
+            return new Tensor[] { -grads[0] };
+        }
+
         private static Tensor _safe_shape_div(Tensor x, Tensor y)
         {
             return math_ops.floordiv(x, gen_math_ops.maximum(y, 1));
@@ -145,13 +160,16 @@ namespace Tensorflow.Gradients
                 var axes = tensor_util.constant_value(op.inputs[1]);
                 if(!(axes is null))
                 {
-                    var rank = axes.shape.Rank;
-                    grad = array_ops.reshape(grad, new int[] { 1 });
-                    if (!input_0_shape.Contains(-1))
-                        input_shape = constant_op.constant(input_0_shape);
-                    else
-                        input_shape = array_ops.shape(op.inputs[0]);
-                    return new Tensor[] { gen_array_ops.tile(grad, input_shape), null };
+                    var rank = input_0_shape.Length;
+                    if (Enumerable.SequenceEqual(Enumerable.Range(0, rank), axes.Data<int>()))
+                    {
+                        grad = array_ops.reshape(grad, new int[] { 1 });
+                        if (!input_0_shape.Contains(-1))
+                            input_shape = constant_op.constant(input_0_shape);
+                        else
+                            input_shape = array_ops.shape(op.inputs[0]);
+                        return new Tensor[] { gen_array_ops.tile(grad, input_shape), null };
+                    }
                 }
             }
 

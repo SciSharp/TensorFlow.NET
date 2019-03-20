@@ -142,6 +142,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor reciprocal(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Reciprocal", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor floor_mod(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("FloorMod", name, args: new { x, y });

@@ -28,6 +28,21 @@ namespace Tensorflow.Gradients
         }
 
         /// <summary>
+        /// The derivative of the softmax nonlinearity.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        public static Tensor[] _SoftmaxGrad(Operation op, Tensor[] grads)
+        {
+            var grad_softmax = grads[0];
+
+            var softmax = op.outputs[0];
+            var sum_channels = math_ops.reduce_sum(grad_softmax * softmax, -1, keepdims: true);
+            return new Tensor[] { (grad_softmax - sum_channels) * softmax };
+        }
+
+        /// <summary>
         /// Gradient function for SoftmaxCrossEntropyWithLogits.
         /// </summary>
         /// <param name="op"></param>
