@@ -207,14 +207,14 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor sum(Tensor input, Tensor axis = null, bool keep_dims = false, string name = null)
+        public static Tensor _sum(Tensor input, Tensor axis = null, bool keep_dims = false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
 
-        public static Tensor sum(Tensor input, int axis, bool keep_dims = false, string name = null)
+        public static Tensor _sum(Tensor input, int axis, bool keep_dims = false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
 

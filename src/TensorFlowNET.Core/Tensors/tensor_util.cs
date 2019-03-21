@@ -302,7 +302,7 @@ namespace Tensorflow
                     default:
                         throw new NotImplementedException("as_shape Not Implemented");
                 }
-                dim.Name = $"dim_{i}";
+                // dim.Name = $"dim_{i}";
 
                 shape.Dim.Add(dim);
             }
@@ -333,7 +333,7 @@ namespace Tensorflow
             {
                 var dim = new TensorShapeProto.Types.Dim();
                 dim.Size = tshape.Dimensions[i];
-                dim.Name = $"dim_{i}";
+                //dim.Name = $"dim_{i}";
 
                 shape.Dim.Add(dim);
             }

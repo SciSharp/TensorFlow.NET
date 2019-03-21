@@ -49,13 +49,6 @@ namespace TensorFlowNET.Examples
             // Gradient Descent
             var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
 
-            //var new_saver = tf.train.import_meta_graph("logistic_regression.meta.bin");
-
-            /*var text = JsonConvert.SerializeObject(tf.get_default_graph(), new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented
-            });*/
-
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
 

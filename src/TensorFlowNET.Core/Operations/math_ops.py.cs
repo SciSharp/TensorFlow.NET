@@ -212,26 +212,29 @@ namespace Tensorflow
             throw new NotImplementedException();
         }
 
-        public static Tensor reduce_sum(Tensor input_tensor, Tensor axis = null, bool keepdims = false)
+        public static Tensor reduce_sum(Tensor input_tensor, Tensor axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
-            var m = gen_math_ops.sum(input_tensor, r);
-            return _may_reduce_to_scalar(keepdims, m);
+            var m = gen_math_ops._sum(input_tensor, r, keep_dims: keepdims, name: name);
+            return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
         public static Tensor reduce_sum(Tensor input_tensor, int axis, bool keepdims = false)
         {
-            var m = gen_math_ops.sum(input_tensor, axis);
-            return _may_reduce_to_scalar(keepdims, m);
+            var m = gen_math_ops._sum(input_tensor, axis);
+            return _may_reduce_to_scalar(keepdims, new int[] { axis }, m);
         }
 
-        private static Tensor _may_reduce_to_scalar(bool keepdims, Tensor output)
+        private static Tensor _may_reduce_to_scalar(bool keepdims, Tensor axis, Tensor output)
         {
-            output.shape = new long[0];
+            if (!common_shapes.has_fully_defined_shape(output) &&
+                !keepdims &&
+                axis == null)
+                output.shape = new long[0];
             return output;
         }
 
-        private static Tensor _may_reduce_to_scalar(bool keepdims, int[] axos, Tensor output)
+        private static Tensor _may_reduce_to_scalar(bool keepdims, int[] axis, Tensor output)
         {
             output.shape = new long[0];
             return output;

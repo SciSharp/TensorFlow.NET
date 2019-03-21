@@ -34,5 +34,10 @@ namespace Tensorflow.Framework
         {
             return tensor.rank;
         }
+
+        public static bool has_fully_defined_shape(Tensor tensor)
+        {
+            return tensor.getShape().is_fully_defined();
+        }
     }
 }
