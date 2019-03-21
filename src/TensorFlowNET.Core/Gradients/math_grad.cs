@@ -22,8 +22,10 @@ namespace Tensorflow.Gradients
             var sy = array_ops.shape(y);
             var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
 
-            var r1 = gen_array_ops.reshape(math_ops.reduce_sum(grad, rx), sx);
-            var r2 = gen_array_ops.reshape(math_ops.reduce_sum(grad, ry), sy);
+            var sum1 = math_ops.reduce_sum(grad, rx);
+            var r1 = gen_array_ops.reshape(sum1, sx);
+            var sum2 = math_ops.reduce_sum(grad, ry);
+            var r2 = gen_array_ops.reshape(sum2, sy);
 
             return new Tensor[] { r1, r2 };
         }
@@ -48,7 +50,8 @@ namespace Tensorflow.Gradients
             var x = op.inputs[0];
             var y = op.inputs[1];
             var grad = grads[0];
-            if (grad is Tensor && _ShapesFullySpecifiedAndEqual(x, y, grad) &&
+            if (grad is Tensor && 
+                _ShapesFullySpecifiedAndEqual(x, y, grad) &&
                 new TF_DataType[] { tf.int32, tf.float32 }.Contains(grad.dtype))
                 return new Tensor[] { gen_math_ops.mul(grad, y), gen_math_ops.mul(grad, x) };
 
@@ -60,10 +63,11 @@ namespace Tensorflow.Gradients
             y = math_ops.conj(y);
 
             var mul1 = gen_math_ops.mul(grad, y);
-            var mul2 = gen_math_ops.mul(x, grad);
             var reduce_sum1 = math_ops.reduce_sum(mul1, rx);
-            var reduce_sum2 = math_ops.reduce_sum(mul2, ry);
             var reshape1 = gen_array_ops.reshape(reduce_sum1, sx);
+
+            var mul2 = gen_math_ops.mul(x, grad);
+            var reduce_sum2 = math_ops.reduce_sum(mul2, ry);
             var reshape2 = gen_array_ops.reshape(reduce_sum2, sy);
 
             return new Tensor[] { reshape1, reshape2 };
@@ -146,7 +150,13 @@ namespace Tensorflow.Gradients
 
         public static bool _ShapesFullySpecifiedAndEqual(Tensor x, Tensor y, Tensor grad)
         {
-            return x.NDims == y.NDims && y.NDims == grad.NDims && x.NDims > -1;
+            var x_shape = x._shape_tuple();
+            var y_shape = y._shape_tuple();
+            var grad_shape = grad._shape_tuple();
+            return Enumerable.SequenceEqual(x_shape, y_shape) &&
+                Enumerable.SequenceEqual(y_shape, grad_shape) &&
+                x.NDims != -1 &&
+                !x_shape.Contains(-1);
         }
 
         public static Tensor[] _SumGrad(Operation op, Tensor[] grads)

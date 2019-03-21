@@ -1,6 +1,8 @@
-﻿using NumSharp.Core;
+﻿using Newtonsoft.Json;
+using NumSharp.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
@@ -26,8 +28,6 @@ namespace TensorFlowNET.Examples
 
         private void PrepareData()
         {
-           //var mnist = MnistDataSet.read_data_sets("logistic_regression", one_hot: true);
-
             // tf Graph Input
             var x = tf.placeholder(tf.float32, new TensorShape(-1, 784)); // mnist data image of shape 28*28=784
             var y = tf.placeholder(tf.float32, new TensorShape(-1, 10)); // 0-9 digits recognition => 10 classes
@@ -49,13 +49,37 @@ namespace TensorFlowNET.Examples
             // Gradient Descent
             var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
 
+            //var new_saver = tf.train.import_meta_graph("logistic_regression.meta.bin");
+
+            /*var text = JsonConvert.SerializeObject(tf.get_default_graph(), new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented
+            });*/
+
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
 
             with(tf.Session(), sess =>
             {
+                var mnist = MnistDataSet.read_data_sets("logistic_regression", one_hot: true);
                 // Run the initializer
                 sess.run(init);
+
+                // Training cycle
+                foreach(var epoch in range(training_epochs))
+                {
+                    var avg_cost = 0.0f;
+                    var total_batch = (int)(mnist.train.num_examples / batch_size);
+                    // Loop over all batches
+                    foreach (var i in range(total_batch))
+                    {
+                        var (batch_xs, batch_ys) = mnist.train.next_batch(batch_size);
+                        // Run optimization op (backprop) and cost op (to get loss value)
+                        /*sess.run(optimizer,
+                            new FeedItem(x, batch_xs),
+                            new FeedItem(y, batch_ys));*/
+                    }
+                }
             });
         }
     }

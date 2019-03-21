@@ -43,6 +43,8 @@ namespace Tensorflow
         public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
 
+        private TF_Output? _tf_output;
+
         public long[] shape
         {
             get
@@ -123,7 +125,10 @@ namespace Tensorflow
 
         public TF_Output _as_tf_output()
         {
-            return new TF_Output(op, value_index);
+            if(!_tf_output.HasValue)
+                _tf_output = new TF_Output(op, value_index);
+
+            return _tf_output.Value;
         }
 
         public T[] Data<T>()
