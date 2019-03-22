@@ -58,17 +58,24 @@ namespace Tensorflow
                 {
                     var value = tensor_values[j];
                     j += 1;
-                    switch (value.dtype.Name)
+                    if (value.ndim == 2)
                     {
-                        case "Int32":
-                            full_values.Add(value.Data<int>(0));
-                            break;
-                        case "Single":
-                            full_values.Add(value.Data<float>(0));
-                            break;
-                        case "Double":
-                            full_values.Add(value.Data<double>(0));
-                            break;
+                        full_values.Add(value[0]);
+                    }
+                    else
+                    {
+                        switch (value.dtype.Name)
+                        {
+                            case "Int32":
+                                full_values.Add(value.Data<int>(0));
+                                break;
+                            case "Single":
+                                full_values.Add(value.Data<float>(0));
+                                break;
+                            case "Double":
+                                full_values.Add(value.Data<double>(0));
+                                break;
+                        }
                     }
                 }
                 i += 1;

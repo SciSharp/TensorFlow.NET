@@ -184,7 +184,7 @@ namespace Tensorflow
 
             // Adds graph_def or the default.
             if (graph_def == null)
-                meta_graph_def.GraphDef = graph._as_graph_def(add_shapes: true);
+                meta_graph_def.GraphDef = graph.as_graph_def(add_shapes: true);
             else
                 meta_graph_def.GraphDef = graph_def;
 

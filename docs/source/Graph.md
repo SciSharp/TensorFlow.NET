@@ -21,3 +21,61 @@ A typical graph is looks like below:
 
 ![image](../assets/graph_vis_animation.gif)
 
+
+
+### Save Model
+
+Saving the model means saving all the values of the parameters and the graph.
+
+```python
+saver = tf.train.Saver()
+saver.save(sess,'./tensorflowModel.ckpt')
+```
+
+After saving the model there will be four files:
+
+* tensorflowModel.ckpt.meta:
+* tensorflowModel.ckpt.data-00000-of-00001:
+* tensorflowModel.ckpt.index
+* checkpoint
+
+We also created a protocol buffer file .pbtxt. It is human readable if you want to convert it to binary: `as_text: false`.
+
+* tensorflowModel.pbtxt: 
+
+This holds a network of nodes, each representing one operation, connected to each other as inputs and outputs.
+
+
+
+### Freezing the Graph
+
+##### *Why we need it?*
+
+When we need to keep all the values of the variables and the Graph structure in a single file we have to freeze the graph.
+
+```csharp
+from tensorflow.python.tools import freeze_graph
+
+freeze_graph.freeze_graph(input_graph = 'logistic_regression/tensorflowModel.pbtxt', 
+                              input_saver = "", 
+                              input_binary = False, 
+                              input_checkpoint = 'logistic_regression/tensorflowModel.ckpt', 
+                              output_node_names = "Softmax",
+                              restore_op_name = "save/restore_all", 
+                              filename_tensor_name = "save/Const:0",
+                              output_graph = 'frozentensorflowModel.pb', 
+                              clear_devices = True, 
+                              initializer_nodes = "")
+
+```
+
+### Optimizing for Inference
+
+To Reduce the amount of computation needed when the network is used only for inferences we can remove some parts of a graph that are only needed for training. 
+
+
+
+### Restoring the Model
+
+
+

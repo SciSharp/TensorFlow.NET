@@ -26,4 +26,5 @@ Welcome to TensorFlow.NET's documentation!
    Train
    EagerMode
    LinearRegression
+   LogisticRegression
    ImageRecognition

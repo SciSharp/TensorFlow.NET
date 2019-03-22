@@ -16,7 +16,8 @@ namespace Tensorflow
 
             public static Saver Saver() => new Saver();
 
-            public static string write_graph(Graph graph, string logdir, string name, bool as_text = true) => graph_io.write_graph(graph, logdir, name, as_text);
+            public static string write_graph(Graph graph, string logdir, string name, bool as_text = true) 
+                => graph_io.write_graph(graph, logdir, name, as_text);
 
             public static Saver import_meta_graph(string meta_graph_or_file,
                 bool clear_devices = false,

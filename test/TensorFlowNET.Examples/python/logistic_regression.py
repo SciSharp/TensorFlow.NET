@@ -16,7 +16,7 @@ mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 # Parameters
 learning_rate = 0.01
-training_epochs = 25
+training_epochs = 10
 batch_size = 100
 display_step = 1
 
@@ -68,3 +68,33 @@ with tf.Session() as sess:
     # Calculate accuracy
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     print("Accuracy:", accuracy.eval({x: mnist.test.images, y: mnist.test.labels}))
+
+    # predict
+    # results = sess.run(pred, feed_dict={x: batch_xs[:1]})
+
+    # save model
+    saver = tf.train.Saver()
+    save_path = saver.save(sess, "logistic_regression/model.ckpt")
+    tf.train.write_graph(sess.graph.as_graph_def(),'logistic_regression','model.pbtxt', as_text=True)
+
+    freeze_graph.freeze_graph(input_graph = 'logistic_regression/model.pbtxt', 
+                              input_saver = "", 
+                              input_binary = False, 
+                              input_checkpoint = 'logistic_regression/model.ckpt', 
+                              output_node_names = "Softmax",
+                              restore_op_name = "save/restore_all", 
+                              filename_tensor_name = "save/Const:0",
+                              output_graph = 'logistic_regression/model.pb', 
+                              clear_devices = True, 
+                              initializer_nodes = "")
+
+    # restoring the model
+    saver = tf.train.import_meta_graph('logistic_regression/tensorflowModel.ckpt.meta')
+    saver.restore(sess,tf.train.latest_checkpoint('logistic_regression'))
+
+    # predict
+    # pred = graph._nodes_by_name["Softmax"]
+    # output = pred.outputs[0]
+    # x = graph._nodes_by_name["Placeholder"]
+    # input = x.outputs[0]
+    # results = sess.run(output, feed_dict={input: batch_xs[:1]})
