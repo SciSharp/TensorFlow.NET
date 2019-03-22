@@ -128,6 +128,20 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Returns the truth value of (x == y) element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor equal(Tensor x, Tensor y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Equal", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor mul(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Mul", name, args: new { x, y });

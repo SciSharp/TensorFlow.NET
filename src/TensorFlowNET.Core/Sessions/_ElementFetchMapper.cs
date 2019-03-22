@@ -43,6 +43,9 @@ namespace Tensorflow
                     case NDArray value:
                         result = value;
                         break;
+                    case float fVal:
+                        result = fVal;
+                        break;
                     default:
                         break;
                 }

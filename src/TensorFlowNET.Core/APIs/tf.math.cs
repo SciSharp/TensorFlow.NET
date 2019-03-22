@@ -21,6 +21,9 @@ namespace Tensorflow
         public static Tensor log(Tensor x, string name = null)
             => gen_math_ops.log(x, name);
 
+        public static Tensor equal(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.equal(x, y, name);
+
         public static Tensor multiply(Tensor x, Tensor y) 
             => gen_math_ops.mul(x, y);
 
