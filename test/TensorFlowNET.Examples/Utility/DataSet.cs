@@ -26,13 +26,15 @@ namespace TensorFlowNET.Examples.Utility
             images.astype(dtype.as_numpy_datatype());
             images = np.multiply(images, 1.0f / 255.0f);
 
+            labels.astype(dtype.as_numpy_datatype());
+
             _images = images;
             _labels = labels;
             _epochs_completed = 0;
             _index_in_epoch = 0;
         }
 
-        public (int, int) next_batch(int batch_size, bool fake_data = false, bool shuffle = true)
+        public (NDArray, NDArray) next_batch(int batch_size, bool fake_data = false, bool shuffle = true)
         {
             var start = _index_in_epoch;
             // Shuffle for the first epoch

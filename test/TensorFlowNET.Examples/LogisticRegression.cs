@@ -62,15 +62,18 @@ namespace TensorFlowNET.Examples
                 foreach(var epoch in range(training_epochs))
                 {
                     var avg_cost = 0.0f;
-                    var total_batch = (int)(mnist.train.num_examples / batch_size);
+                    var total_batch = mnist.train.num_examples / batch_size;
                     // Loop over all batches
                     foreach (var i in range(total_batch))
                     {
                         var (batch_xs, batch_ys) = mnist.train.next_batch(batch_size);
                         // Run optimization op (backprop) and cost op (to get loss value)
-                        /*sess.run(optimizer,
+                        var (_, c) = sess.run(optimizer,
                             new FeedItem(x, batch_xs),
-                            new FeedItem(y, batch_ys));*/
+                            new FeedItem(y, batch_ys));
+
+                        // Compute average loss
+                        avg_cost += c / total_batch;
                     }
                 }
             });

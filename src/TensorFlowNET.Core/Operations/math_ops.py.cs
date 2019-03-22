@@ -219,9 +219,9 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
-        public static Tensor reduce_sum(Tensor input_tensor, int axis, bool keepdims = false)
+        public static Tensor reduce_sum(Tensor input_tensor, int axis, bool keepdims = false, string name = null)
         {
-            var m = gen_math_ops._sum(input_tensor, axis);
+            var m = gen_math_ops._sum(input_tensor, axis, keep_dims: keepdims, name: name);
             return _may_reduce_to_scalar(keepdims, new int[] { axis }, m);
         }
 

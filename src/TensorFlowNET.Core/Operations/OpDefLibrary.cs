@@ -42,7 +42,7 @@ namespace Tensorflow
             var attrs = new Dictionary<string, object>();
             var inputs = new List<Tensor>();
             var input_types = new List<TF_DataType>();
-            dynamic values = null;
+            object values = null;
 
             return with(ops.name_scope(name), scope =>
             {
@@ -116,7 +116,7 @@ namespace Tensorflow
                         else if (default_type_attr_map.ContainsKey(input_arg.TypeAttr))
                             default_dtype = (DataType)default_type_attr_map[input_arg.TypeAttr];
 
-                        values = ops.internal_convert_to_tensor(values, 
+                        var value = ops.internal_convert_to_tensor(values, 
                             name: input_name, 
                             dtype: dtype.as_tf_dtype(),
                             as_ref: input_arg.IsRef,
@@ -125,7 +125,7 @@ namespace Tensorflow
                         //if (!String.IsNullOrEmpty(input_arg.TypeAttr))
                             //attrs[input_arg.TypeAttr] = values.dtype;
 
-                        values = new Tensor[] { values };
+                        values = new Tensor[] { value };
                     }
 
                     if (values is Tensor[] values2)

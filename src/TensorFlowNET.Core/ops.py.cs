@@ -381,13 +381,13 @@ namespace Tensorflow
             return ret.ToArray();
         }
 
-        public static Tensor[] internal_convert_n_to_tensor<T>(T[] values, TF_DataType dtype = TF_DataType.DtInvalid, 
+        public static Tensor[] internal_convert_n_to_tensor(object values, TF_DataType dtype = TF_DataType.DtInvalid, 
             string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid, 
             bool as_ref = false)
         {
             var ret = new List<Tensor>();
 
-            foreach((int i, T value) in Python.enumerate(values))
+            foreach((int i, object value) in enumerate(values as object[]))
             {
                 string n = string.IsNullOrEmpty(name) ? "" : $"{name}_{i}";
                 ret.Add(internal_convert_to_tensor(value, dtype: dtype, name: n, as_ref: as_ref, preferred_dtype: preferred_dtype));
