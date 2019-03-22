@@ -52,7 +52,28 @@ namespace TensorFlowNET.Examples.Utility
                 // Finished epoch
                 _epochs_completed += 1;
 
-                throw new NotImplementedException("next_batch");
+                // Get the rest examples in this epoch
+                var rest_num_examples = _num_examples - start;
+                var images_rest_part = _images[np.arange(start, _num_examples)];
+                var labels_rest_part = _labels[np.arange(start, _num_examples)];
+                // Shuffle the data
+                if (shuffle)
+                {
+                    var perm = np.arange(_num_examples);
+                    np.random.shuffle(perm);
+                    _images = images[perm];
+                    _labels = labels[perm];
+                }
+
+                start = 0;
+                _index_in_epoch = batch_size - rest_num_examples;
+                var end = _index_in_epoch;
+                var images_new_part = _images[np.arange(start, end)];
+                var labels_new_part = _labels[np.arange(start, end)];
+
+                /*return (np.concatenate(new float[][] { images_rest_part.Data<float>(), images_new_part.Data<float>() }, axis: 0),
+                    np.concatenate(new float[][] { labels_rest_part.Data<float>(), labels_new_part.Data<float>() }, axis: 0));*/
+                return (images_new_part, labels_new_part);
             }
             else
             {

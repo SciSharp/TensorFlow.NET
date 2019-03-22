@@ -40,11 +40,7 @@ namespace TensorFlowNET.Examples
             var pred = tf.nn.softmax(tf.matmul(x, W) + b); // Softmax
 
             // Minimize error using cross entropy
-            var log = tf.log(pred);
-            var mul = y * log;
-            var sum = tf.reduce_sum(mul, reduction_indices: 1);
-            var neg = -sum;
-            var cost = tf.reduce_mean(neg);
+            var cost = tf.reduce_mean(-tf.reduce_sum(y * tf.log(pred), reduction_indices: 1));
 
             // Gradient Descent
             var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
@@ -68,14 +64,23 @@ namespace TensorFlowNET.Examples
                     {
                         var (batch_xs, batch_ys) = mnist.train.next_batch(batch_size);
                         // Run optimization op (backprop) and cost op (to get loss value)
-                        var (_, c) = sess.run(optimizer,
+                        var result = sess.run(new object[] { optimizer, cost },
                             new FeedItem(x, batch_xs),
                             new FeedItem(y, batch_ys));
 
+                        var c = (float)result[1];
                         // Compute average loss
                         avg_cost += c / total_batch;
                     }
+
+                    // Display logs per epoch step
+                    if ((epoch + 1) % display_step == 0)
+                        print($"Epoch: {(epoch + 1).ToString("D4")} cost= {avg_cost.ToString("G9")}");
                 }
+
+                print("Optimization Finished!");
+
+                // Test model
             });
         }
     }
