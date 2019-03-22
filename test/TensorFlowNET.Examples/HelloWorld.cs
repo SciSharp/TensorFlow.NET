@@ -33,5 +33,9 @@ namespace TensorFlowNET.Examples
                 }
             }
         }
+
+        public void PrepareData()
+        {
+        }
     }
 }

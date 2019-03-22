@@ -14,5 +14,10 @@ namespace TensorFlowNET.Examples
         {
             throw new NotImplementedException();
         }
+
+        public void PrepareData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

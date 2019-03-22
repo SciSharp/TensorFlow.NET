@@ -78,7 +78,7 @@ namespace TensorFlowNET.Examples
             });
         }
 
-        private void PrepareData()
+        public void PrepareData()
         {
             Directory.CreateDirectory(dir);
 

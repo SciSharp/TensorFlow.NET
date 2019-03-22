@@ -11,5 +11,6 @@ namespace TensorFlowNET.Examples
     public interface IExample
     {
         void Run();
+        void PrepareData();
     }
 }

@@ -13,10 +13,11 @@ namespace TensorFlowNET.Examples
     {
         string dir = "text_classification_with_movie_reviews";
         string dataFile = "imdb.zip";
+        NDArray train_data, train_labels, test_data, test_labels;
 
         public void Run()
         {
-            var((train_data, train_labels), (test_data, test_labels)) = PrepareData();
+            PrepareData();
 
             Console.WriteLine($"Training entries: {train_data.size}, labels: {train_labels.size}");
 
@@ -40,7 +41,7 @@ namespace TensorFlowNET.Examples
             model.add(keras.layers.Embedding(vocab_size, 16));
         }
 
-        private ((NDArray, NDArray), (NDArray, NDArray)) PrepareData()
+        public void PrepareData()
         {
             Directory.CreateDirectory(dir);
 
@@ -71,7 +72,11 @@ namespace TensorFlowNET.Examples
             var y_train = labels_train;
             var y_test = labels_test;
 
-            return ((x_train, y_train), (x_test, y_test));
+            x_train = train_data;
+            train_labels = y_train;
+
+            test_data = x_test;
+            test_labels = y_test;
         }
 
         private NDArray ReadData(string file)

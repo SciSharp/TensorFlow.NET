@@ -21,9 +21,11 @@ namespace TensorFlowNET.Examples
         private int batch_size = 100;
         private int display_step = 1;
 
+        Datasets mnist;
+
         public void Run()
         {
-            var mnist = PrepareData();
+            PrepareData();
 
             // tf Graph Input
             var x = tf.placeholder(tf.float32, new TensorShape(-1, 784)); // mnist data image of shape 28*28=784
@@ -86,10 +88,9 @@ namespace TensorFlowNET.Examples
             });
         }
 
-        private Datasets PrepareData()
+        public void PrepareData()
         {
-            var mnist = MnistDataSet.read_data_sets("logistic_regression", one_hot: true);
-            return mnist;
+            mnist = MnistDataSet.read_data_sets("logistic_regression", one_hot: true);
         }
     }
 }

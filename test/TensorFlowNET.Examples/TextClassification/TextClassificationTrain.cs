@@ -23,7 +23,7 @@ namespace TensorFlowNET.Examples.CnnTextClassification
 
         public void Run()
         {
-            download_dbpedia();
+            PrepareData();
             Console.WriteLine("Building dataset...");
             var (x, y, alphabet_size) = DataHelpers.build_char_dataset("train", "vdcnn", CHAR_MAX_LEN);
 
@@ -32,15 +32,7 @@ namespace TensorFlowNET.Examples.CnnTextClassification
             with(tf.Session(), sess =>
             {
                 new VdCnn(alphabet_size, CHAR_MAX_LEN, NUM_CLASS);
-
             });
-        }
-
-        public void download_dbpedia()
-        {
-            string url = "https://github.com/le-scientifique/torchDatasets/raw/master/dbpedia_csv.tar.gz";
-            Web.Download(url, dataDir, dataFileName);
-            Compress.ExtractTGZ(Path.Join(dataDir, dataFileName), dataDir);
         }
 
         private (int[][], int[][], int[], int[]) train_test_split(int[][] x, int[] y, float test_size = 0.3f)
@@ -74,6 +66,13 @@ namespace TensorFlowNET.Examples.CnnTextClassification
             }
 
             return (train_x.ToArray(), valid_x.ToArray(), train_y.ToArray(), valid_y.ToArray());
+        }
+
+        public void PrepareData()
+        {
+            string url = "https://github.com/le-scientifique/torchDatasets/raw/master/dbpedia_csv.tar.gz";
+            Web.Download(url, dataDir, dataFileName);
+            Compress.ExtractTGZ(Path.Join(dataDir, dataFileName), dataDir);
         }
     }
 }

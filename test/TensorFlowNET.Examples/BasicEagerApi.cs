@@ -12,6 +12,7 @@ namespace TensorFlowNET.Examples
     public class BasicEagerApi : IExample
     {
         private Tensor a, b, c, d;
+
         public void Run()
         {
             // Set Eager API
@@ -33,6 +34,10 @@ namespace TensorFlowNET.Examples
             Console.WriteLine($"a * b = {d}");
 
             // Full compatibility with Numpy
+        }
+
+        public void PrepareData()
+        {
         }
     }
 }

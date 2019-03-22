@@ -17,7 +17,8 @@
     <Description>Google's TensorFlow binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.5.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Add a lot of APIs to build neural networks model</PackageReleaseNotes>
+    <PackageReleaseNotes>Add Logistic Regression to do MNIST.
+Add a lot of APIs to build neural networks model</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
     <FileVersion>0.5.0.0</FileVersion>
   </PropertyGroup>

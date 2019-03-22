@@ -27,5 +27,9 @@ namespace TensorFlowNET.Examples
                                                 logits: logits);
             });
         }
+
+        public void PrepareData()
+        {
+        }
     }
 }
