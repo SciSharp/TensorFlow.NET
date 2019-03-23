@@ -15,13 +15,14 @@ namespace TensorFlowNET.Examples.CnnTextClassification
     /// </summary>
     public class TextClassificationTrain : Python, IExample
     {
+        public bool Enabled => false;
         private string dataDir = "text_classification";
         private string dataFileName = "dbpedia_csv.tar.gz";
 
         private const int CHAR_MAX_LEN = 1014;
         private const int NUM_CLASS = 2;
 
-        public void Run()
+        public bool Run()
         {
             PrepareData();
             Console.WriteLine("Building dataset...");
@@ -29,9 +30,10 @@ namespace TensorFlowNET.Examples.CnnTextClassification
 
             var (train_x, valid_x, train_y, valid_y) = train_test_split(x, y, test_size: 0.15f);
 
-            with(tf.Session(), sess =>
+            return with(tf.Session(), sess =>
             {
                 new VdCnn(alphabet_size, CHAR_MAX_LEN, NUM_CLASS);
+                return false;
             });
         }
 

@@ -9,9 +9,10 @@ namespace TensorFlowNET.Examples
     /// Simple hello world using TensorFlow
     /// https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/1_Introduction/helloworld.py
     /// </summary>
-    public class HelloWorld : IExample
+    public class HelloWorld : Python, IExample
     {
-        public void Run()
+        public bool Enabled => true;
+        public bool Run()
         {
             /* Create a Constant op
                The op is added as a node to the default graph.
@@ -22,16 +23,13 @@ namespace TensorFlowNET.Examples
             var hello = tf.constant(str);
 
             // Start tf session
-            using (var sess = tf.Session())
+            return with(tf.Session(), sess =>
             {
                 // Run the op
                 var result = sess.run(hello);
                 Console.WriteLine(result.ToString());
-                if(!result.ToString().Equals(str))
-                {
-                    throw new ValueError("HelloWorld example acts in unexpected way.");
-                }
-            }
+                return result.ToString().Equals(str);
+            });
         }
 
         public void PrepareData()

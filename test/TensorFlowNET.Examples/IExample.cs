@@ -10,7 +10,8 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public interface IExample
     {
-        void Run();
+        bool Enabled { get; }
+        bool Run();
         void PrepareData();
     }
 }

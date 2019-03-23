@@ -11,11 +11,12 @@ namespace TensorFlowNET.Examples
 {
     public class TextClassificationWithMovieReviews : Python, IExample
     {
+        public bool Enabled => false;
         string dir = "text_classification_with_movie_reviews";
         string dataFile = "imdb.zip";
         NDArray train_data, train_labels, test_data, test_labels;
 
-        public void Run()
+        public bool Run()
         {
             PrepareData();
 
@@ -39,6 +40,8 @@ namespace TensorFlowNET.Examples
 
             var model = keras.Sequential();
             model.add(keras.layers.Embedding(vocab_size, 16));
+
+            return false;
         }
 
         public void PrepareData()

@@ -11,9 +11,11 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BasicEagerApi : IExample
     {
+        public bool Enabled => false;
+
         private Tensor a, b, c, d;
 
-        public void Run()
+        public bool Run()
         {
             // Set Eager API
             Console.WriteLine("Setting Eager mode...");
@@ -34,6 +36,8 @@ namespace TensorFlowNET.Examples
             Console.WriteLine($"a * b = {d}");
 
             // Full compatibility with Numpy
+
+            return true;
         }
 
         public void PrepareData()

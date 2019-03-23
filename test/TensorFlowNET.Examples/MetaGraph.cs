@@ -9,9 +9,12 @@ namespace TensorFlowNET.Examples
 {
     public class MetaGraph : Python, IExample
     {
-        public void Run()
+        public bool Enabled => false;
+
+        public bool Run()
         {
             ImportMetaGraph("my-save-dir/");
+            return false;
         }
 
         private void ImportMetaGraph(string dir)

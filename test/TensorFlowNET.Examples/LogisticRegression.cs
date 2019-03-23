@@ -17,6 +17,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class LogisticRegression : Python, IExample
     {
+        public bool Enabled => true;
         private float learning_rate = 0.01f;
         private int training_epochs = 10;
         private int batch_size = 100;
@@ -24,7 +25,7 @@ namespace TensorFlowNET.Examples
 
         Datasets mnist;
 
-        public void Run()
+        public bool Run()
         {
             PrepareData();
 
@@ -48,7 +49,7 @@ namespace TensorFlowNET.Examples
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
 
-            with(tf.Session(), sess =>
+            return with(tf.Session(), sess =>
             {
                 
                 // Run the initializer
@@ -88,7 +89,7 @@ namespace TensorFlowNET.Examples
                 float acc = accuracy.eval(new FeedItem(x, mnist.test.images), new FeedItem(y, mnist.test.labels));
                 print($"Accuracy: {acc.ToString("F4")}");
 
-                Predict();
+                return acc > 0.9;
             });
         }
 

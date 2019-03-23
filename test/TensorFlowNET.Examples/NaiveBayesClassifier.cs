@@ -11,15 +11,17 @@ namespace TensorFlowNET.Examples
     /// https://github.com/nicolov/naive_bayes_tensorflow
     /// </summary>
     public class NaiveBayesClassifier : Python, IExample
-    { 
+    {
+        public bool Enabled => false;
         public Normal dist { get; set; }
-        public void Run()
+        public bool Run()
         {
             np.array(1.0f, 1.0f);
             var X = np.array(new float[][] { new float[] { 1.0f, 1.0f }, new float[] { 2.0f, 2.0f }, new float[] { -1.0f, -1.0f }, new float[] { -2.0f, -2.0f }, new float[] { 1.0f, -1.0f }, new float[] { 2.0f, -2.0f }, });
             var y = np.array(0,0,1,1,2,2);
             fit(X, y);
             // Create a regular grid and classify each point 
+            return false;
         }
 
         public void fit(NDArray X, NDArray y)

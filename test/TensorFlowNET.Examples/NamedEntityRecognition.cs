@@ -10,7 +10,8 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class NamedEntityRecognition : Python, IExample
     {
-        public void Run()
+        public bool Enabled => false;
+        public bool Run()
         {
             throw new NotImplementedException();
         }

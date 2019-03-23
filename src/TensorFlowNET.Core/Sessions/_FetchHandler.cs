@@ -58,11 +58,7 @@ namespace Tensorflow
                 {
                     var value = tensor_values[j];
                     j += 1;
-                    if (value.ndim == 2)
-                    {
-                        full_values.Add(value[0]);
-                    }
-                    else
+                    if (value.ndim == 0)
                     {
                         switch (value.dtype.Name)
                         {
@@ -75,7 +71,14 @@ namespace Tensorflow
                             case "Double":
                                 full_values.Add(value.Data<double>(0));
                                 break;
+                            case "String":
+                                full_values.Add(value.Data<string>(0));
+                                break;
                         }
+                    }
+                    else
+                    {
+                        full_values.Add(value[np.arange(1)]);
                     }
                 }
                 i += 1;

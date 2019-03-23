@@ -12,6 +12,8 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class LinearRegression : Python, IExample
     {
+        public bool Enabled => true;
+
         NumPyRandom rng = np.random;
 
         // Parameters
@@ -22,7 +24,7 @@ namespace TensorFlowNET.Examples
         NDArray train_X, train_Y;
         int n_samples;
 
-        public void Run()
+        public bool Run()
         {
             // Training Data
             PrepareData();
@@ -52,7 +54,7 @@ namespace TensorFlowNET.Examples
             var init = tf.global_variables_initializer();
 
             // Start training
-            with(tf.Session(), sess => 
+            return with(tf.Session(), sess => 
             {
                 // Run the initializer
                 sess.run(init);
@@ -91,7 +93,10 @@ namespace TensorFlowNET.Examples
                     new FeedItem(X, test_X), 
                     new FeedItem(Y, test_Y));
                 Console.WriteLine($"Testing cost={testing_cost}");
-                Console.WriteLine($"Absolute mean square loss difference: {Math.Abs((float)training_cost - (float)testing_cost)}");
+                var diff = Math.Abs((float)training_cost - (float)testing_cost);
+                Console.WriteLine($"Absolute mean square loss difference: {diff}");
+
+                return diff < 0.01;
             });
         }
 
