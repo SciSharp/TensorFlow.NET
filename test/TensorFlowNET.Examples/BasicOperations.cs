@@ -13,6 +13,9 @@ namespace TensorFlowNET.Examples
     public class BasicOperations : Python, IExample
     {
         public bool Enabled => true;
+        public int Priority => 2;
+        public string Name => "Basic Operations";
+
         private Session sess;
 
         public bool Run()

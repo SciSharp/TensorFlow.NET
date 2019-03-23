@@ -9,7 +9,9 @@ namespace TensorFlowNET.Examples
 {
     public class MetaGraph : Python, IExample
     {
+        public int Priority => 100;
         public bool Enabled => false;
+        public string Name => "Meta Graph";
 
         public bool Run()
         {

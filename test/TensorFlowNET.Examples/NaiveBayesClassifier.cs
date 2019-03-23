@@ -12,7 +12,10 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class NaiveBayesClassifier : Python, IExample
     {
+        public int Priority => 100;
         public bool Enabled => false;
+        public string Name => "Naive Bayes Classifier";
+
         public Normal dist { get; set; }
         public bool Run()
         {

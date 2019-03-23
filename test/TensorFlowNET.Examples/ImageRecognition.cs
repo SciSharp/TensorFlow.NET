@@ -12,7 +12,9 @@ namespace TensorFlowNET.Examples
 {
     public class ImageRecognition : Python, IExample
     {
+        public int Priority => 5;
         public bool Enabled => true;
+        public string Name => "Image Recognition";
 
         string dir = "ImageRecognition";
         string pbFile = "tensorflow_inception_graph.pb";

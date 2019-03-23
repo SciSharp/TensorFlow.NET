@@ -20,6 +20,9 @@ namespace TensorFlowNET.Examples
     public class InceptionArchGoogLeNet : Python, IExample
     {
         public bool Enabled => false;
+        public int Priority => 100;
+        public string Name => "Inception Arch GoogLeNet";
+
         string dir = "label_image_data";
         string pbFile = "inception_v3_2016_08_28_frozen.pb";
         string labelFile = "imagenet_slim_labels.txt";

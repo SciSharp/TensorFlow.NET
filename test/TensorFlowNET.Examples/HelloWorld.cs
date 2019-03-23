@@ -11,7 +11,10 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class HelloWorld : Python, IExample
     {
+        public int Priority => 1;
         public bool Enabled => true;
+        public string Name => "Hello World";
+
         public bool Run()
         {
             /* Create a Constant op

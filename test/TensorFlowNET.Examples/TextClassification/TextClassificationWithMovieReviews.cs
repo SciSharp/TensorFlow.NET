@@ -11,7 +11,10 @@ namespace TensorFlowNET.Examples
 {
     public class TextClassificationWithMovieReviews : Python, IExample
     {
+        public int Priority => 6;
         public bool Enabled => false;
+        public string Name => "Movie Reviews";
+
         string dir = "text_classification_with_movie_reviews";
         string dataFile = "imdb.zip";
         NDArray train_data, train_labels, test_data, test_labels;

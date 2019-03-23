@@ -15,7 +15,10 @@ namespace TensorFlowNET.Examples.CnnTextClassification
     /// </summary>
     public class TextClassificationTrain : Python, IExample
     {
+        public int Priority => 100;
         public bool Enabled => false;
+        public string Name => "Text Classification";
+
         private string dataDir = "text_classification";
         private string dataFileName = "dbpedia_csv.tar.gz";
 

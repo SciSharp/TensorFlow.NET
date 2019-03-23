@@ -15,32 +15,35 @@ namespace TensorFlowNET.Examples
             var errors = new List<string>();
             var success = new List<string>();
             var disabled = new List<string>();
+            var examples = assembly.GetTypes()
+                .Where(x => x.GetInterfaces().Contains(typeof(IExample)))
+                .Select(x => (IExample)Activator.CreateInstance(x))
+                .OrderBy(x => x.Priority)
+                .ToArray();
 
-            foreach (Type type in assembly.GetTypes().Where(x => x.GetInterfaces().Contains(typeof(IExample))))
+            foreach (IExample example in examples)
             {
-                if (args.Length > 0 && !args.Contains(type.Name))
+                if (args.Length > 0 && !args.Contains(example.Name))
                     continue;
 
-                Console.WriteLine($"{DateTime.UtcNow} Starting {type.Name}", Color.Tan);
-
-                var example = (IExample)Activator.CreateInstance(type);
+                Console.WriteLine($"{DateTime.UtcNow} Starting {example.Name}", Color.White);
 
                 try
                 {
                     if (example.Enabled)
                         if (example.Run())
-                            success.Add(type.Name);
+                            success.Add($"{example.Priority} {example.Name}");
                         else
-                            errors.Add(type.Name);
+                            errors.Add($"{example.Priority} {example.Name}");
                     else
-                        disabled.Add(type.Name);
+                        disabled.Add($"{example.Priority} {example.Name}");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
                 }
 
-                Console.WriteLine($"{DateTime.UtcNow} Completed {type.Name}", Color.Tan);
+                Console.WriteLine($"{DateTime.UtcNow} Completed {example.Name}", Color.White);
             }
 
             success.ForEach(x => Console.WriteLine($"{x} example is OK!", Color.Green));

@@ -11,7 +11,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BasicEagerApi : IExample
     {
+        public int Priority => 100;
         public bool Enabled => false;
+        public string Name => "Basic Eager";
 
         private Tensor a, b, c, d;
 

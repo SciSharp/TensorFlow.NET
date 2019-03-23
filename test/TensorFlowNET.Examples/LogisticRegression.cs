@@ -17,7 +17,10 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class LogisticRegression : Python, IExample
     {
+        public int Priority => 4;
         public bool Enabled => true;
+        public string Name => "Logistic Regression";
+
         private float learning_rate = 0.01f;
         private int training_epochs = 10;
         private int batch_size = 100;
