@@ -9,6 +9,30 @@ namespace Tensorflow
     public static class gen_math_ops
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
+
+        /// <summary>
+        /// Returns the index with the largest value across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="dimension"></param>
+        /// <param name="output_type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+            => _op_def_lib._apply_op_helper("ArgMax", name, args: new { input, dimension, output_type }).outputs[0];
+
+        /// <summary>
+        /// Returns the index with the smallest value across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="dimension"></param>
+        /// <param name="output_type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type= TF_DataType.TF_INT64, string name= null)
+            =>_op_def_lib._apply_op_helper("ArgMin", name, args: new { input, dimension, output_type }).outputs[0];
+        
+
         /// <summary>
         /// Computes the mean of elements across dimensions of a tensor.
         /// Reduces `input` along the dimensions given in `axis`. Unless        /// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in        /// `axis`. If `keep_dims` is true, the reduced dimensions are retained with length 1.
@@ -207,6 +231,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor _abs(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Abs", name, new { x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims=false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims });
@@ -246,21 +277,6 @@ namespace Tensorflow
         public static Tensor range(Tensor start, Tensor limit, Tensor delta, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Range", name, new { start, limit, delta });
-
-            return _op.outputs[0];
-        }
-
-        /// <summary>
-        /// Returns the index with the largest value across dimensions of a tensor.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="dimension"></param>
-        /// <param name="output_type"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
-        {
-            var _op = _op_def_lib._apply_op_helper("ArgMax", name, new { input, dimension, output_type });
 
             return _op.outputs[0];
         }

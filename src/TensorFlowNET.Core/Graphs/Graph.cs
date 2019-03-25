@@ -355,7 +355,7 @@ namespace Tensorflow
             return _collections.Keys.Where(x => !x.StartsWith("__")).ToArray();
         }
 
-        public object get_collection(string name, string scope = "")
+        public object get_collection(string name, string scope = null)
         {
             return _collections.ContainsKey(name) ? _collections[name] : null;
         }

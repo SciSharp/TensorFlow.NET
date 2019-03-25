@@ -222,6 +222,12 @@ namespace Tensorflow
                         ints[i] = *(int*)(offset + (int)(tensor.itemsize * i));
                     nd = np.array(ints).reshape(ndims);
                     break;
+                case TF_DataType.TF_INT64:
+                    var longs = new long[tensor.size];
+                    for (ulong i = 0; i < tensor.size; i++)
+                        longs[i] = *(long*)(offset + (int)(tensor.itemsize * i));
+                    nd = np.array(longs).reshape(ndims);
+                    break;
                 case TF_DataType.TF_FLOAT:
                     var floats = new float[tensor.size];
                     for (ulong i = 0; i < tensor.size; i++)

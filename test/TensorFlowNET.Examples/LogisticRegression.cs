@@ -98,7 +98,7 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("logistic_regression", one_hot: true);
+            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true);
         }
 
         public void SaveModel(Session sess)

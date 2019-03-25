@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
-    <Version>0.5.0</Version>
+    <Version>0.5.1</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -16,11 +16,13 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.5.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Add Logistic Regression to do MNIST.
-Add a lot of APIs to build neural networks model</PackageReleaseNotes>
+    <AssemblyVersion>0.5.1.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.5:
+Added Nearest Neighbor.
+Add a lot of APIs to build neural networks model.
+Bug fix.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.5.0.0</FileVersion>
+    <FileVersion>0.5.1.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -44,7 +46,7 @@ Add a lot of APIs to build neural networks model</PackageReleaseNotes>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.7.0" />
-    <PackageReference Include="NumSharp" Version="0.8.1" />
+    <PackageReference Include="NumSharp" Version="0.8.2" />
   </ItemGroup>
 
   <ItemGroup>

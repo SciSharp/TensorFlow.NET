@@ -6,8 +6,17 @@ namespace Tensorflow
 {
     public static partial class tf
     {
+        public static Tensor abs(Tensor x, string name = null)
+            => math_ops.abs(x, name);
+
         public static Tensor add(Tensor a, Tensor b) 
             => gen_math_ops.add(a, b);
+
+        public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+            => gen_math_ops.arg_max(input, dimension, output_type: output_type, name: name);
+
+        public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+            => gen_math_ops.arg_min(input, dimension, output_type: output_type, name: name);
 
         public static Tensor sub(Tensor a, Tensor b) 
             => gen_math_ops.sub(a, b);
@@ -26,6 +35,9 @@ namespace Tensorflow
 
         public static Tensor multiply(Tensor x, Tensor y) 
             => gen_math_ops.mul(x, y);
+
+        public static Tensor negative(Tensor x, string name = null)
+            => gen_math_ops.neg(x, name);
 
         public static Tensor divide<T>(Tensor x, T[] y, string name = null) where T : struct
             => x / ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y");

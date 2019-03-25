@@ -6,9 +6,36 @@ using Tensorflow.Framework;
 
 namespace Tensorflow
 {
+    /// <summary>
+    /// python\ops\math_ops.py
+    /// </summary>
     public class math_ops : Python
     {
-        public static Tensor add(Tensor x, Tensor y, string name = null) => gen_math_ops.add(x, y, name);
+        public static Tensor abs(Tensor x, string name = null)
+        {
+            return with(ops.name_scope(name, "Abs", new { x }), scope =>
+            {
+                x = ops.convert_to_tensor(x, name: "x");
+                if (x.dtype.is_complex())
+                    throw new NotImplementedException("math_ops.abs for dtype.is_complex");
+                    //return gen_math_ops.complex_abs(x, Tout: x.dtype.real_dtype, name: name);
+                return gen_math_ops._abs(x, name: name);
+            });
+        }
+
+        public static Tensor add(Tensor x, Tensor y, string name = null) 
+            => gen_math_ops.add(x, y, name);
+
+        public static Tensor add(Tensor x, string name = null)
+        {
+            return with(ops.name_scope(name, "Abs", new { x }), scope =>
+            {
+                name = scope;
+                x = ops.convert_to_tensor(x, name: "x");
+
+                return gen_math_ops._abs(x, name: name);
+            });
+        }
 
         public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {

@@ -27,4 +27,5 @@ Welcome to TensorFlow.NET's documentation!
    EagerMode
    LinearRegression
    LogisticRegression
+   NearestNeighbor
    ImageRecognition

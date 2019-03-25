@@ -11,7 +11,7 @@ namespace TensorFlowNET.Examples
 {
     public class TextClassificationWithMovieReviews : Python, IExample
     {
-        public int Priority => 6;
+        public int Priority => 7;
         public bool Enabled => false;
         public string Name => "Movie Reviews";
 

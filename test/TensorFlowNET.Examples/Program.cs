@@ -32,11 +32,11 @@ namespace TensorFlowNET.Examples
                 {
                     if (example.Enabled)
                         if (example.Run())
-                            success.Add($"{example.Priority} {example.Name}");
+                            success.Add($"Example {example.Priority}: {example.Name}");
                         else
-                            errors.Add($"{example.Priority} {example.Name}");
+                            errors.Add($"Example {example.Priority}: {example.Name}");
                     else
-                        disabled.Add($"{example.Priority} {example.Name}");
+                        disabled.Add($"Example {example.Priority}: {example.Name}");
                 }
                 catch (Exception ex)
                 {
@@ -46,9 +46,9 @@ namespace TensorFlowNET.Examples
                 Console.WriteLine($"{DateTime.UtcNow} Completed {example.Name}", Color.White);
             }
 
-            success.ForEach(x => Console.WriteLine($"{x} example is OK!", Color.Green));
-            disabled.ForEach(x => Console.WriteLine($"{x} example is Disabled!", Color.Tan));
-            errors.ForEach(x => Console.WriteLine($"{x} example is Failed!", Color.Red));
+            success.ForEach(x => Console.WriteLine($"{x} is OK!", Color.Green));
+            disabled.ForEach(x => Console.WriteLine($"{x} is Disabled!", Color.Tan));
+            errors.ForEach(x => Console.WriteLine($"{x} is Failed!", Color.Red));
 
             Console.ReadLine();
         }

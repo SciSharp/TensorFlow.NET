@@ -73,6 +73,7 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 * [Image Recognition](test/TensorFlowNET.Examples/ImageRecognition.cs)
 * [Linear Regression](test/TensorFlowNET.Examples/LinearRegression.cs)
 * [Logistic Regression](test/TensorFlowNET.Examples/LogisticRegression.cs)
+* [Nearest Neighbor](test/TensorFlowNET.Examples/NearestNeighbor.cs)
 * [Text Classification](test/TensorFlowNET.Examples/TextClassificationWithMovieReviews.cs)
 * [CNN Text Classification](test/TensorFlowNET.Examples/CnnTextClassification.cs)
 * [Naive Bayes Classification](test/TensorFlowNET.Examples/NaiveBayesClassifier.cs)

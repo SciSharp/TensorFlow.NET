@@ -65,6 +65,9 @@ namespace Tensorflow
                             case "Int32":
                                 full_values.Add(value.Data<int>(0));
                                 break;
+                            case "Int64":
+                                full_values.Add(value.Data<long>(0));
+                                break;
                             case "Single":
                                 full_values.Add(value.Data<float>(0));
                                 break;
@@ -78,7 +81,7 @@ namespace Tensorflow
                     }
                     else
                     {
-                        full_values.Add(value[np.arange(1)]);
+                        full_values.Add(value[np.arange(0, value.shape[0])]);
                     }
                 }
                 i += 1;
