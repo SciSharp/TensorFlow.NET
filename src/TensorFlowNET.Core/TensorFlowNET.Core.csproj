@@ -7,7 +7,7 @@
     <Version>0.5.1</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Copyright>Apache 2.0</Copyright>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -50,7 +50,9 @@ Bug fix.</PackageReleaseNotes>
   </ItemGroup>
 
   <ItemGroup>
-    <Content CopyToOutputDirectory="PreserveNewest" Include="./runtimes/win-x64/native/tensorflow.dll" Link="tensorflow.dll" Pack="true" PackagePath="runtimes/win-x64/native/tensorflow.dll" />
+    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/win-x64/native/tensorflow.dll" Link="tensorflow.dll" Pack="true" PackagePath="../../tensorflowlib/runtimes/win-x64/native/tensorflow.dll" />
+    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow.so" Link="libtensorflow.so" Pack="true" PackagePath="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow.so" />
+    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow_framework.so" Link="libtensorflow_framework.so" Pack="true" PackagePath="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow_framework.so" />
   </ItemGroup>
 
   <ItemGroup>
