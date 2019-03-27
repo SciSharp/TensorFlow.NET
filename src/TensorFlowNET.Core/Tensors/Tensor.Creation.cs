@@ -111,7 +111,7 @@ namespace Tensorflow
             // Free the original buffer and set flag
             Deallocator deallocator = (IntPtr values, IntPtr len, ref bool closure) =>
             {
-                Marshal.FreeHGlobal(dotHandle);
+                Marshal.FreeHGlobal(values);
                 closure = true;
             };
 

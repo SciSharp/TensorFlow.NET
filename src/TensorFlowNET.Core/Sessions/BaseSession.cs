@@ -186,9 +186,10 @@ namespace Tensorflow
             var result = new NDArray[fetch_list.Length];
 
             for (int i = 0; i < fetch_list.Length; i++)
-            {
                 result[i] = fetchValue(output_values[i]);
-            }
+
+            for (int i = 0; i < feed_dict.Length; i++)
+                feed_dict[i].Value.Dispose();
 
             return result;
         }
