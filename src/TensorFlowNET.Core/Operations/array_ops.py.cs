@@ -7,7 +7,8 @@ namespace Tensorflow
 {
     public class array_ops : Python
     {
-        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null) => gen_array_ops.placeholder_with_default(input, shape, name);
+        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null) 
+            => gen_array_ops.placeholder_with_default(input, shape, name);
 
         public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
@@ -41,19 +42,84 @@ namespace Tensorflow
             else
             {
                 tShape = constant_op._tensor_shape_tensor_conversion_function(shape.as_shape());
-                var c = constant_op.constant(0);
+                var c = constant_op.constant(0, dtype: dtype);
                 return gen_array_ops.fill(tShape, c, name: name);
             }
         }
 
-        public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1) => expand_dims_v2(input, axis, name);
+        public static Tensor _autopacking_conversion_function(object[] v, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
+        {
+            var inferred_dtype = _get_dtype_from_nested_lists(v);
+            if (dtype == TF_DataType.DtInvalid)
+                dtype = inferred_dtype;
 
-        private static Tensor expand_dims_v2(Tensor input, int axis, string name = null) => gen_array_ops.expand_dims(input, axis, name);
+            return _autopacking_helper(v, dtype, name == null ? "packed" : name);
+        }
+
+        private static TF_DataType _get_dtype_from_nested_lists(object[] list_or_tuple)
+        {
+            TF_DataType dtype = TF_DataType.DtInvalid;
+
+            foreach(var obj in list_or_tuple)
+            {
+                switch (obj)
+                {
+                    case Tensor t:
+                        dtype = t.dtype.as_base_dtype();
+                        break;
+                }
+
+                if (dtype != TF_DataType.DtInvalid)
+                    break;
+            }
+
+            return dtype;
+        }
+
+        public static Tensor _autopacking_helper(object[] list_or_tuple, TF_DataType dtype, string name)
+        {
+            var must_pack = false;
+            var converted_elems = new List<object>();
+            return with(ops.name_scope(name), scope =>
+            {
+                foreach (var (i, elem) in enumerate(list_or_tuple))
+                {
+                    converted_elems.Add(elem);
+                    must_pack = true;
+                }
+
+                if(must_pack)
+                {
+                    var elems_as_tensors = new List<Tensor>();
+                    foreach (var (i, elem) in enumerate(converted_elems))
+                    {
+                        if (elem is Tensor tensor)
+                            elems_as_tensors.Add(tensor);
+                        else
+                        {
+                            var elem_tensor = constant_op.constant(elem, dtype: dtype, name: i.ToString());
+                            elems_as_tensors.Add(elem_tensor);
+                        }
+                    }
+
+                    return gen_array_ops.pack(elems_as_tensors.ToArray(), name: scope);
+                }
+                else
+                {
+                    // return converted_elems.ToArray();
+                    throw new NotImplementedException("_autopacking_helper.converted_elems");
+                }
+            });
+        }
+
+        public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1) 
+            => expand_dims_v2(input, axis, name);
+
+        private static Tensor expand_dims_v2(Tensor input, int axis, string name = null) 
+            => gen_array_ops.expand_dims(input, axis, name);
 
         public static Tensor rank(Tensor input, string name = null)
-        {
-            return math_ops.rank_internal(input, name, optimize: true);
-        }
+            => math_ops.rank_internal(input, name, optimize: true);
 
         /// <summary>
         /// Creates a tensor with all elements set to 1.
@@ -66,10 +132,8 @@ namespace Tensorflow
         public static Tensor ones_like<T>(T tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
             => ones_like_impl(tensor, dtype, name, optimize);
 
-        public static Tensor reshape(Tensor tensor, Tensor shape, string name = null)
-        {
-            return gen_array_ops.reshape(tensor, shape, null);
-        }
+        public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
+            => gen_array_ops.reshape(tensor, shape, null);
 
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
         {
@@ -97,6 +161,18 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor ones(Tensor[] shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        {
+            dtype = dtype.as_base_dtype();
+            return with(ops.name_scope(name, "ones", new { shape }), scope =>
+            {
+                name = scope;
+                var shape1 = ops.convert_to_tensor(shape, dtype: TF_DataType.TF_INT32);
+                var output = gen_array_ops.fill(shape1, constant_op.constant(1, dtype: dtype), name: name);
+                return output;
+            });
+        }
+
         public static Tensor ones(int[] dims, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
@@ -106,6 +182,44 @@ namespace Tensorflow
                 var shape = ops.convert_to_tensor(dims, dtype: TF_DataType.TF_INT32);
                 var output = gen_array_ops.fill(shape, constant_op.constant(1.0f, dtype: dtype), name: name);
                 return output;
+            });
+        }
+
+        public static Tensor one_hot(Tensor indices, int depth, 
+            Tensor on_value = null,
+            Tensor off_value = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            int axis = -1,
+            string name = null)
+        {
+            return with(ops.name_scope(name, "one_hot", new { indices, depth, dtype }), scope =>
+            {
+                name = scope;
+                var on_exists = false;
+                var off_exists = false;
+                var on_dtype = TF_DataType.DtInvalid;
+                var off_dtype = TF_DataType.DtInvalid;
+
+                if (dtype == TF_DataType.DtInvalid)
+                    dtype = TF_DataType.TF_FLOAT;
+
+                if(!on_exists)
+                {
+                    on_value = ops.convert_to_tensor(1, dtype, name: "on_value");
+                    on_dtype = dtype;
+                }
+
+                if (!off_exists)
+                {
+                    off_value = ops.convert_to_tensor(0, dtype, name = "off_value");
+                    off_dtype = dtype;
+                }
+
+                return gen_array_ops.one_hot(indices, depth,
+                    on_value: on_value,
+                    off_value: off_value,
+                    axis: axis,
+                    name: name);
             });
         }
 
@@ -136,14 +250,10 @@ namespace Tensorflow
         /// </param>
         /// <returns>A `Tensor` of type `out_type`.</returns>
         public static Tensor shape(Tensor input, string name = null, TF_DataType out_type = TF_DataType.TF_INT32)
-        {
-            return shape_internal(input, name, optimize: true, out_type: out_type);
-        }
+            => shape_internal(input, name, optimize: true, out_type: out_type);
 
         public static Tensor size(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
-        {
-            return size_internal(input, name, optimize: optimize, out_type: out_type);
-        }
+            => size_internal(input, name, optimize: optimize, out_type: out_type);
 
         private static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
@@ -168,32 +278,21 @@ namespace Tensorflow
 
         private static Tensor size_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
-            return with(ops.name_scope(name, "Size", new Tensor[] { input }), scope =>
+            return with(ops.name_scope(name, "Size", new { input }), scope =>
             {
                 name = scope;
 
-                if (!tf.context.executing_eagerly())
+                var input_tensor = ops.convert_to_tensor(input);
+                var input_shape = tensor_util.to_shape(input_tensor.shape);
+                if (optimize)
                 {
-                    var input_tensor = ops.convert_to_tensor(input);
-                    var input_shape = tensor_util.to_shape(input_tensor.shape);
-                    if (optimize)
+                    if (input_shape.is_fully_defined())
                     {
-                        if (input_shape.is_fully_defined())
-                        {
-                            var nd = np.array(input_tensor.shape, out_type.as_numpy_datatype());
-                            return constant_op.constant(nd, name: name);
-                        }
+                        return constant_op.constant(input_shape.Size, dtype: out_type, name: name);
                     }
-
-                    return gen_array_ops.size(input, name: name, out_type: out_type);
-                }
-                else
-                {
-                    // result = gen_array_ops.shape();
-                    throw new NotImplementedException("array_ops.size_internal");
                 }
 
-                return null;
+                return gen_array_ops.size(input, name: name, out_type: out_type);
             });
         }
 
@@ -234,8 +333,46 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor stop_gradient(Tensor input, string name = null)
+            => gen_array_ops.stop_gradient(input,  name);
+
+        /// <summary>
+        /// Extracts a strided slice of a tensor (generalized python array indexing).
+        /// </summary>
+        /// <param name="input_"></param>
+        /// <param name="begin"></param>
+        /// <param name="end"></param>
+        /// <param name="strides"></param>
+        /// <param name="begin_mask"></param>
+        /// <param name="end_mask"></param>
+        /// <param name="ellipsis_mask"></param>
+        /// <param name="new_axis_mask"></param>
+        /// <param name="shrink_axis_mask"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor strided_slice(Tensor input_, Tensor begin, Tensor end, 
+            Tensor strides = null,
+            int begin_mask = 0,
+            int end_mask = 0,
+            int ellipsis_mask = 0,
+            int new_axis_mask = 0,
+            int shrink_axis_mask = 0,
+            string name = null)
         {
-            return gen_array_ops.stop_gradient(input,  name);
+            var op = gen_array_ops.strided_slice(
+                input: input_,
+                begin: begin,
+                end: end,
+                strides: strides,
+                begin_mask: begin_mask,
+                end_mask: end_mask,
+                ellipsis_mask: ellipsis_mask,
+                new_axis_mask: new_axis_mask,
+                shrink_axis_mask: shrink_axis_mask,
+                name: name);
+
+            string parent_name = name;
+
+            return op;
         }
 
         /// <summary>
@@ -256,14 +393,14 @@ namespace Tensorflow
         /// Contains the same data as `input`, but has one or more dimensions of
         /// size 1 removed.</returns>
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null, int[] squeeze_dims = null)
-        {
-            return gen_array_ops.squeeze(input, axis, name);
-        }
+            => gen_array_ops.squeeze(input, axis, name);
 
         public static Tensor identity(Tensor input, string name = null)
-        {
-            return gen_array_ops.identity(input, name);
-        }
+            => gen_array_ops.identity(input, name);
+
+        public static Tensor invert_permutation(Tensor x, string name = null)
+            => gen_array_ops.invert_permutation(x, name: name);
+
         /// <summary>
         /// Computes the shape of a broadcast given symbolic shapes.
         /// When shape_x and shape_y are Tensors representing shapes(i.e.the result of
@@ -279,27 +416,33 @@ namespace Tensorflow
         /// <param name="shape_y"> A rank 1 integer `Tensor`, representing the shape of y.</param>
         /// <returns> A rank 1 integer `Tensor` representing the broadcasted shape.</returns>
         public static Tensor broadcast_dynamic_shape(Tensor shape_x, Tensor shape_y)
-        {
-            return gen_array_ops.broadcast_args(shape_x, shape_y);
-        }
+            => gen_array_ops.broadcast_args(shape_x, shape_y);
 
         public static Tensor broadcast_static_shape(Tensor shape_x, Tensor shape_y)
-        {
-            return Framework.common_shapes.broadcast_shape(shape_x, shape_y);
-        }
+            => Framework.common_shapes.broadcast_shape(shape_x, shape_y);
 
         public static Tensor gather(Tensor @params, Tensor indices, string name = null, int axis = 0)
-        {
-            return gen_array_ops.gather_v2(@params, indices, axis, name: name);
-        }
+            => gen_array_ops.gather_v2(@params, indices, axis, name: name);
 
-        public static Tensor transpose(Tensor a, int[] perm = null, string name = "transpose", bool conjugate = false)
+        public static Tensor transpose<T1, T2>(T1 a, T2 perm, string name = "transpose", bool conjugate = false)
         {
             return with(ops.name_scope(name, "transpose", new { a }), scope =>
             {
-                name = scope;
-                return gen_array_ops.transpose(a, perm, name);
+                return gen_array_ops.transpose(a, perm, name: scope);
             });
         }
+
+        public static Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
+            => gen_array_ops.slice(input, begin, size, name: name);
+
+        public static Tensor stack(object values, int axis = 0, string name = "stack")
+        {
+            if (axis == 0)
+                // If the input is a constant list, it can be converted to a constant op
+                return ops.convert_to_tensor(values, name: name);
+
+            throw new NotImplementedException("array_ops.stack");
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using NumSharp.Core;
+﻿//using Newtonsoft.Json;
+using NumSharp.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,8 @@ namespace Tensorflow
         public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
 
+        private TF_Output? _tf_output;
+
         public long[] shape
         {
             get
@@ -74,7 +77,8 @@ namespace Tensorflow
 
         public int[] _shape_tuple()
         {
-            return null;
+            if (shape == null) return null;
+            return shape.Select(x => (int)x).ToArray();
         }
 
         public TensorShape getShape()
@@ -122,7 +126,10 @@ namespace Tensorflow
 
         public TF_Output _as_tf_output()
         {
-            return new TF_Output(op, value_index);
+            if(!_tf_output.HasValue)
+                _tf_output = new TF_Output(op, value_index);
+
+            return _tf_output.Value;
         }
 
         public T[] Data<T>()
@@ -161,7 +168,12 @@ namespace Tensorflow
         /// <param name="feed_dict">A dictionary that maps `Tensor` objects to feed values.</param>
         /// <param name="session">The `Session` to be used to evaluate this tensor.</param>
         /// <returns></returns>
-        public NDArray eval(FeedItem[] feed_dict = null, Session session = null)
+        public NDArray eval(params FeedItem[] feed_dict)
+        {
+            return ops._eval_using_default_session(this, feed_dict, graph);
+        }
+
+        public NDArray eval(Session session, FeedItem[] feed_dict = null)
         {
             return ops._eval_using_default_session(this, feed_dict, graph, session);
         }
@@ -184,6 +196,61 @@ namespace Tensorflow
                 default:
                     throw new NotImplementedException("ToTFDataType error");
             }
+        }
+
+        public Tensor this[int slice_spec]
+        {
+            get
+            {
+                var slice_spec_s = new int[] { slice_spec };
+                var begin = new List<int>();
+                var end = new List<int>();
+                var strides = new List<int>();
+
+                var index = 0;
+                var (new_axis_mask, shrink_axis_mask) = (0, 0);
+                var (begin_mask, end_mask) = (0, 0);
+                var ellipsis_mask = 0;
+
+                foreach(var s in slice_spec_s)
+                {
+                    {
+                        begin.Add(s);
+                        end.Add(s + 1);
+                        strides.Add(1);
+                        shrink_axis_mask |= (1 << index);
+                    }
+                    
+                    index += 1;
+                }
+
+                return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+                {
+                    string name = scope;
+                    if(begin != null)
+                    {
+                        var (packed_begin, packed_end, packed_strides) =
+                            (array_ops.stack(begin.ToArray()),
+                            array_ops.stack(end.ToArray()),
+                            array_ops.stack(strides.ToArray()));
+
+                        return gen_array_ops.strided_slice(
+                            this,
+                            packed_begin,
+                            packed_end,
+                            packed_strides,
+                            begin_mask: begin_mask,
+                            end_mask: end_mask,
+                            shrink_axis_mask: shrink_axis_mask,
+                            new_axis_mask: new_axis_mask,
+                            ellipsis_mask: ellipsis_mask,
+                            name: name);
+                    }
+
+                    throw new NotImplementedException("");
+                });
+            }
+            
         }
 
         public override string ToString()

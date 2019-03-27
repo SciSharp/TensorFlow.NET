@@ -4,7 +4,12 @@ using System.Text;
 
 namespace Tensorflow.Keras.Engine
 {
-    internal class Model : Network
+    public class Model : Network
     {
+        public Model(string name = null) 
+            : base(name: name)
+        {
+
+        }
     }
 }

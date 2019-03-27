@@ -19,6 +19,10 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class InceptionArchGoogLeNet : Python, IExample
     {
+        public bool Enabled => false;
+        public int Priority => 100;
+        public string Name => "Inception Arch GoogLeNet";
+
         string dir = "label_image_data";
         string pbFile = "inception_v3_2016_08_28_frozen.pb";
         string labelFile = "imagenet_slim_labels.txt";
@@ -30,7 +34,7 @@ namespace TensorFlowNET.Examples
         string input_name = "import/input";
         string output_name = "import/InceptionV3/Predictions/Reshape_1";
 
-        public void Run()
+        public bool Run()
         {
             PrepareData();
 
@@ -60,6 +64,8 @@ namespace TensorFlowNET.Examples
 
             foreach (float idx in top_k)
                 Console.WriteLine($"{picFile}: {idx} {labels[(int)idx]}, {results[(int)idx]}");
+
+            return true;
         }
 
         private NDArray ReadTensorFromImageFile(string file_name,
@@ -83,7 +89,7 @@ namespace TensorFlowNET.Examples
             });
         }
 
-        private void PrepareData()
+        public void PrepareData()
         {
             Directory.CreateDirectory(dir);
 

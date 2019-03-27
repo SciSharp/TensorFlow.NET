@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Tensorflow.Train;
 
 namespace Tensorflow
 {
@@ -11,9 +12,12 @@ namespace Tensorflow
         {
             public static Optimizer GradientDescentOptimizer(float learning_rate) => new GradientDescentOptimizer(learning_rate);
 
+            public static Optimizer AdamOptimizer(float learning_rate) => new AdamOptimizer(learning_rate);
+
             public static Saver Saver() => new Saver();
 
-            public static string write_graph(Graph graph, string logdir, string name, bool as_text = true) => graph_io.write_graph(graph, logdir, name, as_text);
+            public static string write_graph(Graph graph, string logdir, string name, bool as_text = true) 
+                => graph_io.write_graph(graph, logdir, name, as_text);
 
             public static Saver import_meta_graph(string meta_graph_or_file,
                 bool clear_devices = false,

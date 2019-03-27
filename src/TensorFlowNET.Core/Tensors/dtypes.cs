@@ -31,8 +31,14 @@ namespace Tensorflow
 
             switch (type.Name)
             {
+                case "Boolean":
+                    dtype = TF_DataType.TF_BOOL;
+                    break;
                 case "Int32":
                     dtype = TF_DataType.TF_INT32;
+                    break;
+                case "Int64":
+                    dtype = TF_DataType.TF_INT64;
                     break;
                 case "Single":
                     dtype = TF_DataType.TF_FLOAT;

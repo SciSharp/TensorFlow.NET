@@ -53,7 +53,23 @@ namespace Tensorflow.Operations
             return _op.outputs[0];
         }
 
-        public static (Tensor, Tensor, Tensor) _fused_batch_norm(Tensor x,
+        public static Tensor bias_add_grad(Tensor out_backprop,
+            string data_format = "NHWC",
+            string name = null)
+        {
+            if (data_format == null)
+                data_format = "NHWC";
+
+            var _op = _op_def_lib._apply_op_helper("BiasAddGrad", name: name, args: new
+            {
+                out_backprop,
+                data_format
+            });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor[] _fused_batch_norm(Tensor x,
                 Tensor scale,
                 Tensor offset,
                 Tensor mean,
@@ -75,7 +91,87 @@ namespace Tensorflow.Operations
                 is_training
             });
 
-            return (_op.outputs[0], _op.outputs[1], _op.outputs[2]);
+            return _op.outputs;
+        }
+
+        public static Tensor log_softmax(Tensor logits, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LogSoftmax", name: name, args: new
+            {
+                logits
+            });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor max_pool(Tensor input,
+            int[] ksize,
+            int[] strides,
+            string padding,
+            string data_format = "NHWC",
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("MaxPool", name: name, args: new
+            {
+                input,
+                ksize,
+                strides,
+                padding,
+                data_format,
+            });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor[] top_kv2(Tensor input, int k, bool sorted = true, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TopKV2", name: name, args: new
+            {
+                input,
+                k,
+                sorted
+            });
+
+            return _op.outputs;
+        }
+
+        public static Tensor relu_grad(Tensor gradients, Tensor features, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ReluGrad", name: name, args: new
+            {
+                gradients,
+                features
+            });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor softmax(Tensor logits, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Softmax", name: name, args: new
+            {
+                logits
+            });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Computes softmax cross entropy cost and gradients to backpropagate.
+        /// </summary>
+        /// <param name="features"></param>
+        /// <param name="labels"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static (Tensor, Tensor) softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("SoftmaxCrossEntropyWithLogits", name: name, args: new
+            {
+                features,
+                labels
+            });
+
+            return (_op.outputs[0], _op.outputs[1]);
         }
     }
 }

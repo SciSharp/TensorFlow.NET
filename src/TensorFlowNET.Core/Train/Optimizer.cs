@@ -34,6 +34,7 @@ namespace Tensorflow
 
             Name = name;
             _use_locking = use_locking;
+            LearningRate = learning_rate;
             // Dictionary of slots.
             _slots = new Dictionary<string, object>();
             _non_slot_dict = new Dictionary<string, object>();
@@ -49,6 +50,7 @@ namespace Tensorflow
         /// was not `None`, that operation also increments `global_step`.
         /// </returns>
         public Operation minimize(Tensor loss, 
+            RefVariable global_step = null,
             GateGradientType gate_gradients = GateGradientType.GATE_OP,
             bool colocate_gradients_with_ops = false)
         {

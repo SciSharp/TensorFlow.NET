@@ -24,5 +24,13 @@ namespace Tensorflow
                 name: name, 
                 container: container, 
                 shared_name: shared_name);
+
+        public static Tensor assign_sub(RefVariable @ref,
+            Tensor value,
+            bool use_locking = false,
+            string name = null) => gen_state_ops.assign_sub(@ref,
+                value,
+                use_locking: use_locking,
+                name: name);
     }
 }

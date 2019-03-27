@@ -10,7 +10,7 @@ namespace Tensorflow
     {
         public static string write_graph(Graph graph, string logdir, string name, bool as_text = true)
         {
-            var graph_def = graph._as_graph_def();
+            var graph_def = graph.as_graph_def();
             string path = Path.Combine(logdir, name);
             if (as_text)
                 File.WriteAllText(path, graph_def.ToString());

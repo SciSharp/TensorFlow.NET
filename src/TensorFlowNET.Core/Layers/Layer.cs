@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using Tensorflow.Keras.Engine;
 
 namespace Tensorflow.Layers
 {
-    public class Layer : Keras.Engine.Layer
+    public class Layer : Keras.Layers.Layer
     {
         protected Graph _graph;
         
@@ -52,12 +52,24 @@ namespace Tensorflow.Layers
 
             Python.with(scope_context_manager, scope2 => _current_scope = scope2);
             // Actually call layer
-            var outputs = base.__call__(inputs, training: training);
+            var outputs = base.__call__(new Tensor[] { inputs }, training: training);
 
             // Update global default collections.
-            //_add_elements_to_collection(updates, ops.GraphKeys.UPDATE_OPS);
+            _add_elements_to_collection(_updates.ToArray(), new string[] { ops.GraphKeys.UPDATE_OPS });
 
             return outputs;
+        }
+
+        protected virtual void _add_elements_to_collection(Operation[] elements, string[] collection_list)
+        {
+            foreach(var name in collection_list)
+            {
+                var collection = ops.get_collection_ref(name) as List<object>;
+
+                foreach (var element in elements)
+                    if (!collection.Contains(element))
+                        collection.Add(element);
+            }
         }
 
         protected virtual RefVariable add_weight(string name,

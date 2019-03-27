@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Eager;
+using static Tensorflow.ops;
 
 namespace Tensorflow
 {
@@ -21,11 +22,13 @@ namespace Tensorflow
 
         public static RefVariable Variable<T>(T data, 
             bool trainable = true,
+            bool validate_shape = true,
             string name = null, 
             TF_DataType dtype = TF_DataType.DtInvalid)
         {
             return Tensorflow.variable_scope.default_variable_creator(data, 
                 trainable: trainable,
+                validate_shape: validate_shape,
                 name: name,
                 dtype: TF_DataType.DtInvalid);
         }

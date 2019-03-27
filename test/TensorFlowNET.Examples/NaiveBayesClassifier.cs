@@ -11,9 +11,13 @@ namespace TensorFlowNET.Examples
     /// https://github.com/nicolov/naive_bayes_tensorflow
     /// </summary>
     public class NaiveBayesClassifier : Python, IExample
-    { 
+    {
+        public int Priority => 100;
+        public bool Enabled => false;
+        public string Name => "Naive Bayes Classifier";
+
         public Normal dist { get; set; }
-        public void Run()
+        public bool Run()
         {
             var X = np.array<double>(new double[][] { new double[] { 5.1, 3.5},new double[] { 4.9, 3.0 },new double[] { 4.7, 3.2 },
                                      new double[] { 4.6, 3.1 },new double[] { 5.0, 3.6 },new double[] { 5.4, 3.9 },
@@ -169,6 +173,11 @@ namespace TensorFlowNET.Examples
             var log_prob = joint_likelihood - norm_factor;
             // exp to get the actual probabilities
             return tf.exp(log_prob);
+        }
+
+        public void PrepareData()
+        {
+            
         }
     }
 }

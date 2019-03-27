@@ -1,3 +1,5 @@
+TensorFlow.NET pack all required libraries in architecture-specific assemblies folders per NuGet standard.
+
 Here are some pre-built TensorFlow binaries you can use for each platform:
 
 - Linux
@@ -6,7 +8,18 @@ Here are some pre-built TensorFlow binaries you can use for each platform:
 - Mac: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-darwin-x86_64-1.13.1.tar.gz
 - Windows: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-windows-x86_64-1.13.1.zip
 
+### Run in Linux
+
+`Install-Package TensorFlow.NET`
+
+Download Linux pre-built library and unzip `libtensorflow.so` and `libtensorflow_framework.so` into current running directory.
+
+### Run in Mac OS
+
+### Build from source for Windows
+
 https://www.tensorflow.org/install/source_windows
+
 pacman -S git patch unzip
 
 1. Build static library

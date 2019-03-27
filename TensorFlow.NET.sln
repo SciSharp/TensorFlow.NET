@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Core", "src\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Visualization", "src\TensorFlowNET.Visualization\TensorFlowNET.Visualization.csproj", "{0254BFF9-453C-4FE0-9609-3644559A79CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NumSharp.Core", "..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj", "{3EEAFB06-BEF0-4261-BAAB-630EABD25290}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{0254BFF9-453C-4FE0-9609-3644559A79CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0254BFF9-453C-4FE0-9609-3644559A79CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0254BFF9-453C-4FE0-9609-3644559A79CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EEAFB06-BEF0-4261-BAAB-630EABD25290}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EEAFB06-BEF0-4261-BAAB-630EABD25290}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EEAFB06-BEF0-4261-BAAB-630EABD25290}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EEAFB06-BEF0-4261-BAAB-630EABD25290}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,14 +13,19 @@ namespace Tensorflow.Keras.Utils
             return tensors.Select(x => is_symbolic_tensor(x)).Count() == tensors.Length;
         }
 
+        public static bool? constant_value(Tensor pred)
+        {
+            return smart_module.smart_constant_value(pred);
+        }
+
         public static bool is_symbolic_tensor(Tensor tensor)
         {
             return true;
         }
 
-        public static object smart_cond(Tensor pred, 
-            Func<(Tensor, Tensor, Tensor)> true_fn = null,
-            Func<(Tensor, Tensor, Tensor)> false_fn = null, 
+        public static Tensor[] smart_cond<T>(Tensor pred, 
+            Func<T[]> true_fn = null,
+            Func<T[]> false_fn = null, 
             string name = null)
         {
             return smart_module.smart_cond(pred,

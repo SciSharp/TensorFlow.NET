@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow
+namespace Tensorflow.Train
 {
     public class GradientDescentOptimizer : Optimizer
     {

@@ -9,6 +9,30 @@ namespace Tensorflow
     public static class gen_math_ops
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
+
+        /// <summary>
+        /// Returns the index with the largest value across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="dimension"></param>
+        /// <param name="output_type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+            => _op_def_lib._apply_op_helper("ArgMax", name, args: new { input, dimension, output_type }).outputs[0];
+
+        /// <summary>
+        /// Returns the index with the smallest value across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="dimension"></param>
+        /// <param name="output_type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type= TF_DataType.TF_INT64, string name= null)
+            =>_op_def_lib._apply_op_helper("ArgMin", name, args: new { input, dimension, output_type }).outputs[0];
+        
+
         /// <summary>
         /// Computes the mean of elements across dimensions of a tensor.
         /// Reduces `input` along the dimensions given in `axis`. Unless        /// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in        /// `axis`. If `keep_dims` is true, the reduced dimensions are retained with length 1.
@@ -20,16 +44,30 @@ namespace Tensorflow
         /// <param name="keep_dims"> An optional `bool`. Defaults to `False`. If true, retain reduced dimensions with length 1.</param>
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
-        public static Tensor mean(Tensor input, Tensor axis, bool keep_dims= false, string name = null)
+        public static Tensor mean<T1, T2>(T1 input, T2 axis, bool keep_dims= false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
 
             return _op.outputs[0];
         }
 
-        public static Tensor mean(Tensor input, int[] axis, bool keep_dims = false, string name = null)
+        public static Tensor prod<T1, T2>(T1 input, T2 axis, bool keep_dims = false, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims, name });
+            var _op = _op_def_lib._apply_op_helper("Prod", name, args: new { input, reduction_indices = axis, keep_dims });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor acos(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Acos", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor asin(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Asin", name, args: new { x });
 
             return _op.outputs[0];
         }
@@ -37,6 +75,83 @@ namespace Tensorflow
         public static Tensor add(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor atan(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Atan", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor ceil(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Ceil", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor cos(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Cos", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor cosh(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Cosh", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor floor(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Floor", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ClipByValue", name, args: new { t, clip_value_min, clip_value_max });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("GreaterEqual", name: name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor less_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LessEqual", name: name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor log1p(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Log1p", name, args: new { x });
 
             return _op.outputs[0];
         }
@@ -128,6 +243,27 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Returns the truth value of (x == y) element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor equal(Tensor x, Tensor y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Equal", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor atan2(Tensor y, Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Atan2", name, args: new { y, x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor mul(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Mul", name, args: new { x, y });
@@ -138,6 +274,13 @@ namespace Tensorflow
         public static Tensor real_div(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("RealDiv", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor reciprocal(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Reciprocal", name, args: new { x });
 
             return _op.outputs[0];
         }
@@ -186,9 +329,30 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor _max(Tensor input, int[] axis, bool keep_dims=false, string name = null)
+        public static Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Minimum", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _abs(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Abs", name, new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims=false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Min", name, new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
@@ -200,7 +364,14 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor sum(Tensor input, Tensor axis = null, bool keep_dims = false, string name = null)
+        public static Tensor _sum(Tensor input, Tensor axis = null, bool keep_dims = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _sum(Tensor input, int axis, bool keep_dims = false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
 

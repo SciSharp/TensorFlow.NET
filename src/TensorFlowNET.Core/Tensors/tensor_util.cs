@@ -38,7 +38,8 @@ namespace Tensorflow
             {
                 return MakeNdarray(tensor.op.get_attr("value") as TensorProto);
             }
-            throw new NotImplementedException("_ConstantValue");   
+
+            return null;
         }
 
         public static NDArray MakeNdarray(TensorProto tensor)
@@ -50,6 +51,15 @@ namespace Tensorflow
             if (tensor.TensorContent.Length > 0)
                 return np.frombuffer(tensor.TensorContent.ToByteArray(), tensor_dtype)
                     .reshape(shape);
+            else if (tensor.Dtype == DataType.DtHalf || tensor.Dtype == DataType.DtBfloat16)
+                ;
+            else if (tensor.Dtype == DataType.DtFloat)
+                ;
+            else if (new DataType[] { DataType.DtInt32, DataType.DtUint8 }.Contains(tensor.Dtype))
+                if (tensor.IntVal.Count == 1)
+                    return np.repeat(np.array(tensor.IntVal[0]), Convert.ToInt32(num_elements))
+                        .reshape(shape);
+
             throw new NotImplementedException("MakeNdarray");
         }
 
@@ -99,6 +109,9 @@ namespace Tensorflow
                             nparray = boolVal;
                             break;
                         case int intVal:
+                            nparray = intVal;
+                            break;
+                        case long intVal:
                             nparray = intVal;
                             break;
                         case int[] intVals:
@@ -216,10 +229,14 @@ namespace Tensorflow
             switch (nparray.dtype.Name)
             {
                 case "Bool":
+                case "Boolean":
                     tensor_proto.BoolVal.AddRange(proto_values.Data<bool>());
                     break;
                 case "Int32":
                     tensor_proto.IntVal.AddRange(proto_values.Data<int>());
+                    break;
+                case "Int64":
+                    tensor_proto.Int64Val.AddRange(proto_values.Data<long>());
                     break;
                 case "Single":
                     tensor_proto.FloatVal.AddRange(proto_values.Data<float>());
@@ -286,7 +303,7 @@ namespace Tensorflow
                     default:
                         throw new NotImplementedException("as_shape Not Implemented");
                 }
-                dim.Name = $"dim_{i}";
+                // dim.Name = $"dim_{i}";
 
                 shape.Dim.Add(dim);
             }
@@ -317,7 +334,7 @@ namespace Tensorflow
             {
                 var dim = new TensorShapeProto.Types.Dim();
                 dim.Size = tshape.Dimensions[i];
-                dim.Name = $"dim_{i}";
+                //dim.Name = $"dim_{i}";
 
                 shape.Dim.Add(dim);
             }

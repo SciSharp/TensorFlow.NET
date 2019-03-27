@@ -60,7 +60,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ((int)tensor.shape[0], nd.shape[0]);
             EXPECT_EQ((int)tensor.shape[1], nd.shape[1]);
             EXPECT_EQ(tensor.bytesize, (ulong)nd.size * sizeof(float));
-            Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), new float[] { 1, 4, 2, 5, 3, 6 }));
+            Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), new float[] { 1, 2, 3, 4, 5, 6 }));
         }
 
         /// <summary>

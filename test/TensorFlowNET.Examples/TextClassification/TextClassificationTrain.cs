@@ -15,32 +15,29 @@ namespace TensorFlowNET.Examples.CnnTextClassification
     /// </summary>
     public class TextClassificationTrain : Python, IExample
     {
+        public int Priority => 100;
+        public bool Enabled => false;
+        public string Name => "Text Classification";
+
         private string dataDir = "text_classification";
         private string dataFileName = "dbpedia_csv.tar.gz";
 
         private const int CHAR_MAX_LEN = 1014;
         private const int NUM_CLASS = 2;
 
-        public void Run()
+        public bool Run()
         {
-            download_dbpedia();
+            PrepareData();
             Console.WriteLine("Building dataset...");
             var (x, y, alphabet_size) = DataHelpers.build_char_dataset("train", "vdcnn", CHAR_MAX_LEN);
 
             var (train_x, valid_x, train_y, valid_y) = train_test_split(x, y, test_size: 0.15f);
 
-            with(tf.Session(), sess =>
+            return with(tf.Session(), sess =>
             {
                 new VdCnn(alphabet_size, CHAR_MAX_LEN, NUM_CLASS);
-
+                return false;
             });
-        }
-
-        public void download_dbpedia()
-        {
-            string url = "https://github.com/le-scientifique/torchDatasets/raw/master/dbpedia_csv.tar.gz";
-            Web.Download(url, dataDir, dataFileName);
-            Compress.ExtractTGZ(Path.Join(dataDir, dataFileName), dataDir);
         }
 
         private (int[][], int[][], int[], int[]) train_test_split(int[][] x, int[] y, float test_size = 0.3f)
@@ -74,6 +71,13 @@ namespace TensorFlowNET.Examples.CnnTextClassification
             }
 
             return (train_x.ToArray(), valid_x.ToArray(), train_y.ToArray(), valid_y.ToArray());
+        }
+
+        public void PrepareData()
+        {
+            string url = "https://github.com/le-scientifique/torchDatasets/raw/master/dbpedia_csv.tar.gz";
+            Web.Download(url, dataDir, dataFileName);
+            Compress.ExtractTGZ(Path.Join(dataDir, dataFileName), dataDir);
         }
     }
 }

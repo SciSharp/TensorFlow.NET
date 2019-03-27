@@ -251,7 +251,7 @@ namespace Tensorflow
         {
             return export_meta_graph(
                 filename: filename,
-                graph_def: ops.get_default_graph()._as_graph_def(add_shapes: true),
+                graph_def: ops.get_default_graph().as_graph_def(add_shapes: true),
                 saver_def: _saver_def,
                 collection_list: collection_list,
                 as_text: as_text,

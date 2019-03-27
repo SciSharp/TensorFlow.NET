@@ -10,7 +10,6 @@ namespace Tensorflow
     /// </summary>
     public class _ElementFetchMapper : _FetchMapper
     {
-        private List<object> _unique_fetches = new List<object>();
         private Func<List<object>, object> _contraction_fn;
 
         public _ElementFetchMapper(object[] fetches, Func<List<object>, object> contraction_fn)
@@ -32,7 +31,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public NDArray build_results(List<object> values)
+        public override NDArray build_results(List<object> values)
         {
             NDArray result = null;
 
@@ -44,17 +43,30 @@ namespace Tensorflow
                     case NDArray value:
                         result = value;
                         break;
+                    case short value:
+                        result = value;
+                        break;
+                    case int value:
+                        result = value;
+                        break;
+                    case long value:
+                        result = value;
+                        break;
+                    case float value:
+                        result = value;
+                        break;
+                    case double value:
+                        result = value;
+                        break;
+                    case string value:
+                        result = value;
+                        break;
                     default:
                         break;
                 }
             }
 
             return result;
-        }
-
-        public List<object> unique_fetches()
-        {
-            return _unique_fetches;
         }
     }
 }

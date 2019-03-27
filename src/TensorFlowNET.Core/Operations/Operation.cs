@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Collections;
+//using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,8 +103,12 @@ namespace Tensorflow
                 }
             }
 
+            // Dict mapping op name to file and line information for op colocation
+            // context managers.
+            _control_flow_context = graph._get_control_flow_context();
+
             // This will be set by self.inputs.
-            if(op_def == null)
+            if (op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
 
             var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
@@ -185,7 +190,10 @@ namespace Tensorflow
             if (oneof_value == "type")
                 return x.Type;
 
-            return x.GetType().GetProperty(oneof_value).GetValue(x);
+            object result = x.GetType().GetProperty(oneof_value).GetValue(x);
+            if (result is Google.Protobuf.ByteString byteString)
+                return byteString.ToStringUtf8();
+            return result;
         }
 
         public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)

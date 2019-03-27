@@ -11,9 +11,9 @@ namespace Tensorflow.Operations.Initializers
         private int? seed;
         private TF_DataType dtype;
 
-        public TruncatedNormal(float mean = 0.0f, 
-            float stddev = 1.0f, 
-            int? seed = null, 
+        public TruncatedNormal(float mean = 0.0f,
+            float stddev = 1.0f,
+            int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
             this.mean = mean;
@@ -24,7 +24,7 @@ namespace Tensorflow.Operations.Initializers
 
         public Tensor call(TensorShape shape, TF_DataType dtype)
         {
-            throw new NotImplementedException("");
+            return random_ops.truncated_normal(shape, mean, stddev, dtype : dtype, seed: seed);
         }
 
         public object get_config()

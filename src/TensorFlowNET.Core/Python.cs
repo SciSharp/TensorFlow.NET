@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
@@ -14,6 +15,11 @@ namespace Tensorflow
         protected void print(object obj)
         {
             Console.WriteLine(obj.ToString());
+        }
+
+        protected IEnumerable<int> range(int end)
+        {
+            return Enumerable.Range(0, end);
         }
 
         public static T New<T>(object args) where T : IPyClass
@@ -118,14 +124,6 @@ namespace Tensorflow
             {
                 object obj = propertyDescriptor.GetValue(dyn);
                 string name = propertyDescriptor.Name;
-                // avoid .net keyword
-                switch (name)
-                {
-                    case "_ref_":
-                        name = "ref";
-                        break;
-                }
-
                 dictionary.Add(name, obj);
             }
             return dictionary;

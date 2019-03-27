@@ -81,7 +81,7 @@ namespace TensorFlowNET.UnitTest
 
                 Assert.AreEqual(result.shape[0], 2);
                 Assert.AreEqual(result.shape[1], 3);
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 2, 1, 1, 1, 3 }, data));
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 1, 1, 2, 1, 3 }, data));
             });
         }
 

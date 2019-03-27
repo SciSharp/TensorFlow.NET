@@ -52,7 +52,7 @@ namespace Tensorflow
             bool use_locking = true,
             string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { _ref_ = tensor, value, validate_shape, use_locking });
+            var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref = tensor, value, validate_shape, use_locking });
 
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
@@ -65,6 +65,16 @@ namespace Tensorflow
             _execute.record_gradient("Assign", _inputs_flat, _attrs, _result, name);
 
             return _result[0];
+        }
+
+        public static Tensor assign_sub(RefVariable @ref,
+            Tensor value,
+            bool use_locking = false,
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("AssignSub", name: name, args: new { @ref, value, use_locking });
+
+            return _op.outputs[0];
         }
     }
 }

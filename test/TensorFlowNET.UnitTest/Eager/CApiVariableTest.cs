@@ -17,7 +17,7 @@ namespace TensorFlowNET.UnitTest.Eager
         ContextOptions opts = new ContextOptions();
         Context ctx;
 
-        [TestMethod]
+        //[TestMethod]
         public void Variables()
         {
             ctx = new Context(opts, status);

@@ -4,23 +4,26 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
-    <Version>0.4.2</Version>
+    <Version>0.6.0</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Copyright>Apache 2.0</Copyright>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/SciSharp</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
-    <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET</PackageTags>
+    <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.4.2.0</AssemblyVersion>
-    <PackageReleaseNotes>Added ConfigProto to control CPU and GPU resource.
-Fixed import name scope issue.</PackageReleaseNotes>
+    <AssemblyVersion>0.6.0.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.5:
+Added K-means Clustering.
+Added Nearest Neighbor.
+Added a lot of APIs to build neural networks model.
+Bug fix.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.4.2.0</FileVersion>
+    <FileVersion>0.6.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -44,15 +47,17 @@ Fixed import name scope issue.</PackageReleaseNotes>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.7.0" />
-    <PackageReference Include="NumSharp" Version="0.7.4" />
+    <PackageReference Include="NumSharp" Version="0.8.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content CopyToOutputDirectory="PreserveNewest" Include="./runtimes/win-x64/native/tensorflow.dll" Link="tensorflow.dll" Pack="true" PackagePath="runtimes/win-x64/native/tensorflow.dll" />
+    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/win-x64/native/tensorflow.dll" Link="tensorflow.dll" Pack="true" PackagePath="../../tensorflowlib/runtimes/win-x64/native/tensorflow.dll" />
+    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow.so" Link="libtensorflow.so" Pack="true" PackagePath="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow.so" />
+    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow_framework.so" Link="libtensorflow_framework.so" Pack="true" PackagePath="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow_framework.so" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
+    <Folder Include="Keras\Initializers\" />
   </ItemGroup>
 
 </Project>

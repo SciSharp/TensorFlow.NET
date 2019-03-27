@@ -186,9 +186,10 @@ namespace Tensorflow
             var result = new NDArray[fetch_list.Length];
 
             for (int i = 0; i < fetch_list.Length; i++)
-            {
                 result[i] = fetchValue(output_values[i]);
-            }
+
+            for (int i = 0; i < feed_dict.Length; i++)
+                feed_dict[i].Value.Dispose();
 
             return result;
         }
@@ -221,6 +222,12 @@ namespace Tensorflow
                     for (ulong i = 0; i < tensor.size; i++)
                         ints[i] = *(int*)(offset + (int)(tensor.itemsize * i));
                     nd = np.array(ints).reshape(ndims);
+                    break;
+                case TF_DataType.TF_INT64:
+                    var longs = new long[tensor.size];
+                    for (ulong i = 0; i < tensor.size; i++)
+                        longs[i] = *(long*)(offset + (int)(tensor.itemsize * i));
+                    nd = np.array(longs).reshape(ndims);
                     break;
                 case TF_DataType.TF_FLOAT:
                     var floats = new float[tensor.size];

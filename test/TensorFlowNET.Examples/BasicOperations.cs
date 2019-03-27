@@ -10,11 +10,15 @@ namespace TensorFlowNET.Examples
     /// Basic Operations example using TensorFlow library.
     /// https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/1_Introduction/basic_operations.py
     /// </summary>
-    public class BasicOperations : IExample
+    public class BasicOperations : Python, IExample
     {
+        public bool Enabled => true;
+        public int Priority => 2;
+        public string Name => "Basic Operations";
+
         private Session sess;
 
-        public void Run()
+        public bool Run()
         {
             // Basic constant operations
             // The value returned by the constructor represents the output
@@ -86,15 +90,16 @@ namespace TensorFlowNET.Examples
             // graph: the two constants and matmul.
             //
             // The output of the op is returned in 'result' as a numpy `ndarray` object.
-            using (sess = tf.Session())
+            return with(tf.Session(), sess =>
             {
                 var result = sess.run(product);
                 Console.WriteLine(result.ToString()); // ==> [[ 12.]]
-                if (result.Data<int>()[0] != 12)
-                {
-                    throw new ValueError("BasicOperations");
-                }
-            }
+                return result.Data<int>()[0] == 12;
+            });
+        }
+
+        public void PrepareData()
+        {
         }
     }
 }

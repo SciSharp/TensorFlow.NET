@@ -46,7 +46,7 @@ namespace Tensorflow
             });
         }
 
-        public static (Tensor, Tensor, Tensor) fused_batch_norm(Tensor x, 
+        public static Tensor[] fused_batch_norm(Tensor x, 
             RefVariable scale,
             RefVariable offset,
             Tensor mean,

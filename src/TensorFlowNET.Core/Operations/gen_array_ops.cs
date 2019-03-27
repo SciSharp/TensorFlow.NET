@@ -27,16 +27,9 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
+        public static Tensor pack(Tensor[] values, int axis = 0, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
-
-            return _op.outputs[0];
-        }
-
-        public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
-        {
-            var _op = _op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
+            var _op = _op_def_lib._apply_op_helper("Pack", name: name, args: new { values, axis });
 
             return _op.outputs[0];
         }
@@ -64,6 +57,13 @@ namespace Tensorflow
         public static Tensor identity(Tensor input, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Identity", name, new { input });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor invert_permutation(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("InvertPermutation", name, new { x });
 
             return _op.outputs[0];
         }
@@ -110,7 +110,13 @@ namespace Tensorflow
             return (_op.outputs[0], _op.outputs[1]);
         }
 
-        public static Tensor reshape(Tensor tensor, Tensor shape, string name = null)
+        public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
+            return _op.outputs[0];
+        }
+
+        public static Tensor reshape(Tensor tensor, int[] shape, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
             return _op.outputs[0];
@@ -119,6 +125,17 @@ namespace Tensorflow
         public static Tensor where()
         {
             throw new NotImplementedException("where");
+        }
+
+        public static Tensor one_hot(Tensor indices, int depth,
+            Tensor on_value = null,
+            Tensor off_value = null,
+            TF_DataType dtype = TF_DataType.DtInvalid, 
+            int axis = -1,
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("OneHot", name, new { indices, depth, on_value, off_value, axis });
+            return _op.outputs[0];
         }
 
         /// <summary>
@@ -137,6 +154,12 @@ namespace Tensorflow
         public static Tensor select(Tensor condition, Tensor t, Tensor e, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Select", name, new { condition, t, e });
+            return _op.outputs[0];
+        }
+
+        public static Tensor scatter_nd(Tensor indices, Tensor updates, Tensor[] shape, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ScatterNd", name, new { indices, updates, shape });
             return _op.outputs[0];
         }
 
@@ -163,7 +186,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor transpose(Tensor x, int[] perm, string name = null)
+        public static Tensor transpose<T1, T2>(T1 x, T2 perm, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Transpose", name, new { x, perm });
             return _op.outputs[0];
@@ -174,12 +197,44 @@ namespace Tensorflow
             var _op = _op_def_lib._apply_op_helper("ZerosLike", name, new { x });
             return _op.outputs[0];
         }
+
         public static Tensor stop_gradient(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("StopGradient", name, args: new { input = x, name });
 
             return _op.outputs[0];
         }
+
+        public static Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides,
+            int begin_mask = 0,
+            int end_mask = 0,
+            int ellipsis_mask = 0,
+            int new_axis_mask = 0,
+            int shrink_axis_mask = 0,
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StridedSlice", name, new
+            {
+                input,
+                begin,
+                end,
+                strides,
+                begin_mask,
+                end_mask,
+                ellipsis_mask,
+                new_axis_mask,
+                shrink_axis_mask
+            });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Slice", name, new { input, begin, size });
+            return _op.outputs[0];
+        }
+
         /// <summary>
         /// Removes dimensions of size 1 from the shape of a tensor.
         /// Given a tensor `input`, this operation returns a tensor of the same type with

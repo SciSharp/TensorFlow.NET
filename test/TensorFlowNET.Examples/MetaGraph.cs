@@ -9,9 +9,14 @@ namespace TensorFlowNET.Examples
 {
     public class MetaGraph : Python, IExample
     {
-        public void Run()
+        public int Priority => 100;
+        public bool Enabled => false;
+        public string Name => "Meta Graph";
+
+        public bool Run()
         {
             ImportMetaGraph("my-save-dir/");
+            return false;
         }
 
         private void ImportMetaGraph(string dir)
@@ -26,6 +31,10 @@ namespace TensorFlowNET.Examples
                 var loss = tf.losses.sparse_softmax_cross_entropy(labels: labels,
                                                 logits: logits);
             });
+        }
+
+        public void PrepareData()
+        {
         }
     }
 }

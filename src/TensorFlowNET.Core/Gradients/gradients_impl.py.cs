@@ -131,12 +131,23 @@ namespace Tensorflow
                             // for ops that do not have gradients.
                             var grad_fn = ops.get_gradient_function(op);
 
+                            foreach(var (i, out_grad) in enumerate(out_grads))
+                            {
+                                if(out_grad == null)
+                                {
+                                    if (loop_state != null)
+                                        ;
+                                    else
+                                        out_grads[i] = control_flow_ops.ZerosLikeOutsideLoop(op, i);
+                                }
+                            }
+
                             with(ops.name_scope(op.name + "_grad"), scope1 =>
                             {
                                 string name1 = scope1;
                                 if (grad_fn != null)
                                 {
-                                    in_grads = _MaybeCompile(grad_scope, op, out_grads[0], null, grad_fn);
+                                    in_grads = _MaybeCompile(grad_scope, op, out_grads, null, grad_fn);
                                     _VerifyGeneratedGradients(in_grads, op);
                                 }
 
@@ -226,7 +237,7 @@ namespace Tensorflow
                     $"inputs {op.inputs._inputs.Count()}");
         }
 
-        private static Tensor[] _MaybeCompile(string scope, Operation op, Tensor out_grads, Action func, Func<Operation, Tensor, Tensor[]> grad_fn)
+        private static Tensor[] _MaybeCompile(string scope, Operation op, Tensor[] out_grads, Action func, Func<Operation, Tensor[], Tensor[]> grad_fn)
         {
             scope = scope.EndsWith("/") ? scope.Substring(0, scope.Length - 1) : scope;
             return grad_fn(op, out_grads);
@@ -240,28 +251,27 @@ namespace Tensorflow
         private static Tensor[] _AggregatedGrads(Dictionary<string, Tensor[][]> grads, Operation op, string gradient_uid, object loop_state, int aggregation_method = 0)
         {
             var out_grads = _GetGrads(grads, op);
-            for(int i = 0; i < out_grads.Length; i++)
+            var return_grads = new Tensor[out_grads.Length];
+
+            foreach(var (i, out_grad) in enumerate(out_grads))
             {
-                var out_grad = out_grads[i];
-                if(loop_state != null)
+                if (loop_state != null)
                 {
 
                 }
 
-                // Grads have to be Tensors or IndexedSlices
-
                 // Aggregate multiple gradients, and convert [] to None.
-                if(out_grad != null)
+                if (out_grad != null)
                 {
-                    if(out_grad.Length < 2)
+                    if (out_grad.Length < 2)
                     {
                         string used = "nop";
-                        return new Tensor[] { out_grad[0] };
+                        return_grads[i] = out_grad[0];
                     }
                 }
             }
 
-            return null;
+            return return_grads;
         }
 
         /// <summary>

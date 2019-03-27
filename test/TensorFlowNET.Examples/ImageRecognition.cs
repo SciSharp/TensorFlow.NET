@@ -12,12 +12,16 @@ namespace TensorFlowNET.Examples
 {
     public class ImageRecognition : Python, IExample
     {
+        public int Priority => 6;
+        public bool Enabled => true;
+        public string Name => "Image Recognition";
+
         string dir = "ImageRecognition";
         string pbFile = "tensorflow_inception_graph.pb";
         string labelFile = "imagenet_comp_graph_label_strings.txt";
         string picFile = "grace_hopper.jpg";
 
-        public void Run()
+        public bool Run()
         {
             PrepareData();
 
@@ -54,7 +58,10 @@ namespace TensorFlowNET.Examples
                 });
 
                 Console.WriteLine($"{picFile}: {labels[idx]} {propability}");
+                return labels[idx].Equals("military uniform");
             }
+
+            return false;
         }
 
         private NDArray ReadTensorFromImageFile(string file_name,
@@ -78,7 +85,7 @@ namespace TensorFlowNET.Examples
             });
         }
 
-        private void PrepareData()
+        public void PrepareData()
         {
             Directory.CreateDirectory(dir);
 

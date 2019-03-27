@@ -29,5 +29,15 @@ namespace Tensorflow.Framework
         {
             throw new NotFiniteNumberException();
         }
+
+        public static int? rank(Tensor tensor)
+        {
+            return tensor.rank;
+        }
+
+        public static bool has_fully_defined_shape(Tensor tensor)
+        {
+            return tensor.getShape().is_fully_defined();
+        }
     }
 }

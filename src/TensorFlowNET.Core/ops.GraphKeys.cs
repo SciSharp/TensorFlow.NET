@@ -47,6 +47,10 @@ namespace Tensorflow
 
             // Used to store v2 summary names.
             public static string _SUMMARY_COLLECTION = "_SUMMARY_V2";
+
+            // Key for control flow context.
+            public static string COND_CONTEXT = "cond_context";
+            public static string WHILE_CONTEXT = "while_context";
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Tensorflow
         public static Tensor operator -(Tensor x, Tensor y) => BinaryOpWrapper("sub", x, y);
         public static Tensor operator -(Tensor x, int y) => BinaryOpWrapper("sub", x, y);
         public static Tensor operator -(Tensor x, double y) => BinaryOpWrapper("sub", x, y);
+        public static Tensor operator -(float x, Tensor y) => BinaryOpWrapper("Sub", x, y);
 
         public static Tensor operator *(float x, Tensor y) => BinaryOpWrapper("mul", x, y);
         public static Tensor operator *(double x, Tensor y) => BinaryOpWrapper("mul", x, y);
@@ -26,12 +27,12 @@ namespace Tensorflow
 
         public static Tensor operator %(Tensor x, Tensor y) => BinaryOpWrapper("mod", x, y);
 
-        public static Tensor operator >(Tensor x, int y) => gen_array_ops.greater(x, y);
-        public static Tensor operator >(Tensor x, float y) => gen_array_ops.greater(x, y);
-        public static Tensor operator >(Tensor x, double y) => gen_array_ops.greater(x, y);
-        public static Tensor operator <(Tensor x, int y) => gen_array_ops.less(x, y);
-        public static Tensor operator <(Tensor x, float y) => gen_array_ops.less(x, y);
-        public static Tensor operator <(Tensor x, double y) => gen_array_ops.less(x, y);
+        public static Tensor operator >(Tensor x, int y) => gen_math_ops.greater(x, y);
+        public static Tensor operator >(Tensor x, float y) => gen_math_ops.greater(x, y);
+        public static Tensor operator >(Tensor x, double y) => gen_math_ops.greater(x, y);
+        public static Tensor operator <(Tensor x, int y) => gen_math_ops.less(x, y);
+        public static Tensor operator <(Tensor x, float y) => gen_math_ops.less(x, y);
+        public static Tensor operator <(Tensor x, double y) => gen_math_ops.less(x, y);
 
         private static Tensor BinaryOpWrapper<Tx, Ty>(string name, Tx x, Ty y)
         {
@@ -48,7 +49,7 @@ namespace Tensorflow
                 var x1 = ops.convert_to_tensor(x, dtype: dtype, name: "x");
                 var y1 = ops.convert_to_tensor(y, dtype: dtype, name: "y");
 
-                switch (name)
+                switch (name.ToLower())
                 {
                     case "add":
                         result = gen_math_ops.add(x1, y1, name: scope);

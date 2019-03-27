@@ -10,6 +10,25 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public interface IExample
     {
-        void Run();
+        /// <summary>
+        /// running order
+        /// </summary>
+        int Priority { get; }
+        /// <summary>
+        /// True to run example
+        /// </summary>
+        bool Enabled { get; }
+
+        string Name { get; }
+
+        /// <summary>
+        /// Build dataflow graph, train and predict
+        /// </summary>
+        /// <returns></returns>
+        bool Run();
+        /// <summary>
+        /// Prepare dataset
+        /// </summary>
+        void PrepareData();
     }
 }
