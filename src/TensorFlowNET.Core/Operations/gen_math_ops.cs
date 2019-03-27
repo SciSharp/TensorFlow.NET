@@ -135,6 +135,27 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor less_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LessEqual", name: name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor log1p(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Log1p", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor squared_difference(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("SquaredDifference", name, args: new { x, y, name });
@@ -308,6 +329,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Minimum", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor _abs(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Abs", name, new { x });
@@ -318,6 +346,13 @@ namespace Tensorflow
         public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims=false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Min", name, new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }

@@ -106,6 +106,39 @@ namespace Tensorflow
             => gen_math_ops.greater_equal(x, y, name);
 
         /// <summary>
+        /// Returns the truth value of (x < y) element-wise.
+        /// </summary>
+        /// <typeparam name="Tx"></typeparam>
+        /// <typeparam name="Ty"></typeparam>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.less(x, y, name);
+
+        /// <summary>
+        /// Returns the truth value of (x <= y) element-wise.
+        /// </summary>
+        /// <typeparam name="Tx"></typeparam>
+        /// <typeparam name="Ty"></typeparam>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor less_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.less_equal(x, y, name);
+
+        /// <summary>
+        /// Computes natural logarithm of (1 + x) element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor log1p(Tensor x, string name = null)
+            => gen_math_ops.log1p(x, name);
+
+        /// <summary>
         /// Clips tensor values to a specified min and max.
         /// </summary>
         /// <param name="t"></param>
@@ -140,6 +173,56 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor atan2(Tensor y, Tensor x, string name = null)
             => gen_math_ops.atan2(y, x, name);
+
+        /// <summary>
+        /// Computes the maximum of elements across dimensions of a tensor.
+        /// </summary>
+        /// <typeparam name="Tx"></typeparam>
+        /// <typeparam name="Ty"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="axis"></param>
+        /// <param name="keep_dims"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+            => gen_math_ops._max(input, axis, keep_dims: keep_dims, name: name);
+
+        /// <summary>
+        /// Computes the minimum of elements across dimensions of a tensor.
+        /// </summary>
+        /// <typeparam name="Tx"></typeparam>
+        /// <typeparam name="Ty"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="axis"></param>
+        /// <param name="keep_dims"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+            => gen_math_ops._min(input, axis, keep_dims: keep_dims, name: name);
+
+        /// <summary>
+        /// Returns the max of x and y (i.e. x > y ? x : y) element-wise.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor maximum<T1, T2>(T1 x, T2 y, string name = null)
+            => gen_math_ops.maximum(x, y, name: name);
+
+        /// <summary>
+        /// Returns the min of x and y (i.e. x < y ? x : y) element-wise.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
+            => gen_math_ops.minimum(x, y, name: name);
 
         public static Tensor multiply(Tensor x, Tensor y) 
             => gen_math_ops.mul(x, y);

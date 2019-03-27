@@ -26,13 +26,6 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
-        {
-            var _op = _op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
-
-            return _op.outputs[0];
-        }
-
         public static Tensor pack(Tensor[] values, int axis = 0, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Pack", name: name, args: new { values, axis });
