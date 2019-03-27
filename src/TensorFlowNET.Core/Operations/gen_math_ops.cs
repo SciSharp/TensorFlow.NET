@@ -100,9 +100,37 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor cosh(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Cosh", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor floor(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Floor", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("ClipByValue", name, args: new { t, clip_value_min, clip_value_max });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("GreaterEqual", name: name, args: new { x, y });
 
             return _op.outputs[0];
         }

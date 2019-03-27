@@ -64,6 +64,48 @@ namespace Tensorflow
             => gen_math_ops.cos(x, name);
 
         /// <summary>
+        /// Computes hyperbolic cosine of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor cosh(Tensor x, string name = null)
+            => gen_math_ops.cosh(x, name);
+
+        /// <summary>
+        /// Returns element-wise largest integer not greater than x.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor floor(Tensor x, string name = null)
+            => gen_math_ops.floor(x, name);
+
+        /// <summary>
+        /// Returns the truth value of (x > y) element-wise.
+        /// </summary>
+        /// <typeparam name="Tx"></typeparam>
+        /// <typeparam name="Ty"></typeparam>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.greater(x, y, name);
+
+        /// <summary>
+        /// Returns the truth value of (x >= y) element-wise.
+        /// </summary>
+        /// <typeparam name="Tx"></typeparam>
+        /// <typeparam name="Ty"></typeparam>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.greater_equal(x, y, name);
+
+        /// <summary>
         /// Clips tensor values to a specified min and max.
         /// </summary>
         /// <param name="t"></param>
