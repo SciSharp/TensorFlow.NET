@@ -224,7 +224,10 @@ namespace Tensorflow
 
         /// <summary>
         ///   When building ops to compute gradients, this op prevents the contribution of
-        ///   its inputs to be taken into account.Normally, the gradient generator adds ops        ///   to a graph to compute the derivatives of a specified 'loss' by recursively        ///   finding out inputs that contributed to its computation.If you insert this op        ///   in the graph it inputs are masked from the gradient generator.  They are not
+        ///   its inputs to be taken into account.Normally, the gradient generator adds ops
+        ///   to a graph to compute the derivatives of a specified 'loss' by recursively
+        ///   finding out inputs that contributed to its computation.If you insert this op
+        ///   in the graph it inputs are masked from the gradient generator.  They are not
         ///   taken into account for computing gradients.
         /// </summary>
         /// <param name="input"></param>

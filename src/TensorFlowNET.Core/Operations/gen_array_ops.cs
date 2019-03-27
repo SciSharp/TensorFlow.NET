@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -152,6 +153,11 @@ namespace Tensorflow
         }
 
         public static Tensor tile(Tensor input, Tensor multiples, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Tile", name, new { input, multiples });
+            return _op.outputs[0];
+        }
+        public static Tensor tile(NDArray input, int[] multiples, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Tile", name, new { input, multiples });
             return _op.outputs[0];

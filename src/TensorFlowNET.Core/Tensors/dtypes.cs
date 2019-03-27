@@ -47,7 +47,7 @@ namespace Tensorflow
                     dtype = TF_DataType.TF_STRING;
                     break;
                 default:
-                    throw new Exception("Not Implemented");
+                    throw new Exception("as_dtype Not Implemented");
             }
 
             return dtype;
