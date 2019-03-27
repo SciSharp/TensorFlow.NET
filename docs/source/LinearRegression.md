@@ -8,6 +8,8 @@ Consider the case of a single variable of interest y and a single predictor vari
 
 We have some data $D=\{x{\tiny i},y{\tiny i}\}$ and we assume a simple linear model of this dataset with Gaussian noise:
 
+线性回归是一种线性建模方法，这种方法用来描述自变量与一个或多个因变量的之间的关系。在只有一个因变量y和一个自变量的情况下。自变量还有以下几种叫法：协变量，输入，特征；因变量通常被叫做响应变量，输出，输出结果。
+假如我们有数据$D=\{x{\tiny i},y{\tiny i}\}$，并且假设这个数据集是满足高斯分布的线性模型：
 ```csharp
 // Prepare training Data
 var train_X = np.array(3.3f, 4.4f, 5.5f, 6.71f, 6.93f, 4.168f, 9.779f, 6.182f, 7.59f, 2.167f, 7.042f, 10.791f, 5.313f, 7.997f, 5.654f, 9.27f, 3.1f);
@@ -17,6 +19,8 @@ var n_samples = train_X.shape[0];
 ![regression dataset](_static/regression-dataset.png)
 
 Based on the given data points, we try to plot a line that models the points the best. The red line can be modelled based on the linear equation: $y = wx + b$. The motive of the linear regression algorithm is to find the best values for $w$ and $b$. Before moving on to the algorithm, le's have a look at two important concepts you must know to better understand linear regression.
+
+按照上图根据数据描述的数据点，在这些数据点之间画出一条线，这条线能达到最好模拟点的分布的效果。红色的线能够通过下面呢线性等式来描述：$y = wx + b$。线性回归算法的目标就是找到这条线对应的最好的参数$w$和$b$。在介绍线性回归算法之前，我们先看两个重要的概念，这两个概念有助于你理解线性回归算法。
 
 ### Cost Function
 
