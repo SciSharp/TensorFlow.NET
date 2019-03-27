@@ -8,7 +8,8 @@ Consider the case of a single variable of interest y and a single predictor vari
 
 We have some data $D=\{x{\tiny i},y{\tiny i}\}$ and we assume a simple linear model of this dataset with Gaussian noise:
 
-线性回归是一种线性建模方法，这种方法用来描述自变量与一个或多个因变量的之间的关系。在只有一个因变量y和一个自变量的情况下。自变量还有以下几种叫法：协变量，输入，特征；因变量通常被叫做响应变量，输出，输出结果。
+线性回归是一种线性建模方法，这种方法用来描述自变量与一个或多个因变量的之间的关系。在只有一个因变量y和一个自变量的情况下。自变量还有以下几种叫法：
+协变量，输入，特征；因变量通常被叫做响应变量，输出，输出结果。
 假如我们有数据$D=\{x{\tiny i},y{\tiny i}\}$，并且假设这个数据集是满足高斯分布的线性模型：
 ```csharp
 // Prepare training Data
@@ -20,12 +21,15 @@ var n_samples = train_X.shape[0];
 
 Based on the given data points, we try to plot a line that models the points the best. The red line can be modelled based on the linear equation: $y = wx + b$. The motive of the linear regression algorithm is to find the best values for $w$ and $b$. Before moving on to the algorithm, le's have a look at two important concepts you must know to better understand linear regression.
 
-按照上图根据数据描述的数据点，在这些数据点之间画出一条线，这条线能达到最好模拟点的分布的效果。红色的线能够通过下面呢线性等式来描述：$y = wx + b$。线性回归算法的目标就是找到这条线对应的最好的参数$w$和$b$。在介绍线性回归算法之前，我们先看两个重要的概念，这两个概念有助于你理解线性回归算法。
+按照上图根据数据描述的数据点，在这些数据点之间画出一条线，这条线能达到最好模拟点的分布的效果。红色的线能够通过下面呢线性等式来描述：$y = wx + b$。
+线性回归算法的目标就是找到这条线对应的最好的参数$w$和$b$。在介绍线性回归算法之前，我们先看两个重要的概念，这两个概念有助于你理解线性回归算法。
 
 ### Cost Function
 
 The cost function helps us to figure out the best possible values for $w$ and $b$ which would provide the best fit line for the data points. Since we want the best values for $w$ and $b$, we convert this search problem into a minimization problem where we would like to minimize the error between the predicted value and the actual value.
-损失函数帮助我们估算出最优的参数$w$和$b$，这个最优的参数能够最好的拟合数据点的分布。由于我们想找到最优的参数$w$和$b$，因此我们把这个问题转化成求预测参数与实际参数之差的最小值问题。
+
+损失函数帮助我们估算出最优的参数$w$和$b$，这个最优的参数能够最好的拟合数据点的分布。由于我们想找到最优的参数$w$和$b$，因此我们把这个问题转化成求
+预测参数与实际参数之差的最小值问题。
 
 ![minimize-square-cost](_static/minimize-square-cost.png)
 
@@ -35,6 +39,7 @@ function we are going to change the values of $w$ and $b$ such that the MSE valu
 
 我们选择最小化上面的函数。预测值和真实值之间的差异的大小衡量了预测结果的偏差。我们用所有点的偏差的平方和除以所有点所有点的数量大小来表示说有点的平均
 的误差大小。因此，损失函数又叫均方误差（简称MSE）。到此，我们可以通过调整参数$w$和$b$来使MSE达到最小值。
+
 ```csharp
 // tf Graph Input
 var X = tf.placeholder(tf.float32);
