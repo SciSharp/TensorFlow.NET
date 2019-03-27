@@ -229,6 +229,7 @@ namespace Tensorflow
             switch (nparray.dtype.Name)
             {
                 case "Bool":
+                case "Boolean":
                     tensor_proto.BoolVal.AddRange(proto_values.Data<bool>());
                     break;
                 case "Int32":

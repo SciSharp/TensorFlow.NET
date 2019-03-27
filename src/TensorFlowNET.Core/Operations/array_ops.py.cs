@@ -161,6 +161,18 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor ones(Tensor[] shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        {
+            dtype = dtype.as_base_dtype();
+            return with(ops.name_scope(name, "ones", new { shape }), scope =>
+            {
+                name = scope;
+                var shape1 = ops.convert_to_tensor(shape, dtype: TF_DataType.TF_INT32);
+                var output = gen_array_ops.fill(shape1, constant_op.constant(1, dtype: dtype), name: name);
+                return output;
+            });
+        }
+
         public static Tensor ones(int[] dims, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();

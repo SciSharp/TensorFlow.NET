@@ -156,6 +156,7 @@ namespace Tensorflow
             {
                 return new RefVariable(initial_value, 
                     trainable: trainable.Value,
+                    validate_shape: validate_shape,
                     name: name,
                     dtype: dtype);
             }
