@@ -30,6 +30,15 @@ namespace Tensorflow
         public static Tensor add(Tensor a, Tensor b) 
             => gen_math_ops.add(a, b);
 
+        /// <summary>
+        /// Computes atan of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor atan(Tensor x, string name = null)
+            => gen_math_ops.atan(x, name);
+
         public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
             => gen_math_ops.arg_max(input, dimension, output_type: output_type, name: name);
 
