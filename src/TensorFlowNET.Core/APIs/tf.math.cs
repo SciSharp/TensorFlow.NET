@@ -45,6 +45,35 @@ namespace Tensorflow
         public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
             => gen_math_ops.arg_min(input, dimension, output_type: output_type, name: name);
 
+        /// <summary>
+        /// Returns element-wise smallest integer not less than x.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor ceil(Tensor x, string name = null)
+            => gen_math_ops.ceil(x, name);
+
+        /// <summary>
+        /// Computes cos of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor cos(Tensor x, string name = null)
+            => gen_math_ops.cos(x, name);
+
+        /// <summary>
+        /// Clips tensor values to a specified min and max.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="clip_value_min"></param>
+        /// <param name="clip_value_max"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
+            => gen_math_ops._clip_by_value(t, clip_value_min, clip_value_max);
+
         public static Tensor sub(Tensor a, Tensor b) 
             => gen_math_ops.sub(a, b);
 

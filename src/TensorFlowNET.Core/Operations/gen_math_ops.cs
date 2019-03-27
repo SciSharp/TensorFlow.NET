@@ -86,6 +86,27 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor ceil(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Ceil", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor cos(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Cos", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ClipByValue", name, args: new { t, clip_value_min, clip_value_max });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor squared_difference(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("SquaredDifference", name, args: new { x, y, name });
