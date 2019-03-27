@@ -13,7 +13,7 @@ namespace TensorFlowNET.Examples
     public class NaiveBayesClassifier : Python, IExample
     {
         public int Priority => 100;
-        public bool Enabled => false;
+        public bool Enabled => true;
         public string Name => "Naive Bayes Classifier";
 
         public Normal dist { get; set; }
@@ -89,6 +89,8 @@ namespace TensorFlowNET.Examples
             var samples = np.vstack(xx.ravel(), yy.ravel());
             var Z = s.run(predict(samples));
 
+
+            return true;
         }
 
         public void fit(NDArray X, NDArray y)
