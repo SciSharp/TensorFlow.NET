@@ -25,6 +25,7 @@ Based on the given data points, we try to plot a line that models the points the
 ### Cost Function
 
 The cost function helps us to figure out the best possible values for $w$ and $b$ which would provide the best fit line for the data points. Since we want the best values for $w$ and $b$, we convert this search problem into a minimization problem where we would like to minimize the error between the predicted value and the actual value.
+损失函数帮助我们估算出最优的参数$w$和$b$，这个最优的参数能够最好的拟合数据点的分布。由于我们想找到最优的参数$w$和$b$，因此我们把这个问题转化成求预测参数与实际参数之差的最小值问题。
 
 ![minimize-square-cost](_static/minimize-square-cost.png)
 
@@ -32,6 +33,8 @@ We choose the above function to minimize. The difference between the predicted v
 value by the total number of data points. This provides the average squared error over all the data points. Therefore, this cost function is also known as the Mean Squared Error(MSE) function. Now, using this MSE
 function we are going to change the values of $w$ and $b$ such that the MSE value settles at the minima.
 
+我们选择最小化上面的函数。预测值和真实值之间的差异的大小衡量了预测结果的偏差。我们用所有点的偏差的平方和除以所有点所有点的数量大小来表示说有点的平均
+的误差大小。因此，损失函数又叫均方误差（简称MSE）。到此，我们可以通过调整参数$w$和$b$来使MSE达到最小值。
 ```csharp
 // tf Graph Input
 var X = tf.placeholder(tf.float32);
@@ -49,8 +52,13 @@ var cost = tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * n_samples);
 ```
 
 ### Gradient Descent
+### 梯度下降法
 
 The another important concept needed to understand is gradient descent. Gradient descent is a method of updating $w$ and $b$ to minimize the cost function. The idea is that we start with some random values for $w$ and $b$ and then we change these values iteratively to reduce the cost. Gradient descent helps us on how to update the values or which direction we would go next. Gradient descent is also know as **steepest descent**.
+
+另一个需要理解的重要概念是梯度下降法。梯度下降法是通过更新参数$w$和$b$来最小化损失函数。梯度下降法的思想就是首先以任意的参数$w$和$b$开始计算损失
+函数，然后通过递归的方式不断地变化参数来减小损失。梯度下降法帮助我们如何更新参数，或者说告诉我们下一个参数该如何设置。梯度下降法也称为“最快下降法”。
+
 
 ![gradient-descent](_static/gradient-descent.png)
 
@@ -58,6 +66,11 @@ To draw an analogy, imagine a pit in the shape of U and you are standing at the 
 of steps to reach the bottom. If you decide to take one step at a time you would eventually reach the bottom of the pit but this would take a longer time. If you choose to take longer steps each time, you would 
 reach sooner but, there is a chance that you could overshoot the bottom of the pit and not exactly at the bottom. In the gradient descent algorithm, the number of steps you take is the learning rate. This 
 decides on how fast the algorithm converges to the minima.
+
+这里做一个类比，想象着你站在一个U形坑的最上面，你的目标是达到坑的最低端。有一个条件是，你不确定你走多少步能到达底端。如果你选择一步一步的走到坑的
+底端，这样可能需要的时间很长。如果你每次大步的往前走，你可能很快到达坑的底端，但是你有可能错过坑的最底端。在梯度下降算法中，你所采用的步数就是训练
+速率。训练速率决定了算法以多块的速度使得损失函数达到最小值。
+
 
 ```csharp
 // Gradient descent
