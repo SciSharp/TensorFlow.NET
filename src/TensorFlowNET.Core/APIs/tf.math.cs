@@ -9,6 +9,15 @@ namespace Tensorflow
         public static Tensor abs(Tensor x, string name = null)
             => math_ops.abs(x, name);
 
+        /// <summary>
+        /// Computes acos of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor acos(Tensor x, string name = null)
+            => gen_math_ops.acos(x, name);
+
         public static Tensor add(Tensor a, Tensor b) 
             => gen_math_ops.add(a, b);
 
