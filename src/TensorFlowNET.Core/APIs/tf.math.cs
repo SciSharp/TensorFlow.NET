@@ -18,6 +18,15 @@ namespace Tensorflow
         public static Tensor acos(Tensor x, string name = null)
             => gen_math_ops.acos(x, name);
 
+        /// <summary>
+        /// Computes asin of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor asin(Tensor x, string name = null)
+            => gen_math_ops.asin(x, name);
+
         public static Tensor add(Tensor a, Tensor b) 
             => gen_math_ops.add(a, b);
 
