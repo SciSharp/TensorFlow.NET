@@ -187,6 +187,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor atan2(Tensor y, Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Atan2", name, args: new { y, x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor mul(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Mul", name, args: new { x, y });

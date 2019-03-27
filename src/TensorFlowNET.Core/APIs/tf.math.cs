@@ -60,6 +60,16 @@ namespace Tensorflow
         public static Tensor equal(Tensor x, Tensor y, string name = null)
             => gen_math_ops.equal(x, y, name);
 
+        /// <summary>
+        /// Computes arctangent of `y/x` element-wise, respecting signs of the arguments.
+        /// </summary>
+        /// <param name="y"></param>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor atan2(Tensor y, Tensor x, string name = null)
+            => gen_math_ops.atan2(y, x, name);
+
         public static Tensor multiply(Tensor x, Tensor y) 
             => gen_math_ops.mul(x, y);
 
