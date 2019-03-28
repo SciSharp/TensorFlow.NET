@@ -79,25 +79,32 @@ namespace Tensorflow
             return array_ops.broadcast_static_shape(new Tensor(_loc.shape), new Tensor(_scale.shape));
         }
 
-        private Tensor _log_prob(Tensor x)
+        protected override Tensor _log_prob(Tensor x)
         {
-            return _log_unnormalized_prob(_z(x)) -_log_normalization();
+            var log_prob = _log_unnormalized_prob(_z(x));
+            var log_norm = _log_normalization();
+            return log_prob - log_norm;
         }
 
         private Tensor _log_unnormalized_prob (Tensor x)
         {
             return -0.5 * math_ops.square(_z(x));
         }
-
+        /// <summary>
+        /// Standardize input `x` to a unit normal.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         private Tensor _z (Tensor x)
         {
-            return (x - this._loc) / this._scale;
+            return tf.divide(tf.sub(x, this._loc), this._scale);
         }
 
         private Tensor _log_normalization()
         {
-            Tensor t = new Tensor(Math.Log(2.0 * Math.PI));
-            return 0.5 * t + math_ops.log(scale());
+            Tensor t1 = ops.convert_to_tensor(Math.Log(2.0 * Math.PI), TF_DataType.TF_FLOAT);
+            Tensor t2 = tf.multiply(ops.convert_to_tensor(0.5, TF_DataType.TF_FLOAT), t1);
+            return  tf.add(t2, math_ops.log(this._scale));
         }
     }
 }

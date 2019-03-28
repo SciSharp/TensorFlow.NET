@@ -152,6 +152,9 @@ namespace Tensorflow
         public static Tensor sub(Tensor a, Tensor b) 
             => gen_math_ops.sub(a, b);
 
+        public static Tensor divide(Tensor a, Tensor b)
+            => gen_math_ops.real_div(a, b);
+
         public static Tensor sqrt(Tensor a, string name = null) 
             => gen_math_ops.sqrt(a, name);
 
