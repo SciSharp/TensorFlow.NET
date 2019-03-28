@@ -53,7 +53,17 @@ namespace Tensorflow.Clustering
             var initial_clusters = _initial_clusters;
             var num_clusters = ops.convert_to_tensor(_num_clusters);
             var inputs = _inputs;
-            _create_variables(num_clusters);
+            var vars = _create_variables(num_clusters);
+            var cluster_centers_var = vars[0];
+            var cluster_centers_initialized = vars[1];
+            var total_counts = vars[2];
+            var cluster_centers_updated = vars[3];
+            var update_in_steps = vars[4];
+
+            var init_op = new _InitializeClustersOpFactory(_inputs, num_clusters, initial_clusters, _distance_metric,
+                _random_seed, _kmeans_plus_plus_num_retries,
+                _kmc2_chain_length, cluster_centers_var, cluster_centers_updated,
+                cluster_centers_initialized).op();
 
             throw new NotImplementedException("KMeans training_graph");
         }

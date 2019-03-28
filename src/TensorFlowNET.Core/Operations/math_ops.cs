@@ -37,6 +37,27 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        /// Adds all input tensors element-wise.
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor add_n(Tensor[] inputs, string name = null)
+        {
+            inputs = ops.convert_n_to_tensor_or_indexed_slices(inputs);
+
+            if(inputs.Length == 1)
+            {
+                var values = inputs[0];
+                if (name != null)
+                    return array_ops.identity(values, name: name);
+                return values;
+            }
+            throw new NotImplementedException("math_ops add_n n > 1");
+            // return gen_math_ops.add_n(inputs, name: name);
+        }
+
         public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             var base_type = dtype.as_base_dtype();
@@ -161,7 +182,24 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor reciprocal(Tensor x, string name = null)
             => gen_math_ops.reciprocal(x, name: name);
-        
+
+        /// <summary>
+        /// Computes the "logical and" of elements across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input_tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor reduce_all(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        {
+            var all = gen_math_ops._all(input_tensor,
+                    _ReductionDims(input_tensor, axis),
+                    keepdims,
+                    name: name);
+
+            return _may_reduce_to_scalar(keepdims, axis, all);
+        }
 
         /// <summary>
         /// Computes log(sum(exp(elements across dimensions of a tensor))).

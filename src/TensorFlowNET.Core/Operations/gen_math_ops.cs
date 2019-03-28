@@ -10,6 +10,13 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
+        public static Tensor _all(Tensor input, Tensor axis, bool keep_dims = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("All", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
+
+            return _op.outputs[0];
+        }
+
         /// <summary>
         /// Returns the index with the largest value across dimensions of a tensor.
         /// </summary>
@@ -250,7 +257,7 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor equal(Tensor x, Tensor y, string name = null)
+        public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Equal", name, args: new { x, y });
 

@@ -9,6 +9,29 @@ namespace Tensorflow
 {
     public class control_flow_ops : Python
     {
+        public static Operation Asset(Tensor condition, object[] data, int? summarize = null, string name = null)
+        {
+            return with(ops.name_scope(name, "Assert", new { condition, data }), scope =>
+            {
+                name = scope;
+                var xs = ops.convert_n_to_tensor(data);
+                condition = ops.convert_to_tensor(condition, name: "Condition");
+                Func<Operation[]> true_assert = () => new Operation[]
+                {
+                    gen_logging_ops._assert(condition, data, summarize, name: "Assert")
+                };
+
+                Func<Operation[]> false_assert = () => new Operation[]
+                {
+                    gen_control_flow_ops.no_op()
+                };
+
+                var guarded_assert = cond(condition, false_assert, true_assert, name: "AssertGuard");
+
+                return guarded_assert[0].op;
+            });
+        }
+
         public static Operation group<T>(T[] inputs, string name = null) where T : ITensorOrOperation
         {
             return with(ops.name_scope(name, "group_deps", inputs), scope =>

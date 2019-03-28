@@ -39,7 +39,7 @@ namespace TensorFlowNET.Examples
 
             // Build KMeans graph
             var training_graph = kmeans.training_graph();
-
+            
             return false;
         }
 

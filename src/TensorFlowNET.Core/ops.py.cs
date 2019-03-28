@@ -346,20 +346,17 @@ namespace Tensorflow
             session.run(operation, feed_dict);
         }
 
+        public static Tensor[] convert_n_to_tensor(object[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
+            => internal_convert_n_to_tensor(values, dtype: dtype, name: name, as_ref: false);
+
         public static Tensor[] convert_n_to_tensor_or_indexed_slices(Tensor[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
-        {
-            return internal_convert_n_to_tensor_or_indexed_slices(values, dtype: dtype, name: name);
-        }
+            => internal_convert_n_to_tensor_or_indexed_slices(values, dtype: dtype, name: name);
 
         public static Tensor convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
-        {
-            return internal_convert_to_tensor_or_indexed_slices(value: value, dtype: dtype, name: name, as_ref: false);
-        }
+            => internal_convert_to_tensor_or_indexed_slices(value: value, dtype: dtype, name: name, as_ref: false);
 
         public static Tensor internal_convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
-        {
-            return value;
-        }
+            => value;
 
         public static Tensor[] internal_convert_n_to_tensor_or_indexed_slices(Tensor[] values, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
         {
