@@ -24,9 +24,9 @@ copyright = '2019, Haiping Chen'
 author = 'Haiping Chen'
 
 # The short X.Y version
-version = '0.0.1'
+version = '0.6.0'
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '0.6.0'
 
 
 # -- General configuration ---------------------------------------------------

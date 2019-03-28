@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
-    <Version>0.6.0</Version>
+    <Version>0.5.2</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
@@ -14,16 +14,14 @@
     <PackageProjectUrl>https://github.com/SciSharp</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
-    <Description>Google's TensorFlow binding in .NET Standard.
+    <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.6.0.0</AssemblyVersion>
+    <AssemblyVersion>0.5.2.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.5:
-Added K-means Clustering.
 Added Nearest Neighbor.
-Added a lot of APIs to build neural networks model.
-Bug fix.</PackageReleaseNotes>
+Bug memory leak issue when allocating Tensor.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.6.0.0</FileVersion>
+    <FileVersion>0.5.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

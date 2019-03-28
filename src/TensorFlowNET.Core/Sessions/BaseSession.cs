@@ -245,6 +245,8 @@ namespace Tensorflow
                     throw new NotImplementedException("can't fetch output");
             }
 
+            tensor.Dispose();
+
             return nd;
         }
 
