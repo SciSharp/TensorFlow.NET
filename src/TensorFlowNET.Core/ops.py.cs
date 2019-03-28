@@ -406,6 +406,8 @@ namespace Tensorflow
 
             switch (value)
             {
+                case NDArray nd:
+                    return constant_op.constant(nd, dtype: dtype, name: name);
                 case Tensor tensor:
                     return tensor;
                 case Tensor[] tensors:
