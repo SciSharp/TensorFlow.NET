@@ -26,17 +26,6 @@ namespace Tensorflow
         public static Tensor add(Tensor x, Tensor y, string name = null) 
             => gen_math_ops.add(x, y, name);
 
-        public static Tensor add(Tensor x, string name = null)
-        {
-            return with(ops.name_scope(name, "Add", new { x }), scope =>
-            {
-                name = scope;
-                x = ops.convert_to_tensor(x, name: "x");
-
-                return gen_math_ops._abs(x, name: name);
-            });
-        }
-
         /// <summary>
         /// Adds all input tensors element-wise.
         /// </summary>
