@@ -43,7 +43,7 @@ namespace Tensorflow
 
         private Tensor _call_log_prob (Tensor value, string name)
         {
-            with(ops.name_scope(name, "moments", new { value }), scope =>
+            return with(ops.name_scope(name, "moments", new { value }), scope =>
             {
                 try
                 {
@@ -60,10 +60,9 @@ namespace Tensorflow
                     }
                 }
             });
-            return null;
         }
 
-        private Tensor _log_prob(Tensor value)
+        protected virtual Tensor _log_prob(Tensor value)
         {
             throw new NotImplementedException();
         }
