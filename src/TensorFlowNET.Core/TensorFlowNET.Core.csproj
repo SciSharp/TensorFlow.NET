@@ -58,8 +58,4 @@ Bug memory leak issue when allocating Tensor.</PackageReleaseNotes>
     <Folder Include="Keras\Initializers\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
-  </ItemGroup>
-
 </Project>
