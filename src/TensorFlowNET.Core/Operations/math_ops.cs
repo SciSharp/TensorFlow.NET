@@ -28,7 +28,7 @@ namespace Tensorflow
 
         public static Tensor add(Tensor x, string name = null)
         {
-            return with(ops.name_scope(name, "Abs", new { x }), scope =>
+            return with(ops.name_scope(name, "Add", new { x }), scope =>
             {
                 name = scope;
                 x = ops.convert_to_tensor(x, name: "x");
