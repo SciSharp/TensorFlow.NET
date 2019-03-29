@@ -9,7 +9,7 @@ namespace Tensorflow
 {
     public class control_flow_ops : Python
     {
-        public static Operation Asset(Tensor condition, object[] data, int? summarize = null, string name = null)
+        public static Operation Assert(Tensor condition, object[] data, int? summarize = null, string name = null)
         {
             return with(ops.name_scope(name, "Assert", new { condition, data }), scope =>
             {

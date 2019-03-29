@@ -8,11 +8,11 @@ namespace Tensorflow.Clustering
     /// <summary>
     /// Internal class to create the op to initialize the clusters.
     /// </summary>
-    public class _InitializeClustersOpFactory
+    public class _InitializeClustersOpFactory : Python
     {
         Tensor[] _inputs;
         Tensor _num_clusters;
-        IInitializer _initial_clusters;
+        string _initial_clusters;
         string _distance_metric;
         int _random_seed;
         int _kmeans_plus_plus_num_retries;
@@ -26,7 +26,7 @@ namespace Tensorflow.Clustering
 
         public _InitializeClustersOpFactory(Tensor[] inputs,
             Tensor num_clusters,
-            IInitializer initial_clusters,
+            string initial_clusters,
             string distance_metric,
             int random_seed,
             int kmeans_plus_plus_num_retries,
@@ -56,7 +56,25 @@ namespace Tensorflow.Clustering
         {
             return control_flow_ops.cond(gen_math_ops.equal(_num_remaining, 0),
                 () => new Operation[] { check_ops.assert_equal(_cluster_centers_initialized, true) },
-                () => new Operation[0]);
+                _initialize);
         }
+
+        private Operation[] _initialize()
+        {
+            with(ops.control_dependencies(new Operation[]
+            {
+                check_ops.assert_positive(_num_remaining)
+            }), delegate
+            {
+                // var num_now_remaining = _add_new_centers();
+            });
+
+            throw new NotImplementedException("_InitializeClustersOpFactory _initialize");
+        }
+
+        /*private int _add_new_centers()
+        {
+            var new_centers = _choose_initial_centers();
+        }*/
     }
 }
