@@ -252,6 +252,11 @@ namespace Tensorflow
             return math_ops.reduce_sum(input);
         }
 
+        public static Tensor reduce_sum(Tensor input, int axis, int? reduction_indices = null)
+        {
+            return math_ops.reduce_sum(input, axis);
+        }
+
         public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);
 
