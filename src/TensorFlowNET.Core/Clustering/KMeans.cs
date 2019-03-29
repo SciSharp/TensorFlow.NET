@@ -19,7 +19,7 @@ namespace Tensorflow.Clustering
 
         Tensor[] _inputs;
         int _num_clusters;
-        IInitializer _initial_clusters;
+        string _initial_clusters;
         string _distance_metric;
         bool _use_mini_batch;
         int _mini_batch_steps_per_iteration;
@@ -29,7 +29,7 @@ namespace Tensorflow.Clustering
 
         public KMeans(Tensor inputs,
             int num_clusters,
-            IInitializer initial_clusters = null,
+            string initial_clusters = RANDOM_INIT,
             string distance_metric = SQUARED_EUCLIDEAN_DISTANCE,
             bool use_mini_batch = false,
             int mini_batch_steps_per_iteration = 1,
