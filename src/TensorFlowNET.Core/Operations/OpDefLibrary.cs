@@ -13,8 +13,10 @@ namespace Tensorflow
     public class OpDefLibrary : Python
     {
         public Operation _apply_op_helper(string op_type_name, string name = null, object args = null)
+            => _apply_op_helper(op_type_name, name: name, keywords: ConvertToDict(args));
+
+        public Operation _apply_op_helper(string op_type_name, string name = null, Dictionary<string, object> keywords = null)
         {
-            Dictionary<string, object> keywords = ConvertToDict(args);
             var g = ops.get_default_graph();
             var op_def = g.GetOpDef(op_type_name);
 
