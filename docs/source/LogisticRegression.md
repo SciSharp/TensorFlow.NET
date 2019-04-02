@@ -13,4 +13,7 @@ The dependent variable of logistics regression can be two-category or multi-cate
 The general steps for regression problems are as follows:
 
 
+logistic回归则通过函数S将ax+b对应到一个隐状态p，p = S(ax+b)，然后根据p与1-p的大小决定因变量的值。这里的函数S就是Sigmoid函数
+https://www.cnblogs.com/Belter/p/6128644.html
+
 The full example is [here](https://github.com/SciSharp/TensorFlow.NET/blob/master/test/TensorFlowNET.Examples/LogisticRegression.cs).
