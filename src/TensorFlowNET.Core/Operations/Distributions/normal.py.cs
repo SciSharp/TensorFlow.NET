@@ -83,7 +83,7 @@ namespace Tensorflow
         {
             var log_prob = _log_unnormalized_prob(_z(x));
             var log_norm = _log_normalization();
-            return log_prob - log_norm;
+            return tf.sub(log_prob, log_norm);
         }
 
         private Tensor _log_unnormalized_prob (Tensor x)

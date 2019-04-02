@@ -12,7 +12,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class NaiveBayesClassifier : Python, IExample
     {
-        public int Priority => 100;
+        public int Priority => 6;
         public bool Enabled => true;
         public string Name => "Naive Bayes Classifier";
 
@@ -88,7 +88,7 @@ namespace TensorFlowNET.Examples
             var s = tf.Session();
             if (xx.dtype ==  typeof(float))
             {
-                var samples = np.vstack <float>(xx.ravel(), yy.ravel());
+                var samples = np.hstack<float>(xx.ravel().reshape(-1,1), yy.ravel().reshape(-1,1));
                 var Z = s.run(predict(samples));
             }
 
@@ -179,7 +179,7 @@ namespace TensorFlowNET.Examples
             var joint_likelihood = tf.add(ops.convert_to_tensor(priors, TF_DataType.TF_FLOAT), cond_probs);
             // normalize to get (log)-probabilities
 
-            var norm_factor = tf.reduce_logsumexp(joint_likelihood, new int[] { 1 }, true);
+            var norm_factor = tf.reduce_logsumexp(joint_likelihood, new int[] { 1 }, keepdims: true);
             var log_prob = joint_likelihood - norm_factor;
             // exp to get the actual probabilities
             return tf.exp(log_prob);
