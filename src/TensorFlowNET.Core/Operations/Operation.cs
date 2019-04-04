@@ -11,6 +11,7 @@ namespace Tensorflow
     public partial class Operation : ITensorOrOperation
     {
         private readonly IntPtr _handle; // _c_op in python
+        private readonly IntPtr _operDesc; 
 
         private Graph _graph;
         //[JsonIgnore]
@@ -58,9 +59,9 @@ namespace Tensorflow
         {
             _graph = g;
 
-            var desc = c_api.TF_NewOperation(g, opType, oper_name);
-            c_api.TF_SetAttrType(desc, "dtype", TF_DataType.TF_INT32);
-            c_api.TF_FinishOperation(desc, status);
+            _operDesc = c_api.TF_NewOperation(g, opType, oper_name);
+            c_api.TF_SetAttrType(_operDesc, "dtype", TF_DataType.TF_INT32);
+            _handle = c_api.TF_FinishOperation(_operDesc, status);
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace Tensorflow
                 op_def = g.GetOpDef(node_def.Op);
 
             var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
-            _handle = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
+            (_handle, _operDesc) = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
 
             // Initialize self._outputs.
             output_types = new TF_DataType[NumOutputs];

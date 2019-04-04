@@ -265,7 +265,7 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            return $"tf.Variable '{name}' shape={shape} dtype={dtype}";
+            return $"tf.RefVariable '{name}' shape={shape} dtype={dtype}";
         }
 
         public VariableDef to_proto(string export_scope)
