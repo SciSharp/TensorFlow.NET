@@ -160,15 +160,18 @@ namespace Tensorflow
 
                 // Convert attr values to AttrValue protos.
                 var attr_protos = new Dictionary<string, AttrValue>();
-                foreach (var attr_def in op_def.Attr)
+                foreach (AttrDef attr_def in op_def.Attr)
                 {
                     var key = attr_def.Name;
-                    var value = attrs[key];
-
-                    if (!attrs.ContainsKey(key))
-                        Console.WriteLine($"_apply_op_helper: key '{key}' is not found in '{op_def.Name}' operation's attr_def.");
-
-                    attr_protos[key] = SetAttrValue(op_def, attr_def, value);
+                    if (attrs.ContainsKey(key))
+                    {
+                        attr_protos[key] = SetAttrValue(op_def, attr_def, attrs[key]);
+                    } else {
+                        if (attr_def.DefaultValue == null)
+                        {
+                            throw new TypeError("Missing required positional argument " + key);
+                        }
+                    }
                 }
 
                 attrs.Clear();
