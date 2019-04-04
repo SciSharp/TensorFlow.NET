@@ -1,4 +1,4 @@
-﻿using NumSharp.Core;
+﻿using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,9 +47,10 @@ namespace TensorFlowNET.Examples
                     // Get nearest neighbor
                     long nn_index = sess.run(pred, new FeedItem(xtr, Xtr), new FeedItem(xte, Xte[i]));
                     // Get nearest neighbor class label and compare it to its true label
-                    print($"Test {i} Prediction: {np.argmax(Ytr[nn_index])} True Class: {np.argmax(Yte[i] as NDArray)}");
+                    int index = (int)nn_index;
+                    print($"Test {i} Prediction: {np.argmax(Ytr[(NDArray)index])} True Class: {np.argmax(Yte[i] as NDArray)}");
                     // Calculate accuracy
-                    if (np.argmax(Ytr[nn_index]) == np.argmax(Yte[i] as NDArray))
+                    if (np.argmax(Ytr[(NDArray)index]) == np.argmax(Yte[i] as NDArray))
                         accuracy += 1f/ Xte.shape[0];
                 }
 

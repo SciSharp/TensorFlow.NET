@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
-using NumSharp.Core;
+using NumSharp;
 using System.Linq;
 
 namespace TensorFlowNET.Examples

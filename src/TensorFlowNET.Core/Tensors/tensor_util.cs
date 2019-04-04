@@ -1,10 +1,8 @@
-﻿using NumSharp.Core;
-using NumSharp.Core.Interfaces;
+﻿using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using tensor_pb2 = Tensorflow;
 
 namespace Tensorflow
 {
@@ -45,7 +43,7 @@ namespace Tensorflow
         public static NDArray MakeNdarray(TensorProto tensor)
         {
             var shape = tensor.TensorShape.Dim.Select(x => (int)x.Size).ToArray();
-            long num_elements = np.prod(shape);
+            int num_elements = np.prod(shape);
             var tensor_dtype =  tensor.Dtype.as_numpy_dtype();
 
             if (tensor.TensorContent.Length > 0)
@@ -199,7 +197,7 @@ namespace Tensorflow
                 is_same_size = shape_size == nparray.size;
             }
 
-            var tensor_proto = new tensor_pb2.TensorProto
+            var tensor_proto = new TensorProto
             {
                 Dtype = numpy_dtype.as_datatype_enum(),
                 TensorShape = tensor_util.as_shape(shape)
@@ -316,12 +314,12 @@ namespace Tensorflow
             return new TensorShape(dims.Select(x => (int)x).ToArray());
         }
 
-        public static TensorShape as_shape(this IShape shape)
+        public static TensorShape as_shape(this Shape shape)
         {
             return new TensorShape(shape.Dimensions);
         }
 
-        public static TensorShape reshape(this IShape shape, int[] dims)
+        public static TensorShape reshape(this Shape shape, int[] dims)
         {
             return new TensorShape(dims);
         }

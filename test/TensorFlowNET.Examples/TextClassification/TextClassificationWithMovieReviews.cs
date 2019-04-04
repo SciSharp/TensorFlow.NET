@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using Tensorflow;
-using NumSharp.Core;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NumSharp;
 
 namespace TensorFlowNET.Examples
 {
@@ -71,8 +71,8 @@ namespace TensorFlowNET.Examples
             labels_test = labels_test[indices_test];
 
             // not completed
-            var xs = x_train.hstack(x_test);
-            var labels = labels_train.hstack(labels_test);
+            var xs = x_train.hstack<int>(x_test);
+            var labels = labels_train.hstack<int>(labels_test);
 
             var idx = x_train.size;
             var y_train = labels_train;

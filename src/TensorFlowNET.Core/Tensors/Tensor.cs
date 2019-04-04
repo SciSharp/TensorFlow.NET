@@ -1,5 +1,5 @@
 ﻿//using Newtonsoft.Json;
-using NumSharp.Core;
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;

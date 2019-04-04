@@ -4,12 +4,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Tensorflow;
-using node_def_pb2 = Tensorflow;
 using Google.Protobuf;
 using System.Linq;
-using NumSharp.Core;
+using NumSharp;
 using System.ComponentModel;
-using Tensorflow.Gradients;
 
 namespace Tensorflow
 {
@@ -176,7 +174,7 @@ namespace Tensorflow
 
         public static NodeDef _NodeDef(string op_type, string name, string device = "", Dictionary<string, AttrValue> attrs = null)
         {
-            var node_def = new node_def_pb2.NodeDef();
+            var node_def = new NodeDef();
             node_def.Op = op_type;
             node_def.Name = name;
 
