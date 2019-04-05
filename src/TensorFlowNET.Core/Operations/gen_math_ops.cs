@@ -101,6 +101,20 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor sin(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Sin", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor sinh(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Sinh", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor cos(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Cos", name, args: new { x });
@@ -111,6 +125,20 @@ namespace Tensorflow
         public static Tensor cosh(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Cosh", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor tan(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Tan", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor tanh(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Tanh", name, args: new { x });
 
             return _op.outputs[0];
         }
