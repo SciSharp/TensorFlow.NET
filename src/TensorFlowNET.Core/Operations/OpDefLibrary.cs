@@ -355,13 +355,7 @@ namespace Tensorflow
 
         private bool _IsListValue(object v)
         {
-            switch (v)
-            {
-                case Tensor[] val:
-                    return true;
-                default:
-                    return false;
-            }
+            return v.GetType().IsArray;
         }
     }
 }
