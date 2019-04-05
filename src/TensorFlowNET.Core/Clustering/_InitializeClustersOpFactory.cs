@@ -52,13 +52,6 @@ namespace Tensorflow.Clustering
             _num_data = math_ops.add_n(_inputs.Select(i => array_ops.shape(i)[0]).ToArray());
         }
 
-        public Tensor[] op()
-        {
-            return control_flow_ops.cond(gen_math_ops.equal(_num_remaining, 0),
-                () => new Operation[] { check_ops.assert_equal(_cluster_centers_initialized, true) },
-                _initialize);
-        }
-
         private Operation[] _initialize()
         {
             with(ops.control_dependencies(new Operation[]
@@ -70,6 +63,17 @@ namespace Tensorflow.Clustering
             });
 
             throw new NotImplementedException("_InitializeClustersOpFactory _initialize");
+        }
+
+        public Tensor[] op()
+        {
+            return control_flow_ops.cond(gen_math_ops.equal(_num_remaining, 0),
+                () => 
+                {
+                    var op = check_ops.assert_equal(_cluster_centers_initialized, true);
+                    return new Operation[] { op };
+                },
+                _initialize);
         }
 
         /*private int _add_new_centers()

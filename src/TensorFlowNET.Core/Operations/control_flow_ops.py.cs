@@ -16,14 +16,16 @@ namespace Tensorflow
                 name = scope;
                 var xs = ops.convert_n_to_tensor(data);
                 condition = ops.convert_to_tensor(condition, name: "Condition");
-                Func<Operation[]> true_assert = () => new Operation[]
+                Func<Operation[]> true_assert = () =>
                 {
-                    gen_logging_ops._assert(condition, data, summarize, name: "Assert")
+                    var assert = gen_logging_ops._assert(condition, data, summarize, name: "Assert");
+                    return new Operation[] { assert };
                 };
 
-                Func<Operation[]> false_assert = () => new Operation[]
+                Func<Operation[]> false_assert = () =>
                 {
-                    gen_control_flow_ops.no_op()
+                    var op = gen_control_flow_ops.no_op();
+                    return new Operation[] { op };
                 };
 
                 var guarded_assert = cond(condition, false_assert, true_assert, name: "AssertGuard");

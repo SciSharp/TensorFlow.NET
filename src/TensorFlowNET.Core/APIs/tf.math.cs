@@ -55,6 +55,24 @@ namespace Tensorflow
             => gen_math_ops.ceil(x, name);
 
         /// <summary>
+        /// Computes sin of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor sin(Tensor x, string name = null)
+            => gen_math_ops.sin(x, name);
+
+        /// <summary>
+        /// Computes hyperbolic sine of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor sinh(Tensor x, string name = null)
+            => gen_math_ops.sinh(x, name);
+
+        /// <summary>
         /// Computes cos of x element-wise.
         /// </summary>
         /// <param name="x"></param>
@@ -71,6 +89,12 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor cosh(Tensor x, string name = null)
             => gen_math_ops.cosh(x, name);
+
+        public static Tensor tan(Tensor x, string name = null)
+            => gen_math_ops.tan(x, name);
+
+        public static Tensor tanh(Tensor x, string name = null)
+            => gen_math_ops.tanh(x, name);
 
         /// <summary>
         /// Returns element-wise largest integer not greater than x.
@@ -256,6 +280,9 @@ namespace Tensorflow
         {
             return math_ops.reduce_sum(input, axis);
         }
+
+        public static Tensor sum(Tensor input, int axis, bool keep_dims = false, string name = null)
+            => gen_math_ops._sum(input, axis, keep_dims: keep_dims, name: name);
 
         public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);

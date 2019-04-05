@@ -25,7 +25,7 @@ namespace Tensorflow
 
         public void _add_control_input(Operation op)
         {
-            c_api.TF_AddControlInput(_handle, op);
+            c_api.TF_AddControlInput(_operDesc, op);
         }
 
         public void _add_control_inputs(Operation[] ops)
