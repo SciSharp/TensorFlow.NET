@@ -75,12 +75,20 @@ namespace Tensorflow.Operations
             {
                 case Tensor[] results:
                     return (original_result, results);
+                case Operation[] results:
+                    return (original_result, new Tensor[] { _BuildCondTensor (results) });
                 case float[] fv:
                     var result = ops.convert_to_tensor(fv[0]);
                     return (original_result, new Tensor[] { result });
                 default:
                     return (original_result, new Tensor[0]);
             }
+        }
+
+        private Tensor _BuildCondTensor(Operation[] v)
+        {
+            // Use pivot as the proxy for this op.
+            return control_flow_ops.with_dependencies(v, _pivot);
         }
     }
 }

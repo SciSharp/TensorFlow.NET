@@ -52,17 +52,24 @@ namespace Tensorflow.Clustering
             _num_data = math_ops.add_n(_inputs.Select(i => array_ops.shape(i)[0]).ToArray());
         }
 
-        private Operation[] _initialize()
+        private Tensor[] _initialize()
         {
-            with(ops.control_dependencies(new Operation[]
+            return with(ops.control_dependencies(new Operation[]
             {
                 check_ops.assert_positive(_num_remaining)
             }), delegate
             {
-                // var num_now_remaining = _add_new_centers();
+                var num_now_remaining = _add_new_centers();
+                return control_flow_ops.cond(math_ops.equal(num_now_remaining, 0),
+                  () =>
+                  {
+                      return new Tensor[] { state_ops.assign(_cluster_centers_initialized, true) };
+                  },
+                  () =>
+                  {
+                      return new Tensor[] { control_flow_ops.no_op().output[0] };
+                  });
             });
-
-            throw new NotImplementedException("_InitializeClustersOpFactory _initialize");
         }
 
         public Tensor[] op()
@@ -71,14 +78,49 @@ namespace Tensorflow.Clustering
                 () => 
                 {
                     var op = check_ops.assert_equal(_cluster_centers_initialized, true);
-                    return new Operation[] { op };
+                    return new Tensor[] { op.output[0] };
                 },
                 _initialize);
         }
 
-        /*private int _add_new_centers()
+        private Tensor _add_new_centers()
         {
+            // Adds some centers and returns the number of centers remaining.
             var new_centers = _choose_initial_centers();
-        }*/
+            if (_distance_metric == KMeans.COSINE_DISTANCE)
+                new_centers = nn_impl.l2_normalize(new_centers[0], axis: 1);
+
+            // If cluster_centers is empty, it doesn't have the right shape for concat.
+            var all_centers = control_flow_ops.cond(math_ops.equal(_num_selected, 0),
+                () => new Tensor[] { new_centers },
+                () => new Tensor[] { gen_array_ops.concat(new Tensor[] { _cluster_centers, new_centers }, 0) });
+
+            var a = state_ops.assign(_cluster_centers, all_centers, validate_shape: false);
+
+            return _num_clusters - array_ops.shape(a)[0];
+        }
+
+        private Tensor _choose_initial_centers()
+        {
+            return _greedy_batch_sampler()[0];
+        }
+
+        private Tensor[] _greedy_batch_sampler()
+        {
+            return control_flow_ops.cond(_num_data <= _num_remaining,
+                () =>
+                {
+                    return new Tensor[] { gen_array_ops.concat(_inputs, 0) };
+                },
+                () =>
+                {
+                    return new Tensor[] { _random() };
+                });
+        }
+
+        private Tensor _random()
+        {
+            throw new NotImplementedException("");
+        }
     }
 }

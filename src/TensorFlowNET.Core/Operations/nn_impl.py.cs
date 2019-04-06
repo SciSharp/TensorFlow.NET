@@ -8,6 +8,28 @@ namespace Tensorflow
     public class nn_impl : Python
     {
         /// <summary>
+        /// Normalizes along dimension `axis` using an L2 norm.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="axis"></param>
+        /// <param name="epsilon"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor l2_normalize(Tensor x, 
+            int axis = 0,
+            float epsilon = 1e-12f,
+            string name = null)
+        {
+            return with(ops.name_scope(name, "", new { x }), scope =>
+            {
+                x = ops.convert_to_tensor(x, name: "x");
+                var square_sum = math_ops.reduce_sum(math_ops.square(x), axis, keepdims: true);
+                var x_inv_norm = math_ops.rsqrt(math_ops.maximum(square_sum, epsilon));
+                return math_ops.multiply(x, x_inv_norm, name: name);
+            });
+        }
+
+        /// <summary>
         /// Calculate the mean and variance of `x`
         /// </summary>
         /// <param name="x"> A `Tensor`.</param>

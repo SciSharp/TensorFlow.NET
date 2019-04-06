@@ -19,11 +19,26 @@ namespace Tensorflow
             TF_DataType dtype,
             string name = "Variable",
             string container = "",
-            string shared_name = "") => gen_state_ops.variable_v2(shape, 
-                dtype, 
-                name: name, 
-                container: container, 
+            string shared_name = "") => gen_state_ops.variable_v2(shape,
+                dtype,
+                name: name,
+                container: container,
                 shared_name: shared_name);
+
+        public static Tensor assign(Tensor @ref, object value,
+            bool validate_shape = true,
+            bool use_locking = true,
+            string name = null)
+        {
+            if (@ref.dtype.is_ref_dtype())
+                return gen_state_ops.assign(@ref,
+                    value,
+                    validate_shape: validate_shape,
+                    use_locking: use_locking,
+                    name: name);
+            else
+                throw new NotImplementedException("state_ops.assign");
+        }
 
         public static Tensor assign_sub(RefVariable @ref,
             Tensor value,

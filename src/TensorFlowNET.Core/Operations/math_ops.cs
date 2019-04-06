@@ -63,6 +63,13 @@ namespace Tensorflow
                 return x;
             });
         }
+
+        public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.equal(x, y, name: name);
+
+        public static Tensor multiply(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.mul(x, y, name: name);
+
         /// <summary>
         /// Computes the mean of elements across dimensions of a tensor.
         /// Reduces `input_tensor` along the dimensions given in `axis`.
@@ -327,7 +334,15 @@ namespace Tensorflow
                 return range(0, rank, 1);
             }
         }
-        
+
+        /// <summary>
+        /// Computes reciprocal of square root of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor rsqrt(Tensor x, string name = null)
+            => gen_math_ops.rsqrt(x, name: name);
 
         public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range" )
         {
@@ -372,6 +387,9 @@ namespace Tensorflow
                     return gen_array_ops.rank(input, name);
             });
         }
+
+        public static Tensor maximum<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.maximum(x, y, name: name);
 
         public static Tensor matmul(Tensor a, Tensor b,
             bool transpose_a = false, bool transpose_b = false,

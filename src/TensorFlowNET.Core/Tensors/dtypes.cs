@@ -134,5 +134,10 @@ namespace Tensorflow
         {
             return type == TF_DataType.TF_HALF || type == TF_DataType.TF_FLOAT || type == TF_DataType.TF_DOUBLE;
         }
+
+        public static bool is_ref_dtype(this TF_DataType type)
+        {
+            return (int)type > 100;
+        }
     }
 }

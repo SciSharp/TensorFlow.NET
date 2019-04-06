@@ -428,5 +428,18 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+
+        /// <summary>
+        /// Computes reciprocal of square root of x element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor rsqrt(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Rsqrt", name, new { x });
+
+            return _op.outputs[0];
+        }
     }
 }

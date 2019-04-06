@@ -64,6 +64,14 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        /// Does nothing. Only useful as a placeholder for control edges.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Operation no_op(string name = null)
+            => gen_control_flow_ops.no_op(name: name);
+
         private static Operation _GroupControlDeps(string dev, Operation[] deps, string name = null)
         {
             return with(ops.control_dependencies(deps), ctl =>

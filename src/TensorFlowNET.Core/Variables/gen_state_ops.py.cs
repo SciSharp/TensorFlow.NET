@@ -47,12 +47,12 @@ namespace Tensorflow
         /// <param name="validate_shape"></param>
         /// <param name="use_locking"></param>
         /// <param name="name"></param>
-        public static Tensor assign(Tensor tensor, object value, 
+        public static Tensor assign(Tensor @ref, object value, 
             bool validate_shape = true, 
             bool use_locking = true,
             string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref = tensor, value, validate_shape, use_locking });
+            var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
 
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
