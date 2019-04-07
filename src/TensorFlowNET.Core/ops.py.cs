@@ -102,8 +102,23 @@ namespace Tensorflow
 
         /// <summary>
         /// Wrapper for `Graph.control_dependencies()` using the default graph.
+        /// 
+        /// See `tf.Graph.control_dependencies` for more details.
+
+        /// When eager execution is enabled, any callable object in the `control_inputs`
+        /// list will be called.
         /// </summary>
-        /// <param name="control_inputs"></param>
+        /// <param name="control_inputs">
+        /// A list of `Operation` or `Tensor` objects which
+        /// must be executed or computed before running the operations
+        /// defined in the context.Can also be `None` to clear the control
+        /// dependencies.If eager execution is enabled, any callable object in the
+        /// `control_inputs` list will be called.
+        /// </param>
+        /// <returns>
+        /// A context manager that specifies control dependencies for all
+        /// operations constructed within the context.
+        /// </returns>
         public static _ControlDependenciesController control_dependencies(Operation[] control_inputs)
         {
             return get_default_graph().control_dependencies(control_inputs);

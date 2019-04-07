@@ -8,6 +8,25 @@ using System.Text;
 
 namespace Tensorflow
 {
+
+    /// <summary>
+    /// Represents a graph node that performs computation on tensors.
+    /// 
+    /// An `Operation` is a node in a TensorFlow `Graph` that takes zero or
+    /// more `Tensor` objects as input, and produces zero or more `Tensor`
+    /// objects as output. Objects of type `Operation` are created by
+    /// calling an op constructor(such as `tf.matmul`)
+    /// or `tf.Graph.create_op`.
+    /// 
+    /// For example `c = tf.matmul(a, b)` creates an `Operation` of type
+    /// "MatMul" that takes tensors `a` and `b` as input, and produces `c`
+    /// as output.
+    /// 
+    /// After the graph has been launched in a session, an `Operation` can
+    /// be executed by passing it to
+    /// `tf.Session.run`.
+    /// `op.run()` is a shortcut for calling `tf.get_default_session().run(op)`.
+    /// </summary>
     public partial class Operation : ITensorOrOperation
     {
         private readonly IntPtr _handle; // _c_op in python

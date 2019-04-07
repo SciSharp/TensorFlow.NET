@@ -54,6 +54,13 @@ namespace Tensorflow
             return ret;
         }
 
+        /// <summary>
+        /// Returns a context manager that specifies control dependencies.
+        /// 
+        /// Use with the `with` keyword to specify that all operations constructed
+        /// within the context should have control dependencies on
+        /// `control_inputs`. 
+        /// </summary>
         public _ControlDependenciesController control_dependencies(ITensorOrOperation[] control_inputs)
         {
             if (control_inputs == null)
