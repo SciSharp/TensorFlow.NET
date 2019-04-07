@@ -117,6 +117,13 @@ namespace Tensorflow
                         case Operation c1:
                             control_input_ops.Add(c1);
                             break;
+                        case Tensor tensor:
+                            control_input_ops.Add(tensor.op);
+                            break;
+                        // TODO: IndexedSlices don't yet exist, but once they do, this needs to be uncommented
+                        //case IndexedSlices islices:
+                        //    control_input_ops.Add(islices.op);
+                        //    break;
                         default:
                             throw new NotImplementedException($"Control input must be an Operation, a Tensor, or IndexedSlices: {c}");
                     }
