@@ -17,6 +17,9 @@ namespace Tensorflow
             Console.WriteLine(obj.ToString());
         }
 
+        protected int len(Array a)
+            => a.Length;
+
         protected IEnumerable<int> range(int end)
         {
             return Enumerable.Range(0, end);
