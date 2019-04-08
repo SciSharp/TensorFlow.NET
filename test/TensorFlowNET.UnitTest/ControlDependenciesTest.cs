@@ -143,7 +143,7 @@ def _apply_op(g, *args, **kwargs):
              */
         }
 
-        //[Ignore()]
+        [Ignore("Fails with message: Op type not registered 'FloatOutput' in binary running on ...")]
         [TestMethod]
         public void TestNested()
         {
@@ -196,7 +196,7 @@ self.assertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs)
         }
 
 
-        [Ignore("How to translate _apply_op into c#?")]
+        [Ignore("will fail due to unsupported op 'FloatOutput'")]
         [TestMethod]
         public void TestClear()
         {
@@ -236,7 +236,7 @@ self.assertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs)
              */
         }
 
-        [Ignore("How to translate _apply_op into c#?")]
+        [Ignore("will fail due to unsupported op 'FloatOutput'")]
         [TestMethod]
         public void TestComplex()
         {
@@ -315,7 +315,7 @@ self.assertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs)
              */
         }
 
-        [Ignore("How to translate _apply_op into c#?")]
+        [Ignore("will fail due to unsupported op 'FloatOutput'")]
         [TestMethod]
         public void TestRepeatedDependency()
         {

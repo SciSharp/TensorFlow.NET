@@ -193,11 +193,12 @@ namespace Tensorflow
             node_def.Op = op_type;
             node_def.Name = name;
 
-            foreach (var attr in attrs)
+            if (attrs != null)
             {
-                node_def.Attr.Add(attr.Key, attr.Value);
+                foreach (var attr in attrs)
+                    node_def.Attr.Add(attr.Key, attr.Value);
             }
-            
+
             return node_def;
         }
 
