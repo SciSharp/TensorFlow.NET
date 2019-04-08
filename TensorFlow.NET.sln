@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28729.10
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.UnitTest", "test\TensorFlowNET.UnitTest\TensorFlowNET.UnitTest.csproj", "{029A8CF1-CF95-4DCB-98AA-9D3D96A83B3E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Examples", "test\TensorFlowNET.Examples\TensorFlowNET.Examples.csproj", "{1FE60088-157C-4140-91AB-E96B915E4BAE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Core", "src\TensorFlowNET.Core\TensorFlowNET.Core.csproj", "{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Visualization", "src\TensorFlowNET.Visualization\TensorFlowNET.Visualization.csproj", "{0254BFF9-453C-4FE0-9609-3644559A79CE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NumSharp.Core", "..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj", "{7BCAA225-997B-4BB0-987A-153E1CD1896B}"
 EndProject
@@ -31,10 +29,6 @@ Global
 		{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0254BFF9-453C-4FE0-9609-3644559A79CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0254BFF9-453C-4FE0-9609-3644559A79CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0254BFF9-453C-4FE0-9609-3644559A79CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0254BFF9-453C-4FE0-9609-3644559A79CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7BCAA225-997B-4BB0-987A-153E1CD1896B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7BCAA225-997B-4BB0-987A-153E1CD1896B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BCAA225-997B-4BB0-987A-153E1CD1896B}.Release|Any CPU.ActiveCfg = Release|Any CPU
