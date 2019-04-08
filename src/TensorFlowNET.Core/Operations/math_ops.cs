@@ -291,7 +291,7 @@ namespace Tensorflow
                 !keepdims &&
                 axis == null)
                 // We want set_shape to be reflected in the C API graph for when we run it.
-                output.shape = new long[0];
+                output.shape = new int[0];
             return output;
         }
 
@@ -300,7 +300,7 @@ namespace Tensorflow
             if (!common_shapes.has_fully_defined_shape(output) &&
                 !keepdims &&
                 axis == null)
-                output.shape = new long[0];
+                output.shape = new int[0];
             return output;
         }
 

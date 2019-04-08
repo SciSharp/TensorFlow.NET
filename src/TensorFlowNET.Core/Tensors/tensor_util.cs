@@ -321,6 +321,11 @@ namespace Tensorflow
             return new TensorShape(dims.Select(x => (int)x).ToArray());
         }
 
+        public static TensorShape to_shape(int[] dims)
+        {
+            return new TensorShape(dims);
+        }
+
         public static TensorShape as_shape(this Shape shape)
         {
             return new TensorShape(shape.Dimensions);

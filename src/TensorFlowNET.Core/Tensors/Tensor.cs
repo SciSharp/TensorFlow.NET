@@ -46,7 +46,7 @@ namespace Tensorflow
 
         private TF_Output? _tf_output;
 
-        public long[] shape
+        public int[] shape
         {
             get
             {
@@ -63,7 +63,7 @@ namespace Tensorflow
                         dims[i] = c_api.TF_Dim(_handle, i);
                 }
 
-                return dims;
+                return dims.Select(x => Convert.ToInt32(x)).ToArray();
             }
 
             set
@@ -71,7 +71,7 @@ namespace Tensorflow
                 if (value == null)
                     c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
                 else
-                    c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value, value.Length, status);
+                    c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value.Select(x => Convert.ToInt64(x)).ToArray(), value.Length, status);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using NumSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
@@ -21,7 +22,17 @@ namespace Tensorflow
 
         public virtual NDArray build_results(List<object> values)
         {
-            return values.ToArray();
+            var type = values[0].GetType();
+            var nd = new NDArray(type, values.Count);
+
+            switch (type.Name)
+            {
+                case "Single":
+                    nd.SetData(values.Select(x => (float)x).ToArray());
+                    break;
+            }
+
+            return nd;
         }
 
         public virtual List<object> unique_fetches()

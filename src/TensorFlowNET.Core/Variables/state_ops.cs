@@ -15,7 +15,7 @@ namespace Tensorflow
         /// <param name="container"></param>
         /// <param name="shared_name"></param>
         /// <returns></returns>
-        public static Tensor variable_op_v2(long[] shape,
+        public static Tensor variable_op_v2(int[] shape,
             TF_DataType dtype,
             string name = "Variable",
             string container = "",

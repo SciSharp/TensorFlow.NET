@@ -52,7 +52,24 @@ namespace Tensorflow
             {
                 if (is_op)
                 {
-                    full_values.Add(null);
+                    if(tensor_values.Length > 0)
+                    {
+                        switch (tensor_values[0].dtype.Name)
+                        {
+                            case "Int32":
+                                full_values.Add(float.NaN);
+                                break;
+                            case "Single":
+                                full_values.Add(float.NaN);
+                                break;
+                            default:
+                                throw new NotImplementedException($"build_results tensor_values[0] {tensor_values[0].dtype.Name}");
+                        }
+                    }
+                    else
+                    {
+                        full_values.Add(null);
+                    }
                 }
                 else
                 {

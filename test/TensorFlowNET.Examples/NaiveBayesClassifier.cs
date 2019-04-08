@@ -19,64 +19,64 @@ namespace TensorFlowNET.Examples
         public Normal dist { get; set; }
         public bool Run()
         {
-            var X = np.array<float>(new float[][] { new float[] { 5.1f, 3.5f},new float[] { 4.9f, 3.0f },new float[] { 4.7f, 3.2f },
-                                     new float[] { 4.6f, 3.1f },new float[] { 5.0f, 3.6f },new float[] { 5.4f, 3.9f },
-                                     new float[] { 4.6f, 3.4f },new float[] { 5.0f, 3.4f },new float[] { 4.4f, 2.9f },
-                                     new float[] { 4.9f, 3.1f },new float[] { 5.4f, 3.7f },new float[] {4.8f, 3.4f },
-                                     new float[] {4.8f, 3.0f },new float[] {4.3f, 3.0f },new float[] {5.8f, 4.0f },
-                                     new float[] {5.7f, 4.4f },new float[] {5.4f, 3.9f },new float[] {5.1f, 3.5f },
-                                     new float[] {5.7f, 3.8f },new float[] {5.1f, 3.8f },new float[] {5.4f, 3.4f },
-                                     new float[] {5.1f, 3.7f },new float[] {5.1f, 3.3f },new float[] {4.8f, 3.4f },
-                                     new float[] {5.0f, 3.0f },new float[] {5.0f , 3.4f },new float[] {5.2f, 3.5f },
-                                     new float[] {5.2f, 3.4f },new float[] {4.7f, 3.2f },new float[] {4.8f, 3.1f },
-                                     new float[] {5.4f, 3.4f },new float[] {5.2f, 4.1f},new float[] {5.5f, 4.2f },
-                                     new float[] {4.9f, 3.1f },new float[] {5.0f , 3.2f },new float[] {5.5f, 3.5f },
-                                     new float[] {4.9f, 3.6f },new float[] {4.4f, 3.0f },new float[] {5.1f, 3.4f },
-                                     new float[] {5.0f , 3.5f },new float[] {4.5f, 2.3f },new float[] {4.4f, 3.2f },
-                                     new float[] {5.0f , 3.5f },new float[] {5.1f, 3.8f },new float[] {4.8f, 3.0f},
-                                     new float[] {5.1f, 3.8f },new float[] {4.6f, 3.2f },new float[] { 5.3f, 3.7f },
-                                     new float[] {5.0f , 3.3f },new float[] {7.0f , 3.2f },new float[] {6.4f, 3.2f },
-                                     new float[] {6.9f, 3.1f },new float[] {5.5f, 2.3f },new float[] {6.5f, 2.8f },
-                                     new float[] {5.7f, 2.8f },new float[] {6.3f, 3.3f },new float[] {4.9f, 2.4f },
-                                     new float[] {6.6f, 2.9f },new float[] {5.2f, 2.7f },new float[] {5.0f , 2.0f },
-                                     new float[] {5.9f, 3.0f },new float[] {6.0f , 2.2f },new float[] {6.1f, 2.9f },
-                                     new float[] {5.6f, 2.9f },new float[] {6.7f, 3.1f },new float[] {5.6f, 3.0f },
-                                     new float[] {5.8f, 2.7f },new float[] {6.2f, 2.2f },new float[] {5.6f, 2.5f },
-                                     new float[] {5.9f, 3.0f},new float[] {6.1f, 2.8f},new float[] {6.3f, 2.5f},
-                                     new float[] {6.1f, 2.8f},new float[] {6.4f, 2.9f},new float[] {6.6f, 3.0f },
-                                     new float[] {6.8f, 2.8f},new float[] {6.7f, 3.0f },new float[] {6.0f , 2.9f},
-                                     new float[] {5.7f, 2.6f},new float[] {5.5f, 2.4f},new float[] {5.5f, 2.4f},
-                                     new float[] {5.8f, 2.7f},new float[] {6.0f , 2.7f},new float[] {5.4f, 3.0f},
-                                     new float[] {6.0f , 3.4f},new float[] {6.7f, 3.1f},new float[] {6.3f, 2.3f},
-                                     new float[] {5.6f, 3.0f },new float[] {5.5f, 2.5f},new float[] {5.5f, 2.6f},
-                                     new float[] {6.1f, 3.0f },new float[] {5.8f, 2.6f},new float[] {5.0f, 2.3f},
-                                     new float[] {5.6f, 2.7f},new float[] {5.7f, 3.0f },new float[] {5.7f, 2.9f},
-                                     new float[] {6.2f, 2.9f},new float[] {5.1f, 2.5f},new float[] {5.7f, 2.8f},
-                                     new float[] {6.3f, 3.3f},new float[] {5.8f, 2.7f},new float[] {7.1f, 3.0f },
-                                     new float[] {6.3f, 2.9f},new float[] {6.5f, 3.0f },new float[] {7.6f, 3.0f },
-                                     new float[] {4.9f, 2.5f},new float[] {7.3f, 2.9f},new float[] {6.7f, 2.5f},
-                                     new float[] {7.2f, 3.6f},new float[] {6.5f, 3.2f},new float[] {6.4f, 2.7f},
-                                     new float[] {6.8f, 3.00f },new float[] {5.7f, 2.5f},new float[] {5.8f, 2.8f},
-                                     new float[] {6.4f, 3.2f},new float[] {6.5f, 3.0f },new float[] {7.7f, 3.8f},
-                                     new float[] {7.7f, 2.6f},new float[] {6.0f , 2.2f},new float[] {6.9f, 3.2f},
-                                     new float[] {5.6f, 2.8f},new float[] {7.7f, 2.8f},new float[] {6.3f, 2.7f},
-                                     new float[] {6.7f, 3.3f},new float[] {7.2f, 3.2f},new float[] {6.2f, 2.8f},
-                                     new float[] {6.1f, 3.0f },new float[] {6.4f, 2.8f},new float[] {7.2f, 3.0f },
-                                     new float[] {7.4f, 2.8f},new float[] {7.9f, 3.8f},new float[] {6.4f, 2.8f},
-                                     new float[] {6.3f, 2.8f},new float[] {6.1f, 2.6f},new float[] {7.7f, 3.0f },
-                                     new float[] {6.3f, 3.4f},new float[] {6.4f, 3.1f},new float[] {6.0f, 3.0f},
-                                     new float[] {6.9f, 3.1f},new float[] {6.7f, 3.1f},new float[] {6.9f, 3.1f},
-                                     new float[] {5.8f, 2.7f},new float[] {6.8f, 3.2f},new float[] {6.7f, 3.3f},
-                                     new float[] {6.7f, 3.0f },new float[] {6.3f, 2.5f},new float[] {6.5f, 3.0f },
-                                     new float[] {6.2f, 3.4f},new float[] {5.9f, 3.0f }, new float[] {5.8f, 3.0f }});
+            var X = np.array(new float[][] { new float[] { 5.1f, 3.5f},new float[] { 4.9f, 3.0f },new float[] { 4.7f, 3.2f },
+                            new float[] { 4.6f, 3.1f },new float[] { 5.0f, 3.6f },new float[] { 5.4f, 3.9f },
+                            new float[] { 4.6f, 3.4f },new float[] { 5.0f, 3.4f },new float[] { 4.4f, 2.9f },
+                            new float[] { 4.9f, 3.1f },new float[] { 5.4f, 3.7f },new float[] {4.8f, 3.4f },
+                            new float[] {4.8f, 3.0f },new float[] {4.3f, 3.0f },new float[] {5.8f, 4.0f },
+                            new float[] {5.7f, 4.4f },new float[] {5.4f, 3.9f },new float[] {5.1f, 3.5f },
+                            new float[] {5.7f, 3.8f },new float[] {5.1f, 3.8f },new float[] {5.4f, 3.4f },
+                            new float[] {5.1f, 3.7f },new float[] {5.1f, 3.3f },new float[] {4.8f, 3.4f },
+                            new float[] {5.0f, 3.0f },new float[] {5.0f , 3.4f },new float[] {5.2f, 3.5f },
+                            new float[] {5.2f, 3.4f },new float[] {4.7f, 3.2f },new float[] {4.8f, 3.1f },
+                            new float[] {5.4f, 3.4f },new float[] {5.2f, 4.1f},new float[] {5.5f, 4.2f },
+                            new float[] {4.9f, 3.1f },new float[] {5.0f , 3.2f },new float[] {5.5f, 3.5f },
+                            new float[] {4.9f, 3.6f },new float[] {4.4f, 3.0f },new float[] {5.1f, 3.4f },
+                            new float[] {5.0f , 3.5f },new float[] {4.5f, 2.3f },new float[] {4.4f, 3.2f },
+                            new float[] {5.0f , 3.5f },new float[] {5.1f, 3.8f },new float[] {4.8f, 3.0f},
+                            new float[] {5.1f, 3.8f },new float[] {4.6f, 3.2f },new float[] { 5.3f, 3.7f },
+                            new float[] {5.0f , 3.3f },new float[] {7.0f , 3.2f },new float[] {6.4f, 3.2f },
+                            new float[] {6.9f, 3.1f },new float[] {5.5f, 2.3f },new float[] {6.5f, 2.8f },
+                            new float[] {5.7f, 2.8f },new float[] {6.3f, 3.3f },new float[] {4.9f, 2.4f },
+                            new float[] {6.6f, 2.9f },new float[] {5.2f, 2.7f },new float[] {5.0f , 2.0f },
+                            new float[] {5.9f, 3.0f },new float[] {6.0f , 2.2f },new float[] {6.1f, 2.9f },
+                            new float[] {5.6f, 2.9f },new float[] {6.7f, 3.1f },new float[] {5.6f, 3.0f },
+                            new float[] {5.8f, 2.7f },new float[] {6.2f, 2.2f },new float[] {5.6f, 2.5f },
+                            new float[] {5.9f, 3.0f},new float[] {6.1f, 2.8f},new float[] {6.3f, 2.5f},
+                            new float[] {6.1f, 2.8f},new float[] {6.4f, 2.9f},new float[] {6.6f, 3.0f },
+                            new float[] {6.8f, 2.8f},new float[] {6.7f, 3.0f },new float[] {6.0f , 2.9f},
+                            new float[] {5.7f, 2.6f},new float[] {5.5f, 2.4f},new float[] {5.5f, 2.4f},
+                            new float[] {5.8f, 2.7f},new float[] {6.0f , 2.7f},new float[] {5.4f, 3.0f},
+                            new float[] {6.0f , 3.4f},new float[] {6.7f, 3.1f},new float[] {6.3f, 2.3f},
+                            new float[] {5.6f, 3.0f },new float[] {5.5f, 2.5f},new float[] {5.5f, 2.6f},
+                            new float[] {6.1f, 3.0f },new float[] {5.8f, 2.6f},new float[] {5.0f, 2.3f},
+                            new float[] {5.6f, 2.7f},new float[] {5.7f, 3.0f },new float[] {5.7f, 2.9f},
+                            new float[] {6.2f, 2.9f},new float[] {5.1f, 2.5f},new float[] {5.7f, 2.8f},
+                            new float[] {6.3f, 3.3f},new float[] {5.8f, 2.7f},new float[] {7.1f, 3.0f },
+                            new float[] {6.3f, 2.9f},new float[] {6.5f, 3.0f },new float[] {7.6f, 3.0f },
+                            new float[] {4.9f, 2.5f},new float[] {7.3f, 2.9f},new float[] {6.7f, 2.5f},
+                            new float[] {7.2f, 3.6f},new float[] {6.5f, 3.2f},new float[] {6.4f, 2.7f},
+                            new float[] {6.8f, 3.00f },new float[] {5.7f, 2.5f},new float[] {5.8f, 2.8f},
+                            new float[] {6.4f, 3.2f},new float[] {6.5f, 3.0f },new float[] {7.7f, 3.8f},
+                            new float[] {7.7f, 2.6f},new float[] {6.0f , 2.2f},new float[] {6.9f, 3.2f},
+                            new float[] {5.6f, 2.8f},new float[] {7.7f, 2.8f},new float[] {6.3f, 2.7f},
+                            new float[] {6.7f, 3.3f},new float[] {7.2f, 3.2f},new float[] {6.2f, 2.8f},
+                            new float[] {6.1f, 3.0f },new float[] {6.4f, 2.8f},new float[] {7.2f, 3.0f },
+                            new float[] {7.4f, 2.8f},new float[] {7.9f, 3.8f},new float[] {6.4f, 2.8f},
+                            new float[] {6.3f, 2.8f},new float[] {6.1f, 2.6f},new float[] {7.7f, 3.0f },
+                            new float[] {6.3f, 3.4f},new float[] {6.4f, 3.1f},new float[] {6.0f, 3.0f},
+                            new float[] {6.9f, 3.1f},new float[] {6.7f, 3.1f},new float[] {6.9f, 3.1f},
+                            new float[] {5.8f, 2.7f},new float[] {6.8f, 3.2f},new float[] {6.7f, 3.3f},
+                            new float[] {6.7f, 3.0f },new float[] {6.3f, 2.5f},new float[] {6.5f, 3.0f },
+                            new float[] {6.2f, 3.4f},new float[] {5.9f, 3.0f }, new float[] {5.8f, 3.0f }});
             
-            var y = np.array<int>(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                                  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                                  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+            var y = np.array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
             fit(X, y);
             // Create a regular grid and classify each point 
             float x_min = X.amin(0).Data<float>(0) - 0.5f;
@@ -88,19 +88,18 @@ namespace TensorFlowNET.Examples
             var s = tf.Session();
             if (xx.dtype ==  typeof(float))
             {
-                var samples = np.hstack<float>(xx.ravel().reshape(-1,1), yy.ravel().reshape(-1,1));
+                var samples = np.hstack<float>(xx.ravel().reshape(xx.size,1), yy.ravel().reshape(yy.size,1));
                 var Z = s.run(predict(samples));
             }
-
 
             return true;
         }
 
         public void fit(NDArray X, NDArray y)
         {
-            NDArray unique_y = y.unique<long>();
+            var unique_y = y.unique<int>();
 
-            Dictionary<long, List<List<float>>> dic = new Dictionary<long, List<List<float>>>();
+            var dic = new Dictionary<int, List<List<float>>>();
             // Init uy in dic
             foreach (int uy in unique_y.Data<int>())
             {
@@ -111,11 +110,11 @@ namespace TensorFlowNET.Examples
             int maxCount = 0;
             for (int i = 0; i < y.size; i++)
             {
-                long curClass = (long)y[i];
-                List<List<float>> l = dic[curClass];
-                List<float> pair = new List<float>();
-                pair.Add((float)X[i,0]);
-                pair.Add((float)X[i, 1]);
+                var curClass = y[i];
+                var l = dic[curClass];
+                var pair = new List<float>();
+                pair.Add(X[i,0]);
+                pair.Add(X[i, 1]);
                 l.Add(pair);
                 if (l.Count > maxCount)
                 {
@@ -124,7 +123,7 @@ namespace TensorFlowNET.Examples
                 dic[curClass] = l;
             }
             float[,,] points = new float[dic.Count, maxCount, X.shape[1]];
-            foreach (KeyValuePair<long, List<List<float>>> kv in dic)
+            foreach (KeyValuePair<int, List<List<float>>> kv in dic)
             {
                 int j = (int) kv.Key;
                 for (int i = 0; i < maxCount; i++)
@@ -136,7 +135,7 @@ namespace TensorFlowNET.Examples
                 }
 
             }
-            NDArray points_by_class = np.array<float>(points);
+            var points_by_class = np.array(points);
             // estimate mean and variance for each class / feature
             // shape : nb_classes * nb_features
             var cons = tf.constant(points_by_class);

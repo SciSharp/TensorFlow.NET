@@ -62,10 +62,6 @@ namespace Tensorflow.Keras
             {
                 switch(sequences[i])
                 {
-                    case int[] data:
-                        for (int j = 0; j < nd.shape[1]; j++)
-                            nd[i, j] = j < data.Length ? data[j] : value;
-                        break;
                     default:
                         throw new NotImplementedException("pad_sequences");
                 }
