@@ -12,7 +12,7 @@ namespace TensorFlowNET.UnitTest
     /// excerpt of tensorflow/python/framework/ops_test.py
     /// </summary>
     [TestClass]
-    public class ControlDependenciesTest : Python
+    public class ControlDependenciesTest : PythonTest
     {
         [TestMethod]
         public void TestBasic()
@@ -70,48 +70,64 @@ namespace TensorFlowNET.UnitTest
                     {
                         a = constant_op.constant(1.0);
                         b = future();
-                        with(g.control_dependencies(new ITensorOrOperation[] {a, b}), ctrl =>
-                        {
-                            c = constant_op.constant(3.0);
-                        });
-                        Assert.IsTrue(Enumerable.SequenceEqual(c.op.control_inputs, new[] {a.op, b.op}));
+                        with(g.control_dependencies(new ITensorOrOperation[] { a, b }), ctrl =>
+                          {
+                              c = constant_op.constant(3.0);
+                          });
+                        Assert.IsTrue(Enumerable.SequenceEqual(c.op.control_inputs, new[] { a.op, b.op }));
                         Assert.AreEqual(1, calls);
                     });
 
                 }
             }
-/*
-  def testEager(self):
-    def future():
-      future.calls += 1
-      return constant_op.constant(2.0)
-    future.calls = 0
+            /*
+              def testEager(self):
+                def future():
+                  future.calls += 1
+                  return constant_op.constant(2.0)
+                future.calls = 0
 
-    if context.executing_eagerly():
-      a = constant_op.constant(1.0)
-      b = future
-      with ops.control_dependencies([a, b]):
-        c = constant_op.constant(3.0)
-      self.assertEqual(future.calls, 1)
-    else:
-      g = ops.Graph()
-      with g.as_default():
-        a = constant_op.constant(1.0)
-        b = future()
-        with g.control_dependencies([a, b]):
-          c = constant_op.constant(3.0)
-      self.assertEqual(c.op.control_inputs, [a.op, b.op])
-      self.assertEqual(future.calls, 1)
-*/
-            }
+                if context.executing_eagerly():
+                  a = constant_op.constant(1.0)
+                  b = future
+                  with ops.control_dependencies([a, b]):
+                    c = constant_op.constant(3.0)
+                  self.assertEqual(future.calls, 1)
+                else:
+                  g = ops.Graph()
+                  with g.as_default():
+                    a = constant_op.constant(1.0)
+                    b = future()
+                    with g.control_dependencies([a, b]):
+                      c = constant_op.constant(3.0)
+                  self.assertEqual(c.op.control_inputs, [a.op, b.op])
+                  self.assertEqual(future.calls, 1)
+            */
+        }
 
 
-        [Ignore("How to translate _apply_op into c#?")]
+        // Note: {henon}, all tests below use the function _apply_op which is not really portable in C#, see original source below
+        // but I think _apply_op(...) can just be replaced by g.create_op(...).
+        /*
+def _apply_op(g, *args, **kwargs):
+  op = g.create_op(*args, **kwargs)
+  if len(op.outputs) == 1:
+    return op.outputs[0]
+  else:
+    return op.outputs
+         */
+
+
+        [Ignore("")]
         [TestMethod]
         public void TestBasicWithConversion()
         {
+            var g = ops.get_default_graph();
+            // Note: _apply_op can be replaced by g.create_op
+            var a = g.create_op("FloatOutput", new Tensor[] { }, new[] { TF_DataType.TF_FLOAT });
+            // TODO: ConvertibleObj, see original source below
             /*
-  def testBasicWithConversion(self):
+    def testBasicWithConversion(self):
     g = ops.Graph()
     a = _apply_op(g, "FloatOutput", [], [dtypes.float32])
 
@@ -127,31 +143,56 @@ namespace TensorFlowNET.UnitTest
              */
         }
 
-        [Ignore("How to translate _apply_op into c#?")]
+        //[Ignore()]
         [TestMethod]
         public void TestNested()
         {
+            var g = ops.get_default_graph();
+            var a_1 = g.create_op("FloatOutput", new Tensor[] { }, new[] { TF_DataType.TF_FLOAT });
+            var a_2 = g.create_op("FloatOutput", new Tensor[] { }, new[] { TF_DataType.TF_FLOAT });
+            var a_3 = g.create_op("FloatOutput", new Tensor[] { }, new[] { TF_DataType.TF_FLOAT });
+            var a_4 = g.create_op("FloatOutput", new Tensor[] { }, new[] { TF_DataType.TF_FLOAT });
+            Operation b_1 = null, b_2 = null;
+            with(g.control_dependencies(new ITensorOrOperation[] { a_1, a_2, a_3, a_4 }), ctrl =>
+            {
+                b_1 = g.create_op("FloatOutput", new Tensor[] { }, new[] { TF_DataType.TF_FLOAT });
+            });
+            with(g.control_dependencies(new ITensorOrOperation[] { a_1 }), ctrl1 =>
+            {
+                with(g.control_dependencies(new ITensorOrOperation[] { a_2 }), ctrl2 =>
+                {
+                    with(g.control_dependencies(new ITensorOrOperation[] { a_3 }), ctrl3 =>
+                    {
+                        with(g.control_dependencies(new ITensorOrOperation[] { a_4 }), ctrl4 =>
+                        {
+                            b_2 = g.create_op("FloatOutput", new Tensor[] { }, new[] { TF_DataType.TF_FLOAT });
+                        });
+                    });
+                });
+            });
+            AssertItemsEqual(new[] {a_1.op, a_2.op, a_3.op, a_4.op}, b_1.op.control_inputs);
+            AssertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs);
             /*
-  def testNested(self):
-    g = ops.Graph()
-    a_1 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
-    a_2 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
-    a_3 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
-    a_4 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
+def testNested(self):
+g = ops.Graph()
+a_1 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
+a_2 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
+a_3 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
+a_4 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
 
-    with g.control_dependencies([a_1, a_2, a_3, a_4]):
-      b_1 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
+with g.control_dependencies([a_1, a_2, a_3, a_4]):
+  b_1 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
 
-    with g.control_dependencies([a_1]):
-      with g.control_dependencies([a_2]):
-        with g.control_dependencies([a_3]):
-          with g.control_dependencies([a_4]):
-            b_2 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
+with g.control_dependencies([a_1]):
+  with g.control_dependencies([a_2]):
+    with g.control_dependencies([a_3]):
+      with g.control_dependencies([a_4]):
+        b_2 = _apply_op(g, "FloatOutput", [], [dtypes.float32])
 
-    self.assertItemsEqual([a_1.op, a_2.op, a_3.op, a_4.op],
-                          b_1.op.control_inputs)
-    self.assertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs)
-             */
+self.assertItemsEqual([a_1.op, a_2.op, a_3.op, a_4.op],
+                      b_1.op.control_inputs)
+self.assertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs)
+         */
         }
 
 
