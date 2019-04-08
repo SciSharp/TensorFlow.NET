@@ -30,7 +30,7 @@ namespace Tensorflow
         /// <returns>A list of control inputs for the op to be created.</returns>
         private ITensorOrOperation[] _control_dependencies_for_inputs(ITensorOrOperation[] input_ops)
         {
-            var ret = new ITensorOrOperation[0];
+            var ret = new List<ITensorOrOperation>();
 
             foreach(var controller in _control_dependencies_stack)
             {
@@ -48,10 +48,10 @@ namespace Tensorflow
                 }
 
                 if (!dominated)
-                    ret = controller.control_inputs.Where(x => !input_ops.Contains(x)).ToArray();
+                    ret.AddRange( controller.control_inputs.Where(x => !input_ops.Contains(x)));
             }
 
-            return ret;
+            return ret.ToArray();
         }
 
         /// <summary>
