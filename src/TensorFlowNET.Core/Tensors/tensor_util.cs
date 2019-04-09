@@ -116,10 +116,19 @@ namespace Tensorflow
                         case int intVal:
                             nparray = intVal;
                             break;
+                        case int[] intVals:
+                            nparray = np.array(intVals);
+                            break;
+                        case int[,] intVals:
+                            nparray = np.array(intVals);
+                            break;
                         case long intVal:
                             nparray = intVal;
                             break;
-                        case int[] intVals:
+                        case long[] intVals:
+                            nparray = np.array(intVals);
+                            break;
+                        case long[,] intVals:
                             nparray = np.array(intVals);
                             break;
                         case float floatVal:
@@ -128,8 +137,17 @@ namespace Tensorflow
                         case float[] floatVals:
                             nparray = floatVals;
                             break;
+                        case float[,] floatVals:
+                            nparray = np.array(floatVals);
+                            break;
                         case double doubleVal:
                             nparray = doubleVal;
+                            break;
+                        case double[] doubleVals:
+                            nparray = np.array(doubleVals);
+                            break;
+                        case double[,] doubleVals:
+                            nparray = np.array(doubleVals);
                             break;
                         case string strVal:
                             nparray = strVal;
@@ -140,8 +158,11 @@ namespace Tensorflow
                         case byte[] byteValues:
                             nparray = byteValues;
                             break;
+                        case byte[,] byteValues:
+                            nparray = np.array(byteValues);
+                            break;
                         default:
-                            throw new NotImplementedException("make_tensor_proto Not Implemented");
+                            throw new NotImplementedException($"make_tensor_proto: Support for type {values.GetType()} Not Implemented");
                     }
                 }
                 else
@@ -174,7 +195,7 @@ namespace Tensorflow
                                 nparray = Convert.ToString(values);
                             break;
                         default:
-                            throw new NotImplementedException("make_tensor_proto Not Implemented");
+                            throw new NotImplementedException($"make_tensor_proto: Support for type {np_dt.Name} Not Implemented");
                     }
                 }
             }

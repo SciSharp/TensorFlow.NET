@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest
     /// </summary>
     public class PythonTest : Python
     {
-        public void AssertItemsEqual(ICollection expected, ICollection given)
+        public void assertItemsEqual(ICollection expected, ICollection given)
         {
             Assert.IsNotNull(expected);
             Assert.IsNotNull(given);
@@ -23,5 +23,12 @@ namespace TensorFlowNET.UnitTest
             for(int i=0; i<e.Length; i++)
                 Assert.AreEqual(e[i], g[i], $"Items differ at index {i}, expected {e[i]} but got {g[i]}");
         }
+
+        public void assertEqual(object given, object expected)
+        {
+            Assert.AreEqual(expected, given);
+        }
+
+        protected PythonTest self { get => this; }
     }
 }

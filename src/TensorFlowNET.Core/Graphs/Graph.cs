@@ -74,7 +74,7 @@ namespace Tensorflow
 
             return null;
         }
-       
+
         private ITensorOrOperation _as_graph_element_locked(object obj, bool allow_tensor = true, bool allow_operation = true)
         {
             string types_str = "";
@@ -99,7 +99,7 @@ namespace Tensorflow
             // If obj appears to be a name...
             if (obj is string name)
             {
-                if(name.Contains(":") && allow_tensor)
+                if (name.Contains(":") && allow_tensor)
                 {
                     string op_name = name.Split(':')[0];
                     int out_n = int.Parse(name.Split(':')[1]);
@@ -107,7 +107,7 @@ namespace Tensorflow
                     if (_nodes_by_name.ContainsKey(op_name))
                         return _nodes_by_name[op_name].outputs[out_n];
                 }
-                else if(!name.Contains(":") & allow_operation)
+                else if (!name.Contains(":") & allow_operation)
                 {
                     if (!_nodes_by_name.ContainsKey(name))
                         throw new KeyError($"The name {name} refers to an Operation not in the graph.");
@@ -166,8 +166,8 @@ namespace Tensorflow
                 throw new RuntimeError("Graph is finalized and cannot be modified.");
         }
 
-        public unsafe Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes, 
-            TF_DataType[] input_types = null, string name = null, 
+        public unsafe Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes,
+            TF_DataType[] input_types = null, string name = null,
             Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)
         {
             if (inputs == null)
@@ -188,7 +188,7 @@ namespace Tensorflow
             var input_ops = inputs.Select(x => x.op).ToArray();
             var control_inputs = _control_dependencies_for_inputs(input_ops);
 
-            var op = new Operation(node_def, 
+            var op = new Operation(node_def,
                 this,
                 inputs: inputs,
                 output_types: dtypes,
@@ -261,52 +261,59 @@ namespace Tensorflow
             return String.IsNullOrEmpty(new_stack) ? "" : new_stack + "/";
         }
 
+        /// <summary>
+        /// Return a unique operation name for `name`.
+        /// 
+        /// Note: You rarely need to call `unique_name()` directly.Most of
+        /// the time you just need to create `with g.name_scope()` blocks to
+        /// generate structured names.
+        /// 
+        /// `unique_name` is used to generate structured names, separated by
+        /// `"/"`, to help identify operations when debugging a graph.
+        /// Operation names are displayed in error messages reported by the
+        /// TensorFlow runtime, and in various visualization tools such as
+        /// TensorBoard.
+        /// 
+        /// If `mark_as_used` is set to `True`, which is the default, a new
+        /// unique name is created and marked as in use.If it's set to `False`,
+        /// the unique name is returned without actually being marked as used.
+        /// This is useful when the caller simply wants to know what the name
+        /// to be created will be.
+        /// </summary>
+        /// <param name="name">The name for an operation.</param>
+        /// <param name="mark_as_used"> Whether to mark this name as being used.</param>
+        /// <returns>A string to be passed to `create_op()` that will be used
+        /// to name the operation being created.</returns>
         public string unique_name(string name, bool mark_as_used = true)
         {
             if (!String.IsNullOrEmpty(_name_stack))
-            {
                 name = _name_stack + "/" + name;
-            }
-
+            // For the sake of checking for names in use, we treat names as case
+            // insensitive (e.g. foo = Foo).
             var name_key = name.ToLower();
             int i = 0;
             if (_names_in_use.ContainsKey(name_key))
-            {
-                foreach (var item in _names_in_use)
-                {
-                    if (item.Key == name_key)
-                    {
-                        i = _names_in_use[name_key];
-                        break;
-                    }
-                    
-                    i++;
-                }
-            }
-
+                i = _names_in_use[name_key];
+            // Increment the number for "name_key".
             if (mark_as_used)
-                if (_names_in_use.ContainsKey(name_key))
-                    _names_in_use[name_key]++;
-                else
-                    _names_in_use[name_key] = i + 1;
-            
+                _names_in_use[name_key] = i + 1;
             if (i > 0)
             {
-                var base_name_key = name_key;
-
                 // Make sure the composed name key is not already used.
-                if (_names_in_use.ContainsKey(name_key))
+                var base_name_key = name_key;
+                while (_names_in_use.ContainsKey(name_key))
                 {
                     name_key = $"{base_name_key}_{i}";
                     i += 1;
                 }
-
+                // Mark the composed name_key as used in case someone wants
+                // to call unique_name("name_1").
                 if (mark_as_used)
                     _names_in_use[name_key] = 1;
 
-                name = $"{name}_{i - 1}";
+                // Return the new name with the original capitalization of the given name.
+                name = $"{name}_{i-1}";
             }
-
             return name;
         }
 
@@ -376,7 +383,7 @@ namespace Tensorflow
         {
             _unfetchable_ops.Add(op);
         }
-        
+
         public void Dispose()
         {
             c_api.TF_DeleteGraph(_handle);
@@ -388,7 +395,7 @@ namespace Tensorflow
 
         public void __exit__()
         {
-            
+
         }
 
         public static implicit operator IntPtr(Graph graph)
