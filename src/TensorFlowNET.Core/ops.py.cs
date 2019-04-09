@@ -119,10 +119,13 @@ namespace Tensorflow
         /// A context manager that specifies control dependencies for all
         /// operations constructed within the context.
         /// </returns>
-        public static _ControlDependenciesController control_dependencies(Operation[] control_inputs)
+        public static _ControlDependenciesController control_dependencies(object[] control_inputs)
         {
             return get_default_graph().control_dependencies(control_inputs);
         }
+
+        public static _ControlDependenciesController control_dependencies(ITensorOrOperation[] control_inputs)
+            => control_dependencies(control_inputs == null ? null : control_inputs.OfType<object>().ToArray());
 
         /// <summary>
         /// Creates a TF_Operation.

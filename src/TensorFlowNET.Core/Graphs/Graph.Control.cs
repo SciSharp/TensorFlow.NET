@@ -30,15 +30,15 @@ namespace Tensorflow
         /// <returns>A list of control inputs for the op to be created.</returns>
         private ITensorOrOperation[] _control_dependencies_for_inputs(ITensorOrOperation[] input_ops)
         {
-            var ret = new ITensorOrOperation[0];
+            var ret = new List<ITensorOrOperation>();
 
-            foreach(var controller in _control_dependencies_stack)
+            foreach (var controller in _control_dependencies_stack)
             {
                 bool dominated = false;
                 // If any of the input_ops already depends on the inputs from controller,
                 // we say that the new op is dominated (by that input), and we therefore
                 // do not need to add control dependencies for this controller's inputs.
-                foreach(var op in input_ops)
+                foreach (var op in input_ops)
                 {
                     if (controller.op_in_group(op))
                     {
@@ -48,10 +48,10 @@ namespace Tensorflow
                 }
 
                 if (!dominated)
-                    ret = controller.control_inputs.Where(x => !input_ops.Contains(x)).ToArray();
+                    ret.AddRange(controller.control_inputs.Where(x => !input_ops.Contains(x)));
             }
 
-            return ret;
+            return ret.ToArray();
         }
 
         /// <summary>
@@ -62,6 +62,16 @@ namespace Tensorflow
         /// `control_inputs`. 
         /// </summary>
         public _ControlDependenciesController control_dependencies(ITensorOrOperation[] control_inputs)
+            => control_dependencies(control_inputs == null ? null : control_inputs.OfType<object>().ToArray());
+
+        /// <summary>
+        /// Returns a context manager that specifies control dependencies.
+        /// 
+        /// Use with the `with` keyword to specify that all operations constructed
+        /// within the context should have control dependencies on
+        /// `control_inputs`. 
+        /// </summary>
+        public _ControlDependenciesController control_dependencies(object[] control_inputs)
         {
             if (control_inputs == null)
                 return new _ControlDependenciesController(this, null);
@@ -69,9 +79,26 @@ namespace Tensorflow
             var control_ops = new List<ITensorOrOperation>();
             foreach (var c in control_inputs)
             {
-                control_ops.Add(c);
+                switch (c)
+                {
+                    // TODO: implement IndexedSlices
+                    //case IndexedSlices islice:
+                    //    control_ops.Add(islice.op);
+                    //    break;
+                    case Tensor t:                       
+                        control_ops.Add(t.op);
+                        break;
+                    case Operation op:
+                        control_ops.Add(op);
+                        break;
+                    default:
+                        var t1 = _as_graph_element(c);
+                        if (t1 == null)
+                            throw new TypeError($"Control input must be Operation or Tensor:{c}");
+                        control_ops.Add(t1.op);
+                        break;
+                }
             }
-
             return new _ControlDependenciesController(this, control_ops);
         }
 
@@ -103,6 +130,9 @@ namespace Tensorflow
             _control_dependencies_stack.Dequeue();
         }
 
+        /// <summary>
+        /// Record that the given op depends on all registered control dependencies.
+        /// </summary>
         public void _record_op_seen_by_control_dependencies(Operation op)
         {
             foreach (var controller in _control_dependencies_stack)

@@ -6,6 +6,8 @@ using System.Text;
 
 namespace Tensorflow
 {
+
+    // from ops.py
     public partial class Operation
     {
         public TF_Output Input(int index) => c_api.TF_OperationInput(new TF_Input(_handle, index));
@@ -39,6 +41,15 @@ namespace Tensorflow
 
         public int NumControlInputs => c_api.TF_OperationNumControlInputs(_handle);
 
+        /// <summary>
+        /// The `Operation` objects on which this op has a control dependency.
+        /// 
+        /// Before this op is executed, TensorFlow will ensure that the
+        /// operations in `self.control_inputs` have finished executing.This
+        /// mechanism can be used to run ops sequentially for performance
+        /// reasons, or to ensure that the side effects of an op are observed
+        /// in the correct order.
+        /// </summary>
         public Operation[] control_inputs
         {
             get

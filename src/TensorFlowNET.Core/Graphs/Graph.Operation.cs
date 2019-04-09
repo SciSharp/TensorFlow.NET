@@ -23,6 +23,12 @@ namespace Tensorflow
             return c_api.TF_NewOperation(_handle, opType, opName);
         }
 
+        /// <summary>
+        /// Returns the `Operation` with the given `name`.
+        /// 
+        /// This method may be called concurrently from multiple threads.
+        /// </summary>
+        /// <param name="name">The name of the `Operation` to return.</param>
         public Operation get_operation_by_name(string name) 
             => as_graph_element(name, allow_tensor: false, allow_operation: true) as Operation;
 

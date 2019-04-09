@@ -45,7 +45,6 @@ Bug memory leak issue when allocating Tensor.</PackageReleaseNotes>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.7.0" />
-    <PackageReference Include="NumSharp" Version="0.8.3" />
   </ItemGroup>
 
   <ItemGroup>
