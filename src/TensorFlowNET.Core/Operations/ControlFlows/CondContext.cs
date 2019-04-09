@@ -64,6 +64,25 @@ namespace Tensorflow.Operations
             }
         }
 
+        public (T, Tensor) BuildCondBranch<T>(Func<T> fn)
+        {
+            // Add the subgraph defined by fn() to the graph.
+            var pre_summaries = ops.get_collection(ops.GraphKeys._SUMMARY_COLLECTION);
+            var original_result = fn();
+            var post_summaries = ops.get_collection(ops.GraphKeys._SUMMARY_COLLECTION);
+
+            switch (original_result)
+            {
+                case Operation[] results:
+                    return (original_result, _BuildCondTensor(results));
+                case float[] fv:
+                    var result = ops.convert_to_tensor(fv[0]);
+                    return (original_result, result );
+                default:
+                    return (original_result, null);
+            }
+        }
+
         public (T[], Tensor[]) BuildCondBranch<T>(Func<T[]> fn)
         {
             // Add the subgraph defined by fn() to the graph.

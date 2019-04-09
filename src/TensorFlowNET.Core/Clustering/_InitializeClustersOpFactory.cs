@@ -52,7 +52,7 @@ namespace Tensorflow.Clustering
             _num_data = math_ops.add_n(_inputs.Select(i => array_ops.shape(i)[0]).ToArray());
         }
 
-        private Tensor[] _initialize()
+        private Tensor _initialize()
         {
             return with(ops.control_dependencies(new Operation[]
             {
@@ -63,24 +63,25 @@ namespace Tensorflow.Clustering
                 return control_flow_ops.cond(math_ops.equal(num_now_remaining, 0),
                   () =>
                   {
-                      return new Tensor[] { state_ops.assign(_cluster_centers_initialized, true) };
+                      return state_ops.assign(_cluster_centers_initialized, true);
                   },
                   () =>
                   {
-                      return new Tensor[] { control_flow_ops.no_op().output[0] };
+                      return control_flow_ops.no_op().output[0];
                   });
             });
         }
 
-        public Tensor[] op()
+        public Tensor op()
         {
-            return control_flow_ops.cond(gen_math_ops.equal(_num_remaining, 0),
+            var x = control_flow_ops.cond(gen_math_ops.equal(_num_remaining, 0),
                 () => 
                 {
-                    var op = check_ops.assert_equal(_cluster_centers_initialized, true);
-                    return new Tensor[] { op.output[0] };
+                    return check_ops.assert_equal(_cluster_centers_initialized, true);
                 },
                 _initialize);
+
+            return x;
         }
 
         private Tensor _add_new_centers()
@@ -93,7 +94,7 @@ namespace Tensorflow.Clustering
             // If cluster_centers is empty, it doesn't have the right shape for concat.
             var all_centers = control_flow_ops.cond(math_ops.equal(_num_selected, 0),
                 () => new Tensor[] { new_centers },
-                () => new Tensor[] { gen_array_ops.concat(new Tensor[] { _cluster_centers, new_centers }, 0) });
+                () => new Tensor[] { array_ops.concat(new Tensor[] { _cluster_centers, new_centers }, 0) });
 
             var a = state_ops.assign(_cluster_centers, all_centers, validate_shape: false);
 
@@ -105,16 +106,16 @@ namespace Tensorflow.Clustering
             return _greedy_batch_sampler()[0];
         }
 
-        private Tensor[] _greedy_batch_sampler()
+        private Tensor _greedy_batch_sampler()
         {
             return control_flow_ops.cond(_num_data <= _num_remaining,
                 () =>
                 {
-                    return new Tensor[] { gen_array_ops.concat(_inputs, 0) };
+                    return array_ops.concat(_inputs, 0);
                 },
                 () =>
                 {
-                    return new Tensor[] { _random() };
+                    return _random();
                 });
         }
 

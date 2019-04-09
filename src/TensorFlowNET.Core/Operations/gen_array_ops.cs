@@ -12,7 +12,14 @@ namespace Tensorflow
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
         public static Execute _execute = new Execute();
 
-        public static Tensor concat(Tensor[] values, int axis, string name = null)
+        /// <summary>
+        /// Concatenates tensors along one dimension.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor concat_v2(Tensor[] values, int axis, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
 

@@ -40,6 +40,7 @@ namespace TensorFlowNET.Examples
                 }
                 catch (Exception ex)
                 {
+                    errors.Add($"Example {example.Priority}: {example.Name}");
                     Console.WriteLine(ex);
                 }
 

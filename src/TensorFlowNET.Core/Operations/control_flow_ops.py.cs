@@ -187,6 +187,53 @@ namespace Tensorflow
             return @switch(data, pred, name: name);
         }
 
+        public static Tensor cond(Tensor pred,
+            Func<ITensorOrOperation> true_fn = null,
+            Func<ITensorOrOperation> false_fn = null,
+            bool strict = false,
+            string name = null)
+        {
+            return with(ops.name_scope(name, "cond", new { pred }), delegate
+            {
+                // Add the Switch to the graph.
+                var (p_2, p_1) = @switch(pred, pred);
+                var pivot_1 = array_ops.identity(p_1, name: "switch_t");
+                var pivot_2 = array_ops.identity(p_2, name: "switch_f");
+                pred = array_ops.identity(pred, name: "pred_id");
+
+                // Disable the fetching of tensors that are only on one branch of cond.
+                foreach (var tensor in new Tensor[] { p_1, p_2, pivot_1, pivot_2, pred })
+                    tensor.op.graph.prevent_fetching(tensor.op);
+
+                // Build the graph for the true branch in a new context.
+                var context_t = new CondContext(pred, pivot_1, branch: 1);
+                context_t.Enter();
+                var (orig_res_t, res_t) = context_t.BuildCondBranch(true_fn);
+                context_t.Exit();
+
+                // Build the graph for the false branch in a new context.
+                var context_f = new CondContext(pred, pivot_2, branch: 0);
+                context_f.Enter();
+                var (orig_res_f, res_f) = context_f.BuildCondBranch(false_fn);
+                context_f.Exit();
+
+                var res_t_flat = res_t;
+                var res_f_flat = res_f;
+
+                return new Tensor(IntPtr.Zero);
+                /*var merges = zip(res_f_flat, res_t_flat)
+                    .Select(pair => merge(new Tensor[] { pair.Item1, pair.Item2 }))
+                    .ToArray();
+
+                merges = _convert_flows_to_tensorarrays(orig_res_t, merges);
+
+                ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_t);
+                ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_f);
+
+                return merges;*/
+            });
+        }
+
         public static Tensor[] cond<T>(Tensor pred,
             Func<T[]> true_fn = null,
             Func<T[]> false_fn = null,

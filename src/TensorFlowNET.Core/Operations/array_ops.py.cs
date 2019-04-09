@@ -421,6 +421,26 @@ namespace Tensorflow
         public static Tensor broadcast_static_shape(Tensor shape_x, Tensor shape_y)
             => Framework.common_shapes.broadcast_shape(shape_x, shape_y);
 
+        /// <summary>
+        /// Concatenates tensors along one dimension.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor concat(Tensor[] values, int axis, string name = "concat")
+        {
+            if(values.Length == 1) // Degenerate case of one tensor.
+            {
+                return with(ops.name_scope(name), scope => {
+                    var t = ops.convert_to_tensor(axis, name: "concat_dim", dtype: TF_DataType.TF_INT32);
+                    return identity(values[0], name = scope);
+                });
+            }
+
+            return gen_array_ops.concat_v2(values, axis, name: name);
+        }
+
         public static Tensor gather(Tensor @params, Tensor indices, string name = null, int axis = 0)
             => gen_array_ops.gather_v2(@params, indices, axis, name: name);
 
