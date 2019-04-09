@@ -13,7 +13,7 @@ namespace Tensorflow
         private Graph _graph;
         private List<ITensorOrOperation> _control_inputs_val;
         private List<ITensorOrOperation> _seen_nodes;
-        private Queue<_ControlDependenciesController> _old_stack;
+        private List<_ControlDependenciesController> _old_stack;
         private bool _new_stack;
         private IControlFlowContext _old_control_flow_context;
 
@@ -73,7 +73,7 @@ namespace Tensorflow
             {
                 // Clear the control_dependencies graph.
                 _old_stack = _graph._control_dependencies_stack;
-                _graph._control_dependencies_stack = new Queue<_ControlDependenciesController>();
+                _graph._control_dependencies_stack = new List<_ControlDependenciesController>();
 
                 // Clear the control_flow_context too.
                 _old_control_flow_context = _graph._get_control_flow_context();
