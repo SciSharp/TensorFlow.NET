@@ -53,7 +53,6 @@ namespace TensorFlowNET.Examples
 
             return with(tf.Session(), sess =>
             {
-                
                 // Run the initializer
                 sess.run(init);
 
@@ -71,7 +70,7 @@ namespace TensorFlowNET.Examples
                             new FeedItem(x, batch_xs),
                             new FeedItem(y, batch_ys));
 
-                        var c = (float)result[1];
+                        float c = result[1];
                         // Compute average loss
                         avg_cost += c / total_batch;
                     }

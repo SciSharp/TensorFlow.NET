@@ -96,7 +96,7 @@ namespace TensorFlowNET.Examples.Utility
             for(int row = 0; row < num_labels; row++)
             {
                 var col = labels_dense.Data<byte>(row);
-                labels_one_hot[row, col] = 1;
+                labels_one_hot.SetData(1, row, col);
             }
 
             return labels_one_hot;
