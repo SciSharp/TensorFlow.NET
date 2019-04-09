@@ -61,115 +61,150 @@ namespace TensorFlowNET.UnitTest
                 self.assertEqual(op4.name, "myop_1_1");
             });
         }
+
+        [Ignore("Something is not right, Switch gets not inserted correctly?")]
+        [TestMethod]
+        public void TestCond()
+        {
+            var graph = tf.Graph().as_default();
+            with<Graph>(graph, g =>
+            {
+                var x = constant_op.constant(10);
+
+                var true_fn = new Func<Tensor>(() =>
+                {
+                    var (c_op, op_desc) = ops._create_c_op(g, ops._NodeDef("Identity", "cond/myop"), new[] { x }, new Operation[0]);
+                    var new_ops = g._add_new_tf_operations();
+                    self.assertEqual(len(new_ops), 1);
+                    return x;
+                });
+
+                control_flow_ops.cond(x < 10, true_fn, () => x);
+
+                var op = g.get_operation_by_name("cond/myop");
+                self.assertIsNotNone(op);
+                self.assertEqual(op.name, "cond/myop");
+                self.assertEqual(op.type, "Identity");
+                //self.assertEqual(op.outputs, new object[0]);
+                var op_input = op.inputs[0].op;
+                self.assertEqual(op_input.type, "Switch");
+                self.assertEqual(op_input.inputs[0], x);
+                self.assertEqual(op.graph, g);
+                self.assertIsNotNone(op._get_control_flow_context());
+                // TODO: op._get_control_flow_context().name not implemented
+                //self.assertEqual(op._get_control_flow_context().name, "cond/cond_text");
+            });
+            /*
+                @test_util.run_v1_only("b/120545219")
+                def testCond(self):
+                  g = ops.Graph()
+                  with g.as_default():
+                    x = test_ops.int_output()
+
+                    def true_fn():
+                      ops._create_c_op(ops.get_default_graph(),
+                                       ops._NodeDef("IntInput", "cond/myop"), [x], [])
+                      new_ops = g._add_new_tf_operations()
+                      self.assertEqual(len(new_ops), 1)
+                      return x
+
+                    control_flow_ops.cond(x < 10, true_fn, lambda: x)
+
+                  op = g.get_operation_by_name("cond/myop")
+                  self.assertIsNotNone(op)
+                  self.assertEqual(op.name, "cond/myop")
+                  self.assertEqual(op.type, "IntInput")
+                  self.assertEqual(op.outputs, [])
+                  op_input = op.inputs[0].op
+                  self.assertEqual(op_input.type, "Switch")
+                  self.assertEqual(op_input.inputs[0], x)
+                  self.assertEqual(op.graph, g)
+                  # pylint: disable=protected-access
+                  self.assertIsNotNone(op._get_control_flow_context())
+                  self.assertEqual(op._get_control_flow_context().name,
+                                   "cond/cond_text")
+                  # pylint: enable=protected-access
+                  */
+        }
         /*
-                 @test_util.run_v1_only("b/120545219")
-                 def testCond(self):
-                   g = ops.Graph()
-                   with g.as_default():
-                     x = test_ops.int_output()
+                  @test_util.run_v1_only("b/120545219")
+                  def testWhileLoop(self):
+                    g = ops.Graph()
+                    with g.as_default():
+                      x = test_ops.int_output()
 
-                     def true_fn():
-                       ops._create_c_op(ops.get_default_graph(),
-                                        ops._NodeDef("IntInput", "cond/myop"), [x], [])
-                       new_ops = g._add_new_tf_operations()
-                       self.assertEqual(len(new_ops), 1)
-                       return x
+                      def body(i):
+                        ops._create_c_op(ops.get_default_graph(),
+                                         ops._NodeDef("IntInput", "myloop/myop"), [x], [])
+                        new_ops = g._add_new_tf_operations()
+                        self.assertEqual(len(new_ops), 1)
+                        return i
 
-                     control_flow_ops.cond(x < 10, true_fn, lambda: x)
+                      control_flow_ops.while_loop(lambda i: i < 10, body, [0], name="myloop")
 
-                   op = g.get_operation_by_name("cond/myop")
-                   self.assertIsNotNone(op)
-                   self.assertEqual(op.name, "cond/myop")
-                   self.assertEqual(op.type, "IntInput")
-                   self.assertEqual(op.outputs, [])
-                   op_input = op.inputs[0].op
-                   self.assertEqual(op_input.type, "Switch")
-                   self.assertEqual(op_input.inputs[0], x)
-                   self.assertEqual(op.graph, g)
-                   # pylint: disable=protected-access
-                   self.assertIsNotNone(op._get_control_flow_context())
-                   self.assertEqual(op._get_control_flow_context().name,
-                                    "cond/cond_text")
-                   # pylint: enable=protected-access
+                    op = g.get_operation_by_name("myloop/myop")
+                    self.assertIsNotNone(op)
+                    self.assertEqual(op.name, "myloop/myop")
+                    self.assertEqual(op.type, "IntInput")
+                    self.assertEqual(op.outputs, [])
+                    op_input = op.inputs[0].op
+                    self.assertEqual(op_input.type, "Enter")
+                    self.assertEqual(list(op_input.inputs), [x])
+                    self.assertEqual(op.graph, g)
+                    # pylint: disable=protected-access
+                    self.assertIsNotNone(op._get_control_flow_context())
+                    self.assertEqual(op._get_control_flow_context().name,
+                                     "myloop/while_context")
+                    # pylint: enable=protected-access
 
-                 @test_util.run_v1_only("b/120545219")
-                 def testWhileLoop(self):
-                   g = ops.Graph()
-                   with g.as_default():
-                     x = test_ops.int_output()
+                  @test_util.run_v1_only("b/120545219")
+                  def testWhileLoopWithInternalControlDep(self):
+                    g = ops.Graph()
+                    with g.as_default():
+                      x = test_ops.int_output()
 
-                     def body(i):
-                       ops._create_c_op(ops.get_default_graph(),
-                                        ops._NodeDef("IntInput", "myloop/myop"), [x], [])
-                       new_ops = g._add_new_tf_operations()
-                       self.assertEqual(len(new_ops), 1)
-                       return i
+                      def body(i):
+                        c = constant_op.constant(1.0, name="c")
+                        ops._create_c_op(ops.get_default_graph(),
+                                         ops._NodeDef("IntInput", "myloop/myop"), [x], [])
+                        with ops.control_dependencies([c]):
+                          new_ops = g._add_new_tf_operations()
+                          self.assertEqual(len(new_ops), 1)
+                        return i
 
-                     control_flow_ops.while_loop(lambda i: i < 10, body, [0], name="myloop")
+                      control_flow_ops.while_loop(lambda i: i < 10, body, [0], name="myloop")
 
-                   op = g.get_operation_by_name("myloop/myop")
-                   self.assertIsNotNone(op)
-                   self.assertEqual(op.name, "myloop/myop")
-                   self.assertEqual(op.type, "IntInput")
-                   self.assertEqual(op.outputs, [])
-                   op_input = op.inputs[0].op
-                   self.assertEqual(op_input.type, "Enter")
-                   self.assertEqual(list(op_input.inputs), [x])
-                   self.assertEqual(op.graph, g)
-                   # pylint: disable=protected-access
-                   self.assertIsNotNone(op._get_control_flow_context())
-                   self.assertEqual(op._get_control_flow_context().name,
-                                    "myloop/while_context")
-                   # pylint: enable=protected-access
+                    op = g.get_operation_by_name("myloop/myop")
+                    self.assertIsNotNone(op)
+                    c = g.get_operation_by_name("myloop/c")
+                    self.assertIsNotNone(c)
+                    # Internal control dep is preserved
+                    self.assertEqual(op.control_inputs, [c])
 
-                 @test_util.run_v1_only("b/120545219")
-                 def testWhileLoopWithInternalControlDep(self):
-                   g = ops.Graph()
-                   with g.as_default():
-                     x = test_ops.int_output()
+                  @test_util.run_v1_only("b/120545219")
+                  def testWhileLoopWithExternalControlDep(self):
+                    g = ops.Graph()
+                    with g.as_default():
+                      x = test_ops.int_output()
+                      c = constant_op.constant(1.0)
 
-                     def body(i):
-                       c = constant_op.constant(1.0, name="c")
-                       ops._create_c_op(ops.get_default_graph(),
-                                        ops._NodeDef("IntInput", "myloop/myop"), [x], [])
-                       with ops.control_dependencies([c]):
-                         new_ops = g._add_new_tf_operations()
-                         self.assertEqual(len(new_ops), 1)
-                       return i
+                      def body(i):
+                        ops._create_c_op(ops.get_default_graph(),
+                                         ops._NodeDef("IntInput", "myloop/myop"), [x], [])
+                        with ops.control_dependencies([c]):
+                          new_ops = g._add_new_tf_operations()
+                          self.assertEqual(len(new_ops), 1)
+                        return i
 
-                     control_flow_ops.while_loop(lambda i: i < 10, body, [0], name="myloop")
+                      control_flow_ops.while_loop(lambda i: i < 10, body, [0], name="myloop")
 
-                   op = g.get_operation_by_name("myloop/myop")
-                   self.assertIsNotNone(op)
-                   c = g.get_operation_by_name("myloop/c")
-                   self.assertIsNotNone(c)
-                   # Internal control dep is preserved
-                   self.assertEqual(op.control_inputs, [c])
-
-                 @test_util.run_v1_only("b/120545219")
-                 def testWhileLoopWithExternalControlDep(self):
-                   g = ops.Graph()
-                   with g.as_default():
-                     x = test_ops.int_output()
-                     c = constant_op.constant(1.0)
-
-                     def body(i):
-                       ops._create_c_op(ops.get_default_graph(),
-                                        ops._NodeDef("IntInput", "myloop/myop"), [x], [])
-                       with ops.control_dependencies([c]):
-                         new_ops = g._add_new_tf_operations()
-                         self.assertEqual(len(new_ops), 1)
-                       return i
-
-                     control_flow_ops.while_loop(lambda i: i < 10, body, [0], name="myloop")
-
-                   op = g.get_operation_by_name("myloop/myop")
-                   self.assertIsNotNone(op)
-                   # External control dep is removed and replaced with internal control dep
-                   self.assertNotEqual(op.control_inputs[0], c.op)
-                   self.assertIsNotNone(op.control_inputs[0]._get_control_flow_context())
+                    op = g.get_operation_by_name("myloop/myop")
+                    self.assertIsNotNone(op)
+                    # External control dep is removed and replaced with internal control dep
+                    self.assertNotEqual(op.control_inputs[0], c.op)
+                    self.assertIsNotNone(op.control_inputs[0]._get_control_flow_context())
 
 
-               */
+                */
     }
     }

@@ -8,6 +8,7 @@ namespace Tensorflow
 {
     public partial class Graph
     {
+        // Current control flow context. It could be either CondContext or WhileContext 
         public IControlFlowContext _control_flow_context;
 
         // represents the nested with(...) statements
