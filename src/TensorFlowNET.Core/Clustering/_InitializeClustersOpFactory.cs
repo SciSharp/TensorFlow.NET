@@ -121,7 +121,15 @@ namespace Tensorflow.Clustering
 
         private Tensor _random()
         {
-            throw new NotImplementedException("");
+            var reshape = array_ops.reshape(_num_remaining, new int[] { -1 });
+            var cast = math_ops.cast(_num_data, TF_DataType.TF_INT64);
+            var indices = random_ops.random_uniform(
+                reshape,
+                minval: 0,
+                maxval: cast,
+                seed: _random_seed,
+                dtype: TF_DataType.TF_INT64);
+            return embedding_ops.embedding_lookup(_inputs, indices, partition_strategy: "div");
         }
     }
 }

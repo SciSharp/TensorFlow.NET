@@ -64,6 +64,31 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor random_uniform(Tensor shape,
+            long minval = 0,
+            Tensor maxval = null,
+            TF_DataType dtype = TF_DataType.TF_FLOAT,
+            int? seed = null,
+            string name = null)
+        {
+            return with(ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
+            {
+                name = scope;
+                var minTensor = ops.convert_to_tensor(minval, dtype: dtype, name: "min");
+                var maxTensor = ops.convert_to_tensor(maxval, dtype: dtype, name: "max");
+                var (seed1, seed2) = random_seed.get_seed(seed);
+                if (dtype.is_integer())
+                {
+                    return gen_random_ops.random_uniform_int(shape, minTensor, maxTensor, seed: seed1, seed2: seed2, name: name);
+                }
+                else
+                {
+                    var rnd = gen_random_ops.random_uniform(shape, dtype);
+                    return math_ops.add(rnd * (maxTensor - minTensor), minTensor, name: name);
+                }
+            });
+        }
+
         public static Tensor truncated_normal(int[] shape,
             float mean = 0.0f,
             float stddev = 1.0f,

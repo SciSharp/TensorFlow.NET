@@ -37,12 +37,46 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor _embedding_lookup_and_transform(Tensor[] @params,
+                Tensor ids,
+                string partition_strategy = "mod",
+                string name = null,
+                string max_norm = null)
+        {
+            return with(ops.name_scope(name, "embedding_lookup", new { @params, ids }), scope =>
+            {
+                name = scope;
+                int np = @params.Length;
+                @params = ops.convert_n_to_tensor_or_indexed_slices(@params, name: "params");
+                ids = ops.convert_to_tensor(ids, name: "ids");
+                if (np == 1)
+                {
+
+                }
+                return array_ops.identity(null);
+                throw new NotImplementedException("_embedding_lookup_and_transform");
+            });
+        }
+
         public static Tensor _clip(Tensor @params, Tensor ids, string max_norm = null)
         {
             if (max_norm == null)
                 return @params;
 
             throw new NotImplementedException("_clip");
+        }
+
+        public static Tensor embedding_lookup(Tensor[] @params, Tensor ids, 
+            string partition_strategy = "mod", 
+            string name = null,
+            bool validate_indices = true,
+            string max_norm = null)
+        {
+            return _embedding_lookup_and_transform(@params: @params,
+              ids: ids,
+              partition_strategy: partition_strategy,
+              name: name,
+              max_norm: max_norm);
         }
     }
 }

@@ -32,6 +32,30 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Outputs random integers from a uniform distribution.
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="minval"></param>
+        /// <param name="maxval"></param>
+        /// <param name="seed"></param>
+        /// <param name="seed2"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor random_uniform_int(Tensor shape, Tensor minval, Tensor maxval, int? seed = 0, int? seed2 = 0, string name = null)
+        {
+            if (!seed.HasValue)
+                seed = 0;
+            if (!seed2.HasValue)
+                seed2 = 0;
+
+            var _op = _op_def_lib._apply_op_helper("RandomUniformInt",
+                name: name,
+                args: new { shape, minval, maxval, seed, seed2 });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
         /// Outputs random values from a uniform distribution.
         /// </summary>
         /// <param name="shape"></param>
