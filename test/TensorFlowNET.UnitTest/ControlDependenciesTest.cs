@@ -277,7 +277,7 @@ namespace TensorFlowNET.UnitTest
             AssertItemsEqual(new[] {a_4.op}, e_4.op.control_inputs);
         }
 
-        [Ignore("will fail due to unsupported op 'FloatOutput'")]
+        [Ignore("Don't know how to create an operation with two outputs")]
         [TestMethod]
         public void TestRepeatedDependency()
         {
@@ -293,15 +293,21 @@ namespace TensorFlowNET.UnitTest
 
     self.assertEqual(b.op.control_inputs, [a])
     self.assertEqual(c.op.control_inputs, [a])
-
-  def testNoControlDependencyWithDataDependency(self):
-    g = ops.Graph()
-    a = _apply_op(g, "FloatOutput", [], [dtypes.float32])
-    with g.control_dependencies([a]):
-      b = _apply_op(g, "Identity", [a], [dtypes.float32])
-
-    self.assertEqual(b.op.control_inputs, [])
+ 
              */
+        }
+
+        [TestMethod]
+        public void TestNoControlDependencyWithDataDependency()
+        {
+            var g = tf.Graph().as_default();
+            Operation b = null;
+            var a = constant_op.constant(100.0);
+            with(g.control_dependencies(new[] { a }), ctrl1 =>
+            {
+                b = array_ops.identity(a);
+            });
+            Assert.AreEqual(0, b.op.control_inputs.Length);
         }
 
     }
