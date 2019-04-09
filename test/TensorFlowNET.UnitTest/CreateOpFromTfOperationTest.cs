@@ -33,28 +33,35 @@ namespace TensorFlowNET.UnitTest
                 Assert.AreEqual("myop", op.name);
                 Assert.AreEqual("Identity", op.type);
                 Assert.AreEqual(1, len(op.outputs));
-                AssertItemsEqual(new []{2, 3}, op.outputs[0].shape);
+                assertItemsEqual(new []{2, 3}, op.outputs[0].shape);
             });
         }
 
-        /*def testUniqueName(self):
-                   g = ops.Graph()
-                   with g.as_default():
-                     c_op = ops._create_c_op(g, ops._NodeDef("IntOutput", "myop"), [], [])
-                     c_op2 = ops._create_c_op(g, ops._NodeDef("IntOutput", "myop_1"), [], [])
-                     op = g._create_op_from_tf_operation(c_op)
-                     op2 = g._create_op_from_tf_operation(c_op2)
+        [TestMethod]
+        public void TestUniqueName()
+        {
+            var graph = tf.Graph().as_default();
+            with<Graph>(graph, g =>
+            {
+                //var (c_op,op_desc) = ops._create_c_op(g, ops._NodeDef("Const", "myop"), new Tensor[0], new Operation[0]);
+                //var (c_op2, op_desc1) = ops._create_c_op(g, ops._NodeDef("Const", "myop_1"), new Tensor[0], new Operation[0]);
+                //var op = g._create_op_from_tf_operation(c_op);
+                //var op2 = g._create_op_from_tf_operation(c_op2);
+                var op = constant_op.constant(0, name:"myop").op;
+                var op2 = constant_op.constant(0, name: "myop_1").op;
 
-                     # Create ops with same names as op1 and op2. We expect the new names to be
-                     # uniquified.
-                     op3 = test_ops.int_output(name="myop").op
-                     op4 = test_ops.int_output(name="myop_1").op
+                // Create ops with same names as op1 and op2. We expect the new names to be
+                // uniquified.
+                var op3 = constant_op.constant(0, name: "myop").op;
+                var op4 = constant_op.constant(0, name: "myop_1").op;
 
-                   self.assertEqual(op.name, "myop")
-                   self.assertEqual(op2.name, "myop_1")
-                   self.assertEqual(op3.name, "myop_2")
-                   self.assertEqual(op4.name, "myop_1_1")
-
+                self.assertEqual(op.name, "myop");
+                self.assertEqual(op2.name, "myop_1");
+                self.assertEqual(op3.name, "myop_2");
+                self.assertEqual(op4.name, "myop_1_1");
+            });
+        }
+        /*
                  @test_util.run_v1_only("b/120545219")
                  def testCond(self):
                    g = ops.Graph()
@@ -164,5 +171,5 @@ namespace TensorFlowNET.UnitTest
 
 
                */
-        }
+    }
     }

@@ -157,8 +157,8 @@ namespace TensorFlowNET.UnitTest
                      });
                  });
              });
-            AssertItemsEqual(new[] { a_1.op, a_2.op, a_3.op, a_4.op }, b_1.op.control_inputs);
-            AssertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs);
+            assertItemsEqual(new[] { a_1.op, a_2.op, a_3.op, a_4.op }, b_1.op.control_inputs);
+            assertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs);
         }
 
         [TestMethod]
@@ -200,12 +200,12 @@ namespace TensorFlowNET.UnitTest
                     b_none2 = constant_op.constant(12.0);
                 });
             });
-            AssertItemsEqual(new[] { a_3.op, a_4.op }, b_3_4.op.control_inputs);
-            AssertItemsEqual(new[] { a_3.op }, b_3.op.control_inputs);
-            AssertItemsEqual(new object[0], b_none.op.control_inputs);
-            AssertItemsEqual(new[] { a_1.op, a_2.op }, b_1_2.op.control_inputs);
-            AssertItemsEqual(new[] { a_1.op }, b_1.op.control_inputs);
-            AssertItemsEqual(new object[0], b_none2.op.control_inputs);
+            assertItemsEqual(new[] { a_3.op, a_4.op }, b_3_4.op.control_inputs);
+            assertItemsEqual(new[] { a_3.op }, b_3.op.control_inputs);
+            assertItemsEqual(new object[0], b_none.op.control_inputs);
+            assertItemsEqual(new[] { a_1.op, a_2.op }, b_1_2.op.control_inputs);
+            assertItemsEqual(new[] { a_1.op }, b_1.op.control_inputs);
+            assertItemsEqual(new object[0], b_none2.op.control_inputs);
         }
 
         [TestMethod]
@@ -256,25 +256,25 @@ namespace TensorFlowNET.UnitTest
                 });
             });
 
-            AssertItemsEqual(new[] {a_1.op}, b_1.op.control_inputs);
-            AssertItemsEqual(new[] {a_1.op, a_2.op}, b_2.op.control_inputs);
-            AssertItemsEqual(new[] { a_1.op, a_2.op}, b_3.op.control_inputs);
-            AssertItemsEqual(new[] {a_1.op, a_2.op}, b_4.op.control_inputs);
+            assertItemsEqual(new[] {a_1.op}, b_1.op.control_inputs);
+            assertItemsEqual(new[] {a_1.op, a_2.op}, b_2.op.control_inputs);
+            assertItemsEqual(new[] { a_1.op, a_2.op}, b_3.op.control_inputs);
+            assertItemsEqual(new[] {a_1.op, a_2.op}, b_4.op.control_inputs);
 
-            AssertItemsEqual(new object[0], c_1.op.control_inputs);
-            AssertItemsEqual(new[] {a_2.op}, c_2.op.control_inputs);
-            AssertItemsEqual(new[] {a_2.op, a_3.op}, c_3.op.control_inputs);
-            AssertItemsEqual(new[] {a_2.op, a_3.op, a_4.op}, c_4.op.control_inputs);
+            assertItemsEqual(new object[0], c_1.op.control_inputs);
+            assertItemsEqual(new[] {a_2.op}, c_2.op.control_inputs);
+            assertItemsEqual(new[] {a_2.op, a_3.op}, c_3.op.control_inputs);
+            assertItemsEqual(new[] {a_2.op, a_3.op, a_4.op}, c_4.op.control_inputs);
 
-            AssertItemsEqual(new object[0], d_1.op.control_inputs);
-            AssertItemsEqual(new object[0], d_2.op.control_inputs);
-            AssertItemsEqual(new object[0], d_3.op.control_inputs);
-            AssertItemsEqual(new object[0], d_4.op.control_inputs);
+            assertItemsEqual(new object[0], d_1.op.control_inputs);
+            assertItemsEqual(new object[0], d_2.op.control_inputs);
+            assertItemsEqual(new object[0], d_3.op.control_inputs);
+            assertItemsEqual(new object[0], d_4.op.control_inputs);
 
-            AssertItemsEqual(new[] {a_1.op}, e_1.op.control_inputs);
-            AssertItemsEqual(new[] {a_2.op}, e_2.op.control_inputs);
-            AssertItemsEqual(new[] {a_3.op}, e_3.op.control_inputs);
-            AssertItemsEqual(new[] {a_4.op}, e_4.op.control_inputs);
+            assertItemsEqual(new[] {a_1.op}, e_1.op.control_inputs);
+            assertItemsEqual(new[] {a_2.op}, e_2.op.control_inputs);
+            assertItemsEqual(new[] {a_3.op}, e_3.op.control_inputs);
+            assertItemsEqual(new[] {a_4.op}, e_4.op.control_inputs);
         }
 
         [Ignore("Don't know how to create an operation with two outputs")]
