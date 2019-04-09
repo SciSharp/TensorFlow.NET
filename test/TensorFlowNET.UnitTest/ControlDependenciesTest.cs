@@ -161,7 +161,6 @@ namespace TensorFlowNET.UnitTest
             AssertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs);
         }
 
-        [Ignore("Fails")]
         [TestMethod]
         public void TestClear()
         {

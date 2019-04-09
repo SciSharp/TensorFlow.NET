@@ -10,18 +10,8 @@ namespace Tensorflow
     {
         public IControlFlowContext _control_flow_context;
 
-        private Queue<_ControlDependenciesController> _graph_control_dependencies_stack = new Queue<_ControlDependenciesController>();
-        public Queue<_ControlDependenciesController> _control_dependencies_stack
-        {
-            get
-            {
-                return _graph_control_dependencies_stack;
-            }
-            set
-            {
-                _graph_control_dependencies_stack = value;
-            }
-        }
+        // represents the nested with(...) statements
+        public List<_ControlDependenciesController> _control_dependencies_stack { get; set; } = new List<_ControlDependenciesController>();
 
         /// <summary>
         /// For an op that takes `input_ops` as inputs, compute control inputs.
@@ -122,12 +112,12 @@ namespace Tensorflow
 
         public void _push_control_dependencies_controller(_ControlDependenciesController controller)
         {
-            _control_dependencies_stack.Enqueue(controller);
+            _control_dependencies_stack.Add(controller);
         }
 
         public void _pop_control_dependencies_controller(_ControlDependenciesController controller)
         {
-            _control_dependencies_stack.Dequeue();
+            _control_dependencies_stack.RemoveAt(_control_dependencies_stack.Count-1);
         }
 
         /// <summary>
