@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using Tensorflow.Operations;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.ops_test
 {
     /// <summary>
     /// excerpt of tensorflow/python/framework/ops_test.py
