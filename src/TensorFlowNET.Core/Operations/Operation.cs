@@ -62,16 +62,22 @@ namespace Tensorflow
             }
         }
 
-        public Operation(IntPtr handle)
+        public Operation(IntPtr handle, Graph g=null)
         {
             if (handle == IntPtr.Zero)
                 return;
 
             _handle = handle;
-            _graph = ops.get_default_graph();
+            _graph = g ?? ops.get_default_graph();
             _outputs = new Tensor[NumOutputs];
             for (int i = 0; i < NumOutputs; i++)
                 _outputs[i] = new Tensor(this, i, OutputType(i));
+
+            // Dict mapping op name to file and line information for op colocation
+            // context managers.
+            _control_flow_context = graph._get_control_flow_context();
+
+            // Note: _control_flow_post_processing() must not be called here, the caller is responsible for calling it when using this constructor.
         }
 
         public Operation(Graph g, string opType, string oper_name)
@@ -81,6 +87,10 @@ namespace Tensorflow
             _operDesc = c_api.TF_NewOperation(g, opType, oper_name);
             c_api.TF_SetAttrType(_operDesc, "dtype", TF_DataType.TF_INT32);
             _handle = c_api.TF_FinishOperation(_operDesc, status);
+
+            // Dict mapping op name to file and line information for op colocation
+            // context managers.
+            _control_flow_context = graph._get_control_flow_context();
         }
 
         /// <summary>
@@ -258,6 +268,23 @@ namespace Tensorflow
             }
 
             return base.Equals(obj);
+        }
+
+        /// <summary>
+        /// Update the input to this operation at the given index.
+        /// 
+        /// NOTE: This is for TF internal use only.Please don't use it.
+        /// </summary>
+        /// <param name="index">the index of the input to update.</param>
+        /// <param name="tensor"> the Tensor to be used as the input at the given index.</param>
+        public void _update_input(int index, Tensor tensor)
+        {
+            throw new NotImplementedException("_update_input");
+            // TODO: implement below code dependencies
+            //_assert_same_graph( tensor);
+            //// Reset cached inputs.
+            //_inputs_val = null;
+            //c_api.UpdateEdge(_graph._c_graph, tensor._as_tf_output(), _tf_input(index));
         }
     }
 }

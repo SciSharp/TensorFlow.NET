@@ -43,9 +43,25 @@ namespace Tensorflow
             return _get_operation_by_name_unsafe(op_name);
         }
 
+        /// <summary>
+        /// Creates an `Operation` in this graph from the supplied TF_Operation.
+        /// 
+        /// This method is like create_op() except the new Operation is constructed
+        /// using `c_op`. The returned Operation will have `c_op` as its _c_op
+        /// field.This is used to create Operation objects around TF_Operations created
+        /// indirectly by the C API(e.g.by TF_ImportGraphDef, TF_FinishWhile).
+        /// 
+        /// This function does not call Operation._control_flow_post_processing or
+        /// Graph._control_dependencies_for_inputs (since the inputs may not be
+        /// available yet). The caller is responsible for calling these methods.
+        /// </summary>
+        /// <param name="c_op">a wrapped TF_Operation</param>
+        /// <param name="compute_device">(Optional.) If True, device functions will be executed
+        /// to compute the device property of the Operation.</param>
+        /// <returns>An `Operation` object.</returns>
         public Operation _create_op_from_tf_operation(IntPtr c_op, bool compute_device = true)
         {
-            var ret = new Operation(c_op);
+            var ret = new Operation(c_op, this);
             _add_op(ret);
 
             var name_key = ret.name.ToLower();

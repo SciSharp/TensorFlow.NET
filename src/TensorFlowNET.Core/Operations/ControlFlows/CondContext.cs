@@ -16,17 +16,13 @@ namespace Tensorflow.Operations
         /// The boolean tensor for the cond predicate
         /// </summary>
         private Tensor _pred;
+
         public Tensor pred => _pred;
 
         /// <summary>
         /// 0 or 1 representing this branch
         /// </summary>
         private int _branch;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private List<string> _values = new List<string>();
 
         private Dictionary<string, Tensor> _external_values = new Dictionary<string, Tensor>();
 
@@ -66,6 +62,58 @@ namespace Tensorflow.Operations
         }
 
         /// <summary>
+        /// Add `val` to the current context and its outer context recursively.
+        /// </summary>
+        /// <param name="val"></param>
+        public override Tensor AddValue(Tensor val)
+        {
+            Tensor result = null;
+            if (_values.Contains(val.name))
+            {
+                // Use the real value if it comes from outer context. This is needed in
+                // particular for nested conds.
+                if (_external_values.ContainsKey(val.name))
+                    result = _external_values[val.name];
+                else
+                    result = val;
+            }
+            else
+            {
+                result = val;
+                _values.Add(val.name);
+                // TODO: _outer_context                
+                if (_outer_context != null)
+                {
+                    result = _outer_context.AddValue(val);
+                    _values.Add(result.name);
+                    _external_values[result.name] = result;
+                }
+                // TODO: how to do 'with' here??
+                //with(ops.control_dependencies(null), ctrl =>
+                //{
+                var (r0, r1) = control_flow_ops._SwitchRefOrTensor(result, _pred);
+                result = new[]{r0, r1}[_branch];
+                if (_outer_context != null)
+                    _outer_context.AddInnerOp(result.op);
+                //});
+
+                result.op.graph.prevent_fetching(result.op);
+                result.op._set_control_flow_context(this);
+
+                // Mark Switch output as seen by this context and any outer contexts,
+                // just like what we do for normal op outputs in _AddOpInternal() below.
+                IControlFlowContext ctxt = this;
+                while (ctxt != null)
+                {
+                    ctxt.values.Add(result.name);
+                    ctxt = ctxt.outer_context;
+                }
+                _external_values[val.name] = result;
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Add the subgraph defined by fn() to the graph.
         /// </summary>
         public (T, Tensor) BuildCondBranch<T>(Func<T> fn)
@@ -94,14 +142,14 @@ namespace Tensorflow.Operations
             switch (original_result)
             {
                 case Tensor result:
-                    return (original_result, _BuildCondTensor(new[] { result.op }));
-                case Operation[] results:
-                    return (original_result, _BuildCondTensor(results));
+                    return (original_result, _BuildCondTensor(result));
+                case Operation op:
+                    return (original_result, _BuildCondTensor(op));
                 case float[] fv:
-                {
-                    var result = ops.convert_to_tensor(fv[0]);
-                    return (original_result, result );
-                }
+                    {
+                        var result = ops.convert_to_tensor(fv[0]);
+                        return (original_result, _BuildCondTensor(result));
+                    }
                 default:
                     return (original_result, null);
             }
@@ -117,9 +165,9 @@ namespace Tensorflow.Operations
             switch (original_result)
             {
                 case Tensor[] results:
-                    return (original_result, new Tensor[] { _BuildCondTensor(results.Select(t=>t.op).ToArray())});
+                    return (original_result, results.Select(_BuildCondTensor).ToArray());
                 case Operation[] results:
-                    return (original_result, new Tensor[] { _BuildCondTensor (results) });
+                    return (original_result, results.Select(_BuildCondTensor).ToArray());
                 case float[] fv:
                     var result = ops.convert_to_tensor(fv[0]);
                     return (original_result, new Tensor[] { result });
@@ -128,10 +176,52 @@ namespace Tensorflow.Operations
             }
         }
 
-        private Tensor _BuildCondTensor(Operation[] v)
+        private Tensor _BuildCondTensor(ITensorOrOperation v)
         {
-            // Use pivot as the proxy for this op.
-            return control_flow_ops.with_dependencies(v, _pivot);
+            switch (v)
+            {
+                case Operation op:
+                    // Use pivot as the proxy for this op.
+                    return control_flow_ops.with_dependencies(new Operation[] { op }, _pivot);
+                case Tensor t:
+                    return _ProcessOutputTensor(t);
+                default:
+                    return _ProcessOutputTensor(ops.convert_to_tensor(v));
+
+            }
+        }
+
+        /// <summary>
+        /// Process an output tensor of a conditional branch.
+        /// </summary>
+        private Tensor _ProcessOutputTensor(Tensor val)
+        {
+            var real_val = val;
+            if (!_values.Contains(val.name))
+            {
+                // Handle the special case of lambda: x
+                _values.Add(val.name);
+                if (_outer_context != null)
+                {
+                    real_val = _outer_context.AddValue(val);
+                    _values.Add(real_val.name);
+                    _external_values[real_val.name] = real_val;
+                }
+            }
+            else
+            {
+                Tensor external_val = null;
+                if (_external_values.ContainsKey(val.name))
+                    external_val = _external_values[val.name];
+                if (external_val != null)
+                    real_val = external_val;
+            }
+            return real_val;
+        }
+
+        public override void  AddInnerOp(Operation resultOp)
+        {
+            throw new NotImplementedException();
         }
     }
 }
