@@ -11,12 +11,16 @@ namespace Tensorflow
 
         /// <summary>
         /// Add this op to its control flow context.
+        /// 
+        /// This may add new ops and change this op's inputs. self.inputs must be
+        /// available before calling this method.
         /// </summary>
         public void _control_flow_post_processing()
         {
             foreach(var input_tensor in inputs)
             {
-
+                //TODO: implement below code dependency
+                //control_flow_util.CheckInputFromValidContext(this, input_tensor.op);
             }
 
             if (_control_flow_context != null)

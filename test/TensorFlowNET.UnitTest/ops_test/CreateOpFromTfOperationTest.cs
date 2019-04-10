@@ -84,6 +84,10 @@ namespace TensorFlowNET.UnitTest.ops_test
                 control_flow_ops.cond(x < 10, true_fn, () => x);
 
                 var op = g.get_operation_by_name("cond/myop");
+
+                tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta.txt", as_text:true);
+                tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
+
                 self.assertIsNotNone(op);
                 self.assertEqual(op.name, "cond/myop");
                 self.assertEqual(op.type, "Identity");

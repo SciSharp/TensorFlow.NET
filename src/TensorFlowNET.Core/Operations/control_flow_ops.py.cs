@@ -111,7 +111,7 @@ namespace Tensorflow
             return loop_state;
         }
 
-        private static bool IsLoopExit(Operation op)
+        public static bool IsLoopExit(Operation op)
         {
             return op.OpType == "Exit" || op.OpType == "RefExit";
         }
@@ -193,20 +193,49 @@ namespace Tensorflow
                 return gen_array_ops.identity(data, name: name);
         }
 
-        /// <summary>
-        /// Forwards `data` to an output determined by `pred`.
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="pred"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        ///  <summary>
+        ///  Forwards `data` to an output determined by `pred`.
+        ///  If `pred` is false, the `data` input is forwarded to the first output.
+        ///  Otherwise, the data goes to the second output.
+        ///  
+        ///  This op handles `Tensor`s and `IndexedSlices`.
+        ///  </summary>
+        ///  <param name="data">The tensor to be forwarded to the appropriate output.</param>
+        ///  <param name="pred">A scalar that specifies which output port will receive data.</param>
+        /// <param name="name"> A name for this operation (optional).</param>
+        /// <returns>
+        ///  `(output_false, output_true)`: If `pred` is true, data will be forwarded to
+        /// `output_true`, otherwise it goes to `output_false`.
+        /// </returns>
         public static (Tensor, Tensor) _SwitchRefOrTensor(Tensor data, Tensor pred, string name = "Switch")
         {
             data = ops.convert_to_tensor_or_indexed_slices(data, name: "data");
-
+            // NOTE(vrv): ops.colocate_with(data, ignore_existing=True) below
+            // addresses the following scenario.
+            //
+            // Assume you execute Optimizer.apply_gradients() in a branch of a cond().
+            //
+            // 1. The update op is created inside a `with ops.colocate(var):` block
+            //
+            // 2. Some tensor `data` is captured and a switch is created in a
+            //    `with ops.colocate_with(data):` block.
+            //
+            // with ops.colocate_with(var):
+            //  with ops.colocate_with(data):
+            //    op = ...
+            //
+            // var and data may be pinned to different devices, so we want to ops
+            // created within ops.colocate_with(data) to ignore the existing stack.
             ops.colocate_with(data, ignore_existing: true);
-
-            return @switch(data, pred, name: name);
+            {
+                if (data is Tensor)
+                {
+                    // TODO: ref_switch
+                    //if (data.dtype._is_ref_dtype)
+                    //    return control_flow_ops.ref_switch(data, pred, name = name);
+                }
+                return @switch(data, pred, name: name);
+            }            
         }
 
         /// <summary>
@@ -484,5 +513,7 @@ namespace Tensorflow
 
             throw new NotImplementedException("ZerosLikeOutsideLoop");
         }
+
+        
     }
 }
