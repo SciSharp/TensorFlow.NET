@@ -32,6 +32,11 @@ namespace Tensorflow
             });
         }
 
+        private static Tensor _constant_if_small(int value, Tensor shape)
+        {
+            return shape < 1000;
+        }
+
         private static Tensor _constant_if_small<T>(T value, Shape shape, TF_DataType dtype, string name)
         {
             Tensor tShape = null;
@@ -167,8 +172,9 @@ namespace Tensorflow
             return with(ops.name_scope(name, "ones", new { shape }), scope =>
             {
                 name = scope;
+                var output = _constant_if_small(1, shape[0]);
                 var shape1 = ops.convert_to_tensor(shape, dtype: TF_DataType.TF_INT32);
-                var output = gen_array_ops.fill(shape1, constant_op.constant(1, dtype: dtype), name: name);
+                output = gen_array_ops.fill(shape1, constant_op.constant(1, dtype: dtype), name: name);
                 return output;
             });
         }

@@ -425,7 +425,7 @@ namespace Tensorflow
                 case Tensor tensor:
                     return tensor;
                 case Tensor[] tensors:
-                    return array_ops._autopacking_helper(tensors, dtype, name);
+                    return array_ops._autopacking_helper(tensors, dtype, name == null ? "packed" : name);
                 case RefVariable varVal:
                     return varVal._TensorConversionFunction(as_ref: as_ref);
                 case object[] objects:

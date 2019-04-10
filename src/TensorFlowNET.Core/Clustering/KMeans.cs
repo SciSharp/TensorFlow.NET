@@ -79,9 +79,8 @@ namespace Tensorflow.Clustering
             else
             {
                 var cluster_centers_updated = cluster_centers;
-                var cluster_counts = _use_mini_batch ?
-                    tf.Variable(array_ops.ones(new Tensor[] { num_clusters }, dtype: TF_DataType.TF_INT64)) : 
-                    null;
+                var ones = array_ops.ones(new Tensor[] { num_clusters }, dtype: TF_DataType.TF_INT64);
+                var cluster_counts = _use_mini_batch ? tf.Variable(ones) : null;
                 return new RefVariable[]
                 {
                     cluster_centers,
