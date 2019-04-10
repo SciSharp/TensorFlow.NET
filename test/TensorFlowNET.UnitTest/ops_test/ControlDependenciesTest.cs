@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using Tensorflow.Eager;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.ops_test
 {
     /// <summary>
     /// excerpt of tensorflow/python/framework/ops_test.py
@@ -157,8 +157,8 @@ namespace TensorFlowNET.UnitTest
                      });
                  });
              });
-            assertItemsEqual(new[] { a_1.op, a_2.op, a_3.op, a_4.op }, b_1.op.control_inputs);
-            assertItemsEqual(b_1.op.control_inputs, b_2.op.control_inputs);
+            assertItemsEqual(b_1.op.control_inputs, new[] { a_1.op, a_2.op, a_3.op, a_4.op });
+            assertItemsEqual(b_2.op.control_inputs, b_1.op.control_inputs);
         }
 
         [TestMethod]
@@ -200,6 +200,7 @@ namespace TensorFlowNET.UnitTest
                     b_none2 = constant_op.constant(12.0);
                 });
             });
+            // Note assertItemsEqual(given, expected), expected and given parameters should be swapped below 
             assertItemsEqual(new[] { a_3.op, a_4.op }, b_3_4.op.control_inputs);
             assertItemsEqual(new[] { a_3.op }, b_3.op.control_inputs);
             assertItemsEqual(new object[0], b_none.op.control_inputs);
@@ -256,6 +257,7 @@ namespace TensorFlowNET.UnitTest
                 });
             });
 
+            // Note assertItemsEqual(given, expected), expected and given parameters should be swapped below 
             assertItemsEqual(new[] {a_1.op}, b_1.op.control_inputs);
             assertItemsEqual(new[] {a_1.op, a_2.op}, b_2.op.control_inputs);
             assertItemsEqual(new[] { a_1.op, a_2.op}, b_3.op.control_inputs);

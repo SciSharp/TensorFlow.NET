@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest
     /// </summary>
     public class PythonTest : Python
     {
-        public void assertItemsEqual(ICollection expected, ICollection given)
+        public void assertItemsEqual(ICollection given, ICollection expected)
         {
             Assert.IsNotNull(expected);
             Assert.IsNotNull(given);
