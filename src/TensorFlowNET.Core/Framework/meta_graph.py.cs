@@ -136,11 +136,14 @@ namespace Tensorflow
             var graph = ops.get_default_graph();
 
             var var_list = new Dictionary<string, RefVariable>();
-            var variables = graph.get_collection(ops.GraphKeys.GLOBAL_VARIABLES);
+            var variables = graph.get_collection(ops.GraphKeys.GLOBAL_VARIABLES) as List<RefVariable>;
 
-            foreach(var v in variables as List<RefVariable>)
+            if (variables != null)
             {
-                var_list[v.name] = v;
+                foreach (var v in variables)
+                {
+                    var_list[v.name] = v;
+                }
             }
 
             var scoped_meta_graph_def = create_meta_graph_def(
