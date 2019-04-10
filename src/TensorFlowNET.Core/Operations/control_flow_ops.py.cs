@@ -318,7 +318,7 @@ namespace Tensorflow
                         "Incompatible return types of true_fn and false_fn: {}".format(e))
                 except ValueError as e:
                     raise ValueError(
-                        "Incompatible return values of true_fn and false_fn: {}".format(e))
+                        "Incompatible return values of true_fn and false_fn: {}".format(e))*/
 
                 var res_t_flat = new Tensor[] { res_t };
                 var res_f_flat = new Tensor[] { res_f };
