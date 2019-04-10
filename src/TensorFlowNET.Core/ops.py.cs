@@ -50,17 +50,57 @@ namespace Tensorflow
         }
 
         private static Graph default_graph;
+        /// <summary>
+        /// Returns the default graph for the current thread.
+        /// 
+        /// The returned graph will be the innermost graph on which a
+        /// `Graph.as_default()` context has been entered, or a global default
+        /// graph if none has been explicitly created.
+        /// 
+        /// NOTE: The default graph is a property of the current thread.If you
+        /// create a new thread, and wish to use the default graph in that
+        /// thread, you must explicitly add a `with g.as_default():` in that
+        /// thread's function.
+        /// </summary>
+        /// <returns></returns>
         public static Graph get_default_graph()
         {
+            //TODO: original source indicates there should be a _default_graph_stack!
+            //return _default_graph_stack.get_default()
             if (default_graph == null)
                 default_graph = tf.Graph();
             return default_graph;
         }
         public static Graph set_default_graph(Graph graph)
         {
+            //TODO: original source does not have a 'set_default_graph' and indicates there should be a _default_graph_stack!
             default_graph = graph;
             return default_graph;
         }
+
+        /// <summary>
+        /// Clears the default graph stack and resets the global default graph.
+        /// 
+        /// NOTE: The default graph is a property of the current thread.This
+        /// function applies only to the current thread.Calling this function while
+        /// a `tf.Session` or `tf.InteractiveSession` is active will result in undefined
+        /// behavior. Using any previously created `tf.Operation` or `tf.Tensor` objects
+        /// after calling this function will result in undefined behavior.
+        /// </summary>
+        /// <returns></returns>
+        public static void reset_default_graph()
+        {
+            //TODO: original source indicates there should be a _default_graph_stack!
+            //if (!_default_graph_stack.is_cleared())
+            //    throw new InvalidOperationException("Do not use tf.reset_default_graph() to clear " +
+            //                                    "nested graphs. If you need a cleared graph, " +
+            //                                    "exit the nesting and create a new graph.");
+            //_default_graph_stack.reset();
+            if (default_graph!=null)
+                default_graph.Dispose();
+            default_graph = tf.Graph();
+        }
+
 
         public static Graph _get_graph_from_inputs(List<Tensor> op_input_list, Graph graph = null)
         {

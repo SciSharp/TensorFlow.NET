@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow.Operations
@@ -92,13 +93,15 @@ namespace Tensorflow.Operations
 
             switch (original_result)
             {
+                case Tensor result:
+                    return (original_result, _BuildCondTensor(new[] { result.op }));
                 case Operation[] results:
                     return (original_result, _BuildCondTensor(results));
-                case Tensor tensor:
-                    return (original_result, tensor);
                 case float[] fv:
+                {
                     var result = ops.convert_to_tensor(fv[0]);
                     return (original_result, result );
+                }
                 default:
                     return (original_result, null);
             }
@@ -114,7 +117,7 @@ namespace Tensorflow.Operations
             switch (original_result)
             {
                 case Tensor[] results:
-                    return (original_result, results);
+                    return (original_result, new Tensor[] { _BuildCondTensor(results.Select(t=>t.op).ToArray())});
                 case Operation[] results:
                     return (original_result, new Tensor[] { _BuildCondTensor (results) });
                 case float[] fv:
