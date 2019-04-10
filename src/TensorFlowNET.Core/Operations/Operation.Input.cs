@@ -27,9 +27,9 @@ namespace Tensorflow
 
                     for (int i = 0; i < NumInputs; i++)
                     {
-                        var tf_outpus = Input(i);
-                        var op = new Operation(tf_outpus.oper);
-                        retval[i] = op.outputs[tf_outpus.index];
+                        var tf_outputs = Input(i);
+                        var op = new Operation(tf_outputs.oper);
+                        retval[i] = op.outputs[tf_outputs.index];
                     }
 
                     _inputs = new InputList(retval);

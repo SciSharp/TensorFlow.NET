@@ -144,8 +144,27 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        /// Produces the content of `output_tensor` only after `dependencies`.
+        /// 
+        /// In some cases, a user may want the output of an operation to be
+        /// consumed externally only after some other dependencies have run
+        /// first.This function ensures returns `output_tensor`, but only after all
+        /// operations in `dependencies` have run.Note that this means that there is
+        /// no guarantee that `output_tensor` will be evaluated after any `dependencies`
+        /// have run.
+        /// 
+        /// See also `tf.tuple` and `tf.group`.
+        /// </summary>
+        /// <param name="dependencies">Iterable of operations to run before this op finishes.</param>
+        /// <param name="output_tensor">A `Tensor` or `IndexedSlices` that will be returned.</param>
+        /// <param name="name">(Optional) A name for this operation.</param>
+        /// <returns>Same as `output_tensor`.</returns>
         public static Tensor with_dependencies(Operation[] dependencies, Tensor output_tensor, string name = null)
         {
+            //TODO: missing original code
+            //if context.executing_eagerly():
+            //    return output_tensor
             var values = new List<object>();
             values.AddRange(dependencies);
             values.Add(output_tensor);
@@ -153,12 +172,15 @@ namespace Tensorflow
             return with(ops.name_scope(name, "control_dependency", values), scope =>
             {
                 name = scope;
-
-                return with(ops.control_dependencies(dependencies), ctl =>
+                // TODO: missing original code
+                //with ops.colocate_with(output_tensor):
                 {
-                    output_tensor = ops.convert_to_tensor_or_composite(output_tensor);
-                    return _Identity(output_tensor, name: name);
-                });
+                    return with(ops.control_dependencies(dependencies), ctl =>
+                    {
+                        output_tensor = ops.convert_to_tensor_or_composite(output_tensor);
+                        return _Identity(output_tensor, name: name);
+                    });
+                }
             });
         }
 
@@ -393,8 +415,27 @@ namespace Tensorflow
             return tensors_or_flows;
         }
 
+        /// <summary>
+        /// Returns the value of an available element of `inputs`.
+        /// 
+        /// This op tests each of the tensors in `inputs` in turn to determine if any of
+        /// them is available.If it finds an available tensor, it returns it and its
+        /// index in `inputs`.
+        /// 
+        /// It is an error if more than one tensor in `inputs` is available.If no tensor
+        /// in `inputs` is available, the returned tensor and index are not set.
+        /// 
+        /// This op handles both `Tensor`s and `IndexedSlices`. If inputs has a mix of
+        /// `Tensor`s and `IndexedSlices`, all inputs are converted to IndexedSlices
+        /// before merging.
+        /// </summary>
+        /// <param name="inputs">inputs: The input tensors, at most one of which is available.</param>
+        /// <param name="name">A name for this operation (optional).</param>
+        /// <returns></returns>
         public static Tensor merge(Tensor[] inputs, string name = null)
         {
+            if (inputs.Any(x => x == null))
+                throw new ValueError($"At least one of the merge inputs is null: {inputs}");
             return with(ops.name_scope(name, "Merge", inputs), scope =>
             {
                 name = scope;
