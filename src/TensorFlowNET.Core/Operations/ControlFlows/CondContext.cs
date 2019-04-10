@@ -75,6 +75,8 @@ namespace Tensorflow.Operations
             {
                 case Operation[] results:
                     return (original_result, _BuildCondTensor(results));
+                case Tensor tensor:
+                    return (original_result, tensor);
                 case float[] fv:
                     var result = ops.convert_to_tensor(fv[0]);
                     return (original_result, result );

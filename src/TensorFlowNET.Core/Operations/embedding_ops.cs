@@ -51,10 +51,15 @@ namespace Tensorflow
                 ids = ops.convert_to_tensor(ids, name: "ids");
                 if (np == 1)
                 {
-
+                    ops.colocate_with(@params[0]);
+                    var result = _clip(array_ops.gather(@params[0], ids, name: name), ids, max_norm);
+                    return array_ops.identity(result);
                 }
-                return array_ops.identity(null);
-                throw new NotImplementedException("_embedding_lookup_and_transform");
+                else
+                {
+                    // Flatten the ids. There are two cases where we need to do this.
+                    throw new NotImplementedException("_embedding_lookup_and_transform");
+                }
             });
         }
 

@@ -217,20 +217,24 @@ namespace Tensorflow
                 var (orig_res_f, res_f) = context_f.BuildCondBranch(false_fn);
                 context_f.Exit();
 
-                var res_t_flat = res_t;
-                var res_f_flat = res_f;
+                var res_t_flat = new Tensor[] { res_t };
+                var res_f_flat = new Tensor[] { res_f };
 
-                return new Tensor(IntPtr.Zero);
-                /*var merges = zip(res_f_flat, res_t_flat)
+                foreach(var (val_x, val_y) in zip(res_t_flat, res_f_flat))
+                {
+
+                }
+                
+                var merges = zip(res_f_flat, res_t_flat)
                     .Select(pair => merge(new Tensor[] { pair.Item1, pair.Item2 }))
                     .ToArray();
 
-                merges = _convert_flows_to_tensorarrays(orig_res_t, merges);
+                merges = _convert_flows_to_tensorarrays(new Tensor[] { (Tensor)orig_res_t }, merges);
 
                 ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_t);
                 ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_f);
 
-                return merges;*/
+                return merges[0];
             });
         }
 
