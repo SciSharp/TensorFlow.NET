@@ -187,6 +187,48 @@ namespace Tensorflow
             return @switch(data, pred, name: name);
         }
 
+        /// <summary>
+        /// Return `true_fn()` if the predicate `pred` is true else `false_fn()`.
+        /// 
+        /// `true_fn` and `false_fn` both return lists of output tensors. `true_fn` and
+        /// `false_fn` must have the same non-zero number and type of outputs.
+        /// 
+        /// **WARNING**: Any Tensors or Operations created outside of `true_fn` and
+        /// `false_fn` will be executed regardless of which branch is selected at runtime.
+        /// 
+        /// Although this behavior is consistent with the dataflow model of TensorFlow,
+        /// it has frequently surprised users who expected a lazier semantics.
+        /// Consider the following simple program:
+        /// 
+        /// z = tf.multiply(a, b)
+        /// result = tf.cond(x &lt; y, ()=> tf.add(x, z), ()=> tf.square(y))
+        /// 
+        /// If `x&lt;y`, the `tf.add` operation will be executed and `tf.square`
+        /// operation will not be executed.Since `z` is needed for at least one
+        /// branch of the `cond`, the `tf.multiply` operation is always executed,
+        /// unconditionally.
+        /// 
+        /// Note that `cond` calls `true_fn` and `false_fn` *exactly once* (inside the
+        /// call to `cond`, and not at all during `Session.run()`). `cond`
+        /// stitches together the graph fragments created during the `true_fn` and
+        /// `false_fn` calls with some additional graph nodes to ensure that the right
+        /// branch gets executed depending on the value of `pred`.
+        /// 
+        /// `tf.cond` supports nested structures as implemented in
+        /// `tensorflow.python.util.nest`. Both `true_fn` and `false_fn` must return the
+        /// same(possibly nested) value structure of lists, tuples, and/or named tuples.
+        /// Singleton lists and tuples form the only exceptions to this: when returned by
+        /// `true_fn` and/or `false_fn`, they are implicitly unpacked to single values.
+        /// This behavior is disabled by passing `strict= True`.
+        /// </summary>
+        /// <param name="pred"> A scalar determining whether to return the result of `true_fn` or
+        /// `false_fn`.</param>
+        /// <param name="true_fn">The callable to be performed if pred is true.</param>
+        /// <param name="false_fn">The callable to be performed if pred is false.</param>
+        /// <param name="strict"> A boolean that enables/disables 'strict' mode; see above.</param>
+        /// <param name="name">Optional name prefix for the returned tensors.</param>
+        /// <returns>Tensors returned by the call to either `true_fn` or `false_fn`. If the
+        /// callables return a singleton list, the element is extracted from the list.</returns>
         public static Tensor cond(Tensor pred,
             Func<ITensorOrOperation> true_fn = null,
             Func<ITensorOrOperation> false_fn = null,
@@ -195,6 +237,37 @@ namespace Tensorflow
         {
             return with(ops.name_scope(name, "cond", new { pred }), delegate
             {
+                // TODO: here a chunk of original code is missing
+                /*
+                  if fn1 is not None:
+                    if true_fn is not None:
+                      raise TypeError("cond(): true_fn and fn1 may not be set simultaneously.")
+                    true_fn = fn1
+                  elif true_fn is None:
+                    raise TypeError("cond(): true_fn argument required")
+                  if fn2 is not None:
+                    if false_fn is not None:
+                      raise TypeError("cond(): false_fn and fn2 may not be set simultaneously.")
+                    false_fn = fn2
+                  elif false_fn is None:
+                    raise TypeError("cond(): false_fn argument required")
+
+                  if not callable(true_fn):
+                    raise TypeError("true_fn must be callable.")
+                  if not callable(false_fn):
+                    raise TypeError("false_fn must be callable.")
+
+                  with ops.name_scope(name, "cond", [pred]):
+                    if context.executing_eagerly():
+                      if pred:
+                        return _UnpackIfSingleton(true_fn())
+                      return _UnpackIfSingleton(false_fn())
+
+                    # Add the Switch to the graph.
+                    if isinstance(pred, bool):
+                      raise TypeError("pred must not be a Python bool")
+                */
+
                 // Add the Switch to the graph.
                 var (p_2, p_1) = @switch(pred, pred);
                 var pivot_1 = array_ops.identity(p_1, name: "switch_t");
@@ -207,15 +280,45 @@ namespace Tensorflow
 
                 // Build the graph for the true branch in a new context.
                 var context_t = new CondContext(pred, pivot_1, branch: 1);
-                context_t.Enter();
-                var (orig_res_t, res_t) = context_t.BuildCondBranch(true_fn);
-                context_t.Exit();
-
+                ITensorOrOperation orig_res_t;
+                Tensor res_t;
+                try
+                {
+                    context_t.Enter();
+                    (orig_res_t, res_t) = context_t.BuildCondBranch(true_fn);
+                }
+                finally
+                {
+                    context_t.Exit();
+                }
                 // Build the graph for the false branch in a new context.
                 var context_f = new CondContext(pred, pivot_2, branch: 0);
-                context_f.Enter();
-                var (orig_res_f, res_f) = context_f.BuildCondBranch(false_fn);
-                context_f.Exit();
+                ITensorOrOperation orig_res_f;
+                Tensor res_f;
+                try
+                {
+                    context_f.Enter();
+                    (orig_res_f, res_f) = context_f.BuildCondBranch(false_fn);
+                }
+                finally
+                {
+                    context_f.Exit();
+                }
+
+                //TODO: missing original code
+                //if not strict:
+                //  orig_res_t = _UnpackIfSingleton(orig_res_t)
+                //  orig_res_f = _UnpackIfSingleton(orig_res_f)
+                /*
+                # Check that the return values of the two branches have the same structure.
+                try:
+                    nest.assert_same_structure(orig_res_t, orig_res_f)
+                except TypeError as e:
+                    raise TypeError(
+                        "Incompatible return types of true_fn and false_fn: {}".format(e))
+                except ValueError as e:
+                    raise ValueError(
+                        "Incompatible return values of true_fn and false_fn: {}".format(e))
 
                 var res_t_flat = new Tensor[] { res_t };
                 var res_f_flat = new Tensor[] { res_f };

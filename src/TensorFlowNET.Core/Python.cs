@@ -1,5 +1,6 @@
 ﻿using NumSharp;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace Tensorflow
             Console.WriteLine(obj.ToString());
         }
 
-        protected int len(Array a)
-            => a.Length;
+        protected int len<T>(IEnumerable<T> a)
+            => a.Count();
 
         protected IEnumerable<int> range(int end)
         {

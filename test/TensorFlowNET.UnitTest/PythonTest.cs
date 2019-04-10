@@ -29,6 +29,11 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual(expected, given);
         }
 
+        public void assertIsNotNone(object given)
+        {
+            Assert.IsNotNull(given);
+        }
+
         protected PythonTest self { get => this; }
     }
 }
