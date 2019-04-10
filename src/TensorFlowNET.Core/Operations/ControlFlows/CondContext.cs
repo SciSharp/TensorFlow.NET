@@ -64,6 +64,9 @@ namespace Tensorflow.Operations
             }
         }
 
+        /// <summary>
+        /// Add the subgraph defined by fn() to the graph.
+        /// </summary>
         public (T, Tensor) BuildCondBranch<T>(Func<T> fn)
         {
             // Add the subgraph defined by fn() to the graph.
@@ -71,10 +74,31 @@ namespace Tensorflow.Operations
             var original_result = fn();
             var post_summaries = ops.get_collection(ops.GraphKeys._SUMMARY_COLLECTION);
 
+            //TODO: port this chunck of missing code:
+            /*
+            if len(post_summaries) > len(pre_summaries):
+                new_summaries = post_summaries[len(pre_summaries):]
+                summary_ref = ops.get_collection_ref(ops.GraphKeys._SUMMARY_COLLECTION)  # pylint: disable=protected-access
+                summary_ref[:] = pre_summaries
+                with ops.control_dependencies(new_summaries):
+                if original_result is None:
+                    return no_op(), None
+                else:
+                    original_result = nest.map_structure(array_ops.identity,
+                                                        original_result)
+            */
+            if (original_result == null)
+                return (original_result, null);
+
             switch (original_result)
             {
                 case Operation[] results:
+                    // Python code:
+                    // result = nest.map_structure(self._BuildCondTensor, original_result)
                     return (original_result, _BuildCondTensor(results));
+                case Tensor t:
+                    // TODO: should this be (original_result, t) instead?
+                    return (original_result, _BuildCondTensor(new []{t.op}));
                 case float[] fv:
                     var result = ops.convert_to_tensor(fv[0]);
                     return (original_result, result );
