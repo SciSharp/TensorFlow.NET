@@ -20,7 +20,7 @@ namespace TensorFlowNET.Examples
 
         // Parameters
         float learning_rate = 0.01f;
-        int training_epochs = 1000;
+        public int TrainingEpochs = 1000;
         int display_step = 50;
 
         NDArray train_X, train_Y;
@@ -62,7 +62,7 @@ namespace TensorFlowNET.Examples
                 sess.run(init);
 
                 // Fit all training data
-                for (int epoch = 0; epoch < training_epochs; epoch++)
+                for (int epoch = 0; epoch < TrainingEpochs; epoch++)
                 {
                     foreach (var (x, y) in zip<float>(train_X, train_Y))
                     {

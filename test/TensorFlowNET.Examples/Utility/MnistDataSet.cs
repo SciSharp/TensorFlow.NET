@@ -15,16 +15,17 @@ namespace TensorFlowNET.Examples.Utility
         private const string TRAIN_LABELS = "train-labels-idx1-ubyte.gz";
         private const string TEST_IMAGES = "t10k-images-idx3-ubyte.gz";
         private const string TEST_LABELS = "t10k-labels-idx1-ubyte.gz";
-
         public static Datasets read_data_sets(string train_dir, 
             bool one_hot = false,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             bool reshape = true,
             int validation_size = 5000,
-            int test_size = 5000,
+            int? train_size = null,
+            int? test_size = null,
             string source_url = DEFAULT_SOURCE_URL)
         {
-            var train_size = validation_size * 2;
+            if (train_size!=null && validation_size >= train_size)
+                throw new ArgumentException("Validation set should be smaller than training set");
 
             Web.Download(source_url + TRAIN_IMAGES, train_dir, TRAIN_IMAGES);
             Compress.ExtractGZip(Path.Join(train_dir, TRAIN_IMAGES), train_dir);

@@ -51,7 +51,7 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void LogisticRegression()
         {
-            new LogisticRegression() { Enabled = true, TrainingEpochs=10, DataSize = 500, TestSize = 500 }.Run();
+            new LogisticRegression() { Enabled = true, TrainingEpochs=10, TrainSize = 500, ValidationSize = 100, TestSize = 100 }.Run();
         }
 
         [Ignore]
@@ -78,7 +78,7 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void NearestNeighbor()
         {
-            new NearestNeighbor() { Enabled = true, DataSize = 500, TestBatchSize = 100 }.Run();
+            new NearestNeighbor() { Enabled = true, TrainSize = 500, ValidationSize = 100, TestSize = 100 }.Run();
         }
 
         [Ignore]
