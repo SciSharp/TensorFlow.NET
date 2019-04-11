@@ -21,8 +21,10 @@ namespace TensorFlowNET.Examples
         public string Name => "Logistic Regression";
 
         private float learning_rate = 0.01f;
-        private int training_epochs = 10;
-        private int batch_size = 100;
+        public int TrainingEpochs = 10;
+        public int DataSize = 5000;
+        public int TestSize = 5000;
+        public int BatchSize = 100;
         private int display_step = 1;
 
         Datasets mnist;
@@ -57,14 +59,14 @@ namespace TensorFlowNET.Examples
                 sess.run(init);
 
                 // Training cycle
-                foreach (var epoch in range(training_epochs))
+                foreach (var epoch in range(TrainingEpochs))
                 {
                     var avg_cost = 0.0f;
-                    var total_batch = mnist.train.num_examples / batch_size;
+                    var total_batch = mnist.train.num_examples / BatchSize;
                     // Loop over all batches
                     foreach (var i in range(total_batch))
                     {
-                        var (batch_xs, batch_ys) = mnist.train.next_batch(batch_size);
+                        var (batch_xs, batch_ys) = mnist.train.next_batch(BatchSize);
                         // Run optimization op (backprop) and cost op (to get loss value)
                         var result = sess.run(new object[] { optimizer, cost },
                             new FeedItem(x, batch_xs),
@@ -96,7 +98,7 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true);
+            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, validation_size: DataSize, test_size: TestSize);
         }
 
         public void SaveModel(Session sess)

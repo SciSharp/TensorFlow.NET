@@ -13,7 +13,7 @@ namespace TensorFlowNET.Examples.CnnTextClassification
         private const string TRAIN_PATH = "text_classification/dbpedia_csv/train.csv";
         private const string TEST_PATH = "text_classification/dbpedia_csv/test.csv";
 
-        public static (int[][], int[], int) build_char_dataset(string step, string model, int document_max_len)
+        public static (int[][], int[], int) build_char_dataset(string step, string model, int document_max_len, int? limit=null)
         {
             string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:’'\"/|_#$%ˆ&*˜‘+=<>()[]{} ";
             /*if (step == "train")
@@ -25,10 +25,11 @@ namespace TensorFlowNET.Examples.CnnTextClassification
                 char_dict[c.ToString()] = char_dict.Count;
 
             var contents = File.ReadAllLines(TRAIN_PATH);
-            
-            var x = new int[contents.Length][];
-            var y = new int[contents.Length];
-            for (int i = 0; i < contents.Length; i++)
+            var size = limit == null ? contents.Length : limit.Value;
+
+            var x = new int[size][];
+            var y = new int[size];
+            for (int i = 0; i < size; i++)
             {
                 string[] parts = contents[i].ToLower().Split(",\"").ToArray();
                 string content = parts[2];

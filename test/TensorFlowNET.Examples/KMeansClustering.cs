@@ -18,6 +18,9 @@ namespace TensorFlowNET.Examples
         public int Priority => 8;
         public bool Enabled { get; set; } = true;
         public string Name => "K-means Clustering";
+        public int DataSize = 5000;
+        public int TestSize = 5000;
+        public int BatchSize = 100;
 
         Datasets mnist;
         NDArray full_data_x;
@@ -45,7 +48,7 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true);
+            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, validation_size: DataSize, test_size:TestSize);
             full_data_x = mnist.train.images;
         }
     }
