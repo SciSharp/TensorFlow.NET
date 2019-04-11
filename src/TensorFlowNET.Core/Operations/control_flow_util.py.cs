@@ -27,10 +27,17 @@ namespace Tensorflow
             return op.type == "Switch" || op.type == "RefSwitch";
         }
 
+        /// <summary>
+        /// Return the control flow context for the output of an op.
+        /// </summary>
         public static IControlFlowContext GetOutputContext(Operation op)
         {
             var ctxt = op._get_control_flow_context();
-
+            // Exit nodes usually have a control flow context, except in the case where the
+            // exit node was imported via import_graph_def (in which case no nodes have
+            // control flow contexts).
+            if (ctxt != null && IsLoopExit(op))
+                ctxt = ctxt.outer_context;
             return ctxt;
         }
     }
