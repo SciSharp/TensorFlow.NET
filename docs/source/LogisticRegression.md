@@ -23,7 +23,7 @@ logistic回归通过函数S将ax+b对应到一个隐状态p，p = S(ax+b)，然�
 将t换成ax+b，可以得到逻辑回归模型的参数形式：
                                           P(x;a,b) = 1 / (1 + e^(-ax+b))
 
-![image](https://github.com/SciEvan/TensorFlow.NET/tree/master/docs/source/sigmoid.png)
+![image](https://github.com/SciEvan/TensorFlow.NET/blob/master/docs/source/sigmoid.png)
 
 sigmoid函数的图像
 
