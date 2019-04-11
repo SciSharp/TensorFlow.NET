@@ -88,14 +88,14 @@ namespace Tensorflow.Operations
                     _values.Add(result.name);
                     _external_values[result.name] = result;
                 }
-                // TODO: how to do 'with' here??
-                //with(ops.control_dependencies(null), ctrl =>
-                //{
-                var (r0, r1) = control_flow_ops._SwitchRefOrTensor(result, _pred);
-                result = new[]{r0, r1}[_branch];
-                if (_outer_context != null)
-                    _outer_context.AddInnerOp(result.op);
-                //});
+                
+                with(ops.control_dependencies(null), ctrl =>
+                {
+                    var (r0, r1) = control_flow_ops._SwitchRefOrTensor(result, _pred);
+                    result = new[] { r0, r1 }[_branch];
+                    if (_outer_context != null)
+                        _outer_context.AddInnerOp(result.op);
+                });
 
                 result.op.graph.prevent_fetching(result.op);
                 result.op._set_control_flow_context(this);

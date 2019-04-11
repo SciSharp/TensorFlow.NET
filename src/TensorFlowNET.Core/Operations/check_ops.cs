@@ -35,7 +35,8 @@ namespace Tensorflow
                     };
                 }
 
-                var condition = math_ops.reduce_all(gen_math_ops.equal(x, y));
+                var eq = gen_math_ops.equal(x, y);
+                var condition = math_ops.reduce_all(eq);
                 var x_static = tensor_util.constant_value(x);
                 var y_static = tensor_util.constant_value(y);
                 return control_flow_ops.Assert(condition, data);
