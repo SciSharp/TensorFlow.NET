@@ -24,7 +24,7 @@ logistic回归通过函数S将ax+b对应到一个隐状态p，p = S(ax+b)，然�
                                           P(x;a,b) = 1 / (1 + e^(-ax+b))
 
 ![image](https://github.com/SciEvan/TensorFlow.NET/blob/master/docs/source/sigmoid.png)
-                                  ###sigmoid函数的图像
+                          sigmoid函数的图像
 
 By the function of the function S, we can limit the output value to the interval [0, 1],
 p(x) can then be used to represent the probability p(y=1|x), the probability that y is divided into 1 group when an x occurs.
