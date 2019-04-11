@@ -16,13 +16,13 @@ namespace TensorFlowNET.Examples
         public bool Enabled { get; set; } = true;
         public string Name => "Linear Regression";
 
-        NumPyRandom rng = np.random;
+        public int training_epochs = 1000;
 
         // Parameters
         float learning_rate = 0.01f;
-        public int TrainingEpochs = 1000;
         int display_step = 50;
 
+        NumPyRandom rng = np.random;
         NDArray train_X, train_Y;
         int n_samples;
 
@@ -62,7 +62,7 @@ namespace TensorFlowNET.Examples
                 sess.run(init);
 
                 // Fit all training data
-                for (int epoch = 0; epoch < TrainingEpochs; epoch++)
+                for (int epoch = 0; epoch < training_epochs; epoch++)
                 {
                     foreach (var (x, y) in zip<float>(train_X, train_Y))
                     {

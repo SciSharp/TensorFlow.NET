@@ -39,7 +39,7 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void KMeansClustering()
         {
-            new KMeansClustering() { Enabled = true }.Run();
+            new KMeansClustering() { Enabled = true, train_size = 500, validation_size = 100, test_size = 100, batch_size =100 }.Run();
         }
 
         [TestMethod]
@@ -51,7 +51,7 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void LogisticRegression()
         {
-            new LogisticRegression() { Enabled = true, TrainingEpochs=10, TrainSize = 500, ValidationSize = 100, TestSize = 100 }.Run();
+            new LogisticRegression() { Enabled = true, training_epochs=10, train_size = 500, validation_size = 100, test_size = 100 }.Run();
         }
 
         [Ignore]

@@ -18,14 +18,15 @@ namespace TensorFlowNET.Examples
         public int Priority => 8;
         public bool Enabled { get; set; } = true;
         public string Name => "K-means Clustering";
-        public int DataSize = 5000;
-        public int TestSize = 5000;
-        public int BatchSize = 100;
+
+        public int? train_size = null;
+        public int validation_size = 5000;
+        public int? test_size = null;
+        public int batch_size = 1024; // The number of samples per batch
 
         Datasets mnist;
         NDArray full_data_x;
         int num_steps = 50; // Total steps to train
-        int batch_size = 1024; // The number of samples per batch
         int k = 25; // The number of clusters
         int num_classes = 10; // The 10 digits
         int num_features = 784; // Each image is 28x28 pixels
@@ -48,7 +49,7 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, validation_size: DataSize, test_size:TestSize);
+            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size:validation_size, test_size:test_size);
             full_data_x = mnist.train.images;
         }
     }
