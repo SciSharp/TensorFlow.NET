@@ -12,7 +12,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BasicOperations : Python, IExample
     {
-        public bool Enabled => true;
+        public bool Enabled { get; set; } = true;
         public int Priority => 2;
         public string Name => "Basic Operations";
 

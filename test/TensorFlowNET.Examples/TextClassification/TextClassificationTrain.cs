@@ -15,8 +15,9 @@ namespace TensorFlowNET.Examples.CnnTextClassification
     public class TextClassificationTrain : Python, IExample
     {
         public int Priority => 100;
-        public bool Enabled => false;
+        public bool Enabled { get; set; }= false;
         public string Name => "Text Classification";
+        public int? DataLimit = null;
 
         private string dataDir = "text_classification";
         private string dataFileName = "dbpedia_csv.tar.gz";
@@ -28,7 +29,7 @@ namespace TensorFlowNET.Examples.CnnTextClassification
         {
             PrepareData();
             Console.WriteLine("Building dataset...");
-            var (x, y, alphabet_size) = DataHelpers.build_char_dataset("train", "vdcnn", CHAR_MAX_LEN);
+            var (x, y, alphabet_size) = DataHelpers.build_char_dataset("train", "vdcnn", CHAR_MAX_LEN, DataLimit);
 
             var (train_x, valid_x, train_y, valid_y) = train_test_split(x, y, test_size: 0.15f);
 

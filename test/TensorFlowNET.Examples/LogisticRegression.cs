@@ -17,12 +17,16 @@ namespace TensorFlowNET.Examples
     public class LogisticRegression : Python, IExample
     {
         public int Priority => 4;
-        public bool Enabled => true;
+        public bool Enabled { get; set; } = true;
         public string Name => "Logistic Regression";
 
+        public int training_epochs = 10;
+        public int? train_size = null;
+        public int validation_size = 5000;
+        public int? test_size = null;
+        public int batch_size = 100;
+
         private float learning_rate = 0.01f;
-        private int training_epochs = 10;
-        private int batch_size = 100;
         private int display_step = 1;
 
         Datasets mnist;
@@ -96,7 +100,7 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true);
+            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size: validation_size, test_size: test_size);
         }
 
         public void SaveModel(Session sess)
@@ -139,7 +143,7 @@ namespace TensorFlowNET.Examples
                 if (results.argmax() == (batch_ys[0] as NDArray).argmax())
                     print("predicted OK!");
                 else
-                    throw new ValueError("predict error, maybe 90% accuracy");
+                    throw new ValueError("predict error, should be 90% accuracy");
             });
         }
     }

@@ -17,7 +17,7 @@ namespace TensorFlowNET.Examples
         /// <summary>
         /// True to run example
         /// </summary>
-        bool Enabled { get; }
+        bool Enabled { get; set; }
 
         string Name { get; }
 

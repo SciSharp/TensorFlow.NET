@@ -13,16 +13,16 @@ namespace TensorFlowNET.Examples
     public class LinearRegression : Python, IExample
     {
         public int Priority => 3;
-        public bool Enabled => true;
+        public bool Enabled { get; set; } = true;
         public string Name => "Linear Regression";
 
-        NumPyRandom rng = np.random;
+        public int training_epochs = 1000;
 
         // Parameters
         float learning_rate = 0.01f;
-        int training_epochs = 1000;
         int display_step = 50;
 
+        NumPyRandom rng = np.random;
         NDArray train_X, train_Y;
         int n_samples;
 

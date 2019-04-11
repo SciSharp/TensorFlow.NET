@@ -15,29 +15,33 @@ namespace TensorFlowNET.Examples.Utility
         private const string TRAIN_LABELS = "train-labels-idx1-ubyte.gz";
         private const string TEST_IMAGES = "t10k-images-idx3-ubyte.gz";
         private const string TEST_LABELS = "t10k-labels-idx1-ubyte.gz";
-
         public static Datasets read_data_sets(string train_dir, 
             bool one_hot = false,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             bool reshape = true,
             int validation_size = 5000,
+            int? train_size = null,
+            int? test_size = null,
             string source_url = DEFAULT_SOURCE_URL)
         {
+            if (train_size!=null && validation_size >= train_size)
+                throw new ArgumentException("Validation set should be smaller than training set");
+
             Web.Download(source_url + TRAIN_IMAGES, train_dir, TRAIN_IMAGES);
             Compress.ExtractGZip(Path.Join(train_dir, TRAIN_IMAGES), train_dir);
-            var train_images = extract_images(Path.Join(train_dir, TRAIN_IMAGES.Split('.')[0]));
+            var train_images = extract_images(Path.Join(train_dir, TRAIN_IMAGES.Split('.')[0]), limit: train_size);
 
             Web.Download(source_url + TRAIN_LABELS, train_dir, TRAIN_LABELS);
             Compress.ExtractGZip(Path.Join(train_dir, TRAIN_LABELS), train_dir);
-            var train_labels = extract_labels(Path.Join(train_dir, TRAIN_LABELS.Split('.')[0]), one_hot: one_hot);
+            var train_labels = extract_labels(Path.Join(train_dir, TRAIN_LABELS.Split('.')[0]), one_hot: one_hot, limit: train_size);
 
             Web.Download(source_url + TEST_IMAGES, train_dir, TEST_IMAGES);
             Compress.ExtractGZip(Path.Join(train_dir, TEST_IMAGES), train_dir);
-            var test_images = extract_images(Path.Join(train_dir, TEST_IMAGES.Split('.')[0]));
+            var test_images = extract_images(Path.Join(train_dir, TEST_IMAGES.Split('.')[0]), limit: test_size);
 
             Web.Download(source_url + TEST_LABELS, train_dir, TEST_LABELS);
             Compress.ExtractGZip(Path.Join(train_dir, TEST_LABELS), train_dir);
-            var test_labels = extract_labels(Path.Join(train_dir, TEST_LABELS.Split('.')[0]), one_hot: one_hot);
+            var test_labels = extract_labels(Path.Join(train_dir, TEST_LABELS.Split('.')[0]), one_hot: one_hot, limit:test_size);
 
             int end = train_images.shape[0];
             var validation_images = train_images[np.arange(validation_size)];
@@ -52,14 +56,15 @@ namespace TensorFlowNET.Examples.Utility
             return new Datasets(train, validation, test);
         }
 
-        public static NDArray extract_images(string file)
+        public static NDArray extract_images(string file, int? limit=null)
         {
             using (var bytestream = new FileStream(file, FileMode.Open))
             {
                 var magic = _read32(bytestream);
                 if (magic != 2051)
                     throw new ValueError($"Invalid magic number {magic} in MNIST image file: {file}");
-                var num_images = _read32(bytestream);
+                var num_images =  _read32(bytestream);
+                num_images = limit == null ? num_images : Math.Min(num_images, (uint)limit);
                 var rows = _read32(bytestream);
                 var cols = _read32(bytestream);
                 var buf = new byte[rows * cols * num_images];
@@ -70,7 +75,7 @@ namespace TensorFlowNET.Examples.Utility
             }
         }
 
-        public static NDArray extract_labels(string file, bool one_hot = false, int num_classes = 10)
+        public static NDArray extract_labels(string file, bool one_hot = false, int num_classes = 10, int? limit = null)
         {
             using (var bytestream = new FileStream(file, FileMode.Open))
             {
@@ -78,6 +83,7 @@ namespace TensorFlowNET.Examples.Utility
                 if (magic != 2049)
                     throw new ValueError($"Invalid magic number {magic} in MNIST label file: {file}");
                 var num_items = _read32(bytestream);
+                num_items = limit == null ? num_items : Math.Min(num_items,(uint) limit);
                 var buf = new byte[num_items];
                 bytestream.Read(buf, 0, buf.Length);
                 var labels = np.frombuffer(buf, np.uint8);
