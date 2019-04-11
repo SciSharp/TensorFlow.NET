@@ -37,7 +37,8 @@ namespace Tensorflow.Operations
             _context_stack = new Stack<IControlFlowContext>();
         }
 
-        public string name { get; set; }
+        public string name { get => _name; }
+        protected string _name;
 
         public void __init__()
         {

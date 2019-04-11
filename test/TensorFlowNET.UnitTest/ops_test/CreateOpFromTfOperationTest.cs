@@ -64,7 +64,6 @@ namespace TensorFlowNET.UnitTest.ops_test
             });
         }
 
-        [Ignore("Switch op gets not inserted correctly in the graph")]
         [TestMethod]
         public void TestCond()
         {
@@ -94,42 +93,12 @@ namespace TensorFlowNET.UnitTest.ops_test
                 //self.assertEqual(op.outputs, new object[0]);
                 var op_input = op.inputs[0].op;
                 self.assertEqual(op_input.type, "Switch");
-                self.assertEqual(op_input.inputs[0], x);
+                self.assertEqual(op_input.inputs[0].name, x.name);
                 self.assertEqual(op.graph, g);
                 self.assertIsNotNone(op._get_control_flow_context());
-                self.assertEqual((op._get_control_flow_context() as ControlFlowContext).name, "cond/cond_text");
+                var cond_text = op._get_control_flow_context() as ControlFlowContext;
+                self.assertEqual(cond_text.name, "cond/cond_text");
             });
-            /*
-                @test_util.run_v1_only("b/120545219")
-                def testCond(self):
-                  g = ops.Graph()
-                  with g.as_default():
-                    x = test_ops.int_output()
-
-                    def true_fn():
-                      ops._create_c_op(ops.get_default_graph(),
-                                       ops._NodeDef("IntInput", "cond/myop"), [x], [])
-                      new_ops = g._add_new_tf_operations()
-                      self.assertEqual(len(new_ops), 1)
-                      return x
-
-                    control_flow_ops.cond(x < 10, true_fn, lambda: x)
-
-                  op = g.get_operation_by_name("cond/myop")
-                  self.assertIsNotNone(op)
-                  self.assertEqual(op.name, "cond/myop")
-                  self.assertEqual(op.type, "IntInput")
-                  self.assertEqual(op.outputs, [])
-                  op_input = op.inputs[0].op
-                  self.assertEqual(op_input.type, "Switch")
-                  self.assertEqual(op_input.inputs[0], x)
-                  self.assertEqual(op.graph, g)
-                  # pylint: disable=protected-access
-                  self.assertIsNotNone(op._get_control_flow_context())
-                  self.assertEqual(op._get_control_flow_context().name,
-                                   "cond/cond_text")
-                  # pylint: enable=protected-access
-                  */
         }
 
         [Ignore("Todo: Port")]

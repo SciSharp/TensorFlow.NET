@@ -255,16 +255,17 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            if(NDims == 0)
-            {
-                switch (dtype)
-                {
-                    case TF_DataType.TF_INT32:
-                        return Data<int>()[0].ToString();
-                }
-            }
+            // this can throw IndexOutOfRangeException 
+            //if(NDims == 0)
+            //{
+            //    switch (dtype)
+            //    {
+            //        case TF_DataType.TF_INT32:
+            //            return Data<int>()[0].ToString();
+            //    }
+            //}
 
-            return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype.ToString()}";
+            return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
         }
 
         public void Dispose()

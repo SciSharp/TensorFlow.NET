@@ -10,7 +10,7 @@ namespace Tensorflow.Operations
     /// </summary>
     public class CondContext : ControlFlowContext
     {
-        private string _name;
+
 
         /// <summary>
         /// The boolean tensor for the cond predicate
