@@ -207,6 +207,9 @@ namespace Tensorflow.Operations
                     _values.Add(real_val.name);
                     _external_values[real_val.name] = real_val;
                 }
+                var (t0, t1) = control_flow_ops._SwitchRefOrTensor(real_val, _pred);
+                real_val = new[] {t0, t1}[_branch];
+                _external_values[val.name] = real_val;
             }
             else
             {
