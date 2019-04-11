@@ -279,12 +279,36 @@ namespace Tensorflow
         /// <param name="tensor"> the Tensor to be used as the input at the given index.</param>
         public void _update_input(int index, Tensor tensor)
         {
-            throw new NotImplementedException("_update_input");
+            var input = _tf_input(index);
+            var output = tensor._as_tf_output();
+            _assert_same_graph( tensor);
+            // Reset cached inputs.
+            _inputs=new InputList(new Tensor[]{ tensor }); // is this right? original code: self._inputs_val=None
             // TODO: implement below code dependencies
-            //_assert_same_graph( tensor);
-            //// Reset cached inputs.
-            //_inputs_val = null;
-            //c_api.UpdateEdge(_graph._c_graph, tensor._as_tf_output(), _tf_input(index));
+            //c_api.UpdateEdge(_graph._c_graph, output, input);
+        }
+
+        private void _assert_same_graph(Tensor tensor)
+        {
+            //TODO: implement
+        }
+
+        /// <summary>
+        /// Create and return a new TF_Output for output_idx'th output of this op.
+        /// </summary>
+        public TF_Output _tf_output(int output_idx)
+        {
+            var tf_output =  new TF_Output(op, output_idx);
+            return tf_output;
+        }
+
+        /// <summary>
+        /// Create and return a new TF_Input for input_idx'th input of this op.
+        /// </summary>
+        public TF_Input _tf_input(int input_idx)
+        {
+            var tf_input = new TF_Input(op, input_idx);
+            return tf_input;
         }
     }
 }
