@@ -16,7 +16,7 @@ namespace TensorFlowNET.Examples
     public class KMeansClustering : Python, IExample
     {
         public int Priority => 8;
-        public bool Enabled => true;
+        public bool Enabled { get; set; } = true;
         public string Name => "K-means Clustering";
 
         Datasets mnist;

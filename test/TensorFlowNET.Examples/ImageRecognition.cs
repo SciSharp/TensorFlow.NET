@@ -13,7 +13,7 @@ namespace TensorFlowNET.Examples
     public class ImageRecognition : Python, IExample
     {
         public int Priority => 7;
-        public bool Enabled => true;
+        public bool Enabled { get; set; } = true;
         public string Name => "Image Recognition";
 
         string dir = "ImageRecognition";

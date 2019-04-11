@@ -46,7 +46,10 @@ namespace Tensorflow
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw ex;
+#if DEBUG
+                Debugger.Break();
+#endif
+                throw;
             }
             finally
             {
@@ -65,7 +68,10 @@ namespace Tensorflow
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw ex;
+#if DEBUG
+                Debugger.Break();
+#endif
+                throw;
             }
             finally
             {
@@ -87,6 +93,7 @@ namespace Tensorflow
 #if DEBUG
                 Debugger.Break();
 #endif
+                throw;
                 return default(TOut);
             }
             finally

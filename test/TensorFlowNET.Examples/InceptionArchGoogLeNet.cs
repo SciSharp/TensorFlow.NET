@@ -19,7 +19,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class InceptionArchGoogLeNet : Python, IExample
     {
-        public bool Enabled => false;
+        public bool Enabled { get; set; } = false;
         public int Priority => 100;
         public string Name => "Inception Arch GoogLeNet";
 

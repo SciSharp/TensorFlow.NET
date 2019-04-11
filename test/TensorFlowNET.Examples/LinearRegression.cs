@@ -13,7 +13,7 @@ namespace TensorFlowNET.Examples
     public class LinearRegression : Python, IExample
     {
         public int Priority => 3;
-        public bool Enabled => true;
+        public bool Enabled { get; set; } = true;
         public string Name => "Linear Regression";
 
         NumPyRandom rng = np.random;

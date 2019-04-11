@@ -15,7 +15,7 @@ namespace TensorFlowNET.Examples
     public class NearestNeighbor : Python, IExample
     {
         public int Priority => 5;
-        public bool Enabled => true;
+        public bool Enabled { get; set; } = true;
         public string Name => "Nearest Neighbor";
         Datasets mnist;
         NDArray Xtr, Ytr, Xte, Yte;
