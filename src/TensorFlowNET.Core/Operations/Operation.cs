@@ -279,11 +279,13 @@ namespace Tensorflow
         /// <param name="tensor"> the Tensor to be used as the input at the given index.</param>
         public void _update_input(int index, Tensor tensor)
         {
+            _assert_same_graph(tensor);
+
             var input = _tf_input(index);
             var output = tensor._as_tf_output();
-            _assert_same_graph( tensor);
+
             // Reset cached inputs.
-            _inputs=new InputList(new Tensor[]{ tensor }); // is this right? original code: self._inputs_val=None
+            _inputs = null;// new InputList(new Tensor[] { tensor }); // is this right? original code: self._inputs_val=None
             // TODO: implement below code dependencies
             //c_api.UpdateEdge(_graph._c_graph, output, input);
         }

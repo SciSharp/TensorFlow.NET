@@ -74,8 +74,8 @@ namespace Tensorflow.Operations
                 // particular for nested conds.
                 if (_external_values.ContainsKey(val.name))
                     result = _external_values[val.name];
-                else
-                    result = val;
+
+                result = result == null ? val : result;
             }
             else
             {
@@ -89,6 +89,11 @@ namespace Tensorflow.Operations
                     _external_values[result.name] = result;
                 }
                 
+                // for debug purpose
+                if(ops.get_default_graph()._nodes_by_name.Count > 60)
+                {
+                }
+
                 with(ops.control_dependencies(null), ctrl =>
                 {
                     var (r0, r1) = control_flow_ops._SwitchRefOrTensor(result, _pred);
