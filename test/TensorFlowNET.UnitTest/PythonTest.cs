@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
+using NumSharp;
 using Tensorflow;
 using Tensorflow.Util;
 
@@ -25,17 +27,45 @@ namespace TensorFlowNET.UnitTest
 
         public void assertItemsEqual(ICollection given, ICollection expected)
         {
+            if (given is Hashtable && expected is Hashtable)
+            {
+                Assert.AreEqual(JObject.FromObject(expected).ToString(), JObject.FromObject(given).ToString());
+                return;
+            }
             Assert.IsNotNull(expected);
             Assert.IsNotNull(given);
             var e = expected.OfType<object>().ToArray();
             var g = given.OfType<object>().ToArray();
             Assert.AreEqual(e.Length, g.Length, $"The collections differ in length expected {e.Length} but got {g.Length}");
             for (int i = 0; i < e.Length; i++)
-                Assert.AreEqual(e[i], g[i], $"Items differ at index {i}, expected {e[i]} but got {g[i]}");
+            {
+                if (g[i] is NDArray && e[i] is NDArray)
+                    assertItemsEqual((g[i] as NDArray).Array, (e[i] as NDArray).Array);
+                else if (e[i] is ICollection && g[i] is ICollection)
+                    assertEqual(g[i], e[i]);
+                else 
+                    Assert.AreEqual(e[i], g[i], $"Items differ at index {i}, expected {e[i]} but got {g[i]}");
+            }
         }
+
+        public void assertAllEqual(ICollection given, ICollection expected)
+        {
+            assertItemsEqual(given, expected);
+        }
+
 
         public void assertEqual(object given, object expected)
         {
+            if (given is NDArray && expected is NDArray)
+            {
+                assertItemsEqual((given as NDArray).Array, (expected as NDArray).Array);
+                return;
+            }
+            if (given is Hashtable && expected is Hashtable)
+            {
+                Assert.AreEqual(JObject.FromObject(expected).ToString(), JObject.FromObject(given).ToString());
+                return;
+            }
             if (given is ICollection && expected is ICollection)
             {
                 assertItemsEqual(given as ICollection, expected as ICollection);
@@ -52,6 +82,16 @@ namespace TensorFlowNET.UnitTest
         public void assertIsNotNone(object given)
         {
             Assert.IsNotNull(given);
+        }
+
+        public void assertFalse(bool cond)
+        {
+            Assert.IsFalse(cond);
+        }
+
+        public void assertTrue(bool cond)
+        {
+            Assert.IsTrue(cond);
         }
 
         #endregion

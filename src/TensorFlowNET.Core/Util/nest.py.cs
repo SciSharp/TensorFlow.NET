@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NumSharp;
 
 namespace Tensorflow.Util
@@ -24,6 +23,14 @@ namespace Tensorflow.Util
     public static class nest
     {
 
+        public static IEnumerable<object[]> zip(params object[] structures)
+            => Python.zip(structures);
+
+        public static IEnumerable<(T1, T2)> zip<T1, T2>(IEnumerable<T1> e1, IEnumerable<T2> e2)
+            => Python.zip(e1, e2);
+
+        public static Dictionary<string, object> ConvertToDict(object dyn)
+            => Python.ConvertToDict(dyn);
 
         //def _get_attrs_values(obj):
         //  """Returns the list of values from an attrs instance."""
@@ -75,8 +82,14 @@ namespace Tensorflow.Util
                 //# instances. This is intentional, to avoid potential bugs caused by mixing
                 //# ordered and plain dicts (e.g., flattening a dict but using a
                 //# corresponding `OrderedDict` to pack it back).
-                //    result = dict(zip(_sorted(instance), args))
-                //    return type(instance)((key, result[key]) for key in _six.iterkeys(instance))
+                switch (instance)
+                {
+                    case Hashtable hash:
+                        var result = new Hashtable();
+                        foreach ((object key, object value) in zip(_sorted(hash).OfType<object>(), args))
+                            result[key] = value;
+                        return result;
+                }
             }
             //else if( _is_namedtuple(instance) || _is_attrs(instance)) 
             //    return type(instance)(*args)
@@ -140,7 +153,9 @@ namespace Tensorflow.Util
         }
 
         //# See the swig file (util.i) for documentation.
-        public static bool is_sequence(object arg) => arg is IEnumerable && !(arg is string);
+        public static bool is_sequence(object arg) 
+            => arg is IEnumerable && !(arg is string) && !(arg is NDArray) &&
+                    !(arg.GetType().IsGenericType && arg.GetType().GetGenericTypeDefinition() == typeof(HashSet<>));
 
         public static bool is_mapping(object arg) => arg is IDictionary;
 
@@ -355,38 +370,54 @@ namespace Tensorflow.Util
         /// <returns> `flat_sequence` converted to have the same recursive structure as
         /// `structure`.
         /// </returns>
-        public static object pack_sequence_as(object structure, List<object> flat_sequence)
+        public static object pack_sequence_as<T>(object structure, IEnumerable<T> flat_sequence)
         {
-            if (flat_sequence == null)
+            List<object> flat = null;
+            if (flat_sequence is List<object>)
+                flat = flat_sequence as List<object>;
+            else 
+                flat=new List<object>(flat_sequence.OfType<object>());
+            if (flat_sequence==null)
                 throw new ArgumentException("flat_sequence must not be null");
             //  if not is_sequence(flat_sequence):
             //    raise TypeError("flat_sequence must be a sequence")
 
             if (!is_sequence(structure))
             {
-                if (len(flat_sequence) != 1)
-                    throw new ValueError($"Structure is a scalar but len(flat_sequence) ==  {len(flat_sequence)} > 1");
-                return flat_sequence.FirstOrDefault();
+                if (len(flat) != 1)
+                    throw new ValueError($"Structure is a scalar but len(flat_sequence) ==  {len(flat)} > 1");
+                return flat.FirstOrDefault();
             }
             int final_index = 0;
             List<object> packed = null;
             try
             {
-                (final_index, packed) = _packed_nest_with_indices(structure, flat_sequence, 0);
-                if (final_index < len(flat_sequence))
-                    throw new IndexOutOfRangeException($"Final index: { final_index} was smaller than  len(flat_sequence): { len(flat_sequence) }");
+                (final_index, packed) = _packed_nest_with_indices(structure, flat, 0);
+                if (final_index < len(flat))
+                    throw new IndexOutOfRangeException(
+                        $"Final index: {final_index} was smaller than  len(flat_sequence): {len(flat)}");
+                return _sequence_like(structure, packed);
             }
             catch (IndexOutOfRangeException)
             {
                 var flat_structure = flatten(structure);
-                if (len(flat_structure) != len(flat_sequence))
+                if (len(flat_structure) != len(flat))
                 {
                     throw new ValueError("Could not pack sequence. Structure had %d elements, but " +
-                                         $"flat_sequence had {len(flat_structure)} elements. flat_sequence had: {len(flat_sequence)}");
+                                         $"flat_sequence had {len(flat_structure)} elements. flat_sequence had: {len(flat)}");
                 }
                 return _sequence_like(structure, packed);
             }
-            return packed;
+            catch (ArgumentOutOfRangeException)
+            {
+                var flat_structure = flatten(structure);
+                if (len(flat_structure) != len(flat))
+                {
+                    throw new ValueError("Could not pack sequence. Structure had %d elements, but " +
+                                         $"flat_sequence had {len(flat_structure)} elements. flat_sequence had: {len(flat)}");
+                }
+                return _sequence_like(structure, packed);
+            }
         }
 
         /// <summary>
@@ -396,10 +427,9 @@ namespace Tensorflow.Util
         ///  `structure[i]`.  All structures in `structure` must have the same arity,
         ///  and the return value will contain the results in the same structure.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="U"></typeparam>
+        /// <typeparam name="T">the type of the elements of the output structure (object if diverse)</typeparam>
         /// <param name="func"> A callable that accepts as many arguments as there are structures.</param>
-        /// <param name="structure">scalar, or tuple or list of constructed scalars and/or other
+        /// <param name="structures">scalar, or tuple or list of constructed scalars and/or other
         ///      tuples/lists, or scalars.  Note: numpy arrays are considered as scalars.</param>
         /// <param name="check_types">If set to
         ///      `True` (default) the types of iterables within the structures have to be
@@ -414,18 +444,41 @@ namespace Tensorflow.Util
         ///    `check_types` is `False` the sequence types of the first structure will be
         ///    used.
         /// </returns>
-        public static IEnumerable<U> map_structure<T, U>(Func<T, U> func, IEnumerable<T> structure, bool check_types = false)
+        public static IEnumerable<object> map_structure(Func<object[], object> func, object structure, params object[] more_structures)
         {
-
+            // TODO: check structure and types
             //  for other in structure[1:]:
             //    assert_same_structure(structure[0], other, check_types=check_types)
 
-            //  flat_structure = [flatten(s) for s in structure]
-            //  entries = zip(*flat_structure)
+            if (more_structures.Length==0)
+            {
+                // we don't need to zip if we have only one structure
+                return map_structure(a => func(new object[]{a}), structure);
+            }
+            var flat_structures = new List<object>() { flatten(structure) };
+            flat_structures.AddRange(more_structures.Select(flatten));
+            var entries = zip(flat_structures);
+            var mapped_flat_structure = entries.Select(func);
 
-            //  return pack_sequence_as(
-            //      structure[0], [func(*x) for x in entries])
-            return null;
+            return (pack_sequence_as(structure, mapped_flat_structure) as IEnumerable).OfType<object>();
+        }
+
+        /// <summary>
+        /// Same as map_structure, but with only one structure (no combining of multiple structures)
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="structure"></param>
+        /// <returns></returns>
+        public static IEnumerable<object> map_structure(Func<object, object> func, object structure)
+        {
+            // TODO: check structure and types
+            //  for other in structure[1:]:
+            //    assert_same_structure(structure[0], other, check_types=check_types)
+
+            var flat_structure = flatten(structure);
+            var mapped_flat_structure = flat_structure.Select(func).ToList();
+
+            return (pack_sequence_as(structure, mapped_flat_structure) as IEnumerable).OfType<object>();
         }
 
         //def map_structure_with_paths(func, *structure, **kwargs):
