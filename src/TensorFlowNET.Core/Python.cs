@@ -120,6 +120,55 @@ namespace Tensorflow
                 yield return (t1.Data<T1>(i), t2.Data<T2>(i));
         }
 
+        public static IEnumerable<(T1, T2)> zip<T1, T2>(IEnumerable<T1> e1, IEnumerable<T2> e2)
+        {
+            var iter2 = e2.GetEnumerator();
+            foreach (var v1 in e1)
+            {
+                iter2.MoveNext();
+                var v2 = iter2.Current;
+                yield return (v1, v2);
+            }
+        }
+
+        /// <summary>
+        /// Untyped implementation of zip for arbitrary data
+        /// 
+        /// Converts an list of lists or arrays [[1,2,3], [4,5,6], [7,8,9]] into a list of arrays 
+        /// representing tuples of the same index of all source arrays [[1,4,7], [2,5,9], [3,6,9]]
+        /// </summary>
+        /// <param name="lists">one or multiple sequences to be zipped</param>
+        /// <returns></returns>
+        public static IEnumerable<object[]> zip(params object[] lists)
+        {
+            if (lists.Length == 0)
+                yield break;
+            var first = lists[0];
+            if (first == null)
+                yield break;
+            var arity = (first as IEnumerable).OfType<object>().Count();
+            for (int i = 0; i < arity; i++)
+            {
+                var array= new object[lists.Length];
+                for (int j = 0; j < lists.Length; j++)
+                    array[j] = GetSequenceElementAt(lists[j], i);
+                yield return array;
+            }
+        }
+
+        private static object GetSequenceElementAt(object sequence, int i)
+        {
+            switch (sequence)
+            {
+                case Array array:
+                    return array.GetValue(i);
+                case IList list:
+                    return list[i];
+                default:
+                    return (sequence as IEnumerable).OfType<object>().Skip(Math.Max(0, i)).FirstOrDefault();
+            }
+        }
+
         public static IEnumerable<(int, T)> enumerate<T>(IList<T> values)
         {
             for (int i = 0; i < values.Count; i++)
@@ -137,6 +186,7 @@ namespace Tensorflow
             }
             return dictionary;
         }
+
     }
 
     public interface IPython : IDisposable

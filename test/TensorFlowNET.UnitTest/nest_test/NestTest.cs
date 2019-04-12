@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using Colorful;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
+using NumSharp;
 using Tensorflow;
 using Tensorflow.Util;
 
-namespace TensorFlowNET.UnitTest.control_flow_ops_test
+namespace TensorFlowNET.UnitTest.nest_test
 {
     /// <summary>
     /// excerpt of tensorflow/python/framework/util/nest_test.py
@@ -15,11 +16,11 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
     public class NestTest : PythonTest
     {
 
-        public class PointXY
-        {
-            public double x;
-            public double y;
-        }
+        //public class PointXY
+        //{
+        //    public double x;
+        //    public double y;
+        //}
 
         //  if attr:
         //    class BadAttr(object):
@@ -53,38 +54,35 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         [TestMethod]
         public void testFlattenAndPack()
         {
-            object structure = new object[] {new object[] {3, 4}, 5, new object[] {6, 7, new object[] {9, 10}, 8}};
-            var flat = new List<object> {"a", "b", "c", "d", "e", "f", "g", "h"};
+            object structure = new object[] { new object[] { 3, 4 }, 5, new object[] { 6, 7, new object[] { 9, 10 }, 8 } };
+            var flat = new List<object> { "a", "b", "c", "d", "e", "f", "g", "h" };
 
-            self.assertEqual(nest.flatten(structure), new[] {3, 4, 5, 6, 7, 9, 10, 8});
+            self.assertEqual(nest.flatten(structure), new[] { 3, 4, 5, 6, 7, 9, 10, 8 });
             self.assertEqual(JArray.FromObject(nest.pack_sequence_as(structure, flat)).ToString(),
-                JArray.FromObject(new object[] {new object[] {"a", "b"}, "c", new object[] {"d", "e", new object[] {"f", "g"}, "h"}}).ToString());
-            structure = new object[] { new Hashtable {["x"] = 4, ["y"] = 2}, new object[] { new object[] { new Hashtable { ["x"] = 1,["y"]  = 0}, }, }};
-            flat = new List<object> { 4, 2, 1, 0};
+                JArray.FromObject(new object[] { new object[] { "a", "b" }, "c", new object[] { "d", "e", new object[] { "f", "g" }, "h" } }).ToString());
+            structure = new object[] { new Hashtable { ["x"] = 4, ["y"] = 2 }, new object[] { new object[] { new Hashtable { ["x"] = 1, ["y"] = 0 }, }, } };
+            flat = new List<object> { 4, 2, 1, 0 };
             self.assertEqual(nest.flatten(structure), flat);
-            //    restructured_from_flat = nest.pack_sequence_as(structure, flat)
-            //    self.assertEqual(restructured_from_flat, structure)
-            //    self.assertEqual(restructured_from_flat[0].x, 4)
-            //    self.assertEqual(restructured_from_flat[0].y, 2)
-            //    self.assertEqual(restructured_from_flat[1][0][0].x, 1)
-            //    self.assertEqual(restructured_from_flat[1][0][0].y, 0)
+            var restructured_from_flat = nest.pack_sequence_as(structure, flat) as object[];
+            //Console.WriteLine(JArray.FromObject(restructured_from_flat));
+            self.assertEqual(restructured_from_flat, structure);
+            self.assertEqual((restructured_from_flat[0] as Hashtable)["x"], 4);
+            self.assertEqual((restructured_from_flat[0] as Hashtable)["y"], 2);
+            self.assertEqual((((restructured_from_flat[1] as object[])[0] as object[])[0] as Hashtable)["x"], 1);
+            self.assertEqual((((restructured_from_flat[1] as object[])[0] as object[])[0] as Hashtable)["y"], 0);
 
-            //    self.assertEqual([5], nest.flatten(5))
-            //    self.assertEqual([np.array([5])], nest.flatten(np.array([5])))
+            self.assertEqual(new List<object> { 5 }, nest.flatten(5));
+            flat = nest.flatten(np.array(new[] { 5 }));
+            self.assertEqual(new object[] { np.array(new int[] { 5 }) }, flat);
 
-            //    self.assertEqual("a", nest.pack_sequence_as(5, ["a"]))
-            //    self.assertEqual(
-            //        np.array([5]), nest.pack_sequence_as("scalar", [np.array([5])]))
+            self.assertEqual("a", nest.pack_sequence_as(5, new List<object> { "a" }));
+            self.assertEqual(np.array(new[] { 5 }),
+                nest.pack_sequence_as("scalar", new List<object> { np.array(new[] { 5 }) }));
 
-            //    with self.assertRaisesRegexp(ValueError, "Structure is a scalar"):
-            //      nest.pack_sequence_as("scalar", [4, 5])
+            Assert.ThrowsException<ValueError>(() => nest.pack_sequence_as("scalar", new List<object>() { 4, 5 }));
 
-            //    with self.assertRaisesRegexp(TypeError, "flat_sequence"):
-            //      nest.pack_sequence_as([4, 5], "bad_sequence")
-
-            //    with self.assertRaises(ValueError):
-            //      nest.pack_sequence_as([5, 6, [7, 8]], ["a", "b", "c"])
-
+            Assert.ThrowsException<ValueError>(() =>
+                nest.pack_sequence_as(new object[] { 5, 6, new object[] { 7, 8 } }, new List<object> { "a", "b", "c" }));
         }
 
         //  @parameterized.parameters({"mapping_type": collections.OrderedDict
@@ -173,42 +171,56 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         //    self.assertIsInstance(unflattened_custom_mapping, _CustomMapping)
         //    self.assertEqual(list(unflattened_custom_mapping.keys()), [41])
 
-        //  def testFlatten_numpyIsNotFlattened(self):
-        //    structure = np.array([1, 2, 3])
-        //    flattened = nest.flatten(structure)
-        //    self.assertEqual(len(flattened), 1)
+        [TestMethod]
+        public void testFlatten_numpyIsNotFlattened()
+        {
+            var structure = np.array(1, 2, 3);
+            var flattened = nest.flatten(structure);
+            self.assertEqual(len(flattened), 1);
+        }
 
-        //  def testFlatten_stringIsNotFlattened(self):
-        //    structure = "lots of letters"
-        //    flattened = nest.flatten(structure)
-        //    self.assertEqual(len(flattened), 1)
-        //    unflattened = nest.pack_sequence_as("goodbye", flattened)
-        //    self.assertEqual(structure, unflattened)
+        [TestMethod]
+        public void testFlatten_stringIsNotFlattened()
+        {
+            var structure = "lots of letters";
+            var flattened = nest.flatten(structure);
+            self.assertEqual(len(flattened), 1);
+            var unflattened = nest.pack_sequence_as("goodbye", flattened);
+            self.assertEqual(structure, unflattened);
+        }
 
         //  def testPackSequenceAs_notIterableError(self) :
         //    with self.assertRaisesRegexp(TypeError,
         //                                 "flat_sequence must be a sequence"):
         //      nest.pack_sequence_as("hi", "bye")
 
-        //  def testPackSequenceAs_wrongLengthsError(self):
-        //    with self.assertRaisesRegexp(
-        //        ValueError,
-        //        "Structure had 2 elements, but flat_sequence had 3 elements."):
-        //      nest.pack_sequence_as(["hello", "world"],
-        //                            ["and", "goodbye", "again"])
+        [TestMethod]
+        public void testPackSequenceAs_wrongLengthsError()
+        {
+            Assert.ThrowsException<ValueError>(() =>
+            {
+                //    with self.assertRaisesRegexp(
+                //        ValueError,
+                //        "Structure had 2 elements, but flat_sequence had 3 elements."):
+                nest.pack_sequence_as(new object[] { "hello", "world" }, new object[] { "and", "goodbye", "again" });
+            });
+        }
 
-        //  @test_util.assert_no_new_pyobjects_executing_eagerly
-        //  def testIsSequence(self):
-        //    self.assertFalse(nest.is_sequence("1234"))
-        //    self.assertTrue(nest.is_sequence([1, 3, [4, 5]]))
-        //    self.assertTrue(nest.is_sequence(((7, 8), (5, 6))))
-        //    self.assertTrue(nest.is_sequence([]))
-        //    self.assertTrue(nest.is_sequence({"a": 1, "b": 2}))
-        //    self.assertFalse(nest.is_sequence(set([1, 2])))
-        //    ones = array_ops.ones([2, 3])
-        //    self.assertFalse(nest.is_sequence(ones))
-        //    self.assertFalse(nest.is_sequence(math_ops.tanh(ones)))
-        //    self.assertFalse(nest.is_sequence(np.ones((4, 5))))
+        [TestMethod]
+        public void testIsSequence()
+        {
+            self.assertFalse(nest.is_sequence("1234"));
+            self.assertTrue(nest.is_sequence(new object[] { 1, 3, new object[] { 4, 5 } }));
+            // TODO: ValueTuple<T,T>
+            //self.assertTrue(nest.is_sequence(((7, 8), (5, 6))));
+            self.assertTrue(nest.is_sequence(new object[] { }));
+            self.assertTrue(nest.is_sequence(new Hashtable { ["a"] = 1, ["b"] = 2 }));
+            self.assertFalse(nest.is_sequence(new HashSet<int> { 1, 2 }));
+            var ones = array_ops.ones(new int[] { 2, 3 });
+            self.assertFalse(nest.is_sequence(ones));
+            self.assertFalse(nest.is_sequence(gen_math_ops.tanh(ones)));
+            self.assertFalse(nest.is_sequence(np.ones(new int[] { 4, 5 })));
+        }
 
         //  @parameterized.parameters({"mapping_type": _CustomMapping},
         //                            {"mapping_type": dict})
@@ -363,71 +375,75 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         //    nest.assert_same_structure({"a": 4}, _CustomMapping(a= 3))
         //    nest.assert_same_structure(_CustomMapping(b=3), {"b": 4})
 
-        //  @test_util.assert_no_new_pyobjects_executing_eagerly
-        //  def testMapStructure(self) :
-        //    structure1 = (((1, 2), 3), 4, (5, 6))
-        //    structure2 = (((7, 8), 9), 10, (11, 12))
-        //    structure1_plus1 = nest.map_structure(lambda x: x + 1, structure1)
-        //    nest.assert_same_structure(structure1, structure1_plus1)
-        //    self.assertAllEqual(
-        //        [2, 3, 4, 5, 6, 7],
-        //        nest.flatten(structure1_plus1))
-        //    structure1_plus_structure2 = nest.map_structure(
-        //        lambda x, y: x + y, structure1, structure2)
-        //    self.assertEqual(
-        //        (((1 + 7, 2 + 8), 3 + 9), 4 + 10, (5 + 11, 6 + 12)),
-        //        structure1_plus_structure2)
+        [TestMethod]
+        public void testMapStructure()
+        {
+            var structure1 = new object[] { new object[] { new object[] { 1, 2 }, 3 }, 4, new object[] { 5, 6 } };
+            var structure2 = new object[] { new object[] { new object[] { 7, 8 }, 9 }, 10, new object[] { 11, 12 } };
+            var structure1_plus1 = nest.map_structure(x => (int)x + 1, structure1);
+            var structure1_strings = nest.map_structure(x => $"{x}", structure1);
+            var s = JArray.FromObject(structure1_plus1).ToString();
+            Console.WriteLine(s);
+            //    nest.assert_same_structure(structure1, structure1_plus1)
+            self.assertAllEqual( nest.flatten(structure1_plus1), new object[] { 2, 3, 4, 5, 6, 7 });
+            self.assertAllEqual(nest.flatten(structure1_strings), new object[] { "1", "2", "3", "4", "5", "6" });
+            //    structure1_plus_structure2 = nest.map_structure(
+            //        lambda x, y: x + y, structure1, structure2)
+            //    self.assertEqual(
+            //        (((1 + 7, 2 + 8), 3 + 9), 4 + 10, (5 + 11, 6 + 12)),
+            //        structure1_plus_structure2)
 
-        //    self.assertEqual(3, nest.map_structure(lambda x: x - 1, 4))
+            //    self.assertEqual(3, nest.map_structure(lambda x: x - 1, 4))
 
-        //    self.assertEqual(7, nest.map_structure(lambda x, y: x + y, 3, 4))
+            //    self.assertEqual(7, nest.map_structure(lambda x, y: x + y, 3, 4))
 
-        //    # Empty structures
-        //    self.assertEqual((), nest.map_structure(lambda x: x + 1, ()))
-        //    self.assertEqual([], nest.map_structure(lambda x: x + 1, []))
-        //    self.assertEqual({}, nest.map_structure(lambda x: x + 1, {}))
-        //    self.assertEqual(NestTest.EmptyNT(), nest.map_structure(lambda x: x + 1,
-        //                                                            NestTest.EmptyNT()))
+            //    # Empty structures
+            //    self.assertEqual((), nest.map_structure(lambda x: x + 1, ()))
+            //    self.assertEqual([], nest.map_structure(lambda x: x + 1, []))
+            //    self.assertEqual({}, nest.map_structure(lambda x: x + 1, {}))
+            //    self.assertEqual(NestTest.EmptyNT(), nest.map_structure(lambda x: x + 1,
+            //                                                            NestTest.EmptyNT()))
 
-        //    # This is checking actual equality of types, empty list != empty tuple
-        //    self.assertNotEqual((), nest.map_structure(lambda x: x + 1, []))
+            //    # This is checking actual equality of types, empty list != empty tuple
+            //    self.assertNotEqual((), nest.map_structure(lambda x: x + 1, []))
 
-        //    with self.assertRaisesRegexp(TypeError, "callable"):
-        //      nest.map_structure("bad", structure1_plus1)
+            //    with self.assertRaisesRegexp(TypeError, "callable"):
+            //      nest.map_structure("bad", structure1_plus1)
 
-        //    with self.assertRaisesRegexp(ValueError, "at least one structure"):
-        //      nest.map_structure(lambda x: x)
+            //    with self.assertRaisesRegexp(ValueError, "at least one structure"):
+            //      nest.map_structure(lambda x: x)
 
-        //    with self.assertRaisesRegexp(ValueError, "same number of elements"):
-        //      nest.map_structure(lambda x, y: None, (3, 4), (3, 4, 5))
+            //    with self.assertRaisesRegexp(ValueError, "same number of elements"):
+            //      nest.map_structure(lambda x, y: None, (3, 4), (3, 4, 5))
 
-        //    with self.assertRaisesRegexp(ValueError, "same nested structure"):
-        //      nest.map_structure(lambda x, y: None, 3, (3,))
+            //    with self.assertRaisesRegexp(ValueError, "same nested structure"):
+            //      nest.map_structure(lambda x, y: None, 3, (3,))
 
-        //    with self.assertRaisesRegexp(TypeError, "same sequence type"):
-        //      nest.map_structure(lambda x, y: None, ((3, 4), 5), [(3, 4), 5])
+            //    with self.assertRaisesRegexp(TypeError, "same sequence type"):
+            //      nest.map_structure(lambda x, y: None, ((3, 4), 5), [(3, 4), 5])
 
-        //    with self.assertRaisesRegexp(ValueError, "same nested structure"):
-        //      nest.map_structure(lambda x, y: None, ((3, 4), 5), (3, (4, 5)))
+            //    with self.assertRaisesRegexp(ValueError, "same nested structure"):
+            //      nest.map_structure(lambda x, y: None, ((3, 4), 5), (3, (4, 5)))
 
-        //    structure1_list = [[[1, 2], 3], 4, [5, 6]]
-        //    with self.assertRaisesRegexp(TypeError, "same sequence type"):
-        //      nest.map_structure(lambda x, y: None, structure1, structure1_list)
+            //    structure1_list = [[[1, 2], 3], 4, [5, 6]]
+            //    with self.assertRaisesRegexp(TypeError, "same sequence type"):
+            //      nest.map_structure(lambda x, y: None, structure1, structure1_list)
 
-        //    nest.map_structure(lambda x, y: None, structure1, structure1_list,
-        //                       check_types=False)
+            //    nest.map_structure(lambda x, y: None, structure1, structure1_list,
+            //                       check_types=False)
 
-        //    with self.assertRaisesRegexp(ValueError, "same nested structure"):
-        //      nest.map_structure(lambda x, y: None, ((3, 4), 5), (3, (4, 5)),
-        //                         check_types=False)
+            //    with self.assertRaisesRegexp(ValueError, "same nested structure"):
+            //      nest.map_structure(lambda x, y: None, ((3, 4), 5), (3, (4, 5)),
+            //                         check_types=False)
 
-        //    with self.assertRaisesRegexp(ValueError, "Only valid keyword argument"):
-        //      nest.map_structure(lambda x: None, structure1, foo="a")
+            //    with self.assertRaisesRegexp(ValueError, "Only valid keyword argument"):
+            //      nest.map_structure(lambda x: None, structure1, foo="a")
 
-        //    with self.assertRaisesRegexp(ValueError, "Only valid keyword argument"):
-        //      nest.map_structure(lambda x: None, structure1, check_types=False, foo="a")
+            //    with self.assertRaisesRegexp(ValueError, "Only valid keyword argument"):
+            //      nest.map_structure(lambda x: None, structure1, check_types=False, foo="a")
 
-        //  ABTuple = collections.namedtuple("ab_tuple", "a, b")  # pylint: disable=invalid-name
+            //  ABTuple = collections.namedtuple("ab_tuple", "a, b")  # pylint: disable=invalid-name
+        }
 
         //  @test_util.assert_no_new_pyobjects_executing_eagerly
         //  def testMapStructureWithStrings(self) :
