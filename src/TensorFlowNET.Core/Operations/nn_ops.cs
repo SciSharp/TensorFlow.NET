@@ -30,7 +30,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor bias_add(Tensor value, 
-            RefVariable bias, 
+            Tensor bias, 
             string data_format = null, 
             string name = null)
         {

@@ -38,46 +38,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
             });
         }
 
-        [Ignore("Todo")]
-        [TestMethod]
-        public void testCondMissingArg1()
-        {
-            //  def testCondMissingArg1(self):
-            //    x = constant_op.constant(1)
-            //    with self.assertRaises(TypeError):
-            //      control_flow_ops.cond(True, false_fn=lambda: x)
-
-        }
-
-        [Ignore("Todo")]
-        [TestMethod]
-        public void testCondMissingArg2()
-        {
-            //  def testCondMissingArg2(self):
-            //    x = constant_op.constant(1)
-            //    with self.assertRaises(TypeError):
-            //      control_flow_ops.cond(True, lambda: x)
-        }
-
-        [Ignore("Todo")]
-        [TestMethod]
-        public void testCondDuplicateArg1()
-        {
-            //  def testCondDuplicateArg1(self):
-            //    x = constant_op.constant(1)
-            //    with self.assertRaises(TypeError):
-            //      control_flow_ops.cond(True, lambda: x, lambda: x, fn1=lambda: x)
-        }
-
-        [Ignore("Todo")]
-        [TestMethod]
-        public void testCondDuplicateArg2()
-        {
-            //  def testCondDuplicateArg2(self):
-            //    x = constant_op.constant(1)
-            //    with self.assertRaises(TypeError):
-            //      control_flow_ops.cond(True, lambda: x, lambda: x, fn2=lambda: x)
-        }
+        // NOTE: all other test python test cases of this class are either not needed due to strong typing or dest a deprecated api
 
     }
 }
