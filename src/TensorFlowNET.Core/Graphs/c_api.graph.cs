@@ -278,5 +278,16 @@ namespace Tensorflow
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_NewImportGraphDefOptions();
+
+        /// <summary>
+        /// Updates 'dst' to consume 'new_src'.
+        /// </summary>
+        /// <param name="graph">TF_Graph*</param>
+        /// <param name="new_src"></param>
+        /// <param name="dst"></param>
+        /// <param name="status">TF_Status*</param>
+        [DllImport(TensorFlowLibName)]
+        
+        public static extern void TF_UpdateEdge(IntPtr graph, TF_Output new_src, TF_Input dst, IntPtr status);
     }
 }
