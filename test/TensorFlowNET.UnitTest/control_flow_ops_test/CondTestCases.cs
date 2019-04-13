@@ -13,53 +13,29 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         [TestMethod]
         public void testCondTrue()
         {
-            var x = tf.constant(2);
-            var y = tf.constant(5);
-            var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
-                () => tf.add(y, tf.constant(23)));
-            self.assertEquals(self.evaluate(z), 34);
+            with(tf.Graph().as_default(), g =>
+            {
+                var x = tf.constant(2);
+                var y = tf.constant(5);
+                var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
+                    () => tf.add(y, tf.constant(23)));
+                //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
+                self.assertEquals(eval_scalar(z), 34);
+            });
         }
 
-        [Ignore("Todo")]
+        [Ignore("This Test Fails due to missing edges in the graph!")]
         [TestMethod]
         public void testCondFalse()
         {
-            //  def testCondFalse(self):
-            //    x = constant_op.constant(2)
-            //    y = constant_op.constant(1)
-            //    z = control_flow_ops.cond(
-            //        math_ops.less(
-            //            x,
-            //            y), lambda: math_ops.multiply(x, 17), lambda: math_ops.add(y, 23))
-            //    self.assertEquals(self.evaluate(z), 24)
-        }
-
-        [Ignore("Todo")]
-        [TestMethod]
-        public void testCondTrueLegacy()
-        {
-            //  def testCondTrueLegacy(self):
-            //    x = constant_op.constant(2)
-            //    y = constant_op.constant(5)
-            //    z = control_flow_ops.cond(
-            //        math_ops.less(x, y),
-            //        fn1=lambda: math_ops.multiply(x, 17),
-            //        fn2=lambda: math_ops.add(y, 23))
-            //    self.assertEquals(self.evaluate(z), 34)
-        }
-
-        [Ignore("Todo")]
-        [TestMethod]
-        public void testCondFalseLegacy()
-        {
-            //  def testCondFalseLegacy(self):
-            //    x = constant_op.constant(2)
-            //    y = constant_op.constant(1)
-            //    z = control_flow_ops.cond(
-            //        math_ops.less(x, y),
-            //        fn1=lambda: math_ops.multiply(x, 17),
-            //        fn2=lambda: math_ops.add(y, 23))
-            //    self.assertEquals(self.evaluate(z), 24)
+            with(tf.Graph().as_default(), g =>
+            {
+                var x = tf.constant(2);
+                var y = tf.constant(1);
+                var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
+                    () => tf.add(y, tf.constant(23)));
+                self.assertEquals(eval_scalar(z), 24);
+            });
         }
 
         [Ignore("Todo")]

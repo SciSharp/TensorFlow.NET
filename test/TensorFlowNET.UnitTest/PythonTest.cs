@@ -132,22 +132,65 @@ namespace TensorFlowNET.UnitTest
         }
 
         /// <summary>
-        /// Evaluates tensors and returns numpy values.
+        /// Evaluates tensors and returns a dictionary of {name:result, ...}.
         /// <param name="tensors">A Tensor or a nested list/tuple of Tensors.</param>
         /// </summary>
-        /// <returns> tensors numpy values.</returns>
-        public object evaluate(params Tensor[] tensors)
+        public Dictionary<string, NDArray> evaluate(params Tensor[] tensors)
         {
+            var results = new Dictionary<string, NDArray>();
             //  if context.executing_eagerly():
             //    return self._eval_helper(tensors)
             //  else:
             {
                 var sess = ops.get_default_session();
-                if (sess == None)
-                    with(self.session(), s => sess = s);
-                return sess.run(tensors);
+                if (sess == null)
+                    sess = self.session();
+
+                with<Session>(sess, s =>
+                {
+                    foreach (var t in tensors)
+                        results[t.name] = t.eval();
+                });
+                return results;
             }
         }
+
+        public NDArray evaluate(Tensor tensor)
+        {
+            NDArray result = null;
+            //  if context.executing_eagerly():
+            //    return self._eval_helper(tensors)
+            //  else:
+            {
+                var sess = ops.get_default_session();
+                if (sess == null)
+                    sess = self.session();
+                with<Session>(sess, s =>
+                {
+                    result = tensor.eval();
+                });
+                return result;
+            }
+        }
+
+        public object eval_scalar(Tensor tensor)
+        {
+            NDArray result = null;
+            //  if context.executing_eagerly():
+            //    return self._eval_helper(tensors)
+            //  else:
+            {
+                var sess = ops.get_default_session();
+                if (sess == null)
+                    sess = self.session();
+                with<Session>(sess, s =>
+                {
+                    result = tensor.eval();
+                });
+                return result.Array.GetValue(0);
+            }
+        }
+
 
         //Returns a TensorFlow Session for use in executing tests.
         public Session session(Graph graph = null, object config = null, bool use_gpu = false, bool force_gpu = false)
@@ -188,16 +231,11 @@ namespace TensorFlowNET.UnitTest
             //if (context.executing_eagerly())
             //  yield None
             //else 
-            {
-                with<Session>(self._create_session(graph, config, force_gpu), sess =>
-                {
-                    with(self._constrain_devices_and_set_default(sess, use_gpu, force_gpu), (x) =>
-                    {
-                        s = sess;
-                    });
-                });
-            }
-            return s;
+            //{
+            s = self._create_session(graph, config, force_gpu);
+            self._constrain_devices_and_set_default(s, use_gpu, force_gpu);
+            //}
+            return s.as_default();
         }
 
         private IPython _constrain_devices_and_set_default(Session sess, bool useGpu, bool forceGpu)
