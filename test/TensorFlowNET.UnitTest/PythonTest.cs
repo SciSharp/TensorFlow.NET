@@ -136,6 +136,7 @@ namespace TensorFlowNET.UnitTest
         /// <param name="tensors">A Tensor or a nested list/tuple of Tensors.</param>
         /// </summary>
         /// <returns> tensors numpy values.</returns>
+        [Obsolete("Why do we need this function? we already have Tensor.eval().")]
         public object evaluate(params Tensor[] tensors)
         {
             //  if context.executing_eagerly():

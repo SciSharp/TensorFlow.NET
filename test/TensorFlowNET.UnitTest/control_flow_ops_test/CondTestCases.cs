@@ -13,11 +13,16 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         [TestMethod]
         public void testCondTrue()
         {
-            var x = tf.constant(2);
-            var y = tf.constant(5);
-            var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
-                () => tf.add(y, tf.constant(23)));
-            self.assertEquals(self.evaluate(z), 34);
+            with(tf.Session(), sess =>
+            {
+                var x = tf.constant(2);
+                var y = tf.constant(5);
+                var z = control_flow_ops.cond(tf.less(x, y),
+                    () => tf.multiply(x, tf.constant(17)),
+                    () => tf.add(y, tf.constant(23)));
+                int result = z.eval(sess);
+                assertEquals(result, 34);
+            });
         }
 
         [Ignore("Todo")]
