@@ -287,7 +287,7 @@ namespace Tensorflow
             // Reset cached inputs.
             _inputs = null;// new InputList(new Tensor[] { tensor }); // is this right? original code: self._inputs_val=None
             // TODO: implement below code dependencies
-            //c_api.UpdateEdge(_graph._c_graph, output, input);
+            // c_api.TF_UpdateEdge(graph, output, input, status);
         }
 
         private void _assert_same_graph(Tensor tensor)

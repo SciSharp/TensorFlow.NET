@@ -80,7 +80,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor add(Tensor x, Tensor y, string name = null)
+        public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
 
@@ -300,7 +300,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor mul(Tensor x, Tensor y, string name = null)
+        public static Tensor mul<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Mul", name, args: new { x, y });
 
