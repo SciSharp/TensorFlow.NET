@@ -18,7 +18,8 @@ namespace TensorFlowNET.UnitTest
     {
         #region python compatibility layer
         protected PythonTest self { get => this; }
-        protected object None {
+        protected object None
+        {
             get { return null; }
         }
         #endregion
@@ -43,7 +44,7 @@ namespace TensorFlowNET.UnitTest
                     assertItemsEqual((g[i] as NDArray).Array, (e[i] as NDArray).Array);
                 else if (e[i] is ICollection && g[i] is ICollection)
                     assertEqual(g[i], e[i]);
-                else 
+                else
                     Assert.AreEqual(e[i], g[i], $"Items differ at index {i}, expected {e[i]} but got {g[i]}");
             }
         }
@@ -102,28 +103,171 @@ namespace TensorFlowNET.UnitTest
         {
             if (tensors == null)
                 return null;
-            //return nest.map_structure(self._eval_tensor, tensors);
+            return nest.map_structure(self._eval_tensor, tensors);
             return null;
         }
 
-        //def evaluate(self, tensors) :
-        //  """Evaluates tensors and returns numpy values.
+        protected object _eval_tensor(object tensor)
+        {
+            if (tensor == None)
+                return None;
+            //else if (callable(tensor))
+            //     return self._eval_helper(tensor())
+            else
+            {
+                try
+                {
+                    //TODO:
+                    //       if sparse_tensor.is_sparse(tensor):
+                    //         return sparse_tensor.SparseTensorValue(tensor.indices, tensor.values,
+                    //                                                tensor.dense_shape)
+                    //return (tensor as Tensor).numpy();
+                }
+                catch (Exception e)
+                {
+                    throw new ValueError("Unsupported type: " + tensor.GetType());
+                }
+                return null;
+            }
+        }
 
-        //  Args:
-        //    tensors: A Tensor or a nested list/tuple of Tensors.
+        /// <summary>
+        /// Evaluates tensors and returns numpy values.
+        /// <param name="tensors">A Tensor or a nested list/tuple of Tensors.</param>
+        /// </summary>
+        /// <returns> tensors numpy values.</returns>
+        public object evaluate(params Tensor[] tensors)
+        {
+            //  if context.executing_eagerly():
+            //    return self._eval_helper(tensors)
+            //  else:
+            {
+                var sess = ops.get_default_session();
+                if (sess == None)
+                    with(self.session(), s => sess = s);
+                return sess.run(tensors);
+            }
+        }
 
-        //  Returns:
-        //    tensors numpy values.
-        //  """
-        //  if context.executing_eagerly():
-        //    return self._eval_helper(tensors)
-        //  else:
-        //    sess = ops.get_default_session()
-        //    if sess is None:
-        //      with self.test_session() as sess:
-        //        return sess.run(tensors)
-        //    else:
-        //      return sess.run(tensors)
+        //Returns a TensorFlow Session for use in executing tests.
+        public Session session(Graph graph = null, object config = null, bool use_gpu = false, bool force_gpu = false)
+        {
+            //Note that this will set this session and the graph as global defaults.
+
+            //Use the `use_gpu` and `force_gpu` options to control where ops are run.If
+            //`force_gpu` is True, all ops are pinned to `/device:GPU:0`. Otherwise, if
+            //`use_gpu` is True, TensorFlow tries to run as many ops on the GPU as
+            //possible.If both `force_gpu and `use_gpu` are False, all ops are pinned to
+            //the CPU.
+
+            //Example:
+            //```python
+            //class MyOperatorTest(test_util.TensorFlowTestCase):
+            //  def testMyOperator(self):
+            //    with self.session(use_gpu= True):
+            //      valid_input = [1.0, 2.0, 3.0, 4.0, 5.0]
+            //    result = MyOperator(valid_input).eval()
+            //      self.assertEqual(result, [1.0, 2.0, 3.0, 5.0, 8.0]
+            //      invalid_input = [-1.0, 2.0, 7.0]
+            //    with self.assertRaisesOpError("negative input not supported"):
+            //        MyOperator(invalid_input).eval()
+            //```
+
+            //Args:
+            //  graph: Optional graph to use during the returned session.
+            //  config: An optional config_pb2.ConfigProto to use to configure the
+            //    session.
+            //  use_gpu: If True, attempt to run as many ops as possible on GPU.
+            //  force_gpu: If True, pin all ops to `/device:GPU:0`.
+
+            //Yields:
+            //  A Session object that should be used as a context manager to surround
+            //  the graph building and execution code in a test case.
+
+            Session s = null;
+            //if (context.executing_eagerly())
+            //  yield None
+            //else 
+            {
+                with<Session>(self._create_session(graph, config, force_gpu), sess =>
+                {
+                    with(self._constrain_devices_and_set_default(sess, use_gpu, force_gpu), (x) =>
+                    {
+                        s = sess;
+                    });
+                });
+            }
+            return s;
+        }
+
+        private IPython _constrain_devices_and_set_default(Session sess, bool useGpu, bool forceGpu)
+        {
+            //def _constrain_devices_and_set_default(self, sess, use_gpu, force_gpu):
+            //"""Set the session and its graph to global default and constrain devices."""
+            //if context.executing_eagerly():
+            //  yield None
+            //else:
+            //  with sess.graph.as_default(), sess.as_default():
+            //    if force_gpu:
+            //      # Use the name of an actual device if one is detected, or
+            //      # '/device:GPU:0' otherwise
+            //      gpu_name = gpu_device_name()
+            //      if not gpu_name:
+            //            gpu_name = "/device:GPU:0"
+            //      with sess.graph.device(gpu_name):
+            //        yield sess
+            //    elif use_gpu:
+            //      yield sess
+            //    else:
+            //      with sess.graph.device("/device:CPU:0"):
+            //        yield sess
+            return sess;
+        }
+
+        // See session() for details.
+        private Session _create_session(Graph graph, object cfg, bool forceGpu)
+        {
+            var prepare_config = new Func<object, object>((config) =>
+            {
+                //  """Returns a config for sessions.
+                //  Args:
+                //        config: An optional config_pb2.ConfigProto to use to configure the
+                //      session.
+                //  Returns:
+                //    A config_pb2.ConfigProto object.
+
+                //TODO: config
+
+                //  # use_gpu=False. Currently many tests rely on the fact that any device
+                //  # will be used even when a specific device is supposed to be used.
+                //  allow_soft_placement = not force_gpu
+                //  if config is None:
+                //    config = config_pb2.ConfigProto()
+                //    config.allow_soft_placement = allow_soft_placement
+                //    config.gpu_options.per_process_gpu_memory_fraction = 0.3
+                //  elif not allow_soft_placement and config.allow_soft_placement:
+                //    config_copy = config_pb2.ConfigProto()
+                //    config_copy.CopyFrom(config)
+                //    config = config_copy
+                //    config.allow_soft_placement = False
+                //  # Don't perform optimizations for tests so we don't inadvertently run
+                //  # gpu ops on cpu
+                //  config.graph_options.optimizer_options.opt_level = -1
+                //  # Disable Grappler constant folding since some tests & benchmarks
+                //  # use constant input and become meaningless after constant folding.
+                //  # DO NOT DISABLE GRAPPLER OPTIMIZERS WITHOUT CONSULTING WITH THE
+                //  # GRAPPLER TEAM.
+                //  config.graph_options.rewrite_options.constant_folding = (
+                //      rewriter_config_pb2.RewriterConfig.OFF)
+                //  config.graph_options.rewrite_options.pin_to_host_optimization = (
+                //      rewriter_config_pb2.RewriterConfig.OFF)
+                return config;
+            });
+            //TODO: use this instead of normal session
+            //return new ErrorLoggingSession(graph = graph, config = prepare_config(config))
+            return new Session(graph: graph);//, config = prepare_config(config))
+        }
+
         #endregion
 
 

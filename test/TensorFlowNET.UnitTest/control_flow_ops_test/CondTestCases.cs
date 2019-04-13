@@ -10,14 +10,14 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
     public class CondTestCases : PythonTest
     {
 
-        [Ignore("Todo")]
         [TestMethod]
         public void testCondTrue()
         {
-            //var x = constant_op.constant(2);
-            //var y = constant_op.constant(5);
-            //    var z = control_flow_ops.cond(math_ops.less(x,y), ()=> math_ops.multiply(x, 17), ()=> math_ops.add(y, 23))
-            //self.assertEquals(self.evaluate(z), 34);
+            var x = tf.constant(2);
+            var y = tf.constant(5);
+            var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
+                () => tf.add(y, tf.constant(23)));
+            self.assertEquals(self.evaluate(z), 34);
         }
 
         [Ignore("Todo")]
