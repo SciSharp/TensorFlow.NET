@@ -162,7 +162,7 @@ namespace TensorFlowNET.UnitTest.ops_test
             {
                 var z1 = tf.add(a_3, tf.multiply(a_4, a_2));
             });
-            tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
+            //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
             assertItemsEqual(b_1.op.control_inputs, new[] { a_1.op, a_2.op, a_3.op, a_4.op });
             assertItemsEqual(b_2.op.control_inputs, b_1.op.control_inputs);
         }

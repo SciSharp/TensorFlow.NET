@@ -132,10 +132,11 @@ namespace TensorFlowNET.UnitTest
         }
 
         /// <summary>
-        /// Evaluates tensors and returns a dictionary of {name:result, ...}.
-        /// <param name="tensors">A Tensor or a nested list/tuple of Tensors.</param>
+        /// This function is used in many original tensorflow unit tests to evaluate tensors 
+        /// in a test session with special settings (for instance constant folding off)
+        /// 
         /// </summary>
-        public Dictionary<string, NDArray> evaluate(params Tensor[] tensors)
+        public T evaluate<T>(Tensor tensor)
         {
             var results = new Dictionary<string, NDArray>();
             //  if context.executing_eagerly():
@@ -145,49 +146,26 @@ namespace TensorFlowNET.UnitTest
                 var sess = ops.get_default_session();
                 if (sess == null)
                     sess = self.session();
-
+                T t_result = (T)(object)null;
                 with<Session>(sess, s =>
                 {
-                    foreach (var t in tensors)
-                        results[t.name] = t.eval();
+                        var ndarray=tensor.eval();
+                    if (typeof(T) == typeof(double))
+                    {
+                        double d = ndarray;
+                        t_result = (T)(object)d;
+                    }
+                    else if (typeof(T) == typeof(int))
+                    {
+                        int d = ndarray;
+                        t_result = (T) (object) d;
+                    }
+                    else
+                    {
+                        t_result = (T)(object)ndarray;
+                    }
                 });
-                return results;
-            }
-        }
-
-        public NDArray evaluate(Tensor tensor)
-        {
-            NDArray result = null;
-            //  if context.executing_eagerly():
-            //    return self._eval_helper(tensors)
-            //  else:
-            {
-                var sess = ops.get_default_session();
-                if (sess == null)
-                    sess = self.session();
-                with<Session>(sess, s =>
-                {
-                    result = tensor.eval();
-                });
-                return result;
-            }
-        }
-
-        public object eval_scalar(Tensor tensor)
-        {
-            NDArray result = null;
-            //  if context.executing_eagerly():
-            //    return self._eval_helper(tensors)
-            //  else:
-            {
-                var sess = ops.get_default_session();
-                if (sess == null)
-                    sess = self.session();
-                with<Session>(sess, s =>
-                {
-                    result = tensor.eval();
-                });
-                return result.Array.GetValue(0);
+                return t_result;
             }
         }
 

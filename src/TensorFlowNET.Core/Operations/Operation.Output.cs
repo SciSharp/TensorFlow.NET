@@ -42,8 +42,8 @@ namespace Tensorflow
             if (NumControlOutputs > 0)
             {
                 IntPtr control_output_handle = Marshal.AllocHGlobal(Marshal.SizeOf<IntPtr>() * NumControlOutputs);
-                c_api.TF_OperationGetControlOutputs(_handle, control_output_handle, NumControlInputs);
-                for (int i = 0; i < NumControlInputs; i++)
+                c_api.TF_OperationGetControlOutputs(_handle, control_output_handle, NumControlOutputs);
+                for (int i = 0; i < NumControlOutputs; i++)
                 {
                     var handle = control_output_handle + Marshal.SizeOf<IntPtr>() * i;
                     control_outputs[i] = new Operation(*(IntPtr*)handle);

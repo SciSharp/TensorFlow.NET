@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Tensorflow.Operations;
 using static Tensorflow.CollectionDef;
 using static Tensorflow.MetaGraphDef.Types;
 
@@ -95,15 +96,29 @@ namespace Tensorflow
                         }
                         else
                         {
-                            throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
+                            foreach(var value in col.Value.BytesList.Value)
+                            {
+                                switch (col.Key)
+                                {
+                                    case "cond_context":
+                                        var proto = CondContextDef.Parser.ParseFrom(value);
+                                        var condContext = new CondContext().from_proto(proto, import_scope);
+                                        graph.add_to_collection(col.Key, condContext);
+                                        break;
+                                    default:
+                                        throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
+                                }
+                            }
                         }
                         
                         break;
+                    default:
+                        throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
                 }
             }
 
-            var variables = graph.get_collection(ops.GraphKeys.GLOBAL_VARIABLES,
-                                     scope: scope_to_prepend_to_names) as List<RefVariable>;
+            var variables = graph.get_collection<RefVariable>(ops.GraphKeys.GLOBAL_VARIABLES,
+                                     scope: scope_to_prepend_to_names);
             var var_list = new Dictionary<string, RefVariable>();
             variables.ForEach(v => var_list[ops.strip_name_scope(v.name, scope_to_prepend_to_names)] = v);
 

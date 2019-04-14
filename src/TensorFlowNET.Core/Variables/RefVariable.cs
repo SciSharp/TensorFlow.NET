@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public partial class RefVariable : VariableV1, IProtoBuf
+    public partial class RefVariable : VariableV1, IProtoBuf<VariableDef, RefVariable>
     {
         public bool _in_graph_mode = true;
         public Tensor _initial_value;
@@ -288,7 +288,7 @@ namespace Tensorflow
             throw new NotImplementedException("to_proto RefVariable");
         }
 
-        public T from_proto<T>(VariableDef variable_def, string import_scope)
+        public RefVariable from_proto(VariableDef proto, string import_scope)
         {
             throw new NotImplementedException();
         }

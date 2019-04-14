@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using Tensorflow;
 
 namespace TensorFlowNET.UnitTest.control_flow_ops_test
@@ -9,32 +10,73 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
     [TestClass]
     public class CondTestCases : PythonTest
     {
-
         [TestMethod]
         public void testCondTrue()
         {
-            with(tf.Graph().as_default(), g =>
+            var graph = tf.Graph().as_default();
+
+            with(tf.Session(graph), sess =>
             {
                 var x = tf.constant(2);
                 var y = tf.constant(5);
-                var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
-                    () => tf.add(y, tf.constant(23)));
-                //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
-                self.assertEquals(eval_scalar(z), 34);
+                var pred = tf.less(x, y);
+
+                Func<ITensorOrOperation> if_true = delegate
+                {
+                    return tf.multiply(x, 17);
+                };
+
+                Func<ITensorOrOperation> if_false = delegate
+                {
+                    return tf.add(y, 23);
+                };
+
+                var z = control_flow_ops.cond(pred, if_true, if_false);
+                int result = z.eval(sess);
+                assertEquals(result, 34);
             });
         }
 
-        //[Ignore("This Test Fails due to missing edges in the graph!")]
         [TestMethod]
         public void testCondFalse()
         {
-            with(tf.Graph().as_default(), g =>
+            /* python
+             * import tensorflow as tf
+               from tensorflow.python.framework import ops
+
+                def if_true():
+                    return tf.math.multiply(x, 17)
+                def if_false():
+                    return tf.math.add(y, 23)
+
+                with tf.Session() as sess:
+                    x = tf.constant(2)
+                    y = tf.constant(1)
+                    pred = tf.math.less(x,y)
+                    z = tf.cond(pred, if_true, if_false)
+                    result = z.eval()
+
+                print(result == 24) */
+
+            with(tf.Session(), sess =>
             {
                 var x = tf.constant(2);
                 var y = tf.constant(1);
-                var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
-                    () => tf.add(y, tf.constant(23)));
-                self.assertEquals(eval_scalar(z), 24);
+                var pred = tf.less(x, y);
+
+                Func<ITensorOrOperation> if_true = delegate
+                {
+                    return tf.multiply(x, 17);
+                };
+
+                Func<ITensorOrOperation> if_false = delegate
+                {
+                    return tf.add(y, 23);
+                };
+
+                var z = control_flow_ops.cond(pred, if_true, if_false);
+                int result = z.eval(sess);
+                assertEquals(result, 24);
             });
         }
 

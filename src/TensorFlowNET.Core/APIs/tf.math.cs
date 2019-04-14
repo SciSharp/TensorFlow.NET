@@ -27,7 +27,7 @@ namespace Tensorflow
         public static Tensor asin(Tensor x, string name = null)
             => gen_math_ops.asin(x, name);
 
-        public static Tensor add(Tensor a, Tensor b) 
+        public static Tensor add<Tx, Ty>(Tx a, Ty b) 
             => gen_math_ops.add(a, b);
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace Tensorflow
         public static Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
             => gen_math_ops.minimum(x, y, name: name);
 
-        public static Tensor multiply(Tensor x, Tensor y) 
+        public static Tensor multiply<Tx, Ty>(Tx x, Ty y) 
             => gen_math_ops.mul(x, y);
 
         public static Tensor negative(Tensor x, string name = null)

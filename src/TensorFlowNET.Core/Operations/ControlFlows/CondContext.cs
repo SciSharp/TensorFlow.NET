@@ -8,7 +8,7 @@ namespace Tensorflow.Operations
     /// <summary>
     /// The context for the conditional construct.
     /// </summary>
-    public class CondContext : ControlFlowContext
+    public class CondContext : ControlFlowContext, IProtoBuf<CondContextDef, CondContext>
     {
 
 
@@ -35,16 +35,20 @@ namespace Tensorflow.Operations
         /// <param name="name">Name of the `CondContext` python object.</param>
         /// <param name="context_def"></param>
         /// <param name="import_scope"></param>
-        public CondContext(Tensor pred,
-            Tensor pivot,
-            int branch,
+        public CondContext(Tensor pred = null,
+            Tensor pivot = null,
+            int? branch = null,
             string name = "cond_text",
-            object context_def = null,
+            CondContextDef context_def = null,
             string import_scope = null)
         {
+            if (pred == null && context_def == null) return;
+
             _name = ops.get_default_graph().unique_name(name);
             if (context_def != null)
-                throw new NotImplementedException("CondContext context_def is not null");
+            {
+                _init_from_proto(context_def, import_scope: import_scope);
+            }
             else
             {
                 // Initializes the default fields.
@@ -59,6 +63,18 @@ namespace Tensorflow.Operations
                 _values.Add(pivot.name);
                 pivot.op._set_control_flow_context(this);
             }
+        }
+
+        private void _init_from_proto(CondContextDef context_def, string import_scope = null)
+        {
+            var g = ops.get_default_graph();
+            _name = ops.prepend_name_scope(context_def.ContextName, import_scope);
+            var p1 = ops.prepend_name_scope(context_def.PredName, import_scope);
+            _pred = g.as_graph_element(p1) as Tensor;
+            var p2 = ops.prepend_name_scope(context_def.PivotName, import_scope);
+            _pivot = g.as_graph_element(p2) as Tensor;
+            _branch = context_def.Branch;
+            __init__(values_def: context_def.ValuesDef, import_scope: import_scope);
         }
 
         /// <summary>
@@ -230,6 +246,22 @@ namespace Tensorflow.Operations
         public override void  AddInnerOp(Operation resultOp)
         {
             throw new NotImplementedException();
+        }
+
+        public CondContextDef to_proto(string export_scope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CondContext from_proto(CondContextDef proto, string import_scope)
+        {
+            var ret = new CondContext(context_def: proto, import_scope: import_scope);
+
+            ret.Enter();
+            foreach (var nested_def in proto.NestedContexts)
+                throw new NotImplementedException("");
+            ret.Exit();
+            return ret;
         }
     }
 }

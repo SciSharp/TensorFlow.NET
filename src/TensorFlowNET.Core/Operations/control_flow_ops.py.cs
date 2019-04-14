@@ -308,7 +308,7 @@ namespace Tensorflow
                     tensor.op.graph.prevent_fetching(tensor.op);
 
                 // Build the graph for the true branch in a new context.
-                var context_t = new CondContext(pred, pivot_1, branch: 1);
+                var context_t = new CondContext(pred: pred, pivot: pivot_1, branch: 1);
                 ITensorOrOperation orig_res_t;
                 Tensor res_t;
                 try
@@ -321,7 +321,7 @@ namespace Tensorflow
                     context_t.Exit();
                 }
                 // Build the graph for the false branch in a new context.
-                var context_f = new CondContext(pred, pivot_2, branch: 0);
+                var context_f = new CondContext(pred: pred, pivot: pivot_2, branch: 0);
                 ITensorOrOperation orig_res_f;
                 Tensor res_f;
                 try
@@ -389,13 +389,13 @@ namespace Tensorflow
                     tensor.op.graph.prevent_fetching(tensor.op);
 
                 // Build the graph for the true branch in a new context.
-                var context_t = new CondContext(pred, pivot_1, branch: 1);
+                var context_t = new CondContext(pred: pred, pivot: pivot_1, branch: 1);
                 context_t.Enter();
                 var (orig_res_t, res_t) = context_t.BuildCondBranch(true_fn);
                 context_t.Exit();
 
                 // Build the graph for the false branch in a new context.
-                var context_f = new CondContext(pred, pivot_2, branch: 0);
+                var context_f = new CondContext(pred: pred, pivot: pivot_2, branch: 0);
                 context_f.Enter();
                 var (orig_res_f, res_f) = context_f.BuildCondBranch(false_fn);
                 context_f.Exit();

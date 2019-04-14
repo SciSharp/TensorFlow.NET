@@ -290,7 +290,6 @@ namespace Tensorflow
             // the updated inputs are reloaded from the c_api
             c_api.TF_UpdateEdge(_graph, output, input, status);
             //var updated_inputs = inputs;
-
         }
 
         private void _assert_same_graph(Tensor tensor)
