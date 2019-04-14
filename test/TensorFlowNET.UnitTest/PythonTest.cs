@@ -132,23 +132,43 @@ namespace TensorFlowNET.UnitTest
         }
 
         /// <summary>
-        /// Evaluates tensors and returns numpy values.
-        /// <param name="tensors">A Tensor or a nested list/tuple of Tensors.</param>
+        /// This function is used in many original tensorflow unit tests to evaluate tensors 
+        /// in a test session with special settings (for instance constant folding off)
+        /// 
         /// </summary>
-        /// <returns> tensors numpy values.</returns>
-        [Obsolete("Why do we need this function? we already have Tensor.eval().")]
-        public object evaluate(params Tensor[] tensors)
+        public T evaluate<T>(Tensor tensor)
         {
+            var results = new Dictionary<string, NDArray>();
             //  if context.executing_eagerly():
             //    return self._eval_helper(tensors)
             //  else:
             {
                 var sess = ops.get_default_session();
-                if (sess == None)
-                    with(self.session(), s => sess = s);
-                return sess.run(tensors);
+                if (sess == null)
+                    sess = self.session();
+                T t_result = (T)(object)null;
+                with<Session>(sess, s =>
+                {
+                        var ndarray=tensor.eval();
+                    if (typeof(T) == typeof(double))
+                    {
+                        double d = ndarray;
+                        t_result = (T)(object)d;
+                    }
+                    else if (typeof(T) == typeof(int))
+                    {
+                        int d = ndarray;
+                        t_result = (T) (object) d;
+                    }
+                    else
+                    {
+                        t_result = (T)(object)ndarray;
+                    }
+                });
+                return t_result;
             }
         }
+
 
         //Returns a TensorFlow Session for use in executing tests.
         public Session session(Graph graph = null, object config = null, bool use_gpu = false, bool force_gpu = false)
@@ -189,16 +209,11 @@ namespace TensorFlowNET.UnitTest
             //if (context.executing_eagerly())
             //  yield None
             //else 
-            {
-                with<Session>(self._create_session(graph, config, force_gpu), sess =>
-                {
-                    with(self._constrain_devices_and_set_default(sess, use_gpu, force_gpu), (x) =>
-                    {
-                        s = sess;
-                    });
-                });
-            }
-            return s;
+            //{
+            s = self._create_session(graph, config, force_gpu);
+            self._constrain_devices_and_set_default(s, use_gpu, force_gpu);
+            //}
+            return s.as_default();
         }
 
         private IPython _constrain_devices_and_set_default(Session sess, bool useGpu, bool forceGpu)

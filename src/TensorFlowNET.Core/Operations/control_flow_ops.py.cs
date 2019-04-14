@@ -290,33 +290,11 @@ namespace Tensorflow
             {
                 // TODO: here a chunk of original code is missing
                 /*
-                  if fn1 is not None:
-                    if true_fn is not None:
-                      raise TypeError("cond(): true_fn and fn1 may not be set simultaneously.")
-                    true_fn = fn1
-                  elif true_fn is None:
-                    raise TypeError("cond(): true_fn argument required")
-                  if fn2 is not None:
-                    if false_fn is not None:
-                      raise TypeError("cond(): false_fn and fn2 may not be set simultaneously.")
-                    false_fn = fn2
-                  elif false_fn is None:
-                    raise TypeError("cond(): false_fn argument required")
-
-                  if not callable(true_fn):
-                    raise TypeError("true_fn must be callable.")
-                  if not callable(false_fn):
-                    raise TypeError("false_fn must be callable.")
-
                   with ops.name_scope(name, "cond", [pred]):
                     if context.executing_eagerly():
                       if pred:
                         return _UnpackIfSingleton(true_fn())
                       return _UnpackIfSingleton(false_fn())
-
-                    # Add the Switch to the graph.
-                    if isinstance(pred, bool):
-                      raise TypeError("pred must not be a Python bool")
                 */
 
                 // Add the Switch to the graph.

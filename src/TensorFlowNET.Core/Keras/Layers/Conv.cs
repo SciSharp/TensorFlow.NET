@@ -101,8 +101,8 @@ namespace Tensorflow.Keras.Layers
                     throw new NotImplementedException("call channels_first");
                 }
                 else
-                {
-                    outputs = nn_ops.bias_add(outputs, bias, data_format: "NHWC");
+                {                    
+                    outputs = nn_ops.bias_add(outputs, bias._AsTensor(), data_format: "NHWC");
                 }
             }
 
