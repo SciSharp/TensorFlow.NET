@@ -157,11 +157,11 @@ namespace TensorFlowNET.UnitTest.ops_test
                      });
                  });
              });
-            var z=tf.add(a_1, tf.multiply(b_2, b_1));
-            with(g.control_dependencies(new[] {z}), ctrl =>
-            {
-                var z1 = tf.add(a_3, tf.multiply(a_4, a_2));
-            });
+            //var z=tf.add(a_1, tf.multiply(b_2, b_1));
+            //with(g.control_dependencies(new[] {z}), ctrl =>
+            //{
+            //    var z1 = tf.add(a_3, tf.multiply(a_4, a_2));
+            //});
             //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
             assertItemsEqual(b_1.op.control_inputs, new[] { a_1.op, a_2.op, a_3.op, a_4.op });
             assertItemsEqual(b_2.op.control_inputs, b_1.op.control_inputs);
