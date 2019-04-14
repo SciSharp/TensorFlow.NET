@@ -37,3 +37,16 @@ pacman -S git patch unzip
 4. Install from local wheel file.
 
 `pip install C:/tmp/tensorflow_pkg/tensorflow-1.13.0-cp36-cp36m-win_amd64.whl`
+
+### Export more APIs
+
+Add more api to `c_api.h`
+
+```c++
+TF_CAPI_EXPORT extern void AddControlInput(TF_Graph* graph, TF_Operation* op, TF_Operation* input);
+TF_CAPI_EXPORT extern void UpdateEdge(TF_Graph* graph, TF_Output new_src, TF_Input dst, TF_Status* status);
+TF_CAPI_EXPORT extern void RemoveAllControlInputs(TF_Graph* graph, TF_Operation* op);
+```
+
+
+

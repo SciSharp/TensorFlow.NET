@@ -43,6 +43,23 @@ namespace Tensorflow
         public static extern void TF_AddControlInput(IntPtr desc, IntPtr input);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="graph">TF_Graph*</param>
+        /// <param name="op">TF_Operation*</param>
+        /// <param name="input">TF_Operation*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void AddControlInput(IntPtr graph, IntPtr op, IntPtr input);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="graph">TF_Graph*</param>
+        /// <param name="op">TF_Operation*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void RemoveAllControlInputs(IntPtr graph, IntPtr op);
+
+        /// <summary>
         /// For inputs that take a list of tensors.
         /// inputs must point to TF_Output[num_inputs].
         /// </summary>

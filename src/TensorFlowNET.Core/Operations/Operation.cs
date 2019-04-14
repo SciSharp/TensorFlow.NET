@@ -1,5 +1,4 @@
 ﻿using Google.Protobuf.Collections;
-using Newtonsoft.Json;
 //using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -34,15 +33,15 @@ namespace Tensorflow
         private readonly IntPtr _operDesc; 
 
         private Graph _graph;
-        [JsonIgnore]
+        //[JsonIgnore]
         public Graph graph => _graph;
-        [JsonIgnore]
+        //[JsonIgnore]
         public int _id => _id_value;
-        [JsonIgnore]
+        //[JsonIgnore]
         public int _id_value;
 
         public string type => OpType;
-        [JsonIgnore]
+        //[JsonIgnore]
         public Operation op => this;
         public TF_DataType dtype => TF_DataType.DtInvalid;
         private Status status = new Status();
@@ -289,7 +288,7 @@ namespace Tensorflow
             _inputs = null; 
             // after the c_api call next time _inputs is accessed 
             // the updated inputs are reloaded from the c_api
-            c_api.TF_UpdateEdge(_graph, output, input, status);
+            c_api.UpdateEdge(_graph, output, input, status);
             //var updated_inputs = inputs;
         }
 
