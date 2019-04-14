@@ -139,7 +139,7 @@ namespace TensorFlowNET.UnitTest.ops_test
             var a_2 = constant_op.constant(3.0);
             var a_3 = constant_op.constant(4.0);
             var a_4 = constant_op.constant(5.0);
-            Operation b_1 = null, b_2 = null;
+            Tensor b_1 = null, b_2 = null;
             with(g.control_dependencies(new[] { a_1, a_2, a_3, a_4 }), ctrl =>
              {
                  b_1 = constant_op.constant(6.0);
@@ -157,6 +157,12 @@ namespace TensorFlowNET.UnitTest.ops_test
                      });
                  });
              });
+            var z=tf.add(a_1, tf.multiply(b_2, b_1));
+            with(g.control_dependencies(new[] {z}), ctrl =>
+            {
+                var z1 = tf.add(a_3, tf.multiply(a_4, a_2));
+            });
+            tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
             assertItemsEqual(b_1.op.control_inputs, new[] { a_1.op, a_2.op, a_3.op, a_4.op });
             assertItemsEqual(b_2.op.control_inputs, b_1.op.control_inputs);
         }
