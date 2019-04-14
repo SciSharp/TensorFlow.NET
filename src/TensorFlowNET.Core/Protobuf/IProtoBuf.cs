@@ -8,7 +8,7 @@ namespace Tensorflow
     /// In order for a object to be serialized to and from MetaGraphDef, 
     /// the class must implement to_proto() and from_proto() methods
     /// </summary>
-    public interface IProtoBuf
+    public interface IProtoBuf<TProtoDef, TDef>
     {
         string name { get; }
 
@@ -17,15 +17,15 @@ namespace Tensorflow
         /// </summary>
         /// <param name="export_scope"></param>
         /// <returns></returns>
-        VariableDef to_proto(string export_scope);
+        TProtoDef to_proto(string export_scope);
 
         /// <summary>
         /// Returns a `Variable` object created from `variable_def`.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="variable_def"></param>
+        /// <param name="proto"></param>
         /// <param name="import_scope"></param>
         /// <returns></returns>
-        T from_proto<T>(VariableDef variable_def, string import_scope);
+        TDef from_proto(TProtoDef proto, string import_scope);
     }
 }

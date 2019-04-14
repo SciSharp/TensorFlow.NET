@@ -1,9 +1,11 @@
 ﻿### Download compiler from https://github.com/protocolbuffers/protobuf/releases
+Work in command line
+
 ```shell
+cd tensorflow
+
 set SRC_DIR=D:/Projects/tensorflow
 set DST_DIR=D:/Projects/TensorFlow.NET/src/TensorFlowNET.Core/Protobuf
-
-cd tensorflow
 
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/resource_handle.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/tensor_shape.proto
@@ -32,6 +34,7 @@ protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/cluster.prot
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/config.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/debug.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/rewriter_config.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/control_flow.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/training/checkpoint_state.proto
 ```
 

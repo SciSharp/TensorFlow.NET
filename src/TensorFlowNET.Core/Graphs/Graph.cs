@@ -412,6 +412,11 @@ namespace Tensorflow
             return _collections.ContainsKey(name) ? _collections[name] : null;
         }
 
+        public List<T> get_collection<T>(string name, string scope = null)
+        {
+            return _collections.ContainsKey(name) ? _collections[name] as List<T> : new List<T>();
+        }
+
         public object get_collection_ref(string name)
         {
             if (!_collections.ContainsKey(name))

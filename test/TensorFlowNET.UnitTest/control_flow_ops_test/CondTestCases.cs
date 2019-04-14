@@ -10,17 +10,28 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
     [TestClass]
     public class CondTestCases : PythonTest
     {
-
         [TestMethod]
         public void testCondTrue()
         {
-            with(tf.Session(), sess =>
+            var graph = tf.Graph().as_default();
+
+            with(tf.Session(graph), sess =>
             {
                 var x = tf.constant(2);
                 var y = tf.constant(5);
-                var z = control_flow_ops.cond(tf.less(x, y),
-                    () => tf.multiply(x, 17),
-                    () => tf.add(y, 23));
+                var pred = tf.less(x, y);
+
+                Func<ITensorOrOperation> if_true = delegate
+                {
+                    return tf.multiply(x, 17);
+                };
+
+                Func<ITensorOrOperation> if_false = delegate
+                {
+                    return tf.add(y, 23);
+                };
+
+                var z = control_flow_ops.cond(pred, if_true, if_false);
                 int result = z.eval(sess);
                 assertEquals(result, 34);
             });

@@ -376,7 +376,7 @@ namespace Tensorflow
                 if (import_scope.EndsWith("/"))
                     import_scope = import_scope.Substring(0, import_scope.Length - 1);
 
-                throw new NotImplementedException("prepend_name_scope");
+                return $"{import_scope}/{name}";
             }
             else
                 return name;

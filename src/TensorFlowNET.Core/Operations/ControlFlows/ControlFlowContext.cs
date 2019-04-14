@@ -32,6 +32,8 @@ namespace Tensorflow.Operations
         protected Stack<IControlFlowContext> _context_stack;
         protected IControlFlowContext _outer_context;
 
+        protected Dictionary<string, ITensorOrOperation> _external_values;
+
         public ControlFlowContext()
         {
             _context_stack = new Stack<IControlFlowContext>();
@@ -40,13 +42,41 @@ namespace Tensorflow.Operations
         public string name { get => _name; }
         protected string _name;
 
-        public void __init__()
+        public void __init__(ValuesDef values_def = null, string import_scope = null)
         {
-
+            _outer_context = ops.get_default_graph()._get_control_flow_context();
+            if (values_def != null)
+                _init_values_from_proto(values_def, import_scope: import_scope);
         }
 
         public void __enter__()
         {
+        }
+
+        /// <summary>
+        /// Initializes values and external_values from `ValuesDef` protocol buffer.
+        /// </summary>
+        /// <param name="values_def"></param>
+        /// <param name="import_scope"></param>
+        protected void _init_values_from_proto(ValuesDef values_def, string import_scope = null)
+        {
+            _external_values = new Dictionary<string, ITensorOrOperation>();
+            foreach (var value in values_def.Values)
+                _values.Add(value);
+            var g = ops.get_default_graph();
+            foreach(var value in values_def.ExternalValues)
+            {
+                var k = ops.prepend_name_scope(value.Key, import_scope);
+                var v = value.Value;
+                _external_values[k] = g.as_graph_element(ops.prepend_name_scope(v, import_scope));
+            }
+
+            var op_names = _values.Where(x => !_external_values.ContainsKey(x))
+                .Select(x => x.Split(':')[0])
+                .ToArray();
+
+            foreach (var op in op_names)
+                (g.as_graph_element(op) as Operation)._set_control_flow_context(this);
         }
 
         public void __exit__()
