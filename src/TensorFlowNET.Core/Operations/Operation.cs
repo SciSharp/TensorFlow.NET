@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Collections;
+using Newtonsoft.Json;
 //using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -33,15 +34,15 @@ namespace Tensorflow
         private readonly IntPtr _operDesc; 
 
         private Graph _graph;
-        //[JsonIgnore]
+        [JsonIgnore]
         public Graph graph => _graph;
-        //[JsonIgnore]
+        [JsonIgnore]
         public int _id => _id_value;
-        //[JsonIgnore]
+        [JsonIgnore]
         public int _id_value;
 
         public string type => OpType;
-        //[JsonIgnore]
+        [JsonIgnore]
         public Operation op => this;
         public TF_DataType dtype => TF_DataType.DtInvalid;
         private Status status = new Status();
