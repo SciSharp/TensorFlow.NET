@@ -12,7 +12,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
     public class CondTestCases : PythonTest
     {
         [TestMethod]
-        public void testCondTrue()
+        public void testCondTrue_ConstOnly()
         {
             var graph = tf.Graph().as_default();
 
@@ -31,7 +31,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         }
 
         [TestMethod]
-        public void testCondFalse()
+        public void testCondFalse_ConstOnly()
         {
             var graph = tf.Graph().as_default();
 
@@ -46,6 +46,40 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
 
                 int result = z.eval(sess);
                 assertEquals(result, 11);
+            });
+        }
+
+        [TestMethod]
+        public void testCondTrue()
+        {
+            var graph = tf.Graph().as_default();
+
+            with(tf.Session(graph), sess =>
+            {
+                var x = tf.constant(2);
+                var y = tf.constant(5);
+                var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
+                    () => tf.add(y, tf.constant(23)));
+                //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
+                int result = z.eval(sess);
+                assertEquals(result, 34);
+            });
+        }
+
+        //[Ignore("This Test Fails due to missing edges in the graph!")]
+        [TestMethod]
+        public void testCondFalse()
+        {
+            var graph = tf.Graph().as_default();
+
+            with(tf.Session(graph), sess =>
+            {
+                var x = tf.constant(2);
+                var y = tf.constant(1);
+                var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
+                    () => tf.add(y, tf.constant(23)));
+                int result = z.eval(sess);
+                assertEquals(result, 24);
             });
         }
 

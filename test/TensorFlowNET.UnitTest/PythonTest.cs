@@ -138,7 +138,7 @@ namespace TensorFlowNET.UnitTest
         /// </summary>
         public T evaluate<T>(Tensor tensor)
         {
-            var results = new Dictionary<string, NDArray>();
+            object result = null;
             //  if context.executing_eagerly():
             //    return self._eval_helper(tensors)
             //  else:
@@ -146,26 +146,25 @@ namespace TensorFlowNET.UnitTest
                 var sess = ops.get_default_session();
                 if (sess == null)
                     sess = self.session();
-                T t_result = (T)(object)null;
                 with<Session>(sess, s =>
                 {
-                        var ndarray=tensor.eval();
+                    var ndarray=tensor.eval();
                     if (typeof(T) == typeof(double))
                     {
-                        double d = ndarray;
-                        t_result = (T)(object)d;
+                        double x = ndarray;
+                        result=x;
                     }
                     else if (typeof(T) == typeof(int))
                     {
-                        int d = ndarray;
-                        t_result = (T) (object) d;
+                        int x = ndarray;
+                        result = x;
                     }
                     else
                     {
-                        t_result = (T)(object)ndarray;
+                        result = ndarray;
                     }
                 });
-                return t_result;
+                return (T)result;
             }
         }
 
