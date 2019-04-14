@@ -285,9 +285,11 @@ namespace Tensorflow
             var output = tensor._as_tf_output();
 
             // Reset cached inputs.
-            _inputs = null;// new InputList(new Tensor[] { tensor }); // is this right? original code: self._inputs_val=None
-            // TODO: implement below code dependencies
-            c_api.TF_UpdateEdge(graph, output, input, status);
+            _inputs = null; 
+            // after the c_api call next time _inputs is accessed 
+            // the updated inputs are reloaded from the c_api
+            c_api.TF_UpdateEdge(_graph, output, input, status);
+            //var updated_inputs = inputs;
         }
 
         private void _assert_same_graph(Tensor tensor)

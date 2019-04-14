@@ -38,6 +38,12 @@ namespace Tensorflow
             Status.Check(true);
         }
 
+        public Session as_default()
+        {
+            tf.defaultSession = this;
+            return this;
+        }
+
         public static Session LoadFromSavedModel(string path)
         {
             var graph = c_api.TF_NewGraph();
