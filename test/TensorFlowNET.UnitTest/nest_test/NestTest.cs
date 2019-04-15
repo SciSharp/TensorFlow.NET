@@ -15,6 +15,11 @@ namespace TensorFlowNET.UnitTest.nest_test
     [TestClass]
     public class NestTest : PythonTest
     {
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            tf.Graph().as_default();
+        }
 
         //public class PointXY
         //{

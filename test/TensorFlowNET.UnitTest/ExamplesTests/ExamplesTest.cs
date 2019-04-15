@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tensorflow;
 using TensorFlowNET.Examples;
 using TensorFlowNET.Examples.CnnTextClassification;
 
-namespace TensorFlowNET.UnitTest.ExamplesTests
+namespace TensorFlowNET.ExamplesTests
 {
     [TestClass]
     public class ExamplesTest
@@ -13,18 +14,21 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void BasicOperations()
         {
+            tf.Graph().as_default();
             new BasicOperations() { Enabled = true }.Run();
         }
 
         [TestMethod]
         public void HelloWorld()
         {
+            tf.Graph().as_default();
             new HelloWorld() { Enabled = true }.Run();
         }
 
         [TestMethod]
         public void ImageRecognition()
         {
+            tf.Graph().as_default();
             new HelloWorld() { Enabled = true }.Run();
         }
 
@@ -32,6 +36,7 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void InceptionArchGoogLeNet()
         {
+            tf.Graph().as_default();
             new InceptionArchGoogLeNet() { Enabled = true }.Run();
         }
 
@@ -39,18 +44,21 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void KMeansClustering()
         {
-            new KMeansClustering() { Enabled = true, train_size = 500, validation_size = 100, test_size = 100, batch_size =100 }.Run();
+            tf.Graph().as_default();
+            new KMeansClustering() { Enabled = false, train_size = 500, validation_size = 100, test_size = 100, batch_size =100 }.Run();
         }
 
         [TestMethod]
         public void LinearRegression()
         {
+            tf.Graph().as_default();
             new LinearRegression() { Enabled = true }.Run();
         }
 
         [TestMethod]
         public void LogisticRegression()
         {
+            tf.Graph().as_default();
             new LogisticRegression() { Enabled = true, training_epochs=10, train_size = 500, validation_size = 100, test_size = 100 }.Run();
         }
 
@@ -58,6 +66,7 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void MetaGraph()
         {
+            tf.Graph().as_default();
             new MetaGraph() { Enabled = true }.Run();
         }
 
@@ -65,19 +74,22 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void NaiveBayesClassifier()
         {
-            new NaiveBayesClassifier() { Enabled = true }.Run();
+            tf.Graph().as_default();
+            new NaiveBayesClassifier() { Enabled = false }.Run();
         }
 
         [Ignore]
         [TestMethod]
         public void NamedEntityRecognition()
         {
+            tf.Graph().as_default();
             new NamedEntityRecognition() { Enabled = true }.Run();
         }
 
         [TestMethod]
         public void NearestNeighbor()
         {
+            tf.Graph().as_default();
             new NearestNeighbor() { Enabled = true, TrainSize = 500, ValidationSize = 100, TestSize = 100 }.Run();
         }
 
@@ -85,6 +97,7 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void TextClassificationTrain()
         {
+            tf.Graph().as_default();
             new TextClassificationTrain() { Enabled = true, DataLimit=100 }.Run();
         }
 
@@ -92,6 +105,7 @@ namespace TensorFlowNET.UnitTest.ExamplesTests
         [TestMethod]
         public void TextClassificationWithMovieReviews()
         {
+            tf.Graph().as_default();
             new TextClassificationWithMovieReviews() { Enabled = true }.Run();
         }
         

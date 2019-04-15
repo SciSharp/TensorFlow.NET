@@ -36,6 +36,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void VarCreation()
         {
+            tf.Graph().as_default();
             with(tf.variable_scope("foo"), delegate
             {
                 with(tf.variable_scope("bar"), delegate
@@ -52,6 +53,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void ReenterVariableScope()
         {
+            tf.Graph().as_default();
             variable_scope vs = null;
             with(tf.variable_scope("foo"), v => vs = v);
 
