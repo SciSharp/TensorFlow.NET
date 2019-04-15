@@ -37,7 +37,7 @@ namespace Tensorflow.Operations
         /// <param name="import_scope"></param>
         public CondContext(Tensor pred = null,
             Tensor pivot = null,
-            int? branch = null,
+            int branch = 0,
             string name = "cond_text",
             CondContextDef context_def = null,
             string import_scope = null)
@@ -55,7 +55,7 @@ namespace Tensorflow.Operations
                 base.__init__();
                 _pred = pred;
                 _pivot = pivot;
-
+                _branch = branch; // 0 or 1 representing this branch
                 // Values considered to have been already seen in this context. pred is not
                 // included in this context.
                 _values.Add(pred.name);
@@ -105,11 +105,6 @@ namespace Tensorflow.Operations
                     _external_values[result.name] = result;
                 }
                 
-                // for debug purpose
-                if(ops.get_default_graph()._nodes_by_name.Count > 60)
-                {
-                }
-
                 with(ops.control_dependencies(null), ctrl =>
                 {
                     var (r0, r1) = control_flow_ops._SwitchRefOrTensor(result, _pred);

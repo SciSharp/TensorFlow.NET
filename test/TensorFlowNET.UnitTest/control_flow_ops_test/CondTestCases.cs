@@ -22,8 +22,8 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
                 var y = tf.constant(5, name: "y"); 
 
                 var z = control_flow_ops.cond(tf.less(x, y), 
-                    () => tf.constant(22, name: "t2"), 
-                    () => tf.constant(55, name: "f5"));
+                    () => tf.constant(22, name: "t22"), 
+                    () => tf.constant(55, name: "f55"));
 
                 int result = z.eval(sess);
                 assertEquals(result, 22);
@@ -41,8 +41,8 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
                 var y = tf.constant(1, name: "y");
 
                 var z = control_flow_ops.cond(tf.less(x, y), 
-                    () => tf.constant(22, name: "t2"), 
-                    () => tf.constant(11, name: "f1"));
+                    () => tf.constant(22, name: "t22"), 
+                    () => tf.constant(11, name: "f11"));
 
                 int result = z.eval(sess);
                 assertEquals(result, 11);
@@ -56,17 +56,18 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
 
             with(tf.Session(graph), sess =>
             {
-                var x = tf.constant(2);
-                var y = tf.constant(5);
-                var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
-                    () => tf.add(y, tf.constant(23)));
-                //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
+                var x = tf.constant(2, name: "x");
+                var y = tf.constant(5, name: "y");
+
+                var z = control_flow_ops.cond(tf.less(x, y),
+                    () => tf.multiply(x, 17),
+                    () => tf.add(y, 23));
+
                 int result = z.eval(sess);
                 assertEquals(result, 34);
             });
         }
 
-        //[Ignore("This Test Fails due to missing edges in the graph!")]
         [TestMethod]
         public void testCondFalse()
         {
@@ -76,8 +77,11 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
             {
                 var x = tf.constant(2);
                 var y = tf.constant(1);
-                var z = control_flow_ops.cond(tf.less(x, y), () => tf.multiply(x, tf.constant(17)),
-                    () => tf.add(y, tf.constant(23)));
+
+                var z = control_flow_ops.cond(tf.less(x, y), 
+                    () => tf.multiply(x, 17),
+                    () => tf.add(y, 23));
+
                 int result = z.eval(sess);
                 assertEquals(result, 24);
             });

@@ -128,9 +128,9 @@ namespace Tensorflow
 
         public Tensor(Operation op, int value_index, TF_DataType dtype)
         {
-            this.op = op;
-            this.value_index = value_index;
-            this._dtype = dtype;
+            _op = op;
+            _value_index = value_index;
+            _dtype = dtype;
             _id = ops.uid();
         }
     }

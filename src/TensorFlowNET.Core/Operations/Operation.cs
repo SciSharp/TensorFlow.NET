@@ -51,6 +51,7 @@ namespace Tensorflow
         public string Device => c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 
         private NodeDef _node_def;
+        //[JsonIgnore]
         public NodeDef node_def
         {
             get
@@ -290,6 +291,7 @@ namespace Tensorflow
             // the updated inputs are reloaded from the c_api
             c_api.UpdateEdge(_graph, output, input, status);
             //var updated_inputs = inputs;
+            status.Check();
         }
 
         private void _assert_same_graph(Tensor tensor)

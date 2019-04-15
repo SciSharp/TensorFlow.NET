@@ -36,12 +36,11 @@ namespace Tensorflow
         public static (Tensor, Tensor) @switch(Tensor data, Tensor pred, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Switch", name, new { data, pred });
-            var _result = (_op.outputs[0], _op.outputs[1]);
             var _inputs_flat = _op.inputs;
             var _attrs = ("T", _op.get_attr("T"));
             // TODO: missing original code
             //_execute.record_gradient("Switch", _inputs_flat, _attrs, _result, name);
-            return _result;
+            return (_op.outputs[0], _op.outputs[1]);
         }
 
         public static (Tensor, Tensor) merge(Tensor[] inputs, string name = null)

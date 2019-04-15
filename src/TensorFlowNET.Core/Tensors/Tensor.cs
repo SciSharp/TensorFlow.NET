@@ -22,17 +22,19 @@ namespace Tensorflow
         public int Id => _id;
         //[JsonIgnore]
         public Graph graph => op?.graph;
+        private Operation _op;
         //[JsonIgnore]
-        public Operation op { get; }
+        public Operation op => _op;
         //[JsonIgnore]
         public Tensor[] outputs => op.outputs;
 
         /// <summary>
         /// The string name of this tensor.
         /// </summary>
-        public string name => $"{(op == null ? "Operation was not named" : $"{op.name}:{value_index}")}";
+        public string name => $"{(op == null ? "Operation was not named" : $"{op.name}:{_value_index}")}";
 
-        public int value_index { get; }
+        private int _value_index;
+        public int value_index => _value_index;
 
         private Status status = new Status();
 
