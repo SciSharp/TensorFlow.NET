@@ -12,7 +12,7 @@ TensorFlow.NET is a member project of [SciSharp STACK](https://github.com/SciSha
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
-### Why should you use TensorFlow.NET ?
+### Why TensorFlow.NET ?
 
 `SciSharp STASK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Scince the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
 
@@ -82,10 +82,28 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 * [Naive Bayes Classification](test/TensorFlowNET.Examples/NaiveBayesClassifier.cs)
 * [Named Entity Recognition](test/TensorFlowNET.Examples/NamedEntityRecognition.cs)
 
+### Contribute:
+
+Feel like contributing to one of the hottest projects in the Machine Learning field? Want to know how Tensorflow magically creates the computational graph? We appreciate every contribution however small. There are tasks for novices to experts alike, if everyone tackles only a small task the sum of contributions will be huge.
+
+You can:
+* Let everyone know about this project (trivial)
+* Port Tensorflow unit tests from Python to C# (easy)
+* Port missing Tensorflow code from Python to C# (easy)
+* Port Tensorflow examples to C# and raise issues if you come accross missing parts of the API (easy)
+* Debug one of the unit tests that is marked as Ignored to get it to work (can be challenging)
+* Debug one of the not yet working examples and get it to work (hard)
+
+How to debug unit tests:
+
+The best way to find out why a unit test is failing is to single step it in C# and its pendant Python at the same time to see where the flow of execution digresses or where variables exhibit different values. Good Python IDEs like PyCharm let you single step into the tensorflow library code. 
+
+### Contact
+
 Feel free to star or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET).
 
+Join our Chat on [Gitter](https://gitter.im/sci-sharp/community)
 Scan QR code to join Tencent TIM group:
 
 ![SciSharp STACK](docs/TIM.jpg)
 
-Or join our Chat on [Gitter](https://gitter.im/sci-sharp/community)
