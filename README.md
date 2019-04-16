@@ -102,7 +102,8 @@ The best way to find out why a unit test is failing is to single step it in C# a
 
 Feel free to star or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET).
 
-Join our Chat on [Gitter](https://gitter.im/sci-sharp/community)
+Join our chat on [Gitter](https://gitter.im/sci-sharp/community) or
+
 Scan QR code to join Tencent TIM group:
 
 ![SciSharp STACK](docs/TIM.jpg)
