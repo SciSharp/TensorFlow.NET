@@ -164,6 +164,12 @@ namespace Tensorflow.Operations
             var internal_control_inputs = op.control_inputs;
         }
 
+        public object to_proto()
+        {
+            throw new NotImplementedException();
+        }
+
+
         public void Dispose()
         {
         }

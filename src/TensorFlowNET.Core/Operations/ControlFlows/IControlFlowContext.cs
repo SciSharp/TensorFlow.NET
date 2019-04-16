@@ -11,5 +11,6 @@ namespace Tensorflow
         HashSet<string> values { get; }
         Tensor AddValue(Tensor val);
         void AddInnerOp(Operation resultOp);
+        object to_proto();
     }
 }

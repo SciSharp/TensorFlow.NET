@@ -67,5 +67,10 @@ namespace Tensorflow
             else
                 return gen_control_flow_ops.no_op(name: name);
         }
+
+        public static Tensor global_variables_initializer()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

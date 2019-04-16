@@ -492,6 +492,11 @@ namespace Tensorflow
             throw new NotImplementedException("ZerosLikeOutsideLoop");
         }
 
-        
+        // TODO
+        public static void while_loop(Func<Tensor, Tensor> func, Func<Tensor, Tensor> func1, Tensor[] tensors, int? i)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

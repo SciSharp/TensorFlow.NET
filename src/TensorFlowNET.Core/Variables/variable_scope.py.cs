@@ -240,5 +240,11 @@ namespace Tensorflow
             if (_current_name_scope != null)
                 _current_name_scope.Dispose();
         }
+
+        // TODO for Switch/Case
+        public static RefVariable get_variable(string embeddingMatrix, double[,] initializer, bool use_resource)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

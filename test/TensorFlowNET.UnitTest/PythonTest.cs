@@ -95,9 +95,15 @@ namespace TensorFlowNET.UnitTest
             Assert.IsTrue(cond);
         }
 
+
+        public void assertProtoEquals(object toProto, object o)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
-        #region tensor evaluation
+        #region tensor evaluation and test session
 
         protected object _eval_helper(Tensor[] tensors)
         {
@@ -165,6 +171,11 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
+
+        protected Session cached_session()
+        {
+            throw new NotImplementedException();
+        }
 
         //Returns a TensorFlow Session for use in executing tests.
         public Session session(Graph graph = null, object config = null, bool use_gpu = false, bool force_gpu = false)

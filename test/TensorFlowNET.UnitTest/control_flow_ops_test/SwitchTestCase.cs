@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 
 namespace TensorFlowNET.UnitTest.control_flow_ops_test
@@ -14,24 +15,33 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         [TestMethod]
         public void testResourceReadInLoop()
         {
-            //def testResourceReadInLoop(self):
-            //  embedding_matrix = variable_scope.get_variable(
-            //      "embedding_matrix", initializer=[[2.0], [3.0]], use_resource=True)
-            //
-            //  def cond(it, _):
-            //    return it < 5
-            //
-            //  def body(it, cost):
-            //    embedding = embedding_ops.embedding_lookup(embedding_matrix, [0])
-            //    cost += math_ops.reduce_sum(embedding)
-            //    return it + 1, cost
-            //
-            //  _, cost = control_flow_ops.while_loop(
-            //      cond, body, [constant_op.constant(0),
-            //                   constant_op.constant(0.0)])
-            //  with self.cached_session():
-            //    self.evaluate(variables.global_variables_initializer())
-            //    self.assertAllEqual(10.0, self.evaluate(cost))
+
+            var embedding_matrix = variable_scope.get_variable(
+                "embedding_matrix", initializer: new double[,] { { 2.0 }, { 3.0 } }, use_resource: true);
+
+            Tensor cond(Tensor it, Tensor _)
+            {
+                return it < 5;
+            }
+
+            // TODO: below code doesn't compile
+            //(Tensor, Tensor) body(Tensor it, Tensor cost)
+            //{
+            //    var embedding = embedding_ops.embedding_lookup(embedding_matrix, new int[]{0});
+            //    cost += math_ops.reduce_sum(embedding);
+            //    return (it + 1, cost);
+            //}
+            //var (_, cost1) = control_flow_ops.while_loop(
+            //    cond, body, new[]
+            //    {
+            //        constant_op.constant(0),
+            //        constant_op.constant(0.0)
+            //    });
+            //with<Session>(this.cached_session(), sess =>
+            //{
+            //    self.evaluate(variables.global_variables_initializer());
+            //    self.assertAllEqual(10.0, self.evaluate(cost1));
+            //});
         }
 
 
@@ -49,7 +59,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
             doTestIndexedSlicesGradientInCondInWhileLoop(use_resource: true);
         }
 
-        private void doTestIndexedSlicesGradientInCondInWhileLoop(bool use_resource= false)
+        private void doTestIndexedSlicesGradientInCondInWhileLoop(bool use_resource = false)
         {
             //def doTestIndexedSlicesGradientInCondInWhileLoop(self, use_resource=False):
             //  embedding_matrix = variable_scope.get_variable(
