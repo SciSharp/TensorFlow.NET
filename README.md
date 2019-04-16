@@ -1,5 +1,5 @@
 # TensorFlow.NET
-TensorFlow.NET provides .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It's the full complete binding in CSharp language for TensorFlow API. It allows .NET developers to develop, train and deploy Machine Learning models in .NET standard which is running on cross-platform.
+TensorFlow.NET provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in CSharp which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. 
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/wx4td43v2d3f2xj6?svg=true)](https://ci.appveyor.com/project/Haiping-Chen/tensorflow-net)
@@ -12,13 +12,15 @@ TensorFlow.NET is a member project of [SciSharp STACK](https://github.com/SciSha
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
-### Why should we use TensorFlow.NET ?
+### Why should you use TensorFlow.NET ?
 
-`SciSharp STASK`'s mission is to create a zero learning curve on the .NET based technology stack Machine Learning tool library. Let's take a look at a comparison picture and you can see why TensorFlow.NET is the tool that is the most comfortable for you.
+`SciSharp STASK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Scince the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
 
 ![pythn vs csharp](docs/assets/syntax-comparision.png)
 
-SciSharp's philosophy allows a large number of machine learning code written in python to be quickly migrated to .NET, allowing a large number of .NET Developers to use more updated models.
+SciSharp's philosophy allows a large number of machine learning code written in Python to be quickly migrated to .NET, enabling .NET developers to use cutting edge machine learning models and access a vast number of Tensorflow resources which would not be possible without this project.
+
+In comparison to other projects, like for instance TensorFlowSharp which only provide Tensorflow's low-level C++ API and can only run models that were built using Python, Tensorflow.NET also implements Tensorflow's high level API where all the magic happens. This computation graph building layer is still under active development. Once it is completely implemented you can build new Machine Learning models in C#. 
 
 ### How to use
 
@@ -80,8 +82,10 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 * [Naive Bayes Classification](test/TensorFlowNET.Examples/NaiveBayesClassifier.cs)
 * [Named Entity Recognition](test/TensorFlowNET.Examples/NamedEntityRecognition.cs)
 
-Star me or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET) feel free.
+Feel free to star or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET).
 
 Scan QR code to join Tencent TIM group:
 
 ![SciSharp STACK](docs/TIM.jpg)
+
+Or join our Chat on [Gitter](https://gitter.im/sci-sharp/community)
