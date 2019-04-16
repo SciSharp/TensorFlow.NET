@@ -143,7 +143,7 @@ namespace TensorFlowNET.UnitTest
             //    return self._eval_helper(tensors)
             //  else:
             {
-                with(ops.get_default_session(), s =>
+                with(tf.Session(), s =>
                 {
                     var ndarray=tensor.eval();
                     if (typeof(T) == typeof(double))

@@ -281,6 +281,9 @@ namespace Tensorflow
             return math_ops.reduce_sum(input, axis);
         }
 
+        public static Tensor sigmoid<T>(T x, string name = null)
+            => math_ops.sigmoid(x, name: name);
+
         public static Tensor sum(Tensor input, int axis, bool keep_dims = false, string name = null)
             => gen_math_ops._sum(input, axis, keep_dims: keep_dims, name: name);
 

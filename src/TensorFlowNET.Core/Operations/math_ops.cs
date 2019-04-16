@@ -119,7 +119,13 @@ namespace Tensorflow
                 return _may_reduce_to_scalar(keepdims, axis, m);
             }
         }
-        
+
+        public static Tensor sigmoid<T>(T x, string name = null)
+        {
+            var x_tensor = ops.convert_to_tensor(x, name: "x");
+            return gen_math_ops.sigmoid(x_tensor, name: name);
+        }
+
         /// <summary>
         /// Returns (x - y)(x - y) element-wise.
         /// </summary>

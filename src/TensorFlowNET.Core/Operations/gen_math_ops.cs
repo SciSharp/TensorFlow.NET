@@ -108,6 +108,26 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        ///    Computes sigmoid of <c>x</c> element-wise.
+        /// </summary>
+        /// <param name="x">
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'Sigmoid'.
+        /// </param>
+        /// <returns>
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    Specifically, <c>y = 1 / (1 + exp(-x))</c>.
+        /// </remarks>
+        public static Tensor sigmoid(Tensor x, string name = "Sigmoid")
+        {
+            var op = _op_def_lib._apply_op_helper("Sigmoid", name: name, new { x });
+
+            return op.output;
+        }
         public static Tensor sinh(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Sinh", name, args: new { x });
