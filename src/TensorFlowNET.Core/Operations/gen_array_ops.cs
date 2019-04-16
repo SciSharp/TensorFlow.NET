@@ -26,6 +26,44 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        ///    Returns a diagonal tensor with a given diagonal values.
+        /// </summary>
+        /// <param name="diagonal">
+        ///    Rank k tensor where k is at most 1.
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'Diag'.
+        /// </param>
+        /// <returns>
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    Given a <c>diagonal</c>, this operation returns a tensor with the <c>diagonal</c> and
+        ///    everything else padded with zeros. The diagonal is computed as follows:
+        ///    
+        ///    Assume <c>diagonal</c> has dimensions [D1,..., Dk], then the output is a tensor of
+        ///    rank 2k with dimensions [D1,..., Dk, D1,..., Dk] where:
+        ///    
+        ///    <c>output[i1,..., ik, i1,..., ik] = diagonal[i1, ..., ik]</c> and 0 everywhere else.
+        ///    
+        ///    For example:
+        ///    
+        ///   <code>
+        ///    # 'diagonal' is [1, 2, 3, 4]
+        ///    tf.diag(diagonal) ==&amp;gt; [[1, 0, 0, 0]
+        ///    [0, 2, 0, 0]
+        ///    [0, 0, 3, 0]
+        ///    [0, 0, 0, 4]]
+        ///   </code>
+        /// </remarks>
+        public static Tensor diag(Tensor diagonal, string name = null)
+        {
+            var op = _op_def_lib._apply_op_helper("Diag", name: name, args: new { diagonal });
+
+            return op.output;
+        }
+
         public static Tensor expand_dims(Tensor input, int axis, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("ExpandDims", name: name, args: new { input, dim = axis });
