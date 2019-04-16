@@ -360,6 +360,8 @@ namespace Tensorflow
         /// <returns>The default `Session` being used in the current thread.</returns>
         public static Session get_default_session()
         {
+            if (tf.defaultSession == null)
+                tf.defaultSession = tf.Session();
             return tf.defaultSession;
         }
 

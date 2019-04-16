@@ -23,7 +23,8 @@ namespace Tensorflow
             return with(ops.name_scope(name, "l2_normalize", new { x }), scope =>
             {
                 x = ops.convert_to_tensor(x, name: "x");
-                var square_sum = math_ops.reduce_sum(math_ops.square(x), axis, keepdims: true);
+                var sq = math_ops.square(x);
+                var square_sum = math_ops.reduce_sum(sq, axis, keepdims: true);
                 var x_inv_norm = math_ops.rsqrt(math_ops.maximum(square_sum, epsilon));
                 return math_ops.multiply(x, x_inv_norm, name: name);
             });
