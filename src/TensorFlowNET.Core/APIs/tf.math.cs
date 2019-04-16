@@ -287,6 +287,9 @@ namespace Tensorflow
         public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);
 
+        public static Tensor round(Tensor x, string name = null)
+            => gen_math_ops.round(x, name: name);
+
         public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null) 
             => math_ops.cast(x, dtype, name);
 

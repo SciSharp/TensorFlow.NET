@@ -430,6 +430,28 @@ namespace Tensorflow
         }
 
         /// <summary>
+        ///    Rounds the values of a tensor to the nearest integer, element-wise.
+        /// </summary>
+        /// <param name="x">
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'Round'.
+        /// </param>
+        /// <returns>
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    Rounds half to even.  Also known as bankers rounding. If you want to round
+        ///    according to the current system rounding mode use std::cint.
+        /// </remarks>
+        public static Tensor round(Tensor x, string name = "Round")
+        {
+            var op = _op_def_lib._apply_op_helper("Round", name: name, new { x });
+
+            return op.output;
+        }
+
+        /// <summary>
         /// Computes reciprocal of square root of x element-wise.
         /// </summary>
         /// <param name="x"></param>
