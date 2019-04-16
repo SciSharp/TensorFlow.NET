@@ -20,7 +20,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
                 var c = new Func<Tensor, Tensor>(x => gen_math_ops.less(x, 10, name: "c"));
                 var b = new Func<Tensor, Tensor>(x => gen_math_ops.add(x, 1, name: "c"));
                 control_flow_ops.while_loop(
-                      c, b, new[] { i }, maximum_iterations = maximum_iterations);
+                      c, b, new[] { i }, maximum_iterations);
                 foreach (Operation op in sess.graph.get_operations())
                 {
                     var control_flow_context = op._get_control_flow_context();

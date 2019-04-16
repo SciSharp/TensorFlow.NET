@@ -470,5 +470,9 @@ namespace Tensorflow
             throw new NotImplementedException("array_ops.stack");
         }
 
+        public static Tensor placeholder(TF_DataType dtype)
+        {
+            throw new NotImplementedException("array_ops.placeholder");
+        }
     }
 }

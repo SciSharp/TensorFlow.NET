@@ -99,5 +99,10 @@ namespace Tensorflow
                 is_training,
                 name);
         }
+
+        public static Tensor zero_fraction(Tensor t)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

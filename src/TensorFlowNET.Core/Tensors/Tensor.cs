@@ -88,6 +88,11 @@ namespace Tensorflow
             return tensor_util.to_shape(shape);
         }
 
+        public void setShape(Shape shape)
+        {
+            this.shape = shape.Dimensions;
+        }
+
         /// <summary>
         /// number of dimensions
         /// 0	Scalar (magnitude only)
@@ -272,5 +277,6 @@ namespace Tensorflow
             c_api.TF_DeleteTensor(_handle);
             status.Dispose();
         }
+
     }
 }

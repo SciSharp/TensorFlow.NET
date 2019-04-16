@@ -6,6 +6,9 @@ namespace Tensorflow
 {
     public static class dtypes
     {
+        public static TF_DataType int8 = TF_DataType.TF_INT8;
+        public static TF_DataType float32 = TF_DataType.TF_FLOAT; // is that float32?
+
         public static Type as_numpy_datatype(this TF_DataType type)
         {
             switch (type)
