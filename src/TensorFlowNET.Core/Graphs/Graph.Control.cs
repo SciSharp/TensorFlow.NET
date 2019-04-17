@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {
     public partial class Graph
     {
         // Current control flow context. It could be either CondContext or WhileContext 
-        public IControlFlowContext _control_flow_context;
+        public ControlFlowContext _control_flow_context;
 
         // represents the nested with(...) statements
         public List<_ControlDependenciesController> _control_dependencies_stack { get; set; } = new List<_ControlDependenciesController>();
@@ -97,7 +98,7 @@ namespace Tensorflow
         /// Returns the current control flow context.
         /// </summary>
         /// <returns>A context object.</returns>
-        public IControlFlowContext _get_control_flow_context()
+        public ControlFlowContext _get_control_flow_context()
         {
             return _control_flow_context;
         }
@@ -106,7 +107,7 @@ namespace Tensorflow
         /// Sets the current control flow context.
         /// </summary>
         /// <param name="ctx">a context object.</param>
-        public void _set_control_flow_context(IControlFlowContext ctx)
+        public void _set_control_flow_context(ControlFlowContext ctx)
         {
             _control_flow_context = ctx;
         }

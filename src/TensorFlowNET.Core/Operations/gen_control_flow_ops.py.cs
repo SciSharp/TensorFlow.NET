@@ -33,14 +33,14 @@ namespace Tensorflow
         /// output_false: A `Tensor`. Has the same type as `data`.
         /// output_true: A `Tensor`. Has the same type as `data`.
         /// </returns>
-        public static (Tensor, Tensor) @switch(Tensor data, Tensor pred, string name = null)
+        public static Tensor[] @switch(Tensor data, Tensor pred, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Switch", name, new { data, pred });
             var _inputs_flat = _op.inputs;
             var _attrs = ("T", _op.get_attr("T"));
             // TODO: missing original code
             //_execute.record_gradient("Switch", _inputs_flat, _attrs, _result, name);
-            return (_op.outputs[0], _op.outputs[1]);
+            return new []{_op.outputs[0], _op.outputs[1]};
         }
 
         public static (Tensor, Tensor) merge(Tensor[] inputs, string name = null)
