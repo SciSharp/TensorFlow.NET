@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Operations;
+using Tensorflow.Operations.ControlFlows;
 using util = Tensorflow.control_flow_util;
 
 namespace Tensorflow
@@ -93,9 +94,9 @@ namespace Tensorflow
         /// <param name="between_op_list"></param>
         /// <param name="between_ops"></param>
         /// <param name="colocate_gradients_with_ops"></param>
-        public static object MaybeCreateControlFlowState(List<Operation> between_op_list, List<Operation> between_ops, bool colocate_gradients_with_ops)
+        public static ControlFlowState MaybeCreateControlFlowState(List<Operation> between_op_list, List<Operation> between_ops, bool colocate_gradients_with_ops)
         {
-            object loop_state = null;
+            ControlFlowState loop_state = null;
 
             foreach (var op in between_op_list)
             {
@@ -103,7 +104,7 @@ namespace Tensorflow
                 {
                     if(loop_state == null)
                     {
-                        // loop_state = ControlFlowState();
+                        loop_state = new ControlFlowState();
                     }
                 }
             }
@@ -207,7 +208,7 @@ namespace Tensorflow
         ///  `(output_false, output_true)`: If `pred` is true, data will be forwarded to
         /// `output_true`, otherwise it goes to `output_false`.
         /// </returns>
-        public static (Tensor, Tensor) _SwitchRefOrTensor(Tensor data, Tensor pred, string name = "Switch")
+        public static Tensor[] _SwitchRefOrTensor(Tensor data, Tensor pred, string name = "Switch")
         {
             data = ops.convert_to_tensor_or_indexed_slices(data, name: "data");
             // NOTE(vrv): ops.colocate_with(data, ignore_existing=True) below
@@ -298,7 +299,9 @@ namespace Tensorflow
                 */
 
                 // Add the Switch to the graph.
-                var (p_2, p_1) = @switch(pred, pred);
+                var switch_result= @switch(pred, pred);
+                var p_2=switch_result[0];
+                var p_1 = switch_result[1];
                 var pivot_1 = array_ops.identity(p_1, name: "switch_t");
                 var pivot_2 = array_ops.identity(p_2, name: "switch_f");
                 pred = array_ops.identity(pred, name: "pred_id");
@@ -379,7 +382,9 @@ namespace Tensorflow
             return with(ops.name_scope(name, "cond", new { pred }), delegate
             {
                 // Add the Switch to the graph.
-                var (p_2, p_1) = @switch(pred, pred);
+                var switch_result = @switch(pred, pred);
+                var p_2 = switch_result[0];
+                var p_1 = switch_result[1];
                 var pivot_1 = array_ops.identity(p_1, name: "switch_t");
                 var pivot_2 = array_ops.identity(p_2, name: "switch_f");
                 pred = array_ops.identity(pred, name: "pred_id");
@@ -460,7 +465,7 @@ namespace Tensorflow
         /// <param name="pred"></param>
         /// <param name="dtype"></param>
         /// <param name="name"></param>
-        public static (Tensor, Tensor) @switch(Tensor data, 
+        public static Tensor[] @switch(Tensor data, 
             Tensor pred, 
             TF_DataType dtype = TF_DataType.DtInvalid, 
             string name = null)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Operations.ControlFlows;
 
 namespace Tensorflow.Operations
 {
@@ -107,8 +108,8 @@ namespace Tensorflow.Operations
                 
                 with(ops.control_dependencies(null), ctrl =>
                 {
-                    var (r0, r1) = control_flow_ops._SwitchRefOrTensor(result, _pred);
-                    result = new[] { r0, r1 }[_branch];
+                    var results = control_flow_ops._SwitchRefOrTensor(result, _pred);
+                    result = results[_branch];
                     if (_outer_context != null)
                         _outer_context.AddInnerOp(result.op);
                 });
@@ -118,7 +119,7 @@ namespace Tensorflow.Operations
 
                 // Mark Switch output as seen by this context and any outer contexts,
                 // just like what we do for normal op outputs in _AddOpInternal() below.
-                IControlFlowContext ctxt = this;
+                ControlFlowContext ctxt = this;
                 while (ctxt != null)
                 {
                     ctxt.values.Add(result.name);
@@ -223,8 +224,8 @@ namespace Tensorflow.Operations
                     _values.Add(real_val.name);
                     _external_values[real_val.name] = real_val;
                 }
-                var (t0, t1) = control_flow_ops._SwitchRefOrTensor(real_val, _pred);
-                real_val = new[] {t0, t1}[_branch];
+                var results = control_flow_ops._SwitchRefOrTensor(real_val, _pred);
+                real_val = results[_branch];
                 _external_values[val.name] = real_val;
             }
             else
@@ -286,7 +287,7 @@ namespace Tensorflow.Operations
 
             // Mark op's outputs as seen by this context and any outer contexts.
             var output_names = op.outputs.Select(x => x.name).ToArray();
-            IControlFlowContext ctxt = this;
+            ControlFlowContext ctxt = this;
             while (ctxt != null)
             {
                 foreach (var name in output_names)
@@ -299,6 +300,28 @@ namespace Tensorflow.Operations
 
             if (_outer_context != null)
                 _outer_context.AddInnerOp(op);
+        }
+
+        public override GradLoopState grad_state
+        {
+            get
+            {
+                var whc = GetWhileContext();
+                if (whc != null)
+                    return whc.grad_state;
+                return null;
+            }
+        }
+
+        public override bool back_prop
+        {
+            get
+            {
+                var whc = GetWhileContext();
+                if (whc != null)
+                    return whc.back_prop;
+                return false;
+            }
         }
 
         public CondContextDef to_proto(string export_scope)

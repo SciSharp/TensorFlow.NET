@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Operations.ControlFlows;
 
 namespace Tensorflow.Operations
 {
@@ -22,21 +23,25 @@ namespace Tensorflow.Operations
     /// 4. A ControlFlowContext has _context_stack.
     /// Pushed and popped by ctxt.Enter() and ctxt.Exit()
     /// </summary>
-    public abstract class ControlFlowContext : Python, IPython, IControlFlowContext
+    public abstract class ControlFlowContext : Python, IPython
     {
         /// <summary>
         /// The predicate tensor in this branch
         /// </summary>
         protected Tensor _pivot;
+        public Tensor pivot
+        {
+            get => _pivot;
+        }
 
-        protected Stack<IControlFlowContext> _context_stack;
-        protected IControlFlowContext _outer_context;
+        protected Stack<ControlFlowContext> _context_stack;
+        protected ControlFlowContext _outer_context;
 
         protected Dictionary<string, ITensorOrOperation> _external_values;
 
         public ControlFlowContext()
         {
-            _context_stack = new Stack<IControlFlowContext>();
+            _context_stack = new Stack<ControlFlowContext>();
         }
 
         public string name { get => _name; }
@@ -111,8 +116,13 @@ namespace Tensorflow.Operations
             _AddOpInternal(op);
         }
 
-        public IControlFlowContext outer_context { get { return _outer_context; } }
+        public ControlFlowContext outer_context { get { return _outer_context; } }
         public HashSet<string> values => _values;
+
+        public virtual GradLoopState grad_state => throw new NotImplementedException("abstract method");
+
+        public virtual bool back_prop => throw new NotImplementedException("abstract method");
+
         public virtual Tensor AddValue(Tensor val)
         {
             // to be overridden
@@ -147,7 +157,7 @@ namespace Tensorflow.Operations
         /// <summary>
         /// Returns true if `maybe_containing_ctxt` is or contains `ctxt`.
         /// </summary>
-        public static bool IsContainingContext(IControlFlowContext ctxt, ControlFlowContext maybe_containing_ctxt)
+        public static bool IsContainingContext(ControlFlowContext ctxt, ControlFlowContext maybe_containing_ctxt)
         {
             while (ctxt != maybe_containing_ctxt)
             {
@@ -164,6 +174,16 @@ namespace Tensorflow.Operations
             var internal_control_inputs = op.control_inputs;
         }
 
+        /// <summary>
+        /// Return the while context containing this context
+        /// </summary>
+        public virtual WhileContext GetWhileContext()
+        {
+            if (_outer_context != null)
+                return _outer_context.GetWhileContext();
+            return null;
+        }
+
         public object to_proto()
         {
             throw new NotImplementedException();
@@ -173,5 +193,6 @@ namespace Tensorflow.Operations
         public void Dispose()
         {
         }
+
     }
 }

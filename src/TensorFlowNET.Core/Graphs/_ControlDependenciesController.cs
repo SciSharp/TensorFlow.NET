@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Eager;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {
@@ -15,7 +16,7 @@ namespace Tensorflow
         private List<ITensorOrOperation> _seen_nodes;
         private List<_ControlDependenciesController> _old_stack;
         private bool _new_stack;
-        private IControlFlowContext _old_control_flow_context;
+        private ControlFlowContext _old_control_flow_context;
 
         public ITensorOrOperation[] control_inputs => _control_inputs_val.ToArray();
 

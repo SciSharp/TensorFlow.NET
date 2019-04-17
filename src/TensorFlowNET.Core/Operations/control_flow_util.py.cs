@@ -30,7 +30,7 @@ namespace Tensorflow
         /// <summary>
         /// Return the control flow context for the output of an op.
         /// </summary>
-        public static IControlFlowContext GetOutputContext(Operation op)
+        public static ControlFlowContext GetOutputContext(Operation op)
         {
             var ctxt = op._get_control_flow_context();
             // Exit nodes usually have a control flow context, except in the case where the
