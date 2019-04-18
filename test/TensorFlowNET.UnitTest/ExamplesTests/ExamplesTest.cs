@@ -108,6 +108,16 @@ namespace TensorFlowNET.ExamplesTests
             tf.Graph().as_default();
             new TextClassificationWithMovieReviews() { Enabled = true }.Run();
         }
+
+        [Ignore]
+        [TestMethod]
+        public void NeuralNetXor()
+        {
+            tf.Graph().as_default();
+            new NeuralNetXor() { Enabled = true }.Run();
+        }
+
         
+
     }
 }

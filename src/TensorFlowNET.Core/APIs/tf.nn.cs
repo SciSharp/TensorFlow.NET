@@ -26,7 +26,9 @@ namespace Tensorflow
                     partition_strategy: partition_strategy,
                     name: name);
 
-            public static IActivation relu => new relu();
+            public static IActivation relu() => new relu();
+
+            public static Tensor relu(Tensor features, string name = null) => gen_nn_ops.relu(features, name);
 
             public static Tensor[] fused_batch_norm(Tensor x,
                 RefVariable scale,
