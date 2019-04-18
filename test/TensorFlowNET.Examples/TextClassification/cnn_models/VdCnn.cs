@@ -66,7 +66,7 @@ namespace TensorFlowNET.Examples.TextClassification
                     filters: num_filters[0],
                     kernel_size: new int[] { filter_sizes[0], embedding_size },
                     kernel_initializer: cnn_initializer,
-                    activation: tf.nn.relu);
+                    activation: tf.nn.relu());
 
                 conv0 = tf.transpose(conv0, new int[] { 0, 1, 3, 2 });
             });
@@ -99,12 +99,12 @@ namespace TensorFlowNET.Examples.TextClassification
             // ============= Fully Connected Layers =============
             with(tf.name_scope("fc-1"), scope =>
             {
-                fc1_out = tf.layers.dense(h_flat, 2048, activation: tf.nn.relu, kernel_initializer: fc_initializer);
+                fc1_out = tf.layers.dense(h_flat, 2048, activation: tf.nn.relu(), kernel_initializer: fc_initializer);
             });
 
             with(tf.name_scope("fc-2"), scope =>
             {
-                fc2_out = tf.layers.dense(fc1_out, 2048, activation: tf.nn.relu, kernel_initializer: fc_initializer);
+                fc2_out = tf.layers.dense(fc1_out, 2048, activation: tf.nn.relu(), kernel_initializer: fc_initializer);
             });
 
             with(tf.name_scope("fc-3"), scope =>
@@ -148,7 +148,7 @@ namespace TensorFlowNET.Examples.TextClassification
                         // batch normalization
                         conv = tf.layers.batch_normalization(conv, training: is_training);
                         // relu
-                        conv = tf.nn.relu.Activate(conv);
+                        conv = tf.nn.relu(conv);
                         conv = tf.transpose(conv, new int[] { 0, 1, 3, 2 });
                     });
                 }

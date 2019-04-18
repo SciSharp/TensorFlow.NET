@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Tensorflow.Operations.Activation;
 
 namespace Tensorflow.Operations
 {
@@ -172,6 +174,60 @@ namespace Tensorflow.Operations
             });
 
             return (_op.outputs[0], _op.outputs[1]);
+        }
+
+        /// <summary>
+        /// Computes rectified linear: `max(features, 0)`.
+        /// </summary>
+        /// <param name="features">A `Tensor`. Must be one of the following types: `float32`, `float64`, `int32`, `uint8`, `int16`, `int8`, `int64`, `bfloat16`, `uint16`, `half`, `uint32`, `uint64`, `qint8`.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>A `Tensor`. Has the same type as `features`.</returns>
+        public static Tensor relu(Tensor features, string name = null)
+        {
+
+            //_ctx = _context._context
+            //if _ctx is not None and _ctx._eager_context.is_eager:
+            //  try:
+            //    _result = _pywrap_tensorflow.TFE_Py_FastPathExecute(
+            //      _ctx._context_handle, _ctx._eager_context.device_name, "Relu", name,
+            //      _ctx._post_execution_callbacks, features)
+            //    return _result
+            //  except _core._FallbackException:
+            //    try:
+            //      return relu_eager_fallback(
+            //          features, name=name, ctx=_ctx)
+            //    except _core._SymbolicException:
+            //      pass  # Add nodes to the TensorFlow graph.
+            //    except (TypeError, ValueError):
+            //      result = _dispatch.dispatch(
+            //            relu, features=features, name=name)
+            //      if result is not _dispatch.OpDispatcher.NOT_SUPPORTED:
+            //        return result
+            //      raise
+            //  except _core._NotOkStatusException as e:
+            //    if name is not None:
+            //      message = e.message + " name: " + name
+            //    else:
+            //      message = e.message
+            //    _six.raise_from(_core._status_to_exception(e.code, message), None)
+            //# Add nodes to the TensorFlow graph.
+            //try:
+            OpDefLibrary _op_def_lib = new OpDefLibrary();
+            var _op = _op_def_lib._apply_op_helper("Relu", name: name, args: new { features });
+            return _op.outputs[0];
+            //except (TypeError, ValueError):
+            //  result = _dispatch.dispatch(
+            //        relu, features=features, name=name)
+            //  if result is not _dispatch.OpDispatcher.NOT_SUPPORTED:
+            //    return result
+            //  raise
+            // var _result = _op.outputs.ToArray();
+            //_inputs_flat = _op.inputs
+            //_attrs = ("T", _op.get_attr("T"))
+            //_execute.record_gradient(
+            //    "Relu", _inputs_flat, _attrs, _result, name)
+            //_result, = _result
+            // return _result;
         }
     }
 }
