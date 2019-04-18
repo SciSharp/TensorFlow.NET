@@ -128,6 +128,31 @@ namespace Tensorflow
 
             return op.output;
         }
+
+        /// <summary>
+        ///    Computes the gradient of the sigmoid of <c>x</c> wrt its input.
+        /// </summary>
+        /// <param name="y">
+        /// </param>
+        /// <param name="dy">
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'SigmoidGrad'.
+        /// </param>
+        /// <returns>
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    Specifically, <c>grad = dy * y * (1 - y)</c>, where <c>y = sigmoid(x)</c>, and
+        ///    <c>dy</c> is the corresponding input gradient.
+        /// </remarks>
+        public static Tensor sigmoid_grad(Tensor y, Tensor dy, string name = "SigmoidGrad")
+        {
+            var op = _op_def_lib._apply_op_helper("SigmoidGrad", name: name, args: new { y, dy });
+
+            return op.outputs[0];
+        }
+
         public static Tensor sinh(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Sinh", name, args: new { x });

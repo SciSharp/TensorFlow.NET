@@ -299,6 +299,7 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
         {
+            if (axis == null) axis = new int[0];
             var _op = _op_def_lib._apply_op_helper("Squeeze", name, args: new { input, squeeze_dims = axis });
 
             return _op.outputs[0];

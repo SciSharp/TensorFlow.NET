@@ -216,6 +216,31 @@ namespace Tensorflow.Gradients
             return new Tensor[] { reshape2, reshape1 };
         }
 
+        public static Tensor[] _SigmoidGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var y = op.outputs[0];
+
+            return with(ops.control_dependencies(grads), delegate
+            {
+                y = math_ops.conj(y);
+                return new Tensor[] { gen_math_ops.sigmoid_grad(y, grad) };
+            });
+        }
+
+        public static Tensor[] _SquareGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            return with(ops.control_dependencies(grads), delegate
+            {
+                x = math_ops.conj(x);
+                var y = constant_op.constant(2.0f, dtype: x.dtype);
+                return new Tensor[] { math_ops.multiply(grad, math_ops.multiply(x, y)) };
+            });
+        }
+
         public static Tensor[] _PowGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];

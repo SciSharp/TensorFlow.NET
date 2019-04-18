@@ -46,29 +46,26 @@ namespace TensorFlowNET.Examples
 
         public bool Run()
         {
+            var graph = tf.Graph().as_default();
 
-            var graph = tf.Graph();
+            var features = tf.placeholder(tf.float32, new TensorShape(4, 2));
+            var labels = tf.placeholder(tf.int32, new TensorShape(4));
 
-            var init=with(graph.as_default(), g =>
-            {
-                var features = tf.placeholder(tf.float32, new TensorShape(4, 2));
-                var labels = tf.placeholder(tf.int32, new TensorShape(4));
+            var (train_op, loss, gs) = make_graph(features, labels);
 
-                var (train_op, loss, gs) = make_graph(features, labels);
-                return tf.global_variables_initializer();
-            });
+            var init = tf.global_variables_initializer();
 
             // Start tf session
-            with<Session>(tf.Session(), sess =>
+            with(tf.Session(graph), sess =>
             {
                 init.run();
                 var step = 0;
                 var xy = np.array(new bool[,]
                 {
-                    {true, false, },
-                    {true, true, },
-                    {false, false, },
-                    {false, true, },
+                    {true, false},
+                    {true, true },
+                    {false, false },
+                    {false, true},
                 }, dtype: np.float32);
 
                 var y_ = np.array(new[] {true, false, false, true}, dtype: np.int32);

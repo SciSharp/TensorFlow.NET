@@ -48,6 +48,10 @@ namespace Tensorflow
                         return array_grad._ReshapeGrad(oper, out_grads);
                     case "Relu":
                         return nn_grad._ReluGrad(oper, out_grads);
+                    case "Sigmoid":
+                        return math_grad._SigmoidGrad(oper, out_grads);
+                    case "Square":
+                        return math_grad._SquareGrad(oper, out_grads);
                     case "Squeeze":
                         return array_grad._SqueezeGrad(oper, out_grads);
                     case "Softmax":
