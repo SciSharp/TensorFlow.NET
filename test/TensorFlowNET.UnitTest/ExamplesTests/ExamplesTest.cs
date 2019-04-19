@@ -109,7 +109,7 @@ namespace TensorFlowNET.ExamplesTests
             new TextClassificationWithMovieReviews() { Enabled = true }.Run();
         }
 
-        [Ignore("Attempting to use uninitialized value Variable_1")]
+        //[Ignore("Attempting to use uninitialized value Variable_1")]
         [TestMethod]
         public void NeuralNetXor()
         {

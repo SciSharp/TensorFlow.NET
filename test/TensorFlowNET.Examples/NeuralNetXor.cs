@@ -58,7 +58,8 @@ namespace TensorFlowNET.Examples
             // Start tf session
             with(tf.Session(graph), sess =>
             {
-                init.run();
+                // init.run()
+                sess.run(init);
                 var step = 0;
                 //TODO: make the type conversion and jagged array initializer work with numpy
                 //var xy = np.array(new bool[,]
@@ -90,9 +91,9 @@ namespace TensorFlowNET.Examples
                     loss_value = sess.run(loss, new FeedItem(features, xy), new FeedItem(labels, y_));
                     step++;
                     if (step%1000==0)
-                        Console.WriteLine($"Step {0} loss: {loss_value[0]}");
+                        Console.WriteLine($"Step {step} loss: {loss_value}");
                 }
-                Console.WriteLine($"Final loss: {loss_value[0]}");
+                Console.WriteLine($"Final loss: {loss_value}");
             });
             return true;
         }
