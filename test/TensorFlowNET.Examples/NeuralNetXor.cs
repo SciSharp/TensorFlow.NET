@@ -18,6 +18,8 @@ namespace TensorFlowNET.Examples
 
         public int num_steps = 5000;
 
+        private NDArray data;
+
         private (Operation, Tensor, RefVariable) make_graph(Tensor features,Tensor labels, int num_hidden = 8)
         {
             var stddev = 1 / Math.Sqrt(2);
@@ -46,6 +48,8 @@ namespace TensorFlowNET.Examples
 
         public bool Run()
         {
+            PrepareData();
+
             var graph = tf.Graph().as_default();
 
             var features = tf.placeholder(tf.float32, new TensorShape(4, 2));
@@ -58,29 +62,11 @@ namespace TensorFlowNET.Examples
             // Start tf session
             with(tf.Session(graph), sess =>
             {
-                // init.run()
                 sess.run(init);
                 var step = 0;
-                //TODO: make the type conversion and jagged array initializer work with numpy
-                //var xy = np.array(new bool[,]
-                //{
-                //    {true, false},
-                //    {true, true },
-                //    {false, false },
-                //    {false, true},
-                //}, dtype: np.float32);
-                var xy = np.array(new float[]
-                {
-                    1, 0,
-                    1, 1,
-                    0, 0,
-                    0, 1
-                }, np.float32).reshape(4,2);
-                
 
-                //var y_ = np.array(new[] {true, false, false, true}, dtype: np.int32);
                 var y_ = np.array(new int[] { 1, 0, 0, 1 }, dtype: np.int32);
-                NDArray loss_value=null;
+                float loss_value = 0;
                 while (step < num_steps)
                 {
                     // original python:
@@ -88,18 +74,26 @@ namespace TensorFlowNET.Examples
                     //          [train_op, gs, loss],
                     //          feed_dict={features: xy, labels: y_}
                     //      )
-                    loss_value = sess.run(loss, new FeedItem(features, xy), new FeedItem(labels, y_));
+                    loss_value = sess.run(loss, new FeedItem(features, data), new FeedItem(labels, y_));
                     step++;
                     if (step%1000==0)
                         Console.WriteLine($"Step {step} loss: {loss_value}");
                 }
                 Console.WriteLine($"Final loss: {loss_value}");
             });
+
             return true;
         }
 
         public void PrepareData()
         {
+            data = new float[,]
+            {
+                {1, 0 },
+                {1, 1 },
+                {0, 0 },
+                {0, 1 }
+            };
         }
     }
 }
