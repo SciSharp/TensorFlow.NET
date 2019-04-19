@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NumSharp;
@@ -59,6 +59,7 @@ namespace TensorFlowNET.Examples
 
             var init = tf.global_variables_initializer();
 
+            float loss_value = 0;
             // Start tf session
             with(tf.Session(graph), sess =>
             {
@@ -66,7 +67,6 @@ namespace TensorFlowNET.Examples
                 var step = 0;
 
                 var y_ = np.array(new int[] { 1, 0, 0, 1 }, dtype: np.int32);
-                float loss_value = 0;
                 while (step < num_steps)
                 {
                     // original python:
@@ -81,8 +81,7 @@ namespace TensorFlowNET.Examples
                 }
                 Console.WriteLine($"Final loss: {loss_value}");
             });
-
-            return true;
+            return loss_value < 0.0627;
         }
 
         public void PrepareData()

@@ -109,12 +109,12 @@ namespace TensorFlowNET.ExamplesTests
             new TextClassificationWithMovieReviews() { Enabled = true }.Run();
         }
 
-        //[Ignore("Attempting to use uninitialized value Variable_1")]
+        [Ignore("Loss function optimization is not working yet")]
         [TestMethod]
         public void NeuralNetXor()
         {
             tf.Graph().as_default();
-            new NeuralNetXor() { Enabled = true }.Run();
+            Assert.IsTrue(new NeuralNetXor() { Enabled = true }.Run());
         }
 
         
