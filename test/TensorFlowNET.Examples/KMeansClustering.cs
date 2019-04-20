@@ -33,6 +33,8 @@ namespace TensorFlowNET.Examples
 
         public bool Run()
         {
+            tf.train.import_meta_graph("kmeans.meta");
+
             // Input images
             var X = tf.placeholder(tf.float32, shape: new TensorShape(-1, num_features));
             //  Labels (for assigning a label to a centroid and testing)
