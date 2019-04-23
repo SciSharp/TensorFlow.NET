@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow;
 using Buffer = Tensorflow.Buffer;
@@ -20,6 +21,13 @@ namespace TensorFlowNET.UnitTest
             var handle = c_api.TF_GetAllOpList();
             var buffer = new Buffer(handle);
             var op_list = OpList.Parser.ParseFrom(buffer);
+
+            var _registered_ops = new Dictionary<string, OpDef>();
+            foreach (var op_def in op_list.Op)
+                _registered_ops[op_def.Name] = op_def;
+
+            // r1.14 added NN op
+            var op = _registered_ops.FirstOrDefault(x => x.Key == "NearestNeighbors");
             Assert.IsTrue(op_list.Op.Count > 1000);
         }
 
