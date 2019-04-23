@@ -12,7 +12,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class NeuralNetXor : Python, IExample
     {
-        public int Priority => 2;
+        public int Priority => 10;
         public bool Enabled { get; set; } = true;
         public string Name => "NN XOR";
 

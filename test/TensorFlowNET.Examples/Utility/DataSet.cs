@@ -54,8 +54,8 @@ namespace TensorFlowNET.Examples.Utility
 
                 // Get the rest examples in this epoch
                 var rest_num_examples = _num_examples - start;
-                var images_rest_part = _images[np.arange(start, _num_examples)];
-                var labels_rest_part = _labels[np.arange(start, _num_examples)];
+                //var images_rest_part = _images[np.arange(start, _num_examples)];
+                //var labels_rest_part = _labels[np.arange(start, _num_examples)];
                 // Shuffle the data
                 if (shuffle)
                 {

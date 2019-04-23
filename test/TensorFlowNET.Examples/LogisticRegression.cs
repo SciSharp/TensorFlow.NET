@@ -1,6 +1,7 @@
 ﻿using NumSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -55,6 +56,8 @@ namespace TensorFlowNET.Examples
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
 
+            var sw = new Stopwatch();
+
             return with(tf.Session(), sess =>
             {
                 // Run the initializer
@@ -63,6 +66,8 @@ namespace TensorFlowNET.Examples
                 // Training cycle
                 foreach (var epoch in range(training_epochs))
                 {
+                    sw.Start();
+
                     var avg_cost = 0.0f;
                     var total_batch = mnist.train.num_examples / batch_size;
                     // Loop over all batches
@@ -79,9 +84,13 @@ namespace TensorFlowNET.Examples
                         avg_cost += c / total_batch;
                     }
 
+                    sw.Stop();
+
                     // Display logs per epoch step
                     if ((epoch + 1) % display_step == 0)
-                        print($"Epoch: {(epoch + 1).ToString("D4")} cost= {avg_cost.ToString("G9")}");
+                        print($"Epoch: {(epoch + 1).ToString("D4")} cost= {avg_cost.ToString("G9")} elapse= {sw.ElapsedMilliseconds}ms");
+
+                    sw.Reset();
                 }
 
                 print("Optimization Finished!");
