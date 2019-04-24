@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {
@@ -113,6 +114,9 @@ namespace Tensorflow
                             foreach (var element in values) ;
                             break;
                         case List<ITensorOrOperation> values:
+                            foreach (var element in values) ;
+                            break;
+                        case List<CondContext> values:
                             foreach (var element in values) ;
                             break;
                         default:

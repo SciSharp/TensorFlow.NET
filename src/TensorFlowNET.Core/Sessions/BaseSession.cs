@@ -204,6 +204,12 @@ namespace Tensorflow
 
             switch (tensor.dtype)
             {
+                case TF_DataType.TF_BOOL:
+                    var bools = new bool[tensor.size];
+                    for (ulong i = 0; i < tensor.size; i++)
+                        bools[i] = *(bool*)(offset + (int)(tensor.itemsize * i));
+                    nd = np.array(bools).reshape(ndims);
+                    break;
                 case TF_DataType.TF_STRING:
                     var bytes = tensor.Data();
                     // wired, don't know why we have to start from offset 9.

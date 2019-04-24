@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Operations.ControlFlows;
+using static Tensorflow.ControlFlowContextDef;
 
 namespace Tensorflow.Operations
 {
@@ -182,6 +183,23 @@ namespace Tensorflow.Operations
             if (_outer_context != null)
                 return _outer_context.GetWhileContext();
             return null;
+        }
+
+        /// <summary>
+        /// Deserializes `context_def` into the appropriate ControlFlowContext.
+        /// </summary>
+        /// <param name="context_def">ControlFlowContextDef proto</param>
+        /// <param name="import_scope">Name scope to add</param>
+        /// <returns>A ControlFlowContext subclass</returns>
+        protected ControlFlowContext from_control_flow_context_def(ControlFlowContextDef context_def, string import_scope = "")
+        {
+            switch (context_def.CtxtCase)
+            {
+                case CtxtOneofCase.CondCtxt:
+                    return new CondContext().from_proto(context_def.CondCtxt, import_scope: import_scope);
+            }
+
+            throw new NotImplementedException($"Unknown ControlFlowContextDef field: {context_def.CtxtCase}");
         }
 
         public object to_proto()
