@@ -42,7 +42,7 @@ namespace Tensorflow
 
         public NDArray build_results(BaseSession session, NDArray[] tensor_values)
         {
-            var full_values = new List<object>();
+            var full_values = new List<NDArray>();
             if (_final_fetches.Count != tensor_values.Length)
                 throw new InvalidOperationException("_final_fetches mismatch tensor_values");
 

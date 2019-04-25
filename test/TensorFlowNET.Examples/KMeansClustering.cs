@@ -62,10 +62,23 @@ namespace TensorFlowNET.Examples
                 sess.run(init_op, new FeedItem(X, full_data_x));
 
                 // Training
+                NDArray result = null;
                 foreach(var i in range(1, num_steps + 1))
                 {
-                    var result = sess.run(new Tensor[] { avg_distance, cluster_idx }, new FeedItem(X, full_data_x));
+                    result = sess.run(new ITensorOrOperation[] { train_op, avg_distance, cluster_idx }, new FeedItem(X, full_data_x));
+                    if (i % 2 == 0 || i == 1)
+                        print($"Step {i}, Avg Distance: {result[1]}");
                 }
+
+                var idx = result[2];
+
+                // Assign a label to each centroid
+                // Count total number of labels per centroid, using the label of each training
+                // sample to their closest centroid (given by 'idx')
+                var counts = np.zeros(k, num_classes);
+                foreach (var i in range(idx.len))
+                    counts[idx[i]] += mnist.train.labels[i];
+
             });
 
             return false;

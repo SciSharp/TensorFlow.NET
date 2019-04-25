@@ -1,5 +1,5 @@
 # TensorFlow.NET
-TensorFlow.NET provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in CSharp which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. 
+TensorFlow.NET (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in CSharp which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. 
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/wx4td43v2d3f2xj6?svg=true)](https://ci.appveyor.com/project/Haiping-Chen/tensorflow-net)
@@ -8,7 +8,7 @@ TensorFlow.NET provides a .NET Standard binding for [TensorFlow](https://www.ten
 [![Documentation Status](https://readthedocs.org/projects/tensorflownet/badge/?version=latest)](https://tensorflownet.readthedocs.io/en/latest/?badge=latest)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 
-TensorFlow.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
+TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
@@ -24,14 +24,14 @@ In comparison to other projects, like for instance TensorFlowSharp which only pr
 
 ### How to use
 
-Install TensorFlow.NET through NuGet.
+Install TF.NET through NuGet.
 ```sh
 PM> Install-Package TensorFlow.NET
 ```
 
 If you are using Linux or Mac OS, please download the pre-compiled dll [here](tensorflowlib) and place it in the working folder. This is only need for Linux and Mac OS, and already packed into NuGet for Windows.
 
-Import tensorflow.net.
+Import TF.NET.
 
 ```cs
 using Tensorflow;
