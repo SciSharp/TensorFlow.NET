@@ -30,6 +30,15 @@ namespace Tensorflow
                 case "Single":
                     nd.SetData(values.Select(x => (float)x).ToArray());
                     break;
+                case "NDArray":
+                    //    nd.SetData<NDArray>(values.ToArray());
+                    //NDArray[] arr = new NDArray[values.Count];
+                    //for (int i=0; i<values.Count; i++)
+                    NDArray[] arr = values.Select(x => (NDArray)x).ToArray();
+                    nd = new NDArray(arr);
+                    break;
+                default:
+                    break;
             }
 
             return nd;
