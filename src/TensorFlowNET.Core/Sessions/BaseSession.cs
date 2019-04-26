@@ -25,6 +25,7 @@ namespace Tensorflow
             else
             {
                 _graph = graph;
+
             }
 
             _target = UTF8Encoding.UTF8.GetBytes(target);
