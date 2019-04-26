@@ -250,6 +250,27 @@ namespace Tensorflow
             }
         }
 
+        public override string ToString()
+        {
+            return _handle == IntPtr.Zero ? "tf.Operation Undefined" : $"tf.Operation '{name}' type={OpType}";
+        }
+
+        public static implicit operator Operation(IntPtr handle) => new Operation(handle);
+        public static implicit operator IntPtr(Operation op) => op._handle;
+
+        public override bool Equals(object obj)
+        {
+            switch (obj)
+            {
+                case IntPtr val:
+                    return val == _handle;
+                case Operation val:
+                    return val._handle == _handle;
+            }
+
+            return base.Equals(obj);
+        }
+
         /// <summary>
         /// Update the input to this operation at the given index.
         /// 

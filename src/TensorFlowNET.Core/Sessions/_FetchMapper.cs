@@ -24,7 +24,19 @@ namespace Tensorflow
         {
             var type = values[0].GetType();
             var nd = new NDArray(type, values.Count);
-            nd.SetData(values.ToArray());
+
+            switch (type.Name)
+            {
+                case "Single":
+                    nd.SetData(values.Select(x => (float)x).ToArray());
+                    break;
+                case "NDArray":
+                    NDArray[] arr = values.Select(x => (NDArray)x).ToArray();
+                    nd = new NDArray(arr);
+                    break;
+                default:
+                    break;
+            }
             return nd;
         }
 

@@ -335,7 +335,7 @@ namespace Tensorflow.Operations
 
             ret.Enter();
             foreach (var nested_def in proto.NestedContexts)
-                from_control_flow_context_def(nested_def, import_scope: import_scope);
+                throw new NotImplementedException("");
             ret.Exit();
             return ret;
         }
