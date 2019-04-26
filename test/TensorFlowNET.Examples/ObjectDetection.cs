@@ -50,13 +50,9 @@ namespace TensorFlowNET.Examples
             with(tf.Session(graph), sess =>
             {
                 var results = sess.run(outTensorArr, new FeedItem(imgTensor, imgArr));
-
-                //NDArray scores = results.Array.GetValue(2) as NDArray;
-
-                //floatscores.Data<float>();
+                
                 NDArray[] resultArr = results.Data<NDArray>();
-
-                //float[] scores = resultArr[2].Data<float>();
+                
                 buildOutputImage(resultArr);
             });
 

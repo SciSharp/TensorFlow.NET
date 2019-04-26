@@ -17,10 +17,10 @@ namespace Tensorflow
             if (fetch.GetType().IsArray)
                 return new _ListFetchMapper(fetches);
             else
-                return new _ElementFetchMapper(fetches, (List<object> fetched_vals) => fetched_vals[0]);
+                return new _ElementFetchMapper(fetches, (List<NDArray> fetched_vals) => fetched_vals[0]);
         }
 
-        public virtual NDArray build_results(List<object> values)
+        public virtual NDArray build_results(List<NDArray> values)
         {
             var type = values[0].GetType();
             var nd = new NDArray(type, values.Count);
@@ -31,16 +31,12 @@ namespace Tensorflow
                     nd.SetData(values.Select(x => (float)x).ToArray());
                     break;
                 case "NDArray":
-                    //    nd.SetData<NDArray>(values.ToArray());
-                    //NDArray[] arr = new NDArray[values.Count];
-                    //for (int i=0; i<values.Count; i++)
                     NDArray[] arr = values.Select(x => (NDArray)x).ToArray();
                     nd = new NDArray(arr);
                     break;
                 default:
                     break;
             }
-
             return nd;
         }
 
