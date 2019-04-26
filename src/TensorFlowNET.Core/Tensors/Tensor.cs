@@ -195,7 +195,6 @@ namespace Tensorflow
                 case "Double":
                     return TF_DataType.TF_DOUBLE;
                 case "Byte":
-                    return TF_DataType.TF_UINT8;
                 case "String":
                     return TF_DataType.TF_STRING;
                 default:

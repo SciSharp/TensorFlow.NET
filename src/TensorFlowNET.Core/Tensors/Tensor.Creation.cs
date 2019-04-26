@@ -67,8 +67,7 @@ namespace Tensorflow
                 case "Double":
                     Marshal.Copy(nd1.Data<double>(), 0, dotHandle, nd.size);
                     break;
-                case "Byte":
-                    Marshal.Copy(nd1.Data<byte>(), 0, dotHandle, nd.size);
+                //case "Byte":
                     /*var bb = nd.Data<byte>();
                     var bytes = Marshal.AllocHGlobal(bb.Length);
                     Marshal.Copy(bb, 0, bytes, bb.Length);

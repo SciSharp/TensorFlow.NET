@@ -27,6 +27,11 @@ namespace Tensorflow
             return Enumerable.Range(0, end);
         }
 
+        protected IEnumerable<int> range(int start, int end)
+        {
+            return Enumerable.Range(start, end);
+        }
+
         public static T New<T>(object args) where T : IPyClass
         {
             var instance = Activator.CreateInstance<T>();
