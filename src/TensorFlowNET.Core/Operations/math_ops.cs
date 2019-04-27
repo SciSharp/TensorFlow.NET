@@ -333,10 +333,15 @@ namespace Tensorflow
             else
             {
                 var rank = common_shapes.rank(x);
-                if (rank != null)
+
+                // we rely on Range and Rank to do the right thing at run-time.
+                if (rank == -1) return range(0, array_ops.rank(x));
+
+                if (rank.HasValue && rank.Value > -1)
                 {
                    return constant_op.constant(np.arange(rank.Value), TF_DataType.TF_INT32);
                 }
+
                 return range(0, rank, 1);
             }
         }

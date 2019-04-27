@@ -45,7 +45,7 @@ namespace TensorFlowNET.ExamplesTests
         public void KMeansClustering()
         {
             tf.Graph().as_default();
-            new KMeansClustering() { Enabled = false, train_size = 500, validation_size = 100, test_size = 100, batch_size =100 }.Run();
+            new KMeansClustering() { Enabled = true, train_size = 500, validation_size = 100, test_size = 100, batch_size =100 }.Run();
         }
 
         [TestMethod]

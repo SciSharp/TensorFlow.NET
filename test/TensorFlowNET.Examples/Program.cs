@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -21,6 +22,7 @@ namespace TensorFlowNET.Examples
                 .OrderBy(x => x.Priority)
                 .ToArray();
 
+            var sw = new Stopwatch();
             foreach (IExample example in examples)
             {
                 if (args.Length > 0 && !args.Contains(example.Name))
@@ -28,21 +30,31 @@ namespace TensorFlowNET.Examples
 
                 Console.WriteLine($"{DateTime.UtcNow} Starting {example.Name}", Color.White);
 
+                
                 try
                 {
                     if (example.Enabled)
-                        if (example.Run())
-                            success.Add($"Example {example.Priority}: {example.Name}");
+                    {
+                        sw.Restart();
+                        bool isSuccess = example.Run();
+                        sw.Stop();
+
+                        if (isSuccess)
+                            success.Add($"Example {example.Priority}: {example.Name} in {sw.Elapsed.TotalSeconds}s");
                         else
-                            errors.Add($"Example {example.Priority}: {example.Name}");
+                            errors.Add($"Example {example.Priority}: {example.Name} in {sw.Elapsed.TotalSeconds}s");
+                    }
                     else
-                        disabled.Add($"Example {example.Priority}: {example.Name}");
+                    {
+                        disabled.Add($"Example {example.Priority}: {example.Name} in {sw.ElapsedMilliseconds}ms");
+                    }
                 }
                 catch (Exception ex)
                 {
                     errors.Add($"Example {example.Priority}: {example.Name}");
                     Console.WriteLine(ex);
                 }
+                
 
                 Console.WriteLine($"{DateTime.UtcNow} Completed {example.Name}", Color.White);
             }

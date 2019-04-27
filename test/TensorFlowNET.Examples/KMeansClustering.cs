@@ -28,7 +28,7 @@ namespace TensorFlowNET.Examples
 
         Datasets mnist;
         NDArray full_data_x;
-        int num_steps = 10; // Total steps to train
+        int num_steps = 20; // Total steps to train
         int k = 25; // The number of clusters
         int num_classes = 10; // The 10 digits
         int num_features = 784; // Each image is 28x28 pixels
@@ -42,9 +42,9 @@ namespace TensorFlowNET.Examples
             tf.train.import_meta_graph("graph/kmeans.meta");
 
             // Input images
-            var X = graph.get_operation_by_name("Placeholder").output; // tf.placeholder(tf.float32, shape: new TensorShape(-1, num_features));
+            Tensor X = graph.get_operation_by_name("Placeholder"); // tf.placeholder(tf.float32, shape: new TensorShape(-1, num_features));
             //  Labels (for assigning a label to a centroid and testing)
-            var Y = graph.get_operation_by_name("Placeholder_1").output; // tf.placeholder(tf.float32, shape: new TensorShape(-1, num_classes));
+            Tensor Y = graph.get_operation_by_name("Placeholder_1"); // tf.placeholder(tf.float32, shape: new TensorShape(-1, num_classes));
 
             // K-Means Parameters
             //var kmeans = new KMeans(X, k, distance_metric: KMeans.COSINE_DISTANCE, use_mini_batch: true);
@@ -57,6 +57,7 @@ namespace TensorFlowNET.Examples
             var train_op = graph.get_operation_by_name("group_deps");
             Tensor avg_distance = graph.get_operation_by_name("Mean");
             Tensor cluster_idx = graph.get_operation_by_name("Squeeze_1");
+            NDArray result = null;
 
             with(tf.Session(graph), sess =>
             {
@@ -64,19 +65,16 @@ namespace TensorFlowNET.Examples
                 sess.run(init_op, new FeedItem(X, full_data_x));
 
                 // Training
-                NDArray result = null;
                 var sw = new Stopwatch();
 
                 foreach (var i in range(1, num_steps + 1))
                 {
-                    sw.Start();
+                    sw.Restart();
                     result = sess.run(new ITensorOrOperation[] { train_op, avg_distance, cluster_idx }, new FeedItem(X, full_data_x));
                     sw.Stop();
 
-                    if (i % 5 == 0 || i == 1)
+                    if (i % 4 == 0 || i == 1)
                         print($"Step {i}, Avg Distance: {result[1]} Elapse: {sw.ElapsedMilliseconds}ms");
-
-                    sw.Reset();
                 }
 
                 var idx = result[2].Data<int>();
@@ -102,9 +100,20 @@ namespace TensorFlowNET.Examples
 
                 // Evaluation ops
                 // Lookup: centroid_id -> label
+                var cluster_label = tf.nn.embedding_lookup(labels_map, cluster_idx);
+
+                // Compute accuracy
+                var correct_prediction = tf.equal(cluster_label, tf.cast(tf.argmax(Y, 1), tf.int32));
+                var cast = tf.cast(correct_prediction, tf.float32);
+                var accuracy_op = tf.reduce_mean(cast);
+
+                // Test Model
+                var (test_x, test_y) = (mnist.test.images, mnist.test.labels);
+                result = sess.run(accuracy_op, new FeedItem(X, test_x), new FeedItem(Y, test_y));
+                print($"Test Accuracy: {result}");
             });
 
-            return false;
+            return (float)result > 0.70;
         }
 
         public void PrepareData()

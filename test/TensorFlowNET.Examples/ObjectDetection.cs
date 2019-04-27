@@ -16,7 +16,7 @@ namespace TensorFlowNET.Examples
     public class ObjectDetection : Python, IExample
     {
         public int Priority => 11;
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
         public string Name => "Object Detection";
         public float MIN_SCORE = 0.5f;
 

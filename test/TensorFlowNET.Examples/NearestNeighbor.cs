@@ -51,7 +51,10 @@ namespace TensorFlowNET.Examples
                     long nn_index = sess.run(pred, new FeedItem(xtr, Xtr), new FeedItem(xte, Xte[i]));
                     // Get nearest neighbor class label and compare it to its true label
                     int index = (int)nn_index;
-                    print($"Test {i} Prediction: {np.argmax(Ytr[index])} True Class: {np.argmax(Yte[i])}");
+
+                    if (i % 10 == 0 || i == 0)
+                        print($"Test {i} Prediction: {np.argmax(Ytr[index])} True Class: {np.argmax(Yte[i])}");
+
                     // Calculate accuracy
                     if ((int)np.argmax(Ytr[index]) == (int)np.argmax(Yte[i]))
                         accuracy += 1f/ Xte.shape[0];
@@ -60,7 +63,7 @@ namespace TensorFlowNET.Examples
                 print($"Accuracy: {accuracy}");
             });
 
-            return accuracy > 0.9;
+            return accuracy > 0.8;
         }
 
         public void PrepareData()
