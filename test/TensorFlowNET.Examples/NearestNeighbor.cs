@@ -51,9 +51,9 @@ namespace TensorFlowNET.Examples
                     long nn_index = sess.run(pred, new FeedItem(xtr, Xtr), new FeedItem(xte, Xte[i]));
                     // Get nearest neighbor class label and compare it to its true label
                     int index = (int)nn_index;
-                    print($"Test {i} Prediction: {np.argmax(Ytr[(NDArray)index])} True Class: {np.argmax(Yte[i] as NDArray)}");
+                    print($"Test {i} Prediction: {np.argmax(Ytr[index])} True Class: {np.argmax(Yte[i])}");
                     // Calculate accuracy
-                    if (np.argmax(Ytr[(NDArray)index]) == np.argmax(Yte[i] as NDArray))
+                    if ((int)np.argmax(Ytr[index]) == (int)np.argmax(Yte[i]))
                         accuracy += 1f/ Xte.shape[0];
                 }
 

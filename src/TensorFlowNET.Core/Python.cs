@@ -29,7 +29,7 @@ namespace Tensorflow
 
         protected IEnumerable<int> range(int start, int end)
         {
-            return Enumerable.Range(start, end);
+            return Enumerable.Range(start, end - start);
         }
 
         public static T New<T>(object args) where T : IPyClass

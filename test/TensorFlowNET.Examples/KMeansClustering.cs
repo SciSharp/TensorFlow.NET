@@ -1,6 +1,8 @@
 ﻿using NumSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Tensorflow;
 using Tensorflow.Clustering;
@@ -26,7 +28,7 @@ namespace TensorFlowNET.Examples
 
         Datasets mnist;
         NDArray full_data_x;
-        int num_steps = 50; // Total steps to train
+        int num_steps = 10; // Total steps to train
         int k = 25; // The number of clusters
         int num_classes = 10; // The 10 digits
         int num_features = 784; // Each image is 28x28 pixels
@@ -63,22 +65,43 @@ namespace TensorFlowNET.Examples
 
                 // Training
                 NDArray result = null;
-                foreach(var i in range(1, num_steps + 1))
+                var sw = new Stopwatch();
+
+                foreach (var i in range(1, num_steps + 1))
                 {
+                    sw.Start();
                     result = sess.run(new ITensorOrOperation[] { train_op, avg_distance, cluster_idx }, new FeedItem(X, full_data_x));
-                    if (i % 2 == 0 || i == 1)
-                        print($"Step {i}, Avg Distance: {result[1]}");
+                    sw.Stop();
+
+                    if (i % 5 == 0 || i == 1)
+                        print($"Step {i}, Avg Distance: {result[1]} Elapse: {sw.ElapsedMilliseconds}ms");
+
+                    sw.Reset();
                 }
 
-                var idx = result[2];
+                var idx = result[2].Data<int>();
 
                 // Assign a label to each centroid
                 // Count total number of labels per centroid, using the label of each training
                 // sample to their closest centroid (given by 'idx')
-                var counts = np.zeros(k, num_classes);
-                foreach (var i in range(idx.len))
-                    counts[idx[i]] += mnist.train.labels[i];
+                var counts = np.zeros((k, num_classes), np.float32);
 
+                sw.Start();
+                foreach (var i in range(idx.Length))
+                {
+                    var x = mnist.train.labels[i];
+                    counts[idx[i]] += x;
+                }
+                    
+                sw.Stop();
+                print($"Assign a label to each centroid took {sw.ElapsedMilliseconds}ms");
+
+                // Assign the most frequent label to the centroid
+                var labels_map_array = np.argmax(counts, 1);
+                var labels_map = tf.convert_to_tensor(labels_map_array);
+
+                // Evaluation ops
+                // Lookup: centroid_id -> label
             });
 
             return false;

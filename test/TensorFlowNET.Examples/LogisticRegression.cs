@@ -88,7 +88,7 @@ namespace TensorFlowNET.Examples
 
                     // Display logs per epoch step
                     if ((epoch + 1) % display_step == 0)
-                        print($"Epoch: {(epoch + 1).ToString("D4")} cost= {avg_cost.ToString("G9")} elapse= {sw.ElapsedMilliseconds}ms");
+                        print($"Epoch: {(epoch + 1).ToString("D4")} Cost: {avg_cost.ToString("G9")} Elapse: {sw.ElapsedMilliseconds}ms");
 
                     sw.Reset();
                 }
