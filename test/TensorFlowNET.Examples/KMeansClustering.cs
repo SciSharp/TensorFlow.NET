@@ -39,7 +39,7 @@ namespace TensorFlowNET.Examples
 
             var graph = tf.Graph().as_default();
 
-            tf.train.import_meta_graph("kmeans.meta");
+            tf.train.import_meta_graph("graph/kmeans.meta");
 
             // Input images
             var X = graph.get_operation_by_name("Placeholder").output; // tf.placeholder(tf.float32, shape: new TensorShape(-1, num_features));
@@ -111,6 +111,10 @@ namespace TensorFlowNET.Examples
         {
             mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size:validation_size, test_size:test_size);
             full_data_x = mnist.train.images;
+
+            // download graph meta data
+            string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/kmeans.meta";
+            Web.Download(url, "graph", "kmeans.meta");
         }
     }
 }
