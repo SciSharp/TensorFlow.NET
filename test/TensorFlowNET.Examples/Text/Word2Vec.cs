@@ -101,8 +101,9 @@ namespace TensorFlowNET.Examples
                         var sim = sess.run(cosine_sim_op, new FeedItem(X, x_test));
                         foreach(var i in range(len(eval_words)))
                         {
-                            var nearest = sim[i].argsort<float>()
-                                .Data<float>()
+                            var nearest = (0f - sim[i]).argsort<float>()
+                                .Data<int>()
+                                .Skip(1)
                                 .Take(top_k)
                                 .ToArray();
                             string log_str = $"\"{eval_words[i]}\" nearest neighbors:";
