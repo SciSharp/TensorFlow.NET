@@ -80,6 +80,9 @@ namespace Tensorflow
                             case int val:
                                 feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
+                            case int[] val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
+                                break;
                             case string val:
                                 feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;

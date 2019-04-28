@@ -123,7 +123,9 @@ namespace TensorFlowNET.Examples
                 }
             }
 
-            bitmap.Save(Path.Join(imageDir, "output.jpg"));
+            string path = Path.Join(imageDir, "output.jpg");
+            bitmap.Save(path);
+            Console.WriteLine($"Processed image is saved as {path}");
         }
 
         private void drawObjectOnBitmap(Bitmap bmp, Rectangle rect, float score, string name)
