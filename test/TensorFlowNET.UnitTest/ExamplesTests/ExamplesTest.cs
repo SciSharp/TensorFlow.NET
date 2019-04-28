@@ -123,5 +123,11 @@ namespace TensorFlowNET.ExamplesTests
         }
 
 
+        [TestMethod]
+        public void ObjectDetection()
+        {
+            tf.Graph().as_default();
+            Assert.IsTrue(new ObjectDetection() { Enabled = true, ImportGraph = true }.Run());
+        }
     }
 }

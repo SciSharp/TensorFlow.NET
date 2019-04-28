@@ -25,13 +25,14 @@ namespace TensorFlowNET.Examples
         private (Operation, Tensor, Tensor) make_graph(Tensor features,Tensor labels, int num_hidden = 8)
         {
             var stddev = 1 / Math.Sqrt(2);
-            var hidden_weights = tf.Variable(tf.truncated_normal(new int []{2, num_hidden}, stddev: (float) stddev ));
+            var hidden_weights = tf.Variable(tf.truncated_normal(new int []{2, num_hidden}, seed:1, stddev: (float) stddev ));
 
             // Shape [4, num_hidden]
             var hidden_activations = tf.nn.relu(tf.matmul(features, hidden_weights));
 
             var output_weights = tf.Variable(tf.truncated_normal(
                 new[] {num_hidden, 1},
+                seed: 17,
                 stddev: (float) (1 / Math.Sqrt(num_hidden))
             ));
 
