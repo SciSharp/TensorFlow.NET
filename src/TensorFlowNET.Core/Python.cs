@@ -153,6 +153,34 @@ namespace Tensorflow
             }
             return dictionary;
         }
+        
+        public static bool hasattr(object obj, string key)
+        {
+            var __type__ = (obj).GetType();
+
+            var __member__ = __type__.GetMembers();
+            var __memberobject__ = __type__.GetMember(key);
+            return (__memberobject__.Length > 0) ? true : false;
+        }
+        public delegate object __object__(params object[] args);
+        public static __object__ getattr(object obj, string key)
+        {
+            var __dyn_obj__ = obj.GetType().GetMember(key);
+            if (__dyn_obj__.Length == 0)
+                throw new Exception("The object \"" + nameof(obj) + "\" doesn't have a defination \"" + key + "\"");
+            var __type__ = __dyn_obj__[0];
+            if (__type__.MemberType == System.Reflection.MemberTypes.Method)
+            {
+                var __method__ = obj.GetType().GetMethod(key);
+                return (__object__)((object[] args) => __method__.Invoke(obj, args));
+            }
+            else if (__type__.MemberType == System.Reflection.MemberTypes.Field)
+            {
+                var __field__ = (object)obj.GetType().GetField(key).GetValue(obj);
+                return (__object__)((object[] args) => { return __field__; });
+            }
+            return (__object__)((object[] args) => { return "NaN"; });
+        }
 
     }
 
