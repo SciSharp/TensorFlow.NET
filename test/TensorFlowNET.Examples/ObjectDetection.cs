@@ -28,7 +28,7 @@ namespace TensorFlowNET.Examples
 
         public bool Run()
         {
-            //buildOutputImage(null);
+            PrepareData();
 
             // read in the input image
             var imgArr = ReadTensorFromImageFile(Path.Join(imageDir, "input.jpg"));
@@ -91,7 +91,7 @@ namespace TensorFlowNET.Examples
             // download the pbtxt file
             if (!File.Exists(Path.Join(modelDir, "mscoco_label_map.pbtxt")))
             {
-                string url = $"https://github.com/tensorflow/models/blob/master/research/object_detection/data/mscoco_label_map.pbtxt";
+                string url = $"https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_label_map.pbtxt";
                 Utility.Web.Download(url, modelDir, "mscoco_label_map.pbtxt");
             }
         }
@@ -123,7 +123,6 @@ namespace TensorFlowNET.Examples
                 float score = scores[i];
                 if (score > MIN_SCORE)
                 {
-                    //var boxes = resultArr[1].Data<float[,,]>();
                     float[] boxes = resultArr[1].Data<float>();
                     float top = boxes[i * 4] * bitmap.Height;
                     float left = boxes[i * 4 + 1] * bitmap.Width;
