@@ -16,7 +16,7 @@ namespace TensorFlowNET.Examples
         public int Priority => 10;
         public bool Enabled { get; set; } = true;
         public string Name => "NN XOR";
-        public bool ImportGraph { get; set; } = false;
+        public bool ImportGraph { get; set; } = true;
 
         public int num_steps = 5000;
 
@@ -57,7 +57,7 @@ namespace TensorFlowNET.Examples
             else
                 loss_value=RunWithBuiltGraph();
 
-            return loss_value < 0.0627;
+            return loss_value < 0.0628;
         }
 
         private float RunWithImportedGraph()

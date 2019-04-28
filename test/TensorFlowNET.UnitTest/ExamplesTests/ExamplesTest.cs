@@ -40,12 +40,11 @@ namespace TensorFlowNET.ExamplesTests
             new InceptionArchGoogLeNet() { Enabled = true }.Run();
         }
 
-        [Ignore]
         [TestMethod]
         public void KMeansClustering()
         {
             tf.Graph().as_default();
-            new KMeansClustering() { Enabled = true, train_size = 500, validation_size = 100, test_size = 100, batch_size =100 }.Run();
+            new KMeansClustering() { Enabled = true, ImportGraph = true, train_size = 500, validation_size = 100, test_size = 100, batch_size =100 }.Run();
         }
 
         [TestMethod]
@@ -109,15 +108,20 @@ namespace TensorFlowNET.ExamplesTests
             new TextClassificationWithMovieReviews() { Enabled = true }.Run();
         }
 
-        [Ignore("Loss function optimization is not working yet")]
         [TestMethod]
         public void NeuralNetXor()
         {
             tf.Graph().as_default();
-            Assert.IsTrue(new NeuralNetXor() { Enabled = true }.Run());
+            Assert.IsTrue(new NeuralNetXor() { Enabled = true, ImportGraph = false }.Run());
         }
 
-        
+        [TestMethod]
+        public void NeuralNetXor_ImportedGraph()
+        {
+            tf.Graph().as_default();
+            Assert.IsTrue(new NeuralNetXor() { Enabled = true, ImportGraph = true }.Run());
+        }
+
 
     }
 }
