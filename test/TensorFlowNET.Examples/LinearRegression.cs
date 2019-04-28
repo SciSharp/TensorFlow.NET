@@ -15,6 +15,8 @@ namespace TensorFlowNET.Examples
         public int Priority => 3;
         public bool Enabled { get; set; } = true;
         public string Name => "Linear Regression";
+        public bool ImportGraph { get; set; } = false;
+
 
         public int training_epochs = 1000;
 

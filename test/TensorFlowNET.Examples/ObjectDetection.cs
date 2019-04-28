@@ -18,6 +18,8 @@ namespace TensorFlowNET.Examples
         public int Priority => 11;
         public bool Enabled { get; set; } = true;
         public string Name => "Object Detection";
+        public bool ImportGraph { get; set; } = false;
+
         public float MIN_SCORE = 0.5f;
 
         string modelDir = "ssd_mobilenet_v1_coco_2018_01_28";

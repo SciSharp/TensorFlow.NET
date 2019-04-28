@@ -14,6 +14,7 @@ namespace TensorFlowNET.Examples
         public int Priority => 9;
         public bool Enabled { get; set; } = false;
         public string Name => "Movie Reviews";
+        public bool ImportGraph { get; set; } = true;
 
         string dir = "text_classification_with_movie_reviews";
         string dataFile = "imdb.zip";

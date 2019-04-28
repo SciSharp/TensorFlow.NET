@@ -14,10 +14,16 @@ namespace TensorFlowNET.Examples
         /// running order
         /// </summary>
         int Priority { get; }
+
         /// <summary>
         /// True to run example
         /// </summary>
         bool Enabled { get; set; }
+
+        /// <summary>
+        /// Set true to import the computation graph instead of building it.
+        /// </summary>
+        bool ImportGraph { get; set; }
 
         string Name { get; }
 

@@ -18,6 +18,7 @@ namespace TensorFlowNET.Examples.CnnTextClassification
         public bool Enabled { get; set; }= false;
         public string Name => "Text Classification";
         public int? DataLimit = null;
+        public bool ImportGraph { get; set; } = true;
 
         private string dataDir = "text_classification";
         private string dataFileName = "dbpedia_csv.tar.gz";

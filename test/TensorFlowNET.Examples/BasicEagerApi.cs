@@ -14,6 +14,7 @@ namespace TensorFlowNET.Examples
         public int Priority => 100;
         public bool Enabled { get; set; } = false;
         public string Name => "Basic Eager";
+        public bool ImportGraph { get; set; } = false;
 
         private Tensor a, b, c, d;
 

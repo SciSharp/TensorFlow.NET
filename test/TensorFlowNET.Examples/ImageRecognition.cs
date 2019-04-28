@@ -15,6 +15,8 @@ namespace TensorFlowNET.Examples
         public int Priority => 7;
         public bool Enabled { get; set; } = true;
         public string Name => "Image Recognition";
+        public bool ImportGraph { get; set; } = false;
+
 
         string dir = "ImageRecognition";
         string pbFile = "tensorflow_inception_graph.pb";

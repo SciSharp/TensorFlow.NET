@@ -20,6 +20,7 @@ namespace TensorFlowNET.Examples
         public int Priority => 8;
         public bool Enabled { get; set; } = true;
         public string Name => "K-means Clustering";
+        public bool ImportGraph { get; set; } = true;
 
         public int? train_size = null;
         public int validation_size = 5000;

@@ -22,6 +22,8 @@ namespace TensorFlowNET.Examples
         public int? TrainSize = null;
         public int ValidationSize = 5000;
         public int? TestSize = null;
+        public bool ImportGraph { get; set; } = false;
+
 
         public bool Run()
         {

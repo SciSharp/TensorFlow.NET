@@ -15,6 +15,8 @@ namespace TensorFlowNET.Examples
         public int Priority => 6;
         public bool Enabled { get; set; } = true;
         public string Name => "Naive Bayes Classifier";
+        public bool ImportGraph { get; set; } = false;
+
 
         public Normal dist { get; set; }
         public bool Run()

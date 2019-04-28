@@ -14,6 +14,8 @@ namespace TensorFlowNET.Examples
         public int Priority => 1;
         public bool Enabled { get; set; } = true;
         public string Name => "Hello World";
+        public bool ImportGraph { get; set; } = false;
+
 
         public bool Run()
         {

@@ -12,6 +12,8 @@ namespace TensorFlowNET.Examples
         public int Priority => 100;
         public bool Enabled { get; set; } = false;
         public string Name => "Meta Graph";
+        public bool ImportGraph { get; set; } = true;
+
 
         public bool Run()
         {

@@ -20,6 +20,8 @@ namespace TensorFlowNET.Examples
         public int Priority => 4;
         public bool Enabled { get; set; } = true;
         public string Name => "Logistic Regression";
+        public bool ImportGraph { get; set; } = false;
+
 
         public int training_epochs = 10;
         public int? train_size = null;

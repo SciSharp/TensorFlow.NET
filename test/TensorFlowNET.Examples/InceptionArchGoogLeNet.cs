@@ -22,6 +22,8 @@ namespace TensorFlowNET.Examples
         public bool Enabled { get; set; } = false;
         public int Priority => 100;
         public string Name => "Inception Arch GoogLeNet";
+        public bool ImportGraph { get; set; } = false;
+
 
         string dir = "label_image_data";
         string pbFile = "inception_v3_2016_08_28_frozen.pb";
