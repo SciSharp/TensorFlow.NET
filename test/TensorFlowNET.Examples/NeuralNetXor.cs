@@ -16,7 +16,7 @@ namespace TensorFlowNET.Examples
         public int Priority => 10;
         public bool Enabled { get; set; } = true;
         public string Name => "NN XOR";
-        public bool ImportGraph { get; set; } = true;
+        public bool ImportGraph { get; set; } = false;
 
         public int num_steps = 5000;
 
