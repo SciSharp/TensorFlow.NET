@@ -17,6 +17,7 @@ namespace TensorFlowNET.Examples
         public int Priority => 12;
         public bool Enabled { get; set; } = true;
         public string Name => "Word2Vec";
+        public bool ImportGraph { get; set; } = true;
 
         // Training Parameters
         float learning_rate = 0.1f;

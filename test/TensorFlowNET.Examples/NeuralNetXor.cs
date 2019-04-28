@@ -66,8 +66,8 @@ namespace TensorFlowNET.Examples
 
             tf.train.import_meta_graph("graph/xor.meta");
 
-            var features = graph.get_operation_by_name("Placeholder");
-            var labels = graph.get_operation_by_name("Placeholder_1");
+            Tensor features = graph.get_operation_by_name("Placeholder");
+            Tensor labels = graph.get_operation_by_name("Placeholder_1");
             Tensor loss = graph.get_operation_by_name("loss");
 
             var init = tf.global_variables_initializer();
@@ -144,7 +144,7 @@ namespace TensorFlowNET.Examples
 
             // download graph meta data
             string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/xor.meta";
-            Web.Download(url, "graph", "kmeans.meta");
+            Web.Download(url, "graph", "xor.meta");
         }
     }
 }
