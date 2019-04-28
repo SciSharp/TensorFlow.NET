@@ -16,7 +16,7 @@ namespace TensorFlowNET.Examples
     public class ObjectDetection : Python, IExample
     {
         public int Priority => 11;
-        public bool Enabled { get; set; } = false;
+        public bool Enabled { get; set; } = true;
         public string Name => "Object Detection";
         public float MIN_SCORE = 0.5f;
 
@@ -36,15 +36,11 @@ namespace TensorFlowNET.Examples
             var graph = new Graph().as_default();          
             graph.Import(Path.Join(modelDir, pbFile));
 
-            var tensorNum = graph.OperationByName("num_detections").outputs[0];
-            var tensorBoxes = graph.OperationByName("detection_boxes").outputs[0];
-            var tensorScores = graph.OperationByName("detection_scores").outputs[0];
-            var tensorClasses = graph.OperationByName("detection_classes").outputs[0];
-
-            var imgTensor = graph.OperationByName("image_tensor").outputs[0];
-
-            
-
+            Tensor tensorNum = graph.OperationByName("num_detections");
+            Tensor tensorBoxes = graph.OperationByName("detection_boxes");
+            Tensor tensorScores = graph.OperationByName("detection_scores");
+            Tensor tensorClasses = graph.OperationByName("detection_classes");
+            Tensor imgTensor = graph.OperationByName("image_tensor");
             Tensor[] outTensorArr = new Tensor[] { tensorNum, tensorBoxes, tensorScores, tensorClasses };
 
             with(tf.Session(graph), sess =>
@@ -61,39 +57,19 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            if (!Directory.Exists(modelDir))
-                Directory.CreateDirectory(modelDir);
+            // get model file
+            string url = "http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz";
+            Web.Download(url, modelDir, "ssd_mobilenet_v1_coco.tar.gz");
 
-            if (!File.Exists(Path.Join(modelDir, "ssd_mobilenet_v1_coco.tar.gz")))
-            {
-                // get model file
-                string url = "http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz";
-
-                Utility.Web.Download(url, modelDir, "ssd_mobilenet_v1_coco.tar.gz");
-            }
-
-            if (!File.Exists(Path.Join(modelDir, "frozen_inference_graph.pb")))
-            {
-                Utility.Compress.ExtractTGZ(Path.Join(modelDir, "ssd_mobilenet_v1_coco.tar.gz"), "./");
-            }
-
+            Compress.ExtractTGZ(Path.Join(modelDir, "ssd_mobilenet_v1_coco.tar.gz"), "./");
 
             // download sample picture
-            if (!Directory.Exists(imageDir))
-                Directory.CreateDirectory(imageDir);
-
-            if (!File.Exists(Path.Join(imageDir, "input.jpg")))
-            {
-                string url = $"https://github.com/tensorflow/models/raw/master/research/object_detection/test_images/image2.jpg";
-                Utility.Web.Download(url, imageDir, "input.jpg");
-            }
+            url = $"https://github.com/tensorflow/models/raw/master/research/object_detection/test_images/image2.jpg";
+            Web.Download(url, imageDir, "input.jpg");
 
             // download the pbtxt file
-            if (!File.Exists(Path.Join(modelDir, "mscoco_label_map.pbtxt")))
-            {
-                string url = $"https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_label_map.pbtxt";
-                Utility.Web.Download(url, modelDir, "mscoco_label_map.pbtxt");
-            }
+            url = $"https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_label_map.pbtxt";
+            Web.Download(url, modelDir, "mscoco_label_map.pbtxt");
         }
 
         private NDArray ReadTensorFromImageFile(string file_name)
