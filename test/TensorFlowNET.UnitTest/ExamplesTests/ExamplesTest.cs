@@ -119,7 +119,7 @@ namespace TensorFlowNET.ExamplesTests
         public void NeuralNetXor_ImportedGraph()
         {
             tf.Graph().as_default();
-            Assert.IsTrue(new NeuralNetXor() { Enabled = true, ImportGraph = false }.Run());
+            Assert.IsTrue(new NeuralNetXor() { Enabled = true, ImportGraph = true }.Run());
         }
 
 
