@@ -145,9 +145,12 @@ namespace TensorFlowNET.Examples
                 {0, 1 }
             };
 
-            // download graph meta data
-            string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/xor.meta";
-            Web.Download(url, "graph", "xor.meta");
+            if (ImportGraph)
+            {
+                // download graph meta data
+                string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/xor.meta";
+                Web.Download(url, "graph", "xor.meta");
+            }
         }
     }
 }
