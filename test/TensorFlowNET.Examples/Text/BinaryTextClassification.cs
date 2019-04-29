@@ -9,14 +9,19 @@ using NumSharp;
 
 namespace TensorFlowNET.Examples
 {
-    public class TextClassificationWithMovieReviews : Python, IExample
+    /// <summary>
+    /// This example classifies movie reviews as positive or negative using the text of the review. 
+    /// This is a binary—or two-class—classification, an important and widely applicable kind of machine learning problem.
+    /// https://github.com/tensorflow/docs/blob/master/site/en/tutorials/keras/basic_text_classification.ipynb
+    /// </summary>
+    public class BinaryTextClassification : Python, IExample
     {
         public int Priority => 9;
-        public bool Enabled { get; set; } = false;
-        public string Name => "Movie Reviews";
+        public bool Enabled { get; set; } = true;
+        public string Name => "Binary Text Classification";
         public bool ImportGraph { get; set; } = true;
 
-        string dir = "text_classification_with_movie_reviews";
+        string dir = "binary_text_classification";
         string dataFile = "imdb.zip";
         NDArray train_data, train_labels, test_data, test_labels;
 
@@ -89,17 +94,18 @@ namespace TensorFlowNET.Examples
         private NDArray ReadData(string file)
         {
             var lines = File.ReadAllLines(file);
-            var nd = new NDArray(lines[0].StartsWith("[") ? typeof(object) : np.int32, new Shape(lines.Length));
+            var nd = new NDArray(lines[0].StartsWith("[") ? typeof(string) : np.int32, new Shape(lines.Length));
 
             if (lines[0].StartsWith("["))
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    var matches = Regex.Matches(lines[i], @"\d+\s*");
+                    /*var matches = Regex.Matches(lines[i], @"\d+\s*");
                     var data = new int[matches.Count];
                     for (int j = 0; j < data.Length; j++)
                         data[j] = Convert.ToInt32(matches[j].Value);
-                    nd[i] = data.ToArray();
+                    nd[i] = data.ToArray();*/
+                    nd[i] = lines[i].Substring(1, lines[i].Length - 2).Replace(" ", string.Empty);
                 }
             }
             else

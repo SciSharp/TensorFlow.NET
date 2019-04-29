@@ -76,7 +76,7 @@ namespace TensorFlowNET.Examples
             var init = tf.global_variables_initializer();
             float loss_value = 0;
             // Start tf session
-            with<Session>(tf.Session(graph), sess =>
+            with(tf.Session(graph), sess =>
             {
                 sess.run(init);
                 var step = 0;

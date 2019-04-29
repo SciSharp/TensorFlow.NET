@@ -105,7 +105,7 @@ namespace TensorFlowNET.ExamplesTests
         public void TextClassificationWithMovieReviews()
         {
             tf.Graph().as_default();
-            new TextClassificationWithMovieReviews() { Enabled = true }.Run();
+            new BinaryTextClassification() { Enabled = true }.Run();
         }
 
         [TestMethod]

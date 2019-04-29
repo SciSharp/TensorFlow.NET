@@ -37,7 +37,7 @@ Import TF.NET.
 using Tensorflow;
 ```
 
-Add two constants.
+Add two constants:
 ```cs
 // Create a Constant op
 var a = tf.constant(4.0f);
@@ -50,7 +50,7 @@ using (var sess = tf.Session())
 }
 ```
 
-Feed placeholder.
+Feed placeholder:
 ```cs
 // Create a placeholder op
 var a = tf.placeholder(tf.float32);
@@ -59,13 +59,68 @@ var c = tf.add(a, b);
 
 using(var sess = tf.Session())
 {
-    var feed_dict = new Dictionary<Tensor, object>();
-    feed_dict.Add(a, 3.0f);
-    feed_dict.Add(b, 2.0f);
-
-    var o = sess.run(c, feed_dict);
+    var o = sess.run(c, new FeedItem(a, 3.0f), new FeedItem(b, 2.0f));
 }
 ```
+
+Linear Regression:
+
+```c#
+// We can set a fixed init value in order to debug
+var W = tf.Variable(-0.06f, name: "weight");
+var b = tf.Variable(-0.73f, name: "bias");
+
+// Construct a linear model
+var pred = tf.add(tf.multiply(X, W), b);
+
+// Mean squared error
+var cost = tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * n_samples);
+
+// Gradient descent
+// Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
+var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
+
+// Initialize the variables (i.e. assign their default value)
+var init = tf.global_variables_initializer();
+
+// Start training
+with(tf.Session(), sess => 
+{
+    // Run the initializer
+    sess.run(init);
+    
+    // Fit all training data
+    for (int epoch = 0; epoch < training_epochs; epoch++)
+    {
+        foreach (var (x, y) in zip<float>(train_X, train_Y))
+            sess.run(optimizer, new FeedItem(X, x), new FeedItem(Y, y));
+        
+        // Display logs per epoch step
+        if ((epoch + 1) % display_step == 0)
+        {
+            var c = sess.run(cost, new FeedItem(X, train_X), new FeedItem(Y, train_Y));
+            Console.WriteLine($"Epoch: {epoch + 1} cost={c} " + $"W={sess.run(W)} b={sess.run(b)}");
+        }
+        
+        Console.WriteLine("Optimization Finished!");
+        var training_cost = sess.run(cost, new FeedItem(X, train_X), new FeedItem(Y, train_Y));
+        Console.WriteLine($"Training cost={training_cost} W={sess.run(W)} b={sess.run(b)}");
+        
+        // Testing example
+        var test_X = np.array(6.83f, 4.668f, 8.9f, 7.91f, 5.7f, 8.7f, 3.1f, 2.1f);
+        var test_Y = np.array(1.84f, 2.273f, 3.2f, 2.831f, 2.92f, 3.24f, 1.35f, 1.03f);
+        Console.WriteLine("Testing... (Mean square loss Comparison)");
+        
+        var testing_cost = sess.run(tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * test_X.shape[0]), new FeedItem(X, test_X), new FeedItem(Y, test_Y));
+        Console.WriteLine($"Testing cost={testing_cost}");
+        
+        var diff = Math.Abs((float)training_cost - (float)testing_cost);
+        Console.WriteLine($"Absolute mean square loss difference: {diff}");
+    }
+});
+```
+
+
 
 Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html).
 
@@ -73,13 +128,17 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 
 * [Hello World](test/TensorFlowNET.Examples/HelloWorld.cs)
 * [Basic Operations](test/TensorFlowNET.Examples/BasicOperations.cs)
-* [Image Recognition](test/TensorFlowNET.Examples/ImageRecognition.cs)
 * [Linear Regression](test/TensorFlowNET.Examples/LinearRegression.cs)
 * [Logistic Regression](test/TensorFlowNET.Examples/LogisticRegression.cs)
 * [Nearest Neighbor](test/TensorFlowNET.Examples/NearestNeighbor.cs)
+* [Naive Bayes Classification](test/TensorFlowNET.Examples/NaiveBayesClassifier.cs)
+* [Image Recognition](test/TensorFlowNET.Examples/ImageRecognition.cs)
+* [K-means Clustering](test/TensorFlowNET.Examples/KMeansClustering.cs)
+* [NN XOR](test/TensorFlowNET.Examples/NeuralNetXor.cs)
+* [Object Detection](test/TensorFlowNET.Examples/ObjectDetection.cs)
 * [Text Classification](test/TensorFlowNET.Examples/TextClassificationWithMovieReviews.cs)
 * [CNN Text Classification](test/TensorFlowNET.Examples/CnnTextClassification.cs)
-* [Naive Bayes Classification](test/TensorFlowNET.Examples/NaiveBayesClassifier.cs)
+
 * [Named Entity Recognition](test/TensorFlowNET.Examples/NamedEntityRecognition.cs)
 
 ### Contribute:
@@ -94,7 +153,7 @@ You can:
 * Debug one of the unit tests that is marked as Ignored to get it to work (can be challenging)
 * Debug one of the not yet working examples and get it to work (hard)
 
-How to debug unit tests:
+### How to debug unit tests:
 
 The best way to find out why a unit test is failing is to single step it in C# and its pendant Python at the same time to see where the flow of execution digresses or where variables exhibit different values. Good Python IDEs like PyCharm let you single step into the tensorflow library code. 
 
