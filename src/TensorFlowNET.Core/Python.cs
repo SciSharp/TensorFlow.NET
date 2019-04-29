@@ -163,25 +163,36 @@ namespace Tensorflow
             return (__memberobject__.Length > 0) ? true : false;
         }
         public delegate object __object__(params object[] args);
-        public static __object__ getattr(object obj, string key)
+        public static __object__ getattr(object obj, string key, params Type[] ___parameter_type__)
         {
             var __dyn_obj__ = obj.GetType().GetMember(key);
             if (__dyn_obj__.Length == 0)
-                throw new Exception("The object \"" + nameof(obj) + "\" doesn't have a defination \"" + key + "\"");
+                throw new Exception("The object \"" + nameof(obj) + "\" doesnot have a defination \"" + key + "\"");
             var __type__ = __dyn_obj__[0];
             if (__type__.MemberType == System.Reflection.MemberTypes.Method)
             {
-                var __method__ = obj.GetType().GetMethod(key);
-                return (__object__)((object[] args) => __method__.Invoke(obj, args));
+                try
+                {
+                    var __method__ = (___parameter_type__.Length > 0) ? obj.GetType().GetMethod(key, ___parameter_type__) : obj.GetType().GetMethod(key);
+                    return (__object__)((object[] args) => __method__.Invoke(obj, args));
+                }
+                catch (System.Reflection.AmbiguousMatchException ex)
+                {
+                    throw new Exception("AmbigousFunctionMatchFound : (Probable cause : Function Overloading) Please add parameter types of the function.");
+                }
             }
             else if (__type__.MemberType == System.Reflection.MemberTypes.Field)
             {
                 var __field__ = (object)obj.GetType().GetField(key).GetValue(obj);
                 return (__object__)((object[] args) => { return __field__; });
             }
+            else if (__type__.MemberType == System.Reflection.MemberTypes.Property)
+            {
+                var __property__ = (object)obj.GetType().GetProperty(key).GetValue(obj);
+                return (__object__)((object[] args) => { return __property__; });
+            }
             return (__object__)((object[] args) => { return "NaN"; });
         }
-
     }
 
     public interface IPython : IDisposable
