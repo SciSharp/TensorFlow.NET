@@ -13,8 +13,10 @@ namespace TensorFlowNET.Examples.CnnTextClassification
         private const string TRAIN_PATH = "text_classification/dbpedia_csv/train.csv";
         private const string TEST_PATH = "text_classification/dbpedia_csv/test.csv";
 
-        public static (int[][], int[], int) build_char_dataset(string step, string model, int document_max_len, int? limit=null)
+        public static (int[][], int[], int) build_char_dataset(string step, string model, int document_max_len, int? limit = null)
         {
+            if (model != "vd_cnn")
+                throw new NotImplementedException(model);
             string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:’'\"/|_#$%ˆ&*˜‘+=<>()[]{} ";
             /*if (step == "train")
                 df = pd.read_csv(TRAIN_PATH, names =["class", "title", "content"]);*/
@@ -42,7 +44,7 @@ namespace TensorFlowNET.Examples.CnnTextClassification
                     else
                         x[i][j] = char_dict.ContainsKey(content[j].ToString()) ? char_dict[content[j].ToString()] : char_dict["<unk>"];
                 }
-                    
+
                 y[i] = int.Parse(parts[0]);
             }
 

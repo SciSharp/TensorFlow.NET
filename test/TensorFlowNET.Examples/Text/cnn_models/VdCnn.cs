@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow;
+using TensorFlowNET.Examples.Text.cnn_models;
 
 namespace TensorFlowNET.Examples.TextClassification
 {
-    public class VdCnn : Python
+    public class VdCnn : Python, ITextClassificationModel
     {
         private int embedding_size;
         private int[] filter_sizes;
@@ -15,9 +16,9 @@ namespace TensorFlowNET.Examples.TextClassification
         private float learning_rate;
         private IInitializer cnn_initializer;
         private IInitializer fc_initializer;
-        private Tensor x;
-        private Tensor y;
-        private Tensor is_training;
+        public Tensor x { get; private set; }
+        public Tensor y { get; private set; }
+        public Tensor is_training { get; private set; }
         private RefVariable global_step;
         private RefVariable embeddings;
         private Tensor x_emb;
