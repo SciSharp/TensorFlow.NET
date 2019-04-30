@@ -43,7 +43,7 @@ namespace TensorFlowNET.Examples
             var predictions = tf.sigmoid(tf.squeeze(logits));
             var loss = tf.reduce_mean(tf.square(predictions - tf.cast(labels, tf.float32)), name:"loss");
 
-            var gs = tf.Variable(0, trainable: false);
+            var gs = tf.Variable(0, trainable: false, name: "global_step");
             var train_op = tf.train.GradientDescentOptimizer(0.2f).minimize(loss, global_step: gs);
 
             return (train_op, loss, gs);
@@ -91,7 +91,7 @@ namespace TensorFlowNET.Examples
                     //      )
                     var result = sess.run(new ITensorOrOperation[] { train_op, global_step, loss }, new FeedItem(features, data), new FeedItem(labels, y_));
                     loss_value = result[2];
-                    step++;
+                    step = result[1];
                     if (step % 1000 == 0)
                         Console.WriteLine($"Step {step} loss: {loss_value}");
                 }
@@ -124,8 +124,7 @@ namespace TensorFlowNET.Examples
                 {
                     var result = sess.run(new ITensorOrOperation[] { train_op, gs, loss }, new FeedItem(features, data), new FeedItem(labels, y_));
                     loss_value = result[2];
-                    //step = result[1];
-                    step++;
+                    step = result[1];
                     if (step % 1000 == 0)
                         Console.WriteLine($"Step {step} loss: {loss_value}");
                 }

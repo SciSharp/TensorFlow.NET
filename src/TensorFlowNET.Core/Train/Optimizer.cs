@@ -43,19 +43,44 @@ namespace Tensorflow
 
         /// <summary>
         /// Add operations to minimize `loss` by updating `var_list`
+        ///  
+        ///  This method simply combines calls `compute_gradients()` and
+        ///  `apply_gradients()`. If you want to process the gradient before applying
+        ///  them call `compute_gradients()` and `apply_gradients()` explicitly instead
+        ///  of using this function.
         /// </summary>
-        /// <param name="loss"></param>
+        /// <param name="loss">A `Tensor` containing the value to minimize.</param>
+        /// <param name="global_step">Optional `Variable` to increment by one after the
+        /// variables have been updated.</param>
+        /// <param name="var_list">Optional list or tuple of `Variable` objects to update to
+        /// minimize `loss`.  Defaults to the list of variables collected in
+        /// the graph under the key `GraphKeys.TRAINABLE_VARIABLES`.</param>
+        /// <param name="gate_gradients">
+        /// How to gate the computation of gradients.  Can be
+        /// `GATE_NONE`, `GATE_OP`, or  `GATE_GRAPH`.
+        /// </param>
+        /// <param name="aggregation_method">
+        /// Specifies the method used to combine gradient terms.
+        /// Valid values are defined in the class `AggregationMethod`.
+        /// </param>
+        /// <param name="colocate_gradients_with_ops"></param>
+        /// <param name="name">Optional name for the returned operation.</param>
+        /// <param name="grad_loss">Optional. A `Tensor` holding the gradient computed for `loss`.</param>
         /// <returns>
         /// An Operation that updates the variables in `var_list`.  If `global_step`
         /// was not `None`, that operation also increments `global_step`.
         /// </returns>
         public Operation minimize(Tensor loss, 
             RefVariable global_step = null,
+            List<RefVariable> var_list=null,
             GateGradientType gate_gradients = GateGradientType.GATE_OP,
-            bool colocate_gradients_with_ops = false)
+            int? aggregation_method=null,
+            bool colocate_gradients_with_ops = false, string name=null, Tensor grad_loss=null)
         {
-            var grads_and_vars = compute_gradients(loss, 
+            // TODO: strongly type aggregation_method
+            var grads_and_vars = compute_gradients(loss, var_list:var_list,
                 gate_gradients: gate_gradients, 
+                aggregation_method:aggregation_method,
                 colocate_gradients_with_ops: colocate_gradients_with_ops);
 
             var vars_with_grad = grads_and_vars.Where(x => x.Item1 != null).Select(x => x.Item2).ToArray();
@@ -63,10 +88,25 @@ namespace Tensorflow
                 throw new ValueError($"No gradients provided for any variable, check your graph for ops" +
                     $" that do not support gradients, between variables {string.Join(",", vars_with_grad.Select(x => x.name))} and loss {loss}.");
 
-            return apply_gradients(grads_and_vars);
+            return apply_gradients(grads_and_vars, global_step:global_step, name:name);
         }
 
-        public Operation apply_gradients(Tuple<Tensor, RefVariable>[] grads_and_vars, Tensor global_step = null, string name = null)
+        /// <summary>
+        /// Apply gradients to variables.
+        /// 
+        /// This is the second part of `minimize()`. It returns an `Operation` that
+        /// applies gradients.
+        /// </summary>
+        /// <param name="grads_and_vars">List of (gradient, variable) pairs as returned by
+        /// `compute_gradients()`.</param>
+        /// <param name="global_step">Optional `Variable` to increment by one after the
+        /// variables have been updated.</param>
+        /// <param name="name">Optional name for the returned operation.  Default to the
+        /// name passed to the `Optimizer` constructor.</param>
+        /// <returns>
+        /// An `Operation` that applies the specified gradients. If `global_step`
+        /// was not None, that operation also increments `global_step`.</returns>
+        public Operation apply_gradients(Tuple<Tensor, RefVariable>[] grads_and_vars, RefVariable global_step = null, string name = null)
         {
             // No DistributionStrategy case.
             var converted_grads_and_vars = new List<Tuple<Tensor, RefVariable, _OptimizableVariable>>();
@@ -113,7 +153,24 @@ namespace Tensorflow
                 }
                 else
                 {
-
+                    with(ops.control_dependencies(new object[] {_finish(update_ops.ToArray(), "update")}), dep =>
+                    {
+                        ops.colocate_with(global_step);
+                        // TODO: port this if branch once ResourceVariable has been ported!
+                        //if (global_step is ResourceVariable)
+                        //{
+                        //        # TODO(apassos): the implicit read in assign_add is slow; consider
+                        //        # making it less so.
+                        //        apply_updates = resource_variable_ops.assign_add_variable_op(
+                        //            global_step.handle,
+                        //            ops.convert_to_tensor(1, dtype = global_step.dtype),
+                        //            name = name)
+                        //}
+                        //else
+                        {
+                            apply_updates = state_ops.assign_add(global_step, tf.constant(1), name: name);
+                        }
+                    });
                 }
 
                 if (!tf.context.executing_eagerly())

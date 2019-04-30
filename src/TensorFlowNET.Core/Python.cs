@@ -19,8 +19,26 @@ namespace Tensorflow
             Console.WriteLine(obj.ToString());
         }
 
-        protected int len<T>(IEnumerable<T> a)
-            => a.Count();
+        //protected int len<T>(IEnumerable<T> a)
+        //    => a.Count();
+
+        protected int len(object a)
+        {
+            switch (a)
+            {
+                case Array arr:
+                    return arr.Length;
+                case IList arr:
+                    return arr.Count;
+                case ICollection arr:
+                    return arr.Count;
+                case NDArray ndArray:
+                    return ndArray.len;
+                case IEnumerable enumerable:
+                    return enumerable.OfType<object>().Count();
+            }
+            throw new NotImplementedException("len() not implemented for type: " + a.GetType());
+        }
 
         protected IEnumerable<int> range(int end)
         {
@@ -153,7 +171,7 @@ namespace Tensorflow
             }
             return dictionary;
         }
-        
+
         public static bool hasattr(object obj, string key)
         {
             var __type__ = (obj).GetType();
