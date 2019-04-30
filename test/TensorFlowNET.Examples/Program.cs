@@ -33,7 +33,7 @@ namespace TensorFlowNET.Examples
                 
                 try
                 {
-                    if (example.Enabled)
+                    if (example.Enabled || args.Length > 0) // if a specific example was specified run it, regardless of enabled value
                     {
                         sw.Restart();
                         bool isSuccess = example.Run();
