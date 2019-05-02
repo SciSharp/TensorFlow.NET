@@ -4,7 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
-    <Version>0.6.1</Version>
+    <TargetTensorFlow>1.14.0</TargetTensorFlow>
+    <Version>0.7.0</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
@@ -16,11 +17,15 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.6.1.0</AssemblyVersion>
+    <AssemblyVersion>0.7.0.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.6:
-More math/ linalg APIs.</PackageReleaseNotes>
+
+Add XOR example.
+Add KMeans example.
+Add Object Detection example.
+Add Word2Vec example.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.6.1.0</FileVersion>
+    <FileVersion>0.7.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
