@@ -35,6 +35,8 @@ namespace Tensorflow
 
             public static string TRAIN_OP = "train_op";
 
+            public static string GLOBAL_STEP = GLOBAL_STEP = "global_step";
+
             public static string[] _VARIABLE_COLLECTIONS = new string[] { "variables", "trainable_variables" }; 
             /// <summary>
             /// Key to collect BaseSaverBuilder.SaveableObject instances for checkpointing.

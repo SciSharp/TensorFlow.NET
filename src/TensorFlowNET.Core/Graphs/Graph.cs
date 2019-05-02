@@ -388,7 +388,7 @@ namespace Tensorflow
                 var handle = return_oper_handle.node + Marshal.SizeOf<TF_Operation>() * i;
                 return_opers[i] = new Operation(*(IntPtr*)handle);
             }
-
+            
             return return_opers;
         }
 
@@ -437,6 +437,18 @@ namespace Tensorflow
         public void Dispose()
         {
             c_api.TF_DeleteGraph(_handle);
+        }
+
+        /// <summary>
+        /// Returns the <see cref="Tensor"/> with the given <paramref name="name"/>.
+        /// This method may be called concurrently from multiple threads.
+        /// </summary>
+        /// <param name="name">The name of the `Tensor` to return.</param>
+        /// <exception cref="KeyError">If <paramref name="name"/> does not correspond to a tensor in this graph.</exception>
+        /// <returns>The `Tensor` with the given <paramref name="name"/>.</returns>
+        public Tensor get_tensor_by_name(string name)
+        {
+            return (Tensor)this.as_graph_element(name, allow_tensor: true, allow_operation: false);
         }
 
         public void __enter__()
