@@ -446,9 +446,9 @@ namespace Tensorflow
         /// <param name="name">The name of the `Tensor` to return.</param>
         /// <exception cref="KeyError">If <paramref name="name"/> does not correspond to a tensor in this graph.</exception>
         /// <returns>The `Tensor` with the given <paramref name="name"/>.</returns>
-        public ITensorOrOperation get_tensor_by_name(string name)
+        public Tensor get_tensor_by_name(string name)
         {
-            return this.as_graph_element(name, allow_tensor: true, allow_operation: false);
+            return (Tensor)this.as_graph_element(name, allow_tensor: true, allow_operation: false);
         }
 
         public void __enter__()
