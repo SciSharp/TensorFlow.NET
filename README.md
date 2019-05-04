@@ -157,6 +157,18 @@ You can:
 
 The best way to find out why a unit test is failing is to single step it in C# and its pendant Python at the same time to see where the flow of execution digresses or where variables exhibit different values. Good Python IDEs like PyCharm let you single step into the tensorflow library code. 
 
+### Git Knowhow for Contributors
+
+Add SciSharp/TensorFlow.NET as upstream to your local repo ...
+```git
+git remote add upstream git@github.com:SciSharp/TensorFlow.NET.git
+```
+
+Please make sure you keep your fork up to date by regularly pulling from upstream. 
+```git
+git pull upstream master
+```
+
 ### Contact
 
 Feel free to star or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET).
