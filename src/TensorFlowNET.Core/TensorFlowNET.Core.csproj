@@ -49,7 +49,7 @@ Add Word2Vec example.</PackageReleaseNotes>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.7.0" />
-    <PackageReference Include="NumSharp" Version="0.10.0-beta" />
+    <PackageReference Include="NumSharp" Version="0.10.0" />
   </ItemGroup>
 
   <ItemGroup>
