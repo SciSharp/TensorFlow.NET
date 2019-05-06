@@ -1,27 +1,33 @@
 ﻿using NumSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
+using Console = Colorful.Console;
 using System.Linq;
 using System.Net;
 using System.Text;
 using Tensorflow;
+using System.Drawing;
 
 namespace TensorFlowNET.Examples
 {
-    public class ImageRecognition : Python, IExample
+    /// <summary>
+    /// Inception v3 is a widely-used image recognition model 
+    /// that has been shown to attain greater than 78.1% accuracy on the ImageNet dataset. 
+    /// The model is the culmination of many ideas developed by multiple researchers over the years.
+    /// </summary>
+    public class ImageRecognitionInception : Python, IExample
     {
         public int Priority => 7;
         public bool Enabled { get; set; } = true;
-        public string Name => "Image Recognition";
+        public string Name => "Image Recognition Inception";
         public bool ImportGraph { get; set; } = false;
 
 
-        string dir = "ImageRecognition";
+        string dir = "ImageRecognitionInception";
         string pbFile = "tensorflow_inception_graph.pb";
         string labelFile = "imagenet_comp_graph_label_strings.txt";
-        string picFile = "grace_hopper.jpg";
 
         public bool Run()
         {
@@ -29,41 +35,39 @@ namespace TensorFlowNET.Examples
 
             var labels = File.ReadAllLines(Path.Join(dir, labelFile));
             var files = Directory.GetFiles(Path.Join(dir, "img"));
-            foreach (var file in files)
+
+            var graph = new Graph().as_default();
+            //import GraphDef from pb file
+            graph.Import(Path.Join(dir, pbFile));
+
+            var input_name = "input";
+            var output_name = "output";
+
+            var input_operation = graph.OperationByName(input_name);
+            var output_operation = graph.OperationByName(output_name);
+
+            var result_labels = new List<string>();
+            var sw = new Stopwatch();
+
+            with(tf.Session(graph), sess =>
             {
-                var tensor = ReadTensorFromImageFile(file);
-
-                var graph = new Graph().as_default();
-                //import GraphDef from pb file
-                graph.Import(Path.Join(dir, pbFile));
-
-                var input_name = "input";
-                var output_name = "output";
-
-                var input_operation = graph.OperationByName(input_name);
-                var output_operation = graph.OperationByName(output_name);
-
-                var idx = 0;
-                float propability = 0;
-                with(tf.Session(graph), sess =>
+                foreach (var file in files)
                 {
+                    sw.Restart();
+
+                    // load image file
+                    var tensor = ReadTensorFromImageFile(file);
                     var results = sess.run(output_operation.outputs[0], new FeedItem(input_operation.outputs[0], tensor));
-                    var probabilities = results.Data<float>();
-                    for (int i = 0; i < probabilities.Length; i++)
-                    {
-                        if (probabilities[i] > propability)
-                        {
-                            idx = i;
-                            propability = probabilities[i];
-                        }
-                    }
-                });
+                    results = np.squeeze(results);
+                    int idx = np.argmax(results);
 
-                Console.WriteLine($"{picFile}: {labels[idx]} {propability}");
-                return labels[idx].Equals("military uniform");
-            }
+                    Console.WriteLine($"{file.Split(Path.DirectorySeparatorChar).Last()}: {labels[idx]} {results[idx]} in {sw.ElapsedMilliseconds}ms", Color.Tan);
 
-            return false;
+                    result_labels.Add(labels[idx]);
+                }
+            });
+            
+            return result_labels.Contains("military uniform");
         }
 
         private NDArray ReadTensorFromImageFile(string file_name,
@@ -72,7 +76,7 @@ namespace TensorFlowNET.Examples
                                 int input_mean = 117,
                                 int input_std = 1)
         {
-            return with(tf.Graph().as_default(), graph =>
+            return with(tf.Graph(), graph =>
             {
                 var file_reader = tf.read_file(file_name, "file_reader");
                 var decodeJpeg = tf.image.decode_jpeg(file_reader, channels: 3, name: "DecodeJpeg");
@@ -102,6 +106,9 @@ namespace TensorFlowNET.Examples
             Directory.CreateDirectory(Path.Join(dir, "img"));
             url = $"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/grace_hopper.jpg";
             Utility.Web.Download(url, Path.Join(dir, "img"), "grace_hopper.jpg");
+
+            url = $"https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/data/shasta-daisy.jpg";
+            Utility.Web.Download(url, Path.Join(dir, "img"), "shasta-daisy.jpg");
         }
     }
 }
