@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using Tensorflow;
 using Console = Colorful.Console;
 
 namespace TensorFlowNET.Examples
@@ -12,15 +13,17 @@ namespace TensorFlowNET.Examples
     {
         static void Main(string[] args)
         {
-            var assembly = Assembly.GetEntryAssembly();
             var errors = new List<string>();
             var success = new List<string>();
             var disabled = new List<string>();
-            var examples = assembly.GetTypes()
+            var examples = Assembly.GetEntryAssembly().GetTypes()
                 .Where(x => x.GetInterfaces().Contains(typeof(IExample)))
                 .Select(x => (IExample)Activator.CreateInstance(x))
                 .OrderBy(x => x.Priority)
                 .ToArray();
+
+            Console.WriteLine($"TensorFlow v{tf.VERSION}", Color.Yellow);
+            Console.WriteLine($"TensorFlow.NET v{Assembly.GetAssembly(typeof(TF_DataType)).GetName().Version}", Color.Yellow);
 
             var sw = new Stopwatch();
             foreach (IExample example in examples)
@@ -30,7 +33,6 @@ namespace TensorFlowNET.Examples
 
                 Console.WriteLine($"{DateTime.UtcNow} Starting {example.Name}", Color.White);
 
-                
                 try
                 {
                     if (example.Enabled || args.Length > 0) // if a specific example was specified run it, regardless of enabled value
@@ -55,7 +57,6 @@ namespace TensorFlowNET.Examples
                     Console.WriteLine(ex);
                 }
                 
-
                 Console.WriteLine($"{DateTime.UtcNow} Completed {example.Name}", Color.White);
             }
 
