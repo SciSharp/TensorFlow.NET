@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -12,7 +13,7 @@ namespace TensorFlowNET.Examples
     /// 
     /// tensorflow\contrib\crf\python\ops\crf.py
     /// </summary>
-    public class CRF : Python, IExample
+    public class CRF : IExample
     {
         public int Priority => 13;
 
