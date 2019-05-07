@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow.Clustering
 {
     /// <summary>
     /// Creates the graph for k-means clustering.
     /// </summary>
-    public class KMeans : Python
+    public class KMeans
     {
         public const string CLUSTERS_VAR_NAME = "clusters";
 

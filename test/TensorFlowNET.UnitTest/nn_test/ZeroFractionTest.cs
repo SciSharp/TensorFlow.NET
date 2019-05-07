@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest.nn_test
 {

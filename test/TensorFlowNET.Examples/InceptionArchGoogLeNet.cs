@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -17,7 +18,7 @@ namespace TensorFlowNET.Examples
     /// Inception Architecture for Computer Vision
     /// Port from tensorflow\examples\label_image\label_image.py
     /// </summary>
-    public class InceptionArchGoogLeNet : Python, IExample
+    public class InceptionArchGoogLeNet : IExample
     {
         public bool Enabled { get; set; } = false;
         public int Priority => 100;

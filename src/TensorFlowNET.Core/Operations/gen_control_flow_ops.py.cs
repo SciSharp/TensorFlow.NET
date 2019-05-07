@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class gen_control_flow_ops : Python
+    public class gen_control_flow_ops
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 

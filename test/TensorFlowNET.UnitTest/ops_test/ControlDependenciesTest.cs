@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using Tensorflow.Eager;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest.ops_test
 {

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
     /// <summary>
     /// Variable scope object to carry defaults to provide to `get_variable`
     /// </summary>
-    public class VariableScope : Python
+    public class VariableScope
     {
         public bool use_resource { get; set; }
         private _ReuseMode _reuse;

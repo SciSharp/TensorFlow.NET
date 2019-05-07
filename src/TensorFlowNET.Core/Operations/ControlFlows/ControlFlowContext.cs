@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Tensorflow.Operations.ControlFlows;
 using static Tensorflow.ControlFlowContextDef;
+using static Tensorflow.Python;
 
 namespace Tensorflow.Operations
 {
@@ -24,7 +25,7 @@ namespace Tensorflow.Operations
     /// 4. A ControlFlowContext has _context_stack.
     /// Pushed and popped by ctxt.Enter() and ctxt.Exit()
     /// </summary>
-    public abstract class ControlFlowContext : Python, IPython
+    public abstract class ControlFlowContext : IPython
     {
         /// <summary>
         /// The predicate tensor in this branch

@@ -4,6 +4,7 @@ using System.Text;
 using NumSharp;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -11,7 +12,7 @@ namespace TensorFlowNET.Examples
     /// Simple vanilla neural net solving the famous XOR problem
     /// https://github.com/amygdala/tensorflow-workshop/blob/master/workshop_sections/getting_started/xor/README.md
     /// </summary>
-    public class NeuralNetXor : Python, IExample
+    public class NeuralNetXor : IExample
     {
         public int Priority => 10;
         public bool Enabled { get; set; } = true;

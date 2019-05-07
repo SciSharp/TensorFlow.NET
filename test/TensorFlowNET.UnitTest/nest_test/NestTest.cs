@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using NumSharp;
 using Tensorflow;
 using Tensorflow.Util;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest.nest_test
 {

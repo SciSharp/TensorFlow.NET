@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class array_ops : Python
+    public class array_ops
     {
         public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null) 
             => gen_array_ops.placeholder_with_default(input, shape, name);

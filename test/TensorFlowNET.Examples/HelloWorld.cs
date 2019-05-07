@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -9,7 +10,7 @@ namespace TensorFlowNET.Examples
     /// Simple hello world using TensorFlow
     /// https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/1_Introduction/helloworld.py
     /// </summary>
-    public class HelloWorld : Python, IExample
+    public class HelloWorld : IExample
     {
         public int Priority => 1;
         public bool Enabled { get; set; } = true;

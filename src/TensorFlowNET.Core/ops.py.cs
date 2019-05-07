@@ -8,10 +8,11 @@ using Google.Protobuf;
 using System.Linq;
 using NumSharp;
 using System.ComponentModel;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public partial class ops : Python
+    public partial class ops
     {
         public static void add_to_collection<T>(string name, T value)
         {

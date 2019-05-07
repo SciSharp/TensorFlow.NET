@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Operations;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class nn_impl : Python
+    public class nn_impl
     {
         /// <summary>
         /// Normalizes along dimension `axis` using an L2 norm.

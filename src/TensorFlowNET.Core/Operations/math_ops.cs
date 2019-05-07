@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Framework;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
     /// <summary>
     /// python\ops\math_ops.py
     /// </summary>
-    public class math_ops : Python
+    public class math_ops
     {
         public static Tensor abs(Tensor x, string name = null)
         {

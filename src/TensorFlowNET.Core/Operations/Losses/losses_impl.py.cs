@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class LossesImpl : Python
+    public class LossesImpl
     {
         public Tensor sparse_softmax_cross_entropy(Tensor labels, 
             Tensor logits,

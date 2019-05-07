@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using static Tensorflow.OpDef.Types;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class importer : Python
+    public class importer
     {
         public static ITensorOrOperation[] import_graph_def(GraphDef graph_def,
             Dictionary<string, Tensor> input_map = null,

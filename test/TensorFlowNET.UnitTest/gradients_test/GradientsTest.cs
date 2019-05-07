@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest.gradients_test
 {

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow.Clustering
 {
     /// <summary>
     /// Internal class to create the op to initialize the clusters.
     /// </summary>
-    public class _InitializeClustersOpFactory : Python
+    public class _InitializeClustersOpFactory
     {
         Tensor[] _inputs;
         Tensor _num_clusters;

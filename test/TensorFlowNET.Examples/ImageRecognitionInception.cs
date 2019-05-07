@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using Tensorflow;
 using System.Drawing;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -17,7 +18,7 @@ namespace TensorFlowNET.Examples
     /// that has been shown to attain greater than 78.1% accuracy on the ImageNet dataset. 
     /// The model is the culmination of many ideas developed by multiple researchers over the years.
     /// </summary>
-    public class ImageRecognitionInception : Python, IExample
+    public class ImageRecognitionInception : IExample
     {
         public int Priority => 7;
         public bool Enabled { get; set; } = true;

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest.control_flow_ops_test
 {

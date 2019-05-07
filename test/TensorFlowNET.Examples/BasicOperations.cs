@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -10,7 +11,7 @@ namespace TensorFlowNET.Examples
     /// Basic Operations example using TensorFlow library.
     /// https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/1_Introduction/basic_operations.py
     /// </summary>
-    public class BasicOperations : Python, IExample
+    public class BasicOperations : IExample
     {
         public bool Enabled { get; set; } = true;
         public int Priority => 2;

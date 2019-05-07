@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class PlaceholderTest : Python
+    public class PlaceholderTest
     {
         [TestMethod]
         public void placeholder()
