@@ -13,7 +13,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BiLstmCrfNer : IExample
     {
-        public int Priority => 13;
+        public int Priority => 101;
 
         public bool Enabled { get; set; } = true;
         public bool ImportGraph { get; set; } = false;
@@ -24,7 +24,7 @@ namespace TensorFlowNET.Examples
         public bool Run()
         {
             PrepareData();
-            return true;
+            return false;
         }
 
         public void PrepareData()
