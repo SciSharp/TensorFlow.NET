@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using static Tensorflow.Python;
 
 
 namespace Tensorflow
 {
-    public class _BaseDistribution : Python
+    public class _BaseDistribution
     {
         // Abstract base class needed for resolving subclass hierarchy.
     }

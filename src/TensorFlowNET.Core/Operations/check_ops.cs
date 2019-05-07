@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class check_ops : Python
+    public class check_ops
     {
         /// <summary>
         /// Assert the condition `x == y` holds element-wise.

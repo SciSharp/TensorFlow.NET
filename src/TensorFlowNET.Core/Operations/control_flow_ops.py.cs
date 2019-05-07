@@ -5,10 +5,11 @@ using System.Text;
 using Tensorflow.Operations;
 using Tensorflow.Operations.ControlFlows;
 using util = Tensorflow.control_flow_util;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class control_flow_ops : Python
+    public class control_flow_ops
     {
         public static Operation Assert(Tensor condition, object[] data, int? summarize = null, string name = null)
         {

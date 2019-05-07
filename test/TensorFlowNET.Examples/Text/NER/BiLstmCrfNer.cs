@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -10,7 +11,7 @@ namespace TensorFlowNET.Examples
     /// Bidirectional LSTM-CRF Models for Sequence Tagging 
     /// https://github.com/guillaumegenthial/tf_ner/tree/master/models/lstm_crf
     /// </summary>
-    public class BiLstmCrfNer : Python, IExample
+    public class BiLstmCrfNer : IExample
     {
         public int Priority => 13;
 

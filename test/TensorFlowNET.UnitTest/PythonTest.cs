@@ -8,13 +8,14 @@ using Newtonsoft.Json.Linq;
 using NumSharp;
 using Tensorflow;
 using Tensorflow.Util;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest
 {
     /// <summary>
     /// Use as base class for test classes to get additional assertions
     /// </summary>
-    public class PythonTest : Python
+    public class PythonTest
     {
         #region python compatibility layer
         protected PythonTest self { get => this; }

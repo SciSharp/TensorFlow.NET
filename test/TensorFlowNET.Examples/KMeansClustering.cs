@@ -7,6 +7,7 @@ using System.Text;
 using Tensorflow;
 using Tensorflow.Clustering;
 using TensorFlowNET.Examples.Utility;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -15,7 +16,7 @@ namespace TensorFlowNET.Examples
     /// handwritten digit images.
     /// https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/2_BasicModels/kmeans.py
     /// </summary>
-    public class KMeansClustering : Python, IExample
+    public class KMeansClustering : IExample
     {
         public int Priority => 8;
         public bool Enabled { get; set; } = true;

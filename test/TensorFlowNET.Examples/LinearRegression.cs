@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -10,7 +11,7 @@ namespace TensorFlowNET.Examples
     /// A linear regression learning algorithm example using TensorFlow library.
     /// https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/2_BasicModels/linear_regression.py
     /// </summary>
-    public class LinearRegression : Python, IExample
+    public class LinearRegression : IExample
     {
         public int Priority => 3;
         public bool Enabled { get; set; } = true;

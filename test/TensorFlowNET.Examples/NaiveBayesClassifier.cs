@@ -4,13 +4,14 @@ using System.Text;
 using Tensorflow;
 using NumSharp;
 using System.Linq;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// https://github.com/nicolov/naive_bayes_tensorflow
     /// </summary>
-    public class NaiveBayesClassifier : Python, IExample
+    public class NaiveBayesClassifier : IExample
     {
         public int Priority => 6;
         public bool Enabled { get; set; } = true;

@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest
 {
-    public class CApiTest : Python
+    public class CApiTest
     {
         protected TF_Code TF_OK = TF_Code.TF_OK;
         protected TF_DataType TF_FLOAT = TF_DataType.TF_FLOAT;

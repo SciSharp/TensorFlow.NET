@@ -12,9 +12,9 @@ namespace Tensorflow
     /// <summary>
     /// Mapping C# functions to Python
     /// </summary>
-    public class Python
+    public static class Python
     {
-        protected void print(object obj)
+        public static void print(object obj)
         {
             Console.WriteLine(obj.ToString());
         }
@@ -22,7 +22,7 @@ namespace Tensorflow
         //protected int len<T>(IEnumerable<T> a)
         //    => a.Count();
 
-        protected int len(object a)
+        public static int len(object a)
         {
             switch (a)
             {
@@ -40,12 +40,12 @@ namespace Tensorflow
             throw new NotImplementedException("len() not implemented for type: " + a.GetType());
         }
 
-        protected IEnumerable<int> range(int end)
+        public static IEnumerable<int> range(int end)
         {
             return Enumerable.Range(0, end);
         }
 
-        protected IEnumerable<int> range(int start, int end)
+        public static IEnumerable<int> range(int start, int end)
         {
             return Enumerable.Range(start, end - start);
         }

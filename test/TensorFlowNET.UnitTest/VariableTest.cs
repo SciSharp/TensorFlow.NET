@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class VariableTest : Python
+    public class VariableTest
     {
         [TestMethod]
         public void Initializer()

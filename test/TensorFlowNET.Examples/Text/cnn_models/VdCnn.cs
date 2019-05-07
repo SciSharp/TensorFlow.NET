@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using Tensorflow;
 using TensorFlowNET.Examples.Text.cnn_models;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples.TextClassification
 {
-    public class VdCnn : Python, ITextClassificationModel
+    public class VdCnn : ITextClassificationModel
     {
         private int embedding_size;
         private int[] filter_sizes;

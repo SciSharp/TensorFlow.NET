@@ -4,10 +4,11 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
-    public class MetaGraph : Python, IExample
+    public class MetaGraph : IExample
     {
         public int Priority => 100;
         public bool Enabled { get; set; } = false;

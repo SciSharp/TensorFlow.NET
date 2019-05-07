@@ -7,10 +7,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Tensorflow.OpDef.Types;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class OpDefLibrary : Python
+    public class OpDefLibrary
     {
         public Operation _apply_op_helper(string op_type_name, string name = null, object args = null)
             => _apply_op_helper(op_type_name, name: name, keywords: ConvertToDict(args));

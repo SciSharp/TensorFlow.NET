@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class TrainSaverTest : Python
+    public class TrainSaverTest
     {
         public void ExportGraph()
         {

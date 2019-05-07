@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class embedding_ops : Python
+    public class embedding_ops
     {
         /// <summary>
         /// Helper function for embedding_lookup and _compute_sampled_logits.
