@@ -9,11 +9,12 @@ using TensorFlowNET.Examples.Utility;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
 
-    public class ObjectDetection : Python, IExample
+    public class ObjectDetection : IExample
     {
         public int Priority => 11;
         public bool Enabled { get; set; } = true;

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -13,7 +14,7 @@ namespace TensorFlowNET.Examples
     /// Implement Word2Vec algorithm to compute vector representations of words.
     /// https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/2_BasicModels/word2vec.py
     /// </summary>
-    public class Word2Vec : Python, IExample
+    public class Word2Vec : IExample
     {
         public int Priority => 12;
         public bool Enabled { get; set; } = true;

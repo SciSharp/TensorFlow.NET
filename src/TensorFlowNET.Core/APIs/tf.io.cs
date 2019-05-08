@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public partial class tf
+    public static partial class tf
     {
         public static Tensor read_file(string filename, string name = null) => gen_io_ops.read_file(filename, name);
 

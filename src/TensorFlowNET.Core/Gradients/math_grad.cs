@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow.Gradients
 {
     /// <summary>
     /// Gradients for operators defined in math_ops.py.
     /// </summary>
-    public class math_grad : Python
+    public class math_grad
     {
         public static Tensor[] _AddGrad(Operation op, Tensor[] grads)
         {

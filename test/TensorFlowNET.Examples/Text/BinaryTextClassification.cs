@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NumSharp;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -14,7 +15,7 @@ namespace TensorFlowNET.Examples
     /// This is a binary—or two-class—classification, an important and widely applicable kind of machine learning problem.
     /// https://github.com/tensorflow/docs/blob/master/site/en/tutorials/keras/basic_text_classification.ipynb
     /// </summary>
-    public class BinaryTextClassification : Python, IExample
+    public class BinaryTextClassification : IExample
     {
         public int Priority => 9;
         public bool Enabled { get; set; } = true;

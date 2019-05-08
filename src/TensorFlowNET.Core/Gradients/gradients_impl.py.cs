@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
-    public class gradients_impl : Python
+    public class gradients_impl
     {
         public static Tensor[] gradients(Tensor[] ys,
             Tensor[] xs, 

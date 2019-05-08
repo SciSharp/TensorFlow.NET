@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {
@@ -12,7 +13,7 @@ namespace TensorFlowNET.Examples
     /// This example is using the MNIST database of handwritten digits
     /// https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/2_BasicModels/nearest_neighbor.py
     /// </summary>
-    public class NearestNeighbor : Python, IExample
+    public class NearestNeighbor : IExample
     {
         public int Priority => 5;
         public bool Enabled { get; set; } = true;

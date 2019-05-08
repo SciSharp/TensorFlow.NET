@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using distribute_lib = Tensorflow.Distribute;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
@@ -12,7 +13,7 @@ namespace Tensorflow
     /// class directly, but instead instantiate one of its subclasses such as
     /// `GradientDescentOptimizer`, `AdagradOptimizer`, or `MomentumOptimizer`.
     /// </summary>
-    public abstract class Optimizer : Python
+    public abstract class Optimizer
     {
         // Values for gate_gradients.
         public static int GATE_NONE = 0;

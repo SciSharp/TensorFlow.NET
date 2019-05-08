@@ -10,13 +10,14 @@ using Tensorflow.Keras.Engine;
 using TensorFlowNET.Examples.Text.cnn_models;
 using TensorFlowNET.Examples.TextClassification;
 using TensorFlowNET.Examples.Utility;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples.CnnTextClassification
 {
     /// <summary>
     /// https://github.com/dongjun-Lee/text-classification-models-tf
     /// </summary>
-    public class TextClassificationTrain : Python, IExample
+    public class TextClassificationTrain : IExample
     {
         public int Priority => 100;
         public bool Enabled { get; set; } = false;

@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class NameScopeTest : Python
+    public class NameScopeTest
     {
         Graph g = ops.get_default_graph();
         string name = "";
