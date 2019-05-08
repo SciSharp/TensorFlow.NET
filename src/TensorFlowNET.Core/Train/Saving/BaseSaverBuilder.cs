@@ -120,6 +120,9 @@ namespace Tensorflow
                         case List<CondContext> values:
                             foreach (var element in values) ;
                             break;
+                        case List<WhileContext> values:
+                            foreach (var element in values) ;
+                            break;
                         default:
                             throw new NotImplementedException("_build_internal.check_collection_list");
                     }

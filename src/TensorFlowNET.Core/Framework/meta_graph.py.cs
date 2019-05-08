@@ -101,9 +101,18 @@ namespace Tensorflow
                                 switch (col.Key)
                                 {
                                     case "cond_context":
-                                        var proto = CondContextDef.Parser.ParseFrom(value);
-                                        var condContext = new CondContext().from_proto(proto, import_scope);
-                                        graph.add_to_collection(col.Key, condContext);
+                                        {
+                                            var proto = CondContextDef.Parser.ParseFrom(value);
+                                            var condContext = new CondContext().from_proto(proto, import_scope);
+                                            graph.add_to_collection(col.Key, condContext);
+                                        }
+                                        break;
+                                    case "while_context":
+                                        {
+                                            var proto = WhileContextDef.Parser.ParseFrom(value);
+                                            var whileContext = new WhileContext().from_proto(proto, import_scope);
+                                            graph.add_to_collection(col.Key, whileContext);
+                                        }
                                         break;
                                     default:
                                         throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
