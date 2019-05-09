@@ -23,52 +23,45 @@ namespace TensorFlowNET.Examples.Utility
             string line;
             string newText = "{\"items\":[";
 
-            try
+            using (System.IO.StreamReader reader = new System.IO.StreamReader(filePath))
             {
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(filePath))
+
+                while ((line = reader.ReadLine()) != null)
                 {
+                    string newline = string.Empty;
 
-                    while ((line = reader.ReadLine()) != null)
+                    if (line.Contains("{"))
                     {
-                        string newline = string.Empty;
+                        newline = line.Replace("item", "").Trim();
+                        //newText += line.Insert(line.IndexOf("=") + 1, "\"") + "\",";
+                        newText += newline;
+                    }
+                    else if (line.Contains("}"))
+                    {
+                        newText = newText.Remove(newText.Length - 1);
+                        newText += line;
+                        newText += ",";
+                    }
+                    else
+                    {
+                        newline = line.Replace(":", "\":").Trim();
+                        newline = "\"" + newline;// newline.Insert(0, "\"");
+                        newline += ",";
 
-                        if (line.Contains("{"))
-                        {
-                            newline = line.Replace("item", "").Trim();
-                            //newText += line.Insert(line.IndexOf("=") + 1, "\"") + "\",";
-                            newText += newline;
-                        }
-                        else if (line.Contains("}"))
-                        {
-                            newText = newText.Remove(newText.Length - 1);
-                            newText += line;
-                            newText += ",";
-                        }
-                        else
-                        {
-                            newline = line.Replace(":", "\":").Trim();
-                            newline = "\"" + newline;// newline.Insert(0, "\"");
-                            newline += ",";
-
-                            newText += newline;
-                        }
-
+                        newText += newline;
                     }
 
-                    newText = newText.Remove(newText.Length - 1);
-                    newText += "]}";
-
-                    reader.Close();
                 }
 
-                PbtxtItems items = JsonConvert.DeserializeObject<PbtxtItems>(newText);
+                newText = newText.Remove(newText.Length - 1);
+                newText += "]}";
 
-                return items;
+                reader.Close();
             }
-            catch (Exception ex)
-            {
-                return null;
-            }
+
+            PbtxtItems items = JsonConvert.DeserializeObject<PbtxtItems>(newText);
+
+            return items;
         }
     }
 }
