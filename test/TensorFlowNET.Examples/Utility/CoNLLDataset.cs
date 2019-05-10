@@ -8,13 +8,14 @@ using Tensorflow.Estimator;
 
 namespace TensorFlowNET.Examples.Utility
 {
-    public class CoNLLDataset : IEnumerable
+    public class CoNLLDataset
     {
         static Dictionary<string, int> vocab_chars;
         static Dictionary<string, int> vocab_words;
+        static Dictionary<string, int> vocab_tags;
 
-        List<Tuple<int[], int>> _elements;
         HyperParams _hp;
+        string _path;
 
         public CoNLLDataset(string path, HyperParams hp)
         {
@@ -24,22 +25,10 @@ namespace TensorFlowNET.Examples.Utility
             if (vocab_words == null)
                 vocab_words = load_vocab(hp.filepath_words);
 
-            var lines = File.ReadAllLines(path);
+            if (vocab_tags == null)
+                vocab_tags = load_vocab(hp.filepath_tags);
 
-            foreach (var l in lines)
-            {
-                string line = l.Trim();
-                if (string.IsNullOrEmpty(line) || line.StartsWith("-DOCSTART-"))
-                {
-
-                }
-                else
-                {
-                    var ls = line.Split(' ');
-                    // process word
-                    var word = processing_word(ls[0]);
-                }
-            }
+            _path = path;
         }
 
         private (int[], int) processing_word(string word)
@@ -58,6 +47,20 @@ namespace TensorFlowNET.Examples.Utility
             return (char_ids, id);
         }
 
+        private int processing_tag(string word)
+        {
+            // 1. preprocess word
+            if (false) // lowercase
+                word = word.ToLower();
+            if (false) // isdigit
+                word = "$NUM$";
+
+            // 2. get id of word
+            int id = vocab_tags.GetValueOrDefault(word, -1);
+
+            return id;
+        }
+
         private Dictionary<string, int> load_vocab(string filename)
         {
             var dict = new Dictionary<string, int>();
@@ -68,9 +71,38 @@ namespace TensorFlowNET.Examples.Utility
             return dict;
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerable<((int[], int)[], int[])> GetItems()
         {
-            return _elements.GetEnumerator();
+            var lines = File.ReadAllLines(_path);
+
+            int niter = 0;
+            var words = new List<(int[], int)>();
+            var tags = new List<int>();
+
+            foreach (var l in lines)
+            {
+                string line = l.Trim();
+                if (string.IsNullOrEmpty(line) || line.StartsWith("-DOCSTART-"))
+                {
+                    if (words.Count > 0)
+                    {
+                        niter++;
+                        yield return (words.ToArray(), tags.ToArray());
+                        words.Clear();
+                        tags.Clear();
+                    }
+                }
+                else
+                {
+                    var ls = line.Split(' ');
+                    // process word
+                    var word = processing_word(ls[0]);
+                    var tag = processing_tag(ls[1]);
+
+                    words.Add(word);
+                    tags.Add(tag);
+                }
+            }
         }
     }
 }

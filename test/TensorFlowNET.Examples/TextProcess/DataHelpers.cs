@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace TensorFlowNET.Examples.CnnTextClassification
+namespace TensorFlowNET.Examples
 {
     public class DataHelpers
     {
@@ -89,6 +89,66 @@ namespace TensorFlowNET.Examples.CnnTextClassification
             str = Regex.Replace(str, @"[^A-Za-z0-9(),!?\'\`]", " ");
             str = Regex.Replace(str, @"\'s", " \'s");
             return str;
+        }
+
+        /// <summary>
+        /// Padding
+        /// </summary>
+        /// <param name="sequences"></param>
+        /// <param name="pad_tok">the char to pad with</param>
+        /// <returns>a list of list where each sublist has same length</returns>
+        public static (int[][], int[]) pad_sequences(int[][] sequences, int pad_tok = 0)
+        {
+            int max_length = sequences.Select(x => x.Length).Max();
+            return _pad_sequences(sequences, pad_tok, max_length);
+        }
+
+        public static (int[][][], int[][]) pad_sequences(int[][][] sequences, int pad_tok = 0)
+        {
+            int max_length_word = sequences.Select(x => x.Select(w => w.Length).Max()).Max();
+            int[][][] sequence_padded;
+            var sequence_length = new int[sequences.Length][];
+            for (int i = 0; i < sequences.Length; i++)
+            {
+                // all words are same length now
+                var (sp, sl) = _pad_sequences(sequences[i], pad_tok, max_length_word);
+                sequence_length[i] = sl;
+            }
+
+            int max_length_sentence = sequences.Select(x => x.Length).Max();
+            (sequence_padded, _) = _pad_sequences(sequences, np.repeat(pad_tok, max_length_word).Data<int>(), max_length_sentence);
+            (sequence_length, _) = _pad_sequences(sequence_length, 0, max_length_sentence);
+
+            return (sequence_padded, sequence_length);
+        }
+
+        private static (int[][], int[]) _pad_sequences(int[][] sequences, int pad_tok, int max_length)
+        {
+            var sequence_length = new int[sequences.Length];
+            for (int i = 0; i < sequences.Length; i++)
+            {
+                sequence_length[i] = sequences[i].Length;
+                Array.Resize(ref sequences[i], max_length);
+            }
+
+            return (sequences, sequence_length);
+        }
+
+        private static (int[][][], int[]) _pad_sequences(int[][][] sequences, int[] pad_tok, int max_length)
+        {
+            var sequence_length = new int[sequences.Length];
+            for (int i = 0; i < sequences.Length; i++)
+            {
+                sequence_length[i] = sequences[i].Length;
+                Array.Resize(ref sequences[i], max_length);
+                for (int j = 0; j < max_length - sequence_length[i]; j++)
+                {
+                    sequences[i][max_length - j - 1] = new int[pad_tok.Length];
+                    Array.Copy(pad_tok, sequences[i][max_length - j - 1], pad_tok.Length);
+                }
+            }
+
+            return (sequences, sequence_length);
         }
     }
 }
