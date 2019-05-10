@@ -191,6 +191,8 @@ namespace Tensorflow
                     return TF_DataType.TF_INT16;
                 case "Int32":
                     return TF_DataType.TF_INT32;
+                case "Int64":
+                    return TF_DataType.TF_INT64;
                 case "Single":
                     return TF_DataType.TF_FLOAT;
                 case "Double":
@@ -199,6 +201,8 @@ namespace Tensorflow
                     return TF_DataType.TF_UINT8;
                 case "String":
                     return TF_DataType.TF_STRING;
+                case "Boolean":
+                    return TF_DataType.TF_BOOL;
                 default:
                     throw new NotImplementedException("ToTFDataType error");
             }
