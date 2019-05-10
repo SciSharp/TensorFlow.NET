@@ -55,6 +55,9 @@ namespace Tensorflow
             var nd1 = nd.ravel();
             switch (nd.dtype.Name)
             {
+                case "Boolean":
+                    Marshal.Copy(nd1.Data<byte>(), 0, dotHandle, nd.size);
+                    break;
                 case "Int16":
                     Marshal.Copy(nd1.Data<short>(), 0, dotHandle, nd.size);
                     break;
