@@ -1,5 +1,6 @@
 ﻿using NumSharp;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -38,6 +39,13 @@ namespace Tensorflow
         public virtual NDArray run(object fetches, params FeedItem[] feed_dict)
         {
             return _run(fetches, feed_dict);
+        }
+
+        public virtual NDArray run(ITensorOrOperation[] fetches, Hashtable feed_dict = null)
+        {
+            var feed_items = feed_dict == null ? new FeedItem[0] : 
+                feed_dict.Keys.OfType<object>().Select(key => new FeedItem(key, feed_dict[key])).ToArray();
+            return _run(fetches, feed_items);
         }
 
         private NDArray _run(object fetches, FeedItem[] feed_dict = null)
@@ -87,6 +95,12 @@ namespace Tensorflow
                                 feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
                             case byte[] val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
+                                break;
+                            case bool val:
+                                feed_dict_tensor[subfeed_t] = (NDArray) val;
+                                break;
+                            case bool[] val:
                                 feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
                             default:
