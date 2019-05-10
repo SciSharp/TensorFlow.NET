@@ -13,7 +13,7 @@ namespace TensorFlowNET.Examples
         private const string TRAIN_PATH = "text_classification/dbpedia_csv/train.csv";
         private const string TEST_PATH = "text_classification/dbpedia_csv/test.csv";
 
-        public static (int[][], int[], int) build_char_dataset(string step, string model, int document_max_len, int? limit = null)
+        public static (NDArray, NDArray, int) build_char_dataset(string step, string model, int document_max_len, int? limit = null)
         {
             if (model != "vd_cnn")
                 throw new NotImplementedException(model);
@@ -29,22 +29,32 @@ namespace TensorFlowNET.Examples
             var contents = File.ReadAllLines(TRAIN_PATH);
             var size = limit == null ? contents.Length : limit.Value;
 
-            var x = new int[size][];
-            var y = new int[size];
+            var x = new NDArray(np.int32, new Shape(size, document_max_len));
+            var y = new NDArray(np.int32, new Shape(size));
+            var tenth = size / 10;
+            var percent = 0;
             for (int i = 0; i < size; i++)
             {
+                if ((i + 1) % tenth == 0)
+                {
+                    percent += 10;
+                    Console.WriteLine($"\t{percent}%");
+                }
+
                 string[] parts = contents[i].ToLower().Split(",\"").ToArray();
                 string content = parts[2];
                 content = content.Substring(0, content.Length - 1);
-                x[i] = new int[document_max_len];
+                var a = new int[document_max_len];
                 for (int j = 0; j < document_max_len; j++)
                 {
                     if (j >= content.Length)
-                        x[i][j] = char_dict["<pad>"];
+                        a[j] = char_dict["<pad>"];
+                    //x[i, j] = char_dict["<pad>"];
                     else
-                        x[i][j] = char_dict.ContainsKey(content[j].ToString()) ? char_dict[content[j].ToString()] : char_dict["<unk>"];
+                        a[j] = char_dict.ContainsKey(content[j].ToString()) ? char_dict[content[j].ToString()] : char_dict["<unk>"];
+                    //x[i, j] = char_dict.ContainsKey(content[j].ToString()) ? char_dict[content[j].ToString()] : char_dict["<unk>"];
                 }
-
+                x[i] = a;
                 y[i] = int.Parse(parts[0]);
             }
 
