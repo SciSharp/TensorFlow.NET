@@ -185,6 +185,10 @@ namespace TensorFlowNET.Examples.Text.NER
             hp.filepath_tags = Path.Combine(hp.data_root_dir, "tags.txt");
             hp.filepath_chars = Path.Combine(hp.data_root_dir, "chars.txt");
 
+            string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/data/lstm_crf_ner.zip";
+            Web.Download(url, hp.data_root_dir, "lstm_crf_ner.zip");
+            Compress.UnZip(Path.Combine(hp.data_root_dir, "lstm_crf_ner.zip"), hp.data_root_dir);
+
             // 1. vocabulary
             /*vocab_tags = load_vocab(hp.filepath_tags);
             
