@@ -95,12 +95,12 @@ namespace TensorFlowNET.Examples.CnnTextClassification
                 //_, step, loss = sess.run([model.optimizer, model.global_step, model.loss], feed_dict = train_feed_dict)
                 var result = sess.run(new ITensorOrOperation[] { optimizer, global_step, loss }, train_feed_dict);
                 loss_value = result[2];
-                var step = result[1];
-                if (step % 10 == 0)
+                var step = (int)result[1];
+                if (step % 10 == 0 || step < 10)
                 {
                     var estimate = TimeSpan.FromSeconds((stopwatch.Elapsed.TotalSeconds / i) * total);
                     Console.WriteLine($"Training on batch {i}/{total}. Estimated training time: {estimate}");
-                    Console.WriteLine($"Step {step} loss: {result[2]}");
+                    Console.WriteLine($"Step {step} loss: {loss_value}");
                 }
 
                 if (step % 100 == 0)
