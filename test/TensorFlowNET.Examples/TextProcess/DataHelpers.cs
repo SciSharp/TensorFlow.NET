@@ -11,10 +11,8 @@ namespace TensorFlowNET.Examples
 {
     public class DataHelpers
     {
-        private const string TRAIN_PATH = "text_classification/dbpedia_csv/train.csv";
-        private const string TEST_PATH = "text_classification/dbpedia_csv/test.csv";
 
-        public static (int[][], int[], int) build_char_dataset(string step, string model, int document_max_len, int? limit = null)
+        public static (int[][], int[], int) build_char_dataset(string path, string model, int document_max_len, int? limit = null, bool shuffle=true)
         {
             if (model != "vd_cnn")
                 throw new NotImplementedException(model);
@@ -26,7 +24,9 @@ namespace TensorFlowNET.Examples
             char_dict["<unk>"] = 1;
             foreach (char c in alphabet)
                 char_dict[c.ToString()] = char_dict.Count;
-            var contents = new Random(17).Shuffle( File.ReadAllLines(TRAIN_PATH));
+            var contents = File.ReadAllLines(path);
+            if (shuffle)
+                new Random(17).Shuffle(contents);
             //File.WriteAllLines("text_classification/dbpedia_csv/train_6400.csv", contents.Take(6400));
             var size = limit == null ? contents.Length : limit.Value;
 
