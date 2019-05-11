@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using TensorFlowNET.Examples.Utility;
 
 namespace TensorFlowNET.Examples
 {
@@ -25,7 +26,8 @@ namespace TensorFlowNET.Examples
             char_dict["<unk>"] = 1;
             foreach (char c in alphabet)
                 char_dict[c.ToString()] = char_dict.Count;
-            var contents = File.ReadAllLines(TRAIN_PATH);
+            var contents = new Random(17).Shuffle( File.ReadAllLines(TRAIN_PATH));
+            //File.WriteAllLines("text_classification/dbpedia_csv/train_6400.csv", contents.Take(6400));
             var size = limit == null ? contents.Length : limit.Value;
 
             var x = new int[size][];
