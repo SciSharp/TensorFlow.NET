@@ -71,6 +71,9 @@ namespace Tensorflow
         public static Tensor multiply(Tensor x, Tensor y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
 
+        public static Tensor mul_no_nan(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.mul_no_nan(x, y, name: name);
+
         /// <summary>
         /// Computes the mean of elements across dimensions of a tensor.
         /// Reduces `input_tensor` along the dimensions given in `axis`.
