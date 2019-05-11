@@ -59,8 +59,8 @@ namespace TensorFlowNET.Examples.CnnTextClassification
             Console.WriteLine("\tDONE ");
 
             var (train_x, valid_x, train_y, valid_y) = train_test_split(x, y, test_size: 0.15f);
-            Console.WriteLine("Training set size: " + train_x.shape[0]);
-            Console.WriteLine("Test set size: " + valid_x.shape[0]);
+            Console.WriteLine("Training set size: " + train_x.Length);
+            Console.WriteLine("Test set size: " + valid_x.Length);
 
             Console.WriteLine("Import graph...");
             var meta_file = model_name + ".meta";
@@ -164,19 +164,106 @@ namespace TensorFlowNET.Examples.CnnTextClassification
         }
 
         // TODO: this originally is an SKLearn utility function. it randomizes train and test which we don't do here
-        private (NDArray, NDArray, NDArray, NDArray) train_test_split(NDArray x, NDArray y, float test_size = 0.3f)
+        //private (NDArray, NDArray, NDArray, NDArray) train_test_split(NDArray x, NDArray y, float test_size = 0.3f)
+        //{
+        //    Console.WriteLine("Splitting in Training and Testing data...");
+        //    int len = x.shape[0];
+        //    //int classes = y.Data<int>().Distinct().Count();
+        //    //int samples = len / classes;
+        //    int train_size = (int)Math.Round(len * (1 - test_size));
+        //    var train_x = x[new Slice(stop: train_size), new Slice()];
+        //    var valid_x = x[new Slice(start: train_size + 1), new Slice()];
+        //    var train_y = y[new Slice(stop: train_size)];
+        //    var valid_y = y[new Slice(start: train_size + 1)];
+        //    Console.WriteLine("\tDONE");
+        //    return (train_x, valid_x, train_y, valid_y);
+        //}
+
+        private (int[][], int[][], int[], int[]) train_test_split(int[][] x, int[] y, float test_size = 0.3f)
         {
             Console.WriteLine("Splitting in Training and Testing data...");
-            int len = x.shape[0];
-            //int classes = y.Data<int>().Distinct().Count();
+            var stopwatch = Stopwatch.StartNew();
+            int len = x.Length;
+            //int classes = y.Distinct().Count();
             //int samples = len / classes;
-            int train_size = (int)Math.Round(len * (1 - test_size));
-            var train_x = x[new Slice(stop: train_size), new Slice()];
-            var valid_x = x[new Slice(start: train_size + 1), new Slice()];
-            var train_y = y[new Slice(stop: train_size)];
-            var valid_y = y[new Slice(start: train_size + 1)];
-            Console.WriteLine("\tDONE");
+            int train_size = int.Parse((len * (1 - test_size)).ToString());
+
+            //var train_x = new List<int[]>();
+            //var valid_x = new List<int[]>();
+            //var train_y = new List<int>();
+            //var valid_y = new List<int>();
+
+            //for (int i = 0; i < classes; i++)
+            //{
+            //    for (int j = 0; j < samples; j++)
+            //    {
+            //        int idx = i * samples + j;
+            //        if (idx < train_size + samples * i)
+            //        {
+            //            train_x.Add(x[idx]);
+            //            train_y.Add(y[idx]);
+            //        }
+            //        else
+            //        {
+            //            valid_x.Add(x[idx]);
+            //            valid_y.Add(y[idx]);
+            //        }
+            //    }
+            //}
+            var random = new Random(17);
+
+            // we collect indices of labels 
+            var labels = new Dictionary<int, HashSet<int>>();
+            var shuffled_indices = Shuffle<int>(random, range(len).ToArray());
+            foreach (var i in shuffled_indices)
+            {
+                var label = y[i];
+                if (!labels.ContainsKey(i))
+                    labels[label] = new HashSet<int>();
+                labels[label].Add(i);
+            }
+
+            var train_x = new int[train_size][];
+            var valid_x = new int[len - train_size][];
+            var train_y = new int[train_size];
+            var valid_y = new int[len - train_size];
+
+            FillWithShuffledLabels(x, y, train_x, train_y, random, labels);
+            FillWithShuffledLabels(x, y, valid_x, valid_y, random, labels);
+
+            Console.WriteLine("\tDONE " + stopwatch.Elapsed);
             return (train_x, valid_x, train_y, valid_y);
+        }
+
+        private static void FillWithShuffledLabels(int[][] x, int[] y, int[][] shuffled_x, int[] shuffled_y, Random random, Dictionary<int, HashSet<int>> labels)
+        {
+            int i = 0;
+            while (i < shuffled_x.Length)
+            {
+                foreach (var key in Shuffle<int>(random, labels.Keys.ToArray()))
+                {
+                    var set = labels[key];
+                    var index = set.First();
+                    if (set.Count == 0)
+                        labels.Remove(key); // remove the set as it is empty
+                    shuffled_x[i] = x[index];
+                    shuffled_y[i] = y[index];
+                    i++;
+                }
+            }
+        }
+
+        public static T[] Shuffle<T>(Random rng, T[] array)
+        {
+            int n = array.Length;
+            while (n > 1)
+            {
+                int k = rng.Next(n--);
+                T temp = array[n];
+                array[n] = array[k];
+                array[k] = temp;
+            }
+            return array;
         }
 
         private IEnumerable<(NDArray, NDArray, int)> batch_iter(NDArray inputs, NDArray outputs, int batch_size, int num_epochs)

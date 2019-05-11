@@ -13,7 +13,7 @@ namespace TensorFlowNET.Examples
         private const string TRAIN_PATH = "text_classification/dbpedia_csv/train.csv";
         private const string TEST_PATH = "text_classification/dbpedia_csv/test.csv";
 
-        public static (NDArray, NDArray, int) build_char_dataset(string step, string model, int document_max_len, int? limit = null)
+        public static (int[][], int[], int) build_char_dataset(string step, string model, int document_max_len, int? limit = null)
         {
             if (model != "vd_cnn")
                 throw new NotImplementedException(model);
@@ -25,12 +25,11 @@ namespace TensorFlowNET.Examples
             char_dict["<unk>"] = 1;
             foreach (char c in alphabet)
                 char_dict[c.ToString()] = char_dict.Count;
-            var random=new Random(42);
-            var contents = File.ReadAllLines(TRAIN_PATH).OrderBy(line=>random.NextDouble()).ToArray();
+            var contents = File.ReadAllLines(TRAIN_PATH);
             var size = limit == null ? contents.Length : limit.Value;
 
-            var x = new NDArray(np.int32, new Shape(size, document_max_len));
-            var y = new NDArray(np.int32, new Shape(size));
+            var x = new int[size][];
+            var y = new int[size];
             var tenth = size / 10;
             var percent = 0;
             for (int i = 0; i < size; i++)
@@ -49,10 +48,8 @@ namespace TensorFlowNET.Examples
                 {
                     if (j >= content.Length)
                         a[j] = char_dict["<pad>"];
-                    //x[i, j] = char_dict["<pad>"];
                     else
                         a[j] = char_dict.ContainsKey(content[j].ToString()) ? char_dict[content[j].ToString()] : char_dict["<unk>"];
-                    //x[i, j] = char_dict.ContainsKey(content[j].ToString()) ? char_dict[content[j].ToString()] : char_dict["<unk>"];
                 }
                 x[i] = a;
                 y[i] = int.Parse(parts[0]);
