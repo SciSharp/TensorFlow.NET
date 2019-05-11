@@ -25,8 +25,8 @@ namespace TensorFlowNET.Examples
             char_dict["<unk>"] = 1;
             foreach (char c in alphabet)
                 char_dict[c.ToString()] = char_dict.Count;
-
-            var contents = File.ReadAllLines(TRAIN_PATH);
+            var random=new Random(42);
+            var contents = File.ReadAllLines(TRAIN_PATH).OrderBy(line=>random.NextDouble()).ToArray();
             var size = limit == null ? contents.Length : limit.Value;
 
             var x = new NDArray(np.int32, new Shape(size, document_max_len));

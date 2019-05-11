@@ -91,6 +91,8 @@ namespace TensorFlowNET.Examples.CnnTextClassification
                     [model_y] = y_batch,
                     [is_training] = true,
                 };
+                //Console.WriteLine("x: " + x_batch.ToString() + "\n");
+                //Console.WriteLine("y: " + y_batch.ToString());
                 // original python:
                 //_, step, loss = sess.run([model.optimizer, model.global_step, model.loss], feed_dict = train_feed_dict)
                 var result = sess.run(new ITensorOrOperation[] { optimizer, global_step, loss }, train_feed_dict);
