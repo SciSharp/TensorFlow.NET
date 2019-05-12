@@ -79,13 +79,13 @@ namespace TensorFlowNET.Examples.CnnTextClassification
             var num_batches_per_epoch = (len(train_x) - 1) / BATCH_SIZE + 1;
             double max_accuracy = 0;
 
-            Tensor is_training = graph.get_operation_by_name("is_training");
-            Tensor model_x = graph.get_operation_by_name("x");
-            Tensor model_y = graph.get_operation_by_name("y");
-            Tensor loss = graph.get_operation_by_name("loss/value");
-            Tensor optimizer = graph.get_operation_by_name("loss/optimizer");
-            Tensor global_step = graph.get_operation_by_name("global_step");
-            Tensor accuracy = graph.get_operation_by_name("accuracy/value");
+            Tensor is_training = graph.get_tensor_by_name("is_training:0");
+            Tensor model_x = graph.get_tensor_by_name("x:0");
+            Tensor model_y = graph.get_tensor_by_name("y:0");
+            Tensor loss = graph.get_tensor_by_name("loss/value:0");
+            Tensor optimizer = graph.get_tensor_by_name("loss/optimizer:0");
+            Tensor global_step = graph.get_tensor_by_name("global_step:0");
+            Tensor accuracy = graph.get_tensor_by_name("accuracy/value:0");
             stopwatch = Stopwatch.StartNew();
             int i = 0;
             foreach (var (x_batch, y_batch, total) in train_batches)

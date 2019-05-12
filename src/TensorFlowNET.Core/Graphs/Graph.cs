@@ -160,7 +160,14 @@ namespace Tensorflow
                 }
                 else if (!name.Contains(":") & !allow_operation)
                 {
-                    throw new NotImplementedException("_as_graph_element_locked");
+                    // Looks like an Operation name but can't be an Operation.
+                    if (_nodes_by_name.ContainsKey(name))
+                        // Yep, it's an Operation name
+                        throw new ValueError($"The name {name} refers to an Operation, not a {types_str}.");
+                    else
+                        throw new ValueError(
+                            $"The name {name} looks like an (invalid) Operation name, not a {types_str}" +
+                            " Tensor names must be of the form \"<op_name>:<output_index>\".");
                 }
             }
 
