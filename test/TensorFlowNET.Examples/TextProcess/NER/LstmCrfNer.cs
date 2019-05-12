@@ -200,6 +200,13 @@ namespace TensorFlowNET.Examples.Text.NER
             // 2. get processing functions that map str -> id
             dev = new CoNLLDataset(hp.filepath_dev, hp);
             train = new CoNLLDataset(hp.filepath_train, hp);
+
+            // download graph meta data
+            var meta_file = "lstm_crf_ner.meta";
+            var meta_path = Path.Combine("graph", meta_file);
+            url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/" + meta_file;
+            Web.Download(url, "graph", meta_file);
+
         }
     }
 }
