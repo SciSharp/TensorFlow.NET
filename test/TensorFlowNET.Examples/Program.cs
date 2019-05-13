@@ -64,6 +64,7 @@ namespace TensorFlowNET.Examples
             disabled.ForEach(x => Console.WriteLine($"{x} is Disabled!", Color.Tan));
             errors.ForEach(x => Console.WriteLine($"{x} is Failed!", Color.Red));
 
+            Console.Write("Please [Enter] to quit.");
             Console.ReadLine();
         }
     }

@@ -63,14 +63,6 @@ namespace TensorFlowNET.ExamplesTests
 
         [Ignore]
         [TestMethod]
-        public void MetaGraph()
-        {
-            tf.Graph().as_default();
-            new MetaGraph() { Enabled = true }.Run();
-        }
-
-        [Ignore]
-        [TestMethod]
         public void NaiveBayesClassifier()
         {
             tf.Graph().as_default();

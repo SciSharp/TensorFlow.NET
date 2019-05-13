@@ -352,6 +352,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor mul_no_nan<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("MulNoNan", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor real_div(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("RealDiv", name, args: new { x, y });

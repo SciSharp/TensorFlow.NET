@@ -32,6 +32,22 @@ namespace Tensorflow.Gradients
             return new Tensor[] { r1, r2 };
         }
 
+        /// <summary>
+        /// Returns grad * exp(x).
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        public static Tensor[] _ExpGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var y = op.outputs[0];  // y = e^x
+            return with(ops.control_dependencies(new Operation[] { grad }), dp => {
+                y = math_ops.conj(y);
+                return new Tensor[] { math_ops.mul_no_nan(y, grad) };
+            });
+        }
+
         public static Tensor[] _IdGrad(Operation op, Tensor[] grads)
         {
             return new Tensor[] { grads[0] };

@@ -22,6 +22,8 @@ namespace Tensorflow
                         return math_grad._AddGrad(oper, out_grads);
                     case "BiasAdd":
                         return nn_grad._BiasAddGrad(oper, out_grads);
+                    case "Exp":
+                        return math_grad._ExpGrad(oper, out_grads);
                     case "Identity":
                         return math_grad._IdGrad(oper, out_grads);
                     case "Log":

@@ -198,6 +198,8 @@ namespace Tensorflow.Operations
             {
                 case CtxtOneofCase.CondCtxt:
                     return new CondContext().from_proto(context_def.CondCtxt, import_scope: import_scope);
+                case CtxtOneofCase.WhileCtxt:
+                    return new WhileContext().from_proto(context_def.WhileCtxt, import_scope: import_scope);
             }
 
             throw new NotImplementedException($"Unknown ControlFlowContextDef field: {context_def.CtxtCase}");

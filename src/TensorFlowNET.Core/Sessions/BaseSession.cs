@@ -1,5 +1,6 @@
 ﻿using NumSharp;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -18,7 +19,7 @@ namespace Tensorflow
 
         public BaseSession(string target = "", Graph graph = null)
         {
-            if(graph is null)
+            if (graph is null)
             {
                 _graph = ops.get_default_graph();
             }
@@ -38,6 +39,13 @@ namespace Tensorflow
         public virtual NDArray run(object fetches, params FeedItem[] feed_dict)
         {
             return _run(fetches, feed_dict);
+        }
+
+        public virtual NDArray run(object fetches, Hashtable feed_dict = null)
+        {
+            var feed_items = feed_dict == null ? new FeedItem[0] :
+                feed_dict.Keys.OfType<object>().Select(key => new FeedItem(key, feed_dict[key])).ToArray();
+            return _run(fetches, feed_items);
         }
 
         private NDArray _run(object fetches, FeedItem[] feed_dict = null)
@@ -89,11 +97,17 @@ namespace Tensorflow
                             case byte[] val:
                                 feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
+                            case bool val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
+                                break;
+                            case bool[] val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
+                                break;
                             default:
                                 Console.WriteLine($"can't handle data type of subfeed_val");
                                 throw new NotImplementedException("_run subfeed");
                         }
-                        
+
                         feed_map[subfeed_t.name] = (subfeed_t, subfeed_val);
                     }
                 }
@@ -132,9 +146,9 @@ namespace Tensorflow
         /// </returns>
         private NDArray[] _do_run(List<Operation> target_list, List<Tensor> fetch_list, Dictionary<object, object> feed_dict)
         {
-            var feeds = feed_dict.Select(x => 
+            var feeds = feed_dict.Select(x =>
             {
-                if(x.Key is Tensor tensor)
+                if (x.Key is Tensor tensor)
                 {
                     switch (x.Value)
                     {

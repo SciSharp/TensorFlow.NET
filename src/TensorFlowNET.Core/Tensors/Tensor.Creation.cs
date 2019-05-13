@@ -55,6 +55,10 @@ namespace Tensorflow
             var nd1 = nd.ravel();
             switch (nd.dtype.Name)
             {
+                case "Boolean":
+                    var boolVals = Array.ConvertAll(nd1.Data<bool>(), x => Convert.ToByte(x));
+                    Marshal.Copy(boolVals, 0, dotHandle, nd.size);
+                    break;
                 case "Int16":
                     Marshal.Copy(nd1.Data<short>(), 0, dotHandle, nd.size);
                     break;
