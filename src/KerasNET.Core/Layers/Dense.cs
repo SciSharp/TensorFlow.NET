@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Tensorflow;
-using static Makina.Makina;
-using Makina;
+using static Keras.Keras;
+using Keras;
 using NumSharp;
 using Tensorflow.Operations.Activation;
 
-namespace Makina.Layers
+namespace Keras.Layers
 {
     public class Dense : ILayer
     {

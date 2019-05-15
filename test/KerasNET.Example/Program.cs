@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Tensorflow;
 using static Tensorflow.Python;
-using static Makina.Makina;
-using Makina.Layers;
-using Makina;
+using static Keras.Keras;
+using Keras.Layers;
+using Keras;
 using NumSharp;
 
-namespace Makina.Example
+namespace Keras.Example
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("================================== Makina ==================================");
+            Console.WriteLine("================================== Keras ==================================");
 
             #region data
             var batch_size = 1000;

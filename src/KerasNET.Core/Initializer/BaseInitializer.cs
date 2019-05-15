@@ -4,7 +4,7 @@ using System.Text;
 using Tensorflow;
 using Tensorflow.Layers;
 
-namespace Makina.Initializer
+namespace Keras.Initializer
 {
     class BaseInitializer : IInitializer
     {

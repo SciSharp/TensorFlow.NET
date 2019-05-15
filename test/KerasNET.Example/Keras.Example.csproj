@@ -74,11 +74,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MakinaNET.Core\MakinaNET.Core.csproj">
-      <Project>{6ff518eb-523f-4930-919e-05011efced6f}</Project>
-      <Name>MakinaNET.Core</Name>
+    <ProjectReference Include="..\..\src\KerasNET.Core\Keras.Core.csproj">
+      <Project>{902e188f-a953-43b4-9991-72bab1697bc3}</Project>
+      <Name>Keras.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TensorFlowNET.Core\TensorFlowNET.Core.csproj">
+    <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj">
       <Project>{fd682ac0-7b2d-45d3-8b0d-c6d678b04144}</Project>
       <Name>TensorFlowNET.Core</Name>
     </ProjectReference>

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
 
-namespace Makina
+namespace Keras
 {
-    public static class Makina
+    public static class Keras
     {
         public static Tensor create_tensor(int[] shape, float mean = 0, float stddev = 1, TF_DataType dtype = TF_DataType.TF_FLOAT, int? seed = null, string name = null)
         {

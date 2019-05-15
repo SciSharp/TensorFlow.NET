@@ -1,13 +1,13 @@
-﻿using Makina.Layers;
+﻿using Keras.Layers;
 using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
-using static Makina.Makina;
+using static Keras.Keras;
 using static Tensorflow.Python;
 
-namespace Makina
+namespace Keras
 {
     public class Model
     {

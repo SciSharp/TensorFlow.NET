@@ -1,11 +1,11 @@
 ﻿using System;
 using Tensorflow;
-using Makina;
-using Makina.Layers;
+using Keras;
+using Keras.Layers;
 using NumSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Makina.Test
+namespace Keras.Test
 {
     [TestClass]
     public class BaseTests
@@ -17,7 +17,12 @@ namespace Makina.Test
             var input = new Tensor(np.array(new int[] { 3 }));
             dense_1.__build__(input.getShape());
             var outputShape = dense_1.output_shape(input.getShape());
-            //Assert.AreEqual(outputShape.Dimensions, new int[] { 1 });
+            var a = (int[])(outputShape.Dimensions);
+            var b = (int[])(new int[] { 1 });
+            var _a = np.array(a);
+            var _b = np.array(b);
+
+            Assert.IsTrue(np.array_equal(_a, _b));
         }
     }
 }

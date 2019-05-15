@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Makina</AssemblyName>
-    <RootNamespace>Makina</RootNamespace>
+    <AssemblyName>Keras</AssemblyName>
+    <RootNamespace>Keras</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

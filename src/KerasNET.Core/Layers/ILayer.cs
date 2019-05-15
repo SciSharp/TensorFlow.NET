@@ -4,7 +4,7 @@ using System.Text;
 using Tensorflow;
 using NumSharp;
 
-namespace Makina.Layers
+namespace Keras.Layers
 {
     public interface ILayer
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Makina
+namespace Keras
 {
     interface IInitializer
     {
