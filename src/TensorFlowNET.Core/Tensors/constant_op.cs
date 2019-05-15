@@ -88,5 +88,15 @@ namespace Tensorflow
 
             return constant_op.constant(s_list, name: name);
         }
+
+        public static bool is_constant(ITensorOrOperation tensor_or_op)
+        {
+            if (tensor_or_op is Tensor tensor)
+                return tensor.op.type == "Const";
+            else if (tensor_or_op is Operation op)
+                return op.type == "Const";
+            else
+                throw new ValueError("is_constant");
+        }
     }
 }

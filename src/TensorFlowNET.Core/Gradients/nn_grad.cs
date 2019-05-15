@@ -6,6 +6,9 @@ using Tensorflow.Operations;
 
 namespace Tensorflow.Gradients
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class nn_grad
     {
         /// <summary>
