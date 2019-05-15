@@ -40,8 +40,8 @@
     <Reference Include="Google.Protobuf, Version=3.7.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.7.0\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
-    <Reference Include="NumSharp.Core, Version=0.10.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NumSharp.0.10.0\lib\netstandard2.0\NumSharp.Core.dll</HintPath>
+    <Reference Include="NumSharp.Core, Version=0.10.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NumSharp.0.10.1\lib\netstandard2.0\NumSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
