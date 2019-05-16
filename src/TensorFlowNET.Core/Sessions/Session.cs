@@ -11,7 +11,7 @@ namespace Tensorflow
         public SessionOptions Options { get; }
         public Graph graph;
 
-        public Session(string target = "", Graph graph = null)
+        public Session(string target = "", Graph graph = null):base(target,graph,null)
         {
             if(graph == null)
             {
@@ -20,20 +20,21 @@ namespace Tensorflow
             this.graph = graph;
             Options = new SessionOptions();
             _handle = c_api.TF_NewSession(graph, Options, Status);
+            //why create session again. already created session in BaseSession.
             Status.Check();
         }
 
-        public Session(IntPtr handle)
+        public Session(IntPtr handle):base("",null,null)
         {
             _handle = handle;
         }
 
         public Session(Graph g, SessionOptions opts = null, Status s = null)
+            :base(string.Empty,g,opts)
         {
-            if (s == null)
-                s = Status;
+            s = s ?? Status;           
             graph = g;
-            Options = opts == null ? new SessionOptions() : opts;
+            Options = opts ?? new SessionOptions();
             _handle = c_api.TF_NewSession(graph, Options, s);
             Status.Check(true);
         }

@@ -17,7 +17,8 @@ namespace Tensorflow
         protected byte[] _target;
         protected IntPtr _session;
 
-        public BaseSession(string target = "", Graph graph = null)
+   
+        public BaseSession(string target , Graph graph ,SessionOptions opts)
         {
             if (graph is null)
             {
@@ -29,11 +30,14 @@ namespace Tensorflow
             }
 
             _target = UTF8Encoding.UTF8.GetBytes(target);
-            var opts = c_api.TF_NewSessionOptions();
+            SessionOptions newOpts = null;
+            if (opts == null)
+              newOpts =  c_api.TF_NewSessionOptions();
             var status = new Status();
-            _session = c_api.TF_NewSession(_graph, opts, status);
+            _session = c_api.TF_NewSession(_graph, opts?? newOpts, status);
 
-            c_api.TF_DeleteSessionOptions(opts);
+            if (opts == null)
+                c_api.TF_DeleteSessionOptions(newOpts);
         }
 
         public virtual NDArray run(object fetches, params FeedItem[] feed_dict)
