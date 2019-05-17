@@ -6,37 +6,23 @@ namespace Tensorflow
 {
     public class Session : BaseSession, IPython
     {
-        private IntPtr _handle;
-        public Status Status  = new Status();
-        public SessionOptions Options { get; }
-        public Graph graph;
-
-        public Session(string target = "", Graph graph = null):base(target,graph,null)
+        public Session(string target = "", Graph g = null)
+            : base(target, g, null)
         {
-            if(graph == null)
-            {
-                graph = tf.get_default_graph();
-            }
-            this.graph = graph;
-            Options = new SessionOptions();
-            _handle = c_api.TF_NewSession(graph, Options, Status);
-            //why create session again. already created session in BaseSession.
-            Status.Check();
+
         }
 
-        public Session(IntPtr handle):base("",null,null)
+        public Session(IntPtr handle)
+            : base("", null, null)
         {
-            _handle = handle;
+            _session = handle;
         }
 
         public Session(Graph g, SessionOptions opts = null, Status s = null)
-            :base(string.Empty,g,opts)
+            : base("", g, opts)
         {
-            s = s ?? Status;           
-            graph = g;
-            Options = opts ?? new SessionOptions();
-            _handle = c_api.TF_NewSession(graph, Options, s);
-            Status.Check(true);
+            if (s == null)
+                s = Status;
         }
 
         public Session as_default()
@@ -64,7 +50,7 @@ namespace Tensorflow
             return sess;
         }
 
-        public static implicit operator IntPtr(Session session) => session._handle;
+        public static implicit operator IntPtr(Session session) => session._session;
         public static implicit operator Session(IntPtr handle) => new Session(handle);
 
         public void close()
@@ -74,19 +60,18 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            Options.Dispose();
-            c_api.TF_DeleteSession(_handle, Status);
+            c_api.TF_DeleteSession(_session, Status);
             Status.Dispose();
         }
 
         public void __enter__()
         {
-            
+
         }
 
         public void __exit__()
         {
-            
+
         }
     }
 }

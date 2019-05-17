@@ -306,7 +306,7 @@ namespace TensorFlowNET.UnitTest
             });
             //TODO: use this instead of normal session
             //return new ErrorLoggingSession(graph = graph, config = prepare_config(config))
-            return new Session(graph: graph);//, config = prepare_config(config))
+            return new Session(graph);//, config = prepare_config(config))
         }
 
         #endregion

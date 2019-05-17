@@ -110,7 +110,7 @@ namespace Tensorflow
                     return tfHandle1;*/
                     break;
                 default:
-                    throw new NotImplementedException("Marshal.Copy failed.");
+                    throw new NotImplementedException($"Marshal.Copy failed for {nd.dtype.Name}.");
             }
             
             // Free the original buffer and set flag

@@ -16,28 +16,28 @@ namespace Tensorflow
         protected int _current_version;
         protected byte[] _target;
         protected IntPtr _session;
+        public Status Status;
+        public Graph graph => _graph;
 
-   
-        public BaseSession(string target , Graph graph ,SessionOptions opts)
+        public BaseSession(string target = "", Graph g = null, SessionOptions opts = null)
         {
-            if (graph is null)
-            {
-                _graph = ops.get_default_graph();
-            }
-            else
-            {
-                _graph = graph;
-            }
+            _graph = graph is null ? ops.get_default_graph() : g;
 
             _target = UTF8Encoding.UTF8.GetBytes(target);
+
             SessionOptions newOpts = null;
             if (opts == null)
-              newOpts =  c_api.TF_NewSessionOptions();
-            var status = new Status();
-            _session = c_api.TF_NewSession(_graph, opts?? newOpts, status);
+                newOpts = c_api.TF_NewSessionOptions();
 
+            Status = new Status();
+
+            _session = c_api.TF_NewSession(_graph, opts ?? newOpts, Status);
+
+            // dispose newOpts
             if (opts == null)
                 c_api.TF_DeleteSessionOptions(newOpts);
+
+            Status.Check(true);
         }
 
         public virtual NDArray run(object fetches, params FeedItem[] feed_dict)
