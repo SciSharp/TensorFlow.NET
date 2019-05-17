@@ -21,7 +21,7 @@ namespace Tensorflow
 
         public BaseSession(string target = "", Graph g = null, SessionOptions opts = null)
         {
-            _graph = graph is null ? ops.get_default_graph() : g;
+            _graph = g is null ? ops.get_default_graph() : g;
 
             _target = UTF8Encoding.UTF8.GetBytes(target);
 
