@@ -1,12 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
     public class gen_image_ops
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
+
+        public Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name= null)
+        {
+            if (dtype == image.dtype)
+                return array_ops.identity(image, name: name);
+
+            return with(ops.name_scope(name, "convert_image", image), scope =>
+            {
+                name = scope;
+
+                if (image.dtype.is_integer() && dtype.is_integer())
+                {
+                    throw new NotImplementedException("convert_image_dtype is_integer");
+                } 
+                else if (image.dtype.is_floating() && dtype.is_floating())
+                {
+                    throw new NotImplementedException("convert_image_dtype is_floating");
+                }
+                else
+                {
+                    if (image.dtype.is_integer())
+                    {
+                        // Converting to float: first cast, then scale. No saturation possible.
+                        var cast = math_ops.cast(image, dtype);
+                        var scale = 1.0f / image.dtype.max();
+                        return math_ops.multiply(cast, scale, name: name);
+                    }
+                    else
+                    {
+                        throw new NotImplementedException("convert_image_dtype is_integer");
+                    }
+                }
+            });
+        }
 
         public Tensor decode_jpeg(Tensor contents,
             int channels = 0,

@@ -34,6 +34,16 @@ namespace Tensorflow
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
             => gen_array_ops.squeeze(input, axis, name);
 
+        /// <summary>
+        /// Stacks a list of rank-`R` tensors into one rank-`(R+1)` tensor.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor stack(object values, int axis = 0, string name = "stack")
+            => array_ops.stack(values, axis, name: name);
+
         public static Tensor one_hot(Tensor indices, int depth,
             Tensor on_value = null,
             Tensor off_value = null,

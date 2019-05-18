@@ -123,6 +123,17 @@ namespace Tensorflow
                 type;
         }
 
+        public static int max(this TF_DataType type)
+        {
+            switch (type)
+            {
+                case TF_DataType.TF_UINT8:
+                    return 255;
+                default:
+                    throw new NotImplementedException($"max {type.name()}");
+            }
+        }
+
         public static bool is_complex(this TF_DataType type)
         {
             return type == TF_DataType.TF_COMPLEX || type == TF_DataType.TF_COMPLEX64 || type == TF_DataType.TF_COMPLEX128;
@@ -130,7 +141,8 @@ namespace Tensorflow
 
         public static bool is_integer(this TF_DataType type)
         {
-            return type == TF_DataType.TF_INT8 || type == TF_DataType.TF_INT16 || type == TF_DataType.TF_INT32 || type == TF_DataType.TF_INT64;
+            return type == TF_DataType.TF_INT8 || type == TF_DataType.TF_INT16 || type == TF_DataType.TF_INT32 || type == TF_DataType.TF_INT64 ||
+                type == TF_DataType.TF_UINT8 || type == TF_DataType.TF_UINT16 || type == TF_DataType.TF_UINT32 || type == TF_DataType.TF_UINT64;
         }
 
         public static bool is_floating(this TF_DataType type)

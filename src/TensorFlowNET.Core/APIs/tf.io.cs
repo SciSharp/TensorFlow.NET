@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.IO;
 
 namespace Tensorflow
 {
     public static partial class tf
     {
+        public static GFile gfile = new GFile();
         public static Tensor read_file(string filename, string name = null) => gen_io_ops.read_file(filename, name);
 
         public static gen_image_ops image => new gen_image_ops();

@@ -24,7 +24,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor add(Tensor x, Tensor y, string name = null) 
+        public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null) 
             => gen_math_ops.add(x, y, name);
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace Tensorflow
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.equal(x, y, name: name);
 
-        public static Tensor multiply(Tensor x, Tensor y, string name = null)
+        public static Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
 
-        public static Tensor mul_no_nan(Tensor x, Tensor y, string name = null)
+        public static Tensor mul_no_nan<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul_no_nan(x, y, name: name);
 
         /// <summary>
