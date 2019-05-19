@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -105,7 +106,83 @@ namespace TensorFlowNET.Examples.ImageProcess
             Tensor bottleneck_tensor, string module_name)
         {
             var label_lists = image_lists[label_name];
-            var sub_dir_path = Path.Join(image_dir, label_name);
+            var sub_dir_path = Path.Join(bottleneck_dir, label_name);
+            Directory.CreateDirectory(sub_dir_path);
+            string bottleneck_path = get_bottleneck_path(image_lists, label_name, index,
+                                        bottleneck_dir, category, module_name);
+
+            if (!File.Exists(bottleneck_path))
+                create_bottleneck_file(bottleneck_path, image_lists, label_name, index,
+                                       image_dir, category, sess, jpeg_data_tensor,
+                                       decoded_image_tensor, resized_input_tensor,
+                                       bottleneck_tensor);
+        }
+
+        private void create_bottleneck_file(string bottleneck_path, Dictionary<string, Dictionary<string, string[]>> image_lists, 
+            string label_name, int index, string image_dir, string category, Session sess, 
+            Tensor jpeg_data_tensor, Tensor decoded_image_tensor, Tensor resized_input_tensor, Tensor bottleneck_tensor)
+        {
+            // Create a single bottleneck file.
+            print("Creating bottleneck at " + bottleneck_path);
+            var image_path = get_image_path(image_lists, label_name, index, image_dir, category);
+            if (!File.Exists(image_path))
+                print($"File does not exist {image_path}");
+
+            var image_data = File.ReadAllBytes(image_path);
+            var bottleneck_values = run_bottleneck_on_image(
+                sess, image_data, jpeg_data_tensor, decoded_image_tensor,
+                resized_input_tensor, bottleneck_tensor);
+        }
+
+        /// <summary>
+        /// Runs inference on an image to extract the 'bottleneck' summary layer.
+        /// </summary>
+        /// <param name="sess">Current active TensorFlow Session.</param>
+        /// <param name="image_path">Path of raw JPEG data.</param>
+        /// <param name="image_data_tensor">Input data layer in the graph.</param>
+        /// <param name="decoded_image_tensor">Output of initial image resizing and preprocessing.</param>
+        /// <param name="resized_input_tensor">The input node of the recognition graph.</param>
+        /// <param name="bottleneck_tensor">Layer before the final softmax.</param>
+        /// <returns></returns>
+        private NDArray run_bottleneck_on_image(Session sess, byte[] image_data, Tensor image_data_tensor,
+                            Tensor decoded_image_tensor, Tensor resized_input_tensor, Tensor bottleneck_tensor)
+        {
+            // First decode the JPEG image, resize it, and rescale the pixel values.
+            var resized_input_values = sess.run(decoded_image_tensor, new FeedItem(image_data_tensor, image_data));
+            // Then run it through the recognition network.
+            var bottleneck_values = sess.run(bottleneck_tensor, new FeedItem(resized_input_tensor, resized_input_values));
+            bottleneck_values = np.squeeze(bottleneck_values);
+            return bottleneck_values;
+        }
+
+        private string get_bottleneck_path(Dictionary<string, Dictionary<string, string[]>> image_lists, string label_name, int index, 
+            string bottleneck_dir, string category, string module_name)
+        {
+            module_name = (module_name.Replace("://", "~")  // URL scheme.
+                 .Replace('/', '~')  // URL and Unix paths.
+                 .Replace(':', '~').Replace('\\', '~'));  // Windows paths.
+            return get_image_path(image_lists, label_name, index, bottleneck_dir,
+                                  category) + "_" + module_name + ".txt";
+        }
+
+        private string get_image_path(Dictionary<string, Dictionary<string, string[]>> image_lists, string label_name,
+            int index, string image_dir, string category)
+        {
+            if (!image_lists.ContainsKey(label_name))
+                print($"Label does not exist {label_name}");
+
+            var label_lists = image_lists[label_name];
+            if (!label_lists.ContainsKey(category))
+                print($"Category does not exist {category}");
+            var category_list = label_lists[category];
+            if (category_list.Length == 0)
+                print($"Label {label_name} has no images in the category {category}.");
+
+            var mod_index = index % len(category_list);
+            var base_name = category_list[mod_index].Split(Path.DirectorySeparatorChar).Last();
+            var sub_dir = label_name;
+            var full_path = Path.Join(image_dir, sub_dir, base_name);
+            return full_path;
         }
 
         public void PrepareData()

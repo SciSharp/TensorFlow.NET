@@ -187,6 +187,8 @@ namespace Tensorflow
         {
             switch (type.Name)
             {
+                case "Char":
+                    return TF_DataType.TF_UINT8;
                 case "Int16":
                     return TF_DataType.TF_INT16;
                 case "Int32":

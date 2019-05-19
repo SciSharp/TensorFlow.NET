@@ -8,6 +8,7 @@ namespace Tensorflow
 {
     public static partial class tf
     {
+        public static TF_DataType bytes = TF_DataType.TF_STRING;
         public static TF_DataType int16 = TF_DataType.TF_INT16;
         public static TF_DataType int32 = TF_DataType.TF_INT32;
         public static TF_DataType float16 = TF_DataType.TF_HALF;

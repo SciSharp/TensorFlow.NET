@@ -99,6 +99,9 @@ namespace Tensorflow
                                 feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
                             case byte[] val:
+                                feed_dict_tensor[subfeed_t] = np.array(val);
+                                break;
+                            case char[] val:
                                 feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
                             case bool val:
@@ -130,7 +133,7 @@ namespace Tensorflow
 
             // We only want to really perform the run if fetches or targets are provided,
             // or if the call is a partial run that specifies feeds.
-            var results = _do_run(final_targets.Select(x => (Operation)(object)x).ToList(), final_fetches, feed_dict_tensor);
+            var results = _do_run(final_targets.Select(x => (Operation)x).ToList(), final_fetches, feed_dict_tensor);
 
             return fetch_handler.build_results(this, results);
         }
@@ -161,7 +164,7 @@ namespace Tensorflow
                         case Tensor t1:
                             return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), t1);
                         case NDArray nd:
-                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(nd));
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(nd, tensor.dtype));
                         case int intVal:
                             return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(intVal));
                         case float floatVal:
