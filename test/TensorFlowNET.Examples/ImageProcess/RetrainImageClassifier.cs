@@ -45,6 +45,8 @@ namespace TensorFlowNET.Examples.ImageProcess
             tf.train.import_meta_graph("graph/InceptionV3.meta");
             Tensor bottleneck_tensor = graph.OperationByName("module_apply_default/hub_output/feature_vector/SpatialSqueeze");
             Tensor resized_image_tensor = graph.OperationByName("Placeholder");
+            Tensor final_tensor = graph.OperationByName("final_result");
+            Tensor ground_truth_input = graph.OperationByName("input/GroundTruthInput");
 
             var sw = new Stopwatch();
 
@@ -63,9 +65,43 @@ namespace TensorFlowNET.Examples.ImageProcess
                         bottleneck_dir, jpeg_data_tensor,
                         decoded_image_tensor, resized_image_tensor,
                         bottleneck_tensor, tfhub_module);
+
+                // Create the operations we need to evaluate the accuracy of our new layer.
+                var (evaluation_step, _) = add_evaluation_step(final_tensor, ground_truth_input);
+
+                // Merge all the summaries and write them out to the summaries_dir
+                var merged = tf.summary.merge_all();
             });
 
             return false;
+        }
+
+        /// <summary>
+        /// Inserts the operations we need to evaluate the accuracy of our results.
+        /// </summary>
+        /// <param name="result_tensor"></param>
+        /// <param name="ground_truth_tensor"></param>
+        /// <returns></returns>
+        private (Tensor, Tensor) add_evaluation_step(Tensor result_tensor, Tensor ground_truth_tensor)
+        {
+            Tensor evaluation_step = null, correct_prediction = null, prediction = null;
+
+            with(tf.name_scope("accuracy"), scope =>
+            {
+                with(tf.name_scope("correct_prediction"), delegate
+                {
+                    prediction = tf.argmax(result_tensor, 1);
+                    correct_prediction = tf.equal(prediction, ground_truth_tensor);
+                });
+
+                with(tf.name_scope("accuracy"), delegate
+                {
+                    evaluation_step = tf.reduce_mean(tf.cast(correct_prediction, tf.float32));
+                });
+            });
+
+            tf.summary.scalar("accuracy", evaluation_step);
+            return (evaluation_step, prediction);
         }
 
         /// <summary>
@@ -95,12 +131,15 @@ namespace TensorFlowNET.Examples.ImageProcess
                         get_or_create_bottleneck(sess, image_lists, label_name, index, image_dir, category,
                             bottleneck_dir, jpeg_data_tensor, decoded_image_tensor,
                             resized_input_tensor, bottleneck_tensor, module_name);
+                        how_many_bottlenecks++;
+                        if (how_many_bottlenecks % 100 == 0)
+                            print($"{how_many_bottlenecks} bottleneck files created.");
                     }
                 }
             }
         }
 
-        private void get_or_create_bottleneck(Session sess, Dictionary<string, Dictionary<string, string[]>> image_lists, 
+        private float[] get_or_create_bottleneck(Session sess, Dictionary<string, Dictionary<string, string[]>> image_lists, 
             string label_name, int index, string image_dir, string category, string bottleneck_dir, 
             Tensor jpeg_data_tensor, Tensor decoded_image_tensor, Tensor resized_input_tensor,
             Tensor bottleneck_tensor, string module_name)
@@ -116,6 +155,9 @@ namespace TensorFlowNET.Examples.ImageProcess
                                        image_dir, category, sess, jpeg_data_tensor,
                                        decoded_image_tensor, resized_input_tensor,
                                        bottleneck_tensor);
+            var bottleneck_string = File.ReadAllText(bottleneck_path);
+            var bottleneck_values = Array.ConvertAll(bottleneck_string.Split(','), x => float.Parse(x));
+            return bottleneck_values;
         }
 
         private void create_bottleneck_file(string bottleneck_path, Dictionary<string, Dictionary<string, string[]>> image_lists, 
@@ -132,13 +174,16 @@ namespace TensorFlowNET.Examples.ImageProcess
             var bottleneck_values = run_bottleneck_on_image(
                 sess, image_data, jpeg_data_tensor, decoded_image_tensor,
                 resized_input_tensor, bottleneck_tensor);
+            var values = bottleneck_values.Data<float>();
+            var bottleneck_string = string.Join(",", values);
+            File.WriteAllText(bottleneck_path, bottleneck_string);
         }
 
         /// <summary>
         /// Runs inference on an image to extract the 'bottleneck' summary layer.
         /// </summary>
         /// <param name="sess">Current active TensorFlow Session.</param>
-        /// <param name="image_path">Path of raw JPEG data.</param>
+        /// <param name="image_data">Data of raw JPEG data.</param>
         /// <param name="image_data_tensor">Input data layer in the graph.</param>
         /// <param name="decoded_image_tensor">Output of initial image resizing and preprocessing.</param>
         /// <param name="resized_input_tensor">The input node of the recognition graph.</param>

@@ -47,6 +47,9 @@ namespace Tensorflow
             /// </summary>
             public static string UPDATE_OPS = "update_ops";
 
+            // Key to collect summaries.
+            public const string SUMMARIES = "summaries";
+
             // Used to store v2 summary names.
             public static string _SUMMARY_COLLECTION = "_SUMMARY_V2";
 
