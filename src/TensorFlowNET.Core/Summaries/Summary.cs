@@ -8,6 +8,13 @@ namespace Tensorflow.Summaries
 {
     public class Summary
     {
+        public FileWriter FileWriter(string logdir, Graph graph,
+            int max_queue = 10, int flush_secs = 120, string filename_suffix = null,
+            Session session = null)
+            => new FileWriter(logdir, graph, max_queue: max_queue,
+                flush_secs: flush_secs, filename_suffix: filename_suffix,
+                session: session);
+
         public Tensor merge_all(string key = ops.GraphKeys.SUMMARIES, string scope= null, string name= null)
         {
             var summary_ops = ops.get_collection(key, scope: scope);

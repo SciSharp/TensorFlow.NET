@@ -71,6 +71,7 @@ namespace TensorFlowNET.Examples.ImageProcess
 
                 // Merge all the summaries and write them out to the summaries_dir
                 var merged = tf.summary.merge_all();
+                var train_writer = tf.summary.FileWriter(summaries_dir + "/train", sess.graph);
             });
 
             return false;
