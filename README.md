@@ -128,18 +128,18 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 
 * [Hello World](test/TensorFlowNET.Examples/HelloWorld.cs)
 * [Basic Operations](test/TensorFlowNET.Examples/BasicOperations.cs)
-* [Linear Regression](test/TensorFlowNET.Examples/LinearRegression.cs)
-* [Logistic Regression](test/TensorFlowNET.Examples/LogisticRegression.cs)
-* [Nearest Neighbor](test/TensorFlowNET.Examples/NearestNeighbor.cs)
-* [Naive Bayes Classification](test/TensorFlowNET.Examples/NaiveBayesClassifier.cs)
-* [Image Recognition](test/TensorFlowNET.Examples/ImageRecognition.cs)
-* [K-means Clustering](test/TensorFlowNET.Examples/KMeansClustering.cs)
-* [NN XOR](test/TensorFlowNET.Examples/NeuralNetXor.cs)
-* [Object Detection](test/TensorFlowNET.Examples/ObjectDetection.cs)
-* [Text Classification](test/TensorFlowNET.Examples/TextClassificationWithMovieReviews.cs)
-* [CNN Text Classification](test/TensorFlowNET.Examples/CnnTextClassification.cs)
+* [Linear Regression](test/TensorFlowNET.Examples/BasicModels/LinearRegression.cs)
+* [Logistic Regression](test/TensorFlowNET.Examples/BasicModels/LogisticRegression.cs)
+* [Nearest Neighbor](test/TensorFlowNET.Examples/BasicModels/NearestNeighbor.cs)
+* [Naive Bayes Classification](test/TensorFlowNET.Examples/BasicModels/NaiveBayesClassifier.cs)
+* [Image Recognition](test/TensorFlowNET.Examples/ImageProcess)
+* [K-means Clustering](test/TensorFlowNET.Examples/BasicModels/KMeansClustering.cs)
+* [NN XOR](test/TensorFlowNET.Examples/BasicModels/NeuralNetXor.cs)
+* [Object Detection](test/TensorFlowNET.Examples/ImageProcess/ObjectDetection.cs)
+* [Text Classification](test/TensorFlowNET.Examples/TextProcess/BinaryTextClassification.cs)
+* [CNN Text Classification](test/TensorFlowNET.Examples/TextProcess/cnn_models/VdCnn.cs)
 
-* [Named Entity Recognition](test/TensorFlowNET.Examples/NamedEntityRecognition.cs)
+* [Named Entity Recognition](test/TensorFlowNET.Examples/TextProcess/NER)
 
 ### Contribute:
 

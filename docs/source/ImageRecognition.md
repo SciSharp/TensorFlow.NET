@@ -133,4 +133,4 @@ grace_hopper.jpg: 466 bulletproof vest, 0.005350832
 2/18/2019 3:56:25 AM Completed InceptionArchGoogLeNet
 ```
 
-You can find the full source code from [github](https://github.com/SciSharp/TensorFlow.NET/tree/master/test/TensorFlowNET.Examples). 
+You can find the full source code from [github](https://github.com/SciSharp/TensorFlow.NET/tree/master/test/TensorFlowNET.Examples/ImageProcess). 

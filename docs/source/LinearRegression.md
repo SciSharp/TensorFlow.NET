@@ -87,4 +87,4 @@ When we visualize the graph in TensorBoard:
 
 ![linear-regression](_static/linear-regression-tensor-board.png)
 
-The full example is [here](https://github.com/SciSharp/TensorFlow.NET/blob/master/test/TensorFlowNET.Examples/LinearRegression.cs).
+The full example is [here](https://github.com/SciSharp/TensorFlow.NET/blob/master/test/TensorFlowNET.Examples/BasicModels/LinearRegression.cs).
