@@ -92,6 +92,12 @@ namespace Tensorflow
                             case int val:
                                 feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;
+                            case long val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
+                                break;
+                            case long[] val:
+                                feed_dict_tensor[subfeed_t] = (NDArray)val;
+                                break;
                             case int[] val:
                                 feed_dict_tensor[subfeed_t] = (NDArray)val;
                                 break;

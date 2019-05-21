@@ -31,11 +31,19 @@ namespace TensorFlowNET.Examples.ImageProcess
         string summaries_dir = Path.Join(data_dir, "retrain_logs");
         string image_dir = Path.Join(data_dir, "flower_photos");
         string bottleneck_dir = Path.Join(data_dir, "bottleneck");
+        // The location where variable checkpoints will be stored.
+        string CHECKPOINT_NAME = Path.Join(data_dir, "_retrain_checkpoint");
         string tfhub_module = "https://tfhub.dev/google/imagenet/inception_v3/feature_vector/3";
         float testing_percentage = 0.1f;
         float validation_percentage = 0.1f;
         Tensor resized_image_tensor;
         Dictionary<string, Dictionary<string, string[]>> image_lists;
+        int how_many_training_steps = 200;
+        int eval_step_interval = 10;
+        int train_batch_size = 100;
+        int validation_batch_size = 100;
+        int intermediate_store_frequency = 0;
+        const int MAX_NUM_IMAGES_PER_CLASS = 134217727;
 
         public bool Run()
         {
@@ -47,6 +55,9 @@ namespace TensorFlowNET.Examples.ImageProcess
             Tensor resized_image_tensor = graph.OperationByName("Placeholder");
             Tensor final_tensor = graph.OperationByName("final_result");
             Tensor ground_truth_input = graph.OperationByName("input/GroundTruthInput");
+            Operation train_step = graph.OperationByName("train/GradientDescent");
+            Tensor bottleneck_input = graph.OperationByName("input/BottleneckInputPlaceholder");
+            Tensor cross_entropy = graph.OperationByName("cross_entropy/sparse_softmax_cross_entropy_loss/value");
 
             var sw = new Stopwatch();
 
@@ -72,9 +83,102 @@ namespace TensorFlowNET.Examples.ImageProcess
                 // Merge all the summaries and write them out to the summaries_dir
                 var merged = tf.summary.merge_all();
                 var train_writer = tf.summary.FileWriter(summaries_dir + "/train", sess.graph);
+                var validation_writer = tf.summary.FileWriter(summaries_dir + "/validation", sess.graph);
+
+                // Create a train saver that is used to restore values into an eval graph
+                // when exporting models.
+                var train_saver = tf.train.Saver();
+
+                for (int i = 0; i < how_many_training_steps; i++)
+                {
+                    var (train_bottlenecks, train_ground_truth, _) = get_random_cached_bottlenecks(
+                         sess, image_lists, train_batch_size, "training",
+                         bottleneck_dir, image_dir, jpeg_data_tensor,
+                         decoded_image_tensor, resized_image_tensor, bottleneck_tensor,
+                         tfhub_module);
+
+                    // Feed the bottlenecks and ground truth into the graph, and run a training
+                    // step. Capture training summaries for TensorBoard with the `merged` op.
+                    var results = sess.run(
+                          new ITensorOrOperation[] { merged, train_step },
+                          new FeedItem(bottleneck_input, train_bottlenecks),
+                          new FeedItem(ground_truth_input, train_ground_truth));
+                    var train_summary = results[0];
+
+                    // TODO
+                    train_writer.add_summary(train_summary, i);
+
+                    // Every so often, print out how well the graph is training.
+                    bool is_last_step = (i + 1 == how_many_training_steps);
+                    if ((i % eval_step_interval) == 0 || is_last_step)
+                    {
+                        results = sess.run(
+                            new Tensor[] { evaluation_step, cross_entropy },
+                            new FeedItem(bottleneck_input, train_bottlenecks),
+                            new FeedItem(ground_truth_input, train_ground_truth));
+                        (float train_accuracy, float cross_entropy_value) = (results[0], results[1]);
+                        print($"{DateTime.Now}: Step {i}: Train accuracy = {train_accuracy * 100}%");
+                        print($"{DateTime.Now}: Step {i}: Cross entropy = {cross_entropy_value}");
+
+                        var (validation_bottlenecks, validation_ground_truth, _) = get_random_cached_bottlenecks(
+                            sess, image_lists, validation_batch_size, "validation",
+                            bottleneck_dir, image_dir, jpeg_data_tensor,
+                            decoded_image_tensor, resized_image_tensor, bottleneck_tensor,
+                            tfhub_module);
+
+                        // Run a validation step and capture training summaries for TensorBoard
+                        // with the `merged` op.
+                        results = sess.run(new Tensor[] { merged, evaluation_step },
+                            new FeedItem(bottleneck_input, validation_bottlenecks),
+                            new FeedItem(ground_truth_input, validation_ground_truth));
+
+                        (string validation_summary, float validation_accuracy) = (results[0], results[1]);
+
+                        validation_writer.add_summary(validation_summary, i);
+                        print($"{DateTime.Now}: Step {i}: Validation accuracy = {validation_accuracy * 100}% (N={len(validation_bottlenecks)})");
+                    }
+
+                    // Store intermediate results
+                    int intermediate_frequency = intermediate_store_frequency;
+                    if (intermediate_frequency > 0 && i % intermediate_frequency == 0 && i > 0)
+                    {
+
+                    }
+                }
+
+                // After training is complete, force one last save of the train checkpoint.
+                train_saver.save(sess, CHECKPOINT_NAME);
             });
 
             return false;
+        }
+
+        private (NDArray, long[], string[]) get_random_cached_bottlenecks(Session sess, Dictionary<string, Dictionary<string, string[]>> image_lists, 
+            int how_many, string category, string bottleneck_dir, string image_dir, 
+            Tensor jpeg_data_tensor, Tensor decoded_image_tensor, Tensor resized_input_tensor,
+            Tensor bottleneck_tensor, string module_name)
+        {
+            var bottlenecks = new List<float[]>();
+            var ground_truths = new List<long>();
+            var filenames = new List<string>();
+            int class_count = image_lists.Keys.Count;
+            foreach (var unused_i in range(how_many))
+            {
+                int label_index = new Random().Next(class_count);
+                string label_name = image_lists.Keys.ToArray()[label_index];
+                int image_index = new Random().Next(MAX_NUM_IMAGES_PER_CLASS);
+                string image_name = get_image_path(image_lists, label_name, image_index,
+                                  image_dir, category);
+                var bottleneck = get_or_create_bottleneck(
+                  sess, image_lists, label_name, image_index, image_dir, category,
+                  bottleneck_dir, jpeg_data_tensor, decoded_image_tensor,
+                  resized_input_tensor, bottleneck_tensor, module_name);
+                bottlenecks.Add(bottleneck);
+                ground_truths.Add(label_index);
+                filenames.Add(image_name);
+            }
+
+            return (bottlenecks.ToArray(), ground_truths.ToArray(), filenames.ToArray());
         }
 
         /// <summary>

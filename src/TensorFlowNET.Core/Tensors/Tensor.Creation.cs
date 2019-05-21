@@ -71,6 +71,9 @@ namespace Tensorflow
                 case "Int32":
                     Marshal.Copy(nd1.Data<int>(), 0, dotHandle, nd.size);
                     break;
+                case "Int64":
+                    Marshal.Copy(nd1.Data<long>(), 0, dotHandle, nd.size);
+                    break;
                 case "Single":
                     Marshal.Copy(nd1.Data<float>(), 0, dotHandle, nd.size);
                     break;
@@ -80,24 +83,8 @@ namespace Tensorflow
                 case "Byte":
                     Marshal.Copy(nd1.Data<byte>(), 0, dotHandle, nd.size);
                     break;
-                //case "String":
-                    /*string ss = nd.Data<string>()[0];
-                    var str = Marshal.StringToHGlobalAnsi(ss);
-                    ulong dst_len = c_api.TF_StringEncodedSize((ulong)ss.Length);
-                    var dataType1 = ToTFDataType(nd.dtype);
-                    // shape
-                    var dims1 = nd.shape.Select(x => (long)x).ToArray();
-
-                    var tfHandle1 = c_api.TF_AllocateTensor(dataType1,
-                        dims1,
-                        nd.ndim,
-                        dst_len + sizeof(Int64));
-
-                    dotHandle = c_api.TF_TensorData(tfHandle1);
-                    Marshal.WriteInt64(dotHandle, 0);
-                    c_api.TF_StringEncode(str, (ulong)ss.Length, dotHandle + sizeof(Int64), dst_len, status);
-                    return tfHandle1;*/
-                    break;
+                case "String":
+                    return new Tensor(UTF8Encoding.UTF8.GetBytes(nd.Data<string>(0)));
                 default:
                     throw new NotImplementedException($"Marshal.Copy failed for {nd.dtype.Name}.");
             }
