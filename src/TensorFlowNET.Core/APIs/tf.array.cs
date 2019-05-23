@@ -49,6 +49,20 @@ namespace Tensorflow
             Tensor off_value = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             int axis = -1,
-            string name = null) => array_ops.one_hot(indices, depth, dtype: dtype, axis: axis, name: name);        
+            string name = null) => array_ops.one_hot(indices, depth, dtype: dtype, axis: axis, name: name);
+
+        /// <summary>
+        /// A placeholder op that passes through `input` when its output is not fed.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input">A `Tensor`. The default value to produce when output is not fed.</param>
+        /// <param name="shape">
+        /// A `tf.TensorShape` or list of `int`s. The (possibly partial) shape of
+        /// the tensor.
+        /// </param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>A `Tensor`. Has the same type as `input`.</returns>
+        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null)
+            => gen_array_ops.placeholder_with_default(input, shape, name: name);
     }
 }

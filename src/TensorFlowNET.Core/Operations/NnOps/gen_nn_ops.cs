@@ -177,6 +177,42 @@ namespace Tensorflow.Operations
         }
 
         /// <summary>
+        ///    Computes softmax cross entropy cost and gradients to backpropagate.
+        /// </summary>
+        /// <param name="features">
+        ///    batch_size x num_classes matrix
+        /// </param>
+        /// <param name="labels">
+        ///    batch_size vector with values in [0, num_classes).
+        ///    This is the label for the given minibatch entry.
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'SparseSoftmaxCrossEntropyWithLogits'.
+        /// </param>
+        /// <returns>
+        ///    Returns a tuple with multiple values, as follows:
+        ///    loss : Per example loss (batch_size vector).
+        ///    backprop : backpropagated gradients (batch_size x num_classes matrix).
+        ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
+        /// </returns>
+        /// <remarks>
+        ///    Unlike <c>SoftmaxCrossEntropyWithLogits</c>, this operation does not accept
+        ///    a matrix of label probabilities, but rather a single label per row
+        ///    of features.  This label is considered to have probability 1.0 for the
+        ///    given row.
+        ///    
+        ///    Inputs are the logits, not probabilities.
+        /// </remarks>
+        public static (Tensor loss, Tensor backprop) sparse_softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = "SparseSoftmaxCrossEntropyWithLogits")
+        {
+            var op = _op_def_lib._apply_op_helper("SparseSoftmaxCrossEntropyWithLogits", name: name, args: new { features, labels });
+            int _idx = 0;
+            var loss = op.outputs[_idx++];
+            var backprop = op.outputs[_idx++];
+            return (loss, backprop);
+        }
+
+        /// <summary>
         /// Computes rectified linear: `max(features, 0)`.
         /// </summary>
         /// <param name="features">A `Tensor`. Must be one of the following types: `float32`, `float64`, `int32`, `uint8`, `int16`, `int8`, `int64`, `bfloat16`, `uint16`, `half`, `uint32`, `uint64`, `qint8`.</param>

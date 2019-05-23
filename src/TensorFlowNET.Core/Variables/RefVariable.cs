@@ -19,13 +19,13 @@ namespace Tensorflow
         public bool _save_slice_info;
 
         private Operation _initializer_op;
-        public Operation initializer => _initializer_op;
-        public Operation op => _variable.op;
+        public override Operation initializer => _initializer_op;
+        public override Operation op => _variable.op;
         public Graph graph => _variable.graph;
         public TF_DataType dtype => _variable.dtype;
         public TensorShape shape => tensor_util.to_shape(_variable.shape);
 
-        public string name => _variable.name;
+        public override string name => _variable.name;
 
         public RefVariable(object initial_value = null,
             bool trainable = true,
@@ -153,7 +153,7 @@ namespace Tensorflow
                 // Manually overrides the variable's shape with the initial value's.
                 if (validate_shape)
                 {
-                    var initial_value_shape = _initial_value.getShape();
+                    var initial_value_shape = _initial_value.GetShape();
                     if (!initial_value_shape.is_fully_defined())
                         throw new ValueError($"initial_value must have a shape specified: {_initial_value}");
                 }
@@ -176,7 +176,7 @@ namespace Tensorflow
                     _snapshot = gen_array_ops.identity(_variable, name = "read");
                 }
 
-                ops.add_to_collections(collections, this);
+                ops.add_to_collections(collections, this as VariableV1);
             });
         }
 

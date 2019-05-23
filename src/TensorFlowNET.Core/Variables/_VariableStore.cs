@@ -27,8 +27,8 @@ namespace Tensorflow
             bool? reuse = null,
             bool? trainable = null,
             bool validate_shape = true,
-            VariableSynchronization synchronization = VariableSynchronization.AUTO,
-            VariableAggregation aggregation = VariableAggregation.NONE)
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation = VariableAggregation.None)
         {
             dtype = dtype.as_base_dtype();
             trainable = variable_scope._get_trainable_value(synchronization, trainable);
@@ -49,8 +49,8 @@ namespace Tensorflow
             object initializer = null,
             bool? trainable = null,
             bool validate_shape = true,
-            VariableSynchronization synchronization = VariableSynchronization.AUTO,
-            VariableAggregation aggregation = VariableAggregation.NONE)
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation = VariableAggregation.None)
         {
             bool is_scalar = !(shape is null) && shape.NDim == 0;
 
@@ -98,8 +98,8 @@ namespace Tensorflow
             bool? trainable = null,
             bool validate_shape = false,
             bool? use_resource = null,
-            VariableSynchronization synchronization = VariableSynchronization.AUTO,
-            VariableAggregation aggregation = VariableAggregation.NONE)
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation = VariableAggregation.None)
         {
             bool initializing_from_value = false;
             if (use_resource == null)
@@ -161,8 +161,8 @@ namespace Tensorflow
             bool? trainable = null,
             bool validate_shape = false,
             bool? use_resource = null,
-            VariableSynchronization synchronization = VariableSynchronization.AUTO,
-            VariableAggregation aggregation = VariableAggregation.NONE)
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation = VariableAggregation.None)
         {
             if (use_resource == null)
                 use_resource = false;

@@ -10,7 +10,7 @@ namespace Tensorflow
 
         Tensor[] bulk_restore(Tensor filename_tensor, SaveableObject[] saveables, int preferred_shard, bool restore_sequentially);
 
-        SaverDef _build_internal(RefVariable[] names_to_saveables, 
+        SaverDef _build_internal(VariableV1[] names_to_saveables, 
             bool reshape = false, 
             bool sharded = false, 
             int max_to_keep = 5,

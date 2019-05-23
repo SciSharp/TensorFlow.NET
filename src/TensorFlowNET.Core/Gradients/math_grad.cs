@@ -32,6 +32,27 @@ namespace Tensorflow.Gradients
             return new Tensor[] { r1, r2 };
         }
 
+        public static Tensor[] _DivNoNanGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+            var y = op.inputs[1];
+            var sx = array_ops.shape(x);
+            var sy = array_ops.shape(y);
+            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+            x = math_ops.conj(x);
+            y = math_ops.conj(y);
+
+            var reduce_sum1 = math_ops.reduce_sum(math_ops.div_no_nan(grad, y), rx);
+            var reduce_sum2 = math_ops.reduce_sum(grad * math_ops.div_no_nan(math_ops.div_no_nan(-x, y), y), ry);
+
+            return new Tensor[]
+            {
+                array_ops.reshape(reduce_sum1, sx),
+                array_ops.reshape(reduce_sum2, sy)
+            };
+        }
+
         /// <summary>
         /// Returns grad * exp(x).
         /// </summary>

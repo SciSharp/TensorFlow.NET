@@ -33,7 +33,7 @@ namespace TensorFlowNET.UnitTest.nn_test
             var y_np = this._ZeroFraction(x_np);
 
             var x_tf = constant_op.constant(x_np);
-            x_tf.setShape(x_shape);
+            x_tf.SetShape(x_shape);
             var y_tf = nn_impl.zero_fraction(x_tf);
             var y_tf_np = self.evaluate<NDArray>(y_tf);
 

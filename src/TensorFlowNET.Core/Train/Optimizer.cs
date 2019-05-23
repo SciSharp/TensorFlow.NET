@@ -246,6 +246,9 @@ namespace Tensorflow
                 case List<RefVariable> values:
                     var_list = values;
                     break;
+                case List<VariableV1> values:
+                    var_list = values.Select(x => x as RefVariable).ToList();
+                    break;
             }
 
             var processors = var_list.Select(v => optimizer._get_processor(v)).ToList();

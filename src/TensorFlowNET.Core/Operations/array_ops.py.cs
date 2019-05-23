@@ -11,6 +11,9 @@ namespace Tensorflow
         public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null) 
             => gen_array_ops.placeholder_with_default(input, shape, name);
 
+        public static Tensor prevent_gradient(Tensor input, string message = "", string name = null)
+            => gen_array_ops.prevent_gradient(input, message: message, name: name);
+
         public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();

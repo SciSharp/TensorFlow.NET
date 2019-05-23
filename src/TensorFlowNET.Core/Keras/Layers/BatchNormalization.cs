@@ -106,17 +106,17 @@ namespace Tensorflow.Keras.Layers
                 param_shape,
                 dtype: param_dtype,
                 initializer: moving_mean_initializer,
-                synchronization: VariableSynchronization.ON_READ,
+                synchronization: VariableSynchronization.OnRead,
                 trainable: false,
-                aggregation: VariableAggregation.MEAN);
+                aggregation: VariableAggregation.Mean);
 
             moving_variance = add_weight("moving_variance",
               shape: param_shape,
               dtype: param_dtype,
               initializer: moving_variance_initializer,
-              synchronization: VariableSynchronization.ON_READ,
+              synchronization: VariableSynchronization.OnRead,
               trainable: false,
-              aggregation: VariableAggregation.MEAN);
+              aggregation: VariableAggregation.Mean);
 
             if (renorm)
                 throw new NotImplementedException("build when renorm is true");

@@ -25,7 +25,7 @@ namespace Tensorflow
             /// <summary>
             /// Key to collect losses
             /// </summary>
-            public static string LOSSES = "losses";
+            public const string LOSSES = "losses";
 
             /// <summary>
             /// Key to collect Variable objects that are global (shared across machines).

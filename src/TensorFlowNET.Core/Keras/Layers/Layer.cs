@@ -136,7 +136,7 @@ namespace Tensorflow.Keras.Layers
         protected void _maybe_build(Tensor[] inputs)
         {
             var input_list = inputs;
-            build(input_list[0].getShape());
+            build(input_list[0].GetShape());
         }
 
         protected virtual void build(TensorShape input_shape)

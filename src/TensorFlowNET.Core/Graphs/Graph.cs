@@ -70,6 +70,8 @@ namespace Tensorflow
 
         public string _name_stack = "";
         public string _graph_key;
+        public string _last_loss_reduction;
+
         public Status Status { get; }
 
         /// <summary>
@@ -443,7 +445,7 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            c_api.TF_DeleteGraph(_handle);
+            // c_api.TF_DeleteGraph(_handle);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Operations;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
@@ -59,6 +60,47 @@ namespace Tensorflow
             throw new NotImplementedException("_softmax helper");
         }
 
+        /// <summary>
+        /// Computes sparse softmax cross entropy between `logits` and `labels`.
+        /// </summary>
+        /// <param name="labels"></param>
+        /// <param name="logits"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor sparse_softmax_cross_entropy_with_logits(Tensor labels = null,
+            Tensor logits = null, string name = null)
+        {
+            // Reshape logits and labels to rank 2.
+            return with(ops.name_scope(name, default_name: "SparseSoftmaxCrossEntropyWithLogits", (labels, logits)), delegate
+            {
+                labels = ops.convert_to_tensor(labels);
+                logits = ops.convert_to_tensor(logits);
+                var precise_logits = logits.dtype == TF_DataType.TF_HALF ? math_ops.cast(logits, dtypes.float32) : logits;
+
+                // Store label shape for result later.
+                var labels_static_shape = labels.GetShape();
+                var labels_shape = array_ops.shape(labels);
+                /*bool static_shapes_fully_defined = (
+                    labels_static_shape.is_fully_defined() &&
+                        logits.get_shape()[:-1].is_fully_defined());*/
+
+                // Check if no reshapes are required.
+                if(logits.GetShape().NDim == 2)
+                {
+                    var (cost, _) = gen_nn_ops.sparse_softmax_cross_entropy_with_logits(
+                        precise_logits, labels, name: name);
+                    if (logits.dtype == dtypes.float16)
+                        return math_ops.cast(cost, dtypes.float32);
+                    else
+                        return cost;
+                }
+
+                // Perform a check of the dynamic shapes if the static shapes are not fully
+                // defined.
+                throw new NotImplementedException("sparse_softmax_cross_entropy_with_logits");
+            });
+        }
+
         public static Tensor softmax_cross_entropy_with_logits_v2_helper(Tensor labels,
             Tensor logits,
             int axis = -1,
@@ -68,7 +110,7 @@ namespace Tensorflow
             {
                 var precise_logits = logits;
                 var input_rank = array_ops.rank(precise_logits);
-                var shape = logits.getShape();
+                var shape = logits.GetShape();
 
                 if (axis != -1)
                     throw new NotImplementedException("softmax_cross_entropy_with_logits_v2_helper axis != -1");

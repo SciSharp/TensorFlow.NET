@@ -74,6 +74,23 @@ namespace Tensorflow.Gradients
             };
         }
 
+        public static Tensor[] _SparseSoftmaxCrossEntropyWithLogitsGrad(Operation op, Tensor[] grads)
+        {
+            var sparse_softmax_grad_without_gradient = array_ops.prevent_gradient(
+              op.outputs[1],
+              message: "Currently there is no way to take the second " +
+              "derivative of sparse_softmax_cross_entropy_with_logits due to the fused " +
+              "implementation's interaction with tf.gradients()");
+
+            var grad_0 = grads[0];
+
+            return new Tensor[]
+            {
+                _BroadcastMul(grad_0, sparse_softmax_grad_without_gradient),
+                null
+            };
+        }
+
         private static bool IsZero(Tensor g)
         {
             if (new string[] { "ZerosLike", "Zeros" }.Contains(g.op.type))

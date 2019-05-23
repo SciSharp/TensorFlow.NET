@@ -25,26 +25,92 @@ namespace Tensorflow {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Cih0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3ZhcmlhYmxlLnByb3RvEgp0",
-            "ZW5zb3JmbG93ItQBCgtWYXJpYWJsZURlZhIVCg12YXJpYWJsZV9uYW1lGAEg",
+            "ZW5zb3JmbG93IsgCCgtWYXJpYWJsZURlZhIVCg12YXJpYWJsZV9uYW1lGAEg",
             "ASgJEhoKEmluaXRpYWxfdmFsdWVfbmFtZRgGIAEoCRIYChBpbml0aWFsaXpl",
             "cl9uYW1lGAIgASgJEhUKDXNuYXBzaG90X25hbWUYAyABKAkSOQoTc2F2ZV9z",
             "bGljZV9pbmZvX2RlZhgEIAEoCzIcLnRlbnNvcmZsb3cuU2F2ZVNsaWNlSW5m",
-            "b0RlZhITCgtpc19yZXNvdXJjZRgFIAEoCBIRCgl0cmFpbmFibGUYByABKAgi",
-            "YAoQU2F2ZVNsaWNlSW5mb0RlZhIRCglmdWxsX25hbWUYASABKAkSEgoKZnVs",
-            "bF9zaGFwZRgCIAMoAxISCgp2YXJfb2Zmc2V0GAMgAygDEhEKCXZhcl9zaGFw",
-            "ZRgEIAMoA0JuChhvcmcudGVuc29yZmxvdy5mcmFtZXdvcmtCDlZhcmlhYmxl",
-            "UHJvdG9zUAFaPWdpdGh1Yi5jb20vdGVuc29yZmxvdy90ZW5zb3JmbG93L3Rl",
-            "bnNvcmZsb3cvZ28vY29yZS9mcmFtZXdvcmv4AQFiBnByb3RvMw=="));
+            "b0RlZhITCgtpc19yZXNvdXJjZRgFIAEoCBIRCgl0cmFpbmFibGUYByABKAgS",
+            "PAoPc3luY2hyb25pemF0aW9uGAggASgOMiMudGVuc29yZmxvdy5WYXJpYWJs",
+            "ZVN5bmNocm9uaXphdGlvbhI0CgthZ2dyZWdhdGlvbhgJIAEoDjIfLnRlbnNv",
+            "cmZsb3cuVmFyaWFibGVBZ2dyZWdhdGlvbiJgChBTYXZlU2xpY2VJbmZvRGVm",
+            "EhEKCWZ1bGxfbmFtZRgBIAEoCRISCgpmdWxsX3NoYXBlGAIgAygDEhIKCnZh",
+            "cl9vZmZzZXQYAyADKAMSEQoJdmFyX3NoYXBlGAQgAygDKqwBChdWYXJpYWJs",
+            "ZVN5bmNocm9uaXphdGlvbhIhCh1WQVJJQUJMRV9TWU5DSFJPTklaQVRJT05f",
+            "QVVUTxAAEiEKHVZBUklBQkxFX1NZTkNIUk9OSVpBVElPTl9OT05FEAESJQoh",
+            "VkFSSUFCTEVfU1lOQ0hST05JWkFUSU9OX09OX1dSSVRFEAISJAogVkFSSUFC",
+            "TEVfU1lOQ0hST05JWkFUSU9OX09OX1JFQUQQAyqeAQoTVmFyaWFibGVBZ2dy",
+            "ZWdhdGlvbhIdChlWQVJJQUJMRV9BR0dSRUdBVElPTl9OT05FEAASHAoYVkFS",
+            "SUFCTEVfQUdHUkVHQVRJT05fU1VNEAESHQoZVkFSSUFCTEVfQUdHUkVHQVRJ",
+            "T05fTUVBThACEisKJ1ZBUklBQkxFX0FHR1JFR0FUSU9OX09OTFlfRklSU1Rf",
+            "UkVQTElDQRADQi8KGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0IOVmFyaWFi",
+            "bGVQcm90b3NQAfgBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.VariableDef), global::Tensorflow.VariableDef.Parser, new[]{ "VariableName", "InitialValueName", "InitializerName", "SnapshotName", "SaveSliceInfoDef", "IsResource", "Trainable" }, null, null, null),
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.VariableSynchronization), typeof(global::Tensorflow.VariableAggregation), }, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.VariableDef), global::Tensorflow.VariableDef.Parser, new[]{ "VariableName", "InitialValueName", "InitializerName", "SnapshotName", "SaveSliceInfoDef", "IsResource", "Trainable", "Synchronization", "Aggregation" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SaveSliceInfoDef), global::Tensorflow.SaveSliceInfoDef.Parser, new[]{ "FullName", "FullShape", "VarOffset", "VarShape" }, null, null, null)
           }));
     }
     #endregion
 
   }
+  #region Enums
+  /// <summary>
+  /// Indicates when a distributed variable will be synced.
+  /// </summary>
+  public enum VariableSynchronization {
+    /// <summary>
+    /// `AUTO`: Indicates that the synchronization will be determined by the
+    /// current `DistributionStrategy` (eg. With `MirroredStrategy` this would be
+    /// `ON_WRITE`).
+    /// </summary>
+    [pbr::OriginalName("VARIABLE_SYNCHRONIZATION_AUTO")] Auto = 0,
+    /// <summary>
+    /// `NONE`: Indicates that there will only be one copy of the variable, so
+    /// there is no need to sync.
+    /// </summary>
+    [pbr::OriginalName("VARIABLE_SYNCHRONIZATION_NONE")] None = 1,
+    /// <summary>
+    /// `ON_WRITE`: Indicates that the variable will be updated across devices
+    /// every time it is written.
+    /// </summary>
+    [pbr::OriginalName("VARIABLE_SYNCHRONIZATION_ON_WRITE")] OnWrite = 2,
+    /// <summary>
+    /// `ON_READ`: Indicates that the variable will be aggregated across devices
+    /// when it is read (eg. when checkpointing or when evaluating an op that uses
+    /// the variable).
+    /// </summary>
+    [pbr::OriginalName("VARIABLE_SYNCHRONIZATION_ON_READ")] OnRead = 3,
+  }
+
+  /// <summary>
+  /// Indicates how a distributed variable will be aggregated.
+  /// </summary>
+  public enum VariableAggregation {
+    /// <summary>
+    /// `NONE`: This is the default, giving an error if you use a
+    /// variable-update operation with multiple replicas.
+    /// </summary>
+    [pbr::OriginalName("VARIABLE_AGGREGATION_NONE")] None = 0,
+    /// <summary>
+    /// `SUM`: Add the updates across replicas.
+    /// </summary>
+    [pbr::OriginalName("VARIABLE_AGGREGATION_SUM")] Sum = 1,
+    /// <summary>
+    /// `MEAN`: Take the arithmetic mean ("average") of the updates across
+    /// replicas.
+    /// </summary>
+    [pbr::OriginalName("VARIABLE_AGGREGATION_MEAN")] Mean = 2,
+    /// <summary>
+    /// `ONLY_FIRST_REPLICA`: This is for when every replica is performing the same
+    /// update, but we only want to perform the update once. Used, e.g., for the
+    /// global step counter.
+    /// </summary>
+    [pbr::OriginalName("VARIABLE_AGGREGATION_ONLY_FIRST_REPLICA")] OnlyFirstReplica = 3,
+  }
+
+  #endregion
+
   #region Messages
   /// <summary>
   /// Protocol buffer representing a Variable.
@@ -81,6 +147,8 @@ namespace Tensorflow {
       saveSliceInfoDef_ = other.saveSliceInfoDef_ != null ? other.saveSliceInfoDef_.Clone() : null;
       isResource_ = other.isResource_;
       trainable_ = other.trainable_;
+      synchronization_ = other.synchronization_;
+      aggregation_ = other.aggregation_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -187,6 +255,34 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "synchronization" field.</summary>
+    public const int SynchronizationFieldNumber = 8;
+    private global::Tensorflow.VariableSynchronization synchronization_ = 0;
+    /// <summary>
+    /// Indicates when a distributed variable will be synced.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.VariableSynchronization Synchronization {
+      get { return synchronization_; }
+      set {
+        synchronization_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "aggregation" field.</summary>
+    public const int AggregationFieldNumber = 9;
+    private global::Tensorflow.VariableAggregation aggregation_ = 0;
+    /// <summary>
+    /// Indicates how a distributed variable will be aggregated.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.VariableAggregation Aggregation {
+      get { return aggregation_; }
+      set {
+        aggregation_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as VariableDef);
@@ -207,6 +303,8 @@ namespace Tensorflow {
       if (!object.Equals(SaveSliceInfoDef, other.SaveSliceInfoDef)) return false;
       if (IsResource != other.IsResource) return false;
       if (Trainable != other.Trainable) return false;
+      if (Synchronization != other.Synchronization) return false;
+      if (Aggregation != other.Aggregation) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -220,6 +318,8 @@ namespace Tensorflow {
       if (saveSliceInfoDef_ != null) hash ^= SaveSliceInfoDef.GetHashCode();
       if (IsResource != false) hash ^= IsResource.GetHashCode();
       if (Trainable != false) hash ^= Trainable.GetHashCode();
+      if (Synchronization != 0) hash ^= Synchronization.GetHashCode();
+      if (Aggregation != 0) hash ^= Aggregation.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -261,6 +361,14 @@ namespace Tensorflow {
         output.WriteRawTag(56);
         output.WriteBool(Trainable);
       }
+      if (Synchronization != 0) {
+        output.WriteRawTag(64);
+        output.WriteEnum((int) Synchronization);
+      }
+      if (Aggregation != 0) {
+        output.WriteRawTag(72);
+        output.WriteEnum((int) Aggregation);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -289,6 +397,12 @@ namespace Tensorflow {
       }
       if (Trainable != false) {
         size += 1 + 1;
+      }
+      if (Synchronization != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Synchronization);
+      }
+      if (Aggregation != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Aggregation);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -324,6 +438,12 @@ namespace Tensorflow {
       }
       if (other.Trainable != false) {
         Trainable = other.Trainable;
+      }
+      if (other.Synchronization != 0) {
+        Synchronization = other.Synchronization;
+      }
+      if (other.Aggregation != 0) {
+        Aggregation = other.Aggregation;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -365,6 +485,14 @@ namespace Tensorflow {
           }
           case 56: {
             Trainable = input.ReadBool();
+            break;
+          }
+          case 64: {
+            synchronization_ = (global::Tensorflow.VariableSynchronization) input.ReadEnum();
+            break;
+          }
+          case 72: {
+            aggregation_ = (global::Tensorflow.VariableAggregation) input.ReadEnum();
             break;
           }
         }

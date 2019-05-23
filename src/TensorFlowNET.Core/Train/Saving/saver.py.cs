@@ -37,7 +37,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Saver _create_saver_from_imported_meta_graph(MetaGraphDef meta_graph_def, 
             string import_scope, 
-            Dictionary<string, RefVariable> imported_vars)
+            Dictionary<string, VariableV1> imported_vars)
         {
             if(meta_graph_def.SaverDef != null)
             {

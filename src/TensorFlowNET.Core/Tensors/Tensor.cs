@@ -84,12 +84,12 @@ namespace Tensorflow
             return shape.Select(x => (int)x).ToArray();
         }
 
-        public TensorShape getShape()
+        public TensorShape GetShape()
         {
             return tensor_util.to_shape(shape);
         }
 
-        public void setShape(Shape shape)
+        public void SetShape(Shape shape)
         {
             this.shape = shape.Dimensions;
         }

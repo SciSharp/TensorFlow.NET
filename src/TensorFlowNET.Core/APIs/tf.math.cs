@@ -277,9 +277,21 @@ namespace Tensorflow
         }
 
         public static Tensor reduce_sum(Tensor input, int axis, int? reduction_indices = null)
-        {
-            return math_ops.reduce_sum(input, axis);
-        }
+            => math_ops.reduce_sum(input, axis);
+
+        /// <summary>
+        /// Computes the maximum of elements across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input_tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_max(input_tensor, axis, keepdims, name);
+
+        public static Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_min(input_tensor, axis, keepdims, name);
 
         public static Tensor sigmoid<T>(T x, string name = null)
             => math_ops.sigmoid(x, name: name);

@@ -37,7 +37,7 @@ namespace Tensorflow.Framework
 
         public static bool has_fully_defined_shape(Tensor tensor)
         {
-            return tensor.getShape().is_fully_defined();
+            return tensor.GetShape().is_fully_defined();
         }
     }
 }

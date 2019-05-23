@@ -24,6 +24,8 @@ namespace Tensorflow
                         return nn_grad._BiasAddGrad(oper, out_grads);
                     case "ConcatV2":
                         return array_grad._ConcatGradV2(oper, out_grads);
+                    case "DivNoNan":
+                        return math_grad._DivNoNanGrad(oper, out_grads);
                     case "Exp":
                         return math_grad._ExpGrad(oper, out_grads);
                     case "Identity":
@@ -62,6 +64,8 @@ namespace Tensorflow
                         return nn_grad._SoftmaxGrad(oper, out_grads);
                     case "SoftmaxCrossEntropyWithLogits":
                         return nn_grad._SoftmaxCrossEntropyWithLogitsGrad(oper, out_grads);
+                    case "SparseSoftmaxCrossEntropyWithLogits":
+                        return nn_grad._SparseSoftmaxCrossEntropyWithLogitsGrad(oper, out_grads);
                     case "Transpose":
                         return array_grad._TransposeGrad(oper, out_grads);
                     case "TopK":

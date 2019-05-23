@@ -17,8 +17,8 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             object initializer = null, // IInitializer or Tensor
             bool? trainable = null,
-            VariableSynchronization synchronization = VariableSynchronization.AUTO,
-            VariableAggregation aggregation = VariableAggregation.NONE)
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation = VariableAggregation.None)
         {
             var scope = Tensorflow.variable_scope.get_variable_scope();
             var store = Tensorflow.variable_scope._get_default_variable_store();

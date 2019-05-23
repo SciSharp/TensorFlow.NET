@@ -36,6 +36,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         string tfhub_module = "https://tfhub.dev/google/imagenet/inception_v3/feature_vector/3";
         float testing_percentage = 0.1f;
         float validation_percentage = 0.1f;
+        float learning_rate = 0.01f;
         Tensor resized_image_tensor;
         Dictionary<string, Dictionary<string, string[]>> image_lists;
         int how_many_training_steps = 200;
@@ -43,21 +44,38 @@ namespace TensorFlowNET.Examples.ImageProcess
         int train_batch_size = 100;
         int validation_batch_size = 100;
         int intermediate_store_frequency = 0;
+        int class_count = 0;
         const int MAX_NUM_IMAGES_PER_CLASS = 134217727;
+        Operation train_step;
+        Tensor final_tensor;
+        Tensor bottleneck_input;
+        Tensor cross_entropy;
+        Tensor ground_truth_input;
 
         public bool Run()
         {
             PrepareData();
 
-            var graph = tf.Graph().as_default();
-            tf.train.import_meta_graph("graph/InceptionV3.meta");
-            Tensor bottleneck_tensor = graph.OperationByName("module_apply_default/hub_output/feature_vector/SpatialSqueeze");
+            // Set up the pre-trained graph.
+            var (graph, bottleneck_tensor, resized_image_tensor, wants_quantization) =
+                create_module_graph();
+
+            // Add the new layer that we'll be training.
+            with(graph.as_default(), delegate
+            {
+                (train_step, cross_entropy, bottleneck_input,
+                 ground_truth_input, final_tensor) = add_final_retrain_ops(
+                     class_count, "final_result", bottleneck_tensor,
+                     wants_quantization, is_training: true);
+            });
+
+            /*Tensor bottleneck_tensor = graph.OperationByName("module_apply_default/hub_output/feature_vector/SpatialSqueeze");
             Tensor resized_image_tensor = graph.OperationByName("Placeholder");
             Tensor final_tensor = graph.OperationByName("final_result");
             Tensor ground_truth_input = graph.OperationByName("input/GroundTruthInput");
-            Operation train_step = graph.OperationByName("train/GradientDescent");
+            train_step = graph.OperationByName("train/GradientDescent");
             Tensor bottleneck_input = graph.OperationByName("input/BottleneckInputPlaceholder");
-            Tensor cross_entropy = graph.OperationByName("cross_entropy/sparse_softmax_cross_entropy_loss/value");
+            Tensor cross_entropy = graph.OperationByName("cross_entropy/sparse_softmax_cross_entropy_loss/value");*/
 
             var sw = new Stopwatch();
 
@@ -87,7 +105,7 @@ namespace TensorFlowNET.Examples.ImageProcess
 
                 // Create a train saver that is used to restore values into an eval graph
                 // when exporting models.
-                var train_saver = tf.train.Saver();
+                // var train_saver = tf.train.Saver();
 
                 for (int i = 0; i < how_many_training_steps; i++)
                 {
@@ -147,10 +165,178 @@ namespace TensorFlowNET.Examples.ImageProcess
                 }
 
                 // After training is complete, force one last save of the train checkpoint.
-                train_saver.save(sess, CHECKPOINT_NAME);
+                // train_saver.save(sess, CHECKPOINT_NAME);
+
+                // We've completed all our training, so run a final test evaluation on
+                // some new images we haven't used before.
+                run_final_eval(sess, null, class_count, image_lists,
+                               jpeg_data_tensor, decoded_image_tensor, resized_image_tensor,
+                               bottleneck_tensor);
             });
 
             return false;
+        }
+
+        /// <summary>
+        /// Runs a final evaluation on an eval graph using the test data set.
+        /// </summary>
+        /// <param name="train_session"></param>
+        /// <param name="module_spec"></param>
+        /// <param name="class_count"></param>
+        /// <param name="image_lists"></param>
+        /// <param name="jpeg_data_tensor"></param>
+        /// <param name="decoded_image_tensor"></param>
+        /// <param name="resized_image_tensor"></param>
+        /// <param name="bottleneck_tensor"></param>
+        private void run_final_eval(Session train_session, object module_spec, int class_count, 
+            Dictionary<string, Dictionary<string, string[]>> image_lists,
+            Tensor jpeg_data_tensor, Tensor decoded_image_tensor,
+            Tensor resized_image_tensor, Tensor bottleneck_tensor)
+        {
+            /*var (eval_session, _, bottleneck_input, ground_truth_input, evaluation_step,
+                prediction) = build_eval_session(module_spec, class_count);*/
+        }
+
+        private void build_eval_session(int class_count)
+        {
+            // If quantized, we need to create the correct eval graph for exporting.
+            var (eval_graph, bottleneck_tensor, resized_input_tensor, wants_quantization) = create_module_graph();
+            var eval_sess = tf.Session(graph: eval_graph);
+
+            with(eval_graph.as_default(), graph =>
+            {
+
+
+            });
+        }
+
+        /// <summary>
+        /// Adds a new softmax and fully-connected layer for training and eval.
+        /// 
+        /// We need to retrain the top layer to identify our new classes, so this function
+        /// adds the right operations to the graph, along with some variables to hold the
+        /// weights, and then sets up all the gradients for the backward pass.
+        /// 
+        /// The set up for the softmax and fully-connected layers is based on:
+        /// https://www.tensorflow.org/tutorials/mnist/beginners/index.html
+        /// </summary>
+        /// <param name="class_count"></param>
+        /// <param name="final_tensor_name"></param>
+        /// <param name="bottleneck_tensor"></param>
+        /// <param name="quantize_layer"></param>
+        /// <param name="is_training"></param>
+        /// <returns></returns>
+        private (Operation, Tensor, Tensor, Tensor, Tensor) add_final_retrain_ops(int class_count, string final_tensor_name, 
+            Tensor bottleneck_tensor, bool quantize_layer, bool is_training)
+        {
+            var (batch_size, bottleneck_tensor_size) = (bottleneck_tensor.GetShape().Dimensions[0], bottleneck_tensor.GetShape().Dimensions[1]);
+            with(tf.name_scope("input"), scope =>
+            {
+                bottleneck_input = tf.placeholder_with_default(
+                    bottleneck_tensor,
+                    shape: bottleneck_tensor.GetShape().Dimensions,
+                    name: "BottleneckInputPlaceholder");
+
+                ground_truth_input = tf.placeholder(tf.int64, new TensorShape(batch_size), name: "GroundTruthInput");
+            });
+
+            // Organizing the following ops so they are easier to see in TensorBoard.
+            string layer_name = "final_retrain_ops";
+            Tensor logits = null;
+            with(tf.name_scope(layer_name), scope =>
+            {
+                RefVariable layer_weights = null;
+                with(tf.name_scope("weights"), delegate
+                {
+                    var initial_value = tf.truncated_normal(new int[] { bottleneck_tensor_size, class_count }, stddev: 0.001f);
+                    layer_weights = tf.Variable(initial_value, name: "final_weights");
+                    variable_summaries(layer_weights);
+                });
+
+                RefVariable layer_biases = null;
+                with(tf.name_scope("biases"), delegate
+                {
+                    layer_biases = tf.Variable(tf.zeros((class_count)), name: "final_biases");
+                    variable_summaries(layer_biases);
+                });
+
+                with(tf.name_scope("Wx_plus_b"), delegate
+                {
+                    logits = tf.matmul(bottleneck_input, layer_weights) + layer_biases;
+                    tf.summary.histogram("pre_activations", logits);
+                });
+            });
+
+            final_tensor = tf.nn.softmax(logits, name: final_tensor_name);
+
+            // The tf.contrib.quantize functions rewrite the graph in place for
+            // quantization. The imported model graph has already been rewritten, so upon
+            // calling these rewrites, only the newly added final layer will be
+            // transformed.
+            if (quantize_layer)
+            {
+                throw new NotImplementedException("quantize_layer");
+                /*if (is_training)
+                    tf.contrib.quantize.create_training_graph();
+                else
+                    tf.contrib.quantize.create_eval_graph();*/
+            }
+
+            tf.summary.histogram("activations", final_tensor);
+
+            // If this is an eval graph, we don't need to add loss ops or an optimizer.
+            if (!is_training)
+                return (null, null, bottleneck_input, ground_truth_input, final_tensor);
+
+            Tensor cross_entropy_mean = null;
+            with(tf.name_scope("cross_entropy"), delegate
+            {
+                cross_entropy_mean = tf.losses.sparse_softmax_cross_entropy(
+                    labels: ground_truth_input, logits: logits);
+            });
+
+            tf.summary.scalar("cross_entropy", cross_entropy_mean);
+
+            with(tf.name_scope("train"), delegate
+            {
+                var optimizer = tf.train.GradientDescentOptimizer(learning_rate);
+                train_step = optimizer.minimize(cross_entropy_mean);
+            });
+
+            return (train_step, cross_entropy_mean, bottleneck_input, ground_truth_input,
+                final_tensor);
+        }
+
+        private void variable_summaries(RefVariable var)
+        {
+            with(tf.name_scope("summaries"), delegate
+            {
+                var mean = tf.reduce_mean(var);
+                tf.summary.scalar("mean", mean);
+                Tensor stddev = null;
+                with(tf.name_scope("stddev"), delegate {
+                    stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)));
+                });
+                tf.summary.scalar("stddev", stddev);
+                tf.summary.scalar("max", tf.reduce_max(var));
+                tf.summary.scalar("min", tf.reduce_min(var));
+                tf.summary.histogram("histogram", var);
+            });
+        }
+
+        private (Graph, Tensor, Tensor, bool) create_module_graph()
+        {
+            var (height, width) = (299, 299);
+            
+            return with(tf.Graph().as_default(), graph =>
+            {
+                tf.train.import_meta_graph("graph/InceptionV3.meta");
+                Tensor resized_input_tensor = graph.OperationByName("Placeholder"); //tf.placeholder(tf.float32, new TensorShape(-1, height, width, 3));
+                // var m = hub.Module(module_spec);
+                Tensor bottleneck_tensor = graph.OperationByName("module_apply_default/hub_output/feature_vector/SpatialSqueeze");// m(resized_input_tensor);
+                var wants_quantization = false;
+                return (graph, bottleneck_tensor, resized_input_tensor, wants_quantization);
+            });
         }
 
         private (NDArray, long[], string[]) get_random_cached_bottlenecks(Session sess, Dictionary<string, Dictionary<string, string[]>> image_lists, 
@@ -161,7 +347,7 @@ namespace TensorFlowNET.Examples.ImageProcess
             var bottlenecks = new List<float[]>();
             var ground_truths = new List<long>();
             var filenames = new List<string>();
-            int class_count = image_lists.Keys.Count;
+            class_count = image_lists.Keys.Count;
             foreach (var unused_i in range(how_many))
             {
                 int label_index = new Random().Next(class_count);
@@ -353,7 +539,7 @@ namespace TensorFlowNET.Examples.ImageProcess
 
             // Look at the folder structure, and create lists of all the images.
             image_lists = create_image_lists();
-            var class_count = len(image_lists);
+            class_count = len(image_lists);
             if (class_count == 0)
                 print($"No valid folders of images found at {image_dir}");
             if (class_count == 1)

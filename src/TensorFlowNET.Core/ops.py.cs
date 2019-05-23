@@ -471,6 +471,8 @@ namespace Tensorflow
                     return array_ops._autopacking_helper(tensors, dtype, name == null ? "packed" : name);
                 case RefVariable varVal:
                     return varVal._TensorConversionFunction(as_ref: as_ref);
+                case ResourceVariable varVal:
+                    return null;
                 case object[] objects:
                     return array_ops._autopacking_conversion_function(objects, dtype: dtype, name: name);
                 default:

@@ -36,8 +36,8 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             object initializer = null, // IInitializer or Tensor
             bool? trainable = null,
-            VariableSynchronization synchronization = VariableSynchronization.AUTO,
-            VariableAggregation aggregation= VariableAggregation.NONE)
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation= VariableAggregation.None)
         {
             string full_name = !string.IsNullOrEmpty(this._name) ? this._name + "/" + name : name;
             return with(ops.name_scope(null), scope =>

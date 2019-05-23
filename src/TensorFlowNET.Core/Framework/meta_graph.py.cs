@@ -19,7 +19,7 @@ namespace Tensorflow
             return meta_graph_def;
         }
 
-        public static (Dictionary<string, RefVariable>, ITensorOrOperation[]) import_scoped_meta_graph_with_return_elements(MetaGraphDef meta_graph_or_file,
+        public static (Dictionary<string, VariableV1>, ITensorOrOperation[]) import_scoped_meta_graph_with_return_elements(MetaGraphDef meta_graph_or_file,
             bool clear_devices = false,
             string import_scope = "",
             Dictionary<string, Tensor> input_map = null,
@@ -61,7 +61,7 @@ namespace Tensorflow
                 return_elements: return_elements);
 
             // Restores all the other collections.
-            var variable_objects = new Dictionary<ByteString, RefVariable>();
+            var variable_objects = new Dictionary<ByteString, VariableV1>();
             foreach(var col in meta_graph_def.CollectionDef.OrderBy(x => x.Key))
             {
                 // Don't add unbound_inputs to the new graph.
@@ -83,11 +83,14 @@ namespace Tensorflow
                         {
                             foreach (var value in col.Value.BytesList.Value)
                             {
-                                RefVariable variable = null;
+                                VariableV1 variable = null;
                                 if (!variable_objects.ContainsKey(value))
                                 {
                                     var proto = VariableDef.Parser.ParseFrom(value);
-                                    variable = new RefVariable(variable_def: proto, import_scope: scope_to_prepend_to_names);
+                                    if (proto.IsResource)
+                                        variable = new ResourceVariable(variable_def: proto, import_scope: scope_to_prepend_to_names);
+                                    else
+                                        variable = new RefVariable(variable_def: proto, import_scope: scope_to_prepend_to_names);
                                     variable_objects[value] = variable;
                                 }
                                 variable = variable_objects[value];
@@ -126,9 +129,9 @@ namespace Tensorflow
                 }
             }
 
-            var variables = graph.get_collection<RefVariable>(ops.GraphKeys.GLOBAL_VARIABLES,
+            var variables = graph.get_collection<VariableV1>(ops.GraphKeys.GLOBAL_VARIABLES,
                                      scope: scope_to_prepend_to_names);
-            var var_list = new Dictionary<string, RefVariable>();
+            var var_list = new Dictionary<string, VariableV1>();
             variables.ForEach(v => var_list[ops.strip_name_scope(v.name, scope_to_prepend_to_names)] = v);
 
             return (var_list, imported_return_elements);

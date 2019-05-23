@@ -140,6 +140,7 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 * [CNN Text Classification](test/TensorFlowNET.Examples/TextProcess/cnn_models/VdCnn.cs)
 
 * [Named Entity Recognition](test/TensorFlowNET.Examples/TextProcess/NER)
+* [Transfer Learning for Image Classification in InceptionV3](test/TensorFlowNET.Examples/ImageProcess/RetrainImageClassifier.cs)
 
 ### Contribute:
 

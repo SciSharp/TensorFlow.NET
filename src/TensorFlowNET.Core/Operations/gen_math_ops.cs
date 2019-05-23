@@ -37,7 +37,31 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type= TF_DataType.TF_INT64, string name= null)
             =>_op_def_lib._apply_op_helper("ArgMin", name, args: new { input, dimension, output_type }).outputs[0];
-        
+
+
+        /// <summary>
+        ///    Returns 0 if the denominator is zero.
+        /// </summary>
+        /// <param name="x">
+        /// </param>
+        /// <param name="y">
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'DivNoNan'.
+        /// </param>
+        /// <returns>
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    
+        ///    *NOTE*: <c>DivNoNan</c> supports broadcasting. More about broadcasting
+        ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+        /// </remarks>
+        public static Tensor div_no_nan(Tensor x, Tensor y, string name = null)
+        {
+            var op = _op_def_lib._apply_op_helper("DivNoNan", name: name, args: new { x, y });
+            return op.output;
+        }
 
         /// <summary>
         /// Computes the mean of elements across dimensions of a tensor.

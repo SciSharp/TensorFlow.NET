@@ -136,8 +136,8 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool validate_shape = false,
             bool ? use_resource = null, 
-            VariableSynchronization synchronization = VariableSynchronization.AUTO,
-            VariableAggregation aggregation = VariableAggregation.NONE)
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation = VariableAggregation.None)
         {
             trainable = _get_trainable_value(synchronization, trainable);
             if (!use_resource.HasValue)
@@ -208,7 +208,7 @@ namespace Tensorflow
 
         public static bool _get_trainable_value(VariableSynchronization synchronization, bool? trainable = true)
         {
-            if (synchronization == VariableSynchronization.ON_READ)
+            if (synchronization == VariableSynchronization.OnRead)
             {
                 if (trainable.Value)
                     throw new ValueError("Synchronization value can be set to " +

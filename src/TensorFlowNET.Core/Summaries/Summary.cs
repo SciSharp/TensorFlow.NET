@@ -15,6 +15,14 @@ namespace Tensorflow.Summaries
                 flush_secs: flush_secs, filename_suffix: filename_suffix,
                 session: session);
 
+        public Tensor histogram(string name, Tensor tensor, string[] collections = null, string family = null)
+        {
+            var (tag, scope) = summary_scope(name, family: family, values: new Tensor[] { tensor }, default_name: "HistogramSummary");
+            var val = gen_logging_ops.histogram_summary(tag: tag, values: tensor, name: scope);
+            collect(val, collections?.ToList(), new List<string> { ops.GraphKeys.SUMMARIES });
+            return val;
+        }
+
         public Tensor merge_all(string key = ops.GraphKeys.SUMMARIES, string scope= null, string name= null)
         {
             var summary_ops = ops.get_collection(key, scope: scope);

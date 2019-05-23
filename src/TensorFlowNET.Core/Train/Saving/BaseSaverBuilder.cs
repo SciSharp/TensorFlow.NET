@@ -58,7 +58,7 @@ namespace Tensorflow
             return gen_io_ops.restore_v2(filename_tensor, names.ToArray(), slices.ToArray(), dtypes.ToArray());
         }
 
-        public virtual SaverDef _build_internal(RefVariable[] names_to_saveables,
+        public virtual SaverDef _build_internal(VariableV1[] names_to_saveables,
             bool reshape = false,
             bool sharded = false,
             int max_to_keep = 5,
@@ -111,6 +111,12 @@ namespace Tensorflow
                     var cols = graph.get_collection(collection_type);
                     switch (cols)
                     {
+                        case List<VariableV1> values:
+                            foreach (var element in values) ;
+                            break;
+                        case List<ResourceVariable> values:
+                            foreach (var element in values) ;
+                            break;
                         case List<RefVariable> values:
                             foreach (var element in values) ;
                             break;
@@ -166,10 +172,14 @@ namespace Tensorflow
             string name = "restore_all")
         {
             var all_tensors = bulk_restore(filename_tensor, saveables, preferred_shard, restore_sequentially);
-            var assign_ops = new List<Tensor>();
+            var assign_ops = new List<Operation>();
             int idx = 0;
 
-            foreach(var saveable in saveables)
+            // Load and optionally reshape on the CPU, as string tensors are not
+            // available on the GPU.
+            // TODO(touts): Re-enable restore on GPU when we can support annotating
+            // string tensors as "HostMemory" inputs.
+            foreach (var saveable in saveables)
             {
                 List<TensorShape> shapes = null;
                 if (reshape)
@@ -179,7 +189,8 @@ namespace Tensorflow
 
                 var saveable_tensors = all_tensors.Skip(idx).Take(saveable.specs.Length);
                 idx += saveable.specs.Length;
-                assign_ops.Add(saveable.restore(saveable_tensors.ToArray(), shapes == null ? null : shapes.ToArray()));
+                var restored = saveable.restore(saveable_tensors.ToArray(), shapes == null ? null : shapes.ToArray());
+                assign_ops.Add(restored as Operation);
             }
 
             return control_flow_ops.group(assign_ops.ToArray(), name: name);

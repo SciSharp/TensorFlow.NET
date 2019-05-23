@@ -77,12 +77,12 @@ namespace Tensorflow.Layers
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
             bool? trainable = null,
-            VariableSynchronization synchronization = VariableSynchronization.AUTO,
-            VariableAggregation aggregation = VariableAggregation.NONE)
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation = VariableAggregation.None)
         {
             var default_graph = ops.get_default_graph();
             Graph init_graph = null;
-            RefVariable[] existing_variables = null;
+            VariableV1[] existing_variables = null;
 
             if (default_graph.building_function)
             {

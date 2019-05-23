@@ -18,6 +18,13 @@ namespace Tensorflow
             return _op;
         }
 
+        public static Tensor histogram_summary(string tag, Tensor values, string name = null)
+        {
+            var dict = new Dictionary<string, object>();
+            var op = _op_def_lib._apply_op_helper("HistogramSummary", name: name, args: new { tag, values });
+            return op.output;
+        }
+
         /// <summary>
         ///    Outputs a <c>Summary</c> protocol buffer with scalar values.
         /// </summary>

@@ -65,6 +65,39 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        ///    Returns 0 if the denominator is zero.
+        /// </summary>
+        /// <param name="x">
+        /// </param>
+        /// <param name="y">
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'DivNoNan'.
+        /// </param>
+        /// <returns>
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    
+        ///    *NOTE*: <c>DivNoNan</c> supports broadcasting. More about broadcasting
+        ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+        /// </remarks>
+        public static Tensor div_no_nan(Tensor x, Tensor y, string name = null)
+        {
+            return with(ops.name_scope(name, "div_no_nan", (x, y)), name_scope =>
+            {
+                name = name_scope;
+                x = ops.convert_to_tensor(x, name: "x");
+                y = ops.convert_to_tensor(y, name: "y", dtype: x.dtype.as_base_dtype());
+                var x_dtype = x.dtype.as_base_dtype();
+                var y_dtype = y.dtype.as_base_dtype();
+                if (x_dtype != y_dtype)
+                    throw new TypeError($"x and y must have the same dtype, got {x_dtype} != {y_dtype}");
+                return gen_math_ops.div_no_nan(x, y, name: name);
+            });
+        }
+
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.equal(x, y, name: name);
 
@@ -252,6 +285,13 @@ namespace Tensorflow
             var max = (axis != null) ? gen_math_ops._max(input_tensor, axis, keepdims, name) :
                 gen_math_ops._max(input_tensor, r, keepdims, name);
             return _may_reduce_to_scalar(keepdims, axis, max);
+        }
+
+        public static Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        {
+            var r = _ReductionDims(input_tensor, axis);
+            var min = gen_math_ops._min(input_tensor, r, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis, min);
         }
 
         /// <summary>
