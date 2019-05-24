@@ -15,14 +15,13 @@ namespace Tensorflow
         public _ElementFetchMapper(object[] fetches, Func<List<NDArray>, object> contraction_fn)
         {
             var g = ops.get_default_graph();
-            ITensorOrOperation el = null;
 
             foreach(var fetch in fetches)
             {
-                el = g.as_graph_element(fetch, allow_tensor: true, allow_operation: true);
+                var el = g.as_graph_element(fetch, allow_tensor: true, allow_operation: true);
+                _unique_fetches.Add(el);
             }
-
-            _unique_fetches.Add(el);
+            
             _contraction_fn = contraction_fn;
         }
 

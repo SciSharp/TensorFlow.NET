@@ -3,12 +3,14 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
+using Console = Colorful.Console;
 
 namespace TensorFlowNET.Examples.ImageProcess
 {
@@ -84,7 +86,7 @@ namespace TensorFlowNET.Examples.ImageProcess
 
             var sw = new Stopwatch();
 
-            with(tf.Session(graph), sess =>
+            return with(tf.Session(graph), sess =>
             {
                 // Initialize all weights: for the module to their pretrained values,
                 // and for the newly added retraining layer to random initial values.
@@ -111,6 +113,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                 // Create a train saver that is used to restore values into an eval graph
                 // when exporting models.
                 var train_saver = tf.train.Saver();
+                sw.Restart();
 
                 for (int i = 0; i < how_many_training_steps; i++)
                 {
@@ -140,8 +143,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                             new FeedItem(bottleneck_input, train_bottlenecks),
                             new FeedItem(ground_truth_input, train_ground_truth));
                         (float train_accuracy, float cross_entropy_value) = (results[0], results[1]);
-                        print($"{DateTime.Now}: Step {i}: Train accuracy = {train_accuracy * 100}%");
-                        print($"{DateTime.Now}: Step {i}: Cross entropy = {cross_entropy_value}");
+                        print($"{DateTime.Now}: Step {i + 1}: Train accuracy = {train_accuracy * 100}%,  Cross entropy = {cross_entropy_value.ToString("G4")}");
 
                         var (validation_bottlenecks, validation_ground_truth, _) = get_random_cached_bottlenecks(
                             sess, image_lists, validation_batch_size, "validation",
@@ -158,7 +160,8 @@ namespace TensorFlowNET.Examples.ImageProcess
                         (string validation_summary, float validation_accuracy) = (results[0], results[1]);
 
                         validation_writer.add_summary(validation_summary, i);
-                        print($"{DateTime.Now}: Step {i + 1}: Validation accuracy = {validation_accuracy * 100}% (N={len(validation_bottlenecks)})");
+                        print($"{DateTime.Now}: Step {i + 1}: Validation accuracy = {validation_accuracy * 100}% (N={len(validation_bottlenecks)}) {sw.ElapsedMilliseconds}ms");
+                        sw.Restart();
                     }
 
                     // Store intermediate results
@@ -180,12 +183,11 @@ namespace TensorFlowNET.Examples.ImageProcess
 
                 // Write out the trained graph and labels with the weights stored as
                 // constants.
-                print($"final test accuracy: {test_accuracy}");
                 print($"Save final result to : {output_graph}");
                 save_graph_to_file(output_graph, class_count);
+                File.WriteAllText(output_labels, string.Join("\n", image_lists.Keys));
+                return test_accuracy > 0.75f;
             });
-
-            return false;
         }
 
         /// <summary>
@@ -214,6 +216,8 @@ namespace TensorFlowNET.Examples.ImageProcess
             var results = eval_session.run(new Tensor[] { evaluation_step, prediction },
                   new FeedItem(bottleneck_input, test_bottlenecks),
                   new FeedItem(ground_truth_input, test_ground_truth));
+
+            print($"final test accuracy: {((float)results[0] * 100).ToString("G4")}% (N={len(test_bottlenecks)})");
 
             return (results[0], results[1]);
         }

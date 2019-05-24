@@ -33,6 +33,8 @@ namespace Tensorflow
                         _fetches.Add(val);
                         _ops.Add(false);
                         break;
+                    default:
+                        throw new NotImplementedException("_FetchHandler fetch");
                 }
 
             }
