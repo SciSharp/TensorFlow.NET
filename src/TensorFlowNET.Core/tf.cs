@@ -48,13 +48,6 @@ namespace Tensorflow
 
         public static string VERSION => c_api.StringPiece(c_api.TF_Version());
 
-        public static Graph get_default_graph()
-        {
-            return ops.get_default_graph();
-        }
-
-        public static Graph Graph() => new Graph();
-
         public static Session Session()
         {
             defaultSession = new Session();

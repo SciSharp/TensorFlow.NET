@@ -1,4 +1,5 @@
-﻿using NumSharp;
+﻿using Google.Protobuf;
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,17 +32,21 @@ namespace TensorFlowNET.Examples.ImageProcess
         string summaries_dir = Path.Join(data_dir, "retrain_logs");
         string image_dir = Path.Join(data_dir, "flower_photos");
         string bottleneck_dir = Path.Join(data_dir, "bottleneck");
+        string output_graph = Path.Join(data_dir, "output_graph.pb");
+        string output_labels = Path.Join(data_dir, "output_labels.txt");
         // The location where variable checkpoints will be stored.
         string CHECKPOINT_NAME = Path.Join(data_dir, "_retrain_checkpoint");
         string tfhub_module = "https://tfhub.dev/google/imagenet/inception_v3/feature_vector/3";
+        string final_tensor_name = "final_result";
         float testing_percentage = 0.1f;
         float validation_percentage = 0.1f;
         float learning_rate = 0.01f;
         Tensor resized_image_tensor;
         Dictionary<string, Dictionary<string, string[]>> image_lists;
-        int how_many_training_steps = 200;
+        int how_many_training_steps = 100;
         int eval_step_interval = 10;
         int train_batch_size = 100;
+        int test_batch_size = -1;
         int validation_batch_size = 100;
         int intermediate_store_frequency = 0;
         int class_count = 0;
@@ -65,13 +70,13 @@ namespace TensorFlowNET.Examples.ImageProcess
             {
                 (train_step, cross_entropy, bottleneck_input,
                  ground_truth_input, final_tensor) = add_final_retrain_ops(
-                     class_count, "final_result", bottleneck_tensor,
+                     class_count, final_tensor_name, bottleneck_tensor,
                      wants_quantization, is_training: true);
             });
 
             /*Tensor bottleneck_tensor = graph.OperationByName("module_apply_default/hub_output/feature_vector/SpatialSqueeze");
             Tensor resized_image_tensor = graph.OperationByName("Placeholder");
-            Tensor final_tensor = graph.OperationByName("final_result");
+            Tensor final_tensor = graph.OperationByName(final_tensor_name);
             Tensor ground_truth_input = graph.OperationByName("input/GroundTruthInput");
             train_step = graph.OperationByName("train/GradientDescent");
             Tensor bottleneck_input = graph.OperationByName("input/BottleneckInputPlaceholder");
@@ -105,7 +110,7 @@ namespace TensorFlowNET.Examples.ImageProcess
 
                 // Create a train saver that is used to restore values into an eval graph
                 // when exporting models.
-                // var train_saver = tf.train.Saver();
+                var train_saver = tf.train.Saver();
 
                 for (int i = 0; i < how_many_training_steps; i++)
                 {
@@ -153,7 +158,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                         (string validation_summary, float validation_accuracy) = (results[0], results[1]);
 
                         validation_writer.add_summary(validation_summary, i);
-                        print($"{DateTime.Now}: Step {i}: Validation accuracy = {validation_accuracy * 100}% (N={len(validation_bottlenecks)})");
+                        print($"{DateTime.Now}: Step {i + 1}: Validation accuracy = {validation_accuracy * 100}% (N={len(validation_bottlenecks)})");
                     }
 
                     // Store intermediate results
@@ -165,13 +170,19 @@ namespace TensorFlowNET.Examples.ImageProcess
                 }
 
                 // After training is complete, force one last save of the train checkpoint.
-                // train_saver.save(sess, CHECKPOINT_NAME);
+                train_saver.save(sess, CHECKPOINT_NAME);
 
                 // We've completed all our training, so run a final test evaluation on
                 // some new images we haven't used before.
-                run_final_eval(sess, null, class_count, image_lists,
+                var (test_accuracy, predictions) = run_final_eval(sess, null, class_count, image_lists,
                                jpeg_data_tensor, decoded_image_tensor, resized_image_tensor,
                                bottleneck_tensor);
+
+                // Write out the trained graph and labels with the weights stored as
+                // constants.
+                print($"final test accuracy: {test_accuracy}");
+                print($"Save final result to : {output_graph}");
+                save_graph_to_file(output_graph, class_count);
             });
 
             return false;
@@ -188,26 +199,51 @@ namespace TensorFlowNET.Examples.ImageProcess
         /// <param name="decoded_image_tensor"></param>
         /// <param name="resized_image_tensor"></param>
         /// <param name="bottleneck_tensor"></param>
-        private void run_final_eval(Session train_session, object module_spec, int class_count, 
+        private (float, NDArray) run_final_eval(Session train_session, object module_spec, int class_count, 
             Dictionary<string, Dictionary<string, string[]>> image_lists,
             Tensor jpeg_data_tensor, Tensor decoded_image_tensor,
             Tensor resized_image_tensor, Tensor bottleneck_tensor)
         {
-            /*var (eval_session, _, bottleneck_input, ground_truth_input, evaluation_step,
-                prediction) = build_eval_session(module_spec, class_count);*/
+            var (test_bottlenecks, test_ground_truth, test_filenames) = get_random_cached_bottlenecks(train_session, image_lists,
+                                    test_batch_size, "testing", bottleneck_dir, image_dir, jpeg_data_tensor,
+                                    decoded_image_tensor, resized_image_tensor, bottleneck_tensor, tfhub_module);
+
+            var (eval_session, _, bottleneck_input, ground_truth_input, evaluation_step,
+                prediction) = build_eval_session(class_count);
+
+            var results = eval_session.run(new Tensor[] { evaluation_step, prediction },
+                  new FeedItem(bottleneck_input, test_bottlenecks),
+                  new FeedItem(ground_truth_input, test_ground_truth));
+
+            return (results[0], results[1]);
         }
 
-        private void build_eval_session(int class_count)
+        private (Session, Tensor, Tensor, Tensor, Tensor, Tensor) 
+            build_eval_session(int class_count)
         {
             // If quantized, we need to create the correct eval graph for exporting.
             var (eval_graph, bottleneck_tensor, resized_input_tensor, wants_quantization) = create_module_graph();
             var eval_sess = tf.Session(graph: eval_graph);
+            Tensor evaluation_step = null;
+            Tensor prediction = null;
 
             with(eval_graph.as_default(), graph =>
             {
+                // Add the new layer for exporting.
+                var (_, _, bottleneck_input, ground_truth_input, final_tensor) = 
+                    add_final_retrain_ops(class_count, final_tensor_name, bottleneck_tensor,
+                        wants_quantization, is_training: false);
 
+                // Now we need to restore the values from the training graph to the eval
+                // graph.
+                tf.train.Saver().restore(eval_sess, CHECKPOINT_NAME);
 
+                (evaluation_step, prediction) = add_evaluation_step(final_tensor,
+                                                      ground_truth_input);
             });
+
+            return (eval_sess, resized_input_tensor, bottleneck_input, ground_truth_input,
+                evaluation_step, prediction);
         }
 
         /// <summary>
@@ -348,20 +384,42 @@ namespace TensorFlowNET.Examples.ImageProcess
             var ground_truths = new List<long>();
             var filenames = new List<string>();
             class_count = image_lists.Keys.Count;
-            foreach (var unused_i in range(how_many))
+            if (how_many >= 0)
             {
-                int label_index = new Random().Next(class_count);
-                string label_name = image_lists.Keys.ToArray()[label_index];
-                int image_index = new Random().Next(MAX_NUM_IMAGES_PER_CLASS);
-                string image_name = get_image_path(image_lists, label_name, image_index,
-                                  image_dir, category);
-                var bottleneck = get_or_create_bottleneck(
-                  sess, image_lists, label_name, image_index, image_dir, category,
-                  bottleneck_dir, jpeg_data_tensor, decoded_image_tensor,
-                  resized_input_tensor, bottleneck_tensor, module_name);
-                bottlenecks.Add(bottleneck);
-                ground_truths.Add(label_index);
-                filenames.Add(image_name);
+                // Retrieve a random sample of bottlenecks.
+                foreach (var unused_i in range(how_many))
+                {
+                    int label_index = new Random().Next(class_count);
+                    string label_name = image_lists.Keys.ToArray()[label_index];
+                    int image_index = new Random().Next(MAX_NUM_IMAGES_PER_CLASS);
+                    string image_name = get_image_path(image_lists, label_name, image_index,
+                                      image_dir, category);
+                    var bottleneck = get_or_create_bottleneck(
+                      sess, image_lists, label_name, image_index, image_dir, category,
+                      bottleneck_dir, jpeg_data_tensor, decoded_image_tensor,
+                      resized_input_tensor, bottleneck_tensor, module_name);
+                    bottlenecks.Add(bottleneck);
+                    ground_truths.Add(label_index);
+                    filenames.Add(image_name);
+                }
+            }
+            else
+            {
+                // Retrieve all bottlenecks.
+                foreach (var (label_index, label_name) in enumerate(image_lists.Keys.ToArray()))
+                {
+                    foreach(var (image_index, image_name) in enumerate(image_lists[label_name][category]))
+                    {
+                        var bottleneck = get_or_create_bottleneck(
+                            sess, image_lists, label_name, image_index, image_dir, category,
+                            bottleneck_dir, jpeg_data_tensor, decoded_image_tensor,
+                            resized_input_tensor, bottleneck_tensor, module_name);
+
+                        bottlenecks.Add(bottleneck);
+                        ground_truths.Add(label_index);
+                        filenames.Add(image_name);
+                    }
+                }
             }
 
             return (bottlenecks.ToArray(), ground_truths.ToArray(), filenames.ToArray());
@@ -519,6 +577,20 @@ namespace TensorFlowNET.Examples.ImageProcess
             var sub_dir = label_name;
             var full_path = Path.Join(image_dir, sub_dir, base_name);
             return full_path;
+        }
+
+        /// <summary>
+        /// Saves an graph to file, creating a valid quantized one if necessary.
+        /// </summary>
+        /// <param name="graph_file_name"></param>
+        /// <param name="class_count"></param>
+        private void save_graph_to_file(string graph_file_name, int class_count)
+        {
+            var (sess, _, _, _, _, _) = build_eval_session(class_count);
+            var graph = sess.graph;
+            var output_graph_def = tf.graph_util.convert_variables_to_constants(
+                sess, graph.as_graph_def(), new string[] { final_tensor_name });
+            File.WriteAllBytes(graph_file_name, output_graph_def.ToByteArray());
         }
 
         public void PrepareData()

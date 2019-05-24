@@ -111,6 +111,12 @@ namespace Tensorflow
                     var cols = graph.get_collection(collection_type);
                     switch (cols)
                     {
+                        case List<Tensor> values:
+                            foreach (var element in values) ;
+                            break;
+                        case List<Operation> values:
+                            foreach (var element in values) ;
+                            break;
                         case List<VariableV1> values:
                             foreach (var element in values) ;
                             break;
@@ -127,6 +133,9 @@ namespace Tensorflow
                             foreach (var element in values) ;
                             break;
                         case List<WhileContext> values:
+                            foreach (var element in values) ;
+                            break;
+                        case List<Object> values:
                             foreach (var element in values) ;
                             break;
                         default:
@@ -172,7 +181,7 @@ namespace Tensorflow
             string name = "restore_all")
         {
             var all_tensors = bulk_restore(filename_tensor, saveables, preferred_shard, restore_sequentially);
-            var assign_ops = new List<Operation>();
+            var assign_ops = new List<ITensorOrOperation>();
             int idx = 0;
 
             // Load and optionally reshape on the CPU, as string tensors are not
@@ -190,7 +199,7 @@ namespace Tensorflow
                 var saveable_tensors = all_tensors.Skip(idx).Take(saveable.specs.Length);
                 idx += saveable.specs.Length;
                 var restored = saveable.restore(saveable_tensors.ToArray(), shapes == null ? null : shapes.ToArray());
-                assign_ops.Add(restored as Operation);
+                assign_ops.Add(restored as ITensorOrOperation);
             }
 
             return control_flow_ops.group(assign_ops.ToArray(), name: name);

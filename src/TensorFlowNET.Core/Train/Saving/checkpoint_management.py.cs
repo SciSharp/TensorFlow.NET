@@ -73,23 +73,28 @@ namespace Tensorflow
             string model_checkpoint_path,
             List<string> all_model_checkpoint_paths = null,
             List<float> all_model_checkpoint_timestamps = null,
-            float? last_preserved_timestamp = null)
+            double? last_preserved_timestamp = null)
         {
             if (all_model_checkpoint_paths == null)
                 all_model_checkpoint_paths = new List<string>();
 
+            if (!all_model_checkpoint_paths.Contains(model_checkpoint_path))
+                all_model_checkpoint_paths.Add(model_checkpoint_path);
+
             // Relative paths need to be rewritten to be relative to the "save_dir"
             // if model_checkpoint_path already contains "save_dir".
-            all_model_checkpoint_paths.Add(model_checkpoint_path);
 
             var coord_checkpoint_proto = new CheckpointState()
             {
-                ModelCheckpointPath = model_checkpoint_path,
-                LastPreservedTimestamp = last_preserved_timestamp.Value
+                ModelCheckpointPath = model_checkpoint_path
             };
 
+            if (last_preserved_timestamp.HasValue)
+                coord_checkpoint_proto.LastPreservedTimestamp = last_preserved_timestamp.Value;
+
             coord_checkpoint_proto.AllModelCheckpointPaths.AddRange(all_model_checkpoint_paths);
-            coord_checkpoint_proto.AllModelCheckpointTimestamps.AddRange(all_model_checkpoint_timestamps.Select(x => (double)x));
+            if (all_model_checkpoint_timestamps != null)
+                coord_checkpoint_proto.AllModelCheckpointTimestamps.AddRange(all_model_checkpoint_timestamps.Select(x => (double)x));
 
             return coord_checkpoint_proto;
         }
