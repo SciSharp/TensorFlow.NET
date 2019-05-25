@@ -25,7 +25,7 @@ namespace TensorFlowNET.Examples.ImageProcess
     {
         public int Priority => 16;
 
-        public bool Enabled { get; set; } = false;
+        public bool Enabled { get; set; } = true;
         public bool ImportGraph { get; set; } = true;
 
         public string Name => "Retrain Image Classifier";
@@ -75,14 +75,6 @@ namespace TensorFlowNET.Examples.ImageProcess
                      class_count, final_tensor_name, bottleneck_tensor,
                      wants_quantization, is_training: true);
             });
-
-            /*Tensor bottleneck_tensor = graph.OperationByName("module_apply_default/hub_output/feature_vector/SpatialSqueeze");
-            Tensor resized_image_tensor = graph.OperationByName("Placeholder");
-            Tensor final_tensor = graph.OperationByName(final_tensor_name);
-            Tensor ground_truth_input = graph.OperationByName("input/GroundTruthInput");
-            train_step = graph.OperationByName("train/GradientDescent");
-            Tensor bottleneck_input = graph.OperationByName("input/BottleneckInputPlaceholder");
-            Tensor cross_entropy = graph.OperationByName("cross_entropy/sparse_softmax_cross_entropy_loss/value");*/
 
             var sw = new Stopwatch();
 
@@ -485,7 +477,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                             bottleneck_dir, jpeg_data_tensor, decoded_image_tensor,
                             resized_input_tensor, bottleneck_tensor, module_name);
                         how_many_bottlenecks++;
-                        if (how_many_bottlenecks % 100 == 0)
+                        if (how_many_bottlenecks % 300 == 0)
                             print($"{how_many_bottlenecks} bottleneck files created.");
                     }
                 }
@@ -608,6 +600,11 @@ namespace TensorFlowNET.Examples.ImageProcess
             // download graph meta data
             url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/InceptionV3.meta";
             Web.Download(url, "graph", "InceptionV3.meta");
+
+            // download variables.data checkpoint file.
+            url = "https://github.com/SciSharp/TensorFlow.NET/raw/master/data/tfhub_modules.zip";
+            Web.Download(url, data_dir, "tfhub_modules.zip");
+            Compress.UnZip(Path.Join(data_dir, "tfhub_modules.zip"), Path.Join(Path.GetTempPath(), "tfhub_modules"));
 
             // Prepare necessary directories that can be used during training
             Directory.CreateDirectory(summaries_dir);

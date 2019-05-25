@@ -8,7 +8,7 @@
     <Version>0.8.0</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Apache 2.0</Copyright>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -49,7 +49,7 @@ Add Word2Vec example.</PackageReleaseNotes>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.7.0" />
-    <PackageReference Include="NumSharp" Version="0.10.1" />
+    <PackageReference Include="NumSharp" Version="0.10.2" />
   </ItemGroup>
 
   <ItemGroup>
