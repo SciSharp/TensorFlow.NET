@@ -126,6 +126,14 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 
 ### More examples:
 
+Run specific example in shell:
+
+```cs
+dotnet TensorFlowNET.Examples.dll "Retrain Image Classifier"
+```
+
+Example runner will download all the required files like training data and model pb files.
+
 * [Hello World](test/TensorFlowNET.Examples/HelloWorld.cs)
 * [Basic Operations](test/TensorFlowNET.Examples/BasicOperations.cs)
 * [Linear Regression](test/TensorFlowNET.Examples/BasicModels/LinearRegression.cs)
