@@ -69,7 +69,8 @@ namespace Tensorflow
         private List<Tensor> _unfeedable_tensors = new List<Tensor>();
 
         public string _name_stack = "";
-        public string _graph_key;
+        private string _graph_key;
+        public string graph_key => _graph_key;
         public string _last_loss_reduction;
 
         public Status Status { get; }

@@ -30,12 +30,12 @@ namespace TensorFlowNET.Examples
         {
             PrepareData();
 
-            Console.WriteLine($"Training entries: {train_data.size}, labels: {train_labels.size}");
+            Console.WriteLine($"Training entries: {train_data.len}, labels: {train_labels.len}");
 
             // A dictionary mapping words to an integer index
             var word_index = GetWordIndex();
             
-            train_data = keras.preprocessing.sequence.pad_sequences(train_data,
+            /*train_data = keras.preprocessing.sequence.pad_sequences(train_data,
                 value: word_index["<PAD>"],
                 padding: "post",
                 maxlen: 256);
@@ -43,13 +43,14 @@ namespace TensorFlowNET.Examples
             test_data = keras.preprocessing.sequence.pad_sequences(test_data,
                 value: word_index["<PAD>"],
                 padding: "post",
-                maxlen: 256);
+                maxlen: 256);*/
 
             // input shape is the vocabulary count used for the movie reviews (10,000 words)
             int vocab_size = 10000;
 
             var model = keras.Sequential();
-            model.add(keras.layers.Embedding(vocab_size, 16));
+            var layer = keras.layers.Embedding(vocab_size, 16);
+            model.add(layer);
 
             return false;
         }
@@ -78,17 +79,23 @@ namespace TensorFlowNET.Examples
             labels_test = labels_test[indices_test];
 
             // not completed
-            var xs = x_train.hstack<int>(x_test);
+            var xs = x_train.hstack<string>(x_test);
             var labels = labels_train.hstack<int>(labels_test);
 
             var idx = x_train.size;
             var y_train = labels_train;
             var y_test = labels_test;
 
-            x_train = train_data;
-            train_labels = y_train;
+            // convert x_train
+            train_data = new NDArray(np.int32, (x_train.size, 256));
+            for (int i = 0; i < x_train.size; i++)
+                train_data[i] = x_train[i].Data<string>(0).Split(',').Select(x => int.Parse(x)).ToArray();
 
-            test_data = x_test;
+            test_data = new NDArray(np.int32, (x_test.size, 256));
+            for (int i = 0; i < x_test.size; i++)
+                test_data[i] = x_test[i].Data<string>(0).Split(',').Select(x => int.Parse(x)).ToArray();
+
+            train_labels = y_train;
             test_labels = y_test;
         }
 

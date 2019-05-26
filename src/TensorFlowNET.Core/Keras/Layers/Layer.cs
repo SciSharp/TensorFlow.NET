@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
+using static Tensorflow.Python;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -33,7 +34,8 @@ namespace Tensorflow.Keras.Layers
         protected InputSpec input_spec;
         protected bool supports_masking;
         protected List<RefVariable> _trainable_weights;
-        public string _name;
+        private string _name;
+        public string name => _name;
         protected string _base_name;
         protected bool _compute_previous_mask;
         protected List<Operation> _updates;
@@ -85,17 +87,24 @@ namespace Tensorflow.Keras.Layers
             // Handle Keras mask propagation from previous layer to current layer.
             Python.with(ops.name_scope(_name_scope()), delegate
             {
-                if (!built)
+                /*if (!built)
                 {
                     _maybe_build(inputs);
                     built = true;
-                }
+                }*/
 
                 if (build_graph)
                 {
                     // Symbolic execution on symbolic tensors. We will attempt to build
                     // the corresponding TF subgraph inside `backend.get_graph()`
-                    var graph = backend.get_graph();
+                    var graph = backend.get_graph().as_default();
+                    with(ops.name_scope(_name_scope()), delegate
+                    {
+                        // Build layer if applicable (if the `build` method has been
+                        // overridden).
+                        _maybe_build(inputs[0]);
+                    });
+
                     outputs = call(inputs[0], training: training);
                     _handle_activity_regularization(inputs[0], outputs);
                     _set_mask_metadata(inputs[0], outputs, null);
@@ -130,13 +139,17 @@ namespace Tensorflow.Keras.Layers
 
         protected virtual string _name_scope()
         {
-            return null;
+            return name;
         }
 
-        protected void _maybe_build(Tensor[] inputs)
+        protected void _maybe_build(Tensor input)
         {
-            var input_list = inputs;
-            build(input_list[0].GetShape());
+            // Check input assumptions set before layer building, e.g. input rank.
+            if (built)
+                return;
+
+            build(input.GetShape());
+            built = true;
         }
 
         protected virtual void build(TensorShape input_shape)
@@ -160,7 +173,7 @@ namespace Tensorflow.Keras.Layers
             var variable = _add_variable_with_custom_getter(name,
                 shape,
                 dtype: dtype,
-                getter: getter == null ? base_layer_utils.make_variable : getter,
+                //getter: getter == null ? base_layer_utils.make_variable : getter,
                 overwrite: true,
                 initializer: initializer,
                 trainable: trainable.Value);
@@ -176,12 +189,12 @@ namespace Tensorflow.Keras.Layers
             _updates.AddRange(updates_op);
         }
 
-        protected virtual void _init_set_name(string name)
+        protected virtual void _init_set_name(string name, bool zero_based = true)
         {
-            string base_name = name;
             if (name == null)
-                (_name, base_name) = _make_unique_name();
-            _base_name = base_name;
+                _name = base_layer_utils.unique_layer_name(generic_utils.to_snake_case(this.GetType().Name), zero_based: zero_based);
+            else
+                _name = name;
         }
 
         protected virtual (string, string) _make_unique_name()

@@ -19,6 +19,10 @@ namespace Tensorflow.Keras.Engine
             
         }
 
+        /// <summary>
+        /// Adds a layer instance on top of the layer stack.
+        /// </summary>
+        /// <param name="layer"></param>
         public void add(Layer layer)
         {
             built = false;
@@ -32,7 +36,7 @@ namespace Tensorflow.Keras.Engine
                     var x = keras.layers.Input(
                       batch_shape: batch_shape,
                       dtype: dtype,
-                      name: layer._name + "_input");
+                      name: layer.name + "_input");
 
                     // This will build the current layer
                     // and create the node connecting the current layer

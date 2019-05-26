@@ -30,26 +30,6 @@ namespace Tensorflow.Keras
             object value = null)
         {
             int[] length = new int[sequences.size];
-            switch (sequences.dtype.Name)
-            {
-                case "Object":
-                    for (int i = 0; i < sequences.size; i++)
-                    {
-                        switch (sequences.Data<object>(i))
-                        {
-                            case string data:
-                                length[i] = Regex.Matches(data, ",").Count;
-                                break;
-                        }
-                    }
-                    break;
-                case "Int32":
-                    for (int i = 0; i < sequences.size; i++)
-                        length[i] = Regex.Matches(sequences.Data<object>(i).ToString(), ",").Count;
-                    break;
-                default:
-                    throw new NotImplementedException($"pad_sequences: {sequences.dtype.Name}");
-            }
 
             if (maxlen == null)
                 maxlen = length.Max();

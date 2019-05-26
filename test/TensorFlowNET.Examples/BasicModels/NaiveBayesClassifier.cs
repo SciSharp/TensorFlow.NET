@@ -18,69 +18,14 @@ namespace TensorFlowNET.Examples
         public string Name => "Naive Bayes Classifier";
         public bool ImportGraph { get; set; } = false;
 
-
+        public NDArray X, y;
         public Normal dist { get; set; }
         public bool Run()
         {
-            var X = np.array(new float[][] { new float[] { 5.1f, 3.5f},new float[] { 4.9f, 3.0f },new float[] { 4.7f, 3.2f },
-                            new float[] { 4.6f, 3.1f },new float[] { 5.0f, 3.6f },new float[] { 5.4f, 3.9f },
-                            new float[] { 4.6f, 3.4f },new float[] { 5.0f, 3.4f },new float[] { 4.4f, 2.9f },
-                            new float[] { 4.9f, 3.1f },new float[] { 5.4f, 3.7f },new float[] {4.8f, 3.4f },
-                            new float[] {4.8f, 3.0f },new float[] {4.3f, 3.0f },new float[] {5.8f, 4.0f },
-                            new float[] {5.7f, 4.4f },new float[] {5.4f, 3.9f },new float[] {5.1f, 3.5f },
-                            new float[] {5.7f, 3.8f },new float[] {5.1f, 3.8f },new float[] {5.4f, 3.4f },
-                            new float[] {5.1f, 3.7f },new float[] {5.1f, 3.3f },new float[] {4.8f, 3.4f },
-                            new float[] {5.0f, 3.0f },new float[] {5.0f , 3.4f },new float[] {5.2f, 3.5f },
-                            new float[] {5.2f, 3.4f },new float[] {4.7f, 3.2f },new float[] {4.8f, 3.1f },
-                            new float[] {5.4f, 3.4f },new float[] {5.2f, 4.1f},new float[] {5.5f, 4.2f },
-                            new float[] {4.9f, 3.1f },new float[] {5.0f , 3.2f },new float[] {5.5f, 3.5f },
-                            new float[] {4.9f, 3.6f },new float[] {4.4f, 3.0f },new float[] {5.1f, 3.4f },
-                            new float[] {5.0f , 3.5f },new float[] {4.5f, 2.3f },new float[] {4.4f, 3.2f },
-                            new float[] {5.0f , 3.5f },new float[] {5.1f, 3.8f },new float[] {4.8f, 3.0f},
-                            new float[] {5.1f, 3.8f },new float[] {4.6f, 3.2f },new float[] { 5.3f, 3.7f },
-                            new float[] {5.0f , 3.3f },new float[] {7.0f , 3.2f },new float[] {6.4f, 3.2f },
-                            new float[] {6.9f, 3.1f },new float[] {5.5f, 2.3f },new float[] {6.5f, 2.8f },
-                            new float[] {5.7f, 2.8f },new float[] {6.3f, 3.3f },new float[] {4.9f, 2.4f },
-                            new float[] {6.6f, 2.9f },new float[] {5.2f, 2.7f },new float[] {5.0f , 2.0f },
-                            new float[] {5.9f, 3.0f },new float[] {6.0f , 2.2f },new float[] {6.1f, 2.9f },
-                            new float[] {5.6f, 2.9f },new float[] {6.7f, 3.1f },new float[] {5.6f, 3.0f },
-                            new float[] {5.8f, 2.7f },new float[] {6.2f, 2.2f },new float[] {5.6f, 2.5f },
-                            new float[] {5.9f, 3.0f},new float[] {6.1f, 2.8f},new float[] {6.3f, 2.5f},
-                            new float[] {6.1f, 2.8f},new float[] {6.4f, 2.9f},new float[] {6.6f, 3.0f },
-                            new float[] {6.8f, 2.8f},new float[] {6.7f, 3.0f },new float[] {6.0f , 2.9f},
-                            new float[] {5.7f, 2.6f},new float[] {5.5f, 2.4f},new float[] {5.5f, 2.4f},
-                            new float[] {5.8f, 2.7f},new float[] {6.0f , 2.7f},new float[] {5.4f, 3.0f},
-                            new float[] {6.0f , 3.4f},new float[] {6.7f, 3.1f},new float[] {6.3f, 2.3f},
-                            new float[] {5.6f, 3.0f },new float[] {5.5f, 2.5f},new float[] {5.5f, 2.6f},
-                            new float[] {6.1f, 3.0f },new float[] {5.8f, 2.6f},new float[] {5.0f, 2.3f},
-                            new float[] {5.6f, 2.7f},new float[] {5.7f, 3.0f },new float[] {5.7f, 2.9f},
-                            new float[] {6.2f, 2.9f},new float[] {5.1f, 2.5f},new float[] {5.7f, 2.8f},
-                            new float[] {6.3f, 3.3f},new float[] {5.8f, 2.7f},new float[] {7.1f, 3.0f },
-                            new float[] {6.3f, 2.9f},new float[] {6.5f, 3.0f },new float[] {7.6f, 3.0f },
-                            new float[] {4.9f, 2.5f},new float[] {7.3f, 2.9f},new float[] {6.7f, 2.5f},
-                            new float[] {7.2f, 3.6f},new float[] {6.5f, 3.2f},new float[] {6.4f, 2.7f},
-                            new float[] {6.8f, 3.00f },new float[] {5.7f, 2.5f},new float[] {5.8f, 2.8f},
-                            new float[] {6.4f, 3.2f},new float[] {6.5f, 3.0f },new float[] {7.7f, 3.8f},
-                            new float[] {7.7f, 2.6f},new float[] {6.0f , 2.2f},new float[] {6.9f, 3.2f},
-                            new float[] {5.6f, 2.8f},new float[] {7.7f, 2.8f},new float[] {6.3f, 2.7f},
-                            new float[] {6.7f, 3.3f},new float[] {7.2f, 3.2f},new float[] {6.2f, 2.8f},
-                            new float[] {6.1f, 3.0f },new float[] {6.4f, 2.8f},new float[] {7.2f, 3.0f },
-                            new float[] {7.4f, 2.8f},new float[] {7.9f, 3.8f},new float[] {6.4f, 2.8f},
-                            new float[] {6.3f, 2.8f},new float[] {6.1f, 2.6f},new float[] {7.7f, 3.0f },
-                            new float[] {6.3f, 3.4f},new float[] {6.4f, 3.1f},new float[] {6.0f, 3.0f},
-                            new float[] {6.9f, 3.1f},new float[] {6.7f, 3.1f},new float[] {6.9f, 3.1f},
-                            new float[] {5.8f, 2.7f},new float[] {6.8f, 3.2f},new float[] {6.7f, 3.3f},
-                            new float[] {6.7f, 3.0f },new float[] {6.3f, 2.5f},new float[] {6.5f, 3.0f },
-                            new float[] {6.2f, 3.4f},new float[] {5.9f, 3.0f }, new float[] {5.8f, 3.0f }});
-            
-            var y = np.array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+            PrepareData();
+
             fit(X, y);
+
             // Create a regular grid and classify each point 
             float x_min = X.amin(0).Data<float>(0) - 0.5f;
             float y_min = X.amin(0).Data<float>(1) - 0.5f;
@@ -88,12 +33,11 @@ namespace TensorFlowNET.Examples
             float y_max = X.amax(0).Data<float>(1) + 0.5f;
 
             var (xx, yy) = np.meshgrid(np.linspace(x_min, x_max, 30), np.linspace(y_min, y_max, 30));
-            var s = tf.Session();
-            if (xx.dtype ==  typeof(float))
+            with(tf.Session(), sess =>
             {
-                var samples = np.hstack<float>(xx.ravel().reshape(xx.size,1), yy.ravel().reshape(yy.size,1));
-                var Z = s.run(predict(samples));
-            }
+                var samples = np.hstack<float>(xx.ravel().reshape(xx.size, 1), yy.ravel().reshape(yy.size, 1));
+                var Z = sess.run(predict(samples));
+            });
 
             return true;
         }
@@ -189,7 +133,42 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            
+            #region Training data
+            X = np.array(new float[,] {
+                {5.1f, 3.5f}, {4.9f, 3.0f}, {4.7f, 3.2f}, {4.6f, 3.1f}, {5.0f, 3.6f}, {5.4f, 3.9f},
+                {4.6f, 3.4f}, {5.0f, 3.4f}, {4.4f, 2.9f}, {4.9f, 3.1f}, {5.4f, 3.7f}, {4.8f, 3.4f},
+                {4.8f, 3.0f}, {4.3f, 3.0f}, {5.8f, 4.0f}, {5.7f, 4.4f}, {5.4f, 3.9f}, {5.1f, 3.5f},
+                {5.7f, 3.8f}, {5.1f, 3.8f}, {5.4f, 3.4f}, {5.1f, 3.7f}, {5.1f, 3.3f}, {4.8f, 3.4f},
+                {5.0f, 3.0f}, {5.0f, 3.4f}, {5.2f, 3.5f}, {5.2f, 3.4f}, {4.7f, 3.2f}, {4.8f, 3.1f},
+                {5.4f, 3.4f}, {5.2f, 4.1f}, {5.5f, 4.2f}, {4.9f, 3.1f}, {5.0f, 3.2f}, {5.5f, 3.5f},
+                {4.9f, 3.6f}, {4.4f, 3.0f}, {5.1f, 3.4f}, {5.0f, 3.5f}, {4.5f, 2.3f}, {4.4f, 3.2f},
+                {5.0f, 3.5f}, {5.1f, 3.8f}, {4.8f, 3.0f}, {5.1f, 3.8f}, {4.6f, 3.2f}, {5.3f, 3.7f},
+                {5.0f, 3.3f}, {7.0f, 3.2f}, {6.4f, 3.2f}, {6.9f, 3.1f}, {5.5f, 2.3f}, {6.5f, 2.8f},
+                {5.7f, 2.8f}, {6.3f, 3.3f}, {4.9f, 2.4f}, {6.6f, 2.9f}, {5.2f, 2.7f}, {5.0f, 2.0f},
+                {5.9f, 3.0f}, {6.0f, 2.2f}, {6.1f, 2.9f}, {5.6f, 2.9f}, {6.7f, 3.1f}, {5.6f, 3.0f},
+                {5.8f, 2.7f}, {6.2f, 2.2f}, {5.6f, 2.5f}, {5.9f, 3.0f}, {6.1f, 2.8f}, {6.3f, 2.5f},
+                {6.1f, 2.8f}, {6.4f, 2.9f}, {6.6f, 3.0f}, {6.8f, 2.8f}, {6.7f, 3.0f}, {6.0f, 2.9f},
+                {5.7f, 2.6f}, {5.5f, 2.4f}, {5.5f, 2.4f}, {5.8f, 2.7f}, {6.0f, 2.7f}, {5.4f, 3.0f},
+                {6.0f, 3.4f}, {6.7f, 3.1f}, {6.3f, 2.3f}, {5.6f, 3.0f}, {5.5f, 2.5f}, {5.5f, 2.6f},
+                {6.1f, 3.0f}, {5.8f, 2.6f}, {5.0f, 2.3f}, {5.6f, 2.7f}, {5.7f, 3.0f}, {5.7f, 2.9f},
+                {6.2f, 2.9f}, {5.1f, 2.5f}, {5.7f, 2.8f}, {6.3f, 3.3f}, {5.8f, 2.7f}, {7.1f, 3.0f},
+                {6.3f, 2.9f}, {6.5f, 3.0f}, {7.6f, 3.0f}, {4.9f, 2.5f}, {7.3f, 2.9f}, {6.7f, 2.5f},
+                {7.2f, 3.6f}, {6.5f, 3.2f}, {6.4f, 2.7f}, {6.8f, 3.0f}, {5.7f, 2.5f}, {5.8f, 2.8f},
+                {6.4f, 3.2f}, {6.5f, 3.0f}, {7.7f, 3.8f}, {7.7f, 2.6f}, {6.0f, 2.2f}, {6.9f, 3.2f},
+                {5.6f, 2.8f}, {7.7f, 2.8f}, {6.3f, 2.7f}, {6.7f, 3.3f}, {7.2f, 3.2f}, {6.2f, 2.8f},
+                {6.1f, 3.0f}, {6.4f, 2.8f}, {7.2f, 3.0f}, {7.4f, 2.8f}, {7.9f, 3.8f}, {6.4f, 2.8f},
+                {6.3f, 2.8f}, {6.1f, 2.6f}, {7.7f, 3.0f}, {6.3f, 3.4f}, {6.4f, 3.1f}, {6.0f, 3.0f},
+                {6.9f, 3.1f}, {6.7f, 3.1f}, {6.9f, 3.1f}, {5.8f, 2.7f}, {6.8f, 3.2f}, {6.7f, 3.3f},
+                {6.7f, 3.0f}, {6.3f, 2.5f}, {6.5f, 3.0f}, {6.2f, 3.4f}, {5.9f, 3.0f}, {5.8f, 3.0f}});
+
+            y = np.array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+            #endregion
         }
     }
 }

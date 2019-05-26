@@ -111,7 +111,7 @@ namespace Tensorflow
 
             // Store the graph key so optimizers know how to only retrieve variables from
             // this graph.
-            _graph_key = ops.get_default_graph()._graph_key;
+            _graph_key = ops.get_default_graph().graph_key;
 
             _trainable = trainable;
             if (trainable && !collections.Contains(ops.GraphKeys.TRAINABLE_VARIABLES))
