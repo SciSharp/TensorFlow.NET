@@ -102,8 +102,10 @@ namespace Tensorflow
             default_graph = tf.Graph();
         }
 
+        public static Graph _get_graph_from_inputs(params Tensor[] op_input_list)
+            => _get_graph_from_inputs(op_input_list: op_input_list);
 
-        public static Graph _get_graph_from_inputs(List<Tensor> op_input_list, Graph graph = null)
+        public static Graph _get_graph_from_inputs(Tensor[] op_input_list, Graph graph = null)
         {
             foreach(var op_input in op_input_list)
             {

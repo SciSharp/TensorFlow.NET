@@ -37,7 +37,7 @@ namespace Tensorflow.Layers
             VariableScope scope = null)
         {
             _set_scope(scope);
-            _graph = ops._get_graph_from_inputs(new List<Tensor> { inputs }, graph: _graph);
+            _graph = ops._get_graph_from_inputs(new Tensor[] { inputs }, graph: _graph);
 
             variable_scope scope_context_manager = null;
             if (built)

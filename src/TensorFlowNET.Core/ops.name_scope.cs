@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
 
@@ -37,8 +38,11 @@ namespace Tensorflow
                 _name = _name == null ? _default_name : _name;
 
                 Graph g = null;
-                if (_values is List<Tensor> values)
-                    g = _get_graph_from_inputs(values);
+
+                if (_values is List<Tensor> vList)
+                    g = _get_graph_from_inputs(vList.ToArray());
+                else if (_values is Tensor[] vArray)
+                    g = _get_graph_from_inputs(vArray);
 
                 if (g == null)
                     g = get_default_graph();

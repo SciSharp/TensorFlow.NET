@@ -203,37 +203,6 @@ namespace TensorFlowNET.Examples.CnnTextClassification
             return (train_x, valid_x, train_y, valid_y);
         }
 
-        //private (int[][], int[][], int[], int[]) train_test_split(int[][] x, int[] y, float test_size = 0.3f)
-        //{
-        //    Console.WriteLine("Splitting in Training and Testing data...");
-        //    var stopwatch = Stopwatch.StartNew();
-        //    int len = x.Length;
-        //    int train_size = int.Parse((len * (1 - test_size)).ToString());
-        //    var random = new Random(17);
-
-        //    // we collect indices of labels 
-        //    var labels = new Dictionary<int, HashSet<int>>();
-        //    var shuffled_indices = random.Shuffle<int>(range(len).ToArray());
-        //    foreach (var i in shuffled_indices)
-        //    {
-        //        var label = y[i];
-        //        if (!labels.ContainsKey(i))
-        //            labels[label] = new HashSet<int>();
-        //        labels[label].Add(i);
-        //    }
-
-        //    var train_x = new int[train_size][];
-        //    var valid_x = new int[len - train_size][];
-        //    var train_y = new int[train_size];
-        //    var valid_y = new int[len - train_size];
-
-        //    FillWithShuffledLabels(x, y, train_x, train_y, random, labels);
-        //    FillWithShuffledLabels(x, y, valid_x, valid_y, random, labels);
-
-        //    Console.WriteLine("\tDONE " + stopwatch.Elapsed);
-        //    return (train_x, valid_x, train_y, valid_y);
-        //}
-
         private static void FillWithShuffledLabels(int[][] x, int[] y, int[][] shuffled_x, int[] shuffled_y, Random random, Dictionary<int, HashSet<int>> labels)
         {
             int i = 0;
