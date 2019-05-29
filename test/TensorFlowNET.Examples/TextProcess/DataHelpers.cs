@@ -12,6 +12,46 @@ namespace TensorFlowNET.Examples
 {
     public class DataHelpers
     {
+        public static Dictionary<string, int> build_word_dict(string path)
+        {
+            var contents = File.ReadAllLines(path);
+
+            var words = new List<string>();
+            foreach (var content in contents)
+                words.AddRange(clean_str(content).Split(' ').Where(x => x.Length > 1));
+            var word_counter = words.GroupBy(x => x)
+                .Select(x => new { Word = x.Key, Count = x.Count() })
+                .OrderByDescending(x => x.Count)
+                .ToArray();
+
+            var word_dict = new Dictionary<string, int>();
+            word_dict["<pad>"] = 0;
+            word_dict["<unk>"] = 1;
+            word_dict["<eos>"] = 2;
+            foreach (var word in word_counter)
+                word_dict[word.Word] = word_dict.Count;
+
+            return word_dict;
+        }
+
+        public static (int[][], int[]) build_word_dataset(string path, Dictionary<string, int> word_dict, int document_max_len)
+        {
+            var contents = File.ReadAllLines(path);
+            var x = contents.Select(c => (clean_str(c) + " <eos>")
+                .Split(' ').Take(document_max_len)
+                .Select(w => word_dict.ContainsKey(w) ? word_dict[w] : word_dict["<unk>"]).ToArray())
+                .ToArray();
+
+            for (int i = 0; i < x.Length; i++)
+                if (x[i].Length == document_max_len)
+                    x[i][document_max_len - 1] = word_dict["<eos>"];
+                else
+                    Array.Resize(ref x[i], document_max_len);
+
+            var y = contents.Select(c => int.Parse(c.Substring(0, c.IndexOf(','))) - 1).ToArray();
+
+            return (x, y);
+        }
 
         public static (int[][], int[], int) build_char_dataset(string path, string model, int document_max_len, int? limit = null, bool shuffle=true)
         {
@@ -96,8 +136,8 @@ namespace TensorFlowNET.Examples
 
         private static string clean_str(string str)
         {
-            str = Regex.Replace(str, @"[^A-Za-z0-9(),!?\'\`]", " ");
-            str = Regex.Replace(str, @"\'s", " \'s");
+            str = Regex.Replace(str, "[^A-Za-z0-9(),!?]", " ");
+            str = Regex.Replace(str, ",", " ");
             return str;
         }
 

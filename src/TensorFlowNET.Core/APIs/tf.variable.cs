@@ -6,6 +6,12 @@ namespace Tensorflow
 {
     public static partial class tf
     {
+        public static VariableV1[] global_variables(string scope = null)
+        {
+            return (ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
+                .ToArray();
+        }
+
         public static Operation global_variables_initializer()
         {
             var g = variables.global_variables();

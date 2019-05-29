@@ -14,7 +14,7 @@ namespace Tensorflow
 
             public static Optimizer AdamOptimizer(float learning_rate) => new AdamOptimizer(learning_rate);
 
-            public static Saver Saver() => new Saver();
+            public static Saver Saver(VariableV1[] var_list = null) => new Saver(var_list: var_list);
 
             public static string write_graph(Graph graph, string logdir, string name, bool as_text = true) 
                 => graph_io.write_graph(graph, logdir, name, as_text);
