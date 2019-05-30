@@ -19,11 +19,11 @@ namespace TensorFlowNET.Examples
     /// <summary>
     /// https://github.com/dongjun-Lee/text-classification-models-tf
     /// </summary>
-    public class TextClassificationTrain : IExample
+    public class CnnTextClassification : IExample
     {
-        public int Priority => 100;
-        public bool Enabled { get; set; } = false;
-        public string Name => "Text Classification";
+        public int Priority => 17;
+        public bool Enabled { get; set; } = true;
+        public string Name => "CNN Text Classification";
         public int? DataLimit = null;
         public bool ImportGraph { get; set; } = true;
         public bool UseSubset = false; // <----- set this true to use a limited subset of dbpedia
@@ -31,10 +31,7 @@ namespace TensorFlowNET.Examples
         private string dataDir = "text_classification";
         private string dataFileName = "dbpedia_csv.tar.gz";
 
-        public string model_name = "word_cnn"; // word_cnn | char_cnn | vd_cnn | word_rnn | att_rnn | rcnn
-
         private const string TRAIN_PATH = "text_classification/dbpedia_csv/train.csv";
-        private const string SUBSET_PATH = "text_classification/dbpedia_csv/dbpedia_6400.csv";
         private const string TEST_PATH = "text_classification/dbpedia_csv/test.csv";
 
         private const int NUM_CLASS = 14;
@@ -48,6 +45,7 @@ namespace TensorFlowNET.Examples
         public bool Run()
         {
             PrepareData();
+
             var graph = tf.Graph().as_default();
             return with(tf.Session(graph), sess =>
             {
@@ -62,20 +60,14 @@ namespace TensorFlowNET.Examples
         {
             var stopwatch = Stopwatch.StartNew();
             Console.WriteLine("Building dataset...");
-            var path = UseSubset ? SUBSET_PATH : TRAIN_PATH;
             int[][] x = null;
             int[] y = null;
             int alphabet_size = 0;
             int vocabulary_size = 0;
 
-            if (model_name == "vd_cnn")
-                (x, y, alphabet_size) = DataHelpers.build_char_dataset(path, model_name, CHAR_MAX_LEN, DataLimit = null, shuffle:!UseSubset);
-            else
-            {
-                var word_dict = DataHelpers.build_word_dict(TRAIN_PATH);
-                vocabulary_size = len(word_dict);
-                (x, y) = DataHelpers.build_word_dataset(TRAIN_PATH, word_dict, WORD_MAX_LEN);
-            }
+            var word_dict = DataHelpers.build_word_dict(TRAIN_PATH);
+            vocabulary_size = len(word_dict);
+            (x, y) = DataHelpers.build_word_dataset(TRAIN_PATH, word_dict, WORD_MAX_LEN);
 
             Console.WriteLine("\tDONE ");
 
@@ -84,7 +76,7 @@ namespace TensorFlowNET.Examples
             Console.WriteLine("Test set size: " + valid_x.len);
 
             Console.WriteLine("Import graph...");
-            var meta_file = model_name + ".meta";
+            var meta_file = "word_cnn.meta";
             tf.train.import_meta_graph(Path.Join("graph", meta_file));
             Console.WriteLine("\tDONE " + stopwatch.Elapsed);
 
@@ -98,8 +90,8 @@ namespace TensorFlowNET.Examples
             Tensor is_training = graph.OperationByName("is_training");
             Tensor model_x = graph.OperationByName("x");
             Tensor model_y = graph.OperationByName("y");
-            Tensor loss = graph.OperationByName("loss/Mean"); // word_cnn
-            Operation optimizer = graph.OperationByName("loss/Adam"); // word_cnn
+            Tensor loss = graph.OperationByName("loss/Mean");
+            Operation optimizer = graph.OperationByName("loss/Adam");
             Tensor global_step = graph.OperationByName("Variable");
             Tensor accuracy = graph.OperationByName("accuracy/accuracy");
             stopwatch = Stopwatch.StartNew();
@@ -113,10 +105,7 @@ namespace TensorFlowNET.Examples
                     [model_y] = y_batch,
                     [is_training] = true,
                 };
-                //Console.WriteLine("x: " + x_batch.ToString() + "\n");
-                //Console.WriteLine("y: " + y_batch.ToString());
-                // original python:
-                //_, step, loss = sess.run([model.optimizer, model.global_step, model.loss], feed_dict = train_feed_dict)
+
                 var result = sess.run(new ITensorOrOperation[] { optimizer, global_step, loss }, train_feed_dict);
                 loss_value = result[2];
                 var step = (int)result[1];
@@ -128,7 +117,7 @@ namespace TensorFlowNET.Examples
 
                 if (step % 100 == 0)
                 {
-                    // # Test accuracy with validation data for each epoch.
+                    // Test accuracy with validation data for each epoch.
                     var valid_batches = batch_iter(valid_x, valid_y, BATCH_SIZE, 1);
                     var (sum_accuracy, cnt) = (0.0f, 0);
                     foreach (var (valid_x_batch, valid_y_batch, total_validation_batches) in valid_batches)
@@ -149,11 +138,11 @@ namespace TensorFlowNET.Examples
 
                     print($"\nValidation Accuracy = {valid_accuracy}\n");
 
-                    //    # Save model
+                    // Save model
                     if (valid_accuracy > max_accuracy)
                     {
                         max_accuracy = valid_accuracy;
-                        // saver.save(sess, $"{dataDir}/{model_name}.ckpt", global_step: step.ToString());
+                        saver.save(sess, $"{dataDir}/word_cnn.ckpt", global_step: step.ToString());
                         print("Model is saved.\n");
                     }
                 }
@@ -165,24 +154,11 @@ namespace TensorFlowNET.Examples
         protected virtual bool RunWithBuiltGraph(Session session, Graph graph)
         {
             Console.WriteLine("Building dataset...");
-            var (x, y, alphabet_size) = DataHelpers.build_char_dataset("train", model_name, CHAR_MAX_LEN, DataLimit);
+            var (x, y, alphabet_size) = DataHelpers.build_char_dataset("train", "word_cnn", CHAR_MAX_LEN, DataLimit);
 
             var (train_x, valid_x, train_y, valid_y) = train_test_split(x, y, test_size: 0.15f);
 
             ITextClassificationModel model = null;
-            switch (model_name) // word_cnn | char_cnn | vd_cnn | word_rnn | att_rnn | rcnn
-            {
-                case "word_cnn":
-                case "char_cnn":
-                case "word_rnn":
-                case "att_rnn":
-                case "rcnn":
-                    throw new NotImplementedException();
-                    break;
-                case "vd_cnn":
-                    model = new VdCnn(alphabet_size, CHAR_MAX_LEN, NUM_CLASS);
-                    break;
-            }
             // todo train the model
             return false;
         }
@@ -258,7 +234,7 @@ namespace TensorFlowNET.Examples
             if (ImportGraph)
             {
                 // download graph meta data
-                var meta_file = model_name + ".meta";
+                var meta_file = "word_cnn.meta";
                 var meta_path = Path.Combine("graph", meta_file);
                 if (File.GetLastWriteTime(meta_path) < new DateTime(2019, 05, 11))
                 {

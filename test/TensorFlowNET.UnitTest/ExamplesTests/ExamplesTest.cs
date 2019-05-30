@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using TensorFlowNET.Examples;
-using TensorFlowNET.Examples.CnnTextClassification;
 
 namespace TensorFlowNET.ExamplesTests
 {
