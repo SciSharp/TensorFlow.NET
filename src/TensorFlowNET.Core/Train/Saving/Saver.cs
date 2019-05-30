@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
@@ -144,26 +145,20 @@ namespace Tensorflow
 
         public string save(Session sess,
             string save_path,
-            string global_step = "",
+            int global_step = -1,
             string latest_filename = "",
             string meta_graph_suffix = "meta",
             bool write_meta_graph = true,
             bool write_state = true,
-            bool strip_default_attrs = false)
+            bool strip_default_attrs = false,
+            bool save_debug_info = false)
         {
             if (string.IsNullOrEmpty(latest_filename))
                 latest_filename = "checkpoint";
             string model_checkpoint_path = "";
             string checkpoint_file = "";
 
-            if (!string.IsNullOrEmpty(global_step))
-            {
-
-            }
-            else
-            {
-                checkpoint_file = save_path;
-            }
+            checkpoint_file = $"{save_path}-{global_step}";
 
             var save_path_parent = Path.GetDirectoryName(save_path);
 
@@ -189,6 +184,7 @@ namespace Tensorflow
             if (write_meta_graph)
             {
                 string meta_graph_filename = checkpoint_management.meta_graph_filename(checkpoint_file, meta_graph_suffix: meta_graph_suffix);
+                export_meta_graph(meta_graph_filename, strip_default_attrs: strip_default_attrs, save_debug_info: save_debug_info);
             }
 
             return _is_empty ? string.Empty : model_checkpoint_path;
@@ -244,10 +240,11 @@ namespace Tensorflow
         public MetaGraphDef export_meta_graph(string filename= "",
                         string[] collection_list = null,
                         string export_scope = "",
-                        bool as_text= false,
-                        bool clear_devices= false,
-                        bool clear_extraneous_savers= false,
-                        bool strip_default_attrs= false)
+                        bool as_text = false,
+                        bool clear_devices = false,
+                        bool clear_extraneous_savers = false,
+                        bool strip_default_attrs = false,
+                        bool save_debug_info = false)
         {
             return export_meta_graph(
                 filename: filename,
