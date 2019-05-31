@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Tensorflow.Python;
 
 namespace Tensorflow.Layers
 {
@@ -50,7 +51,7 @@ namespace Tensorflow.Layers
                     auxiliary_name_scope: false);
             }
 
-            Python.with(scope_context_manager, scope2 => _current_scope = scope2);
+            with(scope_context_manager, scope2 => _current_scope = scope2);
             // Actually call layer
             var outputs = base.__call__(new Tensor[] { inputs }, training: training);
 
@@ -58,6 +59,13 @@ namespace Tensorflow.Layers
             _add_elements_to_collection(_updates.ToArray(), new string[] { ops.GraphKeys.UPDATE_OPS });
 
             return outputs;
+        }
+
+        protected override void _init_set_name(string name, bool zero_based = true)
+        {
+            // Determine layer name (non-unique).
+            base._init_set_name(name, zero_based: zero_based);
+            _base_name = this.name;
         }
 
         protected virtual void _add_elements_to_collection(Operation[] elements, string[] collection_list)
@@ -140,10 +148,18 @@ namespace Tensorflow.Layers
         {
             if (_scope == null)
             {
-                Python.with(tf.variable_scope(scope, default_name: _base_name), captured_scope =>
+                if(_reuse.HasValue && _reuse.Value)
                 {
-                    _scope = captured_scope;
-                });
+                    throw new NotImplementedException("_set_scope _reuse.HasValue");
+                    /*with(tf.variable_scope(scope == null ? _base_name : scope),
+                        captured_scope => _scope = captured_scope);*/
+                }
+                else
+                {
+                    with(tf.variable_scope(scope, default_name: _base_name),
+                        captured_scope => _scope = captured_scope);
+                }
+
             }
         }
     }

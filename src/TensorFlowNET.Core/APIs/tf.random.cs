@@ -25,7 +25,7 @@ namespace Tensorflow
 
         public static Tensor random_uniform(int[] shape,
             float minval = 0,
-            float? maxval = null,
+            float maxval = 1,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             int? seed = null,
             string name = null) => random_ops.random_uniform(shape, minval, maxval, dtype, seed, name);

@@ -234,7 +234,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor select(Tensor condition, Tensor t, Tensor e, string name = null)
+        public static Tensor select<Tx, Ty>(Tensor condition, Tx t, Ty e, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Select", name, new { condition, t, e });
             return _op.outputs[0];

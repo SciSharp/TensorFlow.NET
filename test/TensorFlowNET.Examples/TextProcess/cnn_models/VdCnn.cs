@@ -40,7 +40,7 @@ namespace TensorFlowNET.Examples.TextClassification
 
             x = tf.placeholder(tf.int32, new TensorShape(-1, document_max_len), name: "x");
             y = tf.placeholder(tf.int32, new TensorShape(-1), name: "y");
-            is_training = tf.placeholder(tf.boolean, new TensorShape(), name: "is_training");
+            is_training = tf.placeholder(tf.@bool, new TensorShape(), name: "is_training");
             global_step = tf.Variable(0, trainable: false);
 
             // Embedding Layer

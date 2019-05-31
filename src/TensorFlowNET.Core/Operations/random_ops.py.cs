@@ -49,7 +49,7 @@ namespace Tensorflow
         /// <returns>A tensor of the specified shape filled with random uniform values.</returns>
         public static Tensor random_uniform(int[] shape, 
             float minval = 0,
-            float? maxval = null,
+            float maxval = 1,
             TF_DataType dtype = TF_DataType.TF_FLOAT, 
             int? seed = null, 
             string name = null)

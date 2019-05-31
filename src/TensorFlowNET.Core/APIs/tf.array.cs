@@ -21,6 +21,13 @@ namespace Tensorflow
             => array_ops.expand_dims(input, axis, name, dim);
 
         /// <summary>
+        /// Return the elements, either from `x` or `y`, depending on the `condition`.
+        /// </summary>
+        /// <returns></returns>
+        public static Tensor where<Tx, Ty>(Tensor condition, Tx x, Ty y, string name = null)
+            => array_ops.where(condition, x, y, name);
+
+        /// <summary>
         /// Transposes `a`. Permutes the dimensions according to `perm`.
         /// </summary>
         /// <param name="a"></param>

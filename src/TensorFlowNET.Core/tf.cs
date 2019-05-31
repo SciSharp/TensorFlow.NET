@@ -15,7 +15,7 @@ namespace Tensorflow
         public static TF_DataType float16 = TF_DataType.TF_HALF;
         public static TF_DataType float32 = TF_DataType.TF_FLOAT;
         public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
-        public static TF_DataType boolean = TF_DataType.TF_BOOL;
+        public static TF_DataType @bool = TF_DataType.TF_BOOL;
         public static TF_DataType chars = TF_DataType.TF_STRING;
 
         public static Context context = new Context(new ContextOptions(), new Status());

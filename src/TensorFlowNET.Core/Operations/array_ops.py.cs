@@ -233,7 +233,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor where(Tensor condition, Tensor x = null, Tensor y = null, string name = null)
+        public static Tensor where(Tensor condition, object x = null, object y = null, string name = null)
         {
             if( x == null && y == null)
             {
