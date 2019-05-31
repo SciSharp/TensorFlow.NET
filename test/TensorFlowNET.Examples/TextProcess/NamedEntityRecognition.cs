@@ -11,18 +11,37 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class NamedEntityRecognition : IExample
     {
-        public int Priority => 100;
         public bool Enabled { get; set; } = false;
         public string Name => "NER";
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PrepareData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
 
         public bool Run()
         {
             throw new NotImplementedException();
         }
 
-        public void PrepareData()
+        public bool Predict()
         {
             throw new NotImplementedException();
         }

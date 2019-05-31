@@ -20,10 +20,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class ImageRecognitionInception : IExample
     {
-        public int Priority => 7;
         public bool Enabled { get; set; } = true;
         public string Name => "Image Recognition Inception";
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
 
         string dir = "ImageRecognitionInception";
@@ -114,6 +113,26 @@ namespace TensorFlowNET.Examples
                 var nd = ReadTensorFromImageFile(files[i]);
                 file_ndarrays.Add(nd);
             }
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

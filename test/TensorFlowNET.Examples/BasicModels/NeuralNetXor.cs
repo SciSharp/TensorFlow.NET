@@ -14,10 +14,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class NeuralNetXor : IExample
     {
-        public int Priority => 10;
         public bool Enabled { get; set; } = true;
         public string Name => "NN XOR";
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
         public int num_steps = 10000;
 
@@ -54,7 +53,7 @@ namespace TensorFlowNET.Examples
         {
             PrepareData();
             float loss_value = 0;
-            if (ImportGraph)
+            if (IsImportingGraph)
                 loss_value = RunWithImportedGraph();
             else
                 loss_value = RunWithBuiltGraph();
@@ -145,12 +144,32 @@ namespace TensorFlowNET.Examples
                 {0, 1 }
             };
 
-            if (ImportGraph)
+            if (IsImportingGraph)
             {
                 // download graph meta data
                 string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/xor.meta";
                 Web.Download(url, "graph", "xor.meta");
             }
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

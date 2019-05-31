@@ -21,11 +21,10 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class TextClassificationTrain : IExample
     {
-        public int Priority => 100;
         public bool Enabled { get; set; } = false;
         public string Name => "Text Classification";
         public int? DataLimit = null;
-        public bool ImportGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = true;
         public bool UseSubset = false; // <----- set this true to use a limited subset of dbpedia
 
         private string dataDir = "text_classification";
@@ -51,7 +50,7 @@ namespace TensorFlowNET.Examples
             var graph = tf.Graph().as_default();
             return with(tf.Session(graph), sess =>
             {
-                if (ImportGraph)
+                if (IsImportingGraph)
                     return RunWithImportedGraph(sess, graph);
                 else
                     return RunWithBuiltGraph(sess, graph);
@@ -255,7 +254,7 @@ namespace TensorFlowNET.Examples
                 Compress.ExtractTGZ(Path.Join(dataDir, dataFileName), dataDir);
             }
 
-            if (ImportGraph)
+            if (IsImportingGraph)
             {
                 // download graph meta data
                 var meta_file = model_name + ".meta";
@@ -269,6 +268,26 @@ namespace TensorFlowNET.Examples
                 var url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/" + meta_file;
                 Web.Download(url, "graph", meta_file);
             }
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

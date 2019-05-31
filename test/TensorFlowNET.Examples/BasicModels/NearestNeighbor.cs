@@ -15,7 +15,6 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class NearestNeighbor : IExample
     {
-        public int Priority => 5;
         public bool Enabled { get; set; } = true;
         public string Name => "Nearest Neighbor";
         Datasets mnist;
@@ -23,7 +22,7 @@ namespace TensorFlowNET.Examples
         public int? TrainSize = null;
         public int ValidationSize = 5000;
         public int? TestSize = null;
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
 
         public bool Run()
@@ -75,6 +74,26 @@ namespace TensorFlowNET.Examples
             // In this example, we limit mnist data
             (Xtr, Ytr) = mnist.train.next_batch(TrainSize==null ? 5000 : TrainSize.Value / 100); // 5000 for training (nn candidates)
             (Xte, Yte) = mnist.test.next_batch(TestSize==null ? 200 : TestSize.Value / 100); // 200 for testing
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

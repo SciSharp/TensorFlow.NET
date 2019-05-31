@@ -16,10 +16,9 @@ namespace TensorFlowNET.Examples
 
     public class ObjectDetection : IExample
     {
-        public int Priority => 11;
         public bool Enabled { get; set; } = true;
         public string Name => "Object Detection";
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
         public float MIN_SCORE = 0.5f;
 
@@ -144,6 +143,26 @@ namespace TensorFlowNET.Examples
                     graphic.DrawString(text, new Font("Verdana", 8), Brushes.Red, p);
                 }
             }
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

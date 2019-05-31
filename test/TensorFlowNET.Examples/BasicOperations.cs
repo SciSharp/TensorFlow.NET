@@ -14,10 +14,8 @@ namespace TensorFlowNET.Examples
     public class BasicOperations : IExample
     {
         public bool Enabled { get; set; } = true;
-        public int Priority => 2;
         public string Name => "Basic Operations";
-        public bool ImportGraph { get; set; } = false;
-
+        public bool IsImportingGraph { get; set; } = false;
 
         private Session sess;
 
@@ -103,6 +101,26 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

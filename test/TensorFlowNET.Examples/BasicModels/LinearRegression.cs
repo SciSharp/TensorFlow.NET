@@ -13,11 +13,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class LinearRegression : IExample
     {
-        public int Priority => 3;
         public bool Enabled { get; set; } = true;
         public string Name => "Linear Regression";
-        public bool ImportGraph { get; set; } = false;
-
+        public bool IsImportingGraph { get; set; } = false;
 
         public int training_epochs = 1000;
 
@@ -112,6 +110,26 @@ namespace TensorFlowNET.Examples
             train_Y = np.array(1.7f, 2.76f, 2.09f, 3.19f, 1.694f, 1.573f, 3.366f, 2.596f, 2.53f, 1.221f,
                          2.827f, 3.465f, 1.65f, 2.904f, 2.42f, 2.94f, 1.3f);
             n_samples = train_X.shape[0];
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

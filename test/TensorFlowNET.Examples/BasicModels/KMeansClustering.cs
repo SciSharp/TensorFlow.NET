@@ -18,10 +18,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class KMeansClustering : IExample
     {
-        public int Priority => 8;
         public bool Enabled { get; set; } = true;
         public string Name => "K-means Clustering";
-        public bool ImportGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = true;
 
         public int? train_size = null;
         public int validation_size = 5000;
@@ -126,6 +125,26 @@ namespace TensorFlowNET.Examples
             // download graph meta data
             string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/kmeans.meta";
             Web.Download(url, "graph", "kmeans.meta");
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

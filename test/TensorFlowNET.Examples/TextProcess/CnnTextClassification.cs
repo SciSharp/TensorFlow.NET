@@ -21,11 +21,10 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class CnnTextClassification : IExample
     {
-        public int Priority => 17;
         public bool Enabled { get; set; } = true;
         public string Name => "CNN Text Classification";
         public int? DataLimit = null;
-        public bool ImportGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = false;
 
         private string dataDir = "word_cnn";
         private string dataFileName = "dbpedia_csv.tar.gz";
@@ -49,7 +48,7 @@ namespace TensorFlowNET.Examples
             var graph = tf.Graph().as_default();
             return with(tf.Session(graph), sess =>
             {
-                if (ImportGraph)
+                if (IsImportingGraph)
                     return RunWithImportedGraph(sess, graph);
                 else
                     return RunWithBuiltGraph(sess, graph);
@@ -222,7 +221,7 @@ namespace TensorFlowNET.Examples
             Web.Download(url, dataDir, "dbpedia_subset.zip");
             Compress.UnZip(Path.Combine(dataDir, "dbpedia_subset.zip"), Path.Combine(dataDir, "dbpedia_csv"));
 
-            if (ImportGraph)
+            if (IsImportingGraph)
             {
                 // download graph meta data
                 var meta_file = "word_cnn.meta";
@@ -236,6 +235,26 @@ namespace TensorFlowNET.Examples
                 url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/" + meta_file;
                 Web.Download(url, "graph", meta_file);
             }
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

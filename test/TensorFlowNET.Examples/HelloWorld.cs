@@ -12,11 +12,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class HelloWorld : IExample
     {
-        public int Priority => 1;
         public bool Enabled { get; set; } = true;
         public string Name => "Hello World";
-        public bool ImportGraph { get; set; } = false;
-
+        public bool IsImportingGraph { get; set; } = false;
 
         public bool Run()
         {
@@ -40,6 +38,26 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

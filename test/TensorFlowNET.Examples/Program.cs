@@ -19,7 +19,6 @@ namespace TensorFlowNET.Examples
             var examples = Assembly.GetEntryAssembly().GetTypes()
                 .Where(x => x.GetInterfaces().Contains(typeof(IExample)))
                 .Select(x => (IExample)Activator.CreateInstance(x))
-                .OrderBy(x => x.Priority)
                 .ToArray();
 
             Console.WriteLine($"TensorFlow v{tf.VERSION}", Color.Yellow);
@@ -42,18 +41,18 @@ namespace TensorFlowNET.Examples
                         sw.Stop();
 
                         if (isSuccess)
-                            success.Add($"Example {example.Priority}: {example.Name} in {sw.Elapsed.TotalSeconds}s");
+                            success.Add($"Example: {example.Name} in {sw.Elapsed.TotalSeconds}s");
                         else
-                            errors.Add($"Example {example.Priority}: {example.Name} in {sw.Elapsed.TotalSeconds}s");
+                            errors.Add($"Example: {example.Name} in {sw.Elapsed.TotalSeconds}s");
                     }
                     else
                     {
-                        disabled.Add($"Example {example.Priority}: {example.Name} in {sw.ElapsedMilliseconds}ms");
+                        disabled.Add($"Example: {example.Name} in {sw.ElapsedMilliseconds}ms");
                     }
                 }
                 catch (Exception ex)
                 {
-                    errors.Add($"Example {example.Priority}: {example.Name}");
+                    errors.Add($"Example: {example.Name}");
                     Console.WriteLine(ex);
                 }
                 

@@ -20,10 +20,8 @@ namespace TensorFlowNET.Examples.Text.NER
     /// </summary>
     public class LstmCrfNer : IExample
     {
-        public int Priority => 14;
-
         public bool Enabled { get; set; } = true;
-        public bool ImportGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = true;
 
         public string Name => "LSTM + CRF NER";
 
@@ -207,6 +205,26 @@ namespace TensorFlowNET.Examples.Text.NER
             url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/" + meta_file;
             Web.Download(url, "graph", meta_file);
 
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

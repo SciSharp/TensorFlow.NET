@@ -15,10 +15,8 @@ namespace TensorFlowNET.Examples.ImageProcess
     /// </summary>
     public class ImageBackgroundRemoval : IExample
     {
-        public int Priority => 15;
-
         public bool Enabled { get; set; } = true;
-        public bool ImportGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = true;
 
         public string Name => "Image Background Removal";
 
@@ -58,6 +56,26 @@ namespace TensorFlowNET.Examples.ImageProcess
             url = $"http://download.tensorflow.org/models/{fileName}";
             Web.Download(url, modelDir, fileName);
             Compress.ExtractTGZ(Path.Join(modelDir, fileName), modelDir);*/
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

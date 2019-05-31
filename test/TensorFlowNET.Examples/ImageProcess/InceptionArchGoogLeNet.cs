@@ -21,9 +21,8 @@ namespace TensorFlowNET.Examples
     public class InceptionArchGoogLeNet : IExample
     {
         public bool Enabled { get; set; } = false;
-        public int Priority => 100;
         public string Name => "Inception Arch GoogLeNet";
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
 
         string dir = "label_image_data";
@@ -107,6 +106,26 @@ namespace TensorFlowNET.Examples
             string pic = "grace_hopper.jpg";
             url = $"https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/{pic}";
             Utility.Web.Download(url, dir, pic);
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

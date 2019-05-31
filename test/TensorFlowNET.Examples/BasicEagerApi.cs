@@ -11,10 +11,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BasicEagerApi : IExample
     {
-        public int Priority => 100;
         public bool Enabled { get; set; } = false;
         public string Name => "Basic Eager";
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
         private Tensor a, b, c, d;
 
@@ -45,6 +44,26 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
         }
     }
 }

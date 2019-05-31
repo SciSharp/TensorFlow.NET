@@ -26,7 +26,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         public int Priority => 16;
 
         public bool Enabled { get; set; } = true;
-        public bool ImportGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = true;
 
         public string Name => "Retrain Image Classifier";
 
@@ -666,6 +666,26 @@ namespace TensorFlowNET.Examples.ImageProcess
             }
 
             return result;
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -18,10 +18,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class LogisticRegression : IExample
     {
-        public int Priority => 4;
         public bool Enabled { get; set; } = true;
         public string Name => "Logistic Regression";
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
 
         public int training_epochs = 10;
@@ -157,6 +156,26 @@ namespace TensorFlowNET.Examples
                 else
                     throw new ValueError("predict error, should be 90% accuracy");
             });
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IExample.Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

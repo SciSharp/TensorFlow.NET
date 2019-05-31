@@ -13,10 +13,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class NaiveBayesClassifier : IExample
     {
-        public int Priority => 6;
         public bool Enabled { get; set; } = true;
         public string Name => "Naive Bayes Classifier";
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
         public NDArray X, y;
         public Normal dist { get; set; }
@@ -96,7 +95,7 @@ namespace TensorFlowNET.Examples
             this.dist = dist;
         }
 
-        public Tensor predict (NDArray X)
+        public Tensor predict(NDArray X)
         {
             if (dist == null)
             {
@@ -169,6 +168,26 @@ namespace TensorFlowNET.Examples
                         2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
                         2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
             #endregion
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

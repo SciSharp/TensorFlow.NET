@@ -16,10 +16,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class Word2Vec : IExample
     {
-        public int Priority => 12;
         public bool Enabled { get; set; } = true;
         public string Name => "Word2Vec";
-        public bool ImportGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = true;
 
         // Training Parameters
         float learning_rate = 0.1f;
@@ -203,6 +202,26 @@ namespace TensorFlowNET.Examples
             print($"Unique words: {text_words.Distinct().Count()}");
             print($"Vocabulary size: {word2id.Count}");
             print($"Most common words: {string.Join(", ", word2id.Take(10))}");
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
 
         private class WordId

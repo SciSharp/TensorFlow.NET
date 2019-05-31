@@ -14,10 +14,8 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BiLstmCrfNer : IExample
     {
-        public int Priority => 101;
-
         public bool Enabled { get; set; } = true;
-        public bool ImportGraph { get; set; } = false;
+        public bool IsImportingGraph { get; set; } = false;
 
         public string Name => "bi-LSTM + CRF NER";
 
@@ -34,6 +32,26 @@ namespace TensorFlowNET.Examples
             hp.filepath_chars = Path.Combine(hp.data_root_dir, "vocab.chars.txt");
             hp.filepath_tags = Path.Combine(hp.data_root_dir, "vocab.tags.txt");
             hp.filepath_glove = Path.Combine(hp.data_root_dir, "glove.npz");
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }

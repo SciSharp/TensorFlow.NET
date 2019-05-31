@@ -17,10 +17,9 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BinaryTextClassification : IExample
     {
-        public int Priority => 9;
         public bool Enabled { get; set; } = true;
         public string Name => "Binary Text Classification";
-        public bool ImportGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = true;
 
         string dir = "binary_text_classification";
         string dataFile = "imdb.zip";
@@ -137,6 +136,26 @@ namespace TensorFlowNET.Examples
             result["<UNUSED>"] = 3;
 
             return result;
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Train()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Predict()
+        {
+            throw new NotImplementedException();
         }
     }
 }
