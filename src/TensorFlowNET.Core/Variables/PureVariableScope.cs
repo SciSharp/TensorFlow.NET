@@ -35,7 +35,7 @@ namespace Tensorflow
             _old_name_scope = old_name_scope;
             _var_store = variable_scope._get_default_variable_store();
             _var_scope_store = variable_scope.get_variable_scope_store();
-            _new_name = _scope._name;
+            _new_name = _scope.name;
 
             string name_scope = _scope._name_scope;
             variable_scope_object = new VariableScope(_reuse,
@@ -55,7 +55,7 @@ namespace Tensorflow
             }
             else
             {
-                _new_name = string.IsNullOrEmpty(_old._name) ? _name : _old._name + "/" + _name;
+                _new_name = string.IsNullOrEmpty(_old.name) ? _name : _old.name + "/" + _name;
                 _reuse = _reuse || _old.resue;
                 string name_scope = _old_name_scope == null ? _name : _old_name_scope;
 

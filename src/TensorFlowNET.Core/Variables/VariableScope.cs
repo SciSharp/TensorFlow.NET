@@ -15,7 +15,8 @@ namespace Tensorflow
         public bool resue;
 
         private TF_DataType _dtype;
-        public string _name { get; set; }
+        string _name;
+        public string name => _name;
         public string _name_scope { get; set; }
         public string original_name_scope => _name_scope;
 

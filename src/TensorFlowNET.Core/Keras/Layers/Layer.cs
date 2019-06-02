@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
+using Tensorflow.Train;
 using static Tensorflow.Python;
 
 namespace Tensorflow.Keras.Layers
@@ -14,7 +15,7 @@ namespace Tensorflow.Keras.Layers
     /// as convolution, batch norm, etc. These operations require managing weights,
     /// losses, updates, and inter-layer connectivity.
     /// </summary>
-    public class Layer : CheckpointableBase
+    public class Layer : AutoTrackable
     {
         /// <summary>
         /// Indicates whether `build` needs to be called upon layer call, to create
@@ -84,32 +85,35 @@ namespace Tensorflow.Keras.Layers
             // models using the functional API).
             bool build_graph = tf_utils.are_all_symbolic_tensors(input_list);
 
-            // Handle Keras mask propagation from previous layer to current layer.
-            Python.with(ops.name_scope(_name_scope()), delegate
+            if (build_graph)
             {
-                /*if (!built)
-                {
-                    _maybe_build(inputs);
-                    built = true;
-                }*/
+                // Only create Keras history if at least one tensor originates from a
+                // `keras.Input`. Otherwise this Layer may be being used outside the Keras
+                // framework.
+                // base_layer_utils.create_keras_history(inputs)
+            }
 
-                if (build_graph)
-                {
-                    // Symbolic execution on symbolic tensors. We will attempt to build
-                    // the corresponding TF subgraph inside `backend.get_graph()`
-                    var graph = backend.get_graph().as_default();
-                    with(ops.name_scope(_name_scope()), delegate
-                    {
-                        // Build layer if applicable (if the `build` method has been
-                        // overridden).
-                        _maybe_build(inputs[0]);
-                    });
+            // with base_layer_utils.call_context(self):
 
-                    outputs = call(inputs[0], training: training);
-                    _handle_activity_regularization(inputs[0], outputs);
-                    _set_mask_metadata(inputs[0], outputs, null);
-                }
-            });
+            // Handle Keras mask propagation from previous layer to current layer.
+            // with base_layer_utils.call_context(self):
+            // Check input assumptions set after layer building, e.g. input shape.
+            if (build_graph)
+            {
+                // Symbolic execution on symbolic tensors. We will attempt to build
+                // the corresponding TF subgraph inside `backend.get_graph()`
+                var graph = backend.get_graph().as_default();
+                with(ops.name_scope(_name_scope()), delegate
+                {
+                    // Build layer if applicable (if the `build` method has been
+                    // overridden).
+                    _maybe_build(inputs[0]);
+                });
+
+               outputs = call(inputs[0], training: training);
+                _handle_activity_regularization(inputs[0], outputs);
+                _set_mask_metadata(inputs[0], outputs, null);
+            }
 
             return outputs;
         }
@@ -147,6 +151,8 @@ namespace Tensorflow.Keras.Layers
             // Check input assumptions set before layer building, e.g. input rank.
             if (built)
                 return;
+            if (_dtype == TF_DataType.DtInvalid)
+                _dtype = input.dtype;
 
             build(input.GetShape());
             built = true;
@@ -170,10 +176,21 @@ namespace Tensorflow.Keras.Layers
             if (trainable == null)
                 trainable = true;
 
+            // Initialize variable when no initializer provided
+            if(initializer == null)
+            {
+                // If dtype is DT_FLOAT, provide a uniform unit scaling initializer
+                if (dtype.is_floating())
+                    initializer = tf.glorot_uniform_initializer;
+                else if (dtype.is_integer())
+                    initializer = tf.zeros_initializer;
+                else
+                    throw new ValueError($"An initializer for variable {name} of type {dtype.as_base_dtype()} is required for layer {this.name}");
+            }
             var variable = _add_variable_with_custom_getter(name,
                 shape,
                 dtype: dtype,
-                //getter: getter == null ? base_layer_utils.make_variable : getter,
+                getter: getter, // getter == null ? base_layer_utils.make_variable : getter,
                 overwrite: true,
                 initializer: initializer,
                 trainable: trainable.Value);

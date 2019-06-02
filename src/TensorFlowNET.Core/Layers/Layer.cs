@@ -51,9 +51,14 @@ namespace Tensorflow.Layers
                     auxiliary_name_scope: false);
             }
 
-            with(scope_context_manager, scope2 => _current_scope = scope2);
-            // Actually call layer
-            var outputs = base.__call__(new Tensor[] { inputs }, training: training);
+            Tensor outputs = null;
+            with(scope_context_manager, scope2 =>
+            {
+                _current_scope = scope2;
+                // Actually call layer
+                outputs = base.__call__(new Tensor[] { inputs }, training: training);
+            });
+
 
             // Update global default collections.
             _add_elements_to_collection(_updates.ToArray(), new string[] { ops.GraphKeys.UPDATE_OPS });
@@ -80,6 +85,17 @@ namespace Tensorflow.Layers
             }
         }
 
+        /// <summary>
+        /// Adds a new variable to the layer, or gets an existing one; returns it.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="shape"></param>
+        /// <param name="dtype"></param>
+        /// <param name="initializer"></param>
+        /// <param name="trainable"></param>
+        /// <param name="synchronization"></param>
+        /// <param name="aggregation"></param>
+        /// <returns></returns>
         protected virtual RefVariable add_weight(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
@@ -157,7 +173,10 @@ namespace Tensorflow.Layers
                 else
                 {
                     with(tf.variable_scope(scope, default_name: _base_name),
-                        captured_scope => _scope = captured_scope);
+                        captured_scope =>
+                        {
+                            _scope = captured_scope;
+                        });
                 }
 
             }

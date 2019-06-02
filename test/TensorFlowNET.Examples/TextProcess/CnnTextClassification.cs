@@ -174,8 +174,9 @@ namespace TensorFlowNET.Examples
                 x_emb = tf.expand_dims(x_emb, -1);
             });
 
-            foreach(var filter_size in filter_sizes)
+            for(int len = 0; len < filter_sizes.Rank; len++)
             {
+                int filter_size = filter_sizes.GetLength(len);
                 var conv = tf.layers.conv2d(
                     x_emb,
                     filters: num_filters,
@@ -183,6 +184,12 @@ namespace TensorFlowNET.Examples
                     strides: new int[] { 1, 1 },
                     padding: "VALID",
                     activation: tf.nn.relu());
+
+                var pool = tf.layers.max_pooling2d(
+                    conv,
+                    pool_size: new[] { document_max_len - filter_size + 1, 1 },
+                    strides: new[] { 1, 1 },
+                    padding: "VALID");
             }
 
             return graph;

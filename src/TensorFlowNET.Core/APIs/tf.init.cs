@@ -14,7 +14,7 @@ namespace Tensorflow
 
         public static variable_scope variable_scope(string name,
                string default_name = null,
-               object values = null,
+               Tensor[] values = null,
                bool auxiliary_name_scope = true) => new variable_scope(name, 
                    default_name, 
                    values,
@@ -22,7 +22,7 @@ namespace Tensorflow
 
         public static variable_scope variable_scope(VariableScope scope,
               string default_name = null,
-              object values = null,
+              Tensor[] values = null,
               bool? reuse = null,
               bool auxiliary_name_scope = true) => new variable_scope(scope,
                   default_name,
