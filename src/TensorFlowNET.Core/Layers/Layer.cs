@@ -172,13 +172,12 @@ namespace Tensorflow.Layers
                 }
                 else
                 {
-                    with(tf.variable_scope(scope, default_name: _base_name),
-                        captured_scope =>
-                        {
-                            _scope = captured_scope;
-                        });
+                    with(tf.variable_scope(scope, default_name: _base_name), captured_scope =>
+                    {
+                        // convert variable_scope to VariableScope
+                        _scope = captured_scope;
+                    });
                 }
-
             }
         }
     }

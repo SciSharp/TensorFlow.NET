@@ -87,7 +87,7 @@ namespace Tensorflow
         private Dictionary<string, object> _collections = new Dictionary<string, object>();
 
         public bool building_function;
-
+        
         public Graph()
         {
             _handle = c_api.TF_NewGraph();
@@ -113,7 +113,14 @@ namespace Tensorflow
             return _as_graph_element_locked(obj, allow_tensor, allow_operation);
         }
 
-        public Graph as_default() => ops.set_default_graph(this);
+        /// <summary>
+        /// Returns a context manager that makes this `Graph` the default graph.
+        /// </summary>
+        /// <returns></returns>
+        public Graph as_default()
+        {
+            return ops.set_default_graph(this);
+        }
 
         private Tensor _as_graph_element(object obj)
         {

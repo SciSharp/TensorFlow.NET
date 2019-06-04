@@ -195,7 +195,7 @@ namespace TensorFlowNET.Examples
             return graph;
         }
 
-        private bool RunWithImportedGraph(Session sess, Graph graph)
+        private bool Train(Session sess, Graph graph)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -274,8 +274,7 @@ namespace TensorFlowNET.Examples
         {
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
 
-            return with(tf.Session(graph), sess 
-                => RunWithImportedGraph(sess, graph));
+            return with(tf.Session(graph), sess => Train(sess, graph));
         }
 
         public bool Predict()

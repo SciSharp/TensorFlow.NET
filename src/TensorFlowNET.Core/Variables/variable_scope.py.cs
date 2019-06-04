@@ -26,6 +26,7 @@ namespace Tensorflow
         private bool? _reuse;
         bool _in_graph_mode;
         protected Graph _graph;
+        bool _building_function;
 
         public variable_scope(string name, 
             string default_name = "",
@@ -70,6 +71,17 @@ namespace Tensorflow
 
         public void __enter__()
         {
+            // If the default graph is building a function, then we should not replace it
+            // with the cached graph.
+            if (ops.get_default_graph().building_function)
+                _building_function = true;
+            else
+                _building_function = false;
+            if (_in_graph_mode && !_building_function)
+            {
+                _graph.as_default();
+            }
+
             _scope = _enter_scope_uncached();
         }
 

@@ -54,12 +54,13 @@ namespace Tensorflow
             public void Dispose()
             {
                 var g = get_default_graph();
-                // Console.WriteLine($"name_scope: {g._name_stack} -> {old_stack}");
                 g._name_stack = old_stack;
+                // Console.WriteLine($"name_scope: {g._name_stack} -> {old_stack}");
             }
 
             public void __exit__()
             {
+
             }
 
             /// <summary>
