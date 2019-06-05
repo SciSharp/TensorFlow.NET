@@ -190,7 +190,7 @@ namespace Tensorflow.Keras.Layers
             var variable = _add_variable_with_custom_getter(name,
                 shape,
                 dtype: dtype,
-                getter: getter, // getter == null ? base_layer_utils.make_variable : getter,
+                getter: (getter == null) ? base_layer_utils.make_variable : getter,
                 overwrite: true,
                 initializer: initializer,
                 trainable: trainable.Value);
