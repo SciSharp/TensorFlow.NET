@@ -24,6 +24,7 @@ namespace Tensorflow
 
         public static Tensor operator /(Tensor x, Tensor y) => BinaryOpWrapper("truediv", x, y);
         public static Tensor operator /(Tensor x, float y) => BinaryOpWrapper("truediv", x, y);
+        public static Tensor operator /(float x, Tensor y) => BinaryOpWrapper("truediv", x, y);
         public static Tensor operator /(Tensor x, double y) => BinaryOpWrapper("truediv", x, y);
 
         public static Tensor operator %(Tensor x, Tensor y) => BinaryOpWrapper("mod", x, y);

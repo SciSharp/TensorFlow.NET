@@ -10,6 +10,27 @@ namespace Tensorflow
     {
         public static class nn
         {
+            /// <summary>
+            /// Computes dropout.
+            /// </summary>
+            /// <param name="x">A floating point tensor.</param>
+            /// <param name="keep_prob">(deprecated) A deprecated alias for `(1-rate)`.</param>
+            /// <param name="noise_shape"></param>
+            /// <param name="seed">Used to create random seeds.</param>
+            /// <param name="name"></param>
+            /// <param name="rate">A scalar `Tensor` with the same type as `x`.</param>
+            /// <returns>A Tensor of the same shape of `x`.</returns>
+            public static Tensor dropout(Tensor x, Tensor keep_prob = null, Tensor noise_shape = null, int? seed = null, string name = null,
+                float? rate = null)
+            {
+                Tensor keep = null;
+                if (keep_prob != null)
+                    keep = 1.0f - keep_prob;
+                var rate_tensor = keep;
+
+                return nn_ops.dropout_v2(x, rate: rate_tensor, noise_shape: noise_shape, seed: seed, name: name);
+            }
+
             public static (Tensor, Tensor) moments(Tensor x,
                 int[] axes,
                 string name = null,

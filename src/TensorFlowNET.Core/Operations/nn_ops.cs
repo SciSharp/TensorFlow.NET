@@ -43,6 +43,58 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        /// Computes dropout.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="rate"></param>
+        /// <param name="noise_shape"></param>
+        /// <param name="seed"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor dropout_v2(Tensor x, Tensor rate, Tensor noise_shape = null, int? seed = null, string name = null)
+        {
+            return with(ops.name_scope(name, "dropout", x), scope =>
+            {
+                name = scope;
+                x = ops.convert_to_tensor(x, name: "x");
+                if (!x.dtype.is_floating())
+                    throw new NotImplementedException($"x has to be a floating point tensor since it's going to" +
+                        $" be scaled. Got a {x.dtype} tensor instead.");
+
+                rate = ops.convert_to_tensor(rate, dtype: x.dtype, name: "rate");
+                // Do nothing if we know rate == 0
+                var val = tensor_util.constant_value(rate);
+                if (!(val is null) && val.Data<float>(0) == 0)
+                    return x;
+
+                noise_shape = _get_noise_shape(x, noise_shape);
+
+                // Sample a uniform distribution on [0.0, 1.0) and select values larger than
+                // rate.
+                //
+                // NOTE: Random uniform actually can only generate 2^23 floats on [1.0, 2.0)
+                // and subtract 1.0.
+                var random_tensor = random_ops.random_uniform(noise_shape, seed: seed, dtype: x.dtype);
+                var keep_prob = 1.0f - rate;
+                var scale = 1.0f / keep_prob;
+                // NOTE: if (1.0 + rate) - 1 is equal to rate, then we want to consider that
+                // float to be selected, hence we use a >= comparison.
+                var keep_mask = random_tensor >= rate;
+                var ret = x * scale * math_ops.cast(keep_mask, x.dtype);
+                ret.SetShape(x.GetShape());
+                return ret;
+            });
+        }
+
+        private static Tensor _get_noise_shape(Tensor x, Tensor noise_shape)
+        {
+            if (noise_shape == null)
+                return array_ops.shape(x);
+            else
+                return noise_shape;
+        }
+
         public static Tensor log_softmax(Tensor logits, int axis = -1, string name = null)
         {
             return _softmax(logits, gen_nn_ops.log_softmax, axis, name);

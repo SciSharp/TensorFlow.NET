@@ -76,7 +76,7 @@ namespace Tensorflow
             {
                 name = scope;
                 var minTensor = ops.convert_to_tensor(minval, dtype: dtype, name: "min");
-                var maxTensor = ops.convert_to_tensor(maxval, dtype: dtype, name: "max");
+                var maxTensor = ops.convert_to_tensor(maxval == null ? 1 : maxval, dtype: dtype, name: "max");
                 var (seed1, seed2) = random_seed.get_seed(seed);
                 if (dtype.is_integer())
                 {

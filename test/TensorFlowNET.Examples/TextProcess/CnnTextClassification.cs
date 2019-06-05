@@ -163,7 +163,7 @@ namespace TensorFlowNET.Examples
             var y = tf.placeholder(tf.int32, new TensorShape(-1), name: "y");
             var is_training = tf.placeholder(tf.@bool, new TensorShape(), name: "is_training");
             var global_step = tf.Variable(0, trainable: false);
-            var keep_prob = tf.where(is_training, 0.5, 1.0);
+            var keep_prob = tf.where(is_training, 0.5f, 1.0f);
             Tensor x_emb = null;
 
             with(tf.name_scope("embedding"), scope =>
@@ -200,7 +200,7 @@ namespace TensorFlowNET.Examples
 
             with(tf.name_scope("dropout"), delegate
             {
-                // var h_drop = tf.nn.dropout(h_pool_flat, self.keep_prob);
+                var h_drop = tf.nn.dropout(h_pool_flat, keep_prob);
             });
 
             return graph;
