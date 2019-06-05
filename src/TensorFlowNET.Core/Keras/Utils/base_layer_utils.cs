@@ -21,6 +21,21 @@ namespace Tensorflow.Keras.Utils
             int[] shape,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
+            bool trainable = true) => make_variable(name, shape, dtype, initializer, trainable, true);
+
+        /// <summary>
+        /// Adds a new variable to the layer.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="shape"></param>
+        /// <param name="dtype"></param>
+        /// <param name="initializer"></param>
+        /// <param name="trainable"></param>
+        /// <returns></returns>
+        public static RefVariable make_variable(string name,
+            int[] shape,
+            TF_DataType dtype = TF_DataType.TF_FLOAT,
+            IInitializer initializer = null,
             bool trainable = true,
             bool use_resource = true)
         {
@@ -28,7 +43,7 @@ namespace Tensorflow.Keras.Utils
 
             ops.init_scope();
 
-            Func<Tensor> init_val = ()=> initializer.call(new TensorShape(shape), dtype: dtype);
+            Func<Tensor> init_val = () => initializer.call(new TensorShape(shape), dtype: dtype);
 
             var variable_dtype = dtype.as_base_dtype();
             var v = tf.Variable(init_val);
@@ -44,13 +59,13 @@ namespace Tensorflow.Keras.Utils
         public static string unique_layer_name(string name, Dictionary<(string, string), int> name_uid_map = null,
             string[] avoid_names = null, string @namespace = "", bool zero_based = false)
         {
-            if(name_uid_map == null)
+            if (name_uid_map == null)
                 name_uid_map = get_default_graph_uid_map();
             if (avoid_names == null)
                 avoid_names = new string[0];
 
             string proposed_name = null;
-            while(proposed_name == null || avoid_names.Contains(proposed_name))
+            while (proposed_name == null || avoid_names.Contains(proposed_name))
             {
                 var name_key = (@namespace, name);
                 if (!name_uid_map.ContainsKey(name_key))
@@ -58,7 +73,7 @@ namespace Tensorflow.Keras.Utils
 
                 if (zero_based)
                 {
-                    int number =  name_uid_map[name_key];
+                    int number = name_uid_map[name_key];
                     if (number > 0)
                         proposed_name = $"{name}_{number}";
                     else
