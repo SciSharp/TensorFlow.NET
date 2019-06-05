@@ -195,7 +195,14 @@ namespace TensorFlowNET.Examples
                 pooled_outputs.Add(pool);
             }
 
-            // var h_pool = tf.concat(pooled_outputs, 3);
+            var h_pool = tf.concat(pooled_outputs, 3);
+            var h_pool_flat = tf.reshape(h_pool, new TensorShape(-1, num_filters * filter_sizes.Rank));
+
+            with(tf.name_scope("dropout"), delegate
+            {
+                // var h_drop = tf.nn.dropout(h_pool_flat, self.keep_prob);
+            });
+
             return graph;
         }
 

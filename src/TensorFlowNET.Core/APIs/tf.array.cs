@@ -1,11 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
 {
     public static partial class tf
     {
+        /// <summary>
+        /// Concatenates tensors along one dimension.
+        /// </summary>
+        /// <param name="values">A list of `Tensor` objects or a single `Tensor`.</param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns>A `Tensor` resulting from concatenation of the input tensors.</returns>
+        public static Tensor concat(IList<Tensor> values, int axis, string name = "concat")
+        {
+            if (values.Count == 1)
+                throw new NotImplementedException("tf.concat length is 1");
+
+            return gen_array_ops.concat_v2(values.ToArray(), axis, name: name);
+        }
+
         /// <summary>
         /// Inserts a dimension of 1 into a tensor's shape.
         /// </summary>
