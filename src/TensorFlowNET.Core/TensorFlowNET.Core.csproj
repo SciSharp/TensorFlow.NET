@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.8.0</Version>
+    <Version>0.8.1</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -17,15 +17,12 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.8.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.7:
+    <AssemblyVersion>0.8.1.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.8:
 
-Add XOR example.
-Add KMeans example.
-Add Object Detection example.
-Add Word2Vec example.</PackageReleaseNotes>
+Removed global static graph instance.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.8.0.0</FileVersion>
+    <FileVersion>0.8.1.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

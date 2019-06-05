@@ -15,10 +15,12 @@ namespace Tensorflow
         public static variable_scope variable_scope(string name,
                string default_name = null,
                Tensor[] values = null,
-               bool auxiliary_name_scope = true) => new variable_scope(name, 
-                   default_name, 
+               bool? reuse = null,
+               bool auxiliary_name_scope = true) => new variable_scope(name,
+                   default_name,
                    values,
-                   auxiliary_name_scope);
+                   reuse: reuse,
+                   auxiliary_name_scope: auxiliary_name_scope);
 
         public static variable_scope variable_scope(VariableScope scope,
               string default_name = null,
@@ -27,7 +29,8 @@ namespace Tensorflow
               bool auxiliary_name_scope = true) => new variable_scope(scope,
                   default_name,
                   values,
-                  auxiliary_name_scope);
+                  reuse: reuse,
+                  auxiliary_name_scope: auxiliary_name_scope);
 
         public static IInitializer truncated_normal_initializer(float mean = 0.0f,
             float stddev = 1.0f,

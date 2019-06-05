@@ -107,7 +107,7 @@ namespace Tensorflow
             if (_name != null || _scope != null)
             {
                 var name_scope = _name == null ? _scope.name.Split('/').Last() : _name;
-                if (name_scope != null || current_name_scope != null)
+                if (current_name_scope == null)
                     current_name_scope = ops.name_scope(name_scope);
                 current_name_scope.__enter__();
                 var current_name_scope_name = current_name_scope;

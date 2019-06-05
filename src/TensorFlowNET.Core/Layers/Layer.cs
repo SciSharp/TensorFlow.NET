@@ -48,6 +48,7 @@ namespace Tensorflow.Layers
             else
             {
                 scope_context_manager = tf.variable_scope(_scope,
+                    reuse: _reuse,
                     auxiliary_name_scope: false);
             }
 
@@ -123,34 +124,33 @@ namespace Tensorflow.Layers
 
             _set_scope();
             var reuse = built || (_reuse != null && _reuse.Value);
-            return Python.with(tf.variable_scope(_scope, 
-                reuse: reuse, 
+            return with(tf.variable_scope(_scope,
+                reuse: reuse,
                 auxiliary_name_scope: false), scope =>
-            {
-                _current_scope = scope;
-                return Python.with(ops.name_scope(_name_scope()), delegate
                 {
-                    var variable = base.add_weight(name,
-                        shape,
-                        dtype: dtype,
-                        initializer: initializer,
-                        trainable: trainable,
-                        getter: (name1, shape1, dtype1, initializer1, trainable1) =>
-                        {
-                            return tf.get_variable(name1, 
-                                shape: new TensorShape(shape1),
-                                dtype: dtype1,
-                                initializer: initializer1,
-                                trainable: trainable1);
-                        });
-
-                    if(init_graph != null)
+                    _current_scope = scope;
+                    return with(ops.name_scope(_name_scope()), delegate
                     {
-                        var trainable_variables = variables.trainable_variables();
-                    }
-                    return variable;
+                        var variable = base.add_weight(name,
+                            shape,
+                            dtype: dtype,
+                            initializer: initializer,
+                            trainable: trainable,
+                            getter: (name1, shape1, dtype1, initializer1, trainable1) =>
+                            {
+                                return tf.get_variable(name1,
+                                    shape: new TensorShape(shape1),
+                                    dtype: dtype1,
+                                    initializer: initializer1,
+                                    trainable: trainable1);
+                            });
+
+                        //if (init_graph != null)
+                            //var trainable_variables = variables.trainable_variables();
+                        
+                        return variable;
+                    });
                 });
-            });
         }
 
 

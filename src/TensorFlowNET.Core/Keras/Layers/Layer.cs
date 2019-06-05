@@ -108,11 +108,11 @@ namespace Tensorflow.Keras.Layers
                     // Build layer if applicable (if the `build` method has been
                     // overridden).
                     _maybe_build(inputs[0]);
-                });
 
-               outputs = call(inputs[0], training: training);
-                _handle_activity_regularization(inputs[0], outputs);
-                _set_mask_metadata(inputs[0], outputs, null);
+                    outputs = call(inputs[0], training: training);
+                    _handle_activity_regularization(inputs[0], outputs);
+                    _set_mask_metadata(inputs[0], outputs, null);
+                });
             }
 
             return outputs;
