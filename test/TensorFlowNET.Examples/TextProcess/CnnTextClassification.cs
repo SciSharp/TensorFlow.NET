@@ -203,6 +203,27 @@ namespace TensorFlowNET.Examples
                 var h_drop = tf.nn.dropout(h_pool_flat, keep_prob);
             });
 
+            Tensor logits = null;
+            Tensor predictions = null;
+            with(tf.name_scope("output"), delegate
+            {
+                logits = tf.layers.dense(h_pool_flat, keep_prob);
+                predictions = tf.argmax(logits, -1, output_type: tf.int32);
+            });
+
+            with(tf.name_scope("loss"), delegate
+            {
+                var sscel = tf.nn.sparse_softmax_cross_entropy_with_logits(logits: logits, labels: y);
+                var loss = tf.reduce_mean(sscel);
+                var optimizer = tf.train.AdamOptimizer(learning_rate).minimize(loss, global_step: global_step);
+            });
+
+            with(tf.name_scope("accuracy"), delegate
+            {
+                var correct_predictions = tf.equal(predictions, y);
+                var accuracy = tf.reduce_mean(tf.cast(correct_predictions, TF_DataType.TF_FLOAT), name: "accuracy");
+            });
+
             return graph;
         }
 

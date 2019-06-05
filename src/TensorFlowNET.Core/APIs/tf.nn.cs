@@ -90,6 +90,17 @@ namespace Tensorflow
             public static Tensor softmax(Tensor logits, int axis = -1, string name = null)
                 => gen_nn_ops.softmax(logits, name);
 
+            /// <summary>
+            /// Computes sparse softmax cross entropy between `logits` and `labels`.
+            /// </summary>
+            /// <param name="labels"></param>
+            /// <param name="logits"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public static Tensor sparse_softmax_cross_entropy_with_logits(Tensor labels = null,
+            Tensor logits = null, string name = null)
+                => nn_ops.sparse_softmax_cross_entropy_with_logits(labels: labels, logits: logits, name: name);
+
             public static Tensor softmax_cross_entropy_with_logits_v2(Tensor labels, Tensor logits, int axis = -1, string name = null)
                 => nn_ops.softmax_cross_entropy_with_logits_v2_helper(labels, logits, axis: axis, name: name);
         }
