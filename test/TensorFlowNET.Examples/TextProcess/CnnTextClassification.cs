@@ -26,11 +26,11 @@ namespace TensorFlowNET.Examples
         public int? DataLimit = null;
         public bool IsImportingGraph { get; set; } = false;
 
-        private string dataDir = "word_cnn";
+        private const string dataDir = "word_cnn";
         private string dataFileName = "dbpedia_csv.tar.gz";
 
-        private const string TRAIN_PATH = "text_classification/dbpedia_csv/train.csv";
-        private const string TEST_PATH = "text_classification/dbpedia_csv/test.csv";
+        private const string TRAIN_PATH = "word_cnn/dbpedia_csv/train.csv";
+        private const string TEST_PATH = "word_cnn/dbpedia_csv/test.csv";
         
         private const int NUM_CLASS = 14;
         private const int BATCH_SIZE = 64;
