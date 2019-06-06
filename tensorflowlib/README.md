@@ -18,6 +18,9 @@ Download Linux pre-built library and unzip `libtensorflow.so` and `libtensorflow
 
 ### Run in Mac OS
 
+### GPU Tensorflow for windows
+Before running verify you installed  CUDA and cuDNN
+
 ### Build from source for Windows
 
 https://www.tensorflow.org/install/source_windows
