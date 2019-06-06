@@ -43,12 +43,6 @@ namespace Tensorflow
             if (grad_ys == null)
                 grad_ys = new Tensor[ys.Length];
 
-            var all = new List<Tensor>();
-            all.AddRange(ys);
-            all.AddRange(xs);
-            all.AddRange(stop_gradients);
-            all.AddRange(grad_ys);
-            
             // Iterate over the collected ops.
             /**
              * grads: op => list of gradients received on each output endpoint of the
@@ -59,7 +53,8 @@ namespace Tensorflow
              **/
             var grads = new Dictionary<string, Tensor[][]>();
 
-            with(ops.name_scope(name, "gradients", values: all), scope =>
+            with(ops.name_scope(name, "gradients", 
+                values: ys.Concat(xs).Concat(stop_gradients).Concat(grad_ys)), scope =>
             {
                 string grad_scope = scope;
                 // Get a uid for this call to gradients that can be used to help
@@ -166,7 +161,7 @@ namespace Tensorflow
                     }
 
                     var inputs = _NonEagerInputs(op, xs).ToList();
-                    foreach (var (t_in, in_grad) in Python.zip(inputs, in_grads))
+                    foreach (var (t_in, in_grad) in zip(inputs, in_grads))
                     {
                         if(in_grad != null)
                         {

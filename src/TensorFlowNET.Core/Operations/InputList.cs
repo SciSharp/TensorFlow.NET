@@ -10,7 +10,15 @@ namespace Tensorflow
     {
         public Tensor[] _inputs;
         public int Length => _inputs.Length;
-        public Tensor this[int index] => _inputs[index];
+        public Tensor this[int index]
+        {
+            get
+            {
+                if (index == -1)
+                    index = _inputs.Length - 1;
+                return _inputs[index];
+            }
+        }
 
         public InputList(Tensor[] inputs)
         {

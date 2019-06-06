@@ -23,6 +23,16 @@ namespace Tensorflow
             public static string TRAINABLE_VARIABLES = "trainable_variables";
 
             /// <summary>
+            /// Trainable resource-style variables.
+            /// </summary>
+            public static string TRAINABLE_RESOURCE_VARIABLES = "trainable_resource_variables";
+
+            /// <summary>
+            /// Key for streaming model ports.
+            /// </summary>
+            public static string _STREAMING_MODEL_PORTS = "streaming_model_ports";
+
+            /// <summary>
             /// Key to collect losses
             /// </summary>
             public const string LOSSES = "losses";

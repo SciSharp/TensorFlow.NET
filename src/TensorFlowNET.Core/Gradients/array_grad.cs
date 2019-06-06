@@ -40,6 +40,8 @@ namespace Tensorflow.Gradients
                 return end_value_index <= dim_index ? new Tensor[] { grad, null } : new Tensor[] { null, grad };
 
             var concat_dim = op.inputs[dim_index];
+            if (end_value_index == -1)
+                end_value_index = op.inputs.Length - 1;
             var input_values = op.inputs._inputs.Skip(start_value_index).Take(end_value_index - start_value_index).ToArray();
 
             var out_grads = new List<Tensor>();

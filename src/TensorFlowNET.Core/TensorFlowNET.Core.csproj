@@ -56,6 +56,7 @@ Removed global static graph instance.</PackageReleaseNotes>
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Distribute\" />
     <Folder Include="Keras\Initializers\" />
   </ItemGroup>
 

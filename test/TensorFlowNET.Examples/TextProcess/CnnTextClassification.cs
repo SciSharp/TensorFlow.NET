@@ -207,7 +207,7 @@ namespace TensorFlowNET.Examples
             Tensor predictions = null;
             with(tf.name_scope("output"), delegate
             {
-                logits = tf.layers.dense(h_pool_flat, keep_prob);
+                logits = tf.layers.dense(h_pool_flat, NUM_CLASS);
                 predictions = tf.argmax(logits, -1, output_type: tf.int32);
             });
 
@@ -215,7 +215,8 @@ namespace TensorFlowNET.Examples
             {
                 var sscel = tf.nn.sparse_softmax_cross_entropy_with_logits(logits: logits, labels: y);
                 var loss = tf.reduce_mean(sscel);
-                var optimizer = tf.train.AdamOptimizer(learning_rate).minimize(loss, global_step: global_step);
+                var adam = tf.train.AdamOptimizer(learning_rate);
+                var optimizer = adam.minimize(loss, global_step: global_step);
             });
 
             with(tf.name_scope("accuracy"), delegate

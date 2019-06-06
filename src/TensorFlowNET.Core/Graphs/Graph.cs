@@ -72,7 +72,7 @@ namespace Tensorflow
         private string _graph_key;
         public string graph_key => _graph_key;
         public string _last_loss_reduction;
-
+        public bool _is_loss_scaled_by_optimizer { get; set; }
         public Status Status { get; }
 
         /// <summary>
