@@ -184,6 +184,69 @@ namespace Tensorflow
             return dictionary;
         }
 
+
+        public static bool all(IEnumerable enumerable)
+        {
+            foreach (var e1 in enumerable)
+            {
+                if (!Convert.ToBoolean(e1))
+                    return false;
+            }
+            return true;
+        }
+
+        public static bool any(IEnumerable enumerable)
+        {
+            foreach (var e1 in enumerable)
+            {
+                if (Convert.ToBoolean(e1))
+                    return true;
+            }
+            return false;
+        }
+
+        public static double sum(IEnumerable enumerable)
+        {
+            var typedef = new Type[] { typeof(double), typeof(int), typeof(float) };
+            var sum = 0.0d;
+            foreach (var e1 in enumerable)
+            {
+                if (!typedef.Contains(e1.GetType()))
+                    throw new Exception("Numeric array expected");
+                sum += (double)e1;
+            }
+            return sum;
+        }
+
+        public static double sum<TKey, TValue>(Dictionary<TKey, TValue> values)
+        {
+            return sum(values.Keys);
+        }
+
+        public static IEnumerable<double> slice(double start, double end, double step = 1)
+        {
+            for (double i = start; i < end; i += step)
+                yield return i;
+        }
+
+        public static IEnumerable<float> slice(float start, float end, float step = 1)
+        {
+            for (float i = start; i < end; i += step)
+                yield return i;
+        }
+
+        public static IEnumerable<int> slice(int start, int end, int step = 1)
+        {
+            for (int i = start; i < end; i += step)
+                yield return i;
+        }
+
+        public static IEnumerable<int> slice(int range)
+        {
+            for (int i = 0; i < range; i++)
+                yield return i;
+        }
+
         public static bool hasattr(object obj, string key)
         {
             var __type__ = (obj).GetType();

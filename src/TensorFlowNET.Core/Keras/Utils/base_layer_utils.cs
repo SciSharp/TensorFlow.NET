@@ -95,14 +95,14 @@ namespace Tensorflow.Keras.Utils
         {
             var graph = ops.get_default_graph();
             Dictionary<(string, string), int> name_uid_map = null;
-            if (backend.PER_GRAPH_LAYER_NAME_UIDS.ContainsKey(graph.graph_key))
+            if (backend.PER_GRAPH_LAYER_NAME_UIDS.ContainsKey(graph))
             {
-                name_uid_map = backend.PER_GRAPH_LAYER_NAME_UIDS[graph.graph_key];
+                name_uid_map = backend.PER_GRAPH_LAYER_NAME_UIDS[graph];
             }
             else
             {
                 name_uid_map = new Dictionary<(string, string), int>();
-                backend.PER_GRAPH_LAYER_NAME_UIDS[graph.graph_key] = name_uid_map;
+                backend.PER_GRAPH_LAYER_NAME_UIDS[graph] = name_uid_map;
             }
 
             return name_uid_map;
