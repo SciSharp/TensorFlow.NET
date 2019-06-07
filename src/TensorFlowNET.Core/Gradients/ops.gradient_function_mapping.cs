@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using Tensorflow.Gradients;
 
@@ -7,74 +9,57 @@ namespace Tensorflow
 {
     public partial class ops
     {
+        static Dictionary<string, Func<Operation, Tensor[], Tensor[]>> gradientFunctions = null;
+
+        /// <summary>
+        /// Regiter new gradient function
+        /// </summary>
+        /// <param name="name">operation type</param>
+        /// <param name="func">function delegate</param>
+        public static void RegisterGradientFunction(string name, Func<Operation, Tensor[], Tensor[]> func)
+        {
+            if(gradientFunctions == null)
+                gradientFunctions = new Dictionary<string, Func<Operation, Tensor[], Tensor[]>>();
+
+            gradientFunctions[name] = func;
+        }
+
         public static Func<Operation, Tensor[], Tensor[]> get_gradient_function(Operation op)
         {
             if (op.inputs == null) return null;
 
-            // map tensorflow\python\ops\math_grad.py
-            return (oper, out_grads) =>
+            if (gradientFunctions == null)
             {
-                // Console.WriteLine($"get_gradient_function: {oper.type} '{oper.name}'");
+                gradientFunctions = new Dictionary<string, Func<Operation, Tensor[], Tensor[]>>();
 
-                switch (oper.type)
+                var gradGroups = Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .Where(x => x.GetCustomAttribute<RegisterGradient>() != null)
+                    .ToArray();
+
+                foreach (var g in gradGroups)
                 {
-                    case "Add":
-                        return math_grad._AddGrad(oper, out_grads);
-                    case "BiasAdd":
-                        return nn_grad._BiasAddGrad(oper, out_grads);
-                    case "ConcatV2":
-                        return array_grad._ConcatGradV2(oper, out_grads);
-                    case "DivNoNan":
-                        return math_grad._DivNoNanGrad(oper, out_grads);
-                    case "Exp":
-                        return math_grad._ExpGrad(oper, out_grads);
-                    case "Identity":
-                        return math_grad._IdGrad(oper, out_grads);
-                    case "Log":
-                        return math_grad._LogGrad(oper, out_grads);
-                    case "MatMul":
-                        return math_grad._MatMulGrad(oper, out_grads);
-                    case "Merge":
-                        return control_flow_grad._MergeGrad(oper, out_grads);
-                    case "Mul":
-                        return math_grad._MulGrad(oper, out_grads);
-                    case "Mean":
-                        return math_grad._MeanGrad(oper, out_grads);
-                    case "Neg":
-                        return math_grad._NegGrad(oper, out_grads);
-                    case "Sum":
-                        return math_grad._SumGrad(oper, out_grads);
-                    case "Sub":
-                        return math_grad._SubGrad(oper, out_grads);
-                    case "Pow":
-                        return math_grad._PowGrad(oper, out_grads);
-                    case "RealDiv":
-                        return math_grad._RealDivGrad(oper, out_grads);
-                    case "Reshape":
-                        return array_grad._ReshapeGrad(oper, out_grads);
-                    case "Relu":
-                        return nn_grad._ReluGrad(oper, out_grads);
-                    case "Sigmoid":
-                        return math_grad._SigmoidGrad(oper, out_grads);
-                    case "Square":
-                        return math_grad._SquareGrad(oper, out_grads);
-                    case "Squeeze":
-                        return array_grad._SqueezeGrad(oper, out_grads);
-                    case "Softmax":
-                        return nn_grad._SoftmaxGrad(oper, out_grads);
-                    case "SoftmaxCrossEntropyWithLogits":
-                        return nn_grad._SoftmaxCrossEntropyWithLogitsGrad(oper, out_grads);
-                    case "SparseSoftmaxCrossEntropyWithLogits":
-                        return nn_grad._SparseSoftmaxCrossEntropyWithLogitsGrad(oper, out_grads);
-                    case "Transpose":
-                        return array_grad._TransposeGrad(oper, out_grads);
-                    case "TopK":
-                    case "TopKV2":
-                        return nn_grad._TopKGrad(oper, out_grads);
-                    default:
-                        throw new NotImplementedException($"get_gradient_function {oper.type}");
+                    var methods = g.GetMethods().Where(x => x.GetCustomAttribute<RegisterGradient>() != null)
+                        .ToArray();
+
+                    foreach (var m in methods)
+                    {
+                        RegisterGradientFunction(m.GetCustomAttribute<RegisterGradient>().Name,
+                            (oper, out_grads) =>
+                                 g.InvokeMember(m.Name,
+                                    BindingFlags.InvokeMethod,
+                                    null,
+                                    null,
+                                    args: new object[] { oper, out_grads }) as Tensor[]
+                        );
+                    }
                 }
-            };
+            }
+
+            if (!gradientFunctions.ContainsKey(op.type))
+                throw new NotImplementedException($"can't get graident function through get_gradient_function {op.type}");
+
+            return gradientFunctions[op.type];
         }
     }
 }

@@ -74,6 +74,7 @@ namespace Tensorflow.Gradients
         /// <summary>
         /// Gradients for a Merge op are calculated using a Switch op.
         /// </summary>
+        [RegisterGradient("Merge")]
         public static Tensor[] _MergeGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];

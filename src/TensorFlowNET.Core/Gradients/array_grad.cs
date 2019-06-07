@@ -10,8 +10,10 @@ namespace Tensorflow.Gradients
     /// <summary>
     /// tensorflow\python\ops\array_grad.py
     /// </summary>
+    [RegisterGradient("array_grad")]
     public class array_grad
     {
+        [RegisterGradient("ConcatV2")]
         public static Tensor[] _ConcatGradV2(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -123,12 +125,13 @@ namespace Tensorflow.Gradients
                 return gen_ops.shape_n(inputs);
         }
 
-
+        [RegisterGradient("Reshape")]
         public static Tensor[] _ReshapeGrad(Operation op, Tensor[] grads)
         {
             return new Tensor[] { array_ops.reshape(grads[0], array_ops.shape(op.inputs[0])), null };
         }
 
+        [RegisterGradient("Squeeze")]
         public static Tensor[] _SqueezeGrad(Operation op, Tensor[] grads)
         {
             return new Tensor[] { _ReshapeToInput(op, grads[0]) };
@@ -139,6 +142,7 @@ namespace Tensorflow.Gradients
             return array_ops.reshape(grad, array_ops.shape(op.inputs[0]));
         }
 
+        [RegisterGradient("Transpose")]
         public static Tensor[] _TransposeGrad(Operation op, Tensor[] grads)
         {
             var p = op.inputs[1];

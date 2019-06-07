@@ -10,8 +10,10 @@ namespace Tensorflow.Gradients
     /// <summary>
     /// Gradients for operators defined in math_ops.py.
     /// </summary>
+    [RegisterGradient("math_grad")]
     public class math_grad
     {
+        [RegisterGradient("Add")]
         public static Tensor[] _AddGrad(Operation op, Tensor[] grads)
         {
             var x = op.inputs[0];
@@ -32,6 +34,7 @@ namespace Tensorflow.Gradients
             return new Tensor[] { r1, r2 };
         }
 
+        [RegisterGradient("DivNoNan")]
         public static Tensor[] _DivNoNanGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -59,6 +62,7 @@ namespace Tensorflow.Gradients
         /// <param name="op"></param>
         /// <param name="grads"></param>
         /// <returns></returns>
+        [RegisterGradient("Exp")]
         public static Tensor[] _ExpGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -69,11 +73,13 @@ namespace Tensorflow.Gradients
             });
         }
 
+        [RegisterGradient("Identity")]
         public static Tensor[] _IdGrad(Operation op, Tensor[] grads)
         {
             return new Tensor[] { grads[0] };
         }
 
+        [RegisterGradient("Log")]
         public static Tensor[] _LogGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -84,6 +90,7 @@ namespace Tensorflow.Gradients
             });
         }
 
+        [RegisterGradient("Mul")]
         public static Tensor[] _MulGrad(Operation op, Tensor[] grads)
         {
             var x = op.inputs[0];
@@ -112,6 +119,7 @@ namespace Tensorflow.Gradients
             return new Tensor[] { reshape1, reshape2 };
         }
 
+        [RegisterGradient("MatMul")]
         public static Tensor[] _MatMulGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -145,6 +153,7 @@ namespace Tensorflow.Gradients
             return new Tensor[] { grad_a, grad_b };
         }
 
+        [RegisterGradient("Mean")]
         public static Tensor[] _MeanGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -159,6 +168,7 @@ namespace Tensorflow.Gradients
             return new Tensor[] { math_ops.truediv(sum_grad, math_ops.cast(factor, sum_grad.dtype)), null };
         }
 
+        [RegisterGradient("Neg")]
         public static Tensor[] _NegGrad(Operation op, Tensor[] grads)
         {
             return new Tensor[] { -grads[0] };
@@ -169,6 +179,7 @@ namespace Tensorflow.Gradients
             return math_ops.floordiv(x, gen_math_ops.maximum(y, 1));
         }
 
+        [RegisterGradient("Sub")]
         public static Tensor[] _SubGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -198,6 +209,7 @@ namespace Tensorflow.Gradients
                 !x_shape.Contains(-1);
         }
 
+        [RegisterGradient("Sum")]
         public static Tensor[] _SumGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -231,6 +243,7 @@ namespace Tensorflow.Gradients
             return new Tensor[] { gen_array_ops.tile(grad, tile_scaling), null };
         }
 
+        [RegisterGradient("RealDiv")]
         public static Tensor[] _RealDivGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -254,6 +267,7 @@ namespace Tensorflow.Gradients
             return new Tensor[] { reshape2, reshape1 };
         }
 
+        [RegisterGradient("Sigmoid")]
         public static Tensor[] _SigmoidGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -266,6 +280,7 @@ namespace Tensorflow.Gradients
             });
         }
 
+        [RegisterGradient("Square")]
         public static Tensor[] _SquareGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -279,6 +294,7 @@ namespace Tensorflow.Gradients
             });
         }
 
+        [RegisterGradient("Pow")]
         public static Tensor[] _PowGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];

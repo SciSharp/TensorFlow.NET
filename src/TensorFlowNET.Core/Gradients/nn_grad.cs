@@ -9,6 +9,7 @@ namespace Tensorflow.Gradients
     /// <summary>
     /// 
     /// </summary>
+    [RegisterGradient("math_grad")]
     public class nn_grad
     {
         /// <summary>
@@ -17,6 +18,7 @@ namespace Tensorflow.Gradients
         /// <param name="op"></param>
         /// <param name="grad"></param>
         /// <returns></returns>
+        [RegisterGradient("BiasAdd")]
         public static Tensor[] _BiasAddGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
@@ -25,6 +27,7 @@ namespace Tensorflow.Gradients
             return new Tensor[] { grad, bias_add_grad };
         }
 
+        [RegisterGradient("Relu")]
         public static Tensor[] _ReluGrad(Operation op, Tensor[] grads)
         {
             return new Tensor[] { gen_nn_ops.relu_grad(grads[0], op.outputs[0]) };
@@ -36,6 +39,7 @@ namespace Tensorflow.Gradients
         /// <param name="op"></param>
         /// <param name="grads"></param>
         /// <returns></returns>
+        [RegisterGradient("Softmax")]
         public static Tensor[] _SoftmaxGrad(Operation op, Tensor[] grads)
         {
             var grad_softmax = grads[0];
@@ -54,6 +58,7 @@ namespace Tensorflow.Gradients
         /// <param name="grad_loss"></param>
         /// <param name="grad_grad"></param>
         /// <returns></returns>
+        [RegisterGradient("SoftmaxCrossEntropyWithLogits")]
         public static Tensor[] _SoftmaxCrossEntropyWithLogitsGrad(Operation op, Tensor[] grads)
         {
             var grad_loss = grads[0];
@@ -74,6 +79,7 @@ namespace Tensorflow.Gradients
             };
         }
 
+        [RegisterGradient("SparseSoftmaxCrossEntropyWithLogits")]
         public static Tensor[] _SparseSoftmaxCrossEntropyWithLogitsGrad(Operation op, Tensor[] grads)
         {
             var sparse_softmax_grad_without_gradient = array_ops.prevent_gradient(
@@ -111,6 +117,7 @@ namespace Tensorflow.Gradients
         /// <param name="op"></param>
         /// <param name="grads"></param>
         /// <returns></returns>
+        [RegisterGradient("TopK")]
         public static Tensor[] _TopKGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
