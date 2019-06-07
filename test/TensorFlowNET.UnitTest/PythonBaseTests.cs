@@ -10,6 +10,24 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class PythonBaseTests : PythonTest
     {
+        [Ignore]
+        [TestMethod]
+        public void weakKeyDictionary_test()
+        {
+            var weakKeyDict = new WeakKeyDictionary<int, char>();
+            for (int i = 0; i < 5; i++)
+            {
+                var c = (char)((int)'a' + i);
+                weakKeyDict[i] = c;
+                //Assert.AreEqual(weakKeyDict.Count, (int)(i + 1));
+                var v = (weakKeyDict.Count == i + 1);
+                Assert.IsTrue(v);
+            }
+            //Assert.AreEqual(weakKeyDict.Count, 0);
+            var b = (weakKeyDict.Count == 0);
+            Assert.IsTrue(b);
+        }
+
         [TestMethod]
         public void hasattr_getattr()
         {
