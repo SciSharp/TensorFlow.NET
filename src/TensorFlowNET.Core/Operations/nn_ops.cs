@@ -37,6 +37,7 @@ namespace Tensorflow
         {
             return Python.with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
             {
+                name = scope;
                 value = ops.convert_to_tensor(value, name: "input");
                 var bias_tensor = ops.convert_to_tensor(bias, dtype: value.dtype, name: "bias");
                 return gen_nn_ops.bias_add(value, bias_tensor, data_format: data_format, name: name);

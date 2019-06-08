@@ -67,13 +67,6 @@ namespace Tensorflow.Layers
             return outputs;
         }
 
-        protected override void _init_set_name(string name, bool zero_based = true)
-        {
-            // Determine layer name (non-unique).
-            base._init_set_name(name, zero_based: zero_based);
-            _base_name = this.name;
-        }
-
         protected virtual void _add_elements_to_collection(Operation[] elements, string[] collection_list)
         {
             foreach(var name in collection_list)

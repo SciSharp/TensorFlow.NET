@@ -11,7 +11,7 @@ namespace Tensorflow.Operations
         public string name;
         public int[] strides;
         public string data_format;
-        private Func<object, Tensor> conv_op;
+        private Func<Conv2dParams, Tensor> conv_op;
 
         public _NonAtrousConvolution(TensorShape input_shape,
             TensorShape filter_shape,
@@ -55,14 +55,14 @@ namespace Tensorflow.Operations
 
         public Tensor __call__(Tensor inp, RefVariable filter)
         {
-            return conv_op(new
+            return conv_op(new Conv2dParams
             {
-                input = inp,
-                filter,
-                strides,
-                padding,
-                data_format,
-                name
+                Input = inp,
+                Filter = filter,
+                Strides = strides,
+                Padding = padding,
+                DataFormat = data_format,
+                Name = name
             });
         }
     }

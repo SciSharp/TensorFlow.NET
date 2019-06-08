@@ -40,7 +40,7 @@ namespace Tensorflow
             VariableSynchronization synchronization = VariableSynchronization.Auto,
             VariableAggregation aggregation= VariableAggregation.None)
         {
-            string full_name = !string.IsNullOrEmpty(this._name) ? this._name + "/" + name : name;
+            string full_name = !string.IsNullOrEmpty(this.name) ? this.name + "/" + name : name;
             return with(ops.name_scope(null), scope =>
             {
                 if (dtype == TF_DataType.DtInvalid)

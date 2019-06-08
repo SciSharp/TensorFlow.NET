@@ -473,7 +473,7 @@ namespace Tensorflow
                 case Tensor[] tensors:
                     return array_ops._autopacking_helper(tensors, dtype, name == null ? "packed" : name);
                 case RefVariable varVal:
-                    return varVal._TensorConversionFunction(as_ref: as_ref);
+                    return varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref);
                 case ResourceVariable varVal:
                     return null;
                 case object[] objects:

@@ -188,7 +188,7 @@ namespace Tensorflow
 
         public Tensor _as_graph_element() => _variable;
 
-        public Tensor _TensorConversionFunction(bool as_ref = false)
+        public Tensor _TensorConversionFunction(TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
         {
             if (as_ref)
                 return _ref();

@@ -56,7 +56,9 @@ namespace Tensorflow.Keras.Layers
         protected override void build(TensorShape input_shape)
         {
             int channel_axis = data_format == "channels_first" ? 1 : -1;
-            int input_dim = input_shape.Dimensions[input_shape.NDim - 1];
+            int input_dim = channel_axis < 0 ? 
+                input_shape.Dimensions[input_shape.NDim + channel_axis] : 
+                input_shape.Dimensions[channel_axis];
             var kernel_shape = new int[] { kernel_size[0], kernel_size[1], input_dim, filters };
             kernel = add_weight(name: "kernel",
                 shape: kernel_shape,
@@ -102,7 +104,7 @@ namespace Tensorflow.Keras.Layers
                 }
                 else
                 {                    
-                    outputs = nn_ops.bias_add(outputs, bias._AsTensor(), data_format: "NHWC");
+                    outputs = nn_ops.bias_add(outputs, bias, data_format: "NHWC");
                 }
             }
 

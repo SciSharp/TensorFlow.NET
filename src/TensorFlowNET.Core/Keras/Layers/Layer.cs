@@ -206,12 +206,14 @@ namespace Tensorflow.Keras.Layers
             _updates.AddRange(updates_op);
         }
 
+        // Determine layer name (non-unique).
         protected virtual void _init_set_name(string name, bool zero_based = true)
         {
+            var base_name = name;
+            _name = name;
             if (name == null)
-                _name = base_layer_utils.unique_layer_name(generic_utils.to_snake_case(this.GetType().Name), zero_based: zero_based);
-            else
-                _name = name;
+                (_name, base_name) = _make_unique_name();
+            _base_name = base_name;
         }
 
         protected virtual (string, string) _make_unique_name()

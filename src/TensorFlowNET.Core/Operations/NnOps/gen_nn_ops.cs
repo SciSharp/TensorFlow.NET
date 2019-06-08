@@ -10,28 +10,36 @@ namespace Tensorflow.Operations
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
-        public static Tensor conv2d(object parameters)
+        /// <summary>
+        /// Computes a 2-D convolution given 4-D `input` and `filter` tensors.
+        /// 
+        /// Given an input tensor of shape `[batch, in_height, in_width, in_channels]`
+        /// and a filter / kernel tensor of shape
+        /// `[filter_height, filter_width, in_channels, out_channels]`, this op
+        /// performs the following:
+        /// 
+        /// 1. Flattens the filter to a 2-D matrix with shape
+        ///    `[filter_height * filter_width * in_channels, output_channels]`.
+        /// 2. Extracts image patches from the input tensor to form a *virtual*
+        ///    tensor of shape `[batch, out_height, out_width,
+        ///    filter_height * filter_width * in_channels]`.
+        /// 3. For each patch, right-multiplies the filter matrix and the image patch
+        ///    vector.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static Tensor conv2d(Conv2dParams parameters)
         {
-            var args = Python.ConvertToDict(parameters);
-
-            var input = args["input"];
-            var filter = args["filter"];
-            var strides = args["strides"];
-            var padding = args["padding"];
-            var name = args["name"];
-            var data_format = args.ContainsKey("data_format") ? args["data_format"] : "NHWC";
-            var use_cudnn_on_gpu = args.ContainsKey("use_cudnn_on_gpu") ? args["use_cudnn_on_gpu"] : true;
-            var dilations = args.ContainsKey("dilations") ? args["dilations"] : new int[] { 1, 1, 1, 1 };
-
-            var _op = _op_def_lib._apply_op_helper("Conv2D", name: name?.ToString(), args: new
+            var _op = _op_def_lib._apply_op_helper("Conv2D", name: parameters.Name, args: new
             {
-                input,
-                filter,
-                strides,
-                padding,
-                use_cudnn_on_gpu,
-                data_format,
-                dilations
+                input = parameters.Input,
+                filter = parameters.Filter,
+                strides = parameters.Strides,
+                padding = parameters.Padding,
+                use_cudnn_on_gpu = parameters.UseCudnnOnGpu,
+                explicit_paddings = parameters.ExplicitPaddings,
+                data_format = parameters.DataFormat,
+                dilations = parameters.Dilations
             });
 
             return _op.outputs[0];
