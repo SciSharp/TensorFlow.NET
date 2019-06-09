@@ -97,6 +97,50 @@ namespace Tensorflow.Gradients
             };
         }
 
+        /// <summary>
+        /// Gradient function for Conv2D.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        [RegisterGradient("Conv2D")]
+        public static Tensor[] _Conv2DGrad(Operation op, Tensor[] grads)
+        {
+            var dilations = op.get_attr("dilations");
+            var strides = op.get_attr("strides");
+            var padding = op.get_attr("padding");
+            var explicit_paddings = op.get_attr("explicit_paddings");
+            var use_cudnn_on_gpu = op.get_attr("use_cudnn_on_gpu");
+            var data_format = op.get_attr("data_format");
+            var shape = gen_array_ops.shape_n(new Tensor[] { op.inputs[0], op.inputs[1] });
+            
+            return new Tensor[]
+            {
+                gen_nn_ops.conv2d_backprop_input(new Conv2dParams
+                {
+                    InputSizes = shape[0],
+                    Filter = op.inputs[1],
+                    Dilations = dilations == null ? null : dilations as int[],
+                    Strides = strides == null ? null : strides as int[],
+                    Padding = padding.ToString(),
+                    ExplicitPaddings = explicit_paddings == null ? null : explicit_paddings as int[],
+                    UseCudnnOnGpu = (bool)use_cudnn_on_gpu,
+                    DataFormat = data_format.ToString()
+                }),
+                gen_nn_ops.conv2d_backprop_filter(new Conv2dParams
+                {
+                    Input = op.inputs[0],
+                    FilterSizes = shape[1],
+                    Dilations = dilations == null ? null : dilations as int[],
+                    Strides = strides == null ? null : strides as int[],
+                    Padding = padding.ToString(),
+                    ExplicitPaddings = explicit_paddings == null ? null : explicit_paddings as int[],
+                    UseCudnnOnGpu = (bool)use_cudnn_on_gpu,
+                    DataFormat = data_format.ToString()
+                })
+            };
+        }
+
         private static bool IsZero(Tensor g)
         {
             if (new string[] { "ZerosLike", "Zeros" }.Contains(g.op.type))

@@ -23,9 +23,25 @@ namespace Tensorflow.Operations
         public Tensor Input { get; set; }
 
         /// <summary>
+        /// An integer vector representing the shape of `input`
+        /// </summary>
+        public Tensor InputSizes { get; set; }
+
+        /// <summary>
         /// A 4-D tensor of shape
         /// </summary>
         public Tensor Filter { get; set; }
+
+        /// <summary>
+        /// An integer vector representing the tensor shape of `filter`
+        /// </summary>
+        public Tensor FilterSizes { get; set; }
+
+        /// <summary>
+        /// A `Tensor`. Must have the same type as `filter`.
+        /// 4-D with shape `[batch, out_height, out_width, out_channels]`.
+        /// </summary>
+        public Tensor OutBackProp { get; set; }
 
         /// <summary>
         /// The stride of the sliding window for each

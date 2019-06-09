@@ -252,6 +252,19 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Returns shape of tensors.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="out_type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor[] shape_n(Tensor[] input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ShapeN", name, new { input, out_type });
+            return _op.outputs;
+        }
+
         public static Tensor size(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Size", name, new { input, out_type });

@@ -45,6 +45,52 @@ namespace Tensorflow.Operations
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Computes the gradients of convolution with respect to the filter.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static Tensor conv2d_backprop_filter(Conv2dParams parameters)
+        {
+            var _op = _op_def_lib._apply_op_helper("Conv2DBackpropFilter", name: parameters.Name, args: new
+            {
+                input = parameters.Input,
+                filter_sizes = parameters.FilterSizes,
+                out_backprop = parameters.OutBackProp,
+                strides = parameters.Strides,
+                padding = parameters.Padding,
+                use_cudnn_on_gpu = parameters.UseCudnnOnGpu,
+                explicit_paddings = parameters.ExplicitPaddings,
+                data_format = parameters.DataFormat,
+                dilations = parameters.Dilations
+            });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Computes the gradients of convolution with respect to the input.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static Tensor conv2d_backprop_input(Conv2dParams parameters)
+        {
+            var _op = _op_def_lib._apply_op_helper("Conv2DBackpropInput", name: parameters.Name, args: new
+            {
+                input_sizes = parameters.InputSizes,
+                filter = parameters.Filter,
+                out_backprop = parameters.OutBackProp,
+                strides = parameters.Strides,
+                padding = parameters.Padding,
+                use_cudnn_on_gpu = parameters.UseCudnnOnGpu,
+                explicit_paddings = parameters.ExplicitPaddings,
+                data_format = parameters.DataFormat,
+                dilations = parameters.Dilations
+            });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor bias_add(Tensor value,
             Tensor bias,
             string data_format = null,

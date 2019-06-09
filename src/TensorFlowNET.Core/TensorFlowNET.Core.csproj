@@ -20,8 +20,9 @@ Docs: https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.8.1.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.8:
 
-1. Removed global static graph instance.
-2. Provide custom gradient function.</PackageReleaseNotes>
+1. Remove global static graph instance.
+2. Provide custom gradient function.
+3. Add gradient function for Conv2D.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
     <FileVersion>0.8.1.0</FileVersion>
   </PropertyGroup>
