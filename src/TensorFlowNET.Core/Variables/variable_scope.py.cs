@@ -106,13 +106,13 @@ namespace Tensorflow
 
             if (_name != null || _scope != null)
             {
-                var name_scope = _name == null ? _scope.name.Split('/').Last() : _name;
+                var name_scope = _scope.name.Split('/').Last();
                 if (current_name_scope == null)
                     current_name_scope = ops.name_scope(name_scope);
                 current_name_scope.__enter__();
                 var current_name_scope_name = current_name_scope;
                 _current_name_scope = current_name_scope;
-                string old_name_scope = current_name_scope_name;
+                string old_name_scope = _scope.original_name_scope;
                 
                 if(_scope == null)
                     pure_variable_scope = new PureVariableScope(_name, old_name_scope: old_name_scope);
@@ -139,6 +139,11 @@ namespace Tensorflow
             }
         }
 
+        /// <summary>
+        /// Get a name with the given prefix unique in the current variable scope.
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
         public static string _get_unique_variable_scope(string prefix)
         {
             var var_scope_store = get_variable_scope_store();
@@ -146,7 +151,10 @@ namespace Tensorflow
             string name = !string.IsNullOrEmpty(current_scope.name) ? current_scope.name + "/" + prefix : prefix;
             if (var_scope_store.variable_scope_count(name) == 0)
                 return prefix;
-            throw new NotImplementedException("_get_unique_variable_scope");
+            var idx = 1;
+            while (var_scope_store.variable_scope_count($"{name}_{idx}") > 0)
+                idx += 1;
+            return $"{prefix}_{idx}";
         }
 
         public static RefVariable default_variable_creator(object initial_value,
@@ -250,6 +258,7 @@ namespace Tensorflow
 
         public void __exit__()
         {
+            _cached_pure_variable_scope.__exit__();
             if (_current_name_scope != null)
                 _current_name_scope.__exit__();
         }

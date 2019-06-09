@@ -7,7 +7,7 @@ namespace Tensorflow
     public class _VariableScopeStore
     {
         public VariableScope current_scope { get; set; }
-        private Dictionary<string, int> variable_scopes_count;
+        public Dictionary<string, int> variable_scopes_count;
 
         public _VariableScopeStore()
         {
@@ -21,6 +21,13 @@ namespace Tensorflow
                 variable_scopes_count[scope_name] += 1;
             else
                 variable_scopes_count[scope_name] = 1;
+        }
+
+        public void close_variable_subscopes(string scope_name)
+        {
+            foreach (var k in variable_scopes_count.Keys)
+                if (scope_name == null || k.StartsWith(scope_name + "/"))
+                    variable_scopes_count[k] = 0;
         }
 
         public int variable_scope_count(string scope_name)

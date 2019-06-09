@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
@@ -16,7 +17,8 @@ namespace Tensorflow
         private _VariableScopeStore _var_scope_store;
         private VariableScope variable_scope_object;
         private VariableScope _cached_variable_scope_object;
-
+        VariableScope _last_variable_scope_object;
+        Dictionary<string, int> _old_subscopes;
         public PureVariableScope(string name, 
             string old_name_scope = null, 
             TF_DataType dtype = TF_DataType.DtInvalid)
@@ -51,6 +53,7 @@ namespace Tensorflow
             if(_scope != null)
             {
                 _var_scope_store.open_variable_scope(_new_name);
+                _old_subscopes = _var_scope_store.variable_scopes_count.ToDictionary(kv => kv.Key, kv => kv.Value);
                 variable_scope_object = _cached_variable_scope_object;
             }
             else
@@ -66,6 +69,7 @@ namespace Tensorflow
                 _var_scope_store.open_variable_scope(_new_name);
             }
             _var_scope_store.current_scope = variable_scope_object;
+            _last_variable_scope_object = variable_scope_object;
         }
 
         public void Dispose()
@@ -75,7 +79,12 @@ namespace Tensorflow
 
         public void __exit__()
         {
-            
+            // If jumping out from a non-prolonged scope, restore counts.
+            if (_scope != null)
+                _var_scope_store.variable_scopes_count = _old_subscopes;
+            else
+                _var_scope_store.close_variable_subscopes(_new_name);
+            _var_scope_store.current_scope = _old;
         }
 
         public static implicit operator VariableScope(PureVariableScope scope)

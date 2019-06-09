@@ -22,8 +22,13 @@ namespace Tensorflow.Layers
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool? _reuse = null) : base(trainable: trainable, name: name, dtype: dtype)
         {
+            // For backwards compatibility, legacy layers do not use `ResourceVariable`
+            // by default.
             this._use_resource_variables = false;
             this._reuse = _reuse;
+
+            // Avoid an incorrect lint error
+            _trainable_weights = new List<RefVariable>();
             this.built = false;
             _keras_style = false;
         }
@@ -130,13 +135,12 @@ namespace Tensorflow.Layers
                             initializer: initializer,
                             trainable: trainable,
                             getter: (name1, shape1, dtype1, initializer1, trainable1) =>
-                            {
-                                return tf.get_variable(name1,
+                                tf.get_variable(name1,
                                     shape: new TensorShape(shape1),
                                     dtype: dtype1,
                                     initializer: initializer1,
-                                    trainable: trainable1);
-                            });
+                                    trainable: trainable1)
+                            );
 
                         //if (init_graph != null)
                             //var trainable_variables = variables.trainable_variables();

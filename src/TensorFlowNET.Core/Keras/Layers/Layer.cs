@@ -14,6 +14,8 @@ namespace Tensorflow.Keras.Layers
     /// A layer is a class implementing common neural networks operations, such
     /// as convolution, batch norm, etc. These operations require managing weights,
     /// losses, updates, and inter-layer connectivity.
+    /// 
+    /// tensorflow\python\keras\engine\base_layer.py
     /// </summary>
     public class Layer : AutoTrackable
     {
@@ -55,9 +57,14 @@ namespace Tensorflow.Keras.Layers
         {
             this.trainable = trainable;
             this._dtype = dtype;
+            // A stateful layer is a layer whose updates are run during inference too,
+            // for instance stateful RNNs.
             stateful = false;
+            // Indicates whether `build` needs to be called upon layer call, to create
+            // the layer's weights.
             built = false;
             this.supports_masking = false;
+
             _init_set_name(name);
             _trainable_weights = new List<RefVariable>();
             _compute_previous_mask = false;
@@ -154,7 +161,8 @@ namespace Tensorflow.Keras.Layers
             if (_dtype == TF_DataType.DtInvalid)
                 _dtype = input.dtype;
 
-            build(input.GetShape());
+            var input_shapes = input.GetShape();
+            build(input_shapes);
             built = true;
         }
 
