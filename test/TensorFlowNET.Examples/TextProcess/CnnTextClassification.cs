@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using NumSharp;
 using Tensorflow;
 using Tensorflow.Keras.Engine;
@@ -197,17 +198,17 @@ namespace TensorFlowNET.Examples
 
             var h_pool = tf.concat(pooled_outputs, 3);
             var h_pool_flat = tf.reshape(h_pool, new TensorShape(-1, num_filters * filter_sizes.Rank));
-
+            Tensor h_drop = null;
             with(tf.name_scope("dropout"), delegate
             {
-                var h_drop = tf.nn.dropout(h_pool_flat, keep_prob);
+                h_drop = tf.nn.dropout(h_pool_flat, keep_prob);
             });
 
             Tensor logits = null;
             Tensor predictions = null;
             with(tf.name_scope("output"), delegate
             {
-                logits = tf.layers.dense(h_pool_flat, NUM_CLASS);
+                logits = tf.layers.dense(h_drop, NUM_CLASS);
                 predictions = tf.argmax(logits, -1, output_type: tf.int32);
             });
 
@@ -306,6 +307,8 @@ namespace TensorFlowNET.Examples
         public bool Train()
         {
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
+
+            var imported_graph = JsonConvert.SerializeObject(graph, new JsonSerializerSettings { Formatting = Formatting.Indented });
 
             return with(tf.Session(graph), sess => Train(sess, graph));
         }

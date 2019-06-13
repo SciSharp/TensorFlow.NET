@@ -142,6 +142,7 @@ namespace Tensorflow
 
                 var layer = new Dense(units, activation, 
                     use_bias: use_bias,
+                    bias_initializer: bias_initializer,
                     kernel_initializer: kernel_initializer);
 
                 return layer.apply(inputs);

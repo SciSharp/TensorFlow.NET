@@ -57,24 +57,24 @@ namespace Tensorflow
             if (initializer is IInitializer init)
             {
                 return _get_single_variable(name: name,
-                shape: shape,
-                dtype: dtype,
-                initializer: init,
-                trainable: trainable,
-                validate_shape: validate_shape,
-                synchronization: synchronization,
-                aggregation: aggregation);
+                    shape: shape,
+                    dtype: dtype,
+                    initializer: init,
+                    trainable: trainable,
+                    validate_shape: validate_shape,
+                    synchronization: synchronization,
+                    aggregation: aggregation);
             }
             else if (initializer is Tensor tensor)
             {
                 return _get_single_variable(name: name,
-                shape: shape,
-                dtype: dtype,
-                initializer: tensor,
-                trainable: trainable,
-                validate_shape: validate_shape,
-                synchronization: synchronization,
-                aggregation: aggregation);
+                    shape: shape,
+                    dtype: dtype,
+                    initializer: tensor,
+                    trainable: trainable,
+                    validate_shape: validate_shape,
+                    synchronization: synchronization,
+                    aggregation: aggregation);
             }
             else
             {
@@ -141,7 +141,7 @@ namespace Tensorflow
                     v = variable_scope.default_variable_creator(init_val,
                         name: name,
                         trainable: trainable,
-                        dtype: TF_DataType.DtInvalid,
+                        dtype: variable_dtype,
                         validate_shape: validate_shape,
                         synchronization: synchronization,
                         aggregation: aggregation);

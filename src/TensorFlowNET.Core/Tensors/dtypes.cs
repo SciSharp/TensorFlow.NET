@@ -16,6 +16,8 @@ namespace Tensorflow
             {
                 case TF_DataType.TF_BOOL:
                     return typeof(bool);
+                case TF_DataType.TF_INT64:
+                    return typeof(long);
                 case TF_DataType.TF_INT32:
                     return typeof(int);
                 case TF_DataType.TF_INT16:

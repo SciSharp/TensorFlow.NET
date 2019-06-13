@@ -123,7 +123,7 @@ namespace Tensorflow
             return with(ops.name_scope(name, "tuple", tensors), scope =>
             {
                 name = scope;
-                var gating_ops = tensors.Select(x => x.op).ToList();
+                var gating_ops = tensors.Where(x => x != null).Select(x => x.op).ToList();
 
                 if(control_inputs != null)
                 {
@@ -139,7 +139,10 @@ namespace Tensorflow
                 var tpl = new List<Tensor>();
                 foreach(var t in tensors)
                 {
-                    tpl.Add(with_dependencies(new Operation[] { gate }, t));
+                    if (t != null)
+                        tpl.Add(with_dependencies(new Operation[] { gate }, t));
+                    else
+                        tpl.Add(null);
                 }
 
                 return tpl.ToArray();
