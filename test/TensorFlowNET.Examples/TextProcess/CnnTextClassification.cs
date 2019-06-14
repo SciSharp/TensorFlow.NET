@@ -308,8 +308,6 @@ namespace TensorFlowNET.Examples
         {
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
 
-            var imported_graph = JsonConvert.SerializeObject(graph, new JsonSerializerSettings { Formatting = Formatting.Indented });
-
             return with(tf.Session(graph), sess => Train(sess, graph));
         }
 

@@ -127,8 +127,28 @@ namespace Tensorflow
         private static Tensor expand_dims_v2(Tensor input, int axis, string name = null) 
             => gen_array_ops.expand_dims(input, axis, name);
 
+        /// <summary>
+        /// Returns the rank of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static Tensor rank(Tensor input, string name = null)
-            => math_ops.rank_internal(input, name, optimize: true);
+            => rank_internal(input, name, optimize: true);
+
+        public static Tensor rank_internal(Tensor input, string name = null, bool optimize = true)
+        {
+            return with(ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
+            {
+                name = scope;
+                var input_tensor = ops.convert_to_tensor(input);
+                var input_shape = tensor_util.to_shape(input_tensor.shape);
+                if (optimize && input_shape.NDim > -1)
+                    return constant_op.constant(input_shape.NDim, dtype: tf.int32, name: name);
+                else
+                    return gen_array_ops.rank(input, name);
+            });
+        }
 
         /// <summary>
         /// Creates a tensor with all elements set to 1.

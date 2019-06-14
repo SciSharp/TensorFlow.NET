@@ -29,7 +29,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE;DEBUG;GRAPH_SERIALIZE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -48,7 +48,6 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.8.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NumSharp" Version="0.10.2" />
   </ItemGroup>
 
@@ -61,10 +60,6 @@ Docs: https://tensorflownet.readthedocs.io</Description>
   <ItemGroup>
     <Folder Include="Distribute\" />
     <Folder Include="Keras\Initializers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
   </ItemGroup>
 
 </Project>

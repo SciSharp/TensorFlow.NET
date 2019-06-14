@@ -55,12 +55,14 @@ namespace Tensorflow
         public TF_DataType dtype => TF_DataType.DtInvalid;
         private Status status = new Status();
 
-        public string name => c_api.StringPiece(c_api.TF_OperationName(_handle));
+        public string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => c_api.StringPiece(c_api.TF_OperationOpType(_handle));
         public string Device => c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 
         private NodeDef _node_def;
+#if GRAPH_SERIALIZE
         [JsonIgnore]
+#endif
         public NodeDef node_def
         {
             get

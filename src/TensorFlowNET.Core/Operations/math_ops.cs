@@ -429,20 +429,6 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor rank_internal(Tensor input, string name = null, bool optimize = true)
-        {
-            return with(ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
-            {
-                name = scope;
-                var input_tensor = ops.convert_to_tensor(input);
-                var input_shape = tensor_util.to_shape(input_tensor.shape);
-                if (optimize && input_shape.NDim == null)
-                    return constant_op.constant(input_shape.NDim);
-                else
-                    return gen_array_ops.rank(input, name);
-            });
-        }
-
         public static Tensor maximum<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.maximum(x, y, name: name);
 

@@ -15,7 +15,7 @@ namespace Tensorflow
             int? aggregation_method = null,
             Tensor[] stop_gradients = null)
         {
-            return gradients_impl._GradientsHelper(ys, 
+            return gradients_util._GradientsHelper(ys, 
                 xs, 
                 grad_ys, 
                 name, 
@@ -33,7 +33,7 @@ namespace Tensorflow
             int? aggregation_method = null,
             Tensor[] stop_gradients = null)
         {
-            return gradients_impl._GradientsHelper(new Tensor[] { ys },
+            return gradients_util._GradientsHelper(new Tensor[] { ys },
                 xs,
                 grad_ys,
                 name,
