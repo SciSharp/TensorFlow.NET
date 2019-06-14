@@ -143,7 +143,7 @@ namespace Tensorflow
                 name = scope;
                 var input_tensor = ops.convert_to_tensor(input);
                 var input_shape = tensor_util.to_shape(input_tensor.shape);
-                if (optimize && input_shape.NDim > -1)
+                if (optimize && input_shape.NDim > 0)
                     return constant_op.constant(input_shape.NDim, dtype: tf.int32, name: name);
                 else
                     return gen_array_ops.rank(input, name);
