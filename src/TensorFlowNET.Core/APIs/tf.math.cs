@@ -257,6 +257,16 @@ namespace Tensorflow
         public static Tensor negative(Tensor x, string name = null)
             => gen_math_ops.neg(x, name);
 
+        /// <summary>
+        /// Divides x / y elementwise (using Python 2 division operator semantics).
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor div(Tensor x, Tensor y, string name = null)
+            => math_ops.div(x, y, name: name);
+
         public static Tensor divide<T>(Tensor x, T[] y, string name = null) where T : struct
             => x / ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y");
 

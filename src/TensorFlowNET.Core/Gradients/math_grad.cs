@@ -168,6 +168,96 @@ namespace Tensorflow.Gradients
             return new Tensor[] { math_ops.truediv(sum_grad, math_ops.cast(factor, sum_grad.dtype)), null };
         }
 
+        /// <summary>
+        /// Gradient for Max.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        [RegisterGradient("Max")]
+        public static Tensor[] _MaxGrad(Operation op, Tensor[] grads)
+        {
+            return _MinOrMaxGrad(op, grads);
+        }
+
+        /// <summary>
+        /// Gradient for Min.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        [RegisterGradient("Min")]
+        public static Tensor[] _MinGrad(Operation op, Tensor[] grads)
+        {
+            return _MinOrMaxGrad(op, grads);
+        }
+
+        private static Tensor[] _MinOrMaxGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var input_shape = array_ops.shape(op.inputs[0]);
+            var output_shape_kept_dims = math_ops.reduced_shape(input_shape, op.inputs[1]);
+            var y = op.outputs[0];
+            y = array_ops.reshape(y, output_shape_kept_dims);
+            grad = array_ops.reshape(grad, output_shape_kept_dims);
+
+            // Compute the number of selected (maximum or minimum) elements in each
+            // reduction dimension. If there are multiple minimum or maximum elements
+            // then the gradient will be divided between them.
+            var indicators = math_ops.cast(math_ops.equal(y, op.inputs[0]), grad.dtype);
+            var num_selected = array_ops.reshape(math_ops.reduce_sum(indicators, op.inputs[1]), output_shape_kept_dims);
+
+            return new Tensor[] { math_ops.div(indicators, num_selected) * grad, null };
+        }
+
+        /// <summary>
+        /// Returns grad*(x > y, x <= y) with type of grad.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        [RegisterGradient("Maximum")]
+        public static Tensor[] _MaximumGrad(Operation op, Tensor[] grads)
+        {
+            return _MaximumMinimumGrad(op, grads[0]);
+        }
+
+        /// <summary>
+        /// Returns grad*(x < y, x >= y) with type of grad.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        [RegisterGradient("Minimum")]
+        public static Tensor[] _MinimumGrad(Operation op, Tensor[] grads)
+        {
+            return _MaximumMinimumGrad(op, grads[0]);
+        }
+
+        /// <summary>
+        /// Factor out the code for the gradient of Maximum or Minimum.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grad"></param>
+        /// <returns></returns>
+        private static Tensor[] _MaximumMinimumGrad(Operation op, Tensor grad)
+        {
+            var x = op.inputs[0];
+            var y = op.inputs[1];
+            var gdtype = grad.dtype;
+            var sx = array_ops.shape(x);
+            var sy = array_ops.shape(y);
+            var gradshape = array_ops.shape(grad);
+            var zeros = array_ops.zeros(gradshape, gdtype);
+            var xmask = gen_math_ops.greater_equal(x, y);
+            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var xgrad = array_ops.where(xmask, grad, zeros);
+            var ygrad = array_ops.where(xmask, zeros, grad);
+            var gx = array_ops.reshape(math_ops.reduce_sum(xgrad, rx), sx);
+            var gy = array_ops.reshape(math_ops.reduce_sum(ygrad, ry), sy);
+            return new Tensor[] { gx, gy };
+        }
+
         [RegisterGradient("Neg")]
         public static Tensor[] _NegGrad(Operation op, Tensor[] grads)
         {

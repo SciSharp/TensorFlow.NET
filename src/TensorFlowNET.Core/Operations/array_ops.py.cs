@@ -36,6 +36,29 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor zeros(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        {
+            dtype = dtype.as_base_dtype();
+            return with(ops.name_scope(name, "zeros", shape), scope =>
+            {
+                name = scope;
+                switch (dtype)
+                {
+                    case TF_DataType.TF_BOOL:
+                        return gen_array_ops.fill(shape, tf.constant(false, dtype: dtype), name: name);
+                    case TF_DataType.TF_DOUBLE:
+                        return gen_array_ops.fill(shape, tf.constant(0.0D, dtype: dtype), name: name);
+                    case TF_DataType.TF_FLOAT:
+                        return gen_array_ops.fill(shape, tf.constant(0.0F, dtype: dtype), name: name);
+                    case TF_DataType.TF_INT32:
+                        return gen_array_ops.fill(shape, tf.constant(0, dtype: dtype), name: name);
+                    default:
+                        throw new TypeError("can't find type for zeros");
+                }
+                
+            });
+        }
+
         private static Tensor _constant_if_small(int value, Tensor shape)
         {
             return shape < 1000;

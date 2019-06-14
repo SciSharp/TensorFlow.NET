@@ -66,6 +66,31 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Divide two values using Python 2 semantics. Used for Tensor.__div__.
+        /// </summary>
+        /// <param name="x">`Tensor` numerator of real numeric type.</param>
+        /// <param name="y">`Tensor` denominator of real numeric type.</param>
+        /// <param name="name">A name for the operation</param>
+        /// <returns>`x / y` returns the quotient of x and y.</returns>
+        public static Tensor div(Tensor x, Tensor y, string name = null)
+        {
+            return with(ops.name_scope(name, "div", (x, y)), name_scope =>
+            {
+                name = name_scope;
+                x = ops.convert_to_tensor(x, name: "x");
+                y = ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name = "y");
+                var x_dtype = x.dtype.as_base_dtype();
+                var y_dtype = y.dtype.as_base_dtype();
+                if (x_dtype != y_dtype)
+                    throw new TypeError($"x and y must have the same dtype, got {x_dtype} != {y_dtype}");
+                if (x_dtype.is_floating() || x_dtype.is_complex())
+                    return gen_math_ops.real_div(x, y, name: name);
+                else
+                    return gen_math_ops.floor_div(x, y, name: name);
+            });
+        }
+
+        /// <summary>
         ///    Returns 0 if the denominator is zero.
         /// </summary>
         /// <param name="x">
