@@ -105,6 +105,8 @@ namespace TensorFlowNET.Examples.ImageProcess
                 // Create a train saver that is used to restore values into an eval graph
                 // when exporting models.
                 var train_saver = tf.train.Saver();
+                train_saver.save(sess, CHECKPOINT_NAME);
+
                 sw.Restart();
 
                 for (int i = 0; i < how_many_training_steps; i++)
