@@ -16,6 +16,12 @@ namespace Tensorflow
             _write_version = write_version;
         }
 
+        /// <summary>
+        /// Create an Op to save 'saveables'.
+        /// </summary>
+        /// <param name="filename_tensor"></param>
+        /// <param name="saveables"></param>
+        /// <returns></returns>
         public virtual Operation save_op(Tensor filename_tensor, SaveableObject[] saveables)
         {
             var tensor_names = new List<string>();
@@ -105,6 +111,10 @@ namespace Tensorflow
                 }
 
                 var graph = ops.get_default_graph();
+                // Do some sanity checking on collections containing
+                // PartitionedVariables. If a saved collection has a PartitionedVariable,
+                // the GraphDef needs to include concat ops to get the value (or there'll
+                // be a lookup error on load).
                 var check_collection_list = graph.get_all_collection_keys();
                 foreach (var collection_type in check_collection_list)
                 {

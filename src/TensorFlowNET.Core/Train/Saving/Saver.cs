@@ -158,7 +158,10 @@ namespace Tensorflow
             string model_checkpoint_path = "";
             string checkpoint_file = "";
 
-            checkpoint_file = $"{save_path}-{global_step}";
+            if (global_step > 0)
+                checkpoint_file = $"{save_path}-{global_step}";
+            else
+                checkpoint_file = save_path;
 
             var save_path_parent = Path.GetDirectoryName(save_path);
 
@@ -291,15 +294,13 @@ namespace Tensorflow
             if (_saver_def.MaxToKeep <= 0) return;
 
             // Remove first from list if the same name was used before.
-            foreach (var p in _last_checkpoints)
-                if (latest_save_path == _CheckpointFilename((p.Key, p.Value)))
-                    _last_checkpoints.Remove(p.Key);
-
-            // Append new path to list
-            _last_checkpoints.Add(latest_save_path, Python.time());
+            var _existed_checkpoints = _last_checkpoints.FirstOrDefault(p => latest_save_path == _CheckpointFilename((p.Key, p.Value)));
+            if (_existed_checkpoints.Key != null)
+                _last_checkpoints.Remove(_existed_checkpoints.Key);
+            _last_checkpoints.Add(latest_save_path, time());
 
             // If more than max_to_keep, remove oldest.
-            if(_last_checkpoints.Count > _saver_def.MaxToKeep)
+            if (_last_checkpoints.Count > _saver_def.MaxToKeep)
             {
                 var first = _last_checkpoints.First();
                 _last_checkpoints.Remove(first.Key);
