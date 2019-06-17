@@ -29,14 +29,16 @@ namespace Tensorflow
 
         public Operation update_op(Optimizer optimizer, Tensor g)
         {
-            var update_op = optimizer._apply_dense(g, _v);
+            Operation update_op = null;
 
-            return update_op;
-        }
-
-        public Operation update_op(Optimizer optimizer, IndexedSlices g)
-        {
-            var update_op = optimizer._apply_dense(g, _v);
+            if (g.Tag == null)
+            {
+                update_op = optimizer._apply_dense(g, _v);
+            }
+            else if (g.Tag is IndexedSlices)
+            {
+                return optimizer._apply_sparse_duplicate_indices(g, _v);
+            }
 
             return update_op;
         }

@@ -223,8 +223,8 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("Unique", name, new { x, out_idx });
             // TODO
-            throw new NotImplementedException("_result = _UniqueOutput._make(_result)");
-            // return _op.outputs[0];
+            //var _result = _UniqueOutput._make(_op.outputs);
+            return (_op.outputs[0], _op.outputs[1]);
         }
 
         public static Tensor where()

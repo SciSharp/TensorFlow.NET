@@ -31,11 +31,18 @@ namespace Tensorflow.Framework
             _values = values;
             _indices = indices;
             _dense_shape = dense_shape;
+
+            _values.Tag = this;
         }
 
         public static implicit operator Tensor(IndexedSlices indexedSlices)
         {
             return indexedSlices.values;
+        }
+
+        public static implicit operator IndexedSlices(Tensor tensor)
+        {
+            return tensor.Tag as IndexedSlices;
         }
     }
 }

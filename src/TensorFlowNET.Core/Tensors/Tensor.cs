@@ -58,6 +58,11 @@ namespace Tensorflow
 
         private TF_Output? _tf_output;
 
+        /// <summary>
+        /// used for keep other pointer when do implicit operating
+        /// </summary>
+        public object Tag { get; set; }
+
         public int[] shape
         {
             get
@@ -219,11 +224,11 @@ namespace Tensorflow
             }
         }
 
-        public Tensor this[int start, int? stop, int? step]
+        public Tensor this[Slice slice]
         {
             get
             {
-                var slice_spec = new int[] { start };
+                var slice_spec = new int[] { slice.Start.Value };
                 var begin = new List<int>();
                 var end = new List<int>();
                 var strides = new List<int>();
@@ -236,14 +241,16 @@ namespace Tensorflow
                 foreach (var s in slice_spec)
                 {
                     begin.Add(s);
-                    if (stop == null)
+                    if(slice.Stop.HasValue)
+                    {
+                        end.Add(slice.Stop.Value);
+                    }
+                    else
                     {
                         end.Add(0);
                         end_mask |= (1 << index);
                     }
-                    else
-                        end.Add(s + 1);
-                    strides.Add(1);
+                    strides.Add(slice.Step);
 
                     index += 1;
                 }
@@ -277,7 +284,57 @@ namespace Tensorflow
             }
         }
 
-        public Tensor this[int slice_spec] => this[slice_spec, null, null];
+        public Tensor this[int start]
+        {
+            get
+            {
+                var slice_spec = new int[] { start };
+                var begin = new List<int>();
+                var end = new List<int>();
+                var strides = new List<int>();
+
+                var index = 0;
+                var (new_axis_mask, shrink_axis_mask) = (0, 0);
+                var (begin_mask, end_mask) = (0, 0);
+                var ellipsis_mask = 0;
+
+                foreach (var s in slice_spec)
+                {
+                    begin.Add(s);
+                    end.Add(s + 1);
+                    strides.Add(1);
+                    shrink_axis_mask |= (1 << index);
+                    index += 1;
+                }
+
+                return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+                {
+                    string name = scope;
+                    if (begin != null)
+                    {
+                        var (packed_begin, packed_end, packed_strides) =
+                            (array_ops.stack(begin.ToArray()),
+                            array_ops.stack(end.ToArray()),
+                            array_ops.stack(strides.ToArray()));
+
+                        return gen_array_ops.strided_slice(
+                            this,
+                            packed_begin,
+                            packed_end,
+                            packed_strides,
+                            begin_mask: begin_mask,
+                            end_mask: end_mask,
+                            shrink_axis_mask: shrink_axis_mask,
+                            new_axis_mask: new_axis_mask,
+                            ellipsis_mask: ellipsis_mask,
+
+                            name: name);
+                    }
+
+                    throw new NotImplementedException("");
+                });
+            }
+        }
 
         public override string ToString()
         {
