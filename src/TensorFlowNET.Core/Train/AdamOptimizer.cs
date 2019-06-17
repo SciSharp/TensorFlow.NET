@@ -70,5 +70,12 @@ namespace Tensorflow.Train
             return (_get_non_slot_variable("beta1_power", graph: graph),
                 _get_non_slot_variable("beta2_power", graph: graph));
         }
+
+        public override void _prepare()
+        {
+            //copied from GradientDescentOptimizer
+            LearningRate = _call_if_callable(LearningRate);
+            LearningRateTensor = ops.convert_to_tensor(LearningRate, name: "learning_rate");
+        }
     }
 }

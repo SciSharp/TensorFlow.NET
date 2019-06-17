@@ -57,10 +57,10 @@ namespace TensorFlowNET.Examples
             //int classes = y.Data<int>().Distinct().Count();
             //int samples = len / classes;
             int train_size = (int)Math.Round(len * (1 - test_size));
-            var train_x = x[new Slice(stop: train_size), new Slice()];
-            var valid_x = x[new Slice(start: train_size), new Slice()];
-            var train_y = y[new Slice(stop: train_size)];
-            var valid_y = y[new Slice(start: train_size)];
+            train_x = x[new Slice(stop: train_size), new Slice()];
+            valid_x = x[new Slice(start: train_size), new Slice()];
+            train_y = y[new Slice(stop: train_size)];
+            valid_y = y[new Slice(start: train_size)];
             Console.WriteLine("\tDONE");
             return (train_x, valid_x, train_y, valid_y);
         }
@@ -135,7 +135,8 @@ namespace TensorFlowNET.Examples
             {
                 // delete old cached file which contains errors
                 Console.WriteLine("Discarding cached file: " + meta_path);
-                File.Delete(meta_path);
+                if(File.Exists(meta_path))
+                    File.Delete(meta_path);
             }
             var url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/" + meta_file;
             Web.Download(url, "graph", meta_file);

@@ -91,6 +91,15 @@ namespace TensorFlowNET.ExamplesTests
             new TextClassificationTrain() { Enabled = true, DataLimit=100 }.Run();
         }
 
+
+        [TestMethod]
+        public void CnnTextClassificationTrain()
+        {
+            tf.Graph().as_default();
+            new CnnTextClassification() { Enabled = true, IsImportingGraph = false }.Run();
+        }
+
+
         [Ignore]
         [TestMethod]
         public void TextClassificationWithMovieReviews()
