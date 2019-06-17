@@ -72,5 +72,13 @@ namespace Tensorflow
             Tensor value,
             bool use_locking = false,
             string name = null) => gen_state_ops.assign_add(@ref, value, use_locking: use_locking, name: name);
+
+        public static Tensor scatter_add(RefVariable @ref, Tensor indices, Tensor updates, bool use_locking = false, string name = null)
+        {
+            if (@ref.dtype.is_ref_dtype())
+                return gen_state_ops.scatter_add(@ref, indices, updates, use_locking: use_locking, name: name);
+
+            throw new NotImplementedException("scatter_add");
+        }
     }
 }

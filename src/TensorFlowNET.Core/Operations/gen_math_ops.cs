@@ -17,6 +17,19 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Add all input tensors element wise.
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor add_n(Tensor[] inputs, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("AddN", name, args: new { inputs });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
         /// Returns the index with the largest value across dimensions of a tensor.
         /// </summary>
         /// <param name="input"></param>
@@ -195,6 +208,20 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("Cosh", name, args: new { x });
 
+            return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Computes the sum along segments of a tensor.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="segment_ids"></param>
+        /// <param name="num_segments"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor unsorted_segment_sum(Tensor data, Tensor segment_ids, Tensor num_segments, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("UnsortedSegmentSum", name, new { data, segment_ids, num_segments });
             return _op.outputs[0];
         }
 

@@ -44,8 +44,8 @@ namespace Tensorflow
                     return array_ops.identity(values, name: name);
                 return values;
             }
-            throw new NotImplementedException("math_ops add_n n > 1");
-            // return gen_math_ops.add_n(inputs, name: name);
+            
+            return gen_math_ops.add_n(inputs, name: name);
         }
 
         public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
@@ -125,6 +125,9 @@ namespace Tensorflow
 
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.equal(x, y, name: name);
+
+        public static Tensor sqrt(Tensor x, string name = null)
+            => gen_math_ops.sqrt(x, name: name);
 
         public static Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
@@ -319,6 +322,17 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, min);
         }
 
+        /// <summary>
+        /// Computes the sum along segments of a tensor.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="segment_ids"></param>
+        /// <param name="num_segments"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor unsorted_segment_sum(Tensor data, Tensor segment_ids, Tensor num_segments, string name = null)
+            => gen_math_ops.unsorted_segment_sum(data, segment_ids, num_segments, name: name);
+        
         /// <summary>
         /// Casts a tensor to type `int32`.
         /// </summary>

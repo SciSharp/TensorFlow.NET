@@ -276,6 +276,9 @@ namespace Tensorflow
             });
         }
 
+        public static (Tensor, Tensor) unique(Tensor x, TF_DataType out_idx = TF_DataType.TF_INT32, string name = null)
+            => gen_array_ops.unique(x, out_idx: out_idx, name: name);
+
         public static Tensor where(Tensor condition, object x = null, object y = null, string name = null)
         {
             if( x == null && y == null)

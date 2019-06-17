@@ -98,5 +98,19 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Adds sparse updates to a variable reference.
+        /// </summary>
+        /// <param name="ref"></param>
+        /// <param name="indices"></param>
+        /// <param name="updates"></param>
+        /// <param name="use_locking"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor scatter_add(RefVariable @ref, Tensor indices, Tensor updates, bool use_locking = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ScatterAdd", name: name, args: new { @ref, indices, updates, use_locking });
+            return _op.outputs[0];
+        }
     }
 }

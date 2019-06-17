@@ -5,10 +5,10 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.8.1</Version>
+    <Version>0.8.2</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Copyright>Apache 2.0</Copyright>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -17,14 +17,15 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.8.1.0</AssemblyVersion>
+    <AssemblyVersion>0.8.2.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.8:
 
 1. Remove global static graph instance.
 2. Provide custom gradient function.
-3. Add gradient function for Conv2D.</PackageReleaseNotes>
+3. Add gradient function for Conv2D.
+4. Fix bug for Transfer Learning example.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.8.1.0</FileVersion>
+    <FileVersion>0.8.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -40,6 +41,10 @@ Docs: https://tensorflownet.readthedocs.io</Description>
     <Compile Remove="runtimes\**" />
     <EmbeddedResource Remove="runtimes\**" />
     <None Remove="runtimes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Operations\gen_ops.cs" />
   </ItemGroup>
 
   <ItemGroup>

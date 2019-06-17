@@ -8,10 +8,7 @@ using System.Text;
 using Newtonsoft.Json;
 using NumSharp;
 using Tensorflow;
-using Tensorflow.Keras.Engine;
 using Tensorflow.Sessions;
-using TensorFlowNET.Examples.Text.cnn_models;
-using TensorFlowNET.Examples.TextClassification;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
 

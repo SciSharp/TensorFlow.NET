@@ -11,10 +11,26 @@ namespace Tensorflow.Framework
     {
         Tensor _values;
         public Tensor values => _values;
+        Tensor _indices;
+        public Tensor indices => _indices;
+        Tensor _dense_shape;
+        public Tensor dense_shape => _dense_shape;
+
+        public string name => _values.name;
+
+        public string device => _values.Device;
+
+        public Operation op => _values.op;
+
+        public TF_DataType dtype => _values.dtype;
+
+        public Graph graph => _values.graph;
 
         public IndexedSlices(Tensor values, Tensor indices, Tensor dense_shape = null)
         {
-
+            _values = values;
+            _indices = indices;
+            _dense_shape = dense_shape;
         }
 
         public static implicit operator Tensor(IndexedSlices indexedSlices)

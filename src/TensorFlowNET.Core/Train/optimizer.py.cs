@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Framework;
 
 namespace Tensorflow
 {
@@ -27,6 +28,13 @@ namespace Tensorflow
         }
 
         public Operation update_op(Optimizer optimizer, Tensor g)
+        {
+            var update_op = optimizer._apply_dense(g, _v);
+
+            return update_op;
+        }
+
+        public Operation update_op(Optimizer optimizer, IndexedSlices g)
         {
             var update_op = optimizer._apply_dense(g, _v);
 

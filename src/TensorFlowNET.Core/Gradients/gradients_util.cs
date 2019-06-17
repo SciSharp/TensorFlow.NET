@@ -93,10 +93,7 @@ namespace Tensorflow
                     {
                         // generate gradient subgraph for op.
                         var op = queue.Dequeue();
-                        if(op.name == "embedding/ExpandDims")
-                        {
 
-                        }
                         _maybe_colocate_with(op, gradient_uid, colocate_gradients_with_ops);
                         //if (loop_state != null)
                         //loop_state.EnterGradWhileContext(op, before: true);
@@ -311,15 +308,21 @@ namespace Tensorflow
                 // Aggregate multiple gradients, and convert [] to None.
                 if (out_grad.Count > 0)
                 {
+                    string used = "";
                     if (out_grad.Count < 2)
                     {
-                        string used = "nop";
+                        used = "nop";
                         if (out_grad.Count == 0)
                         {
                             throw new ValueError("_AggregatedGrads out_grad.Length == 0");
                         }
 
                         return_grads[i] = out_grad[0];
+                    }
+                    else
+                    {
+                        used = "add_n";
+                        out_grads[i] = new List<Tensor> { _MultiDeviceAddN(out_grad.ToArray(), gradient_uid) };
                     }
                 }
                 else
@@ -329,6 +332,38 @@ namespace Tensorflow
             }
 
             return return_grads;
+        }
+
+        /// <summary>
+        /// Adds tensors from potentially multiple devices.
+        /// </summary>
+        /// <param name="tensor_list"></param>
+        /// <param name="gradient_uid"></param>
+        /// <returns></returns>
+        private static Tensor _MultiDeviceAddN(Tensor[] tensor_list, string gradient_uid)
+        {
+            // Basic function structure comes from control_flow_ops.group().
+            // Sort tensors according to their devices.
+            var tensors_on_device = new Dictionary<string, List<Tensor>>();
+            
+            foreach (var tensor in tensor_list)
+            {
+                if (!tensors_on_device.ContainsKey(tensor.Device))
+                    tensors_on_device[tensor.Device] = new List<Tensor>();
+
+                tensors_on_device[tensor.Device].Add(tensor);
+            }
+                
+            // For each device, add the tensors on that device first.
+            var summands = new List<Tensor>();
+            foreach(var dev in tensors_on_device.Keys)
+            {
+                var tensors = tensors_on_device[dev];
+                ops._colocate_with_for_gradient(tensors[0].op, gradient_uid, ignore_existing: true);
+                summands.Add(math_ops.add_n(tensors.ToArray()));
+            }
+
+            return math_ops.add_n(summands.ToArray());
         }
 
         /// <summary>
