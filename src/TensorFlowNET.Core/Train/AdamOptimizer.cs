@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Framework;
 using static Tensorflow.Python;
@@ -61,6 +62,19 @@ namespace Tensorflow.Train
             var v_sqrt = math_ops.sqrt(v_t);
             var var_update = state_ops.assign_sub(var, lr * m_t / (v_sqrt + epsilon_t), use_locking: _use_locking);
             return control_flow_ops.group(new[] { var_update, m_t, v_t });
+        }
+
+        protected override void _create_slots(RefVariable[] var_list)
+        {
+            var first_var = var_list.OrderBy(x => x.name).First();
+            _create_non_slot_variable(initial_value: _beta1, name: "beta1_power", colocate_with: first_var);
+            _create_non_slot_variable(initial_value: _beta2, name: "beta2_power", colocate_with: first_var);
+
+            // Create slots for the first and second moments.
+            foreach(var v in var_list)
+            {
+                _zero_slot(v, "m", Name);
+            }
         }
 
         private (RefVariable, RefVariable) _get_beta_accumulators()

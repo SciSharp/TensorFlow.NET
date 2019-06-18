@@ -16,5 +16,10 @@ namespace Tensorflow
                                                       value_tensor,
                                                       name: name);
         }
+
+        public static bool is_resource_variable(VariableV1 var)
+        {
+            return var is ResourceVariable;
+        }
     }
 }

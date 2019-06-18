@@ -6,6 +6,8 @@ namespace Tensorflow.Train
 {
     public abstract class Trackable
     {
+        protected int _self_update_uid;
+
         /// <summary>
         /// Restore-on-create for a variable be saved with this `Checkpointable`.
         /// </summary>
@@ -32,9 +34,29 @@ namespace Tensorflow.Train
                 return new_variable;
         }
 
+        /// <summary>
+        /// Pop and load any deferred checkpoint restores into `trackable`.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="trackable"></param>
+        protected void _handle_deferred_dependencies(string name, RefVariable trackable)
+        {
+            _maybe_initialize_trackable();
+            // TODO
+        }
+
         protected RefVariable _track_checkpointable(RefVariable checkpointable, string name, bool overwrite = false)
         {
             return checkpointable;
+        }
+
+        /// <summary>
+        /// Initialize dependency management.
+        /// </summary>
+        protected void _maybe_initialize_trackable()
+        {
+            // _self_unconditional_checkpoint_dependencies = []
+            _self_update_uid = -1;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Framework;
+using Tensorflow.Train;
 using static Tensorflow.Python;
 
 namespace Tensorflow
@@ -13,7 +14,7 @@ namespace Tensorflow
     /// class directly, but instead instantiate one of its subclasses such as
     /// `GradientDescentOptimizer`, `AdagradOptimizer`, or `MomentumOptimizer`.
     /// </summary>
-    public abstract class Optimizer
+    public abstract class Optimizer : Trackable
     {
         // Values for gate_gradients.
         public static int GATE_NONE = 0;
@@ -27,6 +28,7 @@ namespace Tensorflow
         public Dictionary<string, Dictionary<string, RefVariable>> _slots;
         public Dictionary<string, RefVariable> _non_slot_dict;
         public Dictionary<string, object> _deferred_slot_restorations;
+        SlotCreator slot_creator = new SlotCreator();
 
         public Optimizer(float learning_rate, bool use_locking, string name = null)
         {
@@ -187,9 +189,49 @@ namespace Tensorflow
             });
         }
 
-        private void _create_slots(RefVariable[] var_list)
+        /// <summary>
+        /// Create the beta1 and beta2 accumulators on the same device as the first
+        /// variable. Sort the var_list to make sure this device is consistent across
+        /// workers (these need to go on the same PS, otherwise some updates are
+        /// silently ignored).
+        /// </summary>
+        /// <param name="var_list"></param>
+        protected virtual void _create_slots(RefVariable[] var_list)
         {
+            
+        }
 
+        /// <summary>
+        /// Add an extra variable, not associated with a slot.
+        /// </summary>
+        /// <param name="initial_value"></param>
+        /// <param name="name"></param>
+        /// <param name="colocate_with"></param>
+        protected RefVariable _create_non_slot_variable(float initial_value, string name, RefVariable colocate_with)
+        {
+            // Recommendation: Use OptimizerV2 if your optimizer uses non-slot variables.
+            var graph = colocate_with.graph;
+            var key = $"{name}.{graph.graph_key}";
+            var v = _non_slot_dict.ContainsKey(key) ? _non_slot_dict[key] : null;
+            if(v == null)
+            {
+                _maybe_initialize_trackable();
+                v = variable_scope.default_variable_creator(
+                    initial_value, name: name, trainable: false,
+                    use_resource: resource_variable_ops.is_resource_variable(
+                        colocate_with));
+
+                // Restore this variable by name if necessary, but don't add a
+                // Trackable dependency. Optimizers return the current graph's
+                // non-slot variables from _checkpoint_dependencies explicitly rather
+                // than unconditionally adding dependencies (since there may be multiple
+                // non-slot variables with the same name in different graphs, trying to
+                // save all of them would result in errors).
+                _handle_deferred_dependencies(name, v);
+                _non_slot_dict[key] = v;
+            }
+
+            return v;
         }
 
         public virtual Operation _finish(Operation[] update_ops, string name_scope)
@@ -340,6 +382,34 @@ namespace Tensorflow
         protected T _call_if_callable<T>(T param)
         {
             return param;
+        }
+
+        /// <summary>
+        /// Find or create a slot initialized with 0.0.
+        /// </summary>
+        /// <param name="var"></param>
+        /// <param name="slot_name"></param>
+        /// <param name="op_name"></param>
+        /// <returns></returns>
+        protected RefVariable _zero_slot(RefVariable var, string slot_name, string op_name)
+        {
+            var named_slots = _slot_dict(slot_name);
+            if (!named_slots.ContainsKey(_var_key(var)))
+            {
+                var new_slot_variable = slot_creator.create_zeros_slot(var, op_name);
+            }
+            return named_slots[_var_key(var)];
+        }
+
+        protected Dictionary<string, RefVariable> _slot_dict(string slot_name)
+        {
+            var named_slots = _slots.ContainsKey(slot_name) ? _slots[slot_name] : null;
+            if(named_slots == null)
+            {
+                _slots[slot_name] = new Dictionary<string, RefVariable>();
+            }
+
+            return named_slots;
         }
     }
 }
