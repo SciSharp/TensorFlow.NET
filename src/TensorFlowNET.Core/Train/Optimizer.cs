@@ -21,7 +21,8 @@ namespace Tensorflow
         public static int GATE_OP = 1;
         public static int GATE_GRAPH = 2;
 
-        public string Name { get; set; }
+        string _name;
+        public string Name => _name;
         public float LearningRate { get; set; }
         public Tensor LearningRateTensor { get; set; }
         public bool _use_locking;
@@ -35,7 +36,7 @@ namespace Tensorflow
             if (String.IsNullOrEmpty(name))
                 throw new NotImplementedException("Must specify the optimizer name");
 
-            Name = name;
+            _name = name;
             _use_locking = use_locking;
             LearningRate = learning_rate;
             // Dictionary of slots.
@@ -391,14 +392,25 @@ namespace Tensorflow
         /// <param name="slot_name"></param>
         /// <param name="op_name"></param>
         /// <returns></returns>
-        protected RefVariable _zero_slot(RefVariable var, string slot_name, string op_name)
+        protected RefVariable _zeros_slot(RefVariable var, string slot_name, string op_name)
         {
             var named_slots = _slot_dict(slot_name);
             if (!named_slots.ContainsKey(_var_key(var)))
             {
                 var new_slot_variable = slot_creator.create_zeros_slot(var, op_name);
+                _restore_slot_variable(slot_name: slot_name, variable: var, slot_variable: new_slot_variable);
+                named_slots[_var_key(var)] = new_slot_variable;
             }
             return named_slots[_var_key(var)];
+        }
+
+        /// <summary>
+        /// Restore a newly created slot variable's value.
+        /// </summary>
+        protected void _restore_slot_variable(string slot_name, RefVariable variable, RefVariable slot_variable)
+        {
+            var variable_key = _var_key(variable);
+            // TODO
         }
 
         protected Dictionary<string, RefVariable> _slot_dict(string slot_name)
@@ -406,7 +418,8 @@ namespace Tensorflow
             var named_slots = _slots.ContainsKey(slot_name) ? _slots[slot_name] : null;
             if(named_slots == null)
             {
-                _slots[slot_name] = new Dictionary<string, RefVariable>();
+                named_slots = new Dictionary<string, RefVariable>();
+                _slots[slot_name] = named_slots;
             }
 
             return named_slots;

@@ -37,6 +37,8 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             object initializer = null, // IInitializer or Tensor
             bool? trainable = null,
+            bool? use_resource = null,
+            bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
             VariableAggregation aggregation= VariableAggregation.None)
         {

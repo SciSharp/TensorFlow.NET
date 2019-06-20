@@ -43,7 +43,7 @@ namespace Tensorflow.Train
         {
             var validate_shape = shape.is_fully_defined();
             var prefix = primary.op.name;
-            return with(new variable_scope(prefix + "/" + name), delegate
+            return with(new variable_scope(string.Empty, prefix + "/" + name), delegate
             {
                 return _create_slot_var(primary, initializer, "", validate_shape, shape, dtype);
             });
@@ -62,11 +62,11 @@ namespace Tensorflow.Train
         private RefVariable _create_slot_var(VariableV1 primary, IInitializer val, string scope, bool validate_shape, 
             TensorShape shape, TF_DataType dtype)
         {
-            bool use_resource = primary is RefVariable;
+            bool use_resource = primary is ResourceVariable;
             if (resource_variable_ops.is_resource_variable(primary))
                 use_resource = true;
 
-            var slot = variable_scope.get_variable(
+            var slot = tf.get_variable(
               scope,
               initializer: val,
               trainable: false,

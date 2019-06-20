@@ -73,7 +73,8 @@ namespace Tensorflow.Train
             // Create slots for the first and second moments.
             foreach(var v in var_list)
             {
-                _zero_slot(v, "m", Name);
+                _zeros_slot(v, "m", Name);
+                _zeros_slot(v, "v", Name);
             }
         }
 
