@@ -46,8 +46,7 @@ namespace Tensorflow.Train
             var lr = (lr_t * math_ops.sqrt(1 - beta2_power) / (1 - beta1_power));
             var m = get_slot(var, "m");
             var m_scaled_g_values = grad * (1 - beta1_t);
-            var mul = m * beta1_t;
-            var m_t = state_ops.assign(m, mul, use_locking: _use_locking);
+            var m_t = state_ops.assign(m, m * beta1_t, use_locking: _use_locking);
             with(ops.control_dependencies(new[] { m_t }), delegate
             {
                 m_t = scatter_add(m, indices, m_scaled_g_values);

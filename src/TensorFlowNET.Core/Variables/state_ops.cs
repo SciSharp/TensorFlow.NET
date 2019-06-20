@@ -40,6 +40,18 @@ namespace Tensorflow
             //return @ref.assign(value, name: name);
         }
 
+        public static Tensor assign(RefVariable @ref, object value,
+            bool validate_shape = true,
+            bool use_locking = true,
+            string name = null)
+        {
+            return gen_state_ops.assign(@ref,
+                value,
+                validate_shape: validate_shape,
+                use_locking: use_locking,
+                name: name);
+        }
+
         public static Tensor assign_sub(RefVariable @ref,
             Tensor value,
             bool use_locking = false,
