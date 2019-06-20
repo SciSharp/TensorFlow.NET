@@ -5,6 +5,8 @@ using Tensorflow;
 using NumSharp;
 using System.Linq;
 using static Tensorflow.Python;
+using System.IO;
+using TensorFlowNET.Examples.Utility;
 
 namespace TensorFlowNET.Examples
 {
@@ -34,10 +36,10 @@ namespace TensorFlowNET.Examples
             var (xx, yy) = np.meshgrid(np.linspace(x_min, x_max, 30), np.linspace(y_min, y_max, 30));
             with(tf.Session(), sess =>
             {
-                var samples = np.vstack<float>(xx.ravel(), yy.ravel());
-                samples = np.transpose(samples);
-                var array = np.Load<double[,]>("H:\\PythonApplication1\\PythonApplication1\\data.npy");
-                samples = np.array(array).astype(np.float32);
+                //var samples = np.vstack<float>(xx.ravel(), yy.ravel());
+                //samples = np.transpose(samples);
+                var array = np.Load<double[,]>(Path.Join("nb", "nb_example.npy"));
+                var samples = np.array(array).astype(np.float32);
                 var Z = sess.run(predict(samples));
             });
 
@@ -170,6 +172,10 @@ namespace TensorFlowNET.Examples
                         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
                         2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
                         2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+
+
+            string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/data/nb_example.npy";
+            Web.Download(url, "nb", "nb_example.npy");
             #endregion
         }
 
