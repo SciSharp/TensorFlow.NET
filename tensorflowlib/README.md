@@ -22,6 +22,15 @@ Here are some pre-built TensorFlow binaries you can use for each platform:
 
 Download Linux pre-built library and unzip `libtensorflow.so` and `libtensorflow_framework.so` into current running directory.
 
+To run image recognition in Linux, please ensure some prerequisite libraries is install.
+
+```shell
+sudo apt install libc6-dev 
+sudo apt install libgdiplus
+```
+
+More information about [System.Drawing on Linux](<https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx>).
+
 ### Run in Mac OS
 
 ### GPU Tensorflow for windows
