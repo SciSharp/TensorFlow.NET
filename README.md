@@ -150,6 +150,8 @@ Example runner will download all the required files like training data and model
 * [Named Entity Recognition](test/TensorFlowNET.Examples/TextProcess/NER)
 * [Transfer Learning for Image Classification in InceptionV3](test/TensorFlowNET.Examples/ImageProcess/RetrainImageClassifier.cs)
 
+More troubleshooting of running example refer [here](tensorflowlib/README.md).
+
 ### Contribute:
 
 Feel like contributing to one of the hottest projects in the Machine Learning field? Want to know how Tensorflow magically creates the computational graph? We appreciate every contribution however small. There are tasks for novices to experts alike, if everyone tackles only a small task the sum of contributions will be huge.
