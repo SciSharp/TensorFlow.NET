@@ -62,4 +62,14 @@ Docs: https://tensorflownet.readthedocs.io</Description>
     <Folder Include="Keras\Initializers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NumSharp.Core">
+      <HintPath>..\..\..\..\NumSharp\src\NumSharp.Core\bin\Debug\netstandard2.0\NumSharp.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

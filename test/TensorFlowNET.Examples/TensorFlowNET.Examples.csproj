@@ -23,4 +23,10 @@
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="NumSharp.Core">
+      <HintPath>..\..\..\..\NumSharp\src\NumSharp.Core\bin\Debug\netstandard2.0\NumSharp.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -82,7 +82,7 @@ namespace Tensorflow
 
         protected override Tensor _log_prob(Tensor x)
         {
-            var log_prob = _log_unnormalized_prob(_z(x));
+            var log_prob = _log_unnormalized_prob(x);
             var log_norm = _log_normalization();
             return tf.sub(log_prob, log_norm);
         }

@@ -34,7 +34,10 @@ namespace TensorFlowNET.Examples
             var (xx, yy) = np.meshgrid(np.linspace(x_min, x_max, 30), np.linspace(y_min, y_max, 30));
             with(tf.Session(), sess =>
             {
-                var samples = np.hstack<float>(xx.ravel().reshape(xx.size, 1), yy.ravel().reshape(yy.size, 1));
+                var samples = np.vstack<float>(xx.ravel(), yy.ravel());
+                samples = np.transpose(samples);
+                var array = np.Load<double[,]>("H:\\PythonApplication1\\PythonApplication1\\data.npy");
+                samples = np.array(array).astype(np.float32);
                 var Z = sess.run(predict(samples));
             });
 
