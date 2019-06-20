@@ -25,7 +25,7 @@ namespace Tensorflow
             var saver = _create_saver_from_imported_meta_graph(
                 meta_graph_def, import_scope, imported_vars);
 
-            return (saver, null);
+            return (saver, imported_return_elements);
         }
 
         /// <summary>

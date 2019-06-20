@@ -104,7 +104,7 @@ namespace Tensorflow
                 current_name_scope = ops.name_scope(name_scope);
             }
 
-            if (_name != null || _scope != null)
+            if (!string.IsNullOrEmpty(_name) || _scope != null)
             {
                 var name_scope = _scope.name.Split('/').Last();
                 if (current_name_scope == null)
@@ -270,7 +270,11 @@ namespace Tensorflow
         }
 
         // TODO for Switch/Case
-        public static RefVariable get_variable(string embeddingMatrix, double[,] initializer, bool use_resource)
+        public static RefVariable get_variable(string embeddingMatrix, IInitializer initializer, bool use_resource, 
+            TensorShape shape = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            bool trainable = false,
+            bool validate_shape = true)
         {
             throw new NotImplementedException();
         }

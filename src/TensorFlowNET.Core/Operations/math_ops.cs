@@ -44,8 +44,8 @@ namespace Tensorflow
                     return array_ops.identity(values, name: name);
                 return values;
             }
-            throw new NotImplementedException("math_ops add_n n > 1");
-            // return gen_math_ops.add_n(inputs, name: name);
+            
+            return gen_math_ops.add_n(inputs, name: name);
         }
 
         public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
@@ -62,6 +62,31 @@ namespace Tensorflow
                     x = gen_math_ops.cast(x, base_type, name: name);
 
                 return x;
+            });
+        }
+
+        /// <summary>
+        /// Divide two values using Python 2 semantics. Used for Tensor.__div__.
+        /// </summary>
+        /// <param name="x">`Tensor` numerator of real numeric type.</param>
+        /// <param name="y">`Tensor` denominator of real numeric type.</param>
+        /// <param name="name">A name for the operation</param>
+        /// <returns>`x / y` returns the quotient of x and y.</returns>
+        public static Tensor div(Tensor x, Tensor y, string name = null)
+        {
+            return with(ops.name_scope(name, "div", (x, y)), name_scope =>
+            {
+                name = name_scope;
+                x = ops.convert_to_tensor(x, name: "x");
+                y = ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name = "y");
+                var x_dtype = x.dtype.as_base_dtype();
+                var y_dtype = y.dtype.as_base_dtype();
+                if (x_dtype != y_dtype)
+                    throw new TypeError($"x and y must have the same dtype, got {x_dtype} != {y_dtype}");
+                if (x_dtype.is_floating() || x_dtype.is_complex())
+                    return gen_math_ops.real_div(x, y, name: name);
+                else
+                    return gen_math_ops.floor_div(x, y, name: name);
             });
         }
 
@@ -100,6 +125,9 @@ namespace Tensorflow
 
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.equal(x, y, name: name);
+
+        public static Tensor sqrt(Tensor x, string name = null)
+            => gen_math_ops.sqrt(x, name: name);
 
         public static Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
@@ -295,6 +323,17 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Computes the sum along segments of a tensor.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="segment_ids"></param>
+        /// <param name="num_segments"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor unsorted_segment_sum(Tensor data, Tensor segment_ids, Tensor num_segments, string name = null)
+            => gen_math_ops.unsorted_segment_sum(data, segment_ids, num_segments, name: name);
+        
+        /// <summary>
         /// Casts a tensor to type `int32`.
         /// </summary>
         /// <param name="x">A `Tensor` or `SparseTensor` or `IndexedSlices`.</param>
@@ -426,20 +465,6 @@ namespace Tensorflow
             return with(ops.name_scope(name, "floordiv", new { x, y }), scope =>
             {
                 return gen_math_ops.floor_div(x, y, scope);
-            });
-        }
-
-        public static Tensor rank_internal(Tensor input, string name = null, bool optimize = true)
-        {
-            return with(ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
-            {
-                name = scope;
-                var input_tensor = ops.convert_to_tensor(input);
-                var input_shape = tensor_util.to_shape(input_tensor.shape);
-                if (optimize && input_shape.NDim == null)
-                    return constant_op.constant(input_shape.NDim);
-                else
-                    return gen_array_ops.rank(input, name);
             });
         }
 

@@ -5,10 +5,10 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.8.1</Version>
+    <Version>0.8.2</Version>
     <Authors>Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Copyright>Apache 2.0</Copyright>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -17,19 +17,20 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.8.1.0</AssemblyVersion>
+    <AssemblyVersion>0.8.2.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.8:
 
 1. Remove global static graph instance.
 2. Provide custom gradient function.
-3. Add gradient function for Conv2D.</PackageReleaseNotes>
+3. Add gradient function for Conv2D.
+4. Fix bug for Transfer Learning example.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.8.1.0</FileVersion>
+    <FileVersion>0.8.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -43,18 +44,17 @@ Docs: https://tensorflownet.readthedocs.io</Description>
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Operations\gen_ops.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Protobuf\README.md" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.7.0" />
-    <PackageReference Include="NumSharp" Version="0.10.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/win-x64/native/tensorflow.dll" Link="tensorflow.dll" Pack="true" PackagePath="../../tensorflowlib/runtimes/win-x64/native/tensorflow.dll" />
-    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow.so" Link="libtensorflow.so" Pack="true" PackagePath="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow.so" />
-    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow_framework.so" Link="libtensorflow_framework.so" Pack="true" PackagePath="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow_framework.so" />
+    <PackageReference Include="Google.Protobuf" Version="3.8.0" />
+    <PackageReference Include="Microsoft.ML.TensorFlow.Redist" Version="0.13.0" />
+    <PackageReference Include="NumSharp" Version="0.10.3" />
   </ItemGroup>
 
   <ItemGroup>

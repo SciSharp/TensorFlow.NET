@@ -106,10 +106,10 @@ namespace Tensorflow.Gradients
         [RegisterGradient("Conv2D")]
         public static Tensor[] _Conv2DGrad(Operation op, Tensor[] grads)
         {
-            var dilations = op.get_attr("dilations");
-            var strides = op.get_attr("strides");
+            var dilations = (op.get_attr("dilations") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray();
+            var strides = (op.get_attr("strides") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray();
             var padding = op.get_attr("padding");
-            var explicit_paddings = op.get_attr("explicit_paddings");
+            var explicit_paddings = (op.get_attr("explicit_paddings") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray();
             var use_cudnn_on_gpu = op.get_attr("use_cudnn_on_gpu");
             var data_format = op.get_attr("data_format");
             var shape = gen_array_ops.shape_n(new Tensor[] { op.inputs[0], op.inputs[1] });
@@ -120,21 +120,23 @@ namespace Tensorflow.Gradients
                 {
                     InputSizes = shape[0],
                     Filter = op.inputs[1],
-                    Dilations = dilations == null ? null : dilations as int[],
-                    Strides = strides == null ? null : strides as int[],
+                    OutBackProp = grads[0],
+                    Dilations = dilations,
+                    Strides = strides,
                     Padding = padding.ToString(),
-                    ExplicitPaddings = explicit_paddings == null ? null : explicit_paddings as int[],
+                    ExplicitPaddings = explicit_paddings,
                     UseCudnnOnGpu = (bool)use_cudnn_on_gpu,
-                    DataFormat = data_format.ToString()
+                    DataFormat = data_format.ToString(),
                 }),
                 gen_nn_ops.conv2d_backprop_filter(new Conv2dParams
                 {
                     Input = op.inputs[0],
                     FilterSizes = shape[1],
-                    Dilations = dilations == null ? null : dilations as int[],
-                    Strides = strides == null ? null : strides as int[],
+                    OutBackProp = grads[0],
+                    Dilations = dilations,
+                    Strides = strides,
                     Padding = padding.ToString(),
-                    ExplicitPaddings = explicit_paddings == null ? null : explicit_paddings as int[],
+                    ExplicitPaddings = explicit_paddings,
                     UseCudnnOnGpu = (bool)use_cudnn_on_gpu,
                     DataFormat = data_format.ToString()
                 })
@@ -153,6 +155,23 @@ namespace Tensorflow.Gradients
         {
             vec = array_ops.expand_dims(vec, -1);
             return vec * mat;
+        }
+
+        [RegisterGradient("MaxPool")]
+        public static Tensor[] _MaxPoolGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            return new Tensor[]
+            {
+                gen_nn_ops.max_pool_grad(
+                  op.inputs[0],
+                  op.outputs[0],
+                  grad,
+                  (op.get_attr("ksize") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray(),
+                  (op.get_attr("strides") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray(),
+                  padding: op.get_attr("padding").ToString(),
+                  data_format: op.get_attr("data_format").ToString())
+            };
         }
 
         /// <summary>

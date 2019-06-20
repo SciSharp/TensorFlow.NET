@@ -28,7 +28,7 @@ namespace TensorFlowNET.UnitTest.nn_test
         public void testZeroFraction()
         {
             var x_shape = new Shape(5, 17);
-            var x_np = new NumPyRandom().randint(0, 2, x_shape);
+            var x_np = np.random.randint(0, 2, x_shape);
                 x_np.astype(np.float32);
             var y_np = this._ZeroFraction(x_np);
 

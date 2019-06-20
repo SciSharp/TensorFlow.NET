@@ -105,6 +105,8 @@ namespace TensorFlowNET.Examples.ImageProcess
                 // Create a train saver that is used to restore values into an eval graph
                 // when exporting models.
                 var train_saver = tf.train.Saver();
+                train_saver.save(sess, CHECKPOINT_NAME);
+
                 sw.Restart();
 
                 for (int i = 0; i < how_many_training_steps; i++)
@@ -178,6 +180,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                 print($"Save final result to : {output_graph}");
                 save_graph_to_file(output_graph, class_count);
                 File.WriteAllText(output_labels, string.Join("\n", image_lists.Keys));
+
                 return test_accuracy > 0.75f;
             });
         }
@@ -604,7 +607,7 @@ namespace TensorFlowNET.Examples.ImageProcess
             // download variables.data checkpoint file.
             url = "https://github.com/SciSharp/TensorFlow.NET/raw/master/data/tfhub_modules.zip";
             Web.Download(url, data_dir, "tfhub_modules.zip");
-            Compress.UnZip(Path.Join(data_dir, "tfhub_modules.zip"), Path.Join(Path.GetTempPath(), "tfhub_modules"));
+            Compress.UnZip(Path.Join(data_dir, "tfhub_modules.zip"), "tfhub_modules");
 
             // Prepare necessary directories that can be used during training
             Directory.CreateDirectory(summaries_dir);

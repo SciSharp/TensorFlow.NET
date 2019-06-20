@@ -26,6 +26,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor[] concat_offset(Tensor concat_dim, Tensor[] shape, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ConcatOffset", name: name, args: new { concat_dim, shape });
+
+            return _op.outputs;
+        }
+
         /// <summary>
         ///    Returns a diagonal tensor with a given diagonal values.
         /// </summary>
@@ -205,6 +212,21 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Finds unique elements in a 1-D tensor.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="out_idx"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static (Tensor, Tensor) unique(Tensor x, TF_DataType out_idx = TF_DataType.TF_INT32, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Unique", name, new { x, out_idx });
+            // TODO
+            //var _result = _UniqueOutput._make(_op.outputs);
+            return (_op.outputs[0], _op.outputs[1]);
+        }
+
         public static Tensor where()
         {
             throw new NotImplementedException("where");
@@ -269,6 +291,26 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("Size", name, new { input, out_type });
             return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Return a slice from 'input'
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="begin"></param>
+        /// <param name="size"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor slice(Tensor input, Tensor begin, Tensor size, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Slice", name, new { input, begin, size });
+            return _op.outputs[0];
+        }
+
+        public static Tensor[] split(Tensor axis, Tensor value, int num_split, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Split", name, new { split_dim = axis, value, num_split });
+            return _op.outputs;
         }
 
         public static Tensor tile(Tensor input, Tensor multiples, string name = null)

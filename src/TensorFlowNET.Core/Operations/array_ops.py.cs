@@ -36,6 +36,29 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor zeros(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        {
+            dtype = dtype.as_base_dtype();
+            return with(ops.name_scope(name, "zeros", shape), scope =>
+            {
+                name = scope;
+                switch (dtype)
+                {
+                    case TF_DataType.TF_BOOL:
+                        return gen_array_ops.fill(shape, tf.constant(false, dtype: dtype), name: name);
+                    case TF_DataType.TF_DOUBLE:
+                        return gen_array_ops.fill(shape, tf.constant(0.0D, dtype: dtype), name: name);
+                    case TF_DataType.TF_FLOAT:
+                        return gen_array_ops.fill(shape, tf.constant(0.0F, dtype: dtype), name: name);
+                    case TF_DataType.TF_INT32:
+                        return gen_array_ops.fill(shape, tf.constant(0, dtype: dtype), name: name);
+                    default:
+                        throw new TypeError("can't find type for zeros");
+                }
+                
+            });
+        }
+
         private static Tensor _constant_if_small(int value, Tensor shape)
         {
             return shape < 1000;
@@ -127,8 +150,28 @@ namespace Tensorflow
         private static Tensor expand_dims_v2(Tensor input, int axis, string name = null) 
             => gen_array_ops.expand_dims(input, axis, name);
 
+        /// <summary>
+        /// Returns the rank of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static Tensor rank(Tensor input, string name = null)
-            => math_ops.rank_internal(input, name, optimize: true);
+            => rank_internal(input, name, optimize: true);
+
+        public static Tensor rank_internal(Tensor input, string name = null, bool optimize = true)
+        {
+            return with(ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
+            {
+                name = scope;
+                var input_tensor = ops.convert_to_tensor(input);
+                var input_shape = tensor_util.to_shape(input_tensor.shape);
+                if (optimize && input_shape.NDim > 0)
+                    return constant_op.constant(input_shape.NDim, dtype: tf.int32, name: name);
+                else
+                    return gen_array_ops.rank(input, name);
+            });
+        }
 
         /// <summary>
         /// Creates a tensor with all elements set to 1.
@@ -233,6 +276,9 @@ namespace Tensorflow
             });
         }
 
+        public static (Tensor, Tensor) unique(Tensor x, TF_DataType out_idx = TF_DataType.TF_INT32, string name = null)
+            => gen_array_ops.unique(x, out_idx: out_idx, name: name);
+
         public static Tensor where(Tensor condition, object x = null, object y = null, string name = null)
         {
             if( x == null && y == null)
@@ -277,7 +323,7 @@ namespace Tensorflow
                     var input_shape = tensor_util.to_shape(input_tensor.shape);
                     if (optimize && input_tensor.NDims > -1 && input_shape.is_fully_defined())
                     {
-                        var nd = np.array(input_tensor.shape, out_type.as_numpy_datatype());
+                        var nd = np.array(input_tensor.shape).astype(out_type.as_numpy_datatype());
                         return constant_op.constant(nd, name: name);
                     }
                 }

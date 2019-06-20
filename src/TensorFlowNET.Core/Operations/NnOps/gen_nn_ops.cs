@@ -179,6 +179,23 @@ namespace Tensorflow.Operations
             return _op.outputs[0];
         }
 
+        public static Tensor max_pool_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, 
+            string data_format= "NHWC", string name= null)
+        {
+            var _op = _op_def_lib._apply_op_helper("MaxPoolGrad", name: name, args: new
+            {
+                orig_input,
+                orig_output,
+                grad,
+                ksize,
+                strides,
+                padding,
+                data_format
+            });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor[] top_kv2(Tensor input, int k, bool sorted = true, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("TopKV2", name: name, args: new

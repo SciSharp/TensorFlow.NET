@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Framework;
+using Tensorflow.Train;
 using static Tensorflow.Python;
 
 namespace Tensorflow
@@ -12,32 +14,36 @@ namespace Tensorflow
     /// class directly, but instead instantiate one of its subclasses such as
     /// `GradientDescentOptimizer`, `AdagradOptimizer`, or `MomentumOptimizer`.
     /// </summary>
-    public abstract class Optimizer
+    public abstract class Optimizer : Trackable
     {
         // Values for gate_gradients.
         public static int GATE_NONE = 0;
         public static int GATE_OP = 1;
         public static int GATE_GRAPH = 2;
 
-        public string Name { get; set; }
-        public float LearningRate { get; set; }
-        public Tensor LearningRateTensor { get; set; }
+        string _name;
+        public string Name => _name;
+        protected float _lr;
+        public float LearningRate => _lr;
+        protected Tensor _lr_t;
+        public Tensor LearningRateTensor => _lr_t;
         public bool _use_locking;
-        public Dictionary<string, object> _slots;
-        public Dictionary<string, object> _non_slot_dict;
+        public Dictionary<string, Dictionary<string, RefVariable>> _slots;
+        public Dictionary<string, RefVariable> _non_slot_dict;
         public Dictionary<string, object> _deferred_slot_restorations;
+        SlotCreator slot_creator = new SlotCreator();
 
         public Optimizer(float learning_rate, bool use_locking, string name = null)
         {
             if (String.IsNullOrEmpty(name))
                 throw new NotImplementedException("Must specify the optimizer name");
 
-            Name = name;
+            _name = name;
             _use_locking = use_locking;
-            LearningRate = learning_rate;
+            _lr = learning_rate;
             // Dictionary of slots.
-            _slots = new Dictionary<string, object>();
-            _non_slot_dict = new Dictionary<string, object>();
+            _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
+            _non_slot_dict = new Dictionary<string, RefVariable>();
             _deferred_slot_restorations = new Dictionary<string, object>();
         }
 
@@ -110,7 +116,7 @@ namespace Tensorflow
         public Operation apply_gradients(Tuple<Tensor, RefVariable>[] grads_and_vars, RefVariable global_step = null, string name = null)
         {
             // No DistributionStrategy case.
-            var converted_grads_and_vars = new List<Tuple<Tensor, RefVariable, _OptimizableVariable>>();
+            var converted_grads_and_vars = new List<(Tensor, RefVariable, _OptimizableVariable)>();
             foreach (var (g, v) in grads_and_vars)
             {
                 if(g != null)
@@ -118,7 +124,7 @@ namespace Tensorflow
                     // Convert the grad to Tensor or IndexedSlices if necessary.
                     var gR = ops.convert_to_tensor_or_indexed_slices(g);
                     var p = _get_processor(v);
-                    converted_grads_and_vars.Add(new Tuple<Tensor, RefVariable, _OptimizableVariable>(gR, v, p));
+                    converted_grads_and_vars.Add((gR, v, p));
                 }
             }
 
@@ -143,7 +149,8 @@ namespace Tensorflow
                     var scope_name = var.op.name;
                     with(ops.name_scope("update_" + scope_name), scope2 =>
                     {
-                        update_ops.Add(processor.update_op(this, grad));
+                        var op = processor.update_op(this, grad);
+                        update_ops.Add(op);
                     });
                 }
 
@@ -185,9 +192,49 @@ namespace Tensorflow
             });
         }
 
-        private void _create_slots(RefVariable[] var_list)
+        /// <summary>
+        /// Create the beta1 and beta2 accumulators on the same device as the first
+        /// variable. Sort the var_list to make sure this device is consistent across
+        /// workers (these need to go on the same PS, otherwise some updates are
+        /// silently ignored).
+        /// </summary>
+        /// <param name="var_list"></param>
+        protected virtual void _create_slots(RefVariable[] var_list)
         {
+            
+        }
 
+        /// <summary>
+        /// Add an extra variable, not associated with a slot.
+        /// </summary>
+        /// <param name="initial_value"></param>
+        /// <param name="name"></param>
+        /// <param name="colocate_with"></param>
+        protected RefVariable _create_non_slot_variable(float initial_value, string name, RefVariable colocate_with)
+        {
+            // Recommendation: Use OptimizerV2 if your optimizer uses non-slot variables.
+            var graph = colocate_with.graph;
+            var key = $"{name}.{graph.graph_key}";
+            var v = _non_slot_dict.ContainsKey(key) ? _non_slot_dict[key] : null;
+            if(v == null)
+            {
+                _maybe_initialize_trackable();
+                v = variable_scope.default_variable_creator(
+                    initial_value, name: name, trainable: false,
+                    use_resource: resource_variable_ops.is_resource_variable(
+                        colocate_with));
+
+                // Restore this variable by name if necessary, but don't add a
+                // Trackable dependency. Optimizers return the current graph's
+                // non-slot variables from _checkpoint_dependencies explicitly rather
+                // than unconditionally adding dependencies (since there may be multiple
+                // non-slot variables with the same name in different graphs, trying to
+                // save all of them would result in errors).
+                _handle_deferred_dependencies(name, v);
+                _non_slot_dict[key] = v;
+            }
+
+            return v;
         }
 
         public virtual Operation _finish(Operation[] update_ops, string name_scope)
@@ -201,9 +248,66 @@ namespace Tensorflow
             return gen_training_ops.apply_gradient_descent(var, alpha, grad, use_locking: _use_locking).op;
         }
 
+        /// <summary>
+        /// Add ops to apply sparse gradients to `var`, with repeated sparse indices.
+        /// </summary>
+        /// <param name="grad"></param>
+        /// <param name="var"></param>
+        /// <returns></returns>
+        public virtual Operation _apply_sparse_duplicate_indices(IndexedSlices grad, RefVariable var)
+        {
+            var (summed_values, unique_indices) = _deduplicate_indexed_slices(values: grad.values, indices: grad.indices);
+            var gradient_no_duplicate_indices = new IndexedSlices(
+                indices: unique_indices,
+                values: summed_values,
+                dense_shape: grad.dense_shape);
+            return _apply_sparse(gradient_no_duplicate_indices, var);
+        }
+
+        public virtual Operation _apply_sparse(IndexedSlices grad, RefVariable var)
+        {
+            throw new NotImplementedException("_apply_sparse");
+        }
+
+        public virtual (Tensor, Tensor) _deduplicate_indexed_slices(Tensor values, Tensor indices)
+        {
+            var (unique_indices, new_index_positions) = array_ops.unique(indices);
+            var shape = array_ops.shape(unique_indices)[0];
+            var summed_values = math_ops.unsorted_segment_sum(values, new_index_positions, shape);
+            return (summed_values, unique_indices);
+        }
+
         public virtual void _prepare()
         {
 
+        }
+
+        /// <summary>
+        /// Return a slot named `name` created for `var` by the Optimizer.
+        /// </summary>
+        /// <param name="var"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        protected RefVariable get_slot(RefVariable var, string name)
+        {
+            var named_slots = _slots.ContainsKey(name) ? _slots[name] : null;
+            if (named_slots == null)
+                return null;
+
+            return named_slots.ContainsKey(_var_key(var)) ? named_slots[_var_key(var)] : null;
+        }
+
+        private string _var_key(RefVariable var)
+        {
+            return $"{var.op.graph.graph_key}.{var.op.name}";
+        }
+
+        protected RefVariable _get_non_slot_variable(string name, Graph graph = null)
+        {
+            var key = $"{name}.{graph.graph_key}";
+            var non_slot = _non_slot_dict.ContainsKey(key) ? _non_slot_dict[key] : null;
+
+            return non_slot;
         }
 
         private _OptimizableVariable _get_processor(RefVariable v)
@@ -281,6 +385,46 @@ namespace Tensorflow
         protected T _call_if_callable<T>(T param)
         {
             return param;
+        }
+
+        /// <summary>
+        /// Find or create a slot initialized with 0.0.
+        /// </summary>
+        /// <param name="var"></param>
+        /// <param name="slot_name"></param>
+        /// <param name="op_name"></param>
+        /// <returns></returns>
+        protected RefVariable _zeros_slot(RefVariable var, string slot_name, string op_name)
+        {
+            var named_slots = _slot_dict(slot_name);
+            if (!named_slots.ContainsKey(_var_key(var)))
+            {
+                var new_slot_variable = slot_creator.create_zeros_slot(var, op_name);
+                _restore_slot_variable(slot_name: slot_name, variable: var, slot_variable: new_slot_variable);
+                named_slots[_var_key(var)] = new_slot_variable;
+            }
+            return named_slots[_var_key(var)];
+        }
+
+        /// <summary>
+        /// Restore a newly created slot variable's value.
+        /// </summary>
+        protected void _restore_slot_variable(string slot_name, RefVariable variable, RefVariable slot_variable)
+        {
+            var variable_key = _var_key(variable);
+            // TODO
+        }
+
+        protected Dictionary<string, RefVariable> _slot_dict(string slot_name)
+        {
+            var named_slots = _slots.ContainsKey(slot_name) ? _slots[slot_name] : null;
+            if(named_slots == null)
+            {
+                named_slots = new Dictionary<string, RefVariable>();
+                _slots[slot_name] = named_slots;
+            }
+
+            return named_slots;
         }
     }
 }

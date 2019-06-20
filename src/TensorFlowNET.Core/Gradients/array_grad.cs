@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Framework;
 using Tensorflow.Operations;
 using static Tensorflow.Python;
 
@@ -42,9 +43,9 @@ namespace Tensorflow.Gradients
                 return end_value_index <= dim_index ? new Tensor[] { grad, null } : new Tensor[] { null, grad };
 
             var concat_dim = op.inputs[dim_index];
-            if (end_value_index == -1)
-                end_value_index = op.inputs.Length - 1;
-            var input_values = op.inputs._inputs.Skip(start_value_index).Take(end_value_index - start_value_index).ToArray();
+            var input_values = op.inputs._inputs.Skip(start_value_index)
+                .Take(end_value_index == -1 ? op.inputs.Length - 1 : end_value_index - start_value_index)
+                .ToArray();
 
             var out_grads = new List<Tensor>();
             if (constant_op.is_constant(concat_dim))
@@ -82,18 +83,24 @@ namespace Tensorflow.Gradients
                         new Tensor[] { non_neg_concat_dim, tf.constant(0) },
                         new Tensor[] { tf.constant(1), tf.constant(-1) });
                 var squeeze_sizes = array_ops.squeeze(slice);
-                out_grads = gen_ops.split(grad, squeeze_sizes, non_neg_concat_dim).ToList();
+                out_grads = gen_array_ops.split(grad, squeeze_sizes, non_neg_concat_dim).ToList();
             }
             else
             {
-                var offset = gen_ops.concat_offset(non_neg_concat_dim, sizes);
+                var offset = gen_array_ops.concat_offset(non_neg_concat_dim, sizes);
                 foreach (var (begin, size) in zip(offset, sizes))
-                    out_grads.Add(gen_ops.slice(grad, begin, size));
+                    out_grads.Add(gen_array_ops.slice(grad, begin, size));
             }
 
             return (end_value_index <= dim_index ? 
-                out_grads.ToArray().Concat(null) : 
+                out_grads.ToArray().Concat(new Tensor[] { null }) : 
                 new Tensor[] { null }.Concat(out_grads)).ToArray();
+        }
+
+        [RegisterGradient("ExpandDims")]
+        public static Tensor[] _ExpandDimsGrad(Operation op, Tensor[] grads)
+        {
+            return new Tensor[] { _ReshapeToInput(op, grads[0]), null };
         }
 
         /// <summary>
@@ -122,7 +129,46 @@ namespace Tensorflow.Gradients
             if (fully_known)
                 return sizes;
             else
-                return gen_ops.shape_n(inputs);
+                return gen_array_ops.shape_n(inputs);
+        }
+
+        /// <summary>
+        /// Gradient for GatherV2 op.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        [RegisterGradient("GatherV2")]
+        public static Tensor[] _GatherV2Grad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var @params = op.inputs[0];
+            ops.colocate_with(@params);
+
+            var params_shape = array_ops.shape(@params, out_type: tf.int64);
+            params_shape = math_ops.cast(params_shape, tf.int32);
+
+            var indices = op.inputs[1];
+            var indices_size = array_ops.expand_dims(array_ops.size(indices), 0);
+            var axis = op.inputs[2];
+            var axis_static = tensor_util.constant_value(axis);
+
+            // For axis 0 gathers, build an appropriately shaped IndexedSlices.
+            if((int)axis_static == 0)
+            {
+                var params_tail_shape = params_shape[new NumSharp.Slice(start:1)];
+                var values_shape = array_ops.concat(new[] { indices_size, params_tail_shape }, 0);
+                var values = array_ops.reshape(grad, values_shape);
+                indices = array_ops.reshape(indices, indices_size);
+                return new Tensor[]
+                {
+                    new IndexedSlices(values, indices, params_shape),
+                    null,
+                    null
+                };
+            }
+
+            return new Tensor[] { null, null };
         }
 
         [RegisterGradient("Reshape")]

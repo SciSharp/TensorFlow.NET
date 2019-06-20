@@ -37,6 +37,16 @@ namespace Tensorflow
             => array_ops.expand_dims(input, axis, name, dim);
 
         /// <summary>
+        /// Creates a tensor filled with a scalar value.
+        /// </summary>
+        /// <param name="dims"></param>
+        /// <param name="value"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor fill<T>(Tensor dims, T value, string name = null)
+            => gen_array_ops.fill(dims, value, name: name);
+
+        /// <summary>
         /// Return the elements, either from `x` or `y`, depending on the `condition`.
         /// </summary>
         /// <returns></returns>
