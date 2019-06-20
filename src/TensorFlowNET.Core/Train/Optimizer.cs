@@ -23,8 +23,10 @@ namespace Tensorflow
 
         string _name;
         public string Name => _name;
-        public float LearningRate { get; set; }
-        public Tensor LearningRateTensor { get; set; }
+        protected float _lr;
+        public float LearningRate => _lr;
+        protected Tensor _lr_t;
+        public Tensor LearningRateTensor => _lr_t;
         public bool _use_locking;
         public Dictionary<string, Dictionary<string, RefVariable>> _slots;
         public Dictionary<string, RefVariable> _non_slot_dict;
@@ -38,7 +40,7 @@ namespace Tensorflow
 
             _name = name;
             _use_locking = use_locking;
-            LearningRate = learning_rate;
+            _lr = learning_rate;
             // Dictionary of slots.
             _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
             _non_slot_dict = new Dictionary<string, RefVariable>();
@@ -302,7 +304,7 @@ namespace Tensorflow
 
         protected RefVariable _get_non_slot_variable(string name, Graph graph = null)
         {
-            var key = $"{graph.graph_key}.{name}";
+            var key = $"{name}.{graph.graph_key}";
             var non_slot = _non_slot_dict.ContainsKey(key) ? _non_slot_dict[key] : null;
 
             return non_slot;

@@ -36,8 +36,8 @@ namespace Tensorflow
                     validate_shape: validate_shape,
                     use_locking: use_locking,
                     name: name);
-            else
-                throw new NotImplementedException("state_ops.assign");
+            throw new NotImplementedException("state_ops.assign");
+            //return @ref.assign(value, name: name);
         }
 
         public static Tensor assign_sub(RefVariable @ref,

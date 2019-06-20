@@ -46,7 +46,8 @@ namespace Tensorflow.Train
             var lr = (lr_t * math_ops.sqrt(1 - beta2_power) / (1 - beta1_power));
             var m = get_slot(var, "m");
             var m_scaled_g_values = grad * (1 - beta1_t);
-            var m_t = state_ops.assign(m, m * beta1_t, use_locking: _use_locking);
+            var mul = m * beta1_t;
+            var m_t = state_ops.assign(m, mul, use_locking: _use_locking);
             with(ops.control_dependencies(new[] { m_t }), delegate
             {
                 m_t = scatter_add(m, indices, m_scaled_g_values);
@@ -88,9 +89,15 @@ namespace Tensorflow.Train
 
         public override void _prepare()
         {
-            //copied from GradientDescentOptimizer
-            LearningRate = _call_if_callable(LearningRate);
-            LearningRateTensor = ops.convert_to_tensor(LearningRate, name: "learning_rate");
+            var lr = _call_if_callable(_lr);
+            var beta1 = _call_if_callable(_beta1);
+            var beta2 = _call_if_callable(_beta2);
+            var epsilon = _call_if_callable(_epsilon);
+
+            _lr_t = ops.convert_to_tensor(lr, name: "learning_rate");
+            _beta1_t = ops.convert_to_tensor(beta1, name: "beta1");
+            _beta2_t = ops.convert_to_tensor(beta2, name: "beta2");
+            _epsilon_t = ops.convert_to_tensor(epsilon, name: "epsilon");
         }
     }
 }
