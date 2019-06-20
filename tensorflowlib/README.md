@@ -1,4 +1,10 @@
-TensorFlow.NET pack all required libraries in architecture-specific assemblies folders per NuGet standard.
+TensorFlow.NET pack all required libraries in architecture-specific assemblies folders per NuGet standard [Deprecated] .
+
+We changed to use `Microsoft.ML.TensorFlow.Redist` to maintain the TensorFlow library.
+
+
+
+### Download manually
 
 Here are some pre-built TensorFlow binaries you can use for each platform:
 

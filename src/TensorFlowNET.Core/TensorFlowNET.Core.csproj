@@ -53,13 +53,8 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.8.0" />
+    <PackageReference Include="Microsoft.ML.TensorFlow.Redist" Version="0.13.0" />
     <PackageReference Include="NumSharp" Version="0.10.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/win-x64/native/tensorflow.dll" Link="tensorflow.dll" Pack="true" PackagePath="../../tensorflowlib/runtimes/win-x64/native/tensorflow.dll" />
-    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow.so" Link="libtensorflow.so" Pack="true" PackagePath="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow.so" />
-    <Content CopyToOutputDirectory="PreserveNewest" Include="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow_framework.so" Link="libtensorflow_framework.so" Pack="true" PackagePath="../../tensorflowlib/runtimes/linux-x64/native/libtensorflow_framework.so" />
   </ItemGroup>
 
   <ItemGroup>
