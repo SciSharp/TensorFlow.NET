@@ -16,7 +16,7 @@ namespace Tensorflow.Train
         float _beta1;
         float _beta2;
         float _epsilon;
-        Tensor _lr_t, _beta1_t, _beta2_t, _epsilon_t;
+        Tensor _beta1_t, _beta2_t, _epsilon_t;
 
         public AdamOptimizer(float learning_rate, float beta1 = 0.9f, float beta2 = 0.999f, float epsilon = 1e-8f, bool use_locking = false, string name = "Adam")
             : base(learning_rate, use_locking, name)
@@ -32,6 +32,25 @@ namespace Tensorflow.Train
             {
                 return state_ops.scatter_add(x, i, v, use_locking: _use_locking);
             });
+        }
+
+        public override Operation _apply_dense(Tensor grad, RefVariable var)
+        {
+            var m = get_slot(var, "m");
+            var v = get_slot(var, "v");
+            var (beta1_power, beta2_power) = _get_beta_accumulators();
+            return gen_training_ops.apply_adam(
+                var,
+                m,
+                v,
+                math_ops.cast(beta1_power, var.dtype.as_base_dtype()),
+                math_ops.cast(beta2_power, var.dtype.as_base_dtype()),
+                math_ops.cast(_lr_t, var.dtype.as_base_dtype()),
+                math_ops.cast(_beta1_t, var.dtype.as_base_dtype()),
+                math_ops.cast(_beta2_t, var.dtype.as_base_dtype()),
+                math_ops.cast(_epsilon_t, var.dtype.as_base_dtype()),
+                grad,
+                use_locking: _use_locking).op;
         }
 
         private Operation _apply_sparse_shared(Tensor grad, RefVariable var, Tensor indices, Func<RefVariable, Tensor, Tensor, Tensor> scatter_add)

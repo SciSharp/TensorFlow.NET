@@ -156,7 +156,7 @@ namespace Tensorflow.Gradients
             // For axis 0 gathers, build an appropriately shaped IndexedSlices.
             if((int)axis_static == 0)
             {
-                var params_tail_shape = params_shape[new NumSharp.Slice(start:1)];
+                var params_tail_shape = params_shape.slice(new NumSharp.Slice(start:1));
                 var values_shape = array_ops.concat(new[] { indices_size, params_tail_shape }, 0);
                 var values = array_ops.reshape(grad, values_shape);
                 indices = array_ops.reshape(indices, indices_size);

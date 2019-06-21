@@ -47,10 +47,10 @@ namespace Tensorflow.Clustering
             _cluster_centers_updated = cluster_centers_updated;
             _cluster_centers_initialized = cluster_centers_initialized;
 
-            _num_selected = array_ops.shape(_cluster_centers)[0];
+            _num_selected = array_ops.shape(_cluster_centers).slice(0);
             _num_remaining = _num_clusters - _num_selected;
 
-            _num_data = math_ops.add_n(_inputs.Select(i => array_ops.shape(i)[0]).ToArray());
+            _num_data = math_ops.add_n(_inputs.Select(i => array_ops.shape(i).slice(0)).ToArray());
         }
 
         private Tensor _initialize()
@@ -68,7 +68,7 @@ namespace Tensorflow.Clustering
                   },
                   () =>
                   {
-                      return control_flow_ops.no_op().output[0];
+                      return control_flow_ops.no_op().output.slice(0);
                   });
             });
         }
@@ -90,7 +90,7 @@ namespace Tensorflow.Clustering
             // Adds some centers and returns the number of centers remaining.
             var new_centers = _choose_initial_centers();
             if (_distance_metric == KMeans.COSINE_DISTANCE)
-                new_centers = nn_impl.l2_normalize(new_centers[0], axis: 1);
+                new_centers = nn_impl.l2_normalize(new_centers.slice(0), axis: 1);
 
             // If cluster_centers is empty, it doesn't have the right shape for concat.
             var all_centers = control_flow_ops.cond(math_ops.equal(_num_selected, 0),
@@ -99,12 +99,12 @@ namespace Tensorflow.Clustering
 
             var a = state_ops.assign(_cluster_centers, all_centers, validate_shape: false);
 
-            return _num_clusters - array_ops.shape(a)[0];
+            return _num_clusters - array_ops.shape(a).slice(0);
         }
 
         private Tensor _choose_initial_centers()
         {
-            return _greedy_batch_sampler()[0];
+            return _greedy_batch_sampler().slice(0);
         }
 
         private Tensor _greedy_batch_sampler()

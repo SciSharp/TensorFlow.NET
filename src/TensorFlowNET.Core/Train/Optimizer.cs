@@ -272,7 +272,7 @@ namespace Tensorflow
         public virtual (Tensor, Tensor) _deduplicate_indexed_slices(Tensor values, Tensor indices)
         {
             var (unique_indices, new_index_positions) = array_ops.unique(indices);
-            var shape = array_ops.shape(unique_indices)[0];
+            var shape = array_ops.shape(unique_indices).slice(0);
             var summed_values = math_ops.unsorted_segment_sum(values, new_index_positions, shape);
             return (summed_values, unique_indices);
         }

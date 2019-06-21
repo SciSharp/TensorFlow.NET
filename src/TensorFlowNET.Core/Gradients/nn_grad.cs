@@ -200,7 +200,7 @@ namespace Tensorflow.Gradients
 
             var in_lastdim = array_ops.gather(math_ops.cast(in_shape, TF_DataType.TF_INT64), 
                 array_ops.size(in_shape) - 1);
-            var outerdim = array_ops.shape(ind_2d)[0];
+            var outerdim = array_ops.shape(ind_2d).slice(0);
 
             // Compute linear indices(flattened to 1D).
             var cast1 = math_ops.cast(outerdim, TF_DataType.TF_INT64);

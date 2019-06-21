@@ -224,116 +224,110 @@ namespace Tensorflow
             }
         }
 
-        public Tensor this[Slice slice]
+        public Tensor slice(Slice slice)
         {
-            get
+            var slice_spec = new int[] { slice.Start.Value };
+            var begin = new List<int>();
+            var end = new List<int>();
+            var strides = new List<int>();
+
+            var index = 0;
+            var (new_axis_mask, shrink_axis_mask) = (0, 0);
+            var (begin_mask, end_mask) = (0, 0);
+            var ellipsis_mask = 0;
+
+            foreach (var s in slice_spec)
             {
-                var slice_spec = new int[] { slice.Start.Value };
-                var begin = new List<int>();
-                var end = new List<int>();
-                var strides = new List<int>();
-
-                var index = 0;
-                var (new_axis_mask, shrink_axis_mask) = (0, 0);
-                var (begin_mask, end_mask) = (0, 0);
-                var ellipsis_mask = 0;
-
-                foreach (var s in slice_spec)
+                begin.Add(s);
+                if (slice.Stop.HasValue)
                 {
-                    begin.Add(s);
-                    if(slice.Stop.HasValue)
-                    {
-                        end.Add(slice.Stop.Value);
-                    }
-                    else
-                    {
-                        end.Add(0);
-                        end_mask |= (1 << index);
-                    }
-                    strides.Add(slice.Step);
+                    end.Add(slice.Stop.Value);
+                }
+                else
+                {
+                    end.Add(0);
+                    end_mask |= (1 << index);
+                }
+                strides.Add(slice.Step);
 
-                    index += 1;
+                index += 1;
+            }
+
+            return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+            {
+                string name = scope;
+                if (begin != null)
+                {
+                    var (packed_begin, packed_end, packed_strides) =
+                        (array_ops.stack(begin.ToArray()),
+                        array_ops.stack(end.ToArray()),
+                        array_ops.stack(strides.ToArray()));
+
+                    return gen_array_ops.strided_slice(
+                        this,
+                        packed_begin,
+                        packed_end,
+                        packed_strides,
+                        begin_mask: begin_mask,
+                        end_mask: end_mask,
+                        shrink_axis_mask: shrink_axis_mask,
+                        new_axis_mask: new_axis_mask,
+                        ellipsis_mask: ellipsis_mask,
+
+                        name: name);
                 }
 
-                return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
-                {
-                    string name = scope;
-                    if (begin != null)
-                    {
-                        var (packed_begin, packed_end, packed_strides) =
-                            (array_ops.stack(begin.ToArray()),
-                            array_ops.stack(end.ToArray()),
-                            array_ops.stack(strides.ToArray()));
-
-                        return gen_array_ops.strided_slice(
-                            this,
-                            packed_begin,
-                            packed_end,
-                            packed_strides,
-                            begin_mask: begin_mask,
-                            end_mask: end_mask,
-                            shrink_axis_mask: shrink_axis_mask,
-                            new_axis_mask: new_axis_mask,
-                            ellipsis_mask: ellipsis_mask,
-
-                            name: name);
-                    }
-
-                    throw new NotImplementedException("");
-                });
-            }
+                throw new NotImplementedException("");
+            });
         }
 
-        public Tensor this[int start]
+        public Tensor slice(int start)
         {
-            get
+            var slice_spec = new int[] { start };
+            var begin = new List<int>();
+            var end = new List<int>();
+            var strides = new List<int>();
+
+            var index = 0;
+            var (new_axis_mask, shrink_axis_mask) = (0, 0);
+            var (begin_mask, end_mask) = (0, 0);
+            var ellipsis_mask = 0;
+
+            foreach (var s in slice_spec)
             {
-                var slice_spec = new int[] { start };
-                var begin = new List<int>();
-                var end = new List<int>();
-                var strides = new List<int>();
+                begin.Add(s);
+                end.Add(s + 1);
+                strides.Add(1);
+                shrink_axis_mask |= (1 << index);
+                index += 1;
+            }
 
-                var index = 0;
-                var (new_axis_mask, shrink_axis_mask) = (0, 0);
-                var (begin_mask, end_mask) = (0, 0);
-                var ellipsis_mask = 0;
-
-                foreach (var s in slice_spec)
+            return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+            {
+                string name = scope;
+                if (begin != null)
                 {
-                    begin.Add(s);
-                    end.Add(s + 1);
-                    strides.Add(1);
-                    shrink_axis_mask |= (1 << index);
-                    index += 1;
+                    var (packed_begin, packed_end, packed_strides) =
+                        (array_ops.stack(begin.ToArray()),
+                        array_ops.stack(end.ToArray()),
+                        array_ops.stack(strides.ToArray()));
+
+                    return gen_array_ops.strided_slice(
+                        this,
+                        packed_begin,
+                        packed_end,
+                        packed_strides,
+                        begin_mask: begin_mask,
+                        end_mask: end_mask,
+                        shrink_axis_mask: shrink_axis_mask,
+                        new_axis_mask: new_axis_mask,
+                        ellipsis_mask: ellipsis_mask,
+
+                        name: name);
                 }
 
-                return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
-                {
-                    string name = scope;
-                    if (begin != null)
-                    {
-                        var (packed_begin, packed_end, packed_strides) =
-                            (array_ops.stack(begin.ToArray()),
-                            array_ops.stack(end.ToArray()),
-                            array_ops.stack(strides.ToArray()));
-
-                        return gen_array_ops.strided_slice(
-                            this,
-                            packed_begin,
-                            packed_end,
-                            packed_strides,
-                            begin_mask: begin_mask,
-                            end_mask: end_mask,
-                            shrink_axis_mask: shrink_axis_mask,
-                            new_axis_mask: new_axis_mask,
-                            ellipsis_mask: ellipsis_mask,
-
-                            name: name);
-                    }
-
-                    throw new NotImplementedException("");
-                });
-            }
+                throw new NotImplementedException("");
+            });
         }
 
         public override string ToString()

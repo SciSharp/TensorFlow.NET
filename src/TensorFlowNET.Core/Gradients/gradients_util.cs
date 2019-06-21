@@ -105,16 +105,16 @@ namespace Tensorflow
                         var has_out_grads = true;
                         if (has_out_grads && !stop_ops.Contains(op))
                         {
+                            // A grad_fn must be defined, either as a function or as None
+                            // for ops that do not have gradients.
+                            var grad_fn = ops.get_gradient_function(op);
+
                             if (is_func_call)
                             {
 
                             }
                             else
                             {
-                                // A grad_fn must be defined, either as a function or as None
-                                // for ops that do not have gradients.
-                                var grad_fn = ops.get_gradient_function(op);
-
                                 foreach (var (i, out_grad) in enumerate(out_grads))
                                 {
                                     if (out_grad == null)
@@ -322,7 +322,7 @@ namespace Tensorflow
                     else
                     {
                         used = "add_n";
-                        out_grads[i] = new List<Tensor> { _MultiDeviceAddN(out_grad.ToArray(), gradient_uid) };
+                        return_grads[i] = _MultiDeviceAddN(out_grad.ToArray(), gradient_uid);
                     }
                 }
                 else
