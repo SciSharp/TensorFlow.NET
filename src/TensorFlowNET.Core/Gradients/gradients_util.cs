@@ -153,7 +153,9 @@ namespace Tensorflow
                         {
                             if (in_grad != null)
                             {
-                                if (in_grad is Tensor && t_in.dtype != TF_DataType.TF_RESOURCE)
+                                if (in_grad is Tensor &&
+                                    in_grad.Tag == null && // maybe a IndexedSlice
+                                    t_in.dtype != TF_DataType.TF_RESOURCE)
                                 {
                                     in_grad.shape = t_in.shape;
                                 }

@@ -248,6 +248,9 @@ namespace Tensorflow
             var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
 
             var input_ops = inputs.Select(x => x.op).ToArray();
+            if (name == "loss/gradients/embedding/embedding_lookup_grad/Reshape")
+                ;
+
             var control_inputs = _control_dependencies_for_inputs(input_ops);
 
             var op = new Operation(node_def,

@@ -50,9 +50,18 @@ namespace Tensorflow
 
         private TF_DataType _dtype = TF_DataType.DtInvalid;
         public TF_DataType dtype => _handle == IntPtr.Zero ? _dtype : c_api.TF_TensorType(_handle);
+#if GRAPH_SERIALIZE
+        [JsonIgnore]
+#endif
         public ulong bytesize => _handle == IntPtr.Zero ? 0 : c_api.TF_TensorByteSize(_handle);
+#if GRAPH_SERIALIZE
+        [JsonIgnore]
+#endif
         public ulong itemsize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
         public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / itemsize;
+#if GRAPH_SERIALIZE
+        [JsonIgnore]
+#endif
         public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
 
@@ -61,6 +70,9 @@ namespace Tensorflow
         /// <summary>
         /// used for keep other pointer when do implicit operating
         /// </summary>
+#if GRAPH_SERIALIZE
+        [JsonIgnore]
+#endif
         public object Tag { get; set; }
 
         public int[] shape
@@ -131,7 +143,9 @@ namespace Tensorflow
                 }
             }
         }
-
+#if GRAPH_SERIALIZE
+        [JsonIgnore]
+#endif
         public int NDims => rank;
 
         public string Device => op.Device;
