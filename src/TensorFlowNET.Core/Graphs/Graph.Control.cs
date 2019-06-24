@@ -43,7 +43,7 @@ namespace Tensorflow
                     ret.AddRange(controller.control_inputs.Where(x => !input_ops.Contains(x)));
             }
 
-            return ret.OrderBy(x => x.op.name).ToArray();
+            return ret.ToArray();
         }
 
         /// <summary>
