@@ -188,9 +188,9 @@ Feel free to star or raise issue on [Github](https://github.com/SciSharp/TensorF
 
 Join our chat on [Gitter](https://gitter.im/sci-sharp/community) or
 
-![SciSharp](https://avatars3.githubusercontent.com/u/44989469)
-
 Scan QR code to join Tencent TIM group:
 
 ![SciSharp STACK](docs/TIM.jpg)
+
+![SciSharp](https://avatars3.githubusercontent.com/u/44989469)
 
