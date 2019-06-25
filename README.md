@@ -122,7 +122,7 @@ with(tf.Session(), sess =>
 });
 ```
 
-
+Run this example in [Jupyter Notebook](https://github.com/SciSharp/SciSharpCube).
 
 Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html).
 
