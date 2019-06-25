@@ -1,4 +1,6 @@
 # TensorFlow.NET
+![logo](docs/assets/tf.net.logo.svg)
+
 TensorFlow.NET (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in CSharp which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. 
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
@@ -185,6 +187,8 @@ git pull upstream master
 Feel free to star or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET).
 
 Join our chat on [Gitter](https://gitter.im/sci-sharp/community) or
+
+![SciSharp](https://avatars3.githubusercontent.com/u/44989469)
 
 Scan QR code to join Tencent TIM group:
 
