@@ -389,6 +389,23 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Returns the truth value of (x != y) element-wise.
+        /// </summary>
+        /// <typeparam name="Tx">The type of the x.</typeparam>
+        /// <typeparam name="Ty">The type of the y.</typeparam>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public static Tensor not_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("NotEqual", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
+
         public static Tensor atan2(Tensor y, Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Atan2", name, args: new { y, x });
@@ -563,6 +580,19 @@ namespace Tensorflow
         public static Tensor rsqrt(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Rsqrt", name, new { x });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Returns the fraction of zeros in value.
+        /// </summary>
+        /// <param name="value">A tensor of numeric type.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>The fraction of zeros in value, with type float32.</returns>
+        public static Tensor zero_fraction(Tensor value, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("zero_fraction", name, new { value, name });
 
             return _op.outputs[0];
         }

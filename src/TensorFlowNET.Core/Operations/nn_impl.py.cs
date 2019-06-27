@@ -101,9 +101,57 @@ namespace Tensorflow
                 name);
         }
 
-        public static Tensor zero_fraction(Tensor t)
+        /// <summary>
+        /// Same as math_ops.count_nonzero.
+        /// The reduction is done in dtype, which can be faster for 32-bit dtypes.
+        /// </summary>
+        /// <param name="input_tensor">The numeric tensor.</param>
+        /// <param name="dtype">The reduction dtype.</param>
+        /// <returns>number of nonzero values with type dtype</returns>
+        private static Tensor _count_nonzero(Tensor input_tensor, TF_DataType dtype = TF_DataType.TF_INT64)
         {
-            throw new NotImplementedException();
+            return with(ops.name_scope("count_nonzero", "count_nonzero", new { input_tensor }), scope =>
+            {
+                var zero = array_ops.zeros(new NumSharp.Shape(), dtype: input_tensor.dtype);
+                var nonzero_count = math_ops.reduce_sum(
+                math_ops.cast(gen_math_ops.not_equal(input_tensor, zero), dtype: dtype), name: "nonzero_count");
+                return nonzero_count;
+            });
+        }
+
+        /// <summary>
+        /// Returns the fraction of zeros in value.
+        /// </summary>
+        /// <param name="value">A tensor of numeric type.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>The fraction of zeros in value, with type float32.</returns>
+        public static Tensor zero_fraction(Tensor value, string name = null)
+        {
+            return with(ops.name_scope(name, "zero_fraction", new { value }), scope =>
+            {
+
+                value = ops.convert_to_tensor(value, name: "value");
+                Tensor size = array_ops.size(value, out_type: dtypes.int64);
+                Func<ITensorOrOperation> fu_true = () => math_ops.cast(_count_nonzero(value, dtype: dtypes.int32));
+                Tensor zero_fraction_float32 = null;
+
+                size = gen_math_ops.less_equal(size, dtypes.int32.max());
+                Tensor num_nonzero = control_flow_ops.cond(
+                        size,
+                        () => math_ops.cast(_count_nonzero(value, dtype: dtypes.int32)),
+                        () => _count_nonzero(value, dtype: dtypes.int64)
+                        );
+
+                with(ops.name_scope("counts_to_fraction"), count_scope =>
+                {
+                    var num_zero = size - num_nonzero;
+                    var num_zero_float32 = math_ops.cast(num_zero, dtype: dtypes.float32);
+                    var size_float32 = math_ops.cast(size, dtype: dtypes.float32);
+                    zero_fraction_float32 = num_zero_float32 / size_float32;
+                });
+
+                return array_ops.identity(zero_fraction_float32, "fraction");
+            });
         }
     }
 }

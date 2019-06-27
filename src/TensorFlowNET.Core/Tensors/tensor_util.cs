@@ -176,6 +176,12 @@ namespace Tensorflow
                             else
                                 nparray = Convert.ToInt32(values);
                             break;
+                        case "Int64":
+                            if (values.GetType().IsArray)
+                                nparray = np.array((int[])values, np_dt);
+                            else
+                                nparray = Convert.ToInt64(values);
+                            break;
                         case "Single":
                             if (values.GetType().IsArray)
                                 nparray = np.array((float[])values, np_dt);

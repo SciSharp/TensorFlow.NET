@@ -188,6 +188,9 @@ namespace Tensorflow
         {
             var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
 
+            //TODO: Implement TF_SetDevice
+            //if node_def.device:
+            //    c_api.TF_SetDevice(op_desc, compat.as_str(node_def.device))
             // Add inputs
             foreach (var op_input in inputs)
             {
@@ -195,10 +198,7 @@ namespace Tensorflow
                     c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), op_inputs.Length);
                 else if (op_input is Tensor op_input1)
                 {
-                    if (op_input1.op == null)
-                        c_api.TF_AddInput(op_desc, new TF_Output(op_desc, 0));
-                    else
-                        c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
+                    c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
                 }
                 else
                     throw new NotImplementedException("_create_c_op");

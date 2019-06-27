@@ -7,8 +7,11 @@ namespace Tensorflow
     public static class dtypes
     {
         public static TF_DataType int8 = TF_DataType.TF_INT8;
+        public static TF_DataType int32 = TF_DataType.TF_INT32;
+        public static TF_DataType int64 = TF_DataType.TF_INT64;
         public static TF_DataType float32 = TF_DataType.TF_FLOAT; // is that float32?
         public static TF_DataType float16 = TF_DataType.TF_HALF;
+        public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
 
         public static Type as_numpy_datatype(this TF_DataType type)
         {
@@ -126,12 +129,24 @@ namespace Tensorflow
                 type;
         }
 
-        public static int max(this TF_DataType type)
+        public static long max(this TF_DataType type)
         {
             switch (type)
             {
+                case TF_DataType.TF_INT8:
+                    return sbyte.MaxValue;
+                case TF_DataType.TF_INT16:
+                    return short.MaxValue;
+                case TF_DataType.TF_INT32:
+                    return int.MaxValue;
+                case TF_DataType.TF_INT64:
+                    return long.MaxValue;
                 case TF_DataType.TF_UINT8:
-                    return 255;
+                    return byte.MaxValue;
+                case TF_DataType.TF_UINT16:
+                    return ushort.MaxValue;
+                case TF_DataType.TF_UINT32:
+                    return uint.MaxValue;
                 default:
                     throw new NotImplementedException($"max {type.name()}");
             }
