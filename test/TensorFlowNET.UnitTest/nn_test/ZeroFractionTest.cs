@@ -23,6 +23,7 @@ namespace TensorFlowNET.UnitTest.nn_test
             return 1.0 - nonzeros / (double)total_elements;
         }
 
+        [Ignore("TODO implement nn_impl.zero_fraction")]
         [TestMethod]
         public void testZeroFraction()
         {
@@ -40,6 +41,7 @@ namespace TensorFlowNET.UnitTest.nn_test
             self.assertAllClose(y_tf_np, y_np, eps);
         }
 
+        [Ignore("TODO implement nn_impl.zero_fraction")]
         [TestMethod]
         public void testZeroFractionEmpty()
         {
@@ -58,6 +60,7 @@ namespace TensorFlowNET.UnitTest.nn_test
             self.assertAllClose(1.0, self.evaluate<NDArray>(sparsity));
         }
 
+        [Ignore("TODO implement nn_impl.zero_fraction")]
         [TestMethod]
         public void testZeroFraction2_27Ones()
         {
