@@ -14,6 +14,11 @@ namespace Tensorflow
 {
     public partial class ops
     {
+        public static int tensor_id(Tensor tensor)
+        {
+            return tensor.Id;
+        }
+
         public static void add_to_collection<T>(string name, T value)
         {
             var graph = tf.get_default_graph();

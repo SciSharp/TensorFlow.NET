@@ -10,7 +10,7 @@ namespace Tensorflow
     /// </summary>
     public class Status : IDisposable
     {
-        private readonly IntPtr _handle;
+        protected readonly IntPtr _handle;
 
         /// <summary>
         /// Error message

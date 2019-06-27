@@ -7,6 +7,7 @@ namespace Tensorflow
     public class ImportGraphDefOptions : IDisposable
     {
         private IntPtr _handle;
+
         public int NumReturnOutputs => c_api.TF_ImportGraphDefOptionsNumReturnOutputs(_handle);
 
         public ImportGraphDefOptions()

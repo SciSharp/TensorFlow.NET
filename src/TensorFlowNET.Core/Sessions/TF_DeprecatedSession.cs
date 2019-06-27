@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Tensorflow
+namespace Tensorflow.Sessions
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct TF_SessionOptions
+    public struct TF_DeprecatedSession
     {
-        public SessionOptions options;
+        Session session;
     }
 }
