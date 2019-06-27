@@ -35,6 +35,14 @@ namespace Tensorflow
             return Status;
         }
 
+        public Status Import(byte[] bytes)
+        {
+            var graph_def = new Tensorflow.Buffer(bytes);
+            var opts = c_api.TF_NewImportGraphDefOptions();
+            c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, Status);
+            return Status;
+        }
+
         public static Graph ImportFromPB(string file_path)
         {
             var graph = tf.Graph().as_default();
