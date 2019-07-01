@@ -30,6 +30,8 @@ namespace Tensorflow
                         return _constant_if_small(0.0F, shape, dtype, name);
                     case TF_DataType.TF_INT32:
                         return _constant_if_small(0, shape, dtype, name);
+                    case TF_DataType.TF_INT8:
+                        return _constant_if_small<byte>(0, shape, dtype, name);
                     default:
                         throw new TypeError("can't find type for zeros");
                 }

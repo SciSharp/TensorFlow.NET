@@ -129,10 +129,8 @@ namespace Tensorflow
         {
             return with(ops.name_scope(name, "zero_fraction", new { value }), scope =>
             {
-
                 value = ops.convert_to_tensor(value, name: "value");
                 Tensor size = array_ops.size(value, out_type: dtypes.int64);
-                Func<ITensorOrOperation> fu_true = () => math_ops.cast(_count_nonzero(value, dtype: dtypes.int32));
                 Tensor zero_fraction_float32 = null;
 
                 size = gen_math_ops.less_equal(size, dtypes.int32.max());
