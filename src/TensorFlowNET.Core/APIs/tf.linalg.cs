@@ -11,5 +11,8 @@ namespace Tensorflow
 
         public static Tensor matmul(Tensor a, Tensor b) 
             => gen_math_ops.mat_mul(a, b);
+
+        public static Tensor batch_matmul(Tensor x, Tensor y)
+            => gen_math_ops.batch_mat_mul(x, y);
     }
 }

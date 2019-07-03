@@ -472,6 +472,41 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Multiply slices of the two matrices "x" and "y".
+        /// </summary>
+        /// <remarks>
+        /// The `BatchMatMul` operation is embedded into the
+        /// `MatMul` operation on the DLL side. However the expected
+        /// attributes are not the same, hence we need to expose this
+        /// method to have the right args list on the `_apply_op_helper`
+        /// function.
+        ///
+        /// For each rank > 2 the first rank - 2 dimensions are considered
+        /// as fixed, and have to be consistent across the two matrices. A
+        /// common matrix multiplication is then applied over the residual
+        /// 2 dimensions.
+        ///
+        /// e.g.
+        ///     x is (3, 6, 12); y is (3, 12, 6)
+        ///     batch_matmul(x, y) ==> (3, 6, 6)
+        /// </remarks>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="adj_x"></param>
+        /// <param name="adj_y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor batch_mat_mul(Tensor x, Tensor y, bool adj_x = false, bool adj_y = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper(
+                "BatchMatMul",
+                name,
+                args: new { x, y, adj_x, adj_y });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
         /// Returns the max of x and y (i.e. x > y ? x : y) element-wise.
         /// </summary>
         /// <param name="x"></param>

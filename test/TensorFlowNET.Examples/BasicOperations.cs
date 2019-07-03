@@ -91,11 +91,69 @@ namespace TensorFlowNET.Examples
             // graph: the two constants and matmul.
             //
             // The output of the op is returned in 'result' as a numpy `ndarray` object.
-            return with(tf.Session(), sess =>
+            using (sess = tf.Session())
             {
                 var result = sess.run(product);
                 Console.WriteLine(result.ToString()); // ==> [[ 12.]]
-                return result.Data<int>()[0] == 12;
+            };
+
+            // `BatchMatMul` is actually embedded into the `MatMul` operation on the tensorflow.dll side. Every time we ask
+            // for a multiplication between matrices with rank > 2, the first rank - 2 dimensions are checked to be consistent
+            // across the two matrices and a common matrix multiplication is done on the residual 2 dimensions.
+            //
+            // np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9]).reshape(3, 3, 3)
+            // array([[[1, 2, 3],
+            //     [4, 5, 6],
+            //     [7, 8, 9]],
+            //
+            //     [[1, 2, 3],
+            //     [4, 5, 6],
+            //     [7, 8, 9]],
+            //
+            //     [[1, 2, 3],
+            //     [4, 5, 6],
+            //     [7, 8, 9]]])
+            var firstTensor = tf.convert_to_tensor(
+                np.reshape(
+                    np.array<float>(1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                    3, 3, 3));
+            //
+            // np.array([0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0]).reshape(3,3,2)
+            // array([[[0, 1],
+            //     [0, 1],
+            //     [0, 1]],
+            //
+            //     [[0, 1],
+            //     [0, 0],
+            //     [1, 0]],
+            //
+            //     [[1, 0],
+            //     [1, 0],
+            //     [1, 0]]])
+            var secondTensor = tf.convert_to_tensor(
+                np.reshape(
+                    np.array<float>(0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0),
+                    3, 3, 2));
+            var batchMul = tf.batch_matmul(firstTensor, secondTensor);
+            var checkTensor = np.array<float>(0, 6, 0, 15, 0, 24, 3, 1, 6, 4, 9, 7, 6, 0, 15, 0, 24, 0);
+            return with(tf.Session(), sess =>
+            {
+                var result = sess.run(batchMul);
+                Console.WriteLine(result.ToString());
+                //
+                // ==> array([[[0, 6],
+                //         [0, 15],
+                //         [0, 24]],
+                //
+                //         [[ 3,  1],
+                //         [ 6,  4],
+                //         [ 9,  7]],
+                //
+                //         [[ 6,  0],
+                //         [15,  0],
+                //         [24,  0]]])
+                return np.reshape(result, 18)
+                    .array_equal(checkTensor);
             });
         }
 
