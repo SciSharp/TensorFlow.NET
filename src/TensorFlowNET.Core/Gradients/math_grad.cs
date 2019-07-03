@@ -153,6 +153,11 @@ namespace Tensorflow.Gradients
             return new Tensor[] { grad_a, grad_b };
         }
 
+        public static Tensor[] _BatchMatMul(Operation op, Tensor[] grads)
+        {
+            throw new NotImplementedException();
+        }
+
         [RegisterGradient("Mean")]
         public static Tensor[] _MeanGrad(Operation op, Tensor[] grads)
         {

@@ -497,6 +497,25 @@ namespace Tensorflow
             return result;
         }
 
+        public static Tensor batch_matmul(Tensor x, Tensor y,
+            bool adj_x = false, bool adj_y = false,
+            string name = null)
+        {
+            Tensor result = null;
+
+            with(ops.name_scope(name, "MatMul", new Tensor[] { x, y }), scope =>
+            {
+                name = scope;
+
+                x = ops.convert_to_tensor(x, name: "a");
+                y = ops.convert_to_tensor(y, name: "b");
+
+                result = gen_math_ops.batch_mat_mul(x, y, adj_x, adj_y, name);
+            });
+
+            return result;
+        }
+
         /// <summary>
         /// Returns the complex conjugate of a complex number.
         /// </summary>
