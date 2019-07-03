@@ -61,11 +61,6 @@ namespace TensorFlowNET.Examples
             valid_y = y[new Slice(start: train_size)];
             Console.WriteLine("\tDONE");
 
-            train_x = np.Load<int[,]>(Path.Join("word_cnn", "train_x.npy"));
-            valid_x = np.Load<int[,]>(Path.Join("word_cnn", "valid_x.npy"));
-            train_y = np.Load<int[]>(Path.Join("word_cnn", "train_y.npy"));
-            valid_y = np.Load<int[]>(Path.Join("word_cnn", "valid_y.npy"));
-
             return (train_x, valid_x, train_y, valid_y);
         }
 
