@@ -142,13 +142,13 @@ Example runner will download all the required files like training data and model
 * [Logistic Regression](test/TensorFlowNET.Examples/BasicModels/LogisticRegression.cs)
 * [Nearest Neighbor](test/TensorFlowNET.Examples/BasicModels/NearestNeighbor.cs)
 * [Naive Bayes Classification](test/TensorFlowNET.Examples/BasicModels/NaiveBayesClassifier.cs)
+* [Full Connected Neural Network](test/TensorFlowNET.Examples/ImageProcess/DigitRecognitionNN.cs)
 * [Image Recognition](test/TensorFlowNET.Examples/ImageProcess)
 * [K-means Clustering](test/TensorFlowNET.Examples/BasicModels/KMeansClustering.cs)
 * [NN XOR](test/TensorFlowNET.Examples/BasicModels/NeuralNetXor.cs)
 * [Object Detection](test/TensorFlowNET.Examples/ImageProcess/ObjectDetection.cs)
 * [Text Classification](test/TensorFlowNET.Examples/TextProcess/BinaryTextClassification.cs)
 * [CNN Text Classification](test/TensorFlowNET.Examples/TextProcess/cnn_models/VdCnn.cs)
-
 * [Named Entity Recognition](test/TensorFlowNET.Examples/TextProcess/NER)
 * [Transfer Learning for Image Classification in InceptionV3](test/TensorFlowNET.Examples/ImageProcess/RetrainImageClassifier.cs)
 

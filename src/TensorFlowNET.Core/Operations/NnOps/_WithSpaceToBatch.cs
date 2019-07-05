@@ -18,7 +18,7 @@ namespace Tensorflow.Operations
             string data_format = null)
         {
             var dilation_rate_tensor = ops.convert_to_tensor(dilation_rate, TF_DataType.TF_INT32, name: "dilation_rate");
-            var rate_shape = dilation_rate_tensor.GetShape();
+            var rate_shape = dilation_rate_tensor.TensorShape;
             var num_spatial_dims = rate_shape.Dimensions[0];
             int starting_spatial_dim = -1;
             if (!string.IsNullOrEmpty(data_format) && data_format.StartsWith("NC"))

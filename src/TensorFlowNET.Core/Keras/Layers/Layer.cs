@@ -161,7 +161,7 @@ namespace Tensorflow.Keras.Layers
             if (_dtype == TF_DataType.DtInvalid)
                 _dtype = input.dtype;
 
-            var input_shapes = input.GetShape();
+            var input_shapes = input.TensorShape;
             build(input_shapes);
             built = true;
         }

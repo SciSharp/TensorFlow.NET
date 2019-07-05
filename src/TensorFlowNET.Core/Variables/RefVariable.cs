@@ -153,7 +153,7 @@ namespace Tensorflow
                 // Manually overrides the variable's shape with the initial value's.
                 if (validate_shape)
                 {
-                    var initial_value_shape = _initial_value.GetShape();
+                    var initial_value_shape = _initial_value.TensorShape;
                     if (!initial_value_shape.is_fully_defined())
                         throw new ValueError($"initial_value must have a shape specified: {_initial_value}");
                 }

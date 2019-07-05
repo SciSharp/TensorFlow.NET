@@ -65,7 +65,7 @@ namespace Keras
             #endregion
 
             #region Model Graph Form Layer Stack
-            var flow_shape = features.GetShape();
+            var flow_shape = features.TensorShape;
             Flow = features;
             for (int i = 0; i < layer_stack.Count; i++)
             {

@@ -37,5 +37,7 @@ namespace Tensorflow
         {
             throw new NotImplementedException("TensorShape is_compatible_with");
         }
+
+        public static implicit operator TensorShape((int, int) dims) => new TensorShape(dims.Item1, dims.Item2);
     }
 }

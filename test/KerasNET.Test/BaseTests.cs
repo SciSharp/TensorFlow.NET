@@ -15,8 +15,8 @@ namespace Keras.Test
         {
             var dense_1 = new Dense(1, name: "dense_1", activation: tf.nn.relu());
             var input = new Tensor(np.array(new int[] { 3 }));
-            dense_1.__build__(input.GetShape());
-            var outputShape = dense_1.output_shape(input.GetShape());
+            dense_1.__build__(input.TensorShape);
+            var outputShape = dense_1.output_shape(input.TensorShape);
             var a = (int[])(outputShape.Dimensions);
             var b = (int[])(new int[] { 1 });
             var _a = np.array(a);

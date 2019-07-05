@@ -16,8 +16,8 @@ namespace Tensorflow
                     weights, dtype: values.dtype.as_base_dtype(), name: "weights");
 
                 // Try static check for exact match.
-                var weights_shape = weights.GetShape();
-                var values_shape = values.GetShape();
+                var weights_shape = weights.TensorShape;
+                var values_shape = values.TensorShape;
                 if (weights_shape.is_fully_defined() &&
                     values_shape.is_fully_defined())
                     return weights;

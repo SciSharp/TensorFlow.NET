@@ -110,10 +110,7 @@ namespace Tensorflow
             return shape.Select(x => (int)x).ToArray();
         }
 
-        public TensorShape GetShape()
-        {
-            return tensor_util.to_shape(shape);
-        }
+        public TensorShape TensorShape => tensor_util.to_shape(shape);
 
         public void SetShape(Shape shape)
         {

@@ -40,7 +40,7 @@ namespace Keras.Layers
             var dot = tf.matmul(x, W);
             if (this.activation != null)
                 dot = activation.Activate(dot);
-            Console.WriteLine("Calling Layer \"" + name + "(" + np.array(dot.GetShape().Dimensions).ToString() + ")\" ...");
+            Console.WriteLine("Calling Layer \"" + name + "(" + np.array(dot.TensorShape.Dimensions).ToString() + ")\" ...");
             return dot;
         }
         public TensorShape __shape__()

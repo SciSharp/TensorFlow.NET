@@ -10,9 +10,11 @@ namespace Tensorflow
     {
         public static class train
         {
-            public static Optimizer GradientDescentOptimizer(float learning_rate) => new GradientDescentOptimizer(learning_rate);
+            public static Optimizer GradientDescentOptimizer(float learning_rate) 
+                => new GradientDescentOptimizer(learning_rate);
 
-            public static Optimizer AdamOptimizer(float learning_rate) => new AdamOptimizer(learning_rate);
+            public static Optimizer AdamOptimizer(float learning_rate, string name = null) 
+                => new AdamOptimizer(learning_rate, name: name);
 
             public static Saver Saver(VariableV1[] var_list = null) => new Saver(var_list: var_list);
 
