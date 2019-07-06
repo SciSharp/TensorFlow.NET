@@ -17,9 +17,7 @@ namespace Tensorflow
 
         private Tensor[] _outputs;
         public Tensor[] outputs => _outputs;
-#if GRAPH_SERIALIZE
-        [JsonIgnore]
-#endif
+
         public Tensor output => _outputs.FirstOrDefault();
 
         public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);

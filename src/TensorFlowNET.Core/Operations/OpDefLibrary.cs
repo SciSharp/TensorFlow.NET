@@ -94,14 +94,28 @@ namespace Tensorflow
                             if (attrs.ContainsKey(input_arg.TypeAttr))
                                 dtype = (DataType)attrs[input_arg.TypeAttr];
                             else
-                                if (values is Tensor[] values1)
-                                    dtype = values1[0].dtype.as_datatype_enum();
+                                switch (values)
+                                {
+                                    case Tensor[] values1:
+                                        dtype = values1[0].dtype.as_datatype_enum();
+                                        break;
+                                    case object[] values1:
+                                        foreach(var t in values1)
+                                            if(t is Tensor tensor)
+                                            {
+                                                dtype = tensor.dtype.as_datatype_enum();
+                                                break;
+                                            }
+                                        break;
+                                    default:
+                                        throw new NotImplementedException($"can't infer the dtype for {values.GetType()}");
+                                }
 
                             if (dtype == DataType.DtInvalid && default_type_attr_map.ContainsKey(input_arg.TypeAttr))
                                 default_dtype = (DataType)default_type_attr_map[input_arg.TypeAttr];
                         }
 
-                        if(input_arg.IsRef && dtype != DataType.DtInvalid)
+                        if(!input_arg.IsRef && dtype != DataType.DtInvalid)
                             dtype = dtype.as_base_dtype();
 
                         values = ops.internal_convert_n_to_tensor(values, 

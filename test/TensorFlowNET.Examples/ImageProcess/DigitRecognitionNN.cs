@@ -49,8 +49,6 @@ namespace TensorFlowNET.Examples.ImageProcess
 
         public Graph BuildGraph()
         {
-            var g = tf.Graph();
-
             // Placeholders for inputs (x) and outputs(y)
             x = tf.placeholder(tf.float32, shape: (-1, img_size_flat), name: "X");
             y = tf.placeholder(tf.float32, shape: (-1, n_classes), name: "Y");
@@ -60,7 +58,8 @@ namespace TensorFlowNET.Examples.ImageProcess
             // Create a fully-connected layer with n_classes nodes as output layer
             var output_logits = fc_layer(fc1, n_classes, "OUT", use_relu: false);
             // Define the loss function, optimizer, and accuracy
-            loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels: y, logits: output_logits), name: "loss");
+            var logits = tf.nn.softmax_cross_entropy_with_logits(labels: y, logits: output_logits);
+            loss = tf.reduce_mean(logits, name: "loss");
             optimizer = tf.train.AdamOptimizer(learning_rate: learning_rate, name: "Adam-op").minimize(loss);
             var correct_prediction = tf.equal(tf.argmax(output_logits, 1), tf.argmax(y, 1), name: "correct_pred");
             accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name: "accuracy");
@@ -68,7 +67,7 @@ namespace TensorFlowNET.Examples.ImageProcess
             // Network predictions
             var cls_prediction = tf.argmax(output_logits, axis: 1, name: "predictions");
 
-            return g;
+            return tf.get_default_graph();
         }
 
         private Tensor fc_layer(Tensor x, int num_units, string name, bool use_relu = true)
@@ -93,16 +92,10 @@ namespace TensorFlowNET.Examples.ImageProcess
             return layer;
         } 
 
-        public Graph ImportGraph()
-        {
-            throw new NotImplementedException();
-        }
+        public Graph ImportGraph() => throw new NotImplementedException();
 
-        public bool Predict()
-        {
-            throw new NotImplementedException();
-        }
-
+        public bool Predict() => throw new NotImplementedException();
+            
         public void PrepareData()
         {
             mnist = MnistDataSet.read_data_sets("mnist", one_hot: true);
@@ -112,7 +105,6 @@ namespace TensorFlowNET.Examples.ImageProcess
         {
             // Number of training iterations in each epoch
             var num_tr_iter = mnist.train.labels.len / batch_size;
-
             return with(tf.Session(), sess =>
             {
                 var init = tf.global_variables_initializer();
@@ -153,10 +145,9 @@ namespace TensorFlowNET.Examples.ImageProcess
                     print("---------------------------------------------------------");
                     print($"Epoch: {epoch + 1}, validation loss: {loss_val.ToString("0.0000")}, validation accuracy: {accuracy_val.ToString("P")}");
                     print("---------------------------------------------------------");
-
                 }
 
-                return accuracy_val > 0.9;
+                return accuracy_val > 0.95;
             });
         }
 

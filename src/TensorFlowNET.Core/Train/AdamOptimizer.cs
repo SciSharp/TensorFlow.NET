@@ -110,7 +110,7 @@ namespace Tensorflow.Train
                 var update_beta2 = beta2_power.assign(beta2_power * _beta2_t, use_locking: _use_locking);
 
                 operations.Add(update_beta1);
-                operations.Add(update_beta1);
+                operations.Add(update_beta2);
             });
 
             return control_flow_ops.group(operations.ToArray(), name: name_scope);

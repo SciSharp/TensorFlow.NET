@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
@@ -100,6 +101,25 @@ namespace Tensorflow
             public static Tensor sparse_softmax_cross_entropy_with_logits(Tensor labels = null,
             Tensor logits = null, string name = null)
                 => nn_ops.sparse_softmax_cross_entropy_with_logits(labels: labels, logits: logits, name: name);
+
+            /// <summary>
+            /// Computes softmax cross entropy between `logits` and `labels`.
+            /// </summary>
+            /// <param name="labels"></param>
+            /// <param name="logits"></param>
+            /// <param name="dim"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public static Tensor softmax_cross_entropy_with_logits(Tensor labels, Tensor logits, int dim = -1, string name = null)
+            {
+                with(ops.name_scope(name, "softmax_cross_entropy_with_logits_sg", new { logits, labels }), scope =>
+                {
+                    name = scope;
+                    labels = array_ops.stop_gradient(labels, name: "labels_stop_gradient");
+                });
+
+                return softmax_cross_entropy_with_logits_v2(labels, logits, axis: dim, name: name);
+            }
 
             public static Tensor softmax_cross_entropy_with_logits_v2(Tensor labels, Tensor logits, int axis = -1, string name = null)
                 => nn_ops.softmax_cross_entropy_with_logits_v2_helper(labels, logits, axis: axis, name: name);

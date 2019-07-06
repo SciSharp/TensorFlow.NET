@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Operations;
 using static Tensorflow.Python;
@@ -159,8 +160,9 @@ namespace Tensorflow
             int axis = -1,
             string name = null)
         {
-            return Python.with(ops.name_scope(name, "softmax_cross_entropy_with_logits", new { }), scope =>
+            return with(ops.name_scope(name, "softmax_cross_entropy_with_logits", new { logits, labels }), scope =>
             {
+                name = scope;
                 var precise_logits = logits;
                 var input_rank = array_ops.rank(precise_logits);
                 var shape = logits.TensorShape;
@@ -169,6 +171,10 @@ namespace Tensorflow
                     throw new NotImplementedException("softmax_cross_entropy_with_logits_v2_helper axis != -1");
 
                 var input_shape = array_ops.shape(precise_logits);
+
+                // Make precise_logits and labels into matrices.
+                precise_logits = _flatten_outer_dims(precise_logits);
+                labels = _flatten_outer_dims(labels);
 
                 // Do the actual op computation.
                 // The second output tensor contains the gradients.  We use it in
@@ -185,6 +191,51 @@ namespace Tensorflow
 
                 return cost;
             });
+        }
+
+        /// <summary>
+        /// Flattens logits' outer dimensions and keep its last dimension.
+        /// </summary>
+        /// <param name="logits"></param>
+        /// <returns></returns>
+        private static Tensor _flatten_outer_dims(Tensor logits)
+        {
+            var rank = array_ops.rank(logits);
+            var last_dim_size = array_ops.slice(array_ops.shape(logits),
+                new[] { math_ops.subtract(rank, 1) },
+                new[] { 1 });
+
+            var ops = array_ops.concat(new[] { new[] { -1 }, (object)last_dim_size }, 0);
+            var output = array_ops.reshape(logits, ops);
+
+            // Set output shape if known.
+            // if not context.executing_eagerly():
+            var shape = logits.TensorShape;
+            if(shape != null && shape.NDim > 0)
+            {
+                var product = 1;
+                var product_valid = true;
+                foreach(var d in shape.Dimensions.Take(shape.NDim - 1))
+                {
+                    if(d == -1)
+                    {
+                        product_valid = false;
+                        break;
+                    }
+                    else
+                    {
+                        product *= d;
+                    }
+                }
+
+                if (product_valid)
+                {
+                    var output_shape = new[] { product };
+                    throw new NotImplementedException("_flatten_outer_dims product_valid");
+                }
+            }
+
+            return output;
         }
     }
 }

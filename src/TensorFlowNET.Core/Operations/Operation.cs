@@ -1,7 +1,4 @@
 ﻿using Google.Protobuf.Collections;
-#if GRAPH_SERIALIZE
-using Newtonsoft.Json;
-#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,21 +34,11 @@ namespace Tensorflow
         private Graph _graph;
         public string type => OpType;
 
-#if GRAPH_SERIALIZE
-        [JsonIgnore]
-        public Graph graph => _graph;
-        [JsonIgnore]
-        public int _id => _id_value;
-        [JsonIgnore]
-        public int _id_value;
-        [JsonIgnore]
-        public Operation op => this;
-#else
         public Graph graph => _graph;
         public int _id => _id_value;
         public int _id_value;
         public Operation op => this;
-#endif
+
         public TF_DataType dtype => TF_DataType.DtInvalid;
         private Status status = new Status();
 
@@ -60,9 +47,6 @@ namespace Tensorflow
         public string Device => c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 
         private NodeDef _node_def;
-#if GRAPH_SERIALIZE
-        [JsonIgnore]
-#endif
         public NodeDef node_def
         {
             get

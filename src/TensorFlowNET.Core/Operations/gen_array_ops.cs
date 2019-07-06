@@ -19,7 +19,7 @@ namespace Tensorflow
         /// <param name="axis"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor concat_v2(Tensor[] values, int axis, string name = null)
+        public static Tensor concat_v2<T>(T[] values, int axis, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
 
