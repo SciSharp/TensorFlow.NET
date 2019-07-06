@@ -13,7 +13,7 @@ namespace Tensorflow
             public static Optimizer GradientDescentOptimizer(float learning_rate) 
                 => new GradientDescentOptimizer(learning_rate);
 
-            public static Optimizer AdamOptimizer(float learning_rate, string name = null) 
+            public static Optimizer AdamOptimizer(float learning_rate, string name = "Adam") 
                 => new AdamOptimizer(learning_rate, name: name);
 
             public static Saver Saver(VariableV1[] var_list = null) => new Saver(var_list: var_list);

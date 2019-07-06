@@ -22,7 +22,7 @@ namespace TensorFlowNET.Examples
         public bool Enabled { get; set; } = true;
         public string Name => "CNN Text Classification";
         public int? DataLimit = null;
-        public bool IsImportingGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = false;
 
         private const string dataDir = "word_cnn";
         private string dataFileName = "dbpedia_csv.tar.gz";
@@ -304,7 +304,6 @@ namespace TensorFlowNET.Examples
         public bool Train()
         {
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
-            // string json = JsonConvert.SerializeObject(graph, Formatting.Indented);
             return with(tf.Session(graph), sess => Train(sess, graph));
         }
 
