@@ -40,15 +40,19 @@ namespace TensorFlowNET.Examples.ImageProcess
 
         public bool Run()
         {
+            bool successful = false;
+
             PrepareData();
             BuildGraph();
-            Train();
+            successful = Train();
 
-            return true;
+            return successful;
         }
 
         public Graph BuildGraph()
         {
+            var graph = new Graph().as_default();
+
             // Placeholders for inputs (x) and outputs(y)
             x = tf.placeholder(tf.float32, shape: (-1, img_size_flat), name: "X");
             y = tf.placeholder(tf.float32, shape: (-1, n_classes), name: "Y");
@@ -67,7 +71,7 @@ namespace TensorFlowNET.Examples.ImageProcess
             // Network predictions
             var cls_prediction = tf.argmax(output_logits, axis: 1, name: "predictions");
 
-            return tf.get_default_graph();
+            return graph;
         }
 
         private Tensor fc_layer(Tensor x, int num_units, string name, bool use_relu = true)

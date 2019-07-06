@@ -298,7 +298,7 @@ namespace TensorFlowNET.Examples
                 }
             }
 
-            return max_accuracy > 0.8;
+            return max_accuracy > 0.9;
         }
 
         public bool Train()
