@@ -29,9 +29,10 @@ namespace TensorFlowNET.Examples
         /// Build dataflow graph, train and predict
         /// </summary>
         /// <returns></returns>
-        bool Train();
+        void Train(Session sess);
+        void Test(Session sess);
 
-        bool Predict();
+        void Predict(Session sess);
 
         Graph ImportGraph();
 

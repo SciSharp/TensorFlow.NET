@@ -162,12 +162,17 @@ namespace TensorFlowNET.Examples
             throw new NotImplementedException();
         }
 
-        public bool Train()
+        public void Train(Session sess)
         {
             throw new NotImplementedException();
         }
 
-        public bool Predict()
+        public void Predict(Session sess)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test(Session sess)
         {
             throw new NotImplementedException();
         }

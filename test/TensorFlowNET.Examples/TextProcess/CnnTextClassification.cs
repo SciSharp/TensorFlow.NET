@@ -37,14 +37,18 @@ namespace TensorFlowNET.Examples
         private const int CHAR_MAX_LEN = 1014;
         
         protected float loss_value = 0;
+        double max_accuracy = 0;
+
         int vocabulary_size = 50000;
         NDArray train_x, valid_x, train_y, valid_y;
 
         public bool Run()
         {
             PrepareData();
+            var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
+            with(tf.Session(graph), sess => Train(sess));
 
-            return Train();
+            return max_accuracy > 0.9;
         }
 
         // TODO: this originally is an SKLearn utility function. it randomizes train and test which we don't do here
@@ -235,7 +239,6 @@ namespace TensorFlowNET.Examples
 
             var train_batches = batch_iter(train_x, train_y, BATCH_SIZE, NUM_EPOCHS);
             var num_batches_per_epoch = (len(train_x) - 1) / BATCH_SIZE + 1;
-            double max_accuracy = 0;
 
             Tensor is_training = graph.OperationByName("is_training");
             Tensor model_x = graph.OperationByName("x");
@@ -301,13 +304,17 @@ namespace TensorFlowNET.Examples
             return max_accuracy > 0.9;
         }
 
-        public bool Train()
+        public void Train(Session sess)
         {
-            var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
-            return with(tf.Session(graph), sess => Train(sess, graph));
+            Train(sess, sess.graph);
         }
 
-        public bool Predict()
+        public void Predict(Session sess)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test(Session sess)
         {
             throw new NotImplementedException();
         }

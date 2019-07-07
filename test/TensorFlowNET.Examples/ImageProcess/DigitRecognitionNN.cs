@@ -37,16 +37,21 @@ namespace TensorFlowNET.Examples.ImageProcess
         Operation optimizer;
 
         int display_freq = 100;
+        float accuracy_test = 0f;
+        float loss_test = 1f;
 
         public bool Run()
         {
-            bool successful = false;
-
             PrepareData();
             BuildGraph();
-            successful = Train();
 
-            return successful;
+            with(tf.Session(), sess =>
+            {
+                Train(sess);
+                Test(sess);
+            });
+
+            return loss_test < 0.09 && accuracy_test > 0.95;
         }
 
         public Graph BuildGraph()
@@ -98,61 +103,67 @@ namespace TensorFlowNET.Examples.ImageProcess
 
         public Graph ImportGraph() => throw new NotImplementedException();
 
-        public bool Predict() => throw new NotImplementedException();
+        public void Predict(Session sess) => throw new NotImplementedException();
             
         public void PrepareData()
         {
             mnist = MnistDataSet.read_data_sets("mnist", one_hot: true);
         }
 
-        public bool Train()
+        public void Train(Session sess)
         {
             // Number of training iterations in each epoch
             var num_tr_iter = mnist.train.labels.len / batch_size;
-            return with(tf.Session(), sess =>
+
+            var init = tf.global_variables_initializer();
+            sess.run(init);
+
+            float loss_val = 100.0f;
+            float accuracy_val = 0f;
+
+            foreach (var epoch in range(epochs))
             {
-                var init = tf.global_variables_initializer();
-                sess.run(init);
+                print($"Training epoch: {epoch + 1}");
+                // Randomly shuffle the training data at the beginning of each epoch 
+                var (x_train, y_train) = randomize(mnist.train.images, mnist.train.labels);
 
-                float loss_val = 100.0f;
-                float accuracy_val = 0f;
-
-                foreach (var epoch in range(epochs))
+                foreach (var iteration in range(num_tr_iter))
                 {
-                    print($"Training epoch: {epoch + 1}");
-                    // Randomly shuffle the training data at the beginning of each epoch 
-                    var (x_train, y_train) = randomize(mnist.train.images, mnist.train.labels);
+                    var start = iteration * batch_size;
+                    var end = (iteration + 1) * batch_size;
+                    var (x_batch, y_batch) = get_next_batch(x_train, y_train, start, end);
 
-                    foreach (var iteration in range(num_tr_iter))
+                    // Run optimization op (backprop)
+                    sess.run(optimizer, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
+
+                    if (iteration % display_freq == 0)
                     {
-                        var start = iteration * batch_size;
-                        var end = (iteration + 1) * batch_size;
-                        var (x_batch, y_batch) = get_next_batch(x_train, y_train, start, end);
-
-                        // Run optimization op (backprop)
-                        sess.run(optimizer, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
-
-                        if (iteration % display_freq == 0)
-                        {
-                            // Calculate and display the batch loss and accuracy
-                            var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
-                            loss_val = result[0];
-                            accuracy_val = result[1];
-                            print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")}");
-                        }
+                        // Calculate and display the batch loss and accuracy
+                        var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
+                        loss_val = result[0];
+                        accuracy_val = result[1];
+                        print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")}");
                     }
-
-                    // Run validation after every epoch
-                    var results1 = sess.run(new[] { loss, accuracy }, new FeedItem(x, mnist.validation.images), new FeedItem(y, mnist.validation.labels));
-                    loss_val = results1[0];
-                    accuracy_val = results1[1];
-                    print("---------------------------------------------------------");
-                    print($"Epoch: {epoch + 1}, validation loss: {loss_val.ToString("0.0000")}, validation accuracy: {accuracy_val.ToString("P")}");
-                    print("---------------------------------------------------------");
                 }
 
-                return accuracy_val > 0.95;
-            });
+                // Run validation after every epoch
+                var results1 = sess.run(new[] { loss, accuracy }, new FeedItem(x, mnist.validation.images), new FeedItem(y, mnist.validation.labels));
+                loss_val = results1[0];
+                accuracy_val = results1[1];
+                print("---------------------------------------------------------");
+                print($"Epoch: {epoch + 1}, validation loss: {loss_val.ToString("0.0000")}, validation accuracy: {accuracy_val.ToString("P")}");
+                print("---------------------------------------------------------");
+            }
+        }
+
+        public void Test(Session sess)
+        {
+            var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, mnist.test.images), new FeedItem(y, mnist.test.labels));
+            loss_test = result[0];
+            accuracy_test = result[1];
+            print("---------------------------------------------------------");
+            print($"Test loss: {loss_test.ToString("0.0000")}, test accuracy: {accuracy_test.ToString("P")}");
+            print("---------------------------------------------------------");
         }
 
         private (NDArray, NDArray) randomize(NDArray x, NDArray y)

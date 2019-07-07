@@ -132,30 +132,27 @@ namespace TensorFlowNET.Examples
                               initializer_nodes: "");
         }
 
-        public void Predict()
+        public void Predict(Session sess)
         {
             var graph = new Graph().as_default();
             graph.Import(Path.Join("logistic_regression", "model.pb"));
 
-            with(tf.Session(graph), sess =>
-            {
-                // restoring the model
-                // var saver = tf.train.import_meta_graph("logistic_regression/tensorflowModel.ckpt.meta");
-                // saver.restore(sess, tf.train.latest_checkpoint('logistic_regression'));
-                var pred = graph.OperationByName("Softmax");
-                var output = pred.outputs[0];
-                var x = graph.OperationByName("Placeholder");
-                var input = x.outputs[0];
+            // restoring the model
+            // var saver = tf.train.import_meta_graph("logistic_regression/tensorflowModel.ckpt.meta");
+            // saver.restore(sess, tf.train.latest_checkpoint('logistic_regression'));
+            var pred = graph.OperationByName("Softmax");
+            var output = pred.outputs[0];
+            var x = graph.OperationByName("Placeholder");
+            var input = x.outputs[0];
 
-                // predict
-                var (batch_xs, batch_ys) = mnist.train.next_batch(10);
-                var results = sess.run(output, new FeedItem(input, batch_xs[np.arange(1)]));
+            // predict
+            var (batch_xs, batch_ys) = mnist.train.next_batch(10);
+            var results = sess.run(output, new FeedItem(input, batch_xs[np.arange(1)]));
 
-                if (results.argmax() == (batch_ys[0] as NDArray).argmax())
-                    print("predicted OK!");
-                else
-                    throw new ValueError("predict error, should be 90% accuracy");
-            });
+            if (results.argmax() == (batch_ys[0] as NDArray).argmax())
+                print("predicted OK!");
+            else
+                throw new ValueError("predict error, should be 90% accuracy");
         }
 
         public Graph ImportGraph()
@@ -168,12 +165,12 @@ namespace TensorFlowNET.Examples
             throw new NotImplementedException();
         }
 
-        public bool Train()
+        public void Train(Session sess)
         {
             throw new NotImplementedException();
         }
 
-        bool IExample.Predict()
+        public void Test(Session sess)
         {
             throw new NotImplementedException();
         }
