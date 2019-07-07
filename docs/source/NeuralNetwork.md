@@ -1,4 +1,4 @@
-# Neural Network
+# Chapter. Neural Network
 
 In this chapter, we'll learn how to build a graph of neural network model. The key advantage of neural network compared to Linear Classifier is that it can separate data which it not linearly separable. We'll implement this model to classify hand-written digits images from the MNIST dataset.
 

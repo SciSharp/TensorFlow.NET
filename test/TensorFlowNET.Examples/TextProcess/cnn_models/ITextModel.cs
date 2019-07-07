@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
 
-namespace TensorFlowNET.Examples.Text.cnn_models
+namespace TensorFlowNET.Examples.Text
 {
-    interface ITextClassificationModel
+    interface ITextModel
     {
         Tensor is_training { get;  }
         Tensor x { get;}
