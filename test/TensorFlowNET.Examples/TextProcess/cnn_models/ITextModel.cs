@@ -7,8 +7,5 @@ namespace TensorFlowNET.Examples.Text
 {
     interface ITextModel
     {
-        Tensor is_training { get;  }
-        Tensor x { get;}
-        Tensor y { get; }
     }
 }

@@ -40,6 +40,7 @@ namespace TensorFlowNET.Examples
         float loss_value = 0;
         double max_accuracy = 0;
 
+        int alphabet_size = -1;
         int vocabulary_size = -1;
         NDArray train_x, valid_x, train_y, valid_y;
 
@@ -117,10 +118,18 @@ namespace TensorFlowNET.Examples
             Compress.UnZip(Path.Combine(dataDir, "dbpedia_subset.zip"), Path.Combine(dataDir, "dbpedia_csv"));
 
             Console.WriteLine("Building dataset...");
+            var (x, y) = (new int[0][], new int[0]);
 
-            var word_dict = DataHelpers.build_word_dict(TRAIN_PATH);
-            vocabulary_size = len(word_dict);
-            var (x, y) = DataHelpers.build_word_dataset(TRAIN_PATH, word_dict, WORD_MAX_LEN);
+            if(ModelName == "char_cnn")
+            {
+                (x, y, alphabet_size) = DataHelpers.build_char_dataset(TRAIN_PATH, "char_cnn", CHAR_MAX_LEN);
+            }
+            else
+            {
+                var word_dict = DataHelpers.build_word_dict(TRAIN_PATH);
+                vocabulary_size = len(word_dict);
+                (x, y) = DataHelpers.build_word_dataset(TRAIN_PATH, word_dict, WORD_MAX_LEN);
+            }
 
             Console.WriteLine("\tDONE ");
 
@@ -161,6 +170,9 @@ namespace TensorFlowNET.Examples
             {
                 case "word_cnn":
                     textModel = new WordCnn(vocabulary_size, WORD_MAX_LEN, NUM_CLASS);
+                    break;
+                case "char_cnn":
+                    textModel = new CharCnn(alphabet_size, CHAR_MAX_LEN, NUM_CLASS);
                     break;
             }
 

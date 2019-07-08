@@ -9,24 +9,6 @@ namespace TensorFlowNET.Examples.Text
 {
     public class WordCnn : ITextModel
     {
-        private int embedding_size;
-        private int[] filter_sizes;
-        private int[] num_filters;
-        private int[] num_blocks;
-        private float learning_rate;
-        private IInitializer cnn_initializer;
-        private IInitializer fc_initializer;
-        public Tensor x { get; private set; }
-        public Tensor y { get; private set; }
-        public Tensor is_training { get; private set; }
-        private RefVariable global_step;
-        private RefVariable embeddings;
-        private Tensor x_emb;
-        private Tensor x_expanded;
-        private Tensor logits;
-        private Tensor predictions;
-        private Tensor loss;
-
         public WordCnn(int vocabulary_size, int document_max_len, int num_class)
         {
             var embedding_size = 128;
