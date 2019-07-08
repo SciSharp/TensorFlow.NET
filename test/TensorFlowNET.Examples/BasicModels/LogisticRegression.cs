@@ -32,7 +32,7 @@ namespace TensorFlowNET.Examples
         private float learning_rate = 0.01f;
         private int display_step = 1;
 
-        Datasets mnist;
+        Datasets<DataSetMnist> mnist;
 
         public bool Run()
         {
@@ -102,7 +102,7 @@ namespace TensorFlowNET.Examples
                 var correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1));
                 // Calculate accuracy
                 var accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32));
-                float acc = accuracy.eval(new FeedItem(x, mnist.test.images), new FeedItem(y, mnist.test.labels));
+                float acc = accuracy.eval(new FeedItem(x, mnist.test.data), new FeedItem(y, mnist.test.labels));
                 print($"Accuracy: {acc.ToString("F4")}");
 
                 return acc > 0.9;
@@ -111,7 +111,7 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size: validation_size, test_size: test_size);
+            mnist = MNIST.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size: validation_size, test_size: test_size);
         }
 
         public void SaveModel(Session sess)

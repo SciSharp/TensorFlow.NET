@@ -17,7 +17,7 @@ namespace TensorFlowNET.Examples
     {
         public bool Enabled { get; set; } = true;
         public string Name => "Nearest Neighbor";
-        Datasets mnist;
+        Datasets<DataSetMnist> mnist;
         NDArray Xtr, Ytr, Xte, Yte;
         public int? TrainSize = null;
         public int ValidationSize = 5000;
@@ -70,7 +70,7 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, train_size: TrainSize, validation_size:ValidationSize, test_size:TestSize);
+            mnist = MNIST.read_data_sets("mnist", one_hot: true, train_size: TrainSize, validation_size:ValidationSize, test_size:TestSize);
             // In this example, we limit mnist data
             (Xtr, Ytr) = mnist.train.next_batch(TrainSize==null ? 5000 : TrainSize.Value / 100); // 5000 for training (nn candidates)
             (Xte, Yte) = mnist.test.next_batch(TestSize==null ? 200 : TestSize.Value / 100); // 200 for testing

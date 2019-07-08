@@ -8,14 +8,14 @@ using Tensorflow;
 
 namespace TensorFlowNET.Examples.Utility
 {
-    public class MnistDataSet
+    public class MNIST
     {
         private const string DEFAULT_SOURCE_URL = "https://storage.googleapis.com/cvdf-datasets/mnist/";
         private const string TRAIN_IMAGES = "train-images-idx3-ubyte.gz";
         private const string TRAIN_LABELS = "train-labels-idx1-ubyte.gz";
         private const string TEST_IMAGES = "t10k-images-idx3-ubyte.gz";
         private const string TEST_LABELS = "t10k-labels-idx1-ubyte.gz";
-        public static Datasets read_data_sets(string train_dir, 
+        public static Datasets<DataSetMnist> read_data_sets(string train_dir, 
             bool one_hot = false,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             bool reshape = true,
@@ -49,11 +49,11 @@ namespace TensorFlowNET.Examples.Utility
             train_images = train_images[np.arange(validation_size, end)];
             train_labels = train_labels[np.arange(validation_size, end)];
 
-            var train = new DataSet(train_images, train_labels, dtype, reshape);
-            var validation = new DataSet(validation_images, validation_labels, dtype, reshape);
-            var test = new DataSet(test_images, test_labels, dtype, reshape);
+            var train = new DataSetMnist(train_images, train_labels, dtype, reshape);
+            var validation = new DataSetMnist(validation_images, validation_labels, dtype, reshape);
+            var test = new DataSetMnist(test_images, test_labels, dtype, reshape);
 
-            return new Datasets(train, validation, test);
+            return new Datasets<DataSetMnist>(train, validation, test);
         }
 
         public static NDArray extract_images(string file, int? limit=null)

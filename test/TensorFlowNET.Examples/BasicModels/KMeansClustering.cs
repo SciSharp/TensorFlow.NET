@@ -27,7 +27,7 @@ namespace TensorFlowNET.Examples
         public int? test_size = null;
         public int batch_size = 1024; // The number of samples per batch
 
-        Datasets mnist;
+        Datasets<DataSetMnist> mnist;
         NDArray full_data_x;
         int num_steps = 20; // Total steps to train
         int k = 25; // The number of clusters
@@ -50,8 +50,8 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size:validation_size, test_size:test_size);
-            full_data_x = mnist.train.images;
+            mnist = MNIST.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size:validation_size, test_size:test_size);
+            full_data_x = mnist.train.data;
 
             // download graph meta data
             string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/kmeans.meta";
@@ -141,7 +141,7 @@ namespace TensorFlowNET.Examples
             var accuracy_op = tf.reduce_mean(cast);
 
             // Test Model
-            var (test_x, test_y) = (mnist.test.images, mnist.test.labels);
+            var (test_x, test_y) = (mnist.test.data, mnist.test.labels);
             result = sess.run(accuracy_op, new FeedItem(X, test_x), new FeedItem(Y, test_y));
             accuray_test = result;
             print($"Test Accuracy: {accuray_test}");

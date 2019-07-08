@@ -9,17 +9,17 @@ using static Tensorflow.Python;
 namespace TensorFlowNET.Examples.ImageProcess
 {
     /// <summary>
-    /// Neural Network classifier for Hand Written Digits
-    /// Sample Neural Network architecture with two layers implemented for classifying MNIST digits.
+    /// Convolutional Neural Network classifier for Hand Written Digits
+    /// CNN architecture with two convolutional layers, followed by two fully-connected layers at the end.
     /// Use Stochastic Gradient Descent (SGD) optimizer. 
-    /// http://www.easy-tensorflow.com/tf-tutorials/neural-networks
+    /// http://www.easy-tensorflow.com/tf-tutorials/convolutional-neural-nets-cnns/cnn1
     /// </summary>
-    public class DigitRecognitionNN : IExample
+    public class DigitRecognitionCNN : IExample
     {
         public bool Enabled { get; set; } = true;
         public bool IsImportingGraph { get; set; } = false;
 
-        public string Name => "Digits Recognition Neural Network";
+        public string Name => "MNIST CNN";
 
         const int img_h = 28;
         const int img_w = 28;
@@ -125,13 +125,13 @@ namespace TensorFlowNET.Examples.ImageProcess
             {
                 print($"Training epoch: {epoch + 1}");
                 // Randomly shuffle the training data at the beginning of each epoch 
-                var (x_train, y_train) = randomize(mnist.train.data, mnist.train.labels);
+                var (x_train, y_train) = mnist.Randomize(mnist.train.data, mnist.train.labels);
 
                 foreach (var iteration in range(num_tr_iter))
                 {
                     var start = iteration * batch_size;
                     var end = (iteration + 1) * batch_size;
-                    var (x_batch, y_batch) = get_next_batch(x_train, y_train, start, end);
+                    var (x_batch, y_batch) = mnist.GetNextBatch(x_train, y_train, start, end);
 
                     // Run optimization op (backprop)
                     sess.run(optimizer, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
@@ -164,29 +164,6 @@ namespace TensorFlowNET.Examples.ImageProcess
             print("---------------------------------------------------------");
             print($"Test loss: {loss_test.ToString("0.0000")}, test accuracy: {accuracy_test.ToString("P")}");
             print("---------------------------------------------------------");
-        }
-
-        private (NDArray, NDArray) randomize(NDArray x, NDArray y)
-        {
-            var perm = np.random.permutation(y.shape[0]);
-
-            np.random.shuffle(perm);
-            return (mnist.train.data[perm], mnist.train.labels[perm]);
-        }
-
-        /// <summary>
-        /// selects a few number of images determined by the batch_size variable (if you don't know why, read about Stochastic Gradient Method)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
-        private (NDArray, NDArray) get_next_batch(NDArray x, NDArray y, int start, int end)
-        {
-            var x_batch = x[$"{start}:{end}"];
-            var y_batch = y[$"{start}:{end}"];
-            return (x_batch, y_batch);
         }
     }
 }
