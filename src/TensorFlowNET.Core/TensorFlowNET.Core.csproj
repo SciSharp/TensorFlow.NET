@@ -16,7 +16,8 @@
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
-Docs: https://tensorflownet.readthedocs.io</Description>
+Docs: https://tensorflownet.readthedocs.io
+Learn more about .NET AI: https://medium.com/scisharp</Description>
     <AssemblyVersion>0.9.0.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.8.3:
 
@@ -25,6 +26,8 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 3. Fixed AdaOptimizer issue.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
     <FileVersion>0.9.0.0</FileVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -40,6 +43,10 @@ Docs: https://tensorflownet.readthedocs.io</Description>
     <Compile Remove="runtimes\**" />
     <EmbeddedResource Remove="runtimes\**" />
     <None Remove="runtimes\**" />
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

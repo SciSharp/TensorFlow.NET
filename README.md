@@ -186,7 +186,9 @@ git pull upstream master
 
 Feel free to star or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET).
 
-Join our chat on [Gitter](https://gitter.im/sci-sharp/community) or
+Follow us on [Medium](https://medium.com/scisharp).
+
+Join our chat on [Gitter](https://gitter.im/sci-sharp/community).
 
 Scan QR code to join Tencent TIM group:
 
