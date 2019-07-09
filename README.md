@@ -16,7 +16,7 @@ TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
 
 ### Why TensorFlow.NET ?
 
-`SciSharp STASK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Scince the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
+`SciSharp STACK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Scince the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
 
 ![pythn vs csharp](docs/assets/syntax-comparision.png)
 
@@ -131,7 +131,7 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 Run specific example in shell:
 
 ```cs
-dotnet TensorFlowNET.Examples.dll "Retrain Image Classifier"
+dotnet TensorFlowNET.Examples.dll "EXAMPLE NAME"
 ```
 
 Example runner will download all the required files like training data and model pb files.
