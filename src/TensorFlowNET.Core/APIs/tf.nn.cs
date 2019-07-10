@@ -27,6 +27,24 @@ namespace Tensorflow
     {
         public static class nn
         {
+            public static Tensor conv2d(Tensor input, RefVariable filter, int[] strides, string padding, bool use_cudnn_on_gpu = true, 
+                string data_format= "NHWC", int[] dilations= null, string name = null)
+            {
+                if (dilations == null)
+                    dilations = new[] { 1, 1, 1, 1 };
+
+                return gen_nn_ops.conv2d(new Conv2dParams
+                {
+                    Input = input,
+                    Filter = filter,
+                    Strides = strides,
+                    UseCudnnOnGpu = use_cudnn_on_gpu,
+                    DataFormat = data_format,
+                    Dilations = dilations,
+                    Name = name
+                });
+            }
+
             /// <summary>
             /// Computes dropout.
             /// </summary>
@@ -90,7 +108,10 @@ namespace Tensorflow
                     is_training: is_training,
                     name: name);
 
-            public static IPoolFunction max_pool => new MaxPoolFunction();
+            public static IPoolFunction max_pool_fn => new MaxPoolFunction();
+
+            public static Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null) 
+                => nn_ops.max_pool(value, ksize, strides, padding, data_format: data_format, name: name);
 
             public static Tensor[] top_k(Tensor input, int k = 1, bool sorted = true, string name = null)
                 => gen_nn_ops.top_kv2(input, k: k, sorted: sorted, name: name);

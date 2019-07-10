@@ -12,7 +12,7 @@ namespace Tensorflow.Keras.Layers
             int[] strides,
             string padding = "valid",
             string data_format = null,
-            string name = null) : base(nn.max_pool, pool_size,
+            string name = null) : base(nn.max_pool_fn, pool_size,
                 strides,
                 padding: padding,
                 data_format: data_format,

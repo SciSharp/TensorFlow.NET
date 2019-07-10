@@ -118,6 +118,38 @@ namespace Tensorflow
             return _softmax(logits, gen_nn_ops.log_softmax, axis, name);
         }
 
+        /// <summary>
+        /// Performs the max pooling on the input.
+        /// </summary>
+        /// <param name="value">A 4-D `Tensor` of the format specified by `data_format`.</param>
+        /// <param name="ksize">
+        /// A list or tuple of 4 ints. The size of the window for each dimension
+        /// of the input tensor.
+        /// </param>
+        /// <param name="strides">
+        /// A list or tuple of 4 ints. The stride of the sliding window for
+        /// each dimension of the input tensor.
+        /// </param>
+        /// <param name="padding">A string, either `'VALID'` or `'SAME'`. The padding algorithm.</param>
+        /// <param name="data_format">A string. 'NHWC', 'NCHW' and 'NCHW_VECT_C' are supported.</param>
+        /// <param name="name">Optional name for the operation.</param>
+        /// <returns></returns>
+        public static Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null)
+        {
+            return with(ops.name_scope(name, "MaxPool", value), scope =>
+            {
+                name = scope;
+                value = ops.convert_to_tensor(value, name: "input");
+                return gen_nn_ops.max_pool(
+                    value,
+                    ksize: ksize,
+                    strides: strides,
+                    padding: padding,
+                    data_format: data_format,
+                    name: name);
+            });
+        }
+
         public static Tensor _softmax(Tensor logits, Func<Tensor, string, Tensor> compute_op, int dim = -1, string name = null)
         {
             logits = ops.convert_to_tensor(logits);
