@@ -152,13 +152,13 @@ namespace Tensorflow
                 size = gen_math_ops.less_equal(size, dtypes.int32.max());
                 Tensor num_nonzero = control_flow_ops.cond(
                         size,
-                        () => math_ops.cast(_count_nonzero(value, dtype: dtypes.int32)),
+                        () => math_ops.cast(_count_nonzero(value, dtype: dtypes.int32), TF_DataType.TF_INT64),
                         () => _count_nonzero(value, dtype: dtypes.int64)
                         );
 
                 with(ops.name_scope("counts_to_fraction"), count_scope =>
                 {
-                    var num_zero = size - num_nonzero;
+                    var num_zero = math_ops.subtract(math_ops.cast(size, TF_DataType.TF_INT64), num_nonzero);
                     var num_zero_float32 = math_ops.cast(num_zero, dtype: dtypes.float32);
                     var size_float32 = math_ops.cast(size, dtype: dtypes.float32);
                     zero_fraction_float32 = num_zero_float32 / size_float32;
