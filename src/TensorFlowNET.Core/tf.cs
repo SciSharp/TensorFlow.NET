@@ -38,13 +38,13 @@ namespace Tensorflow
 
         public static Session defaultSession;
 
-        public static RefVariable Variable<T>(T data, 
+        public static RefVariable Variable<T>(T data,
             bool trainable = true,
             bool validate_shape = true,
-            string name = null, 
+            string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid)
         {
-            return Tensorflow.variable_scope.default_variable_creator(data, 
+            return Tensorflow.variable_scope.default_variable_creator(data,
                 trainable: trainable,
                 validate_shape: validate_shape,
                 name: name,
@@ -62,7 +62,14 @@ namespace Tensorflow
             context.default_execution_mode = Context.EAGER_MODE;
         }
 
-        public static string VERSION => c_api.StringPiece(c_api.TF_Version());
+        public static string VERSION
+        {
+            get
+            {
+                c_api_util.DownloadLibrary();
+                return c_api.StringPiece(c_api.TF_Version());
+            }
+        }
 
         public static Session Session()
         {

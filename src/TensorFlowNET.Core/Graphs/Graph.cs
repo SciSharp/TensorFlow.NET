@@ -106,6 +106,8 @@ namespace Tensorflow
         
         public Graph()
         {
+            c_api_util.DownloadLibrary();
+
             _handle = c_api.TF_NewGraph();
             Status = new Status();
             _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
@@ -116,6 +118,8 @@ namespace Tensorflow
 
         public Graph(IntPtr handle)
         {
+            c_api_util.DownloadLibrary();
+
             _handle = handle;
             Status = new Status();
             _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
