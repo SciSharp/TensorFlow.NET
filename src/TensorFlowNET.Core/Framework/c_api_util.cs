@@ -31,34 +31,40 @@ namespace Tensorflow
         static object locker = new object();
         public static void DownloadLibrary()
         {
-            string dll = $"{c_api.TensorFlowLibName}.dll";
-
-            string runtime = "win-x64";
+            string dll = c_api.TensorFlowLibName;
+            string directory = AppDomain.CurrentDomain.BaseDirectory;
+            string file = "";
+            string url = "";
 
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Win32NT:
-                    runtime = "win-x64";
+                    dll = $"{dll}.dll";
+                    file = Path.Combine(directory, "tensorflow.zip");
+                    break;
+                case PlatformID.Unix:
+                    dll = $"lib{dll}.so";
+                    file = Path.Combine(directory, "libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz");
+                    url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz";
                     break;
                 default:
                     throw new RuntimeError($"Unknown OS environment: {Environment.OSVersion.Platform}");
             }
 
-            if (isDllDownloaded || File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dll)))
+            if (isDllDownloaded || File.Exists($"{directory}/{dll}"))
             {
                 isDllDownloaded = true;
                 return;
             }
             
-            string url = $"https://github.com/SciSharp/TensorFlow.NET/raw/master/tensorflowlib/runtimes/{runtime}/native/tensorflow.zip";
 
             lock (locker)
             {
-                if (!File.Exists("tensorflow.zip"))
+                if (!File.Exists(file))
                 {
                     var wc = new WebClient();
-                    Console.WriteLine($"Downloading Tensorflow library...");
-                    var download = Task.Run(() => wc.DownloadFile(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tensorflow.zip")));
+                    Console.WriteLine($"Downloading Tensorflow library from {url}...");
+                    var download = Task.Run(() => wc.DownloadFile(url, file));
                     while (!download.IsCompleted)
                     {
                         Thread.Sleep(1000);
@@ -71,7 +77,19 @@ namespace Tensorflow
                 Console.WriteLine($"Extracting...");
                 var task = Task.Run(() =>
                 {
-                    ZipFile.ExtractToDirectory("tensorflow.zip", AppDomain.CurrentDomain.BaseDirectory);
+                    switch (Environment.OSVersion.Platform)
+                    {
+                        case PlatformID.Win32NT:
+                            ZipFile.ExtractToDirectory(file, directory);
+                            break;
+                        case PlatformID.Unix:
+                            Util.CmdHelper.Bash($"tar xvzf {file} ./lib/");
+                            Util.CmdHelper.Bash($"mv {directory}/lib/* {directory}");
+                            Util.CmdHelper.Bash($"rm -r {directory}/lib");
+                            break;
+                        default:
+                            throw new RuntimeError($"Unknown OS environment: {Environment.OSVersion.Platform}");
+                    }
                 });
 
                 while (!task.IsCompleted)
