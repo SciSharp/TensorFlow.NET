@@ -40,7 +40,8 @@ namespace Tensorflow
             {
                 case PlatformID.Win32NT:
                     dll = $"{dll}.dll";
-                    file = Path.Combine(directory, "tensorflow.zip");
+                    file = Path.Combine(directory, "libtensorflow-cpu-windows-x86_64-1.14.0.zip");
+                    url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-windows-x86_64-1.14.0.zip";
                     break;
                 case PlatformID.Unix:
                     dll = $"lib{dll}.so";
@@ -56,7 +57,6 @@ namespace Tensorflow
                 isDllDownloaded = true;
                 return;
             }
-            
 
             lock (locker)
             {
@@ -81,6 +81,9 @@ namespace Tensorflow
                     {
                         case PlatformID.Win32NT:
                             ZipFile.ExtractToDirectory(file, directory);
+                            Util.CmdHelper.Command($"move lib\\* .\\");
+                            Util.CmdHelper.Command($"rm -r lib");
+                            Util.CmdHelper.Command($"rm -r include");
                             break;
                         case PlatformID.Unix:
                             Util.CmdHelper.Bash($"tar xvzf {file} ./lib/");
