@@ -31,7 +31,7 @@ namespace Tensorflow
     /// </summary>
     public partial class Tensor : IDisposable, ITensorOrOperation
     {
-        private readonly IntPtr _handle;
+        private IntPtr _handle;
 
         private int _id;
         private Operation _op;
@@ -351,6 +351,7 @@ namespace Tensorflow
         public void Dispose()
         {
             c_api.TF_DeleteTensor(_handle);
+            _handle = IntPtr.Zero;
             status.Dispose();
         }
 

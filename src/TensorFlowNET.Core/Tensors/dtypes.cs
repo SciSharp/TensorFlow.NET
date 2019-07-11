@@ -52,20 +52,36 @@ namespace Tensorflow
             }
         }
 
+        // "sbyte", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"
         public static TF_DataType as_dtype(Type type)
         {
             TF_DataType dtype = TF_DataType.DtInvalid;
-
+            
             switch (type.Name)
             {
-                case "Boolean":
-                    dtype = TF_DataType.TF_BOOL;
+                case "SByte":
+                    dtype = TF_DataType.TF_INT8;
+                    break;
+                case "Byte":
+                    dtype = TF_DataType.TF_UINT8;
+                    break;
+                case "Int16":
+                    dtype = TF_DataType.TF_INT16;
+                    break;
+                case "UInt16":
+                    dtype = TF_DataType.TF_UINT16;
                     break;
                 case "Int32":
                     dtype = TF_DataType.TF_INT32;
                     break;
+                case "UInt32":
+                    dtype = TF_DataType.TF_UINT32;
+                    break;
                 case "Int64":
                     dtype = TF_DataType.TF_INT64;
+                    break;
+                case "UInt64":
+                    dtype = TF_DataType.TF_UINT64;
                     break;
                 case "Single":
                     dtype = TF_DataType.TF_FLOAT;
@@ -73,11 +89,14 @@ namespace Tensorflow
                 case "Double":
                     dtype = TF_DataType.TF_DOUBLE;
                     break;
+                case "Complex":
+                    dtype = TF_DataType.TF_COMPLEX128;
+                    break;
                 case "String":
                     dtype = TF_DataType.TF_STRING;
                     break;
-                case "Byte":
-                    dtype = TF_DataType.TF_STRING;
+                case "Boolean":
+                    dtype = TF_DataType.TF_BOOL;
                     break;
                 default:
                     throw new Exception("as_dtype Not Implemented");
