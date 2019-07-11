@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1026.6978"
+   height="328.57144"
+   viewBox="0 0 271.64711 86.934526"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="tf.net.architecture.svg"
+   inkscape:export-filename="tf.net.logo512.png"
+   inkscape:export-xdpi="138.45558"
+   inkscape:export-ydpi="138.45558"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="554.13667"
+     inkscape:cy="161.1291"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-global="false"
+     showguides="false"
+     units="px"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
+    <sodipodi:guide
+       position="-115.16765,123.92938"
+       orientation="1,0"
+       id="guide929"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(8.3858147,-332.35208)">
+    <g
+       id="g1279">
+      <rect
+         y="332.35208"
+         x="-8.3858147"
+         height="86.934525"
+         width="271.64713"
+         id="rect1023"
+         style="opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         id="text843"
+         y="347.40942"
+         x="18.269608"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87777805px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><tspan
+           style="font-size:9.87777805px;stroke-width:0.26458332"
+           y="347.40942"
+           x="18.269608"
+           id="tspan841"
+           sodipodi:role="line">TensorFlow</tspan></text>
+      <g
+         transform="translate(0.53205782,8.3134011)"
+         id="g1009">
+        <rect
+           rx="2.5349789"
+           style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#865fc5;stroke-width:1.08041525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect845"
+           width="73.277794"
+           height="23.348486"
+           x="3.8228469"
+           y="379.87094"
+           ry="2.5349789" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.18378384"
+           x="40.438488"
+           y="388.66986"
+           id="text849"><tspan
+             sodipodi:role="line"
+             x="41.157825"
+             y="388.66986"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378384"
+             id="tspan851">Tensor Computation </tspan><tspan
+             sodipodi:role="line"
+             x="40.438488"
+             y="396.60736"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378384"
+             id="tspan933">Layer (C++)</tspan></text>
+      </g>
+      <g
+         transform="translate(0.75958878,1.0971239)"
+         id="g1003">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.18378386"
+           x="40.093136"
+           y="363.23035"
+           id="text849-6"><tspan
+             sodipodi:role="line"
+             x="40.812473"
+             y="363.23035"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378386"
+             id="tspan891">Graph Manipulation </tspan><tspan
+             sodipodi:role="line"
+             x="40.093136"
+             y="371.16785"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378386"
+             id="tspan937">Layer (Python)</tspan></text>
+        <rect
+           rx="2.5349789"
+           style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#865fc5;stroke-width:1.08041525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect845-1"
+           width="73.277794"
+           height="23.348486"
+           x="3.5953159"
+           y="353.88745"
+           ry="2.5349789" />
+      </g>
+      <text
+         id="text843-5"
+         y="347.40942"
+         x="94.650604"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87777805px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><tspan
+           style="font-size:9.87777805px;stroke-width:0.26458332"
+           y="347.40942"
+           x="94.650604"
+           id="tspan841-2"
+           sodipodi:role="line">TensorFlow.NET</tspan></text>
+      <g
+         transform="translate(-6.8241284,1.7065599)"
+         id="g1015">
+        <rect
+           rx="2.5349789"
+           style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#661f76;stroke-width:1.08041525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect845-1-8"
+           width="73.277794"
+           height="23.348486"
+           x="96.586525"
+           y="353.27802"
+           ry="2.5349789" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.18378386"
+           x="133.686"
+           y="363.2756"
+           id="text849-6-2"><tspan
+             sodipodi:role="line"
+             x="134.40533"
+             y="363.2756"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378386"
+             id="tspan891-9">Graph Manipulation </tspan><tspan
+             sodipodi:role="line"
+             x="133.686"
+             y="371.2131"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378386"
+             id="tspan937-1">Layer (C#)</tspan></text>
+      </g>
+      <g
+         transform="translate(-9.932153,9.1901064)"
+         id="g1021">
+        <rect
+           rx="2.5349789"
+           style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#661f76;stroke-width:1.08041525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect845-2"
+           width="73.277794"
+           height="23.348486"
+           x="99.69455"
+           y="379.26151"
+           ry="2.5349789" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.18378386"
+           x="136.3102"
+           y="388.29663"
+           id="text849-7"><tspan
+             sodipodi:role="line"
+             x="137.02953"
+             y="388.29663"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378386"
+             id="tspan851-4">Tensor Computation </tspan><tspan
+             sodipodi:role="line"
+             x="136.3102"
+             y="396.23413"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378386"
+             id="tspan933-3">Layer (C++)</tspan></text>
+      </g>
+      <g
+         transform="translate(20.221726,-55.562499)"
+         id="g1116">
+        <rect
+           style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#865fc5;stroke-width:1.08041525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect845-24"
+           width="73.277794"
+           height="9.9850101"
+           x="-15.866821"
+           y="433.88846"
+           ry="2.5349789"
+           rx="2.5349789" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.18378384"
+           x="20.748819"
+           y="440.51651"
+           id="text849-5"><tspan
+             sodipodi:role="line"
+             x="20.748819"
+             y="440.51651"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378384"
+             id="tspan851-42">C++ API  (Python)</tspan><tspan
+             sodipodi:role="line"
+             x="20.748819"
+             y="448.45401"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378384"
+             id="tspan933-9" /></text>
+      </g>
+      <g
+         transform="translate(105.62922,-55.3248)"
+         id="g1116-7">
+        <rect
+           style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#661f76;stroke-width:1.08041525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect845-24-6"
+           width="73.277794"
+           height="9.9850101"
+           x="-15.866821"
+           y="433.88846"
+           ry="2.5349789"
+           rx="2.5349789" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.18378384"
+           x="20.748819"
+           y="440.51651"
+           id="text849-5-7"><tspan
+             sodipodi:role="line"
+             x="20.748819"
+             y="440.51651"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378384"
+             id="tspan851-42-5">C++ API  (C#)</tspan><tspan
+             sodipodi:role="line"
+             x="20.748819"
+             y="448.45401"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378384"
+             id="tspan933-9-9" /></text>
+      </g>
+      <g
+         transform="translate(76.872688,8.5224453)"
+         id="g1021-2">
+        <rect
+           rx="2.5349789"
+           style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#661f76;stroke-width:1.08041525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect845-2-3"
+           width="73.277794"
+           height="23.348486"
+           x="99.69455"
+           y="379.26151"
+           ry="2.5349789" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.18378386"
+           x="136.3102"
+           y="388.29663"
+           id="text849-7-1"><tspan
+             sodipodi:role="line"
+             x="137.02953"
+             y="388.29663"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378386"
+             id="tspan851-4-6">Tensor Computation </tspan><tspan
+             sodipodi:role="line"
+             x="136.3102"
+             y="396.23413"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378386"
+             id="tspan933-3-6">Layer (C++)</tspan></text>
+      </g>
+      <g
+         transform="translate(192.43406,-55.992467)"
+         id="g1116-7-2">
+        <rect
+           style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#661f76;stroke-width:1.08041525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect845-24-6-4"
+           width="73.277794"
+           height="9.9850101"
+           x="-15.866821"
+           y="433.88846"
+           ry="2.5349789"
+           rx="2.5349789" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.18378384"
+           x="20.748819"
+           y="440.51651"
+           id="text849-5-7-7"><tspan
+             sodipodi:role="line"
+             x="20.748819"
+             y="440.51651"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378384"
+             id="tspan851-42-5-9">C++ API  (C#)</tspan><tspan
+             sodipodi:role="line"
+             x="20.748819"
+             y="448.45401"
+             style="font-size:6.3499999px;text-align:center;text-anchor:middle;stroke-width:0.18378384"
+             id="tspan933-9-9-0" /></text>
+      </g>
+      <text
+         id="text843-5-3"
+         y="346.74863"
+         x="179.03905"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87777805px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><tspan
+           style="font-size:9.87777805px;stroke-width:0.26458332"
+           y="346.74863"
+           x="179.03905"
+           id="tspan841-2-9"
+           sodipodi:role="line">TensorFlowSharp</tspan><tspan
+           id="tspan1205"
+           style="font-size:9.87777805px;stroke-width:0.26458332"
+           y="359.09586"
+           x="179.03905"
+           sodipodi:role="line" /></text>
+      <text
+         id="text843-5-3-5"
+         y="355.52545"
+         x="192.88992"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.11484385px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><tspan
+           style="font-size:7.11484385px;stroke-width:0.26458332"
+           y="355.52545"
+           x="192.88992"
+           id="tspan841-2-9-8"
+           sodipodi:role="line">(by Microsoft)</tspan><tspan
+           id="tspan1205-0"
+           style="font-size:7.11484385px;stroke-width:0.26458332"
+           y="364.41901"
+           x="192.88992"
+           sodipodi:role="line" /></text>
+    </g>
+  </g>
+</svg>
