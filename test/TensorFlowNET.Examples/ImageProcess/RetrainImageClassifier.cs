@@ -1,4 +1,20 @@
-﻿using Google.Protobuf;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using Google.Protobuf;
 using NumSharp;
 using System;
 using System.Collections.Generic;
@@ -264,12 +280,12 @@ namespace TensorFlowNET.Examples.ImageProcess
         private (Operation, Tensor, Tensor, Tensor, Tensor) add_final_retrain_ops(int class_count, string final_tensor_name, 
             Tensor bottleneck_tensor, bool quantize_layer, bool is_training)
         {
-            var (batch_size, bottleneck_tensor_size) = (bottleneck_tensor.GetShape().Dimensions[0], bottleneck_tensor.GetShape().Dimensions[1]);
+            var (batch_size, bottleneck_tensor_size) = (bottleneck_tensor.TensorShape.Dimensions[0], bottleneck_tensor.TensorShape.Dimensions[1]);
             with(tf.name_scope("input"), scope =>
             {
                 bottleneck_input = tf.placeholder_with_default(
                     bottleneck_tensor,
-                    shape: bottleneck_tensor.GetShape().Dimensions,
+                    shape: bottleneck_tensor.TensorShape.Dimensions,
                     name: "BottleneckInputPlaceholder");
 
                 ground_truth_input = tf.placeholder(tf.int64, new TensorShape(batch_size), name: "GroundTruthInput");
@@ -681,12 +697,17 @@ namespace TensorFlowNET.Examples.ImageProcess
             throw new NotImplementedException();
         }
 
-        public bool Train()
+        public void Train(Session sess)
         {
             throw new NotImplementedException();
         }
 
-        public bool Predict()
+        public void Predict(Session sess)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test(Session sess)
         {
             throw new NotImplementedException();
         }

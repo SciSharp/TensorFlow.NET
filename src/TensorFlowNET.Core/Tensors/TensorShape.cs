@@ -24,6 +24,16 @@ namespace Tensorflow
 
         }
 
+        public TensorShape this[Slice slice]
+        {
+            get
+            {
+                return new TensorShape(Dimensions.Skip(slice.Start.Value)
+                    .Take(slice.Length.Value)
+                    .ToArray());
+            }
+        }
+
         /// <summary>
         /// Returns True iff `self` is fully defined in every dimension.
         /// </summary>
@@ -37,5 +47,10 @@ namespace Tensorflow
         {
             throw new NotImplementedException("TensorShape is_compatible_with");
         }
+
+        public static implicit operator TensorShape(int[] dims) => new TensorShape(dims);
+        public static implicit operator TensorShape((int, int) dims) => new TensorShape(dims.Item1, dims.Item2);
+        public static implicit operator TensorShape((int, int, int) dims) => new TensorShape(dims.Item1, dims.Item2, dims.Item3);
+        public static implicit operator TensorShape((int, int, int, int) dims) => new TensorShape(dims.Item1, dims.Item2, dims.Item3, dims.Item4);
     }
 }

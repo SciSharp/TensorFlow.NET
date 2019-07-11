@@ -1,5 +1,22 @@
-﻿using System;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Operations;
 using static Tensorflow.Python;
@@ -83,7 +100,7 @@ namespace Tensorflow
                 // float to be selected, hence we use a >= comparison.
                 var keep_mask = random_tensor >= rate;
                 var ret = x * scale * math_ops.cast(keep_mask, x.dtype);
-                ret.SetShape(x.GetShape());
+                ret.SetShape(x.TensorShape);
                 return ret;
             });
         }
@@ -99,6 +116,38 @@ namespace Tensorflow
         public static Tensor log_softmax(Tensor logits, int axis = -1, string name = null)
         {
             return _softmax(logits, gen_nn_ops.log_softmax, axis, name);
+        }
+
+        /// <summary>
+        /// Performs the max pooling on the input.
+        /// </summary>
+        /// <param name="value">A 4-D `Tensor` of the format specified by `data_format`.</param>
+        /// <param name="ksize">
+        /// A list or tuple of 4 ints. The size of the window for each dimension
+        /// of the input tensor.
+        /// </param>
+        /// <param name="strides">
+        /// A list or tuple of 4 ints. The stride of the sliding window for
+        /// each dimension of the input tensor.
+        /// </param>
+        /// <param name="padding">A string, either `'VALID'` or `'SAME'`. The padding algorithm.</param>
+        /// <param name="data_format">A string. 'NHWC', 'NCHW' and 'NCHW_VECT_C' are supported.</param>
+        /// <param name="name">Optional name for the operation.</param>
+        /// <returns></returns>
+        public static Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null)
+        {
+            return with(ops.name_scope(name, "MaxPool", value), scope =>
+            {
+                name = scope;
+                value = ops.convert_to_tensor(value, name: "input");
+                return gen_nn_ops.max_pool(
+                    value,
+                    ksize: ksize,
+                    strides: strides,
+                    padding: padding,
+                    data_format: data_format,
+                    name: name);
+            });
         }
 
         public static Tensor _softmax(Tensor logits, Func<Tensor, string, Tensor> compute_op, int dim = -1, string name = null)
@@ -131,14 +180,14 @@ namespace Tensorflow
                 var precise_logits = logits.dtype == TF_DataType.TF_HALF ? math_ops.cast(logits, dtypes.float32) : logits;
 
                 // Store label shape for result later.
-                var labels_static_shape = labels.GetShape();
+                var labels_static_shape = labels.TensorShape;
                 var labels_shape = array_ops.shape(labels);
                 /*bool static_shapes_fully_defined = (
                     labels_static_shape.is_fully_defined() &&
                         logits.get_shape()[:-1].is_fully_defined());*/
 
                 // Check if no reshapes are required.
-                if(logits.GetShape().NDim == 2)
+                if(logits.TensorShape.NDim == 2)
                 {
                     var (cost, _) = gen_nn_ops.sparse_softmax_cross_entropy_with_logits(
                         precise_logits, labels, name: name);
@@ -159,16 +208,21 @@ namespace Tensorflow
             int axis = -1,
             string name = null)
         {
-            return Python.with(ops.name_scope(name, "softmax_cross_entropy_with_logits", new { }), scope =>
+            return with(ops.name_scope(name, "softmax_cross_entropy_with_logits", new { logits, labels }), scope =>
             {
+                name = scope;
                 var precise_logits = logits;
                 var input_rank = array_ops.rank(precise_logits);
-                var shape = logits.GetShape();
+                var shape = logits.TensorShape;
 
                 if (axis != -1)
                     throw new NotImplementedException("softmax_cross_entropy_with_logits_v2_helper axis != -1");
 
                 var input_shape = array_ops.shape(precise_logits);
+
+                // Make precise_logits and labels into matrices.
+                precise_logits = _flatten_outer_dims(precise_logits);
+                labels = _flatten_outer_dims(labels);
 
                 // Do the actual op computation.
                 // The second output tensor contains the gradients.  We use it in
@@ -185,6 +239,51 @@ namespace Tensorflow
 
                 return cost;
             });
+        }
+
+        /// <summary>
+        /// Flattens logits' outer dimensions and keep its last dimension.
+        /// </summary>
+        /// <param name="logits"></param>
+        /// <returns></returns>
+        private static Tensor _flatten_outer_dims(Tensor logits)
+        {
+            var rank = array_ops.rank(logits);
+            var last_dim_size = array_ops.slice(array_ops.shape(logits),
+                new[] { math_ops.subtract(rank, 1) },
+                new[] { 1 });
+
+            var ops = array_ops.concat(new[] { new[] { -1 }, (object)last_dim_size }, 0);
+            var output = array_ops.reshape(logits, ops);
+
+            // Set output shape if known.
+            // if not context.executing_eagerly():
+            var shape = logits.TensorShape;
+            if(shape != null && shape.NDim > 0)
+            {
+                var product = 1;
+                var product_valid = true;
+                foreach(var d in shape.Dimensions.Take(shape.NDim - 1))
+                {
+                    if(d == -1)
+                    {
+                        product_valid = false;
+                        break;
+                    }
+                    else
+                    {
+                        product *= d;
+                    }
+                }
+
+                if (product_valid)
+                {
+                    var output_shape = new[] { product };
+                    throw new NotImplementedException("_flatten_outer_dims product_valid");
+                }
+            }
+
+            return output;
         }
     }
 }

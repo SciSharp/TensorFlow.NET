@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -467,6 +483,41 @@ namespace Tensorflow
         public static Tensor mat_mul(Tensor a, Tensor b, bool transpose_a = false, bool transpose_b = false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("MatMul", name, args: new { a, b, transpose_a, transpose_b });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Multiply slices of the two matrices "x" and "y".
+        /// </summary>
+        /// <remarks>
+        /// The `BatchMatMul` operation is embedded into the
+        /// `MatMul` operation on the DLL side. However the expected
+        /// attributes are not the same, hence we need to expose this
+        /// method to have the right args list on the `_apply_op_helper`
+        /// function.
+        ///
+        /// For each rank > 2 the first rank - 2 dimensions are considered
+        /// as fixed, and have to be consistent across the two matrices. A
+        /// common matrix multiplication is then applied over the residual
+        /// 2 dimensions.
+        ///
+        /// e.g.
+        ///     x is (3, 6, 12); y is (3, 12, 6)
+        ///     batch_matmul(x, y) ==> (3, 6, 6)
+        /// </remarks>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="adj_x"></param>
+        /// <param name="adj_y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor batch_mat_mul(Tensor x, Tensor y, bool adj_x = false, bool adj_y = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper(
+                "BatchMatMul",
+                name,
+                args: new { x, y, adj_x, adj_y });
 
             return _op.outputs[0];
         }

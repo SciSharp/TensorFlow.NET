@@ -55,8 +55,6 @@ namespace TensorFlowNET.Examples
 
         public static (int[][], int[], int) build_char_dataset(string path, string model, int document_max_len, int? limit = null, bool shuffle=true)
         {
-            if (model != "vd_cnn")
-                throw new NotImplementedException(model);
             string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:’'\"/|_#$%ˆ&*˜‘+=<>()[]{} ";
             /*if (step == "train")
                 df = pd.read_csv(TRAIN_PATH, names =["class", "title", "content"]);*/

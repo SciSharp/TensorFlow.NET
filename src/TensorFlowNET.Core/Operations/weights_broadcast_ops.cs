@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static Tensorflow.Python;
@@ -16,8 +32,8 @@ namespace Tensorflow
                     weights, dtype: values.dtype.as_base_dtype(), name: "weights");
 
                 // Try static check for exact match.
-                var weights_shape = weights.GetShape();
-                var values_shape = values.GetShape();
+                var weights_shape = weights.TensorShape;
+                var values_shape = values.TensorShape;
                 if (weights_shape.is_fully_defined() &&
                     values_shape.is_fully_defined())
                     return weights;

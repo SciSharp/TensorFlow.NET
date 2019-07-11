@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Eager;
@@ -22,13 +38,13 @@ namespace Tensorflow
 
         public static Session defaultSession;
 
-        public static RefVariable Variable<T>(T data, 
+        public static RefVariable Variable<T>(T data,
             bool trainable = true,
             bool validate_shape = true,
-            string name = null, 
+            string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid)
         {
-            return Tensorflow.variable_scope.default_variable_creator(data, 
+            return Tensorflow.variable_scope.default_variable_creator(data,
                 trainable: trainable,
                 validate_shape: validate_shape,
                 name: name,
@@ -46,7 +62,14 @@ namespace Tensorflow
             context.default_execution_mode = Context.EAGER_MODE;
         }
 
-        public static string VERSION => c_api.StringPiece(c_api.TF_Version());
+        public static string VERSION
+        {
+            get
+            {
+                c_api_util.DownloadLibrary();
+                return c_api.StringPiece(c_api.TF_Version());
+            }
+        }
 
         public static Session Session()
         {

@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -106,13 +122,13 @@ namespace Tensorflow
 
             if (!string.IsNullOrEmpty(_name) || _scope != null)
             {
-                var name_scope = _scope.name.Split('/').Last();
+                var name_scope = _scope == null ? _name : _scope.name.Split('/').Last();
                 if (current_name_scope == null)
                     current_name_scope = ops.name_scope(name_scope);
                 current_name_scope.__enter__();
-                var current_name_scope_name = current_name_scope;
+                string current_name_scope_name = current_name_scope;
                 _current_name_scope = current_name_scope;
-                string old_name_scope = _scope.original_name_scope;
+                string old_name_scope = _scope == null ? current_name_scope_name : _scope.original_name_scope;
                 
                 if(_scope == null)
                     pure_variable_scope = new PureVariableScope(_name, old_name_scope: old_name_scope);

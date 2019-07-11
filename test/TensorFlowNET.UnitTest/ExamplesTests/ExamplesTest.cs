@@ -83,22 +83,13 @@ namespace TensorFlowNET.ExamplesTests
             new NearestNeighbor() { Enabled = true, TrainSize = 500, ValidationSize = 100, TestSize = 100 }.Run();
         }
 
-        [Ignore]
         [TestMethod]
-        public void TextClassificationTrain()
-        {
-            tf.Graph().as_default();
-            new TextClassificationTrain() { Enabled = true, DataLimit=100 }.Run();
-        }
-
+        public void WordCnnTextClassification()
+            => new CnnTextClassification { Enabled = true, ModelName = "word_cnn", DataLimit =100 }.Run();
 
         [TestMethod]
-        public void CnnTextClassificationTrain()
-        {
-            tf.Graph().as_default();
-            new CnnTextClassification() { Enabled = true, IsImportingGraph = false }.Run();
-        }
-
+        public void CharCnnTextClassification()
+            => new CnnTextClassification { Enabled = true, ModelName = "char_cnn", DataLimit = 100 }.Run();
 
         [Ignore]
         [TestMethod]

@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,6 +25,7 @@ using Newtonsoft.Json;
 using NumSharp;
 using Tensorflow;
 using Tensorflow.Sessions;
+using TensorFlowNET.Examples.Text;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
 
@@ -22,29 +39,37 @@ namespace TensorFlowNET.Examples
         public bool Enabled { get; set; } = true;
         public string Name => "CNN Text Classification";
         public int? DataLimit = null;
-        public bool IsImportingGraph { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = false;
 
-        private const string dataDir = "word_cnn";
-        private string dataFileName = "dbpedia_csv.tar.gz";
+        const string dataDir = "cnn_text";
+        string dataFileName = "dbpedia_csv.tar.gz";
 
-        private const string TRAIN_PATH = "word_cnn/dbpedia_csv/train.csv";
-        private const string TEST_PATH = "word_cnn/dbpedia_csv/test.csv";
+        string TRAIN_PATH = $"{dataDir}/dbpedia_csv/train.csv";
+        string TEST_PATH = $"{dataDir}/dbpedia_csv/test.csv";
         
-        private const int NUM_CLASS = 14;
-        private const int BATCH_SIZE = 64;
-        private const int NUM_EPOCHS = 10;
-        private const int WORD_MAX_LEN = 100;
-        private const int CHAR_MAX_LEN = 1014;
+        int NUM_CLASS = 14;
+        int BATCH_SIZE = 64;
+        int NUM_EPOCHS = 10;
+        int WORD_MAX_LEN = 100;
+        int CHAR_MAX_LEN = 1014;
         
-        protected float loss_value = 0;
-        int vocabulary_size = 50000;
+        float loss_value = 0;
+        double max_accuracy = 0;
+
+        int alphabet_size = -1;
+        int vocabulary_size = -1;
         NDArray train_x, valid_x, train_y, valid_y;
+
+        ITextModel textModel;
+        public string ModelName = "word_cnn"; // word_cnn | char_cnn | vd_cnn | word_rnn | att_rnn | rcnn
 
         public bool Run()
         {
             PrepareData();
+            var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
+            with(tf.Session(graph), sess => Train(sess));
 
-            return Train();
+            return max_accuracy > 0.9;
         }
 
         // TODO: this originally is an SKLearn utility function. it randomizes train and test which we don't do here
@@ -61,15 +86,10 @@ namespace TensorFlowNET.Examples
             valid_y = y[new Slice(start: train_size)];
             Console.WriteLine("\tDONE");
 
-            train_x = np.Load<int[,]>(Path.Join("word_cnn", "train_x.npy"));
-            valid_x = np.Load<int[,]>(Path.Join("word_cnn", "valid_x.npy"));
-            train_y = np.Load<int[]>(Path.Join("word_cnn", "train_y.npy"));
-            valid_y = np.Load<int[]>(Path.Join("word_cnn", "valid_y.npy"));
-
             return (train_x, valid_x, train_y, valid_y);
         }
 
-        private static void FillWithShuffledLabels(int[][] x, int[] y, int[][] shuffled_x, int[] shuffled_y, Random random, Dictionary<int, HashSet<int>> labels)
+        private void FillWithShuffledLabels(int[][] x, int[] y, int[][] shuffled_x, int[] shuffled_y, Random random, Dictionary<int, HashSet<int>> labels)
         {
             int i = 0;
             var label_keys = labels.Keys.ToArray();
@@ -114,12 +134,18 @@ namespace TensorFlowNET.Examples
             Compress.UnZip(Path.Combine(dataDir, "dbpedia_subset.zip"), Path.Combine(dataDir, "dbpedia_csv"));
 
             Console.WriteLine("Building dataset...");
+            var (x, y) = (new int[0][], new int[0]);
 
-            int alphabet_size = 0;
-
-            var word_dict = DataHelpers.build_word_dict(TRAIN_PATH);
-            //vocabulary_size = len(word_dict);
-            var (x, y) = DataHelpers.build_word_dataset(TRAIN_PATH, word_dict, WORD_MAX_LEN);
+            if(ModelName == "char_cnn")
+            {
+                (x, y, alphabet_size) = DataHelpers.build_char_dataset(TRAIN_PATH, "char_cnn", CHAR_MAX_LEN);
+            }
+            else
+            {
+                var word_dict = DataHelpers.build_word_dict(TRAIN_PATH);
+                vocabulary_size = len(word_dict);
+                (x, y) = DataHelpers.build_word_dataset(TRAIN_PATH, word_dict, WORD_MAX_LEN);
+            }
 
             Console.WriteLine("\tDONE ");
 
@@ -156,83 +182,22 @@ namespace TensorFlowNET.Examples
         {
             var graph = tf.Graph().as_default();
 
-            var embedding_size = 128;
-            var learning_rate = 0.001f;
-            var filter_sizes = new int[3, 4, 5];
-            var num_filters = 100;
-            var document_max_len = 100;
-
-            var x = tf.placeholder(tf.int32, new TensorShape(-1, document_max_len), name: "x");
-            var y = tf.placeholder(tf.int32, new TensorShape(-1), name: "y");
-            var is_training = tf.placeholder(tf.@bool, new TensorShape(), name: "is_training");
-            var global_step = tf.Variable(0, trainable: false);
-            var keep_prob = tf.where(is_training, 0.5f, 1.0f);
-            Tensor x_emb = null;
-
-            with(tf.name_scope("embedding"), scope =>
+            switch (ModelName)
             {
-                var init_embeddings = tf.random_uniform(new int[] { vocabulary_size, embedding_size });
-                var embeddings = tf.get_variable("embeddings", initializer: init_embeddings);
-                x_emb = tf.nn.embedding_lookup(embeddings, x);
-                x_emb = tf.expand_dims(x_emb, -1);
-            });
-
-            var pooled_outputs = new List<Tensor>();
-            for (int len = 0; len < filter_sizes.Rank; len++)
-            {
-                int filter_size = filter_sizes.GetLength(len);
-                var conv = tf.layers.conv2d(
-                    x_emb,
-                    filters: num_filters,
-                    kernel_size: new int[] { filter_size, embedding_size },
-                    strides: new int[] { 1, 1 },
-                    padding: "VALID",
-                    activation: tf.nn.relu());
-
-                var pool = tf.layers.max_pooling2d(
-                    conv,
-                    pool_size: new[] { document_max_len - filter_size + 1, 1 },
-                    strides: new[] { 1, 1 },
-                    padding: "VALID");
-
-                pooled_outputs.Add(pool);
+                case "word_cnn":
+                    textModel = new WordCnn(vocabulary_size, WORD_MAX_LEN, NUM_CLASS);
+                    break;
+                case "char_cnn":
+                    textModel = new CharCnn(alphabet_size, CHAR_MAX_LEN, NUM_CLASS);
+                    break;
             }
-
-            var h_pool = tf.concat(pooled_outputs, 3);
-            var h_pool_flat = tf.reshape(h_pool, new TensorShape(-1, num_filters * filter_sizes.Rank));
-            Tensor h_drop = null;
-            with(tf.name_scope("dropout"), delegate
-            {
-                h_drop = tf.nn.dropout(h_pool_flat, keep_prob);
-            });
-
-            Tensor logits = null;
-            Tensor predictions = null;
-            with(tf.name_scope("output"), delegate
-            {
-                logits = tf.layers.dense(h_drop, NUM_CLASS);
-                predictions = tf.argmax(logits, -1, output_type: tf.int32);
-            });
-
-            with(tf.name_scope("loss"), delegate
-            {
-                var sscel = tf.nn.sparse_softmax_cross_entropy_with_logits(logits: logits, labels: y);
-                var loss = tf.reduce_mean(sscel);
-                var adam = tf.train.AdamOptimizer(learning_rate);
-                var optimizer = adam.minimize(loss, global_step: global_step);
-            });
-
-            with(tf.name_scope("accuracy"), delegate
-            {
-                var correct_predictions = tf.equal(predictions, y);
-                var accuracy = tf.reduce_mean(tf.cast(correct_predictions, TF_DataType.TF_FLOAT), name: "accuracy");
-            });
 
             return graph;
         }
 
-        private bool Train(Session sess, Graph graph)
+        public void Train(Session sess)
         {
+            var graph = tf.get_default_graph();
             var stopwatch = Stopwatch.StartNew();
 
             sess.run(tf.global_variables_initializer());
@@ -240,7 +205,6 @@ namespace TensorFlowNET.Examples
 
             var train_batches = batch_iter(train_x, train_y, BATCH_SIZE, NUM_EPOCHS);
             var num_batches_per_epoch = (len(train_x) - 1) / BATCH_SIZE + 1;
-            double max_accuracy = 0;
 
             Tensor is_training = graph.OperationByName("is_training");
             Tensor model_x = graph.OperationByName("x");
@@ -265,10 +229,7 @@ namespace TensorFlowNET.Examples
                 loss_value = result[2];
                 var step = (int)result[1];
                 if (step % 10 == 0)
-                {
-                    var estimate = TimeSpan.FromSeconds((stopwatch.Elapsed.TotalSeconds / i) * total);
-                    Console.WriteLine($"Training on batch {i}/{total} loss: {loss_value}. Estimated training time: {estimate}");
-                }
+                    Console.WriteLine($"Training on batch {i}/{total} loss: {loss_value.ToString("0.0000")}.");
 
                 if (step % 100 == 0)
                 {
@@ -291,7 +252,7 @@ namespace TensorFlowNET.Examples
 
                     var valid_accuracy = sum_accuracy / cnt;
 
-                    print($"\nValidation Accuracy = {valid_accuracy}\n");
+                    print($"\nValidation Accuracy = {valid_accuracy.ToString("P")}\n");
 
                     // Save model
                     if (valid_accuracy > max_accuracy)
@@ -302,18 +263,14 @@ namespace TensorFlowNET.Examples
                     }
                 }
             }
-
-            return max_accuracy > 0.8;
         }
 
-        public bool Train()
+        public void Predict(Session sess)
         {
-            var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
-            // string json = JsonConvert.SerializeObject(graph, Formatting.Indented);
-            return with(tf.Session(graph), sess => Train(sess, graph));
+            throw new NotImplementedException();
         }
 
-        public bool Predict()
+        public void Test(Session sess)
         {
             throw new NotImplementedException();
         }

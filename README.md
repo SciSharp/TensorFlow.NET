@@ -16,7 +16,7 @@ TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
 
 ### Why TensorFlow.NET ?
 
-`SciSharp STASK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Scince the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
+`SciSharp STACK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Scince the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
 
 ![pythn vs csharp](docs/assets/syntax-comparision.png)
 
@@ -131,7 +131,7 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 Run specific example in shell:
 
 ```cs
-dotnet TensorFlowNET.Examples.dll "Retrain Image Classifier"
+dotnet TensorFlowNET.Examples.dll "EXAMPLE NAME"
 ```
 
 Example runner will download all the required files like training data and model pb files.
@@ -142,13 +142,13 @@ Example runner will download all the required files like training data and model
 * [Logistic Regression](test/TensorFlowNET.Examples/BasicModels/LogisticRegression.cs)
 * [Nearest Neighbor](test/TensorFlowNET.Examples/BasicModels/NearestNeighbor.cs)
 * [Naive Bayes Classification](test/TensorFlowNET.Examples/BasicModels/NaiveBayesClassifier.cs)
+* [Full Connected Neural Network](test/TensorFlowNET.Examples/ImageProcess/DigitRecognitionNN.cs)
 * [Image Recognition](test/TensorFlowNET.Examples/ImageProcess)
 * [K-means Clustering](test/TensorFlowNET.Examples/BasicModels/KMeansClustering.cs)
 * [NN XOR](test/TensorFlowNET.Examples/BasicModels/NeuralNetXor.cs)
 * [Object Detection](test/TensorFlowNET.Examples/ImageProcess/ObjectDetection.cs)
 * [Text Classification](test/TensorFlowNET.Examples/TextProcess/BinaryTextClassification.cs)
 * [CNN Text Classification](test/TensorFlowNET.Examples/TextProcess/cnn_models/VdCnn.cs)
-
 * [Named Entity Recognition](test/TensorFlowNET.Examples/TextProcess/NER)
 * [Transfer Learning for Image Classification in InceptionV3](test/TensorFlowNET.Examples/ImageProcess/RetrainImageClassifier.cs)
 
@@ -186,7 +186,9 @@ git pull upstream master
 
 Feel free to star or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET).
 
-Join our chat on [Gitter](https://gitter.im/sci-sharp/community) or
+Follow us on [Medium](https://medium.com/scisharp).
+
+Join our chat on [Gitter](https://gitter.im/sci-sharp/community).
 
 Scan QR code to join Tencent TIM group:
 

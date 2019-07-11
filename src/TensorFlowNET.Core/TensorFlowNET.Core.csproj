@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.8.3</Version>
+    <Version>0.9.0</Version>
     <Authors>Haiping Chen, Meinrad Recheis</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -16,17 +16,18 @@
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
-Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.8.3.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.8:
+Docs: https://tensorflownet.readthedocs.io
+Learn more about .NET AI: https://medium.com/scisharp</Description>
+    <AssemblyVersion>0.9.0.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.8.3:
 
-1. Remove global static graph instance.
-2. Provide custom gradient function.
-3. Add gradient function for Conv2D.
-4. Fix bug for Transfer Learning example.
-5. Overload Graph.Import(byte[] bytes)</PackageReleaseNotes>
+1. Added full connected Neural Network example.
+2. Added word CNN Text Classification example.
+3. Fixed AdaOptimizer issue.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.8.3.0</FileVersion>
+    <FileVersion>0.9.0.0</FileVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,6 +43,10 @@ Docs: https://tensorflownet.readthedocs.io</Description>
     <Compile Remove="runtimes\**" />
     <EmbeddedResource Remove="runtimes\**" />
     <None Remove="runtimes\**" />
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -54,7 +59,6 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.8.0" />
-    <PackageReference Include="Microsoft.ML.TensorFlow.Redist" Version="0.13.0" />
     <PackageReference Include="NumSharp" Version="0.10.3" />
   </ItemGroup>
 

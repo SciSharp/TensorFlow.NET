@@ -1,4 +1,20 @@
-﻿using NumSharp;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,7 +48,7 @@ namespace TensorFlowNET.Examples
         private float learning_rate = 0.01f;
         private int display_step = 1;
 
-        Datasets mnist;
+        Datasets<DataSetMnist> mnist;
 
         public bool Run()
         {
@@ -102,7 +118,7 @@ namespace TensorFlowNET.Examples
                 var correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1));
                 // Calculate accuracy
                 var accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32));
-                float acc = accuracy.eval(new FeedItem(x, mnist.test.images), new FeedItem(y, mnist.test.labels));
+                float acc = accuracy.eval(new FeedItem(x, mnist.test.data), new FeedItem(y, mnist.test.labels));
                 print($"Accuracy: {acc.ToString("F4")}");
 
                 return acc > 0.9;
@@ -111,7 +127,7 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size: validation_size, test_size: test_size);
+            mnist = MNIST.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size: validation_size, test_size: test_size);
         }
 
         public void SaveModel(Session sess)
@@ -132,30 +148,27 @@ namespace TensorFlowNET.Examples
                               initializer_nodes: "");
         }
 
-        public void Predict()
+        public void Predict(Session sess)
         {
             var graph = new Graph().as_default();
             graph.Import(Path.Join("logistic_regression", "model.pb"));
 
-            with(tf.Session(graph), sess =>
-            {
-                // restoring the model
-                // var saver = tf.train.import_meta_graph("logistic_regression/tensorflowModel.ckpt.meta");
-                // saver.restore(sess, tf.train.latest_checkpoint('logistic_regression'));
-                var pred = graph.OperationByName("Softmax");
-                var output = pred.outputs[0];
-                var x = graph.OperationByName("Placeholder");
-                var input = x.outputs[0];
+            // restoring the model
+            // var saver = tf.train.import_meta_graph("logistic_regression/tensorflowModel.ckpt.meta");
+            // saver.restore(sess, tf.train.latest_checkpoint('logistic_regression'));
+            var pred = graph.OperationByName("Softmax");
+            var output = pred.outputs[0];
+            var x = graph.OperationByName("Placeholder");
+            var input = x.outputs[0];
 
-                // predict
-                var (batch_xs, batch_ys) = mnist.train.next_batch(10);
-                var results = sess.run(output, new FeedItem(input, batch_xs[np.arange(1)]));
+            // predict
+            var (batch_xs, batch_ys) = mnist.train.next_batch(10);
+            var results = sess.run(output, new FeedItem(input, batch_xs[np.arange(1)]));
 
-                if (results.argmax() == (batch_ys[0] as NDArray).argmax())
-                    print("predicted OK!");
-                else
-                    throw new ValueError("predict error, should be 90% accuracy");
-            });
+            if (results.argmax() == (batch_ys[0] as NDArray).argmax())
+                print("predicted OK!");
+            else
+                throw new ValueError("predict error, should be 90% accuracy");
         }
 
         public Graph ImportGraph()
@@ -168,12 +181,12 @@ namespace TensorFlowNET.Examples
             throw new NotImplementedException();
         }
 
-        public bool Train()
+        public void Train(Session sess)
         {
             throw new NotImplementedException();
         }
 
-        bool IExample.Predict()
+        public void Test(Session sess)
         {
             throw new NotImplementedException();
         }

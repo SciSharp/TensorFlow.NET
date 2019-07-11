@@ -1,4 +1,20 @@
-﻿using NumSharp;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,14 +24,14 @@ using Tensorflow;
 
 namespace TensorFlowNET.Examples.Utility
 {
-    public class MnistDataSet
+    public class MNIST
     {
         private const string DEFAULT_SOURCE_URL = "https://storage.googleapis.com/cvdf-datasets/mnist/";
         private const string TRAIN_IMAGES = "train-images-idx3-ubyte.gz";
         private const string TRAIN_LABELS = "train-labels-idx1-ubyte.gz";
         private const string TEST_IMAGES = "t10k-images-idx3-ubyte.gz";
         private const string TEST_LABELS = "t10k-labels-idx1-ubyte.gz";
-        public static Datasets read_data_sets(string train_dir, 
+        public static Datasets<DataSetMnist> read_data_sets(string train_dir, 
             bool one_hot = false,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             bool reshape = true,
@@ -49,11 +65,11 @@ namespace TensorFlowNET.Examples.Utility
             train_images = train_images[np.arange(validation_size, end)];
             train_labels = train_labels[np.arange(validation_size, end)];
 
-            var train = new DataSet(train_images, train_labels, dtype, reshape);
-            var validation = new DataSet(validation_images, validation_labels, dtype, reshape);
-            var test = new DataSet(test_images, test_labels, dtype, reshape);
+            var train = new DataSetMnist(train_images, train_labels, dtype, reshape);
+            var validation = new DataSetMnist(validation_images, validation_labels, dtype, reshape);
+            var test = new DataSetMnist(test_images, test_labels, dtype, reshape);
 
-            return new Datasets(train, validation, test);
+            return new Datasets<DataSetMnist>(train, validation, test);
         }
 
         public static NDArray extract_images(string file, int? limit=null)

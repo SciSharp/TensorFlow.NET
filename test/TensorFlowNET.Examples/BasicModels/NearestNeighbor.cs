@@ -1,4 +1,20 @@
-﻿using NumSharp;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +33,7 @@ namespace TensorFlowNET.Examples
     {
         public bool Enabled { get; set; } = true;
         public string Name => "Nearest Neighbor";
-        Datasets mnist;
+        Datasets<DataSetMnist> mnist;
         NDArray Xtr, Ytr, Xte, Yte;
         public int? TrainSize = null;
         public int ValidationSize = 5000;
@@ -70,7 +86,7 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MnistDataSet.read_data_sets("mnist", one_hot: true, train_size: TrainSize, validation_size:ValidationSize, test_size:TestSize);
+            mnist = MNIST.read_data_sets("mnist", one_hot: true, train_size: TrainSize, validation_size:ValidationSize, test_size:TestSize);
             // In this example, we limit mnist data
             (Xtr, Ytr) = mnist.train.next_batch(TrainSize==null ? 5000 : TrainSize.Value / 100); // 5000 for training (nn candidates)
             (Xte, Yte) = mnist.test.next_batch(TestSize==null ? 200 : TestSize.Value / 100); // 200 for testing
@@ -86,12 +102,17 @@ namespace TensorFlowNET.Examples
             throw new NotImplementedException();
         }
 
-        public bool Train()
+        public void Train(Session sess)
         {
             throw new NotImplementedException();
         }
 
-        public bool Predict()
+        public void Predict(Session sess)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test(Session sess)
         {
             throw new NotImplementedException();
         }

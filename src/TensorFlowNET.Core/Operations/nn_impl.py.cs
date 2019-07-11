@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*****************************************************************************
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Operations;
@@ -136,13 +152,13 @@ namespace Tensorflow
                 size = gen_math_ops.less_equal(size, dtypes.int32.max());
                 Tensor num_nonzero = control_flow_ops.cond(
                         size,
-                        () => math_ops.cast(_count_nonzero(value, dtype: dtypes.int32)),
+                        () => math_ops.cast(_count_nonzero(value, dtype: dtypes.int32), TF_DataType.TF_INT64),
                         () => _count_nonzero(value, dtype: dtypes.int64)
                         );
 
                 with(ops.name_scope("counts_to_fraction"), count_scope =>
                 {
-                    var num_zero = size - num_nonzero;
+                    var num_zero = math_ops.subtract(math_ops.cast(size, TF_DataType.TF_INT64), num_nonzero);
                     var num_zero_float32 = math_ops.cast(num_zero, dtype: dtypes.float32);
                     var size_float32 = math_ops.cast(size, dtype: dtypes.float32);
                     zero_fraction_float32 = num_zero_float32 / size_float32;

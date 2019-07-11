@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow;
-using TensorFlowNET.Examples.Text.cnn_models;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.TextClassification
+namespace TensorFlowNET.Examples.Text
 {
-    public class VdCnn : ITextClassificationModel
+    public class VdCnn : ITextModel
     {
         private int embedding_size;
         private int[] filter_sizes;
