@@ -158,7 +158,6 @@ namespace TensorFlowNET.Examples.ImageProcess
                 layer += b;
                 return tf.nn.relu(layer);
             });
-
         }
 
         /// <summary>
@@ -195,7 +194,7 @@ namespace TensorFlowNET.Examples.ImageProcess
             });
         }
 
-        private Tensor weight_variable(string name, int[] shape)
+        private RefVariable weight_variable(string name, int[] shape)
         {
             var initer = tf.truncated_normal_initializer(stddev: 0.01f);
             return tf.get_variable(name,
@@ -210,7 +209,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         /// <param name="name"></param>
         /// <param name="shape"></param>
         /// <returns></returns>
-        private Tensor bias_variable(string name, int[] shape)
+        private RefVariable bias_variable(string name, int[] shape)
         {
             var initial = tf.constant(0f, shape: shape, dtype: tf.float32);
             return tf.get_variable(name,

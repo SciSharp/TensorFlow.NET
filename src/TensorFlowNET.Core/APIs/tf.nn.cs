@@ -30,19 +30,21 @@ namespace Tensorflow
             public static Tensor conv2d(Tensor input, RefVariable filter, int[] strides, string padding, bool use_cudnn_on_gpu = true, 
                 string data_format= "NHWC", int[] dilations= null, string name = null)
             {
-                if (dilations == null)
-                    dilations = new[] { 1, 1, 1, 1 };
-
-                return gen_nn_ops.conv2d(new Conv2dParams
+                var parameters = new Conv2dParams
                 {
                     Input = input,
                     Filter = filter,
                     Strides = strides,
+                    Padding = padding,
                     UseCudnnOnGpu = use_cudnn_on_gpu,
                     DataFormat = data_format,
-                    Dilations = dilations,
                     Name = name
-                });
+                };
+
+                if (dilations != null)
+                    parameters.Dilations = dilations;
+
+                return gen_nn_ops.conv2d(parameters);
             }
 
             /// <summary>
