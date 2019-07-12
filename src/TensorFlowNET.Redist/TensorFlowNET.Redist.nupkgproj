@@ -139,6 +139,9 @@
           WorkingDirectory="$(MSBuildThisFileDirectory)"
           Command="tar -xzmv --hard-dereference -f %(TensorFlowArchive.DownloadFile) -C %(TensorFlowArchive.ExtractDirectory)" />
 
+    <Exec Condition="'$(OS)' != 'Windows_NT'"
+          Command="chmod -R +w %(TensorFlowArchive.ExtractDirectory)" />
+
     <Touch Files="@(TensorFlowArchive->'%(ExtractSemaphore)')" AlwaysCreate="true" />
   </Target>
 
@@ -174,6 +177,7 @@
     <Message Importance="High" Text="@(FilesFromArchive) -> %(FilesFromArchive.TargetPath)" />
     <Copy SourceFiles="@(FilesFromArchive)"
           DestinationFiles="@(FilesFromArchive->'%(TargetPath)')" />
+
   </Target>
 
   <Target Name="Clean">
