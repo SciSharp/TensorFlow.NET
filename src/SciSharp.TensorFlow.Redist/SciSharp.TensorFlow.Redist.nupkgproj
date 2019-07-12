@@ -1,0 +1,188 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <ProjDir>$(MSBuildThisFileDirectory)</ProjDir>
+    <BinDir>$(ProjDir)bin\</BinDir>
+    <ObjDir>$(ProjDir)obj\</ObjDir>
+
+    <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <TensorFlowVersion>1.14.0</TensorFlowVersion>
+    <TensorFlowMajorVersion>1</TensorFlowMajorVersion>
+
+    <PackageAssetsPath>$(BinDir)packages\</PackageAssetsPath>
+    <PackageId>$(MSBuildProjectName)</PackageId>
+    <PackageVersion>$(TensorFlowVersion)</PackageVersion>
+
+    <NoBuild>true</NoBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+
+    <NuspecFile>Redist.nuspec</NuspecFile>
+    <NuspecProperties>packageId=$(PackageId);version=$(PackageVersion)</NuspecProperties>
+    <NuspecBasePath>$(ProjDir)</NuspecBasePath>
+
+    <GenerateNuspecDependsOn>CopyFilesFromArchive</GenerateNuspecDependsOn>
+
+    <PackageRid Condition="'$(OS)' == 'Windows_NT'">win</PackageRid>
+    <PackageRid Condition="'$(OS)' != 'Windows_NT'">linux</PackageRid>
+    <PackageRid Condition="$([MSBuild]::IsOSPlatform('osx'))">osx</PackageRid>
+    <PackageRid>$(PackageRid)-$(TargetArchitecture)</PackageRid>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeMLNetNotices>false</IncludeMLNetNotices>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <TensorFlowConfig Include="windows"
+                      FileExtension=".zip"
+                      FilesFromArchive="lib\tensorflow.dll;
+                                        include\tensorflow\c\LICENSE"
+                      Runtime="win-x64"/>
+
+    <TensorFlowConfig Condition="'$(OS)' != 'Windows_NT'"
+                      Include="linux"
+                      FileExtension=".tar.gz"
+                      FilesFromArchive="lib\libtensorflow.so;
+                                        lib\libtensorflow_framework.so.$(TensorFlowMajorVersion);
+                                        include\tensorflow\c\LICENSE"
+                      Runtime="linux-x64" />
+
+    <TensorFlowConfig Condition="'$(OS)' != 'Windows_NT'"
+                      Include="darwin" FileExtension=".tar.gz"
+                      FilesFromArchive="lib\libtensorflow.dylib;
+                                        lib\libtensorflow_framework.$(TensorFlowMajorVersion).dylib;
+                                        include\tensorflow\c\LICENSE"
+                      Runtime="osx-x64" />
+
+    <AdditionalDownloadFile Include="https://raw.githubusercontent.com/tensorflow/tensorflow/master/LICENSE"
+                            DownloadFile="$(BinDir)LICENSE" />
+  </ItemGroup>
+
+  <Target Name="PrepareArchives">
+    <ItemGroup>
+      <!-- although we could extract all archives on all machines, mac requires a fixup which can only be run on mac 
+           so we split these per-rid and join during the official build packaging.  -->
+      <TensorFlowArchive
+                         Include="@(TensorFlowConfig->'https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-%(Identity)-x86_64-$(TensorFlowVersion)%(FileExtension)')" />
+      <!-- set up metdata used by all targets -->
+      <TensorFlowArchive DownloadFile="$(BinDir)%(FileName)%(Extension)"
+                         DownloadShaFile="$(BinDir)%(FileName)%(Extension).sha"
+                         ExtractDirectory="$(BinDir)%(FileName)"
+                         ExtractSemaphore="$(BinDir)%(FileName)\.extracted"
+                         LocalShaFile="$(MSBuildProjectDirectory)\%(FileName)%(Extension).sha"/>
+    </ItemGroup>
+    <Message Importance="high" Text="%(TensorFlowConfig.Runtime)"/>
+  </Target>
+
+  <Target Name="DownloadArchives"
+          DependsOnTargets="PrepareArchives"
+          Inputs="$(MSBuildProjectFile)"
+          Outputs="@(TensorFlowArchive->'%(DownloadFile)');@(AdditionalDownloadFile->'%(DownloadFile)')">
+    <MakeDir Directories="$(BinDir)" />
+    <ItemGroup>
+      <_downloadFiles Include="@(TensorFlowArchive);@(AdditionalDownloadFile)" Url="%(Identity)" DestinationFile="%(DownloadFile)" />
+    </ItemGroup>
+    <Message Importance="High" Text="Downloading '%(_downloadFiles.Identity)' to '$(BinDir)'." />
+    <DownloadFile SourceUrl="%(_downloadFiles.Identity)" DestinationFolder="$(BinDir)">
+      <Output TaskParameter="DownloadedFile" ItemName="Content" />
+    </DownloadFile>
+  </Target>
+
+
+  <Target Name="ValidateAndExtractArchives"
+          DependsOnTargets="DownloadArchives"
+          Inputs="@(TensorFlowArchive->'%(DownloadFile)')"
+          Outputs="@(TensorFlowArchive->'%(ExtractSemaphore)')">
+
+    <GetFileHash Files="@(TensorFlowArchive->'%(DownloadFile)')" Algorithm="SHA512">
+      <Output
+          TaskParameter="Items"
+          ItemName="FilesWithHashes" />
+    </GetFileHash>
+
+    <Message Importance="High"
+             Text="%(FilesWithHashes.Identity): %(FilesWithHashes.FileHash)" />
+
+    <ItemGroup>
+      <TensorFlowArchive>
+        <DownloadSha>@(FilesWithHashes->'%(FileHash)')</DownloadSha>
+        <LocalSha>$([System.IO.File]::ReadAllText('%(LocalShaFile)'))</LocalSha>
+      </TensorFlowArchive>
+    </ItemGroup>
+
+    <!-- If specified we'll update the checked in SHAs with the downloaded ones. -->
+    <!--<WriteLinesToFile  Condition="'$(UpdateSHA)' == 'true'"
+          File="@(TensorFlowArchive->'%(LocalShaFile)')"
+          Lines="@(TensorFlowArchive->'%(LocalShaFile)')" />-->
+
+    <Error Condition="!Exists('%(TensorFlowArchive.LocalShaFile)')" Text="SHA file '%(TensorFlowArchive.LocalShaFile)' does not exist.  Build with /p:UpdateSHA=true to save it." />
+
+    <Message Importance="High" Text="@TensorFlowArchive->'%(TensorFlowArchive.DownloadFile) - %(TensorFlowArchive.LocalSha) - %(TensorFlowArchive.DownloadSha)"/>
+
+    <!-- Validate that the downloaded SHAs match the expected checked in SHAs -->
+    <Error Condition="'%(TensorFlowArchive.LocalSha)' != '%(TensorFlowArchive.DownloadSha)'" Text="Downloaded file '%(TensorFlowArchive.DownloadFile)' has unexpected SHA.%0A  expected: %(_downloadedTensorFlowArchive.LocalSha)%0A  actual: %(_downloadedTensorFlowArchive.DownloadSha)%0ABuild with /p:UpdateSHA=true if you intentionally changed the URL and wish to update the SHAs, otherwise this could indicate an incomplete download or intercerpted URL and should be examined." />
+
+
+    <!-- The archives are valid, lets extract them, ensuring an empty directory -->
+    <RemoveDir Directories="@(TensorFlowArchive->'%(ExtractDirectory)')" />
+    <MakeDir Directories="@(TensorFlowArchive->'%(ExtractDirectory)')" />
+
+    <Message Importance="High" Text="Decompressing '%(TensorFlowArchive.DownloadFile)' to '%(TensorFlowArchive.ExtractDirectory)'." />
+
+    <Unzip Condition="'%(TensorFlowArchive.FileExtension)' == '.zip'"
+                               SourceFiles="%(TensorFlowArchive.DownloadFile)"
+                               DestinationFolder="%(TensorFlowArchive.ExtractDirectory)" />
+
+    <Exec Condition="'$(OS)' != 'Windows_NT' AND '%(TensorFlowArchive.FileExtension)' == '.tar.gz'"
+          WorkingDirectory="$(MSBuildThisFileDirectory)"
+          Command="tar -xzm --hard-dereference -f %(TensorFlowArchive.DownloadFile) -C %(TensorFlowArchive.ExtractDirectory)" />
+
+    <Exec Condition="'$(OS)' != 'Windows_NT'"
+          Command="chmod -R +w %(TensorFlowArchive.ExtractDirectory)" />
+
+    <Touch Files="@(TensorFlowArchive->'%(ExtractSemaphore)')" AlwaysCreate="true" />
+  </Target>
+
+  <!-- Select the files we want to copy out of each archive. -->
+  <Target Name="GetFilesFromArchive"
+          DependsOnTargets="ValidateAndExtractArchives" >
+    <ItemGroup>
+      <!-- batch rather than transform so that we can split FilesFromArchive metadata -->
+      <_fileFromArchive Include="%(TensorFlowArchive.FilesFromArchive)" ExtractDirectory="%(TensorFlowArchive.ExtractDirectory)" Runtime="%(TensorFlowArchive.Runtime)" />
+      <_fileFromArchive DestinationFile="%(FileName)%(Extension)"/>
+      <_fileFromArchive PackagePath="runtimes\%(_fileFromArchive.Runtime)\native\%(_fileFromArchive.DestinationFile)" />
+
+      <!-- LICENSE from the package is actually THIRD_PARTY_NOTICES-->
+      <_fileFromArchive Condition="'%(DestinationFile)' == 'LICENSE'" PackagePath="THIRD_PARTY_NOTICES.txt" Runtime="" />
+
+      <!-- copy to packaging location -->
+      <FilesFromArchive Include="@(_fileFromArchive->'%(ExtractDirectory)\%(Identity)')"
+                        TargetPath="$(PackageAssetsPath)$(MSBuildProjectName)\%(PackagePath)" />
+      <!-- include LICENSE that was downloaded from GitHub -->
+      <FilesFromArchive Include="$(BinDir)\LICENSE"
+                        TargetPath="$(PackageAssetsPath)$(MSBuildProjectName)\LICENSE.txt" />
+
+      <!-- copy to NativeAssets location, only for current RID, so that they may be used by tests -->
+      <!--<FilesFromArchive Condition="'$(PackageRID)' == '%(_fileFromArchive.Runtime)'"
+                        Include="@(_fileFromArchive->'%(ExtractDirectory)\%(Identity)')"
+                        TargetPath="$(NativeAssetsBuiltPath)\%(_fileFromArchive.DestinationFile)" />-->
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CopyFilesFromArchive"
+          DependsOnTargets="GetFilesFromArchive">
+
+    <Message Importance="High" Text="@(FilesFromArchive) -> %(FilesFromArchive.TargetPath)" />
+    <Copy SourceFiles="@(FilesFromArchive)"
+          DestinationFiles="@(FilesFromArchive->'%(TargetPath)')" />
+
+  </Target>
+
+  <Target Name="Clean">
+    <Message Importance="High" Text="Deleting $(BinDir);$(ObjDir)" />
+    <RemoveDir Directories="$(BinDir);$(ObjDir)" />
+  </Target>
+  
+</Project>
