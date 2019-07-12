@@ -12,7 +12,7 @@
 
     <PackageAssetsPath>$(BinDir)packages\</PackageAssetsPath>
     <PackageId>$(MSBuildProjectName)</PackageId>
-    <PackageVersion>0.15.0</PackageVersion>
+    <PackageVersion>$(TensorFlowVersion)</PackageVersion>
 
     <NoBuild>true</NoBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
@@ -137,7 +137,7 @@
 
     <Exec Condition="'$(OS)' != 'Windows_NT' AND '%(TensorFlowArchive.FileExtension)' == '.tar.gz'"
           WorkingDirectory="$(MSBuildThisFileDirectory)"
-          Command="tar -xzmv --hard-dereference -f %(TensorFlowArchive.DownloadFile) -C %(TensorFlowArchive.ExtractDirectory)" />
+          Command="tar -xzm --hard-dereference -f %(TensorFlowArchive.DownloadFile) -C %(TensorFlowArchive.ExtractDirectory)" />
 
     <Exec Condition="'$(OS)' != 'Windows_NT'"
           Command="chmod -R +w %(TensorFlowArchive.ExtractDirectory)" />
