@@ -1,8 +1,6 @@
 ﻿/*****************************************************************************
    Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
    
-   Portions of this file have been adapted from TensorFlowSharp, authored by Miguel de Icaza (miguel@microsoft.com)
-
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -378,7 +376,7 @@ namespace Tensorflow
         protected IntPtr CreateTensorWithoutCopying(TF_DataType dt, long[] shape, Array data, int start, int count, int element_size)
         {
             if (start < 0 || start > data.Length - count)
-                throw new ArgumentException("start + count > Array size");
+                throw new ArgumentException($"Array length {data.Length} does not match the given shape {new Shape(shape.Cast<int>().ToArray())}");
             
             // get a handle to the pinned array which we will pass on to the tensor computation engine to use
             var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
