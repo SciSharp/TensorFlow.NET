@@ -9,8 +9,8 @@
     <license type="file">LICENSE.txt</license>
     <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
     <projectUrl>https://www.tensorflow.org/</projectUrl>
-    <description>TensorFlowNET.Redist contains the TensorFlow C library version 1.14.0 redistributed as a NuGet package.</description>
-    <releaseNotes>https://github.com/tensorflow/tensorflow/releases/tag/v1.14.0</releaseNotes>
+    <description>$packageId$ contains the TensorFlow C library version $version$ redistributed as a NuGet package.</description>
+    <releaseNotes>https://github.com/tensorflow/tensorflow/releases/tag/v$version$</releaseNotes>
     <copyright>Copyright 2019 The TensorFlow Authors. All rights reserved.</copyright>
     <tags>TensorFlow</tags>
     <dependencies>
@@ -18,9 +18,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="CommonPackage.props" target="build\netstandard2.0\TensorFlowNET.Redist.props" />
-    <file src="bin\packages\TensorFlowNET.Redist\LICENSE.txt" target="LICENSE.txt" />
-    <file src="bin\packages\TensorFlowNET.Redist\THIRD_PARTY_NOTICES.txt" target="THIRD_PARTY_NOTICES.txt" />
-    <file src="bin\packages\TensorFlowNET.Redist\runtimes\**\*" target="runtimes" />
+    <file src="CommonPackage.props" target="build\netstandard2.0\$packageId$.props" />
+    <file src="bin\packages\$packageId$\LICENSE.txt" target="LICENSE.txt" />
+    <file src="bin\packages\$packageId$\THIRD_PARTY_NOTICES.txt" target="THIRD_PARTY_NOTICES.txt" />
+    <file src="bin\packages\$packageId$\runtimes\**\*" target="runtimes" />
   </files>
 </package>
