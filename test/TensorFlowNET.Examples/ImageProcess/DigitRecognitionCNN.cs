@@ -73,6 +73,8 @@ namespace TensorFlowNET.Examples.ImageProcess
         float accuracy_test = 0f;
         float loss_test = 1f;
 
+        NDArray x_train;
+
         public bool Run()
         {
             PrepareData();
@@ -241,9 +243,17 @@ namespace TensorFlowNET.Examples.ImageProcess
         public void PrepareData()
         {
             mnist = MNIST.read_data_sets("mnist", one_hot: true);
+            x_train = Reformat(mnist.train.data, mnist.train.labels);
             print("Size of:");
             print($"- Training-set:\t\t{len(mnist.train.data)}");
             print($"- Validation-set:\t{len(mnist.validation.data)}");
+        }
+
+        private NDArray Reformat(NDArray x, NDArray y)
+        {
+            var (img_size, num_ch, num_class) = (np.sqrt(x.shape[1]), 1, np.unique<int>(np.argmax(y, 1)));
+
+            return x;
         }
 
         public void Train(Session sess)

@@ -41,7 +41,11 @@ namespace Tensorflow
 
         public void close_variable_subscopes(string scope_name)
         {
+            var variable_scopes_count_tmp = new Dictionary<string, int>();
             foreach (var k in variable_scopes_count.Keys)
+                variable_scopes_count_tmp.Add(k, variable_scopes_count[k]);
+
+            foreach (var k in variable_scopes_count_tmp.Keys)
                 if (scope_name == null || k.StartsWith(scope_name + "/"))
                     variable_scopes_count[k] = 0;
         }
