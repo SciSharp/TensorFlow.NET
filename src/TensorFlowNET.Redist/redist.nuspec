@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>$packageId$</id>
+    <version>$version$</version>
+    <authors>The TensorFlow Authors</authors>
+    <owners>The TensorFlow Authors</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://www.tensorflow.org/</projectUrl>
+    <description>TensorFlowNET.Redist contains the TensorFlow C library version 1.14.0 redistributed as a NuGet package.</description>
+    <releaseNotes>https://github.com/tensorflow/tensorflow/releases/tag/v1.14.0</releaseNotes>
+    <copyright>Copyright 2019 The TensorFlow Authors. All rights reserved.</copyright>
+    <tags>TensorFlow</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="CommonPackage.props" target="build\netstandard2.0\TensorFlowNET.Redist.props" />
+    <file src="bin\packages\TensorFlowNET.Redist\LICENSE.txt" target="LICENSE.txt" />
+    <file src="bin\packages\TensorFlowNET.Redist\THIRD_PARTY_NOTICES.txt" target="THIRD_PARTY_NOTICES.txt" />
+    <file src="bin\packages\TensorFlowNET.Redist\runtimes\**\*" target="runtimes" />
+  </files>
+</package>

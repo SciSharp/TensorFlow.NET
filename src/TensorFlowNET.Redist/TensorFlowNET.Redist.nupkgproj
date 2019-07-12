@@ -2,50 +2,38 @@
   
   <PropertyGroup>
     <ProjDir>$(MSBuildThisFileDirectory)</ProjDir>
-    <BinDir>$(ProjRoot)bin\</BinDir>
-    <ObjDir>$(ProjRoot)obj\</ObjDir>
-    <PackageAssetsPath>$(BinDir)packages\</PackageAssetsPath>
+    <BinDir>$(ProjDir)bin\</BinDir>
+    <ObjDir>$(ProjDir)obj\</ObjDir>
 
-
-    <NoBuild>true</NoBuild>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    
     <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
     <TargetFramework>netstandard2.0</TargetFramework>
     <TensorFlowVersion>1.14.0</TensorFlowVersion>
     <TensorFlowMajorVersion>1</TensorFlowMajorVersion>
 
+    <PackageAssetsPath>$(BinDir)packages\</PackageAssetsPath>
+    <PackageId>$(MSBuildProjectName)</PackageId>
+    <PackageVersion>0.15.0</PackageVersion>
+
+    <NoBuild>true</NoBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+
+    <NuspecFile>Redist.nuspec</NuspecFile>
+    <NuspecProperties>packageId=$(PackageId);version=$(PackageVersion)</NuspecProperties>
+    <NuspecBasePath>$(ProjDir)</NuspecBasePath>
+
     <GenerateNuspecDependsOn>CopyFilesFromArchive</GenerateNuspecDependsOn>
-    
+
     <PackageRid Condition="'$(OS)' == 'Windows_NT'">win</PackageRid>
     <PackageRid Condition="'$(OS)' != 'Windows_NT'">linux</PackageRid>
     <PackageRid Condition="$([MSBuild]::IsOSPlatform('osx'))">osx</PackageRid>
     <PackageRid>$(PackageRid)-$(TargetArchitecture)</PackageRid>
 
-    <PackageId>TensorFlowNET.Redist</PackageId>
-    <Authors>The TensorFlow Authors</Authors>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageDescription>$(MSBuildProjectName) contains the TensorFlow C library version $(TensorFlowVersion) redistributed as a NuGet package.</PackageDescription>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Copyright>Copyright 2019 The TensorFlow Authors. All rights reserved.</Copyright>
-    <PackageProjectUrl>https://www.tensorflow.org</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/tensorflow/tensorflow/releases/tag/v$(TensorFlowVersion)</PackageReleaseNotes>
-    <PackageTags>$(PackageTags) TensorFlow</PackageTags>
-    <!-- TODO: consider PackageIconUrl -->
   </PropertyGroup>
 
   <PropertyGroup>
     <IncludeMLNetNotices>false</IncludeMLNetNotices>
   </PropertyGroup>
   
-  <ItemGroup>
-    <Content Include="CommonPackage.props" Pack="true" PackagePath="build\netstandard2.0\$(MSBuildProjectName).props" />
-    <Content Include="$(PackageAssetsPath)$(PackageId)\LICENSE.txt" Pack="true" PackagePath="" />
-    <Content Condition="Exists('$(PackageAssetsPath)\$(PackageId)\THIRD_PARTY_NOTICES.txt')" Include="$(PackageAssetsPath)\$(PackageId)\THIRD_PARTY_NOTICES.txt" Pack="true" PackagePath="" />
-    <Content Include="$(PackageAssetsPath)$(PackageId)\runtimes\**\*" Pack="true" PackagePath="runtimes" />
-  </ItemGroup>
-
   <ItemGroup>
     <TensorFlowConfig Include="windows"
                       FileExtension=".zip"
@@ -143,13 +131,13 @@
 
     <Message Importance="High" Text="Decompressing '%(TensorFlowArchive.DownloadFile)' to '%(TensorFlowArchive.ExtractDirectory)'." />
 
-    <Unzip Condition="'$(PackageRid)' == 'win-x64'"
+    <Unzip Condition="'%(TensorFlowArchive.FileExtension)' == '.zip'"
                                SourceFiles="%(TensorFlowArchive.DownloadFile)"
                                DestinationFolder="%(TensorFlowArchive.ExtractDirectory)" />
 
-    <Exec Condition="'$(OS)' != 'Windows_NT'"
-          WorkingDirectory="%(TensorFlowArchive.ExtractDirectory)"
-          Command="tar -xzmf %(TensorFlowArchive.DownloadFile) -C %(TensorFlowArchive.ExtractDirectory)" />
+    <Exec Condition="'$(OS)' != 'Windows_NT' AND '%(TensorFlowArchive.FileExtension)' == '.tar.gz'"
+          WorkingDirectory="$(MSBuildThisFileDirectory)"
+          Command="tar -xzmv --hard-dereference -f %(TensorFlowArchive.DownloadFile) -C %(TensorFlowArchive.ExtractDirectory)" />
 
     <Touch Files="@(TensorFlowArchive->'%(ExtractSemaphore)')" AlwaysCreate="true" />
   </Target>
@@ -174,14 +162,15 @@
                         TargetPath="$(PackageAssetsPath)$(MSBuildProjectName)\LICENSE.txt" />
 
       <!-- copy to NativeAssets location, only for current RID, so that they may be used by tests -->
-      <FilesFromArchive Condition="'$(PackageRID)' == '%(_fileFromArchive.Runtime)'"
+      <!--<FilesFromArchive Condition="'$(PackageRID)' == '%(_fileFromArchive.Runtime)'"
                         Include="@(_fileFromArchive->'%(ExtractDirectory)\%(Identity)')"
-                        TargetPath="$(NativeAssetsBuiltPath)\%(_fileFromArchive.DestinationFile)" />
+                        TargetPath="$(NativeAssetsBuiltPath)\%(_fileFromArchive.DestinationFile)" />-->
     </ItemGroup>
   </Target>
 
   <Target Name="CopyFilesFromArchive"
           DependsOnTargets="GetFilesFromArchive">
+
     <Message Importance="High" Text="@(FilesFromArchive) -> %(FilesFromArchive.TargetPath)" />
     <Copy SourceFiles="@(FilesFromArchive)"
           DestinationFiles="@(FilesFromArchive->'%(TargetPath)')" />
