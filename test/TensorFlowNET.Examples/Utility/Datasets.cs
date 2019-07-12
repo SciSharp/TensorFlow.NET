@@ -28,7 +28,7 @@ namespace TensorFlowNET.Examples.Utility
             var perm = np.random.permutation(y.shape[0]);
 
             np.random.shuffle(perm);
-            return (train.data[perm], train.labels[perm]);
+            return (x[perm], y[perm]);
         }
 
         /// <summary>
