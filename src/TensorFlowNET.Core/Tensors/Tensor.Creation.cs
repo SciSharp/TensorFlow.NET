@@ -564,7 +564,7 @@ namespace Tensorflow
             _id = ops.uid();
         }
 
-        private bool _isPinnedArray = false;
+        private bool _isPinnedArray => _deallocatorArgs.gc_handle != IntPtr.Zero;
 
         /// <summary>
         /// Creates a new tensor from the given array without copying memory. The array is pinned down and the pointer passed on.
@@ -620,12 +620,11 @@ namespace Tensorflow
 
             // get a handle to the pinned array which we will pass on to the tensor computation engine to use
             var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            _isPinnedArray = true;
             _deallocatorArgs = new DeallocatorArgs() { gc_handle = GCHandle.ToIntPtr(gcHandle) };
             // Free the original buffer and set flag
             Deallocator deallocator = (IntPtr ptr, IntPtr len, ref DeallocatorArgs args) =>
             {
-                if (args.deallocator_called)
+                if (args.deallocator_called || args.gc_handle==IntPtr.Zero)
                     return;
                 // note: since the ptr given to tensorflow is just the addr of the pinned object we can not directly free it! we need to free the gcHandle instead
                 GCHandle.FromIntPtr(args.gc_handle).Free();
@@ -638,6 +637,6 @@ namespace Tensorflow
                 return TF_NewTensor(dt, shape, shape.Length, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr)(count * element_size), deallocator, ref _deallocatorArgs);
         }
 
-        private DeallocatorArgs _deallocatorArgs = new DeallocatorArgs();
+        private DeallocatorArgs _deallocatorArgs = new DeallocatorArgs() { gc_handle = IntPtr.Zero };
     }
 }
