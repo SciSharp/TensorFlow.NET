@@ -31,7 +31,21 @@ namespace Tensorflow
         /// <summary>
         /// true if unmanaged buffer has been freed.
         /// </summary>
-        private bool deallocator_called => _deallocatorArgs.deallocator_called;
+        private bool _deallocator_called => _deallocatorArgs.deallocator_called;
+
+        /// <summary>
+        /// true if the Tensor was created from a managed array
+        /// </summary>
+        private bool _isPinnedArray => _deallocatorArgs.gc_handle != IntPtr.Zero;
+
+        /// <summary>
+        /// This holds values that are used by the unmanaged deallocator callback
+        /// </summary>
+        private DeallocatorArgs _deallocatorArgs = new DeallocatorArgs() { gc_handle = IntPtr.Zero };
+
+        // note: they must be assigned to a static variable in order to work as unmanaged callbacks
+        static Deallocator _hGlobalDeallocator = FreeHGlobalMemory;
+        static Deallocator _gcHandleDeallocator = FreeGCHandle;
 
         public Tensor(IntPtr handle)
         {
@@ -94,7 +108,7 @@ namespace Tensorflow
         {
             var v = (sbyte*)Marshal.AllocHGlobal(sizeof(sbyte));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(sbyte), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(sbyte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -120,7 +134,7 @@ namespace Tensorflow
         {
             var v = (byte*)Marshal.AllocHGlobal(sizeof(byte));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(byte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(byte), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(byte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(byte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -146,7 +160,7 @@ namespace Tensorflow
         {
             var v = (short*)Marshal.AllocHGlobal(sizeof(short));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(short)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(short), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(short)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(short), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -172,7 +186,7 @@ namespace Tensorflow
         {
             var v = (ushort*)Marshal.AllocHGlobal(sizeof(ushort));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ushort)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ushort), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ushort)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ushort), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -198,7 +212,7 @@ namespace Tensorflow
         {
             var v = (int*)Marshal.AllocHGlobal(sizeof(int));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(int)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(int), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(int)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(int), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -224,7 +238,7 @@ namespace Tensorflow
         {
             var v = (uint*)Marshal.AllocHGlobal(sizeof(uint));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(uint)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(uint), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(uint)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(uint), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -250,7 +264,7 @@ namespace Tensorflow
         {
             var v = (long*)Marshal.AllocHGlobal(sizeof(long));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(long)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(long), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(long)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(long), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -276,7 +290,7 @@ namespace Tensorflow
         {
             var v = (ulong*)Marshal.AllocHGlobal(sizeof(ulong));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ulong)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ulong), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ulong)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ulong), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -302,7 +316,7 @@ namespace Tensorflow
         {
             var v = (float*)Marshal.AllocHGlobal(sizeof(float));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(float)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(float), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(float)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(float), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -328,7 +342,7 @@ namespace Tensorflow
         {
             var v = (double*)Marshal.AllocHGlobal(sizeof(double));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(double)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(double), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(double)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(double), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         
         /// <summary>
@@ -354,7 +368,7 @@ namespace Tensorflow
         {
             var v = (Complex*)Marshal.AllocHGlobal(sizeof(Complex));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(Complex)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(Complex), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(Complex)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(Complex), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
 #endif
 
@@ -444,7 +458,7 @@ namespace Tensorflow
                 dims.Length,
                 dotHandle,
                 (UIntPtr)buffersize,
-                hGlobalDeallocator,
+                _hGlobalDeallocator,
                 ref _deallocatorArgs);
 
             return tfHandle;
@@ -458,8 +472,7 @@ namespace Tensorflow
             _id = ops.uid();
         }
 
-        private bool _isPinnedArray => _deallocatorArgs.gc_handle != IntPtr.Zero;
-
+       
         /// <summary>
         /// Creates a new tensor from the given array without copying memory. The array is pinned down and the pointer passed on.
         /// </summary>
@@ -516,16 +529,10 @@ namespace Tensorflow
             var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             _deallocatorArgs = new DeallocatorArgs() { gc_handle = GCHandle.ToIntPtr(gcHandle) };
             if (shape == null || shape.Length == 0)
-                return TF_NewTensor(dt, new long[0], 0, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr)(count * element_size), gcHandleDeallocator, ref _deallocatorArgs);
+                return TF_NewTensor(dt, new long[0], 0, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr)(count * element_size), _gcHandleDeallocator, ref _deallocatorArgs);
             else
-                return TF_NewTensor(dt, shape, shape.Length, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr)(count * element_size), gcHandleDeallocator, ref _deallocatorArgs);
+                return TF_NewTensor(dt, shape, shape.Length, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr)(count * element_size), _gcHandleDeallocator, ref _deallocatorArgs);
         }
-
-        private DeallocatorArgs _deallocatorArgs = new DeallocatorArgs() { gc_handle = IntPtr.Zero };
-
-        // note: they must be assigned to a static variable in order to work as unmanaged callbacks
-        static Deallocator hGlobalDeallocator = FreeHGlobalMemory;
-        static Deallocator gcHandleDeallocator = FreeGCHandle;
 
         [MonoPInvokeCallback(typeof(Deallocator))]
         internal static void FreeHGlobalMemory(IntPtr dataPtr, IntPtr len, ref DeallocatorArgs args)

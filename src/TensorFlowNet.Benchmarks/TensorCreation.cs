@@ -7,7 +7,7 @@ using Tensorflow;
 
 namespace TensorFlowNet.Benchmark
 {
-    [SimpleJob(launchCount: 1, warmupCount: 10, targetCount: 30)]
+    [SimpleJob(launchCount: 1, warmupCount: 2, targetCount: 10)]
     [MinColumn, MaxColumn, MeanColumn, MedianColumn]
     public class TensorCreation
     {
@@ -16,16 +16,19 @@ namespace TensorFlowNet.Benchmark
         [GlobalSetup]
         public void Setup()
         {
-            data = new double[1000];
+            data = new double[10];
         }
 
         [Benchmark]
         public void TensorFromArray()
         {
             var g=new Graph();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 var tensor = new Tensor(data);
+                {
+
+                }
             }
         }
 
@@ -34,9 +37,12 @@ namespace TensorFlowNet.Benchmark
         public void TensorFromNDArray()
         {
             var g = new Graph();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 var tensor = new Tensor(new NDArray(data));
+                {
+
+                }
             }
         }
 

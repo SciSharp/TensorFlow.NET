@@ -350,12 +350,35 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            if (_handle != IntPtr.Zero)
+            IntPtr h=IntPtr.Zero;
+            lock (this)
             {
-                c_api.TF_DeleteTensor(_handle);
-                _handle = IntPtr.Zero; 
+                h = _handle;
+                _handle=IntPtr.Zero;
             }
+            if (h != IntPtr.Zero)
+                c_api.TF_DeleteTensor(_handle);
             status.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose the tensor when it gets garbage collected
+        /// </summary>
+        ~Tensor()
+        {
+            Dispose();
+        }
+
+        public bool IsDisposed
+        {
+            get
+            {
+                lock (this)
+                {
+                    return _handle == IntPtr.Zero;
+                }
+            }
         }
 
     }

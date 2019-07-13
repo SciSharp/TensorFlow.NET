@@ -26,7 +26,7 @@ namespace Tensorflow
     /// </summary>
     public class Status : IDisposable
     {
-        protected readonly IntPtr _handle;
+        protected IntPtr _handle;
 
         /// <summary>
         /// Error message
@@ -71,7 +71,20 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            c_api.TF_DeleteStatus(_handle);
+            IntPtr h = IntPtr.Zero;
+            lock (this)
+            {
+                h = _handle;
+                _handle = IntPtr.Zero;
+            }
+            if (h != IntPtr.Zero)
+                c_api.TF_DeleteStatus(h);
+            GC.SuppressFinalize(this);
+        }
+
+        ~Status()
+        {
+            Dispose();
         }
     }
 }

@@ -5,17 +5,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
     public class TensorTest : CApiTest
     {
-        /// <summary>
-        /// Port from c_api_test.cc
-        /// `TEST(CAPI, AllocateTensor)`
-        /// </summary>
+        [TestMethod]
+        public void TensorDeallocationThreadSafety()
+        {
+            var tensors = new Tensor[1000];
+            foreach (var i in range(1000))
+            {
+                tensors[i] = new Tensor(new int[1000]);
+            }
+            SemaphoreSlim s = new SemaphoreSlim(0, 2);
+            SemaphoreSlim s_done = new SemaphoreSlim(0, 2);
+
+            var t1 = new Thread(() =>
+            {
+                s.Wait();
+                foreach (var t in tensors)
+                    t.Dispose();
+                s_done.Release();
+            });
+
+            var t2 = new Thread(() =>
+            {
+                s.Wait();
+                foreach (var t in tensors)
+                    t.Dispose();
+                s_done.Release();
+            });
+
+            t1.Start();
+            t2.Start();
+            s.Release(2);
+            s_done.Wait();
+            s_done.Wait();
+
+            foreach(var t in tensors)
+                Assert.IsTrue(t.IsDisposed);
+        }
+
+
         [TestMethod]
         public void AllocateTensor()
         {
@@ -28,6 +65,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(num_bytes, t.bytesize);
             t.Dispose();*/
         }
+
 
         /// <summary>
         /// Port from c_api_test.cc
