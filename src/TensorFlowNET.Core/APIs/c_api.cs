@@ -53,7 +53,13 @@ namespace Tensorflow
             return handle == IntPtr.Zero ? String.Empty : Marshal.PtrToStringAnsi(handle);
         }
 
-        public delegate void Deallocator(IntPtr data, IntPtr size, ref bool deallocator);
+        public delegate void Deallocator(IntPtr data, IntPtr size, ref DeallocatorArgs args);
+
+        public struct DeallocatorArgs
+        {
+            public bool deallocator_called;
+            public IntPtr gc_handle;
+        }
 
         [DllImport(TensorFlowLibName)]
         public static unsafe extern IntPtr TF_Version();
