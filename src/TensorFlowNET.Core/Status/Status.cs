@@ -40,7 +40,6 @@ namespace Tensorflow
 
         public Status()
         {
-            c_api_util.DownloadLibrary();
             _handle = c_api.TF_NewStatus();
         }
 

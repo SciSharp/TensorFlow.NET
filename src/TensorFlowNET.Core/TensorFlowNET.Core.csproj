@@ -58,8 +58,9 @@ Learn more about .NET AI: https://medium.com/scisharp</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.8.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.9.0" />
     <PackageReference Include="NumSharp" Version="0.10.3" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="1.14.0" />
   </ItemGroup>
 
   <ItemGroup>

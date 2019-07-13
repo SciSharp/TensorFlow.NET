@@ -62,14 +62,7 @@ namespace Tensorflow
             context.default_execution_mode = Context.EAGER_MODE;
         }
 
-        public static string VERSION
-        {
-            get
-            {
-                c_api_util.DownloadLibrary();
-                return c_api.StringPiece(c_api.TF_Version());
-            }
-        }
+        public static string VERSION => c_api.StringPiece(c_api.TF_Version());
 
         public static Session Session()
         {
