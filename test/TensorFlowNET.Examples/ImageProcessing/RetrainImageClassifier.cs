@@ -557,7 +557,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                             Tensor decoded_image_tensor, Tensor resized_input_tensor, Tensor bottleneck_tensor)
         {
             // First decode the JPEG image, resize it, and rescale the pixel values.
-            var resized_input_values = sess.run(decoded_image_tensor, new FeedItem(image_data_tensor, image_data));
+            var resized_input_values = sess.run(decoded_image_tensor, new FeedItem(image_data_tensor, new Tensor( image_data, TF_DataType.TF_STRING)));
             // Then run it through the recognition network.
             var bottleneck_values = sess.run(bottleneck_tensor, new FeedItem(resized_input_tensor, resized_input_values));
             bottleneck_values = np.squeeze(bottleneck_values);
@@ -644,7 +644,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         {
             // height, width, depth
             var input_dim = (299, 299, 3);
-            var jpeg_data = tf.placeholder(tf.chars, name: "DecodeJPGInput");
+            var jpeg_data = tf.placeholder(tf.@string, name: "DecodeJPGInput");
             var decoded_image = tf.image.decode_jpeg(jpeg_data, channels: input_dim.Item3);
             // Convert from full range of uint8 to range [0,1] of float32.
             var decoded_image_as_float = tf.image.convert_image_dtype(decoded_image, tf.float32);

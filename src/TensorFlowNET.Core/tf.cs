@@ -24,7 +24,8 @@ namespace Tensorflow
 {
     public static partial class tf
     {
-        public static TF_DataType bytes = TF_DataType.TF_STRING;
+        public static TF_DataType @byte = TF_DataType.TF_UINT8;
+        public static TF_DataType @sbyte = TF_DataType.TF_INT8;
         public static TF_DataType int16 = TF_DataType.TF_INT16;
         public static TF_DataType int32 = TF_DataType.TF_INT32;
         public static TF_DataType int64 = TF_DataType.TF_INT64;
@@ -33,6 +34,7 @@ namespace Tensorflow
         public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
         public static TF_DataType @bool = TF_DataType.TF_BOOL;
         public static TF_DataType chars = TF_DataType.TF_STRING;
+        public static TF_DataType @string = TF_DataType.TF_STRING;
 
         public static Context context = new Context(new ContextOptions(), new Status());
 
