@@ -65,11 +65,12 @@ namespace TensorFlowNET.UnitTest.ops_test
             });
         }
 
+        [Ignore("need tesnroflow expose UpdateEdge API")]
         [TestMethod]
         public void TestCond()
         {
             var graph = tf.Graph().as_default();
-            with<Graph>(graph, g =>
+            with(graph, g =>
             {
                 var x = constant_op.constant(10);
 

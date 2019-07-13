@@ -12,6 +12,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
     [TestClass]
     public class CondTestCases : PythonTest
     {
+        [Ignore("need tesnroflow expose AddControlInput API")]
         [TestMethod]
         public void testCondTrue_ConstOnly()
         {
@@ -31,6 +32,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
             });
         }
 
+        [Ignore("need tesnroflow expose AddControlInput API")]
         [TestMethod]
         public void testCondFalse_ConstOnly()
         {
@@ -50,6 +52,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
             });
         }
 
+        [Ignore("need tesnroflow expose AddControlInput API")]
         [TestMethod]
         public void testCondTrue()
         {
@@ -66,6 +69,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
             assertEquals(result, 34);
         }
 
+        [Ignore("need tesnroflow expose AddControlInput API")]
         [TestMethod]
         public void testCondFalse()
         {

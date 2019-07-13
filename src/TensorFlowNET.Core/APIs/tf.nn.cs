@@ -127,6 +127,8 @@ namespace Tensorflow
                 });
             }
 
+            public static rnn_cell_impl rnn_cell => new rnn_cell_impl();
+
             public static Tensor softmax(Tensor logits, int axis = -1, string name = null)
                 => gen_nn_ops.softmax(logits, name);
 
