@@ -14,7 +14,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BiLstmCrfNer : IExample
     {
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
         public bool IsImportingGraph { get; set; } = false;
 
         public string Name => "bi-LSTM + CRF NER";

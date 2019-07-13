@@ -17,7 +17,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class BinaryTextClassification : IExample
     {
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
         public string Name => "Binary Text Classification";
         public bool IsImportingGraph { get; set; } = true;
 

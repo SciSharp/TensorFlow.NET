@@ -34,7 +34,7 @@ namespace TensorFlowNET.Examples
     /// </summary>
     public class KMeansClustering : IExample
     {
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
         public string Name => "K-means Clustering";
         public bool IsImportingGraph { get; set; } = true;
 

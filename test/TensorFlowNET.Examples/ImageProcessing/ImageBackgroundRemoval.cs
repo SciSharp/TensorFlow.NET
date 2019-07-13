@@ -15,7 +15,7 @@ namespace TensorFlowNET.Examples.ImageProcess
     /// </summary>
     public class ImageBackgroundRemoval : IExample
     {
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
         public bool IsImportingGraph { get; set; } = true;
 
         public string Name => "Image Background Removal";
