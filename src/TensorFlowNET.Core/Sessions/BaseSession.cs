@@ -19,6 +19,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -86,57 +87,8 @@ namespace Tensorflow
                     foreach (var (subfeed, subfeed_val) in feed_fn(feed))
                     {
                         var subfeed_t = _graph.as_graph_element(subfeed, allow_tensor: true, allow_operation: false);
-                        var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype();
-
-                        switch (subfeed_val)
-                        {
-                            case IntPtr val:
-                                feed_dict_tensor[subfeed_t] = val;
-                                break;
-                            case NDArray val:
-                                feed_dict_tensor[subfeed_t] = val;
-                                break;
-                            case float val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case double val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case short val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case int val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case long val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case long[] val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case int[] val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case string val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case byte[] val:
-                                feed_dict_tensor[subfeed_t] = np.array(val);
-                                break;
-                            case char[] val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case bool val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            case bool[] val:
-                                feed_dict_tensor[subfeed_t] = (NDArray)val;
-                                break;
-                            default:
-                                Console.WriteLine($"can't handle data type of subfeed_val");
-                                throw new NotImplementedException("_run subfeed");
-                        }
-
+                        //var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype(); // subfeed_dtype was never used
+                        feed_dict_tensor[subfeed_t] = subfeed_val;
                         feed_map[subfeed_t.name] = (subfeed_t, subfeed_val);
                     }
                 }
@@ -181,20 +133,72 @@ namespace Tensorflow
                 {
                     switch (x.Value)
                     {
-                        case IntPtr pointer:
-                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), pointer);
-                        case Tensor t1:
-                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), t1);
-                        case NDArray nd:
-                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(nd, tensor.dtype));
-                        case int intVal:
-                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(intVal));
-                        case float floatVal:
-                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(floatVal));
-                        case double doubleVal:
-                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(doubleVal));
+#if _REGEN
+        %types=["sbyte", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
+        %foreach types%
+                        case #1 v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case #1[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+        %
+#else
+                        case sbyte v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case sbyte[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case byte v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case byte[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case short v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case short[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case ushort v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case ushort[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case int v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case int[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case uint v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case uint[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case long v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case long[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case ulong v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case ulong[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case float v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case float[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case double v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case double[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case Complex v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case Complex[] v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+#endif
+                        case bool v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor((byte)(v?1:0), TF_DataType.TF_BOOL));
+                        case string v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case IntPtr v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v));
+                        case Tensor v:
+                            return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), v);
+                        case NDArray v:
+                                return new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v, tensor.dtype));
                         default:
-                            throw new NotImplementedException("feed_dict data type");
+                            throw new NotImplementedException($"feed_dict data type {(x.Value?.GetType().Name ?? "<null>")}");
                     }
                 }
                 throw new NotImplementedException("_do_run.feed_dict");
