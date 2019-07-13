@@ -44,7 +44,7 @@ namespace Tensorflow
         /// <summary>
         /// The string name of this tensor.
         /// </summary>
-        public string name => $"{(op == null ? "Operation was not named" : $"{op.name}:{_value_index}")}";
+        public string name => $"{(op == null ? "<unnamed Operation>" : $"{op.name}:{_value_index}")}";
 
         private int _value_index;
         public int value_index => _value_index;
@@ -350,8 +350,11 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            c_api.TF_DeleteTensor(_handle);
-            _handle = IntPtr.Zero;
+            if (_handle != IntPtr.Zero)
+            {
+                c_api.TF_DeleteTensor(_handle);
+                _handle = IntPtr.Zero; 
+            }
             status.Dispose();
         }
 
