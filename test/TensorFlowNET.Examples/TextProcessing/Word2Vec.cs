@@ -51,7 +51,7 @@ namespace TensorFlowNET.Examples
 
             var graph = tf.Graph().as_default();
 
-            tf.train.import_meta_graph("graph/word2vec.meta");
+            tf.train.import_meta_graph($"graph{Path.DirectorySeparatorChar}word2vec.meta");
 
             // Input data
             Tensor X = graph.OperationByName("Placeholder");
@@ -169,10 +169,10 @@ namespace TensorFlowNET.Examples
             url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/data/text8.zip";
             Web.Download(url, "word2vec", "text8.zip");
             // Unzip the dataset file. Text has already been processed
-            Compress.UnZip(@"word2vec\text8.zip", "word2vec");
+            Compress.UnZip($"word2vec{Path.DirectorySeparatorChar}text8.zip", "word2vec");
 
             int wordId = 0;
-            text_words = File.ReadAllText(@"word2vec\text8").Trim().ToLower().Split();
+            text_words = File.ReadAllText($"word2vec{Path.DirectorySeparatorChar}text8").Trim().ToLower().Split();
             // Build the dictionary and replace rare words with UNK token
             word2id = text_words.GroupBy(x => x)
                 .Select(x => new WordId
