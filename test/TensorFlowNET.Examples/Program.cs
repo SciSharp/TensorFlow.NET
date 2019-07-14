@@ -78,6 +78,7 @@ namespace TensorFlowNET.Examples
             success.ForEach(x => Console.WriteLine($"{x} is OK!", Color.Green));
             errors.ForEach(x => Console.WriteLine($"{x} is Failed!", Color.Red));
 
+            Console.WriteLine($"{examples.Length} examples are completed.");
             Console.ReadLine();
         }
     }

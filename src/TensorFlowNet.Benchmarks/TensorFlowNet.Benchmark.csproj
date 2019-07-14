@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,17 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="tensorflow.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="tensorflow.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
