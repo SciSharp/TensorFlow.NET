@@ -143,15 +143,15 @@ Example runner will download all the required files like training data and model
 * [Nearest Neighbor](test/TensorFlowNET.Examples/BasicModels/NearestNeighbor.cs)
 * [Naive Bayes Classification](test/TensorFlowNET.Examples/BasicModels/NaiveBayesClassifier.cs)
 * [Full Connected Neural Network](test/TensorFlowNET.Examples/ImageProcess/DigitRecognitionNN.cs)
-* [Image Recognition](test/TensorFlowNET.Examples/ImageProcess)
+* [Image Processing](test/TensorFlowNET.Examples/ImageProcessing)
 * [K-means Clustering](test/TensorFlowNET.Examples/BasicModels/KMeansClustering.cs)
 * [NN XOR](test/TensorFlowNET.Examples/BasicModels/NeuralNetXor.cs)
-* [Object Detection](test/TensorFlowNET.Examples/ImageProcess/ObjectDetection.cs)
-* [Text Classification](test/TensorFlowNET.Examples/TextProcess/BinaryTextClassification.cs)
-* [CNN Text Classification](test/TensorFlowNET.Examples/TextProcess/cnn_models/VdCnn.cs)
-* [MNIST CNN](test/TensorFlowNET.Examples/ImageProcess/DigitRecognitionCNN.cs)
-* [Named Entity Recognition](test/TensorFlowNET.Examples/TextProcess/NER)
-* [Transfer Learning for Image Classification in InceptionV3](test/TensorFlowNET.Examples/ImageProcess/RetrainImageClassifier.cs)
+* [Object Detection](test/TensorFlowNET.Examples/ImageProcessing/ObjectDetection.cs)
+* [Text Classification](test/TensorFlowNET.Examples/TextProcessing/BinaryTextClassification.cs)
+* [CNN Text Classification](test/TensorFlowNET.Examples/TextProcessing/cnn_models/VdCnn.cs)
+* [MNIST CNN](test/TensorFlowNET.Examples/ImageProcessing/DigitRecognitionCNN.cs)
+* [Named Entity Recognition](test/TensorFlowNET.Examples/TextProcessing/NER)
+* [Transfer Learning for Image Classification in InceptionV3](test/TensorFlowNET.Examples/ImageProcessing/RetrainImageClassifier.cs)
 
 More troubleshooting of running example refer [here](tensorflowlib/README.md).
 
@@ -160,12 +160,12 @@ More troubleshooting of running example refer [here](tensorflowlib/README.md).
 Feel like contributing to one of the hottest projects in the Machine Learning field? Want to know how Tensorflow magically creates the computational graph? We appreciate every contribution however small. There are tasks for novices to experts alike, if everyone tackles only a small task the sum of contributions will be huge.
 
 You can:
-* Let everyone know about this project (trivial)
-* Port Tensorflow unit tests from Python to C# (easy)
-* Port missing Tensorflow code from Python to C# (easy)
-* Port Tensorflow examples to C# and raise issues if you come accross missing parts of the API (easy)
-* Debug one of the unit tests that is marked as Ignored to get it to work (can be challenging)
-* Debug one of the not yet working examples and get it to work (hard)
+* Let everyone know about this project
+* Port Tensorflow unit tests from Python to C#
+* Port missing Tensorflow code from Python to C#
+* Port Tensorflow examples to C# and raise issues if you come accross missing parts of the API
+* Debug one of the unit tests that is marked as Ignored to get it to work
+* Debug one of the not yet working examples and get it to work
 
 ### How to debug unit tests:
 
@@ -195,5 +195,5 @@ Scan QR code to join Tencent TIM group:
 
 ![SciSharp STACK](docs/TIM.jpg)
 
-![SciSharp](https://avatars3.githubusercontent.com/u/44989469)
+![SciSharp](https://avatars3.githubusercontent.com/u/44989469) TensorFlow.NET is a part of [SciSharp STACK](https://scisharp.github.io/SciSharp/)
 
