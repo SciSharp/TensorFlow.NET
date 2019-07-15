@@ -102,27 +102,26 @@
           ItemName="FilesWithHashes" />
     </GetFileHash>
 
-    <Message Importance="High"
-             Text="%(FilesWithHashes.Identity): %(FilesWithHashes.FileHash)" />
+    <WriteLinesToFile File="%(FilesWithHashes.Identity).sha" Lines="%(FilesWithHashes.FileHash)" Overwrite="true"/>
+
+    <!-- If specified we'll update the checked in SHAs with the downloaded ones. -->
+    <Copy Condition="'$(UpdateSHA)' == 'true'"
+          SourceFiles="@(TensorFlowArchive->'%(DownloadShaFile)')"
+          DestinationFiles="@(TensorFlowArchive->'%(LocalShaFile)')" />
 
     <ItemGroup>
       <TensorFlowArchive>
         <DownloadSha>@(FilesWithHashes->'%(FileHash)')</DownloadSha>
-        <LocalSha>$([System.IO.File]::ReadAllText('%(LocalShaFile)'))</LocalSha>
+        <LocalSha>$([System.IO.File]::ReadAllText('%(LocalShaFile)').Replace("%0A", ""))</LocalSha>
       </TensorFlowArchive>
     </ItemGroup>
-
-    <!-- If specified we'll update the checked in SHAs with the downloaded ones. -->
-    <!--<WriteLinesToFile  Condition="'$(UpdateSHA)' == 'true'"
-          File="@(TensorFlowArchive->'%(LocalShaFile)')"
-          Lines="@(TensorFlowArchive->'%(LocalShaFile)')" />-->
 
     <Error Condition="!Exists('%(TensorFlowArchive.LocalShaFile)')" Text="SHA file '%(TensorFlowArchive.LocalShaFile)' does not exist.  Build with /p:UpdateSHA=true to save it." />
 
     <Message Importance="High" Text="@TensorFlowArchive->'%(TensorFlowArchive.DownloadFile) - %(TensorFlowArchive.LocalSha) - %(TensorFlowArchive.DownloadSha)"/>
 
     <!-- Validate that the downloaded SHAs match the expected checked in SHAs -->
-    <Error Condition="'%(TensorFlowArchive.LocalSha)' != '%(TensorFlowArchive.DownloadSha)'" Text="Downloaded file '%(TensorFlowArchive.DownloadFile)' has unexpected SHA.%0A  expected: %(_downloadedTensorFlowArchive.LocalSha)%0A  actual: %(_downloadedTensorFlowArchive.DownloadSha)%0ABuild with /p:UpdateSHA=true if you intentionally changed the URL and wish to update the SHAs, otherwise this could indicate an incomplete download or intercerpted URL and should be examined." />
+    <Error Condition="'%(TensorFlowArchive.LocalSha)' != '%(TensorFlowArchive.DownloadSha)'" Text="Downloaded file '%(TensorFlowArchive.DownloadFile)' has unexpected SHA.%0A  expected: %(TensorFlowArchive.LocalSha)%0A  --actual: %(TensorFlowArchive.DownloadSha)%0ABuild with /p:UpdateSHA=true if you intentionally changed the URL and wish to update the SHAs, otherwise this could indicate an incomplete download or intercerpted URL and should be examined." />
 
 
     <!-- The archives are valid, lets extract them, ensuring an empty directory -->
