@@ -30,3 +30,4 @@ Welcome to TensorFlow.NET's documentation!
    NearestNeighbor
    ImageRecognition
    NeuralNetwork
+   ConvolutionNeuralNetwork

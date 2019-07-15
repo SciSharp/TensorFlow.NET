@@ -14,3 +14,8 @@ sphinx-quickstarts
 ```cmd
 make html
 ```
+
+
+
+Access the compiled docs: [https://tensorflownet.readthedocs.io](https://tensorflownet.readthedocs.io/)
+

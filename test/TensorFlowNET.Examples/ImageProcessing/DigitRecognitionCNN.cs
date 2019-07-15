@@ -40,7 +40,6 @@ namespace TensorFlowNET.Examples.ImageProcess
         string logs_path = "logs";
 
         const int img_h = 28, img_w = 28; // MNIST images are 28x28
-        int img_size_flat = img_h * img_w; // 784, the total number of pixels
         int n_classes = 10; // Number of classes, one class per digit
         int n_channels = 1;
 
@@ -63,7 +62,6 @@ namespace TensorFlowNET.Examples.ImageProcess
 
         // Fully-connected layer.
         int h1 = 128; // Number of neurons in fully-connected layer.
-
 
         Tensor x, y;
         Tensor loss, accuracy, cls_prediction;
@@ -254,6 +252,12 @@ namespace TensorFlowNET.Examples.ImageProcess
             });
         }
 
+        /// <summary>
+        /// Create a weight variable with appropriate initialization
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="shape"></param>
+        /// <returns></returns>
         private RefVariable weight_variable(string name, int[] shape)
         {
             var initer = tf.truncated_normal_initializer(stddev: 0.01f);
