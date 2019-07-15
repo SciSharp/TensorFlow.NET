@@ -112,7 +112,7 @@
     <ItemGroup>
       <TensorFlowArchive>
         <DownloadSha>@(FilesWithHashes->'%(FileHash)')</DownloadSha>
-        <LocalSha>$([System.IO.File]::ReadAllText('%(LocalShaFile)').Replace("%0A", ""))</LocalSha>
+        <LocalSha>$([System.IO.File]::ReadAllText('%(LocalShaFile)').Replace("%0A", "").Replace("%0D", ""))</LocalSha>
       </TensorFlowArchive>
     </ItemGroup>
 
