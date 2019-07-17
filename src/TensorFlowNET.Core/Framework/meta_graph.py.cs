@@ -134,7 +134,7 @@ namespace Tensorflow
                                         }
                                         break;
                                     default:
-                                        throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
+                                        continue;
                                 }
                             }
                         }
