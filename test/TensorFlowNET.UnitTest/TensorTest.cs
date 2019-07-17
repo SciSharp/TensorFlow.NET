@@ -48,10 +48,21 @@ namespace TensorFlowNET.UnitTest
             s_done.Wait();
             s_done.Wait();
 
-            foreach(var t in tensors)
+            foreach (var t in tensors)
                 Assert.IsTrue(t.IsDisposed);
         }
 
+        [TestMethod]
+        public void TensorFromSpan()
+        {
+            var array = new int[1000];
+            var span = new Span<int>(array, 100, 500);
+            using (var t = new Tensor(span, new long[] { span.Length }))
+            {
+                Assert.IsFalse(t.IsDisposed);
+                Assert.AreEqual(2000, (int)t.bytesize);
+            }
+        }
 
         [TestMethod]
         public void AllocateTensor()

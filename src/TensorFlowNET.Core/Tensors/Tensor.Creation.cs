@@ -57,6 +57,14 @@ namespace Tensorflow
         %foreach types%
         
         /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<#1> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<#1>(dType ?? dtypes.as_dtype(typeof(#1)), shape, data);
+        }
+
+        /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(#1[] data, TF_DataType? dType = null)
@@ -79,18 +87,29 @@ namespace Tensorflow
         {
             var v = (#1*)Marshal.AllocHGlobal(sizeof(#1));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(#1)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(#1), deallocator: hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(#1)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(#1), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
         %
 #else
 
-        
+
+
+
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<sbyte> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<sbyte>(dType ?? dtypes.as_dtype(typeof(sbyte)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(sbyte[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(sbyte)), new long[]{data.Length}, data, Marshal.SizeOf<sbyte>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(sbyte)), new long[] { data.Length }, data, Marshal.SizeOf<sbyte>());
         }
 
         /// <summary>
@@ -108,15 +127,23 @@ namespace Tensorflow
         {
             var v = (sbyte*)Marshal.AllocHGlobal(sizeof(sbyte));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(sbyte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(sbyte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<byte> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<byte>(dType ?? dtypes.as_dtype(typeof(byte)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(byte[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(byte)), new long[]{data.Length}, data, Marshal.SizeOf<byte>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(byte)), new long[] { data.Length }, data, Marshal.SizeOf<byte>());
         }
 
         /// <summary>
@@ -134,15 +161,23 @@ namespace Tensorflow
         {
             var v = (byte*)Marshal.AllocHGlobal(sizeof(byte));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(byte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(byte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(byte)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(byte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<short> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<short>(dType ?? dtypes.as_dtype(typeof(short)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(short[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(short)), new long[]{data.Length}, data, Marshal.SizeOf<short>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(short)), new long[] { data.Length }, data, Marshal.SizeOf<short>());
         }
 
         /// <summary>
@@ -160,15 +195,23 @@ namespace Tensorflow
         {
             var v = (short*)Marshal.AllocHGlobal(sizeof(short));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(short)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(short), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(short)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(short), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<ushort> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<ushort>(dType ?? dtypes.as_dtype(typeof(ushort)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(ushort[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(ushort)), new long[]{data.Length}, data, Marshal.SizeOf<ushort>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(ushort)), new long[] { data.Length }, data, Marshal.SizeOf<ushort>());
         }
 
         /// <summary>
@@ -186,15 +229,23 @@ namespace Tensorflow
         {
             var v = (ushort*)Marshal.AllocHGlobal(sizeof(ushort));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ushort)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ushort), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ushort)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ushort), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<int> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<int>(dType ?? dtypes.as_dtype(typeof(int)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(int[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(int)), new long[]{data.Length}, data, Marshal.SizeOf<int>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(int)), new long[] { data.Length }, data, Marshal.SizeOf<int>());
         }
 
         /// <summary>
@@ -212,15 +263,23 @@ namespace Tensorflow
         {
             var v = (int*)Marshal.AllocHGlobal(sizeof(int));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(int)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(int), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(int)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(int), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<uint> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<uint>(dType ?? dtypes.as_dtype(typeof(uint)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(uint[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(uint)), new long[]{data.Length}, data, Marshal.SizeOf<uint>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(uint)), new long[] { data.Length }, data, Marshal.SizeOf<uint>());
         }
 
         /// <summary>
@@ -238,15 +297,23 @@ namespace Tensorflow
         {
             var v = (uint*)Marshal.AllocHGlobal(sizeof(uint));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(uint)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(uint), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(uint)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(uint), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<long> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<long>(dType ?? dtypes.as_dtype(typeof(long)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(long[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(long)), new long[]{data.Length}, data, Marshal.SizeOf<long>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(long)), new long[] { data.Length }, data, Marshal.SizeOf<long>());
         }
 
         /// <summary>
@@ -264,15 +331,23 @@ namespace Tensorflow
         {
             var v = (long*)Marshal.AllocHGlobal(sizeof(long));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(long)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(long), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(long)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(long), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<ulong> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<ulong>(dType ?? dtypes.as_dtype(typeof(ulong)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(ulong[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(ulong)), new long[]{data.Length}, data, Marshal.SizeOf<ulong>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(ulong)), new long[] { data.Length }, data, Marshal.SizeOf<ulong>());
         }
 
         /// <summary>
@@ -290,15 +365,23 @@ namespace Tensorflow
         {
             var v = (ulong*)Marshal.AllocHGlobal(sizeof(ulong));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ulong)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ulong), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ulong)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ulong), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<float> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<float>(dType ?? dtypes.as_dtype(typeof(float)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(float[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(float)), new long[]{data.Length}, data, Marshal.SizeOf<float>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(float)), new long[] { data.Length }, data, Marshal.SizeOf<float>());
         }
 
         /// <summary>
@@ -316,15 +399,23 @@ namespace Tensorflow
         {
             var v = (float*)Marshal.AllocHGlobal(sizeof(float));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(float)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(float), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(float)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(float), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<double> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<double>(dType ?? dtypes.as_dtype(typeof(double)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(double[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(double)), new long[]{data.Length}, data, Marshal.SizeOf<double>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(double)), new long[] { data.Length }, data, Marshal.SizeOf<double>());
         }
 
         /// <summary>
@@ -342,15 +433,23 @@ namespace Tensorflow
         {
             var v = (double*)Marshal.AllocHGlobal(sizeof(double));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(double)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(double), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(double)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(double), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
-        
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given span
+        /// </summary>
+        public Tensor(Span<Complex> data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying<Complex>(dType ?? dtypes.as_dtype(typeof(Complex)), shape, data);
+        }
+
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(Complex[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(Complex)), new long[]{data.Length}, data, Marshal.SizeOf<Complex>());
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(Complex)), new long[] { data.Length }, data, Marshal.SizeOf<Complex>());
         }
 
         /// <summary>
@@ -368,7 +467,7 @@ namespace Tensorflow
         {
             var v = (Complex*)Marshal.AllocHGlobal(sizeof(Complex));
             *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(Complex)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(Complex), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(Complex)), dims: new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(Complex), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
         }
 #endif
 
@@ -472,7 +571,7 @@ namespace Tensorflow
             _id = ops.uid();
         }
 
-       
+
         /// <summary>
         /// Creates a new tensor from the given array without copying memory. The array is pinned down and the pointer passed on.
         /// </summary>
@@ -532,6 +631,31 @@ namespace Tensorflow
                 return TF_NewTensor(dt, new long[0], 0, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr)(count * element_size), _gcHandleDeallocator, ref _deallocatorArgs);
             else
                 return TF_NewTensor(dt, shape, shape.Length, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr)(count * element_size), _gcHandleDeallocator, ref _deallocatorArgs);
+        }
+
+        /// <summary>
+        /// Creates a new tensor from a subsection of the given array without copying memory. The array is pinned down and the pointer passed on.
+        /// </summary>
+        /// <param name="shape">Represents the tensor shape.</param>
+        /// <param name="data">The linear array of data, the data must fit in the tensor with the specified dimensions.</param>
+        /// <remarks>
+        /// Use the FromBuffer method to create a tensor that has the specified dimensions
+        /// and is initialized with data from the data array.   The data is copied starting
+        /// at the start offset, for count bytes and is laid out into the tensor following the
+        /// specified dimensions.
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected IntPtr CreateTensorWithoutCopying<T>(TF_DataType dt, long[] shape, Span<T> data)
+        {
+            var element_size = Marshal.SizeOf<T>();
+            var count = data.Length;
+            // get a handle to the pinned array which we will pass on to the tensor computation engine to use
+            var gcHandle = GCHandle.Alloc(data.GetPinnableReference(), GCHandleType.Pinned);
+            _deallocatorArgs = new DeallocatorArgs() { gc_handle = GCHandle.ToIntPtr(gcHandle) };
+            if (shape == null || shape.Length == 0)
+                return TF_NewTensor(dt, new long[0], 0, gcHandle.AddrOfPinnedObject(), (UIntPtr)(count * element_size), _gcHandleDeallocator, ref _deallocatorArgs);
+            else
+                return TF_NewTensor(dt, shape, shape.Length, gcHandle.AddrOfPinnedObject(), (UIntPtr)(count * element_size), _gcHandleDeallocator, ref _deallocatorArgs);
         }
 
         [MonoPInvokeCallback(typeof(Deallocator))]
