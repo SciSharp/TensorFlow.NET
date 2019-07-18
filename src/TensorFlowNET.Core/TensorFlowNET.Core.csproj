@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.10.0-beta</Version>
+    <Version>0.10.0-rc</Version>
     <Authors>Haiping Chen, Meinrad Recheis</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -24,7 +24,8 @@ Learn more about .NET AI: https://medium.com/scisharp</Description>
 1. Added full connected Convolution Neural Network example.
 2. Take dependency on SciSharp.TensorFlow.Redist.
 3. Create Tensor from array without copying.
-4. Fix path issue of Transfer Learning example on Linux.</PackageReleaseNotes>
+4. Fix path issue of Transfer Learning example on Linux.
+5. Add back gen_ops.cs.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
     <FileVersion>0.10.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -50,10 +51,6 @@ Learn more about .NET AI: https://medium.com/scisharp</Description>
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Operations\gen_ops.cs" />
   </ItemGroup>
 
   <ItemGroup>
