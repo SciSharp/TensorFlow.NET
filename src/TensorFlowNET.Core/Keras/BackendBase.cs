@@ -37,7 +37,7 @@ namespace Tensorflow.Keras
 
         public void set_floatx(TF_DataType floatx) => _FLOATX = floatx;
 
-        public NDArray cast_to_floatx(NDArray x) => np.array(x, dtype: _FLOATX.as_numpy_datatype());
+        //public NDArray cast_to_floatx(NDArray x) => np.array(x, dtype: _FLOATX.as_numpy_datatype());
 
         public ImageDataFormat image_data_format() => _IMAGE_DATA_FORMAT;
 

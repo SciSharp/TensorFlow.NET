@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.10.0-alpha</Version>
+    <Version>0.10.0-beta</Version>
     <Authors>Haiping Chen, Meinrad Recheis</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -29,6 +29,8 @@ Learn more about .NET AI: https://medium.com/scisharp</Description>
     <FileVersion>0.10.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -60,7 +62,7 @@ Learn more about .NET AI: https://medium.com/scisharp</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.9.0" />
-    <PackageReference Include="NumSharp" Version="0.10.3" />
+    <PackageReference Include="NumSharp" Version="0.10.4" />
     <PackageReference Include="SciSharp.TensorFlow.Redist" Version="1.14.0" />
   </ItemGroup>
 
@@ -68,11 +70,4 @@ Learn more about .NET AI: https://medium.com/scisharp</Description>
     <Folder Include="Distribute\" />
     <Folder Include="Keras\Initializers\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="NumSharp.Core">
-      <HintPath>..\..\..\..\NumSharp\src\NumSharp.Core\bin\Debug\netstandard2.0\NumSharp.Core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

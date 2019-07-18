@@ -16,7 +16,7 @@ namespace Tensorflow
         {
             if (proto.UnknownRank) return;
 
-            ReShape(proto.Dim.Select(x => (int)x.Size).ToArray());
+            Reshape(proto.Dim.Select(x => (int)x.Size).ToArray());
         }
 
         public TensorShape(params int[] dims) : base(dims)

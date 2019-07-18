@@ -42,7 +42,7 @@ namespace TensorFlowNET.UnitTest
             for (int i = 0; i < e.Length; i++)
             {
                 if (g[i] is NDArray && e[i] is NDArray)
-                    assertItemsEqual((g[i] as NDArray).Array, (e[i] as NDArray).Array);
+                    assertItemsEqual((g[i] as NDArray).GetData<object>(), (e[i] as NDArray).GetData<object>());
                 else if (e[i] is ICollection && g[i] is ICollection)
                     assertEqual(g[i], e[i]);
                 else
@@ -60,7 +60,7 @@ namespace TensorFlowNET.UnitTest
         {
             if (given is NDArray && expected is NDArray)
             {
-                assertItemsEqual((given as NDArray).Array, (expected as NDArray).Array);
+                assertItemsEqual((given as NDArray).GetData<object>(), (expected as NDArray).GetData<object>());
                 return;
             }
             if (given is Hashtable && expected is Hashtable)

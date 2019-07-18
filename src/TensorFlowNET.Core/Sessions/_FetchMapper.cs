@@ -42,7 +42,7 @@ namespace Tensorflow
         {
             var type = values[0].GetType();
             var nd = new NDArray(type, values.Count);
-            nd.SetData(values.ToArray());
+            nd.ReplaceData(values.ToArray());
             return nd;
         }
 
