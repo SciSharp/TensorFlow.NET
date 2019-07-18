@@ -53,14 +53,27 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
-        public void TensorFromSpan()
+        public unsafe void TensorFromFixed()
         {
-            var array = new int[1000];
-            var span = new Span<int>(array, 100, 500);
-            using (var t = new Tensor(span, new long[] { span.Length }))
+            var array = new float[1000];
+            var span = new Span<float>(array, 100, 500);
+            fixed (float* ptr=&MemoryMarshal.GetReference(span))
             {
-                Assert.IsFalse(t.IsDisposed);
-                Assert.AreEqual(2000, (int)t.bytesize);
+                using (var t = new Tensor((IntPtr)ptr, new long[] {span.Length}, tf.float32, 4*span.Length))
+                {
+                    Assert.IsFalse(t.IsDisposed);
+                    Assert.IsFalse(t.IsMemoryOwner);
+                    Assert.AreEqual(2000, (int) t.bytesize);
+                }
+            }
+            fixed (float* ptr = &array[0])
+            {
+                using (var t = new Tensor((IntPtr)ptr, new long[] { array.Length }, tf.float32, 4 * array.Length))
+                {
+                    Assert.IsFalse(t.IsDisposed);
+                    Assert.IsFalse(t.IsMemoryOwner);
+                    Assert.AreEqual(4000, (int)t.bytesize);
+                }
             }
         }
 

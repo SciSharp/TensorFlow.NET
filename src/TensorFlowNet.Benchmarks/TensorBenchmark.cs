@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Engines;
 using NumSharp;
 using Tensorflow;
 
-namespace TensorFlowNet.Benchmark
+namespace TensorFlowBenchmark
 {
     [SimpleJob(launchCount: 1, warmupCount: 2, targetCount: 10)]
     [MinColumn, MaxColumn, MeanColumn, MedianColumn]
@@ -33,15 +31,16 @@ namespace TensorFlowNet.Benchmark
         }
 
         [Benchmark]
-        public void TensorFromSpan()
+        public unsafe void TensorFromFixedPtr()
         {
             var g = new Graph();
-            var span = new Span<double>(data);
             for (int i = 0; i < 100; i++)
             {
-                using (var tensor = new Tensor(span, new long[] { data.Length }))
+                fixed (double* ptr = &data[0])
                 {
-
+                    using (var t = new Tensor((IntPtr)ptr, new long[] { data.Length }, tf.float64, 8 * data.Length))
+                    {
+                    }
                 }
             }
         }

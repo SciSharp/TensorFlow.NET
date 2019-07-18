@@ -3,15 +3,10 @@ using System.Reflection;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 
-namespace TensorFlowNet.Benchmark
+namespace TensorFlowBenchmark
 {
     class Program
     {
-        /// <summary>
-        /// dotnet NumSharp.Benchmark.dll (Benchmark Class Name)
-        /// dotnet NumSharp.Benchmark.dll nparange
-        /// </summary>
-        /// <param name="args"></param>
         static void Main(string[] args)
         {
 #if DEBUG
@@ -24,7 +19,7 @@ namespace TensorFlowNet.Benchmark
             {
                 for (int i = 0; i < args.Length; i++)
                 {
-                    string name = $"TensorFlowNet.Benchmark.{args[i]}";
+                    string name = $"TensorFlowBenchmark.{args[i]}";
                     var type = Type.GetType(name);
                     BenchmarkRunner.Run(type, config);
                 }
