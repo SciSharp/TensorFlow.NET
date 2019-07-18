@@ -551,6 +551,9 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor tanh(Tensor x, string name = null)
+            => gen_math_ops.tanh(x, name);
+
         public static Tensor truediv(Tensor x, Tensor y, string name = null)
             => _truediv_python3(x, y, name);
 

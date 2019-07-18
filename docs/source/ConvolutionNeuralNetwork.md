@@ -346,4 +346,5 @@ Get started with the implementation:
    }
    ```
 
-![cnn-reuslt](../assets/cnn-result.png)
+![](../assets/cnn-result.png)
+

@@ -214,14 +214,14 @@ namespace Tensorflow.Util
         //# See the swig file (util.i) for documentation.
         //flatten = _pywrap_tensorflow.Flatten
 
-        public static List<object> flatten(object structure)
+        public static List<T> flatten<T>(T structure)
         {
-            var list = new List<object>();
+            var list = new List<T>();
             _flatten_recursive(structure, list);
             return list;
         }
 
-        private static void _flatten_recursive(object obj, List<object> list)
+        private static void _flatten_recursive<T>(T obj, List<T> list)
         {
             if (obj is string)
             {
@@ -232,7 +232,7 @@ namespace Tensorflow.Util
             {
                 var dict = obj as IDictionary;
                 foreach (var key in _sorted(dict))
-                    _flatten_recursive(dict[key], list);
+                    _flatten_recursive((T)dict[key], list);
                 return;
             }
             if (obj is NDArray)
@@ -244,7 +244,7 @@ namespace Tensorflow.Util
             {
                 var structure = obj as IEnumerable;
                 foreach (var child in structure)
-                    _flatten_recursive(child, list);
+                    _flatten_recursive((T)child, list);
                 return;
             }
             list.Add(obj);

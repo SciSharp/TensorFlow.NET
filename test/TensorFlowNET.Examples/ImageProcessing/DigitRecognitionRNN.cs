@@ -25,14 +25,12 @@ using static Tensorflow.Python;
 namespace TensorFlowNET.Examples.ImageProcess
 {
     /// <summary>
-    /// Convolutional Neural Network classifier for Hand Written Digits
-    /// CNN architecture with two convolutional layers, followed by two fully-connected layers at the end.
-    /// Use Stochastic Gradient Descent (SGD) optimizer. 
-    /// http://www.easy-tensorflow.com/tf-tutorials/convolutional-neural-nets-cnns/cnn1
+    /// Recurrent Neural Network for handwritten digits MNIST.
+    /// https://medium.com/machine-learning-algorithms/mnist-using-recurrent-neural-network-2d070a5915a2
     /// </summary>
     public class DigitRecognitionRNN : IExample
     {
-        public bool Enabled { get; set; } = false;
+        public bool Enabled { get; set; } = true;
         public bool IsImportingGraph { get; set; } = false;
 
         public string Name => "MNIST RNN";
@@ -84,6 +82,7 @@ namespace TensorFlowNET.Examples.ImageProcess
             var X = tf.placeholder(tf.float32, new[] { -1, n_steps, n_inputs });
             var y = tf.placeholder(tf.int32, new[] { -1 });
             var cell = tf.nn.rnn_cell.BasicRNNCell(num_units: n_neurons);
+            var (output, state) = tf.nn.dynamic_rnn(cell, X, dtype: tf.float32);
 
             return graph;
         }
@@ -154,6 +153,7 @@ namespace TensorFlowNET.Examples.ImageProcess
             print("Size of:");
             print($"- Training-set:\t\t{len(mnist.train.data)}");
             print($"- Validation-set:\t{len(mnist.validation.data)}");
+            print($"- Test-set:\t\t{len(mnist.test.data)}");
         }
 
         public Graph ImportGraph() => throw new NotImplementedException();

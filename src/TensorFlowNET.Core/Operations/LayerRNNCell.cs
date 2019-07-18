@@ -17,32 +17,17 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Tensorflow.Keras.Engine;
-using Tensorflow.Operations.Activation;
 
 namespace Tensorflow
 {
-    public class BasicRNNCell : LayerRNNCell
+    public class LayerRNNCell : RNNCell
     {
-        int _num_units;
-        Func<Tensor, string, Tensor> _activation;
-
-        public BasicRNNCell(int num_units,
-            Func<Tensor, string, Tensor> activation = null,
-            bool? reuse = null,
+        public LayerRNNCell(bool? _reuse = null,
             string name = null,
-            TF_DataType dtype = TF_DataType.DtInvalid) : base(_reuse: reuse, 
-                name: name, 
-                dtype: dtype)
+            TF_DataType dtype = TF_DataType.DtInvalid) : base(_reuse: _reuse,
+                    name: name,
+                    dtype: dtype)
         {
-            // Inputs must be 2-dimensional.
-            input_spec = new InputSpec(ndim: 2);
-
-            _num_units = num_units;
-            if (activation == null)
-                _activation = math_ops.tanh;
-            else
-                _activation = activation;
         }
     }
 }

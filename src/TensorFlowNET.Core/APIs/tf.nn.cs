@@ -16,9 +16,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
+using Tensorflow.Util;
 using static Tensorflow.Python;
 
 namespace Tensorflow
@@ -66,6 +68,33 @@ namespace Tensorflow
                 var rate_tensor = keep;
 
                 return nn_ops.dropout_v2(x, rate: rate_tensor, noise_shape: noise_shape, seed: seed, name: name);
+            }
+
+            /// <summary>
+            /// Creates a recurrent neural network specified by RNNCell `cell`.
+            /// </summary>
+            /// <param name="cell">An instance of RNNCell.</param>
+            /// <param name="inputs">The RNN inputs.</param>
+            /// <param name="dtype"></param>
+            /// <param name="swap_memory"></param>
+            /// <param name="time_major"></param>
+            /// <returns>A pair (outputs, state)</returns>
+            public static (Tensor, Tensor) dynamic_rnn(RNNCell cell, Tensor inputs, TF_DataType dtype = TF_DataType.DtInvalid,
+                bool swap_memory = false, bool time_major = false)
+            {
+                with(variable_scope("rnn"), scope =>
+                {
+                    VariableScope varscope = scope;
+                    var flat_input = nest.flatten(inputs);
+
+                    if (!time_major)
+                    {
+                        flat_input = flat_input.Select(x => ops.convert_to_tensor(x)).ToList();
+                        //flat_input = flat_input.Select(x => _transpose_batch_time(x)).ToList();
+                    }
+                });
+
+                throw new NotImplementedException("");
             }
 
             public static (Tensor, Tensor) moments(Tensor x,

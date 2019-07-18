@@ -78,8 +78,8 @@ namespace TensorFlowNET.UnitTest.nest_test
             self.assertEqual((((restructured_from_flat[1] as object[])[0] as object[])[0] as Hashtable)["y"], 0);
 
             self.assertEqual(new List<object> { 5 }, nest.flatten(5));
-            flat = nest.flatten(np.array(new[] { 5 }));
-            self.assertEqual(new object[] { np.array(new int[] { 5 }) }, flat);
+            var flat1 = nest.flatten(np.array(new[] { 5 }));
+            self.assertEqual(new object[] { np.array(new int[] { 5 }) }, flat1);
 
             self.assertEqual("a", nest.pack_sequence_as(5, new List<object> { "a" }));
             self.assertEqual(np.array(new[] { 5 }),
