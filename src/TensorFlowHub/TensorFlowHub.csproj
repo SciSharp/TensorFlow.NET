@@ -1,7 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
+    <AssemblyName>TensorFlow.Net.Hub</AssemblyName>
+    <RootNamespace>Tensorflow.Hub</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NumSharp" Version="0.10.4" />
+  </ItemGroup>
 </Project>
