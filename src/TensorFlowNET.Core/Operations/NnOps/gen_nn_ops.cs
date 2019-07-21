@@ -141,6 +141,27 @@ namespace Tensorflow.Operations
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Computes exponential linear: <c>exp(features) - 1</c> if &amp;lt; 0, <c>features</c> otherwise.
+        /// </summary>
+        /// <param name="features">
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'Elu'.
+        /// </param>
+        /// <returns>
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    See [Fast and Accurate Deep Network Learning by Exponential Linear Units (ELUs)
+        ///    ](http://arxiv.org/abs/1511.07289)
+        /// </remarks>
+        public static Tensor elu(Tensor features, string name = "Elu")
+        {
+            var op = _op_def_lib._apply_op_helper("Elu", name: name, args: new { features });
+            return op.output;
+        }
+
         public static Tensor[] _fused_batch_norm(Tensor x,
                 Tensor scale,
                 Tensor offset,

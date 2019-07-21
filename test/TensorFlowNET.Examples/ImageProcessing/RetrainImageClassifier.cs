@@ -199,7 +199,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                 RefVariable layer_biases = null;
                 with(tf.name_scope("biases"), delegate
                 {
-                    layer_biases = tf.Variable(tf.zeros((class_count)), name: "final_biases");
+                    layer_biases = tf.Variable(tf.zeros(class_count), name: "final_biases");
                     variable_summaries(layer_biases);
                 });
 

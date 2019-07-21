@@ -97,6 +97,9 @@ namespace Tensorflow
                 throw new NotImplementedException("");
             }
 
+            public static Tensor elu(Tensor features, string name = null)
+                => gen_nn_ops.elu(features, name: name);
+
             public static (Tensor, Tensor) moments(Tensor x,
                 int[] axes,
                 string name = null,
