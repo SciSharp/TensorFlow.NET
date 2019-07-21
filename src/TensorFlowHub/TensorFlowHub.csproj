@@ -9,5 +9,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NumSharp" Version="0.10.4" />
+    <PackageReference Include="sharpcompress" Version="0.23.0" />
   </ItemGroup>
 </Project>
