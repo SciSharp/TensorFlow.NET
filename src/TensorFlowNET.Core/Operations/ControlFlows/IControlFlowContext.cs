@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     // henon: this was too much trouble. there is no value just cost to use an interface here. 
     //public interface IControlFlowContext

@@ -1,6 +1,4 @@
-﻿using System;
-using Tensorflow;
-using Keras;
+﻿using Tensorflow;
 using Keras.Layers;
 using NumSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
-using Tensorflow;
+﻿using Tensorflow;
 using Buffer = Tensorflow.Buffer;
 
 namespace TensorFlowNET.UnitTest

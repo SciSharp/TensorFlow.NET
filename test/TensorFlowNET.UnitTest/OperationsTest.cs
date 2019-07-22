@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NumSharp;
 using Tensorflow;
 using Buffer = Tensorflow.Buffer;

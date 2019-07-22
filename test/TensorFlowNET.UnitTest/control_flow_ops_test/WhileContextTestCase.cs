@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
-using Tensorflow.Operations;
 using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest.control_flow_ops_test

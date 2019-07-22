@@ -14,10 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Tensorflow
 {
     public class gen_random_ops

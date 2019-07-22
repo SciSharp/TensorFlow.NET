@@ -15,8 +15,6 @@
 ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Operations.Initializers;
 using static Tensorflow.Python;
 

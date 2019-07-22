@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using Tensorflow;
 using static Tensorflow.Python;
 
 namespace Tensorflow

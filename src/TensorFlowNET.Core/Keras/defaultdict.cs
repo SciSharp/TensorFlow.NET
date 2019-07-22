@@ -14,8 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System.Collections.Generic;
-
 namespace System.Collections.Generic
 {
     public class defaultdict<TKey, TValue> : Dictionary<TKey, TValue> where TValue : new()

@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Operations;
 using Tensorflow.Operations.ControlFlows;
 using util = Tensorflow.control_flow_util;

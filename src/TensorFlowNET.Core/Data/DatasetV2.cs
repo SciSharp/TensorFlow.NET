@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Data
+﻿namespace Tensorflow.Data
 {
     /// <summary>
     /// Represents a potentially large set of elements.

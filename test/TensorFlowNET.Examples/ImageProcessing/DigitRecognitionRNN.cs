@@ -16,8 +16,6 @@
 
 using NumSharp;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;

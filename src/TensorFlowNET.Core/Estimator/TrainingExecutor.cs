@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static Tensorflow.Python;
-
-namespace Tensorflow.Estimator
+﻿namespace Tensorflow.Estimator
 {
     /// <summary>
     /// The executor to run `Estimator` training and evaluation.

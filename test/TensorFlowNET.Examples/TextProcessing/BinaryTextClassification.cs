@@ -4,9 +4,7 @@ using System.IO;
 using Tensorflow;
 using Newtonsoft.Json;
 using System.Linq;
-using System.Text.RegularExpressions;
 using NumSharp;
-using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {

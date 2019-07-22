@@ -17,10 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Operations.ControlFlows;
 using static Tensorflow.ControlFlowContextDef;
-using static Tensorflow.Python;
 
 namespace Tensorflow.Operations
 {

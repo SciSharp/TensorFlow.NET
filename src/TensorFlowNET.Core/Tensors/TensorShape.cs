@@ -1,9 +1,6 @@
-﻿using Google.Protobuf.Collections;
-using NumSharp;
+﻿using NumSharp;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Tensorflow
 {
