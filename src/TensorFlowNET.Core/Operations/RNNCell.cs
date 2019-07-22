@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Util;
+using static Tensorflow.Python;
 
 namespace Tensorflow
 {
@@ -48,6 +50,7 @@ namespace Tensorflow
         /// difference between TF and Keras RNN cell.
         /// </summary>
         protected bool _is_tf_rnn_cell = false;
+        protected virtual int state_size { get; }
 
         public RNNCell(bool trainable = true,
             string name = null,
@@ -58,6 +61,42 @@ namespace Tensorflow
                     _reuse: _reuse)
         {
             _is_tf_rnn_cell = true;
+        }
+
+        public virtual Tensor get_initial_state(Tensor inputs = null, Tensor batch_size = null, TF_DataType dtype = TF_DataType.DtInvalid)
+        {
+            if (inputs != null)
+                throw new NotImplementedException("get_initial_state input is not null");
+
+            return zero_state(batch_size, dtype);
+        }
+
+        /// <summary>
+        /// Return zero-filled state tensor(s).
+        /// </summary>
+        /// <param name="batch_size"></param>
+        /// <param name="dtype"></param>
+        /// <returns></returns>
+        public Tensor zero_state(Tensor batch_size, TF_DataType dtype)
+        {
+            Tensor output = null;
+            var state_size = this.state_size;
+            with(ops.name_scope($"{this.GetType().Name}ZeroState", values: new { batch_size }), delegate
+            {
+                output = _zero_state_tensors(state_size, batch_size, dtype);
+            });
+
+            return output;
+        }
+
+        private Tensor _zero_state_tensors(int state_size, Tensor batch_size, TF_DataType dtype)
+        {
+            nest.map_structure(x =>
+            {
+                throw new NotImplementedException("");
+            }, state_size);
+
+            throw new NotImplementedException("");
         }
     }
 }

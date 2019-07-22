@@ -30,7 +30,7 @@ namespace TensorFlowNET.Examples.ImageProcess
     /// </summary>
     public class DigitRecognitionRNN : IExample
     {
-        public bool Enabled { get; set; } = false;
+        public bool Enabled { get; set; } = true;
         public bool IsImportingGraph { get; set; } = false;
 
         public string Name => "MNIST RNN";
@@ -95,7 +95,7 @@ namespace TensorFlowNET.Examples.ImageProcess
             var init = tf.global_variables_initializer();
             sess.run(init);
 
-            float loss_val = 100.0f;
+            float loss_val = 100.0f; 
             float accuracy_val = 0f;
 
             foreach (var epoch in range(epochs))

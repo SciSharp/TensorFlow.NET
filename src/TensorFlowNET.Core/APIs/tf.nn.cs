@@ -79,23 +79,12 @@ namespace Tensorflow
             /// <param name="swap_memory"></param>
             /// <param name="time_major"></param>
             /// <returns>A pair (outputs, state)</returns>
-            public static (Tensor, Tensor) dynamic_rnn(RNNCell cell, Tensor inputs, TF_DataType dtype = TF_DataType.DtInvalid,
-                bool swap_memory = false, bool time_major = false)
-            {
-                with(variable_scope("rnn"), scope =>
-                {
-                    VariableScope varscope = scope;
-                    var flat_input = nest.flatten(inputs);
-
-                    if (!time_major)
-                    {
-                        flat_input = flat_input.Select(x => ops.convert_to_tensor(x)).ToList();
-                        //flat_input = flat_input.Select(x => _transpose_batch_time(x)).ToList();
-                    }
-                });
-
-                throw new NotImplementedException("");
-            }
+            public static (Tensor, Tensor) dynamic_rnn(RNNCell cell, Tensor inputs,
+                int? sequence_length = null, TF_DataType dtype = TF_DataType.DtInvalid,
+                int? parallel_iterations = null, bool swap_memory = false, bool time_major = false)
+                => rnn.dynamic_rnn(cell, inputs, sequence_length: sequence_length, dtype: dtype,
+                    parallel_iterations: parallel_iterations, swap_memory: swap_memory,
+                    time_major: time_major);
 
             public static Tensor elu(Tensor features, string name = null)
                 => gen_nn_ops.elu(features, name: name);

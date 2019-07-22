@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="python\**" />
-    <EmbeddedResource Remove="python\**" />
-    <None Remove="python\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Colorful.Console" Version="1.2.9" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="SharpZipLib" Version="1.1.0" />

@@ -29,8 +29,12 @@ namespace TensorFlowNET.Examples
     {
         static void Main(string[] args)
         {
+            int finished = 0;
             var errors = new List<string>();
             var success = new List<string>();
+
+            var parsedArgs = ParseArgs(args);
+
             var examples = Assembly.GetEntryAssembly().GetTypes()
                 .Where(x => x.GetInterfaces().Contains(typeof(IExample)))
                 .Select(x => (IExample)Activator.CreateInstance(x))
@@ -38,14 +42,23 @@ namespace TensorFlowNET.Examples
                 .OrderBy(x => x.Name)
                 .ToArray();
 
+            if (parsedArgs.ContainsKey("ex"))
+                examples = examples.Where(x => x.Name == parsedArgs["ex"]).ToArray();
+
             Console.WriteLine(Environment.OSVersion.ToString(), Color.Yellow);
             Console.WriteLine($"TensorFlow Binary v{tf.VERSION}", Color.Yellow);
             Console.WriteLine($"TensorFlow.NET v{Assembly.GetAssembly(typeof(TF_DataType)).GetName().Version}", Color.Yellow);
 
             for (var i = 0; i < examples.Length; i++)
                 Console.WriteLine($"[{i}]: {examples[i].Name}");
-            Console.Write($"Choose one example to run, hit [Enter] to run all: ", Color.Yellow);
-            var key = Console.ReadLine();
+
+            var key = "0";
+            
+            if (examples.Length > 1)
+            {
+                Console.Write($"Choose one example to run, hit [Enter] to run all: ", Color.Yellow);
+                key = Console.ReadLine();
+            }
 
             var sw = new Stopwatch();
             for (var i = 0; i < examples.Length; i++)
@@ -72,14 +85,35 @@ namespace TensorFlowNET.Examples
                     Console.WriteLine(ex);
                 }
 
+                finished++;
                 Console.WriteLine($"{DateTime.UtcNow} Completed {example.Name}", Color.White);
             }
 
             success.ForEach(x => Console.WriteLine($"{x} is OK!", Color.Green));
             errors.ForEach(x => Console.WriteLine($"{x} is Failed!", Color.Red));
 
-            Console.WriteLine($"{examples.Length} examples are completed.");
+            Console.WriteLine($"{finished} of {examples.Length} example(s) are completed.");
             Console.ReadLine();
+        }
+
+        private static Dictionary<string, string> ParseArgs(string[] args)
+        {
+            var parsed = new Dictionary<string, string>();
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                string key = args[i].Substring(1);
+                switch (key)
+                {
+                    case "ex":
+                        parsed.Add(key, args[++i]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return parsed;
         }
     }
 }

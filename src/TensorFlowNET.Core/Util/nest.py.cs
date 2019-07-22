@@ -512,6 +512,14 @@ namespace Tensorflow.Util
             return _yield_value(pack_sequence_as(structure[0], mapped_flat_structure)).ToList();
         }
 
+        public static Tensor map_structure<T>(Func<T, Tensor> func, T structure)
+        {
+            var flat_structure = flatten(structure);
+            var mapped_flat_structure = flat_structure.Select(func).ToList();
+
+            return pack_sequence_as(structure, mapped_flat_structure) as Tensor;
+        }
+
         /// <summary>
         /// Same as map_structure, but with only one structure (no combining of multiple structures)
         /// </summary>

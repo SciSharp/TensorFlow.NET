@@ -27,6 +27,8 @@ namespace Tensorflow
         int _num_units;
         Func<Tensor, string, Tensor> _activation;
 
+        protected override int state_size => _num_units;
+
         public BasicRNNCell(int num_units,
             Func<Tensor, string, Tensor> activation = null,
             bool? reuse = null,

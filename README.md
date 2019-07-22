@@ -129,7 +129,7 @@ Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflow
 Run specific example in shell:
 
 ```cs
-dotnet TensorFlowNET.Examples.dll "EXAMPLE NAME"
+dotnet TensorFlowNET.Examples.dll -ex "MNIST CNN"
 ```
 
 Example runner will download all the required files like training data and model pb files.
