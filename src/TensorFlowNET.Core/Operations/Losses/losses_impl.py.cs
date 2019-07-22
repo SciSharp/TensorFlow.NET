@@ -141,7 +141,7 @@ namespace Tensorflow
                     // Use static rank.
                     var rank_diff = weights_rank - labels_rank;
                     if (rank_diff == 1)
-                        weights = array_ops.squeeze(weights_tensor, new int[] { -1 });
+                        weights = (int)array_ops.squeeze(weights_tensor, new int[] { -1 });
                     return (labels, predictions, weights_tensor);
                 }
 

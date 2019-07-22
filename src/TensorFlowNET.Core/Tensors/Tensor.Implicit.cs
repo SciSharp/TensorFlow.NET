@@ -20,23 +20,59 @@ namespace Tensorflow
 {
     public partial class Tensor
     {
-        /// <summary>
-        /// Issue unresolved, will cause name_scope problem.
-        /// </summary>
-        /// <param name="scalar"></param>
-        /*public static implicit operator Tensor(double scalar)
+        public static implicit operator Tensor(bool value)
         {
-            return constant_op.constant(scalar);
-        }*/
+            return tf.constant(value, TF_DataType.TF_BOOL);
+        }
 
-        /*public static implicit operator Tensor(int scalar)
+        public static implicit operator Tensor(sbyte value)
         {
-            return constant_op.constant(scalar);
-        }*/
+            return tf.constant(value, TF_DataType.TF_INT8);
+        }
 
-        public static implicit operator int(Tensor tensor)
+        public static implicit operator Tensor(byte value)
         {
-            return tensor.Data<int>()[0];
+            return tf.constant(value, TF_DataType.TF_INT16);
+        }
+
+        public static implicit operator Tensor(ushort value)
+        {
+            return tf.constant(value, TF_DataType.TF_UINT16);
+        }
+
+        public static implicit operator Tensor(short value)
+        {
+            return tf.constant(value, TF_DataType.TF_INT16);
+        }
+
+        public static implicit operator Tensor(int value)
+        {
+            return tf.constant(value, TF_DataType.TF_INT32);
+        }
+
+        public static implicit operator Tensor(uint value)
+        {
+            return tf.constant(value, TF_DataType.TF_UINT32);
+        }
+
+        public static implicit operator Tensor(long value)
+        {
+            return tf.constant(value, TF_DataType.TF_INT64);
+        }
+
+        public static implicit operator Tensor(ulong value)
+        {
+            return tf.constant(value, TF_DataType.TF_UINT64);
+        }
+
+        public static implicit operator Tensor(float value)
+        {
+            return tf.constant(value, TF_DataType.TF_FLOAT);
+        }
+
+        public static implicit operator Tensor(double value)
+        {
+            return tf.constant(value, TF_DataType.TF_DOUBLE);
         }
 
         public static implicit operator IntPtr(Tensor tensor)
