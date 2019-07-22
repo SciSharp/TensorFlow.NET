@@ -71,6 +71,16 @@ namespace Tensorflow.Hub
 
         public static async Task ShowProgressInConsole(this Task task)
         {
+            await ShowProgressInConsole(task, true);
+        }
+
+        public static async Task ShowProgressInConsole(this Task task, bool enable)
+        {
+            if (!enable)
+            {
+                await task;
+            }
+
             var cts = new CancellationTokenSource();
             var showProgressTask = ShowProgressInConsole(cts);
             

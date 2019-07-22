@@ -15,5 +15,6 @@ namespace Tensorflow.Hub
         public int? TrainSize  { get; set; }
         public int? TestSize { get; set; }
         public string SourceUrl { get; set; }
+        public bool ShowProgressInConsole { get; set; }
     }
 }
