@@ -33,10 +33,13 @@ namespace Tensorflow
 
         public static Tensor operator -(Tensor t1) => gen_math_ops.neg(t1);
 
+        public static Tensor operator -(double x, Tensor y) => BinaryOpWrapper("sub", x, y);
+        public static Tensor operator -(float x, Tensor y) => BinaryOpWrapper("sub", x, y);
+        public static Tensor operator -(int x, Tensor y) => BinaryOpWrapper("sub", x, y);
         public static Tensor operator -(Tensor x, Tensor y) => BinaryOpWrapper("sub", x, y);
         public static Tensor operator -(Tensor x, int y) => BinaryOpWrapper("sub", x, y);
+        public static Tensor operator -(Tensor x, float y) => BinaryOpWrapper("sub", x, y);
         public static Tensor operator -(Tensor x, double y) => BinaryOpWrapper("sub", x, y);
-        public static Tensor operator -(float x, Tensor y) => BinaryOpWrapper("sub", x, y);
 
         public static Tensor operator *(float x, Tensor y) => BinaryOpWrapper("mul", x, y);
         public static Tensor operator *(double x, Tensor y) => BinaryOpWrapper("mul", x, y);
