@@ -14,11 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
 namespace Tensorflow
 {
     public static class gen_math_ops

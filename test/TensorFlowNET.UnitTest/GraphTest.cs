@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
 using Tensorflow;
 using Buffer = Tensorflow.Buffer;
 using static Tensorflow.Python;

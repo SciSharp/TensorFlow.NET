@@ -14,11 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Tensorflow.Eager;
 
 namespace Tensorflow
 {
@@ -36,22 +32,19 @@ namespace Tensorflow
             public string _name;
             public string _default_name;
             public object _values;
-            public Context _ctx;
             public string _name_scope;
             public string old_stack = "";
-            private object _g_manager;
-
+            
             public NameScope(string name, string default_name = "", object values = null)
             {
                 _name = name;
                 _default_name = default_name;
                 _values = values;
-                // _ctx = new Context();
             }
 
             public void __enter__()
             {
-                _name = _name == null ? _default_name : _name;
+                _name = _name ?? _default_name;
 
                 Graph g = null;
 
@@ -71,12 +64,10 @@ namespace Tensorflow
             {
                 var g = get_default_graph();
                 g._name_stack = old_stack;
-                // Console.WriteLine($"name_scope: {g._name_stack} -> {old_stack}");
             }
 
             public void __exit__()
             {
-
             }
 
             /// <summary>

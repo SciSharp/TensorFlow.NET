@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Operations.Activation;
 using static Tensorflow.tf;

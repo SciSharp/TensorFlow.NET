@@ -17,8 +17,6 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using Tensorflow.Eager;
 
 namespace Tensorflow

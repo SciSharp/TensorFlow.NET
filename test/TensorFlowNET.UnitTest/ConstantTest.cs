@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using Tensorflow;
 using static Tensorflow.Python;
 
@@ -21,6 +17,62 @@ namespace TensorFlowNET.UnitTest
             var tensor1 = tf.constant(8); // int
             var tensor2 = tf.constant(6.0f); // float
             var tensor3 = tf.constant(6.0); // double
+        }
+
+        [DataTestMethod]
+        [DataRow(int.MinValue)]
+        [DataRow(-1)]
+        [DataRow(0)]
+        [DataRow(1)]
+        [DataRow(int.MaxValue)]
+        public void ScalarConstTypecast_int(int value)
+        {
+            var tensor = (Tensor)value;
+            with(tf.Session(), sess =>
+            {
+                var result = sess.run(tensor);
+                Assert.AreEqual(result.Data<int>()[0], value);
+            });
+        }
+
+        [DataTestMethod]
+        [DataRow(double.NegativeInfinity)]
+        [DataRow(double.MinValue)]
+        [DataRow(-1d)]
+        [DataRow(0d)]
+        [DataRow(double.Epsilon)]
+        [DataRow(1d)]
+        [DataRow(double.MaxValue)]
+        [DataRow(double.PositiveInfinity)]
+        [DataRow(double.NaN)]
+        public void ScalarConstTypecast_double(double value)
+        {
+            var tensor = (Tensor)value;
+            with(tf.Session(), sess =>
+            {
+                var result = sess.run(tensor);
+                Assert.AreEqual(result.Data<double>()[0], value);
+            });
+        }
+
+        [DataTestMethod]
+        [DataRow(float.NegativeInfinity)]
+        [DataRow(float.MinValue)]
+        [DataRow(-1f)]
+        [DataRow(0f)]
+        [DataRow(float.Epsilon)]
+        [DataRow(1f)]
+        [DataRow(float.MaxValue)]
+        [DataRow(float.PositiveInfinity)]
+        [DataRow(float.NaN)]
+        public void ScalarConstTypecast_float(float value)
+        {
+            var tensor = (Tensor)value;
+            with(tf.Session(), sess =>
+            {
+                var result = sess.run(tensor);
+                Assert.AreEqual(result.Data<double>()[0], value);
+            });
         }
 
         [TestMethod]
@@ -62,6 +114,35 @@ namespace TensorFlowNET.UnitTest
                 Assert.AreEqual(0, data[0]);
                 Assert.AreEqual(0, data[500]);
                 Assert.AreEqual(0, data[result.size - 1]);
+            });
+        }
+
+        [TestMethod]
+        public void OnesConst()
+        {
+            var ones = tf.ones(new Shape(3, 2), TF_DataType.TF_DOUBLE, "ones");
+            with(tf.Session(), sess =>
+            {
+                var result = sess.run(ones);
+
+                Assert.AreEqual(result.shape[0], 3);
+                Assert.AreEqual(result.shape[1], 2);
+                Assert.IsTrue(new[] { 1, 1, 1, 1, 1, 1 }.SequenceEqual(result.Data<int>()));
+            });
+        }
+
+        [TestMethod]
+        public void OnesToHalves()
+        {
+            var ones = tf.ones(new Shape(3, 2), TF_DataType.TF_DOUBLE, "ones");
+            var halfes = ones * 0.5;
+            with(tf.Session(), sess =>
+            {
+                var result = sess.run(halfes);
+
+                Assert.AreEqual(result.shape[0], 3);
+                Assert.AreEqual(result.shape[1], 2);
+                Assert.IsTrue(new[] { .5, .5, .5, .5, .5, .5 }.SequenceEqual(result.Data<double>()));
             });
         }
 

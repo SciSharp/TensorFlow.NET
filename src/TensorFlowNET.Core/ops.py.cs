@@ -17,13 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using Tensorflow;
 using Google.Protobuf;
 using System.Linq;
 using NumSharp;
-using System.ComponentModel;
 using static Tensorflow.Python;
 
 namespace Tensorflow

@@ -14,11 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using static Tensorflow.Python;
-
 namespace Tensorflow
 {
     public class gen_control_flow_ops

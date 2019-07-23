@@ -15,8 +15,6 @@
 ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using static Tensorflow.Python;
 
 namespace Tensorflow
@@ -45,6 +43,25 @@ namespace Tensorflow
         public static Tensor operator *(double x, Tensor y) => BinaryOpWrapper("mul", x, y);
         public static Tensor operator *(Tensor x, Tensor y) => BinaryOpWrapper("mul", x, y);
         public static Tensor operator *(Tensor x, int y) => BinaryOpWrapper("mul", x, y);
+        public static Tensor operator *(Tensor tensor, bool constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(Tensor tensor, sbyte constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(Tensor tensor, byte constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(Tensor tensor, ushort constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(Tensor tensor, short constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(Tensor tensor, uint constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(Tensor tensor, long constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(Tensor tensor, ulong constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(Tensor tensor, float constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(Tensor tensor, double constant) => BinaryOpWrapper("mul", tensor, constant);
+        public static Tensor operator *(bool constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
+        public static Tensor operator *(sbyte constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
+        public static Tensor operator *(byte constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
+        public static Tensor operator *(ushort constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
+        public static Tensor operator *(short constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
+        public static Tensor operator *(int constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
+        public static Tensor operator *(uint constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
+        public static Tensor operator *(long constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
+        public static Tensor operator *(ulong constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
 
         public static Tensor operator /(Tensor x, Tensor y) => BinaryOpWrapper("truediv", x, y);
         public static Tensor operator /(Tensor x, float y) => BinaryOpWrapper("truediv", x, y);
@@ -67,9 +84,9 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid;
             if (x is Tensor tl)
                 dtype = tl.dtype.as_base_dtype();
-            if( y is Tensor tr)
+            if (y is Tensor tr)
                 dtype = tr.dtype.as_base_dtype();
-            
+
             var namescope = ops.name_scope(null, name, new { x, y });
             return with(namescope, scope =>
             {
@@ -100,7 +117,7 @@ namespace Tensorflow
 
                 return result;
             });
-            
+
         }
     }
 }

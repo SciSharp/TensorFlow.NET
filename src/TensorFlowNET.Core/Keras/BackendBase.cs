@@ -14,11 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow;
 
 namespace Tensorflow.Keras
 {

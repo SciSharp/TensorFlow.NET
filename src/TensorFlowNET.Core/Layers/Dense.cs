@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Operations.Activation;
+﻿using Tensorflow.Operations.Activation;
 
 namespace Tensorflow.Layers
 {

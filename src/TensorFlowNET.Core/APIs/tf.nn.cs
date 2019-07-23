@@ -14,13 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
-using Tensorflow.Util;
 using static Tensorflow.Python;
 
 namespace Tensorflow

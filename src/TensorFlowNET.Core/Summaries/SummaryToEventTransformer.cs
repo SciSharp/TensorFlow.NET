@@ -14,9 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using Google.Protobuf;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Tensorflow.Summaries

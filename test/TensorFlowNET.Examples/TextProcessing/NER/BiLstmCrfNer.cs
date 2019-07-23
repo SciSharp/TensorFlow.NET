@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Tensorflow;
 using Tensorflow.Estimator;
-using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {

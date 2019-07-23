@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Framework.Models
+﻿namespace Tensorflow.Framework.Models
 {
     public class ScopedTFStatus : Status
     {

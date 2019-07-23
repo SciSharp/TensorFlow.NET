@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     /// <summary>
     /// In order for a object to be serialized to and from MetaGraphDef, 

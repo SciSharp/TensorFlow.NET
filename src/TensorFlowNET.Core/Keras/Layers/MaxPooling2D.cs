@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static Tensorflow.tf;
+﻿using static Tensorflow.tf;
 
 namespace Tensorflow.Keras.Layers
 {

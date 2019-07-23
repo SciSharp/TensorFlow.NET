@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     /// <summary>
     /// TF_DataType holds the type for a scalar value.  E.g., one slot in a tensor.

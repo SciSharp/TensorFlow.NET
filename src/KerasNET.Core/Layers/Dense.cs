@@ -15,12 +15,8 @@
 ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 using Tensorflow;
 using static Keras.Keras;
-using Keras;
 using NumSharp;
 using Tensorflow.Operations.Activation;
 

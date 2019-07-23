@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Framework
+﻿namespace Tensorflow.Framework
 {
     public static class SparseTensor
     {
