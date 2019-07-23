@@ -1,4 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp;
 using Tensorflow;
 using static Tensorflow.Python;
 
@@ -26,6 +31,39 @@ namespace TensorFlowNET.UnitTest.gradients_test
                 self.assertFalse((bool)w_grad.op.get_attr("transpose_b"));
             });
         }
+
+        [TestMethod]
+        public void testBatchMatMulGradient()
+        {
+            var a = tf.constant(np.array(Enumerable.Range(1, 18).Select(elem => (float)elem).ToArray()), shape:new []{2, 3, 3});
+            var b = tf.divide(a, tf.constant(2.0f));
+            var c = tf.batch_matmul(a, b);
+            var g = tf.gradients(c, new[] {a, b}, stop_gradients: new[] {a, b});
+            var checkG = new[]
+            {
+                3.0f, 7.5f, 12.0f,
+                3.0f, 7.5f, 12.0f,
+                3.0f, 7.5f, 12.0f,
+                16.5f, 21.0f, 25.5f,
+                16.5f, 21.0f, 25.5f,
+                16.5f, 21.0f, 25.5f,
+                12.0f, 12.0f, 12.0f,
+                15.0f, 15.0f, 15.0f,
+                18.0f, 18.0f, 18.0f,
+                39.0f, 39.0f, 39.0f,
+                42.0f, 42.0f, 42.0f,
+                45.0f, 45.0f, 45.0f
+            };
+            using (var sess = tf.Session())
+            {
+                var result = sess.run(g);
+                var resultList = result[0].GetData<float>().ToList();
+                resultList.AddRange(result[1].GetData<float>());
+                Console.WriteLine(result.ToString());
+                CollectionAssert.AreEqual(resultList.ToArray(), checkG);
+            }
+        }
+
 
         [Ignore("TODO")]
         [TestMethod]
