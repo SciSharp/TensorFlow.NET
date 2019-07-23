@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.10.0-rc</Version>
+    <Version>0.10.0</Version>
     <Authors>Haiping Chen, Meinrad Recheis</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -25,7 +25,8 @@ Learn more about .NET AI: https://medium.com/scisharp</Description>
 2. Take dependency on SciSharp.TensorFlow.Redist.
 3. Create Tensor from array without copying.
 4. Fix path issue of Transfer Learning example on Linux.
-5. Add back gen_ops.cs.</PackageReleaseNotes>
+5. Add back gen_ops.cs.
+5. Add StridedSliceGrad.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
     <FileVersion>0.10.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -59,7 +60,7 @@ Learn more about .NET AI: https://medium.com/scisharp</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.9.0" />
-    <PackageReference Include="NumSharp" Version="0.10.4" />
+    <PackageReference Include="NumSharp" Version="0.10.5" />
     <PackageReference Include="SciSharp.TensorFlow.Redist" Version="1.14.0" />
   </ItemGroup>
 

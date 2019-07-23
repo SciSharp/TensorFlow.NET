@@ -92,6 +92,17 @@ namespace Tensorflow.Gradients
             return new Tensor[] { grads[0] };
         }
 
+        [RegisterGradient("Lgamma")]
+        public static Tensor[] _LgammaGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+            return with(ops.control_dependencies(new Operation[] { grad }), dp => {
+                x = math_ops.conj(x);
+                return new Tensor[] { grad * math_ops.digamma(x) };
+            });
+        }
+
         [RegisterGradient("Log")]
         public static Tensor[] _LogGrad(Operation op, Tensor[] grads)
         {
@@ -428,6 +439,19 @@ namespace Tensorflow.Gradients
                 x = math_ops.conj(x);
                 var y = constant_op.constant(2.0f, dtype: x.dtype);
                 return new Tensor[] { math_ops.multiply(grad, math_ops.multiply(x, y)) };
+            });
+        }
+
+        [RegisterGradient("Tanh")]
+        public static Tensor[] _TanhGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var y = op.outputs[0];
+
+            return with(ops.control_dependencies(grads), delegate
+            {
+                y = math_ops.conj(y);
+                return new Tensor[] { gen_math_ops.tanh_grad(y, grad) };
             });
         }
 

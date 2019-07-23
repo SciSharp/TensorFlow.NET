@@ -62,6 +62,15 @@ namespace Tensorflow
         public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type= TF_DataType.TF_INT64, string name= null)
             =>_op_def_lib._apply_op_helper("ArgMin", name, args: new { input, dimension, output_type }).outputs[0];
 
+        /// <summary>
+        /// Computes Psi, the derivative of Lgamma (the log of the absolute value of
+        /// `Gamma(x)`), element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor digamma(Tensor x, string name = null)
+            => _op_def_lib._apply_op_helper("Digamma", name, args: new { x }).output;
 
         /// <summary>
         ///    Returns 0 if the denominator is zero.
@@ -250,6 +259,16 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        /// <summary>
+        /// Computes the gradient for the tanh of `x` wrt its input.
+        /// </summary>
+        /// <param name="y"></param>
+        /// <param name="dy"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor tanh_grad(Tensor y, Tensor dy, string name = "TanhGrad")
+            => _op_def_lib._apply_op_helper("TanhGrad", name: name, args: new { y, dy }).output;
+
         public static Tensor floor(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Floor", name, args: new { x });
@@ -269,6 +288,24 @@ namespace Tensorflow
             var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
 
             return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Computes the log of the absolute value of `Gamma(x)` element-wise.
+        /// </summary>
+        /// <param name="x">
+        /// A `Tensor`. Must be one of the following types: `bfloat16`, `half`, `float32`, `float64`.
+        /// </param>
+        /// <param name="name">
+        /// </param>
+        /// <returns>
+        /// The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        public static Tensor lgamma(Tensor x, string name = null)
+        {
+            var op = _op_def_lib._apply_op_helper("Lgamma", name: name, args: new { x });
+
+            return op.output;
         }
 
         public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)

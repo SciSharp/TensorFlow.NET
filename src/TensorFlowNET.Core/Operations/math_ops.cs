@@ -81,6 +81,16 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Computes Psi, the derivative of Lgamma (the log of the absolute value of
+        /// `Gamma(x)`), element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor digamma(Tensor x, string name = null)
+            => gen_math_ops.digamma(x, name: name);
+
+        /// <summary>
         /// Divide two values using Python 2 semantics. Used for Tensor.__div__.
         /// </summary>
         /// <param name="x">`Tensor` numerator of real numeric type.</param>
@@ -233,6 +243,9 @@ namespace Tensorflow
         {
             return gen_math_ops.log(x, name);
         }
+
+        public static Tensor lgamma(Tensor x, string name = null)
+            => gen_math_ops.lgamma(x, name: name);
 
         /// <summary>
         /// Helper function for reduction ops.

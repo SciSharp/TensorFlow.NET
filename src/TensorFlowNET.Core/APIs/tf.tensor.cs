@@ -18,6 +18,41 @@ namespace Tensorflow
 {
     public static partial class tf
     {
-        public static Tensor convert_to_tensor(object value, string name = null) => ops.convert_to_tensor(value, name: name);
+        public static Tensor convert_to_tensor(object value,
+            string name = null) => ops.convert_to_tensor(value, name: name);
+
+        public static Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides = null,
+            int begin_mask = 0,
+            int end_mask = 0,
+            int ellipsis_mask = 0,
+            int new_axis_mask = 0,
+            int shrink_axis_mask = 0,
+            string name = null) => gen_array_ops.strided_slice(input: input,
+                begin: begin,
+                end: end,
+                strides: strides,
+                begin_mask: begin_mask,
+                end_mask: end_mask,
+                ellipsis_mask: ellipsis_mask,
+                new_axis_mask: new_axis_mask,
+                shrink_axis_mask: shrink_axis_mask,
+                name: name);
+
+        public static Tensor strided_slice<T>(Tensor input, T[] begin, T[] end, T[] strides = null,
+            int begin_mask = 0,
+            int end_mask = 0,
+            int ellipsis_mask = 0,
+            int new_axis_mask = 0,
+            int shrink_axis_mask = 0,
+            string name = null) => gen_array_ops.strided_slice(input: input,
+                begin: begin,
+                end: end,
+                strides: strides,
+                begin_mask: begin_mask,
+                end_mask: end_mask,
+                ellipsis_mask: ellipsis_mask,
+                new_axis_mask: new_axis_mask,
+                shrink_axis_mask: shrink_axis_mask,
+                name: name);
     }
 }

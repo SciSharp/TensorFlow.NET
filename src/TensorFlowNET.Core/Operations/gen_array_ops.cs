@@ -381,6 +381,71 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor strided_slice<T>(Tensor input, T[] begin, T[] end, T[] strides,
+            int begin_mask = 0,
+            int end_mask = 0,
+            int ellipsis_mask = 0,
+            int new_axis_mask = 0,
+            int shrink_axis_mask = 0,
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StridedSlice", name, new
+            {
+                input,
+                begin,
+                end,
+                strides,
+                begin_mask,
+                end_mask,
+                ellipsis_mask,
+                new_axis_mask,
+                shrink_axis_mask
+            });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Returns the gradient of `StridedSlice`.
+        /// 
+        /// Since `StridedSlice` cuts out pieces of its `input` which is size
+        /// `shape`, its gradient will have the same shape (which is passed here
+        /// as `shape`). The gradient will be zero in any element that the slice
+        /// does not select.
+        /// </summary>
+        /// <param name="shape">Must be one of the following types: `int32`, `int64`.</param>
+        /// <param name="begin">Must have the same type as `shape`.</param>
+        /// <param name="end">Must have the same type as `shape`.</param>
+        /// <param name="strides">Must have the same type as `shape`.</param>
+        /// <param name="dy">A `Tensor`.</param>
+        /// <param name="begin_mask">An optional `int`. Defaults to `0`.</param>
+        /// <param name="end_mask">An optional `int`. Defaults to `0`.</param>
+        /// <param name="ellipsis_mask">An optional `int`. Defaults to `0`.</param>
+        /// <param name="new_axis_mask">An optional `int`. Defaults to `0`.</param>
+        /// <param name="shrink_axis_mask">An optional `int`. Defaults to `0`.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>A `Tensor`. Has the same type as `dy`.</returns>
+        public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy, 
+            int begin_mask = 0, int end_mask = 0, int ellipsis_mask = 0, int new_axis_mask = 0, 
+            int shrink_axis_mask = 0, string name = null)
+        {
+            var op = _op_def_lib._apply_op_helper("StridedSliceGrad", name: name, args: new
+            {
+                shape,
+                begin,
+                end,
+                strides,
+                dy,
+                begin_mask,
+                end_mask,
+                ellipsis_mask,
+                new_axis_mask,
+                shrink_axis_mask
+            });
+
+            return op.output;
+        }
+
         public static Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Slice", name, new { input, begin, size });

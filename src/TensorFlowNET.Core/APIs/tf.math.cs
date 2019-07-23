@@ -154,6 +154,15 @@ namespace Tensorflow
             => gen_math_ops.less(x, y, name);
 
         /// <summary>
+        /// Computes the log of the absolute value of `Gamma(x)` element-wise.
+        /// </summary>
+        /// <param name="x">A `Tensor`. Must be one of the following types: `bfloat16`, `half`, `float32`, `float64`.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>A `Tensor`. Has the same type as `x`.</returns>
+        public static Tensor lgamma(Tensor x, string name = null)
+            => gen_math_ops.lgamma(x, name: name);
+
+        /// <summary>
         /// Returns the truth value of (x <= y) element-wise.
         /// </summary>
         /// <typeparam name="Tx"></typeparam>

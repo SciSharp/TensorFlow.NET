@@ -196,6 +196,67 @@ namespace Tensorflow.Gradients
             return new Tensor[] { _ReshapeToInput(op, grads[0]) };
         }
 
+        /// <summary>
+        /// Gradient for StridedSlice op.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        [RegisterGradient("StridedSlice")]
+        public static Tensor[] _StridedSliceGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var begin = op.inputs[1];
+            var end = op.inputs[2];
+            var strides = op.inputs[3];
+
+            var x = array_ops.shape(op.inputs[0], out_type: begin.dtype);
+
+            return new Tensor[] 
+            {
+                gen_array_ops.strided_slice_grad(
+                    x,
+                    begin,
+                    end,
+                    strides,
+                    grad,
+                    begin_mask: (int)op.get_attr("begin_mask"),
+                    end_mask: (int)op.get_attr("end_mask"),
+                    ellipsis_mask: (int)op.get_attr("ellipsis_mask"),
+                    new_axis_mask: (int)op.get_attr("new_axis_mask"),
+                    shrink_axis_mask: (int)op.get_attr("shrink_axis_mask")),
+                null,
+                null,
+                null
+            };
+        }
+
+        [RegisterGradient("StridedSliceGrad")]
+        public static Tensor[] _StridedSliceGradGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var begin = op.inputs[1];
+            var end = op.inputs[2];
+            var strides = op.inputs[3];
+
+            return new Tensor[] 
+            {
+                null,
+                null,
+                null,
+                gen_array_ops.strided_slice(
+                    grad,
+                    begin,
+                    end,
+                    strides,
+                    begin_mask: (int)op.get_attr("begin_mask"),
+                    end_mask: (int)op.get_attr("end_mask"),
+                    ellipsis_mask: (int)op.get_attr("ellipsis_mask"),
+                    new_axis_mask: (int)op.get_attr("new_axis_mask"),
+                    shrink_axis_mask: (int)op.get_attr("shrink_axis_mask"))
+            };
+        }
+
         private static Tensor _ReshapeToInput(Operation op, Tensor grad)
         {
             return array_ops.reshape(grad, array_ops.shape(op.inputs[0]));

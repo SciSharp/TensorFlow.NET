@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp;
+using System.Linq;
 using Tensorflow;
 
 namespace TensorFlowNET.UnitTest
@@ -24,6 +26,43 @@ namespace TensorFlowNET.UnitTest
             var g = tf.gradients(ys, new Tensor[] { a, b }, stop_gradients: new Tensor[] { a, b });
             Assert.AreEqual(g[0].name, "gradients/Fill:0");
             Assert.AreEqual(g[1].name, "gradients/Fill:0");
+        }
+
+        [TestMethod]
+        public void StridedSlice()
+        {
+            var graph = tf.Graph().as_default();
+
+            var t = tf.constant(np.array(new int[,,]
+            {
+                {
+                    { 11, 12, 13 },
+                    { 21, 22, 23 }
+                },
+                {
+                    { 31, 32, 33 },
+                    { 41, 42, 43 }
+                },
+                {
+                    { 51, 52, 53 },
+                    { 61, 62, 63 }
+                }
+            }));
+
+            var slice = tf.strided_slice(t,
+                begin: new[] { 0, 0, 0 },
+                end: new[] { 3, 2, 3 },
+                strides: new[] { 2, 2, 2 });
+
+            var y = slice + slice;
+
+            var g = tf.gradients(y, new Tensor[] { slice, slice });
+
+            var r = slice.eval();
+
+            Assert.IsTrue(Enumerable.SequenceEqual(r.shape, new[] { 2, 1, 2 }));
+            Assert.IsTrue(Enumerable.SequenceEqual(r[0].GetData<int>(), new[] { 11, 13 }));
+            Assert.IsTrue(Enumerable.SequenceEqual(r[1].GetData<int>(), new[] { 51, 53 }));
         }
     }
 }
