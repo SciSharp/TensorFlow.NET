@@ -72,5 +72,10 @@ namespace Tensorflow
         {
             return new Session(graph);
         }
+
+        public static Session Session(SessionOptions opts)
+        {
+            return new Session(null, opts);
+        }
     }
 }

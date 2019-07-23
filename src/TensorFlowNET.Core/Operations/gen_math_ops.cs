@@ -210,6 +210,13 @@ namespace Tensorflow
             return op.outputs[0];
         }
 
+        public static Tensor sign(Tensor x, string name = "Sign")
+        {
+            var op = _op_def_lib._apply_op_helper("Sign", name: name, args: new {x});
+
+            return op.outputs[0];
+        }
+
         public static Tensor sinh(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Sinh", name, args: new { x });

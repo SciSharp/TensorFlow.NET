@@ -216,6 +216,15 @@ namespace Tensorflow
             return gen_math_ops.sigmoid(x_tensor, name: name);
         }
 
+        public static Tensor sign(Tensor x, string name = null)
+        {
+            return with(ops.name_scope(name, "Sign", new {x}), scope =>
+            {
+                x = ops.convert_to_tensor(x, name: "x");
+                return gen_math_ops.sign(x);
+            });
+        }
+
         /// <summary>
         /// Returns (x - y)(x - y) element-wise.
         /// </summary>
