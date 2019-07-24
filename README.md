@@ -26,9 +26,10 @@ In comparison to other projects, like for instance TensorFlowSharp which only pr
 
 ### How to use
 
-Install TF.NET through NuGet.
+Install TF.NET and TensorFlow binary through NuGet.
 ```sh
 PM> Install-Package TensorFlow.NET
+PM> Install-Package SciSharp.TensorFlow.Redist
 ```
 
 Import TF.NET.
