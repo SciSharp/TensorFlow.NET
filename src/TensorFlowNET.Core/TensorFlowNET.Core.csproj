@@ -12,12 +12,12 @@
     <Copyright>Apache 2.0</Copyright>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>https://github.com/SciSharp</PackageProjectUrl>
+    <PackageProjectUrl>http://scisharpstack.org</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io
-Learn more about .NET AI: https://medium.com/scisharp</Description>
+Medium: https://medium.com/scisharp</Description>
     <AssemblyVersion>0.10.0.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.9.0:
 
@@ -26,7 +26,8 @@ Learn more about .NET AI: https://medium.com/scisharp</Description>
 3. Create Tensor from array without copying.
 4. Fix path issue of Transfer Learning example on Linux.
 5. Add back gen_ops.cs.
-5. Add StridedSliceGrad.</PackageReleaseNotes>
+6. Add StridedSliceGrad.
+7. Add BatchMatMulGrad.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
     <FileVersion>0.10.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
