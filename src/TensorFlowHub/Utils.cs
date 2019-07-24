@@ -1,14 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using NumSharp;
-using SharpCompress;
-using SharpCompress.Common;
-using SharpCompress.Readers;
 
 namespace Tensorflow.Hub
 {
@@ -37,7 +34,7 @@ namespace Tensorflow.Hub
             }
         }
 
-        public static void Unzip<TDataSet>(this IModelLoader<TDataSet> modelLoader, string zipFile, string saveTo)
+        public static async Task UnzipAsync<TDataSet>(this IModelLoader<TDataSet> modelLoader, string zipFile, string saveTo)
             where TDataSet : IDataSet
         {
             if (!Path.IsPathRooted(saveTo))
@@ -46,27 +43,22 @@ namespace Tensorflow.Hub
             if (!Directory.Exists(saveTo))
                 Directory.CreateDirectory(saveTo);
 
-            using (var stream = File.OpenRead(zipFile))
-            using (var reader = ReaderFactory.Open(stream))
-            {
-                while (reader.MoveToNextEntry())
-                {
-                    if (!reader.Entry.IsDirectory)
-                    {
-                        reader.WriteEntryToDirectory(saveTo, new ExtractionOptions()
-                        {
-                            ExtractFullPath = true,
-                            Overwrite = true
-                        });
-                    }
-                }
-            }
-        }
+            var destFilePath = Path.Combine(saveTo, Path.GetFileNameWithoutExtension(zipFile));
 
-        public static async Task UnzipAsync<TDataSet>(this IModelLoader<TDataSet> modelLoader, string zipFile, string saveTo)
-            where TDataSet : IDataSet
-        {
-            await Task.Run(() => modelLoader.Unzip(zipFile, saveTo));
+            if (File.Exists(destFilePath))
+                File.Delete(destFilePath);
+
+            using (GZipStream unzipStream = new GZipStream(File.OpenRead(zipFile), CompressionMode.Decompress))
+            {
+                using (var destStream = File.Create(destFilePath))
+                {
+                    await unzipStream.CopyToAsync(destStream);
+                    await destStream.FlushAsync();
+                    destStream.Close();
+                }
+
+                unzipStream.Close();
+            }
         }
 
         public static async Task ShowProgressInConsole(this Task task)
