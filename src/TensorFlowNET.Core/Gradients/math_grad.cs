@@ -16,6 +16,7 @@
 
 using System;
 using System.Linq;
+using Tensorflow.Operations;
 using static Tensorflow.Python;
 
 namespace Tensorflow.Gradients
@@ -26,6 +27,15 @@ namespace Tensorflow.Gradients
     [RegisterGradient("math_grad")]
     public class math_grad
     {
+        [RegisterGradient("Abs")]
+        public static Tensor[] _AbsGrad(Operation op, Tensor[] grads)
+        {
+            var x = op.inputs[0];
+            var grad = grads[0];
+
+            return new Tensor[] { gen_ops.mul(grad, gen_math_ops.sign(x)) };
+        }
+
         [RegisterGradient("Add")]
         public static Tensor[] _AddGrad(Operation op, Tensor[] grads)
         {
@@ -426,6 +436,15 @@ namespace Tensorflow.Gradients
                 y = math_ops.conj(y);
                 return new Tensor[] { gen_math_ops.sigmoid_grad(y, grad) };
             });
+        }
+
+        [RegisterGradient("Sign")]
+        public static Tensor[] _SignGrad(Operation op, Tensor[] grads)
+        {
+            var x = op.inputs[0];
+            var zero = constant_op.constant(0.0f, x.dtype, x.shape);
+
+            return new Tensor[] {zero};
         }
 
         [RegisterGradient("Square")]

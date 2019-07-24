@@ -203,6 +203,9 @@ namespace Tensorflow
         public static Tensor sqrt(Tensor a, string name = null) 
             => gen_math_ops.sqrt(a, name);
 
+        public static Tensor sign(Tensor a, string name = null)
+            => gen_math_ops.sign(a, name);
+
         public static Tensor subtract<T>(Tensor x, T[] y, string name = null) where T : struct
             => gen_math_ops.sub(x, ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y"), name);
 
