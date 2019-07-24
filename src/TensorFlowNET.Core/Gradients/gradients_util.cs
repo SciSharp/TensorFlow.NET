@@ -137,7 +137,7 @@ namespace Tensorflow
                                         if (loop_state != null)
                                             ;
                                         else
-                                            out_grads[i] = control_flow_ops.ZerosLikeOutsideLoop(op, i);
+                                            out_grads[i] = new List<Tensor> { control_flow_ops.ZerosLikeOutsideLoop(op, i) };
                                     }
                                 }
 
@@ -146,7 +146,7 @@ namespace Tensorflow
                                     string name1 = scope1;
                                     if (grad_fn != null)
                                     {
-                                        in_grads = _MaybeCompile(grad_scope, op, out_grads, null, grad_fn);
+                                        in_grads = _MaybeCompile(grad_scope, op, out_grads[0].ToArray(), null, grad_fn);
                                         _VerifyGeneratedGradients(in_grads, op);
                                     }
 
@@ -310,10 +310,9 @@ namespace Tensorflow
                 yield return op.inputs[i];
         }
 
-        private static Tensor[] _AggregatedGrads(Dictionary<string, List<List<Tensor>>> grads, Operation op, string gradient_uid, object loop_state, int aggregation_method = 0)
+        private static List<List<Tensor>> _AggregatedGrads(Dictionary<string, List<List<Tensor>>> grads, Operation op, string gradient_uid, object loop_state, int aggregation_method = 0)
         {
             var out_grads = _GetGrads(grads, op);
-            var return_grads = new Tensor[out_grads.Count];
 
             foreach (var (i, out_grad) in enumerate(out_grads))
             {
@@ -334,21 +333,21 @@ namespace Tensorflow
                             throw new ValueError("_AggregatedGrads out_grad.Length == 0");
                         }
 
-                        return_grads[i] = out_grad[0];
+                        out_grads[i] = out_grad;
                     }
                     else
                     {
                         used = "add_n";
-                        return_grads[i] = _MultiDeviceAddN(out_grad.ToArray(), gradient_uid);
+                        out_grads[i] = new List<Tensor> { _MultiDeviceAddN(out_grad.ToArray(), gradient_uid) };
                     }
                 }
                 else
                 {
-                    return_grads[i] = null;
+                    out_grads[i] = null;
                 }
             }
 
-            return return_grads;
+            return out_grads;
         }
 
         /// <summary>
@@ -362,7 +361,7 @@ namespace Tensorflow
             // Basic function structure comes from control_flow_ops.group().
             // Sort tensors according to their devices.
             var tensors_on_device = new Dictionary<string, List<Tensor>>();
-            
+
             foreach (var tensor in tensor_list)
             {
                 if (!tensors_on_device.ContainsKey(tensor.Device))
@@ -370,10 +369,10 @@ namespace Tensorflow
 
                 tensors_on_device[tensor.Device].Add(tensor);
             }
-                
+
             // For each device, add the tensors on that device first.
             var summands = new List<Tensor>();
-            foreach(var dev in tensors_on_device.Keys)
+            foreach (var dev in tensors_on_device.Keys)
             {
                 var tensors = tensors_on_device[dev];
                 ops._colocate_with_for_gradient(tensors[0].op, gradient_uid, ignore_existing: true);

@@ -2,6 +2,7 @@
 using NumSharp;
 using System.Linq;
 using Tensorflow;
+using static Tensorflow.Python;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -26,6 +27,38 @@ namespace TensorFlowNET.UnitTest
             var g = tf.gradients(ys, new Tensor[] { a, b }, stop_gradients: new Tensor[] { a, b });
             Assert.AreEqual(g[0].name, "gradients/Fill:0");
             Assert.AreEqual(g[1].name, "gradients/Fill:0");
+        }
+
+        [TestMethod]
+        public void Gradient2x()
+        {
+            var graph = tf.Graph().as_default();
+            with(tf.Session(graph), sess => {
+                var x = tf.constant(7.0f);
+                var y = x * x * tf.constant(0.1f);
+
+                var grad = tf.gradients(y, x);
+                Assert.AreEqual(grad[0].name, "gradients/AddN:0");
+
+                float r = sess.run(grad[0]);
+                Assert.AreEqual(r, 1.4f);
+            });
+        }
+
+        [TestMethod]
+        public void Gradient3x()
+        {
+            var graph = tf.Graph().as_default();
+            with(tf.Session(graph), sess => {
+                var x = tf.constant(7.0f);
+                var y = x * x * x * tf.constant(0.1f);
+
+                var grad = tf.gradients(y, x);
+                Assert.AreEqual(grad[0].name, "gradients/AddN:0");
+
+                float r = sess.run(grad[0]);
+                Assert.AreEqual(r, 14.700001f);
+            });
         }
 
         [TestMethod]
