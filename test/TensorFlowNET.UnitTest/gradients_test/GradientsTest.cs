@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
@@ -64,6 +63,74 @@ namespace TensorFlowNET.UnitTest.gradients_test
             }
         }
 
+        [TestMethod]
+        public void testTanhGradient()
+        {
+            var a = tf.constant(1f);
+            var b = tf.tanh(a);
+            var g = tf.gradients(b, a);
+            using (var sess = tf.Session())
+            {
+                var result = sess.run(g);
+                var actual = result[0].GetData<float>()[0];
+                self.assertEquals(0.41997434127f, actual);
+            }
+        }
+
+
+        [TestMethod]
+        public void testLgammaGrad()
+        {
+            var a = tf.constant(5f);
+            var b = tf.lgamma(a);
+            var g = tf.gradients(b, a);
+            using (var sess = tf.Session())
+            {
+                var result = sess.run(new object[] { g, b });
+                var actualDeriv = result[0].GetData<float>()[0];
+                var actual = result[1].GetData<float>()[0];
+                self.assertEquals(1.5061177f, actualDeriv);
+                self.assertEquals(3.17805386f, actual);
+            }
+        }
+
+        [TestMethod]
+        public void testSliceGrad()
+        {
+            var a = tf.tanh(tf.constant(new[] { 2f, 3f }, shape: new[] { 2, 1 }));
+            var b = tf.strided_slice(a,
+                tf.constant(new[] { 0 }, TF_DataType.TF_INT32, new[] { 1 }),
+                tf.constant(new[] { 1 }, TF_DataType.TF_INT32, new[] { 1 }),
+                tf.constant(new[] { 1 }, TF_DataType.TF_INT32, new[] { 1 })
+            );
+            var g = tf.gradients(b, a);
+            using (var sess = tf.Session())
+            {
+                var result = sess.run(new object[] { g, b });
+                var actualDeriv = result[0].GetData<float>()[0];
+                var actual = result[1].GetData<float>()[0];
+                self.assertEquals(1.5061177f, actualDeriv);
+                self.assertEquals(3.17805386f, actual);
+            }
+        }
+
+
+        [TestMethod]
+        public void testConcatGrad()
+        {
+            var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
+            var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
+            var a = tf.concat(new List<Tensor>(new[] {a1, a2}), 0);
+            var g = tf.gradients(a, a1);
+            using (var sess = tf.Session())
+            {
+                var result = sess.run(new object[] { g, a });
+                var actualDeriv = result[0].GetData<float>()[0];
+                var actual = result[1].GetData<float>()[0];
+                self.assertEquals(1f, actualDeriv);
+                self.assertEquals(2f, actual);
+            }
+        }
 
         [Ignore("TODO")]
         [TestMethod]
