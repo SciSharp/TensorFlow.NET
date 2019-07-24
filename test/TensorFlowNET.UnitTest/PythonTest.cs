@@ -126,7 +126,6 @@ namespace TensorFlowNET.UnitTest
             if (tensors == null)
                 return null;
             return nest.map_structure(self._eval_tensor, tensors);
-            return null;
         }
 
         protected object _eval_tensor(object tensor)
@@ -145,7 +144,7 @@ namespace TensorFlowNET.UnitTest
                     //                                                tensor.dense_shape)
                     //return (tensor as Tensor).numpy();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new ValueError("Unsupported type: " + tensor.GetType());
                 }

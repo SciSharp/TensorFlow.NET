@@ -39,7 +39,7 @@ namespace TensorFlowNET.UnitTest.ops_test
         [TestMethod]
         public void TestEager()
         {
-            Tensor a = null, c = null, d = null, e = null;
+            Tensor a = null, c = null;
             object b = null;
             var calls = 0;
             Func<Tensor> future = () =>

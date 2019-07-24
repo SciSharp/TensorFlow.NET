@@ -18,10 +18,12 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
             //var embedding_matrix = variable_scope.get_variable(
                 //"embedding_matrix", initializer: new double[,] { { 2.0 }, { 3.0 } }, use_resource: true);
 
+            /*
             Tensor cond(Tensor it, Tensor _)
             {
                 return it < 5;
             }
+            */
 
             // TODO: below code doesn't compile
             //(Tensor, Tensor) body(Tensor it, Tensor cost)
