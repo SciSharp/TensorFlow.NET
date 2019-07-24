@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.10.0</Version>
+    <Version>0.10.1</Version>
     <Authors>Haiping Chen, Meinrad Recheis</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -18,7 +18,7 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io
 Medium: https://medium.com/scisharp</Description>
-    <AssemblyVersion>0.10.0.0</AssemblyVersion>
+    <AssemblyVersion>0.10.1.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.9.0:
 
 1. Added full connected Convolution Neural Network example.
@@ -27,9 +27,10 @@ Medium: https://medium.com/scisharp</Description>
 4. Fix path issue of Transfer Learning example on Linux.
 5. Add back gen_ops.cs.
 6. Add StridedSliceGrad.
-7. Add BatchMatMulGrad.</PackageReleaseNotes>
+7. Add BatchMatMulGrad.
+8. Upgrade NumSharp.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.10.0.0</FileVersion>
+    <FileVersion>0.10.1.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
@@ -61,7 +62,7 @@ Medium: https://medium.com/scisharp</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.9.0" />
-    <PackageReference Include="NumSharp" Version="0.10.5" />
+    <PackageReference Include="NumSharp" Version="0.10.6" />
   </ItemGroup>
 
   <ItemGroup>
