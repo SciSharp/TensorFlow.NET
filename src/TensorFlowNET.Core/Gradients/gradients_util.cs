@@ -146,7 +146,7 @@ namespace Tensorflow
                                     string name1 = scope1;
                                     if (grad_fn != null)
                                     {
-                                        in_grads = _MaybeCompile(grad_scope, op, out_grads[0].ToArray(), null, grad_fn);
+                                        in_grads = _MaybeCompile(grad_scope, op, out_grads.Select(x => x[0]).ToArray(), null, grad_fn);
                                         _VerifyGeneratedGradients(in_grads, op);
                                     }
 
@@ -333,7 +333,7 @@ namespace Tensorflow
                             throw new ValueError("_AggregatedGrads out_grad.Length == 0");
                         }
 
-                        out_grads[i] = out_grad;
+                        out_grads[i] = new List<Tensor> { out_grad[0] };
                     }
                     else
                     {

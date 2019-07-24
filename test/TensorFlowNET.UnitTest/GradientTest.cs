@@ -91,11 +91,14 @@ namespace TensorFlowNET.UnitTest
 
             var g = tf.gradients(y, new Tensor[] { slice, slice });
 
-            var r = slice.eval();
+            with(tf.Session(graph), sess =>
+            {
+                var r = sess.run(slice);
 
-            Assert.IsTrue(Enumerable.SequenceEqual(r.shape, new[] { 2, 1, 2 }));
-            Assert.IsTrue(Enumerable.SequenceEqual(r[0].GetData<int>(), new[] { 11, 13 }));
-            Assert.IsTrue(Enumerable.SequenceEqual(r[1].GetData<int>(), new[] { 51, 53 }));
+                Assert.IsTrue(Enumerable.SequenceEqual(r.shape, new[] { 2, 1, 2 }));
+                Assert.IsTrue(Enumerable.SequenceEqual(r[0].GetData<int>(), new[] { 11, 13 }));
+                Assert.IsTrue(Enumerable.SequenceEqual(r[1].GetData<int>(), new[] { 51, 53 }));
+            });
         }
     }
 }

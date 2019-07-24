@@ -19,7 +19,7 @@ namespace TensorFlowNET.UnitTest
             var tensor3 = tf.constant(6.0); // double
         }
 
-        [DataTestMethod]
+        /*[DataTestMethod]
         [DataRow(int.MinValue)]
         [DataRow(-1)]
         [DataRow(0)]
@@ -85,7 +85,7 @@ namespace TensorFlowNET.UnitTest
                 var result = sess.run(tensor);
                 Assert.IsTrue(result.Data<string>()[0] == str);
             });
-        }
+        }*/
 
         [TestMethod]
         public void ZerosConst()

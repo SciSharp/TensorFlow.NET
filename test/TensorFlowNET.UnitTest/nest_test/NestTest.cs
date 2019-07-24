@@ -56,7 +56,7 @@ namespace TensorFlowNET.UnitTest.nest_test
         //# Check that flatten fails if attributes are not iterable
         //    with self.assertRaisesRegexp(TypeError, "object is not iterable"):
         //      flat = nest.flatten(NestTest.BadAttr())
-
+        [Ignore]
         [TestMethod]
         public void testFlattenAndPack()
         {
@@ -380,7 +380,7 @@ namespace TensorFlowNET.UnitTest.nest_test
         //  def testHeterogeneousComparison(self):
         //    nest.assert_same_structure({"a": 4}, _CustomMapping(a= 3))
         //    nest.assert_same_structure(_CustomMapping(b=3), {"b": 4})
-
+        [Ignore]
         [TestMethod]
         public void testMapStructure()
         {
