@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\TensorFlowHub\TensorFlowHub.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
     <ProjectReference Include="..\TensorFlowNET.Examples\TensorFlowNET.Examples.csproj" />
   </ItemGroup>
