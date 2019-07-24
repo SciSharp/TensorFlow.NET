@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.10.1</Version>
+    <Version>0.10.2</Version>
     <Authors>Haiping Chen, Meinrad Recheis</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -18,7 +18,7 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io
 Medium: https://medium.com/scisharp</Description>
-    <AssemblyVersion>0.10.1.0</AssemblyVersion>
+    <AssemblyVersion>0.10.2.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.9.0:
 
 1. Added full connected Convolution Neural Network example.
@@ -28,9 +28,10 @@ Medium: https://medium.com/scisharp</Description>
 5. Add back gen_ops.cs.
 6. Add StridedSliceGrad.
 7. Add BatchMatMulGrad.
-8. Upgrade NumSharp.</PackageReleaseNotes>
+8. Upgrade NumSharp.
+9. Fix strided_slice_grad type convention error.</PackageReleaseNotes>
     <LangVersion>7.2</LangVersion>
-    <FileVersion>0.10.1.0</FileVersion>
+    <FileVersion>0.10.2.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>

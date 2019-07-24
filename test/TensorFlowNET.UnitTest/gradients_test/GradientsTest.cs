@@ -34,10 +34,10 @@ namespace TensorFlowNET.UnitTest.gradients_test
         [TestMethod]
         public void testBatchMatMulGradient()
         {
-            var a = tf.constant(np.array(Enumerable.Range(1, 18).Select(elem => (float)elem).ToArray()), shape:new []{2, 3, 3});
+            var a = tf.constant(np.array(Enumerable.Range(1, 18).Select(elem => (float)elem).ToArray()), shape: new[] { 2, 3, 3 });
             var b = tf.divide(a, tf.constant(2.0f));
             var c = tf.batch_matmul(a, b);
-            var g = tf.gradients(c, new[] {a, b}, stop_gradients: new[] {a, b});
+            var g = tf.gradients(c, new[] { a, b }, stop_gradients: new[] { a, b });
             var checkG = new[]
             {
                 3.0f, 7.5f, 12.0f,
@@ -99,28 +99,27 @@ namespace TensorFlowNET.UnitTest.gradients_test
         {
             var a = tf.tanh(tf.constant(new[] { 2f, 3f }, shape: new[] { 2, 1 }));
             var b = tf.strided_slice(a,
-                tf.constant(new[] { 0 }, TF_DataType.TF_INT32, new[] { 1 }),
-                tf.constant(new[] { 1 }, TF_DataType.TF_INT32, new[] { 1 }),
-                tf.constant(new[] { 1 }, TF_DataType.TF_INT32, new[] { 1 })
+                tf.constant(new[] { 0 }, tf.int32, new[] { 1 }),
+                tf.constant(new[] { 1 }, tf.int32, new[] { 1 }),
+                tf.constant(new[] { 1 }, tf.int32, new[] { 1 })
             );
             var g = tf.gradients(b, a);
-            using (var sess = tf.Session())
+            with(tf.Session(), sess =>
             {
                 var result = sess.run(new object[] { g, b });
-                var actualDeriv = result[0].GetData<float>()[0];
-                var actual = result[1].GetData<float>()[0];
-                self.assertEquals(1.5061177f, actualDeriv);
-                self.assertEquals(3.17805386f, actual);
-            }
+                var actualDeriv = np.squeeze(result[0]);
+                var actual = np.squeeze(result[1]);
+                self.assertEquals(new float[] { 1, 0 }, new float[] { actualDeriv[0], actualDeriv[1] });
+                self.assertEquals(0.9640276f, (float)actual);
+            });
         }
-
 
         [TestMethod]
         public void testConcatGrad()
         {
             var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
             var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
-            var a = tf.concat(new List<Tensor>(new[] {a1, a2}), 0);
+            var a = tf.concat(new List<Tensor>(new[] { a1, a2 }), 0);
             var g = tf.gradients(a, a1);
             using (var sess = tf.Session())
             {
@@ -136,15 +135,15 @@ namespace TensorFlowNET.UnitTest.gradients_test
         [TestMethod]
         public void testUnusedOutput()
         {
-          //def testUnusedOutput(self):
-          //  with ops.Graph().as_default():
-          //    w = constant(1.0, shape=[2, 2])
-          //    x = constant(1.0, shape=[2, 2])
-          //    wx = math_ops.matmul(w, x)
-          //    split_wx = array_ops.split(value=wx, num_or_size_splits=2, axis=0)
-          //    c = math_ops.reduce_sum(split_wx[1])
-          //    gw = gradients.gradients(c, [w])[0]
-          //  self.assertEquals("MatMul", gw.op.type)
+            //def testUnusedOutput(self):
+            //  with ops.Graph().as_default():
+            //    w = constant(1.0, shape=[2, 2])
+            //    x = constant(1.0, shape=[2, 2])
+            //    wx = math_ops.matmul(w, x)
+            //    split_wx = array_ops.split(value=wx, num_or_size_splits=2, axis=0)
+            //    c = math_ops.reduce_sum(split_wx[1])
+            //    gw = gradients.gradients(c, [w])[0]
+            //  self.assertEquals("MatMul", gw.op.type)
         }
 
         [Ignore("TODO")]
