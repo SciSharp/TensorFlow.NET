@@ -93,6 +93,9 @@ namespace Tensorflow.Hub
 
         private NDArray ExtractImages(string file, int? limit = null)
         {
+            if (!Path.IsPathRooted(file))
+                file = Path.Combine(AppContext.BaseDirectory, file);
+
             using (var bytestream = new FileStream(file, FileMode.Open))
             {
                 var magic = Read32(bytestream);
@@ -118,6 +121,9 @@ namespace Tensorflow.Hub
 
         private NDArray ExtractLabels(string file, bool one_hot = false, int num_classes = 10, int? limit = null)
         {
+            if (!Path.IsPathRooted(file))
+                file = Path.Combine(AppContext.BaseDirectory, file);
+                
             using (var bytestream = new FileStream(file, FileMode.Open))
             {
                 var magic = Read32(bytestream);
