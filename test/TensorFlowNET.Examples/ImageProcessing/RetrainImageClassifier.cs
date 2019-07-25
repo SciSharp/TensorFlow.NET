@@ -735,21 +735,43 @@ namespace TensorFlowNET.Examples.ImageProcess
 
             var labels = File.ReadAllLines(output_labels);
 
+            // predict image
+            var img_path = Path.Join(image_dir, "roses", "12240303_80d87f77a3_n.jpg");
+            var fileBytes = ReadTensorFromImageFile(img_path);
+
+            // import graph and variables
             var graph = Graph.ImportFromPB(output_graph, "");
 
-            Tensor input_layer = graph.OperationByName("input/BottleneckInputPlaceholder");
-            Tensor output_layer = graph.OperationByName("final_result");
+            Tensor input = graph.OperationByName("Placeholder");
+            Tensor output = graph.OperationByName("final_result");
 
             with(tf.Session(graph), sess =>
             {
-                var bottleneck_path = Path.Join(bottleneck_dir, "roses", "12240303_80d87f77a3_n.jpg_https~tfhub.dev~google~imagenet~inception_v3~feature_vector~3.txt");
-                var bottleneck_string = File.ReadAllText(bottleneck_path);
-                var bottleneck_values = Array.ConvertAll(bottleneck_string.Split(','), x => float.Parse(x));
-                var nd = np.array(bottleneck_values).reshape(1, 2048);
-                var result = sess.run(output_layer, new FeedItem(input_layer, nd));
+                var result = sess.run(output, new FeedItem(input, fileBytes));
                 var prob = np.squeeze(result);
                 var idx = np.argmax(prob);
-                print($"Prediction result: [{labels[idx]} {prob[idx][0]}] for {bottleneck_path}.");
+                print($"Prediction result: [{labels[idx]} {prob[idx][0]}] for {img_path}.");
+            });
+        }
+
+        private NDArray ReadTensorFromImageFile(string file_name,
+                        int input_height = 299,
+                        int input_width = 299,
+                        int input_mean = 0,
+                        int input_std = 255)
+        {
+            return with(tf.Graph().as_default(), graph =>
+            {
+                var file_reader = tf.read_file(file_name, "file_reader");
+                var image_reader = tf.image.decode_jpeg(file_reader, channels: 3, name: "jpeg_reader");
+                var caster = tf.cast(image_reader, tf.float32);
+                var dims_expander = tf.expand_dims(caster, 0);
+                var resize = tf.constant(new int[] { input_height, input_width });
+                var bilinear = tf.image.resize_bilinear(dims_expander, resize);
+                var sub = tf.subtract(bilinear, new float[] { input_mean });
+                var normalized = tf.divide(sub, new float[] { input_std });
+
+                return with(tf.Session(graph), sess => sess.run(normalized));
             });
         }
 
