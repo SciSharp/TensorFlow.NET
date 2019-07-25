@@ -55,11 +55,11 @@ namespace Tensorflow
             return Status;
         }
 
-        public static Graph ImportFromPB(string file_path)
+        public static Graph ImportFromPB(string file_path, string name = null)
         {
             var graph = tf.Graph().as_default();
             var graph_def = GraphDef.Parser.ParseFrom(File.ReadAllBytes(file_path));
-            importer.import_graph_def(graph_def);
+            importer.import_graph_def(graph_def, name: name);
             return graph;
         }
     }

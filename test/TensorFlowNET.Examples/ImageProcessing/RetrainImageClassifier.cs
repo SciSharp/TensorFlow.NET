@@ -80,6 +80,16 @@ namespace TensorFlowNET.Examples.ImageProcess
         {
             PrepareData();
 
+            #region For debug purpose
+            
+            // predict images
+            Predict(null);
+
+            // load saved pb and test new images.
+            Test(null); 
+            
+            #endregion
+
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
 
             with(tf.Session(graph), sess =>
@@ -708,14 +718,38 @@ namespace TensorFlowNET.Examples.ImageProcess
             File.WriteAllText(output_labels, string.Join("\n", image_lists.Keys));
         }
 
-        public void Predict(Session sess)
+        public void Predict(Session sess_)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(output_graph))
+                return;
+
+            var graph = Graph.ImportFromPB(output_graph, "");
+
+            Tensor input_layer = graph.OperationByName("input/BottleneckInputPlaceholder");
+            Tensor output_layer = graph.OperationByName("final_result");
+
+            with(tf.Session(graph), sess =>
+            {
+                // load images into NDArray in a matrix[image_num, features]
+                var nd = np.arange(2048f).reshape(1, 2048); // replace this line
+                var result = sess.run(output_layer, new FeedItem(input_layer, nd));
+            });
         }
 
-        public void Test(Session sess)
+        public void Test(Session sess_)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(output_graph))
+                return;
+
+            var graph = Graph.ImportFromPB(output_graph);
+            var (jpeg_data_tensor, decoded_image_tensor) = add_jpeg_decoding();
+
+            with(tf.Session(graph), sess =>
+            {
+                (test_accuracy, predictions) = run_final_eval(sess, null, class_count, image_lists,
+                               jpeg_data_tensor, decoded_image_tensor, resized_image_tensor,
+                               bottleneck_tensor);
+            });
         }
     }
 }

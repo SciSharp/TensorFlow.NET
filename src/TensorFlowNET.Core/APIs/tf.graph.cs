@@ -24,7 +24,7 @@ namespace Tensorflow
             return ops.get_default_graph();
         }
 
-        public static Graph Graph() => new Graph();
-
+        public static Graph Graph() 
+            => new Graph();
     }
 }
