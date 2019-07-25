@@ -35,7 +35,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\KerasNET.Core\Keras.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
-    <ProjectReference Include="..\KerasNET.Example\Keras.Example.csproj" />
   </ItemGroup>
 
 </Project>
