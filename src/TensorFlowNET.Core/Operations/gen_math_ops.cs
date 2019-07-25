@@ -376,6 +376,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor is_nan(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("IsNan", name: name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
         /// <summary>
         /// Computes exponential of x element-wise.  \\(y = e^x\\).
         /// </summary>
