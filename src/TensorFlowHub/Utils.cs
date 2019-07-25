@@ -42,6 +42,9 @@ namespace Tensorflow.Hub
 
             if (!Directory.Exists(saveTo))
                 Directory.CreateDirectory(saveTo);
+            
+            if (!Path.IsPathRooted(zipFile))
+                zipFile = Path.Combine(AppContext.BaseDirectory, zipFile);
 
             var destFilePath = Path.Combine(saveTo, Path.GetFileNameWithoutExtension(zipFile));
 
