@@ -718,10 +718,22 @@ namespace TensorFlowNET.Examples.ImageProcess
             File.WriteAllText(output_labels, string.Join("\n", image_lists.Keys));
         }
 
+        /// <summary>
+        /// Prediction
+        /// labels mapping, it's from output_lables.txt
+        /// 0 - daisy
+        /// 1 - dandelion
+        /// 2 - roses
+        /// 3 - sunflowers
+        /// 4 - tulips
+        /// </summary>
+        /// <param name="sess_"></param>
         public void Predict(Session sess_)
         {
             if (!File.Exists(output_graph))
                 return;
+
+            var labels = File.ReadAllLines(output_labels);
 
             var graph = Graph.ImportFromPB(output_graph, "");
 
@@ -730,9 +742,14 @@ namespace TensorFlowNET.Examples.ImageProcess
 
             with(tf.Session(graph), sess =>
             {
-                // load images into NDArray in a matrix[image_num, features]
-                var nd = np.arange(2048f).reshape(1, 2048); // replace this line
+                var bottleneck_path = Path.Join(bottleneck_dir, "roses", "12240303_80d87f77a3_n.jpg_https~tfhub.dev~google~imagenet~inception_v3~feature_vector~3.txt");
+                var bottleneck_string = File.ReadAllText(bottleneck_path);
+                var bottleneck_values = Array.ConvertAll(bottleneck_string.Split(','), x => float.Parse(x));
+                var nd = np.array(bottleneck_values).reshape(1, 2048);
                 var result = sess.run(output_layer, new FeedItem(input_layer, nd));
+                var prob = np.squeeze(result);
+                var idx = np.argmax(prob);
+                print($"Prediction result: [{labels[idx]} {prob[idx][0]}] for {bottleneck_path}.");
             });
         }
 
