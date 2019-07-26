@@ -22,6 +22,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowDatasets", "src\TensorFlowDatasets\TensorFlowDatasets.csproj", "{DF151A51-E9FD-41BD-B0F4-08A743755D44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Examples.GPU", "test\TensorFlowNET.Examples\TensorFlowNET.Examples.GPU.csproj", "{6F6B3382-8F87-4CD9-BF87-C81D5405685A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{EA9A238E-B93F-4809-AB3D-339B2990FBFF}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\Copy-NativeTensorFlowLibs.ps1 = scripts\Copy-NativeTensorFlowLibs.ps1
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist", "src\runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist\runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist.csproj", "{BEC7FC31-58BD-48C1-96CE-6B68570A5431}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +67,7 @@ Global
 		{B598E5D5-BD2D-4191-8532-F2FBAC31AB81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B598E5D5-BD2D-4191-8532-F2FBAC31AB81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B598E5D5-BD2D-4191-8532-F2FBAC31AB81}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{DF151A51-E9FD-41BD-B0F4-08A743755D44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF151A51-E9FD-41BD-B0F4-08A743755D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF151A51-E9FD-41BD-B0F4-08A743755D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +76,12 @@ Global
 		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{BEC7FC31-58BD-48C1-96CE-6B68570A5431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC7FC31-58BD-48C1-96CE-6B68570A5431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC7FC31-58BD-48C1-96CE-6B68570A5431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC7FC31-58BD-48C1-96CE-6B68570A5431}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> Provide the win-x64 runtime nuget for TensorFlow Gpu
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
