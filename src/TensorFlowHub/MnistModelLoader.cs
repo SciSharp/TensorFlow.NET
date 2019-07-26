@@ -81,7 +81,7 @@ namespace Tensorflow.Hub
             trainImages = trainImages[np.arange(validationSize, end)];
             trainLabels = trainLabels[np.arange(validationSize, end)];
 
-            var dtype = setting.DtType;
+            var dtype = setting.DataType;
             var reshape = setting.ReShape;
 
             var train = new MnistDataSet(trainImages, trainLabels, dtype, reshape);
@@ -100,7 +100,7 @@ namespace Tensorflow.Hub
             {
                 var magic = Read32(bytestream);
                 if (magic != 2051)
-                    throw new ValueError($"Invalid magic number {magic} in MNIST image file: {file}");
+                    throw new Exception($"Invalid magic number {magic} in MNIST image file: {file}");
                 
                 var num_images =  Read32(bytestream);
                 num_images = limit == null ? num_images : Math.Min(num_images, (uint)limit);
@@ -128,7 +128,7 @@ namespace Tensorflow.Hub
             {
                 var magic = Read32(bytestream);
                 if (magic != 2049)
-                    throw new ValueError($"Invalid magic number {magic} in MNIST label file: {file}");
+                    throw new Exception($"Invalid magic number {magic} in MNIST label file: {file}");
                 
                 var num_items = Read32(bytestream);
                 num_items = limit == null ? num_items : Math.Min(num_items, (uint)limit);
