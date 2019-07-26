@@ -51,7 +51,6 @@ namespace TensorFlowNET.ExamplesTests
             new LinearRegression() { Enabled = true }.Run();
         }
 
-        [Ignore("not working")]
         [TestMethod]
         public void LogisticRegression()
         {
@@ -75,7 +74,6 @@ namespace TensorFlowNET.ExamplesTests
             new NamedEntityRecognition() { Enabled = true }.Run();
         }
 
-        [Ignore("Not working")]
         [TestMethod]
         public void NearestNeighbor()
         {

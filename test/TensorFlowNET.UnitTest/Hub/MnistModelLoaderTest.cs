@@ -7,7 +7,6 @@ namespace TensorFlowNET.UnitTest.Hub
     [TestClass]
     public class MnistModelLoaderTest
     {
-        [Ignore("not working")]
         [TestMethod]
         public async Task TestLoad()
         {
