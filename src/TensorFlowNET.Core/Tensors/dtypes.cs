@@ -205,5 +205,10 @@ namespace Tensorflow
         {
             return (int)type > 100;
         }
+
+        public static bool is_compatible_with(this TF_DataType self, TF_DataType other)
+        {
+            return self.as_datatype_enum() == other.as_datatype_enum();
+        }
     }
 }
