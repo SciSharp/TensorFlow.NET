@@ -50,8 +50,8 @@ namespace Tensorflow
                     validate_shape: validate_shape,
                     use_locking: use_locking,
                     name: name);
-            throw new NotImplementedException("state_ops.assign");
-            //return @ref.assign(value, name: name);
+
+            return @ref.assign((Tensor)value, name: name);
         }
 
         public static Tensor assign(RefVariable @ref, object value,

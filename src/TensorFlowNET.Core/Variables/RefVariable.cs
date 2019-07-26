@@ -40,6 +40,8 @@ namespace Tensorflow
 
         public override string name => _variable.name;
 
+        public Tensor eval() => _variable;
+
         public RefVariable(object initial_value = null,
             bool trainable = true,
             List<string> collections = null,
