@@ -4,6 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
+    <PackageReference Include="NumSharp" Version="0.10.6" />
   </ItemGroup>
 </Project>
