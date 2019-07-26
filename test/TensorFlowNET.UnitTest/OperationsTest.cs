@@ -90,6 +90,47 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
+        public void cumSumTest()
+        {
+            var a = tf.constant(new[] { 1, 1, 2, 3, 4, 5 });
+            var b = tf.cumsum(a);
+            var check = np.array(1, 2, 4, 7, 11, 16);
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(b);
+                Assert.IsTrue(o.array_equal(check));
+            }
+
+            b = tf.cumsum(a, exclusive: true);
+            check = np.array(0, 1, 2, 4, 7, 11);
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(b);
+                Assert.IsTrue(o.array_equal(check));
+            }
+
+            b = tf.cumsum(a, reverse: true);
+            check = np.array(16, 15, 14, 12, 9, 5);
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(b);
+                Assert.IsTrue(o.array_equal(check));
+            }
+
+            b = tf.cumsum(a, exclusive:true, reverse: true);
+            check = np.array(15, 14, 12, 9, 5, 0);
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(b);
+                Assert.IsTrue(o.array_equal(check));
+            }
+        }
+
+        [TestMethod]
         public void addOpTests()
         {
             const int rows = 2; // to avoid broadcasting effect

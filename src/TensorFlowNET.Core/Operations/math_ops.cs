@@ -80,6 +80,17 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor cumsum(Tensor x, int axis = 0, bool exclusive = false, bool reverse = false, string name = null)
+        {
+            return with(ops.name_scope(name, "Cumsum", new {x}), scope =>
+            {
+                name = scope;
+                x = ops.convert_to_tensor(x, name: "x");
+
+                return gen_math_ops.cumsum(x, axis: axis, exclusive: exclusive, reverse: reverse, name: name);
+            });
+        }
+
         /// <summary>
         /// Computes Psi, the derivative of Lgamma (the log of the absolute value of
         /// `Gamma(x)`), element-wise.
