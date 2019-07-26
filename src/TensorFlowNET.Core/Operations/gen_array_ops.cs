@@ -426,7 +426,7 @@ namespace Tensorflow
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `dy`.</returns>
         public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy, 
-            int begin_mask = 0, int end_mask = 0, int ellipsis_mask = 0, int new_axis_mask = 0, 
+            int begin_mask = 0, int end_mask = 0, int ellipsis_mask = 0, int new_axis_mask = 0,
             int shrink_axis_mask = 0, string name = null)
         {
             var op = _op_def_lib._apply_op_helper("StridedSliceGrad", name: name, args: new

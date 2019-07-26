@@ -62,6 +62,34 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
+        public void isFinite()
+        {
+            var a = tf.constant(new[] { 1, np.nan, 2, np.nan, 3, np.nan, 4, np.nan });
+            var b = tf.cast(tf.is_finite(a), tf.float32);
+            var check = np.array(1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(b);
+                Assert.IsTrue(o.array_equal(check));
+            }
+        }
+
+        [TestMethod]
+        public void isNan()
+        {
+            var a = tf.constant(new[] { 1, np.nan, 2, np.nan, 3, np.nan, 4, np.nan });
+            var b = tf.cast(tf.is_nan(a), tf.float32);
+            var check = np.array(0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f);
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(b);
+                Assert.IsTrue(o.array_equal(check));
+            }
+        }
+
+        [TestMethod]
         public void addOpTests()
         {
             const int rows = 2; // to avoid broadcasting effect

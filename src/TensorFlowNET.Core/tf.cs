@@ -46,7 +46,7 @@ namespace Tensorflow
                 trainable: trainable,
                 validate_shape: validate_shape,
                 name: name,
-                dtype: TF_DataType.DtInvalid);
+                dtype: dtype);
         }
 
         public static unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
@@ -71,6 +71,11 @@ namespace Tensorflow
         public static Session Session(Graph graph)
         {
             return new Session(graph);
+        }
+
+        public static Session Session(SessionOptions opts)
+        {
+            return new Session(null, opts);
         }
     }
 }

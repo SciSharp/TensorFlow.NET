@@ -57,6 +57,12 @@ namespace Tensorflow
         public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
             => gen_math_ops.arg_min(input, dimension, output_type: output_type, name: name);
 
+        public static Tensor is_finite(Tensor input, string name = null)
+            => gen_math_ops.is_finite(input, name);
+
+        public static Tensor is_nan(Tensor input, string name = null)
+            => gen_math_ops.is_nan(input, name);
+
         /// <summary>
         /// Returns element-wise smallest integer not less than x.
         /// </summary>
@@ -202,6 +208,9 @@ namespace Tensorflow
 
         public static Tensor sqrt(Tensor a, string name = null) 
             => gen_math_ops.sqrt(a, name);
+
+        public static Tensor sign(Tensor a, string name = null)
+            => gen_math_ops.sign(a, name);
 
         public static Tensor subtract<T>(Tensor x, T[] y, string name = null) where T : struct
             => gen_math_ops.sub(x, ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y"), name);

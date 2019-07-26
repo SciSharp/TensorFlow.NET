@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Tensorflow.Framework;
 using static Tensorflow.Python;
 
 namespace Tensorflow
@@ -27,7 +28,7 @@ namespace Tensorflow
     /// A tensor is a generalization of vectors and matrices to potentially higher dimensions. 
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
-    public partial class Tensor : IDisposable, ITensorOrOperation
+    public partial class Tensor : IDisposable, ITensorOrOperation, _TensorLike
     {
         private IntPtr _handle;
 
@@ -108,6 +109,8 @@ namespace Tensorflow
         {
             this.shape = shape.Dimensions;
         }
+
+        public int[] dims => shape;
 
         /// <summary>
         /// number of dimensions

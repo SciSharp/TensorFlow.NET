@@ -15,6 +15,16 @@ namespace Tensorflow.Hub
         private const string TEST_IMAGES = "t10k-images-idx3-ubyte.gz";
         private const string TEST_LABELS = "t10k-labels-idx1-ubyte.gz";
 
+        public static async Task<Datasets<MnistDataSet>> LoadAsync(string trainDir, bool oneHot = false)
+        {
+            var loader = new MnistModelLoader();
+            return await loader.LoadAsync(new ModelLoadSetting
+            {
+                TrainDir = trainDir,
+                OneHot = oneHot
+            });
+        }
+
         public async Task<Datasets<MnistDataSet>> LoadAsync(ModelLoadSetting setting)
         {
             if (setting.TrainSize.HasValue && setting.ValidationSize >= setting.TrainSize.Value)
@@ -71,7 +81,7 @@ namespace Tensorflow.Hub
             trainImages = trainImages[np.arange(validationSize, end)];
             trainLabels = trainLabels[np.arange(validationSize, end)];
 
-            var dtype = setting.DtType;
+            var dtype = setting.DataType;
             var reshape = setting.ReShape;
 
             var train = new MnistDataSet(trainImages, trainLabels, dtype, reshape);
@@ -83,11 +93,14 @@ namespace Tensorflow.Hub
 
         private NDArray ExtractImages(string file, int? limit = null)
         {
+            if (!Path.IsPathRooted(file))
+                file = Path.Combine(AppContext.BaseDirectory, file);
+
             using (var bytestream = new FileStream(file, FileMode.Open))
             {
                 var magic = Read32(bytestream);
                 if (magic != 2051)
-                    throw new ValueError($"Invalid magic number {magic} in MNIST image file: {file}");
+                    throw new Exception($"Invalid magic number {magic} in MNIST image file: {file}");
                 
                 var num_images =  Read32(bytestream);
                 num_images = limit == null ? num_images : Math.Min(num_images, (uint)limit);
@@ -108,11 +121,14 @@ namespace Tensorflow.Hub
 
         private NDArray ExtractLabels(string file, bool one_hot = false, int num_classes = 10, int? limit = null)
         {
+            if (!Path.IsPathRooted(file))
+                file = Path.Combine(AppContext.BaseDirectory, file);
+                
             using (var bytestream = new FileStream(file, FileMode.Open))
             {
                 var magic = Read32(bytestream);
                 if (magic != 2049)
-                    throw new ValueError($"Invalid magic number {magic} in MNIST label file: {file}");
+                    throw new Exception($"Invalid magic number {magic} in MNIST label file: {file}");
                 
                 var num_items = Read32(bytestream);
                 num_items = limit == null ? num_items : Math.Min(num_items, (uint)limit);

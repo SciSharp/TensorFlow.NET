@@ -214,6 +214,12 @@ namespace Tensorflow
                             else
                                 nparray = Convert.ToString(values);
                             break;
+                        case "Boolean":
+                            if (values.GetType().IsArray)
+                                nparray = np.array((bool[])values, np_dt);
+                            else
+                                nparray = Convert.ToBoolean(values);
+                            break;
                         default:
                             throw new NotImplementedException($"make_tensor_proto: Support for type {np_dt.Name} Not Implemented");
                     }

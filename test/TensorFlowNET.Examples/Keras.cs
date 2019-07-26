@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using Tensorflow;
 using Keras.Layers;
 using NumSharp;
+using Keras;
 
-namespace Keras.Example
+namespace TensorFlowNET.Examples
 {
-    class Program
+    public class Keras : IExample
     {
-        static void Main(string[] args)
+        public bool Enabled { get; set; } = true;
+        public bool IsImportingGraph { get; set; } = false;
+
+        public string Name => "Keras";
+
+        public bool Run()
         {
             Console.WriteLine("================================== Keras ==================================");
 
@@ -25,7 +31,7 @@ namespace Keras.Example
 
             #region model
             var m = new Model();
-            
+
             //m.Add(new Dense(8, name: "Hidden", activation: tf.nn.relu())).Add(new Dense(1, name:"Output"));
 
             m.Add(
@@ -37,8 +43,9 @@ namespace Keras.Example
             m.train(num_steps, (X, Y));
             #endregion
 
-            Console.ReadKey();
+            return true;
         }
+
         static (NDArray, NDArray) XOR(int samples)
         {
             var X = new List<float[]>();
@@ -56,6 +63,36 @@ namespace Keras.Example
             }
             
             return (np.array(X.ToArray()), np.array(Y.ToArray()));
+        }
+
+        public Graph BuildGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Graph ImportGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Predict(Session sess)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PrepareData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test(Session sess)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Train(Session sess)
+        {
+            throw new NotImplementedException();
         }
     }
 }

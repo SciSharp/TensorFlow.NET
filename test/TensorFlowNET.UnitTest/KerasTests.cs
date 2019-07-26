@@ -3,7 +3,7 @@ using Keras.Layers;
 using NumSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Keras.Test
+namespace TensorFlowNET.UnitTest
 {
     [TestClass]
     public class BaseTests

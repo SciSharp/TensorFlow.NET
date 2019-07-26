@@ -80,6 +80,16 @@ namespace TensorFlowNET.Examples.ImageProcess
         {
             PrepareData();
 
+            #region For debug purpose
+            
+            // predict images
+            Predict(null);
+
+            // load saved pb and test new images.
+            Test(null); 
+            
+            #endregion
+
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
 
             with(tf.Session(graph), sess =>
@@ -708,14 +718,77 @@ namespace TensorFlowNET.Examples.ImageProcess
             File.WriteAllText(output_labels, string.Join("\n", image_lists.Keys));
         }
 
-        public void Predict(Session sess)
+        /// <summary>
+        /// Prediction
+        /// labels mapping, it's from output_lables.txt
+        /// 0 - daisy
+        /// 1 - dandelion
+        /// 2 - roses
+        /// 3 - sunflowers
+        /// 4 - tulips
+        /// </summary>
+        /// <param name="sess_"></param>
+        public void Predict(Session sess_)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(output_graph))
+                return;
+
+            var labels = File.ReadAllLines(output_labels);
+
+            // predict image
+            var img_path = Path.Join(image_dir, "roses", "12240303_80d87f77a3_n.jpg");
+            var fileBytes = ReadTensorFromImageFile(img_path);
+
+            // import graph and variables
+            var graph = Graph.ImportFromPB(output_graph, "");
+
+            Tensor input = graph.OperationByName("Placeholder");
+            Tensor output = graph.OperationByName("final_result");
+
+            with(tf.Session(graph), sess =>
+            {
+                var result = sess.run(output, new FeedItem(input, fileBytes));
+                var prob = np.squeeze(result);
+                var idx = np.argmax(prob);
+                print($"Prediction result: [{labels[idx]} {prob[idx][0]}] for {img_path}.");
+            });
         }
 
-        public void Test(Session sess)
+        private NDArray ReadTensorFromImageFile(string file_name,
+                        int input_height = 299,
+                        int input_width = 299,
+                        int input_mean = 0,
+                        int input_std = 255)
         {
-            throw new NotImplementedException();
+            return with(tf.Graph().as_default(), graph =>
+            {
+                var file_reader = tf.read_file(file_name, "file_reader");
+                var image_reader = tf.image.decode_jpeg(file_reader, channels: 3, name: "jpeg_reader");
+                var caster = tf.cast(image_reader, tf.float32);
+                var dims_expander = tf.expand_dims(caster, 0);
+                var resize = tf.constant(new int[] { input_height, input_width });
+                var bilinear = tf.image.resize_bilinear(dims_expander, resize);
+                var sub = tf.subtract(bilinear, new float[] { input_mean });
+                var normalized = tf.divide(sub, new float[] { input_std });
+
+                return with(tf.Session(graph), sess => sess.run(normalized));
+            });
+        }
+
+        public void Test(Session sess_)
+        {
+            if (!File.Exists(output_graph))
+                return;
+
+            var graph = Graph.ImportFromPB(output_graph);
+            var (jpeg_data_tensor, decoded_image_tensor) = add_jpeg_decoding();
+
+            with(tf.Session(graph), sess =>
+            {
+                (test_accuracy, predictions) = run_final_eval(sess, null, class_count, image_lists,
+                               jpeg_data_tensor, decoded_image_tensor, resized_image_tensor,
+                               bottleneck_tensor);
+            });
         }
     }
 }
