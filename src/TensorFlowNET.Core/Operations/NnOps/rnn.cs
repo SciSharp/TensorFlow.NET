@@ -24,15 +24,15 @@ namespace Tensorflow.Operations
 {
     internal class rnn
     {
-        public static (Tensor, Tensor) dynamic_rnn(RNNCell cell, Tensor inputs,
-            int? sequence_length = null, Tensor initial_state = null, 
+        public static (Tensor, Tensor) dynamic_rnn(RNNCell cell, Tensor inputs_tensor,
+            Tensor sequence_length = null, Tensor initial_state = null, 
             TF_DataType dtype = TF_DataType.DtInvalid,
             int? parallel_iterations = null, bool swap_memory = false, bool time_major = false)
         {
             with(tf.variable_scope("rnn"), scope =>
             {
                 VariableScope varscope = scope;
-                var flat_input = nest.flatten(inputs);
+                var flat_input = nest.flatten(inputs_tensor);
 
                 if (!time_major)
                 {
@@ -42,22 +42,144 @@ namespace Tensorflow.Operations
 
                 parallel_iterations = parallel_iterations ?? 32;
 
-                if (sequence_length.HasValue)
+                if (sequence_length != null)
                     throw new NotImplementedException("dynamic_rnn sequence_length has value");
 
                 var batch_size = _best_effort_input_batch_size(flat_input);
 
+                Tensor state = null;
                 if (initial_state != null)
-                {
-                    var state = initial_state;
-                }
+                    state = initial_state;
                 else
-                {
-                    cell.get_initial_state(batch_size: batch_size, dtype: dtype);
-                }
+                    state = cell.get_initial_state(batch_size: batch_size, dtype: dtype);
+
+                var inputs = nest.pack_sequence_as(structure: inputs_tensor, flat_sequence: flat_input);
+
+                var (outputs, final_state) = _dynamic_rnn_loop(
+                    cell,
+                    inputs as Tensor,
+                    state,
+                    parallel_iterations: parallel_iterations.Value,
+                    swap_memory: swap_memory,
+                    sequence_length: sequence_length,
+                    dtype: dtype);
             });
 
             throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// Internal implementation of Dynamic RNN.
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="inputs"></param>
+        /// <param name="initial_state"></param>
+        /// <param name="parallel_iterations"></param>
+        /// <param name="swap_memory"></param>
+        /// <param name="sequence_length"></param>
+        /// <param name="dtype"></param>
+        /// <returns></returns>
+        private static (Tensor, Tensor) _dynamic_rnn_loop(RNNCell cell, Tensor inputs, Tensor initial_state,
+            int parallel_iterations, bool swap_memory, Tensor sequence_length = null, TF_DataType dtype = TF_DataType.DtInvalid)
+        {
+            var state = initial_state;
+            var state_size = cell.state_size;
+
+            var flat_input = nest.flatten(inputs);
+            var flat_output_size = nest.flatten(cell.output_size);
+
+            // Construct an initial output
+            var input_shape = array_ops.shape(flat_input[0]);
+            var time_steps = input_shape.slice(0);
+            var batch_size = _best_effort_input_batch_size(flat_input);
+            var inputs_got_shape = flat_input.Select(input_ => input_.TensorShape.with_rank_at_least(3)).ToArray();
+
+            var dims = inputs_got_shape[0].Dimensions.Take(2).ToArray();
+            var (const_time_steps, const_batch_size) = (dims[0], dims[1]);
+
+            foreach(var shape in inputs_got_shape)
+            {
+                if (shape[2] == -1)
+                    throw new ValueError("Input size (depth of inputs) must be accessible via shape inference," +
+                        " but saw value None.");
+
+                var got_time_steps = shape.dims[0];
+                var got_batch_size = shape.dims[1];
+
+                if (const_time_steps != got_time_steps)
+                    throw new ValueError("Time steps is not the same for all the elements in the input in a " +
+                        "batch.");
+
+                if (const_batch_size != got_batch_size)
+                    throw new ValueError("Batch_size is not the same for all the elements in the input.");
+            }
+
+            Func<int, Tensor> _create_zero_arrays = (size_) =>
+            {
+                var size = rnn_cell_impl._concat(batch_size, size_);
+                return array_ops.zeros(
+                    array_ops.stack(size), dtype: _infer_state_dtype(dtype, state));
+            };
+
+            // Prepare dynamic conditional copying of state & output
+            var flat_zero_output = flat_output_size.Select(output => _create_zero_arrays(output)).ToArray();
+            var zero_output = nest.pack_sequence_as(structure: cell.output_size, flat_sequence: flat_zero_output);
+
+            Tensor min_sequence_length = null, max_sequence_length = null;
+            if (sequence_length != null)
+            {
+                min_sequence_length = math_ops.reduce_min(sequence_length);
+                max_sequence_length = math_ops.reduce_max(sequence_length);
+            }
+            else
+            {
+                max_sequence_length = time_steps;
+            }
+
+            var time = array_ops.constant(0, dtype: dtypes.int32, name: "time");
+
+            string base_name = null;
+            with(ops.name_scope("dynamic_rnn"), scope => base_name = scope);
+
+            Func<string, TensorShape, TF_DataType, Tensor> _create_ta = (name, element_shape, dtype_) =>
+            {
+                new TensorArray(dtype: dtype_,
+                                        size: time_steps,
+                                        element_shape: element_shape,
+                                        tensor_array_name: base_name + name);
+                throw new NotImplementedException("");
+            };
+
+            bool in_graph_mode = true;
+            if (in_graph_mode)
+            {
+                foreach(var (i, out_size) in enumerate(flat_output_size))
+                {
+                    _create_ta($"output_{i}",
+                        new TensorShape(const_batch_size).concatenate(
+                            _maybe_tensor_shape_from_tensor(out_size)),
+                        _infer_state_dtype(dtype, state));
+
+
+                    
+                }
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        private static TensorShape _maybe_tensor_shape_from_tensor(Tensor shape)
+            => shape.TensorShape;
+
+        private static TensorShape _maybe_tensor_shape_from_tensor(int shape)
+            => new TensorShape(shape);
+
+        private static TF_DataType _infer_state_dtype(TF_DataType explicit_dtype, Tensor state)
+        {
+            if (explicit_dtype != TF_DataType.DtInvalid)
+                return explicit_dtype;
+
+            throw new NotImplementedException("_infer_state_dtype");
         }
 
         /// <summary>

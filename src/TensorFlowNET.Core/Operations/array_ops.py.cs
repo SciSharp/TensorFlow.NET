@@ -29,6 +29,17 @@ namespace Tensorflow
         public static Tensor prevent_gradient(Tensor input, string message = "", string name = null)
             => gen_array_ops.prevent_gradient(input, message: message, name: name);
 
+        internal static Tensor constant(object value,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            int[] shape = null,
+            string name = "Const",
+            bool verify_shape = false) => constant_op._constant_impl(value,
+                dtype,
+                shape,
+                name,
+                verify_shape: verify_shape,
+                allow_broadcast: false);
+
         public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
