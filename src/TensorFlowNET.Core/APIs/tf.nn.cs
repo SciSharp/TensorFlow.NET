@@ -75,7 +75,7 @@ namespace Tensorflow
             /// <param name="time_major"></param>
             /// <returns>A pair (outputs, state)</returns>
             public static (Tensor, Tensor) dynamic_rnn(RNNCell cell, Tensor inputs,
-                int? sequence_length = null, TF_DataType dtype = TF_DataType.DtInvalid,
+                Tensor sequence_length = null, TF_DataType dtype = TF_DataType.DtInvalid,
                 int? parallel_iterations = null, bool swap_memory = false, bool time_major = false)
                 => rnn.dynamic_rnn(cell, inputs, sequence_length: sequence_length, dtype: dtype,
                     parallel_iterations: parallel_iterations, swap_memory: swap_memory,

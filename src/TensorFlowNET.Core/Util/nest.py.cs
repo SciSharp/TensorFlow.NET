@@ -223,31 +223,27 @@ namespace Tensorflow.Util
 
         private static void _flatten_recursive<T>(T obj, List<T> list)
         {
-            if (obj is string)
+
+            switch(obj)
             {
-                list.Add(obj);
-                return;
+                case IDictionary dict:
+                    foreach (var key in _sorted(dict))
+                        _flatten_recursive((T)dict[key], list);
+                    break;
+                case String str:
+                    list.Add(obj);
+                    break;
+                case NDArray nd:
+                    list.Add(obj);
+                    break;
+                case IEnumerable structure:
+                    foreach (var child in structure)
+                        _flatten_recursive((T)child, list);
+                    break;
+                default:
+                    list.Add(obj);
+                    break;
             }
-            if (obj is IDictionary)
-            {
-                var dict = obj as IDictionary;
-                foreach (var key in _sorted(dict))
-                    _flatten_recursive((T)dict[key], list);
-                return;
-            }
-            if (obj is NDArray)
-            {
-                list.Add(obj);
-                return;
-            }
-            if (obj is IEnumerable)
-            {
-                var structure = obj as IEnumerable;
-                foreach (var child in structure)
-                    _flatten_recursive((T)child, list);
-                return;
-            }
-            list.Add(obj);
         }
 
 

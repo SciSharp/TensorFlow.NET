@@ -27,5 +27,23 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+
+        public static (Tensor, Tensor) tensor_array_v3(Tensor size, TF_DataType dtype = TF_DataType.DtInvalid, 
+            int[] element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
+            bool identical_element_shapes = false, string tensor_array_name = "tensor_array_name", string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArrayV3", name, new
+            {
+                size,
+                dtype,
+                element_shape,
+                dynamic_size,
+                clear_after_read,
+                identical_element_shapes,
+                tensor_array_name
+            });
+
+            return (null, null);
+        }
     }
 }

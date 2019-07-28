@@ -40,7 +40,7 @@ Before running verify you installed  CUDA and cuDNN
 
 https://www.tensorflow.org/install/source_windows
 
-pacman -S git patch unzip
+`pacman -S git patch unzip`
 
 1. Build static library
 

@@ -314,6 +314,11 @@ namespace Tensorflow
             return uid_number++;
         }
 
+        public static void colocate_with(bool ignore_existing = false)
+        {
+            _colocate_with_for_gradient(null, null, ignore_existing);
+        }
+
         public static void colocate_with(Operation op, bool ignore_existing = false)
         {
             _colocate_with_for_gradient(op, null, ignore_existing);
