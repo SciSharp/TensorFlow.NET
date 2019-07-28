@@ -42,7 +42,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         int n_channels = 1;
 
         // Hyper-parameters
-        int epochs = 10;
+        int epochs = 5; // accuracy > 98%
         int batch_size = 100;
         float learning_rate = 0.001f;
         Datasets<DataSetMnist> mnist;
@@ -84,7 +84,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                 Test(sess);
             });
 
-            return loss_test < 0.09 && accuracy_test > 0.95;
+            return loss_test < 0.05 && accuracy_test > 0.98;
         }
 
         public Graph BuildGraph()

@@ -9,6 +9,8 @@ namespace Tensorflow
     /// </summary>
     public class TensorShape : Shape
     {
+        public int[] dims => Dimensions;
+
         public TensorShape(TensorShapeProto proto)
         {
             if (proto.UnknownRank) return;
@@ -43,6 +45,29 @@ namespace Tensorflow
         public bool is_compatible_with(TensorShape shape2)
         {
             throw new NotImplementedException("TensorShape is_compatible_with");
+        }
+
+        public TensorShape with_rank_at_least(int rank)
+        {
+            if (rank != this.NDim)
+                throw new ValueError($"Shape {this} must have rank at least {rank}");
+            else
+                return this;
+        }
+
+        /// <summary>
+        /// Returns the concatenation of the dimension in `self` and `other`.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public TensorShape concatenate(int[] other_)
+        {
+            var other = new TensorShape(other_);
+
+            if (NDim < 0 || other.NDim < 0)
+                return new TensorShape();
+            else
+                return new TensorShape(NDim + other.NDim);
         }
 
         public static implicit operator TensorShape(int[] dims) => new TensorShape(dims);

@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using Tensorflow.Operations;
 using Tensorflow.Util;
 using static Tensorflow.Python;
 
@@ -48,7 +49,9 @@ namespace Tensorflow
         /// difference between TF and Keras RNN cell.
         /// </summary>
         protected bool _is_tf_rnn_cell = false;
-        protected virtual int state_size { get; }
+        public virtual int state_size { get; }
+
+        public virtual int output_size { get; }
 
         public RNNCell(bool trainable = true,
             string name = null,
@@ -89,12 +92,18 @@ namespace Tensorflow
 
         private Tensor _zero_state_tensors(int state_size, Tensor batch_size, TF_DataType dtype)
         {
-            nest.map_structure(x =>
+            var output = nest.map_structure(s =>
             {
-                throw new NotImplementedException("");
+                var c = rnn_cell_impl._concat(batch_size, s);
+                var size = array_ops.zeros(c, dtype: dtype);
+
+                var c_static = rnn_cell_impl._concat(batch_size, s, @static: true);
+                size.set_shape(c_static);
+
+                return size;
             }, state_size);
 
-            throw new NotImplementedException("");
+            return output;
         }
     }
 }

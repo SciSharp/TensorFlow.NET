@@ -110,6 +110,11 @@ namespace Tensorflow
             this.shape = shape.Dimensions;
         }
 
+        public void set_shape(Tensor shape)
+        {
+            this.shape = shape is null ? null : shape.shape;
+        }
+
         public int[] dims => shape;
 
         /// <summary>

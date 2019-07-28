@@ -1,9 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Tensorflow;
 using Tensorflow.Hub;
 
 namespace TensorFlowNET.UnitTest.Hub
