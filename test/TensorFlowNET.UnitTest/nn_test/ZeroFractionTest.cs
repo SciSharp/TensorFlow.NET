@@ -63,7 +63,7 @@ namespace TensorFlowNET.UnitTest.nn_test
         public void testZeroFraction2_27Ones()
         {
             var sparsity = nn_impl.zero_fraction(
-                array_ops.ones(new Shape((int)Math.Pow(2, 27 * 1.01)), dtypes.int8));
+                array_ops.ones(new TensorShape((int)Math.Pow(2, 27 * 1.01)), dtypes.int8));
             self.assertAllClose(0.0, self.evaluate<NDArray>(sparsity));
         }
 
