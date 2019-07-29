@@ -41,7 +41,7 @@ namespace Keras.Layers
             Console.WriteLine("Building Layer \"" + name + "\" ...");
             if (stddev == -1)
                 stddev = (float)(1 / Math.Sqrt(2));
-            var dim = input_shape.Dimensions;
+            var dim = input_shape.dims;
             var input_dim = dim[dim.Length - 1];
             W = tf.Variable(create_tensor(new int[] { input_dim, units }, seed: seed, stddev: (float)stddev));
             WShape = new TensorShape(W.shape);
@@ -52,7 +52,7 @@ namespace Keras.Layers
             var dot = tf.matmul(x, W);
             if (this.activation != null)
                 dot = activation.Activate(dot);
-            Console.WriteLine("Calling Layer \"" + name + "(" + np.array(dot.TensorShape.Dimensions).ToString() + ")\" ...");
+            Console.WriteLine("Calling Layer \"" + name + "(" + np.array(dot.TensorShape.dims).ToString() + ")\" ...");
             return dot;
         }
         public TensorShape __shape__()
@@ -61,7 +61,7 @@ namespace Keras.Layers
         }
         public TensorShape output_shape(TensorShape input_shape)
         {
-            var output_shape = input_shape.Dimensions;
+            var output_shape = input_shape.dims;
             output_shape[output_shape.Length - 1] = units;
             return new TensorShape(output_shape);
         }

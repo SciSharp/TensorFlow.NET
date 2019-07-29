@@ -67,7 +67,7 @@ namespace Tensorflow
             VariableSynchronization synchronization = VariableSynchronization.Auto,
             VariableAggregation aggregation = VariableAggregation.None)
         {
-            bool is_scalar = !(shape is null) && shape.NDim == 0;
+            bool is_scalar = !(shape is null) && shape.ndim == 0;
 
             if (initializer is IInitializer init)
             {

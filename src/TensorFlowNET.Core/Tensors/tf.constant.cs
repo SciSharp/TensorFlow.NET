@@ -42,10 +42,10 @@ namespace Tensorflow
                 verify_shape: false,
                 allow_broadcast: false);
 
-        public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
+        public static Tensor zeros(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
             => array_ops.zeros(shape, dtype, name);
 
-        public static Tensor ones(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
+        public static Tensor ones(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
             => array_ops.ones(shape, dtype, name);
 
         public static Tensor size(Tensor input,

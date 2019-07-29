@@ -86,11 +86,11 @@ namespace TensorFlowNET.Examples
             // convert x_train
             train_data = new NDArray(np.int32, (x_train.size, 256));
             for (int i = 0; i < x_train.size; i++)
-                train_data[i] = x_train[i].Data<string>(0).Split(',').Select(x => int.Parse(x)).ToArray();
+                train_data[i] = x_train[i].Data<string>()[1].Split(',').Select(x => int.Parse(x)).ToArray();
 
             test_data = new NDArray(np.int32, (x_test.size, 256));
             for (int i = 0; i < x_test.size; i++)
-                test_data[i] = x_test[i].Data<string>(0).Split(',').Select(x => int.Parse(x)).ToArray();
+                test_data[i] = x_test[i].Data<string>()[1].Split(',').Select(x => int.Parse(x)).ToArray();
 
             train_labels = y_train;
             test_labels = y_test;

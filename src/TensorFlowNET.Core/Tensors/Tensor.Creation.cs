@@ -513,7 +513,7 @@ namespace Tensorflow
                     Marshal.Copy(nd1.Data<byte>(), 0, dotHandle, nd.size);
                     break;
                 case "String":
-                    return new Tensor(UTF8Encoding.UTF8.GetBytes(nd.Data<string>(0)), TF_DataType.TF_STRING);
+                    return new Tensor(UTF8Encoding.UTF8.GetBytes(nd.Data<string>()[0]), TF_DataType.TF_STRING);
                 default:
                     throw new NotImplementedException($"Marshal.Copy failed for {nd.dtype.Name}.");
             }

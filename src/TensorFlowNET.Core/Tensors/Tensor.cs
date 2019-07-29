@@ -105,9 +105,9 @@ namespace Tensorflow
 
         public TensorShape TensorShape => tensor_util.to_shape(shape);
 
-        public void SetShape(Shape shape)
+        public void SetShape(TensorShape shape)
         {
-            this.shape = shape.Dimensions;
+            this.shape = shape.dims;
         }
 
         public void set_shape(Tensor shape)

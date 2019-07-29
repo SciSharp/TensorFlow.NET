@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Tensorflow.Python;
 using Tensorflow.Util;
+using NumSharp;
 
 namespace Tensorflow.Operations
 {
@@ -94,12 +95,12 @@ namespace Tensorflow.Operations
             var batch_size = _best_effort_input_batch_size(flat_input);
             var inputs_got_shape = flat_input.Select(input_ => input_.TensorShape.with_rank_at_least(3)).ToArray();
 
-            var dims = inputs_got_shape[0].Dimensions.Take(2).ToArray();
+            var dims = inputs_got_shape[0].dims.Take(2).ToArray();
             var (const_time_steps, const_batch_size) = (dims[0], dims[1]);
 
             foreach(var shape in inputs_got_shape)
             {
-                if (shape[2] == -1)
+                if (shape.dims[2] == -1)
                     throw new ValueError("Input size (depth of inputs) must be accessible via shape inference," +
                         " but saw value None.");
 
@@ -190,7 +191,7 @@ namespace Tensorflow.Operations
         public static Tensor _transpose_batch_time(Tensor x)
         {
             var x_static_shape = x.TensorShape;
-            if (x_static_shape.NDim == 1)
+            if (x_static_shape.ndim == 1)
                 return x;
 
             var x_rank = array_ops.rank(x);
@@ -201,9 +202,9 @@ namespace Tensorflow.Operations
             };
             var x_t = array_ops.transpose(x, array_ops.concat(con1, 0));
 
-            var dims = new int[] { x_static_shape.Dimensions[1], x_static_shape.Dimensions[0] }
+            var dims = new int[] { x_static_shape.dims[1], x_static_shape.dims[0] }
                 .ToList();
-            dims.AddRange(x_static_shape.Dimensions.Skip(2));
+            dims.AddRange(x_static_shape.dims.Skip(2));
             var shape = new TensorShape(dims.ToArray());
 
             x_t.SetShape(shape);
@@ -221,12 +222,12 @@ namespace Tensorflow.Operations
             foreach(var input_ in flat_input)
             {
                 var shape = input_.TensorShape;
-                if (shape.NDim < 0)
+                if (shape.ndim < 0)
                     continue;
-                if (shape.NDim < 2)
+                if (shape.ndim < 2)
                     throw new ValueError($"Expected input tensor {input_.name} to have rank at least 2");
 
-                var batch_size = shape.Dimensions[1];
+                var batch_size = shape.dims[1];
                 if (batch_size > -1)
                     throw new ValueError("_best_effort_input_batch_size batch_size > -1");
                     //return batch_size;

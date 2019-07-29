@@ -30,7 +30,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 8. Upgrade NumSharp.
 9. Fix strided_slice_grad type convention error.
 10. Add AbsGrad.</PackageReleaseNotes>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <FileVersion>0.10.3.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -63,11 +63,14 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.9.0" />
-    <PackageReference Include="NumSharp" Version="0.10.6" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Distribute\" />
     <Folder Include="Keras\Initializers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
   </ItemGroup>
 </Project>

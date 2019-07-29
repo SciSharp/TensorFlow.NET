@@ -42,10 +42,10 @@ namespace TensorFlowNET.Examples
             fit(X, y);
 
             // Create a regular grid and classify each point 
-            float x_min = X.amin(0).Data<float>(0) - 0.5f;
-            float y_min = X.amin(0).Data<float>(1) - 0.5f;
-            float x_max = X.amax(0).Data<float>(0) + 0.5f;
-            float y_max = X.amax(0).Data<float>(1) + 0.5f;
+            float x_min = X.amin(0).Data<float>()[0] - 0.5f;
+            float y_min = X.amin(0).Data<float>()[1] - 0.5f;
+            float x_max = X.amax(0).Data<float>()[1] + 0.5f;
+            float y_max = X.amax(0).Data<float>()[1] + 0.5f;
 
             var (xx, yy) = np.meshgrid(np.linspace(x_min, x_max, 30), np.linspace(y_min, y_max, 30));
             with(tf.Session(), sess =>

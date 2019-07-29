@@ -30,7 +30,7 @@ namespace Tensorflow.Operations.Initializers
             if (dtype == TF_DataType.DtInvalid)
                 dtype = this.dtype;
 
-            return array_ops.ones(shape.Dimensions, dtype);
+            return array_ops.ones(shape.dims, dtype);
         }
 
         public object get_config()

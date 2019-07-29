@@ -51,7 +51,7 @@ namespace Tensorflow.Keras.Layers
 
         protected override void build(TensorShape input_shape)
         {
-            var last_dim = input_shape.Dimensions.Last();
+            var last_dim = input_shape.dims.Last();
             var axes = new Dictionary<int, int>();
             axes[-1] = last_dim;
             input_spec = new InputSpec(min_ndim: 2, axes: axes);

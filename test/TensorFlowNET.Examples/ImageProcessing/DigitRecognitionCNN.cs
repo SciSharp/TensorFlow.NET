@@ -243,7 +243,7 @@ namespace TensorFlowNET.Examples.ImageProcess
             return with(tf.variable_scope("Flatten_layer"), delegate
             {
                 var layer_shape = layer.TensorShape;
-                var num_features = layer_shape[new Slice(1, 4)].Size;
+                var num_features = layer_shape[new Slice(1, 4)].size;
                 var layer_flat = tf.reshape(layer, new[] { -1, num_features });
 
                 return layer_flat;

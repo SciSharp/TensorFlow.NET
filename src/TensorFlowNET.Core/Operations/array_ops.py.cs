@@ -40,7 +40,7 @@ namespace Tensorflow
                 verify_shape: verify_shape,
                 allow_broadcast: false);
 
-        public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        public static Tensor zeros(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
             return with(ops.name_scope(name, "zeros", shape), scope =>
@@ -92,16 +92,16 @@ namespace Tensorflow
             return shape < 1000;
         }
 
-        private static Tensor _constant_if_small<T>(T value, Shape shape, TF_DataType dtype, string name)
+        private static Tensor _constant_if_small<T>(T value, TensorShape shape, TF_DataType dtype, string name)
         {
             Tensor tShape = null;
-            if (shape.Size < 1000)
+            if (shape.size < 1000)
             {
                 return constant_op.constant(value, shape: shape, dtype: dtype, name: name);
             }
             else
             {
-                tShape = constant_op._tensor_shape_tensor_conversion_function(shape.as_shape());
+                tShape = constant_op._tensor_shape_tensor_conversion_function(shape);
                 var c = constant_op.constant(0, dtype: dtype);
                 return gen_array_ops.fill(tShape, c, name: name);
             }
@@ -194,8 +194,8 @@ namespace Tensorflow
                 name = scope;
                 var input_tensor = ops.convert_to_tensor(input);
                 var input_shape = tensor_util.to_shape(input_tensor.shape);
-                if (optimize && input_shape.NDim > 0)
-                    return constant_op.constant(input_shape.NDim, dtype: tf.int32, name: name);
+                if (optimize && input_shape.ndim > 0)
+                    return constant_op.constant(input_shape.ndim, dtype: tf.int32, name: name);
                 else
                     return gen_array_ops.rank(input, name);
             });
@@ -372,7 +372,7 @@ namespace Tensorflow
                 {
                     if (input_shape.is_fully_defined())
                     {
-                        return constant_op.constant(input_shape.Size, dtype: out_type, name: name);
+                        return constant_op.constant(input_shape.size, dtype: out_type, name: name);
                     }
                 }
 

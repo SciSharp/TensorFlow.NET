@@ -11,13 +11,13 @@ namespace Tensorflow.Contrib.Learn.Estimators
             bool _shape_is_compatible_0dim(Shape _this, Shape _other)
             {
                 var __other = tensor_shape.as_shape(_other);
-                if (_this.Dimensions == null || __other.Dimensions == null)
+                if (_this.Dimensions == null || __other.dims == null)
                     return true;
 
-                if (_this.NDim != __other.NDim)
+                if (_this.NDim != __other.ndim)
                     return false;
 
-                foreach (var (x_dim, y_dim) in _this.Dimensions.Zip(__other.Dimensions, (x_dim, y_dim) => (x_dim, y_dim)))
+                foreach (var (x_dim, y_dim) in _this.Dimensions.Zip(__other.dims, (x_dim, y_dim) => (x_dim, y_dim)))
                 {
                     if (x_dim != y_dim)
                         return false;

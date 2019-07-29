@@ -132,9 +132,9 @@ namespace Tensorflow
             if(weights > 0)
             {
                 var weights_tensor = ops.convert_to_tensor(weights);
-                var labels_rank = labels.TensorShape.NDim;
+                var labels_rank = labels.TensorShape.ndim;
                 var weights_shape = weights_tensor.TensorShape;
-                var weights_rank = weights_shape.NDim;
+                var weights_rank = weights_shape.ndim;
 
                 if (labels_rank > -1 && weights_rank > -1)
                 {

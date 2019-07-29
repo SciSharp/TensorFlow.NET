@@ -111,10 +111,10 @@ namespace TensorFlowNET.Examples.Utility
             var num_labels = labels_dense.shape[0];
             var index_offset = np.arange(num_labels) * num_classes;
             var labels_one_hot = np.zeros(num_labels, num_classes);
-
-            for(int row = 0; row < num_labels; row++)
+            var bytes = labels_dense.Data<byte>();
+            for (int row = 0; row < num_labels; row++)
             {
-                var col = labels_dense.Data<byte>(row);
+                var col = bytes[row];
                 labels_one_hot.SetData(1.0, row, col);
             }
 
@@ -125,7 +125,7 @@ namespace TensorFlowNET.Examples.Utility
         {
             var buffer = new byte[sizeof(uint)];
             var count = bytestream.Read(buffer, 0, 4);
-            return np.frombuffer(buffer, ">u4").Data<uint>(0);
+            return np.frombuffer(buffer, ">u4").Data<uint>()[0];
         }
     }
 }

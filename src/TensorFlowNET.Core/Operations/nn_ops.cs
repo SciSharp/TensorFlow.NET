@@ -81,7 +81,7 @@ namespace Tensorflow
                 rate = ops.convert_to_tensor(rate, dtype: x.dtype, name: "rate");
                 // Do nothing if we know rate == 0
                 var val = tensor_util.constant_value(rate);
-                if (!(val is null) && val.Data<float>(0) == 0)
+                if (!(val is null) && val.Data<float>()[0] == 0)
                     return x;
 
                 noise_shape = _get_noise_shape(x, noise_shape);
@@ -185,7 +185,7 @@ namespace Tensorflow
                         logits.get_shape()[:-1].is_fully_defined());*/
 
                 // Check if no reshapes are required.
-                if(logits.TensorShape.NDim == 2)
+                if(logits.TensorShape.ndim == 2)
                 {
                     var (cost, _) = gen_nn_ops.sparse_softmax_cross_entropy_with_logits(
                         precise_logits, labels, name: name);
@@ -257,11 +257,11 @@ namespace Tensorflow
             // Set output shape if known.
             // if not context.executing_eagerly():
             var shape = logits.TensorShape;
-            if(shape != null && shape.NDim > 0)
+            if(shape != null && shape.ndim > 0)
             {
                 var product = 1;
                 var product_valid = true;
-                foreach(var d in shape.Dimensions.Take(shape.NDim - 1))
+                foreach(var d in shape.dims.Take(shape.ndim - 1))
                 {
                     if(d == -1)
                     {

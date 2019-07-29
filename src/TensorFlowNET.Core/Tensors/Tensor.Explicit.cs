@@ -77,12 +77,12 @@ namespace Tensorflow
                 throw new ArgumentNullException(nameof(tensor));
             }
 
-            if (tensor.TensorShape.NDim != 0)
+            if (tensor.TensorShape.ndim != 0)
             {
                 throw new ArgumentException("Tensor must have 0 dimensions in order to convert to scalar");
             }
 
-            if (tensor.TensorShape.Size != 1)
+            if (tensor.TensorShape.size != 1)
             {
                 throw new ArgumentException("Tensor must have size 1 in order to convert to scalar");
             }

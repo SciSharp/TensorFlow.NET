@@ -247,7 +247,7 @@ namespace Tensorflow
             }
             else
             {
-                shape_size = new TensorShape(shape).Size;
+                shape_size = new TensorShape(shape).size;
                 is_same_size = shape_size == nparray.size;
             }
 
@@ -387,10 +387,10 @@ namespace Tensorflow
         {
             TensorShapeProto shape = new TensorShapeProto();
 
-            for (int i = 0; i < tshape.NDim; i++)
+            for (int i = 0; i < tshape.ndim; i++)
             {
                 var dim = new TensorShapeProto.Types.Dim();
-                dim.Size = tshape.Dimensions[i];
+                dim.Size = tshape.dims[i];
                 //dim.Name = $"dim_{i}";
 
                 shape.Dim.Add(dim);

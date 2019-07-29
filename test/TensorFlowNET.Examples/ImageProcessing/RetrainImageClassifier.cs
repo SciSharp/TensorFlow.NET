@@ -179,12 +179,12 @@ namespace TensorFlowNET.Examples.ImageProcess
         private (Operation, Tensor, Tensor, Tensor, Tensor) add_final_retrain_ops(int class_count, string final_tensor_name,
             Tensor bottleneck_tensor, bool quantize_layer, bool is_training)
         {
-            var (batch_size, bottleneck_tensor_size) = (bottleneck_tensor.TensorShape.Dimensions[0], bottleneck_tensor.TensorShape.Dimensions[1]);
+            var (batch_size, bottleneck_tensor_size) = (bottleneck_tensor.TensorShape.dims[0], bottleneck_tensor.TensorShape.dims[1]);
             with(tf.name_scope("input"), scope =>
             {
                 bottleneck_input = tf.placeholder_with_default(
                     bottleneck_tensor,
-                    shape: bottleneck_tensor.TensorShape.Dimensions,
+                    shape: bottleneck_tensor.TensorShape.dims,
                     name: "BottleneckInputPlaceholder");
 
                 ground_truth_input = tf.placeholder(tf.int64, new TensorShape(batch_size), name: "GroundTruthInput");
@@ -206,7 +206,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                 RefVariable layer_biases = null;
                 with(tf.name_scope("biases"), delegate
                 {
-                    layer_biases = tf.Variable(tf.zeros(class_count), name: "final_biases");
+                    layer_biases = tf.Variable(tf.zeros(new TensorShape(class_count)), name: "final_biases");
                     variable_summaries(layer_biases);
                 });
 
@@ -662,7 +662,7 @@ namespace TensorFlowNET.Examples.ImageProcess
                 var train_summary = results[0];
 
                 // TODO
-                train_writer.add_summary(train_summary, i);
+                // train_writer.add_summary(train_summary, i);
 
                 // Every so often, print out how well the graph is training.
                 bool is_last_step = (i + 1 == how_many_training_steps);
@@ -687,9 +687,9 @@ namespace TensorFlowNET.Examples.ImageProcess
                         new FeedItem(bottleneck_input, validation_bottlenecks),
                         new FeedItem(ground_truth_input, validation_ground_truth));
 
-                    (string validation_summary, float validation_accuracy) = (results[0], results[1]);
-
-                    validation_writer.add_summary(validation_summary, i);
+                    //(string validation_summary, float validation_accuracy) = (results[0], results[1]);
+                    float validation_accuracy = results[1];
+                    // validation_writer.add_summary(validation_summary, i);
                     print($"{DateTime.Now}: Step {i + 1}: Validation accuracy = {validation_accuracy * 100}% (N={len(validation_bottlenecks)}) {sw.ElapsedMilliseconds}ms");
                     sw.Restart();
                 }

@@ -100,19 +100,19 @@ namespace Tensorflow
                         switch (value.dtype.Name)
                         {
                             case "Int32":
-                                full_values.Add(value.Data<int>(0));
+                                full_values.Add(value.Data<int>()[0]);
                                 break;
                             case "Int64":
-                                full_values.Add(value.Data<long>(0));
+                                full_values.Add(value.Data<long>()[0]);
                                 break;
                             case "Single":
-                                full_values.Add(value.Data<float>(0));
+                                full_values.Add(value.Data<float>()[0]);
                                 break;
                             case "Double":
-                                full_values.Add(value.Data<double>(0));
+                                full_values.Add(value.Data<double>()[0]);
                                 break;
                             case "String":
-                                full_values.Add(value.Data<string>(0));
+                                full_values.Add(value.Data<string>()[0]);
                                 break;
                         }
                     }

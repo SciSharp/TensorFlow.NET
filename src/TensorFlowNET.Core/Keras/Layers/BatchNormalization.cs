@@ -81,7 +81,7 @@ namespace Tensorflow.Keras.Layers
 
         protected override void build(TensorShape input_shape)
         {
-            var ndims = input_shape.NDim;
+            var ndims = input_shape.ndim;
             foreach (var (idx, x) in Python.enumerate(axis))
                 if (x < 0)
                     axis[idx] = ndims + x;
@@ -91,7 +91,7 @@ namespace Tensorflow.Keras.Layers
                     _data_format = "NHWC";
 
             var param_dtype = _dtype == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : _dtype;
-            var param_shape = new int[] { input_shape.Dimensions[axis[0]] };
+            var param_shape = new int[] { input_shape.dims[axis[0]] };
 
             if (scale)
                 gamma = add_weight("gamma",

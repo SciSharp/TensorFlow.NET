@@ -7,27 +7,30 @@ namespace Tensorflow
     /// <summary>
     /// Represents the shape of a `Tensor`.
     /// </summary>
-    public class TensorShape : Shape
+    public class TensorShape
     {
-        public int[] dims => Dimensions;
+        private Shape shape;
+        public int[] dims => shape.Dimensions;
+        public int ndim => shape.NDim;
+        public int size => shape.Size;
 
         public TensorShape(TensorShapeProto proto)
         {
             if (proto.UnknownRank) return;
 
-            Reshape(proto.Dim.Select(x => (int)x.Size).ToArray());
+            shape.reshape(proto.Dim.Select(x => (int)x.Size).ToArray());
         }
 
-        public TensorShape(params int[] dims) : base(dims)
+        public TensorShape(params int[] dims)
         {
-
+            shape = new Shape(dims);
         }
 
         public TensorShape this[Slice slice]
         {
             get
             {
-                return new TensorShape(Dimensions.Skip(slice.Start.Value)
+                return new TensorShape(dims.Skip(slice.Start.Value)
                     .Take(slice.Length.Value)
                     .ToArray());
             }
@@ -39,7 +42,7 @@ namespace Tensorflow
         /// <returns></returns>
         public bool is_fully_defined()
         {
-            return Dimensions != null && Dimensions.Count(x => x < 1) == 0;
+            return dims != null && dims.Count(x => x < 1) == 0;
         }
 
         public bool is_compatible_with(TensorShape shape2)
@@ -49,7 +52,7 @@ namespace Tensorflow
 
         public TensorShape with_rank_at_least(int rank)
         {
-            if (rank != this.NDim)
+            if (rank != ndim)
                 throw new ValueError($"Shape {this} must have rank at least {rank}");
             else
                 return this;
@@ -64,13 +67,16 @@ namespace Tensorflow
         {
             var other = new TensorShape(other_);
 
-            if (NDim < 0 || other.NDim < 0)
+            if (ndim < 0 || other.ndim < 0)
                 return new TensorShape();
             else
-                return new TensorShape(NDim + other.NDim);
+                return new TensorShape(ndim + other.ndim);
         }
 
+        public static implicit operator TensorShape(Shape shape) => new TensorShape(shape.Dimensions);
+        public static implicit operator Shape(TensorShape shape) => new Shape(shape.dims);
         public static implicit operator TensorShape(int[] dims) => new TensorShape(dims);
+        public static implicit operator int[](TensorShape shape) => shape.dims;
         public static implicit operator TensorShape((int, int) dims) => new TensorShape(dims.Item1, dims.Item2);
         public static implicit operator TensorShape((int, int, int) dims) => new TensorShape(dims.Item1, dims.Item2, dims.Item3);
         public static implicit operator TensorShape((int, int, int, int) dims) => new TensorShape(dims.Item1, dims.Item2, dims.Item3, dims.Item4);

@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using NumSharp;
+using NumSharp.Backends;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace Tensorflow
                 case ICollection arr:
                     return arr.Count;
                 case NDArray ndArray:
-                    return ndArray.len;
+                    return ndArray.shape[0];
                 case IEnumerable enumerable:
                     return enumerable.OfType<object>().Count();
             }
@@ -141,9 +142,12 @@ namespace Tensorflow
         }
 
         public static IEnumerable<(T, T)> zip<T>(NDArray t1, NDArray t2)
+            where T : unmanaged
         {
-            for (int i = 0; i < t1.size; i++)
-                yield return (t1.Data<T>(i), t2.Data<T>(i));
+            var a = t1.AsIterator<T>();
+            var b = t2.AsIterator<T>();
+            while (a.HasNext())
+                yield return (a.MoveNext(), b.MoveNext());
         }
 
         public static IEnumerable<(T1, T2)> zip<T1, T2>(IList<T1> t1, IList<T2> t2)
@@ -152,10 +156,14 @@ namespace Tensorflow
                 yield return (t1[i], t2[i]);
         }
 
-        public static IEnumerable<(T1, T2)> zip<T1, T2>(NDArray t1, NDArray t2)
+        public static IEnumerable<(T1, T2)> zip<T1, T2>(NDArray t1, NDArray t2) 
+            where T1: unmanaged
+            where T2: unmanaged
         {
-            for (int i = 0; i < t1.size; i++)
-                yield return (t1.Data<T1>(i), t2.Data<T2>(i));
+            var a = t1.AsIterator<T1>();
+            var b = t2.AsIterator<T2>();
+            while(a.HasNext())
+                yield return (a.MoveNext(), b.MoveNext());
         }
 
         public static IEnumerable<(T1, T2)> zip<T1, T2>(IEnumerable<T1> e1, IEnumerable<T2> e2)
