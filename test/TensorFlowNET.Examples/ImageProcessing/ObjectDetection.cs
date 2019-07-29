@@ -119,11 +119,10 @@ namespace TensorFlowNET.Examples
             // get bitmap
             Bitmap bitmap = new Bitmap(Path.Join(imageDir, "input.jpg"));
 
-            float[] scores = resultArr[2].GetData<float>().ToArray();
-
-            for (int i=0; i<scores.Length; i++)
+            var scores = resultArr[2].AsIterator<float>();
+            for (int i=0; i< scores.size; i++)
             {
-                float score = scores[i];
+                float score = scores.MoveNext();
                 if (score > MIN_SCORE)
                 {
                     float[] boxes = resultArr[1].GetData<float>().ToArray();
@@ -140,9 +139,8 @@ namespace TensorFlowNET.Examples
                         Height = (int)(bottom - top)
                     };
 
-                    float[] ids = resultArr[3].GetData<float>().ToArray();
-
-                    string name = pbTxtItems.items.Where(w => w.id == (int)ids[i]).Select(s=>s.display_name).FirstOrDefault();
+                    var id = (int)resultArr[3].GetValue(i);
+                    string name = pbTxtItems.items.Where(w => w.id == id).Select(s=>s.display_name).FirstOrDefault();
 
                     drawObjectOnBitmap(bitmap, rect, score, name);
                 }
