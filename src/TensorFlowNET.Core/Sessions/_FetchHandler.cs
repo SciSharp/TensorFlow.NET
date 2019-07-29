@@ -111,9 +111,11 @@ namespace Tensorflow
                             case "Double":
                                 full_values.Add(value.Data<double>()[0]);
                                 break;
-                            case "String":
-                                full_values.Add(value.Data<string>()[0]);
-                                break;
+                            /*case "String":
+                                full_values.Add(value.Data<byte>()[0]);
+                                break;*/
+                            default:
+                                throw new NotImplementedException($"build_results tensor_values[0] {tensor_values[0].dtype.Name}");
                         }
                     }
                     else

@@ -296,9 +296,9 @@ namespace Tensorflow
                 case "Double":
                     tensor_proto.DoubleVal.AddRange(proto_values.Data<double>());
                     break;
-                case "String":
+                /*case "String":
                     tensor_proto.StringVal.AddRange(proto_values.Data<string>().Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x.ToString())));
-                    break;
+                    break;*/
                 default:
                     throw new Exception("make_tensor_proto Not Implemented");
             }

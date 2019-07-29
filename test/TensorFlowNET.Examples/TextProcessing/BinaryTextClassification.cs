@@ -27,7 +27,7 @@ namespace TensorFlowNET.Examples
         {
             PrepareData();
 
-            Console.WriteLine($"Training entries: {train_data.len}, labels: {train_labels.len}");
+            Console.WriteLine($"Training entries: {train_data.shape[0]}, labels: {train_labels.shape[0]}");
 
             // A dictionary mapping words to an integer index
             var word_index = GetWordIndex();

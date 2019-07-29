@@ -77,7 +77,7 @@ namespace TensorFlowNET.Examples
 
             var results = sess.run(outTensorArr, new FeedItem(imgTensor, imgArr));
 
-            NDArray[] resultArr = results.Data<NDArray>();
+            NDArray[] resultArr = results.GetNDArrays();
 
             buildOutputImage(resultArr);
         }
@@ -119,14 +119,14 @@ namespace TensorFlowNET.Examples
             // get bitmap
             Bitmap bitmap = new Bitmap(Path.Join(imageDir, "input.jpg"));
 
-            float[] scores = resultArr[2].Data<float>();
+            float[] scores = resultArr[2].GetData<float>().ToArray();
 
             for (int i=0; i<scores.Length; i++)
             {
                 float score = scores[i];
                 if (score > MIN_SCORE)
                 {
-                    float[] boxes = resultArr[1].Data<float>();
+                    float[] boxes = resultArr[1].GetData<float>().ToArray();
                     float top = boxes[i * 4] * bitmap.Height;
                     float left = boxes[i * 4 + 1] * bitmap.Width;
                     float bottom = boxes[i * 4 + 2] * bitmap.Height;
@@ -140,7 +140,7 @@ namespace TensorFlowNET.Examples
                         Height = (int)(bottom - top)
                     };
 
-                    float[] ids = resultArr[3].Data<float>();
+                    float[] ids = resultArr[3].GetData<float>().ToArray();
 
                     string name = pbTxtItems.items.Where(w => w.id == (int)ids[i]).Select(s=>s.display_name).FirstOrDefault();
 

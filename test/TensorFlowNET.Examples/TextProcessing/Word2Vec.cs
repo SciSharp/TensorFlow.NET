@@ -120,7 +120,7 @@ namespace TensorFlowNET.Examples
         // Generate training batch for the skip-gram model
         private (NDArray, NDArray) next_batch(int batch_size, int num_skips, int skip_window)
         {
-            var batch = np.ndarray((batch_size), dtype: np.int32);
+            var batch = np.ndarray(new Shape(batch_size), dtype: np.int32);
             var labels = np.ndarray((batch_size, 1), dtype: np.int32);
             // get window size (words left and right + current one)
             int span = 2 * skip_window + 1;
