@@ -99,6 +99,9 @@ namespace Tensorflow
                     {
                         switch (value.dtype.Name)
                         {
+                            case "Int16":
+                                full_values.Add(value.Data<short>()[0]);
+                                break;
                             case "Int32":
                                 full_values.Add(value.Data<int>()[0]);
                                 break;
