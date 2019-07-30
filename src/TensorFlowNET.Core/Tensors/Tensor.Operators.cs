@@ -82,10 +82,19 @@ namespace Tensorflow
 
         public static Tensor operator %(Tensor x, Tensor y) => BinaryOpWrapper("mod", x, y);
 
+        public static Tensor operator >(double x, Tensor y) => gen_math_ops.greater(x, y);
+        public static Tensor operator >(float x, Tensor y) => gen_math_ops.greater(x, y);
+        public static Tensor operator >(int x, Tensor y) => gen_math_ops.greater(x, y);
+        public static Tensor operator >(Tensor x, Tensor y) => gen_math_ops.greater(x, y);
         public static Tensor operator >(Tensor x, int y) => gen_math_ops.greater(x, y);
         public static Tensor operator >=(Tensor x, Tensor y) => gen_math_ops.greater_equal(x, y);
         public static Tensor operator >(Tensor x, float y) => gen_math_ops.greater(x, y);
         public static Tensor operator >(Tensor x, double y) => gen_math_ops.greater(x, y);
+
+        public static Tensor operator <(double x, Tensor y) => gen_math_ops.less(x, y);
+        public static Tensor operator <(float x, Tensor y) => gen_math_ops.less(x, y);
+        public static Tensor operator <(int x, Tensor y) => gen_math_ops.less(x, y);
+        public static Tensor operator <(Tensor x, Tensor y) => gen_math_ops.less(x, y);
         public static Tensor operator <(Tensor x, int y) => gen_math_ops.less(x, y);
         public static Tensor operator <=(Tensor x, Tensor y) => gen_math_ops.less_equal(x, y);
         public static Tensor operator <(Tensor x, float y) => gen_math_ops.less(x, y);
