@@ -226,7 +226,7 @@ namespace Tensorflow
                 }
             }
 
-            var numpy_dtype = dtypes.as_dtype(nparray.dtype);
+            var numpy_dtype = dtypes.as_dtype(nparray.dtype, dtype: dtype);
             if (numpy_dtype == TF_DataType.DtInvalid)
                 throw new TypeError($"Unrecognized data type: {nparray.dtype}");
 

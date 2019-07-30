@@ -302,7 +302,7 @@ namespace Tensorflow
                         // wired, don't know why we have to start from offset 9.
                         // length in the begin
                         var str = UTF8Encoding.Default.GetString(bytes, 9, bytes[8]);
-                        nd = np.array(str).reshape();
+                        nd = np.array(str);
                         break;
                     case TF_DataType.TF_UINT8:
                         var _bytes = new byte[tensor.size];

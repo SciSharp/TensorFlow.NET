@@ -29,8 +29,9 @@ namespace TensorFlowNET.Examples
             {
                 // Run the op
                 var result = sess.run(hello);
-                Console.WriteLine(result.ToString());
-                return result.ToString().Equals(str);
+                string result_string = string.Join("", result.GetData<char>());
+                Console.WriteLine(result_string);
+                return result_string.Equals(str);
             });
         }
 

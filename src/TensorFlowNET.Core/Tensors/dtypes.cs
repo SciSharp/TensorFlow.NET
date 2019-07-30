@@ -51,12 +51,13 @@ namespace Tensorflow
         }
 
         // "sbyte", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"
-        public static TF_DataType as_dtype(Type type)
+        public static TF_DataType as_dtype(Type type, TF_DataType? dtype = null)
         {
-            TF_DataType dtype = TF_DataType.DtInvalid;
-            
             switch (type.Name)
             {
+                case "Char":
+                    dtype =  dtype ?? TF_DataType.TF_UINT8;
+                    break;
                 case "SByte":
                     dtype = TF_DataType.TF_INT8;
                     break;
@@ -100,7 +101,7 @@ namespace Tensorflow
                     throw new Exception("as_dtype Not Implemented");
             }
 
-            return dtype;
+            return dtype.Value;
         }
 
         public static DataType as_datatype_enum(this TF_DataType type)

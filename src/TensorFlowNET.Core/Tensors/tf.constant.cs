@@ -33,6 +33,14 @@ namespace Tensorflow
                 verify_shape: verify_shape,
                 allow_broadcast: false);
 
+        public static Tensor constant(string value,
+            string name = "Const") => constant_op._constant_impl(value,
+                tf.@string,
+                new int[] { 1 },
+                name,
+                verify_shape: false,
+                allow_broadcast: false);
+
         public static Tensor constant(float value,
             int shape,
             string name = "Const") => constant_op._constant_impl(value,
