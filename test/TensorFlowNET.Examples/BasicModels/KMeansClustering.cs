@@ -18,7 +18,7 @@ using NumSharp;
 using System;
 using System.Diagnostics;
 using Tensorflow;
-using TensorFlowNET.Examples.Utility;
+using Tensorflow.Hub;
 using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
@@ -39,7 +39,7 @@ namespace TensorFlowNET.Examples
         public int? test_size = null;
         public int batch_size = 1024; // The number of samples per batch
 
-        Datasets<DataSetMnist> mnist;
+        Datasets<MnistDataSet> mnist;
         NDArray full_data_x;
         int num_steps = 20; // Total steps to train
         int k = 25; // The number of clusters
@@ -62,19 +62,31 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MNIST.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size:validation_size, test_size:test_size);
-            full_data_x = mnist.train.data;
+            var loader = new MnistModelLoader();
+
+            var setting = new ModelLoadSetting
+            {
+                TrainDir = ".resources/mnist",
+                OneHot = true,
+                TrainSize = train_size,
+                ValidationSize = validation_size,
+                TestSize = test_size
+            };
+
+            mnist = loader.LoadAsync(setting).Result;
+
+            full_data_x = mnist.Train.Data;
 
             // download graph meta data
             string url = "https://raw.githubusercontent.com/SciSharp/TensorFlow.NET/master/graph/kmeans.meta";
-            Web.Download(url, "graph", "kmeans.meta");
+            loader.DownloadAsync(url, ".resources/graph", "kmeans.meta").Wait();
         }
 
         public Graph ImportGraph()
         {
             var graph = tf.Graph().as_default();
 
-            tf.train.import_meta_graph("graph/kmeans.meta");
+            tf.train.import_meta_graph(".resources/graph/kmeans.meta");
 
             return graph;
         }
@@ -132,7 +144,7 @@ namespace TensorFlowNET.Examples
             sw.Start();
             foreach (var i in range(idx.Length))
             {
-                var x = mnist.train.labels[i];
+                var x = mnist.Train.Labels[i];
                 counts[idx[i]] += x;
             }
 
@@ -153,7 +165,7 @@ namespace TensorFlowNET.Examples
             var accuracy_op = tf.reduce_mean(cast);
 
             // Test Model
-            var (test_x, test_y) = (mnist.test.data, mnist.test.labels);
+            var (test_x, test_y) = (mnist.Test.Data, mnist.Test.Labels);
             result = sess.run(accuracy_op, new FeedItem(X, test_x), new FeedItem(Y, test_y));
             accuray_test = result;
             print($"Test Accuracy: {accuray_test}");

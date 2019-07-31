@@ -19,7 +19,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Tensorflow;
-using TensorFlowNET.Examples.Utility;
+using Tensorflow.Hub;
 using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
@@ -45,7 +45,7 @@ namespace TensorFlowNET.Examples
         private float learning_rate = 0.01f;
         private int display_step = 1;
 
-        Datasets<DataSetMnist> mnist;
+        Datasets<MnistDataSet> mnist;
 
         public bool Run()
         {
@@ -84,11 +84,11 @@ namespace TensorFlowNET.Examples
                     sw.Start();
 
                     var avg_cost = 0.0f;
-                    var total_batch = mnist.train.num_examples / batch_size;
+                    var total_batch = mnist.Train.NumOfExamples / batch_size;
                     // Loop over all batches
                     foreach (var i in range(total_batch))
                     {
-                        var (batch_xs, batch_ys) = mnist.train.next_batch(batch_size);
+                        var (batch_xs, batch_ys) = mnist.Train.GetNextBatch(batch_size);
                         // Run optimization op (backprop) and cost op (to get loss value)
                         var result = sess.run(new object[] { optimizer, cost },
                             new FeedItem(x, batch_xs),
@@ -115,7 +115,7 @@ namespace TensorFlowNET.Examples
                 var correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1));
                 // Calculate accuracy
                 var accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32));
-                float acc = accuracy.eval(new FeedItem(x, mnist.test.data), new FeedItem(y, mnist.test.labels));
+                float acc = accuracy.eval(new FeedItem(x, mnist.Test.Data), new FeedItem(y, mnist.Test.Labels));
                 print($"Accuracy: {acc.ToString("F4")}");
 
                 return acc > 0.9;
@@ -124,23 +124,23 @@ namespace TensorFlowNET.Examples
 
         public void PrepareData()
         {
-            mnist = MNIST.read_data_sets("mnist", one_hot: true, train_size: train_size, validation_size: validation_size, test_size: test_size);
+            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true, trainSize: train_size, validationSize: validation_size, testSize: test_size).Result;
         }
 
         public void SaveModel(Session sess)
         {
             var saver = tf.train.Saver();
-            var save_path = saver.save(sess, "logistic_regression/model.ckpt");
-            tf.train.write_graph(sess.graph, "logistic_regression", "model.pbtxt", as_text: true);
+            var save_path = saver.save(sess, ".resources/logistic_regression/model.ckpt");
+            tf.train.write_graph(sess.graph, ".resources/logistic_regression", "model.pbtxt", as_text: true);
 
-            FreezeGraph.freeze_graph(input_graph: "logistic_regression/model.pbtxt",
+            FreezeGraph.freeze_graph(input_graph: ".resources/logistic_regression/model.pbtxt",
                               input_saver: "",
                               input_binary: false,
-                              input_checkpoint: "logistic_regression/model.ckpt",
+                              input_checkpoint: ".resources/logistic_regression/model.ckpt",
                               output_node_names: "Softmax",
                               restore_op_name: "save/restore_all",
                               filename_tensor_name: "save/Const:0",
-                              output_graph: "logistic_regression/model.pb",
+                              output_graph: ".resources/logistic_regression/model.pb",
                               clear_devices: true,
                               initializer_nodes: "");
         }
@@ -148,7 +148,7 @@ namespace TensorFlowNET.Examples
         public void Predict(Session sess)
         {
             var graph = new Graph().as_default();
-            graph.Import(Path.Join("logistic_regression", "model.pb"));
+            graph.Import(Path.Join(".resources/logistic_regression", "model.pb"));
 
             // restoring the model
             // var saver = tf.train.import_meta_graph("logistic_regression/tensorflowModel.ckpt.meta");
@@ -159,7 +159,7 @@ namespace TensorFlowNET.Examples
             var input = x.outputs[0];
 
             // predict
-            var (batch_xs, batch_ys) = mnist.train.next_batch(10);
+            var (batch_xs, batch_ys) = mnist.Train.GetNextBatch(10);
             var results = sess.run(output, new FeedItem(input, batch_xs[np.arange(1)]));
 
             if (results.argmax() == (batch_ys[0] as NDArray).argmax())
