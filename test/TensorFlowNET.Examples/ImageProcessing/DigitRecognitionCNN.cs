@@ -16,6 +16,7 @@
 
 using NumSharp;
 using System;
+using System.Diagnostics;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
@@ -144,6 +145,8 @@ namespace TensorFlowNET.Examples.ImageProcess
             float loss_val = 100.0f;
             float accuracy_val = 0f;
 
+            var sw = new Stopwatch();
+            sw.Start();
             foreach (var epoch in range(epochs))
             {
                 print($"Training epoch: {epoch + 1}");
@@ -165,7 +168,8 @@ namespace TensorFlowNET.Examples.ImageProcess
                         var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
                         loss_val = result[0];
                         accuracy_val = result[1];
-                        print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")}");
+                        print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")} {sw.ElapsedMilliseconds}ms");
+                        sw.Restart();
                     }
                 }
 

@@ -28,8 +28,14 @@ In comparison to other projects, like for instance TensorFlowSharp which only pr
 
 Install TF.NET and TensorFlow binary through NuGet.
 ```sh
+### install tensorflow C# binding
 PM> Install-Package TensorFlow.NET
+
+### Install tensorflow binary
+### For CPU version
 PM> Install-Package SciSharp.TensorFlow.Redist
+### For GPU version (CUDA and cuDNN are required)
+PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 ```
 
 Import TF.NET.

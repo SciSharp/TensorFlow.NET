@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Linq;
 using static Tensorflow.Python;
 
 namespace Tensorflow
@@ -63,17 +64,37 @@ namespace Tensorflow
         public static Tensor operator *(long constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
         public static Tensor operator *(ulong constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
 
-        public static Tensor operator /(Tensor x, Tensor y) => BinaryOpWrapper("truediv", x, y);
-        public static Tensor operator /(Tensor x, float y) => BinaryOpWrapper("truediv", x, y);
+        private static readonly TF_DataType[] _intTfDataTypes = {
+            TF_DataType.TF_INT8, TF_DataType.TF_INT16, TF_DataType.TF_INT32, TF_DataType.TF_INT64,
+            TF_DataType.TF_QINT8, TF_DataType.TF_QINT16, TF_DataType.TF_QINT32,
+            TF_DataType.TF_UINT8, TF_DataType.TF_UINT16, TF_DataType.TF_UINT32, TF_DataType.TF_UINT64
+        };
+        public static Tensor operator /(double x, Tensor y) => BinaryOpWrapper("truediv", x, y);
         public static Tensor operator /(float x, Tensor y) => BinaryOpWrapper("truediv", x, y);
+        public static Tensor operator /(int x, Tensor y) => BinaryOpWrapper("floordiv", x, y);
+        public static Tensor operator /(Tensor x, Tensor y) =>
+            _intTfDataTypes.Contains(x._dtype)
+                ? BinaryOpWrapper("floordiv", x, y)
+                : BinaryOpWrapper("truediv", x, y);
+        public static Tensor operator /(Tensor x, int y) => BinaryOpWrapper("floordiv", x, y);
+        public static Tensor operator /(Tensor x, float y) => BinaryOpWrapper("truediv", x, y);
         public static Tensor operator /(Tensor x, double y) => BinaryOpWrapper("truediv", x, y);
 
         public static Tensor operator %(Tensor x, Tensor y) => BinaryOpWrapper("mod", x, y);
 
+        public static Tensor operator >(double x, Tensor y) => gen_math_ops.greater(x, y);
+        public static Tensor operator >(float x, Tensor y) => gen_math_ops.greater(x, y);
+        public static Tensor operator >(int x, Tensor y) => gen_math_ops.greater(x, y);
+        public static Tensor operator >(Tensor x, Tensor y) => gen_math_ops.greater(x, y);
         public static Tensor operator >(Tensor x, int y) => gen_math_ops.greater(x, y);
         public static Tensor operator >=(Tensor x, Tensor y) => gen_math_ops.greater_equal(x, y);
         public static Tensor operator >(Tensor x, float y) => gen_math_ops.greater(x, y);
         public static Tensor operator >(Tensor x, double y) => gen_math_ops.greater(x, y);
+
+        public static Tensor operator <(double x, Tensor y) => gen_math_ops.less(x, y);
+        public static Tensor operator <(float x, Tensor y) => gen_math_ops.less(x, y);
+        public static Tensor operator <(int x, Tensor y) => gen_math_ops.less(x, y);
+        public static Tensor operator <(Tensor x, Tensor y) => gen_math_ops.less(x, y);
         public static Tensor operator <(Tensor x, int y) => gen_math_ops.less(x, y);
         public static Tensor operator <=(Tensor x, Tensor y) => gen_math_ops.less_equal(x, y);
         public static Tensor operator <(Tensor x, float y) => gen_math_ops.less(x, y);
@@ -98,6 +119,9 @@ namespace Tensorflow
                 {
                     case "add":
                         result = gen_math_ops.add(x1, y1, name: scope);
+                        break;
+                    case "floordiv":
+                        result = gen_math_ops.floor_div(x1, y1, name: scope);
                         break;
                     case "truediv":
                         result = gen_math_ops.real_div(x1, y1, name: scope);
