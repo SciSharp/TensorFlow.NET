@@ -332,3 +332,7 @@ src/TensorFlowNET.Native/bazel-*
 src/TensorFlowNET.Native/c_api.h
 /.vscode
 test/TensorFlowNET.Examples/mnist
+
+
+# training model resources
+.resources

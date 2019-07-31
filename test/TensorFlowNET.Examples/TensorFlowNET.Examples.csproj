@@ -18,5 +18,6 @@
     <ProjectReference Include="..\..\src\KerasNET.Core\Keras.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowText\TensorFlowText.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowHub\TensorFlowHub.csproj" />
   </ItemGroup>
 </Project>
