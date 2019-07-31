@@ -20,7 +20,7 @@ using Tensorflow;
 using Tensorflow.Hub;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// Recurrent Neural Network for handwritten digits MNIST.
