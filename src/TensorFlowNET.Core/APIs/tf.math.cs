@@ -198,6 +198,9 @@ namespace Tensorflow
         public static Tensor logical_or(Tensor x, Tensor y, string name = null)
             => gen_math_ops.logical_or(x, y, name);
 
+        public static Tensor logical_xor(Tensor x, Tensor y, string name = "LogicalXor")
+            => gen_math_ops.logical_xor(x, y, name);
+
         /// <summary>
         /// Clips tensor values to a specified min and max.
         /// </summary>

@@ -371,6 +371,14 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor logical_xor(Tensor x, Tensor y, string name = "LogicalXor")
+        {
+            return logical_and(
+                logical_or(x, y),
+                logical_not(logical_and(x, y)),
+                name);
+        }
+
         public static Tensor squared_difference(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("SquaredDifference", name, args: new { x, y, name });
