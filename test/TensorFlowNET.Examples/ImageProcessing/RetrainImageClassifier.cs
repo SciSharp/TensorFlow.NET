@@ -83,10 +83,10 @@ namespace TensorFlowNET.Examples
             #region For debug purpose
             
             // predict images
-            Predict(null);
+            // Predict(null);
 
             // load saved pb and test new images.
-            Test(null); 
+            // Test(null); 
             
             #endregion
 

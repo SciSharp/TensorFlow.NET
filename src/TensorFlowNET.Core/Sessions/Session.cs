@@ -83,13 +83,19 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            if (_session != IntPtr.Zero)
+            IntPtr h = IntPtr.Zero;
+            lock (this)
+            {
+                h = _session;
+                _session = IntPtr.Zero;
+            }
+            if (h != IntPtr.Zero)
             {
                 var status = new Status();
-                c_api.TF_DeleteSession(_session, status);
+                c_api.TF_DeleteSession(h, status);
+                status.Check(true);
             }
-
-            _session = IntPtr.Zero;
+            
             GC.SuppressFinalize(this);
         }
 

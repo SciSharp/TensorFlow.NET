@@ -445,12 +445,12 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            if (_handle != IntPtr.Zero)
+            /*if (_handle != IntPtr.Zero)
                 c_api.TF_DeleteGraph(_handle);
 
             _handle = IntPtr.Zero;
 
-            GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);*/
         }
 
         /// <summary>

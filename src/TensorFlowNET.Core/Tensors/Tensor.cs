@@ -135,7 +135,9 @@ namespace Tensorflow
                 {
                     var status = new Status();
                     var output = _as_tf_output();
-                    return c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
+                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
+                    status.Check();
+                    return ndim;
                 }
                 else
                 {
@@ -394,15 +396,14 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            IntPtr h=IntPtr.Zero;
+            IntPtr h = IntPtr.Zero;
             lock (this)
             {
                 h = _handle;
-                _handle=IntPtr.Zero;
+                _handle = IntPtr.Zero;
             }
             if (h != IntPtr.Zero)
                 c_api.TF_DeleteTensor(h);
-            
             GC.SuppressFinalize(this);
         }
 
