@@ -118,7 +118,7 @@ namespace TensorFlowNET.Examples
                 float acc = accuracy.eval(new FeedItem(x, mnist.Test.Data), new FeedItem(y, mnist.Test.Labels));
                 print($"Accuracy: {acc.ToString("F4")}");
 
-                return acc > 0.88;
+                return acc > 0.9;
             });
         }
 

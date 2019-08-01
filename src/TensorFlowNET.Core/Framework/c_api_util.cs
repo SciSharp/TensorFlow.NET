@@ -128,7 +128,7 @@ namespace Tensorflow
             IntPtr c_op;
             while ((c_op = c_api.TF_GraphNextOperation(graph, ref pos)) != IntPtr.Zero)
             {
-                yield return c_op;
+                yield return new Operation(c_op, graph);
             }
         }
     }
