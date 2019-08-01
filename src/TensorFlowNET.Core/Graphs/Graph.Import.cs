@@ -43,16 +43,20 @@ namespace Tensorflow
             var bytes = File.ReadAllBytes(file_path);
             var graph_def = new Tensorflow.Buffer(bytes);
             var opts = c_api.TF_NewImportGraphDefOptions();
-            c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, Status);
-            return Status;
+            var status = new Status();
+            c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, status);
+            return status;
         }
 
-        public Status Import(byte[] bytes)
+        public Status Import(byte[] bytes, string prefix = "")
         {
             var graph_def = new Tensorflow.Buffer(bytes);
             var opts = c_api.TF_NewImportGraphDefOptions();
-            c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, Status);
-            return Status;
+            c_api.TF_ImportGraphDefOptionsSetPrefix(opts, prefix);
+            var status = new Status();
+            c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, status);
+            c_api.TF_DeleteImportGraphDefOptions(opts);
+            return status;
         }
 
         public static Graph ImportFromPB(string file_path, string name = null)

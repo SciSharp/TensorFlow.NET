@@ -21,7 +21,6 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using NumSharp.Backends;
 using static Tensorflow.c_api;
 
 namespace Tensorflow
@@ -80,7 +79,7 @@ namespace Tensorflow
         }
 
 #if _REGEN
-        %types=["sbyte", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
+        %types=["sbyte", "bool", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
         %foreach types%
         
         /// <summary>
@@ -115,6 +114,7 @@ namespace Tensorflow
 #else
 
         
+        
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
@@ -141,6 +141,35 @@ namespace Tensorflow
             var v = (sbyte*)Marshal.AllocHGlobal(sizeof(sbyte));
             *v = value;
             _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(sbyte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            IsMemoryOwner=true;
+        }
+        
+        /// <summary>
+        /// Create a 1d Tensor from the given linear array and shape
+        /// </summary>
+        public Tensor(bool[] data, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(bool)), new long[]{data.Length}, data, Marshal.SizeOf<bool>());
+            IsMemoryOwner=true;
+        }
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given array
+        /// </summary>
+        public Tensor(bool[] data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(bool)), shape, data, Marshal.SizeOf<bool>());
+            IsMemoryOwner=true;
+        }
+
+        /// <summary>
+        /// Create a scalar Tensor from the given value
+        /// </summary>
+        public unsafe Tensor(bool value, TF_DataType? dType = null)
+        {
+            var v = (bool*)Marshal.AllocHGlobal(sizeof(bool));
+            *v = value;
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(bool)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(bool), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
             IsMemoryOwner=true;
         }
         
@@ -440,6 +469,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(string str)
         {
+            var status = new Status();
             var buffer = Encoding.UTF8.GetBytes(str);
             var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
             var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
@@ -454,25 +484,24 @@ namespace Tensorflow
 
         public unsafe Tensor(NDArray nd, TF_DataType? tensorDType = null)
         {
-            if (tensorDType == TF_DataType.TF_STRING && nd.typecode == NPTypeCode.Byte)
+            if (tensorDType == TF_DataType.TF_STRING && nd.dtype.Name == "Byte")
             {
                 var buffer = nd.Data<byte>();
-                var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Count);
+                var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
                 var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
-                
-                IntPtr tensor = c_api.TF_TensorData(handle);
 
-                //TODO! handle when nd is a slice, probably by copying.
+                IntPtr tensor = c_api.TF_TensorData(handle);
                 Marshal.WriteInt64(tensor, 0);
-                fixed (byte* src = nd.Unsafe)
-                    c_api.TF_StringEncode(src, (UIntPtr)buffer.Count, (sbyte*)(tensor + sizeof(Int64)), size, status);
+
+                var status = new Status();
+                fixed (byte* src = &buffer[0])
+                    c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
 
                 status.Check(true);
                 _handle=handle;
                 IsMemoryOwner = false;
                 return;
             }
-
             _handle = Allocate(nd, tensorDType: tensorDType);
             IsMemoryOwner = true;
         }
@@ -491,10 +520,36 @@ namespace Tensorflow
             var dataType = ToTFDataType(nd.dtype);
             // shape
             var dims = nd.shape.Select(x => (long)x).ToArray();
-            if (nd.typecode == NPTypeCode.String || nd.typecode == NPTypeCode.Char)
-                ; //TODO! handle it properly.
-            nd.CopyTo(dotHandle);
-
+            var nd1 = nd.ravel();
+            switch (nd.dtype.Name)
+            {
+                case "Boolean":
+                    var boolVals = Array.ConvertAll(nd1.Data<bool>(), x => Convert.ToByte(x));
+                    Marshal.Copy(boolVals, 0, dotHandle, nd.size);
+                    break;
+                case "Int16":
+                    Marshal.Copy(nd1.Data<short>(), 0, dotHandle, nd.size);
+                    break;
+                case "Int32":
+                    Marshal.Copy(nd1.Data<int>(), 0, dotHandle, nd.size);
+                    break;
+                case "Int64":
+                    Marshal.Copy(nd1.Data<long>(), 0, dotHandle, nd.size);
+                    break;
+                case "Single":
+                    Marshal.Copy(nd1.Data<float>(), 0, dotHandle, nd.size);
+                    break;
+                case "Double":
+                    Marshal.Copy(nd1.Data<double>(), 0, dotHandle, nd.size);
+                    break;
+                case "Byte":
+                    Marshal.Copy(nd1.Data<byte>(), 0, dotHandle, nd.size);
+                    break;
+                case "String":
+                    return new Tensor(UTF8Encoding.UTF8.GetBytes(nd.Data<string>(0)), TF_DataType.TF_STRING);
+                default:
+                    throw new NotImplementedException($"Marshal.Copy failed for {nd.dtype.Name}.");
+            }
             var tfHandle = c_api.TF_NewTensor(dataType,
                 dims,
                 dims.Length,
@@ -504,6 +559,40 @@ namespace Tensorflow
                 ref _deallocatorArgs);
 
             return tfHandle;
+        }
+
+        public unsafe Tensor(byte[][] buffer, long[] shape)
+        {
+            int size = 0;
+            foreach (var b in buffer)
+            {
+                size += (int)TF_StringEncodedSize((UIntPtr)b.Length);
+            }
+            int totalSize = size + buffer.Length * 8;
+            ulong offset = 0;
+            IntPtr handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, (UIntPtr)totalSize);
+
+            // Clear offset table
+            IntPtr pOffset = TF_TensorData(handle);
+            IntPtr dst = pOffset + buffer.Length * 8;
+            IntPtr dstLimit = pOffset + totalSize;
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                Marshal.WriteInt64(pOffset, (long)offset);
+                using (var status = new Status())
+                {
+                    fixed (byte* src = &buffer[i][0])
+                    {
+                        var written = TF_StringEncode(src, (UIntPtr)buffer[i].Length, (sbyte*)dst, (UIntPtr)(dstLimit.ToInt64() - dst.ToInt64()), status);
+                        status.Check(true);
+                        pOffset += 8;
+                        dst += (int)written;
+                        offset += written;
+                    }
+                }
+            }
+
+            _handle = handle;
         }
 
         public Tensor(Operation op, int value_index, TF_DataType dtype)
@@ -538,6 +627,8 @@ namespace Tensorflow
 
                 IntPtr tensor = c_api.TF_TensorData(handle);
                 Marshal.WriteInt64(tensor, 0);
+
+                var status = new Status();
                 fixed (byte* src = &buffer[0])
                     c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
 

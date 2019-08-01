@@ -31,8 +31,9 @@ namespace Tensorflow
 
         private GraphDef _as_graph_def(bool add_shapes = false)
         {
-            var buffer = ToGraphDef(Status);
-            Status.Check();
+            var status = new Status();
+            var buffer = ToGraphDef(status);
+            status.Check();
             var def = GraphDef.Parser.ParseFrom(buffer);
             buffer.Dispose();
 
