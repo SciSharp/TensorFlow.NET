@@ -22,8 +22,7 @@ namespace Tensorflow.Hub
             var setting = new ModelLoadSetting
             {
                 TrainDir = trainDir,
-                OneHot = oneHot,
-                TrainSize = trainSize
+                OneHot = oneHot
             };
 
             if (trainSize.HasValue)
@@ -99,7 +98,7 @@ namespace Tensorflow.Hub
 
             var train = new MnistDataSet(trainImages, trainLabels, dtype, reshape);
             var validation = new MnistDataSet(validationImages, validationLabels, dtype, reshape);
-            var test = new MnistDataSet(trainImages, trainLabels, dtype, reshape);
+            var test = new MnistDataSet(testImages, testLabels, dtype, reshape);
 
             return new Datasets<MnistDataSet>(train, validation, test);
         }
