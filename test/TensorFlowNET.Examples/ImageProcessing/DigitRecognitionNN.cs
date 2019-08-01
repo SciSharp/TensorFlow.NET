@@ -127,7 +127,7 @@ namespace TensorFlowNET.Examples
         public void Train(Session sess)
         {
             // Number of training iterations in each epoch
-            var num_tr_iter = mnist.Train.Labels.len / batch_size;
+            var num_tr_iter = mnist.Train.Labels.shape[0] / batch_size;
 
             var init = tf.global_variables_initializer();
             sess.run(init);

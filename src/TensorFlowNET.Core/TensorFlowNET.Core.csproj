@@ -35,7 +35,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 13. Fix default graph and operation issue when import model.
 14. Fix TF_String endcode and decode.
 15. Fix Tensor memory leak.</PackageReleaseNotes>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <FileVersion>0.10.7.2</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

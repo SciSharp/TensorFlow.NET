@@ -196,7 +196,7 @@ namespace Tensorflow
             // [offset1, offset2,...,offsetn, s1size, s1bytes, s2size, s2bytes,...,snsize,snbytes]
             //
             long size = 1;
-            foreach (var s in TensorShape.Dimensions)
+            foreach (var s in TensorShape.dims)
                 size *= s;
 
             var buffer = new byte[size][];
