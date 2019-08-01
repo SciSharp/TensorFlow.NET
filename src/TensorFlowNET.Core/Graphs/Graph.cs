@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -72,7 +73,7 @@ namespace Tensorflow
         all variables that are created during the construction of a graph. The caller
         may define additional collections by specifying a new name.     
      */
-    public partial class Graph : IPython, IDisposable
+    public partial class Graph : IPython, IDisposable, IEnumerable<Operation>
     {
         private IntPtr _handle;
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
@@ -88,7 +89,6 @@ namespace Tensorflow
         public string graph_key => _graph_key;
         public string _last_loss_reduction;
         public bool _is_loss_scaled_by_optimizer { get; set; }
-        public Status Status { get; }
 
         /// <summary>
         /// True if the graph is considered "finalized".  In that case no
@@ -106,7 +106,6 @@ namespace Tensorflow
         public Graph()
         {
             _handle = c_api.TF_NewGraph();
-            Status = new Status();
             _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
             _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
             _names_in_use = new Dictionary<string, int>();
@@ -116,11 +115,14 @@ namespace Tensorflow
         public Graph(IntPtr handle)
         {
             _handle = handle;
-            Status = new Status();
             _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
             _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
             _names_in_use = new Dictionary<string, int>();
             _graph_key = $"grap-key-{ops.uid()}/";
+        }
+
+        public void __enter__()
+        {
         }
 
         public ITensorOrOperation as_graph_element(object obj, bool allow_tensor = true, bool allow_operation = true)
@@ -409,31 +411,6 @@ namespace Tensorflow
             return return_outputs;
         }
 
-        public unsafe Operation[] ReturnOperations(IntPtr results)
-        {
-            TF_Operation return_oper_handle = new TF_Operation();
-            int num_return_opers = 0;
-            c_api.TF_ImportGraphDefResultsReturnOperations(results, ref num_return_opers, ref return_oper_handle);
-            Operation[] return_opers = new Operation[num_return_opers];
-            for (int i = 0; i < num_return_opers; i++)
-            {
-                var handle = return_oper_handle.node + Marshal.SizeOf<TF_Operation>() * i;
-                return_opers[i] = new Operation(*(IntPtr*)handle);
-            }
-            
-            return return_opers;
-        }
-
-        public Operation OperationByName(string operName)
-        {
-            return c_api.TF_GraphOperationByName(_handle, operName);
-        }
-
-        public ITensorOrOperation[] get_operations()
-        {
-            return _nodes_by_name.Values.Select(x => x).ToArray();
-        }
-
         public string[] get_all_collection_keys()
         {
             return _collections.Keys.Where(x => !x.StartsWith("__")).ToArray();
@@ -468,7 +445,12 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            // c_api.TF_DeleteGraph(_handle);
+            /*if (_handle != IntPtr.Zero)
+                c_api.TF_DeleteGraph(_handle);
+
+            _handle = IntPtr.Zero;
+
+            GC.SuppressFinalize(this);*/
         }
 
         /// <summary>
@@ -483,13 +465,42 @@ namespace Tensorflow
             return (Tensor)this.as_graph_element(name, allow_tensor: true, allow_operation: false);
         }
 
-        public void __enter__()
+        public TensorShape GetTensorShape(TF_Output output)
         {
+            var status = new Status();
+            var ndim = c_api.TF_GraphGetTensorNumDims(_handle, output, status);
+            status.Check();
+
+            if (ndim == -1)
+                return new TensorShape();
+
+            var dims = new long[ndim];
+            c_api.TF_GraphGetTensorShape(_handle, output, dims, dims.Length, status);
+            status.Check();
+
+            return new TensorShape(dims.Select(x => (int)x).ToArray());
+        }
+
+        public override string ToString()
+        {
+            int len = 0;
+            return c_api.TF_GraphDebugString(_handle, out len);
         }
 
         public void __exit__()
         {
 
+        }
+
+        private IEnumerable<Operation> GetEnumerable()
+            => c_api_util.tf_operations(this);
+
+        IEnumerator<Operation> IEnumerable<Operation>.GetEnumerator()
+            => GetEnumerable().GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
 
         public static implicit operator IntPtr(Graph graph)

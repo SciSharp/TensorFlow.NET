@@ -25,7 +25,7 @@ using Tensorflow;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// In this tutorial, we will reuse the feature extraction capabilities from powerful image classifiers trained on ImageNet 
@@ -83,10 +83,10 @@ namespace TensorFlowNET.Examples.ImageProcess
             #region For debug purpose
             
             // predict images
-            Predict(null);
+            // Predict(null);
 
             // load saved pb and test new images.
-            Test(null); 
+            // Test(null); 
             
             #endregion
 

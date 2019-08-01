@@ -35,6 +35,8 @@ namespace Tensorflow
 
         public int OutputNumConsumers(int index) => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, index));
 
+        public TF_Output this[int index] => _tf_output(index);
+
         public unsafe TF_Input[] OutputConsumers(int index, int max_consumers)
         {
             int size = Marshal.SizeOf<TF_Input>();

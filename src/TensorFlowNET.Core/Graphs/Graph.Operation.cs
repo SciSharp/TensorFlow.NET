@@ -38,6 +38,31 @@ namespace Tensorflow
             return c_api.TF_NewOperation(_handle, opType, opName);
         }
 
+        public unsafe Operation[] ReturnOperations(IntPtr results)
+        {
+            TF_Operation return_oper_handle = new TF_Operation();
+            int num_return_opers = 0;
+            c_api.TF_ImportGraphDefResultsReturnOperations(results, ref num_return_opers, ref return_oper_handle);
+            Operation[] return_opers = new Operation[num_return_opers];
+            for (int i = 0; i < num_return_opers; i++)
+            {
+                var handle = return_oper_handle.node + Marshal.SizeOf<TF_Operation>() * i;
+                return_opers[i] = new Operation(*(IntPtr*)handle);
+            }
+
+            return return_opers;
+        }
+
+        public Operation OperationByName(string operName)
+        {
+            return c_api.TF_GraphOperationByName(_handle, operName);
+        }
+
+        public ITensorOrOperation[] get_operations()
+        {
+            return _nodes_by_name.Values.Select(x => x).ToArray();
+        }
+
         /// <summary>
         /// Returns the `Operation` with the given `name`.
         /// 

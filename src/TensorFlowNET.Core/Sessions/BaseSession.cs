@@ -32,20 +32,19 @@ namespace Tensorflow
         protected int _current_version;
         protected byte[] _target;
         protected IntPtr _session;
-        public Status Status;
         public Graph graph => _graph;
 
         public BaseSession(string target = "", Graph g = null, SessionOptions opts = null)
         {
             _graph = g is null ? ops.get_default_graph() : g;
-
+            _graph.as_default();
             _target = UTF8Encoding.UTF8.GetBytes(target);
 
             SessionOptions newOpts = null;
             if (opts == null)
                 newOpts = c_api.TF_NewSessionOptions();
 
-            Status = new Status();
+            var Status = new Status();
 
             _session = c_api.TF_NewSession(_graph, opts ?? newOpts, Status);
 

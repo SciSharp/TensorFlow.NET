@@ -17,7 +17,7 @@
     <NoBuild>true</NoBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
 
-    <NuspecFile>Redist.nuspec</NuspecFile>
+    <NuspecFile>Redist-Windows-GPU.nuspec</NuspecFile>
     <NuspecProperties>packageId=$(PackageId);version=$(PackageVersion)</NuspecProperties>
     <NuspecBasePath>$(ProjDir)</NuspecBasePath>
 
@@ -65,7 +65,7 @@
       <!-- although we could extract all archives on all machines, mac requires a fixup which can only be run on mac 
            so we split these per-rid and join during the official build packaging.  -->
       <TensorFlowArchive
-                         Include="@(TensorFlowConfig->'https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-%(Identity)-x86_64-$(TensorFlowVersion)%(FileExtension)')" />
+                         Include="@(TensorFlowConfig->'https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-%(Identity)-x86_64-$(TensorFlowVersion)%(FileExtension)')" />
       <!-- set up metdata used by all targets -->
       <TensorFlowArchive DownloadFile="$(BinDir)%(FileName)%(Extension)"
                          DownloadShaFile="$(BinDir)%(FileName)%(Extension).sha"

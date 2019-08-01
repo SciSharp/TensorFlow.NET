@@ -17,10 +17,10 @@
 using NumSharp;
 using System;
 using Tensorflow;
-using TensorFlowNET.Examples.Utility;
+using Tensorflow.Hub;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// Recurrent Neural Network for handwritten digits MNIST.
@@ -45,7 +45,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         int n_inputs = 28;
         int n_outputs = 10;
 
-        Datasets<DataSetMnist> mnist;
+        Datasets<MnistDataSet> mnist;
 
         Tensor x, y;
         Tensor loss, accuracy, cls_prediction;
@@ -143,15 +143,15 @@ namespace TensorFlowNET.Examples.ImageProcess
 
         public void PrepareData()
         {
-            mnist = MNIST.read_data_sets("mnist", one_hot: true);
-            (x_train, y_train) = (mnist.train.data, mnist.train.labels);
-            (x_valid, y_valid) = (mnist.validation.data, mnist.validation.labels);
-            (x_test, y_test) = (mnist.test.data, mnist.test.labels);
+            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true).Result;
+            (x_train, y_train) = (mnist.Train.Data, mnist.Train.Labels);
+            (x_valid, y_valid) = (mnist.Validation.Data, mnist.Validation.Labels);
+            (x_test, y_test) = (mnist.Test.Data, mnist.Test.Labels);
 
             print("Size of:");
-            print($"- Training-set:\t\t{len(mnist.train.data)}");
-            print($"- Validation-set:\t{len(mnist.validation.data)}");
-            print($"- Test-set:\t\t{len(mnist.test.data)}");
+            print($"- Training-set:\t\t{len(mnist.Train.Data)}");
+            print($"- Validation-set:\t{len(mnist.Validation.Data)}");
+            print($"- Test-set:\t\t{len(mnist.Test.Data)}");
         }
 
         public Graph ImportGraph() => throw new NotImplementedException();

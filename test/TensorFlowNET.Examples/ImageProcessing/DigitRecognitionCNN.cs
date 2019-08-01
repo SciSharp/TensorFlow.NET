@@ -16,11 +16,12 @@
 
 using NumSharp;
 using System;
+using System.Diagnostics;
 using Tensorflow;
-using TensorFlowNET.Examples.Utility;
+using Tensorflow.Hub;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// Convolutional Neural Network classifier for Hand Written Digits
@@ -45,7 +46,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         int epochs = 5; // accuracy > 98%
         int batch_size = 100;
         float learning_rate = 0.001f;
-        Datasets<DataSetMnist> mnist;
+        Datasets<MnistDataSet> mnist;
 
         // Network configuration
         // 1st Convolutional Layer
@@ -144,6 +145,8 @@ namespace TensorFlowNET.Examples.ImageProcess
             float loss_val = 100.0f;
             float accuracy_val = 0f;
 
+            var sw = new Stopwatch();
+            sw.Start();
             foreach (var epoch in range(epochs))
             {
                 print($"Training epoch: {epoch + 1}");
@@ -165,7 +168,8 @@ namespace TensorFlowNET.Examples.ImageProcess
                         var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
                         loss_val = result[0];
                         accuracy_val = result[1];
-                        print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")}");
+                        print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")} {sw.ElapsedMilliseconds}ms");
+                        sw.Restart();
                     }
                 }
 
@@ -306,14 +310,14 @@ namespace TensorFlowNET.Examples.ImageProcess
             
         public void PrepareData()
         {
-            mnist = MNIST.read_data_sets("mnist", one_hot: true);
-            (x_train, y_train) = Reformat(mnist.train.data, mnist.train.labels);
-            (x_valid, y_valid) = Reformat(mnist.validation.data, mnist.validation.labels);
-            (x_test, y_test) = Reformat(mnist.test.data, mnist.test.labels);
+            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true).Result;
+            (x_train, y_train) = Reformat(mnist.Train.Data, mnist.Train.Labels);
+            (x_valid, y_valid) = Reformat(mnist.Validation.Data, mnist.Validation.Labels);
+            (x_test, y_test) = Reformat(mnist.Test.Data, mnist.Test.Labels);
 
             print("Size of:");
-            print($"- Training-set:\t\t{len(mnist.train.data)}");
-            print($"- Validation-set:\t{len(mnist.validation.data)}");
+            print($"- Training-set:\t\t{len(mnist.Train.Data)}");
+            print($"- Validation-set:\t{len(mnist.Validation.Data)}");
         }
 
         /// <summary>

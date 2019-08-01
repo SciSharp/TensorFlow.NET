@@ -4,7 +4,7 @@ using Tensorflow;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// This example removes the background from an input image.

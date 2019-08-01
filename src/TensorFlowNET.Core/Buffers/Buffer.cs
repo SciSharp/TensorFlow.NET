@@ -30,8 +30,8 @@ namespace Tensorflow
             get 
             {
                 var data = new byte[buffer.length];
-                if (buffer.length > 0)
-                    Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
+                if (data.Length > 0)
+                    Marshal.Copy(buffer.data, data, 0, data.Length);
                 return data;
             }
         }
