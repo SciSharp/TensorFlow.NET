@@ -89,7 +89,6 @@ namespace Tensorflow
         public string graph_key => _graph_key;
         public string _last_loss_reduction;
         public bool _is_loss_scaled_by_optimizer { get; set; }
-        public Status Status { get; }
 
         /// <summary>
         /// True if the graph is considered "finalized".  In that case no
@@ -107,7 +106,6 @@ namespace Tensorflow
         public Graph()
         {
             _handle = c_api.TF_NewGraph();
-            Status = new Status();
             _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
             _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
             _names_in_use = new Dictionary<string, int>();
@@ -117,7 +115,6 @@ namespace Tensorflow
         public Graph(IntPtr handle)
         {
             _handle = handle;
-            Status = new Status();
             _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
             _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
             _names_in_use = new Dictionary<string, int>();
@@ -448,7 +445,12 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            // c_api.TF_DeleteGraph(_handle);
+            if (_handle != IntPtr.Zero)
+                c_api.TF_DeleteGraph(_handle);
+
+            _handle = IntPtr.Zero;
+
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>

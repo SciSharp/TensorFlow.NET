@@ -37,7 +37,7 @@ namespace Tensorflow
             : base("", g, opts)
         {
             if (s == null)
-                s = Status;
+                s = new Status();
         }
 
         public Session as_default()
@@ -83,8 +83,19 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            c_api.TF_DeleteSession(_session, Status);
-            Status.Dispose();
+            if (_session != IntPtr.Zero)
+            {
+                var status = new Status();
+                c_api.TF_DeleteSession(_session, status);
+            }
+
+            _session = IntPtr.Zero;
+            GC.SuppressFinalize(this);
+        }
+
+        ~Session()
+        {
+            Dispose();
         }
 
         public void __enter__()
