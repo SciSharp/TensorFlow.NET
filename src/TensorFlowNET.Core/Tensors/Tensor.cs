@@ -363,7 +363,7 @@ namespace Tensorflow
                 _handle=IntPtr.Zero;
             }
             if (h != IntPtr.Zero)
-                c_api.TF_DeleteTensor(_handle);
+                c_api.TF_DeleteTensor(h);
             status.Dispose();
             GC.SuppressFinalize(this);
         }
