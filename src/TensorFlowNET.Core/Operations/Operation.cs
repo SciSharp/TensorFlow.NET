@@ -54,7 +54,6 @@ namespace Tensorflow
         public Operation op => this;
 
         public TF_DataType dtype => TF_DataType.DtInvalid;
-        private Status status = new Status();
 
         public string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => c_api.StringPiece(c_api.TF_OperationOpType(_handle));
@@ -96,7 +95,11 @@ namespace Tensorflow
 
             _operDesc = c_api.TF_NewOperation(g, opType, oper_name);
             c_api.TF_SetAttrType(_operDesc, "dtype", TF_DataType.TF_INT32);
-            _handle = c_api.TF_FinishOperation(_operDesc, status);
+            using (var status = new Status())
+            {
+                _handle = c_api.TF_FinishOperation(_operDesc, status);
+                status.Check(true);
+            }
 
             // Dict mapping op name to file and line information for op colocation
             // context managers.
@@ -220,6 +223,7 @@ namespace Tensorflow
         {
             AttrValue x = null;
 
+            using (var status = new Status())
             using (var buf = new Buffer())
             {
                 c_api.TF_OperationGetAttrValueProto(_handle, name, buf, status);
@@ -274,12 +278,15 @@ namespace Tensorflow
             var output = tensor._as_tf_output();
 
             // Reset cached inputs.
-            _inputs = null; 
+            _inputs = null;
             // after the c_api call next time _inputs is accessed 
             // the updated inputs are reloaded from the c_api
-            c_api.UpdateEdge(_graph, output, input, status);
-            //var updated_inputs = inputs;
-            status.Check();
+            using (var status = new Status())
+            {
+                c_api.UpdateEdge(_graph, output, input, status);
+                //var updated_inputs = inputs;
+                status.Check();
+            }
         }
 
         private void _assert_same_graph(Tensor tensor)
