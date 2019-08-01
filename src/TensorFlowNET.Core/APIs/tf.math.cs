@@ -189,6 +189,9 @@ namespace Tensorflow
         public static Tensor log1p(Tensor x, string name = null)
             => gen_math_ops.log1p(x, name);
 
+        public static Tensor logical_and(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.logical_and(x, y, name);
+
         /// <summary>
         /// Clips tensor values to a specified min and max.
         /// </summary>
