@@ -23,7 +23,10 @@ namespace Tensorflow
     /// </summary>
     public partial class Operation
     {
-        public static implicit operator Operation(IntPtr handle) => new Operation(handle);
+        // make sure the new op is in the same graph instance
+        public static implicit operator Operation(IntPtr handle) 
+            => new Operation(handle);
+
         public static implicit operator IntPtr(Operation op) => op._handle;
         public static implicit operator Tensor(Operation op) => op.output;
 
