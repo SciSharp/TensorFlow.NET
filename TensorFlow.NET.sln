@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowText", "src\Tenso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TensorFlowDatasets", "src\TensorFlowDatasets\TensorFlowDatasets.csproj", "{DF151A51-E9FD-41BD-B0F4-08A743755D44}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Examples.GPU", "test\TensorFlowNET.Examples\TensorFlowNET.Examples.GPU.csproj", "{6F6B3382-8F87-4CD9-BF87-C81D5405685A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{DF151A51-E9FD-41BD-B0F4-08A743755D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF151A51-E9FD-41BD-B0F4-08A743755D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF151A51-E9FD-41BD-B0F4-08A743755D44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
