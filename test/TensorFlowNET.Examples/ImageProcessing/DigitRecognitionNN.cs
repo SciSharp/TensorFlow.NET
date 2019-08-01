@@ -20,7 +20,7 @@ using Tensorflow;
 using Tensorflow.Hub;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// Neural Network classifier for Hand Written Digits
@@ -127,7 +127,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         public void Train(Session sess)
         {
             // Number of training iterations in each epoch
-            var num_tr_iter = mnist.Train.Labels.shape[0] / batch_size;
+            var num_tr_iter = mnist.Train.Labels.len / batch_size;
 
             var init = tf.global_variables_initializer();
             sess.run(init);

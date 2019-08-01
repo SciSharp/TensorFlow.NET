@@ -21,7 +21,7 @@ using Tensorflow;
 using Tensorflow.Hub;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// Convolutional Neural Network classifier for Hand Written Digits
