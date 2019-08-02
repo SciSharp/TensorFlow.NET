@@ -25,13 +25,25 @@ namespace Tensorflow.Hub
             if (!Path.IsPathRooted(dirSaveTo))
                 dirSaveTo = Path.Combine(AppContext.BaseDirectory, dirSaveTo);
 
-            if (!Directory.Exists(dirSaveTo))
-                Directory.CreateDirectory(dirSaveTo);
-            
-            using (var wc = new WebClient())
+            var fileSaveTo = Path.Combine(dirSaveTo, fileName);
+
+            if (File.Exists(fileSaveTo))
             {
-                await wc.DownloadFileTaskAsync(url, Path.Combine(dirSaveTo, fileName));
+                //TODO:maybe you can check file's hashcode and "donglowad.info" to complete file ...
+                Console.WriteLine($"{fileSaveTo} already exists.");
             }
+            else
+            {
+                if (!Directory.Exists(dirSaveTo))
+                    Directory.CreateDirectory(dirSaveTo);
+
+                using (var wc = new WebClient())
+                {
+                    await wc.DownloadFileTaskAsync(url, fileSaveTo);
+                }
+
+            }
+
         }
 
         public static async Task UnzipAsync<TDataSet>(this IModelLoader<TDataSet> modelLoader, string zipFile, string saveTo)
@@ -42,7 +54,7 @@ namespace Tensorflow.Hub
 
             if (!Directory.Exists(saveTo))
                 Directory.CreateDirectory(saveTo);
-            
+
             if (!Path.IsPathRooted(zipFile))
                 zipFile = Path.Combine(AppContext.BaseDirectory, zipFile);
 
@@ -78,7 +90,7 @@ namespace Tensorflow.Hub
 
             var cts = new CancellationTokenSource();
             var showProgressTask = ShowProgressInConsole(cts);
-            
+
             try
             {
                 await task;
@@ -86,7 +98,7 @@ namespace Tensorflow.Hub
             finally
             {
                 cts.Cancel();
-            }            
+            }
         }
 
         private static async Task ShowProgressInConsole(CancellationTokenSource cts)
