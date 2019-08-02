@@ -129,6 +129,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void Add()
         {
+            tf.Graph().as_default();
             int result = 0;
             Tensor x = tf.Variable(10, name: "x");
 

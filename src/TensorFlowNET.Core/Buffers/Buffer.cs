@@ -19,10 +19,8 @@ using System.Runtime.InteropServices;
 
 namespace Tensorflow
 {
-    public class Buffer : IDisposable
+    public class Buffer : DisposableObject
     {
-        private IntPtr _handle;
-
         private TF_Buffer buffer => Marshal.PtrToStructure<TF_Buffer>(_handle);
 
         public byte[] Data 
@@ -54,6 +52,8 @@ namespace Tensorflow
             Marshal.Copy(data, 0, dst, data.Length);
 
             _handle = c_api.TF_NewBufferFromString(dst, (ulong)data.Length);
+
+            Marshal.FreeHGlobal(dst);
         }
 
         public static implicit operator IntPtr(Buffer buffer)
@@ -66,9 +66,7 @@ namespace Tensorflow
             return buffer.Data;
         }
 
-        public void Dispose()
-        {
-            c_api.TF_DeleteBuffer(_handle);
-        }
+        protected override void DisposeUnManagedState()
+            => c_api.TF_DeleteBuffer(_handle);
     }
 }

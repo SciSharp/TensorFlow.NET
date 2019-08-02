@@ -50,7 +50,7 @@ namespace Tensorflow
         {
             var graph = c_api.TF_NewGraph();
             var status = new Status();
-            var opt = c_api.TF_NewSessionOptions();
+            var opt = new SessionOptions();
 
             var tags = new string[] { "serve" };
             var buffer = new TF_Buffer();
@@ -68,41 +68,13 @@ namespace Tensorflow
             // var data = new byte[buffer.length];
             // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
             // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
-            status.Check();
+            status.Check(true);
 
             return new Session(sess, g: new Graph(graph).as_default());
         }
 
         public static implicit operator IntPtr(Session session) => session._session;
         public static implicit operator Session(IntPtr handle) => new Session(handle);
-
-        public void close()
-        {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            IntPtr h = IntPtr.Zero;
-            lock (this)
-            {
-                h = _session;
-                _session = IntPtr.Zero;
-            }
-            if (h != IntPtr.Zero)
-            {
-                var status = new Status();
-                c_api.TF_DeleteSession(h, status);
-                status.Check(true);
-            }
-            
-            GC.SuppressFinalize(this);
-        }
-
-        ~Session()
-        {
-            Dispose();
-        }
 
         public void __enter__()
         {

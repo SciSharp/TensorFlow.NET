@@ -22,10 +22,8 @@ namespace Tensorflow
     /// TF_Status holds error information. It either has an OK code, or
     /// else an error code with an associated error message.
     /// </summary>
-    public class Status : IDisposable
+    public class Status : DisposableObject
     {
-        protected IntPtr _handle;
-
         /// <summary>
         /// Error message
         /// </summary>
@@ -67,22 +65,7 @@ namespace Tensorflow
             return status._handle;
         }
 
-        public void Dispose()
-        {
-            IntPtr h = IntPtr.Zero;
-            lock (this)
-            {
-                h = _handle;
-                _handle = IntPtr.Zero;
-            }
-            if (h != IntPtr.Zero)
-                c_api.TF_DeleteStatus(h);
-            GC.SuppressFinalize(this);
-        }
-
-        ~Status()
-        {
-            Dispose();
-        }
+        protected override void DisposeUnManagedState()
+            => c_api.TF_DeleteStatus(_handle);
     }
 }

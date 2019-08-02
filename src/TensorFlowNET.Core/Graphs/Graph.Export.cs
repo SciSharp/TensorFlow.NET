@@ -22,7 +22,7 @@ namespace Tensorflow
         {
             var buffer = new Buffer();
             c_api.TF_GraphToGraphDef(_handle, buffer, s);
-            s.Check();
+            s.Check(true);
             // var def = GraphDef.Parser.ParseFrom(buffer);
             // buffer.Dispose();
 
@@ -33,7 +33,9 @@ namespace Tensorflow
         {
             var status = new Status();
             var buffer = ToGraphDef(status);
-            status.Check();
+            status.Check(true);
+            status.Dispose();
+
             var def = GraphDef.Parser.ParseFrom(buffer);
             buffer.Dispose();
 

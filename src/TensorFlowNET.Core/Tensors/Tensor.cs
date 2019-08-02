@@ -29,10 +29,8 @@ namespace Tensorflow
     /// A tensor is a generalization of vectors and matrices to potentially higher dimensions. 
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
-    public partial class Tensor : IDisposable, ITensorOrOperation, _TensorLike
+    public partial class Tensor : DisposableObject, ITensorOrOperation, _TensorLike
     {
-        private IntPtr _handle;
-
         private int _id;
         private Operation _op;
 
@@ -394,26 +392,8 @@ namespace Tensorflow
             return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
         }
 
-        public void Dispose()
-        {
-            IntPtr h = IntPtr.Zero;
-            lock (this)
-            {
-                h = _handle;
-                _handle = IntPtr.Zero;
-            }
-            if (h != IntPtr.Zero)
-                c_api.TF_DeleteTensor(h);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Dispose the tensor when it gets garbage collected
-        /// </summary>
-        ~Tensor()
-        {
-            Dispose();
-        }
+        protected override void DisposeUnManagedState()
+            => c_api.TF_DeleteTensor(_handle);
 
         public bool IsDisposed
         {

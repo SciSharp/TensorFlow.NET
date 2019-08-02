@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
+using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Tensorflow;
 using static Tensorflow.Python;
 
@@ -184,9 +186,9 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void StringEncode()
         {
-            /*string str = "Hello, TensorFlow.NET!";
+            string str = "Hello, TensorFlow.NET!";
             var handle = Marshal.StringToHGlobalAnsi(str);
-            ulong dst_len = c_api.TF_StringEncodedSize((UIntPtr)str.Length);
+            ulong dst_len = (ulong)c_api.TF_StringEncodedSize((UIntPtr)str.Length);
             Assert.AreEqual(dst_len, (ulong)23);
             IntPtr dst = Marshal.AllocHGlobal((int)dst_len);
             ulong encoded_len = c_api.TF_StringEncode(handle, (ulong)str.Length, dst, dst_len, status);
@@ -194,7 +196,7 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual(status.Code, TF_Code.TF_OK);
             string encoded_str = Marshal.PtrToStringUTF8(dst + sizeof(byte));
             Assert.AreEqual(encoded_str, str);
-            Assert.AreEqual(str.Length, Marshal.ReadByte(dst));*/
+            Assert.AreEqual(str.Length, Marshal.ReadByte(dst));
             //c_api.TF_StringDecode(dst, (ulong)str.Length, IntPtr.Zero, ref dst_len, status);
         }
 
