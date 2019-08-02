@@ -48,6 +48,10 @@ namespace Tensorflow
 
             _session = c_api.TF_NewSession(_graph, opts ?? newOpts, status);
 
+            // dispose newOpts
+            if (opts == null)
+                c_api.TF_DeleteSessionOptions(newOpts);
+
             status.Check(true);
         }
 
@@ -370,6 +374,20 @@ namespace Tensorflow
             using (var status = new Status())
             {
                 c_api.TF_DeleteSession(handle, status);
+                status.Check(true);
+            }
+        }
+
+        public void close()
+        {
+            Dispose();
+        }
+
+        protected override void DisposeUnManagedState()
+        {
+            using (var status = new Status())
+            {
+                c_api.TF_DeleteSession(_handle, status);
                 status.Check(true);
             }
         }
