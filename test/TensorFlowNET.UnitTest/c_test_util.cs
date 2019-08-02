@@ -37,14 +37,13 @@ namespace TensorFlowNET.UnitTest
 
         public static GraphDef GetGraphDef(Graph graph)
         {
-            var s = new Status();
-            var buffer = new Buffer();
-            c_api.TF_GraphToGraphDef(graph, buffer, s);
-            s.Check();
-            var def = GraphDef.Parser.ParseFrom(buffer);
-            buffer.Dispose();
-            s.Dispose();
-            return def;
+            using (var s = new Status())
+            using (var buffer = new Buffer())
+            {
+                c_api.TF_GraphToGraphDef(graph, buffer, s);
+                s.Check();
+                return GraphDef.Parser.ParseFrom(buffer);
+            }
         }
 
         public static bool IsAddN(NodeDef node_def, int n)

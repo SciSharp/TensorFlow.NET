@@ -24,7 +24,7 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class BaseSession
+    public class BaseSession : DisposableObject
     {
         protected Graph _graph;
         protected bool _opened;
@@ -42,17 +42,13 @@ namespace Tensorflow
 
             SessionOptions newOpts = null;
             if (opts == null)
-                newOpts = c_api.TF_NewSessionOptions();
+                newOpts = new SessionOptions();
 
-            var Status = new Status();
+            var status = new Status();
 
-            _session = c_api.TF_NewSession(_graph, opts ?? newOpts, Status);
+            _session = c_api.TF_NewSession(_graph, opts ?? newOpts, status);
 
-            // dispose newOpts
-            if (opts == null)
-                c_api.TF_DeleteSessionOptions(newOpts);
-
-            Status.Check(true);
+            status.Check(true);
         }
 
         public virtual NDArray run(object fetches, params FeedItem[] feed_dict)
@@ -323,6 +319,20 @@ namespace Tensorflow
         private void _extend_graph()
         {
 
+        }
+
+        public void close()
+        {
+            Dispose();
+        }
+
+        protected override void DisposeUnManagedState()
+        {
+            using (var status = new Status())
+            {
+                c_api.TF_DeleteSession(_handle, status);
+                status.Check(true);
+            }
         }
     }
 }

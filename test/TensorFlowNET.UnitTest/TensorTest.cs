@@ -12,7 +12,7 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class TensorTest : CApiTest
     {
-        [TestMethod]
+        //[TestMethod]
         public void TensorDeallocationThreadSafety()
         {
             var tensors = new Tensor[1000];
