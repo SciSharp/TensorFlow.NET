@@ -377,19 +377,5 @@ namespace Tensorflow
                 status.Check(true);
             }
         }
-
-        public void close()
-        {
-            Dispose();
-        }
-
-        protected override void DisposeUnManagedState(IntPtr handle)
-        {
-            using (var status = new Status())
-            {
-                c_api.TF_DeleteSession(handle, status);
-                status.Check(true);
-            }
-        }
     }
 }
