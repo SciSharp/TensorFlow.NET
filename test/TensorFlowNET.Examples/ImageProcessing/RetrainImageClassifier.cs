@@ -738,7 +738,8 @@ namespace TensorFlowNET.Examples
             var fileBytes = ReadTensorFromImageFile(img_path);
 
             // import graph and variables
-            var graph = Graph.ImportFromPB(output_graph, "");
+            var graph = new Graph();
+            graph.Import(output_graph, "");
 
             Tensor input = graph.OperationByName("Placeholder");
             Tensor output = graph.OperationByName("final_result");
@@ -778,7 +779,8 @@ namespace TensorFlowNET.Examples
             if (!File.Exists(output_graph))
                 return;
 
-            var graph = Graph.ImportFromPB(output_graph);
+            var graph = new Graph();
+            graph.Import(output_graph);
             var (jpeg_data_tensor, decoded_image_tensor) = add_jpeg_decoding();
 
             tf_with(tf.Session(graph), sess =>

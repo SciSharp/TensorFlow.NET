@@ -18,10 +18,8 @@ using System;
 
 namespace Tensorflow
 {
-    public class ImportGraphDefOptions : IDisposable
+    public class ImportGraphDefOptions : DisposableObject
     {
-        private IntPtr _handle;
-
         public int NumReturnOutputs => c_api.TF_ImportGraphDefOptionsNumReturnOutputs(_handle);
 
         public ImportGraphDefOptions()
@@ -39,10 +37,8 @@ namespace Tensorflow
             c_api.TF_ImportGraphDefOptionsAddReturnOutput(_handle, name, index);
         }
 
-        public void Dispose()
-        {
-            c_api.TF_DeleteImportGraphDefOptions(_handle);
-        }
+        protected override void DisposeUnManagedState(IntPtr handle)
+            => c_api.TF_DeleteImportGraphDefOptions(handle);
 
         public static implicit operator IntPtr(ImportGraphDefOptions opts) => opts._handle;
         public static implicit operator ImportGraphDefOptions(IntPtr handle) => new ImportGraphDefOptions(handle);
