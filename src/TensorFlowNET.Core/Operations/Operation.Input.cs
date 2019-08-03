@@ -26,7 +26,18 @@ namespace Tensorflow
     {
         public TF_Output Input(int index) => c_api.TF_OperationInput(new TF_Input(_handle, index));
         public TF_DataType InputType(int index) => c_api.TF_OperationInputType(new TF_Input(_handle, index));
-        public int InputListLength(string name) => c_api.TF_OperationInputListLength(_handle, name, status);
+
+        public int InputListLength(string name)
+        {
+            int num = 0;
+            using(var status = new Status())
+            {
+                num = c_api.TF_OperationInputListLength(_handle, name, status);
+                status.Check(true);
+            }
+            return num;
+        }
+
         public int NumInputs => c_api.TF_OperationNumInputs(_handle);
         private TF_DataType[] _input_types => _inputs._inputs.Select(x => x.dtype).ToArray();
 

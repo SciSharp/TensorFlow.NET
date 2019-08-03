@@ -24,7 +24,18 @@ namespace Tensorflow
     {
         public int NumOutputs => c_api.TF_OperationNumOutputs(_handle);
         public TF_DataType OutputType(int index) => c_api.TF_OperationOutputType(new TF_Output(_handle, index));
-        public int OutputListLength(string name) => c_api.TF_OperationOutputListLength(_handle, name, status);
+
+        public int OutputListLength(string name)
+        {
+            int num = 0;
+            using (var status = new Status())
+            {
+                num = c_api.TF_OperationOutputListLength(_handle, name, status);
+                status.Check(true);
+            }
+
+            return num;
+        }
 
         private Tensor[] _outputs;
         public Tensor[] outputs => _outputs;
@@ -34,6 +45,8 @@ namespace Tensorflow
         public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);
 
         public int OutputNumConsumers(int index) => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, index));
+
+        public TF_Output this[int index] => _tf_output(index);
 
         public unsafe TF_Input[] OutputConsumers(int index, int max_consumers)
         {

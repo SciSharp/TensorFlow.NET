@@ -44,6 +44,9 @@ namespace Tensorflow
         public static extern void TF_DeleteImportGraphDefResults(IntPtr results);
 
         [DllImport(TensorFlowLibName)]
+        public static extern string TF_GraphDebugString(IntPtr graph, out int len);
+
+        [DllImport(TensorFlowLibName)]
         public static extern void TF_GraphGetOpDef(IntPtr graph, string op_name, IntPtr output_op_def, IntPtr status);
 
         /// <summary>
@@ -100,6 +103,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_GraphImportGraphDef(IntPtr graph, IntPtr graph_def, IntPtr options, IntPtr status);
+        
         /// <summary>
         /// Iterate through the operations of a graph.
         /// </summary>

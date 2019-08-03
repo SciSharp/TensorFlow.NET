@@ -295,7 +295,7 @@ namespace Tensorflow
             // inner_device_stack = default_graph._device_function_stack
             // var outer_context = default_graph.as_default;
 
-            with(ops.control_dependencies(null), delegate
+            tf_with(ops.control_dependencies(null), delegate
             {
                 var outer_graph = get_default_graph();
                 // outer_device_stack = None

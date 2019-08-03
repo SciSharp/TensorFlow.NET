@@ -32,6 +32,12 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_AllocateTensor(TF_DataType dtype, IntPtr dims, int num_dims, UIntPtr len);
 
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_AllocateTensor(TF_DataType dtype, long[] dims, int num_dims, ulong len);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_AllocateTensor(TF_DataType dtype, long[] dims, int num_dims, UIntPtr len);
+
         /// <summary>
         /// returns the sizeof() for the underlying type corresponding to the given TF_DataType enum value.
         /// </summary>
@@ -150,5 +156,8 @@ namespace Tensorflow
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern ulong TF_StringDecode(IntPtr src, ulong src_len, IntPtr dst, ref ulong dst_len, IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern unsafe UIntPtr TF_StringDecode(byte* src, UIntPtr src_len, byte** dst, UIntPtr* dst_len, IntPtr status);
     }
 }

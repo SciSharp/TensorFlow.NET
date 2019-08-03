@@ -16,19 +16,18 @@ namespace TensorFlowNET.UnitTest.ops_test
         [TestMethod]
         public void TestBasic()
         {
-            var graph = tf.Graph().as_default();
+            var g = tf.Graph().as_default();
             Tensor a = null, b = null, c = null, d = null, e = null;
-            with<Graph>(graph, g =>
+
+            a = constant_op.constant(1.0);
+            b = constant_op.constant(1.0);
+            tf_with(g.control_dependencies(new[] { a }), x =>
             {
-                a = constant_op.constant(1.0);
-                b = constant_op.constant(1.0);
-                with(g.control_dependencies(new[] { a }), x =>
-                  {
-                      c = constant_op.constant(1.0);
-                      d = array_ops.identity(b);
-                      e = array_ops.identity(c);
-                  });
+                c = constant_op.constant(1.0);
+                d = array_ops.identity(b);
+                e = array_ops.identity(c);
             });
+
             Assert.IsTrue(Enumerable.SequenceEqual(c.op.control_inputs, new[] { a.op }));
             Assert.IsTrue(Enumerable.SequenceEqual(d.op.control_inputs, new[] { a.op }));
             // e should be dominated by c.
@@ -56,7 +55,7 @@ namespace TensorFlowNET.UnitTest.ops_test
                     // TODO: make this compile (see original Python code below)
                     a = constant_op.constant(1.0);
                     b = future; // <--- {henon} obviously, this doesn't compile, looks like control_dependencies needs to be able to take callables as well. 
-                    with(ops.control_dependencies(new object[] { a, b }), ctrl =>
+                    tf_with(ops.control_dependencies(new object[] { a, b }), ctrl =>
                       {
                           return c = constant_op.constant(3.0);
                       });
@@ -64,19 +63,15 @@ namespace TensorFlowNET.UnitTest.ops_test
                 }
                 else
                 {
-                    var graph = tf.Graph().as_default();
-                    with<Graph>(graph, g =>
+                    var g = tf.Graph().as_default();
+                    a = constant_op.constant(1.0);
+                    var b1 = future();
+                    tf_with(g.control_dependencies(new[] { a, b }), ctrl =>
                     {
-                        a = constant_op.constant(1.0);
-                        var b1 = future();
-                        with(g.control_dependencies(new[] { a, b }), ctrl =>
-                        {
-                            c = constant_op.constant(3.0);
-                        });
-                        Assert.IsTrue(Enumerable.SequenceEqual(c.op.control_inputs, new[] { a.op, b1.op }));
-                        Assert.AreEqual(1, calls);
+                        c = constant_op.constant(3.0);
                     });
-
+                    Assert.IsTrue(Enumerable.SequenceEqual(c.op.control_inputs, new[] { a.op, b1.op }));
+                    Assert.AreEqual(1, calls);
                 }
             }
             /*
@@ -139,17 +134,17 @@ namespace TensorFlowNET.UnitTest.ops_test
             var a_3 = constant_op.constant(4.0);
             var a_4 = constant_op.constant(5.0);
             Tensor b_1 = null, b_2 = null;
-            with(g.control_dependencies(new[] { a_1, a_2, a_3, a_4 }), ctrl =>
+            tf_with(g.control_dependencies(new[] { a_1, a_2, a_3, a_4 }), ctrl =>
              {
                  b_1 = constant_op.constant(6.0);
              });
-            with(g.control_dependencies(new[] { a_1 }), ctrl1 =>
+            tf_with(g.control_dependencies(new[] { a_1 }), ctrl1 =>
              {
-                 with(g.control_dependencies(new[] { a_2 }), ctrl2 =>
+                 tf_with(g.control_dependencies(new[] { a_2 }), ctrl2 =>
                  {
-                     with(g.control_dependencies(new[] { a_3 }), ctrl3 =>
+                     tf_with(g.control_dependencies(new[] { a_3 }), ctrl3 =>
                      {
-                         with(g.control_dependencies(new[] { a_4 }), ctrl4 =>
+                         tf_with(g.control_dependencies(new[] { a_4 }), ctrl4 =>
                          {
                              b_2 = constant_op.constant(7.0);
                          });
@@ -175,15 +170,15 @@ namespace TensorFlowNET.UnitTest.ops_test
             var a_3 = constant_op.constant(4.0);
             var a_4 = constant_op.constant(5.0);
             Operation b_3_4 = null, b_3 = null, b_none = null, b_1 = null, b_1_2 = null, b_none2 = null;
-            with(g.control_dependencies(new[] { a_1 }), ctrl1 =>
+            tf_with(g.control_dependencies(new[] { a_1 }), ctrl1 =>
             {
-                with(g.control_dependencies(new[] { a_2 }), ctrl2 =>
+                tf_with(g.control_dependencies(new[] { a_2 }), ctrl2 =>
                 {
-                    with(g.control_dependencies(null), ctrl3 =>
+                    tf_with(g.control_dependencies(null), ctrl3 =>
                     {
-                        with(g.control_dependencies(new[] { a_3 }), ctrl4 =>
+                        tf_with(g.control_dependencies(new[] { a_3 }), ctrl4 =>
                         {
-                            with(g.control_dependencies(new[] { a_4 }), ctrl5 =>
+                            tf_with(g.control_dependencies(new[] { a_4 }), ctrl5 =>
                             {
                                 // deps [a_3, a_4]
                                 b_3_4 = constant_op.constant(7.0);
@@ -199,7 +194,7 @@ namespace TensorFlowNET.UnitTest.ops_test
                 });
                 // deps back to [a_1]
                 b_1 = constant_op.constant(11.0);
-                with(g.control_dependencies(null), ctrl6 =>
+                tf_with(g.control_dependencies(null), ctrl6 =>
                 {
                     // deps are None again
                     b_none2 = constant_op.constant(12.0);
@@ -233,25 +228,25 @@ namespace TensorFlowNET.UnitTest.ops_test
             Operation c_1 = null, c_2 = null, c_3 = null, c_4 = null;
             Operation d_1 = null, d_2 = null, d_3 = null, d_4 = null;
             Operation e_1 = null, e_2 = null, e_3 = null, e_4 = null;
-            with(g.control_dependencies(new[] { a_1 }), ctrl1 =>
+            tf_with(g.control_dependencies(new[] { a_1 }), ctrl1 =>
             {
                 b_1 = tf.multiply(a_3, a_4);
                 c_1 = tf.multiply(a_1, b_1.output);
                 d_1 = tf.multiply(b_1.output, c_1.output);
                 e_1 = constant_op.constant(5.0);
-                with(g.control_dependencies(new[] { a_2 }), ctrl2 =>
+                tf_with(g.control_dependencies(new[] { a_2 }), ctrl2 =>
                 {
                     b_2 = tf.multiply(a_3, a_4);
                     c_2 = tf.multiply(a_1, b_1.output);
                     d_2 = tf.multiply(b_2.output, c_2.output);
                     e_2 = tf.multiply(e_1.output, e_1.output);
-                    with(g.control_dependencies(new[] { a_3 }), ctrl3 =>
+                    tf_with(g.control_dependencies(new[] { a_3 }), ctrl3 =>
                     {
                         b_3 = tf.multiply(a_3, a_4);
                         c_3 = tf.multiply(a_1, b_1.output);
                         d_3 = tf.multiply(b_3.output, c_3.output);
                         e_3 = tf.multiply(e_2.output, e_2.output);
-                        with(g.control_dependencies(new[] { a_4 }), ctrl4 =>
+                        tf_with(g.control_dependencies(new[] { a_4 }), ctrl4 =>
                         {
                             b_4 = tf.multiply(a_3, a_4);
                             c_4 = tf.multiply(a_1, b_1.output);
@@ -310,7 +305,7 @@ namespace TensorFlowNET.UnitTest.ops_test
             var g = tf.Graph().as_default();
             Operation b = null;
             var a = constant_op.constant(100.0);
-            with(g.control_dependencies(new[] { a }), ctrl1 =>
+            tf_with(g.control_dependencies(new[] { a }), ctrl1 =>
             {
                 b = array_ops.identity(a);
             });

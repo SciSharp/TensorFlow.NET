@@ -45,7 +45,7 @@ namespace TensorFlowNET.Examples
             var result_labels = new List<string>();
             var sw = new Stopwatch();
 
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 foreach (var nd in file_ndarrays)
                 {
@@ -58,7 +58,7 @@ namespace TensorFlowNET.Examples
                     Console.WriteLine($"{labels[idx]} {results[idx]} in {sw.ElapsedMilliseconds}ms", Color.Tan);
                     result_labels.Add(labels[idx]);
                 }
-            });
+            }
             
             return result_labels.Contains("military uniform");
         }
@@ -69,19 +69,19 @@ namespace TensorFlowNET.Examples
                                 int input_mean = 117,
                                 int input_std = 1)
         {
-            return with(tf.Graph().as_default(), graph =>
-            {
-                var file_reader = tf.read_file(file_name, "file_reader");
-                var decodeJpeg = tf.image.decode_jpeg(file_reader, channels: 3, name: "DecodeJpeg");
-                var cast = tf.cast(decodeJpeg, tf.float32);
-                var dims_expander = tf.expand_dims(cast, 0);
-                var resize = tf.constant(new int[] { input_height, input_width });
-                var bilinear = tf.image.resize_bilinear(dims_expander, resize);
-                var sub = tf.subtract(bilinear, new float[] { input_mean });
-                var normalized = tf.divide(sub, new float[] { input_std });
+            var graph = tf.Graph().as_default();
 
-                return with(tf.Session(graph), sess => sess.run(normalized));
-            });
+            var file_reader = tf.read_file(file_name, "file_reader");
+            var decodeJpeg = tf.image.decode_jpeg(file_reader, channels: 3, name: "DecodeJpeg");
+            var cast = tf.cast(decodeJpeg, tf.float32);
+            var dims_expander = tf.expand_dims(cast, 0);
+            var resize = tf.constant(new int[] { input_height, input_width });
+            var bilinear = tf.image.resize_bilinear(dims_expander, resize);
+            var sub = tf.subtract(bilinear, new float[] { input_mean });
+            var normalized = tf.divide(sub, new float[] { input_std });
+
+            using (var sess = tf.Session(graph))
+                return sess.run(normalized);
         }
 
         public void PrepareData()

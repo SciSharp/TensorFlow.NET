@@ -25,13 +25,13 @@ namespace TensorFlowNET.Examples
             var hello = tf.constant(str);
 
             // Start tf session
-            return with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 // Run the op
                 var result = sess.run(hello);
                 Console.WriteLine(result.ToString());
                 return result.ToString().Equals(str);
-            });
+            }
         }
 
         public void PrepareData()

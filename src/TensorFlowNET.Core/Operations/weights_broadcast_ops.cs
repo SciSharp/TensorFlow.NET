@@ -22,7 +22,7 @@ namespace Tensorflow
     {
         public static Tensor broadcast_weights(Tensor weights, Tensor values)
         {
-            return with(ops.name_scope(null, "broadcast_weights", (weights, values)), scope =>
+            return tf_with(ops.name_scope(null, "broadcast_weights", (weights, values)), scope =>
             {
                 values = ops.convert_to_tensor(values, name: "values");
                 weights = ops.convert_to_tensor(

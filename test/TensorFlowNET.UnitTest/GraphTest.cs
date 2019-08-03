@@ -419,7 +419,7 @@ namespace TensorFlowNET.UnitTest
         public void ImportGraphMeta()
         {
             var dir = "my-save-dir/";
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 var new_saver = tf.train.import_meta_graph(dir + "my-model-10000.meta");
                 new_saver.restore(sess, dir + "my-model-10000");
@@ -428,7 +428,7 @@ namespace TensorFlowNET.UnitTest
                 var logits = (tf.get_collection("logits") as List<ITensorOrOperation>)[0] as Tensor;
                 var loss = tf.losses.sparse_softmax_cross_entropy(labels: labels,
                                                 logits: logits);
-            });
+            }
         }
     }
 }

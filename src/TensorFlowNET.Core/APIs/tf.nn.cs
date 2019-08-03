@@ -136,7 +136,7 @@ namespace Tensorflow
 
             public static Tensor bias_add(Tensor value, RefVariable bias, string data_format = null, string name = null)
             {
-                return Python.with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
+                return Python.tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
                 {
                     name = scope;
                     return gen_nn_ops.bias_add(value, bias, data_format: data_format, name: name);
@@ -169,7 +169,7 @@ namespace Tensorflow
             /// <returns></returns>
             public static Tensor softmax_cross_entropy_with_logits(Tensor labels, Tensor logits, int dim = -1, string name = null)
             {
-                with(ops.name_scope(name, "softmax_cross_entropy_with_logits_sg", new { logits, labels }), scope =>
+                tf_with(ops.name_scope(name, "softmax_cross_entropy_with_logits_sg", new { logits, labels }), scope =>
                 {
                     name = scope;
                     labels = array_ops.stop_gradient(labels, name: "labels_stop_gradient");

@@ -48,14 +48,14 @@ namespace TensorFlowNET.Examples
             float y_max = X.amax(0).Data<float>(1) + 0.5f;
 
             var (xx, yy) = np.meshgrid(np.linspace(x_min, x_max, 30), np.linspace(y_min, y_max, 30));
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 //var samples = np.vstack<float>(xx.ravel(), yy.ravel());
                 //samples = np.transpose(samples);
                 var array = np.Load<double[,]>(Path.Join("nb", "nb_example.npy"));
                 var samples = np.array(array).astype(np.float32);
                 var Z = sess.run(predict(samples));
-            });
+            }
 
             return true;
         }

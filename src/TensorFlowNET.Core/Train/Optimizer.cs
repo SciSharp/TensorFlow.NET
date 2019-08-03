@@ -151,7 +151,7 @@ namespace Tensorflow
             _create_slots(var_list);
 
             var update_ops = new List<Operation>();
-            return with(ops.name_scope(name, Name), scope =>
+            return tf_with(ops.name_scope(name, Name), scope =>
             {
                 name = scope;
                 _prepare();
@@ -162,7 +162,7 @@ namespace Tensorflow
                         continue;
 
                     var scope_name = var.op.name;
-                    with(ops.name_scope("update_" + scope_name), scope2 =>
+                    tf_with(ops.name_scope("update_" + scope_name), scope2 =>
                     {
                         var op = processor.update_op(this, grad);
                         update_ops.Add(op);
@@ -176,7 +176,7 @@ namespace Tensorflow
                 }
                 else
                 {
-                    with(ops.control_dependencies(new object[] {_finish(update_ops.ToArray(), "update")}), dep =>
+                    tf_with(ops.control_dependencies(new object[] {_finish(update_ops.ToArray(), "update")}), dep =>
                     {
                         ops.colocate_with(global_step);
                         // TODO: port this if branch once ResourceVariable has been ported!

@@ -50,9 +50,9 @@ namespace Tensorflow
             parameters.Add("validate_args", validate_args);
             parameters.Add("allow_nan_stats", allow_nan_stats);
 
-            with(ops.name_scope(name, "", new { loc, scale }), scope => 
+            tf_with(ops.name_scope(name, "", new { loc, scale }), scope => 
             {
-                with(ops.control_dependencies(validate_args ? new Operation[] { scale.op} : new Operation[] { }), cd =>
+                tf_with(ops.control_dependencies(validate_args ? new Operation[] { scale.op} : new Operation[] { }), cd =>
                 {
                     this._loc = array_ops.identity(loc, name);
                     this._scale = array_ops.identity(scale, name);

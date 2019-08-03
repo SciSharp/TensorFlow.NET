@@ -16,6 +16,8 @@ Here are some pre-built TensorFlow binaries you can use for each platform:
   - CPU-only: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-windows-x86_64-1.14.0.zip
   - GPU-enabled: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-windows-x86_64-1.14.0.zip
 
+
+
 ### Run in Linux
 
 `Install-Package TensorFlow.NET`
@@ -31,10 +33,21 @@ sudo apt install libgdiplus
 
 More information about [System.Drawing on Linux](<https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx>).
 
+
+
 ### Run in Mac OS
 
-### GPU Tensorflow for windows
-Before running verify you installed  CUDA and cuDNN
+
+
+### Tensorflow GPU for Windows
+
+Before running verify you installed  CUDA and cuDNN (TensorFlow v1.14 is compatible with CUDA v10.0 and cuDNN v7.4), and make sure the corresponding cuda version is compatible. 
+
+```powershell
+PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
+```
+
+
 
 ### Build from source for Windows
 

@@ -26,7 +26,7 @@ namespace TensorFlowNET.Examples.Text
             Tensor conv3 = null, conv4 = null, conv5 = null, conv6 = null;
             Tensor h_pool = null;
 
-            with(tf.name_scope("conv-maxpool-1"), delegate
+            tf_with(tf.name_scope("conv-maxpool-1"), delegate
             {
                 var conv1 = tf.layers.conv2d(x_expanded,
                     filters: num_filters,
@@ -40,7 +40,7 @@ namespace TensorFlowNET.Examples.Text
                 pool1 = tf.transpose(pool1, new[] { 0, 1, 3, 2 });
             });
 
-            with(tf.name_scope("conv-maxpool-2"), delegate
+            tf_with(tf.name_scope("conv-maxpool-2"), delegate
             {
                 var conv2 = tf.layers.conv2d(pool1,
                     filters: num_filters,
@@ -54,7 +54,7 @@ namespace TensorFlowNET.Examples.Text
                 pool2 = tf.transpose(pool2, new[] { 0, 1, 3, 2 });
             });
 
-            with(tf.name_scope("conv-3"), delegate
+            tf_with(tf.name_scope("conv-3"), delegate
             {
                 conv3 = tf.layers.conv2d(pool2,
                     filters: num_filters,
@@ -64,7 +64,7 @@ namespace TensorFlowNET.Examples.Text
                 conv3 = tf.transpose(conv3, new[] { 0, 1, 3, 2 });
             });
 
-            with(tf.name_scope("conv-4"), delegate
+            tf_with(tf.name_scope("conv-4"), delegate
             {
                 conv4 = tf.layers.conv2d(conv3,
                     filters: num_filters,
@@ -74,7 +74,7 @@ namespace TensorFlowNET.Examples.Text
                 conv4 = tf.transpose(conv4, new[] { 0, 1, 3, 2 });
             });
 
-            with(tf.name_scope("conv-5"), delegate
+            tf_with(tf.name_scope("conv-5"), delegate
             {
                 conv5 = tf.layers.conv2d(conv4,
                     filters: num_filters,
@@ -84,7 +84,7 @@ namespace TensorFlowNET.Examples.Text
                 conv5 = tf.transpose(conv5, new[] { 0, 1, 3, 2 });
             });
 
-            with(tf.name_scope("conv-maxpool-6"), delegate
+            tf_with(tf.name_scope("conv-maxpool-6"), delegate
             {
                 conv6 = tf.layers.conv2d(conv5,
                     filters: num_filters,
@@ -105,7 +105,7 @@ namespace TensorFlowNET.Examples.Text
             Tensor logits = null;
             Tensor predictions = null;
 
-            with(tf.name_scope("fc-1"), delegate
+            tf_with(tf.name_scope("fc-1"), delegate
             {
                 fc1_out = tf.layers.dense(h_pool,
                     1024,
@@ -113,7 +113,7 @@ namespace TensorFlowNET.Examples.Text
                     kernel_initializer: kernel_initializer);
             });
 
-            with(tf.name_scope("fc-2"), delegate
+            tf_with(tf.name_scope("fc-2"), delegate
             {
                 fc2_out = tf.layers.dense(fc1_out,
                     1024,
@@ -121,7 +121,7 @@ namespace TensorFlowNET.Examples.Text
                     kernel_initializer: kernel_initializer);
             });
 
-            with(tf.name_scope("fc-3"), delegate
+            tf_with(tf.name_scope("fc-3"), delegate
             {
                 logits = tf.layers.dense(fc2_out,
                     num_class,
@@ -129,7 +129,7 @@ namespace TensorFlowNET.Examples.Text
                 predictions = tf.argmax(logits, -1, output_type: tf.int32);
             });
 
-            with(tf.name_scope("loss"), delegate
+            tf_with(tf.name_scope("loss"), delegate
             {
                 var y_one_hot = tf.one_hot(y, num_class);
                 var loss = tf.reduce_mean(
@@ -137,7 +137,7 @@ namespace TensorFlowNET.Examples.Text
                 var optimizer = tf.train.AdamOptimizer(learning_rate).minimize(loss, global_step: global_step);
             });
 
-            with(tf.name_scope("accuracy"), delegate
+            tf_with(tf.name_scope("accuracy"), delegate
             {
                 var correct_predictions = tf.equal(predictions, y);
                 var accuracy = tf.reduce_mean(tf.cast(correct_predictions, tf.float32), name: "accuracy");

@@ -90,7 +90,7 @@ namespace Tensorflow.Gradients
         {
             var grad = grads[0];
             var y = op.outputs[0];  // y = e^x
-            return with(ops.control_dependencies(new Operation[] { grad }), dp => {
+            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp => {
                 y = math_ops.conj(y);
                 return new Tensor[] { math_ops.mul_no_nan(y, grad) };
             });
@@ -107,7 +107,7 @@ namespace Tensorflow.Gradients
         {
             var grad = grads[0];
             var x = op.inputs[0];
-            return with(ops.control_dependencies(new Operation[] { grad }), dp => {
+            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp => {
                 x = math_ops.conj(x);
                 return new Tensor[] { grad * math_ops.digamma(x) };
             });
@@ -118,7 +118,7 @@ namespace Tensorflow.Gradients
         {
             var grad = grads[0];
             var x = op.inputs[0];
-            return with(ops.control_dependencies(new Operation[] { grad }), dp => {
+            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp => {
                 x = math_ops.conj(x);
                 return new Tensor[] { grad * math_ops.reciprocal(x) };
             });
@@ -431,7 +431,7 @@ namespace Tensorflow.Gradients
             var grad = grads[0];
             var y = op.outputs[0];
 
-            return with(ops.control_dependencies(grads), delegate
+            return tf_with(ops.control_dependencies(grads), delegate
             {
                 y = math_ops.conj(y);
                 return new Tensor[] { gen_math_ops.sigmoid_grad(y, grad) };
@@ -453,7 +453,7 @@ namespace Tensorflow.Gradients
             var grad = grads[0];
             var x = op.inputs[0];
 
-            return with(ops.control_dependencies(grads), delegate
+            return tf_with(ops.control_dependencies(grads), delegate
             {
                 x = math_ops.conj(x);
                 var y = constant_op.constant(2.0f, dtype: x.dtype);
@@ -467,7 +467,7 @@ namespace Tensorflow.Gradients
             var grad = grads[0];
             var y = op.outputs[0];
 
-            return with(ops.control_dependencies(grads), delegate
+            return tf_with(ops.control_dependencies(grads), delegate
             {
                 y = math_ops.conj(y);
                 return new Tensor[] { gen_math_ops.tanh_grad(y, grad) };

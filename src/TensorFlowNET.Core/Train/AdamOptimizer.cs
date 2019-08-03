@@ -81,7 +81,7 @@ namespace Tensorflow.Train
             var m = get_slot(var, "m");
             var m_scaled_g_values = grad * (1 - beta1_t);
             var m_t = state_ops.assign(m, m * beta1_t, use_locking: _use_locking);
-            with(ops.control_dependencies(new[] { m_t }), delegate
+            tf_with(ops.control_dependencies(new[] { m_t }), delegate
             {
                 m_t = scatter_add(m, indices, m_scaled_g_values);
             });
@@ -89,7 +89,7 @@ namespace Tensorflow.Train
             var v = get_slot(var, "v");
             var v_scaled_g_values = (grad * grad) * (1 - beta2_t);
             var v_t = state_ops.assign(v, v * beta2_t, use_locking: _use_locking);
-            with(ops.control_dependencies(new[] { v_t }), delegate
+            tf_with(ops.control_dependencies(new[] { v_t }), delegate
             {
                 v_t = scatter_add(v, indices, v_scaled_g_values);
             });
@@ -117,7 +117,7 @@ namespace Tensorflow.Train
             var operations = new List<ITensorOrOperation>();
             operations.AddRange(update_ops);
 
-            with(ops.control_dependencies(update_ops), delegate
+            tf_with(ops.control_dependencies(update_ops), delegate
             {
                 var (beta1_power, beta2_power) = _get_beta_accumulators();
                 ops.colocate_with(beta1_power);

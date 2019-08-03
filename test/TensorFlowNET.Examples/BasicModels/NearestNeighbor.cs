@@ -17,7 +17,7 @@
 using NumSharp;
 using System;
 using Tensorflow;
-using TensorFlowNET.Examples.Utility;
+using Tensorflow.Hub;
 using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
@@ -31,7 +31,7 @@ namespace TensorFlowNET.Examples
     {
         public bool Enabled { get; set; } = true;
         public string Name => "Nearest Neighbor";
-        Datasets<DataSetMnist> mnist;
+        Datasets<MnistDataSet> mnist;
         NDArray Xtr, Ytr, Xte, Yte;
         public int? TrainSize = null;
         public int ValidationSize = 5000;
@@ -54,7 +54,7 @@ namespace TensorFlowNET.Examples
             float accuracy = 0f;
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 // Run the initializer
                 sess.run(init);
@@ -77,17 +77,17 @@ namespace TensorFlowNET.Examples
                 }
 
                 print($"Accuracy: {accuracy}");
-            });
+            }
 
             return accuracy > 0.8;
         }
 
         public void PrepareData()
         {
-            mnist = MNIST.read_data_sets("mnist", one_hot: true, train_size: TrainSize, validation_size:ValidationSize, test_size:TestSize);
+            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true, trainSize: TrainSize, validationSize: ValidationSize, testSize: TestSize).Result;
             // In this example, we limit mnist data
-            (Xtr, Ytr) = mnist.train.next_batch(TrainSize==null ? 5000 : TrainSize.Value / 100); // 5000 for training (nn candidates)
-            (Xte, Yte) = mnist.test.next_batch(TestSize==null ? 200 : TestSize.Value / 100); // 200 for testing
+            (Xtr, Ytr) = mnist.Train.GetNextBatch(TrainSize == null ? 5000 : TrainSize.Value / 100); // 5000 for training (nn candidates)
+            (Xte, Yte) = mnist.Test.GetNextBatch(TestSize == null ? 200 : TestSize.Value / 100); // 200 for testing
         }
 
         public Graph ImportGraph()

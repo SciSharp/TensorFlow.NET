@@ -68,7 +68,7 @@ namespace Tensorflow.Clustering
 
         private Tensor _initialize()
         {
-            return with(ops.control_dependencies(new Operation[]
+            return tf_with(ops.control_dependencies(new Operation[]
             {
                 check_ops.assert_positive(_num_remaining)
             }), delegate

@@ -34,7 +34,7 @@ namespace Tensorflow
             float epsilon = 1e-12f,
             string name = null)
         {
-            return with(ops.name_scope(name, "l2_normalize", new { x }), scope =>
+            return tf_with(ops.name_scope(name, "l2_normalize", new { x }), scope =>
             {
                 x = ops.convert_to_tensor(x, name: "x");
                 var sq = math_ops.square(x);
@@ -57,7 +57,7 @@ namespace Tensorflow
             string name = null,
             bool keep_dims = false)
         {
-            return with(ops.name_scope(name, "moments", new { x, axes }), scope =>
+            return tf_with(ops.name_scope(name, "moments", new { x, axes }), scope =>
             {
                 // The dynamic range of fp16 is too limited to support the collection of
                 // sufficient statistics. As a workaround we simply perform the operations
@@ -123,7 +123,7 @@ namespace Tensorflow
         /// <returns>number of nonzero values with type dtype</returns>
         private static Tensor _count_nonzero(Tensor input_tensor, TF_DataType dtype = TF_DataType.TF_INT64)
         {
-            return with(ops.name_scope("count_nonzero", "count_nonzero", new { input_tensor }), scope =>
+            return tf_with(ops.name_scope("count_nonzero", "count_nonzero", new { input_tensor }), scope =>
             {
                 var zero = array_ops.zeros(new NumSharp.Shape(), dtype: input_tensor.dtype);
                 var nonzero_count = math_ops.reduce_sum(
@@ -140,7 +140,7 @@ namespace Tensorflow
         /// <returns>The fraction of zeros in value, with type float32.</returns>
         public static Tensor zero_fraction(Tensor value, string name = null)
         {
-            return with(ops.name_scope(name, "zero_fraction", new { value }), scope =>
+            return tf_with(ops.name_scope(name, "zero_fraction", new { value }), scope =>
             {
                 value = ops.convert_to_tensor(value, name: "value");
                 Tensor size = array_ops.size(value, out_type: dtypes.int64);
@@ -153,7 +153,7 @@ namespace Tensorflow
                         () => _count_nonzero(value, dtype: dtypes.int64)
                         );
 
-                with(ops.name_scope("counts_to_fraction"), count_scope =>
+                tf_with(ops.name_scope("counts_to_fraction"), count_scope =>
                 {
                     var num_zero = math_ops.subtract(math_ops.cast(size, TF_DataType.TF_INT64), num_nonzero);
                     var num_zero_float32 = math_ops.cast(num_zero, dtype: dtypes.float32);

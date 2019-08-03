@@ -4,7 +4,7 @@ using Tensorflow;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// This example removes the background from an input image.
@@ -32,11 +32,11 @@ namespace TensorFlowNET.Examples.ImageProcess
 
             Tensor output = graph.OperationByName("SemanticPredictions");
 
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 // Runs inference on a single image.
                 sess.run(output, new FeedItem(output, "[np.asarray(resized_image)]"));
-            });
+            }
 
             return false;
         }

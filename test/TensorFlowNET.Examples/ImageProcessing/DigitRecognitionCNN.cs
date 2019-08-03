@@ -16,11 +16,12 @@
 
 using NumSharp;
 using System;
+using System.Diagnostics;
 using Tensorflow;
-using TensorFlowNET.Examples.Utility;
+using Tensorflow.Hub;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// Convolutional Neural Network classifier for Hand Written Digits
@@ -45,7 +46,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         int epochs = 5; // accuracy > 98%
         int batch_size = 100;
         float learning_rate = 0.001f;
-        Datasets<DataSetMnist> mnist;
+        Datasets<MnistDataSet> mnist;
 
         // Network configuration
         // 1st Convolutional Layer
@@ -78,11 +79,11 @@ namespace TensorFlowNET.Examples.ImageProcess
             PrepareData();
             BuildGraph();
 
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 Train(sess);
                 Test(sess);
-            });
+            }
 
             return loss_test < 0.05 && accuracy_test > 0.98;
         }
@@ -91,7 +92,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         {
             var graph = new Graph().as_default();
 
-            with(tf.name_scope("Input"), delegate
+            tf_with(tf.name_scope("Input"), delegate
             {
                 // Placeholders for inputs (x) and outputs(y)
                 x = tf.placeholder(tf.float32, shape: (-1, img_h, img_w, n_channels), name: "X");
@@ -106,25 +107,25 @@ namespace TensorFlowNET.Examples.ImageProcess
             var fc1 = fc_layer(layer_flat, h1, "FC1", use_relu: true);
             var output_logits = fc_layer(fc1, n_classes, "OUT", use_relu: false);
 
-            with(tf.variable_scope("Train"), delegate
+            tf_with(tf.variable_scope("Train"), delegate
             {
-                with(tf.variable_scope("Loss"), delegate
+                tf_with(tf.variable_scope("Loss"), delegate
                 {
                     loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels: y, logits: output_logits), name: "loss");
                 });
 
-                with(tf.variable_scope("Optimizer"), delegate
+                tf_with(tf.variable_scope("Optimizer"), delegate
                 {
                     optimizer = tf.train.AdamOptimizer(learning_rate: learning_rate, name: "Adam-op").minimize(loss);
                 });
 
-                with(tf.variable_scope("Accuracy"), delegate
+                tf_with(tf.variable_scope("Accuracy"), delegate
                 {
                     var correct_prediction = tf.equal(tf.argmax(output_logits, 1), tf.argmax(y, 1), name: "correct_pred");
                     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name: "accuracy");
                 });
 
-                with(tf.variable_scope("Prediction"), delegate
+                tf_with(tf.variable_scope("Prediction"), delegate
                 {
                     cls_prediction = tf.argmax(output_logits, axis: 1, name: "predictions");
                 });
@@ -144,6 +145,8 @@ namespace TensorFlowNET.Examples.ImageProcess
             float loss_val = 100.0f;
             float accuracy_val = 0f;
 
+            var sw = new Stopwatch();
+            sw.Start();
             foreach (var epoch in range(epochs))
             {
                 print($"Training epoch: {epoch + 1}");
@@ -165,7 +168,8 @@ namespace TensorFlowNET.Examples.ImageProcess
                         var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
                         loss_val = result[0];
                         accuracy_val = result[1];
-                        print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")}");
+                        print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")} {sw.ElapsedMilliseconds}ms");
+                        sw.Restart();
                     }
                 }
 
@@ -200,7 +204,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         /// <returns>The output array</returns>
         private Tensor conv_layer(Tensor x, int filter_size, int num_filters, int stride, string name)
         {
-            return with(tf.variable_scope(name), delegate {
+            return tf_with(tf.variable_scope(name), delegate {
 
                 var num_in_channel = x.shape[x.NDims - 1];
                 var shape = new[] { filter_size, filter_size, num_in_channel, num_filters };
@@ -240,7 +244,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         /// <returns>flattened array</returns>
         private Tensor flatten_layer(Tensor layer)
         {
-            return with(tf.variable_scope("Flatten_layer"), delegate
+            return tf_with(tf.variable_scope("Flatten_layer"), delegate
             {
                 var layer_shape = layer.TensorShape;
                 var num_features = layer_shape[new Slice(1, 4)].Size;
@@ -289,7 +293,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         /// <returns>The output array</returns>
         private Tensor fc_layer(Tensor x, int num_units, string name, bool use_relu = true)
         {
-            return with(tf.variable_scope(name), delegate
+            return tf_with(tf.variable_scope(name), delegate
             {
                 var in_dim = x.shape[1];
 
@@ -306,14 +310,14 @@ namespace TensorFlowNET.Examples.ImageProcess
             
         public void PrepareData()
         {
-            mnist = MNIST.read_data_sets("mnist", one_hot: true);
-            (x_train, y_train) = Reformat(mnist.train.data, mnist.train.labels);
-            (x_valid, y_valid) = Reformat(mnist.validation.data, mnist.validation.labels);
-            (x_test, y_test) = Reformat(mnist.test.data, mnist.test.labels);
+            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true).Result;
+            (x_train, y_train) = Reformat(mnist.Train.Data, mnist.Train.Labels);
+            (x_valid, y_valid) = Reformat(mnist.Validation.Data, mnist.Validation.Labels);
+            (x_test, y_test) = Reformat(mnist.Test.Data, mnist.Test.Labels);
 
             print("Size of:");
-            print($"- Training-set:\t\t{len(mnist.train.data)}");
-            print($"- Validation-set:\t{len(mnist.validation.data)}");
+            print($"- Training-set:\t\t{len(mnist.Train.Data)}");
+            print($"- Validation-set:\t{len(mnist.Validation.Data)}");
         }
 
         /// <summary>

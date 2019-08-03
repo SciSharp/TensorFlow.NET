@@ -20,37 +20,34 @@ using System.Runtime.InteropServices;
 
 namespace Tensorflow
 {
-    public class SessionOptions : IDisposable
+    public class SessionOptions : DisposableObject
     {
-        private IntPtr _handle;
-        private Status _status;
-
-        public unsafe SessionOptions()
+        public SessionOptions()
         {
-            var opts = c_api.TF_NewSessionOptions();
-            _handle = opts;
-            _status = new Status();
+            _handle = c_api.TF_NewSessionOptions();
         }
 
-        public unsafe SessionOptions(IntPtr handle)
+        public SessionOptions(IntPtr handle)
         {
             _handle = handle;
         }
 
-        public void Dispose()
-        {
-            c_api.TF_DeleteSessionOptions(_handle);
-            _status.Dispose();
-        }
+        protected override void DisposeUnManagedState(IntPtr handle)
+            => c_api.TF_DeleteSessionOptions(handle);
 
-        public Status SetConfig(ConfigProto config)
+        public void SetConfig(ConfigProto config)
         {
             var bytes = config.ToByteArray();
             var proto = Marshal.AllocHGlobal(bytes.Length);
             Marshal.Copy(bytes, 0, proto, bytes.Length);
-            c_api.TF_SetConfig(_handle, proto, (ulong)bytes.Length, _status);
-            _status.Check(false);
-            return _status;
+
+            using (var status = new Status())
+            {
+                c_api.TF_SetConfig(_handle, proto, (ulong)bytes.Length, status);
+                status.Check(false);
+            }
+
+            Marshal.FreeHGlobal(proto);
         }
 
         public static implicit operator IntPtr(SessionOptions opts) => opts._handle;

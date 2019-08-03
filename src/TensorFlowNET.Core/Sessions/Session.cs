@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace Tensorflow
 {
@@ -26,8 +27,8 @@ namespace Tensorflow
 
         }
 
-        public Session(IntPtr handle)
-            : base("", null, null)
+        public Session(IntPtr handle, Graph g = null)
+            : base("", g, null)
         {
             _session = handle;
         }
@@ -36,7 +37,7 @@ namespace Tensorflow
             : base("", g, opts)
         {
             if (s == null)
-                s = Status;
+                s = new Status();
         }
 
         public Session as_default()
@@ -49,34 +50,31 @@ namespace Tensorflow
         {
             var graph = c_api.TF_NewGraph();
             var status = new Status();
-            var opt = c_api.TF_NewSessionOptions();
+            var opt = new SessionOptions();
 
+            var tags = new string[] { "serve" };
             var buffer = new TF_Buffer();
-            var sess = c_api.TF_LoadSessionFromSavedModel(opt, IntPtr.Zero, path, new string[0], 0, graph, ref buffer, status);
 
-            //var bytes = new Buffer(buffer.data).Data;
-            //var meta_graph = MetaGraphDef.Parser.ParseFrom(bytes);
+            var sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                IntPtr.Zero,
+                path,
+                tags,
+                tags.Length,
+                graph,
+                ref buffer,
+                status);
 
-            status.Check();
+            // load graph bytes
+            // var data = new byte[buffer.length];
+            // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
+            // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
+            status.Check(true);
 
-            new Graph(graph).as_default();
-
-            return sess;
+            return new Session(sess, g: new Graph(graph).as_default());
         }
 
         public static implicit operator IntPtr(Session session) => session._session;
         public static implicit operator Session(IntPtr handle) => new Session(handle);
-
-        public void close()
-        {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            c_api.TF_DeleteSession(_session, Status);
-            Status.Dispose();
-        }
 
         public void __enter__()
         {

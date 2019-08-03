@@ -79,7 +79,7 @@ namespace Tensorflow
         }
 
 #if _REGEN
-        %types=["sbyte", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
+        %types=["sbyte", "bool", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
         %foreach types%
         
         /// <summary>
@@ -114,6 +114,7 @@ namespace Tensorflow
 #else
 
         
+        
         /// <summary>
         /// Create a 1d Tensor from the given linear array and shape
         /// </summary>
@@ -140,6 +141,35 @@ namespace Tensorflow
             var v = (sbyte*)Marshal.AllocHGlobal(sizeof(sbyte));
             *v = value;
             _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(sbyte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
+            IsMemoryOwner=true;
+        }
+        
+        /// <summary>
+        /// Create a 1d Tensor from the given linear array and shape
+        /// </summary>
+        public Tensor(bool[] data, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(bool)), new long[]{data.Length}, data, Marshal.SizeOf<bool>());
+            IsMemoryOwner=true;
+        }
+
+        /// <summary>
+        /// Create a N-dimensional Tensor from the given array
+        /// </summary>
+        public Tensor(bool[] data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(bool)), shape, data, Marshal.SizeOf<bool>());
+            IsMemoryOwner=true;
+        }
+
+        /// <summary>
+        /// Create a scalar Tensor from the given value
+        /// </summary>
+        public unsafe Tensor(bool value, TF_DataType? dType = null)
+        {
+            var v = (bool*)Marshal.AllocHGlobal(sizeof(bool));
+            *v = value;
+            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(bool)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(bool), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
             IsMemoryOwner=true;
         }
         
@@ -439,6 +469,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(string str)
         {
+            var status = new Status();
             var buffer = Encoding.UTF8.GetBytes(str);
             var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
             var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
@@ -461,6 +492,8 @@ namespace Tensorflow
 
                 IntPtr tensor = c_api.TF_TensorData(handle);
                 Marshal.WriteInt64(tensor, 0);
+
+                var status = new Status();
                 fixed (byte* src = &buffer[0])
                     c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
 
@@ -528,6 +561,40 @@ namespace Tensorflow
             return tfHandle;
         }
 
+        public unsafe Tensor(byte[][] buffer, long[] shape)
+        {
+            int size = 0;
+            foreach (var b in buffer)
+            {
+                size += (int)TF_StringEncodedSize((UIntPtr)b.Length);
+            }
+            int totalSize = size + buffer.Length * 8;
+            ulong offset = 0;
+            IntPtr handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, (UIntPtr)totalSize);
+
+            // Clear offset table
+            IntPtr pOffset = TF_TensorData(handle);
+            IntPtr dst = pOffset + buffer.Length * 8;
+            IntPtr dstLimit = pOffset + totalSize;
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                Marshal.WriteInt64(pOffset, (long)offset);
+                using (var status = new Status())
+                {
+                    fixed (byte* src = &buffer[i][0])
+                    {
+                        var written = TF_StringEncode(src, (UIntPtr)buffer[i].Length, (sbyte*)dst, (UIntPtr)(dstLimit.ToInt64() - dst.ToInt64()), status);
+                        status.Check(true);
+                        pOffset += 8;
+                        dst += (int)written;
+                        offset += written;
+                    }
+                }
+            }
+
+            _handle = handle;
+        }
+
         public Tensor(Operation op, int value_index, TF_DataType dtype)
         {
             _op = op;
@@ -560,6 +627,8 @@ namespace Tensorflow
 
                 IntPtr tensor = c_api.TF_TensorData(handle);
                 Marshal.WriteInt64(tensor, 0);
+
+                var status = new Status();
                 fixed (byte* src = &buffer[0])
                     c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
 

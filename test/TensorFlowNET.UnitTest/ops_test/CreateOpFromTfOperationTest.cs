@@ -24,81 +24,73 @@ namespace TensorFlowNET.UnitTest.ops_test
         [TestMethod]
         public void TestShape()
         {
-            var graph = tf.Graph().as_default();
-            with<Graph>(graph, g =>
-            {
-                var x = constant_op.constant(new[,] { { 1, 2, 3 }, { 4, 5, 6 } });
-                var (c_op, op_desc) = ops._create_c_op(g, ops._NodeDef("Identity", "myop"), new[] { x }, new Operation[0]);
-                var op = g._create_op_from_tf_operation(c_op);
+            var g = tf.Graph().as_default();
 
-                Assert.AreEqual("myop", op.name);
-                Assert.AreEqual("Identity", op.type);
-                Assert.AreEqual(1, len(op.outputs));
-                assertItemsEqual(new[] { 2, 3 }, op.outputs[0].shape);
-            });
+            var x = constant_op.constant(new[,] { { 1, 2, 3 }, { 4, 5, 6 } });
+            var (c_op, op_desc) = ops._create_c_op(g, ops._NodeDef("Identity", "myop"), new[] { x }, new Operation[0]);
+            var op = g._create_op_from_tf_operation(c_op);
+
+            Assert.AreEqual("myop", op.name);
+            Assert.AreEqual("Identity", op.type);
+            Assert.AreEqual(1, len(op.outputs));
+            assertItemsEqual(new[] { 2, 3 }, op.outputs[0].shape);
         }
 
         [TestMethod]
         public void TestUniqueName()
         {
             var graph = tf.Graph().as_default();
-            with<Graph>(graph, g =>
-            {
-                //var (c_op,op_desc) = ops._create_c_op(g, ops._NodeDef("Const", "myop"), new Tensor[0], new Operation[0]);
-                //var (c_op2, op_desc1) = ops._create_c_op(g, ops._NodeDef("Const", "myop_1"), new Tensor[0], new Operation[0]);
-                //var op = g._create_op_from_tf_operation(c_op);
-                //var op2 = g._create_op_from_tf_operation(c_op2);
-                var op = constant_op.constant(0, name: "myop").op;
-                var op2 = constant_op.constant(0, name: "myop_1").op;
+            //var (c_op,op_desc) = ops._create_c_op(g, ops._NodeDef("Const", "myop"), new Tensor[0], new Operation[0]);
+            //var (c_op2, op_desc1) = ops._create_c_op(g, ops._NodeDef("Const", "myop_1"), new Tensor[0], new Operation[0]);
+            //var op = g._create_op_from_tf_operation(c_op);
+            //var op2 = g._create_op_from_tf_operation(c_op2);
+            var op = constant_op.constant(0, name: "myop").op;
+            var op2 = constant_op.constant(0, name: "myop_1").op;
 
-                // Create ops with same names as op1 and op2. We expect the new names to be
-                // uniquified.
-                var op3 = constant_op.constant(0, name: "myop").op;
-                var op4 = constant_op.constant(0, name: "myop_1").op;
+            // Create ops with same names as op1 and op2. We expect the new names to be
+            // uniquified.
+            var op3 = constant_op.constant(0, name: "myop").op;
+            var op4 = constant_op.constant(0, name: "myop_1").op;
 
-                self.assertEqual(op.name, "myop");
-                self.assertEqual(op2.name, "myop_1");
-                self.assertEqual(op3.name, "myop_2");
-                self.assertEqual(op4.name, "myop_1_1");
-            });
+            self.assertEqual(op.name, "myop");
+            self.assertEqual(op2.name, "myop_1");
+            self.assertEqual(op3.name, "myop_2");
+            self.assertEqual(op4.name, "myop_1_1");
         }
 
         [Ignore("need tesnroflow expose UpdateEdge API")]
         [TestMethod]
         public void TestCond()
         {
-            var graph = tf.Graph().as_default();
-            with(graph, g =>
+            var g = tf.Graph().as_default();
+            var x = constant_op.constant(10);
+
+            var true_fn = new Func<Tensor>(() =>
             {
-                var x = constant_op.constant(10);
-
-                var true_fn = new Func<Tensor>(() =>
-                {
-                    var (c_op, op_desc) = ops._create_c_op(g, ops._NodeDef("Identity", "cond/myop"), new[] { x }, new Operation[0]);
-                    var new_ops = g._add_new_tf_operations();
-                    self.assertEqual(len(new_ops), 1);
-                    return x;
-                });
-
-                control_flow_ops.cond(x < 10, true_fn, () => x);
-
-                var op = g.get_operation_by_name("cond/myop");
-
-                //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta.txt", as_text:true);
-                //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
-
-                self.assertIsNotNone(op);
-                self.assertEqual(op.name, "cond/myop");
-                self.assertEqual(op.type, "Identity");
-                //self.assertEqual(op.outputs, new object[0]);
-                var op_input = op.inputs[0].op;
-                self.assertEqual(op_input.type, "Switch");
-                self.assertEqual(op_input.inputs[0].name, x.name);
-                self.assertEqual(op.graph, g);
-                self.assertIsNotNone(op._get_control_flow_context());
-                var cond_text = op._get_control_flow_context() as ControlFlowContext;
-                self.assertEqual(cond_text.name, "cond/cond_text");
+                var (c_op, op_desc) = ops._create_c_op(g, ops._NodeDef("Identity", "cond/myop"), new[] { x }, new Operation[0]);
+                var new_ops = g._add_new_tf_operations();
+                self.assertEqual(len(new_ops), 1);
+                return x;
             });
+
+            control_flow_ops.cond(x < 10, true_fn, () => x);
+
+            var op = g.get_operation_by_name("cond/myop");
+
+            //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta.txt", as_text:true);
+            //tf.train.export_meta_graph(@"D:\dev\tensorboard\logdir\sharp.meta", as_text: false);
+
+            self.assertIsNotNone(op);
+            self.assertEqual(op.name, "cond/myop");
+            self.assertEqual(op.type, "Identity");
+            //self.assertEqual(op.outputs, new object[0]);
+            var op_input = op.inputs[0].op;
+            self.assertEqual(op_input.type, "Switch");
+            self.assertEqual(op_input.inputs[0].name, x.name);
+            self.assertEqual(op.graph, g);
+            self.assertIsNotNone(op._get_control_flow_context());
+            var cond_text = op._get_control_flow_context() as ControlFlowContext;
+            self.assertEqual(cond_text.name, "cond/cond_text");
         }
 
         [Ignore("Todo: Port")]
@@ -107,20 +99,17 @@ namespace TensorFlowNET.UnitTest.ops_test
         {
             var graph = tf.Graph().as_default();
             Operation x=null;
-            with<Graph>(graph, g =>
+            x = constant_op.constant(42);
+            var body = new Func<int, int>(i =>
             {
-                x = constant_op.constant(42);
-                var body = new Func<int, int>(i =>
-                {
-                    ops._create_c_op(ops.get_default_graph(), ops._NodeDef("Identity", "myloop/myop"), new[] {x},
-                        new Operation[0]);
-                    var new_ops = g._add_new_tf_operations();
-                    self.assertEqual(len(new_ops), 1);
-                    return i;
-                });
-                // TODO: port control_flow_ops.while_loop
-                //control_flow_ops.while_loop( i => i < 10, body, new int[]{0}, name = "myloop");
+                ops._create_c_op(ops.get_default_graph(), ops._NodeDef("Identity", "myloop/myop"), new[] {x},
+                    new Operation[0]);
+                var new_ops = graph._add_new_tf_operations();
+                self.assertEqual(len(new_ops), 1);
+                return i;
             });
+            // TODO: port control_flow_ops.while_loop
+            //control_flow_ops.while_loop( i => i < 10, body, new int[]{0}, name = "myloop");
             var op = graph.get_operation_by_name("myloop/myop");
             self.assertIsNotNone(op);
             self.assertEqual(op.name, "myloop/myop");

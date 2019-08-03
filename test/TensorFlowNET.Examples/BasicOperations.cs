@@ -134,7 +134,7 @@ namespace TensorFlowNET.Examples
                     3, 3, 2));
             var batchMul = tf.batch_matmul(firstTensor, secondTensor);
             var checkTensor = np.array<float>(0, 6, 0, 15, 0, 24, 3, 1, 6, 4, 9, 7, 6, 0, 15, 0, 24, 0);
-            return with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 var result = sess.run(batchMul);
                 Console.WriteLine(result.ToString());
@@ -152,7 +152,7 @@ namespace TensorFlowNET.Examples
                 //         [24,  0]]])
                 return np.reshape(result, 18)
                     .array_equal(checkTensor);
-            });
+            }
         }
 
         public void PrepareData()

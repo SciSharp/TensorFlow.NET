@@ -55,7 +55,7 @@ namespace Tensorflow.Summaries
         /// <returns></returns>
         public Tensor merge(Tensor[] inputs, string[] collections = null, string name = null)
         {
-            return with(ops.name_scope(name, "Merge", inputs), delegate
+            return tf_with(ops.name_scope(name, "Merge", inputs), delegate
             {
                 var val = gen_logging_ops.merge_summary(inputs: inputs, name: name);
                 collect(val, collections?.ToList(), new List<string>());
@@ -88,7 +88,7 @@ namespace Tensorflow.Summaries
         public (string, string) summary_scope(string name, string family = null, string default_name = null, Tensor[] values = null)
         {
             string scope_base_name = string.IsNullOrEmpty(family) ? name : $"{family}/{name}";
-            return with(ops.name_scope(scope_base_name, default_name: default_name, values), scope =>
+            return tf_with(ops.name_scope(scope_base_name, default_name: default_name, values), scope =>
             {
                 var tag = scope._name_scope;
                 if (string.IsNullOrEmpty(family))

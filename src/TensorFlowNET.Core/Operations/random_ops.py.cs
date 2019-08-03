@@ -37,7 +37,7 @@ namespace Tensorflow
             int? seed = null, 
             string name = null)
         {
-            return with(ops.name_scope(name, "random_normal", new { shape, mean, stddev }), scope =>
+            return tf_with(ops.name_scope(name, "random_normal", new { shape, mean, stddev }), scope =>
             {
                 var shape_tensor = _ShapeTensor(shape);
                 var mean_tensor = ops.convert_to_tensor(mean, dtype: dtype, name: "mean");
@@ -67,7 +67,7 @@ namespace Tensorflow
             int? seed = null, 
             string name = null)
         {
-            return with(ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
+            return tf_with(ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
             {
                 name = scope;
                 var tensorShape = _ShapeTensor(shape);
@@ -85,7 +85,7 @@ namespace Tensorflow
             int? seed = null,
             string name = null)
         {
-            return with(ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
+            return tf_with(ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
             {
                 name = scope;
                 var minTensor = ops.convert_to_tensor(minval, dtype: dtype, name: "min");
@@ -110,7 +110,7 @@ namespace Tensorflow
             int? seed = null,
             string name = null)
         {
-            return with(ops.name_scope(name, "truncated_normal", new { shape, mean, stddev }), scope =>
+            return tf_with(ops.name_scope(name, "truncated_normal", new { shape, mean, stddev }), scope =>
             {
                 name = scope;
                 var shape_tensor = _ShapeTensor(shape);

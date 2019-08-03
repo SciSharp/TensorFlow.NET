@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using Tensorflow.Framework;
 using static Tensorflow.Python;
 
@@ -28,10 +29,8 @@ namespace Tensorflow
     /// A tensor is a generalization of vectors and matrices to potentially higher dimensions. 
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
-    public partial class Tensor : IDisposable, ITensorOrOperation, _TensorLike
+    public partial class Tensor : DisposableObject, ITensorOrOperation, _TensorLike
     {
-        private IntPtr _handle;
-
         private int _id;
         private Operation _op;
 
@@ -47,8 +46,6 @@ namespace Tensorflow
 
         private int _value_index;
         public int value_index => _value_index;
-
-        private Status status = new Status();
 
         private TF_DataType _dtype = TF_DataType.DtInvalid;
         public TF_DataType dtype => _handle == IntPtr.Zero ? _dtype : c_api.TF_TensorType(_handle);
@@ -76,6 +73,7 @@ namespace Tensorflow
 
                 if (_handle == IntPtr.Zero)
                 {
+                    var status = new Status();
                     c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, status);
                     status.Check();
                 }
@@ -90,6 +88,8 @@ namespace Tensorflow
 
             set
             {
+                var status = new Status();
+
                 if (value == null)
                     c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
                 else
@@ -131,8 +131,11 @@ namespace Tensorflow
             {
                 if (_handle == IntPtr.Zero)
                 {
+                    var status = new Status();
                     var output = _as_tf_output();
-                    return c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
+                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
+                    status.Check();
+                    return ndim;
                 }
                 else
                 {
@@ -182,6 +185,41 @@ namespace Tensorflow
             var data = new byte[bytesize];
             Marshal.Copy(buffer, data, 0, (int)bytesize);
             return data;
+        }
+
+        public unsafe string[] StringData()
+        {
+            //
+            // TF_STRING tensors are encoded with a table of 8-byte offsets followed by TF_StringEncode-encoded bytes.
+            // [offset1, offset2,...,offsetn, s1size, s1bytes, s2size, s2bytes,...,snsize,snbytes]
+            //
+            long size = 1;
+            foreach (var s in TensorShape.Dimensions)
+                size *= s;
+
+            var buffer = new byte[size][];
+            var src = c_api.TF_TensorData(_handle);
+            var srcLen = (IntPtr)(src.ToInt64() + (long)bytesize);
+            src += (int)(size * 8);
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                using (var status = new Status())
+                {
+                    IntPtr dst = IntPtr.Zero;
+                    UIntPtr dstLen = UIntPtr.Zero;
+                    var read = c_api.TF_StringDecode((byte*)src, (UIntPtr)(srcLen.ToInt64() - src.ToInt64()), (byte**)&dst, &dstLen, status);
+                    status.Check(true);
+                    buffer[i] = new byte[(int)dstLen];
+                    Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);
+                    src += (int)read;
+                }
+            }
+
+            var _str = new string[buffer.Length];
+            for (int i = 0; i < _str.Length; i++)
+                _str[i] = Encoding.UTF8.GetString(buffer[i]);
+
+            return _str;
         }
 
         public Tensor MaybeMove()
@@ -262,7 +300,7 @@ namespace Tensorflow
                 index += 1;
             }
 
-            return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+            return tf_with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
             {
                 string name = scope;
                 if (begin != null)
@@ -311,7 +349,7 @@ namespace Tensorflow
                 index += 1;
             }
 
-            return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+            return tf_with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
             {
                 string name = scope;
                 if (begin != null)
@@ -354,26 +392,12 @@ namespace Tensorflow
             return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
         }
 
-        public void Dispose()
+        protected override void DisposeUnManagedState(IntPtr handle)
         {
-            IntPtr h=IntPtr.Zero;
-            lock (this)
+            if(handle != IntPtr.Zero)
             {
-                h = _handle;
-                _handle=IntPtr.Zero;
+                c_api.TF_DeleteTensor(handle);
             }
-            if (h != IntPtr.Zero)
-                c_api.TF_DeleteTensor(_handle);
-            status.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Dispose the tensor when it gets garbage collected
-        /// </summary>
-        ~Tensor()
-        {
-            Dispose();
         }
 
         public bool IsDisposed

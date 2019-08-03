@@ -75,7 +75,7 @@ namespace Tensorflow
         }
 
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
-        public static void with(IPython py, Action<IPython> action)
+        public static void tf_with(IPython py, Action<IPython> action)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace Tensorflow
         }
 
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
-        public static void with<T>(T py, Action<T> action) where T : IPython
+        public static void tf_with<T>(T py, Action<T> action) where T : IPython
         {
             try
             {
@@ -115,7 +115,7 @@ namespace Tensorflow
         }
 
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
-        public static TOut with<TIn, TOut>(TIn py, Func<TIn, TOut> action) where TIn : IPython
+        public static TOut tf_with<TIn, TOut>(TIn py, Func<TIn, TOut> action) where TIn : IPython
         {
             try
             {

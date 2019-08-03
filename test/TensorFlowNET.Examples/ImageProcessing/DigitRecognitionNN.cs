@@ -17,10 +17,10 @@
 using NumSharp;
 using System;
 using Tensorflow;
-using TensorFlowNET.Examples.Utility;
+using Tensorflow.Hub;
 using static Tensorflow.Python;
 
-namespace TensorFlowNET.Examples.ImageProcess
+namespace TensorFlowNET.Examples
 {
     /// <summary>
     /// Neural Network classifier for Hand Written Digits
@@ -44,7 +44,7 @@ namespace TensorFlowNET.Examples.ImageProcess
         int batch_size = 100;
         float learning_rate = 0.001f;
         int h1 = 200; // number of nodes in the 1st hidden layer
-        Datasets<DataSetMnist> mnist;
+        Datasets<MnistDataSet> mnist;
 
         Tensor x, y;
         Tensor loss, accuracy;
@@ -59,11 +59,11 @@ namespace TensorFlowNET.Examples.ImageProcess
             PrepareData();
             BuildGraph();
 
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 Train(sess);
                 Test(sess);
-            });
+            };
 
             return loss_test < 0.09 && accuracy_test > 0.95;
         }
@@ -121,13 +121,13 @@ namespace TensorFlowNET.Examples.ImageProcess
             
         public void PrepareData()
         {
-            mnist = MNIST.read_data_sets("mnist", one_hot: true);
+            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true).Result;
         }
 
         public void Train(Session sess)
         {
             // Number of training iterations in each epoch
-            var num_tr_iter = mnist.train.labels.len / batch_size;
+            var num_tr_iter = mnist.Train.Labels.len / batch_size;
 
             var init = tf.global_variables_initializer();
             sess.run(init);
@@ -139,13 +139,13 @@ namespace TensorFlowNET.Examples.ImageProcess
             {
                 print($"Training epoch: {epoch + 1}");
                 // Randomly shuffle the training data at the beginning of each epoch 
-                var (x_train, y_train) = randomize(mnist.train.data, mnist.train.labels);
+                var (x_train, y_train) = mnist.Randomize(mnist.Train.Data, mnist.Train.Labels);
 
                 foreach (var iteration in range(num_tr_iter))
                 {
                     var start = iteration * batch_size;
                     var end = (iteration + 1) * batch_size;
-                    var (x_batch, y_batch) = get_next_batch(x_train, y_train, start, end);
+                    var (x_batch, y_batch) = mnist.GetNextBatch(x_train, y_train, start, end);
 
                     // Run optimization op (backprop)
                     sess.run(optimizer, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
@@ -161,7 +161,8 @@ namespace TensorFlowNET.Examples.ImageProcess
                 }
 
                 // Run validation after every epoch
-                var results1 = sess.run(new[] { loss, accuracy }, new FeedItem(x, mnist.validation.data), new FeedItem(y, mnist.validation.labels));
+                var results1 = sess.run(new[] { loss, accuracy }, new FeedItem(x, mnist.Validation.Data), new FeedItem(y, mnist.Validation.Labels));
+                
                 loss_val = results1[0];
                 accuracy_val = results1[1];
                 print("---------------------------------------------------------");
@@ -172,35 +173,12 @@ namespace TensorFlowNET.Examples.ImageProcess
 
         public void Test(Session sess)
         {
-            var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, mnist.test.data), new FeedItem(y, mnist.test.labels));
+            var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, mnist.Test.Data), new FeedItem(y, mnist.Test.Labels));
             loss_test = result[0];
             accuracy_test = result[1];
             print("---------------------------------------------------------");
             print($"Test loss: {loss_test.ToString("0.0000")}, test accuracy: {accuracy_test.ToString("P")}");
             print("---------------------------------------------------------");
-        }
-
-        private (NDArray, NDArray) randomize(NDArray x, NDArray y)
-        {
-            var perm = np.random.permutation(y.shape[0]);
-
-            np.random.shuffle(perm);
-            return (mnist.train.data[perm], mnist.train.labels[perm]);
-        }
-
-        /// <summary>
-        /// selects a few number of images determined by the batch_size variable (if you don't know why, read about Stochastic Gradient Method)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
-        private (NDArray, NDArray) get_next_batch(NDArray x, NDArray y, int start, int end)
-        {
-            var x_batch = x[$"{start}:{end}"];
-            var y_batch = y[$"{start}:{end}"];
-            return (x_batch, y_batch);
         }
     }
 }
