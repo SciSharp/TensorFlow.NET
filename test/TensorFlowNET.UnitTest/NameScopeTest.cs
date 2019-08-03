@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void NestedNameScope()
         {
-            with(new ops.NameScope("scope1"), scope1 =>
+            tf_with(new ops.NameScope("scope1"), scope1 =>
             {
                 name = scope1;
                 Assert.AreEqual("scope1", g._name_stack);
@@ -22,7 +22,7 @@ namespace TensorFlowNET.UnitTest
                 var const1 = tf.constant(1.0);
                 Assert.AreEqual("scope1/Const:0", const1.name);
 
-                with(new ops.NameScope("scope2"), scope2 =>
+                tf_with(new ops.NameScope("scope2"), scope2 =>
                 {
                     name = scope2;
                     Assert.AreEqual("scope1/scope2", g._name_stack);

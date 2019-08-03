@@ -207,7 +207,7 @@ namespace Tensorflow.Keras.Layers
 
         public Tensor _assign_moving_average(RefVariable variable, Tensor value, Tensor momentum)
         {
-            return Python.with(ops.name_scope(null, "AssignMovingAvg", new { variable, value, momentum }), scope =>
+            return Python.tf_with(ops.name_scope(null, "AssignMovingAvg", new { variable, value, momentum }), scope =>
             {
                 // var cm = ops.colocate_with(variable);
                 var decay = ops.convert_to_tensor(1.0f - momentum, name: "decay");

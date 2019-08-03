@@ -28,7 +28,7 @@ namespace Tensorflow
             if (dtype == image.dtype)
                 return array_ops.identity(image, name: name);
 
-            return with(ops.name_scope(name, "convert_image", image), scope =>
+            return tf_with(ops.name_scope(name, "convert_image", image), scope =>
             {
                 name = scope;
 

@@ -90,7 +90,7 @@ namespace TensorFlowNET.Examples
             var init = tf.global_variables_initializer();
             float loss_value = 0;
             // Start tf session
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 sess.run(init);
                 var step = 0;
@@ -110,7 +110,7 @@ namespace TensorFlowNET.Examples
                         Console.WriteLine($"Step {step} loss: {loss_value}");
                 }
                 Console.WriteLine($"Final loss: {loss_value}");
-            });
+            }
 
             return loss_value;
         }
@@ -128,7 +128,7 @@ namespace TensorFlowNET.Examples
 
             float loss_value = 0;
             // Start tf session
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 sess.run(init);
                 var step = 0;
@@ -143,7 +143,7 @@ namespace TensorFlowNET.Examples
                         Console.WriteLine($"Step {step} loss: {loss_value}");
                 }
                 Console.WriteLine($"Final loss: {loss_value}");
-            });
+            }
 
             return loss_value;
         }

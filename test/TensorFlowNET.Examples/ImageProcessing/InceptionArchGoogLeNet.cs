@@ -45,9 +45,12 @@ namespace TensorFlowNET.Examples
             var input_operation = graph.get_operation_by_name(input_name);
             var output_operation = graph.get_operation_by_name(output_name);
 
-            var results = with(tf.Session(graph),
-                sess => sess.run(output_operation.outputs[0],
-                    new FeedItem(input_operation.outputs[0], nd)));
+            NDArray results;
+            using (var sess = tf.Session(graph))
+            {
+                results = sess.run(output_operation.outputs[0],
+                    new FeedItem(input_operation.outputs[0], nd));
+            }
 
             results = np.squeeze(results);
 
@@ -69,19 +72,19 @@ namespace TensorFlowNET.Examples
                                 int input_mean = 0,
                                 int input_std = 255)
         {
-            return with(tf.Graph().as_default(), graph =>
-            {
-                var file_reader = tf.read_file(file_name, "file_reader");
-                var image_reader = tf.image.decode_jpeg(file_reader, channels: 3, name: "jpeg_reader");
-                var caster = tf.cast(image_reader, tf.float32);
-                var dims_expander = tf.expand_dims(caster, 0);
-                var resize = tf.constant(new int[] { input_height, input_width });
-                var bilinear = tf.image.resize_bilinear(dims_expander, resize);
-                var sub = tf.subtract(bilinear, new float[] { input_mean });
-                var normalized = tf.divide(sub, new float[] { input_std });
+            var graph = tf.Graph().as_default();
 
-                return with(tf.Session(graph), sess => sess.run(normalized));
-            });
+            var file_reader = tf.read_file(file_name, "file_reader");
+            var image_reader = tf.image.decode_jpeg(file_reader, channels: 3, name: "jpeg_reader");
+            var caster = tf.cast(image_reader, tf.float32);
+            var dims_expander = tf.expand_dims(caster, 0);
+            var resize = tf.constant(new int[] { input_height, input_width });
+            var bilinear = tf.image.resize_bilinear(dims_expander, resize);
+            var sub = tf.subtract(bilinear, new float[] { input_mean });
+            var normalized = tf.divide(sub, new float[] { input_std });
+
+            using (var sess = tf.Session(graph))
+                return sess.run(normalized);
         }
 
         public void PrepareData()

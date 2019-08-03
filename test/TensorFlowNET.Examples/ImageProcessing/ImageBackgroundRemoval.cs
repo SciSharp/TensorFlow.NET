@@ -32,11 +32,11 @@ namespace TensorFlowNET.Examples
 
             Tensor output = graph.OperationByName("SemanticPredictions");
 
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 // Runs inference on a single image.
                 sess.run(output, new FeedItem(output, "[np.asarray(resized_image)]"));
-            });
+            }
 
             return false;
         }

@@ -66,7 +66,7 @@ namespace Tensorflow.Operations
                 _element_shape = new List<TensorShape> { };
             }
 
-            with(ops.name_scope(name, "", new { handle, size, flow }), scope =>
+            tf_with(ops.name_scope(name, "", new { handle, size, flow }), scope =>
             {
                 if(handle != null)
                 {

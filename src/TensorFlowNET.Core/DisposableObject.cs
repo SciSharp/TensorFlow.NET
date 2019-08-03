@@ -34,38 +34,27 @@ namespace Tensorflow
             _handle = handle;
         }
 
-        private bool disposedValue = false; // To detect redundant calls
-
         protected virtual void DisposeManagedState()
         {
         }
 
-        protected abstract void DisposeUnManagedState();
+        protected abstract void DisposeUnManagedState(IntPtr handle);
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (disposing)
             {
-                if (disposing)
+                // free unmanaged resources (unmanaged objects) and override a finalizer below.
+                if (_handle != IntPtr.Zero)
                 {
                     // dispose managed state (managed objects).
                     DisposeManagedState();
-                }
 
-                // free unmanaged resources (unmanaged objects) and override a finalizer below.
-                /*IntPtr h = IntPtr.Zero;
-                lock (this)
-                {
-                    h = _handle;
+                    // set large fields to null.
+                    DisposeUnManagedState(_handle);
+
                     _handle = IntPtr.Zero;
-                }*/
-                if (_handle != IntPtr.Zero)
-                    DisposeUnManagedState();
-
-                // set large fields to null.
-                _handle = IntPtr.Zero;
-
-                disposedValue = true;
+                }
             }
         }
 

@@ -164,7 +164,7 @@ namespace TensorFlowNET.UnitTest
             //    return self._eval_helper(tensors)
             //  else:
             {
-                with(tf.Session(), s =>
+                using (var sess = tf.Session())
                 {
                     var ndarray=tensor.eval();
                     if (typeof(T) == typeof(double))
@@ -181,7 +181,8 @@ namespace TensorFlowNET.UnitTest
                     {
                         result = ndarray;
                     }
-                });
+                }
+
                 return (T)result;
             }
         }

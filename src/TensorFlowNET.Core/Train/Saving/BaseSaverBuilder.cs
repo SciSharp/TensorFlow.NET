@@ -102,7 +102,7 @@ namespace Tensorflow
             Tensor save_tensor = null;
             Operation restore_op = null;
 
-            return with(ops.name_scope(name, "save", saveables.Select(x => x.op).ToArray()), scope =>
+            return tf_with(ops.name_scope(name, "save", saveables.Select(x => x.op).ToArray()), scope =>
             {
                 name = scope;
 

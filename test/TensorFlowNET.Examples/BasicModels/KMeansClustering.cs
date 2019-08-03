@@ -52,10 +52,10 @@ namespace TensorFlowNET.Examples
         {
             PrepareData();
             var graph = ImportGraph();
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 Train(sess);
-            });
+            }
 
             return accuray_test > 0.70;
         }

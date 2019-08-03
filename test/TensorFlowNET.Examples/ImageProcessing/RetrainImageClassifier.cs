@@ -92,10 +92,10 @@ namespace TensorFlowNET.Examples
 
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
 
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 Train(sess);
-            });
+            }
 
             return test_accuracy > 0.75f;
         }
@@ -141,20 +141,18 @@ namespace TensorFlowNET.Examples
             Tensor evaluation_step = null;
             Tensor prediction = null;
 
-            with(eval_graph.as_default(), graph =>
-            {
-                // Add the new layer for exporting.
-                var (_, _, bottleneck_input, ground_truth_input, final_tensor) =
-                    add_final_retrain_ops(class_count, final_tensor_name, bottleneck_tensor,
-                        wants_quantization, is_training: false);
+            var graph = eval_graph.as_default();
+            // Add the new layer for exporting.
+            var (_, _, bottleneck_input, ground_truth_input, final_tensor) =
+                add_final_retrain_ops(class_count, final_tensor_name, bottleneck_tensor,
+                    wants_quantization, is_training: false);
 
-                // Now we need to restore the values from the training graph to the eval
-                // graph.
-                tf.train.Saver().restore(eval_sess, CHECKPOINT_NAME);
+            // Now we need to restore the values from the training graph to the eval
+            // graph.
+            tf.train.Saver().restore(eval_sess, CHECKPOINT_NAME);
 
-                (evaluation_step, prediction) = add_evaluation_step(final_tensor,
-                                                      ground_truth_input);
-            });
+            (evaluation_step, prediction) = add_evaluation_step(final_tensor,
+                                                    ground_truth_input);
 
             return (eval_sess, resized_input_tensor, bottleneck_input, ground_truth_input,
                 evaluation_step, prediction);
@@ -180,7 +178,7 @@ namespace TensorFlowNET.Examples
             Tensor bottleneck_tensor, bool quantize_layer, bool is_training)
         {
             var (batch_size, bottleneck_tensor_size) = (bottleneck_tensor.TensorShape.dims[0], bottleneck_tensor.TensorShape.dims[1]);
-            with(tf.name_scope("input"), scope =>
+            tf_with(tf.name_scope("input"), scope =>
             {
                 bottleneck_input = tf.placeholder_with_default(
                     bottleneck_tensor,
@@ -193,10 +191,10 @@ namespace TensorFlowNET.Examples
             // Organizing the following ops so they are easier to see in TensorBoard.
             string layer_name = "final_retrain_ops";
             Tensor logits = null;
-            with(tf.name_scope(layer_name), scope =>
+            tf_with(tf.name_scope(layer_name), scope =>
             {
                 RefVariable layer_weights = null;
-                with(tf.name_scope("weights"), delegate
+                tf_with(tf.name_scope("weights"), delegate
                 {
                     var initial_value = tf.truncated_normal(new int[] { bottleneck_tensor_size, class_count }, stddev: 0.001f);
                     layer_weights = tf.Variable(initial_value, name: "final_weights");
@@ -204,13 +202,13 @@ namespace TensorFlowNET.Examples
                 });
 
                 RefVariable layer_biases = null;
-                with(tf.name_scope("biases"), delegate
+                tf_with(tf.name_scope("biases"), delegate
                 {
                     layer_biases = tf.Variable(tf.zeros(new TensorShape(class_count)), name: "final_biases");
                     variable_summaries(layer_biases);
                 });
 
-                with(tf.name_scope("Wx_plus_b"), delegate
+                tf_with(tf.name_scope("Wx_plus_b"), delegate
                 {
                     logits = tf.matmul(bottleneck_input, layer_weights) + layer_biases;
                     tf.summary.histogram("pre_activations", logits);
@@ -239,7 +237,7 @@ namespace TensorFlowNET.Examples
                 return (null, null, bottleneck_input, ground_truth_input, final_tensor);
 
             Tensor cross_entropy_mean = null;
-            with(tf.name_scope("cross_entropy"), delegate
+            tf_with(tf.name_scope("cross_entropy"), delegate
             {
                 cross_entropy_mean = tf.losses.sparse_softmax_cross_entropy(
                     labels: ground_truth_input, logits: logits);
@@ -247,7 +245,7 @@ namespace TensorFlowNET.Examples
 
             tf.summary.scalar("cross_entropy", cross_entropy_mean);
 
-            with(tf.name_scope("train"), delegate
+            tf_with(tf.name_scope("train"), delegate
             {
                 var optimizer = tf.train.GradientDescentOptimizer(learning_rate);
                 train_step = optimizer.minimize(cross_entropy_mean);
@@ -259,12 +257,12 @@ namespace TensorFlowNET.Examples
 
         private void variable_summaries(RefVariable var)
         {
-            with(tf.name_scope("summaries"), delegate
+            tf_with(tf.name_scope("summaries"), delegate
             {
                 var mean = tf.reduce_mean(var);
                 tf.summary.scalar("mean", mean);
                 Tensor stddev = null;
-                with(tf.name_scope("stddev"), delegate
+                tf_with(tf.name_scope("stddev"), delegate
                 {
                     stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)));
                 });
@@ -279,7 +277,7 @@ namespace TensorFlowNET.Examples
         {
             var (height, width) = (299, 299);
 
-            return with(tf.Graph().as_default(), graph =>
+            return tf_with(tf.Graph().as_default(), graph =>
             {
                 tf.train.import_meta_graph("graph/InceptionV3.meta");
                 Tensor resized_input_tensor = graph.OperationByName("Placeholder"); //tf.placeholder(tf.float32, new TensorShape(-1, height, width, 3));
@@ -350,15 +348,15 @@ namespace TensorFlowNET.Examples
         {
             Tensor evaluation_step = null, correct_prediction = null, prediction = null;
 
-            with(tf.name_scope("accuracy"), scope =>
+            tf_with(tf.name_scope("accuracy"), scope =>
             {
-                with(tf.name_scope("correct_prediction"), delegate
+                tf_with(tf.name_scope("correct_prediction"), delegate
                 {
                     prediction = tf.argmax(result_tensor, 1);
                     correct_prediction = tf.equal(prediction, ground_truth_tensor);
                 });
 
-                with(tf.name_scope("accuracy"), delegate
+                tf_with(tf.name_scope("accuracy"), delegate
                 {
                     evaluation_step = tf.reduce_mean(tf.cast(correct_prediction, tf.float32));
                 });
@@ -596,7 +594,7 @@ namespace TensorFlowNET.Examples
                 create_module_graph();
 
             // Add the new layer that we'll be training.
-            with(graph.as_default(), delegate
+            tf_with(graph.as_default(), delegate
             {
                 (train_step, cross_entropy, bottleneck_input,
                  ground_truth_input, final_tensor) = add_final_retrain_ops(
@@ -745,13 +743,13 @@ namespace TensorFlowNET.Examples
             Tensor input = graph.OperationByName("Placeholder");
             Tensor output = graph.OperationByName("final_result");
 
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 var result = sess.run(output, new FeedItem(input, fileBytes));
                 var prob = np.squeeze(result);
                 var idx = np.argmax(prob);
                 print($"Prediction result: [{labels[idx]} {prob[idx][0]}] for {img_path}.");
-            });
+            }
         }
 
         private NDArray ReadTensorFromImageFile(string file_name,
@@ -760,19 +758,19 @@ namespace TensorFlowNET.Examples
                         int input_mean = 0,
                         int input_std = 255)
         {
-            return with(tf.Graph().as_default(), graph =>
-            {
-                var file_reader = tf.read_file(file_name, "file_reader");
-                var image_reader = tf.image.decode_jpeg(file_reader, channels: 3, name: "jpeg_reader");
-                var caster = tf.cast(image_reader, tf.float32);
-                var dims_expander = tf.expand_dims(caster, 0);
-                var resize = tf.constant(new int[] { input_height, input_width });
-                var bilinear = tf.image.resize_bilinear(dims_expander, resize);
-                var sub = tf.subtract(bilinear, new float[] { input_mean });
-                var normalized = tf.divide(sub, new float[] { input_std });
+            var graph = tf.Graph().as_default();
 
-                return with(tf.Session(graph), sess => sess.run(normalized));
-            });
+            var file_reader = tf.read_file(file_name, "file_reader");
+            var image_reader = tf.image.decode_jpeg(file_reader, channels: 3, name: "jpeg_reader");
+            var caster = tf.cast(image_reader, tf.float32);
+            var dims_expander = tf.expand_dims(caster, 0);
+            var resize = tf.constant(new int[] { input_height, input_width });
+            var bilinear = tf.image.resize_bilinear(dims_expander, resize);
+            var sub = tf.subtract(bilinear, new float[] { input_mean });
+            var normalized = tf.divide(sub, new float[] { input_std });
+
+            using (var sess = tf.Session(graph))
+                return sess.run(normalized);
         }
 
         public void Test(Session sess_)
@@ -783,7 +781,7 @@ namespace TensorFlowNET.Examples
             var graph = Graph.ImportFromPB(output_graph);
             var (jpeg_data_tensor, decoded_image_tensor) = add_jpeg_decoding();
 
-            with(tf.Session(graph), sess =>
+            tf_with(tf.Session(graph), sess =>
             {
                 (test_accuracy, predictions) = run_final_eval(sess, null, class_count, image_lists,
                                jpeg_data_tensor, decoded_image_tensor, resized_image_tensor,

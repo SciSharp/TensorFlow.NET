@@ -15,20 +15,18 @@ namespace TensorFlowNET.UnitTest.gradients_test
         [TestMethod]
         public void testGradients()
         {
-            with(tf.Graph().as_default(), g =>
-            {
-                var inp = tf.constant(1.0, shape: new[] { 32, 100 }, name: "in");
-                var w = tf.constant(1.0, shape: new[] { 100, 10 }, name: "w");
-                var b = tf.constant(1.0, shape: new[] { 10 }, name: "b");
-                var xw = math_ops.matmul(inp, w, name: "xw");
-                var h = nn_ops.bias_add(xw, b, name: "h");
-                var w_grad = gradients_impl.gradients(new[] { h }, new[] { w })[0];
-                self.assertEquals("MatMul", w_grad.op.type);
-                // TODO: Operation._original_op
-                //self.assertEquals(w_grad.op._original_op, xw.op);
-                self.assertTrue((bool)w_grad.op.get_attr("transpose_a"));
-                self.assertFalse((bool)w_grad.op.get_attr("transpose_b"));
-            });
+            var g = tf.Graph().as_default();
+            var inp = tf.constant(1.0, shape: new[] { 32, 100 }, name: "in");
+            var w = tf.constant(1.0, shape: new[] { 100, 10 }, name: "w");
+            var b = tf.constant(1.0, shape: new[] { 10 }, name: "b");
+            var xw = math_ops.matmul(inp, w, name: "xw");
+            var h = nn_ops.bias_add(xw, b, name: "h");
+            var w_grad = gradients_impl.gradients(new[] { h }, new[] { w })[0];
+            self.assertEquals("MatMul", w_grad.op.type);
+            // TODO: Operation._original_op
+            //self.assertEquals(w_grad.op._original_op, xw.op);
+            self.assertTrue((bool)w_grad.op.get_attr("transpose_a"));
+            self.assertFalse((bool)w_grad.op.get_attr("transpose_b"));
         }
 
         [TestMethod]
@@ -104,14 +102,14 @@ namespace TensorFlowNET.UnitTest.gradients_test
                 tf.constant(new[] { 1 }, tf.int32, new[] { 1 })
             );
             var g = tf.gradients(b, a);
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 var result = sess.run(new object[] { g, b });
                 var actualDeriv = np.squeeze(result[0]);
                 var actual = np.squeeze(result[1]);
                 self.assertEquals(new float[] { 1, 0 }, new float[] { actualDeriv[0], actualDeriv[1] });
                 self.assertEquals(0.9640276f, (float)actual);
-            });
+            }
         }
 
         [TestMethod]

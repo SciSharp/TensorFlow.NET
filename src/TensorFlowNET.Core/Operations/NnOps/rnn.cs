@@ -30,7 +30,7 @@ namespace Tensorflow.Operations
             TF_DataType dtype = TF_DataType.DtInvalid,
             int? parallel_iterations = null, bool swap_memory = false, bool time_major = false)
         {
-            with(tf.variable_scope("rnn"), scope =>
+            tf_with(tf.variable_scope("rnn"), scope =>
             {
                 VariableScope varscope = scope;
                 var flat_input = nest.flatten(inputs_tensor);
@@ -140,7 +140,7 @@ namespace Tensorflow.Operations
             var time = array_ops.constant(0, dtype: dtypes.int32, name: "time");
 
             string base_name = null;
-            with(ops.name_scope("dynamic_rnn"), scope => base_name = scope);
+            tf_with(ops.name_scope("dynamic_rnn"), scope => base_name = scope);
 
             Func<string, TensorShape, TF_DataType, Tensor> _create_ta = (name, element_shape, dtype_) =>
             {

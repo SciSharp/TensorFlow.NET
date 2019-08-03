@@ -34,7 +34,7 @@ namespace Tensorflow
             int expected_rank_diff = 0,
             string name = null)
         {
-            return with(ops.name_scope(name, default_name: "remove_squeezable_dimensions", (labels, predictions)), delegate
+            return tf_with(ops.name_scope(name, default_name: "remove_squeezable_dimensions", (labels, predictions)), delegate
             {
                 predictions = ops.convert_to_tensor(predictions);
                 labels = ops.convert_to_tensor(labels);

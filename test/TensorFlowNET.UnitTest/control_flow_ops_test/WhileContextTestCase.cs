@@ -11,7 +11,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         private void _testWhileContextHelper(int? maximum_iterations = null)
         {
             // TODO: implement missing code dependencies
-            with<Session>(this.cached_session(), sess =>
+            using (var sess = this.cached_session())
             {
                 var i = constant_op.constant(0, name: "i");
                 var c = new Func<Tensor, Tensor>(x => gen_math_ops.less(x, 10, name: "c"));
@@ -26,7 +26,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
                             WhileContext.from_proto(
                                 control_flow_context.to_proto()).to_proto(), "");*/
                 }
-            });
+            }
         }
 
         [Ignore("TODO")]

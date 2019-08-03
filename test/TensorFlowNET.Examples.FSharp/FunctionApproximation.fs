@@ -77,7 +77,7 @@ let run()=
     let init = tf.global_variables_initializer()
     
     
-    Tensorflow.Python.``with``(tf.Session(), fun (sess:Session) ->
+    Tensorflow.Python.``tf_with``(tf.Session(), fun (sess:Session) ->
         sess.run(init)  |> ignore  
         // Loop over epochs
         for epoch in [0..training_epochs] do

@@ -24,7 +24,7 @@ namespace Tensorflow
         public Tensor compute_weighted_loss(Tensor losses, Tensor weights = null, string scope = null,
             string loss_collection = ops.GraphKeys.LOSSES, string reduction = Reduction.SUM_BY_NONZERO_WEIGHTS)
         {
-            return with(ops.name_scope(scope, default_name: "weighted_loss", (losses, weights)), delegate
+            return tf_with(ops.name_scope(scope, default_name: "weighted_loss", (losses, weights)), delegate
             {
                 // Save the `reduction` argument for loss normalization when distributing
                 // to multiple replicas. Used only for estimator + v1 optimizer flow.
@@ -77,7 +77,7 @@ namespace Tensorflow
 
         public Tensor _num_present(Tensor losses, Tensor weights, bool per_batch = false)
         {
-            return with(ops.name_scope(null, default_name: "num_present", (losses, weights)), name_scope =>
+            return tf_with(ops.name_scope(null, default_name: "num_present", (losses, weights)), name_scope =>
             {
                 string scope = name_scope;
                 weights = math_ops.cast(weights, dtype: dtypes.float32);
@@ -104,7 +104,7 @@ namespace Tensorflow
             string loss_collection= ops.GraphKeys.LOSSES,
             string reduction = Reduction.SUM_BY_NONZERO_WEIGHTS)
         {
-            return with(ops.name_scope(scope,
+            return tf_with(ops.name_scope(scope,
                 "sparse_softmax_cross_entropy_loss",
                 (logits, labels, weights)),
                 name_scope =>

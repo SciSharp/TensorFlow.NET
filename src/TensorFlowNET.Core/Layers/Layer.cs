@@ -72,7 +72,7 @@ namespace Tensorflow.Layers
             }
 
             Tensor outputs = null;
-            with(scope_context_manager, scope2 =>
+            tf_with(scope_context_manager, scope2 =>
             {
                 _current_scope = scope2;
                 // Actually call layer
@@ -136,12 +136,12 @@ namespace Tensorflow.Layers
 
             _set_scope();
             var reuse = built || (_reuse != null && _reuse.Value);
-            return with(tf.variable_scope(_scope,
+            return tf_with(tf.variable_scope(_scope,
                 reuse: reuse,
                 auxiliary_name_scope: false), scope =>
                 {
                     _current_scope = scope;
-                    return with(ops.name_scope(_name_scope()), delegate
+                    return tf_with(ops.name_scope(_name_scope()), delegate
                     {
                         var variable = base.add_weight(name,
                             shape,
@@ -183,7 +183,7 @@ namespace Tensorflow.Layers
                 }
                 else
                 {
-                    with(tf.variable_scope(scope, default_name: _base_name), captured_scope =>
+                    tf_with(tf.variable_scope(scope, default_name: _base_name), captured_scope =>
                     {
                         // convert variable_scope to VariableScope
                         _scope = captured_scope;

@@ -29,7 +29,7 @@ namespace Tensorflow
     {
         public static Tensor abs(Tensor x, string name = null)
         {
-            return with(ops.name_scope(name, "Abs", new { x }), scope =>
+            return tf_with(ops.name_scope(name, "Abs", new { x }), scope =>
             {
                 x = ops.convert_to_tensor(x, name: "x");
                 if (x.dtype.is_complex())
@@ -69,7 +69,7 @@ namespace Tensorflow
             if(base_type == x.dtype)
                 return x;
 
-            return with(ops.name_scope(name, "Cast", new { x }), scope =>
+            return tf_with(ops.name_scope(name, "Cast", new { x }), scope =>
             {
                 name = scope;
                 x = ops.convert_to_tensor(x, name: "x");
@@ -82,7 +82,7 @@ namespace Tensorflow
 
         public static Tensor cumsum(Tensor x, int axis = 0, bool exclusive = false, bool reverse = false, string name = null)
         {
-            return with(ops.name_scope(name, "Cumsum", new {x}), scope =>
+            return tf_with(ops.name_scope(name, "Cumsum", new {x}), scope =>
             {
                 name = scope;
                 x = ops.convert_to_tensor(x, name: "x");
@@ -110,7 +110,7 @@ namespace Tensorflow
         /// <returns>`x / y` returns the quotient of x and y.</returns>
         public static Tensor div(Tensor x, Tensor y, string name = null)
         {
-            return with(ops.name_scope(name, "div", (x, y)), name_scope =>
+            return tf_with(ops.name_scope(name, "div", (x, y)), name_scope =>
             {
                 name = name_scope;
                 x = ops.convert_to_tensor(x, name: "x");
@@ -146,7 +146,7 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor div_no_nan(Tensor x, Tensor y, string name = null)
         {
-            return with(ops.name_scope(name, "div_no_nan", (x, y)), name_scope =>
+            return tf_with(ops.name_scope(name, "div_no_nan", (x, y)), name_scope =>
             {
                 name = name_scope;
                 x = ops.convert_to_tensor(x, name: "x");
@@ -229,7 +229,7 @@ namespace Tensorflow
 
         public static Tensor sign(Tensor x, string name = null)
         {
-            return with(ops.name_scope(name, "Sign", new {x}), scope =>
+            return tf_with(ops.name_scope(name, "Sign", new {x}), scope =>
             {
                 x = ops.convert_to_tensor(x, name: "x");
                 return gen_math_ops.sign(x);
@@ -337,7 +337,7 @@ namespace Tensorflow
         /// <returns> The reduced tensor.</returns>
         public static Tensor reduce_logsumexp(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
         {
-            return with(ops.name_scope(name, "ReduceLogSumExp", new { input_tensor }), scope =>
+            return tf_with(ops.name_scope(name, "ReduceLogSumExp", new { input_tensor }), scope =>
             {
                 var raw_max = reduce_max(input_tensor, axis, true);
                 var my_max = array_ops.stop_gradient(array_ops.where(gen_math_ops.is_finite(raw_max), raw_max, array_ops.zeros_like(raw_max)));
@@ -497,7 +497,7 @@ namespace Tensorflow
             if (delta == null)
                 delta = 1;
 
-            return with(ops.name_scope(name, "Range", new { start, limit, delta }), scope =>
+            return tf_with(ops.name_scope(name, "Range", new { start, limit, delta }), scope =>
             {
                 name = scope;
                 var start1 = ops.convert_to_tensor(start, name: "start");
@@ -510,7 +510,7 @@ namespace Tensorflow
 
         public static Tensor floordiv(Tensor x, Tensor y, string name = null)
         {
-            return with(ops.name_scope(name, "floordiv", new { x, y }), scope =>
+            return tf_with(ops.name_scope(name, "floordiv", new { x, y }), scope =>
             {
                 return gen_math_ops.floor_div(x, y, scope);
             });
@@ -527,7 +527,7 @@ namespace Tensorflow
         {
             Tensor result = null;
 
-            with(ops.name_scope(name, "MatMul", new Tensor[] { a, b }), scope =>
+            tf_with(ops.name_scope(name, "MatMul", new Tensor[] { a, b }), scope =>
             {
                 name = scope;
 
@@ -551,7 +551,7 @@ namespace Tensorflow
         {
             Tensor result = null;
 
-            with(ops.name_scope(name, "MatMul", new Tensor[] { x, y }), scope =>
+            tf_with(ops.name_scope(name, "MatMul", new Tensor[] { x, y }), scope =>
             {
                 name = scope;
 
@@ -576,7 +576,7 @@ namespace Tensorflow
             if (dt.is_floating() || dt.is_integer())
                 return x;
 
-            return with(ops.name_scope(name, "Conj", new List<Tensor> { x }), scope =>
+            return tf_with(ops.name_scope(name, "Conj", new List<Tensor> { x }), scope =>
             {
 
                 return x;
@@ -591,7 +591,7 @@ namespace Tensorflow
 
         public static Tensor _truediv_python3(Tensor x, Tensor y, string name = null)
         {
-            return with(ops.name_scope(name, "truediv", new { x, y }), scope =>
+            return tf_with(ops.name_scope(name, "truediv", new { x, y }), scope =>
             {
                 name = scope;
                 var x_dtype = x.dtype.as_base_dtype();

@@ -36,7 +36,7 @@ namespace TensorFlowNET.Examples.Text
             var keep_prob = tf.where(is_training, 0.5f, 1.0f);
             Tensor x_emb = null;
 
-            with(tf.name_scope("embedding"), scope =>
+            tf_with(tf.name_scope("embedding"), scope =>
             {
                 var init_embeddings = tf.random_uniform(new int[] { vocabulary_size, embedding_size });
                 var embeddings = tf.get_variable("embeddings", initializer: init_embeddings);
@@ -68,20 +68,20 @@ namespace TensorFlowNET.Examples.Text
             var h_pool = tf.concat(pooled_outputs, 3);
             var h_pool_flat = tf.reshape(h_pool, new TensorShape(-1, num_filters * filter_sizes.Rank));
             Tensor h_drop = null;
-            with(tf.name_scope("dropout"), delegate
+            tf_with(tf.name_scope("dropout"), delegate
             {
                 h_drop = tf.nn.dropout(h_pool_flat, keep_prob);
             });
 
             Tensor logits = null;
             Tensor predictions = null;
-            with(tf.name_scope("output"), delegate
+            tf_with(tf.name_scope("output"), delegate
             {
                 logits = tf.layers.dense(h_drop, num_class);
                 predictions = tf.argmax(logits, -1, output_type: tf.int32);
             });
 
-            with(tf.name_scope("loss"), delegate
+            tf_with(tf.name_scope("loss"), delegate
             {
                 var sscel = tf.nn.sparse_softmax_cross_entropy_with_logits(logits: logits, labels: y);
                 var loss = tf.reduce_mean(sscel);
@@ -89,7 +89,7 @@ namespace TensorFlowNET.Examples.Text
                 var optimizer = adam.minimize(loss, global_step: global_step);
             });
 
-            with(tf.name_scope("accuracy"), delegate
+            tf_with(tf.name_scope("accuracy"), delegate
             {
                 var correct_predictions = tf.equal(predictions, y);
                 var accuracy = tf.reduce_mean(tf.cast(correct_predictions, TF_DataType.TF_FLOAT), name: "accuracy");

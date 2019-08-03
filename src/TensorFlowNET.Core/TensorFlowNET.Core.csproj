@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.10.7.2</Version>
+    <Version>0.10.8</Version>
     <Authors>Haiping Chen, Meinrad Recheis</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -17,7 +17,7 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.10.7.2</AssemblyVersion>
+    <AssemblyVersion>0.10.8.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.9.0:
 
 1. Added full connected Convolution Neural Network example.
@@ -34,9 +34,10 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 12. Add Tensor operator overloads.
 13. Fix default graph and operation issue when import model.
 14. Fix TF_String endcode and decode.
-15. Fix Tensor memory leak.</PackageReleaseNotes>
+15. Fix Tensor memory leak.
+16. Rename with to tf_with that is only used to build graph purpose.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <FileVersion>0.10.7.2</FileVersion>
+    <FileVersion>0.10.8.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>

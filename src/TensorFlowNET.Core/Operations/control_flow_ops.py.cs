@@ -28,7 +28,7 @@ namespace Tensorflow
     {
         public static Operation Assert(Tensor condition, object[] data, int? summarize = null, string name = null)
         {
-            return with(ops.name_scope(name, "Assert", new { condition, data }), scope =>
+            return tf_with(ops.name_scope(name, "Assert", new { condition, data }), scope =>
             {
                 name = scope;
                 var xs = ops.convert_n_to_tensor(data);
@@ -53,7 +53,7 @@ namespace Tensorflow
 
         public static Operation group<T>(T[] inputs, string name = null) where T : ITensorOrOperation
         {
-            return with(ops.name_scope(name, "group_deps", inputs), scope =>
+            return tf_with(ops.name_scope(name, "group_deps", inputs), scope =>
             {
                 name = scope;
 
@@ -91,7 +91,7 @@ namespace Tensorflow
 
         private static Operation _GroupControlDeps(string dev, Operation[] deps, string name = null)
         {
-            return with(ops.control_dependencies(deps), ctl =>
+            return tf_with(ops.control_dependencies(deps), ctl =>
             {
                 if (dev == null)
                 {
@@ -135,7 +135,7 @@ namespace Tensorflow
 
         public static Tensor[] tuple(Tensor[] tensors, string name = null, Operation[] control_inputs = null)
         {
-            return with(ops.name_scope(name, "tuple", tensors), scope =>
+            return tf_with(ops.name_scope(name, "tuple", tensors), scope =>
             {
                 name = scope;
                 var gating_ops = tensors.Where(x => x != null).Select(x => x.op).ToList();
@@ -189,13 +189,13 @@ namespace Tensorflow
             values.AddRange(dependencies);
             values.Add(output_tensor);
 
-            return with(ops.name_scope(name, "control_dependency", values), scope =>
+            return tf_with(ops.name_scope(name, "control_dependency", values), scope =>
             {
                 name = scope;
                 // TODO: missing original code
                 //with ops.colocate_with(output_tensor):
                 {
-                    return with(ops.control_dependencies(dependencies), ctl =>
+                    return tf_with(ops.control_dependencies(dependencies), ctl =>
                     {
                         output_tensor = ops.convert_to_tensor_or_composite(output_tensor);
                         return _Identity(output_tensor, name: name);
@@ -306,7 +306,7 @@ namespace Tensorflow
             bool strict = false,
             string name = null)
         {
-            return with(ops.name_scope(name, "cond", new { pred }), delegate
+            return tf_with(ops.name_scope(name, "cond", new { pred }), delegate
             {
                 // TODO: here a chunk of original code is missing
                 /*
@@ -398,7 +398,7 @@ namespace Tensorflow
             bool strict = false,
             string name = null)
         {
-            return with(ops.name_scope(name, "cond", new { pred }), delegate
+            return tf_with(ops.name_scope(name, "cond", new { pred }), delegate
             {
                 // Add the Switch to the graph.
                 var switch_result = @switch(pred, pred);
@@ -467,7 +467,7 @@ namespace Tensorflow
         {
             if (inputs.Any(x => x == null))
                 throw new ValueError($"At least one of the merge inputs is null: {inputs}");
-            return with(ops.name_scope(name, "Merge", inputs), scope =>
+            return tf_with(ops.name_scope(name, "Merge", inputs), scope =>
             {
                 name = scope;
                 inputs = inputs.Select(inp =>
@@ -489,7 +489,7 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid, 
             string name = null)
         {
-            return with(ops.name_scope(name, "Switch", new { data, pred }), scope =>
+            return tf_with(ops.name_scope(name, "Switch", new { data, pred }), scope =>
             {
                 name = scope;
                 data = ops.internal_convert_to_tensor_or_indexed_slices(data,

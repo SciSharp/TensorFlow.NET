@@ -57,7 +57,7 @@ namespace Tensorflow.Train
         {
             var validate_shape = shape.is_fully_defined();
             var prefix = primary.op.name;
-            return with(new variable_scope(string.Empty, prefix + "/" + name), delegate
+            return tf_with(new variable_scope(string.Empty, prefix + "/" + name), delegate
             {
                 return _create_slot_var(primary, initializer, "", validate_shape, shape, dtype);
             });

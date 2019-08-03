@@ -58,7 +58,7 @@ namespace Tensorflow
 
         private Tensor _call_log_prob (Tensor value, string name)
         {
-            return with(ops.name_scope(name, "moments", new { value }), scope =>
+            return tf_with(ops.name_scope(name, "moments", new { value }), scope =>
             {
                 try
                 {

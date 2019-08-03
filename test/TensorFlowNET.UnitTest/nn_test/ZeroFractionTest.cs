@@ -73,12 +73,13 @@ namespace TensorFlowNET.UnitTest.nn_test
         {
             var value = array_ops.placeholder(dtype: dtypes.float32);
             var sparsity = nn_impl.zero_fraction(value);
-            with<Session>(self.cached_session(), sess => {
+            using (var sess = self.cached_session())
+            {
                 // TODO: make this compile
-                      //self.assertAllClose(
-                      //    0.25,
-                      //    sess.run(sparsity, {value: [[0., 1.], [0.3, 2.]]}));
-            });
+                //self.assertAllClose(
+                //    0.25,
+                //    sess.run(sparsity, {value: [[0., 1.], [0.3, 2.]]}));
+            }
         }
 
 

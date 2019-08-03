@@ -35,7 +35,7 @@ namespace Tensorflow
                 string name = null,
                 string max_norm = null)
         {
-            return with(ops.name_scope(name, "embedding_lookup", new { @params, ids }), scope =>
+            return tf_with(ops.name_scope(name, "embedding_lookup", new { @params, ids }), scope =>
             {
                 name = scope;
                 int np = 1;
@@ -58,7 +58,7 @@ namespace Tensorflow
                 string name = null,
                 string max_norm = null)
         {
-            return with(ops.name_scope(name, "embedding_lookup", new { @params, ids }), scope =>
+            return tf_with(ops.name_scope(name, "embedding_lookup", new { @params, ids }), scope =>
             {
                 name = scope;
                 int np = @params.Length;

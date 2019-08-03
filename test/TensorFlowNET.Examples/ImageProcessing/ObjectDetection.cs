@@ -51,7 +51,8 @@ namespace TensorFlowNET.Examples
 
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
 
-            with(tf.Session(graph), sess => Predict(sess));
+            using (var sess = tf.Session(graph))
+                Predict(sess);
 
             return true;
         }
@@ -101,14 +102,15 @@ namespace TensorFlowNET.Examples
 
         private NDArray ReadTensorFromImageFile(string file_name)
         {
-            return with(tf.Graph().as_default(), graph =>
-            {
-                var file_reader = tf.read_file(file_name, "file_reader");
-                var decodeJpeg = tf.image.decode_jpeg(file_reader, channels: 3, name: "DecodeJpeg");
-                var casted = tf.cast(decodeJpeg, TF_DataType.TF_UINT8);
-                var dims_expander = tf.expand_dims(casted, 0);
-                return with(tf.Session(graph), sess => sess.run(dims_expander));
-            });
+            var graph = tf.Graph().as_default();
+
+            var file_reader = tf.read_file(file_name, "file_reader");
+            var decodeJpeg = tf.image.decode_jpeg(file_reader, channels: 3, name: "DecodeJpeg");
+            var casted = tf.cast(decodeJpeg, TF_DataType.TF_UINT8);
+            var dims_expander = tf.expand_dims(casted, 0);
+
+            using (var sess = tf.Session(graph))
+                return sess.run(dims_expander);
         }
 
         private void buildOutputImage(NDArray[] resultArr)

@@ -42,7 +42,7 @@ namespace Tensorflow
 
             string prefix = "";
             var graph = ops.get_default_graph();
-            with(ops.name_scope(name, "import", input_map.Values), scope =>
+            tf_with(ops.name_scope(name, "import", input_map.Values), scope =>
             {
                 prefix = scope;
                 /*if (!string.IsNullOrEmpty(prefix))

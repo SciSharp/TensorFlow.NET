@@ -125,7 +125,7 @@ namespace Tensorflow.Keras.Layers
                 // Symbolic execution on symbolic tensors. We will attempt to build
                 // the corresponding TF subgraph inside `backend.get_graph()`
                 var graph = backend.get_graph().as_default();
-                with(ops.name_scope(_name_scope()), delegate
+                tf_with(ops.name_scope(_name_scope()), delegate
                 {
                     // Build layer if applicable (if the `build` method has been
                     // overridden).

@@ -64,7 +64,9 @@ namespace TensorFlowNET.Examples
         {
             PrepareData();
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
-            with(tf.Session(graph), sess => Train(sess));
+
+            using (var sess = tf.Session(graph))
+                Train(sess);
 
             return max_accuracy > 0.9;
         }
