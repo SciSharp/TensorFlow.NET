@@ -56,8 +56,8 @@ namespace Tensorflow
         public TF_DataType dtype => TF_DataType.DtInvalid;
 
         public string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
-        public string OpType => c_api.StringPiece(c_api.TF_OperationOpType(_handle));
-        public string Device => c_api.StringPiece(c_api.TF_OperationDevice(_handle));
+        public string OpType => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationOpType(_handle));
+        public string Device => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 
         private NodeDef _node_def;
         public NodeDef node_def
