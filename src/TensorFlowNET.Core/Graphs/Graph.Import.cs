@@ -23,6 +23,7 @@ namespace Tensorflow
     {
         public unsafe TF_Output[] ImportGraphDefWithReturnOutputs(Buffer graph_def, ImportGraphDefOptions opts, Status s)
         {
+            as_default();
             var num_return_outputs = opts.NumReturnOutputs;
             var return_outputs = new TF_Output[num_return_outputs];
             int size = Marshal.SizeOf<TF_Output>();
@@ -35,40 +36,37 @@ namespace Tensorflow
                 return_outputs[i] = Marshal.PtrToStructure<TF_Output>(handle);
             }
 
+            Marshal.FreeHGlobal(return_output_handle);
+
             return return_outputs;
         }
 
-        public Status Import(string file_path)
+        public bool Import(string file_path, string prefix = "")
         {
             var bytes = File.ReadAllBytes(file_path);
-            var graph_def = new Tensorflow.Buffer(bytes);
-            var opts = c_api.TF_NewImportGraphDefOptions();
-            var status = new Status();
-            c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, status);
-            return status;
+            return Import(bytes, prefix: prefix);
         }
 
-        public Status Import(byte[] bytes, string prefix = "")
+        public bool Import(byte[] bytes, string prefix = "")
         {
-            var graph_def = new Tensorflow.Buffer(bytes);
-            var opts = c_api.TF_NewImportGraphDefOptions();
-            c_api.TF_ImportGraphDefOptionsSetPrefix(opts, prefix);
-            var status = new Status();
-            c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, status);
-            c_api.TF_DeleteImportGraphDefOptions(opts);
-            return status;
-        }
-
-        static object locker = new object();
-        public static Graph ImportFromPB(string file_path, string name = null)
-        {
-            lock (locker)
+            using (var opts = new ImportGraphDefOptions())
+            using (var status = new Status())
+            using (var graph_def = new Buffer(bytes))
             {
-                var graph = tf.Graph().as_default();
-                var graph_def = GraphDef.Parser.ParseFrom(File.ReadAllBytes(file_path));
-                importer.import_graph_def(graph_def, name: name);
-                return graph;
+                as_default();
+                c_api.TF_ImportGraphDefOptionsSetPrefix(opts, prefix);
+                c_api.TF_GraphImportGraphDef(_handle, graph_def, opts, status);
+                status.Check(true);
+                return status.Code == TF_Code.TF_OK;
             }
         }
+
+        /*public Graph Import(string file_path, string name = null)
+        {
+            as_default();
+            var graph_def = GraphDef.Parser.ParseFrom(File.ReadAllBytes(file_path));
+            importer.import_graph_def(graph_def, name: name);
+            return this;
+        }*/
     }
 }

@@ -54,16 +54,17 @@ namespace Tensorflow
                 input_map = _ConvertInputMapValues(name, input_map);
             });
 
-            var scoped_options = c_api_util.ScopedTFImportGraphDefOptions();
-            _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements);
-
             var bytes = graph_def.ToByteString().ToArray();
-            IntPtr buffer = c_api_util.tf_buffer(bytes);
-
-            var status = new Status();
-            // need to create a class ImportGraphDefWithResults with IDisposal
-            var results = c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status);
-            status.Check(true);
+            using (var buffer = c_api_util.tf_buffer(bytes))
+            using (var scoped_options = c_api_util.ScopedTFImportGraphDefOptions())
+            using (var status = new Status())
+            {
+                _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements);
+                // need to create a class ImportGraphDefWithResults with IDisposal
+                var results = c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status);
+                status.Check(true);
+                c_api.TF_DeleteImportGraphDefResults(results);
+            }
 
             _ProcessNewOps(graph);
 
