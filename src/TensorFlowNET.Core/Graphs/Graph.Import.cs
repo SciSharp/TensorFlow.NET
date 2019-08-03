@@ -59,12 +59,16 @@ namespace Tensorflow
             return status;
         }
 
+        static object locker = new object();
         public static Graph ImportFromPB(string file_path, string name = null)
         {
-            var graph = tf.Graph().as_default();
-            var graph_def = GraphDef.Parser.ParseFrom(File.ReadAllBytes(file_path));
-            importer.import_graph_def(graph_def, name: name);
-            return graph;
+            lock (locker)
+            {
+                var graph = tf.Graph().as_default();
+                var graph_def = GraphDef.Parser.ParseFrom(File.ReadAllBytes(file_path));
+                importer.import_graph_def(graph_def, name: name);
+                return graph;
+            }
         }
     }
 }
