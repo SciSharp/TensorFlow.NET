@@ -300,7 +300,7 @@ namespace Tensorflow
                 index += 1;
             }
 
-            return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+            return tf_with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
             {
                 string name = scope;
                 if (begin != null)
@@ -349,7 +349,7 @@ namespace Tensorflow
                 index += 1;
             }
 
-            return with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+            return tf_with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
             {
                 string name = scope;
                 if (begin != null)
@@ -392,8 +392,13 @@ namespace Tensorflow
             return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
         }
 
-        protected override void DisposeUnManagedState()
-            => c_api.TF_DeleteTensor(_handle);
+        protected override void DisposeUnManagedState(IntPtr handle)
+        {
+            if(handle != IntPtr.Zero)
+            {
+                c_api.TF_DeleteTensor(handle);
+            }
+        }
 
         public bool IsDisposed
         {

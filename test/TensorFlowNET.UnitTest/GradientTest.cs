@@ -33,7 +33,8 @@ namespace TensorFlowNET.UnitTest
         public void Gradient2x()
         {
             var graph = tf.Graph().as_default();
-            with(tf.Session(graph), sess => {
+            using (var sess = tf.Session(graph))
+            {
                 var x = tf.constant(7.0f);
                 var y = x * x * tf.constant(0.1f);
 
@@ -42,14 +43,14 @@ namespace TensorFlowNET.UnitTest
 
                 float r = sess.run(grad[0]);
                 Assert.AreEqual(r, 1.4f);
-            });
+            }
         }
 
         [TestMethod]
         public void Gradient3x()
         {
             var graph = tf.Graph().as_default();
-            with(tf.Session(graph), sess => {
+            tf_with(tf.Session(graph), sess => {
                 var x = tf.constant(7.0f);
                 var y = x * x * x * tf.constant(0.1f);
 
@@ -91,14 +92,14 @@ namespace TensorFlowNET.UnitTest
 
             var g = tf.gradients(y, new Tensor[] { slice, slice });
 
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 var r = sess.run(slice);
 
                 Assert.IsTrue(Enumerable.SequenceEqual(r.shape, new[] { 2, 1, 2 }));
                 Assert.IsTrue(Enumerable.SequenceEqual(r[0].GetData<int>(), new[] { 11, 13 }));
                 Assert.IsTrue(Enumerable.SequenceEqual(r[1].GetData<int>(), new[] { 51, 53 }));
-            });
+            }
         }
     }
 }

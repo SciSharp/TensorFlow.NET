@@ -31,7 +31,7 @@ namespace Tensorflow
             if (message == null)
                 message = "";
 
-            return with(ops.name_scope(name, "assert_equal", new { t1, t2, data }), delegate
+            return tf_with(ops.name_scope(name, "assert_equal", new { t1, t2, data }), delegate
             {
                 var x = ops.convert_to_tensor(t1, name: "x");
                 var y = ops.convert_to_tensor(t2, name: "y");
@@ -62,7 +62,7 @@ namespace Tensorflow
             if (message == null)
                 message = "";
 
-            return with(ops.name_scope(name, "assert_positive", new { x, data }), delegate
+            return tf_with(ops.name_scope(name, "assert_positive", new { x, data }), delegate
             {
                 x = ops.convert_to_tensor(x, name: "x");
                 if (data == null)
@@ -86,7 +86,7 @@ namespace Tensorflow
             if (message == null)
                 message = "";
 
-            return with(ops.name_scope(name, "assert_less", new { x, y, data }), delegate
+            return tf_with(ops.name_scope(name, "assert_less", new { x, y, data }), delegate
             {
                 x = ops.convert_to_tensor(x, name: "x");
                 y = ops.convert_to_tensor(y, name: "y");

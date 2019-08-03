@@ -43,7 +43,7 @@ namespace Tensorflow
         public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
-            return with(ops.name_scope(name, "zeros", shape), scope =>
+            return tf_with(ops.name_scope(name, "zeros", shape), scope =>
             {
                 name = scope;
                 switch (dtype)
@@ -67,7 +67,7 @@ namespace Tensorflow
         public static Tensor zeros(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
-            return with(ops.name_scope(name, "zeros", shape), scope =>
+            return tf_with(ops.name_scope(name, "zeros", shape), scope =>
             {
                 name = scope;
                 switch (dtype)
@@ -140,7 +140,7 @@ namespace Tensorflow
         {
             var must_pack = false;
             var converted_elems = new List<object>();
-            return with(ops.name_scope(name), scope =>
+            return tf_with(ops.name_scope(name), scope =>
             {
                 foreach (var (i, elem) in enumerate(list_or_tuple))
                 {
@@ -189,7 +189,7 @@ namespace Tensorflow
 
         public static Tensor rank_internal(Tensor input, string name = null, bool optimize = true)
         {
-            return with(ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
+            return tf_with(ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
             {
                 name = scope;
                 var input_tensor = ops.convert_to_tensor(input);
@@ -217,7 +217,7 @@ namespace Tensorflow
 
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
         {
-            return with(ops.name_scope(name, "ones_like", new { tensor }), scope =>
+            return tf_with(ops.name_scope(name, "ones_like", new { tensor }), scope =>
             {
                 name = scope;
                 var tensor1 = ops.convert_to_tensor(tensor, name: "tensor");
@@ -233,7 +233,7 @@ namespace Tensorflow
         public static Tensor ones(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
-            return with(ops.name_scope(name, "ones", new { shape }), scope =>
+            return tf_with(ops.name_scope(name, "ones", new { shape }), scope =>
             {
                 name = scope;
                 var output = gen_array_ops.fill(shape, constant_op.constant(1.0f, dtype: dtype), name: name);
@@ -244,7 +244,7 @@ namespace Tensorflow
         public static Tensor ones(Tensor[] shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
-            return with(ops.name_scope(name, "ones", new { shape }), scope =>
+            return tf_with(ops.name_scope(name, "ones", new { shape }), scope =>
             {
                 name = scope;
                 var output = _constant_if_small(1, shape[0]);
@@ -257,7 +257,7 @@ namespace Tensorflow
         public static Tensor ones(int[] dims, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
             dtype = dtype.as_base_dtype();
-            return with(ops.name_scope(name, "ones", new { dims }), scope =>
+            return tf_with(ops.name_scope(name, "ones", new { dims }), scope =>
             {
                 name = scope;
                 var shape = ops.convert_to_tensor(dims, dtype: TF_DataType.TF_INT32);
@@ -273,7 +273,7 @@ namespace Tensorflow
             int axis = -1,
             string name = null)
         {
-            return with(ops.name_scope(name, "one_hot", new { indices, depth, dtype }), scope =>
+            return tf_with(ops.name_scope(name, "one_hot", new { indices, depth, dtype }), scope =>
             {
                 name = scope;
                 var on_exists = false;
@@ -341,7 +341,7 @@ namespace Tensorflow
 
         private static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
-            return with(ops.name_scope(name, "Shape", new { input }), scope =>
+            return tf_with(ops.name_scope(name, "Shape", new { input }), scope =>
             {
                 name = scope;
 
@@ -362,7 +362,7 @@ namespace Tensorflow
 
         private static Tensor size_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
-            return with(ops.name_scope(name, "Size", new { input }), scope =>
+            return tf_with(ops.name_scope(name, "Size", new { input }), scope =>
             {
                 name = scope;
 
@@ -382,7 +382,7 @@ namespace Tensorflow
 
         public static Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
         {
-            return with(ops.name_scope(name, "zeros_like", new Tensor[] { tensor }), scope =>
+            return tf_with(ops.name_scope(name, "zeros_like", new Tensor[] { tensor }), scope =>
             {
                 name = scope;
                 tensor = ops.convert_to_tensor(tensor, name: "tensor");
@@ -516,7 +516,7 @@ namespace Tensorflow
         {
             if(values.Length == 1) // Degenerate case of one tensor.
             {
-                return with(ops.name_scope(name), scope => {
+                return tf_with(ops.name_scope(name), scope => {
                     var t = ops.convert_to_tensor(axis, name: "concat_dim", dtype: TF_DataType.TF_INT32);
                     return identity(values[0], name: scope);
                 });
@@ -535,7 +535,7 @@ namespace Tensorflow
 
         public static Tensor transpose<T1, T2>(T1 a, T2 perm, string name = "transpose", bool conjugate = false)
         {
-            return with(ops.name_scope(name, "transpose", new { a }), scope =>
+            return tf_with(ops.name_scope(name, "transpose", new { a }), scope =>
             {
                 return gen_array_ops.transpose(a, perm, name: scope);
             });

@@ -13,12 +13,12 @@ namespace TensorFlowNET.UnitTest
             var x = tf.placeholder(tf.int32);
             var y = x * 3;
 
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 var result = sess.run(y, 
                     new FeedItem(x, 2));
                 Assert.AreEqual((int)result, 6);
-            });
+            }
         }
     }
 }

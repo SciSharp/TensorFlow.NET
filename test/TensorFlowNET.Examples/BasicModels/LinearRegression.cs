@@ -71,7 +71,7 @@ namespace TensorFlowNET.Examples
             var init = tf.global_variables_initializer();
 
             // Start training
-            return with(tf.Session(), sess => 
+            using (var sess = tf.Session())
             {
                 // Run the initializer
                 sess.run(init);
@@ -114,7 +114,7 @@ namespace TensorFlowNET.Examples
                 Console.WriteLine($"Absolute mean square loss difference: {diff}");
 
                 return diff < 0.01;
-            });
+            }
         }
 
         public void PrepareData()

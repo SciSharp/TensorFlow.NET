@@ -73,7 +73,7 @@ namespace TensorFlowNET.Examples
 
             var sw = new Stopwatch();
 
-            return with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 // Run the initializer
                 sess.run(init);
@@ -119,7 +119,7 @@ namespace TensorFlowNET.Examples
                 print($"Accuracy: {acc.ToString("F4")}");
 
                 return acc > 0.9;
-            });
+            }
         }
 
         public void PrepareData()

@@ -55,7 +55,7 @@ namespace Tensorflow
              **/
             var grads = new Dictionary<string, List<List<Tensor>>>();
 
-            with(ops.name_scope(name, "gradients",
+            tf_with(ops.name_scope(name, "gradients",
                 values: ys.Concat(xs).Concat(stop_gradients).Concat(grad_ys)), scope =>
                 {
                     string grad_scope = scope;
@@ -141,7 +141,7 @@ namespace Tensorflow
                                     }
                                 }
 
-                                with(ops.name_scope(op.name + "_grad"), scope1 =>
+                                tf_with(ops.name_scope(op.name + "_grad"), scope1 =>
                                 {
                                     string name1 = scope1;
                                     if (grad_fn != null)

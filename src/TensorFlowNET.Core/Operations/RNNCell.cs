@@ -82,7 +82,7 @@ namespace Tensorflow
         {
             Tensor output = null;
             var state_size = this.state_size;
-            with(ops.name_scope($"{this.GetType().Name}ZeroState", values: new { batch_size }), delegate
+            tf_with(ops.name_scope($"{this.GetType().Name}ZeroState", values: new { batch_size }), delegate
             {
                 output = _zero_state_tensors(state_size, batch_size, dtype);
             });

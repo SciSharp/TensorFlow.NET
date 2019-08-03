@@ -65,7 +65,7 @@ namespace Tensorflow
             return status._handle;
         }
 
-        protected override void DisposeUnManagedState()
-            => c_api.TF_DeleteStatus(_handle);
+        protected override void DisposeUnManagedState(IntPtr handle)
+            => c_api.TF_DeleteStatus(handle);
     }
 }

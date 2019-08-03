@@ -16,7 +16,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         {
             var graph = tf.Graph().as_default();
 
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 var x = tf.constant(2, name: "x");
                 var y = tf.constant(5, name: "y");
@@ -27,7 +27,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
 
                 int result = z.eval(sess);
                 assertEquals(result, 22);
-            });
+            }
         }
 
         [Ignore("need tesnroflow expose AddControlInput API")]
@@ -36,7 +36,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         {
             var graph = tf.Graph().as_default();
 
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 var x = tf.constant(2, name: "x");
                 var y = tf.constant(1, name: "y");
@@ -47,7 +47,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
 
                 int result = z.eval(sess);
                 assertEquals(result, 11);
-            });
+            }
         }
 
         [Ignore("need tesnroflow expose AddControlInput API")]

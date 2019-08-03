@@ -50,7 +50,7 @@ namespace Tensorflow
             string data_format = null, 
             string name = null)
         {
-            return Python.with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
+            return Python.tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
             {
                 name = scope;
                 value = ops.convert_to_tensor(value, name: "input");
@@ -70,7 +70,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor dropout_v2(Tensor x, Tensor rate, Tensor noise_shape = null, int? seed = null, string name = null)
         {
-            return with(ops.name_scope(name, "dropout", x), scope =>
+            return tf_with(ops.name_scope(name, "dropout", x), scope =>
             {
                 name = scope;
                 x = ops.convert_to_tensor(x, name: "x");
@@ -134,7 +134,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null)
         {
-            return with(ops.name_scope(name, "MaxPool", value), scope =>
+            return tf_with(ops.name_scope(name, "MaxPool", value), scope =>
             {
                 name = scope;
                 value = ops.convert_to_tensor(value, name: "input");
@@ -171,7 +171,7 @@ namespace Tensorflow
             Tensor logits = null, string name = null)
         {
             // Reshape logits and labels to rank 2.
-            return with(ops.name_scope(name, default_name: "SparseSoftmaxCrossEntropyWithLogits", (labels, logits)), delegate
+            return tf_with(ops.name_scope(name, default_name: "SparseSoftmaxCrossEntropyWithLogits", (labels, logits)), delegate
             {
                 labels = ops.convert_to_tensor(labels);
                 logits = ops.convert_to_tensor(logits);
@@ -206,7 +206,7 @@ namespace Tensorflow
             int axis = -1,
             string name = null)
         {
-            return with(ops.name_scope(name, "softmax_cross_entropy_with_logits", new { logits, labels }), scope =>
+            return tf_with(ops.name_scope(name, "softmax_cross_entropy_with_logits", new { logits, labels }), scope =>
             {
                 name = scope;
                 var precise_logits = logits;

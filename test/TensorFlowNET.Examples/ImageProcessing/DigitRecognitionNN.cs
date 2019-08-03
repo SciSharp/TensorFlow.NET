@@ -59,11 +59,11 @@ namespace TensorFlowNET.Examples
             PrepareData();
             BuildGraph();
 
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 Train(sess);
                 Test(sess);
-            });
+            };
 
             return loss_test < 0.09 && accuracy_test > 0.95;
         }

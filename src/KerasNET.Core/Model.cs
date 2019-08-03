@@ -115,7 +115,7 @@ namespace Keras
             var init = tf.global_variables_initializer();
 
             float loss_value = 0;
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 sess.run(init);
                 var step = 0;
@@ -133,7 +133,7 @@ namespace Keras
                         Console.WriteLine($"Step {step} loss: {loss_value}");
                 }
                 Console.WriteLine($"Final loss: {loss_value}");
-            });
+            }
 
             return loss_value;
         }

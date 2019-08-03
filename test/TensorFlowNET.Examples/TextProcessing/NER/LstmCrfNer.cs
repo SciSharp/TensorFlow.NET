@@ -63,7 +63,7 @@ namespace TensorFlowNET.Examples.Text.NER
 
             var init = tf.global_variables_initializer();
 
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 sess.run(init);
 
@@ -73,7 +73,7 @@ namespace TensorFlowNET.Examples.Text.NER
                     loss_value = run_epoch(sess, train, dev, epoch);
                     print($"train loss: {loss_value}");
                 }
-            });
+            }
 
             return loss_value < 0.1;
         }

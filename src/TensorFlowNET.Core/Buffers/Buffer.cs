@@ -66,7 +66,7 @@ namespace Tensorflow
             return buffer.Data;
         }
 
-        protected override void DisposeUnManagedState()
-            => c_api.TF_DeleteBuffer(_handle);
+        protected override void DisposeUnManagedState(IntPtr handle)
+            => c_api.TF_DeleteBuffer(handle);
     }
 }

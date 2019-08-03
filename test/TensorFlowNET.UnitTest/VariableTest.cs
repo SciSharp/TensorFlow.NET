@@ -35,9 +35,9 @@ namespace TensorFlowNET.UnitTest
         public void VarCreation()
         {
             tf.Graph().as_default();
-            with(tf.variable_scope("foo"), delegate
+            tf_with(tf.variable_scope("foo"), delegate
             {
-                with(tf.variable_scope("bar"), delegate
+                tf_with(tf.variable_scope("bar"), delegate
                 {
                     var v = tf.get_variable("v", new TensorShape(1));
                     Assert.AreEqual(v.name, "foo/bar/v:0");
@@ -53,14 +53,14 @@ namespace TensorFlowNET.UnitTest
         {
             tf.Graph().as_default();
             variable_scope vs = null;
-            with(tf.variable_scope("foo"), v => vs = v);
+            tf_with(tf.variable_scope("foo"), v => vs = v);
 
             // Re-enter the variable scope.
-            with(tf.variable_scope(vs, auxiliary_name_scope: false), v =>
+            tf_with(tf.variable_scope(vs, auxiliary_name_scope: false), v =>
             {
                 var vs1 = (VariableScope)v;
                 // Restore the original name_scope.
-                with(tf.name_scope(vs1.original_name_scope), delegate
+                tf_with(tf.name_scope(vs1.original_name_scope), delegate
                 {
                     var v1 = tf.get_variable("v", new TensorShape(1));
                     Assert.AreEqual(v1.name, "foo/v:0");
@@ -89,21 +89,20 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void Assign1()
         {
-            with(tf.Graph().as_default(), graph =>
-            {
-                var variable = tf.Variable(31, name: "tree");
-                var init = tf.global_variables_initializer();
+            var graph = tf.Graph().as_default();
 
-                var sess = tf.Session(graph);
-                sess.run(init);
+            var variable = tf.Variable(31, name: "tree");
+            var init = tf.global_variables_initializer();
 
-                var result = sess.run(variable);
-                Assert.IsTrue((int)result == 31);
+            var sess = tf.Session(graph);
+            sess.run(init);
 
-                var assign = variable.assign(12);
-                result = sess.run(assign);
-                Assert.IsTrue((int)result == 12);
-            });
+            var result = sess.run(variable);
+            Assert.IsTrue((int)result == 31);
+
+            var assign = variable.assign(12);
+            result = sess.run(assign);
+            Assert.IsTrue((int)result == 12);
         }
 
         [TestMethod]
@@ -115,12 +114,12 @@ namespace TensorFlowNET.UnitTest
             // Add an op to initialize the variables.
             var init_op = tf.global_variables_initializer();
 
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 sess.run(init_op);
                 // o some work with the model.
                 inc_v1.op.run();
-            });
+            }
         }
 
         /// <summary>

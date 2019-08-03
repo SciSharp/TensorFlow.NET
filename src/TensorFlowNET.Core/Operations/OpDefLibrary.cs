@@ -58,7 +58,7 @@ namespace Tensorflow
             var input_types = new List<TF_DataType>();
             object values = null;
 
-            return with(ops.name_scope(name), scope =>
+            return tf_with(ops.name_scope(name), scope =>
             {
                 var inferred_from = new Dictionary<string, object>();
                 var base_types = new List<TF_DataType>();

@@ -66,7 +66,7 @@ namespace TensorFlowNET.Examples
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
 
-            with(tf.Session(graph), sess =>
+            using (var sess = tf.Session(graph))
             {
                 // Run the initializer
                 sess.run(init);
@@ -112,7 +112,7 @@ namespace TensorFlowNET.Examples
                         }
                     }
                 }
-            });
+            }
 
             return average_loss < 100;
         }

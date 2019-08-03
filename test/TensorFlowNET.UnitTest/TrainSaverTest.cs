@@ -17,10 +17,10 @@ namespace TensorFlowNET.UnitTest
 
         public void ImportGraph()
         {
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 var new_saver = tf.train.import_meta_graph("C:/tmp/my-model.meta");
-            });
+            }
 
             //tf.train.export_meta_graph(filename: "linear_regression.meta.bin");
             // import meta
@@ -42,7 +42,7 @@ namespace TensorFlowNET.UnitTest
 
         public void ImportSavedModel()
         {
-            with(Session.LoadFromSavedModel("mobilenet"), sess =>
+            tf_with(Session.LoadFromSavedModel("mobilenet"), sess =>
             {
                 
             });
@@ -63,14 +63,14 @@ namespace TensorFlowNET.UnitTest
             // Add ops to save and restore all the variables.
             var saver = tf.train.Saver();
 
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 sess.run(init_op);
 
                 // Save the variables to disk.
                 var save_path = saver.save(sess, "/tmp/model1.ckpt");
                 Console.WriteLine($"Model saved in path: {save_path}");
-            });
+            }
         }
 
         public void Save2()
@@ -87,7 +87,7 @@ namespace TensorFlowNET.UnitTest
             // Add ops to save and restore all the variables.
             var saver = tf.train.Saver();
 
-            with<Session>(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 sess.run(init_op);
                 // o some work with the model.
@@ -97,7 +97,7 @@ namespace TensorFlowNET.UnitTest
                 // Save the variables to disk.
                 var save_path = saver.save(sess, "/tmp/model2.ckpt");
                 Console.WriteLine($"Model saved in path: {save_path}");
-            });
+            }
         }
     }
 }

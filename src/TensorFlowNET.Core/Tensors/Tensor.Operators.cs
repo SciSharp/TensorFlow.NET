@@ -123,7 +123,7 @@ namespace Tensorflow
                 dtype = tr.dtype.as_base_dtype();
 
             var namescope = ops.name_scope(null, name, new { x, y });
-            return with(namescope, scope =>
+            return tf_with(namescope, scope =>
             {
                 Tensor result = null;
                 var x1 = ops.convert_to_tensor(x, dtype: dtype, name: "x");

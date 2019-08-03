@@ -54,7 +54,7 @@ namespace TensorFlowNET.Examples
             float accuracy = 0f;
             // Initialize the variables (i.e. assign their default value)
             var init = tf.global_variables_initializer();
-            with(tf.Session(), sess =>
+            using (var sess = tf.Session())
             {
                 // Run the initializer
                 sess.run(init);
@@ -77,7 +77,7 @@ namespace TensorFlowNET.Examples
                 }
 
                 print($"Accuracy: {accuracy}");
-            });
+            }
 
             return accuracy > 0.8;
         }
