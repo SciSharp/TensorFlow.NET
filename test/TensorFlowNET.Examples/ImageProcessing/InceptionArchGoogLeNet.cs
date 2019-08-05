@@ -41,7 +41,8 @@ namespace TensorFlowNET.Examples
                 input_mean: input_mean,
                 input_std: input_std);
 
-            var graph = Graph.ImportFromPB(Path.Join(dir, pbFile));
+            var graph = new Graph();
+            graph.Import(Path.Join(dir, pbFile));
             var input_operation = graph.get_operation_by_name(input_name);
             var output_operation = graph.get_operation_by_name(output_name);
 

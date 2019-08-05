@@ -31,7 +31,7 @@ namespace TensorFlowNET.Examples
         {
             PrepareData();
            
-            var graph = new Graph().as_default();
+            var graph = new Graph();
             //import GraphDef from pb file
             graph.Import(Path.Join(dir, pbFile));
 
