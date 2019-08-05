@@ -7,12 +7,13 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class NameScopeTest
     {
-        Graph g = ops.get_default_graph();
         string name = "";
 
         [TestMethod]
         public void NestedNameScope()
         {
+            Graph g = tf.Graph().as_default();
+
             tf_with(new ops.NameScope("scope1"), scope1 =>
             {
                 name = scope1;
@@ -36,6 +37,8 @@ namespace TensorFlowNET.UnitTest
                 var const3 = tf.constant(2.0);
                 Assert.AreEqual("scope1/Const_1:0", const3.name);
             });
+
+            g.Dispose();
 
             Assert.AreEqual("", g._name_stack);
         }
