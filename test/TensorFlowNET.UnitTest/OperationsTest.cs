@@ -131,13 +131,22 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
-        public void logicalAndTest()
+        public void logicalOpsTest()
         {
             var a = tf.constant(new[] {1f, 2f, 3f, 4f, -4f, -3f, -2f, -1f});
             var b = tf.less(a, 0f);
             var c = tf.greater(a, 0f);
             var d = tf.cast(tf.logical_and(b, c), tf.int32);
             var check = np.array(new[] { 0, 0, 0, 0, 0, 0, 0, 0 });
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(d);
+                Assert.IsTrue(o.array_equal(check));
+            }
+
+            d = tf.cast(tf.logical_not(b), tf.int32);
+            check = np.array(new[] { 1, 1, 1, 1, 0, 0, 0, 0 });
 
             using (var sess = tf.Session())
             {
