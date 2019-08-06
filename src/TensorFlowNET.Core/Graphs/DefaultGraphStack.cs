@@ -34,10 +34,17 @@ namespace Tensorflow
 
         public Graph get_controller()
         {
-            if (stack.Count == 0)
+            if (stack.Count(x => x.IsDefault) == 0)
                 stack.Add(new StackModel { Graph = tf.Graph(), IsDefault = true });
 
-            return stack.First(x => x.IsDefault).Graph;
+            return stack.Last(x => x.IsDefault).Graph;
+        }
+
+        public bool remove(Graph g)
+        {
+            var sm = stack.FirstOrDefault(x => x.Graph == g);
+            if (sm == null) return false;
+            return stack.Remove(sm);
         }
 
         public void reset()

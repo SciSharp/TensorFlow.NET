@@ -73,9 +73,8 @@ namespace Tensorflow
         all variables that are created during the construction of a graph. The caller
         may define additional collections by specifying a new name.     
      */
-    public partial class Graph : IPython, IDisposable, IEnumerable<Operation>
+    public partial class Graph : DisposableObject, IEnumerable<Operation>
     {
-        private IntPtr _handle;
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
         public Dictionary<string, ITensorOrOperation> _nodes_by_name;
         private Dictionary<string, int> _names_in_use;
@@ -119,10 +118,6 @@ namespace Tensorflow
             _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
             _names_in_use = new Dictionary<string, int>();
             _graph_key = $"grap-key-{ops.uid()}/";
-        }
-
-        public void __enter__()
-        {
         }
 
         public ITensorOrOperation as_graph_element(object obj, bool allow_tensor = true, bool allow_operation = true)
@@ -443,14 +438,15 @@ namespace Tensorflow
             _unfetchable_ops.Add(op);
         }
 
-        public void Dispose()
+        protected override void DisposeManagedState()
         {
-            /*if (_handle != IntPtr.Zero)
-                c_api.TF_DeleteGraph(_handle);
+            ops.default_graph_stack.remove(this);
+        }
 
-            _handle = IntPtr.Zero;
-
-            GC.SuppressFinalize(this);*/
+        protected override void DisposeUnManagedState(IntPtr handle)
+        {
+            Console.WriteLine($"Destroy graph {handle}");
+            c_api.TF_DeleteGraph(handle);
         }
 
         /// <summary>
@@ -481,15 +477,17 @@ namespace Tensorflow
             return new TensorShape(dims.Select(x => (int)x).ToArray());
         }
 
+        string debugString = string.Empty;
         public override string ToString()
         {
-            int len = 0;
-            return c_api.TF_GraphDebugString(_handle, out len);
-        }
+            return $"{graph_key}, ({_handle})"; 
+            /*if (string.IsNullOrEmpty(debugString))
+            {
+                int len = 0;
+                debugString = c_api.TF_GraphDebugString(_handle, out len);
+            }
 
-        public void __exit__()
-        {
-
+            return debugString;*/
         }
 
         private IEnumerable<Operation> GetEnumerable()

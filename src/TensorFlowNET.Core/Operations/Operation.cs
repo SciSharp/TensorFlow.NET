@@ -84,7 +84,7 @@ namespace Tensorflow
 
             // Dict mapping op name to file and line information for op colocation
             // context managers.
-            _control_flow_context = graph._get_control_flow_context();
+            _control_flow_context = _graph._get_control_flow_context();
 
             // Note: _control_flow_post_processing() must not be called here, the caller is responsible for calling it when using this constructor.
         }

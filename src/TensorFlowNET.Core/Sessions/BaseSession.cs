@@ -31,7 +31,6 @@ namespace Tensorflow
         protected bool _closed;
         protected int _current_version;
         protected byte[] _target;
-        protected IntPtr _session;
         public Graph graph => _graph;
 
         public BaseSession(string target = "", Graph g = null, SessionOptions opts = null)
@@ -46,7 +45,7 @@ namespace Tensorflow
 
             var status = new Status();
 
-            _session = c_api.TF_NewSession(_graph, opts ?? newOpts, status);
+            _handle = c_api.TF_NewSession(_graph, opts ?? newOpts, status);
 
             // dispose newOpts
             if (opts == null)
@@ -216,7 +215,7 @@ namespace Tensorflow
 
             var output_values = fetch_list.Select(x => IntPtr.Zero).ToArray();
 
-            c_api.TF_SessionRun(_session,
+            c_api.TF_SessionRun(_handle,
                 run_options: null,
                 inputs: feed_dict.Select(f => f.Key).ToArray(),
                 input_values: feed_dict.Select(f => (IntPtr)f.Value).ToArray(),

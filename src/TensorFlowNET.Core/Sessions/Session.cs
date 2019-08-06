@@ -30,7 +30,7 @@ namespace Tensorflow
         public Session(IntPtr handle, Graph g = null)
             : base("", g, null)
         {
-            _session = handle;
+            _handle = handle;
         }
 
         public Session(Graph g, SessionOptions opts = null, Status s = null)
@@ -73,7 +73,7 @@ namespace Tensorflow
             return new Session(sess, g: new Graph(graph).as_default());
         }
 
-        public static implicit operator IntPtr(Session session) => session._session;
+        public static implicit operator IntPtr(Session session) => session._handle;
         public static implicit operator Session(IntPtr handle) => new Session(handle);
 
         public void __enter__()
