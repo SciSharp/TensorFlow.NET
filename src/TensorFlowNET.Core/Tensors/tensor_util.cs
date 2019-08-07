@@ -57,7 +57,7 @@ namespace Tensorflow
         public static NDArray MakeNdarray(TensorProto tensor)
         {
             var shape = tensor.TensorShape.Dim.Select(x => (int)x.Size).ToArray();
-            int num_elements = shape.Length == 0 ? NDArray.Scalar(1) : np.prod(shape);
+            int num_elements = np.prod(shape);
             var tensor_dtype =  tensor.Dtype.as_numpy_dtype();
 
             if (tensor.TensorContent.Length > 0)

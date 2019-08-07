@@ -24,7 +24,7 @@ namespace Tensorflow.Hub
             images = np.multiply(images, 1.0f / 255.0f);
             Data = images;
 
-            labels.astype(dataType);
+            labels = labels.astype(dataType);
             Labels = labels;
         }
 
