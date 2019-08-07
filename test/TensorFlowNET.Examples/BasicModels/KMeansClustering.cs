@@ -70,7 +70,8 @@ namespace TensorFlowNET.Examples
                 OneHot = true,
                 TrainSize = train_size,
                 ValidationSize = validation_size,
-                TestSize = test_size
+                TestSize = test_size,
+                ShowProgressInConsole = true
             };
 
             mnist = loader.LoadAsync(setting).Result;

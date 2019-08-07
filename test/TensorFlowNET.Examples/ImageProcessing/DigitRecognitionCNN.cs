@@ -310,7 +310,7 @@ namespace TensorFlowNET.Examples
             
         public void PrepareData()
         {
-            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true).Result;
+            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true, showProgressInConsole: true).Result;
             (x_train, y_train) = Reformat(mnist.Train.Data, mnist.Train.Labels);
             (x_valid, y_valid) = Reformat(mnist.Validation.Data, mnist.Validation.Labels);
             (x_test, y_test) = Reformat(mnist.Test.Data, mnist.Test.Labels);
