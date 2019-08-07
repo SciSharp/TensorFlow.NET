@@ -153,6 +153,15 @@ namespace TensorFlowNET.UnitTest
                 var o = sess.run(d);
                 Assert.IsTrue(o.array_equal(check));
             }
+
+            d = tf.cast(tf.logical_or(b, c), tf.int32);
+            check = np.array(new[] { 1, 1, 1, 1, 1, 1, 1, 1 });
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(d);
+                Assert.IsTrue(o.array_equal(check));
+            }
         }
 
         [TestMethod]

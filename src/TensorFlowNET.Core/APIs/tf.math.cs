@@ -195,6 +195,9 @@ namespace Tensorflow
         public static Tensor logical_not(Tensor x, string name = null)
             => gen_math_ops.logical_not(x, name);
 
+        public static Tensor logical_or(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.logical_or(x, y, name);
+
         /// <summary>
         /// Clips tensor values to a specified min and max.
         /// </summary>
