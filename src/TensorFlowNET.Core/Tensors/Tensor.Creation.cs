@@ -520,41 +520,24 @@ namespace Tensorflow
             var dataType = ToTFDataType(nd.dtype);
             // shape
             var dims = nd.shape.Select(x => (long)x).ToArray();
-            var nd1 = nd.ravel();
-            switch (nd.dtype.Name)
+            // var nd1 = nd.ravel();
+            /*switch (nd.dtype.Name)
             {
                 case "Boolean":
                     var boolVals = Array.ConvertAll(nd1.ToArray<bool>(), x => Convert.ToByte(x));
                     Marshal.Copy(boolVals, 0, dotHandle, nd.size);
                     break;
-                case "Int16":
-                    Marshal.Copy(nd1.ToArray<short>(), 0, dotHandle, nd.size);
-                    break;
-                case "Int32":
-                    Marshal.Copy(nd1.ToArray<int>(), 0, dotHandle, nd.size);
-                    break;
-                case "Int64":
-                    Marshal.Copy(nd1.ToArray<long>(), 0, dotHandle, nd.size);
-                    break;
-                case "Single":
-                    Marshal.Copy(nd1.ToArray<float>(), 0, dotHandle, nd.size);
-                    break;
-                case "Double":
-                    Marshal.Copy(nd1.ToArray<double>(), 0, dotHandle, nd.size);
-                    break;
-                case "Byte":
-                    Marshal.Copy(nd1.ToArray<byte>(), 0, dotHandle, nd.size);
-                    break;
                 case "String":
                     throw new NotImplementedException($"Marshal.Copy failed for {nd.dtype.Name}.");
                     //return new Tensor(UTF8Encoding.UTF8.GetBytes(nd.ToArray<string>(0)), TF_DataType.TF_STRING);
                 default:
-                    throw new NotImplementedException($"Marshal.Copy failed for {nd.dtype.Name}.");
-            }
+                    System.Buffer.MemoryCopy(nd1.Unsafe.Address, dotHandle.ToPointer(), nd.size, nd.size);
+                    break;
+            }*/
             var tfHandle = c_api.TF_NewTensor(dataType,
                 dims,
                 dims.Length,
-                dotHandle,
+                new IntPtr(nd.Unsafe.Address),
                 (UIntPtr)buffersize,
                 _hGlobalDeallocator,
                 ref _deallocatorArgs);
@@ -673,7 +656,8 @@ namespace Tensorflow
         {
             if (args.deallocator_called)
                 return;
-            Marshal.FreeHGlobal(dataPtr);
+            // NumSharp will dispose
+            // Marshal.FreeHGlobal(dataPtr);
             args.deallocator_called = true;
         }
 
