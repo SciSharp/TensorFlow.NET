@@ -55,7 +55,7 @@ namespace Tensorflow
                 Console.WriteLine(Message);
                 if (throwException)
                 {
-                    // throw new Exception(Message);
+                    throw new Exception(Message);
                 }
             }
         }
