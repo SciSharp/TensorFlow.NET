@@ -116,11 +116,11 @@ namespace Tensorflow.Hub
         {
             var cols = 0;
 
-            await Task.Delay(1000);
+            await Task.Delay(100);
 
             while (!cts.IsCancellationRequested)
             {
-                await Task.Delay(1000);
+                await Task.Delay(100);
                 Console.Write(".");
                 cols++;
 

@@ -20,7 +20,7 @@ namespace Tensorflow.Hub
             NumOfExamples = images.shape[0];
 
             images = images.reshape(images.shape[0], images.shape[1] * images.shape[2]);
-            images.astype(dataType);
+            images = images.astype(dataType);
             images = np.multiply(images, 1.0f / 255.0f);
             Data = images;
 

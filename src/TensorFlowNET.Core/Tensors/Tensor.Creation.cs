@@ -514,7 +514,7 @@ namespace Tensorflow
             if (nd.dtype.Name != "String")
             {
                 buffersize = (nd.size * nd.dtypesize);
-                dotHandle = Marshal.AllocHGlobal(buffersize);
+                // dotHandle = Marshal.AllocHGlobal(buffersize);
             }
 
             var dataType = ToTFDataType(nd.dtype);
