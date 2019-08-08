@@ -445,7 +445,6 @@ namespace Tensorflow
 
         protected override void DisposeUnManagedState(IntPtr handle)
         {
-            Console.WriteLine($"Destroy graph {handle}");
             c_api.TF_DeleteGraph(handle);
         }
 
