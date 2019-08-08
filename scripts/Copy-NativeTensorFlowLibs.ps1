@@ -7,14 +7,22 @@
     The TensorFlow libraries are copied for Windows and Linux and it becomes
     possible to bundle a meta-package containing them.
 
-.PARAMETER CpuLibraries
-    Switch indicating if the script should download the CPU or GPU version of the
+.PARAMETER SkipCpuLibraries
+    Setting this to true skips the downloading of the CPU version of the
     TensorFlow libraries.
-    By default the GPU version of the libraries is downloaded.
+    By default the CPU version of the libraries are downloaded and put in the
+    relevant projects.
+
+.PARAMETER SkipGpuLibraries
+    Setting this to tru skips the downloading of the GPU version of the 
+    TensorFlow libraries.
+    By default the GPU version of the libraries are downloaded and put in the
+    releavant projects.
 
 #>
 param(
-    [switch] $CpuLibraries = $false
+    [switch] $SkipCpuLibraries = $false,
+    [switch] $SkipGpuLibraries = $false
 )
 
 function Expand-TarGzFiles {
@@ -128,22 +136,32 @@ function Copy-Archive {
 }
 
 $LinuxGpuArchive = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-linux-x86_64-1.14.0.tar.gz"
+$LinuxCpuArchive = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz"
 $LinuxFiles = @(".\libtensorflow.tar", ".\lib\libtensorflow.so", ".\lib\libtensorflow.so.1", ".\lib\libtensorflow.so.1.14.0", `
         ".\lib\libtensorflow_framework.so", ".\lib\libtensorflow_framework.so.1", ".\lib\libtensorflow_framework.so.1.14.0")
 $WindowsGpuArchive = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-windows-x86_64-1.14.0.zip"
+$WindowsCpuArchive = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-windows-x86_64-1.14.0.zip"
 $WindowsFiles = @("lib\tensorflow.dll")
 $PackagesDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "packages")
 
 
-if (-not $CpuLibraries) {
-    $WindowsArchive = $WindowsGpuArchive
-    $LinuxArchive = $LinuxGpuArchive
+if (-not $SkipGpuLibraries) {
+    $Archive = Copy-Archive -ArchiveUrl $WindowsGpuArchive -TargetDirectory $PackagesDirectory
+    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist")
+    Expand-ZipFiles $Archive $WindowsFiles $TargetDirectory
+
+    $Archive = Copy-Archive -ArchiveUrl $LinuxGpuArchive -TargetDirectory $PackagesDirectory
+    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist")
+    Expand-TarGzFiles $Archive $LinuxFiles $TargetDirectory
 }
 
-$Archive = Copy-Archive -ArchiveUrl $WindowsArchive -TargetDirectory $PackagesDirectory
-$TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist")
-Expand-ZipFiles $Archive $WindowsFiles $TargetDirectory
+if (-not $SkipCpuLibraries) {
+    $Archive = Copy-Archive -ArchiveUrl $WindowsCpuArchive -TargetDirectory $PackagesDirectory
+    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.win-x64.SciSharp.TensorFlow-Cpu.Redist")
+    Expand-ZipFiles $Archive $WindowsFiles $TargetDirectory
 
-$Archive = Copy-Archive -ArchiveUrl $LinuxArchive -TargetDirectory $PackagesDirectory
-$TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist")
-Expand-TarGzFiles $Archive $LinuxFiles $TargetDirectory
+    $Archive = Copy-Archive -ArchiveUrl $LinuxCpuArchive -TargetDirectory $PackagesDirectory
+    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.linux-x64.SciSharp.Tensorflow-Cpu.Redist")
+    Expand-TarGzFiles $Archive $LinuxFiles $TargetDirectory
+}
+
