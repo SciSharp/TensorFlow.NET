@@ -357,6 +357,20 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor logical_not(Tensor x, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LogicalNot", name, args: new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor logical_or(Tensor x, Tensor y, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LogicalOr", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor squared_difference(Tensor x, Tensor y, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("SquaredDifference", name, args: new { x, y, name });

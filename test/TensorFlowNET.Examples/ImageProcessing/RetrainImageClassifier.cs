@@ -52,7 +52,8 @@ namespace TensorFlowNET.Examples
         // The location where variable checkpoints will be stored.
         string CHECKPOINT_NAME = Path.Join(data_dir, "_retrain_checkpoint");
         string tfhub_module = "https://tfhub.dev/google/imagenet/inception_v3/feature_vector/3";
-        string final_tensor_name = "final_result";
+        string input_tensor_name = "Placeholder";
+        string final_tensor_name = "Score";
         float testing_percentage = 0.1f;
         float validation_percentage = 0.1f;
         float learning_rate = 0.01f;
@@ -81,13 +82,13 @@ namespace TensorFlowNET.Examples
             PrepareData();
 
             #region For debug purpose
-            
+
             // predict images
             // Predict(null);
 
             // load saved pb and test new images.
             // Test(null); 
-            
+
             #endregion
 
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
@@ -276,16 +277,13 @@ namespace TensorFlowNET.Examples
         private (Graph, Tensor, Tensor, bool) create_module_graph()
         {
             var (height, width) = (299, 299);
-
-            return tf_with(tf.Graph().as_default(), graph =>
-            {
-                tf.train.import_meta_graph("graph/InceptionV3.meta");
-                Tensor resized_input_tensor = graph.OperationByName("Placeholder"); //tf.placeholder(tf.float32, new TensorShape(-1, height, width, 3));
-                // var m = hub.Module(module_spec);
-                Tensor bottleneck_tensor = graph.OperationByName("module_apply_default/hub_output/feature_vector/SpatialSqueeze");// m(resized_input_tensor);
-                var wants_quantization = false;
-                return (graph, bottleneck_tensor, resized_input_tensor, wants_quantization);
-            });
+            var graph = tf.Graph().as_default();
+            tf.train.import_meta_graph("graph/InceptionV3.meta");
+            Tensor resized_input_tensor = graph.OperationByName(input_tensor_name); //tf.placeholder(tf.float32, new TensorShape(-1, height, width, 3));
+                                                                                // var m = hub.Module(module_spec);
+            Tensor bottleneck_tensor = graph.OperationByName("module_apply_default/hub_output/feature_vector/SpatialSqueeze");// m(resized_input_tensor);
+            var wants_quantization = false;
+            return (graph, bottleneck_tensor, resized_input_tensor, wants_quantization);
         }
 
         private (NDArray, long[], string[]) get_random_cached_bottlenecks(Session sess, Dictionary<string, Dictionary<string, string[]>> image_lists,
@@ -594,13 +592,10 @@ namespace TensorFlowNET.Examples
                 create_module_graph();
 
             // Add the new layer that we'll be training.
-            tf_with(graph.as_default(), delegate
-            {
-                (train_step, cross_entropy, bottleneck_input,
-                 ground_truth_input, final_tensor) = add_final_retrain_ops(
-                     class_count, final_tensor_name, bottleneck_tensor,
-                     wants_quantization, is_training: true);
-            });
+            (train_step, cross_entropy, bottleneck_input,
+             ground_truth_input, final_tensor) = add_final_retrain_ops(
+                 class_count, final_tensor_name, bottleneck_tensor,
+                 wants_quantization, is_training: true);
 
             return graph;
         }
@@ -734,15 +729,15 @@ namespace TensorFlowNET.Examples
             var labels = File.ReadAllLines(output_labels);
 
             // predict image
-            var img_path = Path.Join(image_dir, "roses", "12240303_80d87f77a3_n.jpg");
+            var img_path = Path.Join(image_dir, "daisy", "5547758_eea9edfd54_n.jpg");
             var fileBytes = ReadTensorFromImageFile(img_path);
 
             // import graph and variables
             var graph = new Graph();
             graph.Import(output_graph, "");
 
-            Tensor input = graph.OperationByName("Placeholder");
-            Tensor output = graph.OperationByName("final_result");
+            Tensor input = graph.OperationByName(input_tensor_name);
+            Tensor output = graph.OperationByName(final_tensor_name);
 
             using (var sess = tf.Session(graph))
             {

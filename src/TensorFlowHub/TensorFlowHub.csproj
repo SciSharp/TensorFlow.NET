@@ -2,7 +2,7 @@
   <PropertyGroup>
     <RootNamespace>Tensorflow.Hub</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Authors>Kerry Jiang</Authors>
     <Company>SciSharp STACK</Company>
     <Copyright>Apache 2.0</Copyright>
@@ -13,7 +13,7 @@
     <Description>TensorFlow Hub is a library to foster the publication, discovery, and consumption of reusable parts of machine learning models.</Description>
     <PackageId>SciSharp.TensorFlowHub</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>1. Add MNIST loader.</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>

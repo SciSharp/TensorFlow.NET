@@ -121,7 +121,7 @@ namespace TensorFlowNET.Examples
             
         public void PrepareData()
         {
-            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true).Result;
+            mnist = MnistModelLoader.LoadAsync(".resources/mnist", oneHot: true, showProgressInConsole: true).Result;
         }
 
         public void Train(Session sess)
