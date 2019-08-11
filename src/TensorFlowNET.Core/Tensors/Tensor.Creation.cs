@@ -561,122 +561,50 @@ namespace Tensorflow
             return tfHandle;
         }
 
+        private GCHandle gcHandle;
+        private IntPtr NewTensor<T>(T[] array, TF_DataType dataType, long[] dims, int len, int element_size)
+        {
+            gcHandle = GCHandle.Alloc(array, GCHandleType.Pinned);
+            IntPtr p = gcHandle.AddrOfPinnedObject();
+            return c_api.TF_NewTensor(dataType,
+                dims,
+                dims.Length,
+                p,
+                (UIntPtr)(len * element_size),
+                _nothingDeallocator,
+                ref _deallocatorArgs);
+            // free gcHandle at DisposeManagedState(), free here causes random crash
+            // TF_NewTensor already copied data into native, still don't know why we can't free immediately.
+        }
+
         private unsafe IntPtr Allocate(NDArray nd, TF_DataType? tensorDType = null)
         {
-            IntPtr dotHandle = IntPtr.Zero;
             IntPtr tfHandle = IntPtr.Zero;
-            int buffersize = nd.size * nd.dtypesize;
-
             var dataType = ToTFDataType(nd.dtype);
             // shape
             var dims = nd.shape.Select(x => (long)x).ToArray();
             switch (nd.dtype.Name)
             {
                 case "Boolean":
-                    {
-                        var boolVals = Array.ConvertAll(nd.Data<bool>(), x => Convert.ToByte(x));
-                        var array = nd.Data<byte>();
-                        fixed (byte* h = &array[0])
-                        {
-                            tfHandle = c_api.TF_NewTensor(dataType,
-                                dims,
-                                dims.Length,
-                                new IntPtr(h),
-                                (UIntPtr)buffersize,
-                                _nothingDeallocator,
-                                ref _deallocatorArgs);
-                        }
-                    }
+                    tfHandle = NewTensor(nd.Data<bool>(), dataType, dims, nd.size, nd.dtypesize);
                     break;
                 case "Int16":
-                    {
-                        var array = nd.Data<short>();
-                        fixed (short* h = &array[0])
-                        {
-                            tfHandle = c_api.TF_NewTensor(dataType,
-                                dims,
-                                dims.Length,
-                                new IntPtr(h),
-                                (UIntPtr)buffersize,
-                                _nothingDeallocator,
-                                ref _deallocatorArgs);
-                        }
-                    }
+                    tfHandle = NewTensor(nd.Data<short>(), dataType, dims, nd.size, nd.dtypesize);
                     break;
                 case "Int32":
-                    {
-                        var array = nd.Data<int>();
-                        fixed (int* h = &array[0])
-                        {
-                            tfHandle = c_api.TF_NewTensor(dataType,
-                                dims,
-                                dims.Length,
-                                new IntPtr(h),
-                                (UIntPtr)buffersize,
-                                _nothingDeallocator,
-                                ref _deallocatorArgs);
-                        }
-                    }
+                    tfHandle = NewTensor(nd.Data<int>(), dataType, dims, nd.size, nd.dtypesize);
                     break;
                 case "Int64":
-                    {
-                        var array = nd.Data<long>();
-                        fixed (long* h = &array[0])
-                        {
-                            tfHandle = c_api.TF_NewTensor(dataType,
-                                dims,
-                                dims.Length,
-                                new IntPtr(h),
-                                (UIntPtr)buffersize,
-                                _nothingDeallocator,
-                                ref _deallocatorArgs);
-                        }
-                    }
+                    tfHandle = NewTensor(nd.Data<long>(), dataType, dims, nd.size, nd.dtypesize);
                     break;
                 case "Single":
-                    {
-                        var array = nd.Data<float>();
-                        fixed (float* h = &array[0])
-                        {
-                            tfHandle = c_api.TF_NewTensor(dataType,
-                                dims,
-                                dims.Length,
-                                new IntPtr(h),
-                                (UIntPtr)buffersize,
-                                _nothingDeallocator,
-                                ref _deallocatorArgs);
-                        }
-                    }
+                    tfHandle = NewTensor(nd.Data<float>(), dataType, dims, nd.size, nd.dtypesize);
                     break;
                 case "Double":
-                    {
-                        var array = nd.Data<double>();
-                        fixed (double* h = &array[0])
-                        {
-                            tfHandle = c_api.TF_NewTensor(dataType,
-                                dims,
-                                dims.Length,
-                                new IntPtr(h),
-                                (UIntPtr)buffersize,
-                                _nothingDeallocator,
-                                ref _deallocatorArgs);
-                        }
-                    }
+                    tfHandle = NewTensor(nd.Data<double>(), dataType, dims, nd.size, nd.dtypesize);
                     break;
                 case "Byte":
-                    {
-                        var array = nd.Data<byte>();
-                        fixed (byte* h = &array[0])
-                        {
-                            tfHandle = c_api.TF_NewTensor(dataType,
-                                dims,
-                                dims.Length,
-                                new IntPtr(h),
-                                (UIntPtr)buffersize,
-                                _nothingDeallocator,
-                                ref _deallocatorArgs);
-                        }
-                    }
+                    tfHandle = NewTensor(nd.Data<byte>(), dataType, dims, nd.size, nd.dtypesize);
                     break;
                 case "String":
                     return new Tensor(UTF8Encoding.UTF8.GetBytes(nd.Data<string>(0)), TF_DataType.TF_STRING);
@@ -808,7 +736,7 @@ namespace Tensorflow
             if (args.deallocator_called || args.gc_handle == IntPtr.Zero)
                 return;
             // note: since the ptr given to tensorflow is just the addr of the pinned object we can not directly free it! we need to free the gcHandle instead
-            GCHandle.FromIntPtr(args.gc_handle).Free();
+            //args.gchandle.Free();
             args.deallocator_called = true;
         }
 
