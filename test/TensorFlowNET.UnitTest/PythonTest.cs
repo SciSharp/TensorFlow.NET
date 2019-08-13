@@ -121,12 +121,12 @@ namespace TensorFlowNET.UnitTest
 
         #region tensor evaluation and test session
 
-        protected object _eval_helper(Tensor[] tensors)
-        {
-            if (tensors == null)
-                return null;
-            return nest.map_structure(self._eval_tensor, tensors);
-        }
+        //protected object _eval_helper(Tensor[] tensors)
+        //{
+        //    if (tensors == null)
+        //        return null;
+        //    return nest.map_structure(self._eval_tensor, tensors);
+        //}
 
         protected object _eval_tensor(object tensor)
         {
