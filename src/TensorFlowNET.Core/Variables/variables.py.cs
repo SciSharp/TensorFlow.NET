@@ -50,6 +50,8 @@ namespace Tensorflow
 
             return all.ToArray();
         }
+        private static List<VariableV1> GetVariableCollection(string graphKey, string scope = null)
+            => ops.get_collection(graphKey, scope) as List<VariableV1> ?? new List<VariableV1>();
 
         /// <summary>
         /// Returns global variables.
@@ -63,11 +65,8 @@ namespace Tensorflow
         /// </param>
         /// <returns>A list of `Variable` objects.</returns>
         public static List<VariableV1> global_variables(string scope = null)
-        {
-            var result = ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope);
+            => GetVariableCollection(ops.GraphKeys.GLOBAL_VARIABLES, scope);
 
-            return result == null ? new List<VariableV1>() : result as List<VariableV1>;
-        }
 
         /// <summary>
         /// Returns an Op that initializes a list of variables.
@@ -85,7 +84,9 @@ namespace Tensorflow
 
         public static Tensor global_variables_initializer()
         {
-            throw new NotImplementedException();
+            //if context.executing_eagerly() is true
+            //  return gen_control_flow_ops.no_op(name: "global_variables_initializer");
+            return variables_initializer(global_variables().ToArray());
         }
     }
 }

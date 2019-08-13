@@ -15,22 +15,17 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tensorflow
 {
     public static partial class tf
     {
         public static VariableV1[] global_variables(string scope = null)
-        {
-            return (ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
-                .ToArray();
-        }
+            => variables.global_variables(scope).ToArray();
 
         public static Operation global_variables_initializer()
-        {
-            var g = variables.global_variables();
-            return variables.variables_initializer(g.ToArray());
-        }
+            => variables.global_variables_initializer();
 
         public static RefVariable get_variable(string name,
             TensorShape shape = null,
