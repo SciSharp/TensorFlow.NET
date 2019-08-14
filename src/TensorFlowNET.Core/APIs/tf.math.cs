@@ -39,8 +39,8 @@ namespace Tensorflow
         public static Tensor asin(Tensor x, string name = null)
             => gen_math_ops.asin(x, name);
 
-        public static Tensor add<Tx, Ty>(Tx a, Ty b) 
-            => gen_math_ops.add(a, b);
+        public static Tensor add<Tx, Ty>(Tx a, Ty b, string name = null) 
+            => gen_math_ops.add(a, b, name: name);
 
         /// <summary>
         /// Computes atan of x element-wise.

@@ -26,6 +26,44 @@ namespace Tensorflow
 {
     public class control_flow_ops
     {
+        public static Tensor _AddNextAndBackEdge(Tensor m, Tensor v, bool enforce_shape_invariant = true)
+        {
+            v = ops.convert_to_tensor(v);
+            v = _NextIteration(v);
+            if (enforce_shape_invariant)
+                _EnforceShapeInvariant(m, v);
+            m.op._update_input(1, v);
+            return v;
+        }
+
+        /// <summary>
+        /// Check if the shapes of the loops variables are invariants.
+        /// </summary>
+        /// <param name="merge_var"></param>
+        /// <param name="next_var"></param>
+        public static void _EnforceShapeInvariant(Tensor merge_var, Tensor next_var)
+        {
+
+        }
+
+        public static Tensor exit(Tensor data, string name = null)
+        {
+            data = ops.internal_convert_to_tensor_or_indexed_slices(data, as_ref: true);
+            if (data.dtype.is_ref_dtype())
+                return gen_control_flow_ops.ref_exit(data, name: name);
+            else
+                return gen_control_flow_ops._exit(data, name: name);
+        }
+
+        public static Tensor _NextIteration(Tensor data, string name = null)
+        {
+            data = ops.internal_convert_to_tensor_or_indexed_slices(data, as_ref: true);
+            if (data.dtype.is_ref_dtype())
+                return gen_control_flow_ops.ref_next_iteration(data, name: name);
+            else
+                return gen_control_flow_ops.next_iteration(data, name: name);
+        }
+
         public static Operation Assert(Tensor condition, object[] data, int? summarize = null, string name = null)
         {
             return tf_with(ops.name_scope(name, "Assert", new { condition, data }), scope =>
@@ -211,6 +249,14 @@ namespace Tensorflow
                 throw new NotImplementedException("_Identity");
             else
                 return gen_array_ops.identity(data, name: name);
+        }
+
+        public static void _SetShapeInvariants(Tensor[] input_vars, Tensor[] enter_vars, TensorShape shapes = null)
+        {
+            if (shapes == null)
+                return;
+
+            throw new NotImplementedException("_SetShapeInvariants");
         }
 
         ///  <summary>
@@ -516,10 +562,52 @@ namespace Tensorflow
             throw new NotImplementedException("ZerosLikeOutsideLoop");
         }
 
-        // TODO
-        public static void while_loop(Func<Tensor, Tensor> func, Func<Tensor, Tensor> func1, Tensor[] tensors, int? i)
+        /// <summary>
+        /// Repeat `body` while the condition `cond` is true.
+        /// </summary>
+        /// <param name="cond"></param>
+        /// <param name="body"></param>
+        /// <param name="loop_vars"></param>
+        /// <param name="i"></param>
+        public static Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
+            TensorShape shape_invariants = null,
+            int parallel_iterations = 10,
+            bool back_prop = true,
+            bool swap_memory = false,
+            string name = null,
+            int? maximum_iterations = null,
+            bool return_same_structure = false)
         {
-            throw new NotImplementedException();
+            tf_with(ops.name_scope(name, "while", loop_vars), scope =>
+            {
+                if (loop_vars == null || loop_vars.Length == 0)
+                    throw new ValueError("No loop variables provided");
+                if (cond == null)
+                    throw new ValueError("cond must be callable.");
+                if (body == null)
+                    throw new ValueError("body must be callable.");
+                if (parallel_iterations < 1)
+                    throw new ValueError("parallel_iterations must be a positive integer.");
+
+                var loop_context = new WhileContext(
+                    maximum_iterations: maximum_iterations,
+                    parallel_iterations: parallel_iterations,
+                    back_prop: back_prop,
+                    swap_memory: swap_memory);
+
+                if (loop_context.outer_context == null)
+                    ops.add_to_collection(ops.GraphKeys.WHILE_CONTEXT, loop_context);
+
+                var results = loop_context.BuildLoop(cond, body, loop_vars, shape_invariants,
+                                    return_same_structure);
+
+                if (maximum_iterations != null)
+                    return results[1];
+                else
+                    return results[0];
+            });
+
+            throw new NotImplementedException("while_loop");
         }
 
     }

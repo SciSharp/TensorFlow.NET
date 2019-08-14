@@ -416,5 +416,6 @@ namespace Tensorflow
             }
         }
 
+        public int tensor_int_val { get; set; }
     }
 }
