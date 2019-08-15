@@ -47,7 +47,7 @@ namespace Tensorflow
                 switch(Type.GetTypeCode(type))
                 {
                     case TypeCode.Single:
-                        return np.array(values.Select(x => x.GetSingle(0)).ToArray());
+                        return np.array(values.Select(x => (float)x).ToArray());
                     default:
                         throw new NotImplementedException("build_results");
                 }
