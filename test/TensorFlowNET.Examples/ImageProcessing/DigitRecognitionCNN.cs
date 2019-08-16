@@ -328,7 +328,7 @@ namespace TensorFlowNET.Examples
         /// <returns></returns>
         private (NDArray, NDArray) Reformat(NDArray x, NDArray y)
         {
-            var (img_size, num_ch, num_class) = (np.sqrt(x.shape[1]), 1, len(np.unique<int>(np.argmax(y, 1))));
+            var (img_size, num_ch, num_class) = (np.sqrt(x.shape[1]).astype(np.int32), 1, len(np.unique(np.argmax(y, 1))));
             var dataset = x.reshape(x.shape[0], img_size, img_size, num_ch).astype(np.float32);
             //y[0] = np.arange(num_class) == y[0];
             //var labels = (np.arange(num_class) == y.reshape(y.shape[0], 1, y.shape[1])).astype(np.float32);

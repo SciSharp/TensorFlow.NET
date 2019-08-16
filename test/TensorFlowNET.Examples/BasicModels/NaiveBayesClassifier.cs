@@ -62,7 +62,7 @@ namespace TensorFlowNET.Examples
 
         public void fit(NDArray X, NDArray y)
         {
-            var unique_y = y.unique<int>();
+            var unique_y = np.unique(y);
 
             var dic = new Dictionary<int, List<List<float>>>();
             // Init uy in dic
