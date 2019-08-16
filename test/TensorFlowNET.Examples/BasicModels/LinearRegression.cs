@@ -91,16 +91,16 @@ namespace TensorFlowNET.Examples
                     {
                         var c = sess.run(cost, 
                             new FeedItem(X, train_X),
-                            new FeedItem(Y, train_Y));
-                        Console.WriteLine($"Epoch: {epoch + 1} cost={c} " + $"W={sess.run(W)} b={sess.run(b)}");
+                            new FeedItem(Y, train_Y))[0];
+                        Console.WriteLine($"Epoch: {epoch + 1} cost={c} " + $"W={sess.run(W)[0]} b={sess.run(b)[0]}");
                     }
                 }
 
                 Console.WriteLine("Optimization Finished!");
                 var training_cost = sess.run(cost,
                     new FeedItem(X, train_X),
-                    new FeedItem(Y, train_Y));
-                Console.WriteLine($"Training cost={training_cost} W={sess.run(W)} b={sess.run(b)}");
+                    new FeedItem(Y, train_Y))[0];
+                Console.WriteLine($"Training cost={training_cost} W={sess.run(W)[0]} b={sess.run(b)[0]}");
 
                 // Testing example
                 var test_X = np.array(6.83f, 4.668f, 8.9f, 7.91f, 5.7f, 8.7f, 3.1f, 2.1f);
@@ -108,7 +108,7 @@ namespace TensorFlowNET.Examples
                 Console.WriteLine("Testing... (Mean square loss Comparison)");
                 var testing_cost = sess.run(tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * test_X.shape[0]),
                     new FeedItem(X, test_X), 
-                    new FeedItem(Y, test_Y));
+                    new FeedItem(Y, test_Y))[0];
                 Console.WriteLine($"Testing cost={testing_cost}");
                 var diff = Math.Abs((float)training_cost - (float)testing_cost);
                 Console.WriteLine($"Absolute mean square loss difference: {diff}");

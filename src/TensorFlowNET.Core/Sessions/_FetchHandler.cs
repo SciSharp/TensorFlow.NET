@@ -57,7 +57,7 @@ namespace Tensorflow
             _final_fetches = _fetches;
         }
 
-        public NDArray build_results(BaseSession session, NDArray[] tensor_values)
+        public NDArray[] build_results(BaseSession session, NDArray[] tensor_values)
         {
             var full_values = new List<NDArray>();
             if (_final_fetches.Count != tensor_values.Length)
@@ -123,8 +123,7 @@ namespace Tensorflow
                     }
                     else
                     {
-                        //full_values.Add(value.GetNDArrays());
-                        full_values.Add(value);
+                        full_values.Add(value[np.arange(0, value.shape[0])]);
                     }
                 }
                 i += 1;

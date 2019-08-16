@@ -37,23 +37,9 @@ namespace Tensorflow
                 return new _ElementFetchMapper(fetches, (List<NDArray> fetched_vals) => fetched_vals[0]);
         }
 
-        public virtual NDArray build_results(List<NDArray> values)
+        public virtual NDArray[] build_results(List<NDArray> values)
         {
-            // if they're all scalar value
-            bool isAllScalars = values.Count(x => x.ndim == 0) == values.Count;
-            if (isAllScalars)
-            {
-                var type = values[0].dtype;
-                switch(Type.GetTypeCode(type))
-                {
-                    case TypeCode.Single:
-                        return np.array(values.Select(x => (float)x).ToArray());
-                    default:
-                        throw new NotImplementedException("build_results");
-                }
-            }
-
-            return np.stack(values.ToArray());
+            return values.ToArray();
         }
 
         public virtual List<ITensorOrOperation> unique_fetches()

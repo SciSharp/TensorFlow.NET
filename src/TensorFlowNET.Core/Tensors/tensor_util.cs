@@ -212,7 +212,7 @@ namespace Tensorflow
                             if (values.GetType().IsArray)
                                 nparray = np.array((string[])values, np_dt);
                             else
-                                nparray = Convert.ToString(values);
+                                nparray = NDArray.FromString(Convert.ToString(values));
                             break;
                         case "Boolean":
                             if (values.GetType().IsArray)
@@ -267,7 +267,10 @@ namespace Tensorflow
             if (numpy_dtype == TF_DataType.TF_STRING && !(values is NDArray))
             {
                 if (values is string str)
+                {
                     tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFromUtf8(str));
+                    tensor_proto.TensorShape = tensor_util.as_shape(new int[0]);
+                }
                 else if (values is string[] str_values)
                     tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
                 else if(values is byte[] byte_values)

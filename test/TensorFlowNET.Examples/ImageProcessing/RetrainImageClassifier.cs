@@ -455,7 +455,7 @@ namespace TensorFlowNET.Examples
             // First decode the JPEG image, resize it, and rescale the pixel values.
             var resized_input_values = sess.run(decoded_image_tensor, new FeedItem(image_data_tensor, new Tensor(image_data, TF_DataType.TF_STRING)));
             // Then run it through the recognition network.
-            var bottleneck_values = sess.run(bottleneck_tensor, new FeedItem(resized_input_tensor, resized_input_values));
+            var bottleneck_values = sess.run(bottleneck_tensor, new FeedItem(resized_input_tensor, resized_input_values))[0];
             bottleneck_values = np.squeeze(bottleneck_values);
             return bottleneck_values;
         }

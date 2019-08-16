@@ -162,7 +162,7 @@ namespace TensorFlowNET.Examples
             var (batch_xs, batch_ys) = mnist.Train.GetNextBatch(10);
             var results = sess.run(output, new FeedItem(input, batch_xs[np.arange(1)]));
 
-            if (results.argmax() == (batch_ys[0] as NDArray).argmax())
+            if (results[0].argmax() == (batch_ys[0] as NDArray).argmax())
                 print("predicted OK!");
             else
                 throw new ValueError("predict error, should be 90% accuracy");

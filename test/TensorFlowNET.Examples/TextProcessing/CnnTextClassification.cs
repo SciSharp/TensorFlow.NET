@@ -244,7 +244,7 @@ namespace TensorFlowNET.Examples
                             [is_training] = false
                         };
                         var result1 = sess.run(accuracy, valid_feed_dict);
-                        float accuracy_value = result1;
+                        float accuracy_value = result1[0];
                         sum_accuracy += accuracy_value;
                         cnt += 1;
                     }

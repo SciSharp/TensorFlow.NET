@@ -16,7 +16,7 @@ namespace TensorFlowNET.UnitTest
             {
                 session.run(x.initializer);
                 var result = session.run(x);
-                Assert.AreEqual(10, (int)result);
+                Assert.AreEqual(10, (int)result[0]);
             }
         }
 
@@ -81,7 +81,7 @@ namespace TensorFlowNET.UnitTest
             using (var session = tf.Session())
             {
                 session.run(model);
-                int result = session.run(y);
+                int result = session.run(y)[0];
                 Assert.AreEqual(result, 4);
             }
         }
@@ -98,11 +98,11 @@ namespace TensorFlowNET.UnitTest
             sess.run(init);
 
             var result = sess.run(variable);
-            Assert.IsTrue((int)result == 31);
+            Assert.IsTrue((int)result[0] == 31);
 
             var assign = variable.assign(12);
             result = sess.run(assign);
-            Assert.IsTrue((int)result == 12);
+            Assert.IsTrue((int)result[0] == 12);
         }
 
         [TestMethod]
@@ -139,7 +139,7 @@ namespace TensorFlowNET.UnitTest
                 for(int i = 0; i < 5; i++)
                 {
                     x = x + 1;
-                    result = session.run(x);
+                    result = session.run(x)[0];
                     print(result);
                 }
             }

@@ -394,9 +394,8 @@ namespace Tensorflow
 
         protected override void DisposeManagedState()
         {
-            if (gcHandle.IsAllocated)
-                gcHandle.Free();
         }
+
         protected override void DisposeUnManagedState(IntPtr handle)
         {
             if(handle != IntPtr.Zero)

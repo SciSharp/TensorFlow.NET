@@ -64,7 +64,7 @@ namespace TensorFlowNET.Examples
                 foreach(int i in range(Xte.shape[0]))
                 {
                     // Get nearest neighbor
-                    long nn_index = sess.run(pred, new FeedItem(xtr, Xtr), new FeedItem(xte, Xte[i]));
+                    long nn_index = sess.run(pred, new FeedItem(xtr, Xtr), new FeedItem(xte, Xte[i]))[0];
                     // Get nearest neighbor class label and compare it to its true label
                     int index = (int)nn_index;
 

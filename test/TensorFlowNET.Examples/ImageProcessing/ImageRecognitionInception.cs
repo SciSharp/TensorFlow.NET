@@ -51,7 +51,7 @@ namespace TensorFlowNET.Examples
                 {
                     sw.Restart();
 
-                    var results = sess.run(output_operation.outputs[0], new FeedItem(input_operation.outputs[0], nd));
+                    var results = sess.run(output_operation.outputs[0], new FeedItem(input_operation.outputs[0], nd))[0];
                     results = np.squeeze(results);
                     int idx = np.argmax(results);
 

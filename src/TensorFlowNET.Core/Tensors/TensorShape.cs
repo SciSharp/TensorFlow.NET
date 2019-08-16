@@ -71,12 +71,12 @@ namespace Tensorflow
                 return new TensorShape();
             else
             {
-                var concatenate_dims = new int[NDim + other.NDim];
-                for (int i = 0; i < NDim; i++)
+                var concatenate_dims = new int[ndim + other.ndim];
+                for (int i = 0; i < ndim; i++)
                     concatenate_dims[i] = dims[i];
 
-                for (int i = 0; i < other.NDim; i++)
-                    concatenate_dims[NDim + i] = other.dims[i];
+                for (int i = 0; i < other.ndim; i++)
+                    concatenate_dims[ndim + i] = other.dims[i];
 
                 return new TensorShape(concatenate_dims);
             }

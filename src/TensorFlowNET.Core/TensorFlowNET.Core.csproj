@@ -37,7 +37,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 15. Fix Tensor memory leak.
 16. Rename with to tf_with that is only used to build graph purpose.
 17. Graph inherit from DisposableObject.</PackageReleaseNotes>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <FileVersion>0.10.11.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

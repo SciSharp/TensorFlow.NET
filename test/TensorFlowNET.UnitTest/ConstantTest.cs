@@ -98,9 +98,9 @@ namespace TensorFlowNET.UnitTest
             {
                 var result = sess.run(tensor);
 
-                Assert.AreEqual(result.shape[0], 3);
-                Assert.AreEqual(result.shape[1], 2);
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 0, 0 }, result.Data<int>()));
+                Assert.AreEqual(result[0].shape[0], 3);
+                Assert.AreEqual(result[0].shape[1], 2);
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 0, 0 }, result[0].Data<int>()));
             }
 
             // big size
@@ -109,13 +109,13 @@ namespace TensorFlowNET.UnitTest
             {
                 var result = sess.run(tensor);
 
-                Assert.AreEqual(result.shape[0], 200);
-                Assert.AreEqual(result.shape[1], 100);
+                Assert.AreEqual(result[0].shape[0], 200);
+                Assert.AreEqual(result[0].shape[1], 100);
 
-                var data = result.Data<int>();
+                var data = result[0].Data<int>();
                 Assert.AreEqual(0, data[0]);
                 Assert.AreEqual(0, data[500]);
-                Assert.AreEqual(0, data[result.size - 1]);
+                Assert.AreEqual(0, data[result[0].size - 1]);
             }
         }
 
@@ -127,9 +127,9 @@ namespace TensorFlowNET.UnitTest
             {
                 var result = sess.run(ones);
 
-                Assert.AreEqual(result.shape[0], 3);
-                Assert.AreEqual(result.shape[1], 2);
-                Assert.IsTrue(new[] { 1, 1, 1, 1, 1, 1 }.SequenceEqual(result.Data<int>()));
+                Assert.AreEqual(result[0].shape[0], 3);
+                Assert.AreEqual(result[0].shape[1], 2);
+                Assert.IsTrue(new[] { 1, 1, 1, 1, 1, 1 }.SequenceEqual(result[0].Data<int>()));
             }
         }
 
@@ -142,9 +142,9 @@ namespace TensorFlowNET.UnitTest
             {
                 var result = sess.run(halfes);
 
-                Assert.AreEqual(result.shape[0], 3);
-                Assert.AreEqual(result.shape[1], 2);
-                Assert.IsTrue(new[] { .5, .5, .5, .5, .5, .5 }.SequenceEqual(result.Data<double>()));
+                Assert.AreEqual(result[0].shape[0], 3);
+                Assert.AreEqual(result[0].shape[1], 2);
+                Assert.IsTrue(new[] { .5, .5, .5, .5, .5, .5 }.SequenceEqual(result[0].Data<double>()));
             }
         }
 
@@ -161,10 +161,10 @@ namespace TensorFlowNET.UnitTest
             using (var sess = tf.Session())
             {
                 var result = sess.run(tensor);
-                var data = result.Data<int>();
+                var data = result[0].Data<int>();
 
-                Assert.AreEqual(result.shape[0], 2);
-                Assert.AreEqual(result.shape[1], 3);
+                Assert.AreEqual(result[0].shape[0], 2);
+                Assert.AreEqual(result[0].shape[1], 3);
                 Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 1, 1, 2, 1, 3 }, data));
             }
         }
@@ -177,7 +177,7 @@ namespace TensorFlowNET.UnitTest
             var c = a * b;
 
             var sess = tf.Session();
-            double result = sess.run(c);
+            double result = sess.run(c)[0];
             sess.close();
 
             Assert.AreEqual(6.0, result);

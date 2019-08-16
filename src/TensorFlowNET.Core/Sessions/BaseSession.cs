@@ -54,19 +54,19 @@ namespace Tensorflow
             status.Check(true);
         }
 
-        public virtual NDArray run(object fetches, params FeedItem[] feed_dict)
+        public virtual NDArray[] run(object fetches, params FeedItem[] feed_dict)
         {
             return _run(fetches, feed_dict);
         }
 
-        public virtual NDArray run(object fetches, Hashtable feed_dict = null)
+        public virtual NDArray[] run(object fetches, Hashtable feed_dict = null)
         {
             var feed_items = feed_dict == null ? new FeedItem[0] :
                 feed_dict.Keys.OfType<object>().Select(key => new FeedItem(key, feed_dict[key])).ToArray();
             return _run(fetches, feed_items);
         }
 
-        private NDArray _run(object fetches, FeedItem[] feed_dict = null)
+        private NDArray[] _run(object fetches, FeedItem[] feed_dict = null)
         {
             var feed_dict_tensor = new Dictionary<object, object>();
             var feed_map = new Dictionary<object, object>();

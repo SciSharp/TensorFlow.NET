@@ -377,7 +377,7 @@ namespace Tensorflow
                            "`eval(session=sess)`.");
             }
 
-            return session.run(tensor, feed_dict);
+            return session.run(tensor, feed_dict)[0];
         }
 
         /// <summary>
