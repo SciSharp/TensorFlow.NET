@@ -81,7 +81,7 @@ namespace TensorFlowNET.Examples
             var normalized = tf.divide(sub, new float[] { input_std });
 
             using (var sess = tf.Session(graph))
-                return sess.run(normalized);
+                return sess.run(normalized)[0];
         }
 
         public void PrepareData()
