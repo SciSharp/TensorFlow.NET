@@ -53,8 +53,8 @@ namespace TensorFlowNET.Examples
                     new FeedItem(b, (short)3)
                 };
                 // Run every operation with variable input
-                Console.WriteLine($"Addition with variables: {sess.run(add, feed_dict)}");
-                Console.WriteLine($"Multiplication with variables: {sess.run(mul, feed_dict)}");
+                Console.WriteLine($"Addition with variables: {sess.run(add, feed_dict)[0]}");
+                Console.WriteLine($"Multiplication with variables: {sess.run(mul, feed_dict)[0]}");
             }
 
             // ----------------
@@ -91,7 +91,7 @@ namespace TensorFlowNET.Examples
             // The output of the op is returned in 'result' as a numpy `ndarray` object.
             using (sess = tf.Session())
             {
-                var result = sess.run(product);
+                var result = sess.run(product)[0];
                 Console.WriteLine(result.ToString()); // ==> [[ 12.]]
             };
 
@@ -136,7 +136,7 @@ namespace TensorFlowNET.Examples
             var checkTensor = np.array<float>(0, 6, 0, 15, 0, 24, 3, 1, 6, 4, 9, 7, 6, 0, 15, 0, 24, 0);
             using (var sess = tf.Session())
             {
-                var result = sess.run(batchMul);
+                var result = sess.run(batchMul)[0];
                 Console.WriteLine(result.ToString());
                 //
                 // ==> array([[[0, 6],
