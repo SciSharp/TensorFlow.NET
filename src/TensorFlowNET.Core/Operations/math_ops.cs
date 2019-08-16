@@ -516,6 +516,9 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor minimum<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.minimum(x, y, name: name);
+
         public static Tensor maximum<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.maximum(x, y, name: name);
 

@@ -33,7 +33,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="input_ops">The data input ops for an op to be created.</param>
         /// <returns>A list of control inputs for the op to be created.</returns>
-        private ITensorOrOperation[] _control_dependencies_for_inputs(ITensorOrOperation[] input_ops)
+        public ITensorOrOperation[] _control_dependencies_for_inputs(ITensorOrOperation[] input_ops)
         {
             var ret = new List<ITensorOrOperation>();
 

@@ -142,29 +142,56 @@ namespace Tensorflow.Operations
             string base_name = null;
             tf_with(ops.name_scope("dynamic_rnn"), scope => base_name = scope);
 
-            Func<string, TensorShape, TF_DataType, Tensor> _create_ta = (name, element_shape, dtype_) =>
+            Func<string, TensorShape, TF_DataType, TensorArray> _create_ta = (name, element_shape, dtype_) =>
             {
-                new TensorArray(dtype: dtype_,
+                var ta = new TensorArray(dtype: dtype_,
                                         size: time_steps,
                                         element_shape: element_shape,
                                         tensor_array_name: base_name + name);
-                throw new NotImplementedException("");
+                return ta;
             };
 
             bool in_graph_mode = true;
+            var output_ta = new List<TensorArray>();
+            var input_ta = new List<TensorArray>();
             if (in_graph_mode)
             {
-                foreach(var (i, out_size) in enumerate(flat_output_size))
+                foreach (var (i, out_size) in enumerate(flat_output_size))
                 {
-                    _create_ta($"output_{i}",
+                    output_ta.Add(_create_ta($"output_{i}",
                         new TensorShape(const_batch_size).concatenate(
                             _maybe_tensor_shape_from_tensor(out_size)),
-                        _infer_state_dtype(dtype, state));
+                        _infer_state_dtype(dtype, state)));
+                }
 
+                foreach (var (i, flat_input_i) in enumerate(flat_input))
+                {
+                    input_ta.Add(_create_ta($"input_{i}",
+                        new TensorShape(flat_input_i.dims.Skip(1).ToArray()),
+                        flat_input_i.dtype));
+                }
 
-                    
+                for (int i = 0; i < input_ta.Count; i++)
+                {
+                    var (ta, input_) = (input_ta[0], flat_input[0]);
                 }
             }
+
+            // Make sure that we run at least 1 step, if necessary, to ensure
+            // the TensorArrays pick up the dynamic shape.
+            Tensor loop_bound;
+            if (in_graph_mode)
+                loop_bound = math_ops.minimum(
+                    time_steps, math_ops.maximum(1, max_sequence_length));
+
+            /*Func<Tensor, Tensor> cond = (ctime) =>
+            {
+                return null;
+            };
+
+            control_flow_ops.while_loop(
+              cond: cond,
+              body = );*/
 
             throw new NotImplementedException("");
         }

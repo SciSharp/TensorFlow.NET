@@ -14,10 +14,29 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
+
 namespace Tensorflow
 {
     public static partial class tf
     {
+        public static Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
+            TensorShape shape_invariants = null,
+            int parallel_iterations = 10,
+            bool back_prop = true,
+            bool swap_memory = false,
+            string name = null,
+            int? maximum_iterations = null,
+            bool return_same_structure = false)
+            => control_flow_ops.while_loop(cond, body, loop_vars,
+                shape_invariants: shape_invariants,
+                parallel_iterations: parallel_iterations,
+                back_prop: back_prop,
+                swap_memory: swap_memory,
+                name: name,
+                maximum_iterations: maximum_iterations,
+                return_same_structure: return_same_structure);
+
         public static _ControlDependenciesController control_dependencies(Operation[] control_inputs) 
             => ops.control_dependencies(control_inputs);
     }

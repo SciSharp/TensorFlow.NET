@@ -1,7 +1,6 @@
-# TensorFlow.NET
-![logo](docs/assets/tf.net.logo.svg)
+![logo](docs/assets/tf.net.logo.png)
 
-TensorFlow.NET (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in CSharp which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. 
+**TensorFlow.NET** (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in CSharp which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. 
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/wx4td43v2d3f2xj6?svg=true)](https://ci.appveyor.com/project/Haiping-Chen/tensorflow-net)
@@ -10,7 +9,8 @@ TensorFlow.NET (TF.NET) provides a .NET Standard binding for [TensorFlow](https:
 [![Documentation Status](https://readthedocs.org/projects/tensorflownet/badge/?version=latest)](https://tensorflownet.readthedocs.io/en/latest/?badge=latest)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 
-TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
+TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp). <a href="http://scisharpstack.org"><img src="https://github.com/SciSharp/SciSharp/blob/master/art/scisharp_badge.png" width="200" height="200" align="right" /></a>
+
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
@@ -200,5 +200,6 @@ Scan QR code to join Tencent TIM group:
 
 ![SciSharp STACK](docs/TIM.jpg)
 
-![SciSharp](https://avatars3.githubusercontent.com/u/44989469) TensorFlow.NET is a part of [SciSharp STACK](https://scisharp.github.io/SciSharp/)
-
+TensorFlow.NET is a part of [SciSharp STACK](https://scisharp.github.io/SciSharp/)
+<br>
+<a href="http://scisharpstack.org"><img src="https://github.com/SciSharp/SciSharp/blob/master/art/scisharp-stack.png" width="391" height="100" /></a>

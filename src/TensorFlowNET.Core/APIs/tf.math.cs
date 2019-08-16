@@ -39,8 +39,8 @@ namespace Tensorflow
         public static Tensor asin(Tensor x, string name = null)
             => gen_math_ops.asin(x, name);
 
-        public static Tensor add<Tx, Ty>(Tx a, Ty b) 
-            => gen_math_ops.add(a, b);
+        public static Tensor add<Tx, Ty>(Tx a, Ty b, string name = null) 
+            => gen_math_ops.add(a, b, name: name);
 
         /// <summary>
         /// Computes atan of x element-wise.
@@ -197,6 +197,9 @@ namespace Tensorflow
 
         public static Tensor logical_or(Tensor x, Tensor y, string name = null)
             => gen_math_ops.logical_or(x, y, name);
+
+        public static Tensor logical_xor(Tensor x, Tensor y, string name = "LogicalXor")
+            => gen_math_ops.logical_xor(x, y, name);
 
         /// <summary>
         /// Clips tensor values to a specified min and max.

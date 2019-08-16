@@ -6,10 +6,5 @@
         {
 
         }
-
-        ~ScopedTFGraph()
-        {
-            base.Dispose();
-        }
     }
 }
