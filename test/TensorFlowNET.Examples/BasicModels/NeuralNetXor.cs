@@ -103,10 +103,8 @@ namespace TensorFlowNET.Examples
                     //          [train_op, gs, loss],
                     //          feed_dict={features: xy, labels: y_}
                     //      )
-                    var result = sess.run(new ITensorOrOperation[] { train_op, global_step, loss }, new FeedItem(features, data), new FeedItem(labels, y_));
-                    loss_value = result[2];
-                    step = result[1];
-                    if (step % 1000 == 0)
+                    (_, step, loss_value) = sess.run((train_op, global_step, loss), (features, data), (labels, y_));
+                    if (step == 1 || step % 1000 == 0)
                         Console.WriteLine($"Step {step} loss: {loss_value}");
                 }
                 Console.WriteLine($"Final loss: {loss_value}");
@@ -136,10 +134,8 @@ namespace TensorFlowNET.Examples
                 var y_ = np.array(new int[] { 1, 0, 0, 1 }, dtype: np.int32);
                 while (step < num_steps)
                 {
-                    var result = sess.run(new ITensorOrOperation[] { train_op, gs, loss }, new FeedItem(features, data), new FeedItem(labels, y_));
-                    loss_value = result[2];
-                    step = result[1];
-                    if (step % 1000 == 0)
+                    (_, step, loss_value) = sess.run((train_op, gs, loss), (features, data), (labels, y_));
+                    if (step == 1 || step % 1000 == 0)
                         Console.WriteLine($"Step {step} loss: {loss_value}");
                 }
                 Console.WriteLine($"Final loss: {loss_value}");

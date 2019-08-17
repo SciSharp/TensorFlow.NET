@@ -81,8 +81,8 @@ namespace TensorFlowNET.Examples
                     // Get a new batch of data
                     var (batch_x, batch_y) = next_batch(batch_size, num_skips, skip_window);
 
-                    var result = sess.run(new ITensorOrOperation[] { train_op, loss_op }, new FeedItem(X, batch_x), new FeedItem(Y, batch_y));
-                    average_loss += result[1];
+                    (_, float loss) = sess.run((train_op, loss_op), (X, batch_x), (Y, batch_y));
+                    average_loss += loss;
 
                     if (step % display_step == 0 || step == 1)
                     {
@@ -97,7 +97,7 @@ namespace TensorFlowNET.Examples
                     if (step % eval_step == 0 || step == 1)
                     {
                         print("Evaluation...");
-                        var sim = sess.run(cosine_sim_op, new FeedItem(X, x_test))[0];
+                        var sim = sess.run(cosine_sim_op, (X, x_test));
                         foreach(var i in range(len(eval_words)))
                         {
                             var nearest = (0f - sim[i]).argsort<float>()

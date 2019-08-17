@@ -108,7 +108,7 @@ namespace TensorFlowNET.Examples
             var dims_expander = tf.expand_dims(casted, 0);
 
             using (var sess = tf.Session(graph))
-                return sess.run(dims_expander)[0];
+                return sess.run(dims_expander);
         }
 
         private void buildOutputImage(NDArray[] resultArr)

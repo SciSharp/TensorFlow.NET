@@ -28,7 +28,7 @@ namespace TensorFlowNET.Examples
             using (var sess = tf.Session())
             {
                 // Run the op
-                var result = sess.run(hello)[0];
+                var result = sess.run(hello);
                 Console.WriteLine(result.ToString());
                 return result.ToString().Equals(str);
             }

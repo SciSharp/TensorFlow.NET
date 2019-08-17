@@ -148,23 +148,18 @@ namespace TensorFlowNET.Examples
                     var (x_batch, y_batch) = mnist.GetNextBatch(x_train, y_train, start, end);
 
                     // Run optimization op (backprop)
-                    sess.run(optimizer, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
+                    sess.run(optimizer, (x, x_batch), (y, y_batch));
 
                     if (iteration % display_freq == 0)
                     {
                         // Calculate and display the batch loss and accuracy
-                        var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, x_batch), new FeedItem(y, y_batch));
-                        loss_val = result[0];
-                        accuracy_val = result[1];
+                        (loss_val, accuracy_val) = sess.run((loss, accuracy), (x, x_batch), (y, y_batch));
                         print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")}");
                     }
                 }
 
                 // Run validation after every epoch
-                var results1 = sess.run(new[] { loss, accuracy }, new FeedItem(x, mnist.Validation.Data), new FeedItem(y, mnist.Validation.Labels));
-                
-                loss_val = results1[0];
-                accuracy_val = results1[1];
+                (loss_val, accuracy_val) = sess.run((loss, accuracy), (x, mnist.Validation.Data), (y, mnist.Validation.Labels));
                 print("---------------------------------------------------------");
                 print($"Epoch: {epoch + 1}, validation loss: {loss_val.ToString("0.0000")}, validation accuracy: {accuracy_val.ToString("P")}");
                 print("---------------------------------------------------------");
@@ -173,9 +168,7 @@ namespace TensorFlowNET.Examples
 
         public void Test(Session sess)
         {
-            var result = sess.run(new[] { loss, accuracy }, new FeedItem(x, mnist.Test.Data), new FeedItem(y, mnist.Test.Labels));
-            loss_test = result[0];
-            accuracy_test = result[1];
+            (loss_test, accuracy_test) = sess.run((loss, accuracy), (x, mnist.Test.Data), (y, mnist.Test.Labels));
             print("---------------------------------------------------------");
             print($"Test loss: {loss_test.ToString("0.0000")}, test accuracy: {accuracy_test.ToString("P")}");
             print("---------------------------------------------------------");

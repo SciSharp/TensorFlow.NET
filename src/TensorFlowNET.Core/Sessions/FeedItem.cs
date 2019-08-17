@@ -13,5 +13,8 @@
             Key = key;
             Value = val;
         }
+
+        public static implicit operator FeedItem((object, object) feed)
+            => new FeedItem(feed.Item1, feed.Item2);
     }
 }

@@ -90,11 +90,10 @@ namespace TensorFlowNET.Examples
                     {
                         var (batch_xs, batch_ys) = mnist.Train.GetNextBatch(batch_size);
                         // Run optimization op (backprop) and cost op (to get loss value)
-                        var result = sess.run(new object[] { optimizer, cost },
-                            new FeedItem(x, batch_xs),
-                            new FeedItem(y, batch_ys));
+                        (_, float c) = sess.run((optimizer, cost), 
+                            (x, batch_xs), 
+                            (y, batch_ys));
 
-                        float c = result[1];
                         // Compute average loss
                         avg_cost += c / total_batch;
                     }
@@ -115,7 +114,7 @@ namespace TensorFlowNET.Examples
                 var correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1));
                 // Calculate accuracy
                 var accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32));
-                float acc = accuracy.eval(new FeedItem(x, mnist.Test.Data), new FeedItem(y, mnist.Test.Labels));
+                float acc = accuracy.eval((x, mnist.Test.Data), (y, mnist.Test.Labels));
                 print($"Accuracy: {acc.ToString("F4")}");
 
                 return acc > 0.9;

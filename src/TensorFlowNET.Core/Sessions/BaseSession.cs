@@ -54,6 +54,34 @@ namespace Tensorflow
             status.Check(true);
         }
 
+        public virtual void run(Operation op, params FeedItem[] feed_dict)
+        {
+            _run(op, feed_dict);
+        }
+
+        public virtual NDArray run(Tensor fetche, params FeedItem[] feed_dict)
+        {
+            return _run(fetche, feed_dict)[0];
+        }
+
+        public virtual (NDArray, NDArray, NDArray, NDArray) run((ITensorOrOperation, ITensorOrOperation, ITensorOrOperation, ITensorOrOperation) fetches, params FeedItem[] feed_dict)
+        {
+            var results = _run(new object[] { fetches.Item1, fetches.Item2, fetches.Item3, fetches.Item4 }, feed_dict);
+            return (results[0], results[1], results[2], results[3]);
+        }
+
+        public virtual (NDArray, NDArray, NDArray) run((ITensorOrOperation, ITensorOrOperation, ITensorOrOperation) fetches, params FeedItem[] feed_dict)
+        {
+            var results = _run(new object[] { fetches.Item1, fetches.Item2, fetches.Item3 }, feed_dict);
+            return (results[0], results[1], results[2]);
+        }
+
+        public virtual (NDArray, NDArray) run((ITensorOrOperation, ITensorOrOperation) fetches, params FeedItem[] feed_dict)
+        {
+            var results = _run(new object[] { fetches.Item1, fetches.Item2 }, feed_dict);
+            return (results[0], results[1]);
+        }
+
         public virtual NDArray[] run(object fetches, params FeedItem[] feed_dict)
         {
             return _run(fetches, feed_dict);

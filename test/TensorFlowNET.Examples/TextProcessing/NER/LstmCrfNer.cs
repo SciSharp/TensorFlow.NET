@@ -80,17 +80,16 @@ namespace TensorFlowNET.Examples.Text.NER
 
         private float run_epoch(Session sess, CoNLLDataset train, CoNLLDataset dev, int epoch)
         {
-            NDArray[] results = null;
-
+            float accuracy = 0;
             // iterate over dataset
             var batches = minibatches(train, hp.batch_size);
             foreach (var(words, labels) in batches)
             {
                 var (fd, _) = get_feed_dict(words, labels, hp.lr, hp.dropout);
-                results = sess.run(new ITensorOrOperation[] { train_op, loss }, feed_dict: fd);
+                (_, accuracy) = sess.run((train_op, loss), feed_dict: fd);
             }
 
-            return results[1];
+            return accuracy;
         }
 
         private IEnumerable<((int[][], int[])[], int[][])> minibatches(CoNLLDataset data, int minibatch_size)

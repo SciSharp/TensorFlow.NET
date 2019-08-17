@@ -124,13 +124,13 @@ namespace TensorFlowNET.Examples
             var (eval_session, _, bottleneck_input, ground_truth_input, evaluation_step,
                 prediction) = build_eval_session(class_count);
 
-            var results = eval_session.run(new Tensor[] { evaluation_step, prediction },
-                  new FeedItem(bottleneck_input, test_bottlenecks),
-                  new FeedItem(ground_truth_input, test_ground_truth));
+            (float accuracy, NDArray prediction1) = eval_session.run((evaluation_step, prediction),
+                  (bottleneck_input, test_bottlenecks),
+                  (ground_truth_input, test_ground_truth));
 
-            print($"final test accuracy: {((float)results[0] * 100).ToString("G4")}% (N={len(test_bottlenecks)})");
+            print($"final test accuracy: {(accuracy * 100).ToString("G4")}% (N={len(test_bottlenecks)})");
 
-            return (results[0], results[1]);
+            return (accuracy, prediction1);
         }
 
         private (Session, Tensor, Tensor, Tensor, Tensor, Tensor)
@@ -661,11 +661,9 @@ namespace TensorFlowNET.Examples
                 bool is_last_step = (i + 1 == how_many_training_steps);
                 if ((i % eval_step_interval) == 0 || is_last_step)
                 {
-                    results = sess.run(
-                        new Tensor[] { evaluation_step, cross_entropy },
-                        new FeedItem(bottleneck_input, train_bottlenecks),
-                        new FeedItem(ground_truth_input, train_ground_truth));
-                    (float train_accuracy, float cross_entropy_value) = (results[0], results[1]);
+                    (float train_accuracy, float cross_entropy_value) = sess.run((evaluation_step, cross_entropy),
+                        (bottleneck_input, train_bottlenecks),
+                        (ground_truth_input, train_ground_truth));
                     print($"{DateTime.Now}: Step {i + 1}: Train accuracy = {train_accuracy * 100}%,  Cross entropy = {cross_entropy_value.ToString("G4")}");
 
                     var (validation_bottlenecks, validation_ground_truth, _) = get_random_cached_bottlenecks(
@@ -676,12 +674,10 @@ namespace TensorFlowNET.Examples
 
                     // Run a validation step and capture training summaries for TensorBoard
                     // with the `merged` op.
-                    results = sess.run(new Tensor[] { merged, evaluation_step },
-                        new FeedItem(bottleneck_input, validation_bottlenecks),
-                        new FeedItem(ground_truth_input, validation_ground_truth));
+                    (_, float validation_accuracy) = sess.run((merged, evaluation_step),
+                        (bottleneck_input, validation_bottlenecks),
+                        (ground_truth_input, validation_ground_truth));
 
-                    //(string validation_summary, float validation_accuracy) = (results[0], results[1]);
-                    float validation_accuracy = results[1];
                     // validation_writer.add_summary(validation_summary, i);
                     print($"{DateTime.Now}: Step {i + 1}: Validation accuracy = {validation_accuracy * 100}% (N={len(validation_bottlenecks)}) {sw.ElapsedMilliseconds}ms");
                     sw.Restart();
@@ -741,10 +737,10 @@ namespace TensorFlowNET.Examples
 
             using (var sess = tf.Session(graph))
             {
-                var result = sess.run(output, new FeedItem(input, fileBytes));
+                var result = sess.run(output, (input, fileBytes));
                 var prob = np.squeeze(result);
                 var idx = np.argmax(prob);
-                print($"Prediction result: [{labels[idx]} {prob[idx][0]}] for {img_path}.");
+                print($"Prediction result: [{labels[idx]} {prob[idx]}] for {img_path}.");
             }
         }
 
