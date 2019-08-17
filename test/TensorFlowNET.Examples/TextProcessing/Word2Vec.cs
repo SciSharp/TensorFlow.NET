@@ -97,7 +97,7 @@ namespace TensorFlowNET.Examples
                     if (step % eval_step == 0 || step == 1)
                     {
                         print("Evaluation...");
-                        var sim = sess.run(cosine_sim_op, new FeedItem(X, x_test));
+                        var sim = sess.run(cosine_sim_op, new FeedItem(X, x_test))[0];
                         foreach(var i in range(len(eval_words)))
                         {
                             var nearest = (0f - sim[i]).argsort<float>()

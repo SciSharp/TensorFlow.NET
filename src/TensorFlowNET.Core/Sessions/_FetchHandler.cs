@@ -82,6 +82,9 @@ namespace Tensorflow
                             case "String":
                                 full_values.Add(float.NaN);
                                 break;
+                            case "Char":
+                                full_values.Add(float.NaN);
+                                break;
                             default:
                                 throw new NotImplementedException($"build_results tensor_values[0] {tensor_values[0].dtype.Name}");
                         }

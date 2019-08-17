@@ -78,7 +78,7 @@ namespace Tensorflow
             }
 
             // Gets map of variables and the associated data.
-            NDArray returned_variables = null;
+            NDArray[] returned_variables = null;
             if (variable_names != null)
                 returned_variables = sess.run(variable_names);
 

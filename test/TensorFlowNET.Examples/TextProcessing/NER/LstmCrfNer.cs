@@ -80,7 +80,7 @@ namespace TensorFlowNET.Examples.Text.NER
 
         private float run_epoch(Session sess, CoNLLDataset train, CoNLLDataset dev, int epoch)
         {
-            NDArray results = null;
+            NDArray[] results = null;
 
             // iterate over dataset
             var batches = minibatches(train, hp.batch_size);
