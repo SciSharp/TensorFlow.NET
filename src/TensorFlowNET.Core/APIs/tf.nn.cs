@@ -131,6 +131,8 @@ namespace Tensorflow
             public static Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null) 
                 => nn_ops.max_pool(value, ksize, strides, padding, data_format: data_format, name: name);
 
+            public static Tensor in_top_k(Tensor predictions, Tensor targets, int k, string name = "InTopK") => gen_ops.in_top_k(predictions, targets, k, name);
+
             public static Tensor[] top_k(Tensor input, int k = 1, bool sorted = true, string name = null)
                 => gen_nn_ops.top_kv2(input, k: k, sorted: sorted, name: name);
 
