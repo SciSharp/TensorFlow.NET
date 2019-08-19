@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using static Tensorflow.Python;
 
 namespace Tensorflow.Keras
 {
@@ -43,9 +44,9 @@ namespace Tensorflow.Keras
         {
             if (value == null)
                 value = _IMAGE_DATA_FORMAT;
-            if (value.GetType() == typeof(ImageDataFormat))
+            if (isinstance(value, typeof(ImageDataFormat)))
                 return (ImageDataFormat)value;
-            else if (value.GetType() == typeof(string))
+            else if (isinstance(value, typeof(string)))
             {
                 ImageDataFormat dataFormat;
                 if(Enum.TryParse((string)value, true, out dataFormat))
