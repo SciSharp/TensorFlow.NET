@@ -196,6 +196,12 @@ namespace Tensorflow.Gradients
             return new Tensor[] { _ReshapeToInput(op, grads[0]) };
         }
 
+        [RegisterGradient("StopGradient")]
+        public static Tensor[] _NoGradient(Operation op, Tensor[] grads)
+        {
+            return new Tensor[] {null};
+        }
+
         /// <summary>
         /// Gradient for StridedSlice op.
         /// </summary>

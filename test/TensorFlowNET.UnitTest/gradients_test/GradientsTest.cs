@@ -129,6 +129,19 @@ namespace TensorFlowNET.UnitTest.gradients_test
             }
         }
 
+        [TestMethod]
+        public void testStopGradientFunction()
+        {
+            var ap = tf.constant(1f);
+            var b = tf.tanh(ap) + gen_array_ops.stop_gradient(ap);
+            var g = tf.gradients(b, ap);
+            using (var sess = tf.Session())
+            {
+                var result = sess.run(g);
+                var actual = result[0].GetData<float>()[0];
+                self.assertEquals(0.41997434127f, actual);
+            }
+        }
         [Ignore("TODO")]
         [TestMethod]
         public void testUnusedOutput()
