@@ -19,7 +19,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public class Session : BaseSession, IPython
+    public class Session : BaseSession, IObjectLife
     {
         public Session(string target = "", Graph g = null)
             : base(target, g, null)
@@ -84,6 +84,16 @@ namespace Tensorflow
         public void __exit__()
         {
 
+        }
+
+        public void __init__()
+        {
+            
+        }
+
+        public void __del__()
+        {
+            
         }
     }
 }

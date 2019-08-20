@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public static class Binding
+    public static partial class Binding
     {
-        public static tensorflow tf { get; } = Python.New<tensorflow>();
+        public static tensorflow tf { get; } = New<tensorflow>();
     }
 }

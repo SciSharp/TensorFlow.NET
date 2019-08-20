@@ -39,7 +39,7 @@ let run()=
     let n_hidden_layer_1 = 25 // Hidden layer 1
     let n_hidden_layer_2 = 25 // Hidden layer 2
 
-    let tf = Python.New<tensorflow>()
+    let tf = Binding.New<tensorflow>()
     let x = tf.placeholder(tf.float64, new TensorShape(N_points,n_input))
     let y = tf.placeholder(tf.float64, new TensorShape(n_output))
     
@@ -77,7 +77,7 @@ let run()=
     let init = tf.global_variables_initializer()
     
     
-    Tensorflow.Python.``tf_with``(tf.Session(), fun (sess:Session) ->
+    Tensorflow.Binding.``tf_with``(tf.Session(), fun (sess:Session) ->
         sess.run(init)  |> ignore  
         // Loop over epochs
         for epoch in [0..training_epochs] do

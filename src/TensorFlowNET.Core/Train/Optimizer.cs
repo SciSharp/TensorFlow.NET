@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Framework;
 using Tensorflow.Train;
-using static Tensorflow.Python;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -383,7 +382,7 @@ namespace Tensorflow
             if ((int)gate_gradients == Optimizer.GATE_GRAPH)
                 grads = control_flow_ops.tuple(grads);
 
-            var grads_and_vars = Python.zip(grads, var_list)
+            var grads_and_vars = zip(grads, var_list)
                 .Select(x => new Tuple<Tensor, RefVariable>(x.Item1, x.Item2))
                 .ToArray();
 

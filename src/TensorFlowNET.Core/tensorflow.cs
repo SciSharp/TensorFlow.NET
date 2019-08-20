@@ -18,7 +18,7 @@ using Tensorflow.Eager;
 
 namespace Tensorflow
 {
-    public partial class tensorflow : IPyClass
+    public partial class tensorflow : IObjectLife
     {
         public TF_DataType @byte = TF_DataType.TF_UINT8;
         public TF_DataType @sbyte = TF_DataType.TF_INT8;
@@ -78,22 +78,27 @@ namespace Tensorflow
             return new Session(null, opts);
         }
 
-        public void __init__(IPyClass self)
+        public void __init__()
         {
             
         }
 
-        public void __enter__(IPyClass self)
+        public void __enter__()
         {
             
         }
 
-        public void __exit__(IPyClass self)
+        public void __exit__()
         {
             
         }
 
-        public void __del__(IPyClass self)
+        public void __del__()
+        {
+            
+        }
+
+        public void Dispose()
         {
             
         }

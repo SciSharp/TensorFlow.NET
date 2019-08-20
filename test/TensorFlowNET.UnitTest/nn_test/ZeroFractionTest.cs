@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.nn_test
 {

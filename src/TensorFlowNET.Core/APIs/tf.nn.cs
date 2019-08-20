@@ -16,7 +16,7 @@
 
 using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -141,7 +141,7 @@ namespace Tensorflow
 
             public Tensor bias_add(Tensor value, RefVariable bias, string data_format = null, string name = null)
             {
-                return Python.tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
+                return tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
                 {
                     name = scope;
                     return gen_nn_ops.bias_add(value, bias, data_format: data_format, name: name);

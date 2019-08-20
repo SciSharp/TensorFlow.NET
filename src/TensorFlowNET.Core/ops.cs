@@ -20,7 +20,6 @@ using System.Runtime.InteropServices;
 using Google.Protobuf;
 using System.Linq;
 using NumSharp;
-using static Tensorflow.Python;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -448,7 +447,7 @@ namespace Tensorflow
         {
             var ret = new List<Tensor>();
 
-            foreach(var (i, value) in Python.enumerate(values))
+            foreach(var (i, value) in enumerate(values))
             {
                 if (value == null)
                 {

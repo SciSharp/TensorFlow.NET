@@ -16,7 +16,6 @@
 
 using System.Collections.Generic;
 using Tensorflow;
-using static Tensorflow.Python;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples.Text

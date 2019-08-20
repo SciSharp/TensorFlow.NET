@@ -238,7 +238,7 @@ namespace TensorFlowNET.UnitTest
             return s.as_default();
         }
 
-        private IPython _constrain_devices_and_set_default(Session sess, bool useGpu, bool forceGpu)
+        private IObjectLife _constrain_devices_and_set_default(Session sess, bool useGpu, bool forceGpu)
         {
             //def _constrain_devices_and_set_default(self, sess, use_gpu, force_gpu):
             //"""Set the session and its graph to global default and constrain devices."""

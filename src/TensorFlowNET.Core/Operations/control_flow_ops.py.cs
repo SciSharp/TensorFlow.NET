@@ -20,7 +20,7 @@ using System.Linq;
 using Tensorflow.Operations;
 using Tensorflow.Operations.ControlFlows;
 using util = Tensorflow.control_flow_util;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

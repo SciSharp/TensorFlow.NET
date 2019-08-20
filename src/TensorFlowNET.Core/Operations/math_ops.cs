@@ -18,7 +18,7 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using Tensorflow.Framework;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

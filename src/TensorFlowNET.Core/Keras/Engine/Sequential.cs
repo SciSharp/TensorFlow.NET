@@ -18,7 +18,7 @@ using Tensorflow.Keras.Layers;
 
 namespace Tensorflow.Keras.Engine
 {
-    public class Sequential : Model, IPython
+    public class Sequential : Model, IObjectLife
     {
         public Sequential(string name = null) 
             : base(name: name)
@@ -68,6 +68,16 @@ namespace Tensorflow.Keras.Engine
         public void Dispose()
         {
 
+        }
+
+        public void __init__()
+        {
+            
+        }
+
+        public void __del__()
+        {
+            
         }
     }
 }
