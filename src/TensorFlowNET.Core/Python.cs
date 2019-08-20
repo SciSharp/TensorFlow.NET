@@ -309,6 +309,36 @@ namespace Tensorflow
             }
             return (__object__)((object[] args) => { return "NaN"; });
         }
+        public static IEnumerable TupleToEnumerable(object tuple)
+        {
+            Type t = tuple.GetType();
+            if(t.IsGenericType && (t.FullName.StartsWith("System.Tuple") || t.FullName.StartsWith("System.ValueTuple")))
+            {
+                var flds = t.GetFields();
+                for(int i = 0; i < flds.Length;i++)
+                {
+                    yield return ((object)flds[i].GetValue(tuple));
+                }
+            }
+            else
+            {
+                throw new System.Exception("Expected Tuple.");
+            }
+        }
+        public static bool isinstance(object Item1, Type Item2)
+        {
+            return (Item1.GetType() == Item2);
+        }
+        public static bool isinstance(object Item1, object tuple)
+        {
+            var tup = TupleToEnumerable(tuple);
+            foreach(var t in tup)
+            {
+                if(isinstance(Item1, (Type)t))
+                    return true;
+            }
+            return false;
+        }
     }
 
     public interface IPython : IDisposable
