@@ -19,7 +19,7 @@ using System;
 using System.Diagnostics;
 using Tensorflow;
 using Tensorflow.Hub;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -27,7 +27,7 @@ namespace TensorFlowNET.Examples
     /// Convolutional Neural Network classifier for Hand Written Digits
     /// CNN architecture with two convolutional layers, followed by two fully-connected layers at the end.
     /// Use Stochastic Gradient Descent (SGD) optimizer. 
-    /// http://www.easy-tensorflow.com/tf-tutorials/convolutional-neural-nets-cnns/cnn1
+    /// http://www.easy-tf.com/tf-tutorials/convolutional-neural-nets-cnns/cnn1
     /// </summary>
     public class DigitRecognitionCNN : IExample
     {

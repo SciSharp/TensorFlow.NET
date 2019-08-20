@@ -16,9 +16,9 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static Tensor abs(Tensor x, string name = null)
+        public Tensor abs(Tensor x, string name = null)
             => math_ops.abs(x, name);
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor acos(Tensor x, string name = null)
+        public Tensor acos(Tensor x, string name = null)
             => gen_math_ops.acos(x, name);
 
         /// <summary>
@@ -36,10 +36,10 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor asin(Tensor x, string name = null)
+        public Tensor asin(Tensor x, string name = null)
             => gen_math_ops.asin(x, name);
 
-        public static Tensor add<Tx, Ty>(Tx a, Ty b, string name = null) 
+        public Tensor add<Tx, Ty>(Tx a, Ty b, string name = null) 
             => gen_math_ops.add(a, b, name: name);
 
         /// <summary>
@@ -48,19 +48,19 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor atan(Tensor x, string name = null)
+        public Tensor atan(Tensor x, string name = null)
             => gen_math_ops.atan(x, name);
 
-        public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+        public Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
             => gen_math_ops.arg_max(input, dimension, output_type: output_type, name: name);
 
-        public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+        public Tensor arg_min(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
             => gen_math_ops.arg_min(input, dimension, output_type: output_type, name: name);
 
-        public static Tensor is_finite(Tensor input, string name = null)
+        public Tensor is_finite(Tensor input, string name = null)
             => gen_math_ops.is_finite(input, name);
 
-        public static Tensor is_nan(Tensor input, string name = null)
+        public Tensor is_nan(Tensor input, string name = null)
             => gen_math_ops.is_nan(input, name);
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor ceil(Tensor x, string name = null)
+        public Tensor ceil(Tensor x, string name = null)
             => gen_math_ops.ceil(x, name);
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor sin(Tensor x, string name = null)
+        public Tensor sin(Tensor x, string name = null)
             => gen_math_ops.sin(x, name);
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor sinh(Tensor x, string name = null)
+        public Tensor sinh(Tensor x, string name = null)
             => gen_math_ops.sinh(x, name);
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor cos(Tensor x, string name = null)
+        public Tensor cos(Tensor x, string name = null)
             => gen_math_ops.cos(x, name);
 
         /// <summary>
@@ -105,13 +105,13 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor cosh(Tensor x, string name = null)
+        public Tensor cosh(Tensor x, string name = null)
             => gen_math_ops.cosh(x, name);
 
-        public static Tensor tan(Tensor x, string name = null)
+        public Tensor tan(Tensor x, string name = null)
             => gen_math_ops.tan(x, name);
 
-        public static Tensor tanh(Tensor x, string name = null)
+        public Tensor tanh(Tensor x, string name = null)
             => gen_math_ops.tanh(x, name);
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor floor(Tensor x, string name = null)
+        public Tensor floor(Tensor x, string name = null)
             => gen_math_ops.floor(x, name);
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
+        public Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.greater(x, y, name);
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+        public Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.greater_equal(x, y, name);
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
+        public Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.less(x, y, name);
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Tensorflow
         /// <param name="x">A `Tensor`. Must be one of the following types: `bfloat16`, `half`, `float32`, `float64`.</param>
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `x`.</returns>
-        public static Tensor lgamma(Tensor x, string name = null)
+        public Tensor lgamma(Tensor x, string name = null)
             => gen_math_ops.lgamma(x, name: name);
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor less_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+        public Tensor less_equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.less_equal(x, y, name);
 
         /// <summary>
@@ -186,19 +186,19 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor log1p(Tensor x, string name = null)
+        public Tensor log1p(Tensor x, string name = null)
             => gen_math_ops.log1p(x, name);
 
-        public static Tensor logical_and(Tensor x, Tensor y, string name = null)
+        public Tensor logical_and(Tensor x, Tensor y, string name = null)
             => gen_math_ops.logical_and(x, y, name);
 
-        public static Tensor logical_not(Tensor x, string name = null)
+        public Tensor logical_not(Tensor x, string name = null)
             => gen_math_ops.logical_not(x, name);
 
-        public static Tensor logical_or(Tensor x, Tensor y, string name = null)
+        public Tensor logical_or(Tensor x, Tensor y, string name = null)
             => gen_math_ops.logical_or(x, y, name);
 
-        public static Tensor logical_xor(Tensor x, Tensor y, string name = "LogicalXor")
+        public Tensor logical_xor(Tensor x, Tensor y, string name = "LogicalXor")
             => gen_math_ops.logical_xor(x, y, name);
 
         /// <summary>
@@ -209,28 +209,28 @@ namespace Tensorflow
         /// <param name="clip_value_max"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
+        public Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
             => gen_math_ops._clip_by_value(t, clip_value_min, clip_value_max);
 
-        public static Tensor sub(Tensor a, Tensor b) 
+        public Tensor sub(Tensor a, Tensor b) 
             => gen_math_ops.sub(a, b);
 
-        public static Tensor divide(Tensor a, Tensor b)
+        public Tensor divide(Tensor a, Tensor b)
             => gen_math_ops.real_div(a, b);
 
-        public static Tensor sqrt(Tensor a, string name = null) 
+        public Tensor sqrt(Tensor a, string name = null) 
             => gen_math_ops.sqrt(a, name);
 
-        public static Tensor sign(Tensor a, string name = null)
+        public Tensor sign(Tensor a, string name = null)
             => gen_math_ops.sign(a, name);
 
-        public static Tensor subtract<T>(Tensor x, T[] y, string name = null) where T : struct
+        public Tensor subtract<T>(Tensor x, T[] y, string name = null) where T : struct
             => gen_math_ops.sub(x, ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y"), name);
 
-        public static Tensor log(Tensor x, string name = null)
+        public Tensor log(Tensor x, string name = null)
             => gen_math_ops.log(x, name);
 
-        public static Tensor equal(Tensor x, Tensor y, string name = null)
+        public Tensor equal(Tensor x, Tensor y, string name = null)
             => gen_math_ops.equal(x, y, name);
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace Tensorflow
         /// <param name="x"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor atan2(Tensor y, Tensor x, string name = null)
+        public Tensor atan2(Tensor y, Tensor x, string name = null)
             => gen_math_ops.atan2(y, x, name);
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Tensorflow
         /// <param name="keep_dims"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+        public Tensor max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
             => gen_math_ops._max(input, axis, keep_dims: keep_dims, name: name);
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace Tensorflow
         /// <param name="keep_dims"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+        public Tensor min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
             => gen_math_ops._min(input, axis, keep_dims: keep_dims, name: name);
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor maximum<T1, T2>(T1 x, T2 y, string name = null)
+        public Tensor maximum<T1, T2>(T1 x, T2 y, string name = null)
             => gen_math_ops.maximum(x, y, name: name);
 
         /// <summary>
@@ -290,13 +290,13 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
+        public Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
             => gen_math_ops.minimum(x, y, name: name);
 
-        public static Tensor multiply<Tx, Ty>(Tx x, Ty y) 
+        public Tensor multiply<Tx, Ty>(Tx x, Ty y) 
             => gen_math_ops.mul(x, y);
 
-        public static Tensor negative(Tensor x, string name = null)
+        public Tensor negative(Tensor x, string name = null)
             => gen_math_ops.neg(x, name);
 
         /// <summary>
@@ -306,13 +306,13 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor div(Tensor x, Tensor y, string name = null)
+        public Tensor div(Tensor x, Tensor y, string name = null)
             => math_ops.div(x, y, name: name);
 
-        public static Tensor divide<T>(Tensor x, T[] y, string name = null) where T : struct
+        public Tensor divide<T>(Tensor x, T[] y, string name = null) where T : struct
             => x / ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y");
 
-        public static Tensor pow<T1, T2>(T1 x, T2 y) 
+        public Tensor pow<T1, T2>(T1 x, T2 y) 
             => gen_math_ops.pow(x, y);
 
         /// <summary>
@@ -321,14 +321,14 @@ namespace Tensorflow
         /// <param name="input"></param>
         /// <param name="axis"></param>
         /// <returns></returns>
-        public static Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null)
+        public Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null)
         {
             if(!axis.HasValue && reduction_indices.HasValue)
                 return math_ops.reduce_sum(input, reduction_indices.Value);
             return math_ops.reduce_sum(input);
         }
 
-        public static Tensor reduce_sum(Tensor input, int axis, int? reduction_indices = null)
+        public Tensor reduce_sum(Tensor input, int axis, int? reduction_indices = null)
             => math_ops.reduce_sum(input, axis);
 
         /// <summary>
@@ -339,34 +339,34 @@ namespace Tensorflow
         /// <param name="keepdims"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_max(input_tensor, axis, keepdims, name);
 
-        public static Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_min(input_tensor, axis, keepdims, name);
 
-        public static Tensor sigmoid<T>(T x, string name = null)
+        public Tensor sigmoid<T>(T x, string name = null)
             => math_ops.sigmoid(x, name: name);
 
-        public static Tensor sum(Tensor input, int axis, bool keep_dims = false, string name = null)
+        public Tensor sum(Tensor input, int axis, bool keep_dims = false, string name = null)
             => gen_math_ops._sum(input, axis, keep_dims: keep_dims, name: name);
 
-        public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
+        public Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);
 
-        public static Tensor round(Tensor x, string name = null)
+        public Tensor round(Tensor x, string name = null)
             => gen_math_ops.round(x, name: name);
 
-        public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null) 
+        public Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null) 
             => math_ops.cast(x, dtype, name);
 
-        public static Tensor cumsum(Tensor x, int axis = 0, bool exclusive = false, bool reverse = false, string name = null)
+        public Tensor cumsum(Tensor x, int axis = 0, bool exclusive = false, bool reverse = false, string name = null)
             => math_ops.cumsum(x, axis: axis, exclusive: exclusive, reverse: reverse, name: name);
 
-        public static Tensor argmax(Tensor input, int axis = -1, string name = null, int? dimension = null, TF_DataType output_type = TF_DataType.TF_INT64)
+        public Tensor argmax(Tensor input, int axis = -1, string name = null, int? dimension = null, TF_DataType output_type = TF_DataType.TF_INT64)
             => gen_math_ops.arg_max(input, axis, name: name, output_type: output_type);
 
-        public static Tensor square(Tensor x, string name = null)
+        public Tensor square(Tensor x, string name = null)
             => gen_math_ops.square(x, name: name);
     }
 }

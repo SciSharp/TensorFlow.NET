@@ -14,20 +14,22 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
+
 namespace Tensorflow
 {
-    public interface IPyClass
+    public interface IObjectLife : IDisposable
     {
         /// <summary>
         /// Called when the instance is created.
         /// </summary>
         /// <param name="args"></param>
-        void __init__(IPyClass self, dynamic args);
+        void __init__();
 
-        void __enter__(IPyClass self);
+        void __enter__();
 
-        void __exit__(IPyClass self);
+        void __exit__();
 
-        void __del__(IPyClass self);
+        void __del__();
     }
 }

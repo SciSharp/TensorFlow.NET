@@ -23,7 +23,7 @@ namespace Tensorflow
     /// <summary>
     /// A context manager for defining ops that creates variables (layers).
     /// </summary>
-    public class variable_scope : IPython
+    public class variable_scope : IObjectLife
     {
         public static string _VARSTORE_KEY = "__variable_store";
         public static string _VARSCOPESTORE_KEY = "__varscope";
@@ -292,6 +292,16 @@ namespace Tensorflow
             bool validate_shape = true)
         {
             throw new NotImplementedException();
+        }
+
+        public void __init__()
+        {
+            
+        }
+
+        public void __del__()
+        {
+            
         }
     }
 }

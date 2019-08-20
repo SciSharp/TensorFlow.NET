@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -247,7 +248,7 @@ namespace Tensorflow
             if (inputs == null)
                 inputs = new Tensor[0];
 
-            foreach ((int idx, Tensor a) in Python.enumerate(inputs))
+            foreach ((int idx, Tensor a) in enumerate(inputs))
             {
 
             }

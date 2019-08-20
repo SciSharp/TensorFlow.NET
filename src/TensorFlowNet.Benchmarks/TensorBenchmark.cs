@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Attributes;
 using NumSharp;
 using Tensorflow;
+using static Tensorflow.Binding;
 
 namespace TensorFlowBenchmark
 {

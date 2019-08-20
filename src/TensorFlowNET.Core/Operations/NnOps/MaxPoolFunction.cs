@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {

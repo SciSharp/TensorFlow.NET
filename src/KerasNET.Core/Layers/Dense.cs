@@ -19,6 +19,7 @@ using Tensorflow;
 using static Keras.Keras;
 using NumSharp;
 using Tensorflow.Operations.Activation;
+using static Tensorflow.Binding;
 
 namespace Keras.Layers
 {

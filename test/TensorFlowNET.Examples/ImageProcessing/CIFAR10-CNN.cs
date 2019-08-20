@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
 using TensorFlowDatasets;
-using static Tensorflow.Python;
 
 namespace TensorFlowNET.Examples
 {

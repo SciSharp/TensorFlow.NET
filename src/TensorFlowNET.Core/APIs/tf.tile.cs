@@ -18,12 +18,12 @@ using NumSharp;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static Tensor tile(Tensor input,
+        public Tensor tile(Tensor input,
                 Tensor multiples,
                 string name = null) => gen_array_ops.tile(input, multiples, name);
-        public static Tensor tile(NDArray input,
+        public Tensor tile(NDArray input,
                 int[] multiples,
                 string name = null) => gen_array_ops.tile(input, multiples, name);
 

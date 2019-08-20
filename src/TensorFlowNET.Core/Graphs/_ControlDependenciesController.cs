@@ -22,7 +22,7 @@ namespace Tensorflow
     /// <summary>
     /// Context manager for `control_dependencies()`
     /// </summary>
-    public class _ControlDependenciesController : IPython
+    public class _ControlDependenciesController : IObjectLife
     {
         private Graph _graph;
         private List<ITensorOrOperation> _control_inputs_val;
@@ -108,6 +108,16 @@ namespace Tensorflow
         }
 
         public void Dispose()
+        {
+            
+        }
+
+        public void __init__()
+        {
+            
+        }
+
+        public void __del__()
         {
             
         }

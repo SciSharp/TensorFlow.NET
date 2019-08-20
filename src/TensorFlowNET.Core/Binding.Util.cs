@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using NumSharp;
-using NumSharp.Backends;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,17 +25,14 @@ using System.Linq;
 namespace Tensorflow
 {
     /// <summary>
-    /// Mapping C# functions to Python
+    /// Binding utilities to mimic python functions.
     /// </summary>
-    public static class Python
+    public static partial class Binding
     {
         public static void print(object obj)
         {
             Console.WriteLine(obj.ToString());
         }
-
-        //protected int len<T>(IEnumerable<T> a)
-        //    => a.Count();
 
         public static int len(object a)
         {
@@ -66,17 +62,15 @@ namespace Tensorflow
             return Enumerable.Range(start, end - start);
         }
 
-        public static T New<T>(object args) where T : IPyClass
+        public static T New<T>() where T : IObjectLife, new()
         {
-            var instance = Activator.CreateInstance<T>();
-
-            instance.__init__(instance, args);
-
+            var instance = new T();
+            instance.__init__();
             return instance;
         }
 
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
-        public static void tf_with(IPython py, Action<IPython> action)
+        public static void tf_with(IObjectLife py, Action<IObjectLife> action)
         {
             try
             {
@@ -96,7 +90,7 @@ namespace Tensorflow
         }
 
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
-        public static void tf_with<T>(T py, Action<T> action) where T : IPython
+        public static void tf_with<T>(T py, Action<T> action) where T : IObjectLife
         {
             try
             {
@@ -116,7 +110,7 @@ namespace Tensorflow
         }
 
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
-        public static TOut tf_with<TIn, TOut>(TIn py, Func<TIn, TOut> action) where TIn : IPython
+        public static TOut tf_with<TIn, TOut>(TIn py, Func<TIn, TOut> action) where TIn : IObjectLife
         {
             try
             {
@@ -126,7 +120,6 @@ namespace Tensorflow
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw;
                 return default(TOut);
             }
             finally
@@ -278,7 +271,9 @@ namespace Tensorflow
             var __memberobject__ = __type__.GetMember(key);
             return (__memberobject__.Length > 0) ? true : false;
         }
+
         public delegate object __object__(params object[] args);
+
         public static __object__ getattr(object obj, string key, params Type[] ___parameter_type__)
         {
             var __dyn_obj__ = obj.GetType().GetMember(key);
@@ -290,7 +285,7 @@ namespace Tensorflow
                 try
                 {
                     var __method__ = (___parameter_type__.Length > 0) ? obj.GetType().GetMethod(key, ___parameter_type__) : obj.GetType().GetMethod(key);
-                    return (__object__)((object[] args) => __method__.Invoke(obj, args));
+                    return (object[] args) => __method__.Invoke(obj, args);
                 }
                 catch (System.Reflection.AmbiguousMatchException ex)
                 {
@@ -299,27 +294,48 @@ namespace Tensorflow
             }
             else if (__type__.MemberType == System.Reflection.MemberTypes.Field)
             {
-                var __field__ = (object)obj.GetType().GetField(key).GetValue(obj);
-                return (__object__)((object[] args) => { return __field__; });
+                var __field__ = obj.GetType().GetField(key).GetValue(obj);
+                return (object[] args) => { return __field__; };
             }
             else if (__type__.MemberType == System.Reflection.MemberTypes.Property)
             {
-                var __property__ = (object)obj.GetType().GetProperty(key).GetValue(obj);
-                return (__object__)((object[] args) => { return __property__; });
+                var __property__ = obj.GetType().GetProperty(key).GetValue(obj);
+                return (object[] args) => { return __property__; };
             }
-            return (__object__)((object[] args) => { return "NaN"; });
+            return (object[] args) => { return "NaN"; };
         }
-    }
 
-    public interface IPython : IDisposable
-    {
-        void __enter__();
+        public static IEnumerable TupleToEnumerable(object tuple)
+        {
+            Type t = tuple.GetType();
+            if(t.IsGenericType && (t.FullName.StartsWith("System.Tuple") || t.FullName.StartsWith("System.ValueTuple")))
+            {
+                var flds = t.GetFields();
+                for(int i = 0; i < flds.Length;i++)
+                {
+                    yield return flds[i].GetValue(tuple);
+                }
+            }
+            else
+            {
+                throw new System.Exception("Expected Tuple.");
+            }
+        }
 
-        void __exit__();
-    }
+        public static bool isinstance(object Item1, Type Item2)
+        {
+            return Item1.GetType() == Item2;
+        }
 
-    public class PyObject<T> where T : IPyClass
-    {
-        public T Instance { get; set; }
+        public static bool isinstance(object Item1, object tuple)
+        {
+            var tup = TupleToEnumerable(tuple);
+            foreach(var t in tup)
+            {
+                if(isinstance(Item1, (Type)t))
+                    return true;
+            }
+            return false;
+        }
     }
 }

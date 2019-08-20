@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Keras.Utils;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -82,7 +83,7 @@ namespace Tensorflow.Keras.Layers
         protected override void build(TensorShape input_shape)
         {
             var ndims = input_shape.ndim;
-            foreach (var (idx, x) in Python.enumerate(axis))
+            foreach (var (idx, x) in enumerate(axis))
                 if (x < 0)
                     axis[idx] = ndims + x;
 
@@ -207,7 +208,7 @@ namespace Tensorflow.Keras.Layers
 
         public Tensor _assign_moving_average(RefVariable variable, Tensor value, Tensor momentum)
         {
-            return Python.tf_with(ops.name_scope(null, "AssignMovingAvg", new { variable, value, momentum }), scope =>
+            return tf_with(ops.name_scope(null, "AssignMovingAvg", new { variable, value, momentum }), scope =>
             {
                 // var cm = ops.colocate_with(variable);
                 var decay = ops.convert_to_tensor(1.0f - momentum, name: "decay");

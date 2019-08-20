@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -144,7 +144,7 @@ namespace Tensorflow
 
             _check_saver_def();
 
-            _next_checkpoint_time = Python.time() + _saver_def.KeepCheckpointEveryNHours * 3600;
+            _next_checkpoint_time = time() + _saver_def.KeepCheckpointEveryNHours * 3600;
         }
 
         private void _check_saver_def()

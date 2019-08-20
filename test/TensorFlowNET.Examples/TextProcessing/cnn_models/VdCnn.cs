@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Tensorflow;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples.Text
 {
@@ -32,7 +32,7 @@ namespace TensorFlowNET.Examples.Text
             num_filters = new int[] { 64, 64, 128, 256, 512 };
             num_blocks = new int[] { 2, 2, 2, 2 };
             learning_rate = 0.001f;
-            cnn_initializer = tf.keras.initializers.he_normal();
+            cnn_initializer = tensorflow.keras.initializers.he_normal();
             fc_initializer = tf.truncated_normal_initializer(stddev: 0.05f);
 
             x = tf.placeholder(tf.int32, new TensorShape(-1, document_max_len), name: "x");

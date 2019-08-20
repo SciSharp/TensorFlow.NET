@@ -17,7 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Operations;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -50,7 +50,7 @@ namespace Tensorflow
             string data_format = null, 
             string name = null)
         {
-            return Python.tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
+            return tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
             {
                 name = scope;
                 value = ops.convert_to_tensor(value, name: "input");

@@ -18,7 +18,7 @@ using NumSharp;
 using System;
 using Tensorflow;
 using Tensorflow.Hub;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -26,7 +26,7 @@ namespace TensorFlowNET.Examples
     /// Neural Network classifier for Hand Written Digits
     /// Sample Neural Network architecture with two layers implemented for classifying MNIST digits.
     /// Use Stochastic Gradient Descent (SGD) optimizer. 
-    /// http://www.easy-tensorflow.com/tf-tutorials/neural-networks
+    /// http://www.easy-tf.com/tf-tutorials/neural-networks
     /// </summary>
     public class DigitRecognitionNN : IExample
     {

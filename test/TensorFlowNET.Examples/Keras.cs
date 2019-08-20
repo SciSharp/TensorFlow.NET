@@ -4,6 +4,7 @@ using Tensorflow;
 using Keras.Layers;
 using NumSharp;
 using Keras;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {

@@ -19,8 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Operations.ControlFlows;
 using Tensorflow.Util;
-using static Tensorflow.Python;
 using static Tensorflow.control_flow_ops;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {

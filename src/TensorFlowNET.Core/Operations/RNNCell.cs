@@ -17,7 +17,7 @@
 using System;
 using Tensorflow.Operations;
 using Tensorflow.Util;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

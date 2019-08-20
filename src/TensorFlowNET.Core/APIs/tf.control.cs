@@ -18,9 +18,9 @@ using System;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
+        public Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
             TensorShape shape_invariants = null,
             int parallel_iterations = 10,
             bool back_prop = true,
@@ -37,7 +37,7 @@ namespace Tensorflow
                 maximum_iterations: maximum_iterations,
                 return_same_structure: return_same_structure);
 
-        public static _ControlDependenciesController control_dependencies(Operation[] control_inputs) 
+        public _ControlDependenciesController control_dependencies(Operation[] control_inputs) 
             => ops.control_dependencies(control_inputs);
     }
 }

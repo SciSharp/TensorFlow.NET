@@ -1,4 +1,4 @@
-﻿using static Tensorflow.tf;
+﻿using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -9,7 +9,7 @@ namespace Tensorflow.Keras.Layers
             int[] strides,
             string padding = "valid",
             string data_format = null,
-            string name = null) : base(nn.max_pool_fn, pool_size,
+            string name = null) : base(tf.nn.max_pool_fn, pool_size,
                 strides,
                 padding: padding,
                 data_format: data_format,

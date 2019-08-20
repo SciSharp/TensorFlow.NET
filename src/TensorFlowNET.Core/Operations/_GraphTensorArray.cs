@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {

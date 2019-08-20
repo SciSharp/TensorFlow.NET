@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Tensorflow.OpDef.Types;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -141,7 +141,7 @@ namespace Tensorflow
                             dtype = input_arg.Type;
                         else if (attrs.ContainsKey(input_arg.TypeAttr))
                             dtype = (DataType)attrs[input_arg.TypeAttr];
-                        else if (values.GetType() == typeof(string) && dtype == DataType.DtInvalid)
+                        else if (isinstance(values, typeof(string)) && dtype == DataType.DtInvalid)
                             dtype = DataType.DtString;
                         else if (default_type_attr_map.ContainsKey(input_arg.TypeAttr))
                             default_dtype = (DataType)default_type_attr_map[input_arg.TypeAttr];

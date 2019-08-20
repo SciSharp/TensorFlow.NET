@@ -2,6 +2,7 @@
 using Keras.Layers;
 using NumSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {

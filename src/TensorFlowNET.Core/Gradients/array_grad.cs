@@ -17,7 +17,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Framework;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
 {
@@ -194,6 +194,12 @@ namespace Tensorflow.Gradients
         public static Tensor[] _SqueezeGrad(Operation op, Tensor[] grads)
         {
             return new Tensor[] { _ReshapeToInput(op, grads[0]) };
+        }
+
+        [RegisterGradient("StopGradient")]
+        public static Tensor[] _NoGradient(Operation op, Tensor[] grads)
+        {
+            return new Tensor[] {null};
         }
 
         /// <summary>
