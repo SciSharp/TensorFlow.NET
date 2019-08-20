@@ -22,6 +22,7 @@ using System.Linq;
 using Tensorflow.Operations;
 using static Tensorflow.CollectionDef;
 using static Tensorflow.MetaGraphDef.Types;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

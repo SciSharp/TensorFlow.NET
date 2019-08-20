@@ -18,21 +18,21 @@ using System.Collections.Generic;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static VariableV1[] global_variables(string scope = null)
+        public VariableV1[] global_variables(string scope = null)
         {
             return (ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
                 .ToArray();
         }
 
-        public static Operation global_variables_initializer()
+        public Operation global_variables_initializer()
         {
             var g = variables.global_variables();
             return variables.variables_initializer(g.ToArray());
         }
 
-        public static RefVariable get_variable(string name,
+        public RefVariable get_variable(string name,
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             object initializer = null, // IInitializer or Tensor

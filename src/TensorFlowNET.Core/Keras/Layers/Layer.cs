@@ -21,6 +21,7 @@ using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {

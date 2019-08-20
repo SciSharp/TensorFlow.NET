@@ -16,15 +16,15 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static graph_util_impl graph_util => new graph_util_impl();
-        public static Graph get_default_graph()
+        public graph_util_impl graph_util => new graph_util_impl();
+        public Graph get_default_graph()
         {
             return ops.get_default_graph();
         }
 
-        public static Graph Graph() 
+        public Graph Graph() 
             => new Graph();
     }
 }

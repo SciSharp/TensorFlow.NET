@@ -16,14 +16,17 @@
 
 using Tensorflow.Keras.Layers;
 using Tensorflow.Operations.Activation;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static class layers
+        public layers_internal layers { get; } = new layers_internal();
+
+        public class layers_internal
         {
-            public static Tensor conv2d(Tensor inputs,
+            public Tensor conv2d(Tensor inputs,
                 int filters,
                 int[] kernel_size,
                 int[] strides = null,
@@ -80,7 +83,7 @@ namespace Tensorflow
             /// <param name="renorm"></param>
             /// <param name="renorm_momentum"></param>
             /// <returns></returns>
-            public static Tensor batch_normalization(Tensor inputs,
+            public Tensor batch_normalization(Tensor inputs,
                 int axis = -1,
                 float momentum = 0.99f,
                 float epsilon = 0.001f,
@@ -124,7 +127,7 @@ namespace Tensorflow
             /// <param name="data_format"></param>
             /// <param name="name"></param>
             /// <returns></returns>
-            public static Tensor max_pooling2d(Tensor inputs,
+            public Tensor max_pooling2d(Tensor inputs,
                 int[] pool_size,
                 int[] strides,
                 string padding = "valid",
@@ -140,7 +143,7 @@ namespace Tensorflow
                 return layer.apply(inputs);
             }
 
-            public static Tensor dense(Tensor inputs,
+            public Tensor dense(Tensor inputs,
                 int units,
                 IActivation activation = null,
                 bool use_bias = true,

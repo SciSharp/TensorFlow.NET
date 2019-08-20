@@ -21,6 +21,7 @@ using Google.Protobuf;
 using System.Linq;
 using NumSharp;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

@@ -66,12 +66,10 @@ namespace Tensorflow
             return Enumerable.Range(start, end - start);
         }
 
-        public static T New<T>(object args) where T : IPyClass
+        public static T New<T>() where T : IPyClass, new()
         {
-            var instance = Activator.CreateInstance<T>();
-
-            instance.__init__(instance, args);
-
+            var instance = new T();
+            instance.__init__(instance);
             return instance;
         }
 
@@ -346,10 +344,5 @@ namespace Tensorflow
         void __enter__();
 
         void __exit__();
-    }
-
-    public class PyObject<T> where T : IPyClass
-    {
-        public T Instance { get; set; }
     }
 }

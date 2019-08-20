@@ -7,6 +7,7 @@ using Tensorflow;
 using Tensorflow.Estimator;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 using static TensorFlowNET.Examples.DataHelpers;
 
 namespace TensorFlowNET.Examples.Text.NER

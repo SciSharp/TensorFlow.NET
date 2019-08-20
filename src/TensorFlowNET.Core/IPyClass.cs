@@ -22,7 +22,7 @@ namespace Tensorflow
         /// Called when the instance is created.
         /// </summary>
         /// <param name="args"></param>
-        void __init__(IPyClass self, dynamic args);
+        void __init__(IPyClass self);
 
         void __enter__(IPyClass self);
 

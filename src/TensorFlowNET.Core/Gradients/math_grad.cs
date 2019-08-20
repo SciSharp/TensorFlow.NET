@@ -18,6 +18,7 @@ using System;
 using System.Linq;
 using Tensorflow.Operations;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
 {

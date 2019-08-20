@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Keras.Utils;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {

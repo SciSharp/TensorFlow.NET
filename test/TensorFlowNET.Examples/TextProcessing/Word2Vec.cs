@@ -6,6 +6,7 @@ using System.Linq;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {

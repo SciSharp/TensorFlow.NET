@@ -16,13 +16,13 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static Tensor reshape(Tensor tensor,
+        public Tensor reshape(Tensor tensor,
                 Tensor shape,
                 string name = null) => gen_array_ops.reshape(tensor, shape, name);
 
-        public static Tensor reshape(Tensor tensor,
+        public Tensor reshape(Tensor tensor,
                 int[] shape,
                 string name = null) => gen_array_ops.reshape(tensor, shape, name);
     }

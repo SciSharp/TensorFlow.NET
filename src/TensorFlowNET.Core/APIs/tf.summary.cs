@@ -16,11 +16,11 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static Summaries.Summary summary = new Summaries.Summary();
+        public Summaries.Summary summary = new Summaries.Summary();
 
-        public static Tensor scalar(string name, Tensor tensor) 
+        public Tensor scalar(string name, Tensor tensor) 
             => summary.scalar(name, tensor);
     }
 }

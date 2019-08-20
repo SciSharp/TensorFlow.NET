@@ -20,6 +20,7 @@ using System.Linq;
 using Tensorflow.Framework;
 using Tensorflow.Train;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

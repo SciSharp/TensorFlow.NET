@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using static Tensorflow.Binding;
+
 namespace Tensorflow.Keras.Layers
 {
     public class Embedding : Layer

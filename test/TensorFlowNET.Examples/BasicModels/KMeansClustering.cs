@@ -20,6 +20,7 @@ using System.Diagnostics;
 using Tensorflow;
 using Tensorflow.Hub;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {

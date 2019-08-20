@@ -15,7 +15,7 @@
 ******************************************************************************/
 
 using System;
-using System.Runtime.InteropServices;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

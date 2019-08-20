@@ -16,12 +16,12 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static Tensor convert_to_tensor(object value,
+        public Tensor convert_to_tensor(object value,
             string name = null) => ops.convert_to_tensor(value, name: name);
 
-        public static Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides = null,
+        public Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides = null,
             int begin_mask = 0,
             int end_mask = 0,
             int ellipsis_mask = 0,
@@ -38,7 +38,7 @@ namespace Tensorflow
                 shrink_axis_mask: shrink_axis_mask,
                 name: name);
 
-        public static Tensor strided_slice<T>(Tensor input, T[] begin, T[] end, T[] strides = null,
+        public Tensor strided_slice<T>(Tensor input, T[] begin, T[] end, T[] strides = null,
             int begin_mask = 0,
             int end_mask = 0,
             int ellipsis_mask = 0,

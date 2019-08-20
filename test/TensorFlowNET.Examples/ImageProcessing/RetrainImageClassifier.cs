@@ -24,6 +24,7 @@ using System.Linq;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -32,7 +33,7 @@ namespace TensorFlowNET.Examples
     /// and simply train a new classification layer on top. Transfer learning is a technique that shortcuts much of this 
     /// by taking a piece of a model that has already been trained on a related task and reusing it in a new model.
     /// 
-    /// https://www.tensorflow.org/hub/tutorials/image_retraining
+    /// https://www.tf.org/hub/tutorials/image_retraining
     /// </summary>
     public class RetrainImageClassifier : IExample
     {
@@ -167,7 +168,7 @@ namespace TensorFlowNET.Examples
         /// weights, and then sets up all the gradients for the backward pass.
         /// 
         /// The set up for the softmax and fully-connected layers is based on:
-        /// https://www.tensorflow.org/tutorials/mnist/beginners/index.html
+        /// https://www.tf.org/tutorials/mnist/beginners/index.html
         /// </summary>
         /// <param name="class_count"></param>
         /// <param name="final_tensor_name"></param>
@@ -508,7 +509,7 @@ namespace TensorFlowNET.Examples
         {
             // get a set of images to teach the network about the new classes
             string fileName = "flower_photos.tgz";
-            string url = $"http://download.tensorflow.org/example_images/{fileName}";
+            string url = $"http://download.tf.org/example_images/{fileName}";
             Web.Download(url, data_dir, fileName);
             Compress.ExtractTGZ(Path.Join(data_dir, fileName), data_dir);
 

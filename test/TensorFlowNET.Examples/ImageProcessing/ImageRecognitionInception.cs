@@ -6,7 +6,7 @@ using System.IO;
 using Console = Colorful.Console;
 using Tensorflow;
 using System.Drawing;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -89,7 +89,7 @@ namespace TensorFlowNET.Examples
             Directory.CreateDirectory(dir);
 
             // get model file
-            string url = "https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip";
+            string url = "https://storage.googleapis.com/download.tf.org/models/inception5h.zip";
 
             Utility.Web.Download(url, dir, "inception5h.zip");
 

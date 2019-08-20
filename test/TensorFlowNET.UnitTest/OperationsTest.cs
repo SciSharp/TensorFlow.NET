@@ -5,6 +5,7 @@ using System.Linq;
 using NumSharp;
 using Tensorflow;
 using Buffer = Tensorflow.Buffer;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {

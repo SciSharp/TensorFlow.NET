@@ -16,11 +16,13 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static class distributions
+        public distributions_internal distributions { get; } = new distributions_internal();
+
+        public class distributions_internal
         {
-            public static Normal Normal(Tensor loc,
+            public Normal Normal(Tensor loc,
                 Tensor scale,
                 bool validate_args = false,
                 bool allow_nan_stats = true,

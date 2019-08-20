@@ -16,8 +16,8 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static LossesImpl losses => new LossesImpl();
+        public LossesImpl losses => new LossesImpl();
     }
 }

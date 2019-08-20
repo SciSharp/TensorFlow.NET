@@ -19,28 +19,30 @@ using Tensorflow.Train;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static class train
+        public train_internal train { get; } = new train_internal();
+
+        public class train_internal
         {
-            public static Optimizer GradientDescentOptimizer(float learning_rate) 
+            public Optimizer GradientDescentOptimizer(float learning_rate) 
                 => new GradientDescentOptimizer(learning_rate);
 
-            public static Optimizer AdamOptimizer(float learning_rate, string name = "Adam") 
+            public Optimizer AdamOptimizer(float learning_rate, string name = "Adam") 
                 => new AdamOptimizer(learning_rate, name: name);
 
-            public static Saver Saver(VariableV1[] var_list = null) => new Saver(var_list: var_list);
+            public Saver Saver(VariableV1[] var_list = null) => new Saver(var_list: var_list);
 
-            public static string write_graph(Graph graph, string logdir, string name, bool as_text = true) 
+            public string write_graph(Graph graph, string logdir, string name, bool as_text = true) 
                 => graph_io.write_graph(graph, logdir, name, as_text);
 
-            public static Saver import_meta_graph(string meta_graph_or_file,
+            public Saver import_meta_graph(string meta_graph_or_file,
                 bool clear_devices = false,
                 string import_scope = "") => saver._import_meta_graph_with_return_elements(meta_graph_or_file,
                     clear_devices,
                     import_scope).Item1;
 
-            public static (MetaGraphDef, Dictionary<string, RefVariable>) export_meta_graph(string filename = "",
+            public (MetaGraphDef, Dictionary<string, RefVariable>) export_meta_graph(string filename = "",
                 bool as_text = false,
                 bool clear_devices = false,
                 bool clear_extraneous_savers = false,

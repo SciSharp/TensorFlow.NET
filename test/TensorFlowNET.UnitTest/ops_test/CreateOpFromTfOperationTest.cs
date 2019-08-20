@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using Tensorflow.Operations;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.ops_test
 {

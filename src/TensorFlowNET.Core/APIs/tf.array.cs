@@ -20,7 +20,7 @@ using System.Linq;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
         /// <summary>
         /// Concatenates tensors along one dimension.
@@ -29,7 +29,7 @@ namespace Tensorflow
         /// <param name="axis"></param>
         /// <param name="name"></param>
         /// <returns>A `Tensor` resulting from concatenation of the input tensors.</returns>
-        public static Tensor concat(IList<Tensor> values, int axis, string name = "concat")
+        public Tensor concat(IList<Tensor> values, int axis, string name = "concat")
         {
             if (values.Count == 1)
                 throw new NotImplementedException("tf.concat length is 1");
@@ -48,7 +48,7 @@ namespace Tensorflow
         /// A `Tensor` with the same data as `input`, but its shape has an additional
         /// dimension of size 1 added.
         /// </returns>
-        public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1)
+        public Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1)
             => array_ops.expand_dims(input, axis, name, dim);
 
         /// <summary>
@@ -58,14 +58,14 @@ namespace Tensorflow
         /// <param name="value"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor fill<T>(Tensor dims, T value, string name = null)
+        public Tensor fill<T>(Tensor dims, T value, string name = null)
             => gen_array_ops.fill(dims, value, name: name);
 
         /// <summary>
         /// Return the elements, either from `x` or `y`, depending on the `condition`.
         /// </summary>
         /// <returns></returns>
-        public static Tensor where<Tx, Ty>(Tensor condition, Tx x, Ty y, string name = null)
+        public Tensor where<Tx, Ty>(Tensor condition, Tx x, Ty y, string name = null)
             => array_ops.where(condition, x, y, name);
 
         /// <summary>
@@ -76,10 +76,10 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="conjugate"></param>
         /// <returns></returns>
-        public static Tensor transpose<T1>(T1 a, int[] perm = null, string name = "transpose", bool conjugate = false)
+        public Tensor transpose<T1>(T1 a, int[] perm = null, string name = "transpose", bool conjugate = false)
             => array_ops.transpose(a, perm, name, conjugate);
 
-        public static Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
+        public Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
             => gen_array_ops.squeeze(input, axis, name);
 
         /// <summary>
@@ -89,10 +89,10 @@ namespace Tensorflow
         /// <param name="axis"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor stack(object values, int axis = 0, string name = "stack")
+        public Tensor stack(object values, int axis = 0, string name = "stack")
             => array_ops.stack(values, axis, name: name);
 
-        public static Tensor one_hot(Tensor indices, int depth,
+        public Tensor one_hot(Tensor indices, int depth,
             Tensor on_value = null,
             Tensor off_value = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
@@ -110,7 +110,7 @@ namespace Tensorflow
         /// </param>
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `input`.</returns>
-        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null)
+        public Tensor placeholder_with_default<T>(T input, int[] shape, string name = null)
             => gen_array_ops.placeholder_with_default(input, shape, name: name);
     }
 }

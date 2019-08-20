@@ -1,5 +1,6 @@
 ﻿using System;
 using Tensorflow;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {

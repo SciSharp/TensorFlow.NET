@@ -18,25 +18,25 @@ using Tensorflow.Eager;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow : IPyClass
     {
-        public static TF_DataType @byte = TF_DataType.TF_UINT8;
-        public static TF_DataType @sbyte = TF_DataType.TF_INT8;
-        public static TF_DataType int16 = TF_DataType.TF_INT16;
-        public static TF_DataType int32 = TF_DataType.TF_INT32;
-        public static TF_DataType int64 = TF_DataType.TF_INT64;
-        public static TF_DataType float16 = TF_DataType.TF_HALF;
-        public static TF_DataType float32 = TF_DataType.TF_FLOAT;
-        public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
-        public static TF_DataType @bool = TF_DataType.TF_BOOL;
-        public static TF_DataType chars = TF_DataType.TF_STRING;
-        public static TF_DataType @string = TF_DataType.TF_STRING;
+        public TF_DataType @byte = TF_DataType.TF_UINT8;
+        public TF_DataType @sbyte = TF_DataType.TF_INT8;
+        public TF_DataType int16 = TF_DataType.TF_INT16;
+        public TF_DataType int32 = TF_DataType.TF_INT32;
+        public TF_DataType int64 = TF_DataType.TF_INT64;
+        public TF_DataType float16 = TF_DataType.TF_HALF;
+        public TF_DataType float32 = TF_DataType.TF_FLOAT;
+        public TF_DataType float64 = TF_DataType.TF_DOUBLE;
+        public TF_DataType @bool = TF_DataType.TF_BOOL;
+        public TF_DataType chars = TF_DataType.TF_STRING;
+        public TF_DataType @string = TF_DataType.TF_STRING;
 
-        public static Context context = new Context(new ContextOptions(), new Status());
+        public Context context = new Context(new ContextOptions(), new Status());
 
-        public static Session defaultSession;
+        public Session defaultSession;
 
-        public static RefVariable Variable<T>(T data,
+        public RefVariable Variable<T>(T data,
             bool trainable = true,
             bool validate_shape = true,
             string name = null,
@@ -49,33 +49,53 @@ namespace Tensorflow
                 dtype: dtype);
         }
 
-        public static unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
+        public unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
         {
             return gen_array_ops.placeholder(dtype, shape, name);
         }
 
-        public static void enable_eager_execution()
+        public void enable_eager_execution()
         {
             // contex = new Context();
             context.default_execution_mode = Context.EAGER_MODE;
         }
 
-        public static string VERSION => c_api.StringPiece(c_api.TF_Version());
+        public string VERSION => c_api.StringPiece(c_api.TF_Version());
 
-        public static Session Session()
+        public Session Session()
         {
             defaultSession = new Session();
             return defaultSession;
         }
 
-        public static Session Session(Graph graph)
+        public Session Session(Graph graph)
         {
             return new Session(graph);
         }
 
-        public static Session Session(SessionOptions opts)
+        public Session Session(SessionOptions opts)
         {
             return new Session(null, opts);
+        }
+
+        public void __init__(IPyClass self)
+        {
+            
+        }
+
+        public void __enter__(IPyClass self)
+        {
+            
+        }
+
+        public void __exit__(IPyClass self)
+        {
+            
+        }
+
+        public void __del__(IPyClass self)
+        {
+            
         }
     }
 }

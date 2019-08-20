@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using Tensorflow;
 using NumSharp;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 using System.IO;
 using TensorFlowNET.Examples.Utility;
 

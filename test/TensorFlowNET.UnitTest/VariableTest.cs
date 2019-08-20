@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -28,7 +29,7 @@ namespace TensorFlowNET.UnitTest
         }
 
         /// <summary>
-        /// https://www.tensorflow.org/api_docs/python/tf/variable_scope
+        /// https://www.tf.org/api_docs/python/tf/variable_scope
         /// how to create a new variable
         /// </summary>
         [TestMethod]
