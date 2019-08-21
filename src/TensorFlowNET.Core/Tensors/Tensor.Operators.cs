@@ -69,11 +69,12 @@ namespace Tensorflow
             TF_DataType.TF_QINT8, TF_DataType.TF_QINT16, TF_DataType.TF_QINT32,
             TF_DataType.TF_UINT8, TF_DataType.TF_UINT16, TF_DataType.TF_UINT32, TF_DataType.TF_UINT64
         };
+
         public static Tensor operator /(double x, Tensor y) => BinaryOpWrapper("truediv", x, y);
         public static Tensor operator /(float x, Tensor y) => BinaryOpWrapper("truediv", x, y);
         public static Tensor operator /(int x, Tensor y) => BinaryOpWrapper("floordiv", x, y);
         public static Tensor operator /(Tensor x, Tensor y) =>
-            _intTfDataTypes.Contains(x._dtype)
+            _intTfDataTypes.Contains(x.dtype)
                 ? BinaryOpWrapper("floordiv", x, y)
                 : BinaryOpWrapper("truediv", x, y);
         public static Tensor operator /(Tensor x, int y) => BinaryOpWrapper("floordiv", x, y);
@@ -122,8 +123,7 @@ namespace Tensorflow
             if (y is Tensor tr)
                 dtype = tr.dtype.as_base_dtype();
 
-            var namescope = ops.name_scope(null, name, new { x, y });
-            return tf_with(namescope, scope =>
+            using (var scope = ops.name_scope(null, name, new { x, y }))
             {
                 Tensor result = null;
                 var x1 = ops.convert_to_tensor(x, dtype: dtype, name: "x");
@@ -154,8 +154,7 @@ namespace Tensorflow
                 }
 
                 return result;
-            });
-
+            }
         }
     }
 }

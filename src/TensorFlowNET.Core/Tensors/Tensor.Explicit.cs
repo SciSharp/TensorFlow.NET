@@ -128,8 +128,8 @@ namespace Tensorflow
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void EnsureDType(Tensor tensor, TF_DataType @is)
         {
-            if (tensor._dtype != @is)
-                throw new InvalidCastException($"Unable to cast scalar tensor {tensor._dtype} to {@is}");
+            if (tensor.dtype != @is)
+                throw new InvalidCastException($"Unable to cast scalar tensor {tensor.dtype} to {@is}");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

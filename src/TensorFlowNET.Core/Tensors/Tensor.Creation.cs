@@ -594,7 +594,7 @@ namespace Tensorflow
         {
             _op = op;
             _value_index = value_index;
-            _dtype = dtype;
+            _override_dtype = dtype;
             _id = ops.uid();
         }
 

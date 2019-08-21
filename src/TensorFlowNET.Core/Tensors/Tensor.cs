@@ -43,7 +43,7 @@ namespace Tensorflow
         private readonly Operation _op;
         private readonly int _value_index;
         private TF_Output? _tf_output;
-        private readonly TF_DataType _dtype;
+        private readonly TF_DataType _override_dtype;
 
         public int Id => _id;
 
@@ -72,7 +72,7 @@ namespace Tensorflow
         /// <summary>
         ///     The DType of elements in this tensor.
         /// </summary>
-        public TF_DataType dtype => _handle == IntPtr.Zero ? _dtype : c_api.TF_TensorType(_handle);
+        public TF_DataType dtype => _handle == IntPtr.Zero ? _override_dtype : c_api.TF_TensorType(_handle);
 
         public ulong bytesize => _handle == IntPtr.Zero ? 0 : c_api.TF_TensorByteSize(_handle);
         public ulong itemsize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
@@ -231,7 +231,7 @@ namespace Tensorflow
             }
 
             //Are the types matching?
-            if (typeof(T).as_dtype() == _dtype)
+            if (typeof(T).as_dtype() == dtype)
             {
                 if (NDims == 0 && size == 1)  //is it a scalar?
                 {
@@ -274,7 +274,7 @@ namespace Tensorflow
                     {
 #if _REGEN
 		                #region Compute
-		                switch (_dtype.as_numpy_dtype().GetTypeCode())
+		                switch (dtype.as_numpy_dtype().GetTypeCode())
 		                {
 			                %foreach supported_dtypes,supported_dtypes_lowercase%
 			                case NPTypeCode.#1: return new T[] {Converts.ChangeType<T>(*(#2*) buffer, NPTypeCode.#1)};
@@ -286,7 +286,7 @@ namespace Tensorflow
 		                #endregion
 #else
 		                #region Compute
-		                switch (_dtype.as_numpy_dtype().GetTypeCode())
+		                switch (dtype.as_numpy_dtype()?.GetTypeCode())
 		                {
 			                case NPTypeCode.Boolean: return new T[] {Converts.ChangeType<T>(*(bool*) buffer, NPTypeCode.Boolean)};
 			                case NPTypeCode.Byte: return new T[] {Converts.ChangeType<T>(*(byte*) buffer, NPTypeCode.Byte)};
@@ -301,7 +301,7 @@ namespace Tensorflow
 			                case NPTypeCode.Single: return new T[] {Converts.ChangeType<T>(*(float*) buffer, NPTypeCode.Single)};
 			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this, NPTypeCode.String)};
 			                default:
-				                throw new NotSupportedException();
+                                throw new NotSupportedException();
 		                }
 		                #endregion
 #endif
@@ -318,7 +318,7 @@ namespace Tensorflow
 
 #if _REGEN
 		                #region Compute
-		                switch (_dtype.as_numpy_dtype().GetTypeCode())
+		                switch (dtype.as_numpy_dtype().GetTypeCode())
 		                {
 			                %foreach supported_dtypes,supported_dtypes_lowercase%
 			                case NPTypeCode.#1: new UnmanagedMemoryBlock<#2>((#2*) buffer, len).CastTo(new UnmanagedMemoryBlock<T>(dst, len), null, null); break;
@@ -329,7 +329,7 @@ namespace Tensorflow
 		                #endregion
 #else
 		                #region Compute
-		                switch (_dtype.as_numpy_dtype().GetTypeCode())
+		                switch (dtype.as_numpy_dtype().GetTypeCode())
 		                {
 			                case NPTypeCode.Boolean: new UnmanagedMemoryBlock<bool>((bool*) buffer, len).CastTo(new UnmanagedMemoryBlock<T>(dst, len), null, null); break;
 			                case NPTypeCode.Byte: new UnmanagedMemoryBlock<byte>((byte*) buffer, len).CastTo(new UnmanagedMemoryBlock<T>(dst, len), null, null); break;
