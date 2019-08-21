@@ -372,9 +372,16 @@ namespace Tensorflow
         /// <returns></returns>
         public byte[] BufferToArray()
         {
-            var data = new byte[bytesize];
-            Marshal.Copy(buffer, data, 0, (int) bytesize);
-            return data;
+            unsafe
+            {
+                // ReSharper disable once LocalVariableHidesMember
+                var bytesize = (long) this.bytesize;
+                var data = new byte[bytesize];
+                fixed (byte* dst = data) 
+                    System.Buffer.MemoryCopy(buffer.ToPointer(), dst, bytesize, bytesize);
+
+                return data;
+            }
         }
 
         /// Used internally in ToArray&lt;T&gt;
