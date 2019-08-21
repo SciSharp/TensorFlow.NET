@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Tensorflow
 {
@@ -6,70 +7,104 @@ namespace Tensorflow
     {
         public static explicit operator bool(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<bool>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(bool*) tensor.buffer;
+            }
         }
 
         public static explicit operator sbyte(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<sbyte>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(sbyte*) tensor.buffer;
+            }
         }
 
         public static explicit operator byte(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<byte>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(byte*) tensor.buffer;
+            }
         }
 
         public static explicit operator ushort(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<ushort>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(ushort*) tensor.buffer;
+            }
         }
 
         public static explicit operator short(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<short>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(short*) tensor.buffer;
+            }
         }
 
         public static explicit operator int(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<int>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(int*) tensor.buffer;
+            }
         }
 
         public static explicit operator uint(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<uint>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(uint*) tensor.buffer;
+            }
         }
 
         public static explicit operator long(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<long>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(long*) tensor.buffer;
+            }
         }
 
         public static explicit operator ulong(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<ulong>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(ulong*) tensor.buffer;
+            }
         }
 
         public static explicit operator float(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<float>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(float*) tensor.buffer;
+            }
         }
 
         public static explicit operator double(Tensor tensor)
         {
-            EnsureScalar(tensor);
-            return tensor.Data<double>()[0];
+            unsafe
+            {
+                EnsureScalar(tensor);
+                return *(double*) tensor.buffer;
+            }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void EnsureScalar(Tensor tensor)
         {
             if (tensor == null)
