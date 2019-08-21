@@ -439,12 +439,12 @@ namespace Tensorflow
             _unfetchable_ops.Add(op);
         }
 
-        protected override void DisposeManagedState()
+        protected override void DisposeManagedResources()
         {
             ops.default_graph_stack.remove(this);
         }
 
-        protected override void DisposeUnManagedState(IntPtr handle)
+        protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             c_api.TF_DeleteGraph(handle);
         }

@@ -392,11 +392,11 @@ namespace Tensorflow
             return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
         }
 
-        protected override void DisposeManagedState()
-        {
-        }
+        //protected override void DisposeManagedState()
+        //{
+        //}
 
-        protected override void DisposeUnManagedState(IntPtr handle)
+        protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             if(handle != IntPtr.Zero)
             {

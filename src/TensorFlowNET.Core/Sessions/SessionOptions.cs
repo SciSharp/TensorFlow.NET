@@ -32,7 +32,7 @@ namespace Tensorflow
             _handle = handle;
         }
 
-        protected override void DisposeUnManagedState(IntPtr handle)
+        protected override void DisposeUnmanagedResources(IntPtr handle)
             => c_api.TF_DeleteSessionOptions(handle);
 
         public void SetConfig(ConfigProto config)

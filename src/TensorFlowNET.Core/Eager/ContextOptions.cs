@@ -1,8 +1,9 @@
 ﻿using System;
+using System.IO;
 
 namespace Tensorflow.Eager
 {
-    public class ContextOptions : IDisposable
+    public class ContextOptions : IDisposable //TODO! Eli: Shouldn't this inherieting DisposableObject?
     {
         private IntPtr _handle;
 

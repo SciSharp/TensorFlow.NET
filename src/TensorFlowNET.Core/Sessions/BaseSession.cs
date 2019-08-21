@@ -396,7 +396,7 @@ namespace Tensorflow
             Dispose();
         }
 
-        protected override void DisposeUnManagedState(IntPtr handle)
+        protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             using (var status = new Status())
             {
