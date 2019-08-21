@@ -41,7 +41,7 @@ namespace TensorFlowNET.UnitTest
                 var grad = tf.gradients(y, x);
                 Assert.AreEqual(grad[0].name, "gradients/AddN:0");
 
-                float r = sess.run(grad[0])[0];
+                float r = sess.run(grad[0]);
                 Assert.AreEqual(r, 1.4f);
             }
         }
@@ -57,7 +57,7 @@ namespace TensorFlowNET.UnitTest
                 var grad = tf.gradients(y, x);
                 Assert.AreEqual(grad[0].name, "gradients/AddN:0");
 
-                float r = sess.run(grad[0])[0];
+                float r = sess.run(grad[0]);
                 Assert.AreEqual(r, 14.700001f);
             });
         }
@@ -94,7 +94,7 @@ namespace TensorFlowNET.UnitTest
 
             using (var sess = tf.Session(graph))
             {
-                var r = sess.run(slice)[0];
+                var r = sess.run(slice);
 
                 Assert.IsTrue(Enumerable.SequenceEqual(r.shape, new[] { 2, 1, 2 }));
                 Assert.IsTrue(Enumerable.SequenceEqual(r[0].GetData<int>(), new[] { 11, 13 }));
