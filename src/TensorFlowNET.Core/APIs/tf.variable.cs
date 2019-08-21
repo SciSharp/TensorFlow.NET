@@ -32,6 +32,14 @@ namespace Tensorflow
             return variables.variables_initializer(g.ToArray());
         }
 
+        /// <summary>
+        /// Returns all variables created with `trainable=True`.
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        public VariableV1[] trainable_variables(string scope = null)
+            => (variables.trainable_variables() as List<VariableV1>).ToArray();
+
         public RefVariable get_variable(string name,
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
