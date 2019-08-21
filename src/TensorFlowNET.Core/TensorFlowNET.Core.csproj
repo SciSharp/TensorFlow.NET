@@ -52,7 +52,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.5.1" />
-    <PackageReference Include="NumSharp" Version="0.20.0-alpha1" />
+    <PackageReference Include="NumSharp" Version="0.20.0" />
   </ItemGroup>
 
   <ItemGroup>
