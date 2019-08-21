@@ -98,7 +98,7 @@ namespace Tensorflow
                 // float to be selected, hence we use a >= comparison.
                 var keep_mask = random_tensor >= rate;
                 var ret = x * scale * math_ops.cast(keep_mask, x.dtype);
-                ret.SetShape(x.TensorShape);
+                ret.set_shape(x.TensorShape);
                 return ret;
             });
         }

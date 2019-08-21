@@ -549,10 +549,11 @@ namespace Tensorflow
             this.Tag = arraySlice; // keep a reference to the memory block to make sure it is not disposed while TF is using it
             var ptr = new IntPtr(arraySlice.Address);
             int num_bytes = (nd.size * nd.dtypesize);
-            var dtype = given_dtype ?? ToTFDataType(nd.dtype);
+            var dtype = given_dtype ?? nd.dtype.as_dtype();
             var handle = TF_NewTensor(dtype, dims: nd.shape.Select(i=>(long)i).ToArray(), num_dims: nd.ndim, data: ptr, len: (UIntPtr)num_bytes, deallocator: _nothingDeallocator, ref _deallocatorArgs);
             IsMemoryOwner = false;
             return handle;
+
         }
 
         public unsafe Tensor(byte[][] buffer, long[] shape)

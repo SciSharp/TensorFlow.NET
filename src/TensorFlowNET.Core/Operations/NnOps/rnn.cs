@@ -233,7 +233,7 @@ namespace Tensorflow.Operations
             dims.AddRange(x_static_shape.dims.Skip(2));
             var shape = new TensorShape(dims.ToArray());
 
-            x_t.SetShape(shape);
+            x_t.set_shape(shape);
 
             return x_t;
         }
