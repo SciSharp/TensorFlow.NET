@@ -34,19 +34,19 @@ namespace Tensorflow
 
         private void internal_dispose(bool disposing)
         {
+            // free unmanaged resources (unmanaged objects).
+            if (_handle != IntPtr.Zero)
+            {
+                // set large fields to null.
+                DisposeUnmanagedResources(_handle);
+
+                _handle = IntPtr.Zero;
+            }
+
             if (disposing)
             {
                 // dispose managed state (managed objects).
                 DisposeManagedResources();
-
-                // free unmanaged resources (unmanaged objects) and override a finalizer below.
-                if (_handle != IntPtr.Zero)
-                {
-                    // set large fields to null.
-                    DisposeUnmanagedResources(_handle);
-
-                    _handle = IntPtr.Zero;
-                }
             }
         }
 
