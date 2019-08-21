@@ -76,8 +76,8 @@ namespace Tensorflow
         {
             get
             {
-                if (slice.IsIndex == false)
-                    throw new ArgumentException("Slice must be an index.");
+                if (slice.Start.HasValue == false || slice.Length.HasValue == false)
+                    throw new ArgumentException("Slice must has Start and Length.");
 
                 return new TensorShape(dims.Skip(slice.Start.Value)
                     .Take(slice.Length.Value)
