@@ -115,6 +115,16 @@ namespace Tensorflow
             }
         }
 
+        public static explicit operator string(Tensor tensor)
+        {
+            unsafe
+            {
+                EnsureScalar(tensor);
+                EnsureDType(tensor, TF_DataType.TF_STRING);
+                return new string((char*) tensor.buffer, 0, (int) tensor.size);
+            }
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void EnsureDType(Tensor tensor, TF_DataType @is)
         {
