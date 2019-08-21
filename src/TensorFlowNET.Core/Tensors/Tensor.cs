@@ -571,6 +571,7 @@ namespace Tensorflow
             if (handle != IntPtr.Zero)
             {
                 c_api.TF_DeleteTensor(handle);
+                _handle = IntPtr.Zero;
             }
         }
 
