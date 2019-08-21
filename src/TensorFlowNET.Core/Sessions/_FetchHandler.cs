@@ -17,6 +17,7 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
+using NumSharp.Backends;
 
 namespace Tensorflow
 {
@@ -71,18 +72,18 @@ namespace Tensorflow
                 {
                     if(tensor_values.Length > 0)
                     {
-                        switch (tensor_values[0].dtype.Name)
+                        switch (tensor_values[0].typecode)
                         {
-                            case "Int32":
+                            case NPTypeCode.Int32:
                                 full_values.Add(float.NaN);
                                 break;
-                            case "Single":
+                            case NPTypeCode.Single:
                                 full_values.Add(float.NaN);
                                 break;
-                            case "String":
+                            case NPTypeCode.String:
                                 full_values.Add(float.NaN);
                                 break;
-                            case "Char":
+                            case NPTypeCode.Char:
                                 full_values.Add(float.NaN);
                                 break;
                             default:
@@ -100,21 +101,21 @@ namespace Tensorflow
                     j += 1;
                     if (value.ndim == 0)
                     {
-                        switch (value.dtype.Name)
+                        switch (value.typecode)
                         {
-                            case "Int16":
+                            case NPTypeCode.Int16:
                                 full_values.Add(value.GetValue<short>(0));
                                 break;
-                            case "Int32":
+                            case NPTypeCode.Int32:
                                 full_values.Add(value.GetValue<int>(0));
                                 break;
-                            case "Int64":
+                            case NPTypeCode.Int64:
                                 full_values.Add(value.GetValue<long>(0));
                                 break;
-                            case "Single":
+                            case NPTypeCode.Single:
                                 full_values.Add(value.GetValue<float>(0));
                                 break;
-                            case "Double":
+                            case NPTypeCode.Double:
                                 full_values.Add(value.GetValue<double>(0));
                                 break;
                             /*case "String":
