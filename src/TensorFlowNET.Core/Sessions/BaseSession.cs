@@ -64,6 +64,11 @@ namespace Tensorflow
             return _run(fetche, feed_dict)[0];
         }
 
+        public virtual NDArray run(ITensorOrOperation fetche, params FeedItem[] feed_dict)
+        {
+            return _run(fetche, feed_dict)[0];
+        }
+
         public virtual (NDArray, NDArray, NDArray, NDArray) run((ITensorOrOperation, ITensorOrOperation, ITensorOrOperation, ITensorOrOperation) fetches, params FeedItem[] feed_dict)
         {
             var results = _run(new object[] { fetches.Item1, fetches.Item2, fetches.Item3, fetches.Item4 }, feed_dict);
