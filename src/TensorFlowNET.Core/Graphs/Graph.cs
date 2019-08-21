@@ -23,57 +23,58 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    /// <summary>
-    /// TensorFlow uses a dataflow graph to represent your computation in terms of the dependencies between individual operations. 
-    /// This leads to a low-level programming model in which you first define the dataflow graph, 
-    /// then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
-    /// https://www.tensorflow.org/guide/graphs
-    /// </summary>
     /*
-        A TensorFlow computation, represented as a dataflow graph.
+    A TensorFlow computation, represented as a dataflow graph.
 
-        A `Graph` contains a set of
-        `tf.Operation` objects,
-        which represent units of computation; and
-        `tf.Tensor` objects, which represent
-        the units of data that flow between operations.
+    A `Graph` contains a set of
+    `tf.Operation` objects,
+    which represent units of computation; and
+    `tf.Tensor` objects, which represent
+    the units of data that flow between operations.
 
-        A default `Graph` is always registered, and accessible by calling
-        `tf.get_default_graph`.
-        To add an operation to the default graph, simply call one of the functions
-        that defines a new `Operation`:
+    A default `Graph` is always registered, and accessible by calling
+    `tf.get_default_graph`.
+    To add an operation to the default graph, simply call one of the functions
+    that defines a new `Operation`:
 
-        ```python
-        c = tf.constant(4.0)
-        assert c.graph is tf.get_default_graph()
-        ```
+    ```python
+    c = tf.constant(4.0)
+    assert c.graph is tf.get_default_graph()
+    ```
 
-        Another typical usage involves the
-        `tf.Graph.as_default`
-        context manager, which overrides the current default graph for the
-        lifetime of the context:
+    Another typical usage involves the
+    `tf.Graph.as_default`
+    context manager, which overrides the current default graph for the
+    lifetime of the context:
 
-        ```python
-        g = tf.Graph()
-        with g.as_default():
-        # Define operations and tensors in `g`.
-        c = tf.constant(30.0)
-        assert c.graph is g
-        ```
+    ```python
+    g = tf.Graph()
+    with g.as_default():
+    # Define operations and tensors in `g`.
+    c = tf.constant(30.0)
+    assert c.graph is g
+    ```
 
-        Important note: This class *is not* thread-safe for graph construction. All
-        operations should be created from a single thread, or external
-        synchronization must be provided. Unless otherwise specified, all methods
-        are not thread-safe.
+    Important note: This class *is not* thread-safe for graph construction. All
+    operations should be created from a single thread, or external
+    synchronization must be provided. Unless otherwise specified, all methods
+    are not thread-safe.
 
-        A `Graph` instance supports an arbitrary number of "collections"
-        that are identified by name. For convenience when building a large
-        graph, collections can store groups of related objects: for
-        example, the `tf.Variable` uses a collection (named
-        `tf.GraphKeys.GLOBAL_VARIABLES`) for
-        all variables that are created during the construction of a graph. The caller
-        may define additional collections by specifying a new name.     
-     */
+    A `Graph` instance supports an arbitrary number of "collections"
+    that are identified by name. For convenience when building a large
+    graph, collections can store groups of related objects: for
+    example, the `tf.Variable` uses a collection (named
+    `tf.GraphKeys.GLOBAL_VARIABLES`) for
+    all variables that are created during the construction of a graph. The caller
+    may define additional collections by specifying a new name.     
+ */
+
+    /// <summary>
+    ///     TensorFlow uses a dataflow graph to represent your computation in terms of the dependencies between individual operations. 
+    ///     This leads to a low-level programming model in which you first define the dataflow graph, 
+    ///     then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
+    /// </summary>
+    /// <remarks>https://www.tensorflow.org/guide/graphs <br></br>https://www.tensorflow.org/api_docs/python/tf/Graph</remarks>
     public partial class Graph : DisposableObject, IEnumerable<Operation>
     {
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
