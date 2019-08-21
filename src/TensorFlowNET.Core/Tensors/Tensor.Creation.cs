@@ -16,6 +16,7 @@
 
 using NumSharp;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -535,8 +536,7 @@ namespace Tensorflow
             if (nd.dtype.Name == "String")
                 throw new NotImplementedException("Support for NDArray of type string not implemented yet");
             IArraySlice arraySlice;
-            var shape = nd.Unsafe.Storage.Shape;
-            if (shape.IsSliced || shape.IsBroadcasted)
+            if (nd.Unsafe.Storage.Shape.IsContiguous == false)
             {
                 // the memory is NOT contiguous, so we have to copy the view into a contiguous memory block.
                 arraySlice = nd.CloneData();
@@ -611,11 +611,11 @@ namespace Tensorflow
         /// specified dimensions.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SuppressMessage("ReSharper", "LocalVariableHidesMember")]
         protected unsafe IntPtr CreateTensorWithoutCopying(TF_DataType dt, long[] shape, Array data, int element_size)
         {
-            if (dt == TF_DataType.TF_STRING && data is byte[])
+            if (dt == TF_DataType.TF_STRING && data is byte[] buffer)
             {
-                var buffer = (byte[])data;
                 var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
                 var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
 
