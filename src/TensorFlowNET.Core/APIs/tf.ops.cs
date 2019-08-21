@@ -33,5 +33,13 @@ namespace Tensorflow
         /// <returns>The scope name.</returns>
         public ops.NameScope name_scope(string name, string default_name = "", object values = null) 
             => new ops.NameScope(name, default_name, values);
+
+        /// <summary>
+        /// Does nothing. Only useful as a placeholder for control edges.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor no_op(string name = null)
+            => gen_control_flow_ops.no_op(name: name);
     }
 }
