@@ -121,7 +121,7 @@ namespace Tensorflow
 
             if(collections == null)
             {
-                collections = new List<string> { ops.GraphKeys.GLOBAL_VARIABLES };
+                collections = new List<string> { tf.GraphKeys.GLOBAL_VARIABLES };
             }
 
             // Store the graph key so optimizers know how to only retrieve variables from
@@ -129,8 +129,8 @@ namespace Tensorflow
             _graph_key = ops.get_default_graph().graph_key;
 
             _trainable = trainable;
-            if (trainable && !collections.Contains(ops.GraphKeys.TRAINABLE_VARIABLES))
-                collections.Add(ops.GraphKeys.TRAINABLE_VARIABLES);
+            if (trainable && !collections.Contains(tf.GraphKeys.TRAINABLE_VARIABLES))
+                collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
 
             ops.init_scope();
             var values = init_from_fn ? new object[0] : new object[] { initial_value };

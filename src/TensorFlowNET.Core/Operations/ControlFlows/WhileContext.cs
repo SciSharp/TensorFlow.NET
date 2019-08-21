@@ -195,7 +195,7 @@ namespace Tensorflow.Operations
             // their associated TensorArrays for calling the body.
             var packed_vars_for_body = _convert_flows_to_tensorarrays(flat_loop_vars, vars_for_body);
             var body_result = body(packed_vars_for_body[0]);
-            var post_summaries = ops.get_collection(ops.GraphKeys._SUMMARY_COLLECTION);
+            var post_summaries = ops.get_collection(tf.GraphKeys._SUMMARY_COLLECTION);
 
             // Store body_result to keep track of TensorArrays returned by body
             var original_body_result = new[] { body_result };

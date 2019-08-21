@@ -81,7 +81,7 @@ namespace Tensorflow.Layers
 
 
             // Update global default collections.
-            _add_elements_to_collection(_updates.ToArray(), new string[] { ops.GraphKeys.UPDATE_OPS });
+            _add_elements_to_collection(_updates.ToArray(), new string[] { tf.GraphKeys.UPDATE_OPS });
 
             return outputs;
         }

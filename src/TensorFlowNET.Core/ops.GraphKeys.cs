@@ -27,57 +27,57 @@ namespace Tensorflow
         /// specified, but it is also possible to pass an explicit list of
         /// variables.
         /// </summary>
-        public static class GraphKeys
+        public class GraphKeys
         {
             /// <summary>
             /// the subset of `Variable` objects that will be trained by an optimizer.
             /// </summary>
-            public static string TRAINABLE_VARIABLES = "trainable_variables";
+            public string TRAINABLE_VARIABLES = "trainable_variables";
 
             /// <summary>
             /// Trainable resource-style variables.
             /// </summary>
-            public static string TRAINABLE_RESOURCE_VARIABLES = "trainable_resource_variables";
+            public string TRAINABLE_RESOURCE_VARIABLES = "trainable_resource_variables";
 
             /// <summary>
             /// Key for streaming model ports.
             /// </summary>
-            public static string _STREAMING_MODEL_PORTS = "streaming_model_ports";
+            public string _STREAMING_MODEL_PORTS = "streaming_model_ports";
 
             /// <summary>
             /// Key to collect losses
             /// </summary>
-            public const string LOSSES = "losses";
+            public string LOSSES = "losses";
 
             /// <summary>
             /// Key to collect Variable objects that are global (shared across machines).
             /// Default collection for all variables, except local ones.
             /// </summary>
-            public static string GLOBAL_VARIABLES = "variables";
+            public string GLOBAL_VARIABLES = "variables";
 
-            public static string TRAIN_OP = "train_op";
+            public string TRAIN_OP = "train_op";
 
-            public static string GLOBAL_STEP = GLOBAL_STEP = "global_step";
+            public string GLOBAL_STEP = "global_step";
 
-            public static string[] _VARIABLE_COLLECTIONS = new string[] { "variables", "trainable_variables", "model_variables" }; 
+            public string[] _VARIABLE_COLLECTIONS = new string[] { "variables", "trainable_variables", "model_variables" }; 
             /// <summary>
             /// Key to collect BaseSaverBuilder.SaveableObject instances for checkpointing.
             /// </summary>
-            public static string SAVEABLE_OBJECTS = "saveable_objects";
+            public string SAVEABLE_OBJECTS = "saveable_objects";
             /// <summary>
             /// Key to collect update_ops
             /// </summary>
-            public static string UPDATE_OPS = "update_ops";
+            public string UPDATE_OPS = "update_ops";
 
             // Key to collect summaries.
-            public const string SUMMARIES = "summaries";
+            public string SUMMARIES = "summaries";
 
             // Used to store v2 summary names.
-            public static string _SUMMARY_COLLECTION = "_SUMMARY_V2";
+            public string _SUMMARY_COLLECTION = "_SUMMARY_V2";
 
             // Key for control flow context.
-            public static string COND_CONTEXT = "cond_context";
-            public static string WHILE_CONTEXT = "while_context";
+            public string COND_CONTEXT = "cond_context";
+            public string WHILE_CONTEXT = "while_context";
         }
     }
 }

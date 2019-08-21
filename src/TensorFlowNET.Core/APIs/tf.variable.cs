@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -22,7 +23,7 @@ namespace Tensorflow
     {
         public VariableV1[] global_variables(string scope = null)
         {
-            return (ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
+            return (ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
                 .ToArray();
         }
 

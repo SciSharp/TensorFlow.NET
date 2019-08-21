@@ -431,8 +431,8 @@ namespace Tensorflow
 
                 merges = _convert_flows_to_tensorarrays(new Tensor[] { (Tensor)orig_res_t }, merges);
 
-                ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_t);
-                ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_f);
+                ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_t);
+                ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_f);
 
                 return merges[0];
             });
@@ -479,8 +479,8 @@ namespace Tensorflow
 
                 merges = _convert_flows_to_tensorarrays(orig_res_t, merges);
 
-                ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_t);
-                ops.add_to_collection(ops.GraphKeys.COND_CONTEXT, context_f);
+                ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_t);
+                ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_f);
 
                 return merges;
             });
@@ -596,7 +596,7 @@ namespace Tensorflow
                     swap_memory: swap_memory);
 
                 if (loop_context.outer_context == null)
-                    ops.add_to_collection(ops.GraphKeys.WHILE_CONTEXT, loop_context);
+                    ops.add_to_collection(tf.GraphKeys.WHILE_CONTEXT, loop_context);
 
                 var results = loop_context.BuildLoop(cond, body, loop_vars, shape_invariants,
                                     return_same_structure);
