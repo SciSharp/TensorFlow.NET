@@ -667,8 +667,9 @@ namespace Tensorflow
         {
             if (args.deallocator_called)
                 return;
+
             // NumSharp will dispose
-            // Marshal.FreeHGlobal(dataPtr);
+            Marshal.FreeHGlobal(dataPtr);
             args.deallocator_called = true;
         }
 
