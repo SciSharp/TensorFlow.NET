@@ -2,7 +2,7 @@
 
 namespace Tensorflow
 {
-    public class KeyError : Exception
+    public class KeyError : TensorflowException
     {
         public KeyError() : base()
         {

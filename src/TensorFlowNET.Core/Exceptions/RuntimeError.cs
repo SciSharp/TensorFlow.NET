@@ -2,7 +2,7 @@
 
 namespace Tensorflow
 {
-    public class RuntimeError : Exception
+    public class RuntimeError : TensorflowException
     {
         public RuntimeError() : base()
         {
