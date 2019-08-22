@@ -13,13 +13,26 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
     /// </summary>
     public class Main : IExample
     {
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
         public bool IsImportingGraph { get; set; } = false;
-
         public string Name => "YOLOv3";
 
+        #region args
         Dictionary<int, string> classes;
-        Config config;
+        int num_classes;
+        float learn_rate_init;
+        float learn_rate_end;
+        int first_stage_epochs;
+        int second_stage_epochs;
+        int warmup_periods;
+        string time;
+        float moving_ave_decay;
+        int max_bbox_per_scale;
+        int steps_per_period;
+
+        Dataset trainset, testset;
+
+        Config cfg;
 
         Tensor input_data;
         Tensor label_sbbox;
@@ -28,7 +41,8 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
         Tensor true_sbboxes;
         Tensor true_mbboxes;
         Tensor true_lbboxes;
-        Tensor trainable;
+        Tensor trainable; 
+        #endregion
 
         public bool Run()
         {
@@ -90,14 +104,28 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
 
         public void PrepareData()
         {
-            config = new Config(Name);
+            cfg = new Config(Name);
 
             string dataDir = Path.Combine(Name, "data");
             Directory.CreateDirectory(dataDir);
 
             classes = new Dictionary<int, string>();
-            foreach (var line in File.ReadAllLines(config.CLASSES))
+            foreach (var line in File.ReadAllLines(cfg.YOLO.CLASSES))
                 classes[classes.Count] = line;
+            num_classes = classes.Count;
+
+            learn_rate_init = cfg.TRAIN.LEARN_RATE_INIT;
+            learn_rate_end = cfg.TRAIN.LEARN_RATE_END;
+            first_stage_epochs = cfg.TRAIN.FISRT_STAGE_EPOCHS;
+            second_stage_epochs = cfg.TRAIN.SECOND_STAGE_EPOCHS;
+            warmup_periods = cfg.TRAIN.WARMUP_EPOCHS;
+            DateTime now = DateTime.Now;
+            time = $"{now.Year}-{now.Month}-{now.Day}-{now.Hour}-{now.Minute}-{now.Minute}";
+            moving_ave_decay = cfg.YOLO.MOVING_AVE_DECAY;
+            max_bbox_per_scale = 150;
+            trainset = new Dataset("train", cfg);
+            testset = new Dataset("test", cfg);
+            steps_per_period = trainset.Length;
         }
     }
 }

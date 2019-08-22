@@ -158,7 +158,7 @@ namespace Tensorflow
                 // Or get the initial value from a Tensor or Python object.
                 else
                 {
-                    _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value");
+                    _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value", dtype: dtype);
 
                     var shape = _initial_value.shape;
                     dtype = _initial_value.dtype;

@@ -488,6 +488,8 @@ namespace Tensorflow
 
             switch (value)
             {
+                case String str:
+                    return constant_op.constant(str, dtype: TF_DataType.TF_STRING, name: name);
                 case NDArray nd:
                     return constant_op.constant(nd, dtype: dtype, name: name);
                 case Tensor tensor:
