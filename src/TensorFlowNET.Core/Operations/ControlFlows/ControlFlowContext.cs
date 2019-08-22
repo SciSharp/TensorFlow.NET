@@ -141,7 +141,7 @@ namespace Tensorflow.Operations
                     data, frame_name, is_constant, parallel_iterations, name: name);
 
             if (use_input_shape)
-                result.SetShape(data.TensorShape);
+                result.set_shape(data.TensorShape);
 
             return result;
         }

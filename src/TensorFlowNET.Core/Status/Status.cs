@@ -50,7 +50,7 @@ namespace Tensorflow
         /// </summary>
         public void Check(bool throwException = false)
         {
-            if(Code != TF_Code.TF_OK)
+            if (Code != TF_Code.TF_OK)
             {
                 Console.WriteLine(Message);
                 if (throwException)
@@ -65,7 +65,7 @@ namespace Tensorflow
             return status._handle;
         }
 
-        protected override void DisposeUnManagedState(IntPtr handle)
+        protected override void DisposeUnmanagedResources(IntPtr handle)
             => c_api.TF_DeleteStatus(handle);
     }
 }

@@ -308,15 +308,14 @@ namespace Tensorflow
         public static IEnumerable TupleToEnumerable(object tuple)
         {
             Type t = tuple.GetType();
-            if(t.IsGenericType && (t.FullName.StartsWith("System.Tuple") || t.FullName.StartsWith("System.ValueTuple")))
+            if (t.IsGenericType && (t.FullName.StartsWith("System.Tuple") || t.FullName.StartsWith("System.ValueTuple")))
             {
                 var flds = t.GetFields();
-                for(int i = 0; i < flds.Length;i++)
+                for (int i = 0; i < flds.Length; i++)
                 {
                     yield return flds[i].GetValue(tuple);
                 }
-            }
-            else
+            } else
             {
                 throw new System.Exception("Expected Tuple.");
             }
@@ -329,12 +328,9 @@ namespace Tensorflow
 
         public static bool isinstance(object Item1, object tuple)
         {
-            var tup = TupleToEnumerable(tuple);
-            foreach(var t in tup)
-            {
-                if(isinstance(Item1, (Type)t))
+            foreach (var t in TupleToEnumerable(tuple))
+                if (isinstance(Item1, (Type) t))
                     return true;
-            }
             return false;
         }
     }

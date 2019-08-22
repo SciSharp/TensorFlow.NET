@@ -17,7 +17,7 @@ namespace TensorFlowNET.UnitTest
             {
                 var result = sess.run(y, 
                     new FeedItem(x, 2));
-                Assert.AreEqual((int)result[0], 6);
+                Assert.AreEqual((int)result, 6);
             }
         }
     }

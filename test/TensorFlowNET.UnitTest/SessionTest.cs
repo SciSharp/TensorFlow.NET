@@ -45,7 +45,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(TF_DataType.TF_INT32, outTensor.dtype);
             EXPECT_EQ(0, outTensor.NDims);
             ASSERT_EQ((ulong)sizeof(uint), outTensor.bytesize);
-            var output_contents = outTensor.Data<int>();
+            var output_contents = outTensor.ToArray<int>();
             EXPECT_EQ(3 + 2, output_contents[0]);
 
             // Add another operation to the graph.
@@ -66,7 +66,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(TF_DataType.TF_INT32, outTensor.dtype);
             EXPECT_EQ(0, outTensor.NDims);  // scalar
             ASSERT_EQ((ulong)sizeof(uint), outTensor.bytesize);
-            output_contents = outTensor.Data<int>();
+            output_contents = outTensor.ToArray<int>();
             EXPECT_EQ(-(7 + 2), output_contents[0]);
 
             // Clean up

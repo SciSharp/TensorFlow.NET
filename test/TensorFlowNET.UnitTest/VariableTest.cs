@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp;
 using Tensorflow;
 using static Tensorflow.Binding;
 
@@ -16,7 +17,7 @@ namespace TensorFlowNET.UnitTest
             {
                 session.run(x.initializer);
                 var result = session.run(x);
-                Assert.AreEqual(10, (int)result[0]);
+                Assert.AreEqual(10, (int)result);
             }
         }
 
@@ -81,7 +82,7 @@ namespace TensorFlowNET.UnitTest
             using (var session = tf.Session())
             {
                 session.run(model);
-                int result = session.run(y)[0];
+                int result = session.run(y);
                 Assert.AreEqual(result, 4);
             }
         }
@@ -97,12 +98,12 @@ namespace TensorFlowNET.UnitTest
             var sess = tf.Session(graph);
             sess.run(init);
 
-            var result = sess.run(variable);
-            Assert.IsTrue((int)result[0] == 31);
+            NDArray result = sess.run(variable);
+            Assert.IsTrue((int)result == 31);
 
             var assign = variable.assign(12);
             result = sess.run(assign);
-            Assert.IsTrue((int)result[0] == 12);
+            Assert.IsTrue((int)result == 12);
         }
 
         [TestMethod]
@@ -139,7 +140,7 @@ namespace TensorFlowNET.UnitTest
                 for(int i = 0; i < 5; i++)
                 {
                     x = x + 1;
-                    result = session.run(x)[0];
+                    result = session.run(x);
                     print(result);
                 }
             }

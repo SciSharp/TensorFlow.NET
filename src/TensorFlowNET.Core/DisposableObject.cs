@@ -29,18 +29,10 @@ namespace Tensorflow
 
         protected DisposableObject() { }
 
-        public DisposableObject(IntPtr handle)
-        {
-            _handle = handle;
-        }
+        protected DisposableObject(IntPtr handle) 
+            => _handle = handle;
 
-        protected virtual void DisposeManagedState()
-        {
-        }
-
-        protected abstract void DisposeUnManagedState(IntPtr handle);
-
-        protected virtual void Dispose(bool disposing)
+        private void internal_dispose(bool disposing)
         {
             if (disposing)
             {
@@ -48,28 +40,41 @@ namespace Tensorflow
                 if (_handle != IntPtr.Zero)
                 {
                     // dispose managed state (managed objects).
-                    DisposeManagedState();
+                    DisposeManagedResources();
 
                     // set large fields to null.
-                    DisposeUnManagedState(_handle);
+                    DisposeUnmanagedResources(_handle);
 
                     _handle = IntPtr.Zero;
                 }
             }
         }
 
+        /// <summary>
+        ///     Dispose any managed resources.
+        /// </summary>
+        /// <remarks>Equivalent to what you would perform inside <see cref="Dispose()"/></remarks>
+        protected virtual void DisposeManagedResources()
+        {
+        }
+
+        /// <summary>
+        ///     Dispose any unmanaged resources related to given <paramref name="handle"/>.
+        /// </summary>
+        protected abstract void DisposeUnmanagedResources(IntPtr handle);
+
         // override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
         ~DisposableObject()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(false);
+            internal_dispose(false);
         }
 
         // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
+            internal_dispose(true);
             // uncomment the following line if the finalizer is overridden above.
             GC.SuppressFinalize(this);
         }

@@ -17,6 +17,7 @@
 using NumSharp;
 using System;
 using System.Linq;
+using NumSharp.Utilities;
 
 namespace Tensorflow
 {
@@ -109,7 +110,7 @@ namespace Tensorflow
 
             // We first convert value to a numpy array or scalar.
             NDArray nparray = null;
-            var np_dt = dtype.as_numpy_datatype();
+            var np_dt = dtype.as_numpy_dtype();
 
             if (values is NDArray nd)
             {
@@ -188,37 +189,37 @@ namespace Tensorflow
                             if (values.GetType().IsArray)
                                 nparray = np.array((int[])values, np_dt);
                             else
-                                nparray = Convert.ToInt32(values);
+                                nparray = Converts.ToInt32(values);
                             break;
                         case "Int64":
                             if (values.GetType().IsArray)
                                 nparray = np.array((int[])values, np_dt);
                             else
-                                nparray = Convert.ToInt64(values);
+                                nparray = Converts.ToInt64(values);
                             break;
                         case "Single":
                             if (values.GetType().IsArray)
                                 nparray = np.array((float[])values, np_dt);
                             else
-                                nparray = Convert.ToSingle(values);
+                                nparray = Converts.ToSingle(values);
                             break;
                         case "Double":
                             if (values.GetType().IsArray)
                                 nparray = np.array((double[])values, np_dt);
                             else
-                                nparray = Convert.ToDouble(values);
+                                nparray = Converts.ToDouble(values);
                             break;
                         case "String":
                             if (values.GetType().IsArray)
                                 nparray = np.array((string[])values, np_dt);
                             else
-                                nparray = NDArray.FromString(Convert.ToString(values));
+                                nparray = NDArray.FromString(Converts.ToString(values));
                             break;
                         case "Boolean":
                             if (values.GetType().IsArray)
                                 nparray = np.array((bool[])values, np_dt);
                             else
-                                nparray = Convert.ToBoolean(values);
+                                nparray = Converts.ToBoolean(values);
                             break;
                         default:
                             throw new NotImplementedException($"make_tensor_proto: Support for type {np_dt.Name} Not Implemented");

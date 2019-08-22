@@ -37,7 +37,7 @@ namespace Tensorflow
             c_api.TF_ImportGraphDefOptionsAddReturnOutput(_handle, name, index);
         }
 
-        protected override void DisposeUnManagedState(IntPtr handle)
+        protected override void DisposeUnmanagedResources(IntPtr handle)
             => c_api.TF_DeleteImportGraphDefOptions(handle);
 
         public static implicit operator IntPtr(ImportGraphDefOptions opts) => opts._handle;

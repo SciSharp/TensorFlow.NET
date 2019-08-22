@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Tensorflow.IO
 {
@@ -28,6 +29,9 @@ namespace Tensorflow.IO
         /// <param name="in_order">Traverse in order if True, post order if False.</param>
         public IEnumerable<(string, string[], string[])> Walk(string top, bool in_order = true)
         {
+            if (!Directory.Exists(top))
+                return Enumerable.Empty<(string, string[], string[])>();
+
             return walk_v2(top, in_order);
         }
 
