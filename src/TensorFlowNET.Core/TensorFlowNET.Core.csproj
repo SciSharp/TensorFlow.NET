@@ -18,7 +18,12 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.11.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.10.0:</PackageReleaseNotes>
+    <PackageReleaseNotes>Changes since v0.10.0:
+1. Upgrade NumSharp to v0.20.
+2. Add DisposableObject class to manage object lifetime.
+3. Add tf.no_op, tf.nn.in_top_k, tf.GraphKeys and tf.trainable_variables.
+4. Change tensorflow to non-static class in order to execute some initialization process.
+5. Overloade session.run(), make syntax simpler.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
     <FileVersion>0.11.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

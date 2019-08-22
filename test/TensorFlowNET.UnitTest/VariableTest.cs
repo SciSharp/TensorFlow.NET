@@ -24,7 +24,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void StringVar()
         {
-            var mammal1 = tf.Variable("Elephant", name: "var1", dtype: tf.chars);
+            var mammal1 = tf.Variable("Elephant", name: "var1", dtype: tf.@string);
             var mammal2 = tf.Variable("Tiger");
         }
 

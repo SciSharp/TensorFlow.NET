@@ -11,6 +11,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         /// <summary>
         /// https://www.tensorflow.org/api_docs/python/tf/while_loop
         /// </summary>
+        [Ignore]
         [TestMethod]
         public void SimpleWhileLoop()
         {
