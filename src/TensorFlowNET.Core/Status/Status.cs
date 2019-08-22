@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Tensorflow
 {
@@ -48,6 +49,7 @@ namespace Tensorflow
         /// Check status 
         /// Throw exception with error message if code != TF_OK
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Check(bool throwException = false)
         {
             if (Code != TF_Code.TF_OK)

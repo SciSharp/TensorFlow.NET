@@ -497,10 +497,8 @@ namespace Tensorflow
         IEnumerator<Operation> IEnumerable<Operation>.GetEnumerator()
             => GetEnumerable().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator IEnumerable.GetEnumerator() 
+            => throw new NotImplementedException();
 
         public static implicit operator IntPtr(Graph graph)
         {
