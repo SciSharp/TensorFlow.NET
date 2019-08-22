@@ -83,6 +83,12 @@ namespace Tensorflow
             throw new NotImplementedException("MakeNdarray");
         }
 
+        private static readonly TF_DataType[] quantized_types = new TF_DataType[]
+        {
+            TF_DataType.TF_QINT8, TF_DataType.TF_QUINT8, TF_DataType.TF_QINT16, TF_DataType.TF_QUINT16,
+            TF_DataType.TF_QINT32
+        };
+
         /// <summary>
         /// Create a TensorProto.
         /// </summary>
@@ -98,15 +104,6 @@ namespace Tensorflow
                 throw new ValueError("allow_broadcast and verify_shape are not both allowed.");
             if (values is TensorProto tp)
                 return tp;
-
-            if (dtype != TF_DataType.DtInvalid)
-                ;
-
-            bool is_quantized = new TF_DataType[]
-            {
-                TF_DataType.TF_QINT8, TF_DataType.TF_QUINT8, TF_DataType.TF_QINT16, TF_DataType.TF_QUINT16,
-                TF_DataType.TF_QINT32
-            }.Contains(dtype);
 
             // We first convert value to a numpy array or scalar.
             NDArray nparray = null;
@@ -227,13 +224,13 @@ namespace Tensorflow
                 }
             }
 
-            var numpy_dtype = dtypes.as_dtype(nparray.dtype, dtype: dtype);
+            var numpy_dtype = nparray.dtype.as_dtype(dtype: dtype);
             if (numpy_dtype == TF_DataType.DtInvalid)
                 throw new TypeError($"Unrecognized data type: {nparray.dtype}");
 
             // If dtype was specified and is a quantized type, we convert
             // numpy_dtype back into the quantized version.
-            if (is_quantized)
+            if (quantized_types.Contains(dtype))
                 numpy_dtype = dtype;
 
             bool is_same_size = false;
