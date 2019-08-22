@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace Tensorflow
@@ -26,27 +27,32 @@ namespace Tensorflow
     public abstract class DisposableObject : IDisposable
     {
         protected IntPtr _handle;
+        protected bool _disposed;
 
-        protected DisposableObject() { }
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
+        protected DisposableObject()
+        { }
 
-        protected DisposableObject(IntPtr handle) 
+        protected DisposableObject(IntPtr handle)
             => _handle = handle;
 
         private void internal_dispose(bool disposing)
         {
+            if (_disposed)
+                return;
+
+            _disposed = true;
+
+            //first handle managed, they might use the unmanaged resources.
             if (disposing)
+                // dispose managed state (managed objects).
+                DisposeManagedResources();
+
+            if (_handle != IntPtr.Zero)
             {
-                // free unmanaged resources (unmanaged objects) and override a finalizer below.
-                if (_handle != IntPtr.Zero)
-                {
-                    // dispose managed state (managed objects).
-                    DisposeManagedResources();
+                DisposeUnmanagedResources(_handle);
 
-                    // set large fields to null.
-                    DisposeUnmanagedResources(_handle);
-
-                    _handle = IntPtr.Zero;
-                }
+                _handle = IntPtr.Zero;
             }
         }
 
@@ -55,27 +61,22 @@ namespace Tensorflow
         /// </summary>
         /// <remarks>Equivalent to what you would perform inside <see cref="Dispose()"/></remarks>
         protected virtual void DisposeManagedResources()
-        {
-        }
+        { }
 
         /// <summary>
         ///     Dispose any unmanaged resources related to given <paramref name="handle"/>.
         /// </summary>
         protected abstract void DisposeUnmanagedResources(IntPtr handle);
 
-        // override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
         ~DisposableObject()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             internal_dispose(false);
         }
 
-        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             internal_dispose(true);
-            // uncomment the following line if the finalizer is overridden above.
+
             GC.SuppressFinalize(this);
         }
     }
