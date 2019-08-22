@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Tensorflow
@@ -36,6 +37,7 @@ namespace Tensorflow
         protected DisposableObject(IntPtr handle)
             => _handle = handle;
 
+        [SuppressMessage("ReSharper", "InvertIf")]
         private void internal_dispose(bool disposing)
         {
             if (_disposed)
@@ -48,6 +50,7 @@ namespace Tensorflow
                 // dispose managed state (managed objects).
                 DisposeManagedResources();
 
+            //free unmanaged memory
             if (_handle != IntPtr.Zero)
             {
                 DisposeUnmanagedResources(_handle);
@@ -78,6 +81,17 @@ namespace Tensorflow
             internal_dispose(true);
 
             GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     If <see cref="_handle"/> is <see cref="IntPtr.Zero"/> then throws <see cref="ObjectDisposedException"/>
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">When <see cref="_handle"/> is <see cref="IntPtr.Zero"/></exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void EnsureNotDisposed()
+        {
+            if (_disposed)
+                throw new ObjectDisposedException($"Unable to access disposed object, Type: {GetType().Name}");
         }
     }
 }
