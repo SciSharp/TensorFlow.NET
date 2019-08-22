@@ -49,7 +49,7 @@ namespace Tensorflow
 
             // dispose newOpts
             if (opts == null)
-                c_api.TF_DeleteSessionOptions(newOpts);
+                newOpts.Dispose();
 
             status.Check(true);
         }
