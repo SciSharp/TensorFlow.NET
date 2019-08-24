@@ -52,5 +52,13 @@ namespace Tensorflow
                 stddev: stddev,
                 seed: seed,
                 dtype: dtype);
+
+        public IInitializer random_normal_initializer(float mean = 0.0f,
+            float stddev = 1.0f,
+            int? seed = null,
+            TF_DataType dtype = TF_DataType.DtInvalid) => new RandomNormal(mean: mean,
+                stddev: stddev,
+                seed: seed,
+                dtype: dtype);
     }
 }
