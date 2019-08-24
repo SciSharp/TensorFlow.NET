@@ -23,7 +23,7 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
-        public Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name= null)
+        public static Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name= null)
         {
             if (dtype == image.dtype)
                 return array_ops.identity(image, name: name);
@@ -57,7 +57,7 @@ namespace Tensorflow
             });
         }
 
-        public Tensor decode_jpeg(Tensor contents,
+        public static Tensor decode_jpeg(Tensor contents,
             int channels = 0,
             int ratio = 1,
             bool fancy_upscaling = true,
@@ -88,7 +88,7 @@ namespace Tensorflow
             }
         }
 
-        public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
+        public static Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
         {
             if (tf.context.executing_eagerly())
             {

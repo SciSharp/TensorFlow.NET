@@ -14,20 +14,14 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
-using Tensorflow.IO;
+using System.Text;
 
 namespace Tensorflow
 {
-    public partial class tensorflow
+    public class image_ops_impl
     {
-        public GFile gfile = new GFile();
-        public Tensor read_file(string filename, string name = null) => gen_io_ops.read_file(filename, name);
 
-        public void import_graph_def(GraphDef graph_def,
-            Dictionary<string, Tensor> input_map = null,
-            string[] return_elements = null,
-            string name = null,
-            OpList producer_op_list = null) => importer.import_graph_def(graph_def, input_map, return_elements, name, producer_op_list);
     }
 }
