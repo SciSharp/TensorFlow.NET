@@ -163,6 +163,9 @@ namespace Tensorflow
                 => gen_nn_ops.local_response_normalization(input, depth_radius: depth_radius, bias: bias,
                     alpha: alpha, beta: beta, name: name);
 
+            public Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
+                => nn_ops.leaky_relu(features, alpha: alpha, name: name);
+
             public rnn_cell_impl rnn_cell => new rnn_cell_impl();
 
             public Tensor softmax(Tensor logits, int axis = -1, string name = null)

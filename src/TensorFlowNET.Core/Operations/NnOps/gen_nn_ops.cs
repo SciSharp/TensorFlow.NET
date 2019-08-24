@@ -216,6 +216,17 @@ namespace Tensorflow.Operations
             return _op.outputs[0];
         }
 
+        public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LeakyRelu", name: name, args: new
+            {
+                features,
+                alpha
+            });
+
+            return _op.output;
+        }
+
         public static Tensor max_pool(Tensor input,
             int[] ksize,
             int[] strides,
