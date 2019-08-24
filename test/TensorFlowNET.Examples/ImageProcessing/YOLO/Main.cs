@@ -13,7 +13,7 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
     /// </summary>
     public class Main : IExample
     {
-        public bool Enabled { get; set; } = false;
+        public bool Enabled { get; set; } = true;
         public bool IsImportingGraph { get; set; } = false;
         public string Name => "YOLOv3";
 
@@ -41,7 +41,10 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
         Tensor true_sbboxes;
         Tensor true_mbboxes;
         Tensor true_lbboxes;
-        Tensor trainable; 
+        Tensor trainable;
+
+        Session sess;
+        YOLOv3 model;
         #endregion
 
         public bool Run()
@@ -50,7 +53,9 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
 
             var graph = IsImportingGraph ? ImportGraph() : BuildGraph();
 
-            using (var sess = tf.Session(graph))
+            var options = new SessionOptions();
+            options.SetConfig(new ConfigProto { AllowSoftPlacement = true });
+            using (var sess = tf.Session(graph, opts: options))
             {
                 Train(sess);
             }
@@ -86,7 +91,7 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
 
             tf_with(tf.name_scope("define_loss"), scope =>
             {
-                //model = new YOLOv3(input_data, trainable);
+                model = new YOLOv3(cfg, input_data, trainable);
             });
 
             return graph;
@@ -109,9 +114,7 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
             string dataDir = Path.Combine(Name, "data");
             Directory.CreateDirectory(dataDir);
 
-            classes = new Dictionary<int, string>();
-            foreach (var line in File.ReadAllLines(cfg.YOLO.CLASSES))
-                classes[classes.Count] = line;
+            classes = Utils.read_class_names(cfg.YOLO.CLASSES);
             num_classes = classes.Count;
 
             learn_rate_init = cfg.TRAIN.LEARN_RATE_INIT;

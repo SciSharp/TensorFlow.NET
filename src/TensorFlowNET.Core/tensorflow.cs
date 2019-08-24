@@ -68,9 +68,9 @@ namespace Tensorflow
             return defaultSession;
         }
 
-        public Session Session(Graph graph)
+        public Session Session(Graph graph, SessionOptions opts = null)
         {
-            return new Session(graph);
+            return new Session(graph, opts: opts);
         }
 
         public Session Session(SessionOptions opts)
