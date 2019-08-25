@@ -6,6 +6,7 @@
     <NoWin32Manifest>true</NoWin32Manifest>
     <AssemblyName>TensorFlowBenchmark</AssemblyName>
     <RootNamespace>TensorFlowBenchmark</RootNamespace>
+	<LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
