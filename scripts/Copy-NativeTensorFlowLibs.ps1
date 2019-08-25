@@ -147,21 +147,21 @@ $PackagesDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "packages")
 
 if (-not $SkipGpuLibraries) {
     $Archive = Copy-Archive -ArchiveUrl $WindowsGpuArchive -TargetDirectory $PackagesDirectory
-    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist")
+    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "redist", "runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist")
     Expand-ZipFiles $Archive $WindowsFiles $TargetDirectory
 
     $Archive = Copy-Archive -ArchiveUrl $LinuxGpuArchive -TargetDirectory $PackagesDirectory
-    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist")
+    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "redist", "runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist")
     Expand-TarGzFiles $Archive $LinuxFiles $TargetDirectory
 }
 
 if (-not $SkipCpuLibraries) {
     $Archive = Copy-Archive -ArchiveUrl $WindowsCpuArchive -TargetDirectory $PackagesDirectory
-    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.win-x64.SciSharp.TensorFlow-Cpu.Redist")
+    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "redist", "runtime.win-x64.SciSharp.TensorFlow-Cpu.Redist")
     Expand-ZipFiles $Archive $WindowsFiles $TargetDirectory
 
     $Archive = Copy-Archive -ArchiveUrl $LinuxCpuArchive -TargetDirectory $PackagesDirectory
-    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "src", "runtime.linux-x64.SciSharp.Tensorflow-Cpu.Redist")
+    $TargetDirectory = [IO.Path]::Combine($PSScriptRoot, "..", "redist", "runtime.linux-x64.SciSharp.Tensorflow-Cpu.Redist")
     Expand-TarGzFiles $Archive $LinuxFiles $TargetDirectory
 }
 
