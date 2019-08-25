@@ -23,23 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowDatasets", "src\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Examples.GPU", "test\TensorFlowNET.Examples\TensorFlowNET.Examples.GPU.csproj", "{6F6B3382-8F87-4CD9-BF87-C81D5405685A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{EA9A238E-B93F-4809-AB3D-339B2990FBFF}"
-	ProjectSection(SolutionItems) = preProject
-		scripts\Copy-NativeTensorFlowLibs.ps1 = scripts\Copy-NativeTensorFlowLibs.ps1
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist", "src\runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist\runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist.csproj", "{BEC7FC31-58BD-48C1-96CE-6B68570A5431}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SciSharp.TensorFlow-Gpu.Redist", "src\SciSharp.TensorFlow-Gpu.Redist\SciSharp.TensorFlow-Gpu.Redist.csproj", "{FAF0995D-88B9-444B-866F-2E9EB07D77A6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "runtime.linux-x64.SciSharp.TensorFlow-Gpu.Redist", "src\runtime.linux-x64.SciSharp.TensorFlow-Gpu.Redist\runtime.linux-x64.SciSharp.TensorFlow-Gpu.Redist.csproj", "{E26AA660-F734-444C-A982-3F19C2AF8829}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "runtime.win-x64.SciSharp.TensorFlow-Cpu.Redist", "src\runtime.win-x64.SciSharp.TensorFlow-Cpu.Redist\runtime.win-x64.SciSharp.TensorFlow-Cpu.Redist.csproj", "{54ED61EB-DE05-4052-A92D-15B26478E700}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "runtime.linux-x64.SciSharp.TensorFlow-Cpu.Redist", "src\runtime.linux-x64.SciSharp.TensorFlow-Cpu.Redist\runtime.linux-x64.SciSharp.TensorFlow-Cpu.Redist.csproj", "{977C27F4-2196-4CA4-9A79-80A0F72DBB11}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciSharp.TensorFlow-Cpu.Redist", "src\SciSharp.TensorFlow-Cpu.Redist\SciSharp.TensorFlow-Cpu.Redist.csproj", "{6AD4A403-2E82-4795-AC61-50D8B271CFC8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,30 +69,6 @@ Global
 		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEC7FC31-58BD-48C1-96CE-6B68570A5431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEC7FC31-58BD-48C1-96CE-6B68570A5431}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEC7FC31-58BD-48C1-96CE-6B68570A5431}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEC7FC31-58BD-48C1-96CE-6B68570A5431}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FAF0995D-88B9-444B-866F-2E9EB07D77A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FAF0995D-88B9-444B-866F-2E9EB07D77A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FAF0995D-88B9-444B-866F-2E9EB07D77A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FAF0995D-88B9-444B-866F-2E9EB07D77A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E26AA660-F734-444C-A982-3F19C2AF8829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E26AA660-F734-444C-A982-3F19C2AF8829}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E26AA660-F734-444C-A982-3F19C2AF8829}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E26AA660-F734-444C-A982-3F19C2AF8829}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54ED61EB-DE05-4052-A92D-15B26478E700}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54ED61EB-DE05-4052-A92D-15B26478E700}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54ED61EB-DE05-4052-A92D-15B26478E700}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54ED61EB-DE05-4052-A92D-15B26478E700}.Release|Any CPU.Build.0 = Release|Any CPU
-		{977C27F4-2196-4CA4-9A79-80A0F72DBB11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{977C27F4-2196-4CA4-9A79-80A0F72DBB11}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{977C27F4-2196-4CA4-9A79-80A0F72DBB11}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{977C27F4-2196-4CA4-9A79-80A0F72DBB11}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6AD4A403-2E82-4795-AC61-50D8B271CFC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6AD4A403-2E82-4795-AC61-50D8B271CFC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6AD4A403-2E82-4795-AC61-50D8B271CFC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6AD4A403-2E82-4795-AC61-50D8B271CFC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
