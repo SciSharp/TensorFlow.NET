@@ -42,6 +42,20 @@ namespace Tensorflow
 
             public Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name = null)
                 => gen_image_ops.convert_image_dtype(image, dtype, saturate: saturate, name: name);
+
+            public Tensor decode_image(Tensor contents, int channels = 0, TF_DataType dtype = TF_DataType.TF_UINT8,
+                string name = null, bool expand_animations = true)
+                => image_ops_impl.decode_image(contents, channels: channels, dtype: dtype,
+                    name: name, expand_animations: expand_animations);
+
+            /// <summary>
+            /// Convenience function to check if the 'contents' encodes a JPEG image.
+            /// </summary>
+            /// <param name="contents"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public static Tensor is_jpeg(Tensor contents, string name = null)
+                => image_ops_impl.is_jpeg(contents, name: name);
         }
     }
 }

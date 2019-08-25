@@ -168,6 +168,9 @@ namespace Tensorflow
         public static Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
 
+        public static Tensor not_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.not_equal(x, y, name: name);
+
         public static Tensor mul_no_nan<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul_no_nan(x, y, name: name);
 
@@ -263,6 +266,9 @@ namespace Tensorflow
         {
             return gen_math_ops.log(x, name);
         }
+
+        public static Tensor logical_and(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.logical_and(x, y, name: name);
 
         public static Tensor lgamma(Tensor x, string name = null)
             => gen_math_ops.lgamma(x, name: name);
