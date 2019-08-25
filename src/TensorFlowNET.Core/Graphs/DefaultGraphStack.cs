@@ -21,29 +21,30 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
+
     /// <summary>
     ///     Serves as a stack for determining current default graph.
     /// </summary>
-    public class DefaultGraphStack
+    public class DefaultGraphStack 
     {
-        private readonly List<StackModel> _stack = new List<StackModel>();
+        private readonly List<StackModel> stack = new List<StackModel>();
 
         public void set_controller(Graph @default)
         {
-            if (!_stack.Exists(x => x.Graph == @default))
-                _stack.Add(new StackModel {Graph = @default, IsDefault = true});
+            if (!stack.Exists(x => x.Graph == @default))
+                stack.Add(new StackModel {Graph = @default, IsDefault = true});
 
-            foreach (var s in _stack)
+            foreach (var s in stack)
                 s.IsDefault = s.Graph == @default;
         }
 
         public Graph get_controller()
         {
-            if (_stack.Count(x => x.IsDefault) == 0)
-                _stack.Add(new StackModel {Graph = tf.Graph(), IsDefault = true});
-            for (var i = _stack.Count - 1; i >= 0; i--)
+            if (stack.Count(x => x.IsDefault) == 0)
+                stack.Add(new StackModel {Graph = tf.Graph(), IsDefault = true});
+            for (var i = stack.Count - 1; i >= 0; i--)
             {
-                var x = _stack[i];
+                var x = stack[i];
                 if (x.IsDefault)
                     return x.Graph;
             }
@@ -53,16 +54,16 @@ namespace Tensorflow
 
         public bool remove(Graph g)
         {
-            if (_stack.Count == 0)
+            if (stack.Count == 0)
                 return false;
 
-            var sm = _stack.Find(model => model.Graph == g);
-            return sm != null && _stack.Remove(sm);
+            var sm = stack.Find(model => model.Graph == g);
+            return sm != null && stack.Remove(sm);
         }
 
         public void reset()
         {
-            _stack.Clear();
+            stack.Clear();
         }
 
         private class StackModel
