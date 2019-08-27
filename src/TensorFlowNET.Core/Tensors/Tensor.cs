@@ -221,15 +221,6 @@ namespace Tensorflow
         /// <exception cref="ArgumentException">When <typeparam name="T"> is string </typeparam></exception>
         public T[] ToArray<T>() where T : unmanaged
         {
-            //when T is string
-            if (typeof(T) == typeof(string))
-            {
-                if (dtype != TF_DataType.TF_STRING)
-                    throw new ArgumentException($"Given <{typeof(T).Name}> can't be converted to string.");
-
-                return (T[]) (object) StringData();
-            }
-
             //Are the types matching?
             if (typeof(T).as_dtype() == dtype)
             {
@@ -376,9 +367,15 @@ namespace Tensorflow
             }
         }
 
-        /// Used internally in ToArray&lt;T&gt;
-        private unsafe string[] StringData()
+        /// <summary>
+        ///     Extracts string array from current Tensor.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">When <see cref="dtype"/> != TF_DataType.TF_STRING</exception>
+        public unsafe string[] StringData()
         {
+            if (dtype != TF_DataType.TF_STRING)
+                throw new InvalidOperationException($"Unable to call StringData when dtype != TF_DataType.TF_STRING (dtype is {dtype})");
+
             //
             // TF_STRING tensors are encoded with a table of 8-byte offsets followed by TF_StringEncode-encoded bytes.
             // [offset1, offset2,...,offsetn, s1size, s1bytes, s2size, s2bytes,...,snsize,snbytes]
