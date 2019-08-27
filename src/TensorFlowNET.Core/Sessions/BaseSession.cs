@@ -99,20 +99,15 @@ namespace Tensorflow
             var feed_dict_tensor = new Dictionary<object, object>();
             var feed_map = new Dictionary<object, object>();
 
-            Func<FeedItem, IEnumerable<(object, object)>> feed_fn = (item) => { return new (object, object)[] {(item.Key, item.Value)}; };
-
             // Validate and process feed_dict.
-            if (feed_dict != null)
+            if (feed_dict != null && feed_dict.Length > 0)
             {
-                foreach (var feed in feed_dict)
+                foreach (var subfeed in feed_dict)
                 {
-                    foreach (var (subfeed, subfeed_val) in feed_fn(feed))
-                    {
-                        var subfeed_t = _graph.as_graph_element(subfeed, allow_tensor: true, allow_operation: false);
-                        //var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype(); // subfeed_dtype was never used
-                        feed_dict_tensor[subfeed_t] = subfeed_val;
-                        feed_map[subfeed_t.name] = (subfeed_t, subfeed_val);
-                    }
+                    var subfeed_t = _graph.as_graph_element(subfeed.Key, allow_tensor: true, allow_operation: false);
+                    //var subfeed_dtype = subfeed_t.dtype.as_numpy_datatype(); // subfeed_dtype was never used
+                    feed_dict_tensor[subfeed_t] = subfeed.Value;
+                    feed_map[subfeed_t.name] = (subfeed_t, subfeed.Value);
                 }
             }
 
