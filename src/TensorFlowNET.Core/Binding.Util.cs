@@ -333,5 +333,30 @@ namespace Tensorflow
                     return true;
             return false;
         }
+        public static Dictionary<string, object> vars(object obj)
+        {
+            throw new NotImplementedException();
+            /*
+            var objProps = obj.GetType().GetProperties().Where(p => p.GetIndexParameters().Length == 0).ToArray();
+            var objProps_w_IndexParams = obj.GetType().GetProperties().Where(p => p.GetIndexParameters().Length != 0).ToArray();
+            var objFields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+            var ret = new Dictionary<string, object>();
+            for(int i = 0; i < objProps.Length; i++)
+                ret.Add(objProps[i].Name, objProps[i].GetValue(obj));
+            for(int i = 0; i < objProps_w_IndexParams.Length; i++)
+            {
+                var objProp = objProps_w_IndexParams[i];
+                var objPropiParam = objProp.GetIndexParameters();
+                ret.Add(objProp.Name, objProp.GetValue(obj, new object[]{0}));
+            }
+            for(int i = 0; i < objFields.Length; i++)
+                ret.Add(objFields[i].Name, objFields[i].GetValue(obj));
+            return ret;
+            */
+        }
+        public static long id(object obj)
+        {
+            return obj.GetHashCode();
+        }
     }
 }
