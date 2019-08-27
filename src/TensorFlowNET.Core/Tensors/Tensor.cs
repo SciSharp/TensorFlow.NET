@@ -568,11 +568,7 @@ namespace Tensorflow
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
-            if (handle != IntPtr.Zero)
-            {
-                c_api.TF_DeleteTensor(handle);
-                _handle = IntPtr.Zero;
-            }
+            c_api.TF_DeleteTensor(handle);
         }
 
         public bool IsDisposed
