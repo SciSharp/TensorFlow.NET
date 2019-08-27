@@ -30,11 +30,10 @@ namespace Tensorflow
             var return_output_handle = Marshal.AllocHGlobal(size * num_return_outputs);
 
             c_api.TF_GraphImportGraphDefWithReturnOutputs(_handle, graph_def, opts, return_output_handle, num_return_outputs, s);
-            for (int i = 0; i < num_return_outputs; i++)
-            {
-                var handle = return_output_handle + i * size;
-                return_outputs[i] = Marshal.PtrToStructure<TF_Output>(handle);
-            }
+
+            var tf_output_ptr = (TF_Output*) return_output_handle;
+            for (int i = 0; i < num_return_outputs; i++) 
+                return_outputs[i] = *(tf_output_ptr + i);
 
             Marshal.FreeHGlobal(return_output_handle);
 

@@ -39,16 +39,20 @@ namespace Tensorflow
             return c_api.TF_NewOperation(_handle, opType, opName);
         }
 
-        public unsafe Operation[] ReturnOperations(IntPtr results)
+        public Operation[] ReturnOperations(IntPtr results)
         {
             TF_Operation return_oper_handle = new TF_Operation();
             int num_return_opers = 0;
             c_api.TF_ImportGraphDefResultsReturnOperations(results, ref num_return_opers, ref return_oper_handle);
             Operation[] return_opers = new Operation[num_return_opers];
+            var tf_op_size = Marshal.SizeOf<TF_Operation>();
             for (int i = 0; i < num_return_opers; i++)
             {
-                var handle = return_oper_handle.node + Marshal.SizeOf<TF_Operation>() * i;
-                return_opers[i] = new Operation(*(IntPtr*)handle);
+                unsafe
+                {
+                    var handle = return_oper_handle.node + tf_op_size * i;
+                    return_opers[i] = new Operation(*(IntPtr*)handle);
+                }
             }
 
             return return_opers;

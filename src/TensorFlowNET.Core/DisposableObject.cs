@@ -54,7 +54,6 @@ namespace Tensorflow
             if (_handle != IntPtr.Zero)
             {
                 DisposeUnmanagedResources(_handle);
-
                 _handle = IntPtr.Zero;
             }
         }
