@@ -571,16 +571,7 @@ namespace Tensorflow
             c_api.TF_DeleteTensor(handle);
         }
 
-        public bool IsDisposed
-        {
-            get
-            {
-                lock (this)
-                {
-                    return _handle == IntPtr.Zero;
-                }
-            }
-        }
+        public bool IsDisposed => _disposed;
 
         public int tensor_int_val { get; set; }
     }
