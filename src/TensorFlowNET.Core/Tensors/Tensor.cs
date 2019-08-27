@@ -246,20 +246,12 @@ namespace Tensorflow
                 unsafe
                 {
                     var len = (long) size;
-                    fixed (T* dstRet = ret)
+                    fixed (T* dst = ret)
                     {
-                        T* dst = dstRet; //local stack copy
-                        if (typeof(T).IsPrimitive)
-                        {
-                            var src = (T*) buffer;
-                            len *= ((long) itemsize);
-                            System.Buffer.MemoryCopy(src, dst, len, len);
-                        } else
-                        {
-                            var itemsize = (long) this.itemsize;
-                            var buffer = this.buffer.ToInt64();
-                            Parallel.For(0L, len, i => dst[i] = Marshal.PtrToStructure<T>(new IntPtr(buffer + i * itemsize)));
-                        }
+                        //T can only be unmanaged, I believe it is safe to say that MemoryCopy is valid for all cases this method can be called.
+                        var src = (T*) buffer;
+                        len *= ((long) itemsize);
+                        System.Buffer.MemoryCopy(src, dst, len, len);
                     }
                 }
 
