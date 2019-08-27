@@ -442,7 +442,7 @@ namespace Tensorflow
         /// <param name="feed_dict">A dictionary that maps `Tensor` objects to feed values.</param>
         /// <param name="session">The `Session` to be used to evaluate this tensor.</param>
         /// <returns>A <see cref="NumSharp"/> array corresponding to the value of this tensor.</returns>
-        public NDArray eval(Session session, FeedItem[] feed_dict = null)
+        public NDArray eval(Session session, params FeedItem[] feed_dict)
         {
             return ops._eval_using_default_session(this, feed_dict, graph, session);
         }
