@@ -128,7 +128,7 @@ namespace Tensorflow.Layers
             else
             {
                 init_graph = default_graph;
-                existing_variables = variables.global_variables().ToArray();
+                existing_variables = Tensorflow.variables.global_variables().ToArray();
             }
 
             if(dtype == TF_DataType.DtInvalid)

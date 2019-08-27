@@ -20,6 +20,7 @@ using System.Linq;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
+using Tensorflow.Module;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
@@ -32,7 +33,7 @@ namespace Tensorflow.Keras.Layers
     /// 
     /// tensorflow\python\keras\engine\base_layer.py
     /// </summary>
-    public class Layer : AutoTrackable
+    public class Layer : Module.Module
     {
         /// <summary>
         /// Indicates whether `build` needs to be called upon layer call, to create
