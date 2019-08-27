@@ -16,6 +16,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using static Tensorflow.c_api;
 
 namespace Tensorflow
 {
@@ -28,27 +29,28 @@ namespace Tensorflow
         /// <summary>
         /// Error message
         /// </summary>
-        public string Message => c_api.StringPiece(c_api.TF_Message(_handle));
+        public string Message => c_api.StringPiece(TF_Message(_handle));
 
         /// <summary>
         /// Error code
         /// </summary>
-        public TF_Code Code => c_api.TF_GetCode(_handle);
+        public TF_Code Code => TF_GetCode(_handle);
 
         public Status()
         {
-            _handle = c_api.TF_NewStatus();
+            _handle = TF_NewStatus();
         }
 
         public void SetStatus(TF_Code code, string msg)
         {
-            c_api.TF_SetStatus(_handle, code, msg);
+            TF_SetStatus(_handle, code, msg);
         }
 
         /// <summary>
         /// Check status 
         /// Throw exception with error message if code != TF_OK
         /// </summary>
+        /// <exception cref="TensorflowException">When the returned check is not TF_Code.TF_OK</exception>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Check(bool throwException = false)
         {
@@ -56,9 +58,7 @@ namespace Tensorflow
             {
                 Console.WriteLine(Message);
                 if (throwException)
-                {
-                    throw new Exception(Message);
-                }
+                    throw new TensorflowException(Message);
             }
         }
 
@@ -68,6 +68,6 @@ namespace Tensorflow
         }
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
-            => c_api.TF_DeleteStatus(handle);
+            => TF_DeleteStatus(handle);
     }
 }
