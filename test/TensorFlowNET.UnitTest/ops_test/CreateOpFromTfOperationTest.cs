@@ -24,16 +24,17 @@ namespace TensorFlowNET.UnitTest.ops_test
         [TestMethod]
         public void TestShape()
         {
-            var g = tf.Graph().as_default();
+            using (var g = tf.Graph().as_default())
+            {
+                var x = constant_op.constant(new[,] {{1, 2, 3}, {4, 5, 6}});
+                var (c_op, op_desc) = ops._create_c_op(g, ops._NodeDef("Identity", "myop"), new[] {x}, new Operation[0]);
+                var op = g._create_op_from_tf_operation(c_op);
 
-            var x = constant_op.constant(new[,] { { 1, 2, 3 }, { 4, 5, 6 } });
-            var (c_op, op_desc) = ops._create_c_op(g, ops._NodeDef("Identity", "myop"), new[] { x }, new Operation[0]);
-            var op = g._create_op_from_tf_operation(c_op);
-
-            Assert.AreEqual("myop", op.name);
-            Assert.AreEqual("Identity", op.type);
-            Assert.AreEqual(1, len(op.outputs));
-            assertItemsEqual(new[] { 2, 3 }, op.outputs[0].shape);
+                Assert.AreEqual("myop", op.name);
+                Assert.AreEqual("Identity", op.type);
+                Assert.AreEqual(1, len(op.outputs));
+                assertItemsEqual(new[] {2, 3}, op.outputs[0].shape);
+            }
         }
 
         [TestMethod]

@@ -322,7 +322,6 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(feed2, control_inputs[1]);
 
             // Export to a graph def so we can import a graph with control dependencies
-            graph_def.Dispose();
             graph_def = new Buffer();
             c_api.TF_GraphToGraphDef(graph, graph_def, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
@@ -346,14 +345,10 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(feed4, control_inputs[1]);
 
             c_api.TF_DeleteImportGraphDefOptions(opts);
-            c_api.TF_DeleteBuffer(graph_def);
 
             // Can add nodes to the imported graph without trouble.
             c_test_util.Add(feed, scalar, graph, s);
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
-
-            graph.Dispose();
-            s.Dispose();
         }
 
         /// <summary>

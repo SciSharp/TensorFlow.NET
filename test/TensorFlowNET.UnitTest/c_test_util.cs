@@ -1,4 +1,6 @@
-﻿using Tensorflow;
+﻿using System.Diagnostics.CodeAnalysis;
+using Tensorflow;
+using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
 
 namespace TensorFlowNET.UnitTest
@@ -26,12 +28,15 @@ namespace TensorFlowNET.UnitTest
             return op;
         }
 
+        [SuppressMessage("ReSharper", "RedundantAssignment")]
         public static bool GetAttrValue(Operation oper, string attr_name, ref AttrValue attr_value, Status s)
         {
-            var buffer = new Buffer();
-            c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer, s);
-            attr_value = AttrValue.Parser.ParseFrom(buffer);
-            buffer.Dispose();
+            using (var buffer = new Buffer())
+            {
+                c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer, s);
+                attr_value = AttrValue.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+            }
+
             return s.Code == TF_Code.TF_OK;
         }
 
@@ -42,7 +47,7 @@ namespace TensorFlowNET.UnitTest
             {
                 c_api.TF_GraphToGraphDef(graph, buffer, s);
                 s.Check();
-                return GraphDef.Parser.ParseFrom(buffer);
+                return GraphDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
             }
         }
 

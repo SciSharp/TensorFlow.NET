@@ -119,7 +119,7 @@ namespace TensorFlowNET.UnitTest
             {
                 sess.run(init_op);
                 // o some work with the model.
-                inc_v1.op.run();
+                inc_v1.op.run(session: sess);
             }
         }
 

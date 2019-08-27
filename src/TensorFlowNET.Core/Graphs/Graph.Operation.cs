@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -30,7 +31,7 @@ namespace Tensorflow
             using (var status = new Status())
             {
                 c_api.TF_GraphGetOpDef(_handle, type, buffer, status);
-                return OpDef.Parser.ParseFrom(buffer.Data);
+                return OpDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
             }
         }
 
@@ -71,7 +72,7 @@ namespace Tensorflow
 
         public ITensorOrOperation[] get_operations()
         {
-            return _nodes_by_name.Values.Select(x => x).ToArray();
+            return _nodes_by_name.Values.ToArray();
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace Tensorflow
 
         public ITensorOrOperation _get_operation_by_name_unsafe(string name)
         {
-            return _nodes_by_name.ContainsKey(name) ? _nodes_by_name[name] : null;
+            return _nodes_by_name.TryGetValue(name, out var val) ? val : null;
         }
 
         public ITensorOrOperation _get_operation_by_tf_operation(IntPtr tf_oper)

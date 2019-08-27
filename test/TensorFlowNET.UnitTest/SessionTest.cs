@@ -72,8 +72,6 @@ namespace TensorFlowNET.UnitTest
             // Clean up
             csession.CloseAndDelete(s);
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
-            graph.Dispose();
-            s.Dispose();
         }
 
         [TestMethod]
@@ -84,7 +82,7 @@ namespace TensorFlowNET.UnitTest
             var c = math_ops.matmul(a, b, name: "matmul");
             using (var sess = tf.Session())
             {
-                var result = c.eval();
+                var result = c.eval(sess);
                 Assert.AreEqual(6, result.Data<double>()[0]);
             }
         }
