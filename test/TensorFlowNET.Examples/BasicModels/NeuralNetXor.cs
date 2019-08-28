@@ -54,7 +54,7 @@ namespace TensorFlowNET.Examples
             var logits = tf.matmul(hidden_activations, output_weights);
 
             // Shape [4]
-            var predictions = tf.sigmoid(tf.squeeze(logits));
+            var predictions = tf.tanh(tf.squeeze(logits));
             var loss = tf.reduce_mean(tf.square(predictions - tf.cast(labels, tf.float32)), name:"loss");
 
             var gs = tf.Variable(0, trainable: false, name: "global_step");
