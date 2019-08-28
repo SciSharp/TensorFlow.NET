@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Tensorflow;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Binding;
@@ -381,10 +382,15 @@ namespace TensorFlowNET.Examples
             Tensor resized_input_tensor, Tensor bottleneck_tensor, string module_name)
         {
             int how_many_bottlenecks = 0;
-            foreach (var (label_name, label_lists) in image_lists)
+            var kvs = image_lists.ToArray();
+            var categories = new string[] {"training", "testing", "validation"};
+            Parallel.For(0, kvs.Length, i =>
             {
-                foreach (var category in new string[] { "training", "testing", "validation" })
+                var (label_name, label_lists) = kvs[i];
+
+                Parallel.For(0, categories.Length, j =>
                 {
+                    var category = categories[j];
                     var category_list = label_lists[category];
                     foreach (var (index, unused_base_name) in enumerate(category_list))
                     {
@@ -395,8 +401,8 @@ namespace TensorFlowNET.Examples
                         if (how_many_bottlenecks % 300 == 0)
                             print($"{how_many_bottlenecks} bottleneck files created.");
                     }
-                }
-            }
+                });
+            });
         }
 
         private float[] get_or_create_bottleneck(Session sess, Dictionary<string, Dictionary<string, string[]>> image_lists,
