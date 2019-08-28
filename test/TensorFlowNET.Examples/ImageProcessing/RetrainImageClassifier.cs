@@ -508,7 +508,7 @@ namespace TensorFlowNET.Examples
         {
             // get a set of images to teach the network about the new classes
             string fileName = "flower_photos.tgz";
-            string url = $"http://download.tf.org/example_images/{fileName}";
+            string url = $"http://download.tensorflow.org/example_images/{fileName}";
             Web.Download(url, data_dir, fileName);
             Compress.ExtractTGZ(Path.Join(data_dir, fileName), data_dir);
 
