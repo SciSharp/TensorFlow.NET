@@ -44,7 +44,7 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual("", g._name_stack);
         }
 
-        [TestMethod]
+        [TestMethod, Ignore("Unimplemented Usage")]
         public void NestedNameScope_Using()
         {
             Graph g = tf.Graph().as_default();
