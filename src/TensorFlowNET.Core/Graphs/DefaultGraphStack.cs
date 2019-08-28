@@ -27,24 +27,24 @@ namespace Tensorflow
     /// </summary>
     public class DefaultGraphStack 
     {
-        private readonly List<StackModel> stack = new List<StackModel>();
+        private readonly List<StackModel> _stack = new List<StackModel>();
 
         public void set_controller(Graph @default)
         {
-            if (!stack.Exists(x => x.Graph == @default))
-                stack.Add(new StackModel {Graph = @default, IsDefault = true});
+            if (!_stack.Exists(x => x.Graph == @default))
+                _stack.Add(new StackModel {Graph = @default, IsDefault = true});
 
-            foreach (var s in stack)
+            foreach (var s in _stack)
                 s.IsDefault = s.Graph == @default;
         }
 
         public Graph get_controller()
         {
-            if (stack.Count(x => x.IsDefault) == 0)
-                stack.Add(new StackModel {Graph = tf.Graph(), IsDefault = true});
-            for (var i = stack.Count - 1; i >= 0; i--)
+            if (_stack.Count(x => x.IsDefault) == 0)
+                _stack.Add(new StackModel {Graph = tf.Graph(), IsDefault = true});
+            for (var i = _stack.Count - 1; i >= 0; i--)
             {
-                var x = stack[i];
+                var x = _stack[i];
                 if (x.IsDefault)
                     return x.Graph;
             }
@@ -54,16 +54,16 @@ namespace Tensorflow
 
         public bool remove(Graph g)
         {
-            if (stack.Count == 0)
+            if (_stack.Count == 0)
                 return false;
 
-            var sm = stack.Find(model => model.Graph == g);
-            return sm != null && stack.Remove(sm);
+            var sm = _stack.Find(model => model.Graph == g);
+            return sm != null && _stack.Remove(sm);
         }
 
         public void reset()
         {
-            stack.Clear();
+            _stack.Clear();
         }
 
         private class StackModel
