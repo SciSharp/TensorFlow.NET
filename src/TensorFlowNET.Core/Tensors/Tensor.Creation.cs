@@ -528,7 +528,6 @@ namespace Tensorflow
             }
 
             _handle = CreateTensorFromNDArray(nd, tensorDType);
-            IsMemoryOwner = true;
         }
 
         private unsafe IntPtr CreateTensorFromNDArray(NDArray nd, TF_DataType? given_dtype)
