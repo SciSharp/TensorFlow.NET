@@ -2,7 +2,7 @@
 
 namespace Tensorflow
 {
-    public class TypeError : Exception
+    public class TypeError : TensorflowException
     {
         public TypeError() : base()
         {

@@ -64,8 +64,7 @@ namespace Tensorflow
 
         public Session Session()
         {
-            defaultSession = new Session();
-            return defaultSession;
+            return new Session();
         }
 
         public Session Session(Graph graph, SessionOptions opts = null)

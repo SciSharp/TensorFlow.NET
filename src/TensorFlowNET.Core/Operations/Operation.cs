@@ -17,7 +17,9 @@
 using Google.Protobuf.Collections;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Tensorflow.Util;
 
 namespace Tensorflow
 {
@@ -226,9 +228,12 @@ namespace Tensorflow
             using (var status = new Status())
             using (var buf = new Buffer())
             {
-                c_api.TF_OperationGetAttrValueProto(_handle, name, buf, status);
-                status.Check(true);
-                x = AttrValue.Parser.ParseFrom(buf);
+                unsafe
+                {
+                    c_api.TF_OperationGetAttrValueProto(_handle, name, buf, status);
+                    status.Check(true);
+                    x = AttrValue.Parser.ParseFrom(buf.MemoryBlock.Stream());
+                }
             }
 
             string oneof_value = x.ValueCase.ToString();
@@ -259,7 +264,7 @@ namespace Tensorflow
             {
                 c_api.TF_OperationToNodeDef(_handle, buffer, s);
                 s.Check();
-                return NodeDef.Parser.ParseFrom(buffer);
+                return NodeDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
             }
         }
 
@@ -299,8 +304,7 @@ namespace Tensorflow
         /// </summary>
         public TF_Output _tf_output(int output_idx)
         {
-            var tf_output =  new TF_Output(op, output_idx);
-            return tf_output;
+            return new TF_Output(op, output_idx);
         }
 
         /// <summary>
@@ -308,8 +312,7 @@ namespace Tensorflow
         /// </summary>
         public TF_Input _tf_input(int input_idx)
         {
-            var tf_input = new TF_Input(op, input_idx);
-            return tf_input;
+            return new TF_Input(op, input_idx);
         }
     }
 }

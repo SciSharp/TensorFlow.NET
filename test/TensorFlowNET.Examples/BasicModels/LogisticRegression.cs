@@ -102,7 +102,7 @@ namespace TensorFlowNET.Examples
 
                     // Display logs per epoch step
                     if ((epoch + 1) % display_step == 0)
-                        print($"Epoch: {(epoch + 1).ToString("D4")} Cost: {avg_cost.ToString("G9")} Elapse: {sw.ElapsedMilliseconds}ms");
+                        print($"Epoch: {(epoch + 1):D4} Cost: {avg_cost:G9} Elapse: {sw.ElapsedMilliseconds}ms");
 
                     sw.Reset();
                 }
@@ -114,8 +114,8 @@ namespace TensorFlowNET.Examples
                 var correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1));
                 // Calculate accuracy
                 var accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32));
-                float acc = accuracy.eval((x, mnist.Test.Data), (y, mnist.Test.Labels));
-                print($"Accuracy: {acc.ToString("F4")}");
+                float acc = accuracy.eval(sess, (x, mnist.Test.Data), (y, mnist.Test.Labels));
+                print($"Accuracy: {acc:F4}");
 
                 return acc > 0.9;
             }

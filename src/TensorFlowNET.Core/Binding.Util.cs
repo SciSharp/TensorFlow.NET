@@ -178,13 +178,18 @@ namespace Tensorflow
 
         public static IEnumerable<(TKey, TValue)> enumerate<TKey, TValue>(KeyValuePair<TKey, TValue>[] values)
         {
-            foreach (var item in values)
+            var len = values.Length;
+            for (var i = 0; i < len; i++)
+            {
+                var item = values[i];
                 yield return (item.Key, item.Value);
+            }
         }
 
         public static IEnumerable<(int, T)> enumerate<T>(IList<T> values)
         {
-            for (int i = 0; i < values.Count; i++)
+            var len = values.Count;
+            for (int i = 0; i < len; i++)
                 yield return (i, values[i]);
         }
 

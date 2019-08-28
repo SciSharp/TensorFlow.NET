@@ -52,9 +52,9 @@ namespace Tensorflow
         private DeallocatorArgs _deallocatorArgs = new DeallocatorArgs() { gc_handle = IntPtr.Zero };
 
         // note: they must be assigned to a static variable in order to work as unmanaged callbacks
-        static Deallocator _hGlobalDeallocator = FreeHGlobalMemory;
-        static Deallocator _gcHandleDeallocator = FreeGCHandle;
-        private static Deallocator _nothingDeallocator = FreeNothing;
+        private static readonly Deallocator _hGlobalDeallocator = FreeHGlobalMemory;
+        private static readonly Deallocator _gcHandleDeallocator = FreeGCHandle;
+        private static readonly Deallocator _nothingDeallocator = FreeNothing;
 
         /// <summary>
         /// Create a Tensor object from an existing TF handle
@@ -528,7 +528,6 @@ namespace Tensorflow
             }
 
             _handle = CreateTensorFromNDArray(nd, tensorDType);
-            IsMemoryOwner = true;
         }
 
         private unsafe IntPtr CreateTensorFromNDArray(NDArray nd, TF_DataType? given_dtype)
@@ -624,7 +623,7 @@ namespace Tensorflow
                 Marshal.WriteInt64(tensor, 0);
 
                 var status = new Status();
-                fixed (byte* src = &buffer[0])
+                fixed (byte* src = buffer)
                     c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
 
                 status.Check(true);
@@ -667,8 +666,9 @@ namespace Tensorflow
         {
             if (args.deallocator_called)
                 return;
+
             // NumSharp will dispose
-            // Marshal.FreeHGlobal(dataPtr);
+            Marshal.FreeHGlobal(dataPtr);
             args.deallocator_called = true;
         }
 

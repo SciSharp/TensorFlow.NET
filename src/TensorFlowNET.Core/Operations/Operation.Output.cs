@@ -50,14 +50,12 @@ namespace Tensorflow
 
         public unsafe TF_Input[] OutputConsumers(int index, int max_consumers)
         {
-            int size = Marshal.SizeOf<TF_Input>();
-            var handle = Marshal.AllocHGlobal(size);
+            var handle = Marshal.AllocHGlobal(Marshal.SizeOf<TF_Input>());
             int num = c_api.TF_OperationOutputConsumers(new TF_Output(_handle, index), handle, max_consumers);
             var consumers = new TF_Input[num];
+            var inputptr = (TF_Input*) handle;
             for (int i = 0; i < num; i++)
-            {
-                consumers[i] = Marshal.PtrToStructure<TF_Input>(handle + i * size);
-            }
+                consumers[i] = *(inputptr + i);
 
             return consumers;
         }

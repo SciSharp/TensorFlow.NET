@@ -40,10 +40,7 @@ namespace TensorFlowNET.UnitTest
 
         private void DeleteInputValues()
         {
-            for (var i = 0; i < input_values_.Count; ++i)
-            {
-                input_values_[i].Dispose();
-            }
+            //clearing is enough as they will be disposed by the GC unless they are referenced else-where.
             input_values_.Clear();
         }
 
@@ -60,11 +57,7 @@ namespace TensorFlowNET.UnitTest
 
         private void ResetOutputValues()
         {
-            for (var i = 0; i < output_values_.Count; ++i)
-            {
-                if (output_values_[i] != IntPtr.Zero)
-                    output_values_[i].Dispose();
-            }
+            //clearing is enough as they will be disposed by the GC unless they are referenced else-where.
             output_values_.Clear();
         }
 

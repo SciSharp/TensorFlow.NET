@@ -2,7 +2,7 @@
 
 namespace Tensorflow
 {
-    public class ValueError : Exception
+    public class ValueError : TensorflowException
     {
         public ValueError() : base()
         {

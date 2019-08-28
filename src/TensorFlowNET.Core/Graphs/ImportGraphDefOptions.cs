@@ -20,7 +20,8 @@ namespace Tensorflow
 {
     public class ImportGraphDefOptions : DisposableObject
     {
-        public int NumReturnOutputs => c_api.TF_ImportGraphDefOptionsNumReturnOutputs(_handle);
+        public int NumReturnOutputs 
+            => c_api.TF_ImportGraphDefOptionsNumReturnOutputs(_handle);
 
         public ImportGraphDefOptions()
         {

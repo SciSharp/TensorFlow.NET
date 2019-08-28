@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
 using static Tensorflow.Binding;
 
@@ -21,7 +22,7 @@ namespace TensorFlowNET.UnitTest
         {
             var handle = c_api.TF_GetAllOpList();
             var buffer = new Buffer(handle);
-            var op_list = OpList.Parser.ParseFrom(buffer);
+            var op_list = OpList.Parser.ParseFrom(buffer.MemoryBlock.Stream());
 
             var _registered_ops = new Dictionary<string, OpDef>();
             foreach (var op_def in op_list.Op)
