@@ -6,7 +6,7 @@
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
     <Version>0.11.1</Version>
-    <Authors>Haiping Chen, Meinrad Recheis</Authors>
+    <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Apache 2.0</Copyright>

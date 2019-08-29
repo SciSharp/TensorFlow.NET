@@ -13,10 +13,5 @@ namespace Tensorflow.Framework.Models
         {
 
         }
-
-        ~ScopedTFImportGraphDefResults()
-        {
-            base.Dispose();
-        }
     }
 }

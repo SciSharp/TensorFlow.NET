@@ -77,8 +77,11 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            internal_dispose(true);
-            GC.SuppressFinalize(this);
+            lock(this)
+            {
+                internal_dispose(true);
+                GC.SuppressFinalize(this);
+            }
         }
 
         /// <summary>
