@@ -37,6 +37,21 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
             upsample_method = cfg.YOLO.UPSAMPLE_METHOD;
 
             (conv_lbbox, conv_mbbox, conv_sbbox) = __build_nework(input_data);
+
+            tf_with(tf.variable_scope("pred_sbbox"), scope =>
+            {
+                // pred_sbbox = decode(conv_sbbox, anchors[0], strides[0]);
+            });
+
+            tf_with(tf.variable_scope("pred_mbbox"), scope =>
+            {
+                // pred_sbbox = decode(conv_sbbox, anchors[0], strides[0]);
+            });
+
+            tf_with(tf.variable_scope("pred_lbbox"), scope =>
+            {
+                // pred_sbbox = decode(conv_sbbox, anchors[0], strides[0]);
+            });
         }
 
         private (Tensor, Tensor, Tensor) __build_nework(Tensor input_data)

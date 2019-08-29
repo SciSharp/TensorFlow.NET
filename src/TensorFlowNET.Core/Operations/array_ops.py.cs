@@ -260,8 +260,7 @@ namespace Tensorflow
             return tf_with(ops.name_scope(name, "ones", new { dims }), scope =>
             {
                 name = scope;
-                var shape = ops.convert_to_tensor(dims, dtype: TF_DataType.TF_INT32);
-                var output = gen_array_ops.fill(shape, constant_op.constant(1.0f, dtype: dtype), name: name);
+                var output = _constant_if_small(1, dims, dtype, name);
                 return output;
             });
         }

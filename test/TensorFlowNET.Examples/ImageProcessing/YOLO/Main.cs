@@ -94,6 +94,11 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
                 model = new YOLOv3(cfg, input_data, trainable);
             });
 
+            tf_with(tf.name_scope("define_weight_decay"), scope =>
+            {
+                var moving_ave = tf.train.ExponentialMovingAverage(moving_ave_decay).apply((RefVariable[])tf.trainable_variables());
+            });
+
             return graph;
         }
 

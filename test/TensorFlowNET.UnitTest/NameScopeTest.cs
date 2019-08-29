@@ -69,9 +69,7 @@ namespace TensorFlowNET.UnitTest
                 Assert.AreEqual("scope1", g._name_stack);
                 var const3 = tf.constant(2.0);
                 Assert.AreEqual("scope1/Const_1:0", const3.name);
-            }
-
-            ;
+            };
 
             g.Dispose();
 

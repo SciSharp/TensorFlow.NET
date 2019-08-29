@@ -40,7 +40,7 @@ namespace Tensorflow
                 name: name,
                 args: new { shape, dtype, seed, seed2 });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         /// <summary>
