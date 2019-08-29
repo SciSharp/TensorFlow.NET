@@ -39,9 +39,10 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "random_normal", new { shape, mean, stddev }), scope =>
             {
+                name = scope;
                 var shape_tensor = _ShapeTensor(shape);
                 var mean_tensor = ops.convert_to_tensor(mean, dtype: dtype, name: "mean");
-                var stddev_tensor = ops.convert_to_tensor(stddev, dtype: dtype, name = "stddev");
+                var stddev_tensor = ops.convert_to_tensor(stddev, dtype: dtype, name: "stddev");
                 var (seed1, seed2) = random_seed.get_seed(seed);
                 var rnd = gen_random_ops.random_standard_normal(shape_tensor, dtype: dtype, seed: seed1, seed2: seed2);
                 var mul = rnd * stddev_tensor;

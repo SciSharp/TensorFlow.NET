@@ -49,7 +49,7 @@ namespace Tensorflow
 
             // dispose newOpts
             if (opts == null)
-                c_api.TF_DeleteSessionOptions(newOpts);
+                newOpts.Dispose();
 
             status.Check(true);
         }
@@ -60,6 +60,11 @@ namespace Tensorflow
         }
 
         public virtual NDArray run(Tensor fetche, params FeedItem[] feed_dict)
+        {
+            return _run(fetche, feed_dict)[0];
+        }
+
+        public virtual NDArray run(ITensorOrOperation fetche, params FeedItem[] feed_dict)
         {
             return _run(fetche, feed_dict)[0];
         }
@@ -273,7 +278,7 @@ namespace Tensorflow
         {
             var tensor = new Tensor(output);
             NDArray nd = null;
-            Type type = tensor.dtype.as_numpy_datatype();
+            Type type = tensor.dtype.as_numpy_dtype();
             var ndims = tensor.shape;
             var offset = c_api.TF_TensorData(output);
 
@@ -285,7 +290,7 @@ namespace Tensorflow
                         nd = NDArray.Scalar(*(bool*)offset);
                         break;
                     case TF_DataType.TF_STRING:
-                        var bytes = tensor.Data();
+                        var bytes = tensor.BufferToArray();
                         // wired, don't know why we have to start from offset 9.
                         // length in the begin
                         var str = UTF8Encoding.Default.GetString(bytes, 9, bytes[8]);
@@ -324,7 +329,7 @@ namespace Tensorflow
                         nd = np.array(bools).reshape(ndims);
                         break;
                     case TF_DataType.TF_STRING:
-                        var bytes = tensor.Data();
+                        var bytes = tensor.BufferToArray();
                         // wired, don't know why we have to start from offset 9.
                         // length in the begin
                         var str = UTF8Encoding.Default.GetString(bytes, 9, bytes[8]);
@@ -396,7 +401,7 @@ namespace Tensorflow
             Dispose();
         }
 
-        protected override void DisposeUnManagedState(IntPtr handle)
+        protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             using (var status = new Status())
             {

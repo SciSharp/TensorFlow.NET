@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -22,7 +23,7 @@ namespace Tensorflow
     {
         public VariableV1[] global_variables(string scope = null)
         {
-            return (ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
+            return (ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
                 .ToArray();
         }
 
@@ -31,6 +32,14 @@ namespace Tensorflow
             var g = variables.global_variables();
             return variables.variables_initializer(g.ToArray());
         }
+
+        /// <summary>
+        /// Returns all variables created with `trainable=True`.
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        public VariableV1[] trainable_variables(string scope = null)
+            => (variables.trainable_variables() as List<VariableV1>).ToArray();
 
         public RefVariable get_variable(string name,
             TensorShape shape = null,

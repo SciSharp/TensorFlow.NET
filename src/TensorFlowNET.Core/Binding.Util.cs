@@ -178,13 +178,18 @@ namespace Tensorflow
 
         public static IEnumerable<(TKey, TValue)> enumerate<TKey, TValue>(KeyValuePair<TKey, TValue>[] values)
         {
-            foreach (var item in values)
+            var len = values.Length;
+            for (var i = 0; i < len; i++)
+            {
+                var item = values[i];
                 yield return (item.Key, item.Value);
+            }
         }
 
         public static IEnumerable<(int, T)> enumerate<T>(IList<T> values)
         {
-            for (int i = 0; i < values.Count; i++)
+            var len = values.Count;
+            for (int i = 0; i < len; i++)
                 yield return (i, values[i]);
         }
 
@@ -308,15 +313,14 @@ namespace Tensorflow
         public static IEnumerable TupleToEnumerable(object tuple)
         {
             Type t = tuple.GetType();
-            if(t.IsGenericType && (t.FullName.StartsWith("System.Tuple") || t.FullName.StartsWith("System.ValueTuple")))
+            if (t.IsGenericType && (t.FullName.StartsWith("System.Tuple") || t.FullName.StartsWith("System.ValueTuple")))
             {
                 var flds = t.GetFields();
-                for(int i = 0; i < flds.Length;i++)
+                for (int i = 0; i < flds.Length; i++)
                 {
                     yield return flds[i].GetValue(tuple);
                 }
-            }
-            else
+            } else
             {
                 throw new System.Exception("Expected Tuple.");
             }
@@ -329,12 +333,9 @@ namespace Tensorflow
 
         public static bool isinstance(object Item1, object tuple)
         {
-            var tup = TupleToEnumerable(tuple);
-            foreach(var t in tup)
-            {
-                if(isinstance(Item1, (Type)t))
+            foreach (var t in TupleToEnumerable(tuple))
+                if (isinstance(Item1, (Type) t))
                     return true;
-            }
             return false;
         }
     }

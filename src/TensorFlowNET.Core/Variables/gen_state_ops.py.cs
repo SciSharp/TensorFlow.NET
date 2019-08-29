@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using Tensorflow.Eager;
 
@@ -144,6 +145,11 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("ScatterAdd", name: name, args: new { @ref, indices, updates, use_locking });
             return _op.outputs[0];
+        }
+
+        public static Tensor is_variable_initialized(RefVariable @ref, string name = null)
+        {
+            throw new NotImplementedException("");
         }
     }
 }

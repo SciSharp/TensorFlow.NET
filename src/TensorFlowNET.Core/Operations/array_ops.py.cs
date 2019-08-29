@@ -260,8 +260,7 @@ namespace Tensorflow
             return tf_with(ops.name_scope(name, "ones", new { dims }), scope =>
             {
                 name = scope;
-                var shape = ops.convert_to_tensor(dims, dtype: TF_DataType.TF_INT32);
-                var output = gen_array_ops.fill(shape, constant_op.constant(1.0f, dtype: dtype), name: name);
+                var output = _constant_if_small(1, dims, dtype, name);
                 return output;
             });
         }
@@ -351,7 +350,7 @@ namespace Tensorflow
                     var input_shape = tensor_util.to_shape(input_tensor.shape);
                     if (optimize && input_tensor.NDims > -1 && input_shape.is_fully_defined())
                     {
-                        var nd = np.array(input_tensor.shape).astype(out_type.as_numpy_datatype());
+                        var nd = np.array(input_tensor.shape).astype(out_type.as_numpy_dtype());
                         return constant_op.constant(nd, name: name);
                     }
                 }

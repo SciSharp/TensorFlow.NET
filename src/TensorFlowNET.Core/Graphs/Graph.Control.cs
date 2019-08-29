@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Tensorflow.Operations;
 
@@ -66,8 +67,9 @@ namespace Tensorflow
         /// within the context should have control dependencies on
         /// `control_inputs`. 
         /// </summary>
+        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
         public _ControlDependenciesController control_dependencies(ITensorOrOperation[] control_inputs)
-            => control_dependencies(control_inputs == null ? null : control_inputs.OfType<object>().ToArray());
+            => control_dependencies((object[])control_inputs);
 
         /// <summary>
         /// Returns a context manager that specifies control dependencies.

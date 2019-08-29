@@ -14,11 +14,16 @@
    limitations under the License.
 ******************************************************************************/
 
+using static Tensorflow.ops;
+
 namespace Tensorflow
 {
     public partial class tensorflow
     {
         public graph_util_impl graph_util => new graph_util_impl();
+
+        public GraphKeys GraphKeys { get; } = new GraphKeys();
+
         public Graph get_default_graph()
         {
             return ops.get_default_graph();

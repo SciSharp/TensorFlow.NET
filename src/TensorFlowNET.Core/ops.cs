@@ -230,8 +230,8 @@ namespace Tensorflow
             // Add attrs
             foreach (var attr in node_def.Attr)
             {
-                var bytes = attr.Value.ToByteArray();
-                var proto = Marshal.AllocHGlobal(bytes.Length);
+                var bytes = attr.Value.ToByteArray(); //TODO: we can use attr.Value.WriteTo with a memory stream.
+                var proto = Marshal.AllocHGlobal(bytes.Length); //TODO: potential memory leak
                 Marshal.Copy(bytes, 0, proto, bytes.Length);
                 uint len = (uint)bytes.Length;
                 c_api.TF_SetAttrValueProto(op_desc, attr.Key, proto, proto_len: len, status: status);
@@ -488,6 +488,8 @@ namespace Tensorflow
 
             switch (value)
             {
+                case String str:
+                    return constant_op.constant(str, dtype: TF_DataType.TF_STRING, name: name);
                 case NDArray nd:
                     return constant_op.constant(nd, dtype: dtype, name: name);
                 case Tensor tensor:

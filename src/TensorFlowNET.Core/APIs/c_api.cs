@@ -59,6 +59,6 @@ namespace Tensorflow
         }
 
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern IntPtr TF_Version();
+        public static extern IntPtr TF_Version();
     }
 }

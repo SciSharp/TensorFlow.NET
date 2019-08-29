@@ -5,10 +5,5 @@
         public ScopedTFStatus() : base()
         {
         }
-
-        ~ScopedTFStatus()
-        {
-            base.Dispose();
-        }
     }
 }

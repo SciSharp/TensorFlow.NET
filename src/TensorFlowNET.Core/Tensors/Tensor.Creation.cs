@@ -16,11 +16,13 @@
 
 using NumSharp;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using static Tensorflow.c_api;
 
@@ -50,9 +52,9 @@ namespace Tensorflow
         private DeallocatorArgs _deallocatorArgs = new DeallocatorArgs() { gc_handle = IntPtr.Zero };
 
         // note: they must be assigned to a static variable in order to work as unmanaged callbacks
-        static Deallocator _hGlobalDeallocator = FreeHGlobalMemory;
-        static Deallocator _gcHandleDeallocator = FreeGCHandle;
-        private static Deallocator _nothingDeallocator = FreeNothing;
+        private static readonly Deallocator _hGlobalDeallocator = FreeHGlobalMemory;
+        private static readonly Deallocator _gcHandleDeallocator = FreeGCHandle;
+        private static readonly Deallocator _nothingDeallocator = FreeNothing;
 
         /// <summary>
         /// Create a Tensor object from an existing TF handle
@@ -477,7 +479,7 @@ namespace Tensorflow
 
             IntPtr tensor = c_api.TF_TensorData(handle);
             Marshal.WriteInt64(tensor, 0);
-            fixed (byte* src = &buffer[0])
+            fixed (byte* src = buffer)
                 c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
             _handle = handle;
             status.Check(true);
@@ -486,26 +488,46 @@ namespace Tensorflow
         public unsafe Tensor(NDArray nd, TF_DataType? tensorDType = null)
         {
             // todo: handle nd of type "String" here too
-            if (tensorDType == TF_DataType.TF_STRING && nd.dtype.Name == "Byte")
+            if (tensorDType == TF_DataType.TF_STRING && nd.typecode == NPTypeCode.Byte)
             {
-                var buffer = nd.ToArray<byte>();
-                var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
-                var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
+                if (nd.Unsafe.Storage.Shape.IsContiguous)
+                {
+                    var bytesLength = (UIntPtr)nd.size;
+                    var size = c_api.TF_StringEncodedSize(bytesLength);
+                    var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
 
-                IntPtr tensor = c_api.TF_TensorData(handle);
-                Marshal.WriteInt64(tensor, 0);
+                    IntPtr tensor = c_api.TF_TensorData(handle);
+                    Marshal.WriteInt64(tensor, 0);
 
-                var status = new Status();
-                fixed (byte* src = &buffer[0])
-                    c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
+                    var status = new Status();
+                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (sbyte*) (tensor + sizeof(Int64)), size, status);
 
-                status.Check(true);
-                _handle=handle;
-                IsMemoryOwner = false;
+                    status.Check(true);
+                    _handle = handle;
+                    IsMemoryOwner = false;
+                } 
+                else
+                {
+                    var buffer = nd.ToArray<byte>();
+                    var size = c_api.TF_StringEncodedSize((UIntPtr) buffer.Length);
+                    var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
+
+                    IntPtr tensor = c_api.TF_TensorData(handle);
+                    Marshal.WriteInt64(tensor, 0);
+
+                    var status = new Status();
+                    fixed (byte* src = buffer)
+                        c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status);
+
+                    status.Check(true);
+                    _handle = handle;
+                    IsMemoryOwner = false;
+                }
+
                 return;
             }
+
             _handle = CreateTensorFromNDArray(nd, tensorDType);
-            IsMemoryOwner = true;
         }
 
         private unsafe IntPtr CreateTensorFromNDArray(NDArray nd, TF_DataType? given_dtype)
@@ -513,8 +535,7 @@ namespace Tensorflow
             if (nd.dtype.Name == "String")
                 throw new NotImplementedException("Support for NDArray of type string not implemented yet");
             IArraySlice arraySlice;
-            var shape = nd.Unsafe.Storage.Shape;
-            if (shape.IsSliced || shape.IsBroadcasted)
+            if (nd.Unsafe.Storage.Shape.IsContiguous == false)
             {
                 // the memory is NOT contiguous, so we have to copy the view into a contiguous memory block.
                 arraySlice = nd.CloneData();
@@ -527,10 +548,11 @@ namespace Tensorflow
             this.Tag = arraySlice; // keep a reference to the memory block to make sure it is not disposed while TF is using it
             var ptr = new IntPtr(arraySlice.Address);
             int num_bytes = (nd.size * nd.dtypesize);
-            var dtype = given_dtype ?? ToTFDataType(nd.dtype);
+            var dtype = given_dtype ?? nd.dtype.as_dtype();
             var handle = TF_NewTensor(dtype, dims: nd.shape.Select(i=>(long)i).ToArray(), num_dims: nd.ndim, data: ptr, len: (UIntPtr)num_bytes, deallocator: _nothingDeallocator, ref _deallocatorArgs);
             IsMemoryOwner = false;
             return handle;
+
         }
 
         public unsafe Tensor(byte[][] buffer, long[] shape)
@@ -571,7 +593,7 @@ namespace Tensorflow
         {
             _op = op;
             _value_index = value_index;
-            _dtype = dtype;
+            _override_dtype = dtype;
             _id = ops.uid();
         }
 
@@ -589,11 +611,11 @@ namespace Tensorflow
         /// specified dimensions.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SuppressMessage("ReSharper", "LocalVariableHidesMember")]
         protected unsafe IntPtr CreateTensorWithoutCopying(TF_DataType dt, long[] shape, Array data, int element_size)
         {
-            if (dt == TF_DataType.TF_STRING && data is byte[])
+            if (dt == TF_DataType.TF_STRING && data is byte[] buffer)
             {
-                var buffer = (byte[])data;
                 var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
                 var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
 
@@ -601,7 +623,7 @@ namespace Tensorflow
                 Marshal.WriteInt64(tensor, 0);
 
                 var status = new Status();
-                fixed (byte* src = &buffer[0])
+                fixed (byte* src = buffer)
                     c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
 
                 status.Check(true);
@@ -644,8 +666,9 @@ namespace Tensorflow
         {
             if (args.deallocator_called)
                 return;
+
             // NumSharp will dispose
-            // Marshal.FreeHGlobal(dataPtr);
+            Marshal.FreeHGlobal(dataPtr);
             args.deallocator_called = true;
         }
 

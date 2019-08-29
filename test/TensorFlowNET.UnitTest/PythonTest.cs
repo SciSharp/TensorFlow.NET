@@ -165,7 +165,7 @@ namespace TensorFlowNET.UnitTest
             {
                 using (var sess = tf.Session())
                 {
-                    var ndarray=tensor.eval();
+                    var ndarray=tensor.eval(sess);
                     if (typeof(T) == typeof(double))
                     {
                         double x = ndarray;

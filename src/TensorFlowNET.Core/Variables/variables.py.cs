@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -28,7 +29,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static object trainable_variables()
         {
-            return ops.get_collection(ops.GraphKeys.TRAINABLE_VARIABLES);
+            return ops.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES);
         }
 
         /// <summary>
@@ -40,11 +41,11 @@ namespace Tensorflow
         {
             var all = new List<VariableV1>();
 
-            var collection = ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope);
+            var collection = ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope);
             if(collection != null)
                 all.AddRange(collection as List<VariableV1>);
 
-            collection = ops.get_collection(ops.GraphKeys.SAVEABLE_OBJECTS, scope);
+            collection = ops.get_collection(tf.GraphKeys.SAVEABLE_OBJECTS, scope);
             if (collection != null)
                 all.AddRange(collection as List<VariableV1>);
 
@@ -64,7 +65,7 @@ namespace Tensorflow
         /// <returns>A list of `Variable` objects.</returns>
         public static List<VariableV1> global_variables(string scope = null)
         {
-            var result = ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope);
+            var result = ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope);
 
             return result == null ? new List<VariableV1>() : result as List<VariableV1>;
         }

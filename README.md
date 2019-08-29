@@ -1,6 +1,6 @@
 ![logo](docs/assets/tf.net.logo.png)
 
-**TensorFlow.NET** (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in CSharp which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. 
+**TensorFlow.NET** (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in C# which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. 
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/wx4td43v2d3f2xj6?svg=true)](https://ci.appveyor.com/project/Haiping-Chen/tensorflow-net)
@@ -16,7 +16,7 @@ TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp). <a 
 
 ### Why TensorFlow.NET ?
 
-`SciSharp STACK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Scince the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
+`SciSharp STACK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Since the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
 
 ![pythn vs csharp](docs/assets/syntax-comparision.png)
 
@@ -34,40 +34,15 @@ PM> Install-Package TensorFlow.NET
 ### Install tensorflow binary
 ### For CPU version
 PM> Install-Package SciSharp.TensorFlow.Redist
+
 ### For GPU version (CUDA and cuDNN are required)
 PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 ```
 
-Import TF.NET.
+Import TF.NET in your project.
 
 ```cs
-using Tensorflow;
-```
-
-Add two constants:
-```cs
-// Create a Constant op
-var a = tf.constant(4.0f);
-var b = tf.constant(5.0f);
-var c = tf.add(a, b);
-
-using (var sess = tf.Session())
-{
-    var o = sess.run(c);
-}
-```
-
-Feed placeholder:
-```cs
-// Create a placeholder op
-var a = tf.placeholder(tf.float32);
-var b = tf.placeholder(tf.float32);
-var c = tf.add(a, b);
-
-using(var sess = tf.Session())
-{
-    var o = sess.run(c, new FeedItem(a, 3.0f), new FeedItem(b, 2.0f));
-}
+using static Tensorflow.Binding;
 ```
 
 Linear Regression:
@@ -91,39 +66,40 @@ var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
 var init = tf.global_variables_initializer();
 
 // Start training
-with(tf.Session(), sess => 
+using(tf.Session()) 
 {
     // Run the initializer
     sess.run(init);
-    
+
     // Fit all training data
     for (int epoch = 0; epoch < training_epochs; epoch++)
     {
         foreach (var (x, y) in zip<float>(train_X, train_Y))
-            sess.run(optimizer, new FeedItem(X, x), new FeedItem(Y, y));
-        
+            sess.run(optimizer, (X, x), (Y, y));
+
         // Display logs per epoch step
         if ((epoch + 1) % display_step == 0)
         {
-            var c = sess.run(cost, new FeedItem(X, train_X), new FeedItem(Y, train_Y));
+            var c = sess.run(cost, (X, train_X), (Y, train_Y));
             Console.WriteLine($"Epoch: {epoch + 1} cost={c} " + $"W={sess.run(W)} b={sess.run(b)}");
         }
-        
-        Console.WriteLine("Optimization Finished!");
-        var training_cost = sess.run(cost, new FeedItem(X, train_X), new FeedItem(Y, train_Y));
-        Console.WriteLine($"Training cost={training_cost} W={sess.run(W)} b={sess.run(b)}");
-        
-        // Testing example
-        var test_X = np.array(6.83f, 4.668f, 8.9f, 7.91f, 5.7f, 8.7f, 3.1f, 2.1f);
-        var test_Y = np.array(1.84f, 2.273f, 3.2f, 2.831f, 2.92f, 3.24f, 1.35f, 1.03f);
-        Console.WriteLine("Testing... (Mean square loss Comparison)");
-        
-        var testing_cost = sess.run(tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * test_X.shape[0]), new FeedItem(X, test_X), new FeedItem(Y, test_Y));
-        Console.WriteLine($"Testing cost={testing_cost}");
-        
-        var diff = Math.Abs((float)training_cost - (float)testing_cost);
-        Console.WriteLine($"Absolute mean square loss difference: {diff}");
     }
+
+    Console.WriteLine("Optimization Finished!");
+    var training_cost = sess.run(cost, (X, train_X), (Y, train_Y));
+    Console.WriteLine($"Training cost={training_cost} W={sess.run(W)} b={sess.run(b)}");
+
+    // Testing example
+    var test_X = np.array(6.83f, 4.668f, 8.9f, 7.91f, 5.7f, 8.7f, 3.1f, 2.1f);
+    var test_Y = np.array(1.84f, 2.273f, 3.2f, 2.831f, 2.92f, 3.24f, 1.35f, 1.03f);
+    Console.WriteLine("Testing... (Mean square loss Comparison)");
+    var testing_cost = sess.run(tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * test_X.shape[0]),
+                                (X, test_X), (Y, test_Y));
+    Console.WriteLine($"Testing cost={testing_cost}");
+    var diff = Math.Abs((float)training_cost - (float)testing_cost);
+    Console.WriteLine($"Absolute mean square loss difference: {diff}");
+
+    return diff < 0.01;
 });
 ```
 

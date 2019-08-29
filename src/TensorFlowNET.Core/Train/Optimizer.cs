@@ -198,7 +198,7 @@ namespace Tensorflow
 
                 if (!tf.context.executing_eagerly())
                 {
-                    var train_op = ops.get_collection_ref(ops.GraphKeys.TRAIN_OP) as List<ITensorOrOperation>;
+                    var train_op = ops.get_collection_ref(tf.GraphKeys.TRAIN_OP) as List<ITensorOrOperation>;
                     if (train_op != null && train_op.Contains(apply_updates))
                         train_op.Add(apply_updates);
                 }
@@ -359,7 +359,7 @@ namespace Tensorflow
 
 
             var tmp = variables.trainable_variables();
-            var vars = ops.get_collection<RefVariable>(ops.GraphKeys.TRAINABLE_RESOURCE_VARIABLES);
+            var vars = ops.get_collection<RefVariable>(tf.GraphKeys.TRAINABLE_RESOURCE_VARIABLES);
             switch (tmp)
             {
                 case List<RefVariable> values:
@@ -370,7 +370,7 @@ namespace Tensorflow
                     break;
             }
 
-            var_list = var_list.Concat(ops.get_collection<RefVariable>(ops.GraphKeys._STREAMING_MODEL_PORTS)).ToList();
+            var_list = var_list.Concat(ops.get_collection<RefVariable>(tf.GraphKeys._STREAMING_MODEL_PORTS)).ToList();
             var processors = var_list.Select(v => optimizer._get_processor(v)).ToList();
             var var_refs = processors.Select(x => x.target()).ToArray();
 

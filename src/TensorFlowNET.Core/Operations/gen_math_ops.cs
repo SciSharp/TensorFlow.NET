@@ -141,7 +141,7 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         public static Tensor atan(Tensor x, string name = null)

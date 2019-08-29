@@ -112,7 +112,7 @@ namespace TensorFlowNET.UnitTest
             var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape(2, 3);
 
             var tensor = new Tensor(nd);
-            var array = tensor.Data<float>();
+            var array = tensor.ToArray<float>();
 
             EXPECT_EQ(tensor.dtype, TF_DataType.TF_FLOAT);
             EXPECT_EQ(tensor.rank, nd.ndim);

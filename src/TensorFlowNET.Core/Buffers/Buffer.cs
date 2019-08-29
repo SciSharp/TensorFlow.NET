@@ -15,58 +15,116 @@
 ******************************************************************************/
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using NumSharp.Backends.Unmanaged;
+using static Tensorflow.c_api;
 
 namespace Tensorflow
 {
+    /// <summary>
+    ///     Represents a TF_Buffer that can be passed to Tensorflow.
+    /// </summary>
     public class Buffer : DisposableObject
     {
-        private TF_Buffer buffer => Marshal.PtrToStructure<TF_Buffer>(_handle);
-
-        public byte[] Data 
+        private unsafe TF_Buffer buffer
         {
-            get 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => *bufferptr;
+        }
+
+        private unsafe TF_Buffer* bufferptr
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => (TF_Buffer*) _handle;
+        }
+
+        /// <summary>
+        ///     The memory block representing this buffer.
+        /// </summary>
+        /// <remarks>The deallocator is set to null.</remarks>
+        public UnmanagedMemoryBlock<byte> MemoryBlock
+        {
+            get
             {
-                var data = new byte[buffer.length];
-                if (data.Length > 0)
-                    Marshal.Copy(buffer.data, data, 0, data.Length);
-                return data;
+                unsafe
+                {
+                    EnsureNotDisposed();
+                    var buff = (TF_Buffer*) _handle;
+                    return new UnmanagedMemoryBlock<byte>((byte*) buff->data.ToPointer(), (long) buff->length);
+                }
             }
         }
 
-        public int Length => (int)buffer.length;
-
-        public Buffer()
+        /// <summary>
+        ///     The bytes length of this buffer.
+        /// </summary>
+        public ulong Length
         {
-            _handle = c_api.TF_NewBuffer();
+            get
+            {
+                EnsureNotDisposed();
+                return buffer.length;
+            }
         }
 
-        public Buffer(IntPtr handle)
+        public Buffer() => _handle = TF_NewBuffer();
+
+        internal Buffer(IntPtr handle)
         {
+            if (handle == IntPtr.Zero)
+                throw new ArgumentException("Handle (IntPtr) can't be zero.", nameof(handle));
+
             _handle = handle;
         }
 
-        public Buffer(byte[] data)
+        public Buffer(byte[] data) : this(_toBuffer(data))
+        { }
+
+        private static IntPtr _toBuffer(byte[] data)
         {
-            var dst = Marshal.AllocHGlobal(data.Length);
-            Marshal.Copy(data, 0, dst, data.Length);
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
 
-            _handle = c_api.TF_NewBufferFromString(dst, (ulong)data.Length);
-
-            Marshal.FreeHGlobal(dst);
+            unsafe
+            {
+                fixed (byte* src = data)
+                    return TF_NewBufferFromString(new IntPtr(src), (ulong) data.LongLength);
+            }
         }
 
         public static implicit operator IntPtr(Buffer buffer)
         {
+            buffer.EnsureNotDisposed();
             return buffer._handle;
         }
 
-        public static implicit operator byte[](Buffer buffer)
+        public static explicit operator byte[](Buffer buffer) => buffer.ToArray(); //has to be explicit, developer will assume it doesn't cost.
+
+        /// <summary>
+        ///     Copies this buffer's contents onto a <see cref="byte"/> array.
+        /// </summary>
+        public byte[] ToArray()
         {
-            return buffer.Data;
+            EnsureNotDisposed();
+
+            unsafe
+            {
+                var len = buffer.length;
+                if (len == 0)
+                    return Array.Empty<byte>();
+
+                byte[] data = new byte[len];
+                fixed (byte* dst = data)
+                    System.Buffer.MemoryCopy((void*) bufferptr->data, dst, len, len);
+
+                return data;
+            }
         }
 
-        protected override void DisposeUnManagedState(IntPtr handle)
-            => c_api.TF_DeleteBuffer(handle);
+        protected override void DisposeUnmanagedResources(IntPtr handle)
+        {
+            TF_DeleteBuffer(handle);
+        }
     }
 }

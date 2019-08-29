@@ -1,24 +1,22 @@
 ﻿using System;
+using System.IO;
 
 namespace Tensorflow.Eager
 {
-    public class ContextOptions : IDisposable
+    public class ContextOptions : DisposableObject
     {
-        private IntPtr _handle;
+        public ContextOptions() : base(c_api.TFE_NewContextOptions())
+        { }
 
-        public ContextOptions()
-        {
-            _handle = c_api.TFE_NewContextOptions();
-        }
+        /// <summary>
+        ///     Dispose any unmanaged resources related to given <paramref name="handle"/>.
+        /// </summary>
+        protected sealed override void DisposeUnmanagedResources(IntPtr handle) 
+            => c_api.TFE_DeleteContextOptions(_handle);
 
-        public void Dispose()
-        {
-            c_api.TFE_DeleteContextOptions(_handle);
-        }
 
-        public static implicit operator IntPtr(ContextOptions opts)
-        {
-            return opts._handle;
-        }
+        public static implicit operator IntPtr(ContextOptions opts) 
+            => opts._handle;
     }
+
 }

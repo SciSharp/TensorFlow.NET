@@ -106,5 +106,13 @@ namespace Tensorflow
 
             throw new NotImplementedException("scatter_add");
         }
+
+        public static Tensor is_variable_initialized(RefVariable @ref, string name = null)
+        {
+            if (@ref.dtype.is_ref_dtype())
+                return gen_state_ops.is_variable_initialized(@ref: @ref, name: name);
+            throw new NotImplementedException("");
+            //return @ref.is_initialized(name: name);
+        }
     }
 }

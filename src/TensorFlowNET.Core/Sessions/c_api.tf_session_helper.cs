@@ -27,10 +27,14 @@ namespace Tensorflow
             var handle = Marshal.AllocHGlobal(size * num_consumers);
             int num = TF_OperationOutputConsumers(oper_out, handle, num_consumers);
             var consumers = new string[num_consumers];
-            for (int i = 0; i < num; i++)
+            unsafe
             {
-                TF_Input input = Marshal.PtrToStructure<TF_Input>(handle + i * size);
-                consumers[i] = Marshal.PtrToStringAnsi(TF_OperationName(input.oper));
+                var inputptr = (TF_Input*) handle;
+                for (int i = 0; i < num; i++)
+                {
+                    var oper = (inputptr + i)->oper;
+                    consumers[i] = Marshal.PtrToStringAnsi(TF_OperationName(oper));
+                }
             }
 
             return consumers;

@@ -22,7 +22,7 @@ namespace Tensorflow
     public class LossesImpl
     {
         public Tensor compute_weighted_loss(Tensor losses, Tensor weights = null, string scope = null,
-            string loss_collection = ops.GraphKeys.LOSSES, string reduction = Reduction.SUM_BY_NONZERO_WEIGHTS)
+            string loss_collection = "losses", string reduction = Reduction.SUM_BY_NONZERO_WEIGHTS)
         {
             return tf_with(ops.name_scope(scope, default_name: "weighted_loss", (losses, weights)), delegate
             {
@@ -101,7 +101,7 @@ namespace Tensorflow
             Tensor logits,
             float weights = 1.0f,
             string scope = null,
-            string loss_collection= ops.GraphKeys.LOSSES,
+            string loss_collection= "losses",
             string reduction = Reduction.SUM_BY_NONZERO_WEIGHTS)
         {
             return tf_with(ops.name_scope(scope,

@@ -17,6 +17,7 @@
 using NumSharp;
 using System;
 using System.Linq;
+using NumSharp.Utilities;
 
 namespace Tensorflow
 {
@@ -82,6 +83,12 @@ namespace Tensorflow
             throw new NotImplementedException("MakeNdarray");
         }
 
+        private static readonly TF_DataType[] quantized_types = new TF_DataType[]
+        {
+            TF_DataType.TF_QINT8, TF_DataType.TF_QUINT8, TF_DataType.TF_QINT16, TF_DataType.TF_QUINT16,
+            TF_DataType.TF_QINT32
+        };
+
         /// <summary>
         /// Create a TensorProto.
         /// </summary>
@@ -98,18 +105,9 @@ namespace Tensorflow
             if (values is TensorProto tp)
                 return tp;
 
-            if (dtype != TF_DataType.DtInvalid)
-                ;
-
-            bool is_quantized = new TF_DataType[]
-            {
-                TF_DataType.TF_QINT8, TF_DataType.TF_QUINT8, TF_DataType.TF_QINT16, TF_DataType.TF_QUINT16,
-                TF_DataType.TF_QINT32
-            }.Contains(dtype);
-
             // We first convert value to a numpy array or scalar.
             NDArray nparray = null;
-            var np_dt = dtype.as_numpy_datatype();
+            var np_dt = dtype.as_numpy_dtype();
 
             if (values is NDArray nd)
             {
@@ -188,37 +186,37 @@ namespace Tensorflow
                             if (values.GetType().IsArray)
                                 nparray = np.array((int[])values, np_dt);
                             else
-                                nparray = Convert.ToInt32(values);
+                                nparray = Converts.ToInt32(values);
                             break;
                         case "Int64":
                             if (values.GetType().IsArray)
                                 nparray = np.array((int[])values, np_dt);
                             else
-                                nparray = Convert.ToInt64(values);
+                                nparray = Converts.ToInt64(values);
                             break;
                         case "Single":
                             if (values.GetType().IsArray)
                                 nparray = np.array((float[])values, np_dt);
                             else
-                                nparray = Convert.ToSingle(values);
+                                nparray = Converts.ToSingle(values);
                             break;
                         case "Double":
                             if (values.GetType().IsArray)
                                 nparray = np.array((double[])values, np_dt);
                             else
-                                nparray = Convert.ToDouble(values);
+                                nparray = Converts.ToDouble(values);
                             break;
                         case "String":
                             if (values.GetType().IsArray)
                                 nparray = np.array((string[])values, np_dt);
                             else
-                                nparray = NDArray.FromString(Convert.ToString(values));
+                                nparray = NDArray.FromString(Converts.ToString(values));
                             break;
                         case "Boolean":
                             if (values.GetType().IsArray)
                                 nparray = np.array((bool[])values, np_dt);
                             else
-                                nparray = Convert.ToBoolean(values);
+                                nparray = Converts.ToBoolean(values);
                             break;
                         default:
                             throw new NotImplementedException($"make_tensor_proto: Support for type {np_dt.Name} Not Implemented");
@@ -226,13 +224,13 @@ namespace Tensorflow
                 }
             }
 
-            var numpy_dtype = dtypes.as_dtype(nparray.dtype, dtype: dtype);
+            var numpy_dtype = nparray.dtype.as_dtype(dtype: dtype);
             if (numpy_dtype == TF_DataType.DtInvalid)
                 throw new TypeError($"Unrecognized data type: {nparray.dtype}");
 
             // If dtype was specified and is a quantized type, we convert
             // numpy_dtype back into the quantized version.
-            if (is_quantized)
+            if (quantized_types.Contains(dtype))
                 numpy_dtype = dtype;
 
             bool is_same_size = false;

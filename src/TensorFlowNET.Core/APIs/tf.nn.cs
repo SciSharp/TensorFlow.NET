@@ -148,6 +148,24 @@ namespace Tensorflow
                 });
             }
 
+            /// <summary>
+            /// Local Response Normalization.
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="depth_radius"></param>
+            /// <param name="bias"></param>
+            /// <param name="alpha"></param>
+            /// <param name="beta"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public Tensor lrn(Tensor input, int depth_radius = 5, int bias = 1,
+                int alpha = 1, float beta = 0.5f, string name = null)
+                => gen_nn_ops.local_response_normalization(input, depth_radius: depth_radius, bias: bias,
+                    alpha: alpha, beta: beta, name: name);
+
+            public Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
+                => nn_ops.leaky_relu(features, alpha: alpha, name: name);
+
             public rnn_cell_impl rnn_cell => new rnn_cell_impl();
 
             public Tensor softmax(Tensor logits, int axis = -1, string name = null)

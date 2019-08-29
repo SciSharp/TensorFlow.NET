@@ -121,7 +121,7 @@ namespace Tensorflow
 
             if(collections == null)
             {
-                collections = new List<string> { ops.GraphKeys.GLOBAL_VARIABLES };
+                collections = new List<string> { tf.GraphKeys.GLOBAL_VARIABLES };
             }
 
             // Store the graph key so optimizers know how to only retrieve variables from
@@ -129,8 +129,8 @@ namespace Tensorflow
             _graph_key = ops.get_default_graph().graph_key;
 
             _trainable = trainable;
-            if (trainable && !collections.Contains(ops.GraphKeys.TRAINABLE_VARIABLES))
-                collections.Add(ops.GraphKeys.TRAINABLE_VARIABLES);
+            if (trainable && !collections.Contains(tf.GraphKeys.TRAINABLE_VARIABLES))
+                collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
 
             ops.init_scope();
             var values = init_from_fn ? new object[0] : new object[] { initial_value };
@@ -158,7 +158,7 @@ namespace Tensorflow
                 // Or get the initial value from a Tensor or Python object.
                 else
                 {
-                    _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value");
+                    _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value", dtype: dtype);
 
                     var shape = _initial_value.shape;
                     dtype = _initial_value.dtype;
@@ -307,6 +307,29 @@ namespace Tensorflow
         public RefVariable from_proto(VariableDef proto, string import_scope)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns the value of this variable, read in the current context.
+        /// </summary>
+        /// <returns></returns>
+        private ITensorOrOperation read_value()
+        {
+            return array_ops.identity(_variable, name: "read");
+        }
+
+        public Tensor is_variable_initialized(RefVariable variable)
+        {
+            return state_ops.is_variable_initialized(variable);
+        }
+
+        public Tensor initialized_value()
+        {
+            ops.init_scope();
+            throw new NotImplementedException("");
+            /*return control_flow_ops.cond(is_variable_initialized(this),
+                                   read_value,
+                                   () => initial_value);*/
         }
     }
 }

@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -30,7 +31,7 @@ namespace Tensorflow
             using (var status = new Status())
             {
                 c_api.TF_GraphGetOpDef(_handle, type, buffer, status);
-                return OpDef.Parser.ParseFrom(buffer.Data);
+                return OpDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
             }
         }
 
@@ -39,16 +40,20 @@ namespace Tensorflow
             return c_api.TF_NewOperation(_handle, opType, opName);
         }
 
-        public unsafe Operation[] ReturnOperations(IntPtr results)
+        public Operation[] ReturnOperations(IntPtr results)
         {
             TF_Operation return_oper_handle = new TF_Operation();
             int num_return_opers = 0;
             c_api.TF_ImportGraphDefResultsReturnOperations(results, ref num_return_opers, ref return_oper_handle);
             Operation[] return_opers = new Operation[num_return_opers];
+            var tf_op_size = Marshal.SizeOf<TF_Operation>();
             for (int i = 0; i < num_return_opers; i++)
             {
-                var handle = return_oper_handle.node + Marshal.SizeOf<TF_Operation>() * i;
-                return_opers[i] = new Operation(*(IntPtr*)handle);
+                unsafe
+                {
+                    var handle = return_oper_handle.node + tf_op_size * i;
+                    return_opers[i] = new Operation(*(IntPtr*)handle);
+                }
             }
 
             return return_opers;
@@ -67,7 +72,7 @@ namespace Tensorflow
 
         public ITensorOrOperation[] get_operations()
         {
-            return _nodes_by_name.Values.Select(x => x).ToArray();
+            return _nodes_by_name.Values.ToArray();
         }
 
         /// <summary>
@@ -81,7 +86,7 @@ namespace Tensorflow
 
         public ITensorOrOperation _get_operation_by_name_unsafe(string name)
         {
-            return _nodes_by_name.ContainsKey(name) ? _nodes_by_name[name] : null;
+            return _nodes_by_name.TryGetValue(name, out var val) ? val : null;
         }
 
         public ITensorOrOperation _get_operation_by_tf_operation(IntPtr tf_oper)

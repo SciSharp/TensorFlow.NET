@@ -32,13 +32,13 @@ namespace Tensorflow
             _handle = handle;
         }
 
-        protected override void DisposeUnManagedState(IntPtr handle)
+        protected override void DisposeUnmanagedResources(IntPtr handle)
             => c_api.TF_DeleteSessionOptions(handle);
 
         public void SetConfig(ConfigProto config)
         {
-            var bytes = config.ToByteArray();
-            var proto = Marshal.AllocHGlobal(bytes.Length);
+            var bytes = config.ToByteArray(); //TODO! we can use WriteTo
+            var proto = Marshal.AllocHGlobal(bytes.Length); //TODO! potential memory leak
             Marshal.Copy(bytes, 0, proto, bytes.Length);
 
             using (var status = new Status())

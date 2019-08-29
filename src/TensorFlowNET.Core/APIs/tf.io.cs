@@ -24,8 +24,6 @@ namespace Tensorflow
         public GFile gfile = new GFile();
         public Tensor read_file(string filename, string name = null) => gen_io_ops.read_file(filename, name);
 
-        public gen_image_ops image => new gen_image_ops();
-
         public void import_graph_def(GraphDef graph_def,
             Dictionary<string, Tensor> input_map = null,
             string[] return_elements = null,

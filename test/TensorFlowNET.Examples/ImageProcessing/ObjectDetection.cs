@@ -84,7 +84,7 @@ namespace TensorFlowNET.Examples
         public void PrepareData()
         {
             // get model file
-            string url = "http://download.tf.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz";
+            string url = "http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz";
             Web.Download(url, modelDir, "ssd_mobilenet_v1_coco.tar.gz");
 
             Compress.ExtractTGZ(Path.Join(modelDir, "ssd_mobilenet_v1_coco.tar.gz"), "./");

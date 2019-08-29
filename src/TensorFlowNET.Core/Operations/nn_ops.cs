@@ -98,7 +98,7 @@ namespace Tensorflow
                 // float to be selected, hence we use a >= comparison.
                 var keep_mask = random_tensor >= rate;
                 var ret = x * scale * math_ops.cast(keep_mask, x.dtype);
-                ret.SetShape(x.TensorShape);
+                ret.set_shape(x.TensorShape);
                 return ret;
             });
         }
@@ -114,6 +114,19 @@ namespace Tensorflow
         public static Tensor log_softmax(Tensor logits, int axis = -1, string name = null)
         {
             return _softmax(logits, gen_nn_ops.log_softmax, axis, name);
+        }
+
+        public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "LeakyRelu", new { features, alpha }), scope =>
+            {
+                name = scope;
+                features = ops.convert_to_tensor(features, name: "features");
+                if (features.dtype.is_integer())
+                    features = math_ops.cast(features, dtypes.float32);
+                return gen_nn_ops.leaky_relu(features, alpha: alpha, name: name);
+                //return math_ops.maximum(alpha * features, features, name: name);
+            });
         }
 
         /// <summary>
