@@ -308,5 +308,28 @@ namespace Tensorflow
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Returns the value of this variable, read in the current context.
+        /// </summary>
+        /// <returns></returns>
+        private ITensorOrOperation read_value()
+        {
+            return array_ops.identity(_variable, name: "read");
+        }
+
+        public Tensor is_variable_initialized(RefVariable variable)
+        {
+            return state_ops.is_variable_initialized(variable);
+        }
+
+        public Tensor initialized_value()
+        {
+            ops.init_scope();
+            throw new NotImplementedException("");
+            /*return control_flow_ops.cond(is_variable_initialized(this),
+                                   read_value,
+                                   () => initial_value);*/
+        }
     }
 }
