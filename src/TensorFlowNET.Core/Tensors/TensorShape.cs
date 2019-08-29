@@ -143,6 +143,11 @@ namespace Tensorflow
             }
         }
 
+        public override string ToString()
+        {
+            return shape.ToString();
+        }
+
         public static implicit operator TensorShape(Shape shape) => new TensorShape((int[]) shape.Dimensions.Clone());
         public static implicit operator Shape(TensorShape shape) => new Shape((int[]) shape.dims.Clone());
         
