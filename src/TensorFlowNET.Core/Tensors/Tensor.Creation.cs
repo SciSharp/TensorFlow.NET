@@ -678,7 +678,7 @@ namespace Tensorflow
             if (args.deallocator_called || args.gc_handle == IntPtr.Zero)
                 return;
             // note: since the ptr given to tensorflow is just the addr of the pinned object we can not directly free it! we need to free the gcHandle instead
-            //args.gchandle.Free();
+            GCHandle.FromIntPtr(args.gc_handle).Free();
             args.deallocator_called = true;
         }
 
