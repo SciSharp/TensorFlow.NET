@@ -39,7 +39,7 @@ namespace Tensorflow
 
         public Graph get_controller()
         {
-            if (_stack.Count(x => x.IsDefault) == 0)
+            if (_stack.Count == 0 || _stack.Count(x => x.IsDefault) == 0)
                 _stack.Add(new StackModel {Graph = tf.Graph(), IsDefault = true});
             for (var i = _stack.Count - 1; i >= 0; i--)
             {
