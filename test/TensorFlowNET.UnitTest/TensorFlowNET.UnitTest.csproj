@@ -10,6 +10,8 @@
     <DelaySign>false</DelaySign>
 
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
+
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
