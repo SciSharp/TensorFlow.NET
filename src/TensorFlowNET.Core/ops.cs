@@ -93,6 +93,7 @@ namespace Tensorflow
             //return _default_graph_stack.get_default()
             return default_graph_stack.get_controller();
         }
+
         public static Graph set_default_graph(Graph graph)
         {
             //TODO: original source does not have a 'set_default_graph' and indicates there should be a _default_graph_stack!
@@ -311,7 +312,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static int uid()
         {
-            return uid_number++;
+            return Interlocked.Increment(ref uid_number);
         }
 
         public static void colocate_with(bool ignore_existing = false)
