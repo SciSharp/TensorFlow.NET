@@ -21,11 +21,10 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-
     /// <summary>
     ///     Serves as a stack for determining current default graph.
     /// </summary>
-    public class DefaultGraphStack 
+    public class DefaultGraphStack
     {
         private readonly List<StackModel> _stack = new List<StackModel>();
 
@@ -50,6 +49,20 @@ namespace Tensorflow
             }
 
             throw new TensorflowException("Unable to find a default graph");
+        }
+
+        public Graph peak_controller()
+        {
+            if (_stack.Count == 0 || _stack.Count(x => x.IsDefault) == 0)
+                return null;
+            for (var i = _stack.Count - 1; i >= 0; i--)
+            {
+                var x = _stack[i];
+                if (x.IsDefault)
+                    return x.Graph;
+            }
+
+            return null;
         }
 
         public bool remove(Graph g)
