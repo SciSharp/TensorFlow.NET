@@ -83,6 +83,19 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        /// Batch normalization.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="scale"></param>
+        /// <param name="offset"></param>
+        /// <param name="mean"></param>
+        /// <param name="variance"></param>
+        /// <param name="epsilon"></param>
+        /// <param name="data_format"></param>
+        /// <param name="is_training"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static Tensor[] fused_batch_norm(Tensor x, 
             RefVariable scale,
             RefVariable offset,
@@ -103,7 +116,7 @@ namespace Tensorflow
             var min_epsilon = 1.001e-5f;
             epsilon = epsilon > min_epsilon ? epsilon : min_epsilon;
 
-            return gen_nn_ops._fused_batch_norm(x,
+            var results = gen_nn_ops.fused_batch_norm(x,
                 scale_tensor,
                 offset_tensor,
                 mean,
@@ -112,6 +125,12 @@ namespace Tensorflow
                 data_format,
                 is_training,
                 name);
+
+            var y = results[0];
+            var batch_mean = results[1];
+            var batch_var = results[2];
+
+            return new[] { y, batch_mean, batch_var };
         }
 
         /// <summary>
