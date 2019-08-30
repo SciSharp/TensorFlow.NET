@@ -664,7 +664,7 @@ namespace Tensorflow
         [MonoPInvokeCallback(typeof(Deallocator))]
         internal static void FreeHGlobalMemory(IntPtr dataPtr, IntPtr len, ref DeallocatorArgs args)
         {
-            if (args.deallocator_called)
+            if (args.deallocator_called || dataPtr == IntPtr.Zero)
                 return;
 
             // NumSharp will dispose
