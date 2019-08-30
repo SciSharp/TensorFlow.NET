@@ -156,7 +156,7 @@ namespace Tensorflow.Operations
             return op.output;
         }
 
-        public static Tensor[] _fused_batch_norm(Tensor x,
+        public static Tensor[] fused_batch_norm(Tensor x,
                 Tensor scale,
                 Tensor offset,
                 Tensor mean,

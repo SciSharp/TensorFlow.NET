@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1E65784D-C976-4DFF-991A-DD5C57FFC8E2}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\Copy-NativeTensorFlowLibs.ps1 = scripts\Copy-NativeTensorFlowLibs.ps1
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "runtime.linux-x64.SciSharp.TensorFlow-Cpu.Redist", "redist\runtime.linux-x64.SciSharp.TensorFlow-Cpu.Redist\runtime.linux-x64.SciSharp.TensorFlow-Cpu.Redist.csproj", "{9834D2B4-01BF-4D18-8DCF-F498AC481FE7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "runtime.linux-x64.SciSharp.TensorFlow-Gpu.Redist", "redist\runtime.linux-x64.SciSharp.TensorFlow-Gpu.Redist\runtime.linux-x64.SciSharp.TensorFlow-Gpu.Redist.csproj", "{9D853997-3143-4F87-B995-7D7024CF4E1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "runtime.win-x64.SciSharp.TensorFlow-Cpu.Redist", "redist\runtime.win-x64.SciSharp.TensorFlow-Cpu.Redist\runtime.win-x64.SciSharp.TensorFlow-Cpu.Redist.csproj", "{878C1EE4-B945-41BF-98DE-C4747C28022A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist", "redist\runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist\runtime.win-x64.SciSharp.TensorFlow-Gpu.Redist.csproj", "{744A3D51-CEF6-4685-B4C3-718FA61143A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SciSharp.TensorFlow-Cpu.Redist", "redist\SciSharp.TensorFlow-Cpu.Redist\SciSharp.TensorFlow-Cpu.Redist.csproj", "{0A281E9C-6E3D-4172-84BA-2B5F6E9F4D5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SciSharp.TensorFlow-Gpu.Redist", "redist\SciSharp.TensorFlow-Gpu.Redist\SciSharp.TensorFlow-Gpu.Redist.csproj", "{1910BE36-82E3-4465-B3B1-788BFD252DB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9834D2B4-01BF-4D18-8DCF-F498AC481FE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9834D2B4-01BF-4D18-8DCF-F498AC481FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9834D2B4-01BF-4D18-8DCF-F498AC481FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9834D2B4-01BF-4D18-8DCF-F498AC481FE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D853997-3143-4F87-B995-7D7024CF4E1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D853997-3143-4F87-B995-7D7024CF4E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D853997-3143-4F87-B995-7D7024CF4E1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D853997-3143-4F87-B995-7D7024CF4E1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{878C1EE4-B945-41BF-98DE-C4747C28022A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{878C1EE4-B945-41BF-98DE-C4747C28022A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{878C1EE4-B945-41BF-98DE-C4747C28022A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{878C1EE4-B945-41BF-98DE-C4747C28022A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{744A3D51-CEF6-4685-B4C3-718FA61143A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{744A3D51-CEF6-4685-B4C3-718FA61143A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{744A3D51-CEF6-4685-B4C3-718FA61143A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{744A3D51-CEF6-4685-B4C3-718FA61143A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A281E9C-6E3D-4172-84BA-2B5F6E9F4D5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A281E9C-6E3D-4172-84BA-2B5F6E9F4D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A281E9C-6E3D-4172-84BA-2B5F6E9F4D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A281E9C-6E3D-4172-84BA-2B5F6E9F4D5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1910BE36-82E3-4465-B3B1-788BFD252DB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1910BE36-82E3-4465-B3B1-788BFD252DB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1910BE36-82E3-4465-B3B1-788BFD252DB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1910BE36-82E3-4465-B3B1-788BFD252DB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CD7D5F34-42AE-4CCB-BDFA-1619B3A84708}
+	EndGlobalSection
+EndGlobal

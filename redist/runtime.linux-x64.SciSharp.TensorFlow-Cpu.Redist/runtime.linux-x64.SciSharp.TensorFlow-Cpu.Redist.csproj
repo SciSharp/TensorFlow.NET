@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <AssemblyName>SciSharp.Tensorflow-Cpu.Redist</AssemblyName>
+
+    <PackageId>runtime.linux-x64.SciSharp.Tensorflow-Cpu.Redist</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>SciSharp team</Authors>
+    <Company>SciSharp STACK</Company>
+    <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>
+      Distribution of the Linux CPU Tensoflow library.
+      The libraries can be directly downloaded from https://storage.googleapis.com/tensorflow/libtensorflow/
+    </Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+
+    <PackageProjectUrl>https://github.com/SciSharp/TensorFlow.NET</PackageProjectUrl>
+    <PackageTags>native;tensorflow;machine-learning;ML</PackageTags>
+    <PackageOutputPath>../../packages</PackageOutputPath>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- All dlls will be dropped in a folder available through DllImport.-->
+    <Content Include="*.so.*">
+      <PackagePath>runtimes/$(RuntimeIdentifier)/native/%(Filename)%(Extension)</PackagePath>
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
