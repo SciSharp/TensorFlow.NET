@@ -38,9 +38,9 @@ namespace Tensorflow
 
         public BaseSession(string target = "", Graph g = null, SessionOptions opts = null)
         {
-            _graph = g is null ? ops.get_default_graph() : g;
+            _graph = g ?? ops.get_default_graph();
             _graph.as_default();
-            _target = UTF8Encoding.UTF8.GetBytes(target);
+            _target = Encoding.UTF8.GetBytes(target);
 
             SessionOptions newOpts = opts ?? new SessionOptions();
 

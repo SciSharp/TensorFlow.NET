@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Google.Protobuf;
 using System.Linq;
+using System.Threading;
 using NumSharp;
 using static Tensorflow.Binding;
 
@@ -26,6 +27,10 @@ namespace Tensorflow
 {
     public partial class ops
     {
+        private static readonly ThreadLocal<DefaultGraphStack> _defaultGraphFactory = new ThreadLocal<DefaultGraphStack>(() => new DefaultGraphStack());
+
+        public static DefaultGraphStack default_graph_stack => _defaultGraphFactory.Value;
+
         public static int tensor_id(Tensor tensor)
         {
             return tensor.Id;
@@ -71,8 +76,6 @@ namespace Tensorflow
         {
             return get_default_graph().get_collection_ref(key);
         }
-
-        public static DefaultGraphStack default_graph_stack = new DefaultGraphStack();
 
         /// <summary>
         /// Returns the default graph for the current thread.
@@ -387,8 +390,6 @@ namespace Tensorflow
         /// <returns>The default `Session` being used in the current thread.</returns>
         public static Session get_default_session()
         {
-            if (tf.defaultSession == null)
-                tf.defaultSession = tf.Session();
             return tf.defaultSession;
         }
 

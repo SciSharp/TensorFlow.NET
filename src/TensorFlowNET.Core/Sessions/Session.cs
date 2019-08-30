@@ -42,7 +42,7 @@ namespace Tensorflow
 
         public Session as_default()
         {
-            tf.defaultSession = this;
+            tf._defaultSessionFactory.Value = this;
             return this;
         }
 
