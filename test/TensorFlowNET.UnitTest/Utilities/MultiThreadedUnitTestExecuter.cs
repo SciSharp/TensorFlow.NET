@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace TensorFlowNET.UnitTest
@@ -20,6 +21,7 @@ namespace TensorFlowNET.UnitTest
 
         #region Static
 
+        [DebuggerHidden]
         public static void Run(int threadCount, MultiThreadedTestDelegate workload)
         {
             if (workload == null) throw new ArgumentNullException(nameof(workload));
@@ -27,6 +29,7 @@ namespace TensorFlowNET.UnitTest
             new MultiThreadedUnitTestExecuter(threadCount).Run(workload);
         }
 
+        [DebuggerHidden]
         public static void Run(int threadCount, params MultiThreadedTestDelegate[] workloads)
         {
             if (workloads == null) throw new ArgumentNullException(nameof(workloads));
@@ -35,6 +38,7 @@ namespace TensorFlowNET.UnitTest
             new MultiThreadedUnitTestExecuter(threadCount).Run(workloads);
         }
 
+        [DebuggerHidden]
         public static void Run(int threadCount, MultiThreadedTestDelegate workload, Action<MultiThreadedUnitTestExecuter> postRun)
         {
             if (workload == null) throw new ArgumentNullException(nameof(workload));
@@ -58,6 +62,7 @@ namespace TensorFlowNET.UnitTest
             barrier_threadstarted = new SemaphoreSlim(0, threadCount);
         }
 
+        [DebuggerHidden]
         public void Run(params MultiThreadedTestDelegate[] workloads)
         {
             if (workloads == null)
@@ -67,7 +72,15 @@ namespace TensorFlowNET.UnitTest
 
             if (ThreadCount == 1)
             {
-                workloads[0](0);
+                new Thread(() =>
+                {
+                    workloads[0](0);
+                    done_barrier2.Release(1);
+                }).Start();
+                
+                done_barrier2.Wait();
+                PostRun?.Invoke(this);
+
                 return;
             }
 
