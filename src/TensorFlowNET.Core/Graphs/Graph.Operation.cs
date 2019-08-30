@@ -62,11 +62,13 @@ namespace Tensorflow
         public Operation OperationByName(string operName)
         {
             var handle = c_api.TF_GraphOperationByName(_handle, operName);
-            if(graph_key != tf.get_default_graph().graph_key)
+            var defaultKey = tf.get_default_graph().graph_key;
+            if (graph_key != defaultKey)
             {
-                Console.WriteLine($"Current graph is not default graph.");
-                // throw new ValueError($"Current graph is not default graph.");
+                //Console.WriteLine($"Current graph is not default graph.");
+                throw new ValueError($"Current graph is not default graph. Default Graph Key: {defaultKey}, Current Graph Key: {graph_key}");
             }
+
             return new Operation(handle, g: this);
         }
 
