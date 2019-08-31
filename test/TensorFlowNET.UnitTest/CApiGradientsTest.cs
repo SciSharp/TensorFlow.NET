@@ -11,7 +11,7 @@ namespace TensorFlowNET.UnitTest
     /// tensorflow\c\c_api_test.cc
     /// `class CApiGradientsTest`
     /// </summary>
-    [TestClass]
+    [TestClass, Ignore]
     public class CApiGradientsTest : CApiTest, IDisposable
     {
         private Graph graph_ = new Graph();

@@ -117,7 +117,7 @@ namespace TensorFlowNET.UnitTest
         public void SetShape()
         {
             var s = new Status();
-            var graph = new Graph();
+            var graph = new Graph().as_default();
 
             var feed = c_test_util.Placeholder(graph, s);
             var feed_out_0 = new TF_Output(feed, 0);

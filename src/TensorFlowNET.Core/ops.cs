@@ -21,6 +21,7 @@ using Google.Protobuf;
 using System.Linq;
 using System.Threading;
 using NumSharp;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -207,47 +208,49 @@ namespace Tensorflow
         /// <returns>A wrapped TF_Operation*.</returns>
         public static (IntPtr, IntPtr) _create_c_op<T>(Graph graph, NodeDef node_def, T[] inputs, Operation[] control_inputs)
         {
-            var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
-
-            //TODO: Implement TF_SetDevice
-            //if node_def.device:
-            //    c_api.TF_SetDevice(op_desc, compat.as_str(node_def.device))
-            // Add inputs
-            foreach (var op_input in inputs)
+            lock (Locks.ProcessWide)
             {
-                if (op_input is Tensor[] op_inputs)
-                    c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), op_inputs.Length);
-                else if (op_input is Tensor op_input1)
+                var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
+
+                //TODO: Implement TF_SetDevice
+                //if node_def.device:
+                //    c_api.TF_SetDevice(op_desc, compat.as_str(node_def.device))
+                // Add inputs
+                foreach (var op_input in inputs)
                 {
-                    c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
+                    if (op_input is Tensor[] op_inputs)
+                        c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), op_inputs.Length);
+                    else if (op_input is Tensor op_input1)
+                    {
+                        c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
+                    } else
+                        throw new NotImplementedException("_create_c_op");
                 }
-                else
-                    throw new NotImplementedException("_create_c_op");
-            }
 
-            var status = new Status();
+                var status = new Status();
 
-            // Add control inputs
-            foreach (var control_input in control_inputs)
-                c_api.TF_AddControlInput(op_desc, control_input);
+                // Add control inputs
+                foreach (var control_input in control_inputs)
+                    c_api.TF_AddControlInput(op_desc, control_input);
 
-            // Add attrs
-            foreach (var attr in node_def.Attr)
-            {
-                var bytes = attr.Value.ToByteArray(); //TODO: we can use attr.Value.WriteTo with a memory stream.
-                var proto = Marshal.AllocHGlobal(bytes.Length); //TODO: potential memory leak
-                Marshal.Copy(bytes, 0, proto, bytes.Length);
-                uint len = (uint)bytes.Length;
-                c_api.TF_SetAttrValueProto(op_desc, attr.Key, proto, proto_len: len, status: status);
+                // Add attrs
+                foreach (var attr in node_def.Attr)
+                {
+                    var bytes = attr.Value.ToByteArray(); //TODO: we can use attr.Value.WriteTo with a memory stream.
+                    var proto = Marshal.AllocHGlobal(bytes.Length); //TODO: potential memory leak
+                    Marshal.Copy(bytes, 0, proto, bytes.Length);
+                    uint len = (uint) bytes.Length;
+                    c_api.TF_SetAttrValueProto(op_desc, attr.Key, proto, proto_len: len, status: status);
+
+                    status.Check(true);
+                }
+
+                var c_op = c_api.TF_FinishOperation(op_desc, status);
 
                 status.Check(true);
+
+                return (c_op, op_desc);
             }
-
-            var c_op = c_api.TF_FinishOperation(op_desc, status);
-
-            status.Check(true);
-
-            return (c_op, op_desc);
         }
 
         public static OpDef _get_op_def(Graph graph, string type)

@@ -21,24 +21,16 @@ namespace Tensorflow
 {
     public class Session : BaseSession, IObjectLife
     {
-        public Session(string target = "", Graph g = null)
-            : base(target, g, null)
-        {
+        public Session(string target = "", Graph g = null) : base(target, g, null)
+        { }
 
-        }
-
-        public Session(IntPtr handle, Graph g = null)
-            : base("", g, null)
+        public Session(IntPtr handle, Graph g = null) : base("", g, null)
         {
             _handle = handle;
         }
 
-        public Session(Graph g, SessionOptions opts = null, Status s = null)
-            : base("", g, opts)
-        {
-            if (s == null)
-                s = new Status();
-        }
+        public Session(Graph g, SessionOptions opts = null, Status s = null) : base("", g, opts, s)
+        { }
 
         public Session as_default()
         {
