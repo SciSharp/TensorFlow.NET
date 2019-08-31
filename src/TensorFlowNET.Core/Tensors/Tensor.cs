@@ -28,7 +28,6 @@ using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using NumSharp.Utilities;
 using Tensorflow.Framework;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -434,110 +433,6 @@ namespace Tensorflow
         public NDArray eval(Session session, params FeedItem[] feed_dict)
         {
             return ops._eval_using_default_session(this, feed_dict, graph, session);
-        }
-
-        public Tensor slice(Slice slice)
-        {
-            var slice_spec = new int[] {slice.Start.Value};
-            var begin = new List<int>();
-            var end = new List<int>();
-            var strides = new List<int>();
-
-            var index = 0;
-            var (new_axis_mask, shrink_axis_mask) = (0, 0);
-            var (begin_mask, end_mask) = (0, 0);
-            var ellipsis_mask = 0;
-
-            foreach (var s in slice_spec)
-            {
-                begin.Add(s);
-                if (slice.Stop.HasValue)
-                {
-                    end.Add(slice.Stop.Value);
-                } else
-                {
-                    end.Add(0);
-                    end_mask |= (1 << index);
-                }
-
-                strides.Add(slice.Step);
-
-                index += 1;
-            }
-
-            return tf_with(ops.name_scope(null, "strided_slice", new {begin, end, strides}), scope =>
-            {
-                string name = scope;
-                if (begin != null)
-                {
-                    var (packed_begin, packed_end, packed_strides) =
-                        (array_ops.stack(begin.ToArray()),
-                            array_ops.stack(end.ToArray()),
-                            array_ops.stack(strides.ToArray()));
-
-                    return gen_array_ops.strided_slice(
-                        this,
-                        packed_begin,
-                        packed_end,
-                        packed_strides,
-                        begin_mask: begin_mask,
-                        end_mask: end_mask,
-                        shrink_axis_mask: shrink_axis_mask,
-                        new_axis_mask: new_axis_mask,
-                        ellipsis_mask: ellipsis_mask,
-                        name: name);
-                }
-
-                throw new NotImplementedException("");
-            });
-        }
-
-        public Tensor slice(int start)
-        {
-            var slice_spec = new int[] {start};
-            var begin = new List<int>();
-            var end = new List<int>();
-            var strides = new List<int>();
-
-            var index = 0;
-            var (new_axis_mask, shrink_axis_mask) = (0, 0);
-            var (begin_mask, end_mask) = (0, 0);
-            var ellipsis_mask = 0;
-
-            foreach (var s in slice_spec)
-            {
-                begin.Add(s);
-                end.Add(s + 1);
-                strides.Add(1);
-                shrink_axis_mask |= (1 << index);
-                index += 1;
-            }
-
-            return tf_with(ops.name_scope(null, "strided_slice", new {begin, end, strides}), scope =>
-            {
-                string name = scope;
-                if (begin != null)
-                {
-                    var (packed_begin, packed_end, packed_strides) =
-                        (array_ops.stack(begin.ToArray()),
-                            array_ops.stack(end.ToArray()),
-                            array_ops.stack(strides.ToArray()));
-
-                    return gen_array_ops.strided_slice(
-                        this,
-                        packed_begin,
-                        packed_end,
-                        packed_strides,
-                        begin_mask: begin_mask,
-                        end_mask: end_mask,
-                        shrink_axis_mask: shrink_axis_mask,
-                        new_axis_mask: new_axis_mask,
-                        ellipsis_mask: ellipsis_mask,
-                        name: name);
-                }
-
-                throw new NotImplementedException("");
-            });
         }
 
         public override string ToString()
