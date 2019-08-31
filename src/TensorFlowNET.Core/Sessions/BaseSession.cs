@@ -152,7 +152,6 @@ namespace Tensorflow
         {
 
             var feeds = new KeyValuePair<TF_Output, Tensor>[feed_dict.Count];
-            var ignoreDispose = new bool[feed_dict.Count];
             int i = 0;
             foreach (var x in feed_dict)
             {
@@ -160,8 +159,9 @@ namespace Tensorflow
                 {
                     switch (x.Value)
                     {
-                        case Tensor v: ignoreDispose[i] = true; feeds[i++] = new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), v); break;
+                        case Tensor v: feeds[i++] = new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), v); break;
                         case NDArray v: feeds[i++] = new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v, tensor.dtype)); break;
+                        case IntPtr v: feeds[i++] = new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v)); break;
 #if _REGEN
                     %types = ["sbyte", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
                     %foreach types%
@@ -194,7 +194,6 @@ namespace Tensorflow
 #endif
                         case bool v: feeds[i++] = new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor((byte) (v ? 1 : 0), TF_DataType.TF_BOOL)); break;
                         case string v: feeds[i++] = new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v)); break;
-                        case IntPtr v: feeds[i++] = new KeyValuePair<TF_Output, Tensor>(tensor._as_tf_output(), new Tensor(v)); break;
                         default:
                             throw new NotImplementedException($"feed_dict data type {x.Value?.GetType().Name ?? "<null>"}");
                     }
@@ -203,18 +202,7 @@ namespace Tensorflow
 
             var fetches = fetch_list.Select(x => x._as_tf_output()).ToArray();
             //var targets = target_list;
-            try
-            {
-                return _call_tf_sessionrun(feeds, fetches, target_list);
-            } finally
-            {
-                for (var idx = 0; idx < feeds.Length; idx++)
-                {
-                    if (ignoreDispose[idx])
-                        continue;
-                    feeds[idx].Value.Dispose();
-                }
-            }
+            return _call_tf_sessionrun(feeds, fetches, target_list);
         }
 
         private unsafe NDArray[] _call_tf_sessionrun(KeyValuePair<TF_Output, Tensor>[] feed_dict, TF_Output[] fetch_list, List<Operation> target_list)

@@ -28,42 +28,37 @@ using static Tensorflow.c_api;
 
 namespace Tensorflow
 {
+    [SuppressMessage("ReSharper", "InvokeAsExtensionMethod")]
     public partial class Tensor
     {
         /// <summary>
-        /// true if unmanaged buffer has been freed.
+        ///     When Tensor was created from an object that is managed by C#'s GC - this will hold reference to prevent it from being collected.
         /// </summary>
-        private bool _deallocator_called => _deallocatorArgs.deallocator_called;
+        protected object AllocationReferenceHolder;
 
         /// <summary>
-        /// true if the Tensor was created from a managed array
+        ///     The handle that was used to allocate this tensor, dependent on <see cref="AllocationType"/>.
         /// </summary>
-        private bool _isPinnedArray => _deallocatorArgs.gc_handle != IntPtr.Zero;
+        protected object AllocationHandle;
 
         /// <summary>
-        /// True only if the Tensor object was created in a way that the Tensor object itself allocated memory or pinned a managed object.
-        /// False if the Tensor was created from a pointer
+        ///     True if this Tensor holds data allocated by C#.
         /// </summary>
-        public bool IsMemoryOwner { get; private set; }
+        public bool IsMemoryOwner => AllocationType >= AllocationType.Marshal;
 
         /// <summary>
-        /// This holds values that are used by the unmanaged deallocator callback
+        ///     The allocation method used to create this Tensor.
         /// </summary>
-        private DeallocatorArgs _deallocatorArgs = new DeallocatorArgs() { gc_handle = IntPtr.Zero };
-
-        // note: they must be assigned to a static variable in order to work as unmanaged callbacks
-        private static readonly Deallocator _hGlobalDeallocator = FreeHGlobalMemory;
-        private static readonly Deallocator _gcHandleDeallocator = FreeGCHandle;
-        private static readonly Deallocator _nothingDeallocator = FreeNothing;
+        public AllocationType AllocationType { get; protected set; }
 
         /// <summary>
-        /// Create a Tensor object from an existing TF handle
+        ///     Create a Tensor object from an existing TF handle
         /// </summary>
-        /// <param name="handle"></param>
+        /// <param name="handle">Handle to a <see cref="Tensor"/> object.</param>
         public Tensor(IntPtr handle)
         {
             _handle = handle;
-            IsMemoryOwner = false;
+            //no need to set AllocationType = AllocationType.None;
         }
 
         /// <summary>
@@ -71,399 +66,376 @@ namespace Tensorflow
         /// Note: the caller is responsible for freeing the memory. Calling Dispose on this object will dispose the TensorFlow tensor
         /// but not the memory itself!
         /// </summary>
-        /// <param name="ptr">Pointer to unmanaged, fixed or pinned memory which the caller owns</param>
+        /// <param name="data_ptr">Pointer to unmanaged, fixed or pinned memory which the caller owns</param>
         /// <param name="shape">Tensor shape</param>
         /// <param name="dType">TF data type</param>
         /// <param name="num_bytes">Size of the tensor in memory</param>
-        public Tensor(IntPtr ptr, long[] shape, TF_DataType dType, int num_bytes)
+        public Tensor(IntPtr data_ptr, long[] shape, TF_DataType dType, int num_bytes)
         {
-            _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: ptr, len: (UIntPtr)num_bytes, deallocator: _nothingDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner = false;
+            unsafe
+            {
+                _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (UIntPtr) num_bytes);
+                AllocationType = TF_TensorData(_handle) == data_ptr ? AllocationType.FromPointer : AllocationType.Tensorflow;
+            }
+        }
+
+        /// <summary>
+        /// Create a new Tensor from the given unmanaged memory pointer (which must be allocated, fixed or pinned by the caller)
+        /// Note: the caller is responsible for freeing the memory. Calling Dispose on this object will dispose the TensorFlow tensor
+        /// but not the memory itself!
+        /// </summary>
+        /// <param name="data_ptr">Pointer to unmanaged, fixed or pinned memory which the caller owns</param>
+        /// <param name="shape">Tensor shape</param>
+        /// <param name="dType">TF data type</param>
+        /// <param name="num_bytes">Size of the tensor in memory</param>
+        public unsafe Tensor(void* data_ptr, long[] shape, TF_DataType dType, int num_bytes)
+        {
+            _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (UIntPtr) num_bytes);
+            AllocationType = TF_TensorData(_handle).ToPointer() == data_ptr ? AllocationType.FromPointer : AllocationType.Tensorflow;
         }
 
 #if _REGEN
-        %types=["sbyte", "bool", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
+        %types = ["sbyte", "bool", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
         %foreach types%
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(#1[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(#1)), new long[]{data.Length}, data, Marshal.SizeOf<#1>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(#1)), new long[] {data.Length}, data, #(#1=="Complex"|"Marshal.SizeOf<Complex>()"|"sizeof(#(str(#1)))"));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(#1[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(#1)), shape, data, Marshal.SizeOf<#1>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(#1)), shape, data, #(#1=="Complex"|"Marshal.SizeOf<Complex>()"|"sizeof(#(str(#1)))"));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(#1 value, TF_DataType? dType = null)
         {
-            var v = (#1*)Marshal.AllocHGlobal(sizeof(#1));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(#1)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(#1), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(#1)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(#1));
+            *(#1*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         %
 #else
-
-        
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(sbyte[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(sbyte)), new long[]{data.Length}, data, Marshal.SizeOf<sbyte>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(sbyte)), new long[] {data.Length}, data, sizeof(sbyte));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(sbyte[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(sbyte)), shape, data, Marshal.SizeOf<sbyte>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(sbyte)), shape, data, sizeof(sbyte));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(sbyte value, TF_DataType? dType = null)
         {
-            var v = (sbyte*)Marshal.AllocHGlobal(sizeof(sbyte));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(sbyte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(sbyte));
+            *(sbyte*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(bool[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(bool)), new long[]{data.Length}, data, Marshal.SizeOf<bool>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(bool)), new long[] {data.Length}, data, sizeof(bool));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(bool[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(bool)), shape, data, Marshal.SizeOf<bool>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(bool)), shape, data, sizeof(bool));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(bool value, TF_DataType? dType = null)
         {
-            var v = (bool*)Marshal.AllocHGlobal(sizeof(bool));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(bool)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(bool), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(bool)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(bool));
+            *(bool*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(byte[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(byte)), new long[]{data.Length}, data, Marshal.SizeOf<byte>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(byte)), new long[] {data.Length}, data, sizeof(byte));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(byte[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(byte)), shape, data, Marshal.SizeOf<byte>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(byte)), shape, data, sizeof(byte));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(byte value, TF_DataType? dType = null)
         {
-            var v = (byte*)Marshal.AllocHGlobal(sizeof(byte));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(byte)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(byte), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(byte)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(byte));
+            *(byte*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(short[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(short)), new long[]{data.Length}, data, Marshal.SizeOf<short>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(short)), new long[] {data.Length}, data, sizeof(short));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(short[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(short)), shape, data, Marshal.SizeOf<short>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(short)), shape, data, sizeof(short));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(short value, TF_DataType? dType = null)
         {
-            var v = (short*)Marshal.AllocHGlobal(sizeof(short));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(short)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(short), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(short)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(short));
+            *(short*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(ushort[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(ushort)), new long[]{data.Length}, data, Marshal.SizeOf<ushort>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(ushort)), new long[] {data.Length}, data, sizeof(ushort));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(ushort[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(ushort)), shape, data, Marshal.SizeOf<ushort>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(ushort)), shape, data, sizeof(ushort));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(ushort value, TF_DataType? dType = null)
         {
-            var v = (ushort*)Marshal.AllocHGlobal(sizeof(ushort));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ushort)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ushort), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(ushort)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(ushort));
+            *(ushort*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(int[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(int)), new long[]{data.Length}, data, Marshal.SizeOf<int>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(int)), new long[] {data.Length}, data, sizeof(int));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(int[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(int)), shape, data, Marshal.SizeOf<int>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(int)), shape, data, sizeof(int));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(int value, TF_DataType? dType = null)
         {
-            var v = (int*)Marshal.AllocHGlobal(sizeof(int));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(int)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(int), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(int)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(int));
+            *(int*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(uint[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(uint)), new long[]{data.Length}, data, Marshal.SizeOf<uint>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(uint)), new long[] {data.Length}, data, sizeof(uint));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(uint[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(uint)), shape, data, Marshal.SizeOf<uint>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(uint)), shape, data, sizeof(uint));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(uint value, TF_DataType? dType = null)
         {
-            var v = (uint*)Marshal.AllocHGlobal(sizeof(uint));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(uint)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(uint), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(uint)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(uint));
+            *(uint*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(long[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(long)), new long[]{data.Length}, data, Marshal.SizeOf<long>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(long)), new long[] {data.Length}, data, sizeof(long));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(long[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(long)), shape, data, Marshal.SizeOf<long>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(long)), shape, data, sizeof(long));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(long value, TF_DataType? dType = null)
         {
-            var v = (long*)Marshal.AllocHGlobal(sizeof(long));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(long)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(long), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(long)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(long));
+            *(long*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(ulong[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(ulong)), new long[]{data.Length}, data, Marshal.SizeOf<ulong>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(ulong)), new long[] {data.Length}, data, sizeof(ulong));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(ulong[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(ulong)), shape, data, Marshal.SizeOf<ulong>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(ulong)), shape, data, sizeof(ulong));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(ulong value, TF_DataType? dType = null)
         {
-            var v = (ulong*)Marshal.AllocHGlobal(sizeof(ulong));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(ulong)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(ulong), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(ulong)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(ulong));
+            *(ulong*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(float[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(float)), new long[]{data.Length}, data, Marshal.SizeOf<float>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(float)), new long[] {data.Length}, data, sizeof(float));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(float[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(float)), shape, data, Marshal.SizeOf<float>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(float)), shape, data, sizeof(float));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(float value, TF_DataType? dType = null)
         {
-            var v = (float*)Marshal.AllocHGlobal(sizeof(float));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(float)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(float), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(float)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(float));
+            *(float*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(double[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(double)), new long[]{data.Length}, data, Marshal.SizeOf<double>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(double)), new long[] {data.Length}, data, sizeof(double));
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(double[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(double)), shape, data, Marshal.SizeOf<double>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(double)), shape, data, sizeof(double));
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(double value, TF_DataType? dType = null)
         {
-            var v = (double*)Marshal.AllocHGlobal(sizeof(double));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(double)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(double), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(double)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(double));
+            *(double*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
         
         /// <summary>
-        /// Create a 1d Tensor from the given linear array and shape
+        ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
         public Tensor(Complex[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(Complex)), new long[]{data.Length}, data, Marshal.SizeOf<Complex>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(Complex)), new long[] {data.Length}, data, Marshal.SizeOf<Complex>());
         }
 
         /// <summary>
-        /// Create a N-dimensional Tensor from the given array
+        ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(Complex[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorWithoutCopying(dType ?? dtypes.as_dtype(typeof(Complex)), shape, data, Marshal.SizeOf<Complex>());
-            IsMemoryOwner=true;
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(Complex)), shape, data, Marshal.SizeOf<Complex>());
         }
 
         /// <summary>
-        /// Create a scalar Tensor from the given value
+        ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(Complex value, TF_DataType? dType = null)
         {
-            var v = (Complex*)Marshal.AllocHGlobal(sizeof(Complex));
-            *v = value;
-            _handle = TF_NewTensor(dType ?? dtypes.as_dtype(typeof(Complex)), dims:new long[0], num_dims: 0, data: (IntPtr)v, len: (UIntPtr)sizeof(Complex), deallocator: _hGlobalDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner=true;
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(Complex)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(Complex));
+            *(Complex*) TF_TensorData(_handle) = value;
+            AllocationType = AllocationType.Tensorflow;
         }
 #endif
 
@@ -474,13 +446,13 @@ namespace Tensorflow
         {
             var status = new Status();
             var buffer = Encoding.UTF8.GetBytes(str);
-            var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
-            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
+            var size = c_api.TF_StringEncodedSize((UIntPtr) buffer.Length);
+            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
 
             IntPtr tensor = c_api.TF_TensorData(handle);
             Marshal.WriteInt64(tensor, 0);
             fixed (byte* src = buffer)
-                c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
+                c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status);
             _handle = handle;
             status.Check(true);
         }
@@ -492,7 +464,7 @@ namespace Tensorflow
             {
                 if (nd.Unsafe.Storage.Shape.IsContiguous)
                 {
-                    var bytesLength = (UIntPtr)nd.size;
+                    var bytesLength = (UIntPtr) nd.size;
                     var size = c_api.TF_StringEncodedSize(bytesLength);
                     var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
 
@@ -504,9 +476,7 @@ namespace Tensorflow
 
                     status.Check(true);
                     _handle = handle;
-                    IsMemoryOwner = false;
-                } 
-                else
+                } else
                 {
                     var buffer = nd.ToArray<byte>();
                     var size = c_api.TF_StringEncodedSize((UIntPtr) buffer.Length);
@@ -521,7 +491,6 @@ namespace Tensorflow
 
                     status.Check(true);
                     _handle = handle;
-                    IsMemoryOwner = false;
                 }
 
                 return;
@@ -532,27 +501,27 @@ namespace Tensorflow
 
         private unsafe IntPtr CreateTensorFromNDArray(NDArray nd, TF_DataType? given_dtype)
         {
-            if (nd.dtype.Name == "String")
+            if (nd.typecode == NPTypeCode.String)
                 throw new NotImplementedException("Support for NDArray of type string not implemented yet");
-            IArraySlice arraySlice;
-            if (nd.Unsafe.Storage.Shape.IsContiguous == false)
-            {
-                // the memory is NOT contiguous, so we have to copy the view into a contiguous memory block.
-                arraySlice = nd.CloneData();
-            }
-            else
-            {
-                // the memory is contiguous
-                arraySlice = nd.GetData();
-            }
-            this.Tag = arraySlice; // keep a reference to the memory block to make sure it is not disposed while TF is using it
-            var ptr = new IntPtr(arraySlice.Address);
-            int num_bytes = (nd.size * nd.dtypesize);
-            var dtype = given_dtype ?? nd.dtype.as_dtype();
-            var handle = TF_NewTensor(dtype, dims: nd.shape.Select(i=>(long)i).ToArray(), num_dims: nd.ndim, data: ptr, len: (UIntPtr)num_bytes, deallocator: _nothingDeallocator, ref _deallocatorArgs);
-            IsMemoryOwner = false;
-            return handle;
 
+            var arraySlice = nd.Unsafe.Storage.Shape.IsContiguous ? nd.GetData() : nd.CloneData();
+
+            var handle = TF_NewTensor(
+                given_dtype ?? nd.dtype.as_dtype(),
+                dims: nd.shape.Select(i => (long) i).ToArray(),
+                num_dims: nd.ndim,
+                data: arraySlice.Address,
+                len: (UIntPtr) (nd.size * nd.dtypesize));
+
+            //if TF decided not to perform copy, hold reference for given NDArray.
+            if (TF_TensorData(handle).ToPointer() == nd.Unsafe.Address)
+            {
+                AllocationType = AllocationType.FromPointer;
+                AllocationReferenceHolder = nd.Unsafe.Storage;
+            } else
+                AllocationType = AllocationType.Tensorflow;
+
+            return handle;
         }
 
         public unsafe Tensor(byte[][] buffer, long[] shape)
@@ -560,11 +529,12 @@ namespace Tensorflow
             int size = 0;
             foreach (var b in buffer)
             {
-                size += (int)TF_StringEncodedSize((UIntPtr)b.Length);
+                size += (int) TF_StringEncodedSize((UIntPtr) b.Length);
             }
+
             int totalSize = size + buffer.Length * 8;
             ulong offset = 0;
-            IntPtr handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, (UIntPtr)totalSize);
+            IntPtr handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, (UIntPtr) totalSize);
 
             // Clear offset table
             IntPtr pOffset = TF_TensorData(handle);
@@ -572,15 +542,15 @@ namespace Tensorflow
             IntPtr dstLimit = pOffset + totalSize;
             for (int i = 0; i < buffer.Length; i++)
             {
-                Marshal.WriteInt64(pOffset, (long)offset);
+                Marshal.WriteInt64(pOffset, (long) offset);
                 using (var status = new Status())
                 {
                     fixed (byte* src = &buffer[i][0])
                     {
-                        var written = TF_StringEncode(src, (UIntPtr)buffer[i].Length, (sbyte*)dst, (UIntPtr)(dstLimit.ToInt64() - dst.ToInt64()), status);
+                        var written = TF_StringEncode(src, (UIntPtr) buffer[i].Length, (sbyte*) dst, (UIntPtr) (dstLimit.ToInt64() - dst.ToInt64()), status);
                         status.Check(true);
                         pOffset += 8;
-                        dst += (int)written;
+                        dst += (int) written;
                         offset += written;
                     }
                 }
@@ -612,24 +582,26 @@ namespace Tensorflow
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [SuppressMessage("ReSharper", "LocalVariableHidesMember")]
-        protected unsafe IntPtr CreateTensorWithoutCopying(TF_DataType dt, long[] shape, Array data, int element_size)
+        protected unsafe IntPtr CreateTensorFromArray(TF_DataType dt, long[] shape, Array data, int element_size)
         {
             if (dt == TF_DataType.TF_STRING && data is byte[] buffer)
             {
-                var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
-                var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
+                var size = c_api.TF_StringEncodedSize((UIntPtr) buffer.Length);
+                var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
+                AllocationType = AllocationType.Tensorflow;
 
                 IntPtr tensor = c_api.TF_TensorData(handle);
                 Marshal.WriteInt64(tensor, 0);
 
                 var status = new Status();
                 fixed (byte* src = buffer)
-                    c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(Int64)), size, status);
+                    c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status);
 
                 status.Check(true);
                 return handle;
             }
-            return CreateTensorWithoutCopying(dt, shape, data, 0, data.Length, element_size);
+
+            return CreateTensorFromArray(dt, shape, data, 0, data.Length, element_size);
         }
 
         /// <summary>
@@ -647,67 +619,19 @@ namespace Tensorflow
         /// specified dimensions.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected unsafe IntPtr CreateTensorWithoutCopying(TF_DataType dt, long[] shape, Array data, int start, int count, int element_size)
+        protected IntPtr CreateTensorFromArray(TF_DataType dt, long[] shape, Array data, int start, int count, int element_size)
         {
             if (start < 0 || start > data.Length - count)
                 throw new ArgumentException($"Array length {data.Length} does not match the given shape {new Shape(shape.Cast<int>().ToArray())}");
 
             // get a handle to the pinned array which we will pass on to the tensor computation engine to use
             var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            _deallocatorArgs = new DeallocatorArgs() { gc_handle = GCHandle.ToIntPtr(gcHandle) };
+            AllocationType = AllocationType.GCHandle;
+            AllocationHandle = gcHandle;
+
             if (shape == null || shape.Length == 0)
-                return TF_NewTensor(dt, new long[0], 0, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr)(count * element_size), _gcHandleDeallocator, ref _deallocatorArgs);
-            else
-                return TF_NewTensor(dt, shape, shape.Length, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr)(count * element_size), _gcHandleDeallocator, ref _deallocatorArgs);
+                return TF_NewTensor(dt, new long[0], 0, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr) (count * element_size));
+            return TF_NewTensor(dt, shape, shape.Length, gcHandle.AddrOfPinnedObject() + start * element_size, (UIntPtr) (count * element_size));
         }
-
-        [MonoPInvokeCallback(typeof(Deallocator))]
-        internal static void FreeHGlobalMemory(IntPtr dataPtr, IntPtr len, ref DeallocatorArgs args)
-        {
-            if (args.deallocator_called || dataPtr == IntPtr.Zero)
-                return;
-
-            // NumSharp will dispose
-            Marshal.FreeHGlobal(dataPtr);
-            args.deallocator_called = true;
-        }
-
-        [MonoPInvokeCallback(typeof(Deallocator))]
-        internal static void FreeGCHandle(IntPtr dataPtr, IntPtr len, ref DeallocatorArgs args)
-        {
-            if (args.deallocator_called || args.gc_handle == IntPtr.Zero)
-                return;
-            // note: since the ptr given to tensorflow is just the addr of the pinned object we can not directly free it! we need to free the gcHandle instead
-            GCHandle.FromIntPtr(args.gc_handle).Free();
-            args.deallocator_called = true;
-        }
-
-        [MonoPInvokeCallback(typeof(Deallocator))]
-        internal static void FreeNothing(IntPtr dataPtr, IntPtr len, ref DeallocatorArgs args)
-        {
-            args.deallocator_called = true;
-        }
-        
     }
-
-    /// <summary>
-    /// This attribute can be applied to callback functions that will be invoked
-    /// from unmanaged code to managed code.
-    /// </summary>
-    /// <remarks>
-    /// <code>
-    /// [TensorFlow.MonoPInvokeCallback (typeof (BufferReleaseFunc))]
-    /// internal static void MyFreeFunc (IntPtr data, IntPtr length){..}
-    /// </code>
-    /// </remarks>
-    public sealed class MonoPInvokeCallbackAttribute : Attribute
-    {
-        /// <summary>
-        /// Use this constructor to annotate the type of the callback function that 
-        /// will be invoked from unmanaged code.
-        /// </summary>
-        /// <param name="t">T.</param>
-        public MonoPInvokeCallbackAttribute(Type t) { }
-    }
-
 }
