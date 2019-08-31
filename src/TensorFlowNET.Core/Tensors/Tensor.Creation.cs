@@ -520,7 +520,7 @@ namespace Tensorflow
                 len: (UIntPtr) (nd.size * nd.dtypesize));
 
             //if TF decided not to perform copy, hold reference for given NDArray.
-            if (TF_TensorData(handle).ToPointer() == nd.Unsafe.Address)
+            if (TF_TensorData(handle).ToPointer() == arraySlice.Address)
             {
                 AllocationType = AllocationType.FromPointer;
                 AllocationReferenceHolder = nd.Unsafe.Storage;
