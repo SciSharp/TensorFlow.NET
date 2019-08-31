@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Tensorflow;
 using static Tensorflow.Binding;
@@ -22,7 +24,8 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
                     (int pad_h, int pad_w) = ((int)Math.Floor((filters_shape[0] - 2) / 2.0f) + 1, (int)Math.Floor((filters_shape[1] - 2) / 2.0f) + 1);
                     var paddings = tf.constant(new int[,] { { 0, 0 }, { pad_h, pad_h }, { pad_w, pad_w }, { 0, 0 } });
                     input_data = tf.pad(input_data, paddings, "CONSTANT");
-                    throw new NotImplementedException("");
+                    strides = new[] { 1, 2, 2, 1 };
+                    padding = "VALID";
                 }
                 else
                 {
@@ -44,7 +47,9 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
                 }
                 else
                 {
-                    throw new NotImplementedException("");
+                    var bias = tf.get_variable(name: "bias", shape: filters_shape.Last(), trainable: true,
+                       dtype: tf.float32, initializer: tf.constant_initializer(0.0f));
+                    conv = tf.nn.bias_add(conv, bias);
                 }
 
                 if (activate)
@@ -52,6 +57,22 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
 
                 return conv;
             });
+        }
+
+        public static Tensor upsample(Tensor input_data, string name, string method = "deconv")
+        {
+            Debug.Assert(new[] { "resize", "deconv" }.Contains(method));
+            Tensor output = null;
+            if (method == "resize")
+            {
+
+            }
+            else if(method == "deconv")
+            {
+
+            }
+
+            return output;
         }
 
         public static Tensor residual_block(Tensor input_data, int input_channel, int filter_num1, 
