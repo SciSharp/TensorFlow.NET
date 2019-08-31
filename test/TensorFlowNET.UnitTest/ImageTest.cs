@@ -14,10 +14,11 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class ImageTest
     {
-        string imgPath = "../../../../../data/shasta-daisy.jpg";
+        string imgPath = "shasta-daisy.jpg";
         Tensor contents;
 
-        public ImageTest()
+        [TestInitialize]
+        public void Initialize()
         {
             imgPath = Path.GetFullPath(imgPath);
             contents = tf.read_file(imgPath);

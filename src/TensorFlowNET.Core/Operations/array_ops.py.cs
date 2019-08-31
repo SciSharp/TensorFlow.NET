@@ -338,7 +338,7 @@ namespace Tensorflow
         public static Tensor size(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
             => size_internal(input, name, optimize: optimize, out_type: out_type);
 
-        private static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
+        public static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
             return tf_with(ops.name_scope(name, "Shape", new { input }), scope =>
             {

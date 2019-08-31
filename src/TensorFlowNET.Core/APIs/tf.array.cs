@@ -124,5 +124,15 @@ namespace Tensorflow
         /// <returns>A `Tensor`. Has the same type as `input`.</returns>
         public Tensor placeholder_with_default<T>(T input, int[] shape, string name = null)
             => gen_array_ops.placeholder_with_default(input, shape, name: name);
+
+        /// <summary>
+        /// Returns the shape of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <param name="out_type"></param>
+        /// <returns></returns>
+        public Tensor shape(Tensor input, string name = null, TF_DataType out_type = TF_DataType.TF_INT32)
+            => array_ops.shape_internal(input, name, optimize: true, out_type: out_type);
     }
 }

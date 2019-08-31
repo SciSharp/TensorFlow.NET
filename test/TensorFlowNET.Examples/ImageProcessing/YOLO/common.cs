@@ -65,11 +65,14 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
             Tensor output = null;
             if (method == "resize")
             {
-
+                tf_with(tf.variable_scope(name), delegate
+                {
+                    var input_shape = tf.shape(input_data);
+                });
             }
             else if(method == "deconv")
             {
-
+                throw new NotImplementedException("upsample.deconv");
             }
 
             return output;
