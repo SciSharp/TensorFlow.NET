@@ -555,9 +555,35 @@ namespace Tensorflow
             return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
         }
 
+        /// <summary>
+        ///     Dispose any managed resources.
+        /// </summary>
+        /// <remarks>Equivalent to what you would perform inside <see cref="DisposableObject.Dispose"/></remarks>
+        protected override void DisposeManagedResources()
+        {
+            AllocationReferenceHolder = null;
+        }
+
+        [SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             c_api.TF_DeleteTensor(handle);
+
+            if (AllocationHandle == null) 
+                return;
+
+            if (AllocationType == AllocationType.GCHandle)
+            {
+                ((GCHandle) AllocationHandle).Free();
+                AllocationHandle = null;
+                AllocationType = AllocationType.None;
+            } else if (AllocationType == AllocationType.Marshal)
+            {
+                Marshal.FreeHGlobal((IntPtr) AllocationHandle);
+                AllocationHandle = null;
+                AllocationType = AllocationType.None;
+            } else
+                throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
         }
 
         public bool IsDisposed => _disposed;

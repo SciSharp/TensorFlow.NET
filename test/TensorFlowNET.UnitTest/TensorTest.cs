@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using FluentAssertions;
 using Tensorflow;
 using static Tensorflow.Binding;
 
@@ -12,65 +13,51 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class TensorTest : CApiTest
     {
-        [Ignore("Not for mult-thread")]
-        public void TensorDeallocationThreadSafety()
-        {
-            var tensors = new Tensor[1000];
-            foreach (var i in range(1000))
-            {
-                tensors[i] = new Tensor(new int[1000]);
-            }
-            SemaphoreSlim s = new SemaphoreSlim(0, 2);
-            SemaphoreSlim s_done = new SemaphoreSlim(0, 2);
-
-            var t1 = new Thread(() =>
-            {
-                s.Wait();
-                foreach (var t in tensors)
-                    t.Dispose();
-                s_done.Release();
-            });
-
-            var t2 = new Thread(() =>
-            {
-                s.Wait();
-                foreach (var t in tensors)
-                    t.Dispose();
-                s_done.Release();
-            });
-
-            t1.Start();
-            t2.Start();
-            s.Release(2);
-            s_done.Wait();
-            s_done.Wait();
-
-            foreach (var t in tensors)
-                Assert.IsTrue(t.IsDisposed);
-        }
-
         [TestMethod]
         public unsafe void TensorFromFixed()
         {
             var array = new float[1000];
             var span = new Span<float>(array, 100, 500);
-            fixed (float* ptr=&MemoryMarshal.GetReference(span))
+            fixed (float* ptr = &MemoryMarshal.GetReference(span))
             {
-                using (var t = new Tensor((IntPtr)ptr, new long[] {span.Length}, tf.float32, 4*span.Length))
+                using (var t = new Tensor((IntPtr) ptr, new long[] {span.Length}, tf.float32, 4 * span.Length))
                 {
                     Assert.IsFalse(t.IsDisposed);
-                    Assert.IsFalse(t.IsMemoryOwner);
                     Assert.AreEqual(2000, (int) t.bytesize);
                 }
             }
+
             fixed (float* ptr = &array[0])
             {
-                using (var t = new Tensor((IntPtr)ptr, new long[] { array.Length }, tf.float32, 4 * array.Length))
+                using (var t = new Tensor((IntPtr) ptr, new long[] {array.Length}, tf.float32, 4 * array.Length))
                 {
                     Assert.IsFalse(t.IsDisposed);
-                    Assert.IsFalse(t.IsMemoryOwner);
-                    Assert.AreEqual(4000, (int)t.bytesize);
+                    Assert.AreEqual(4000, (int) t.bytesize);
                 }
+            }
+        }
+
+        [TestMethod]
+        public unsafe void TensorFromArray()
+        {
+            var array = new float[1000];
+            using (var t = new Tensor(array, new long[] {array.Length}, tf.float32))
+            {
+                Assert.IsFalse(t.IsDisposed);
+                Assert.AreEqual(1000 * sizeof(float), (int) t.bytesize);
+            }
+
+            using (var t = new Tensor(new float[] {1}, new long[] {1}, tf.float32))
+            {
+                Assert.IsFalse(t.IsDisposed);
+                Assert.AreEqual(1 * sizeof(float), (int) t.bytesize);
+            }
+
+            using (var t = new Tensor(new float[] {1}, null, tf.float32))
+            {
+                Assert.IsFalse(t.IsDisposed);
+                Assert.AreEqual(1 * sizeof(float), (int) t.bytesize);
+                t.shape.Should().BeEmpty();
             }
         }
 
@@ -78,11 +65,11 @@ namespace TensorFlowNET.UnitTest
         public void AllocateTensor()
         {
             ulong num_bytes = 6 * sizeof(float);
-            long[] dims = { 2, 3 };
+            long[] dims = {2, 3};
             Tensor t = c_api.TF_AllocateTensor(TF_DataType.TF_FLOAT, dims, 2, num_bytes);
             EXPECT_EQ(TF_DataType.TF_FLOAT, t.dtype);
             EXPECT_EQ(2, t.NDims);
-            EXPECT_EQ((int)dims[0], t.shape[0]);
+            EXPECT_EQ((int) dims[0], t.shape[0]);
             EXPECT_EQ(num_bytes, t.bytesize);
             t.Dispose();
         }
@@ -98,7 +85,7 @@ namespace TensorFlowNET.UnitTest
             NDArray nd = np.array(2, 3);
             Tensor t = new Tensor(nd);
             Tensor o = t.MaybeMove();
-            ASSERT_TRUE(o == IntPtr.Zero);  // It is unsafe to move memory TF might not own.
+            ASSERT_TRUE(o == IntPtr.Zero); // It is unsafe to move memory TF might not own.
             t.Dispose();
         }
 
@@ -116,10 +103,10 @@ namespace TensorFlowNET.UnitTest
 
             EXPECT_EQ(tensor.dtype, TF_DataType.TF_FLOAT);
             EXPECT_EQ(tensor.rank, nd.ndim);
-            EXPECT_EQ((int)tensor.shape[0], nd.shape[0]);
-            EXPECT_EQ((int)tensor.shape[1], nd.shape[1]);
-            EXPECT_EQ(tensor.bytesize, (ulong)nd.size * sizeof(float));
-            Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), new float[] { 1, 2, 3, 4, 5, 6 }));
+            EXPECT_EQ((int) tensor.shape[0], nd.shape[0]);
+            EXPECT_EQ((int) tensor.shape[1], nd.shape[1]);
+            EXPECT_EQ(tensor.bytesize, (ulong) nd.size * sizeof(float));
+            Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), new float[] {1, 2, 3, 4, 5, 6}));
         }
 
         /// <summary>
@@ -130,7 +117,7 @@ namespace TensorFlowNET.UnitTest
         public void SetShape()
         {
             var s = new Status();
-            var graph = new Graph();
+            var graph = new Graph().as_default();
 
             var feed = c_test_util.Placeholder(graph, s);
             var feed_out_0 = new TF_Output(feed, 0);
@@ -148,7 +135,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(-1, num_dims);
 
             // Set the shape to be 2 x Unknown
-            long[] dims = { 2, -1 };
+            long[] dims = {2, -1};
             c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, dims.Length, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s);
@@ -177,8 +164,8 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(2, num_dims);
-            EXPECT_EQ(2, (int)returned_dims[0]);
-            EXPECT_EQ(3, (int)returned_dims[1]);
+            EXPECT_EQ(2, (int) returned_dims[0]);
+            EXPECT_EQ(3, (int) returned_dims[1]);
 
             // Try to set 'unknown' with same rank on the shape and see that
             // it doesn't change.
@@ -189,8 +176,8 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(2, num_dims);
-            EXPECT_EQ(2, (int)returned_dims[0]);
-            EXPECT_EQ(3, (int)returned_dims[1]);
+            EXPECT_EQ(2, (int) returned_dims[0]);
+            EXPECT_EQ(3, (int) returned_dims[1]);
 
             // Try to fetch a shape with the wrong num_dims
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, 5, s);

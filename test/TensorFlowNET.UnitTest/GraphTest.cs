@@ -207,7 +207,7 @@ namespace TensorFlowNET.UnitTest
         public void ImportGraphDef()
         {
             var s = new Status();
-            var graph = new Graph();
+            var graph = new Graph().as_default();
 
             // Create a simple graph.
             c_test_util.Placeholder(graph, s);
@@ -221,7 +221,7 @@ namespace TensorFlowNET.UnitTest
 
             // Import it, with a prefix, in a fresh graph.
             graph.Dispose();
-            graph = new Graph();
+            graph = new Graph().as_default();
             var opts = c_api.TF_NewImportGraphDefOptions();
             c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported");
             c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
@@ -359,7 +359,7 @@ namespace TensorFlowNET.UnitTest
         public void ImportGraphDef_WithReturnOutputs()
         {
             var s = new Status();
-            var graph = new Graph();
+            var graph = new Graph().as_default();
 
             // Create a graph with two nodes: x and 3
             c_test_util.Placeholder(graph, s);
@@ -375,7 +375,7 @@ namespace TensorFlowNET.UnitTest
 
             // Import it in a fresh graph with return outputs.
             graph.Dispose();
-            graph = new Graph();
+            graph = new Graph().as_default();
             var opts = new ImportGraphDefOptions();
             opts.AddReturnOutput("feed", 0);
             opts.AddReturnOutput("scalar", 0);

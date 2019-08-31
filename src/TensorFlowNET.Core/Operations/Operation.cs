@@ -23,7 +23,6 @@ using Tensorflow.Util;
 
 namespace Tensorflow
 {
-
     /// <summary>
     /// Represents a graph node that performs computation on tensors.
     /// 
@@ -45,35 +44,32 @@ namespace Tensorflow
     public partial class Operation : ITensorOrOperation
     {
         private readonly IntPtr _handle; // _c_op in python
-        private readonly IntPtr _operDesc; 
+        private readonly IntPtr _operDesc;
+        private readonly Graph _graph;
+        private NodeDef _node_def;
 
-        private Graph _graph;
         public string type => OpType;
-
         public Graph graph => _graph;
         public int _id => _id_value;
         public int _id_value;
         public Operation op => this;
-
         public TF_DataType dtype => TF_DataType.DtInvalid;
-
         public string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationOpType(_handle));
         public string Device => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 
-        private NodeDef _node_def;
         public NodeDef node_def
         {
             get
             {
-                if(_node_def == null)
+                if (_node_def == null)
                     _node_def = GetNodeDef();
 
                 return _node_def;
             }
         }
 
-        public Operation(IntPtr handle, Graph g=null)
+        public Operation(IntPtr handle, Graph g = null)
         {
             if (handle == IntPtr.Zero)
                 return;
@@ -97,11 +93,12 @@ namespace Tensorflow
 
             _operDesc = c_api.TF_NewOperation(g, opType, oper_name);
             c_api.TF_SetAttrType(_operDesc, "dtype", TF_DataType.TF_INT32);
-            using (var status = new Status())
-            {
-                _handle = c_api.TF_FinishOperation(_operDesc, status);
-                status.Check(true);
-            }
+            lock (Locks.ProcessWide)
+                using (var status = new Status())
+                {
+                    _handle = c_api.TF_FinishOperation(_operDesc, status);
+                    status.Check(true);
+                }
 
             // Dict mapping op name to file and line information for op colocation
             // context managers.
@@ -133,9 +130,9 @@ namespace Tensorflow
 
             // Build the list of control inputs.
             var control_input_ops = new List<Operation>();
-            if(control_inputs != null)
+            if (control_inputs != null)
             {
-                foreach(var c in control_inputs)
+                foreach (var c in control_inputs)
                 {
                     switch (c)
                     {
@@ -196,15 +193,13 @@ namespace Tensorflow
             {
                 if (!string.IsNullOrEmpty(input_arg.NumberAttr))
                 {
-                    input_len = (int)attrs[input_arg.NumberAttr].I;
+                    input_len = (int) attrs[input_arg.NumberAttr].I;
                     is_sequence = true;
-                }
-                else if (!string.IsNullOrEmpty(input_arg.TypeListAttr))
+                } else if (!string.IsNullOrEmpty(input_arg.TypeListAttr))
                 {
                     input_len = attrs[input_arg.TypeListAttr].List.Type.Count;
                     is_sequence = true;
-                }
-                else
+                } else
                 {
                     input_len = 1;
                     is_sequence = false;
@@ -225,22 +220,21 @@ namespace Tensorflow
         {
             AttrValue x = null;
 
-            using (var status = new Status())
-            using (var buf = new Buffer())
-            {
-                unsafe
+            lock (Locks.ProcessWide)
+                using (var status = new Status())
+                using (var buf = new Buffer())
                 {
                     c_api.TF_OperationGetAttrValueProto(_handle, name, buf, status);
                     status.Check(true);
+
                     x = AttrValue.Parser.ParseFrom(buf.MemoryBlock.Stream());
                 }
-            }
 
             string oneof_value = x.ValueCase.ToString();
             if (string.IsNullOrEmpty(oneof_value))
                 return null;
 
-            if(oneof_value == "list")
+            if (oneof_value == "list")
                 throw new NotImplementedException($"Unsupported field type in {x.ToString()}");
 
             if (oneof_value == "type")
@@ -259,13 +253,15 @@ namespace Tensorflow
 
         private NodeDef GetNodeDef()
         {
-            using (var s = new Status())
-            using (var buffer = new Buffer())
-            {
-                c_api.TF_OperationToNodeDef(_handle, buffer, s);
-                s.Check();
-                return NodeDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
-            }
+            lock (Locks.ProcessWide)
+                using (var s = new Status())
+                using (var buffer = new Buffer())
+                {
+                    c_api.TF_OperationToNodeDef(_handle, buffer, s);
+                    s.Check();
+
+                    return NodeDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+                }
         }
 
         /// <summary>
@@ -286,12 +282,13 @@ namespace Tensorflow
             _inputs = null;
             // after the c_api call next time _inputs is accessed 
             // the updated inputs are reloaded from the c_api
-            using (var status = new Status())
-            {
-                c_api.UpdateEdge(_graph, output, input, status);
-                //var updated_inputs = inputs;
-                status.Check();
-            }
+            lock (Locks.ProcessWide)
+                using (var status = new Status())
+                {
+                    c_api.UpdateEdge(_graph, output, input, status);
+                    //var updated_inputs = inputs;
+                    status.Check();
+                }
         }
 
         private void _assert_same_graph(Tensor tensor)

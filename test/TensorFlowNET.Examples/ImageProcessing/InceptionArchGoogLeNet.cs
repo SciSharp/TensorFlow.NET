@@ -93,7 +93,7 @@ namespace TensorFlowNET.Examples
             Directory.CreateDirectory(dir);
 
             // get model file
-            string url = "https://storage.googleapis.com/download.tf.org/models/inception_v3_2016_08_28_frozen.pb.tar.gz";
+            string url = "https://storage.googleapis.com/download.tensorflow.org/models/inception_v3_2016_08_28_frozen.pb.tar.gz";
             
             Utility.Web.Download(url, dir, $"{pbFile}.tar.gz");
 
