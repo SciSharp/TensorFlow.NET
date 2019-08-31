@@ -411,13 +411,14 @@ namespace TensorFlowNET.UnitTest
 
         }
 
+        [Ignore]
         [TestMethod]
         public void ImportGraphMeta()
         {
             var dir = "my-save-dir/";
             using (var sess = tf.Session())
             {
-                var new_saver = tf.train.import_meta_graph(@"D:\tmp\resnet_v2_101_2017_04_14\eval.graph");
+                var new_saver = tf.train.import_meta_graph(dir + "my-model-10000.meta");
                 new_saver.restore(sess, dir + "my-model-10000");
                 var labels = tf.constant(0, dtype: tf.int32, shape: new int[] { 100 }, name: "labels");
                 var batch_size = tf.size(labels);
