@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Tensorflow
@@ -76,6 +77,51 @@ namespace Tensorflow
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len, Deallocator deallocator, ref DeallocatorArgs deallocator_arg);
+
+        /// <summary>
+        /// Return a new tensor that holds the bytes data[0,len-1]
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <param name="dims"></param>
+        /// <param name="num_dims"></param>
+        /// <param name="data"></param>
+        /// <param name="len">num_bytes, ex: 6 * sizeof(float)</param>
+        /// <param name="deallocator"></param>
+        /// <param name="deallocator_arg"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len, Deallocator deallocator, IntPtr deallocator_arg);
+
+        /// <summary>
+        /// Return a new tensor that holds the bytes data[0,len-1]
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <param name="dims"></param>
+        /// <param name="num_dims"></param>
+        /// <param name="data"></param>
+        /// <param name="len">num_bytes, ex: 6 * sizeof(float)</param>
+        /// <param name="deallocator"></param>
+        /// <param name="deallocator_arg"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len)
+        {
+            return TF_NewTensor(dataType, dims, num_dims, data, len, EmptyDeallocator, DeallocatorArgs.Empty);
+        }
+        /// <summary>
+        /// Return a new tensor that holds the bytes data[0,len-1]
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <param name="dims"></param>
+        /// <param name="num_dims"></param>
+        /// <param name="data"></param>
+        /// <param name="len">num_bytes, ex: 6 * sizeof(float)</param>
+        /// <param name="deallocator"></param>
+        /// <param name="deallocator_arg"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, void* data, UIntPtr len)
+        {
+            return TF_NewTensor(dataType, dims, num_dims, new IntPtr(data), len);
+        }
 
         /// <summary>
         /// Return the number of dimensions that the tensor has.
@@ -159,5 +205,32 @@ namespace Tensorflow
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe UIntPtr TF_StringDecode(byte* src, UIntPtr src_len, byte** dst, UIntPtr* dst_len, IntPtr status);
+
+
+        public static c_api.Deallocator EmptyDeallocator = FreeNothingDeallocator;
+
+        [MonoPInvokeCallback(typeof(c_api.Deallocator))]
+        private static void FreeNothingDeallocator(IntPtr dataPtr, IntPtr len, ref c_api.DeallocatorArgs args)
+        { }
+
+        /// <summary>
+        /// This attribute can be applied to callback functions that will be invoked
+        /// from unmanaged code to managed code.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// [TensorFlow.MonoPInvokeCallback (typeof (BufferReleaseFunc))]
+        /// internal static void MyFreeFunc (IntPtr data, IntPtr length){..}
+        /// </code>
+        /// </remarks>
+        public sealed class MonoPInvokeCallbackAttribute : Attribute
+        {
+            /// <summary>
+            /// Use this constructor to annotate the type of the callback function that 
+            /// will be invoked from unmanaged code.
+            /// </summary>
+            /// <param name="t">T.</param>
+            public MonoPInvokeCallbackAttribute(Type t) { }
+        }
     }
 }
