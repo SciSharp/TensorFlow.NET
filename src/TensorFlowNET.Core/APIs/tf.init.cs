@@ -20,6 +20,8 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
+        public IInitializer constant_initializer<T>(T value, TF_DataType dtype = TF_DataType.TF_FLOAT, bool verify_shape = false) 
+            => new Constant<T>(value, dtype: dtype, verify_shape: verify_shape);
         public IInitializer zeros_initializer => new Zeros();
         public IInitializer ones_initializer => new Ones();
         public IInitializer glorot_uniform_initializer => new GlorotUniform();

@@ -16,34 +16,39 @@
 
 namespace Tensorflow.Operations.Initializers
 {
-    public class RandomUniform : IInitializer
+    public class Constant<T> : IInitializer
     {
-        private int? seed;
-        private float minval;
-        private float maxval;
-        private TF_DataType dtype;
+        TF_DataType dtype;
+        T value;
+        bool _verify_shape;
 
-        public RandomUniform()
+        public Constant(T value, TF_DataType dtype = TF_DataType.TF_FLOAT, bool verify_shape = false)
         {
-
+            this.value = value;
+            this.dtype = dtype;
+            _verify_shape = verify_shape;
         }
 
         public Tensor call(TensorShape shape, TF_DataType dtype = TF_DataType.DtInvalid, bool? verify_shape = null)
         {
-            return random_ops.random_uniform(shape, 
-                minval: minval, 
-                maxval: maxval, 
-                dtype: dtype, 
-                seed: seed);
+            if (dtype == TF_DataType.DtInvalid)
+                dtype = this.dtype;
+
+            if (!verify_shape.HasValue)
+                verify_shape = _verify_shape;
+
+            return constant_op._constant_impl(value, dtype, shape,
+                name: "Const",
+                verify_shape: verify_shape.Value,
+                allow_broadcast: false);
         }
 
         public object get_config()
         {
-            return new {
-                minval,
-                maxval,
-                seed,
-                dtype
+            return new
+            {
+                value,
+                dtype = dtype.name()
             };
         }
     }

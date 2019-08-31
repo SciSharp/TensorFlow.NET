@@ -155,7 +155,7 @@ namespace Tensorflow
         public static implicit operator TensorShape(int[] dims) => new TensorShape(dims);
 
         public static explicit operator int(TensorShape shape) => shape.size;
-        public static explicit operator TensorShape(int dim) => new TensorShape(dim);
+        public static implicit operator TensorShape(int dim) => new TensorShape(dim);
 
         public static explicit operator (int, int)(TensorShape shape) => shape.dims.Length == 2 ? (shape.dims[0], shape.dims[1]) : (0, 0);
         public static implicit operator TensorShape((int, int) dims) => new TensorShape(dims.Item1, dims.Item2);

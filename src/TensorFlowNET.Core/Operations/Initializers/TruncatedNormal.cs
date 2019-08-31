@@ -34,7 +34,7 @@ namespace Tensorflow.Operations.Initializers
             this.dtype = dtype;
         }
 
-        public Tensor call(TensorShape shape, TF_DataType dtype)
+        public Tensor call(TensorShape shape, TF_DataType dtype, bool? verify_shape = null)
         {
             return random_ops.truncated_normal(shape, mean, stddev, dtype : dtype, seed: seed);
         }
