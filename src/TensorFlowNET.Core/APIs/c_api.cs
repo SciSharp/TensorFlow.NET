@@ -54,6 +54,15 @@ namespace Tensorflow
 
         public struct DeallocatorArgs
         {
+            internal static unsafe c_api.DeallocatorArgs* EmptyPtr;
+            internal static unsafe IntPtr Empty;
+
+            static unsafe DeallocatorArgs()
+            {
+                Empty = new IntPtr(EmptyPtr = (DeallocatorArgs*) Marshal.AllocHGlobal(Marshal.SizeOf<DeallocatorArgs>()));
+                *EmptyPtr = new DeallocatorArgs() {gc_handle = IntPtr.Zero, deallocator_called = false};
+            }
+
             public bool deallocator_called;
             public IntPtr gc_handle;
         }

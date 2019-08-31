@@ -29,7 +29,7 @@ namespace TensorFlowNET.UnitTest
         }
 
         /// <summary>
-        /// https://www.tf.org/api_docs/python/tf/variable_scope
+        /// https://www.tensorflow.org/api_docs/python/tf/variable_scope
         /// how to create a new variable
         /// </summary>
         [TestMethod]

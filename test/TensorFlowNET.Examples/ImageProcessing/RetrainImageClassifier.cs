@@ -33,7 +33,7 @@ namespace TensorFlowNET.Examples
     /// and simply train a new classification layer on top. Transfer learning is a technique that shortcuts much of this 
     /// by taking a piece of a model that has already been trained on a related task and reusing it in a new model.
     /// 
-    /// https://www.tf.org/hub/tutorials/image_retraining
+    /// https://www.tensorflow.org/hub/tutorials/image_retraining
     /// </summary>
     public class RetrainImageClassifier : IExample
     {
@@ -168,7 +168,7 @@ namespace TensorFlowNET.Examples
         /// weights, and then sets up all the gradients for the backward pass.
         /// 
         /// The set up for the softmax and fully-connected layers is based on:
-        /// https://www.tf.org/tutorials/mnist/beginners/index.html
+        /// https://www.tensorflow.org/tutorials/mnist/beginners/index.html
         /// </summary>
         /// <param name="class_count"></param>
         /// <param name="final_tensor_name"></param>
