@@ -552,6 +552,40 @@ namespace Tensorflow
             throw new NotImplementedException("array_ops.stack");
         }
 
+        public static Tensor pad(Tensor tensor, Tensor paddings, string mode = "CONSTANT", string name = null, int constant_values = 0)
+        {
+            Tensor result = null;
+            mode = mode.ToUpper();
+            if(mode == "CONSTANT")
+            {
+                if (constant_values != 0)
+                    throw new NotImplementedException("gen_array_ops.pad_v2");
+                else
+                    result = gen_array_ops.pad(tensor, paddings, name: name);
+            }
+
+            // Restore shape information where possible.
+            var paddings_constant = tensor_util.constant_value(
+                result.op.inputs[1], partial: true);
+            var input_shape = result.op.inputs[0].TensorShape;
+            if (input_shape.ndim > -1 &&
+                !result.TensorShape.is_fully_defined() &&
+                !(paddings_constant is null))
+            {
+                var new_shape = new List<int>();
+                foreach((NDArray padding, int dim) in zip(paddings_constant.GetNDArrays(), np.array(input_shape.dims).GetNDArrays()))
+                {
+                    if (padding is null || dim == -1 || padding.GetData<int>().Contains(-1))
+                        new_shape.Add(-1);
+                    else
+                        new_shape.Add(np.sum(padding) + dim);
+                }
+                result.set_shape(new_shape.ToArray());
+            }
+
+            return result;
+        }
+
         public static Tensor placeholder(TF_DataType dtype)
         {
             throw new NotImplementedException("array_ops.placeholder");

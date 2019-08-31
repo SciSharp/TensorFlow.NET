@@ -99,6 +99,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor pad(Tensor input, Tensor paddings, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Pad", name: name, args: new { input, paddings });
+
+            return _op.output;
+        }
+
         public static Tensor pack(Tensor[] values, int axis = 0, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Pack", name: name, args: new { values, axis });

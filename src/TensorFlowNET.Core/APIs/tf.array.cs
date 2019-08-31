@@ -100,6 +100,18 @@ namespace Tensorflow
             string name = null) => array_ops.one_hot(indices, depth, dtype: dtype, axis: axis, name: name);
 
         /// <summary>
+        /// Pads a tensor
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="paddings"></param>
+        /// <param name="mode"></param>
+        /// <param name="name"></param>
+        /// <param name="constant_values"></param>
+        /// <returns></returns>
+        public Tensor pad(Tensor tensor, Tensor paddings, string mode = "CONSTANT", string name = null, int constant_values = 0)
+            => array_ops.pad(tensor, paddings, mode: mode, name: name, constant_values: constant_values);
+
+        /// <summary>
         /// A placeholder op that passes through `input` when its output is not fed.
         /// </summary>
         /// <typeparam name="T"></typeparam>

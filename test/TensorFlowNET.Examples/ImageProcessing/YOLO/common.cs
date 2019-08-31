@@ -19,6 +19,9 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
 
                 if (downsample)
                 {
+                    (int pad_h, int pad_w) = ((int)Math.Floor((filters_shape[0] - 2) / 2.0f) + 1, (int)Math.Floor((filters_shape[1] - 2) / 2.0f) + 1);
+                    var paddings = tf.constant(new int[,] { { 0, 0 }, { pad_h, pad_h }, { pad_w, pad_w }, { 0, 0 } });
+                    input_data = tf.pad(input_data, paddings, "CONSTANT");
                     throw new NotImplementedException("");
                 }
                 else
