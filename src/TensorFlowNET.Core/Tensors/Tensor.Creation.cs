@@ -523,7 +523,7 @@ namespace Tensorflow
             if (TF_TensorData(handle).ToPointer() == arraySlice.Address)
             {
                 AllocationType = AllocationType.FromPointer;
-                AllocationReferenceHolder = nd.Unsafe.Storage;
+                AllocationReferenceHolder = arraySlice;
             } else
                 AllocationType = AllocationType.Tensorflow;
 
