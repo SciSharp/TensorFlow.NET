@@ -128,5 +128,22 @@ namespace Tensorflow
 
             throw new NotImplementedException("");
         }
+
+        /// <summary>
+        /// Resize `images` to `size` using nearest neighbor interpolation.
+        /// </summary>
+        /// <param name="images"></param>
+        /// <param name="size"></param>
+        /// <param name="align_corners"></param>
+        /// <param name="name"></param>
+        /// <param name="half_pixel_centers"></param>
+        /// <returns></returns>
+        public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false, 
+            string name = null, bool half_pixel_centers = false)
+            => gen_image_ops.resize_nearest_neighbor(images: images,
+                  size: size,
+                  align_corners: align_corners,
+                  half_pixel_centers: half_pixel_centers,
+                  name: name);
     }
 }

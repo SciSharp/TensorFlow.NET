@@ -26,7 +26,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 5. Overload session.run(), make syntax simpler.
 6. Add Local Response Normalization.
 7. Add tf.image related APIs.
-8. Add tf.random_normal, tf.constant, tf.pad, tf.shape.
+8. Add tf.random_normal, tf.constant, tf.pad, tf.shape, tf.image.resize_nearest_neighbor.
 9. MultiThread is safe.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
     <FileVersion>0.11.2.0</FileVersion>
