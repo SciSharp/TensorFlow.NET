@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Linq;
 using static Tensorflow.Binding;
@@ -63,6 +64,8 @@ namespace Tensorflow
         public static Tensor operator *(uint constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
         public static Tensor operator *(long constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
         public static Tensor operator *(ulong constant, Tensor tensor) => BinaryOpWrapper("mul", constant, tensor);
+        public static Tensor operator *(NDArray x, Tensor y) => BinaryOpWrapper("mul", x, y);
+        public static Tensor operator *(Tensor x, NDArray y) => BinaryOpWrapper("mul", x, y);
 
         private static readonly TF_DataType[] _intTfDataTypes = {
             TF_DataType.TF_INT8, TF_DataType.TF_INT16, TF_DataType.TF_INT32, TF_DataType.TF_INT64,
