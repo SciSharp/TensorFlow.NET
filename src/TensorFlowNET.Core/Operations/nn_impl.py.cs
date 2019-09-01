@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
@@ -148,6 +149,27 @@ namespace Tensorflow
                 var nonzero_count = math_ops.reduce_sum(
                 math_ops.cast(gen_math_ops.not_equal(input_tensor, zero), dtype: dtype), name: "nonzero_count");
                 return nonzero_count;
+            });
+        }
+
+        public static Tensor sigmoid_cross_entropy_with_logits(Tensor labels, Tensor logits, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "", new { }), scope =>
+            {
+                name = scope;
+                logits = ops.convert_to_tensor(logits, name: "logits");
+                labels = ops.convert_to_tensor(labels, name: "labels");
+                labels.TensorShape.merge_with(logits.TensorShape);
+
+                var zeros = array_ops.zeros_like(logits, dtype: logits.dtype);
+                var cond = (logits >= zeros);
+                var relu_logits = array_ops.where(cond, logits, zeros);
+                var neg_abs_logits = array_ops.where(cond, -logits, logits);
+
+                return math_ops.add(
+                    relu_logits - logits * labels,
+                    gen_math_ops.log1p(gen_math_ops.exp(neg_abs_logits)),
+                    name: name);
             });
         }
 

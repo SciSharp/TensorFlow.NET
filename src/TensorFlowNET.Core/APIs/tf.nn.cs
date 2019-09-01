@@ -168,6 +168,9 @@ namespace Tensorflow
 
             public rnn_cell_impl rnn_cell => new rnn_cell_impl();
 
+            public Tensor sigmoid_cross_entropy_with_logits(Tensor labels, Tensor logits, string name = null)
+                => nn_impl.sigmoid_cross_entropy_with_logits(labels: labels, logits: logits, name: name);
+
             public Tensor softmax(Tensor logits, int axis = -1, string name = null)
                 => gen_nn_ops.softmax(logits, name);
 
