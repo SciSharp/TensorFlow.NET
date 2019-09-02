@@ -126,7 +126,7 @@ namespace Tensorflow
         //      name: A name for the operation(optional).
         //  Returns:
         //    A mutable `Tensor`. Has the same type as `ref`.
-        public static Tensor assign_add(RefVariable @ref, Tensor value, bool use_locking = false, string name = null)
+        public static Tensor assign_add<T>(RefVariable @ref, T value, bool use_locking = false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("AssignAdd", name: name, args: new { @ref, value, use_locking });
             return _op.outputs[0];

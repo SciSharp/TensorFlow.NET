@@ -20,6 +20,13 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
+        public Tensor cond(Tensor pred,
+            Func<ITensorOrOperation> true_fn = null,
+            Func<ITensorOrOperation> false_fn = null,
+            bool strict = false,
+            string name = null)
+            => control_flow_ops.cond(pred, true_fn, false_fn, strict: strict, name: name);
+
         public Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
             TensorShape shape_invariants = null,
             int parallel_iterations = 10,

@@ -29,6 +29,10 @@ namespace Tensorflow
         public static Tensor operator -(RefVariable x, double y) => op_helper("sub", x, y);
         public static Tensor operator -(RefVariable x, Tensor y) => op_helper("sub", x, y);
 
+        public static Tensor operator <(RefVariable x, Tensor y) => op_helper("Less", x, y);
+
+        public static Tensor operator >(RefVariable x, Tensor y) => op_helper("Greater", x, y);
+
         private static Tensor op_helper<T>(string default_name, RefVariable x, T y)
         {
             var tensor1 = x.value();
