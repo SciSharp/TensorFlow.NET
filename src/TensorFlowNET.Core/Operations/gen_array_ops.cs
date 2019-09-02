@@ -224,7 +224,7 @@ namespace Tensorflow
         public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
-            return _op.outputs[0];
+            return _op.output;
         }
 
         public static Tensor reshape(Tensor tensor, int[] shape, string name = null)
@@ -334,12 +334,7 @@ namespace Tensorflow
             return _op.outputs;
         }
 
-        public static Tensor tile(Tensor input, Tensor multiples, string name = null)
-        {
-            var _op = _op_def_lib._apply_op_helper("Tile", name, new { input, multiples });
-            return _op.outputs[0];
-        }
-        public static Tensor tile(NDArray input, int[] multiples, string name = null)
+        public static Tensor tile<T>(Tensor input, T multiples, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Tile", name, new { input, multiples });
             return _op.outputs[0];

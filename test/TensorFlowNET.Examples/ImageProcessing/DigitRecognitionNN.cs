@@ -16,6 +16,7 @@
 
 using NumSharp;
 using System;
+using System.Diagnostics;
 using Tensorflow;
 using Tensorflow.Hub;
 using static Tensorflow.Binding;
@@ -135,6 +136,9 @@ namespace TensorFlowNET.Examples
             float loss_val = 100.0f;
             float accuracy_val = 0f;
 
+            var sw = new Stopwatch();
+            sw.Start();
+
             foreach (var epoch in range(epochs))
             {
                 print($"Training epoch: {epoch + 1}");
@@ -154,7 +158,8 @@ namespace TensorFlowNET.Examples
                     {
                         // Calculate and display the batch loss and accuracy
                         (loss_val, accuracy_val) = sess.run((loss, accuracy), (x, x_batch), (y, y_batch));
-                        print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")}");
+                        print($"iter {iteration.ToString("000")}: Loss={loss_val.ToString("0.0000")}, Training Accuracy={accuracy_val.ToString("P")} {sw.ElapsedMilliseconds}ms");
+                        sw.Restart();
                     }
                 }
 

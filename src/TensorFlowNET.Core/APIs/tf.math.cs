@@ -315,6 +315,9 @@ namespace Tensorflow
         public Tensor pow<T1, T2>(T1 x, T2 y) 
             => gen_math_ops.pow(x, y);
 
+        public Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
+            => math_ops.range(start, limit: limit, delta: delta, dtype: dtype, name: name);
+
         /// <summary>
         /// Computes the sum of elements across dimensions of a tensor.
         /// </summary>
@@ -325,10 +328,12 @@ namespace Tensorflow
         {
             if(!axis.HasValue && reduction_indices.HasValue)
                 return math_ops.reduce_sum(input, reduction_indices.Value);
+            else if (axis.HasValue && !reduction_indices.HasValue)
+                return math_ops.reduce_sum(input, axis.Value);
             return math_ops.reduce_sum(input);
         }
 
-        public Tensor reduce_sum(Tensor input, int axis, int? reduction_indices = null)
+        public Tensor reduce_sum(Tensor input, int[] axis, int? reduction_indices = null)
             => math_ops.reduce_sum(input, axis);
 
         /// <summary>

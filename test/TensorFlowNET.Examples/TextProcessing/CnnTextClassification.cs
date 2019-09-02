@@ -197,7 +197,6 @@ namespace TensorFlowNET.Examples
         public void Train(Session sess)
         {
             var graph = tf.get_default_graph();
-            var stopwatch = Stopwatch.StartNew();
 
             sess.run(tf.global_variables_initializer());
             var saver = tf.train.Saver(tf.global_variables());
@@ -212,14 +211,20 @@ namespace TensorFlowNET.Examples
             Operation optimizer = graph.OperationByName("loss/Adam");
             Tensor global_step = graph.OperationByName("Variable");
             Tensor accuracy = graph.OperationByName("accuracy/accuracy");
-            stopwatch = Stopwatch.StartNew();
+
+            var sw = new Stopwatch();
+            sw.Start();
+
             int step = 0;
             foreach (var (x_batch, y_batch, total) in train_batches)
             {
                 (_, step, loss_value) = sess.run((optimizer, global_step, loss),
                     (model_x, x_batch), (model_y, y_batch), (is_training, true));
-                if (step == 1 || step % 10 == 0)
-                    Console.WriteLine($"Training on batch {step}/{total} loss: {loss_value.ToString("0.0000")}.");
+                if (step % 10 == 0)
+                {
+                    Console.WriteLine($"Training on batch {step}/{total} loss: {loss_value.ToString("0.0000")} {sw.ElapsedMilliseconds}ms.");
+                    sw.Restart();
+                }
 
                 if (step % 100 == 0)
                 {
@@ -242,7 +247,7 @@ namespace TensorFlowNET.Examples
                     var valid_accuracy = sum_accuracy / cnt;
 
                     print($"\nValidation Accuracy = {valid_accuracy.ToString("P")}\n");
-
+                    
                     // Save model
                     if (valid_accuracy > max_accuracy)
                     {

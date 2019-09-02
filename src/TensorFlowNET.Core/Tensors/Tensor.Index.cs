@@ -31,7 +31,7 @@ namespace Tensorflow
         {
             get
             {
-                var slice_spec = slices.Select(x => x == null ? null : new Slice(x)).ToArray();
+                var slice_spec = slices.Select(x => new Slice(x)).ToArray();
                 var begin = new List<int>();
                 var end = new List<int>();
                 var strides = new List<int>();
@@ -43,12 +43,19 @@ namespace Tensorflow
 
                 foreach (var s in slice_spec)
                 {
-                    if(s == null)
+                    if(s.IsNewAxis)
                     {
                         begin.Add(0);
                         end.Add(0);
-                        strides.Add(0);
+                        strides.Add(1);
                         new_axis_mask |= (1 << index);
+                    }
+                    else if (s.IsEllipsis)
+                    {
+                        begin.Add(0);
+                        end.Add(0);
+                        strides.Add(1);
+                        ellipsis_mask |= (1 << index);
                     }
                     else
                     {

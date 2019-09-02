@@ -143,6 +143,14 @@ namespace Tensorflow
             }
         }
 
+        public TensorShape merge_with(TensorShape other)
+        {
+            if (dims.Length == 0)
+                return other;
+
+            throw new NotImplementedException("merge_with");
+        }
+
         public override string ToString()
         {
             return shape.ToString();

@@ -68,6 +68,7 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
                 tf_with(tf.variable_scope(name), delegate
                 {
                     var input_shape = tf.shape(input_data);
+                    output = tf.image.resize_nearest_neighbor(input_data, new Tensor[] { input_shape[1] * 2, input_shape[2] * 2 });
                 });
             }
             else if(method == "deconv")

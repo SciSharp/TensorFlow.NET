@@ -45,6 +45,8 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
 
         Session sess;
         YOLOv3 model;
+        VariableV1[] net_var;
+        Tensor giou_loss, conf_loss, prob_loss;
         #endregion
 
         public bool Run()
@@ -92,6 +94,10 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
             tf_with(tf.name_scope("define_loss"), scope =>
             {
                 model = new YOLOv3(cfg, input_data, trainable);
+                net_var = tf.global_variables();
+                (giou_loss, conf_loss, prob_loss) = model.compute_loss(
+                                                    label_sbbox, label_mbbox, label_lbbox,
+                                                    true_sbboxes, true_mbboxes, true_lbboxes);
             });
 
             tf_with(tf.name_scope("define_weight_decay"), scope =>

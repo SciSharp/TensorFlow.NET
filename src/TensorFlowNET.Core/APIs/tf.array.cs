@@ -23,6 +23,11 @@ namespace Tensorflow
     public partial class tensorflow
     {
         /// <summary>
+        /// A convenient alias for None, useful for indexing arrays.
+        /// </summary>
+        public string newaxis = "";
+
+        /// <summary>
         /// Concatenates tensors along one dimension.
         /// </summary>
         /// <param name="values">A list of `Tensor` objects or a single `Tensor`.</param>
