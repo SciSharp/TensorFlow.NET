@@ -45,6 +45,8 @@ namespace Tensorflow
                     return typeof(bool);
                 case TF_DataType.TF_UINT8:
                     return typeof(byte);
+                case TF_DataType.TF_INT8:
+                    return typeof(sbyte);
                 case TF_DataType.TF_INT64:
                     return typeof(long);
                 case TF_DataType.TF_UINT64:
