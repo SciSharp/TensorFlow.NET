@@ -259,5 +259,26 @@ namespace TensorFlowNET.UnitTest
                 var math = a1 + a2;
             }
         }
+
+        
+        [TestMethod]
+        public void TF_GraphOperationByName()
+        {
+            MultiThreadedUnitTestExecuter.Run(8, Core);
+
+            //the core method
+            void Core(int tid)
+            {
+                tf.peak_default_graph().Should().BeNull();
+                //graph is created automatically to perform create these operations
+                var a1 = tf.constant(new[] {2f}, shape: new[] {1});
+                var a2 = tf.constant(new[] {3f}, shape: new[] {1}, name: "ConstantK");
+                var math = a1 + a2;
+                for (int i = 0; i < 100; i++)
+                {
+                    var op = tf.get_default_graph().OperationByName("ConstantK");
+                }
+            }
+        }
     }
 }
