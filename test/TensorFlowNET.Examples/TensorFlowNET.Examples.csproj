@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Keras.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Colorful.Console" Version="1.2.9" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="SciSharp.TensorFlow.Redist" Version="1.14.0" />
@@ -19,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\KerasNET.Core\Keras.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowDatasets\TensorFlowDatasets.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowText\TensorFlowText.csproj" />

@@ -17,6 +17,7 @@
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -176,7 +177,7 @@ namespace Tensorflow
                 // If 'initial_value' makes use of other variables, make sure we don't
                 // have an issue if these other variables aren't initialized first by
                 // using their initialized_value() method.
-                var _initial_value2 = _try_guard_against_uninitialized_dependencies(_initial_value);
+                var _initial_value2 = _try_guard_against_uninitialized_dependencies(name, _initial_value);
 
                 _initializer_op = gen_state_ops.assign(_variable, _initial_value2, validate_shape).op;
 
@@ -215,9 +216,9 @@ namespace Tensorflow
         /// Attempt to guard against dependencies on uninitialized variables.
         /// </summary>
         /// <param name="initial_value"></param>
-        private Tensor _try_guard_against_uninitialized_dependencies(Tensor initial_value)
+        private Tensor _try_guard_against_uninitialized_dependencies(string name, Tensor initial_value)
         {
-            return _safe_initial_value_from_tensor(initial_value, new Dictionary<string, Operation>());
+            return _safe_initial_value_from_tensor(name, initial_value, op_cache: new Dictionary<string, Operation>());
         }
 
         /// <summary>
@@ -226,19 +227,19 @@ namespace Tensorflow
         /// <param name="tensor">A `Tensor`. The tensor to replace.</param>
         /// <param name="op_cache">A dict mapping operation names to `Operation`s.</param>
         /// <returns>A `Tensor` compatible with `tensor`.</returns>
-        private Tensor _safe_initial_value_from_tensor(Tensor tensor, Dictionary<string, Operation> op_cache)
+        private Tensor _safe_initial_value_from_tensor(string name, Tensor tensor, Dictionary<string, Operation> op_cache)
         {
             var op = tensor.op;
             var new_op = op_cache.ContainsKey(op.name) ? op_cache[op.name] : null;
             if(new_op == null)
             {
-                new_op = _safe_initial_value_from_op(op, op_cache);
+                new_op = _safe_initial_value_from_op(name, op, op_cache);
                 op_cache[op.name] = new_op;
             }
             return new_op.outputs[tensor.value_index];
         }
 
-        private Operation _safe_initial_value_from_op(Operation op, Dictionary<string, Operation> op_cache)
+        private Operation _safe_initial_value_from_op(string name, Operation op, Dictionary<string, Operation> op_cache)
         {
             var op_type = op.node_def.Op;
             switch (op_type)
@@ -250,11 +251,48 @@ namespace Tensorflow
                 case "Variable":
                 case "VariableV2":
                 case "VarHandleOp":
-                    break;
+                    var initialized_value = _find_initialized_value_for_variable(op);
+                    return initialized_value == null ? op : initialized_value.op;
             }
 
             // Recursively build initializer expressions for inputs.
+            var modified = false;
+            var new_op_inputs = new List<Tensor>();
+            foreach (var op_input in op.inputs)
+            {
+                var new_op_input = _safe_initial_value_from_tensor(name, op_input as Tensor, op_cache);
+                new_op_inputs.Add(new_op_input);
+                modified = modified || new_op_input != op_input;
+            }
+
+            // If at least one input was modified, replace the op.
+            if (modified)
+            {
+                var new_op_type = op_type;
+                if (new_op_type == "RefSwitch")
+                    new_op_type = "Switch";
+                var new_op_name = op.node_def.Name + "_" + name;
+                new_op_name = new_op_name.Replace(":", "_");
+                var attrs = new Dictionary<string, AttrValue>();
+                attrs[op.node_def.Name] = op.node_def.Attr.ElementAt(0).Value;
+                /*return op.graph.create_op(new_op_type, new_op_inputs.ToArray(), op._output_types, 
+                    name: new_op_name, attrs: attrs);*/
+            }
             return op;
+        }
+
+        private Operation _find_initialized_value_for_variable(Operation variable_op)
+        {
+            var var_names = new[] { variable_op.node_def.Name, variable_op.node_def.Name + ":0" };
+            foreach(var collection_name in new[]{tf.GraphKeys.GLOBAL_VARIABLES,
+                            tf.GraphKeys.LOCAL_VARIABLES })
+            {
+                foreach (var var in variable_op.graph.get_collection<RefVariable>(collection_name))
+                    if (var_names.Contains(var.name))
+                        return var.initialized_value();
+            }
+
+           return null;
         }
 
         /// <summary>
@@ -318,6 +356,15 @@ namespace Tensorflow
             return array_ops.identity(_variable, name: "read");
         }
 
+        /// <summary>
+        /// Returns the Tensor used as the initial value for the variable.
+        /// </summary>
+        /// <returns></returns>
+        private ITensorOrOperation initial_value()
+        {
+            return _initial_value;
+        }
+
         public Tensor is_variable_initialized(RefVariable variable)
         {
             return state_ops.is_variable_initialized(variable);
@@ -326,10 +373,9 @@ namespace Tensorflow
         public Tensor initialized_value()
         {
             ops.init_scope();
-            throw new NotImplementedException("");
-            /*return control_flow_ops.cond(is_variable_initialized(this),
+            return control_flow_ops.cond(is_variable_initialized(this),
                                    read_value,
-                                   () => initial_value);*/
+                                   initial_value);
         }
     }
 }

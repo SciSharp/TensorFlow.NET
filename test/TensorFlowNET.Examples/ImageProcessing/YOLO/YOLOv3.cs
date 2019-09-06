@@ -23,6 +23,8 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
         Tensor conv_mbbox;
         Tensor conv_sbbox;
         Tensor pred_sbbox;
+        Tensor pred_mbbox;
+        Tensor pred_lbbox;
 
         public YOLOv3(Config cfg_, Tensor input_data_, Tensor trainable_)
         {
@@ -46,12 +48,12 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
 
             tf_with(tf.variable_scope("pred_mbbox"), scope =>
             {
-                pred_sbbox = decode(conv_sbbox, anchors[0], strides[0]);
+                pred_mbbox = decode(conv_mbbox, anchors[1], strides[1]);
             });
 
             tf_with(tf.variable_scope("pred_lbbox"), scope =>
             {
-                pred_sbbox = decode(conv_sbbox, anchors[0], strides[0]);
+                pred_lbbox = decode(conv_lbbox, anchors[2], strides[2]);
             });
         }
 
@@ -144,11 +146,40 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
         {
             Tensor giou_loss = null, conf_loss = null, prob_loss = null;
             (Tensor, Tensor, Tensor) loss_sbbox = (null, null, null);
+            (Tensor, Tensor, Tensor) loss_mbbox = (null, null, null);
+            (Tensor, Tensor, Tensor) loss_lbbox = (null, null, null);
 
             tf_with(tf.name_scope("smaller_box_loss"), delegate
             {
                 loss_sbbox = loss_layer(conv_sbbox, pred_sbbox, label_sbbox, true_sbbox,
                                          anchors: anchors[0], stride: strides[0]);
+            });
+
+            tf_with(tf.name_scope("medium_box_loss"), delegate
+            {
+                loss_mbbox = loss_layer(conv_mbbox, pred_mbbox, label_mbbox, true_mbbox,
+                                         anchors: anchors[1], stride: strides[1]);
+            });
+
+            tf_with(tf.name_scope("bigger_box_loss"), delegate
+            {
+                loss_lbbox = loss_layer(conv_lbbox, pred_lbbox, label_lbbox, true_lbbox,
+                                         anchors: anchors[2], stride: strides[2]);
+            });
+
+            tf_with(tf.name_scope("giou_loss"), delegate
+            {
+                giou_loss = loss_sbbox.Item1 + loss_mbbox.Item1 + loss_lbbox.Item1;
+            });
+
+            tf_with(tf.name_scope("conf_loss"), delegate
+            {
+                conf_loss = loss_sbbox.Item2 + loss_mbbox.Item2 + loss_lbbox.Item2;
+            });
+
+            tf_with(tf.name_scope("prob_loss"), delegate
+            {
+                prob_loss = loss_sbbox.Item3 + loss_mbbox.Item3 + loss_lbbox.Item3;
             });
 
             return (giou_loss, conf_loss, prob_loss);
