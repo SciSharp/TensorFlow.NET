@@ -25,7 +25,7 @@ namespace Tensorflow.Train
                 if (decay.dtype != variable.dtype.as_base_dtype())
                     decay = math_ops.cast(decay, variable.dtype.as_base_dtype());
 
-                return decay;
+                return state_ops.assign_sub(variable, (variable - value) * decay, name: scope);
             });
         }
     }
