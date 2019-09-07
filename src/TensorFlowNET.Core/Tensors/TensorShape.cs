@@ -151,6 +151,15 @@ namespace Tensorflow
             throw new NotImplementedException("merge_with");
         }
 
+        /// <summary>
+        ///     Returns a cloned array from <see cref="dims"/>.
+        /// </summary>
+        public int[] as_list() {
+            if (shape.IsEmpty)
+                throw new ValueError("as_list() is not defined on an unknown TensorShape.");
+            return (int[]) dims.Clone();
+        }
+
         public override string ToString()
         {
             return shape.ToString();
