@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
@@ -162,6 +163,39 @@ namespace Tensorflow
                     kernel_initializer: kernel_initializer);
 
                 return layer.apply(inputs);
+            }
+
+            /// <summary>
+            ///     Flattens an input tensor while preserving the batch axis (axis 0).
+            /// </summary>
+            /// <param name="inputs">Tensor input.</param>
+            /// <param name="name">The name of the layer.</param>
+            /// <param name="data_format">
+            ///     A string, one of `channels_last` (default) or `channels_first`. <br></br>
+            ///     The ordering of the dimensions in the inputs. <br></br>
+            ///     `channels_last` corresponds to inputs with shape <br></br>
+            ///     `(batch, height, width, channels)` while `channels_first` corresponds to <br></br>
+            ///     inputs with shape `(batch, channels, height, width)`. 
+            /// </param>
+            /// <returns></returns>
+            public Tensor flatten(Tensor inputs,
+                string name = null,
+                string data_format = "channels_last")
+            {
+                if (inputs.shape.Length == 0)
+                    throw new ValueError($"Input 0 of layer flatten is incompatible with the layer: : expected min_ndim={1}, found ndim={0}. Full shape received: ()");
+
+                var premutation = new List<int>() {0};
+                if (data_format == "channels_first" && inputs.NDims > 1)
+                {
+                    premutation.AddRange(Binding.range(2, inputs.NDims));
+                    premutation.Add(1);
+                    inputs = array_ops.transpose(inputs, premutation.ToArray());
+                }
+
+                var ret = array_ops.reshape(inputs, new int[] {inputs.shape[0], -1});
+                ret.set_shape(new int[] {inputs.shape[0], -1});
+                return ret;
             }
         }
     }
