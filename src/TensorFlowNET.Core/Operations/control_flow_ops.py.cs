@@ -275,7 +275,7 @@ namespace Tensorflow
         /// </returns>
         public static Tensor[] _SwitchRefOrTensor(Tensor data, Tensor pred, string name = "Switch")
         {
-            data = ops.convert_to_tensor_or_indexed_slices(data, name: "data");
+            data = ops.convert_to_tensor_or_composite(data, name: "data");
             // NOTE(vrv): ops.colocate_with(data, ignore_existing=True) below
             // addresses the following scenario.
             //
@@ -296,9 +296,8 @@ namespace Tensorflow
             {
                 if (data is Tensor)
                 {
-                    // TODO: ref_switch
-                    //if (data.dtype._is_ref_dtype)
-                    //    return control_flow_ops.ref_switch(data, pred, name = name);
+                    if (data.dtype.is_ref_dtype())
+                        return gen_control_flow_ops.ref_switch(data, pred, name: name);
                 }
                 return @switch(data, pred, name: name);
             }            

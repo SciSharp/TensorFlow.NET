@@ -420,7 +420,20 @@ namespace Tensorflow
 
         public List<T> get_collection<T>(string name, string scope = null)
         {
-            return _collections.ContainsKey(name) ? _collections[name] as List<T> : new List<T>();
+            List<T> t = default;
+            var collection = _collections.ContainsKey(name) ? _collections[name] : new List<T>();
+            switch (collection)
+            {
+                case List<VariableV1> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<RefVariable> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                default:
+                    throw new NotImplementedException($"get_collection<{typeof(T).FullName}>");
+            }
+            return t;
         }
 
         public object get_collection_ref(string name)

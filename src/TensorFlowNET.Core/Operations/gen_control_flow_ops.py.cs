@@ -114,6 +114,12 @@ namespace Tensorflow
             return _op;
         }
 
+        public static Tensor[] ref_switch(Tensor data, Tensor pred, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("RefSwitch", name, new { data, pred });
+            return _op.outputs;
+        }
+
         /// <summary>
         /// Forwards `data` to the output port determined by `pred`.
         /// 

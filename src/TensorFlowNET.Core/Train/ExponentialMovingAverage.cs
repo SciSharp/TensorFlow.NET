@@ -13,7 +13,7 @@ namespace Tensorflow.Train
         bool _zero_debias;
         string _name;
         public string name => _name;
-        List<VariableV1> _averages;
+        Dictionary<RefVariable, RefVariable> _averages;
 
         public ExponentialMovingAverage(float decay, int? num_updates = null, bool zero_debias = false,
             string name = "ExponentialMovingAverage")
@@ -22,7 +22,7 @@ namespace Tensorflow.Train
             _num_updates = num_updates;
             _zero_debias = zero_debias;
             _name = name;
-            _averages = new List<VariableV1>();
+            _averages = new Dictionary<RefVariable, RefVariable>();
         }
 
         /// <summary>
@@ -37,16 +37,38 @@ namespace Tensorflow.Train
 
             foreach(var var in var_list)
             {
-                if (!_averages.Contains(var))
+                if (!_averages.ContainsKey(var))
                 {
                     ops.init_scope();
-                    var slot = new SlotCreator();
-                    var.initialized_value();
-                    // var avg = slot.create_zeros_slot
+                    var slot_creator = new SlotCreator();
+                    var value = var.initialized_value();
+                    var avg = slot_creator.create_slot(var,
+                        value,
+                        name,
+                        colocate_with_primary: true);
+                    ops.add_to_collection(ops.GraphKeys.MOVING_AVERAGE_VARIABLES, var);
+                    _averages[var] = avg;
                 }
             }
 
-            throw new NotImplementedException("");
+            return tf_with(ops.name_scope(name), scope =>
+            {
+                var decay = ops.convert_to_tensor(_decay, name: "decay");
+                if (_num_updates.HasValue)
+                {
+                    throw new NotImplementedException("ExponentialMovingAverage.apply");
+                }
+
+                var updates = new List<Tensor>();
+                foreach (var var in var_list)
+                {
+                    var zero_debias = false;// _averages[var] in zero_debias_true
+                    var ama = moving_averages.assign_moving_average(_averages[var], var, decay, zero_debias: zero_debias);
+                    updates.Add(ama);
+                }
+
+                return control_flow_ops.group(updates.ToArray(), name: scope);
+            });
         }
     }
 }

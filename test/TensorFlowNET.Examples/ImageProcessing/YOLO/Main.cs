@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Tensorflow;
 using static Tensorflow.Binding;
@@ -47,6 +48,9 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
         YOLOv3 model;
         VariableV1[] net_var;
         Tensor giou_loss, conf_loss, prob_loss;
+        RefVariable global_step;
+        Tensor learn_rate;
+        Tensor loss;
         #endregion
 
         public bool Run()
@@ -98,11 +102,45 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
                 (giou_loss, conf_loss, prob_loss) = model.compute_loss(
                                                     label_sbbox, label_mbbox, label_lbbox,
                                                     true_sbboxes, true_mbboxes, true_lbboxes);
+                loss = giou_loss + conf_loss + prob_loss;
             });
 
+            Tensor global_step_update = null;
+            tf_with(tf.name_scope("learn_rate"), scope =>
+            {
+                global_step = tf.Variable(1.0, dtype: tf.float64, trainable: false, name: "global_step");
+                var warmup_steps = tf.constant(warmup_periods * steps_per_period,
+                                        dtype: tf.float64, name: "warmup_steps");
+                var train_steps = tf.constant((first_stage_epochs + second_stage_epochs) * steps_per_period,
+                                        dtype: tf.float64, name: "train_steps");
+
+                learn_rate = tf.cond(
+                    pred: global_step < warmup_steps,
+                    true_fn: delegate
+                    {
+                        return global_step / warmup_steps * learn_rate_init;
+                    },
+                    false_fn: delegate
+                    {
+                        return learn_rate_end + 0.5 * (learn_rate_init - learn_rate_end) *
+                            (1 + tf.cos(
+                                (global_step - warmup_steps) / (train_steps - warmup_steps) * Math.PI));
+                    }
+                );
+
+                global_step_update = tf.assign_add(global_step, 1.0f);
+            });
+
+            Operation moving_ave = null;
             tf_with(tf.name_scope("define_weight_decay"), scope =>
             {
-                var moving_ave = tf.train.ExponentialMovingAverage(moving_ave_decay).apply((RefVariable[])tf.trainable_variables());
+                var emv = tf.train.ExponentialMovingAverage(moving_ave_decay);
+                var vars = tf.trainable_variables().Select(x => (RefVariable)x).ToArray();
+                moving_ave = emv.apply(vars);
+            });
+
+            tf_with(tf.name_scope("define_first_stage_train"), scope =>
+            {
             });
 
             return graph;

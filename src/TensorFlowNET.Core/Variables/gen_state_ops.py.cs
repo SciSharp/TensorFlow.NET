@@ -149,7 +149,8 @@ namespace Tensorflow
 
         public static Tensor is_variable_initialized(RefVariable @ref, string name = null)
         {
-            throw new NotImplementedException("");
+            var _op = _op_def_lib._apply_op_helper("IsVariableInitialized", name: name, args: new { @ref });
+            return _op.output;
         }
     }
 }
