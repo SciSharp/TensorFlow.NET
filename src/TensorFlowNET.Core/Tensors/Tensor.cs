@@ -125,6 +125,8 @@ namespace Tensorflow
                     c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
                 else
                     c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
+
+                status.Check(true);
             }
         }
 
