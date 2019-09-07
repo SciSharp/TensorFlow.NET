@@ -273,10 +273,14 @@ namespace Tensorflow
                     new_op_type = "Switch";
                 var new_op_name = op.node_def.Name + "_" + name;
                 new_op_name = new_op_name.Replace(":", "_");
-                var attrs = new Dictionary<string, AttrValue>();
-                attrs[op.node_def.Name] = op.node_def.Attr.ElementAt(0).Value;
-                /*return op.graph.create_op(new_op_type, new_op_inputs.ToArray(), op._output_types, 
-                    name: new_op_name, attrs: attrs);*/
+
+                // Convert attr values to AttrValue protos.
+                var attr_protos = new Dictionary<string, AttrValue>();
+                foreach (var attr_def in op.node_def.Attr)
+                    attr_protos[attr_def.Key] = attr_def.Value;
+
+                return op.graph.create_op(new_op_type, new_op_inputs.ToArray(), op._output_types, 
+                    name: new_op_name, attrs: attr_protos);
             }
             return op;
         }

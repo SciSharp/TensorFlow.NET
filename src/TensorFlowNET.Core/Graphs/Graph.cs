@@ -242,7 +242,7 @@ namespace Tensorflow
                 throw new RuntimeError("Graph is finalized and cannot be modified.");
         }
 
-        public unsafe Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes,
+        public Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes,
             TF_DataType[] input_types = null, string name = null,
             Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)
         {

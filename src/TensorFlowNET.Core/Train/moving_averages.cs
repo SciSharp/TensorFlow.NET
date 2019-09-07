@@ -19,14 +19,14 @@ namespace Tensorflow.Train
         public static Tensor assign_moving_average(RefVariable variable, RefVariable value, Tensor decay,
             bool zero_debias = true, string name = null)
         {
-            tf_with(ops.name_scope(name, "", new { variable, value, decay }), scope =>
+            return tf_with(ops.name_scope(name, "AssignMovingAvg", new { variable, value, decay }), scope =>
             {
                 decay = ops.convert_to_tensor(1.0f - decay, name: "decay");
                 if (decay.dtype != variable.dtype.as_base_dtype())
                     decay = math_ops.cast(decay, variable.dtype.as_base_dtype());
-            });
 
-            throw new NotImplementedException("assign_moving_average");
+                return decay;
+            });
         }
     }
 }

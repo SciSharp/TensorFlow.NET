@@ -49,6 +49,11 @@ namespace Tensorflow.Train
                     ops.add_to_collection(ops.GraphKeys.MOVING_AVERAGE_VARIABLES, var);
                     _averages[var] = avg;
                 }
+                else
+                {
+                    // avg = slot_creator.create_zeros_slot(
+                    throw new NotImplementedException("");
+                }
             }
 
             return tf_with(ops.name_scope(name), scope =>
