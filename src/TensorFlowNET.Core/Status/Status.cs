@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using static Tensorflow.c_api;
 
@@ -52,6 +53,7 @@ namespace Tensorflow
         /// </summary>
         /// <exception cref="TensorflowException">When the returned check is not TF_Code.TF_OK</exception>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerHidden]
         public void Check(bool throwException = false)
         {
             if (Code != TF_Code.TF_OK)
