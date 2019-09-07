@@ -117,7 +117,7 @@ namespace Tensorflow
             /// Key to collect Variable objects that are global (shared across machines).
             /// Default collection for all variables, except local ones.
             /// </summary>
-            public string GLOBAL_VARIABLES = GLOBAL_VARIABLES_;
+            public string GLOBAL_VARIABLES => GLOBAL_VARIABLES_;
 
             public string TRAIN_OP => TRAIN_OP_;
 

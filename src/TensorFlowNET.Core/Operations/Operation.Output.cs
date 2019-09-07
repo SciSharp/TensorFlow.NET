@@ -24,7 +24,7 @@ namespace Tensorflow
     public partial class Operation
     {
         public int NumOutputs => c_api.TF_OperationNumOutputs(_handle);
-        public TF_DataType OutputType(int index) => c_api.TF_OperationOutputType(new TF_Output(_handle, index));
+        public TF_DataType OutputType(int index) => c_api.TF_OperationOutputType(_tf_output(index));
 
         public int OutputListLength(string name)
         {
