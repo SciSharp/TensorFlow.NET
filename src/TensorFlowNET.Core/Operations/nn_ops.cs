@@ -116,6 +116,12 @@ namespace Tensorflow
             return _softmax(logits, gen_nn_ops.log_softmax, axis, name);
         }
 
+        /// <param name="axis">equivalent to `dim`</param>
+        public static Tensor softmax(Tensor logits, int axis = -1, string name = null)
+        {
+            return _softmax(logits, gen_nn_ops.softmax, axis, name);
+        }
+
         public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
         {
             return tf_with(ops.name_scope(name, "LeakyRelu", new { features, alpha }), scope =>
