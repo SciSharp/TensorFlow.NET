@@ -62,6 +62,20 @@ namespace Tensorflow
             _deferred_slot_restorations = new Dictionary<string, object>();
         }
 
+        public Optimizer(Tensor learning_rate, bool use_locking, string name = null)
+        {
+            if (String.IsNullOrEmpty(name))
+                throw new NotImplementedException("Must specify the optimizer name");
+
+            _name = name;
+            _use_locking = use_locking;
+            _lr_t = learning_rate;
+            // Dictionary of slots.
+            _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
+            _non_slot_dict = new Dictionary<string, RefVariable>();
+            _deferred_slot_restorations = new Dictionary<string, object>();
+        }
+
         /// <summary>
         /// Add operations to minimize `loss` by updating `var_list`
         ///  

@@ -41,6 +41,14 @@ namespace Tensorflow.Train
             _epsilon = epsilon;
         }
 
+        public AdamOptimizer(Tensor learning_rate, float beta1 = 0.9f, float beta2 = 0.999f, float epsilon = 1e-8f, bool use_locking = false, string name = "Adam")
+            : base(learning_rate, use_locking, name)
+        {
+            _beta1 = beta1;
+            _beta2 = beta2;
+            _epsilon = epsilon;
+        }
+
         public override Operation _apply_sparse(IndexedSlices grad, RefVariable var)
         {
             return _apply_sparse_shared(grad.values, var, grad.indices, (x, i, v) =>
