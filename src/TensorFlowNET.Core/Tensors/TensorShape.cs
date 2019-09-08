@@ -55,17 +55,6 @@ namespace Tensorflow
             }
         }
 
-        public TensorShape(params int[] dims)
-        {
-            switch (dims.Length)
-            {
-                case 0: shape = new Shape(new int[0]); break;
-                case 1: shape = Shape.Vector((int) dims[0]); break;
-                case 2: shape = Shape.Matrix(dims[0], dims[1]); break;
-                default: shape = new Shape(dims); break;
-            }
-        }
-
         /// <summary>
         ///     An overload that can accept <see cref="Binding.None"/>.
         /// </summary>
