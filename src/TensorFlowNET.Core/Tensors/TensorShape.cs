@@ -109,7 +109,7 @@ namespace Tensorflow
                     intdims[i] = Converts.ToInt32(val);
             }
 
-            switch (dims.Length)
+            switch (intdims.Length)
             {
                 case 0:
                     shape = new Shape(new int[0]);
