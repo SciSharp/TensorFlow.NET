@@ -92,6 +92,9 @@ namespace Tensorflow
                     case long _:
                         arr = dims;
                         break;
+                    case null: //==Binding.None
+                        arr = dims;
+                        break;
                     default:
                         Binding.print(dims);
                         throw new ArgumentException(nameof(dims));
