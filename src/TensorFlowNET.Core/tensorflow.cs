@@ -63,6 +63,11 @@ namespace Tensorflow
             return gen_array_ops.placeholder(dtype, shape, name);
         }
 
+        public unsafe Tensor placeholder(TF_DataType dtype, object[] shape = null, string name = null)
+        {
+            return placeholder(dtype, new TensorShape(shape), name);
+        }
+
         public void enable_eager_execution()
         {
             // contex = new Context();
