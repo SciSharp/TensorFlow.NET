@@ -196,8 +196,7 @@ namespace Tensorflow
                     inputs = array_ops.transpose(inputs, premutation.ToArray());
                 }
 
-                var ret = array_ops.reshape(inputs, new int[] {input_shape[0], -1});
-                ret.shape = ret.shape;
+                var ret = array_ops.reshape(inputs, compute_output_shape(input_shape));
                 //ret.set_shape(compute_output_shape(ret.shape));
                 return ret;
 
