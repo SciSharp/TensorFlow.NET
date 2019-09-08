@@ -33,7 +33,23 @@ namespace Tensorflow
         /// <summary>
         ///     Returns the size this shape represents.
         /// </summary>
-        public int size => shape.Size;
+        public int size
+        {
+            get
+            {
+                var dims = shape.Dimensions;
+                var computed = 1;
+                for (int i = 0; i < dims.Length; i++)
+                {
+                    var val = dims[i];
+                    if (val <= 0)
+                        continue;
+                    computed *= val;
+                }
+
+                return computed;
+            }
+        }
 
         public TensorShape(TensorShapeProto proto)
         {
