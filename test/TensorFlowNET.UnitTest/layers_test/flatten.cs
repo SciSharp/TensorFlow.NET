@@ -36,5 +36,14 @@ namespace TensorFlowNET.UnitTest.layers_test
             var input = tf.placeholder(TF_DataType.TF_INT32, new TensorShape());
             new Action(() => sess.run(tf.layers.flatten(input), (input, NDArray.Scalar(6)))).Should().Throw<ValueError>();
         }
+
+        [TestMethod]
+        public void Case4()
+        {
+            var sess = tf.Session().as_default();
+
+            var input = tf.placeholder(TF_DataType.TF_INT32, new TensorShape(3, 4, None, 1, 2));
+            sess.run(tf.layers.flatten(input), (input, np.arange(3 * 4 * 3 * 1 * 2).reshape(3, 4, 3, 1, 2))).Should().BeShaped(3, 24);
+        }
     }
 }
