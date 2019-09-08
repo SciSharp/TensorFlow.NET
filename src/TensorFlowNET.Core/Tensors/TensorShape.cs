@@ -55,9 +55,6 @@ namespace Tensorflow
             }
         }
 
-        /// <summary>
-        ///     An overload that can accept <see cref="Binding.None"/>.
-        /// </summary>
         public TensorShape(params object[] dims)
         {
             var intdims = new int[dims.Length];
