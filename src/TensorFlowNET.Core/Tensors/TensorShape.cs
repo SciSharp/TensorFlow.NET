@@ -232,6 +232,8 @@ namespace Tensorflow
         public static implicit operator TensorShape(Shape shape) => new TensorShape((int[]) shape.Dimensions.Clone());
         public static implicit operator Shape(TensorShape shape) => new Shape((int[]) shape.dims.Clone());
         
+        public static implicit operator TensorShape(object[] dims) => new TensorShape(dims);        
+
         public static implicit operator int[](TensorShape shape) => (int[])shape.dims.Clone(); //we clone to avoid any changes
         public static implicit operator TensorShape(int[] dims) => new TensorShape(dims);
 
