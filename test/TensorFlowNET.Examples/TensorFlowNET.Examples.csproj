@@ -28,4 +28,8 @@
     <ProjectReference Include="..\..\src\TensorFlowText\TensorFlowText.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowHub\TensorFlowHub.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ImageProcessing\ObjectDetection\" />
+  </ItemGroup>
 </Project>

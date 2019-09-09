@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyName>TensorFlow.Models</AssemblyName>
+    <RootNamespace>Tensorflow.Models</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
+  </ItemGroup>
+
+</Project>
