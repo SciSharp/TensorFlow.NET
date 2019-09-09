@@ -146,6 +146,20 @@ namespace Tensorflow
                 return layer.apply(inputs);
             }
 
+            /// <summary>
+            ///     Densely-connected layer class. aka fully-connected<br></br>
+            ///     `outputs = activation(inputs * kernel + bias)`
+            /// </summary>
+            /// <param name="inputs"></param>
+            /// <param name="units">Python integer, dimensionality of the output space.</param>
+            /// <param name="activation"></param>
+            /// <param name="use_bias">Boolean, whether the layer uses a bias.</param>
+            /// <param name="kernel_initializer"></param>
+            /// <param name="bias_initializer"></param>
+            /// <param name="trainable"></param>
+            /// <param name="name"></param>
+            /// <param name="reuse"></param>
+            /// <returns></returns>
             public Tensor dense(Tensor inputs,
                 int units,
                 IActivation activation = null,
@@ -162,7 +176,8 @@ namespace Tensorflow
                 var layer = new Dense(units, activation, 
                     use_bias: use_bias,
                     bias_initializer: bias_initializer,
-                    kernel_initializer: kernel_initializer);
+                    kernel_initializer: kernel_initializer, 
+                    trainable: trainable);
 
                 return layer.apply(inputs);
             }

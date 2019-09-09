@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Operations;
+
 namespace Tensorflow
 {
     public partial class tensorflow
@@ -211,6 +213,36 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
             => gen_math_ops._clip_by_value(t, clip_value_min, clip_value_max);
+        
+        /// <summary>
+        ///    Clips tensor values to a specified min and max.
+        /// </summary>
+        /// <param name="t">
+        ///    A <c>Tensor</c>.
+        /// </param>
+        /// <param name="clip_value_min">
+        ///    A 0-D (scalar) <c>Tensor</c>, or a <c>Tensor</c> with the same shape
+        ///    as <c>t</c>. The minimum value to clip by.
+        /// </param>
+        /// <param name="clip_value_max">
+        ///    A 0-D (scalar) <c>Tensor</c>, or a <c>Tensor</c> with the same shape
+        ///    as <c>t</c>. The maximum value to clip by.
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'ClipByValue'.
+        /// </param>
+        /// <returns>
+        ///    A clipped <c>Tensor</c> with the same shape as input 't'.
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    Given a tensor <c>t</c>, this operation returns a tensor of the same type and
+        ///    shape as <c>t</c> with its values clipped to <c>clip_value_min</c> and <c>clip_value_max</c>.
+        ///    Any values less than <c>clip_value_min</c> are set to <c>clip_value_min</c>. Any values
+        ///    greater than <c>clip_value_max</c> are set to <c>clip_value_max</c>.
+        /// </remarks>
+        public Tensor clip_by_value (Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = "ClipByValue") 
+            => gen_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
 
         public Tensor sub(Tensor a, Tensor b) 
             => gen_math_ops.sub(a, b);
