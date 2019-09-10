@@ -16,6 +16,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 
@@ -40,6 +41,7 @@ namespace Tensorflow
             return this;
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public static Session LoadFromSavedModel(string path)
         {
             lock (Locks.ProcessWide)
