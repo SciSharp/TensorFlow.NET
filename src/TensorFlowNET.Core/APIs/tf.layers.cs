@@ -15,6 +15,8 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using System.Linq;
+using NumSharp;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
@@ -144,6 +146,20 @@ namespace Tensorflow
                 return layer.apply(inputs);
             }
 
+            /// <summary>
+            ///     Densely-connected layer class. aka fully-connected<br></br>
+            ///     `outputs = activation(inputs * kernel + bias)`
+            /// </summary>
+            /// <param name="inputs"></param>
+            /// <param name="units">Python integer, dimensionality of the output space.</param>
+            /// <param name="activation"></param>
+            /// <param name="use_bias">Boolean, whether the layer uses a bias.</param>
+            /// <param name="kernel_initializer"></param>
+            /// <param name="bias_initializer"></param>
+            /// <param name="trainable"></param>
+            /// <param name="name"></param>
+            /// <param name="reuse"></param>
+            /// <returns></returns>
             public Tensor dense(Tensor inputs,
                 int units,
                 IActivation activation = null,
@@ -160,7 +176,8 @@ namespace Tensorflow
                 var layer = new Dense(units, activation, 
                     use_bias: use_bias,
                     bias_initializer: bias_initializer,
-                    kernel_initializer: kernel_initializer);
+                    kernel_initializer: kernel_initializer, 
+                    trainable: trainable);
 
                 return layer.apply(inputs);
             }
@@ -182,6 +199,7 @@ namespace Tensorflow
                 string name = null,
                 string data_format = "channels_last")
             {
+                var input_shape = inputs.shape;
                 if (inputs.shape.Length == 0)
                     throw new ValueError($"Input 0 of layer flatten is incompatible with the layer: : expected min_ndim={1}, found ndim={0}. Full shape received: ()");
 
@@ -193,9 +211,24 @@ namespace Tensorflow
                     inputs = array_ops.transpose(inputs, premutation.ToArray());
                 }
 
-                var ret = array_ops.reshape(inputs, new int[] {inputs.shape[0], -1});
-                ret.set_shape(new int[] {inputs.shape[0], -1});
+                var ret = array_ops.reshape(inputs, compute_output_shape(input_shape));
+                //ret.set_shape(compute_output_shape(ret.shape));
                 return ret;
+
+                int[] compute_output_shape(int[] inputshape)
+                {
+                    if (inputshape == null || inputshape.Length == 0)
+                        inputshape = new int[] {1};
+
+                    if (inputshape.Skip(1).All(d => d > 0))
+                    {
+                        int[] output_shape = new int[2];
+                        output_shape[0] = inputshape[0];
+                        output_shape[1] = inputshape.Skip(1).Aggregate(1, (acc, rhs) => acc*rhs); //calculate size of all the rest dimensions
+                        return output_shape;
+                    } else
+                        return new int[] {inputshape[0], -1}; //-1 == Binding.None
+                }
             }
         }
     }

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using NumSharp.Utilities;
 
 namespace Tensorflow
 {
@@ -29,9 +30,37 @@ namespace Tensorflow
     /// </summary>
     public static partial class Binding
     {
+        private static string _tostring(object obj)
+        {
+            switch (obj)
+            {
+                case NDArray nd:
+                    return nd.ToString(false);
+                case Array arr:
+                    if (arr.Rank!=1 || arr.GetType().GetElementType()?.IsArray == true)
+                        arr = Arrays.Flatten(arr);
+                    var objs = toObjectArray(arr);
+                    return $"[{string.Join(", ", objs.Select(_tostring))}]";
+                default:
+                    return obj?.ToString() ?? "null";
+            }
+
+            object[] toObjectArray(Array arr)
+            {
+                var len = arr.LongLength;
+                var ret = new object[len];
+                for (long i = 0; i < len; i++)
+                {
+                    ret[i] = arr.GetValue(i);
+                }
+
+                return ret;
+            }
+        }
+
         public static void print(object obj)
         {
-            Console.WriteLine(obj.ToString());
+            Console.WriteLine(_tostring(obj));
         }
 
         public static int len(object a)
