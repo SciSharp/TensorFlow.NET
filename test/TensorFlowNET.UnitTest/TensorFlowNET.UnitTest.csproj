@@ -42,4 +42,10 @@
     <ProjectReference Include="..\TensorFlowNET.Examples\TensorFlowNET.Examples.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="model\saved_model.pb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
