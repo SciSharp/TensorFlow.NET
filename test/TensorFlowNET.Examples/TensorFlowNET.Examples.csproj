@@ -25,11 +25,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TensorFlowDatasets\TensorFlowDatasets.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowNET.Models\TensorFlowNET.Models.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowText\TensorFlowText.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowHub\TensorFlowHub.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ImageProcessing\ObjectDetection\" />
   </ItemGroup>
 </Project>

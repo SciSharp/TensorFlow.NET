@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Tensorflow;
-using Tensorflow.Estimator;
+using Tensorflow.Estimators;
 using TensorFlowNET.Examples.Utility;
 using static Tensorflow.Binding;
 using static TensorFlowNET.Examples.DataHelpers;

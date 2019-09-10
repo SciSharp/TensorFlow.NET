@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Tensorflow.Estimator
+namespace Tensorflow.Estimators
 {
     public class HyperParams
     {

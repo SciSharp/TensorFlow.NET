@@ -68,5 +68,6 @@ Docs: https://tensorflownet.readthedocs.io</Description>
   <ItemGroup>
     <Folder Include="Distribute\" />
     <Folder Include="Keras\Initializers\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>
