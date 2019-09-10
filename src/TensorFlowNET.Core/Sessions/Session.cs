@@ -65,7 +65,7 @@ namespace Tensorflow
                 // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
                 status.Check(true);
 
-                return new Session(sess, g: new Graph(graph).as_default()).as_default();
+                return new Session(sess, g: new Graph(graph)).as_default();
             }
         }
 
