@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -40,29 +41,32 @@ namespace Tensorflow
 
         public static Session LoadFromSavedModel(string path)
         {
-            var graph = c_api.TF_NewGraph();
-            var status = new Status();
-            var opt = new SessionOptions();
+            lock (Locks.ProcessWide)
+            {
+                var graph = c_api.TF_NewGraph();
+                var status = new Status();
+                var opt = new SessionOptions();
 
-            var tags = new string[] { "serve" };
-            var buffer = new TF_Buffer();
+                var tags = new string[] {"serve"};
+                var buffer = new TF_Buffer();
 
-            var sess = c_api.TF_LoadSessionFromSavedModel(opt,
-                IntPtr.Zero,
-                path,
-                tags,
-                tags.Length,
-                graph,
-                ref buffer,
-                status);
+                var sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                    IntPtr.Zero,
+                    path,
+                    tags,
+                    tags.Length,
+                    graph,
+                    ref buffer,
+                    status);
 
-            // load graph bytes
-            // var data = new byte[buffer.length];
-            // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
-            // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
-            status.Check(true);
+                // load graph bytes
+                // var data = new byte[buffer.length];
+                // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
+                // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
+                status.Check(true);
 
-            return new Session(sess, g: new Graph(graph).as_default());
+                return new Session(sess, g: new Graph(graph).as_default()).as_default();
+            }
         }
 
         public static implicit operator IntPtr(Session session) => session._handle;
