@@ -8,8 +8,8 @@ namespace Tensorflow.Estimators
     {
         public static void train_and_evaluate()
         {
-            var executor = new _TrainingExecutor();
-            executor.run();
+            //var executor = new _TrainingExecutor();
+            //executor.run();
         }
     }
 }

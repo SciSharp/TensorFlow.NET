@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Google.Protobuf;
 using System.IO;
 using Tensorflow.Util;
 
@@ -37,7 +38,9 @@ namespace Tensorflow
             using (var buffer = ToGraphDef(status))
             {
                 status.Check(true);
-                def = GraphDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+                // limit size to 250M, recursion to max 100
+                var inputStream = CodedInputStream.CreateWithLimits(buffer.MemoryBlock.Stream(), 250 * 1024 * 1024, 100);
+                def = GraphDef.Parser.ParseFrom(inputStream);
             }
 
             // Strip the experimental library field iff it's empty.
