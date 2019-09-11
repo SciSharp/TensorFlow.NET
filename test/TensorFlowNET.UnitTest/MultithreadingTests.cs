@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp;
 using Tensorflow;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
@@ -260,7 +263,7 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
-        
+
         [TestMethod]
         public void TF_GraphOperationByName()
         {
@@ -277,6 +280,47 @@ namespace TensorFlowNET.UnitTest
                 for (int i = 0; i < 100; i++)
                 {
                     var op = tf.get_default_graph().OperationByName("ConstantK");
+                }
+            }
+        }
+
+        private static string modelPath = "./model/";
+
+        [TestMethod]
+        public void TF_GraphOperationByName_FromModel()
+        {
+            MultiThreadedUnitTestExecuter.Run(8, Core);
+
+            //the core method
+            void Core(int tid)
+            {
+                Console.WriteLine();
+                for (int j = 0; j < 100; j++)
+                {
+                    var sess = Session.LoadFromSavedModel(modelPath).as_default();
+                    var inputs = new[] {"sp", "fuel"};
+
+                    var inp = inputs.Select(name => sess.graph.OperationByName(name).output).ToArray();
+                    var outp = sess.graph.OperationByName("softmax_tensor").output;
+
+                    for (var i = 0; i < 100; i++)
+                    {
+                        {
+                            var data = new float[96];
+                            FeedItem[] feeds = new FeedItem[2];
+
+                            for (int f = 0; f < 2; f++)
+                                feeds[f] = new FeedItem(inp[f], new NDArray(data));
+
+                            try
+                            {
+                                sess.run(outp, feeds);
+                            } catch (Exception ex)
+                            {
+                                Console.WriteLine(ex);
+                            }
+                        }
+                    }
                 }
             }
         }

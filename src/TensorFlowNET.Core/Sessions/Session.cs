@@ -15,6 +15,8 @@
 ******************************************************************************/
 
 using System;
+using System.IO;
+using System.Runtime.CompilerServices;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 
@@ -39,6 +41,7 @@ namespace Tensorflow
             return this;
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public static Session LoadFromSavedModel(string path)
         {
             lock (Locks.ProcessWide)
@@ -50,20 +53,36 @@ namespace Tensorflow
                 var tags = new string[] {"serve"};
                 var buffer = new TF_Buffer();
 
-                var sess = c_api.TF_LoadSessionFromSavedModel(opt,
-                    IntPtr.Zero,
-                    path,
-                    tags,
-                    tags.Length,
-                    graph,
-                    ref buffer,
-                    status);
+                IntPtr sess;
+                try
+                {
+                    sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                        IntPtr.Zero,
+                        path,
+                        tags,
+                        tags.Length,
+                        graph,
+                        ref buffer,
+                        status);
+                    status.Check(true);
+                } catch (TensorflowException ex) when (ex.Message.Contains("Could not find SavedModel"))
+                {
+                    status = new Status();
+                    sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                        IntPtr.Zero,
+                        Path.GetFullPath(path),
+                        tags,
+                        tags.Length,
+                        graph,
+                        ref buffer,
+                        status);
+                    status.Check(true);
+                }
 
                 // load graph bytes
                 // var data = new byte[buffer.length];
                 // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
                 // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
-                status.Check(true);
 
                 return new Session(sess, g: new Graph(graph)).as_default();
             }
