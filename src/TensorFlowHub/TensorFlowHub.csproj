@@ -17,6 +17,6 @@
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NumSharp" Version="0.20.1" />
+    <PackageReference Include="NumSharp" Version="0.20.2" />
   </ItemGroup>
 </Project>
