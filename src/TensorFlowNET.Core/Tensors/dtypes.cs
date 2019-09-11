@@ -16,6 +16,7 @@
 
 using System;
 using System.Numerics;
+using NumSharp;
 using NumSharp.Backends;
 
 namespace Tensorflow
