@@ -4,13 +4,18 @@ using System.Text;
 using static Tensorflow.Binding;
 using Tensorflow.Estimators;
 using System.Linq;
+using Tensorflow.Contrib.Train;
 
 namespace Tensorflow.Models.ObjectDetection
 {
     public class ModelLib
     {
         public TrainAndEvalDict create_estimator_and_inputs(RunConfig run_config,
-            int train_steps = 1)
+            HParams hparams = null,
+            string pipeline_config_path = null,
+            int train_steps = 0,
+            int sample_1_of_n_eval_examples = 0,
+            int sample_1_of_n_eval_on_train_examples = 1)
         {
             var estimator = tf.estimator.Estimator(config: run_config);
 

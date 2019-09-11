@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Tensorflow;
+using Tensorflow.Contrib.Train;
 using Tensorflow.Estimators;
 using Tensorflow.Models.ObjectDetection;
 using static Tensorflow.Binding;
@@ -18,12 +19,23 @@ namespace TensorFlowNET.Examples.ImageProcessing.ObjectDetection
 
         ModelLib model_lib = new ModelLib();
 
+        string model_dir = "D:/Projects/PythonLab/tf-models/research/object_detection/models/model";
+        string pipeline_config_path = "D:/Projects/PythonLab/tf-models/research/object_detection/models/model/faster_rcnn_resnet101_voc07.config";
+        int num_train_steps = 1;
+        int sample_1_of_n_eval_examples = 1;
+        int sample_1_of_n_eval_on_train_examples = 5;
+
         public bool Run()
         {
-            string model_dir = "D:/Projects/PythonLab/tf-models/research/object_detection/models/model";
-
             var config = tf.estimator.RunConfig(model_dir: model_dir);
-            var train_and_eval_dict = model_lib.create_estimator_and_inputs(run_config: config);
+
+            var train_and_eval_dict = model_lib.create_estimator_and_inputs(run_config: config,
+                hparams: new HParams(true),
+                pipeline_config_path: pipeline_config_path,
+                train_steps: num_train_steps,
+                sample_1_of_n_eval_examples: sample_1_of_n_eval_examples,
+                sample_1_of_n_eval_on_train_examples: sample_1_of_n_eval_on_train_examples);
+
             var estimator = train_and_eval_dict.estimator;
             var train_input_fn = train_and_eval_dict.train_input_fn;
             var eval_input_fns = train_and_eval_dict.eval_input_fns;
