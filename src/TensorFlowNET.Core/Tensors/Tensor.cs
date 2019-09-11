@@ -261,31 +261,31 @@ namespace Tensorflow
 		                switch (dtype.as_numpy_dtype().GetTypeCode())
 		                {
 			                %foreach supported_dtypes,supported_dtypes_lowercase%
-			                case NPTypeCode.#1: return new T[] {Converts.ChangeType<T>(*(#2*) buffer, NPTypeCode.#1)};
+			                case NPTypeCode.#1: return new T[] {Converts.ChangeType<T>(*(#2*) buffer)};
 			                %
-			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this, NPTypeCode.String)};
+			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this)};
 			                default:
 				                throw new NotSupportedException();
 		                }
 		                #endregion
 #else
 		                #region Compute
-		                switch (dtype.as_numpy_dtype()?.GetTypeCode())
+		                switch (dtype.as_numpy_dtype().GetTypeCode())
 		                {
-			                case NPTypeCode.Boolean: return new T[] {Converts.ChangeType<T>(*(bool*) buffer, NPTypeCode.Boolean)};
-			                case NPTypeCode.Byte: return new T[] {Converts.ChangeType<T>(*(byte*) buffer, NPTypeCode.Byte)};
-			                case NPTypeCode.Int16: return new T[] {Converts.ChangeType<T>(*(short*) buffer, NPTypeCode.Int16)};
-			                case NPTypeCode.UInt16: return new T[] {Converts.ChangeType<T>(*(ushort*) buffer, NPTypeCode.UInt16)};
-			                case NPTypeCode.Int32: return new T[] {Converts.ChangeType<T>(*(int*) buffer, NPTypeCode.Int32)};
-			                case NPTypeCode.UInt32: return new T[] {Converts.ChangeType<T>(*(uint*) buffer, NPTypeCode.UInt32)};
-			                case NPTypeCode.Int64: return new T[] {Converts.ChangeType<T>(*(long*) buffer, NPTypeCode.Int64)};
-			                case NPTypeCode.UInt64: return new T[] {Converts.ChangeType<T>(*(ulong*) buffer, NPTypeCode.UInt64)};
-			                case NPTypeCode.Char: return new T[] {Converts.ChangeType<T>(*(char*) buffer, NPTypeCode.Char)};
-			                case NPTypeCode.Double: return new T[] {Converts.ChangeType<T>(*(double*) buffer, NPTypeCode.Double)};
-			                case NPTypeCode.Single: return new T[] {Converts.ChangeType<T>(*(float*) buffer, NPTypeCode.Single)};
-			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this, NPTypeCode.String)};
+			                case NPTypeCode.Boolean: return new T[] {Converts.ChangeType<T>(*(bool*) buffer)};
+			                case NPTypeCode.Byte: return new T[] {Converts.ChangeType<T>(*(byte*) buffer)};
+			                case NPTypeCode.Int16: return new T[] {Converts.ChangeType<T>(*(short*) buffer)};
+			                case NPTypeCode.UInt16: return new T[] {Converts.ChangeType<T>(*(ushort*) buffer)};
+			                case NPTypeCode.Int32: return new T[] {Converts.ChangeType<T>(*(int*) buffer)};
+			                case NPTypeCode.UInt32: return new T[] {Converts.ChangeType<T>(*(uint*) buffer)};
+			                case NPTypeCode.Int64: return new T[] {Converts.ChangeType<T>(*(long*) buffer)};
+			                case NPTypeCode.UInt64: return new T[] {Converts.ChangeType<T>(*(ulong*) buffer)};
+			                case NPTypeCode.Char: return new T[] {Converts.ChangeType<T>(*(char*) buffer)};
+			                case NPTypeCode.Double: return new T[] {Converts.ChangeType<T>(*(double*) buffer)};
+			                case NPTypeCode.Single: return new T[] {Converts.ChangeType<T>(*(float*) buffer)};
+			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this)};
 			                default:
-                                throw new NotSupportedException();
+				                throw new NotSupportedException();
 		                }
 		                #endregion
 #endif
