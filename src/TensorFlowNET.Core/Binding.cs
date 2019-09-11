@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Text;
 
 namespace Tensorflow
@@ -17,6 +18,7 @@ namespace Tensorflow
         /// <summary>
         /// Used for TensorShape None
         /// </summary>
+        /// 
         public static readonly int Unknown = -1;
     }
 }

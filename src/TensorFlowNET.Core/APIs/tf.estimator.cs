@@ -32,8 +32,25 @@ namespace Tensorflow
             public RunConfig RunConfig(string model_dir)
                 => new RunConfig(model_dir: model_dir);
 
-            public void train_and_evaluate()
-                => Training.train_and_evaluate();
+            public void train_and_evaluate(Estimator estimator, TrainSpec train_spec, EvalSpec eval_spec)
+                => Training.train_and_evaluate(estimator: estimator, train_spec: train_spec, eval_spec: eval_spec);
+
+            public TrainSpec TrainSpec(Action input_fn, int max_steps)
+                => new TrainSpec(input_fn: input_fn, max_steps: max_steps);
+
+            /// <summary>
+            /// Create an `Exporter` to use with `tf.estimator.EvalSpec`.
+            /// </summary>
+            /// <param name="name"></param>
+            /// <param name="serving_input_receiver_fn"></param>
+            /// <param name="as_text"></param>
+            /// <returns></returns>
+            public FinalExporter FinalExporter(string name, Action serving_input_receiver_fn, bool as_text = false)
+                => new FinalExporter(name: name, serving_input_receiver_fn: serving_input_receiver_fn, 
+                    as_text: as_text);
+
+            public EvalSpec EvalSpec(string name, Action input_fn, FinalExporter exporters)
+                => new EvalSpec(name: name, input_fn: input_fn, exporters: exporters);
         }
     }
 }
