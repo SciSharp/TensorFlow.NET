@@ -18,7 +18,7 @@ namespace Tensorflow.Estimators
 
         string _model_dir;
 
-        public Estimator(RunConfig config)
+        public Estimator(Action model_fn, RunConfig config)
         {
             _config = config;
             _model_dir = _config.model_dir;

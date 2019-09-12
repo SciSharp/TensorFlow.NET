@@ -289,6 +289,9 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void TF_GraphOperationByName_FromModel()
         {
+            if (!Directory.Exists(modelPath))
+                return;
+
             MultiThreadedUnitTestExecuter.Run(8, Core);
 
             //the core method

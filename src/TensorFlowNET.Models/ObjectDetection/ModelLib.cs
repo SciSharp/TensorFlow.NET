@@ -18,18 +18,20 @@ namespace Tensorflow.Models.ObjectDetection
             int sample_1_of_n_eval_examples = 0,
             int sample_1_of_n_eval_on_train_examples = 1)
         {
-            var estimator = tf.estimator.Estimator(config: run_config);
-
             var config = ConfigUtil.get_configs_from_pipeline_file(pipeline_config_path);
             var eval_input_configs = config.EvalInputReader;
 
             var eval_input_fns = new Action[eval_input_configs.Count];
+            var eval_input_names = eval_input_configs.Select(eval_input_config => eval_input_config.Name).ToArray();
+            Action model_fn = () => { };
+            var estimator = tf.estimator.Estimator(model_fn: model_fn, config: run_config);
 
             return new TrainAndEvalDict
             {
                 estimator = estimator,
                 train_steps = train_steps,
-                eval_input_fns = eval_input_fns
+                eval_input_fns = eval_input_fns,
+                eval_input_names = eval_input_names
             };
         }
 

@@ -26,8 +26,8 @@ namespace Tensorflow
 
         public class Estimator_Internal
         {
-            public Estimator Estimator(RunConfig config) 
-                => new Estimator(config: config);
+            public Estimator Estimator(Action model_fn, RunConfig config) 
+                => new Estimator(model_fn: model_fn, config: config);
 
             public RunConfig RunConfig(string model_dir)
                 => new RunConfig(model_dir: model_dir);

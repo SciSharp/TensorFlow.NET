@@ -53,7 +53,6 @@ namespace TensorFlowNET.UnitTest.Estimators
             Assert.IsNull(config.tf_random_seed);
             Assert.AreEqual(100, config.save_summary_steps);
             Assert.AreEqual(600, config.save_checkpoints_secs);
-            Assert.IsNull(config.save_checkpoints_steps);
             Assert.AreEqual(5, config.keep_checkpoint_max);
             Assert.AreEqual(10000, config.keep_checkpoint_every_n_hours);
             Assert.IsNull(config.service);

@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.11.3</Version>
+    <Version>0.11.4</Version>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -17,7 +17,7 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.11.3.0</AssemblyVersion>
+    <AssemblyVersion>0.11.4.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.10.0:
 1. Upgrade NumSharp to v0.20.
 2. Add DisposableObject class to manage object lifetime.
@@ -30,7 +30,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 9. MultiThread is safe.
 10. Support n-dim indexing for tensor.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <FileVersion>0.11.3.0</FileVersion>
+    <FileVersion>0.11.4.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
