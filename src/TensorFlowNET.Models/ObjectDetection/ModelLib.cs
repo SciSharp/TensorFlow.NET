@@ -5,6 +5,7 @@ using static Tensorflow.Binding;
 using Tensorflow.Estimators;
 using System.Linq;
 using Tensorflow.Contrib.Train;
+using Tensorflow.Models.ObjectDetection.Utils;
 
 namespace Tensorflow.Models.ObjectDetection
 {
@@ -19,11 +20,16 @@ namespace Tensorflow.Models.ObjectDetection
         {
             var estimator = tf.estimator.Estimator(config: run_config);
 
+            var config = ConfigUtil.get_configs_from_pipeline_file(pipeline_config_path);
+            var eval_input_configs = config.EvalInputReader;
+
+            var eval_input_fns = new Action[eval_input_configs.Count];
+
             return new TrainAndEvalDict
             {
                 estimator = estimator,
                 train_steps = train_steps,
-                eval_input_fns = new Action[0]
+                eval_input_fns = eval_input_fns
             };
         }
 

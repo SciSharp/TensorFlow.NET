@@ -43,13 +43,12 @@ namespace Tensorflow.Estimators
 
         #endregion
 
-        private static readonly object _USE_DEFAULT = new object();
         public string model_dir { get; set; }
         public ConfigProto session_config { get; set; }
         public int? tf_random_seed { get; set; }
         public int save_summary_steps { get; set; } = 100;
-        public object save_checkpoints_steps { get; set; } = _USE_DEFAULT;
-        public object save_checkpoints_secs { get; set; } = _USE_DEFAULT;
+        public int save_checkpoints_steps { get; set; }
+        public int save_checkpoints_secs { get; set; } = 600;
         public int keep_checkpoint_max { get; set; } = 5;        
         public int keep_checkpoint_every_n_hours { get; set; } = 10000;         
         public int log_step_count_steps{ get; set; } = 100;
@@ -97,23 +96,6 @@ namespace Tensorflow.Estimators
 
         private void Initialize()
         {
-            if (this.save_checkpoints_steps == _USE_DEFAULT && this.save_checkpoints_secs == _USE_DEFAULT)
-            {
-                this.save_checkpoints_steps = null;
-                this.save_checkpoints_secs = 600;
-            }
-            else if (this.save_checkpoints_secs == _USE_DEFAULT)
-            {
-                this.save_checkpoints_secs = null;
-            }
-            else if (this.save_checkpoints_steps == _USE_DEFAULT)
-            {
-                this.save_checkpoints_steps = null;
-            }
-            else if (this.save_checkpoints_steps != null && save_checkpoints_secs != null)
-            {
-                throw new Exception(_SAVE_CKPT_ERR);
-            }
         }
     }
 }

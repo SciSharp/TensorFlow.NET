@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ObjectDetection\Models\faster_rcnn_resnet101_voc07.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ObjectDetection\Models\faster_rcnn_resnet101_voc07.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
   </ItemGroup>
 

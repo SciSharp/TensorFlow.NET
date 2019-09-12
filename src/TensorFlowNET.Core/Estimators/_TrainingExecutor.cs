@@ -16,6 +16,8 @@ namespace Tensorflow.Estimators
         public _TrainingExecutor(Estimator estimator, TrainSpec train_spec, EvalSpec eval_spec)
         {
             _estimator = estimator;
+            _train_spec = train_spec;
+            _eval_spec = eval_spec;
         }
 
         public void run()
