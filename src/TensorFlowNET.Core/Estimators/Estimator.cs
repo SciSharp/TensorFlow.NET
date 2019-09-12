@@ -11,7 +11,11 @@ namespace Tensorflow.Estimators
     public class Estimator : IObjectLife
     {
         RunConfig _config;
+        public RunConfig config => _config;
+
         ConfigProto _session_config;
+        public ConfigProto session_config => _session_config;
+
         string _model_dir;
 
         public Estimator(RunConfig config)

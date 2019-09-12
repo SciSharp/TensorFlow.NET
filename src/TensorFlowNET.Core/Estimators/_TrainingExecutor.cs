@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Tensorflow.Estimators
 {
-    public class _TrainingExecutor
+    /// <summary>
+    /// The executor to run `Estimator` training and evaluation.
+    /// </summary>
+    internal class _TrainingExecutor
     {
         Estimator _estimator;
         EvalSpec _eval_spec;
@@ -17,11 +20,20 @@ namespace Tensorflow.Estimators
 
         public void run()
         {
+            var config = _estimator.config;
+            Console.WriteLine("Running training and evaluation locally (non-distributed).");
             run_local();
         }
 
+        /// <summary>
+        /// Runs training and evaluation locally (non-distributed).
+        /// </summary>
         private void run_local()
         {
+            Console.WriteLine("Start train and evaluate loop. The evaluate will happen " +
+                "after every checkpoint. Checkpoint frequency is determined " +
+                $"based on RunConfig arguments: save_checkpoints_steps {_estimator.config.save_checkpoints_steps} or " +
+                $"save_checkpoints_secs {_estimator.config.save_checkpoints_secs}.");
             var evaluator = new _Evaluator(_estimator, _eval_spec, _train_spec.max_steps);
             /*_estimator.train(input_fn: _train_spec.input_fn,
                  max_steps: _train_spec.max_steps,
