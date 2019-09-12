@@ -44,10 +44,9 @@ namespace Tensorflow.Estimators
         #endregion
 
         private static readonly object _USE_DEFAULT = new object();
-
         public string model_dir { get; set; }
         public ConfigProto session_config { get; set; }
-        public int tf_random_seed { get; set; }        
+        public int? tf_random_seed { get; set; }
         public int save_summary_steps { get; set; } = 100;
         public object save_checkpoints_steps { get; set; } = _USE_DEFAULT;
         public object save_checkpoints_secs { get; set; } = _USE_DEFAULT;
@@ -61,10 +60,60 @@ namespace Tensorflow.Estimators
         public object experimental_distribute { get; set; }
         public object experimental_max_worker_delay_secs { get; set; }
         public int session_creation_timeout_secs  { get; set; } = 7200;
+        public object service { get; set; }
+
+        public RunConfig()
+        {
+            Initialize();
+        }
 
         public RunConfig(string model_dir)
         {
-            this.model_dir = model_dir;
+            this.model_dir = model_dir;      
+            Initialize();
+        }
+
+        public RunConfig(
+            string model_dir = null,
+            int? tf_random_seed = null,
+            int save_summary_steps=100,
+            object save_checkpoints_steps = null, // _USE_DEFAULT
+            object save_checkpoints_secs = null, // _USE_DEFAULT
+            object session_config = null,
+            int keep_checkpoint_max = 5,
+            int keep_checkpoint_every_n_hours = 10000,
+            int log_step_count_steps = 100,
+            object train_distribute = null,
+            object device_fn = null,
+            object protocol = null,
+            object eval_distribute = null,
+            object experimental_distribute = null,
+            object experimental_max_worker_delay_secs = null,
+            int session_creation_timeout_secs = 7200)
+        {
+            this.model_dir = model_dir;      
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            if (this.save_checkpoints_steps == _USE_DEFAULT && this.save_checkpoints_secs == _USE_DEFAULT)
+            {
+                this.save_checkpoints_steps = null;
+                this.save_checkpoints_secs = 600;
+            }
+            else if (this.save_checkpoints_secs == _USE_DEFAULT)
+            {
+                this.save_checkpoints_secs = null;
+            }
+            else if (this.save_checkpoints_steps == _USE_DEFAULT)
+            {
+                this.save_checkpoints_steps = null;
+            }
+            else if (this.save_checkpoints_steps != null && save_checkpoints_secs != null)
+            {
+                throw new Exception(_SAVE_CKPT_ERR);
+            }
         }
     }
 }
