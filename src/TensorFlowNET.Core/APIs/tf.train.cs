@@ -57,6 +57,12 @@ namespace Tensorflow
                     clear_devices: clear_devices,
                     clear_extraneous_savers: clear_extraneous_savers,
                     strip_default_attrs: strip_default_attrs);
+
+            public string latest_checkpoint(string checkpoint_dir, string latest_filename = null)
+                => checkpoint_management.latest_checkpoint(checkpoint_dir, latest_filename: latest_filename);
+
+            public CheckpointState get_checkpoint_state(string checkpoint_dir, string latest_filename = null)
+                => checkpoint_management.get_checkpoint_state(checkpoint_dir, latest_filename: latest_filename);
         }
     }
 }

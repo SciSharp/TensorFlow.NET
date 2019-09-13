@@ -19,19 +19,28 @@ namespace Tensorflow.Models.ObjectDetection
             int sample_1_of_n_eval_on_train_examples = 1)
         {
             var config = ConfigUtil.get_configs_from_pipeline_file(pipeline_config_path);
+
+            // Create the input functions for TRAIN/EVAL/PREDICT.
+            Action train_input_fn = () => { };
+
             var eval_input_configs = config.EvalInputReader;
 
             var eval_input_fns = new Action[eval_input_configs.Count];
             var eval_input_names = eval_input_configs.Select(eval_input_config => eval_input_config.Name).ToArray();
+            Action eval_on_train_input_fn = () => { };
+            Action predict_input_fn = () => { };
             Action model_fn = () => { };
             var estimator = tf.estimator.Estimator(model_fn: model_fn, config: run_config);
 
             return new TrainAndEvalDict
             {
                 estimator = estimator,
-                train_steps = train_steps,
+                train_input_fn = train_input_fn,
                 eval_input_fns = eval_input_fns,
-                eval_input_names = eval_input_names
+                eval_input_names = eval_input_names,
+                eval_on_train_input_fn = eval_on_train_input_fn,
+                predict_input_fn = predict_input_fn,
+                train_steps = train_steps
             };
         }
 
@@ -46,10 +55,7 @@ namespace Tensorflow.Models.ObjectDetection
                     .Select(x => x.ToString())
                     .ToArray();
 
-            var eval_specs = new List<EvalSpec>()
-            {
-                new EvalSpec("", null, null) // for test.
-            };
+            var eval_specs = new List<EvalSpec>();
             foreach (var (index, (eval_spec_name, eval_input_fn)) in enumerate(zip(eval_spec_names, eval_input_fns).ToList()))
             {
                 var exporter_name = index == 0 ? final_exporter_name : $"{final_exporter_name}_{eval_spec_name}";

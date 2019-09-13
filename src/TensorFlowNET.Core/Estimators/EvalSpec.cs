@@ -6,9 +6,11 @@ namespace Tensorflow.Estimators
 {
     public class EvalSpec
     {
+        string _name;
+
         public EvalSpec(string name, Action input_fn, FinalExporter exporters)
         {
-
+            _name = name;
         }
     }
 }

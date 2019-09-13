@@ -18,18 +18,33 @@ namespace Tensorflow.Estimators
 
         string _model_dir;
 
+        Action _model_fn;
+
         public Estimator(Action model_fn, RunConfig config)
         {
             _config = config;
             _model_dir = _config.model_dir;
             _session_config = _config.session_config;
+            _model_fn = model_fn;
         }
 
-        public Estimator train(Action input_fn, int max_steps = 1, 
+        public Estimator train(Action input_fn, int max_steps = 1, Action[] hooks = null,
             _NewCheckpointListenerForEvaluate[] saving_listeners = null)
         {
+            if(max_steps > 0)
+            {
+                var start_step = _load_global_step_from_checkpoint_dir(_model_dir);
+            }
+
             _train_model();
             throw new NotImplementedException("");
+        }
+
+        private int _load_global_step_from_checkpoint_dir(string checkpoint_dir)
+        {
+            var cp = tf.train.latest_checkpoint(checkpoint_dir);
+
+            return 0;
         }
 
         private void _train_model()

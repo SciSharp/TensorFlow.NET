@@ -32,15 +32,17 @@ namespace Tensorflow.Estimators
         /// </summary>
         private void run_local()
         {
+            var train_hooks = new Action[0];
             Console.WriteLine("Start train and evaluate loop. The evaluate will happen " +
                 "after every checkpoint. Checkpoint frequency is determined " +
                 $"based on RunConfig arguments: save_checkpoints_steps {_estimator.config.save_checkpoints_steps} or " +
                 $"save_checkpoints_secs {_estimator.config.save_checkpoints_secs}.");
             var evaluator = new _Evaluator(_estimator, _eval_spec, _train_spec.max_steps);
-            /*_estimator.train(input_fn: _train_spec.input_fn,
+            var saving_listeners = new _NewCheckpointListenerForEvaluate[0];
+            _estimator.train(input_fn: _train_spec.input_fn,
                  max_steps: _train_spec.max_steps,
                  hooks: train_hooks,
-                 saving_listeners: saving_listeners);*/
+                 saving_listeners: saving_listeners);
         }
     }
 }

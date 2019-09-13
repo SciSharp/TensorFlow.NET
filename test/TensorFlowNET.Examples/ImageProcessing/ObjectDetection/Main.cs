@@ -21,7 +21,7 @@ namespace TensorFlowNET.Examples.ImageProcessing.ObjectDetection
 
         string model_dir = "D:/Projects/PythonLab/tf-models/research/object_detection/models/model";
         string pipeline_config_path = "ObjectDetection/Models/faster_rcnn_resnet101_voc07.config";
-        int num_train_steps = 1;
+        int num_train_steps = 50;
         int sample_1_of_n_eval_examples = 1;
         int sample_1_of_n_eval_on_train_examples = 5;
 
