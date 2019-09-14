@@ -25,6 +25,12 @@ namespace Tensorflow
 
         public class train_internal
         {
+            public RefVariable create_global_step(Graph graph)
+                => TrainingUtil.create_global_step(graph);
+
+            public RefVariable get_global_step(Graph graph)
+                => TrainingUtil.get_global_step(graph);
+
             public Optimizer GradientDescentOptimizer(float learning_rate) 
                 => new GradientDescentOptimizer(learning_rate);
 

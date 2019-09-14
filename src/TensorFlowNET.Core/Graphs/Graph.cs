@@ -175,6 +175,10 @@ namespace Tensorflow
 
                     if (_nodes_by_name.ContainsKey(op_name))
                         return _nodes_by_name[op_name].outputs[out_n];
+                    else
+                        throw new KeyError($"The name {name} refers to a Tensor which does not " +
+                            $"exist. The operation, {op_name}, does not exist in the " +
+                            "graph.");
                 }
                 else if (!name.Contains(":") & allow_operation)
                 {

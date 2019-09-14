@@ -175,6 +175,7 @@ namespace Tensorflow
         public static RefVariable default_variable_creator(object initial_value,
             string name = null,
             bool? trainable = null,
+            List<string> collections = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool validate_shape = false,
             bool ? use_resource = null, 
@@ -199,6 +200,7 @@ namespace Tensorflow
                 return new RefVariable(initial_value, 
                     trainable: trainable.Value,
                     validate_shape: validate_shape,
+                    collections: collections,
                     name: name,
                     dtype: dtype);
             }

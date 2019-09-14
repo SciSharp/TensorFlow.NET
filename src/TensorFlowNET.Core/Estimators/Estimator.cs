@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using static Tensorflow.Binding;
 
@@ -34,30 +36,50 @@ namespace Tensorflow.Estimators
             if(max_steps > 0)
             {
                 var start_step = _load_global_step_from_checkpoint_dir(_model_dir);
+                if (max_steps <= start_step)
+                {
+                    Console.WriteLine("Skipping training since max_steps has already saved.");
+                    return this;
+                }
             }
 
-            _train_model();
+            _train_model(input_fn);
             throw new NotImplementedException("");
         }
 
         private int _load_global_step_from_checkpoint_dir(string checkpoint_dir)
         {
-            var cp = tf.train.latest_checkpoint(checkpoint_dir);
+            // var cp = tf.train.latest_checkpoint(checkpoint_dir);
+            // should use NewCheckpointReader (not implemented)
+            var cp = tf.train.get_checkpoint_state(checkpoint_dir);
 
-            return 0;
+            return cp.AllModelCheckpointPaths.Count - 1;
         }
 
-        private void _train_model()
+        private void _train_model(Action input_fn)
         {
-            _train_model_default();
+            _train_model_default(input_fn);
         }
 
-        private void _train_model_default()
+        private void _train_model_default(Action input_fn)
         {
             using (var g = tf.Graph().as_default())
             {
-
+                var global_step_tensor = _create_and_assert_global_step(g);
             }
+        }
+
+        private Tensor _create_and_assert_global_step(Graph graph)
+        {
+            var step = _create_global_step(graph);
+            Debug.Assert(step == tf.train.get_global_step(graph));
+            Debug.Assert(step.dtype.is_integer());
+            return step;
+        }
+
+        private RefVariable _create_global_step(Graph graph)
+        {
+            return tf.train.create_global_step(graph);
         }
 
         public void __init__()

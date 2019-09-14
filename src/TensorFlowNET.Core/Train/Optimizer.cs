@@ -249,7 +249,9 @@ namespace Tensorflow
             {
                 _maybe_initialize_trackable();
                 v = variable_scope.default_variable_creator(
-                    initial_value, name: name, trainable: false,
+                    initial_value, 
+                    name: name, 
+                    trainable: false,
                     use_resource: resource_variable_ops.is_resource_variable(
                         colocate_with));
 

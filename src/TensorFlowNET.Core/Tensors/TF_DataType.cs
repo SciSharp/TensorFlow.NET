@@ -35,5 +35,6 @@
         DtFloatRef = 101, // DT_FLOAT_REF
         DtDoubleRef = 102, // DT_DOUBLE_REF
         DtInt32Ref = 103, // DT_INT32_REF
+        DtInt64Ref = 109 // DT_INT64_REF
     }
 }

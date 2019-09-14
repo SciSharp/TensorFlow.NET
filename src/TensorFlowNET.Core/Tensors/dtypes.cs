@@ -246,7 +246,8 @@ namespace Tensorflow
         public static bool is_integer(this TF_DataType type)
         {
             return type == TF_DataType.TF_INT8 || type == TF_DataType.TF_INT16 || type == TF_DataType.TF_INT32 || type == TF_DataType.TF_INT64 ||
-                type == TF_DataType.TF_UINT8 || type == TF_DataType.TF_UINT16 || type == TF_DataType.TF_UINT32 || type == TF_DataType.TF_UINT64;
+                type == TF_DataType.TF_UINT8 || type == TF_DataType.TF_UINT16 || type == TF_DataType.TF_UINT32 || type == TF_DataType.TF_UINT64 ||
+                type == TF_DataType.DtInt32Ref || type == TF_DataType.DtInt64Ref;
         }
 
         public static bool is_floating(this TF_DataType type)

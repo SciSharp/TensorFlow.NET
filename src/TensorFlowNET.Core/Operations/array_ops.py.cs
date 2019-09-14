@@ -54,6 +54,8 @@ namespace Tensorflow
                         return _constant_if_small(0.0D, shape, dtype, name);
                     case TF_DataType.TF_FLOAT:
                         return _constant_if_small(0.0F, shape, dtype, name);
+                    case TF_DataType.TF_INT64:
+                        return _constant_if_small(0l, shape, dtype, name);
                     case TF_DataType.TF_INT32:
                         return _constant_if_small(0, shape, dtype, name);
                     case TF_DataType.TF_INT8:

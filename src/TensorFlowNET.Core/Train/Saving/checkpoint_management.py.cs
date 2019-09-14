@@ -174,8 +174,24 @@ namespace Tensorflow
             var coord_checkpoint_filename = _GetCheckpointFilename(checkpoint_dir, latest_filename);
             if (File.Exists(coord_checkpoint_filename))
             {
-                var file_content = File.ReadAllBytes(coord_checkpoint_filename);
-                var ckpt = CheckpointState.Parser.ParseFrom(file_content);
+                var file_content = File.ReadAllLines(coord_checkpoint_filename);
+                // https://github.com/protocolbuffers/protobuf/issues/6654
+                // var ckpt = CheckpointState.Parser.ParseFrom(file_content);
+                var ckpt = new CheckpointState();
+                var field = CheckpointState.Descriptor.FindFieldByName("model_checkpoint_path");
+                ckpt.ModelCheckpointPath = file_content.FirstOrDefault(x => x.StartsWith(field.Name + ":")).Substring(field.Name.Length + 2);
+                // remove first and last quote.
+                ckpt.ModelCheckpointPath = ckpt.ModelCheckpointPath.Substring(1, ckpt.ModelCheckpointPath.Length - 2);
+
+                field = CheckpointState.Descriptor.FindFieldByName("all_model_checkpoint_paths");
+                file_content.Where(x => x.StartsWith(field.Name + ":"))
+                    .ToList()
+                    .ForEach(x =>
+                    {
+                        string value = x.Substring(field.Name.Length + 2);
+                        ckpt.AllModelCheckpointPaths.Add(value.Substring(1, value.Length - 2));
+                    });
+
                 if (string.IsNullOrEmpty(ckpt.ModelCheckpointPath))
                     throw new ValueError($"Invalid checkpoint state loaded from {checkpoint_dir}");
                 // For relative model_checkpoint_path and all_model_checkpoint_paths,
