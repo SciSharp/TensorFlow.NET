@@ -6,11 +6,14 @@ using Tensorflow.Estimators;
 using System.Linq;
 using Tensorflow.Contrib.Train;
 using Tensorflow.Models.ObjectDetection.Utils;
+using Tensorflow.Data;
 
 namespace Tensorflow.Models.ObjectDetection
 {
     public class ModelLib
     {
+        Inputs inputs = new Inputs();
+
         public TrainAndEvalDict create_estimator_and_inputs(RunConfig run_config,
             HParams hparams = null,
             string pipeline_config_path = null,
@@ -21,7 +24,7 @@ namespace Tensorflow.Models.ObjectDetection
             var config = ConfigUtil.get_configs_from_pipeline_file(pipeline_config_path);
 
             // Create the input functions for TRAIN/EVAL/PREDICT.
-            Action train_input_fn = () => { };
+            Func<DatasetV1Adapter> train_input_fn = inputs.create_train_input_fn(config.TrainConfig, config.TrainInputReader, config.Model);
 
             var eval_input_configs = config.EvalInputReader;
 
@@ -44,7 +47,7 @@ namespace Tensorflow.Models.ObjectDetection
             };
         }
 
-        public (TrainSpec, EvalSpec[]) create_train_and_eval_specs(Action train_input_fn, Action[] eval_input_fns, Action eval_on_train_input_fn, 
+        public (TrainSpec, EvalSpec[]) create_train_and_eval_specs(Func<DatasetV1Adapter> train_input_fn, Action[] eval_input_fns, Action eval_on_train_input_fn, 
             Action predict_input_fn, int train_steps, bool eval_on_train_data = false, 
             string final_exporter_name = "Servo", string[] eval_spec_names = null)
         {

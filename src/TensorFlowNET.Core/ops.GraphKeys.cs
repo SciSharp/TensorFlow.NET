@@ -122,6 +122,7 @@ namespace Tensorflow
             public string TRAIN_OP => TRAIN_OP_;
 
             public string GLOBAL_STEP => GLOBAL_STEP_;
+            public string GLOBAL_STEP_READ_KEY = "global_step_read_op_cache";
 
             public string[] _VARIABLE_COLLECTIONS => _VARIABLE_COLLECTIONS_;
             /// <summary>

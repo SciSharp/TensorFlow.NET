@@ -434,6 +434,9 @@ namespace Tensorflow
                 case List<RefVariable> list:
                     t = list.Select(x => (T)(object)x).ToList();
                     break;
+                case List<Tensor> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
                 default:
                     throw new NotImplementedException($"get_collection<{typeof(T).FullName}>");
             }

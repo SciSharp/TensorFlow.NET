@@ -17,6 +17,7 @@
 using System;
 using static Tensorflow.Binding;
 using Tensorflow.Estimators;
+using Tensorflow.Data;
 
 namespace Tensorflow
 {
@@ -35,7 +36,7 @@ namespace Tensorflow
             public void train_and_evaluate(Estimator estimator, TrainSpec train_spec, EvalSpec eval_spec)
                 => Training.train_and_evaluate(estimator: estimator, train_spec: train_spec, eval_spec: eval_spec);
 
-            public TrainSpec TrainSpec(Action input_fn, int max_steps)
+            public TrainSpec TrainSpec(Func<DatasetV1Adapter> input_fn, int max_steps)
                 => new TrainSpec(input_fn: input_fn, max_steps: max_steps);
 
             /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Data;
 
 namespace Tensorflow.Estimators
 {
@@ -9,10 +10,10 @@ namespace Tensorflow.Estimators
         int _max_steps;
         public int max_steps => _max_steps;
 
-        Action _input_fn;
-        public Action input_fn => _input_fn;
+        Func<DatasetV1Adapter> _input_fn;
+        public Func<DatasetV1Adapter> input_fn => _input_fn;
 
-        public TrainSpec(Action input_fn, int max_steps)
+        public TrainSpec(Func<DatasetV1Adapter> input_fn, int max_steps)
         {
             _max_steps = max_steps;
             _input_fn = input_fn;

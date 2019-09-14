@@ -6,5 +6,9 @@ namespace Tensorflow.Models.ObjectDetection.MetaArchitectures
 {
     public class FasterRCNNMetaArch
     {
+        public (Tensor, Tensor) preprocess(Tensor tensor)
+        {
+            throw new NotImplementedException("");
+        }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Tensorflow.Data;
+using Tensorflow.Train;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Estimators
@@ -30,7 +32,7 @@ namespace Tensorflow.Estimators
             _model_fn = model_fn;
         }
 
-        public Estimator train(Action input_fn, int max_steps = 1, Action[] hooks = null,
+        public Estimator train(Func<DatasetV1Adapter> input_fn, int max_steps = 1, Action[] hooks = null,
             _NewCheckpointListenerForEvaluate[] saving_listeners = null)
         {
             if(max_steps > 0)
@@ -56,17 +58,39 @@ namespace Tensorflow.Estimators
             return cp.AllModelCheckpointPaths.Count - 1;
         }
 
-        private void _train_model(Action input_fn)
+        private void _train_model(Func<DatasetV1Adapter> input_fn)
         {
             _train_model_default(input_fn);
         }
 
-        private void _train_model_default(Action input_fn)
+        private void _train_model_default(Func<DatasetV1Adapter> input_fn)
         {
             using (var g = tf.Graph().as_default())
             {
                 var global_step_tensor = _create_and_assert_global_step(g);
+
+                // Skip creating a read variable if _create_and_assert_global_step
+                // returns None (e.g. tf.contrib.estimator.SavedModelEstimator).
+                if (global_step_tensor != null)
+                    TrainingUtil._get_or_create_global_step_read(g);
+
+                _get_features_and_labels_from_input_fn(input_fn, "train");
             }
+        }
+
+        private void _get_features_and_labels_from_input_fn(Func<DatasetV1Adapter> input_fn, string mode)
+        {
+            _call_input_fn(input_fn, mode);
+        }
+
+        /// <summary>
+        /// Calls the input function.
+        /// </summary>
+        /// <param name="input_fn"></param>
+        /// <param name="mode"></param>
+        private void _call_input_fn(Func<DatasetV1Adapter> input_fn, string mode)
+        {
+            input_fn();
         }
 
         private Tensor _create_and_assert_global_step(Graph graph)

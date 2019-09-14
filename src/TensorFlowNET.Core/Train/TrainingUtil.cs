@@ -7,7 +7,7 @@ namespace Tensorflow.Train
 {
     public class TrainingUtil
     {
-        public static RefVariable create_global_step(Graph graph)
+        public static RefVariable create_global_step(Graph graph = null)
         {
             graph = graph ?? ops.get_default_graph();
             if (get_global_step(graph) != null)
@@ -24,7 +24,7 @@ namespace Tensorflow.Train
             return v;
         }
 
-        public static RefVariable get_global_step(Graph graph)
+        public static RefVariable get_global_step(Graph graph = null)
         {
             graph = graph ?? ops.get_default_graph();
             RefVariable global_step_tensor = null;
@@ -46,6 +46,44 @@ namespace Tensorflow.Train
             }
                 
             return global_step_tensor;
+        }
+
+        public static Tensor _get_or_create_global_step_read(Graph graph = null)
+        {
+            graph = graph ?? ops.get_default_graph();
+            var global_step_read_tensor = _get_global_step_read(graph);
+            if (global_step_read_tensor != null)
+                return global_step_read_tensor;
+
+            var global_step_tensor = get_global_step(graph);
+
+            if (global_step_tensor == null)
+                return null;
+
+            var g = graph.as_default();
+            g.name_scope(null);
+            g.name_scope(global_step_tensor.op.name + "/");
+            // using initialized_value to ensure that global_step is initialized before
+            // this run. This is needed for example Estimator makes all model_fn build
+            // under global_step_read_tensor dependency.
+            var global_step_value = global_step_tensor.initialized_value();
+            ops.add_to_collection(tf.GraphKeys.GLOBAL_STEP_READ_KEY, global_step_value + 0);
+
+            return _get_global_step_read(graph);
+        }
+
+        private static Tensor _get_global_step_read(Graph graph = null)
+        {
+            graph = graph ?? ops.get_default_graph();
+            var global_step_read_tensors = graph.get_collection<Tensor>(tf.GraphKeys.GLOBAL_STEP_READ_KEY);
+            if (global_step_read_tensors.Count > 1)
+                throw new RuntimeError($"There are multiple items in collection {tf.GraphKeys.GLOBAL_STEP_READ_KEY}. " +
+                    "There should be only one.");
+
+            if (global_step_read_tensors.Count == 1)
+                return global_step_read_tensors[0];
+
+            return null;
         }
     }
 }
