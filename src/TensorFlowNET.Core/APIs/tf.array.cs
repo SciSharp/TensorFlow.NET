@@ -141,6 +141,16 @@ namespace Tensorflow
             => array_ops.shape_internal(input, name, optimize: true, out_type: out_type);
 
         /// <summary>
+        /// Stacks a list of rank-`R` tensors into one rank-`(R+1)` tensor.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns>A stacked `Tensor` with the same type as `values`.</returns>
+        public Tensor stack(Tensor[] values, int axis = 0, string name = "stack")
+            => array_ops.stack(values, axis: axis, name: name);
+
+        /// <summary>
         /// Unpacks the given dimension of a rank-`R` tensor into rank-`(R-1)` tensors.
         /// </summary>
         /// <param name="value"></param>
