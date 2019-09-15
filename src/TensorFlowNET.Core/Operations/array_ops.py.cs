@@ -308,6 +308,18 @@ namespace Tensorflow
         public static (Tensor, Tensor) unique(Tensor x, TF_DataType out_idx = TF_DataType.TF_INT32, string name = null)
             => gen_array_ops.unique(x, out_idx: out_idx, name: name);
 
+        public static Tensor[] unstack(Tensor value, int? num = null, int axis = 0, string name = "unstack")
+        {
+            if(num == null)
+            {
+                value = ops.convert_to_tensor(value);
+                var value_shape = value.TensorShape;
+                num = value_shape.dims[axis];
+            }
+
+            return gen_array_ops.unpack(value, num: num.Value, axis: axis, name: name);
+        }
+
         public static Tensor where(Tensor condition, object x = null, object y = null, string name = null)
         {
             if( x == null && y == null)

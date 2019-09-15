@@ -248,6 +248,12 @@ namespace Tensorflow
             return (_op.outputs[0], _op.outputs[1]);
         }
 
+        public static Tensor[] unpack(Tensor value, int num, int axis = 0, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Unpack", name, new { value, num, axis });
+            return _op.outputs;
+        }
+
         public static Tensor where()
         {
             throw new NotImplementedException("where");

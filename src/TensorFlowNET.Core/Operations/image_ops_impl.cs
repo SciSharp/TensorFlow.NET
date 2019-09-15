@@ -130,6 +130,22 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Resize `images` to `size` using the specified `method`.
+        /// </summary>
+        /// <param name="images"></param>
+        /// <param name="size"></param>
+        /// <param name="method"></param>
+        /// <param name="align_corners"></param>
+        /// <param name="preserve_aspect_ratio"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor resize_images(Tensor images, Tensor size, ResizeMethod method = ResizeMethod.BILINEAR,
+            bool align_corners = false, bool preserve_aspect_ratio = false, string name = null)
+        {
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
         /// Resize `images` to `size` using nearest neighbor interpolation.
         /// </summary>
         /// <param name="images"></param>
@@ -145,5 +161,13 @@ namespace Tensorflow
                   align_corners: align_corners,
                   half_pixel_centers: half_pixel_centers,
                   name: name);
+    }
+
+    public enum ResizeMethod
+    {
+        BILINEAR = 0,
+        NEAREST_NEIGHBOR = 1,
+        BICUBIC = 2,
+        AREA = 3
     }
 }

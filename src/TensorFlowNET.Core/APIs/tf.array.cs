@@ -139,5 +139,16 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor shape(Tensor input, string name = null, TF_DataType out_type = TF_DataType.TF_INT32)
             => array_ops.shape_internal(input, name, optimize: true, out_type: out_type);
+
+        /// <summary>
+        /// Unpacks the given dimension of a rank-`R` tensor into rank-`(R-1)` tensors.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="num"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor[] unstack(Tensor value, int? num = null, int axis = 0, string name = "unstack")
+            => array_ops.unstack(value, num: num, axis: axis, name: name);
     }
 }

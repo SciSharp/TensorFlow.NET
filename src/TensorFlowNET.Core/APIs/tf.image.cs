@@ -40,6 +40,11 @@ namespace Tensorflow
             public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
                 => gen_image_ops.resize_bilinear(images, size, align_corners: align_corners, name: name);
 
+            public Tensor resize_images(Tensor images, Tensor size, ResizeMethod method = ResizeMethod.BILINEAR,
+                    bool align_corners = false, bool preserve_aspect_ratio = false, string name = null)
+                => image_ops_impl.resize_images(images, size, method: method,
+                    align_corners: align_corners, preserve_aspect_ratio: preserve_aspect_ratio, name: name);
+
             public Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name = null)
                 => gen_image_ops.convert_image_dtype(image, dtype, saturate: saturate, name: name);
 
