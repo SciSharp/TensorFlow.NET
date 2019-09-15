@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Data;
-using Tensorflow.Estimators;
-using Tensorflow.Models.ObjectDetection.MetaArchitectures;
 using Tensorflow.Models.ObjectDetection.Protos;
 
 namespace Tensorflow.Models.ObjectDetection
@@ -23,9 +21,7 @@ namespace Tensorflow.Models.ObjectDetection
         public Func<DatasetV1Adapter> create_train_input_fn(TrainConfig train_config, InputReader train_input_config, DetectionModel model_config)
         {
             Func<DatasetV1Adapter> _train_input_fn = () =>
-            {
-                return train_input(train_config, train_input_config, model_config);
-            };
+                train_input(train_config, train_input_config, model_config);
 
             return _train_input_fn;
         }

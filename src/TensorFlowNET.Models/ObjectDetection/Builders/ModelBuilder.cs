@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Tensorflow.Models.ObjectDetection.MetaArchitectures;
 using Tensorflow.Models.ObjectDetection.Protos;
 using static Tensorflow.Models.ObjectDetection.Protos.DetectionModel;
 
@@ -45,7 +44,20 @@ namespace Tensorflow.Models.ObjectDetection
         {
             var num_classes = frcnn_config.NumClasses;
             var image_resizer_fn = image_resizer_builder.build(frcnn_config.ImageResizer);
-            throw new NotImplementedException("");
+
+            var first_stage_atrous_rate = frcnn_config.FirstStageAtrousRate;
+            var number_of_stages = frcnn_config.NumberOfStages;
+
+            return new FasterRCNNMetaArch(new FasterRCNNInitArgs
+            {
+                is_training = is_training,
+                num_classes = num_classes,
+                image_resizer_fn = image_resizer_fn,
+                feature_extractor = () => { throw new NotImplementedException(""); },
+                number_of_stage = number_of_stages,
+                first_stage_anchor_generator = null,
+                first_stage_atrous_rate = first_stage_atrous_rate
+            });
         }
 
         public Action preprocess()
