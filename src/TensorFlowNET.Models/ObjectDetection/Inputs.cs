@@ -9,13 +9,12 @@ namespace Tensorflow.Models.ObjectDetection
     public class Inputs
     {
         ModelBuilder modelBuilder;
-        Dictionary<string, Func<DetectionModel, bool, bool, FasterRCNNMetaArch>> INPUT_BUILDER_UTIL_MAP;
+        DatasetBuilder datasetBuilder;
 
         public Inputs()
         {
             modelBuilder = new ModelBuilder();
-            INPUT_BUILDER_UTIL_MAP = new Dictionary<string, Func<DetectionModel, bool, bool, FasterRCNNMetaArch>>();
-            INPUT_BUILDER_UTIL_MAP["model_build"] = modelBuilder.build;
+            datasetBuilder = new DatasetBuilder();
         }
 
         public Func<DatasetV1Adapter> create_train_input_fn(TrainConfig train_config, InputReader train_input_config, DetectionModel model_config)
@@ -35,12 +34,27 @@ namespace Tensorflow.Models.ObjectDetection
         /// <returns></returns>
         public DatasetV1Adapter train_input(TrainConfig train_config, InputReader train_input_config, DetectionModel model_config)
         {
-            var arch = INPUT_BUILDER_UTIL_MAP["model_build"](model_config, true, true);
+            var arch = modelBuilder.build(model_config, true, true);
             Func<Tensor, (Tensor, Tensor)> model_preprocess_fn = arch.preprocess;
 
-            var dataset = DatasetBuilder.build(train_input_config);
+            Func<Dictionary<string, Tensor>, (Dictionary<string, Tensor>, Dictionary<string, Tensor>) > transform_and_pad_input_data_fn = (tensor_dict) =>
+            {
+                return (_get_features_dict(tensor_dict), _get_labels_dict(tensor_dict));
+            };
+
+            var dataset = datasetBuilder.build(train_input_config);
 
             return dataset;
+        }
+
+        private Dictionary<string, Tensor> _get_features_dict(Dictionary<string, Tensor> input_dict)
+        {
+            throw new NotImplementedException("_get_features_dict");
+        }
+
+        private Dictionary<string, Tensor> _get_labels_dict(Dictionary<string, Tensor> input_dict)
+        {
+            throw new NotImplementedException("_get_labels_dict");
         }
     }
 }

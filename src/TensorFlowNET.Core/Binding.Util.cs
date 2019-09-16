@@ -334,5 +334,15 @@ namespace Tensorflow
                     return true;
             return false;
         }
+
+        public static Func<Tin1, Tout> partial<Tin1, Tout>(Func<Tin1, Tout> func, Tin1 args)
+        {
+            Func<Tin1, Tout> newfunc = (args1) =>
+            {
+                return func(args1);
+            };
+
+            return newfunc;
+        }
     }
 }

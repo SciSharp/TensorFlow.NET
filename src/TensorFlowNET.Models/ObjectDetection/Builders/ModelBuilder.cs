@@ -8,11 +8,12 @@ namespace Tensorflow.Models.ObjectDetection
 {
     public class ModelBuilder
     {
-        ImageResizerBuilder image_resizer_builder;
+        ImageResizerBuilder _image_resizer_builder;
+        FasterRCNNFeatureExtractor _feature_extractor;
 
         public ModelBuilder()
         {
-            image_resizer_builder = new ImageResizerBuilder();
+            _image_resizer_builder = new ImageResizerBuilder();
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Tensorflow.Models.ObjectDetection
         private FasterRCNNMetaArch _build_faster_rcnn_model(FasterRcnn frcnn_config, bool is_training, bool add_summaries)
         {
             var num_classes = frcnn_config.NumClasses;
-            var image_resizer_fn = image_resizer_builder.build(frcnn_config.ImageResizer);
+            var image_resizer_fn = _image_resizer_builder.build(frcnn_config.ImageResizer);
 
             var first_stage_atrous_rate = frcnn_config.FirstStageAtrousRate;
             var number_of_stages = frcnn_config.NumberOfStages;
@@ -53,7 +54,7 @@ namespace Tensorflow.Models.ObjectDetection
                 is_training = is_training,
                 num_classes = num_classes,
                 image_resizer_fn = image_resizer_fn,
-                feature_extractor = () => { throw new NotImplementedException(""); },
+                feature_extractor = _feature_extractor,
                 number_of_stage = number_of_stages,
                 first_stage_anchor_generator = null,
                 first_stage_atrous_rate = first_stage_atrous_rate

@@ -23,12 +23,17 @@ namespace Tensorflow.Models.ObjectDetection
         {
             tf_with(tf.name_scope("Preprocessor"), delegate
             {
-                /*var outputs = shape_utils.static_or_dynamic_map_fn(
-                  _image_resizer_fn,
+                var outputs = shape_utils.static_or_dynamic_map_fn(
+                  (inputs1) =>
+                  {
+                      return _args.image_resizer_fn(new Core.ResizeToRangeArgs
+                      {
+                          image = inputs1
+                      })[0];
+                  },
                   elems: inputs,
-                  dtype: new[] { tf.float32, tf.int32 },
-                  parallel_iterations: _parallel_iterations);*/
-
+                  dtypes: new[] { tf.float32, tf.int32 },
+                  parallel_iterations: _args.parallel_iterations);
             });
 
             throw new NotImplementedException("");

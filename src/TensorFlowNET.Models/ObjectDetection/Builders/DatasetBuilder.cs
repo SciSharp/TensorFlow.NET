@@ -8,7 +8,7 @@ namespace Tensorflow.Models.ObjectDetection
 {
     public class DatasetBuilder
     {
-        public static DatasetV1Adapter build(InputReader input_reader_config, 
+        public DatasetV1Adapter build(InputReader input_reader_config, 
             int batch_size = 0, 
             Action transform_input_data_fn = null)
         {
@@ -19,6 +19,11 @@ namespace Tensorflow.Models.ObjectDetection
 
             var config = input_reader_config.TfRecordInputReader;
 
+            throw new NotImplementedException("");
+        }
+
+        public Dictionary<string, Tensor> process_fn(Tensor value)
+        {
             throw new NotImplementedException("");
         }
     }

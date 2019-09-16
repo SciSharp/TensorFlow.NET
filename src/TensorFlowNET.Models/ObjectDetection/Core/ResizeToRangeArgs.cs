@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using static Tensorflow.tensorflow.image_internal;
 
 namespace Tensorflow.Models.ObjectDetection.Core
 {
