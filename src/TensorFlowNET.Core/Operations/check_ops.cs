@@ -26,7 +26,7 @@ namespace Tensorflow
         /// <param name="t1"></param>
         /// <param name="t2"></param>
         /// <param name="name"></param>
-        public static Operation assert_equal(object t1, object t2, object[] data = null, string message = null, string name = null)
+        public static Operation assert_equal<T1, T2>(T1 t1, T2 t2, object[] data = null, string message = null, string name = null)
         {
             if (message == null)
                 message = "";
