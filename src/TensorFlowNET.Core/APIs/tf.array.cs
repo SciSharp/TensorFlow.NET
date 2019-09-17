@@ -128,6 +128,20 @@ namespace Tensorflow
         public Tensor stack(object values, int axis = 0, string name = "stack")
             => array_ops.stack(values, axis, name: name);
 
+        /// <summary>
+        /// Creates a tensor with all elements set to 1.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <param name="optimize">
+        /// if true, attempt to statically determine the shape of 'tensor' and
+        /// encode it as a constant.
+        /// </param>
+        /// <returns>A `Tensor` with all elements set to 1.</returns>
+        public Tensor ones_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
+            => array_ops.ones_like(tensor, dtype: dtype, name: name, optimize: optimize);
+
         public Tensor one_hot(Tensor indices, int depth,
             Tensor on_value = null,
             Tensor off_value = null,
@@ -191,5 +205,16 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor[] unstack(Tensor value, int? num = null, int axis = 0, string name = "unstack")
             => array_ops.unstack(value, num: num, axis: axis, name: name);
+
+        /// <summary>
+        /// Creates a tensor with all elements set to zero.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <param name="optimize"></param>
+        /// <returns>A `Tensor` with all elements set to zero.</returns>
+        public Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
+            => array_ops.zeros_like(tensor, dtype: dtype, name: name, optimize: optimize);
     }
 }

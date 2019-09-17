@@ -45,6 +45,15 @@ namespace Tensorflow
             => gen_math_ops.add(a, b, name: name);
 
         /// <summary>
+        /// Adds all input tensors element-wise.
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="name"></param>
+        /// <returns>A `Tensor` of same shape and type as the elements of `inputs`.</returns>
+        public Tensor add_n(Tensor[] inputs, string name = null)
+            => math_ops.add_n(inputs, name: name);
+
+        /// <summary>
         /// Computes atan of x element-wise.
         /// </summary>
         /// <param name="x"></param>
@@ -332,6 +341,16 @@ namespace Tensorflow
             => gen_math_ops.neg(x, name);
 
         /// <summary>
+        /// Returns the truth value of (x != y) element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns>A `Tensor` of type bool with the same size as that of x or y.</returns>
+        public Tensor not_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+            => math_ops.not_equal(x, y, name: name);
+
+        /// <summary>
         /// Divides x / y elementwise (using Python 2 division operator semantics).
         /// </summary>
         /// <param name="x"></param>
@@ -347,8 +366,39 @@ namespace Tensorflow
         public Tensor pow<T1, T2>(T1 x, T2 y) 
             => gen_math_ops.pow(x, y);
 
+        /// <summary>
+        /// Divides `x / y` elementwise, rounding toward the most negative integer.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns>`x / y` rounded down.</returns>
+        public Tensor floordiv(Tensor x, Tensor y, string name = null)
+            => math_ops.floordiv(x, y, name: name);
+
+        /// <summary>
+        /// Divides x / y elementwise (using Python 3 division operator semantics).
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns>`x / y` evaluated in floating point.</returns>
+        public static Tensor truediv(Tensor x, Tensor y, string name = null)
+            => math_ops.truediv(x, y, name: name);
+
         public Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
             => math_ops.range(start, limit: limit, delta: delta, dtype: dtype, name: name);
+
+        /// <summary>
+        /// Computes the "logical and" of elements across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input_tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        /// <returns>The reduced tensor.</returns>
+        public Tensor reduce_all(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_all(input_tensor, axis: axis, keepdims: keepdims, name: name);
 
         /// <summary>
         /// Computes the sum of elements across dimensions of a tensor.
