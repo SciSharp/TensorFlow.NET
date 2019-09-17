@@ -7,6 +7,7 @@ using System.Threading;
 using FluentAssertions;
 using Tensorflow;
 using static Tensorflow.Binding;
+using Tensorflow.Framework;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -201,6 +202,24 @@ namespace TensorFlowNET.UnitTest
 
             // graph.Dispose();
             s.Dispose();
+        }
+
+        [TestMethod]
+        public void sparse_to_dense()
+        {
+            var indices = tf.reshape(tf.range(0, 5), new int[] { 5, 1 });
+            var labels = tf.expand_dims(tf.constant(new[] { 0, 1, 2, 3, 4 }),1);
+            var st = tf.concat(values: new[] { indices, labels }, axis: 1);
+            var onehot = tf.sparse_to_dense(st, (5, 5), 1);
+            using (var sess = tf.Session())
+            {
+                var result = sess.run(onehot);
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 0, 0, 0, 0 }, result[0].ToArray<int>()));
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 1, 0, 0, 0 }, result[1].ToArray<int>()));
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 1, 0, 0 }, result[2].ToArray<int>()));
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 1, 0 }, result[3].ToArray<int>()));
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 1 }, result[4].ToArray<int>()));
+            };
         }
     }
 }

@@ -143,6 +143,24 @@ namespace Tensorflow
                 return this;
         }
 
+        public TensorShape with_rank(int rank)
+        {
+            return merge_with(unknown_shape(rank: rank));
+        }
+
+        /// <summary>
+        /// Returns an unknown TensorShape, optionally with a known rank.
+        /// </summary>
+        /// <param name="rank"></param>
+        /// <returns></returns>
+        public TensorShape unknown_shape(int rank = -1)
+        {
+            if (rank == -1)
+                return new TensorShape(-1);
+            else
+                return new TensorShape(Enumerable.Repeat(-1, rank).ToArray());
+        }
+
         /// <summary>
         ///     Returns the concatenation of the dimension in `self` and `other`.
         /// </summary>
