@@ -84,6 +84,15 @@ namespace Tensorflow
         public Tensor transpose<T1>(T1 a, int[] perm = null, string name = "transpose", bool conjugate = false)
             => array_ops.transpose(a, perm, name, conjugate);
 
+        /// <summary>
+        /// Returns the rank of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <returns>Returns a 0-D `int32` `Tensor` representing the rank of `input`.</returns>
+        public Tensor rank(Tensor input, string name = null)
+            => array_ops.rank(input, name: name);
+
         public Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
             => gen_array_ops.squeeze(input, axis, name);
 
