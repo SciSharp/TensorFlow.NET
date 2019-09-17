@@ -67,6 +67,17 @@ namespace Tensorflow
             => gen_array_ops.fill(dims, value, name: name);
 
         /// <summary>
+        /// Gather slices from params axis axis according to indices.
+        /// </summary>
+        /// <param name="params"></param>
+        /// <param name="indices"></param>
+        /// <param name="name"></param>
+        /// <param name="axis"></param>
+        /// <returns></returns>
+        public Tensor gather(Tensor @params, Tensor indices, string name = null, int axis = 0)
+            => array_ops.gather(@params, indices, name: name, axis: axis);
+
+        /// <summary>
         /// Return the elements, either from `x` or `y`, depending on the `condition`.
         /// </summary>
         /// <returns></returns>
