@@ -104,6 +104,17 @@ namespace Tensorflow
         public Tensor rank(Tensor input, string name = null)
             => array_ops.rank(input, name: name);
 
+        /// <summary>
+        /// Extracts a slice from a tensor.
+        /// </summary>
+        /// <param name="input">A `Tensor`.</param>
+        /// <param name="begin">An `int32` or `int64` `Tensor`.</param>
+        /// <param name="size">An `int32` or `int64` `Tensor`.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>A `Tensor` the same type as `input`.</returns>
+        public Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
+            => array_ops.slice(input, begin, size, name: name);
+
         public Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
             => gen_array_ops.squeeze(input, axis, name);
 

@@ -221,5 +221,18 @@ namespace TensorFlowNET.UnitTest
                 Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 1 }, result[4].ToArray<int>()));
             };
         }
+
+        [TestMethod]
+        public void sparse_tensor_to_dense()
+        {
+            /*int[,] dense_array =
+            {
+                { 1, 0, 0, 0, 0 },
+                { 0, 1, 0, 0, 0 },
+                { 0, 0, 1, 0, 0 },
+                { 0, 0, 0, 1, 0 }
+            };
+            var sparseTensor = new SparseTensor<int>(indices, values, dense_shape);*/
+        }
     }
 }
