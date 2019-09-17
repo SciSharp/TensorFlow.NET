@@ -73,7 +73,6 @@ namespace TensorFlowNET.Examples.ImageProcessing.ObjectDetection
 
         public void PrepareData()
         {
-            throw new NotImplementedException();
         }
 
         public void Train(Session sess)

@@ -10,6 +10,7 @@ namespace Tensorflow.Models.ObjectDetection
     {
         ImageResizerBuilder _image_resizer_builder;
         FasterRCNNFeatureExtractor _feature_extractor;
+        AnchorGeneratorBuilder anchor_generator_builder;
 
         public ModelBuilder()
         {
@@ -46,8 +47,12 @@ namespace Tensorflow.Models.ObjectDetection
             var num_classes = frcnn_config.NumClasses;
             var image_resizer_fn = _image_resizer_builder.build(frcnn_config.ImageResizer);
 
-            var first_stage_atrous_rate = frcnn_config.FirstStageAtrousRate;
+            var feature_extractor = _build_faster_rcnn_feature_extractor(frcnn_config.FeatureExtractor, is_training,
+                inplace_batchnorm_update: frcnn_config.InplaceBatchnormUpdate);
+
             var number_of_stages = frcnn_config.NumberOfStages;
+            var first_stage_anchor_generator = anchor_generator_builder.build(frcnn_config.FirstStageAnchorGenerator);
+            var first_stage_atrous_rate = frcnn_config.FirstStageAtrousRate;
 
             return new FasterRCNNMetaArch(new FasterRCNNInitArgs
             {
@@ -64,6 +69,20 @@ namespace Tensorflow.Models.ObjectDetection
         public Action preprocess()
         {
             throw new NotImplementedException("");
+        }
+
+        private FasterRCNNFeatureExtractor _build_faster_rcnn_feature_extractor(FasterRcnnFeatureExtractor feature_extractor_config,
+            bool is_training, bool reuse_weights = false, bool inplace_batchnorm_update = false)
+        {
+            if (inplace_batchnorm_update)
+                throw new ValueError("inplace batchnorm updates not supported.");
+            var feature_type = feature_extractor_config.Type;
+            var first_stage_features_stride = feature_extractor_config.FirstStageFeaturesStride;
+            var batch_norm_trainable = feature_extractor_config.BatchNormTrainable;
+
+            return new FasterRCNNResnet101FeatureExtractor(is_training, first_stage_features_stride,
+                batch_norm_trainable: batch_norm_trainable,
+                reuse_weights: reuse_weights);
         }
     }
 }
