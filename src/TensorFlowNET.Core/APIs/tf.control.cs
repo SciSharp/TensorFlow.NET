@@ -27,6 +27,16 @@ namespace Tensorflow
             string name = null)
             => control_flow_ops.cond(pred, true_fn, false_fn, strict: strict, name: name);
 
+        /// <summary>
+        /// Create an op that groups multiple operations.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="inputs"></param>
+        /// <param name="name"></param>
+        /// <returns>An Operation that executes all its inputs.</returns>
+        public Operation group<T>(T[] inputs, string name = null) where T : ITensorOrOperation
+            => control_flow_ops.group(inputs, name: name);
+
         public Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
             TensorShape shape_invariants = null,
             int parallel_iterations = 10,
