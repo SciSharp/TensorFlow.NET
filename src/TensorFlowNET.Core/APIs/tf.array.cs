@@ -27,6 +27,9 @@ namespace Tensorflow
         /// </summary>
         public string newaxis = "";
 
+        public Tensor check_numerics(Tensor tensor, string message, string name = null)
+            => gen_array_ops.check_numerics(tensor, message, name: name);
+
         /// <summary>
         /// Concatenates tensors along one dimension.
         /// </summary>

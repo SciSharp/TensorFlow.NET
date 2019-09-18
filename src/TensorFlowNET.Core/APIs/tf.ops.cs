@@ -25,6 +25,12 @@ namespace Tensorflow
             => get_default_graph().get_collection(key, scope: scope);
 
         /// <summary>
+        /// A context manager that lifts ops out of control-flow scopes and function-building graphs.
+        /// </summary>
+        public void init_scope()
+            => ops.init_scope();
+
+        /// <summary>
         /// Returns a context manager that creates hierarchical names for operations.
         /// </summary>
         /// <param name="name">The name argument that is passed to the op function.</param>
