@@ -64,5 +64,8 @@ namespace Tensorflow
                 trainable: trainable,
                 collections: collections);
         }
+
+        public VariableScope get_variable_scope()
+            => Tensorflow.variable_scope.get_variable_scope();
     }
 }

@@ -390,6 +390,20 @@ namespace Tensorflow
             => math_ops.range(start, limit: limit, delta: delta, dtype: dtype, name: name);
 
         /// <summary>
+        /// Computes the "logical or" of elements across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input_tensor">The boolean tensor to reduce.</param>
+        /// <param name="axis">The dimensions to reduce.</param>
+        /// <param name="keepdims">If true, retains reduced dimensions with length 1.</param>
+        /// <param name="name"></param>
+        /// <returns>The reduced tensor.</returns>
+        public Tensor reduce_any(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_any(input_tensor, axis: axis, keepdims: keepdims, name: name);
+
+        public Tensor reduce_any(Tensor input_tensor, int axis = 0, bool keepdims = false, string name = null)
+            => math_ops.reduce_any(input_tensor, axis: new[] { axis }, keepdims: keepdims, name: name);
+
+        /// <summary>
         /// Computes the "logical and" of elements across dimensions of a tensor.
         /// </summary>
         /// <param name="input_tensor"></param>

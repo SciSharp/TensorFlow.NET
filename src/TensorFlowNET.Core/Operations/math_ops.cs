@@ -361,6 +361,14 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor reduce_any(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        {
+            var r = _ReductionDims(input_tensor, axis);
+            var max = (axis != null) ? gen_math_ops._any(input_tensor, axis, keepdims, name) :
+                gen_math_ops._any(input_tensor, r, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis, max);
+        }
+
         public static Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);

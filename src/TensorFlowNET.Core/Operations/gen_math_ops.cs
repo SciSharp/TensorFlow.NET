@@ -632,6 +632,13 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor _any<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Any", name, new { input, reduction_indices = axis, keep_dims });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims=false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims });
