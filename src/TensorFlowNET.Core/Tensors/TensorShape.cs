@@ -1,9 +1,10 @@
 ﻿using NumSharp;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using NumSharp.Utilities;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -196,12 +197,26 @@ namespace Tensorflow
             }
         }
 
+        /// <summary>
+        /// Returns a `TensorShape` combining the information in `self` and `other`.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public TensorShape merge_with(TensorShape other)
         {
             if (dims.Length == 0)
                 return other;
 
-            throw new NotImplementedException("merge_with");
+            var new_dims = new List<int>();
+
+            foreach (var i in range(ndim))
+            {
+                var dim = new Dimension(dims[i]);
+                var merged = dim.merge_with(new Dimension(other.dims[i]));
+                new_dims.Add(merged.value);
+            }
+
+            return new TensorShape(new_dims.ToArray());
         }
 
         /// <summary>

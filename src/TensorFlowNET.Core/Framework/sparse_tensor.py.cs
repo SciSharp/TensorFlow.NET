@@ -1,4 +1,6 @@
-﻿using static Tensorflow.Binding;
+﻿using System;
+using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Framework
 {
@@ -8,15 +10,20 @@ namespace Tensorflow.Framework
     public class SparseTensor<T> : CompositeTensor, _TensorLike
     {
         long[,] _indices;
-        Tensor indices;
+        public Tensor indices;
 
         T[] _values;
-        Tensor values;
+        public Tensor values;
 
-        int[] _dense_shape;
-        Tensor dense_shape;
+        long[] _dense_shape;
+        public Tensor dense_shape;
 
-        public SparseTensor(long[,] indices_, T[] values_, int[] dense_shape_)
+        TensorShape _shape;
+        public TensorShape shape => _shape;
+
+        public TF_DataType dtype => dtypes.as_dtype(typeof(T));
+
+        public SparseTensor(long[,] indices_, T[] values_, long[] dense_shape_)
         {
             tf_with(ops.name_scope(null, "SparseTensor", new { }), delegate
             {
@@ -37,6 +44,8 @@ namespace Tensorflow.Framework
 
             indices_shape[0].merge_with(values_shape.dims[0]);
             indices_shape[1].merge_with(dense_shape_shape.dims[0]);
+
+            _shape = new TensorShape(_dense_shape.Select(x => Convert.ToInt32(x)).ToArray());
         }
     }
 

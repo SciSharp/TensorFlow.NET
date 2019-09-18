@@ -225,14 +225,22 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void sparse_tensor_to_dense()
         {
-            /*int[,] dense_array =
+            var decoded_list = tf.SparseTensor(new[,]
             {
-                { 1, 0, 0, 0, 0 },
-                { 0, 1, 0, 0, 0 },
-                { 0, 0, 1, 0, 0 },
-                { 0, 0, 0, 1, 0 }
-            };
-            var sparseTensor = new SparseTensor<int>(indices, values, dense_shape);*/
+                { 0L, 0L },
+                { 1L, 2L }
+            },
+            new int[] { 1, 2 },
+            new[] { 3L, 4L });
+
+            var onehot = tf.sparse_tensor_to_dense(decoded_list);
+            using (var sess = tf.Session())
+            {
+                var result = sess.run(onehot);
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 0, 0, 0 }, result[0].ToArray<int>()));
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 2, 0 }, result[1].ToArray<int>()));
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0 }, result[2].ToArray<int>()));
+            }
         }
     }
 }

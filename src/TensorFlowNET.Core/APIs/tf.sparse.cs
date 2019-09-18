@@ -20,8 +20,19 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public SparseTensor<T> SparseTensor<T>(long[,] indices, T[] values, int[] dense_shape)
+        public SparseTensor<T> SparseTensor<T>(long[,] indices, T[] values, long[] dense_shape)
             => new SparseTensor<T>(indices, values, dense_shape);
+
+        public Tensor sparse_tensor_to_dense<T>(SparseTensor<T> sp_input,
+            T default_value = default,
+            bool validate_indices = true,
+            string name = null)
+            => gen_sparse_ops.sparse_to_dense(sp_input.indices,
+                sp_input.dense_shape,
+                sp_input.values,
+                default_value: default_value,
+                validate_indices: validate_indices,
+                name: name);
 
         /// <summary>
         /// Converts a sparse representation into a dense tensor.

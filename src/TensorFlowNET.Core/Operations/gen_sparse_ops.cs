@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using Tensorflow.Framework;
 
 namespace Tensorflow
 {
@@ -36,6 +37,25 @@ namespace Tensorflow
             int[] output_shape, 
             T sparse_values,
             T default_value,
+            bool validate_indices = true,
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("SparseToDense", name, args: new
+            {
+                sparse_indices,
+                output_shape,
+                sparse_values,
+                default_value,
+                validate_indices
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor sparse_to_dense<T>(Tensor sparse_indices,
+            Tensor output_shape,
+            Tensor sparse_values,
+            T default_value = default,
             bool validate_indices = true,
             string name = null)
         {

@@ -118,110 +118,10 @@ namespace Tensorflow
                 if (values == null)
                     throw new ValueError("None values not supported.");
 
-                if(np_dt == null)
-                {
-                    switch (values)
-                    {
-                        case bool boolVal:
-                            nparray = boolVal;
-                            break;
-                        case int intVal:
-                            nparray = intVal;
-                            break;
-                        case int[] intVals:
-                            nparray = np.array(intVals);
-                            break;
-                        case int[,] intVals:
-                            nparray = np.array(intVals);
-                            break;
-                        case long intVal:
-                            nparray = intVal;
-                            break;
-                        case long[] intVals:
-                            nparray = np.array(intVals);
-                            break;
-                        case long[,] intVals:
-                            nparray = np.array(intVals);
-                            break;
-                        case float floatVal:
-                            nparray = floatVal;
-                            break;
-                        case float[] floatVals:
-                            nparray = floatVals;
-                            break;
-                        case float[,] floatVals:
-                            nparray = np.array(floatVals);
-                            break;
-                        case double doubleVal:
-                            nparray = doubleVal;
-                            break;
-                        case double[] doubleVals:
-                            nparray = np.array(doubleVals);
-                            break;
-                        case double[,] doubleVals:
-                            nparray = np.array(doubleVals);
-                            break;
-                        case string strVal:
-                            nparray = strVal;
-                            break;
-                        case string[] strVals:
-                            nparray = strVals;
-                            break;
-                        case byte[] byteValues:
-                            nparray = byteValues;
-                            break;
-                        case byte[,] byteValues:
-                            nparray = np.array(byteValues);
-                            break;
-                        default:
-                            throw new NotImplementedException($"make_tensor_proto: Support for type {values.GetType()} Not Implemented");
-                    }
-                }
-                else
-                {
-                    // convert data type
-                    switch (np_dt.Name)
-                    {
-                        case "Int32":
-                            if (values.GetType().IsArray)
-                                nparray = np.array((int[])values, np_dt);
-                            else
-                                nparray = Converts.ToInt32(values);
-                            break;
-                        case "Int64":
-                            if (values.GetType().IsArray)
-                                nparray = np.array((int[])values, np_dt);
-                            else
-                                nparray = Converts.ToInt64(values);
-                            break;
-                        case "Single":
-                            if (values.GetType().IsArray)
-                                nparray = np.array((float[])values, np_dt);
-                            else
-                                nparray = Converts.ToSingle(values);
-                            break;
-                        case "Double":
-                            if (values.GetType().IsArray)
-                                nparray = np.array((double[])values, np_dt);
-                            else
-                                nparray = Converts.ToDouble(values);
-                            break;
-                        case "String":
-                            if (values.GetType().IsArray)
-                                nparray = np.array((string[])values, np_dt);
-                            else
-                                nparray = NDArray.FromString(Converts.ToString(values));
-                            break;
-                        case "Boolean":
-                            if (values.GetType().IsArray)
-                                nparray = np.array((bool[])values, np_dt);
-                            else
-                                nparray = Converts.ToBoolean(values);
-                            break;
-                        default:
-                            throw new NotImplementedException($"make_tensor_proto: Support for type {np_dt.Name} Not Implemented");
-                    }
-                }
+                nparray = convert_to_numpy_ndarray(values);
+
+                if (np_dt != null && np_dt != typeof(string))
+                    nparray = nparray.astype(np_dt);
             }
 
             var numpy_dtype = nparray.dtype.as_dtype(dtype: dtype);
@@ -316,23 +216,59 @@ namespace Tensorflow
                 case NDArray val:
                     nd = val;
                     break;
-                case int val:
-                    nd = np.asarray(val);
+                case bool boolVal:
+                    nd = boolVal;
                     break;
-                case int[] val:
-                    nd = np.array(val);
+                case int intVal:
+                    nd = intVal;
                     break;
-                case float val:
-                    nd = np.asarray(val);
+                case int[] intVals:
+                    nd = np.array(intVals);
                     break;
-                case double val:
-                    nd = np.asarray(val);
+                case int[,] intVals:
+                    nd = np.array(intVals);
                     break;
-                case string val:
-                    nd = np.asarray(val);
+                case long intVal:
+                    nd = intVal;
+                    break;
+                case long[] intVals:
+                    nd = np.array(intVals);
+                    break;
+                case long[,] intVals:
+                    nd = np.array(intVals);
+                    break;
+                case float floatVal:
+                    nd = floatVal;
+                    break;
+                case float[] floatVals:
+                    nd = floatVals;
+                    break;
+                case float[,] floatVals:
+                    nd = np.array(floatVals);
+                    break;
+                case double doubleVal:
+                    nd = doubleVal;
+                    break;
+                case double[] doubleVals:
+                    nd = np.array(doubleVals);
+                    break;
+                case double[,] doubleVals:
+                    nd = np.array(doubleVals);
+                    break;
+                case string strVal:
+                    nd = NDArray.FromString(strVal);
+                    break;
+                case string[] strVals:
+                    nd = strVals;
+                    break;
+                case byte[] byteValues:
+                    nd = byteValues;
+                    break;
+                case byte[,] byteValues:
+                    nd = np.array(byteValues);
                     break;
                 default:
-                    throw new Exception("Not Implemented");
+                    throw new NotImplementedException($"convert_to_numpy_ndarray: Support for type {values.GetType()} Not Implemented");
             }
 
             return nd;
