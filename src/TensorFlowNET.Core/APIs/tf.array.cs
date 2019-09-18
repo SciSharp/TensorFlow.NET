@@ -27,6 +27,18 @@ namespace Tensorflow
         /// </summary>
         public string newaxis = "";
 
+        /// <summary>
+        /// BatchToSpace for N-D tensors of type T.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="block_shape"></param>
+        /// <param name="crops"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor batch_to_space_nd<T>(T input, int[] block_shape, int[,] crops, string name = null)
+            => gen_array_ops.batch_to_space_nd(input, block_shape, crops, name: name);
+
         public Tensor check_numerics(Tensor tensor, string message, string name = null)
             => gen_array_ops.check_numerics(tensor, message, name: name);
 

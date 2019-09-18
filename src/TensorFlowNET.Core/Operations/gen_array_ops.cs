@@ -26,6 +26,13 @@ namespace Tensorflow
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
         public static Execute _execute = new Execute();
 
+        public static Tensor batch_to_space_nd<T>(T input, int[] block_shape, int[,] crops, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("BatchToSpaceND", name: name, args: new { input, block_shape, crops });
+
+            return _op.output;
+        }
+        
         public static Tensor check_numerics(Tensor tensor, string message, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("CheckNumerics", name: name, args: new { tensor, message });
