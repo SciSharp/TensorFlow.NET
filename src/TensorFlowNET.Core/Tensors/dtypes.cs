@@ -23,6 +23,7 @@ namespace Tensorflow
 {
     public static class dtypes
     {
+        public static TF_DataType @bool = TF_DataType.TF_BOOL;
         public static TF_DataType int8 = TF_DataType.TF_INT8;
         public static TF_DataType int32 = TF_DataType.TF_INT32;
         public static TF_DataType int64 = TF_DataType.TF_INT64;

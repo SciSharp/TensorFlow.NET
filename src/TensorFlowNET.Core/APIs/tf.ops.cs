@@ -21,6 +21,9 @@ namespace Tensorflow
         public Tensor assign(Tensor @ref, object value, bool validate_shape = true, bool use_locking = true, string name = null) 
             => state_ops.assign(@ref, value, validate_shape, use_locking, name);
 
+        public void device(string device_name)
+            => get_default_graph().device(device_name);
+
         public object get_collection(string key, string scope = "") 
             => get_default_graph().get_collection(key, scope: scope);
 

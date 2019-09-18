@@ -39,6 +39,19 @@ namespace Tensorflow
         public Tensor batch_to_space_nd<T>(T input, int[] block_shape, int[,] crops, string name = null)
             => gen_array_ops.batch_to_space_nd(input, block_shape, crops, name: name);
 
+        /// <summary>
+        /// Apply boolean mask to tensor.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="tensor">N-D tensor.</param>
+        /// <param name="mask">K-D boolean tensor, K <= N and K must be known statically.</param>
+        /// <param name="name"></param>
+        /// <param name="axis">A 0-D int Tensor representing the axis in tensor to mask from. </param>
+        /// <returns>(N-K+1)-dimensional tensor populated by entries in tensor corresponding to True values in mask.</returns>
+        public Tensor boolean_mask<T1, T2>(T1 tensor, T2 mask, string name = "boolean_mask", int axis = 0)
+            => array_ops.boolean_mask(tensor, mask, name: name, axis: axis);
+
         public Tensor check_numerics(Tensor tensor, string message, string name = null)
             => gen_array_ops.check_numerics(tensor, message, name: name);
 

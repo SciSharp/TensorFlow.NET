@@ -288,6 +288,11 @@ namespace Tensorflow
             return op;
         }
 
+        public void device(string device_name)
+        {
+            throw new NotImplementedException("");
+        }
+
         private void _create_op_helper(Operation op, bool compute_device = true)
         {
             _record_op_seen_by_control_dependencies(op);

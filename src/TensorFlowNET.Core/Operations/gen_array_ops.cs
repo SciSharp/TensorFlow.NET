@@ -274,9 +274,10 @@ namespace Tensorflow
             return _op.outputs;
         }
 
-        public static Tensor where()
+        public static Tensor where(Tensor condition, string name = null)
         {
-            throw new NotImplementedException("where");
+            var _op = _op_def_lib._apply_op_helper("Where", name, new { input = condition });
+            return _op.output;
         }
 
         public static Tensor one_hot(Tensor indices, int depth,
