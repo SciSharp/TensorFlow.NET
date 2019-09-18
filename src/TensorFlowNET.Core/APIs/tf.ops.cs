@@ -14,10 +14,18 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
+
 namespace Tensorflow
 {
     public partial class tensorflow
     {
+        public void add_to_collection<T>(string name, T value)
+            => get_default_graph().add_to_collection(name, value);
+
+        public void add_to_collections<T>(List<string> names, T value)
+            => get_default_graph().add_to_collections(names, value);
+
         public Tensor assign(Tensor @ref, object value, bool validate_shape = true, bool use_locking = true, string name = null) 
             => state_ops.assign(@ref, value, validate_shape, use_locking, name);
 

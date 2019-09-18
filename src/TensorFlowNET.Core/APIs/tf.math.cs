@@ -415,6 +415,17 @@ namespace Tensorflow
             => math_ops.reduce_all(input_tensor, axis: axis, keepdims: keepdims, name: name);
 
         /// <summary>
+        /// Computes the product of elements across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input_tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor reduce_prod(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_prod(input_tensor, axis: axis, keepdims: keepdims, name: name);
+
+        /// <summary>
         /// Computes the sum of elements across dimensions of a tensor.
         /// </summary>
         /// <param name="input"></param>

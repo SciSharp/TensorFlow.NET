@@ -95,6 +95,15 @@ namespace Tensorflow
             => gen_array_ops.fill(dims, value, name: name);
 
         /// <summary>
+        /// Return a tensor with the same shape and contents as input.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor identity(Tensor input, string name = null)
+            => array_ops.identity(input, name: name);
+
+        /// <summary>
         /// Gather slices from params axis axis according to indices.
         /// </summary>
         /// <param name="params"></param>
