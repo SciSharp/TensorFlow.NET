@@ -228,6 +228,12 @@ namespace Tensorflow
             return (_op.outputs[0], _op.outputs[1]);
         }
 
+        public static Tensor reverse<T>(Tensor tensor, T axis, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ReverseV2", name, new { tensor, axis });
+            return _op.output;
+        }
+
         public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });

@@ -99,6 +99,19 @@ namespace Tensorflow
             => array_ops.transpose(a, perm, name, conjugate);
 
         /// <summary>
+        /// Reverses specific dimensions of a tensor.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor reverse(Tensor tensor, int[] axis, string name = null)
+            => gen_array_ops.reverse(tensor, axis, name: name);
+
+        public static Tensor reverse(Tensor tensor, Tensor axis, string name = null)
+            => gen_array_ops.reverse(tensor, axis, name: name);
+
+        /// <summary>
         /// Returns the rank of a tensor.
         /// </summary>
         /// <param name="input"></param>
