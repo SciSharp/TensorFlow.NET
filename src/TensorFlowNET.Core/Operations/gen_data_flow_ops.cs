@@ -22,10 +22,9 @@ namespace Tensorflow
 
         public static Tensor dynamic_stitch(Tensor[] indices, Tensor[] data, string name = null)
         {
-            var _attr_N = indices.Length;
             var _op = _op_def_lib._apply_op_helper("DynamicStitch", name, new { indices, data });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         public static (Tensor, Tensor) tensor_array_v3(Tensor size, TF_DataType dtype = TF_DataType.DtInvalid, 
@@ -44,6 +43,59 @@ namespace Tensorflow
             });
 
             return (null, null);
+        }
+
+        public static Tensor padding_fifo_queue_v2(TF_DataType[] component_types, TensorShape[] shapes, 
+            int capacity = -1, string container = "", string shared_name = "", 
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("PaddingFIFOQueueV2", name, new
+            {
+                component_types,
+                shapes,
+                capacity,
+                container,
+                shared_name
+            });
+
+            return _op.output;
+        }
+
+        public static Operation queue_enqueue(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueEnqueue", name, new
+            {
+                handle,
+                components,
+                timeout_ms
+            });
+
+            return _op;
+        }
+
+        public static Operation queue_enqueue_v2(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueEnqueueV2", name, new
+            {
+                handle,
+                components,
+                timeout_ms
+            });
+
+            return _op;
+        }
+
+        public static Tensor[] queue_dequeue_many_v2(Tensor handle, int n, TF_DataType[] component_types, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueDequeueManyV2", name, new
+            {
+                handle,
+                n,
+                component_types,
+                timeout_ms
+            });
+
+            return _op.outputs;
         }
     }
 }
