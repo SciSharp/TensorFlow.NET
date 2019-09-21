@@ -40,7 +40,7 @@ namespace Tensorflow
 
         public tensorflow()
         {
-            _defaultSessionFactory = new ThreadLocal<Session>(Session);
+            _defaultSessionFactory = new ThreadLocal<Session>(() => new Session());
         }
 
         public Session defaultSession => _defaultSessionFactory.Value;

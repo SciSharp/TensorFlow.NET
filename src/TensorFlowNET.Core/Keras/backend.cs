@@ -28,7 +28,7 @@ namespace Tensorflow.Keras
         //Func<Array, bool> py_any = any;
         //Func<double, double, double, IEnumerable<double>> py_slice = slice;
 
-        public static Session _SESSION = tf.defaultSession;
+        public static Session _SESSION = ops.get_default_session();
         public static Graph _GRAPH = null;
         public static Dictionary<Graph, GraphLearningPhase> _GRAPH_LEARNING_PHASES;
         //Dictionary<Graph, Dictionary<string, int>> PER_GRAPH_LAYER_NAME_UIDS;
