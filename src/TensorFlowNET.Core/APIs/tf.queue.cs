@@ -43,5 +43,52 @@ namespace Tensorflow
                 names,
                 shared_name: shared_name,
                 name: name);
+
+        public PaddingFIFOQueue PaddingFIFOQueue(int capacity,
+            TF_DataType dtype,
+            TensorShape shape,
+            string shared_name = null,
+            string name = "padding_fifo_queue")
+            => new PaddingFIFOQueue(capacity,
+                new [] { dtype },
+                new[] { shape },
+                new[] { name },
+                shared_name: shared_name,
+                name: name);
+
+        /// <summary>
+        /// A queue implementation that dequeues elements in first-in first-out order.
+        /// </summary>
+        /// <param name="capacity"></param>
+        /// <param name="dtypes"></param>
+        /// <param name="shapes"></param>
+        /// <param name="names"></param>
+        /// <param name="shared_name"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public FIFOQueue FIFOQueue(int capacity,
+            TF_DataType[] dtypes,
+            TensorShape[] shapes = null,
+            string[] names = null,
+            string shared_name = null,
+            string name = "fifo_queue")
+            => new FIFOQueue(capacity,
+                dtypes,
+                shapes,
+                names,
+                shared_name: shared_name,
+                name: name);
+
+        public FIFOQueue FIFOQueue(int capacity,
+            TF_DataType dtype,
+            TensorShape shape = null,
+            string shared_name = null,
+            string name = "fifo_queue")
+            => new FIFOQueue(capacity,
+                new[] { dtype },
+                new[] { shape ?? new TensorShape() },
+                new[] { name },
+                shared_name: shared_name,
+                name: name);
     }
 }

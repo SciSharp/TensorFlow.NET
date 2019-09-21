@@ -61,6 +61,22 @@ namespace Tensorflow
             return _op.output;
         }
 
+        public static Tensor fifo_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+            int capacity = -1, string container = "", string shared_name = "",
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("FIFOQueueV2", name, new
+            {
+                component_types,
+                shapes,
+                capacity,
+                container,
+                shared_name
+            });
+
+            return _op.output;
+        }
+
         public static Operation queue_enqueue(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("QueueEnqueue", name, new
@@ -76,6 +92,42 @@ namespace Tensorflow
         public static Operation queue_enqueue_v2(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("QueueEnqueueV2", name, new
+            {
+                handle,
+                components,
+                timeout_ms
+            });
+
+            return _op;
+        }
+
+        public static Tensor[] queue_dequeue_v2(Tensor handle, TF_DataType[] component_types, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueDequeueV2", name, new
+            {
+                handle,
+                component_types,
+                timeout_ms
+            });
+
+            return _op.outputs;
+        }
+
+        public static Tensor[] queue_dequeue(Tensor handle, TF_DataType[] component_types, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueDequeue", name, new
+            {
+                handle,
+                component_types,
+                timeout_ms
+            });
+
+            return _op.outputs;
+        }
+
+        public static Operation queue_enqueue_many_v2(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueEnqueueManyV2", name, new
             {
                 handle,
                 components,
