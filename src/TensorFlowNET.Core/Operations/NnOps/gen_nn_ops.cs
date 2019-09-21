@@ -286,6 +286,18 @@ namespace Tensorflow.Operations
             return _op.outputs[0];
         }
 
+        public static Tensor leaky_relu_grad(Tensor gradients, Tensor features, float alpha = 0.2f, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LeakyReluGrad", name: name, args: new
+            {
+                gradients,
+                features,
+                alpha
+            });
+
+            return _op.output;
+        }
+
         public static Tensor softmax(Tensor logits, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Softmax", name: name, args: new

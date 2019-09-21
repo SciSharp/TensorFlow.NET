@@ -47,6 +47,15 @@ namespace Tensorflow.Gradients
             return new Tensor[] { gen_nn_ops.relu_grad(grads[0], op.outputs[0]) };
         }
 
+        [RegisterGradient("LeakyRelu")]
+        public static Tensor[] _LeakyReluGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+            var alpha = (float)op.get_attr("alpha");
+            return new Tensor[] { gen_nn_ops.leaky_relu_grad(grad, x, alpha: alpha)};
+        }
+
         /// <summary>
         /// The derivative of the softmax nonlinearity.
         /// </summary>

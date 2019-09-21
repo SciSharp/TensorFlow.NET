@@ -52,7 +52,6 @@ namespace Tensorflow
             => new PaddingFIFOQueue(capacity,
                 new [] { dtype },
                 new[] { shape },
-                new[] { name },
                 shared_name: shared_name,
                 name: name);
 
