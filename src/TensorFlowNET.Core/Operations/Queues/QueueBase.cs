@@ -42,7 +42,7 @@ namespace Tensorflow.Queues
             });
         }
 
-        private Tensor[] _check_enqueue_dtypes(object vals)
+        protected Tensor[] _check_enqueue_dtypes(object vals)
         {
             var tensors = new List<Tensor>();
 
@@ -56,12 +56,10 @@ namespace Tensorflow.Queues
                     }
                     break;
 
-                case int[] vals1:
-                    tensors.Add(ops.convert_to_tensor(vals1, dtype: _dtypes[0], name: $"component_0"));
-                    break;
-
                 default:
-                    throw new NotImplementedException("");
+                    var dtype1 = GetType().Name == "PriorityQueue" ? _dtypes[1] : _dtypes[0];
+                    tensors.Add(ops.convert_to_tensor(vals, dtype: dtype1, name: $"component_0"));
+                    break;
             }
 
             return tensors.ToArray();

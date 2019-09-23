@@ -10,11 +10,12 @@ namespace Tensorflow.Models.ObjectDetection
     {
         ImageResizerBuilder _image_resizer_builder;
         FasterRCNNFeatureExtractor _feature_extractor;
-        AnchorGeneratorBuilder anchor_generator_builder;
+        AnchorGeneratorBuilder _anchor_generator_builder;
 
         public ModelBuilder()
         {
             _image_resizer_builder = new ImageResizerBuilder();
+            _anchor_generator_builder = new AnchorGeneratorBuilder();
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace Tensorflow.Models.ObjectDetection
                 inplace_batchnorm_update: frcnn_config.InplaceBatchnormUpdate);
 
             var number_of_stages = frcnn_config.NumberOfStages;
-            var first_stage_anchor_generator = anchor_generator_builder.build(frcnn_config.FirstStageAnchorGenerator);
+            var first_stage_anchor_generator = _anchor_generator_builder.build(frcnn_config.FirstStageAnchorGenerator);
             var first_stage_atrous_rate = frcnn_config.FirstStageAtrousRate;
 
             return new FasterRCNNMetaArch(new FasterRCNNInitArgs

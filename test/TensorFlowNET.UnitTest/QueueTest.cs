@@ -70,5 +70,27 @@ namespace TensorFlowNET.UnitTest
                 // until queue has more element.
             }
         }
+
+        [TestMethod]
+        public void PriorityQueue()
+        {
+            var queue = tf.PriorityQueue(3, tf.@string);
+            var init = queue.enqueue_many(new[] { 2L, 4L, 3L }, new[] { "p1", "p2", "p3" });
+            var x = queue.dequeue();
+
+            using (var sess = tf.Session())
+            {
+                init.run();
+
+                var result = sess.run(x);
+                Assert.AreEqual(result[0].GetInt64(), 2L);
+
+                result = sess.run(x);
+                Assert.AreEqual(result[0].GetInt64(), 3L);
+
+                result = sess.run(x);
+                Assert.AreEqual(result[0].GetInt64(), 4L);
+            }
+        }
     }
 }

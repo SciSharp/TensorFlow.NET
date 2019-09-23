@@ -62,6 +62,33 @@ A FIFOQueue that supports batching variable-sized tensors by padding. A `Padding
 
 A queue implementation that dequeues elements in prioritized order. A `PriorityQueue` has bounded capacity; supports multiple concurrent producers and consumers; and provides exactly-once delivery. A `PriorityQueue` holds a list of up to `capacity` elements. Each element is a fixed-length tuple of tensors whose dtypes are described by `types`, and whose shapes are optionally described by the `shapes` argument.
 
+```csharp
+[TestMethod]
+public void PriorityQueue()
+{
+	var queue = tf.PriorityQueue(3, tf.@string);
+	var init = queue.enqueue_many(new[] { 2L, 4L, 3L }, new[] { "p1", "p2", "p3" });
+	var x = queue.dequeue();
+
+	using (var sess = tf.Session())
+	{
+		init.run();
+
+		// output will 2, 3, 4
+		var result = sess.run(x);
+		Assert.AreEqual(result[0].GetInt64(), 2L);
+
+		result = sess.run(x);
+		Assert.AreEqual(result[0].GetInt64(), 3L);
+
+		result = sess.run(x);
+		Assert.AreEqual(result[0].GetInt64(), 4L);
+	}
+}
+```
+
+
+
 #### RandomShuffleQueue
 
 A queue implementation that dequeues elements in a random order. A `RandomShuffleQueue` has bounded capacity; supports multiple concurrent producers and consumers; and provides exactly-once delivery. A `RandomShuffleQueue` holds a list of up to `capacity` elements. Each element is a fixed-length tuple of tensors whose dtypes are described by `dtypes`, and whose shapes are optionally described by the `shapes` argument.

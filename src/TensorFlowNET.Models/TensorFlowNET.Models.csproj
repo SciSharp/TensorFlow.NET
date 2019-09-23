@@ -4,6 +4,16 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>TensorFlow.Models</AssemblyName>
     <RootNamespace>Tensorflow.Models</RootNamespace>
+    <Version>0.0.1</Version>
+    <Authors>Haiping Chen</Authors>
+    <Company>SciSharp STACK</Company>
+    <PackageProjectUrl>https://github.com/SciSharp/TensorFlow.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>TensorFlow</PackageTags>
+    <Description>Models and examples built with TensorFlow.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Apache2</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +24,10 @@
     <Content Include="ObjectDetection\Models\faster_rcnn_resnet101_voc07.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Protobuf.Text" Version="0.3.1" />
   </ItemGroup>
 
   <ItemGroup>

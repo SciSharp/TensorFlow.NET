@@ -77,6 +77,22 @@ namespace Tensorflow
             return _op.output;
         }
 
+        public static Tensor priority_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+            int capacity = -1, string container = "", string shared_name = "",
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("PriorityQueueV2", name, new
+            {
+                component_types,
+                shapes,
+                capacity,
+                container,
+                shared_name
+            });
+
+            return _op.output;
+        }
+
         public static Operation queue_enqueue(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("QueueEnqueue", name, new
