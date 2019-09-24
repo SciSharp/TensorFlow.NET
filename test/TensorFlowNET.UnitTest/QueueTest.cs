@@ -92,5 +92,25 @@ namespace TensorFlowNET.UnitTest
                 Assert.AreEqual(result[0].GetInt64(), 4L);
             }
         }
+
+        [TestMethod]
+        public void RandomShuffleQueue()
+        {
+            var queue = tf.RandomShuffleQueue(10, min_after_dequeue: 1, dtype: tf.int32);
+            var init = queue.enqueue_many(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            var x = queue.dequeue();
+
+            string results = "";
+            using (var sess = tf.Session())
+            {
+                init.run();
+
+                foreach(var i in range(9))
+                    results += (int)sess.run(x) + ".";
+
+                // output in random order
+                Assert.IsFalse(results == "1.2.3.4.5.6.7.8.9.");
+            }
+        }
     }
 }

@@ -108,5 +108,20 @@ namespace Tensorflow
                 new[] { shape ?? new TensorShape() },
                 shared_name: shared_name,
                 name: name);
+
+        public RandomShuffleQueue RandomShuffleQueue(int capacity,
+            int min_after_dequeue,
+            TF_DataType dtype,
+            TensorShape shape = null,
+            int? seed = null,
+            string shared_name = null,
+            string name = "random_shuffle_queue")
+            => new RandomShuffleQueue(capacity,
+                min_after_dequeue: min_after_dequeue,
+                new[] { dtype },
+                new[] { shape ?? new TensorShape() },
+                seed: seed,
+                shared_name: shared_name,
+                name: name);
     }
 }

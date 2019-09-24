@@ -93,6 +93,25 @@ namespace Tensorflow
             return _op.output;
         }
 
+        public static Tensor random_shuffle_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+            int capacity = -1, int min_after_dequeue = 0, int seed = 0, int seed2 = 0,
+            string container = "", string shared_name = "", string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("RandomShuffleQueueV2", name, new
+            {
+                component_types,
+                shapes,
+                capacity,
+                min_after_dequeue,
+                seed,
+                seed2,
+                container,
+                shared_name
+            });
+
+            return _op.output;
+        }
+
         public static Operation queue_enqueue(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("QueueEnqueue", name, new

@@ -58,6 +58,32 @@ Creates a queue that dequeues elements in a first-in first-out order. A `FIFOQue
 
 A FIFOQueue that supports batching variable-sized tensors by padding. A `PaddingFIFOQueue` may contain components with dynamic shape, while also supporting `dequeue_many`. A `PaddingFIFOQueue` holds a list of up to `capacity` elements. Each element is a fixed-length tuple of tensors whose dtypes are described by `dtypes`, and whose shapes are described by the `shapes` argument.
 
+```chsarp
+[TestMethod]
+public void PaddingFIFOQueue()
+{
+	var numbers = tf.placeholder(tf.int32);
+	var queue = tf.PaddingFIFOQueue(10, tf.int32, new TensorShape(-1));
+	var enqueue = queue.enqueue(numbers);
+	var dequeue_many = queue.dequeue_many(n: 3);
+
+	using(var sess = tf.Session())
+	{
+		sess.run(enqueue, (numbers, new[] { 1 }));
+		sess.run(enqueue, (numbers, new[] { 2, 3 }));
+		sess.run(enqueue, (numbers, new[] { 3, 4, 5 }));
+
+		var result = sess.run(dequeue_many[0]);
+
+		Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 0, 0 }, result[0].ToArray<int>()));
+		Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 2, 3, 0 }, result[1].ToArray<int>()));
+		Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 4, 5 }, result[2].ToArray<int>()));
+	}
+}
+```
+
+
+
 #### PriorityQueue
 
 A queue implementation that dequeues elements in prioritized order. A `PriorityQueue` has bounded capacity; supports multiple concurrent producers and consumers; and provides exactly-once delivery. A `PriorityQueue` holds a list of up to `capacity` elements. Each element is a fixed-length tuple of tensors whose dtypes are described by `types`, and whose shapes are optionally described by the `shapes` argument.
@@ -92,6 +118,28 @@ public void PriorityQueue()
 #### RandomShuffleQueue
 
 A queue implementation that dequeues elements in a random order. A `RandomShuffleQueue` has bounded capacity; supports multiple concurrent producers and consumers; and provides exactly-once delivery. A `RandomShuffleQueue` holds a list of up to `capacity` elements. Each element is a fixed-length tuple of tensors whose dtypes are described by `dtypes`, and whose shapes are optionally described by the `shapes` argument.
+
+```csharp
+[TestMethod]
+public void RandomShuffleQueue()
+{
+	var queue = tf.RandomShuffleQueue(10, min_after_dequeue: 1, dtype: tf.int32);
+	var init = queue.enqueue_many(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+	var x = queue.dequeue();
+
+	string results = "";
+	using (var sess = tf.Session())
+	{
+		init.run();
+
+		foreach(var i in range(9))
+			results += (int)sess.run(x) + ".";
+
+		// output in random order
+		// 1.2.3.4.5.6.7.8.9.
+	}
+}
+```
 
 
 
