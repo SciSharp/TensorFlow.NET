@@ -19,7 +19,7 @@
 Docs: https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.11.4.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.10.0:
-1. Upgrade NumSharp to v0.20.
+1. Upgrade NumSharp to v0.20.3.
 2. Add DisposableObject class to manage object lifetime.
 3. Add tf.no_op, tf.nn.in_top_k, tf.GraphKeys and tf.trainable_variables.
 4. Change tensorflow to non-static class in order to execute some initialization process.
@@ -28,7 +28,8 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 7. Add tf.image related APIs.
 8. Add tf.random_normal, tf.constant, tf.pad, tf.shape, tf.image.resize_nearest_neighbor.
 9. MultiThread is safe.
-10. Support n-dim indexing for tensor.</PackageReleaseNotes>
+10. Support n-dim indexing for tensor.
+11. Add RegisterNoGradient</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
     <FileVersion>0.11.4.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -62,7 +63,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.5.1" />
-    <PackageReference Include="NumSharp" Version="0.20.2" />
+    <PackageReference Include="NumSharp" Version="0.20.3" />
   </ItemGroup>
 
   <ItemGroup>

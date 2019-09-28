@@ -96,12 +96,11 @@ namespace Tensorflow.Gradients
             });
         }
 
-        [RegisterGradient("GreaterEqual")]
-        public static Tensor[] _GreaterEqualGrad(Operation op, Tensor[] grads)
-        {
-            var grad = grads[0];
-            throw new NotImplementedException("_GreaterEqualGrad");
-        }
+        [RegisterNoGradient("GreaterEqual")]
+        public static Tensor[] _GreaterEqualGrad(Operation op, Tensor[] grads) => null;
+
+        [RegisterNoGradient("ZerosLike")]
+        public static Tensor[] _ZerosLike(Operation op, Tensor[] grads) => null;
 
         [RegisterGradient("Identity")]
         public static Tensor[] _IdGrad(Operation op, Tensor[] grads)
@@ -415,7 +414,9 @@ namespace Tensorflow.Gradients
                     var rank = input_0_shape.Length;
                     if (Enumerable.SequenceEqual(Enumerable.Range(0, rank), axes.Data<int>()))
                     {
-                        grad = array_ops.reshape(grad, new int[] { 1 });
+                        var new_shape = range(rank).Select(x => 1).ToArray();
+                        grad = array_ops.reshape(grad, new_shape);
+                        // If shape is not fully defined (but rank is), we use Shape.
                         if (!input_0_shape.Contains(-1))
                             input_shape = constant_op.constant(input_0_shape);
                         else

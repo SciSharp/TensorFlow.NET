@@ -117,19 +117,44 @@ namespace Tensorflow
                         Tensor[] in_grads = null;
                         var is_partitioned_call = _IsPartitionedCall(op);
                         var is_func_call = false;
-                        var has_out_grads = true;
+                        var has_out_grads = out_grads.Exists(x => x != null);
                         if (has_out_grads && !stop_ops.Contains(op))
                         {
                             // A grad_fn must be defined, either as a function or as None
                             // for ops that do not have gradients.
-                            var grad_fn = ops.get_gradient_function(op);
 
-                            if (is_func_call)
+                            Func<Operation, Tensor[], Tensor[]> grad_fn = null;
+                            try
                             {
-
+                                grad_fn = ops.get_gradient_function(op);
                             }
-                            else
+                            catch (LookupError)
                             {
+                                if (is_func_call)
+                                {
+                                    if (is_partitioned_call)
+                                    {
+
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                                else
+                                {
+                                    throw new LookupError($"No gradient defined for operation '{op.name}' (op type: {op.type})");
+                                }
+                            }
+
+                            // if (loop_state)
+                                //loop_state.EnterGradWhileContext(op, before: false);
+
+                            if ((is_func_call || grad_fn != null) && has_out_grads)
+                            {
+                                // NOTE: If _AggregatedGrads didn't compute a value for the i'th
+                                // output, it means that the cost does not depend on output[i],
+                                // therefore dC/doutput[i] is 0.
                                 foreach (var (i, out_grad) in enumerate(out_grads))
                                 {
                                     if (out_grad == null)
@@ -143,19 +168,23 @@ namespace Tensorflow
 
                                 tf_with(ops.name_scope(op.name + "_grad"), scope1 =>
                                 {
-                                    string name1 = scope1;
                                     if (grad_fn != null)
                                     {
                                         in_grads = _MaybeCompile(grad_scope, op, out_grads.Select(x => x[0]).ToArray(), null, grad_fn);
-                                        _VerifyGeneratedGradients(in_grads, op);
                                     }
-
+                                    _VerifyGeneratedGradients(in_grads, op);
                                     if (gate_gradients && in_grads.Count(x => x != null) > 1)
                                     {
                                         ops._colocate_with_for_gradient(null, gradient_uid, ignore_existing: true);
                                         in_grads = control_flow_ops.tuple(in_grads);
                                     }
                                 });
+                            }
+                            else
+                            {
+                                // If no grad_fn is defined or none of out_grads is available,
+                                // just propagate a list of None backwards.
+                                in_grads = new Tensor[_NonEagerInputs(op, xs).Count()];
                             }
                         }
                         else

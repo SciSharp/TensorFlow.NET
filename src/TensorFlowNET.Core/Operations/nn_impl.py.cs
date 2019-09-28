@@ -154,7 +154,7 @@ namespace Tensorflow
 
         public static Tensor sigmoid_cross_entropy_with_logits(Tensor labels, Tensor logits, string name = null)
         {
-            return tf_with(ops.name_scope(name, "", new { }), scope =>
+            return tf_with(ops.name_scope(name, "logistic_loss", new { logits, labels }), scope =>
             {
                 name = scope;
                 logits = ops.convert_to_tensor(logits, name: "logits");

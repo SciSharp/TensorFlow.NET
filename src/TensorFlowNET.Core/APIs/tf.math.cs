@@ -431,17 +431,19 @@ namespace Tensorflow
         /// <param name="input"></param>
         /// <param name="axis"></param>
         /// <returns></returns>
-        public Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null)
+        public Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null, 
+            bool keepdims = false, string name = null)
         {
             if(!axis.HasValue && reduction_indices.HasValue)
                 return math_ops.reduce_sum(input, reduction_indices.Value);
             else if (axis.HasValue && !reduction_indices.HasValue)
                 return math_ops.reduce_sum(input, axis.Value);
-            return math_ops.reduce_sum(input);
+            return math_ops.reduce_sum(input, keepdims: keepdims, name: name);
         }
 
-        public Tensor reduce_sum(Tensor input, int[] axis, int? reduction_indices = null)
-            => math_ops.reduce_sum(input, axis);
+        public Tensor reduce_sum(Tensor input, int[] axis, int? reduction_indices = null, 
+            bool keepdims = false, string name = null)
+            => math_ops.reduce_sum(input, axis, keepdims: keepdims, name: name);
 
         /// <summary>
         /// Computes the maximum of elements across dimensions of a tensor.
