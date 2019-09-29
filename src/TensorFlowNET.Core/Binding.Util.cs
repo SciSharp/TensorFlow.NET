@@ -106,11 +106,6 @@ namespace Tensorflow
                 py.__enter__();
                 action(py);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
             finally
             {
                 py.__exit__();
@@ -126,11 +121,6 @@ namespace Tensorflow
                 py.__enter__();
                 action(py);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
             finally
             {
                 py.__exit__();
@@ -145,11 +135,6 @@ namespace Tensorflow
             {
                 py.__enter__();
                 return action(py);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return default(TOut);
             }
             finally
             {
