@@ -168,7 +168,7 @@ namespace Tensorflow
         {
             var a = t1.AsIterator<T>();
             var b = t2.AsIterator<T>();
-            while (a.HasNext())
+            while (a.HasNext() && b.HasNext())
                 yield return (a.MoveNext(), b.MoveNext());
         }
 
@@ -184,19 +184,14 @@ namespace Tensorflow
         {
             var a = t1.AsIterator<T1>();
             var b = t2.AsIterator<T2>();
-            while(a.HasNext())
+            while(a.HasNext() && b.HasNext())
                 yield return (a.MoveNext(), b.MoveNext());
         }
 
         public static IEnumerable<(T1, T2)> zip<T1, T2>(IEnumerable<T1> e1, IEnumerable<T2> e2)
         {
-            var iter2 = e2.GetEnumerator();
-            foreach (var v1 in e1)
-            {
-                iter2.MoveNext();
-                var v2 = iter2.Current;
+            foreach (var (v1, v2) in e1.Zip(e2, (t1, t2) => (t1, t2)))
                 yield return (v1, v2);
-            }
         }
 
         public static IEnumerable<(TKey, TValue)> enumerate<TKey, TValue>(Dictionary<TKey, TValue> values)
