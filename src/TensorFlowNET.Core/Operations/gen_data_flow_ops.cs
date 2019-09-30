@@ -27,10 +27,13 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static (Tensor, Tensor) tensor_array_v3(Tensor size, TF_DataType dtype = TF_DataType.DtInvalid, 
-            int[] element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
+        public static (Tensor, Tensor) tensor_array_v3<T>(T size, TF_DataType dtype = TF_DataType.DtInvalid, 
+            TensorShape[] element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
             bool identical_element_shapes = false, string tensor_array_name = "tensor_array_name", string name = null)
         {
+            if (tensor_array_name == null)
+                tensor_array_name = string.Empty;
+
             var _op = _op_def_lib._apply_op_helper("TensorArrayV3", name, new
             {
                 size,
@@ -42,7 +45,21 @@ namespace Tensorflow
                 tensor_array_name
             });
 
-            return (null, null);
+            return (_op.outputs[0], _op.outputs[1]);
+        }
+
+        public static Tensor tensor_array_scatter_v3(Tensor handle, Tensor indices, Tensor value, 
+            Tensor flow_in, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArrayScatterV3", name, new
+            {
+                handle,
+                indices,
+                value,
+                flow_in
+            });
+
+            return _op.output;
         }
 
         public static Tensor padding_fifo_queue_v2(TF_DataType[] component_types, TensorShape[] shapes, 

@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
 
 namespace Tensorflow
@@ -61,5 +62,34 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor no_op(string name = null)
             => gen_control_flow_ops.no_op(name: name);
+
+        /// <summary>
+        /// map on the list of tensors unpacked from `elems` on dimension 0.
+        /// </summary>
+        /// <param name="fn"></param>
+        /// <param name="elems"></param>
+        /// <param name="dtype"></param>
+        /// <param name="parallel_iterations"></param>
+        /// <param name="back_prop"></param>
+        /// <param name="swap_memory"></param>
+        /// <param name="infer_shape"></param>
+        /// <param name="name"></param>
+        /// <returns>A tensor or (possibly nested) sequence of tensors.</returns>
+        public Tensor map_fn(Func<Tensor, Tensor> fn,
+            Tensor elems,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            int parallel_iterations = -1,
+            bool back_prop = true,
+            bool swap_memory = false,
+            bool infer_shape = true,
+            string name = null)
+            => Operation.map_fn(fn,
+                elems,
+                dtype,
+                parallel_iterations: parallel_iterations,
+                back_prop: back_prop,
+                swap_memory: swap_memory,
+                infer_shape: infer_shape,
+                name: name);
     }
 }
