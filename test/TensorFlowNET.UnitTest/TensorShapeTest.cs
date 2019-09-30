@@ -56,5 +56,12 @@ namespace TensorFlowNET.UnitTest
             TensorShape shape = (Unknown, 1, 2, 3, Unknown);
             shape.GetPrivate<Shape>("shape").Should().BeShaped(-1, 1, 2, 3, -1);
         }
+
+        [TestMethod]
+        public void Case7()
+        {
+            TensorShape shape = new TensorShape();
+            Assert.AreEqual(shape.rank, -1);
+        }
     }
 }

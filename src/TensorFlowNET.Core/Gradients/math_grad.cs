@@ -42,7 +42,8 @@ namespace Tensorflow.Gradients
             var x = op.inputs[0];
             var y = op.inputs[1];
             var grad = grads[0];
-            if (grad is Tensor && _ShapesFullySpecifiedAndEqual(x, y, grad))
+            if (grad is Tensor && 
+                _ShapesFullySpecifiedAndEqual(x, y, grad))
                 return new Tensor[] { grad, grad };
 
             var sx = array_ops.shape(x);
@@ -375,7 +376,8 @@ namespace Tensorflow.Gradients
             var grad = grads[0];
             var x = op.inputs[0];
             var y = op.inputs[1];
-            if (grad is Tensor && _ShapesFullySpecifiedAndEqual(x, y, grad))
+            if (grad is Tensor && 
+                _ShapesFullySpecifiedAndEqual(x, y, grad))
                 return new Tensor[] { grad, -grad };
 
             var sx = array_ops.shape(x);

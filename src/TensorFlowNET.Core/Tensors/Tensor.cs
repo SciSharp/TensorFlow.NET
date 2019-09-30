@@ -132,10 +132,10 @@ namespace Tensorflow
 
         public int[] _shape_tuple()
         {
-            return NDims < 0 ? null : shape;
+            return rank < 0 ? null : shape;
         }
 
-        public TensorShape TensorShape => tensor_util.to_shape(shape);
+        public TensorShape TensorShape => rank < 0 ? new TensorShape() : tensor_util.to_shape(shape);
 
         /// <summary>
         ///     Updates the shape of this tensor.
@@ -165,6 +165,7 @@ namespace Tensorflow
 
         /// <summary>
         /// number of dimensions <br></br>
+        /// -1 Unknown  <br></br>
         /// 0	Scalar (magnitude only) <br></br>
         /// 1	Vector (magnitude and direction) <br></br>
         /// 2	Matrix (table of numbers) <br></br>
@@ -178,11 +179,13 @@ namespace Tensorflow
             {
                 if (_handle == IntPtr.Zero)
                 {
-                    var status = new Status();
-                    var output = _as_tf_output();
-                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
-                    status.Check();
-                    return ndim;
+                    using (var status = new Status())
+                    {
+                        var output = _as_tf_output();
+                        int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
+                        status.Check();
+                        return ndim;
+                    }
                 }
 
                 return c_api.TF_NumDims(_handle);
@@ -440,16 +443,15 @@ namespace Tensorflow
         public override string ToString()
         {
             // this can throw IndexOutOfRangeException 
-            //if(NDims == 0)
-            //{
-            //    switch (dtype)
-            //    {
-            //        case TF_DataType.TF_INT32:
-            //            return Data<int>()[0].ToString();
-            //    }
-            //}
-
-            return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
+            switch (rank)
+            {
+                case -1:
+                    return $"tf.Tensor '{name}' shape=<unknown> dtype={dtype}";
+                case 0:
+                    return $"tf.Tensor '{name}' shape=() dtype={dtype}";
+                default:
+                    return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
+            }
         }
 
         /// <summary>

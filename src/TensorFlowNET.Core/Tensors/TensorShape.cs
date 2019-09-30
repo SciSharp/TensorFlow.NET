@@ -24,12 +24,13 @@ namespace Tensorflow
         /// <summary>
         ///     Returns the rank of this shape.
         /// </summary>
-        public int ndim => shape.NDim;
+        public int ndim => rank;
 
+        private int _rank;
         /// <summary>
         ///     Returns the rank of this shape.
         /// </summary>
-        public int rank => shape.NDim;
+        public int rank => _rank > -1 ? shape.NDim : -1;
 
         /// <summary>
         ///     Returns the size this shape represents.
@@ -50,6 +51,12 @@ namespace Tensorflow
 
                 return computed;
             }
+        }
+
+        public TensorShape()
+        {
+            _rank = -1;
+            shape = new Shape();
         }
 
         public TensorShape(TensorShapeProto proto)
@@ -77,7 +84,7 @@ namespace Tensorflow
             switch (dims.Length)
             {
                 case 0: shape = new Shape(new int[0]); break;
-                case 1: shape = Shape.Vector((int)dims[0]); break;
+                case 1: shape = Shape.Vector(dims[0]); break;
                 case 2: shape = Shape.Matrix(dims[0], dims[1]); break;
                 default: shape = new Shape(dims); break;
             }
@@ -127,7 +134,7 @@ namespace Tensorflow
         /// <returns></returns>
         public bool is_fully_defined()
         {
-            return dims != null && dims.Count(x => x < 1) == 0;
+            return rank > -1 && dims != null && dims.Count(x => x < 1) == 0;
         }
 
         public bool is_compatible_with(TensorShape shape2)
@@ -204,7 +211,7 @@ namespace Tensorflow
         /// <returns></returns>
         public TensorShape merge_with(TensorShape other)
         {
-            if (dims.Length == 0)
+            if (dims == null)
                 return other;
 
             var new_dims = new List<int>();
