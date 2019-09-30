@@ -106,11 +106,6 @@ namespace Tensorflow
                 py.__enter__();
                 action(py);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
             finally
             {
                 py.__exit__();
@@ -126,11 +121,6 @@ namespace Tensorflow
                 py.__enter__();
                 action(py);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
             finally
             {
                 py.__exit__();
@@ -145,11 +135,6 @@ namespace Tensorflow
             {
                 py.__enter__();
                 return action(py);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return default(TOut);
             }
             finally
             {
@@ -190,8 +175,7 @@ namespace Tensorflow
 
         public static IEnumerable<(T1, T2)> zip<T1, T2>(IEnumerable<T1> e1, IEnumerable<T2> e2)
         {
-            foreach (var (v1, v2) in e1.Zip(e2, (t1, t2) => (t1, t2)))
-                yield return (v1, v2);
+            return e1.Zip(e2, (t1, t2) => (t1, t2));
         }
 
         public static IEnumerable<(TKey, TValue)> enumerate<TKey, TValue>(Dictionary<TKey, TValue> values)
