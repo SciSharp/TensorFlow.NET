@@ -28,12 +28,12 @@ namespace TensorFlowNET.Examples
     /// How to optimise your input pipeline with queues and multi-threading
     /// https://blog.metaflow.fr/tensorflow-how-to-optimise-your-input-pipeline-with-queues-and-multi-threading-e7c3874157e0
     /// </summary>
-    public class FullyConnected : IExample
+    public class FullyConnectedInQueue : IExample
     {
-        public bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = false;
         public bool IsImportingGraph { get; set; }
 
-        public string Name => "Fully Connected Neural Network";
+        public string Name => "Fully Connected Neural Network In Queue";
 
         Tensor input = null;
         Tensor x_inputs_data = null;
@@ -46,43 +46,19 @@ namespace TensorFlowNET.Examples
         public Graph BuildGraph()
         {
             var g = tf.get_default_graph();
-            
+
             Tensor z = null;
-            
-            tf_with(tf.variable_scope("placeholder"), delegate
+
+            // We build our small model: a basic two layers neural net with ReLU
+            tf_with(tf.variable_scope("queue"), delegate
             {
-                input = tf.placeholder(tf.float32, shape: (-1, 1024));
-                y_true = tf.placeholder(tf.int32, shape: (-1, 1));
+                // enqueue 5 batches
+                var q = tf.FIFOQueue(capacity: 5, dtype: tf.float32);
+                // We use the "enqueue" operation so 1 element of the queue is the full batch
+                var enqueue_op = q.enqueue(x_inputs_data);
+                var numberOfThreads = 1;
+                // var qr = tf.train.QueueRunner(q, [enqueue_op] * numberOfThreads);
             });
-
-            tf_with(tf.variable_scope("FullyConnected"), delegate
-            {
-                var w = tf.get_variable("w", shape: (1024, 1024), initializer: tf.random_normal_initializer(stddev: 0.1f));
-                var b = tf.get_variable("b", shape: 1024, initializer: tf.constant_initializer(0.1));
-                z = tf.matmul(input, w) + b;
-                var y = tf.nn.relu(z);
-
-                var w2 = tf.get_variable("w2", shape: (1024, 1), initializer: tf.random_normal_initializer(stddev: 0.1f));
-                var b2 = tf.get_variable("b2", shape: 1, initializer: tf.constant_initializer(0.1));
-                z = tf.matmul(y, w2) + b2;
-            });
-
-            tf_with(tf.variable_scope("Loss"), delegate
-            {
-                var losses = tf.nn.sigmoid_cross_entropy_with_logits(tf.cast(y_true, tf.float32), z);
-                loss_op = tf.reduce_mean(losses);
-            });
-
-            tf_with(tf.variable_scope("Accuracy"), delegate
-            {
-                var y_pred = tf.cast(z > 0, tf.int32);
-                accuracy = tf.reduce_mean(tf.cast(tf.equal(y_pred, y_true), tf.float32));
-                // accuracy = tf.Print(accuracy, data =[accuracy], message = "accuracy:")
-            });
-
-            // We add the training operation, ...
-            var adam = tf.train.AdamOptimizer(0.01f);
-            train_op = adam.minimize(loss_op, name: "train_op");
 
             return g;
         }

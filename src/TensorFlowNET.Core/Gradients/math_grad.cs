@@ -393,9 +393,10 @@ namespace Tensorflow.Gradients
             var x_shape = x._shape_tuple();
             var y_shape = y._shape_tuple();
             var grad_shape = grad._shape_tuple();
-            return Enumerable.SequenceEqual(x_shape, y_shape) &&
+            return x_shape != null && 
+                y_shape != null &&
+                Enumerable.SequenceEqual(x_shape, y_shape) &&
                 Enumerable.SequenceEqual(y_shape, grad_shape) &&
-                x_shape.Length > -1 &&
                 !x_shape.Contains(-1);
         }
 

@@ -132,7 +132,7 @@ namespace Tensorflow
 
         public int[] _shape_tuple()
         {
-            return (int[]) shape.Clone();
+            return NDims < 0 ? null : shape;
         }
 
         public TensorShape TensorShape => tensor_util.to_shape(shape);
