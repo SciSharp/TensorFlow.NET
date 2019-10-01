@@ -218,6 +218,9 @@ namespace Tensorflow
             return grouped_inputs.ToArray();
         }
 
+        public T get_attr<T>(string name)
+            => (T)get_attr(name);
+
         public object get_attr(string name)
         {
             AttrValue x = null;

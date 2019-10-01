@@ -36,7 +36,7 @@ namespace Tensorflow.Gradients
         /// </summary>
         /// <returns></returns>
         [RegisterGradient("Switch")]
-        public Tensor[] _SwitchGrad(Tensor op, Tensor[] grads)
+        public Tensor[] _SwitchGrad(Operation op, Tensor[] grads)
         {
             throw new NotImplementedException("_SwitchGrad");
             //graph = ops.get_default_graph()

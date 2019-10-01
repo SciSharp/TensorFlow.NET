@@ -108,7 +108,7 @@ namespace Tensorflow
                     {
                         // generate gradient subgraph for op.
                         var op = queue.Dequeue();
-                        if(tf.get_default_graph()._nodes_by_name.Count > 18505)
+                        if(tf.get_default_graph()._nodes_by_name.Count > 18577)
                         {
 
                         }

@@ -557,8 +557,31 @@ namespace Tensorflow
                     throw new NotImplementedException("ZerosLikeOutsideLoop");
                 return array_ops.zeros_like(val, optimize: false);
             }
-
-            throw new NotImplementedException("ZerosLikeOutsideLoop");
+            else
+            {
+                var op_ctxt = op._get_control_flow_context();
+                if(op_ctxt != null)
+                {
+                    // We are in a cond context. Use a switch to create zeros only when needed.
+                    var pred = op_ctxt.pred;
+                    var branch = op_ctxt.branch;
+                    var switch_val = @switch(op.inputs[0], pred)[1 - branch];
+                    var pivot = array_ops.identity(switch_val);
+                    if (val.dtype == dtypes.resource)
+                        throw new NotImplementedException("");
+                    var zeros_shape = array_ops.shape_internal(switch_val, optimize: false);
+                    // Ensure ops created within array_ops.zeros are dominated by switch in
+                    // cond context.
+                    return tf_with(ops.control_dependencies(new[] { pivot }), delegate
+                    {
+                        return array_ops.zeros(zeros_shape, dtype: val.dtype);
+                    });
+                }
+                else
+                {
+                    return array_ops.zeros_like(val, optimize: false);
+                }
+            }
         }
 
         /// <summary>
