@@ -180,7 +180,7 @@ namespace Tensorflow
             var graph = ops.get_default_graph();
 
             var var_list = new Dictionary<string, RefVariable>();
-            var variables = graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES) as List<RefVariable>;
+            var variables = graph.get_collection<RefVariable>(tf.GraphKeys.GLOBAL_VARIABLES);
 
             if (variables != null)
             {

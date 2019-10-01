@@ -212,7 +212,7 @@ namespace Tensorflow
 
                 if (!tf.context.executing_eagerly())
                 {
-                    var train_op = ops.get_collection_ref(tf.GraphKeys.TRAIN_OP) as List<ITensorOrOperation>;
+                    var train_op = ops.get_collection_ref<Operation>(tf.GraphKeys.TRAIN_OP);
                     if (train_op != null && train_op.Contains(apply_updates))
                         train_op.Add(apply_updates);
                 }
@@ -373,17 +373,19 @@ namespace Tensorflow
             loss = _scale_loss(loss);
             int num_towers = 1;
 
-
-            var tmp = variables.trainable_variables();
-            var vars = ops.get_collection<RefVariable>(tf.GraphKeys.TRAINABLE_RESOURCE_VARIABLES);
-            switch (tmp)
+            if(var_list == null)
             {
-                case List<RefVariable> values:
-                    var_list = values.Concat(vars).ToList();
-                    break;
-                case List<VariableV1> values:
-                    var_list = values.Select(x => x as RefVariable).Concat(vars).ToList();
-                    break;
+                var vars = ops.get_collection<RefVariable>(tf.GraphKeys.TRAINABLE_RESOURCE_VARIABLES);
+                var tmp = variables.trainable_variables();
+                switch (tmp)
+                {
+                    case List<RefVariable> values:
+                        var_list = values.Concat(vars).ToList();
+                        break;
+                    case List<VariableV1> values:
+                        var_list = values.Select(x => x as RefVariable).Concat(vars).ToList();
+                        break;
+                }
             }
 
             var_list = var_list.Concat(ops.get_collection<RefVariable>(tf.GraphKeys._STREAMING_MODEL_PORTS)).ToList();

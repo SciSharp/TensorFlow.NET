@@ -36,8 +36,8 @@ namespace Tensorflow
         public void device(string device_name)
             => get_default_graph().device(device_name);
 
-        public object get_collection(string key, string scope = "") 
-            => get_default_graph().get_collection(key, scope: scope);
+        public List<T> get_collection<T>(string key, string scope = "") 
+            => get_default_graph().get_collection<T>(key, scope: scope);
 
         /// <summary>
         /// A context manager that lifts ops out of control-flow scopes and function-building graphs.
@@ -60,7 +60,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor no_op(string name = null)
+        public Operation no_op(string name = null)
             => gen_control_flow_ops.no_op(name: name);
 
         /// <summary>

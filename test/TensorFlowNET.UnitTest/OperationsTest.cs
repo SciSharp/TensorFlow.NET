@@ -1495,6 +1495,7 @@ namespace TensorFlowNET.UnitTest
             #endregion
         }
 
+        [Ignore("Not finished yet")]
         [TestMethod]
         public void map_fn()
         {

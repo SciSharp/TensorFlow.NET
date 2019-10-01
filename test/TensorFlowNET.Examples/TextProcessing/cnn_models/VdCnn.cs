@@ -118,7 +118,7 @@ namespace TensorFlowNET.Examples.Text
                 var y_one_hot = tf.one_hot(y, num_class);
                 loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits: logits, labels: y_one_hot));
 
-                var update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS) as List<object>;
+                var update_ops = tf.get_collection<object>(tf.GraphKeys.UPDATE_OPS);
                 tf_with(tf.control_dependencies(update_ops.Select(x => (Operation)x).ToArray()), delegate
                 {
                     var adam = tf.train.AdamOptimizer(learning_rate);

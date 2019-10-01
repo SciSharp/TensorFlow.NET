@@ -54,7 +54,7 @@ namespace Tensorflow
                 maximum_iterations: maximum_iterations,
                 return_same_structure: return_same_structure);
 
-        public _ControlDependenciesController control_dependencies(Operation[] control_inputs) 
+        public _ControlDependenciesController control_dependencies(ITensorOrOperation[] control_inputs) 
             => ops.control_dependencies(control_inputs);
     }
 }

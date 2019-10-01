@@ -154,10 +154,10 @@ namespace Tensorflow.Train
             var beta2 = _call_if_callable(_beta2);
             var epsilon = _call_if_callable(_epsilon);
 
-            _lr_t = ops.convert_to_tensor(lr, name: "learning_rate");
-            _beta1_t = ops.convert_to_tensor(beta1, name: "beta1");
-            _beta2_t = ops.convert_to_tensor(beta2, name: "beta2");
-            _epsilon_t = ops.convert_to_tensor(epsilon, name: "epsilon");
+            _lr_t = _lr_t ?? ops.convert_to_tensor(lr, name: "learning_rate");
+            _beta1_t = _beta1_t ?? ops.convert_to_tensor(beta1, name: "beta1");
+            _beta2_t = _beta2_t ?? ops.convert_to_tensor(beta2, name: "beta2");
+            _epsilon_t = _epsilon_t ?? ops.convert_to_tensor(epsilon, name: "epsilon");
         }
     }
 }

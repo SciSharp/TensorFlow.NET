@@ -227,6 +227,10 @@ namespace Tensorflow
 
         public void add_to_collection<T>(string name, T value)
         {
+            if(name == "update_ops")
+            {
+
+            }
             _check_not_finalized();
             if (_collections.ContainsKey(name))
                 (_collections[name] as List<T>).Add(value);
@@ -442,17 +446,20 @@ namespace Tensorflow
                 case List<Tensor> list:
                     t = list.Select(x => (T)(object)x).ToList();
                     break;
+                case List<Operation> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
                 default:
                     throw new NotImplementedException($"get_collection<{typeof(T).FullName}>");
             }
             return t;
         }
 
-        public object get_collection_ref(string name)
+        public List<T> get_collection_ref<T>(string name)
         {
             if (!_collections.ContainsKey(name))
-                _collections[name] = new List<object>();
-            return _collections[name];
+                _collections[name] = new List<T>();
+            return _collections[name] as List<T>;
         }
 
         public void prevent_feeding(Tensor tensor)

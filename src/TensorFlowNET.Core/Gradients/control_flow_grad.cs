@@ -17,12 +17,14 @@
 using System;
 using System.Linq;
 using Tensorflow.Operations;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
 {
     /// <summary>
     /// Gradients for operators defined in control_flow_ops.py.cs
     /// </summary>
+    [RegisterGradient("control_flow_grad")]
     public class control_flow_grad
     {
         /// <summary>
@@ -33,6 +35,7 @@ namespace Tensorflow.Gradients
         /// on the second visit. A next_iteration is also added on second visit.
         /// </summary>
         /// <returns></returns>
+        [RegisterGradient("Switch")]
         public Tensor[] _SwitchGrad(Tensor op, Tensor[] grads)
         {
             throw new NotImplementedException("_SwitchGrad");
@@ -92,7 +95,6 @@ namespace Tensorflow.Gradients
         public static Tensor[] _MergeGrad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
-            var _ = grads[1];
             var input_op = op.inputs[0].op;
             var graph = ops.get_default_graph();
             var op_ctxt = control_flow_util.GetOutputContext(input_op);
@@ -145,6 +147,7 @@ namespace Tensorflow.Gradients
 
         }
 
+        [RegisterGradient("RefMerge")]
         public Tensor[] _RefMergeGrad(Operation op, Tensor[] grads)
         {
             return _MergeGrad(op, grads);
@@ -153,6 +156,7 @@ namespace Tensorflow.Gradients
         /// <summary>
         /// Gradients for an exit op are calculated using an Enter op.
         /// </summary>
+        [RegisterGradient("Exit")]
         public Tensor[] _ExitGrad(Operation op, Tensor[] grads)
         {
             throw new NotImplementedException("_ExitGrad");
@@ -197,14 +201,16 @@ namespace Tensorflow.Gradients
         ///
         ///  Note that the backprop next_iteration is added in switch grad.
         /// </summary>
-        public (object, Tensor[]) _NextIterationGrad(object _, Tensor[] grad)
+        [RegisterGradient("NextIteration")]
+        public Tensor[] _NextIterationGrad(object _, Tensor[] grad)
         {
-            return (_, grad);
+            return grad;
         }
 
-        public (object, Tensor[]) _RefNextIterationGrad(object _, Tensor[] grad)
+        [RegisterGradient("RefNextIteration")]
+        public Tensor[] _RefNextIterationGrad(object _, Tensor[] grad)
         {
-            return (_, grad);
+            return grad;
         }
 
         /// <summary>
@@ -213,7 +219,8 @@ namespace Tensorflow.Gradients
         ///  For loop variables, grad is the gradient so just add an exit.
         ///  For loop invariants, we need to add an accumulator loop.
         /// </summary>
-        public (object, Tensor[]) _EnterGrad(Tensor op, Tensor[] grad)
+        [RegisterGradient("Enter")]
+        public Tensor[] _EnterGrad(Tensor op, Tensor[] grad)
         {
             throw new NotImplementedException("_EnterGrad");
             //  graph = ops.get_default_graph()
@@ -242,7 +249,9 @@ namespace Tensorflow.Gradients
             //  return result
         }
 
-        public (object, Tensor[]) _RefEnterGrad(Tensor op, Tensor[] grad)
+
+        [RegisterGradient("RefEnter")]
+        public Tensor[] _RefEnterGrad(Tensor op, Tensor[] grad)
         {
             return _EnterGrad(op, grad);
         }
@@ -250,7 +259,8 @@ namespace Tensorflow.Gradients
         /// <summary>
         /// Stop backprop for the predicate of a while loop.
         /// </summary>
-        public object _LoopCondGrad(object _)
+        [RegisterGradient("LoopCond")]
+        public Tensor[] _LoopCondGrad(Tensor op, Tensor[] grad)
         {
             return null;
         }

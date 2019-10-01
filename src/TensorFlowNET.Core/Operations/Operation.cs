@@ -151,6 +151,11 @@ namespace Tensorflow
                 }
             }
 
+            if(node_def.Name == "define_loss/conv_lobj_branch/batch_normalization/cond/FusedBatchNorm_1")
+            {
+
+            }
+
             // Dict mapping op name to file and line information for op colocation
             // context managers.
             _control_flow_context = graph._get_control_flow_context();

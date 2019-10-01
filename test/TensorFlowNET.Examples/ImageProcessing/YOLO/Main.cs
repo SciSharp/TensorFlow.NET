@@ -52,6 +52,8 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
         Tensor learn_rate;
         Tensor loss;
         List<RefVariable> first_stage_trainable_var_list;
+        Operation train_op_with_frozen_variables;
+        Operation train_op_with_all_variables;
         #endregion
 
         public bool Run()
@@ -153,6 +155,33 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
 
                 var adam = tf.train.AdamOptimizer(learn_rate);
                 var first_stage_optimizer = adam.minimize(loss, var_list: first_stage_trainable_var_list);
+                tf_with(tf.control_dependencies(tf.get_collection<Operation>(tf.GraphKeys.UPDATE_OPS).ToArray()), delegate
+                {
+                    tf_with(tf.control_dependencies(new ITensorOrOperation[] { first_stage_optimizer, global_step_update }), delegate
+                    {
+                        tf_with(tf.control_dependencies(new[] { moving_ave }), delegate
+                        {
+                            train_op_with_frozen_variables = tf.no_op();
+                        });
+                    });
+                });
+            });
+
+            tf_with(tf.name_scope("define_second_stage_train"), delegate
+            {
+                var second_stage_trainable_var_list = tf.trainable_variables().Select(x => x as RefVariable).ToList();
+                var adam = tf.train.AdamOptimizer(learn_rate);
+                var second_stage_optimizer = adam.minimize(loss, var_list: second_stage_trainable_var_list);
+                tf_with(tf.control_dependencies(tf.get_collection<Operation>(tf.GraphKeys.UPDATE_OPS).ToArray()), delegate
+                {
+                    tf_with(tf.control_dependencies(new ITensorOrOperation[] { second_stage_optimizer, global_step_update }), delegate
+                    {
+                        tf_with(tf.control_dependencies(new[] { moving_ave }), delegate
+                        {
+                            train_op_with_all_variables = tf.no_op();
+                        });
+                    });
+                });
             });
 
             return graph;
