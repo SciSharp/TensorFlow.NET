@@ -128,7 +128,7 @@ namespace TensorFlowNET.Examples
 
             var positive_labels = positive_examples.Select(x => new int[2] { 0, 1 }).ToArray();
             var negative_labels = negative_examples.Select(x => new int[2] { 1, 0 }).ToArray();
-            var y = np.concatenate(new int[][][] { positive_labels, negative_labels });
+            var y = np.concatenate(new NDArray[] { new int[][][] { positive_labels, negative_labels } });
             return (x_text.ToArray(), y);
         }
 
@@ -164,7 +164,7 @@ namespace TensorFlowNET.Examples
             }
 
             int max_length_sentence = sequences.Select(x => x.Length).Max();
-            (sequence_padded, _) = _pad_sequences(sequences, np.repeat(pad_tok, max_length_word).Data<int>(), max_length_sentence);
+            (sequence_padded, _) = _pad_sequences(sequences, np.repeat(pad_tok, max_length_word).GetData<int>().ToArray(), max_length_sentence);
             (sequence_length, _) = _pad_sequences(sequence_length, 0, max_length_sentence);
 
             return (sequence_padded, sequence_length);

@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -26,24 +26,28 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
-        public void hasattr_getattr()
+        public void isinstance_test()
         {
-            var s1 = "Tensorflow v0.1";
-            var f = "Tensorflow";
-            var r = "Tensorflow.NET";
-            var res = s1.Replace(f, r);
+            var s1 = "hi";
+            var s2 = "hello";
 
-            // Test 1
-            Assert.IsTrue(hasattr(s1, "Replace"));
+            var t1 = (s1, s2);
+            var t2 = (s1, s2, s1);
+            var t3 = (s2, s1);
 
-            // Test 2
-            var o = getattr( s1, "Replace", typeof(string), typeof(string));
-            Assert.AreEqual(res, o(f, r));
+            var true1 = isinstance(s1, typeof(string));
+            var false1 = isinstance(t1, typeof(string));
+            var true2 = isinstance(t1, t3.GetType());
+            var false2 = isinstance(t1, t2.GetType());
+            var true3 = isinstance(t1, (t2.GetType(), t1.GetType(), typeof(string)));
+            var false3 = isinstance(t3, (t2.GetType(), typeof(string)));
 
-            // Test 3
-            var l = getattr(s1, "Length");
-            Assert.AreEqual(s1.Length, l());
-
+            Assert.IsTrue(true1);
+            Assert.IsTrue(true2);
+            Assert.IsTrue(true3);
+            Assert.IsFalse(false1);
+            Assert.IsFalse(false2);
+            Assert.IsFalse(false3);
         }
     }
 }

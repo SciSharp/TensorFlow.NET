@@ -17,8 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Tensorflow.Python;
 using Tensorflow.Util;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {
@@ -94,12 +94,12 @@ namespace Tensorflow.Operations
             var batch_size = _best_effort_input_batch_size(flat_input);
             var inputs_got_shape = flat_input.Select(input_ => input_.TensorShape.with_rank_at_least(3)).ToArray();
 
-            var dims = inputs_got_shape[0].Dimensions.Take(2).ToArray();
+            var dims = inputs_got_shape[0].dims.Take(2).ToArray();
             var (const_time_steps, const_batch_size) = (dims[0], dims[1]);
 
             foreach(var shape in inputs_got_shape)
             {
-                if (shape[2] == -1)
+                if (shape.dims[2] == -1)
                     throw new ValueError("Input size (depth of inputs) must be accessible via shape inference," +
                         " but saw value None.");
 
@@ -141,29 +141,56 @@ namespace Tensorflow.Operations
             string base_name = null;
             tf_with(ops.name_scope("dynamic_rnn"), scope => base_name = scope);
 
-            Func<string, TensorShape, TF_DataType, Tensor> _create_ta = (name, element_shape, dtype_) =>
+            Func<string, TensorShape, TF_DataType, TensorArray> _create_ta = (name, element_shape, dtype_) =>
             {
-                new TensorArray(dtype: dtype_,
+                var ta = new TensorArray(dtype: dtype_,
                                         size: time_steps,
-                                        element_shape: element_shape,
+                                        element_shape: new[] { element_shape },
                                         tensor_array_name: base_name + name);
-                throw new NotImplementedException("");
+                return ta;
             };
 
             bool in_graph_mode = true;
+            var output_ta = new List<TensorArray>();
+            var input_ta = new List<TensorArray>();
             if (in_graph_mode)
             {
-                foreach(var (i, out_size) in enumerate(flat_output_size))
+                foreach (var (i, out_size) in enumerate(flat_output_size))
                 {
-                    _create_ta($"output_{i}",
+                    output_ta.Add(_create_ta($"output_{i}",
                         new TensorShape(const_batch_size).concatenate(
                             _maybe_tensor_shape_from_tensor(out_size)),
-                        _infer_state_dtype(dtype, state));
+                        _infer_state_dtype(dtype, state)));
+                }
 
+                foreach (var (i, flat_input_i) in enumerate(flat_input))
+                {
+                    input_ta.Add(_create_ta($"input_{i}",
+                        new TensorShape(flat_input_i.dims.Skip(1).ToArray()),
+                        flat_input_i.dtype));
+                }
 
-                    
+                for (int i = 0; i < input_ta.Count; i++)
+                {
+                    var (ta, input_) = (input_ta[0], flat_input[0]);
                 }
             }
+
+            // Make sure that we run at least 1 step, if necessary, to ensure
+            // the TensorArrays pick up the dynamic shape.
+            Tensor loop_bound;
+            if (in_graph_mode)
+                loop_bound = math_ops.minimum(
+                    time_steps, math_ops.maximum(1, max_sequence_length));
+
+            /*Func<Tensor, Tensor> cond = (ctime) =>
+            {
+                return null;
+            };
+
+            control_flow_ops.while_loop(
+              cond: cond,
+              body = );*/
 
             throw new NotImplementedException("");
         }
@@ -190,7 +217,7 @@ namespace Tensorflow.Operations
         public static Tensor _transpose_batch_time(Tensor x)
         {
             var x_static_shape = x.TensorShape;
-            if (x_static_shape.NDim == 1)
+            if (x_static_shape.ndim == 1)
                 return x;
 
             var x_rank = array_ops.rank(x);
@@ -201,12 +228,12 @@ namespace Tensorflow.Operations
             };
             var x_t = array_ops.transpose(x, array_ops.concat(con1, 0));
 
-            var dims = new int[] { x_static_shape.Dimensions[1], x_static_shape.Dimensions[0] }
+            var dims = new int[] { x_static_shape.dims[1], x_static_shape.dims[0] }
                 .ToList();
-            dims.AddRange(x_static_shape.Dimensions.Skip(2));
+            dims.AddRange(x_static_shape.dims.Skip(2));
             var shape = new TensorShape(dims.ToArray());
 
-            x_t.SetShape(shape);
+            x_t.set_shape(shape);
 
             return x_t;
         }
@@ -221,12 +248,12 @@ namespace Tensorflow.Operations
             foreach(var input_ in flat_input)
             {
                 var shape = input_.TensorShape;
-                if (shape.NDim < 0)
+                if (shape.ndim < 0)
                     continue;
-                if (shape.NDim < 2)
+                if (shape.ndim < 2)
                     throw new ValueError($"Expected input tensor {input_.name} to have rank at least 2");
 
-                var batch_size = shape.Dimensions[1];
+                var batch_size = shape.dims[1];
                 if (batch_size > -1)
                     throw new ValueError("_best_effort_input_batch_size batch_size > -1");
                     //return batch_size;

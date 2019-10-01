@@ -9,24 +9,18 @@ namespace TensorFlowBenchmark
     {
         static void Main(string[] args)
         {
-#if DEBUG
-            IConfig config = new DebugInProcessConfig();
-#else
-            IConfig config = null;
-#endif
-
             if (args?.Length > 0)
             {
                 for (int i = 0; i < args.Length; i++)
                 {
                     string name = $"TensorFlowBenchmark.{args[i]}";
                     var type = Type.GetType(name);
-                    BenchmarkRunner.Run(type, config);
+                    BenchmarkRunner.Run(type);
                 }
             }
             else
             {
-                BenchmarkSwitcher.FromAssembly(Assembly.GetExecutingAssembly()).Run(args, config);
+                BenchmarkSwitcher.FromAssembly(Assembly.GetExecutingAssembly()).Run(args, ManualConfig.Create(DefaultConfig.Instance).With(ConfigOptions.DisableOptimizationsValidator));
             }
 
             Console.ReadLine();

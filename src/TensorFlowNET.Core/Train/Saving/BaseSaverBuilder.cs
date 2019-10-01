@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Operations;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -133,7 +133,7 @@ namespace Tensorflow
                 var check_collection_list = graph.get_all_collection_keys();
                 foreach (var collection_type in check_collection_list)
                 {
-                    var cols = graph.get_collection(collection_type);
+                    /*var cols = graph.get_collection(collection_type);
                     switch (cols)
                     {
                         case List<Tensor> values:
@@ -165,7 +165,7 @@ namespace Tensorflow
                             break;
                         default:
                             throw new NotImplementedException("_build_internal.check_collection_list");
-                    }
+                    }*/
                     
                 }
 

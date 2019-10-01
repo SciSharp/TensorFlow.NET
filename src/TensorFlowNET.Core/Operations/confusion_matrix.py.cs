@@ -15,7 +15,7 @@
 ******************************************************************************/
 
 using System;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -39,9 +39,9 @@ namespace Tensorflow
                 predictions = ops.convert_to_tensor(predictions);
                 labels = ops.convert_to_tensor(labels);
                 var predictions_shape = predictions.TensorShape;
-                var predictions_rank = predictions_shape.NDim;
+                var predictions_rank = predictions_shape.ndim;
                 var labels_shape = labels.TensorShape;
-                var labels_rank = labels_shape.NDim;
+                var labels_rank = labels_shape.ndim;
                 if(labels_rank > -1 && predictions_rank > -1)
                 {
                     // Use static rank.

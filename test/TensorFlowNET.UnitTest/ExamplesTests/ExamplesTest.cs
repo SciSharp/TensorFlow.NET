@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using TensorFlowNET.Examples;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.ExamplesTests
 {

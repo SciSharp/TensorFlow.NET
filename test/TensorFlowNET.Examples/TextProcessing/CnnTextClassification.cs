@@ -24,7 +24,7 @@ using Tensorflow;
 using Tensorflow.Sessions;
 using TensorFlowNET.Examples.Text;
 using TensorFlowNET.Examples.Utility;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -149,8 +149,8 @@ namespace TensorFlowNET.Examples
             Console.WriteLine("\tDONE ");
 
             var (train_x, valid_x, train_y, valid_y) = train_test_split(x, y, test_size: 0.15f);
-            Console.WriteLine("Training set size: " + train_x.len);
-            Console.WriteLine("Test set size: " + valid_x.len);
+            Console.WriteLine("Training set size: " + train_x.shape[0]);
+            Console.WriteLine("Test set size: " + valid_x.shape[0]);
         }
 
         public Graph ImportGraph()
@@ -197,7 +197,6 @@ namespace TensorFlowNET.Examples
         public void Train(Session sess)
         {
             var graph = tf.get_default_graph();
-            var stopwatch = Stopwatch.StartNew();
 
             sess.run(tf.global_variables_initializer());
             var saver = tf.train.Saver(tf.global_variables());
@@ -212,23 +211,20 @@ namespace TensorFlowNET.Examples
             Operation optimizer = graph.OperationByName("loss/Adam");
             Tensor global_step = graph.OperationByName("Variable");
             Tensor accuracy = graph.OperationByName("accuracy/accuracy");
-            stopwatch = Stopwatch.StartNew();
-            int i = 0;
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            int step = 0;
             foreach (var (x_batch, y_batch, total) in train_batches)
             {
-                i++;
-                var train_feed_dict = new FeedDict
-                {
-                    [model_x] = x_batch,
-                    [model_y] = y_batch,
-                    [is_training] = true,
-                };
-
-                var result = sess.run(new ITensorOrOperation[] { optimizer, global_step, loss }, train_feed_dict);
-                loss_value = result[2];
-                var step = (int)result[1];
+                (_, step, loss_value) = sess.run((optimizer, global_step, loss),
+                    (model_x, x_batch), (model_y, y_batch), (is_training, true));
                 if (step % 10 == 0)
-                    Console.WriteLine($"Training on batch {i}/{total} loss: {loss_value.ToString("0.0000")}.");
+                {
+                    Console.WriteLine($"Training on batch {step}/{total} loss: {loss_value.ToString("0.0000")} {sw.ElapsedMilliseconds}ms.");
+                    sw.Restart();
+                }
 
                 if (step % 100 == 0)
                 {
@@ -243,8 +239,7 @@ namespace TensorFlowNET.Examples
                             [model_y] = valid_y_batch,
                             [is_training] = false
                         };
-                        var result1 = sess.run(accuracy, valid_feed_dict);
-                        float accuracy_value = result1;
+                        float accuracy_value = sess.run(accuracy, (model_x, valid_x_batch), (model_y, valid_y_batch), (is_training, false));
                         sum_accuracy += accuracy_value;
                         cnt += 1;
                     }
@@ -252,7 +247,7 @@ namespace TensorFlowNET.Examples
                     var valid_accuracy = sum_accuracy / cnt;
 
                     print($"\nValidation Accuracy = {valid_accuracy.ToString("P")}\n");
-
+                    
                     // Save model
                     if (valid_accuracy > max_accuracy)
                     {

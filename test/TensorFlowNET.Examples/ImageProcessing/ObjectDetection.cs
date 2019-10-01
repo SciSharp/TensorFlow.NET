@@ -22,7 +22,7 @@ using TensorFlowNET.Examples.Utility;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -78,9 +78,7 @@ namespace TensorFlowNET.Examples
 
             var results = sess.run(outTensorArr, new FeedItem(imgTensor, imgArr));
 
-            NDArray[] resultArr = results.Data<NDArray>();
-
-            buildOutputImage(resultArr);
+            buildOutputImage(results);
         }
 
         public void PrepareData()
@@ -121,14 +119,14 @@ namespace TensorFlowNET.Examples
             // get bitmap
             Bitmap bitmap = new Bitmap(Path.Join(imageDir, "input.jpg"));
 
-            float[] scores = resultArr[2].Data<float>();
-
-            for (int i=0; i<scores.Length; i++)
+            var scores = resultArr[2].AsIterator<float>();
+            var boxes = resultArr[1].GetData<float>();
+            var id = np.squeeze(resultArr[3]).GetData<float>();
+            for (int i=0; i< scores.size; i++)
             {
-                float score = scores[i];
+                float score = scores.MoveNext();
                 if (score > MIN_SCORE)
                 {
-                    float[] boxes = resultArr[1].Data<float>();
                     float top = boxes[i * 4] * bitmap.Height;
                     float left = boxes[i * 4 + 1] * bitmap.Width;
                     float bottom = boxes[i * 4 + 2] * bitmap.Height;
@@ -142,9 +140,7 @@ namespace TensorFlowNET.Examples
                         Height = (int)(bottom - top)
                     };
 
-                    float[] ids = resultArr[3].Data<float>();
-
-                    string name = pbTxtItems.items.Where(w => w.id == (int)ids[i]).Select(s=>s.display_name).FirstOrDefault();
+                    string name = pbTxtItems.items.Where(w => w.id == id[i]).Select(s=>s.display_name).FirstOrDefault();
 
                     drawObjectOnBitmap(bitmap, rect, score, name);
                 }

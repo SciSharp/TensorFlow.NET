@@ -14,17 +14,34 @@
    limitations under the License.
 ******************************************************************************/
 
+using static Tensorflow.ops;
+
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static graph_util_impl graph_util => new graph_util_impl();
-        public static Graph get_default_graph()
+        public graph_util_impl graph_util => new graph_util_impl();
+
+        public GraphKeys GraphKeys { get; } = new GraphKeys();
+
+        public Graph get_default_graph()
         {
             return ops.get_default_graph();
         }
 
-        public static Graph Graph() 
+        /// <summary>
+        ///     Equivalent to <see cref="get_default_graph"/> but does not create a new graph if it there is none.
+        /// </summary>
+        public Graph peak_default_graph()
+        {
+            return ops.default_graph_stack.peak_controller();
+        }
+
+        /// <summary>
+        ///     Creates a new graph.
+        /// </summary>
+        ///<remarks>Has no interaction with graph defaulting. Equivalent to new Graph();</remarks>
+        public Graph Graph()
             => new Graph();
     }
 }

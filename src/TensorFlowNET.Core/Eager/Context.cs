@@ -2,12 +2,10 @@
 
 namespace Tensorflow.Eager
 {
-    public class Context : IDisposable
+    public class Context : DisposableObject
     {
-        private IntPtr _handle;
-
-        public static int GRAPH_MODE = 0;
-        public static int EAGER_MODE = 1;
+        public const int GRAPH_MODE = 0;
+        public const int EAGER_MODE = 1;
 
         public int default_execution_mode;
 
@@ -17,19 +15,16 @@ namespace Tensorflow.Eager
             status.Check(true);
         }
 
-        public void Dispose()
-        {
-            c_api.TFE_DeleteContext(_handle);
-        }
+        /// <summary>
+        ///     Dispose any unmanaged resources related to given <paramref name="handle"/>.
+        /// </summary>
+        protected sealed override void DisposeUnmanagedResources(IntPtr handle) 
+            => c_api.TFE_DeleteContext(_handle);
 
-        public bool executing_eagerly()
-        {
-            return false;
-        }
 
-        public static implicit operator IntPtr(Context ctx)
-        {
-            return ctx._handle;
-        }
+        public bool executing_eagerly() => false;
+
+        public static implicit operator IntPtr(Context ctx) 
+            => ctx._handle;
     }
 }

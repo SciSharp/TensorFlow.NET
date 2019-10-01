@@ -16,12 +16,12 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static Tensor convert_to_tensor(object value,
-            string name = null) => ops.convert_to_tensor(value, name: name);
+        public Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid) 
+            => ops.convert_to_tensor(value, dtype, name, preferred_dtype);
 
-        public static Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides = null,
+        public Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides = null,
             int begin_mask = 0,
             int end_mask = 0,
             int ellipsis_mask = 0,
@@ -38,7 +38,7 @@ namespace Tensorflow
                 shrink_axis_mask: shrink_axis_mask,
                 name: name);
 
-        public static Tensor strided_slice<T>(Tensor input, T[] begin, T[] end, T[] strides = null,
+        public Tensor strided_slice<T>(Tensor input, T[] begin, T[] end, T[] strides = null,
             int begin_mask = 0,
             int end_mask = 0,
             int ellipsis_mask = 0,
@@ -54,5 +54,23 @@ namespace Tensorflow
                 new_axis_mask: new_axis_mask,
                 shrink_axis_mask: shrink_axis_mask,
                 name: name);
+
+        /// <summary>
+        /// Splits a tensor into sub tensors.
+        /// </summary>
+        /// <param name="value">The Tensor to split.</param>
+        /// <param name="num_split">Either an integer indicating the number of splits along split_dim or a 1-D integer
+        /// Tensor or Python list containing the sizes of each output tensor along split_dim.
+        /// If a scalar then it must evenly divide value.shape[axis]; otherwise the sum of sizes along the split dimension must match that of the value.</param>
+        /// <param name="axis">An integer or scalar int32 Tensor. The dimension along which to split. Must be in the range [-rank(value), rank(value)). Defaults to 0.</param>
+        /// <param name="name">A name for the operation (optional)</param>
+        /// <returns>if num_or_size_splits is a scalar returns num_or_size_splits Tensor objects;
+        /// if num_or_size_splits is a 1-D Tensor returns num_or_size_splits.get_shape[0] Tensor objects resulting from splitting value.</returns>
+        public Tensor[] split(Tensor value, int num_split, Tensor axis, string name = null) => gen_array_ops.split(
+                value: value,
+                axis: axis,
+                num_split: num_split,
+                name: name
+            );
     }
 }

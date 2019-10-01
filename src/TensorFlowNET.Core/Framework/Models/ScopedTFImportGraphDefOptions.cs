@@ -6,10 +6,5 @@
         {
 
         }
-
-        ~ScopedTFImportGraphDefOptions()
-        {
-            base.Dispose();
-        }
     }
 }

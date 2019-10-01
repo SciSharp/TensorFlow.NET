@@ -6,7 +6,7 @@ using System.IO;
 using Console = Colorful.Console;
 using Tensorflow;
 using System.Drawing;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -51,7 +51,7 @@ namespace TensorFlowNET.Examples
                 {
                     sw.Restart();
 
-                    var results = sess.run(output_operation.outputs[0], new FeedItem(input_operation.outputs[0], nd));
+                    var results = sess.run(output_operation.outputs[0], (input_operation.outputs[0], nd));
                     results = np.squeeze(results);
                     int idx = np.argmax(results);
 

@@ -15,7 +15,9 @@
 ******************************************************************************/
 
 using NumSharp;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tensorflow
 {
@@ -35,12 +37,9 @@ namespace Tensorflow
                 return new _ElementFetchMapper(fetches, (List<NDArray> fetched_vals) => fetched_vals[0]);
         }
 
-        public virtual NDArray build_results(List<NDArray> values)
+        public virtual NDArray[] build_results(List<NDArray> values)
         {
-            var type = values[0].GetType();
-            var nd = new NDArray(type, values.Count);
-            nd.ReplaceData(values.ToArray());
-            return nd;
+            return values.ToArray();
         }
 
         public virtual List<ITensorOrOperation> unique_fetches()

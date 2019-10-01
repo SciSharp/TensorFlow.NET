@@ -20,11 +20,104 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
+        /// <summary>
+        /// Creates or finds a child frame, and makes `data` available to the child frame.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="frame_name"></param>
+        /// <param name="is_constant"></param>
+        /// <param name="parallel_iterations"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor enter(Tensor data, string frame_name = "frame_name", bool is_constant = false, int parallel_iterations = 10, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Enter", name, new
+            {
+                data,
+                frame_name,
+                is_constant,
+                parallel_iterations
+            });
+
+            return _op.output;
+        }
+
+        /// <summary>
+        /// Forwards the input to the output.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor loop_cond(Tensor input, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LoopCond", name, new { input });
+
+            return _op.output;
+        }
+
+        /// <summary>
+        /// Makes its input available to the next iteration.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor ref_next_iteration(Tensor data, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("RefNextIteration", name, new { data });
+
+            return _op;
+        }
+
+        /// <summary>
+        /// Makes its input available to the next iteration.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor next_iteration(Tensor data, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("NextIteration", name, new { data });
+
+            return _op;
+        }
+
+        /// <summary>
+        /// Exits the current frame to its parent frame.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor ref_exit(Tensor data, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("RefExit", name, new { data });
+
+            return _op;
+        }
+
+        /// <summary>
+        /// Exits the current frame to its parent frame.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor _exit(Tensor data, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Exit", name, new { data });
+
+            return _op;
+        }
+
         public static Operation no_op(string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("NoOp", name, null);
 
             return _op;
+        }
+
+        public static Tensor[] ref_switch(Tensor data, Tensor pred, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("RefSwitch", name, new { data, pred });
+            return _op.outputs;
         }
 
         /// <summary>

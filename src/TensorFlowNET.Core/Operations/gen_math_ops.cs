@@ -141,7 +141,7 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         public static Tensor atan(Tensor x, string name = null)
@@ -369,6 +369,14 @@ namespace Tensorflow
             var _op = _op_def_lib._apply_op_helper("LogicalOr", name, args: new { x, y });
 
             return _op.outputs[0];
+        }
+
+        public static Tensor logical_xor(Tensor x, Tensor y, string name = "LogicalXor")
+        {
+            return logical_and(
+                logical_or(x, y),
+                logical_not(logical_and(x, y)),
+                name);
         }
 
         public static Tensor squared_difference(Tensor x, Tensor y, string name = null)
@@ -620,6 +628,13 @@ namespace Tensorflow
         public static Tensor _abs(Tensor x, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Abs", name, new { x });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _any<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Any", name, new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }

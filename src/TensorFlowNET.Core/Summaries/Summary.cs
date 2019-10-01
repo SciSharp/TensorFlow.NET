@@ -16,7 +16,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Summaries
 {
@@ -33,11 +33,11 @@ namespace Tensorflow.Summaries
         {
             var (tag, scope) = summary_scope(name, family: family, values: new Tensor[] { tensor }, default_name: "HistogramSummary");
             var val = gen_logging_ops.histogram_summary(tag: tag, values: tensor, name: scope);
-            collect(val, collections?.ToList(), new List<string> { ops.GraphKeys.SUMMARIES });
+            collect(val, collections?.ToList(), new List<string> { tf.GraphKeys.SUMMARIES });
             return val;
         }
 
-        public Tensor merge_all(string key = ops.GraphKeys.SUMMARIES, string scope= null, string name= null)
+        public Tensor merge_all(string key = "summaries", string scope= null, string name= null)
         {
             var summary_ops = ops.get_collection(key, scope: scope);
             if (summary_ops == null)
@@ -67,7 +67,7 @@ namespace Tensorflow.Summaries
         {
             var (tag, scope) = summary_scope(name, family: family, values: new Tensor[] { tensor });
             var val = gen_logging_ops.scalar_summary(tags: tag, values: tensor, name: scope);
-            collect(val, collections?.ToList(), new List<string> { ops.GraphKeys.SUMMARIES });
+            collect(val, collections?.ToList(), new List<string> { tf.GraphKeys.SUMMARIES });
             return val;
         }
 

@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Keras.Utils;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -81,8 +82,8 @@ namespace Tensorflow.Keras.Layers
 
         protected override void build(TensorShape input_shape)
         {
-            var ndims = input_shape.NDim;
-            foreach (var (idx, x) in Python.enumerate(axis))
+            var ndims = input_shape.ndim;
+            foreach (var (idx, x) in enumerate(axis))
                 if (x < 0)
                     axis[idx] = ndims + x;
 
@@ -91,7 +92,7 @@ namespace Tensorflow.Keras.Layers
                     _data_format = "NHWC";
 
             var param_dtype = _dtype == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : _dtype;
-            var param_shape = new int[] { input_shape.Dimensions[axis[0]] };
+            var param_shape = new int[] { input_shape.dims[axis[0]] };
 
             if (scale)
                 gamma = add_weight("gamma",
@@ -207,7 +208,7 @@ namespace Tensorflow.Keras.Layers
 
         public Tensor _assign_moving_average(RefVariable variable, Tensor value, Tensor momentum)
         {
-            return Python.tf_with(ops.name_scope(null, "AssignMovingAvg", new { variable, value, momentum }), scope =>
+            return tf_with(ops.name_scope(null, "AssignMovingAvg", new { variable, value, momentum }), scope =>
             {
                 // var cm = ops.colocate_with(variable);
                 var decay = ops.convert_to_tensor(1.0f - momentum, name: "decay");

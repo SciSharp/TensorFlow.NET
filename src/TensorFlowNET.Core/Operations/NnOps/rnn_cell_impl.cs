@@ -33,11 +33,11 @@ namespace Tensorflow.Operations
                 throw new ValueError($"prefix tensor must be either a scalar or vector, but saw tensor: {p}");
 
             var s_tensor_shape = new TensorShape(suffix);
-            var s_static = s_tensor_shape.NDim > -1 ?
-                s_tensor_shape.Dimensions :
+            var s_static = s_tensor_shape.ndim > -1 ?
+                s_tensor_shape.dims :
                 null;
             var s = s_tensor_shape.is_fully_defined() ?
-                constant_op.constant(s_tensor_shape.Dimensions, dtype: dtypes.int32) :
+                constant_op.constant(s_tensor_shape.dims, dtype: dtypes.int32) :
                 null;
 
             if (@static)

@@ -19,60 +19,62 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    /// <summary>
-    /// TensorFlow uses a dataflow graph to represent your computation in terms of the dependencies between individual operations. 
-    /// This leads to a low-level programming model in which you first define the dataflow graph, 
-    /// then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
-    /// https://www.tensorflow.org/guide/graphs
-    /// </summary>
     /*
-        A TensorFlow computation, represented as a dataflow graph.
+    A TensorFlow computation, represented as a dataflow graph.
 
-        A `Graph` contains a set of
-        `tf.Operation` objects,
-        which represent units of computation; and
-        `tf.Tensor` objects, which represent
-        the units of data that flow between operations.
+    A `Graph` contains a set of
+    `tf.Operation` objects,
+    which represent units of computation; and
+    `tf.Tensor` objects, which represent
+    the units of data that flow between operations.
 
-        A default `Graph` is always registered, and accessible by calling
-        `tf.get_default_graph`.
-        To add an operation to the default graph, simply call one of the functions
-        that defines a new `Operation`:
+    A default `Graph` is always registered, and accessible by calling
+    `tf.get_default_graph`.
+    To add an operation to the default graph, simply call one of the functions
+    that defines a new `Operation`:
 
-        ```python
-        c = tf.constant(4.0)
-        assert c.graph is tf.get_default_graph()
-        ```
+    ```python
+    c = tf.constant(4.0)
+    assert c.graph is tf.get_default_graph()
+    ```
 
-        Another typical usage involves the
-        `tf.Graph.as_default`
-        context manager, which overrides the current default graph for the
-        lifetime of the context:
+    Another typical usage involves the
+    `tf.Graph.as_default`
+    context manager, which overrides the current default graph for the
+    lifetime of the context:
 
-        ```python
-        g = tf.Graph()
-        with g.as_default():
-        # Define operations and tensors in `g`.
-        c = tf.constant(30.0)
-        assert c.graph is g
-        ```
+    ```python
+    g = tf.Graph()
+    with g.as_default():
+    # Define operations and tensors in `g`.
+    c = tf.constant(30.0)
+    assert c.graph is g
+    ```
 
-        Important note: This class *is not* thread-safe for graph construction. All
-        operations should be created from a single thread, or external
-        synchronization must be provided. Unless otherwise specified, all methods
-        are not thread-safe.
+    Important note: This class *is not* thread-safe for graph construction. All
+    operations should be created from a single thread, or external
+    synchronization must be provided. Unless otherwise specified, all methods
+    are not thread-safe.
 
-        A `Graph` instance supports an arbitrary number of "collections"
-        that are identified by name. For convenience when building a large
-        graph, collections can store groups of related objects: for
-        example, the `tf.Variable` uses a collection (named
-        `tf.GraphKeys.GLOBAL_VARIABLES`) for
-        all variables that are created during the construction of a graph. The caller
-        may define additional collections by specifying a new name.     
-     */
+    A `Graph` instance supports an arbitrary number of "collections"
+    that are identified by name. For convenience when building a large
+    graph, collections can store groups of related objects: for
+    example, the `tf.Variable` uses a collection (named
+    `tf.GraphKeys.GLOBAL_VARIABLES`) for
+    all variables that are created during the construction of a graph. The caller
+    may define additional collections by specifying a new name.     
+ */
+
+    /// <summary>
+    ///     TensorFlow uses a dataflow graph to represent your computation in terms of the dependencies between individual operations. 
+    ///     This leads to a low-level programming model in which you first define the dataflow graph, 
+    ///     then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
+    /// </summary>
+    /// <remarks>https://www.tensorflow.org/guide/graphs <br></br>https://www.tensorflow.org/api_docs/python/tf/Graph</remarks>
     public partial class Graph : DisposableObject, IEnumerable<Operation>
     {
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
@@ -173,6 +175,10 @@ namespace Tensorflow
 
                     if (_nodes_by_name.ContainsKey(op_name))
                         return _nodes_by_name[op_name].outputs[out_n];
+                    else
+                        throw new KeyError($"The name {name} refers to a Tensor which does not " +
+                            $"exist. The operation, {op_name}, does not exist in the " +
+                            "graph.");
                 }
                 else if (!name.Contains(":") & allow_operation)
                 {
@@ -221,6 +227,10 @@ namespace Tensorflow
 
         public void add_to_collection<T>(string name, T value)
         {
+            if(name == "update_ops")
+            {
+
+            }
             _check_not_finalized();
             if (_collections.ContainsKey(name))
                 (_collections[name] as List<T>).Add(value);
@@ -240,14 +250,14 @@ namespace Tensorflow
                 throw new RuntimeError("Graph is finalized and cannot be modified.");
         }
 
-        public unsafe Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes,
+        public Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes,
             TF_DataType[] input_types = null, string name = null,
             Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)
         {
             if (inputs == null)
                 inputs = new Tensor[0];
 
-            foreach ((int idx, Tensor a) in Python.enumerate(inputs))
+            foreach ((int idx, Tensor a) in enumerate(inputs))
             {
 
             }
@@ -280,6 +290,11 @@ namespace Tensorflow
             Console.WriteLine();*/
 
             return op;
+        }
+
+        public void device(string device_name)
+        {
+            throw new NotImplementedException("");
         }
 
         private void _create_op_helper(Operation op, bool compute_device = true)
@@ -397,13 +412,13 @@ namespace Tensorflow
             int num_return_outputs = 0;
             c_api.TF_ImportGraphDefResultsReturnOutputs(results, ref num_return_outputs, ref return_output_handle);
             TF_Output[] return_outputs = new TF_Output[num_return_outputs];
-            for (int i = 0; i < num_return_outputs; i++)
+            unsafe
             {
-                var handle = return_output_handle + (Marshal.SizeOf<TF_Output>() * i);
-                return_outputs[i] = Marshal.PtrToStructure<TF_Output>(handle);
+                var tf_output_ptr = (TF_Output*) return_output_handle;
+                for (int i = 0; i < num_return_outputs; i++) 
+                    return_outputs[i] = *(tf_output_ptr + i);
+                return return_outputs;
             }
-
-            return return_outputs;
         }
 
         public string[] get_all_collection_keys()
@@ -418,14 +433,33 @@ namespace Tensorflow
 
         public List<T> get_collection<T>(string name, string scope = null)
         {
-            return _collections.ContainsKey(name) ? _collections[name] as List<T> : new List<T>();
+            List<T> t = default;
+            var collection = _collections.ContainsKey(name) ? _collections[name] : new List<T>();
+            switch (collection)
+            {
+                case List<VariableV1> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<RefVariable> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<Tensor> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<Operation> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                default:
+                    throw new NotImplementedException($"get_collection<{typeof(T).FullName}>");
+            }
+            return t;
         }
 
-        public object get_collection_ref(string name)
+        public List<T> get_collection_ref<T>(string name)
         {
             if (!_collections.ContainsKey(name))
-                _collections[name] = new List<object>();
-            return _collections[name];
+                _collections[name] = new List<T>();
+            return _collections[name] as List<T>;
         }
 
         public void prevent_feeding(Tensor tensor)
@@ -438,14 +472,13 @@ namespace Tensorflow
             _unfetchable_ops.Add(op);
         }
 
-        protected override void DisposeManagedState()
+        protected override void DisposeManagedResources()
         {
             ops.default_graph_stack.remove(this);
         }
 
-        protected override void DisposeUnManagedState(IntPtr handle)
+        protected override void DisposeUnmanagedResources(IntPtr handle)
         {
-            Console.WriteLine($"Destroy graph {handle}");
             c_api.TF_DeleteGraph(handle);
         }
 
@@ -496,10 +529,8 @@ namespace Tensorflow
         IEnumerator<Operation> IEnumerable<Operation>.GetEnumerator()
             => GetEnumerable().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator IEnumerable.GetEnumerator() 
+            => throw new NotImplementedException();
 
         public static implicit operator IntPtr(Graph graph)
         {

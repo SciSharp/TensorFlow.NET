@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Framework;
 using Tensorflow.Train;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -56,6 +56,20 @@ namespace Tensorflow
             _name = name;
             _use_locking = use_locking;
             _lr = learning_rate;
+            // Dictionary of slots.
+            _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
+            _non_slot_dict = new Dictionary<string, RefVariable>();
+            _deferred_slot_restorations = new Dictionary<string, object>();
+        }
+
+        public Optimizer(Tensor learning_rate, bool use_locking, string name = null)
+        {
+            if (String.IsNullOrEmpty(name))
+                throw new NotImplementedException("Must specify the optimizer name");
+
+            _name = name;
+            _use_locking = use_locking;
+            _lr_t = learning_rate;
             // Dictionary of slots.
             _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
             _non_slot_dict = new Dictionary<string, RefVariable>();
@@ -198,7 +212,7 @@ namespace Tensorflow
 
                 if (!tf.context.executing_eagerly())
                 {
-                    var train_op = ops.get_collection_ref(ops.GraphKeys.TRAIN_OP) as List<ITensorOrOperation>;
+                    var train_op = ops.get_collection_ref<Operation>(tf.GraphKeys.TRAIN_OP);
                     if (train_op != null && train_op.Contains(apply_updates))
                         train_op.Add(apply_updates);
                 }
@@ -235,7 +249,9 @@ namespace Tensorflow
             {
                 _maybe_initialize_trackable();
                 v = variable_scope.default_variable_creator(
-                    initial_value, name: name, trainable: false,
+                    initial_value, 
+                    name: name, 
+                    trainable: false,
                     use_resource: resource_variable_ops.is_resource_variable(
                         colocate_with));
 
@@ -357,20 +373,22 @@ namespace Tensorflow
             loss = _scale_loss(loss);
             int num_towers = 1;
 
-
-            var tmp = variables.trainable_variables();
-            var vars = ops.get_collection<RefVariable>(ops.GraphKeys.TRAINABLE_RESOURCE_VARIABLES);
-            switch (tmp)
+            if(var_list == null)
             {
-                case List<RefVariable> values:
-                    var_list = values.Concat(vars).ToList();
-                    break;
-                case List<VariableV1> values:
-                    var_list = values.Select(x => x as RefVariable).Concat(vars).ToList();
-                    break;
+                var vars = ops.get_collection<RefVariable>(tf.GraphKeys.TRAINABLE_RESOURCE_VARIABLES);
+                var tmp = variables.trainable_variables();
+                switch (tmp)
+                {
+                    case List<RefVariable> values:
+                        var_list = values.Concat(vars).ToList();
+                        break;
+                    case List<VariableV1> values:
+                        var_list = values.Select(x => x as RefVariable).Concat(vars).ToList();
+                        break;
+                }
             }
 
-            var_list = var_list.Concat(ops.get_collection<RefVariable>(ops.GraphKeys._STREAMING_MODEL_PORTS)).ToList();
+            var_list = var_list.Concat(ops.get_collection<RefVariable>(tf.GraphKeys._STREAMING_MODEL_PORTS)).ToList();
             var processors = var_list.Select(v => optimizer._get_processor(v)).ToList();
             var var_refs = processors.Select(x => x.target()).ToArray();
 
@@ -382,7 +400,7 @@ namespace Tensorflow
             if ((int)gate_gradients == Optimizer.GATE_GRAPH)
                 grads = control_flow_ops.tuple(grads);
 
-            var grads_and_vars = Python.zip(grads, var_list)
+            var grads_and_vars = zip(grads, var_list)
                 .Select(x => new Tuple<Tensor, RefVariable>(x.Item1, x.Item2))
                 .ToArray();
 

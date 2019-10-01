@@ -39,7 +39,7 @@ namespace Tensorflow.Operations
     /// 4. A ControlFlowContext has _context_stack.
     /// Pushed and popped by ctxt.Enter() and ctxt.Exit()
     /// </summary>
-    public abstract class ControlFlowContext : IPython
+    public abstract class ControlFlowContext : IObjectLife
     {
         /// <summary>
         /// The predicate tensor in this branch
@@ -53,6 +53,11 @@ namespace Tensorflow.Operations
         protected Stack<ControlFlowContext> _context_stack;
         protected ControlFlowContext _outer_context;
 
+        /// <summary>
+        /// The keys are the names of tensors referenced by but external to this
+        /// context. Each value is the Tensor that should be used by this context to
+        /// access the key value (e.g. a switch output guarding a cond input value).
+        /// </summary>
         protected Dictionary<string, ITensorOrOperation> _external_values;
 
         public ControlFlowContext()
@@ -68,6 +73,12 @@ namespace Tensorflow.Operations
             _outer_context = ops.get_default_graph()._get_control_flow_context();
             if (values_def != null)
                 _init_values_from_proto(values_def, import_scope: import_scope);
+            else
+            {
+                _values = new HashSet<string>();
+                _external_values = new Dictionary<string, ITensorOrOperation>();
+            }
+
         }
 
         public void __enter__()
@@ -112,6 +123,27 @@ namespace Tensorflow.Operations
             var graph = ops.get_default_graph();
             _context_stack.Push(graph._get_control_flow_context());
             graph._set_control_flow_context(this);
+        }
+
+        protected virtual Tensor _Enter(Tensor data, string frame_name,
+            bool is_constant = false, 
+            int parallel_iterations = 10,
+            bool use_ref = true,
+            bool use_input_shape = true,
+            string name = null)
+        {
+            Tensor result;
+            data = ops.internal_convert_to_tensor_or_indexed_slices(data, as_ref: true);
+            if (data.dtype.is_ref_dtype() && use_ref)
+                throw new NotImplementedException("_Enter");
+            else
+                result = gen_control_flow_ops.enter(
+                    data, frame_name, is_constant, parallel_iterations, name: name);
+
+            if (use_input_shape)
+                result.set_shape(data.TensorShape);
+
+            return result;
         }
 
         /// <summary>
@@ -184,6 +216,10 @@ namespace Tensorflow.Operations
             return true;
         }
 
+        protected virtual bool _IsInOuterContext(Operation op)
+        {
+            throw new NotImplementedException("_IsInOuterContext");
+        }
 
         protected virtual void _RemoveExternalControlEdges(Operation op)
         {
@@ -229,5 +265,14 @@ namespace Tensorflow.Operations
         {
         }
 
+        public void __init__()
+        {
+            
+        }
+
+        public void __del__()
+        {
+            
+        }
     }
 }

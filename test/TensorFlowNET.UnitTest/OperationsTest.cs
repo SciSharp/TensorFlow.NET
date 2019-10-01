@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -20,7 +22,7 @@ namespace TensorFlowNET.UnitTest
         {
             var handle = c_api.TF_GetAllOpList();
             var buffer = new Buffer(handle);
-            var op_list = OpList.Parser.ParseFrom(buffer);
+            var op_list = OpList.Parser.ParseFrom(buffer.MemoryBlock.Stream());
 
             var _registered_ops = new Dictionary<string, OpDef>();
             foreach (var op_def in op_list.Op)
@@ -155,6 +157,15 @@ namespace TensorFlowNET.UnitTest
             }
 
             d = tf.cast(tf.logical_or(b, c), tf.int32);
+            check = np.array(new[] { 1, 1, 1, 1, 1, 1, 1, 1 });
+
+            using (var sess = tf.Session())
+            {
+                var o = sess.run(d);
+                Assert.IsTrue(o.array_equal(check));
+            }
+
+            d = tf.cast(tf.logical_xor(b, c), tf.int32);
             check = np.array(new[] { 1, 1, 1, 1, 1, 1, 1, 1 });
 
             using (var sess = tf.Session())
@@ -709,7 +720,7 @@ namespace TensorFlowNET.UnitTest
             {
                 var o = sess.run(c,
                     new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double) o, doubleResult);
+                Assert.AreEqual((double)o, doubleResult);
             }
             #endregion
         }
@@ -1482,6 +1493,24 @@ namespace TensorFlowNET.UnitTest
                 Assert.AreEqual((int)o, doubleResultTwo);
             }
             #endregion
+        }
+
+        [Ignore("Not finished yet")]
+        [TestMethod]
+        public void map_fn()
+        {
+            var a = tf.constant(new[] { 1, 2, 3, 4 });
+            var b = tf.constant(new[] { 17, 12, 11, 10 });
+            var ab = tf.stack(new[] { a, b }, 1);
+
+            Func<Tensor, Tensor> map_operation = (value_ab) =>
+            {
+                var value_a = value_ab[0];
+                var value_b = value_ab[1];
+                return value_a + value_b;
+            };
+
+            var map_result = tf.map_fn(map_operation, ab);
         }
     }
 }

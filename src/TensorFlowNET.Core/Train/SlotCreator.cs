@@ -16,12 +16,30 @@
 
 using System;
 using Tensorflow.Operations.Initializers;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
 {
     public class SlotCreator
     {
+        /// <summary>
+        /// Create a slot initialized to the given value.
+        /// </summary>
+        /// <param name="primary"></param>
+        /// <param name="val"></param>
+        /// <param name="name"></param>
+        /// <param name="colocate_with_primary"></param>
+        /// <returns></returns>
+        public RefVariable create_slot(RefVariable primary, Tensor val, string name, bool colocate_with_primary = true)
+        {
+            var validate_shape = val.TensorShape.is_fully_defined();
+            var prefix = primary.op.name;
+            return tf_with(tf.variable_scope(name: null, prefix + "/" + name), delegate
+            {
+                return _create_slot_var(primary, val, "", validate_shape, null, TF_DataType.DtInvalid);
+            });
+        }
+
         /// <summary>
         /// Create a slot initialized to 0 with same shape as the primary object.
         /// </summary>
@@ -73,7 +91,7 @@ namespace Tensorflow.Train
         /// <param name="shape"></param>
         /// <param name="dtype"></param>
         /// <returns></returns>
-        private RefVariable _create_slot_var(VariableV1 primary, IInitializer val, string scope, bool validate_shape, 
+        private RefVariable _create_slot_var(VariableV1 primary, object val, string scope, bool validate_shape, 
             TensorShape shape, TF_DataType dtype)
         {
             bool use_resource = primary is ResourceVariable;

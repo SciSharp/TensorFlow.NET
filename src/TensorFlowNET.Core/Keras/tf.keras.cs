@@ -2,9 +2,9 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static class keras
+        public class keras
         {
             public static Initializers initializers => new Initializers();
         }

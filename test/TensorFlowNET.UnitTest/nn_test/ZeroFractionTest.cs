@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.nn_test
 {
@@ -31,7 +31,7 @@ namespace TensorFlowNET.UnitTest.nn_test
             var y_np = this._ZeroFraction(x_np);
 
             var x_tf = constant_op.constant(x_np);
-            x_tf.SetShape(x_shape);
+            x_tf.set_shape(x_shape);
             var y_tf = nn_impl.zero_fraction(x_tf);
             var y_tf_np = self.evaluate<NDArray>(y_tf);
 
@@ -63,7 +63,7 @@ namespace TensorFlowNET.UnitTest.nn_test
         public void testZeroFraction2_27Ones()
         {
             var sparsity = nn_impl.zero_fraction(
-                array_ops.ones(new Shape((int)Math.Pow(2, 27 * 1.01)), dtypes.int8));
+                array_ops.ones(new TensorShape((int)Math.Pow(2, 27 * 1.01)), dtypes.int8));
             self.assertAllClose(0.0, self.evaluate<NDArray>(sparsity));
         }
 

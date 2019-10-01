@@ -40,7 +40,7 @@ namespace Tensorflow
                 name: name,
                 args: new { shape, dtype, seed, seed2 });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         /// <summary>
@@ -88,6 +88,23 @@ namespace Tensorflow
                 args: new { shape, dtype, seed, seed2});
 
             return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="seed"></param>
+        /// <param name="seed2"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("RandomShuffle",
+                name: name,
+                args: new { value, seed, seed2 });
+
+            return _op.output;
         }
 
         /// <summary>

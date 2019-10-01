@@ -23,7 +23,7 @@ namespace Tensorflow
     /// <summary>
     /// A context manager for defining ops that creates variables (layers).
     /// </summary>
-    public class variable_scope : IPython
+    public class variable_scope : IObjectLife
     {
         public static string _VARSTORE_KEY = "__variable_store";
         public static string _VARSCOPESTORE_KEY = "__varscope";
@@ -175,6 +175,7 @@ namespace Tensorflow
         public static RefVariable default_variable_creator(object initial_value,
             string name = null,
             bool? trainable = null,
+            List<string> collections = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool validate_shape = false,
             bool ? use_resource = null, 
@@ -199,6 +200,7 @@ namespace Tensorflow
                 return new RefVariable(initial_value, 
                     trainable: trainable.Value,
                     validate_shape: validate_shape,
+                    collections: collections,
                     name: name,
                     dtype: dtype);
             }
@@ -292,6 +294,16 @@ namespace Tensorflow
             bool validate_shape = true)
         {
             throw new NotImplementedException();
+        }
+
+        public void __init__()
+        {
+            
+        }
+
+        public void __del__()
+        {
+            
         }
     }
 }

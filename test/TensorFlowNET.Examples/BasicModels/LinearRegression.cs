@@ -17,7 +17,7 @@
 using NumSharp;
 using System;
 using Tensorflow;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -80,26 +80,18 @@ namespace TensorFlowNET.Examples
                 for (int epoch = 0; epoch < training_epochs; epoch++)
                 {
                     foreach (var (x, y) in zip<float>(train_X, train_Y))
-                    {
-                        sess.run(optimizer, 
-                            new FeedItem(X, x),
-                            new FeedItem(Y, y));
-                    }
+                        sess.run(optimizer, (X, x), (Y, y));
 
                     // Display logs per epoch step
                     if ((epoch + 1) % display_step == 0)
                     {
-                        var c = sess.run(cost, 
-                            new FeedItem(X, train_X),
-                            new FeedItem(Y, train_Y));
+                        var c = sess.run(cost, (X, train_X), (Y, train_Y));
                         Console.WriteLine($"Epoch: {epoch + 1} cost={c} " + $"W={sess.run(W)} b={sess.run(b)}");
                     }
                 }
 
                 Console.WriteLine("Optimization Finished!");
-                var training_cost = sess.run(cost,
-                    new FeedItem(X, train_X),
-                    new FeedItem(Y, train_Y));
+                var training_cost = sess.run(cost, (X, train_X), (Y, train_Y));
                 Console.WriteLine($"Training cost={training_cost} W={sess.run(W)} b={sess.run(b)}");
 
                 // Testing example
@@ -107,8 +99,7 @@ namespace TensorFlowNET.Examples
                 var test_Y = np.array(1.84f, 2.273f, 3.2f, 2.831f, 2.92f, 3.24f, 1.35f, 1.03f);
                 Console.WriteLine("Testing... (Mean square loss Comparison)");
                 var testing_cost = sess.run(tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * test_X.shape[0]),
-                    new FeedItem(X, test_X), 
-                    new FeedItem(Y, test_Y));
+                    (X, test_X), (Y, test_Y));
                 Console.WriteLine($"Testing cost={testing_cost}");
                 var diff = Math.Abs((float)training_cost - (float)testing_cost);
                 Console.WriteLine($"Absolute mean square loss difference: {diff}");

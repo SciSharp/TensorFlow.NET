@@ -13,5 +13,14 @@
             Key = key;
             Value = val;
         }
+
+        public static implicit operator FeedItem((object, object) feed)
+            => new FeedItem(feed.Item1, feed.Item2);
+
+        public void Deconstruct(out object key, out object value)
+        {
+            key = Key;
+            value = Value;
+        }
     }
 }

@@ -25,10 +25,6 @@ namespace Tensorflow.Framework
         }
 
         public static TensorShape as_shape(this Shape shape)
-        {
-            if (shape is TensorShape tshape)
-                return tshape;
-            return new TensorShape(shape);
-        }
+             => new TensorShape(shape.Dimensions);
     }
 }

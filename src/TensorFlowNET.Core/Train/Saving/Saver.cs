@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -144,7 +144,7 @@ namespace Tensorflow
 
             _check_saver_def();
 
-            _next_checkpoint_time = Python.time() + _saver_def.KeepCheckpointEveryNHours * 3600;
+            _next_checkpoint_time = time() + _saver_def.KeepCheckpointEveryNHours * 3600;
         }
 
         private void _check_saver_def()
@@ -170,7 +170,7 @@ namespace Tensorflow
         {
             if (string.IsNullOrEmpty(latest_filename))
                 latest_filename = "checkpoint";
-            string model_checkpoint_path = "";
+            object model_checkpoint_path = "";
             string checkpoint_file = "";
 
             if (global_step > 0)
@@ -188,10 +188,10 @@ namespace Tensorflow
 
                 if (write_state)
                 {
-                    _RecordLastCheckpoint(model_checkpoint_path);
+                    _RecordLastCheckpoint(model_checkpoint_path.ToString());
                     checkpoint_management.update_checkpoint_state_internal(
                         save_dir: save_path_parent,
-                        model_checkpoint_path: model_checkpoint_path,
+                        model_checkpoint_path: model_checkpoint_path.ToString(),
                         all_model_checkpoint_paths: _last_checkpoints.Keys.Select(x => x).ToList(),
                         latest_filename: latest_filename,
                         save_relative_paths: _save_relative_paths);
@@ -205,7 +205,7 @@ namespace Tensorflow
                 export_meta_graph(meta_graph_filename, strip_default_attrs: strip_default_attrs, save_debug_info: save_debug_info);
             }
 
-            return _is_empty ? string.Empty : model_checkpoint_path;
+            return _is_empty ? string.Empty : model_checkpoint_path.ToString();
         }
 
         public (Saver, object) import_meta_graph(string meta_graph_or_file, 

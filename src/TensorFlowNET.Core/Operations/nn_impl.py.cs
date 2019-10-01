@@ -14,8 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using Tensorflow.Operations;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -83,6 +84,19 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        /// Batch normalization.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="scale"></param>
+        /// <param name="offset"></param>
+        /// <param name="mean"></param>
+        /// <param name="variance"></param>
+        /// <param name="epsilon"></param>
+        /// <param name="data_format"></param>
+        /// <param name="is_training"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static Tensor[] fused_batch_norm(Tensor x, 
             RefVariable scale,
             RefVariable offset,
@@ -103,7 +117,7 @@ namespace Tensorflow
             var min_epsilon = 1.001e-5f;
             epsilon = epsilon > min_epsilon ? epsilon : min_epsilon;
 
-            return gen_nn_ops._fused_batch_norm(x,
+            var results = gen_nn_ops.fused_batch_norm(x,
                 scale_tensor,
                 offset_tensor,
                 mean,
@@ -112,6 +126,12 @@ namespace Tensorflow
                 data_format,
                 is_training,
                 name);
+
+            var y = results[0];
+            var batch_mean = results[1];
+            var batch_var = results[2];
+
+            return new[] { y, batch_mean, batch_var };
         }
 
         /// <summary>
@@ -129,6 +149,27 @@ namespace Tensorflow
                 var nonzero_count = math_ops.reduce_sum(
                 math_ops.cast(gen_math_ops.not_equal(input_tensor, zero), dtype: dtype), name: "nonzero_count");
                 return nonzero_count;
+            });
+        }
+
+        public static Tensor sigmoid_cross_entropy_with_logits(Tensor labels, Tensor logits, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "logistic_loss", new { logits, labels }), scope =>
+            {
+                name = scope;
+                logits = ops.convert_to_tensor(logits, name: "logits");
+                labels = ops.convert_to_tensor(labels, name: "labels");
+                labels.TensorShape.merge_with(logits.TensorShape);
+
+                var zeros = array_ops.zeros_like(logits, dtype: logits.dtype);
+                var cond = (logits >= zeros);
+                var relu_logits = array_ops.where(cond, logits, zeros);
+                var neg_abs_logits = array_ops.where(cond, -logits, logits);
+
+                return math_ops.add(
+                    relu_logits - logits * labels,
+                    gen_math_ops.log1p(gen_math_ops.exp(neg_abs_logits)),
+                    name: name);
             });
         }
 

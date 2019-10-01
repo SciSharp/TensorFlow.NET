@@ -18,14 +18,16 @@ using Tensorflow.Operations.Initializers;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static IInitializer zeros_initializer => new Zeros();
-        public static IInitializer ones_initializer => new Ones();
-        public static IInitializer glorot_uniform_initializer => new GlorotUniform();
-        public static IInitializer uniform_initializer => new RandomUniform();
+        public IInitializer constant_initializer<T>(T value, TF_DataType dtype = TF_DataType.TF_FLOAT, bool verify_shape = false) 
+            => new Constant<T>(value, dtype: dtype, verify_shape: verify_shape);
+        public IInitializer zeros_initializer => new Zeros();
+        public IInitializer ones_initializer => new Ones();
+        public IInitializer glorot_uniform_initializer => new GlorotUniform();
+        public IInitializer uniform_initializer => new RandomUniform();
 
-        public static variable_scope variable_scope(string name,
+        public variable_scope variable_scope(string name,
                string default_name = null,
                Tensor[] values = null,
                bool? reuse = null,
@@ -35,7 +37,7 @@ namespace Tensorflow
                    reuse: reuse,
                    auxiliary_name_scope: auxiliary_name_scope);
 
-        public static variable_scope variable_scope(VariableScope scope,
+        public variable_scope variable_scope(VariableScope scope,
               string default_name = null,
               Tensor[] values = null,
               bool? reuse = null,
@@ -45,11 +47,39 @@ namespace Tensorflow
                   reuse: reuse,
                   auxiliary_name_scope: auxiliary_name_scope);
 
-        public static IInitializer truncated_normal_initializer(float mean = 0.0f,
+        public IInitializer truncated_normal_initializer(float mean = 0.0f,
             float stddev = 1.0f,
             int? seed = null,
             TF_DataType dtype = TF_DataType.DtInvalid) => new TruncatedNormal(mean: mean,
                 stddev: stddev,
+                seed: seed,
+                dtype: dtype);
+
+        public IInitializer random_normal_initializer(float mean = 0.0f,
+            float stddev = 1.0f,
+            int? seed = null,
+            TF_DataType dtype = TF_DataType.DtInvalid) => new RandomNormal(mean: mean,
+                stddev: stddev,
+                seed: seed,
+                dtype: dtype);
+
+        /// <summary>
+        /// Initializer capable of adapting its scale to the shape of weights tensors.
+        /// </summary>
+        /// <param name="scale"></param>
+        /// <param name="mode"></param>
+        /// <param name="distribution"></param>
+        /// <param name="seed"></param>
+        /// <param name="dtype"></param>
+        /// <returns></returns>
+        public IInitializer variance_scaling_initializer(float scale = 1.0f,
+            string mode = "fan_in",
+            string distribution = "truncated_normal",
+            int? seed = null,
+            TF_DataType dtype = TF_DataType.TF_FLOAT) => new VarianceScaling(
+                scale: scale,
+                mode: mode,
+                distribution: distribution,
                 seed: seed,
                 dtype: dtype);
     }

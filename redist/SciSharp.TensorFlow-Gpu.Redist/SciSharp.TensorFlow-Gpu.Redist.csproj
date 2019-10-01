@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <!-- TensorFlow doesn't support Gpus on Mac Os. -->
+    <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+    <AssemblyName>SciSharp.Tensorflow-Gpu.Redist</AssemblyName>
+
+    <PackageId>SciSharp.Tensorflow-Gpu.Redist</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>SciSharp team</Authors>
+    <Company>SciSharp STACK</Company>
+    <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>
+      Meta-package for GPU Tensoflow library runtime distribution.
+      Libraries can be directly downloaded from https://storage.googleapis.com/tensorflow/libtensorflow/
+    </Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+
+    <PackageProjectUrl>https://github.com/SciSharp/TensorFlow.NET</PackageProjectUrl>
+    <PackageTags>native;tensorflow;machine-learning;ML</PackageTags>
+    <PackageOutputPath>../../packages</PackageOutputPath>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <!-- Need to add some dependencies so Meta-Project will pull runtime Project(s) -->
+  <Target Name="ValidateRuntimePack" BeforeTargets="GenerateNuspec">
+    <ItemGroup>
+      <RuntimeLinux Include="../../packages/runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist.*.nupkg" />
+      <RuntimeWin Include="../../packages/runtime.win-x64.SciSharp.Tensorflow-Gpu.Redist.*.nupkg" />
+    </ItemGroup>
+    <Message
+      Importance="high"
+      Text="Package runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist: found"
+      Condition="Exists('@(RuntimeLinux)')" />
+    <Message
+      Importance="high"
+      Text="Package runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist: not found"
+      Condition="!Exists('@(RuntimeLinux)')" />
+    <Message
+      Importance="high"
+      Text="Package runtime.win-x64.SciSharp.Tensorflow-Gpu.Redist: found"
+      Condition="Exists('@(RuntimeWin)')" />
+    <Message
+      Importance="high"
+      Text="Package runtime.win-x64.SciSharp.Tensorflow-Gpu.Redist: not found"
+      Condition="!Exists('@(RuntimeWin)')" />
+    <Error
+      Text="You must locally 'dotnet pack' at least one runtime.{rid}.SciSharp.Tensorflow-Gpu.Redist project."
+      Condition="!Exists('@(RuntimeLinux)') AND !Exists('@(RuntimeWin)')" />
+  </Target>
+
+  <PropertyGroup>
+    <RestoreSources>../../packages;$(RestoreSources);https://api.nuget.org/v3/index.json</RestoreSources>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('../../packages/runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist.1.0.0.nupkg')">
+    <PackageReference Include="runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition="Exists('../../packages/runtime.win-x64.SciSharp.Tensorflow-Gpu.Redist.1.0.0.nupkg')">
+    <PackageReference Include="runtime.win-x64.SciSharp.Tensorflow-Gpu.Redist" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <RuntimeLinux Include="../../packages/runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist.*.nupkg" />
+    <RuntimeWin Include="../../packages/runtime.win-x64.SciSharp.Tensorflow-Gpu.Redist.*.nupkg" />
+    <Content
+      Include="runtime.json"
+      Condition="Exists('@(RuntimeLinux)') AND Exists('@(RuntimeWin)')">
+      <PackagePath>runtime.json</PackagePath>
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

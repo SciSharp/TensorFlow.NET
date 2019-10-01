@@ -15,7 +15,7 @@
 ******************************************************************************/
 
 using System;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -23,7 +23,7 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
-        public Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name= null)
+        public static Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name= null)
         {
             if (dtype == image.dtype)
                 return array_ops.identity(image, name: name);
@@ -57,7 +57,7 @@ namespace Tensorflow
             });
         }
 
-        public Tensor decode_jpeg(Tensor contents,
+        public static Tensor decode_jpeg(Tensor contents,
             int channels = 0,
             int ratio = 1,
             bool fancy_upscaling = true,
@@ -88,7 +88,70 @@ namespace Tensorflow
             }
         }
 
-        public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
+        public static Tensor decode_gif(Tensor contents,
+            string name = null)
+        {
+            // Add nodes to the TensorFlow graph.
+            if (tf.context.executing_eagerly())
+            {
+                throw new NotImplementedException("decode_gif");
+            }
+            else
+            {
+                var _op = _op_def_lib._apply_op_helper("DecodeGif", name: name, args: new
+                {
+                    contents
+                });
+
+                return _op.output;
+            }
+        }
+
+        public static Tensor decode_png(Tensor contents,
+            int channels = 0,
+            TF_DataType dtype = TF_DataType.TF_UINT8,
+            string name = null)
+        {
+            // Add nodes to the TensorFlow graph.
+            if (tf.context.executing_eagerly())
+            {
+                throw new NotImplementedException("decode_png");
+            }
+            else
+            {
+                var _op = _op_def_lib._apply_op_helper("DecodePng", name: name, args: new
+                {
+                    contents,
+                    channels,
+                    dtype
+                });
+
+                return _op.output;
+            }
+        }
+
+        public static Tensor decode_bmp(Tensor contents,
+            int channels = 0,
+            string name = null)
+        {
+            // Add nodes to the TensorFlow graph.
+            if (tf.context.executing_eagerly())
+            {
+                throw new NotImplementedException("decode_bmp");
+            }
+            else
+            {
+                var _op = _op_def_lib._apply_op_helper("DecodeBmp", name: name, args: new
+                {
+                    contents,
+                    channels
+                });
+
+                return _op.output;
+            }
+        }
+
+        public static Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
         {
             if (tf.context.executing_eagerly())
             {
@@ -105,6 +168,20 @@ namespace Tensorflow
 
                 return _op.outputs[0];
             }
+        }
+
+        public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false, 
+            bool half_pixel_centers = false, string name = null)
+        {
+            var op = _op_def_lib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new
+            {
+                images,
+                size,
+                align_corners,
+                half_pixel_centers
+            });
+
+            return op.output;
         }
     }
 }

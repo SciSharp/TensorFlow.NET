@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -81,7 +82,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor _tensor_shape_tensor_conversion_function(TensorShape s, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
         {
-            var s_list = s.Dimensions;
+            var s_list = s.dims;
             var int64_value = 0;
             foreach(var dim in s_list)
             {

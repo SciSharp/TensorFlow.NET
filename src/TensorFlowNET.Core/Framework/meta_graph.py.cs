@@ -22,6 +22,7 @@ using System.Linq;
 using Tensorflow.Operations;
 using static Tensorflow.CollectionDef;
 using static Tensorflow.MetaGraphDef.Types;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -94,7 +95,7 @@ namespace Tensorflow
                         break;
                     case KindOneofCase.BytesList:
                         //var proto_type = ops.get_collection_proto_type(key)
-                        if (ops.GraphKeys._VARIABLE_COLLECTIONS.Contains(col.Key))
+                        if (tf.GraphKeys._VARIABLE_COLLECTIONS.Contains(col.Key))
                         {
                             foreach (var value in col.Value.BytesList.Value)
                             {
@@ -145,7 +146,7 @@ namespace Tensorflow
                 }
             }
 
-            var variables = graph.get_collection<VariableV1>(ops.GraphKeys.GLOBAL_VARIABLES,
+            var variables = graph.get_collection<VariableV1>(tf.GraphKeys.GLOBAL_VARIABLES,
                                      scope: scope_to_prepend_to_names);
             var var_list = new Dictionary<string, VariableV1>();
             variables.ForEach(v => var_list[ops.strip_name_scope(v.name, scope_to_prepend_to_names)] = v);
@@ -179,7 +180,7 @@ namespace Tensorflow
             var graph = ops.get_default_graph();
 
             var var_list = new Dictionary<string, RefVariable>();
-            var variables = graph.get_collection(ops.GraphKeys.GLOBAL_VARIABLES) as List<RefVariable>;
+            var variables = graph.get_collection<RefVariable>(tf.GraphKeys.GLOBAL_VARIABLES);
 
             if (variables != null)
             {

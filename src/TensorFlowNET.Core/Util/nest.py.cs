@@ -79,10 +79,10 @@ namespace Tensorflow.Util
         }
 
         public static IEnumerable<(T1, T2)> zip<T1, T2>(IEnumerable<T1> e1, IEnumerable<T2> e2)
-            => Python.zip(e1, e2);
+            => zip(e1, e2);
 
         public static Dictionary<string, object> ConvertToDict(object dyn)
-            => Python.ConvertToDict(dyn);
+            => ConvertToDict(dyn);
 
         //def _get_attrs_values(obj):
         //  """Returns the list of values from an attrs instance."""

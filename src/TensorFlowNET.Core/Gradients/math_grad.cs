@@ -17,7 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Operations;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
 {
@@ -42,7 +42,8 @@ namespace Tensorflow.Gradients
             var x = op.inputs[0];
             var y = op.inputs[1];
             var grad = grads[0];
-            if (grad is Tensor && _ShapesFullySpecifiedAndEqual(x, y, grad))
+            if (grad is Tensor && 
+                _ShapesFullySpecifiedAndEqual(x, y, grad))
                 return new Tensor[] { grad, grad };
 
             var sx = array_ops.shape(x);
@@ -96,6 +97,12 @@ namespace Tensorflow.Gradients
             });
         }
 
+        [RegisterNoGradient("GreaterEqual")]
+        public static Tensor[] _GreaterEqualGrad(Operation op, Tensor[] grads) => null;
+
+        [RegisterNoGradient("ZerosLike")]
+        public static Tensor[] _ZerosLike(Operation op, Tensor[] grads) => null;
+
         [RegisterGradient("Identity")]
         public static Tensor[] _IdGrad(Operation op, Tensor[] grads)
         {
@@ -121,6 +128,17 @@ namespace Tensorflow.Gradients
             return tf_with(ops.control_dependencies(new Operation[] { grad }), dp => {
                 x = math_ops.conj(x);
                 return new Tensor[] { grad * math_ops.reciprocal(x) };
+            });
+        }
+
+        [RegisterGradient("Log1p")]
+        public static Tensor[] _Log1pGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp => {
+                x = math_ops.conj(x);
+                return new Tensor[] { grad * math_ops.reciprocal(1 + x) };
             });
         }
 
@@ -332,6 +350,21 @@ namespace Tensorflow.Gradients
             return new Tensor[] { -grads[0] };
         }
 
+        [RegisterGradient("Select")]
+        public static Tensor[] _SelectGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var c = op.inputs[0];
+            var x = op.inputs[1];
+            var zeros = array_ops.zeros_like(x);
+            return new Tensor[]
+            {
+                null,
+                array_ops.where(c, grad, zeros),
+                array_ops.where(c, zeros, grad)
+            };
+        }
+
         private static Tensor _safe_shape_div(Tensor x, Tensor y)
         {
             return math_ops.floordiv(x, gen_math_ops.maximum(y, 1));
@@ -343,7 +376,8 @@ namespace Tensorflow.Gradients
             var grad = grads[0];
             var x = op.inputs[0];
             var y = op.inputs[1];
-            if (grad is Tensor && _ShapesFullySpecifiedAndEqual(x, y, grad))
+            if (grad is Tensor && 
+                _ShapesFullySpecifiedAndEqual(x, y, grad))
                 return new Tensor[] { grad, -grad };
 
             var sx = array_ops.shape(x);
@@ -361,9 +395,10 @@ namespace Tensorflow.Gradients
             var x_shape = x._shape_tuple();
             var y_shape = y._shape_tuple();
             var grad_shape = grad._shape_tuple();
-            return Enumerable.SequenceEqual(x_shape, y_shape) &&
+            return x_shape != null && 
+                y_shape != null &&
+                Enumerable.SequenceEqual(x_shape, y_shape) &&
                 Enumerable.SequenceEqual(y_shape, grad_shape) &&
-                x.NDims != -1 &&
                 !x_shape.Contains(-1);
         }
 
@@ -382,7 +417,9 @@ namespace Tensorflow.Gradients
                     var rank = input_0_shape.Length;
                     if (Enumerable.SequenceEqual(Enumerable.Range(0, rank), axes.Data<int>()))
                     {
-                        grad = array_ops.reshape(grad, new int[] { 1 });
+                        var new_shape = range(rank).Select(x => 1).ToArray();
+                        grad = array_ops.reshape(grad, new_shape);
+                        // If shape is not fully defined (but rank is), we use Shape.
                         if (!input_0_shape.Contains(-1))
                             input_shape = constant_op.constant(input_0_shape);
                         else

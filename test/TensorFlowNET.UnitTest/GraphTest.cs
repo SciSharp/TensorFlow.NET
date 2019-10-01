@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Tensorflow;
 using Buffer = Tensorflow.Buffer;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -207,7 +207,7 @@ namespace TensorFlowNET.UnitTest
         public void ImportGraphDef()
         {
             var s = new Status();
-            var graph = new Graph();
+            var graph = new Graph().as_default();
 
             // Create a simple graph.
             c_test_util.Placeholder(graph, s);
@@ -221,7 +221,7 @@ namespace TensorFlowNET.UnitTest
 
             // Import it, with a prefix, in a fresh graph.
             graph.Dispose();
-            graph = new Graph();
+            graph = new Graph().as_default();
             var opts = c_api.TF_NewImportGraphDefOptions();
             c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported");
             c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
@@ -322,7 +322,6 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(feed2, control_inputs[1]);
 
             // Export to a graph def so we can import a graph with control dependencies
-            graph_def.Dispose();
             graph_def = new Buffer();
             c_api.TF_GraphToGraphDef(graph, graph_def, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
@@ -346,14 +345,10 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(feed4, control_inputs[1]);
 
             c_api.TF_DeleteImportGraphDefOptions(opts);
-            c_api.TF_DeleteBuffer(graph_def);
 
             // Can add nodes to the imported graph without trouble.
             c_test_util.Add(feed, scalar, graph, s);
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
-
-            graph.Dispose();
-            s.Dispose();
         }
 
         /// <summary>
@@ -364,7 +359,7 @@ namespace TensorFlowNET.UnitTest
         public void ImportGraphDef_WithReturnOutputs()
         {
             var s = new Status();
-            var graph = new Graph();
+            var graph = new Graph().as_default();
 
             // Create a graph with two nodes: x and 3
             c_test_util.Placeholder(graph, s);
@@ -380,7 +375,7 @@ namespace TensorFlowNET.UnitTest
 
             // Import it in a fresh graph with return outputs.
             graph.Dispose();
-            graph = new Graph();
+            graph = new Graph().as_default();
             var opts = new ImportGraphDefOptions();
             opts.AddReturnOutput("feed", 0);
             opts.AddReturnOutput("scalar", 0);
@@ -416,6 +411,8 @@ namespace TensorFlowNET.UnitTest
 
         }
 
+        [Ignore]
+        [TestMethod]
         public void ImportGraphMeta()
         {
             var dir = "my-save-dir/";
@@ -425,7 +422,7 @@ namespace TensorFlowNET.UnitTest
                 new_saver.restore(sess, dir + "my-model-10000");
                 var labels = tf.constant(0, dtype: tf.int32, shape: new int[] { 100 }, name: "labels");
                 var batch_size = tf.size(labels);
-                var logits = (tf.get_collection("logits") as List<ITensorOrOperation>)[0] as Tensor;
+                var logits = tf.get_collection<ITensorOrOperation>("logits")[0] as Tensor;
                 var loss = tf.losses.sparse_softmax_cross_entropy(labels: labels,
                                                 logits: logits);
             }

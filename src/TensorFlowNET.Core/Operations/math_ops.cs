@@ -18,7 +18,7 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using Tensorflow.Framework;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -168,6 +168,9 @@ namespace Tensorflow
         public static Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
 
+        public static Tensor not_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.not_equal(x, y, name: name);
+
         public static Tensor mul_no_nan<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul_no_nan(x, y, name: name);
 
@@ -264,6 +267,9 @@ namespace Tensorflow
             return gen_math_ops.log(x, name);
         }
 
+        public static Tensor logical_and(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.logical_and(x, y, name: name);
+
         public static Tensor lgamma(Tensor x, string name = null)
             => gen_math_ops.lgamma(x, name: name);
 
@@ -355,6 +361,14 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor reduce_any(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        {
+            var r = _ReductionDims(input_tensor, axis);
+            var max = (axis != null) ? gen_math_ops._any(input_tensor, axis, keepdims, name) :
+                gen_math_ops._any(input_tensor, r, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis, max);
+        }
+
         public static Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
@@ -410,6 +424,13 @@ namespace Tensorflow
         }
 
         public static Tensor reduce_sum(Tensor input_tensor, Tensor axis = null, bool keepdims = false, string name = null)
+        {
+            var r = _ReductionDims(input_tensor, axis);
+            var m = gen_math_ops._sum(input_tensor, r, keep_dims: keepdims, name: name);
+            return _may_reduce_to_scalar(keepdims, axis, m);
+        }
+
+        public static Tensor reduce_sum(Tensor input_tensor, int[] axis, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             var m = gen_math_ops._sum(input_tensor, r, keep_dims: keepdims, name: name);
@@ -486,7 +507,7 @@ namespace Tensorflow
         public static Tensor rsqrt(Tensor x, string name = null)
             => gen_math_ops.rsqrt(x, name: name);
 
-        public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range" )
+        public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
         {
             if(limit == null)
             {
@@ -515,6 +536,9 @@ namespace Tensorflow
                 return gen_math_ops.floor_div(x, y, scope);
             });
         }
+
+        public static Tensor minimum<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.minimum(x, y, name: name);
 
         public static Tensor maximum<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.maximum(x, y, name: name);

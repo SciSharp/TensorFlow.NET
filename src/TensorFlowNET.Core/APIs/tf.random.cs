@@ -16,7 +16,7 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
         /// <summary>
         /// Outputs random values from a normal distribution.
@@ -28,26 +28,39 @@ namespace Tensorflow
         /// <param name="seed"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor random_normal(int[] shape,
+        public Tensor random_normal(int[] shape,
             float mean = 0.0f,
             float stddev = 1.0f,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             int? seed = null,
             string name = null) => random_ops.random_normal(shape, mean, stddev, dtype, seed, name);
 
-        public static Tensor random_uniform(int[] shape,
+        public Tensor random_uniform(int[] shape,
             float minval = 0,
             float maxval = 1,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             int? seed = null,
             string name = null) => random_ops.random_uniform(shape, minval, maxval, dtype, seed, name);
 
-        public static Tensor truncated_normal(int[] shape,
+        public Tensor truncated_normal(int[] shape,
             float mean = 0.0f,
             float stddev = 1.0f,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             int? seed = null,
             string name = null)
             => random_ops.truncated_normal(shape, mean, stddev, dtype, seed, name);
+
+        /// <summary>
+        /// Randomly shuffles a tensor along its first dimension.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="seed"></param>
+        /// <param name="name"></param>
+        /// <returns>
+        /// A tensor of same shape and type as value, shuffled along its 
+        /// first dimension.
+        /// </returns>
+        public Tensor random_shuffle(Tensor value, int? seed = null, string name = null)
+            => random_ops.random_shuffle(value, seed: seed, name: name);
     }
 }

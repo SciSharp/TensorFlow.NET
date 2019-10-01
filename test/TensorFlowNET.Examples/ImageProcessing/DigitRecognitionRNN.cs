@@ -18,7 +18,7 @@ using NumSharp;
 using System;
 using Tensorflow;
 using Tensorflow.Hub;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -88,7 +88,7 @@ namespace TensorFlowNET.Examples
         public void Train(Session sess)
         {
             // Number of training iterations in each epoch
-            var num_tr_iter = y_train.len / batch_size;
+            var num_tr_iter = y_train.shape[0] / batch_size;
 
             var init = tf.global_variables_initializer();
             sess.run(init);

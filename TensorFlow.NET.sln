@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Examples", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Core", "src\TensorFlowNET.Core\TensorFlowNET.Core.csproj", "{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Keras.Core", "src\KerasNET.Core\Keras.Core.csproj", "{902E188F-A953-43B4-9991-72BAB1697BC3}"
-EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "TensorFlowNET.Examples.FSharp", "test\TensorFlowNET.Examples.FSharp\TensorFlowNET.Examples.FSharp.fsproj", "{62BC3801-F0D3-44A9-A0AC-712F40C8F961}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowBenchmark", "src\TensorFlowNet.Benchmarks\TensorFlowBenchmark.csproj", "{68861442-971A-4196-876E-C9330F0B3C54}"
@@ -19,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowHub", "src\Tensor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowText", "src\TensorFlowText\TensorFlowText.csproj", "{B598E5D5-BD2D-4191-8532-F2FBAC31AB81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TensorFlowDatasets", "src\TensorFlowDatasets\TensorFlowDatasets.csproj", "{DF151A51-E9FD-41BD-B0F4-08A743755D44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowDatasets", "src\TensorFlowDatasets\TensorFlowDatasets.csproj", "{DF151A51-E9FD-41BD-B0F4-08A743755D44}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Examples.GPU", "test\TensorFlowNET.Examples\TensorFlowNET.Examples.GPU.csproj", "{6F6B3382-8F87-4CD9-BF87-C81D5405685A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Models", "src\TensorFlowNET.Models\TensorFlowNET.Models.csproj", "{D03F94CF-B283-4730-B177-21A57641061F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}.Release|Any CPU.Build.0 = Release|Any CPU
-		{902E188F-A953-43B4-9991-72BAB1697BC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{902E188F-A953-43B4-9991-72BAB1697BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{902E188F-A953-43B4-9991-72BAB1697BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{902E188F-A953-43B4-9991-72BAB1697BC3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{62BC3801-F0D3-44A9-A0AC-712F40C8F961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62BC3801-F0D3-44A9-A0AC-712F40C8F961}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62BC3801-F0D3-44A9-A0AC-712F40C8F961}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,10 +59,10 @@ Global
 		{DF151A51-E9FD-41BD-B0F4-08A743755D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF151A51-E9FD-41BD-B0F4-08A743755D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF151A51-E9FD-41BD-B0F4-08A743755D44}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F6B3382-8F87-4CD9-BF87-C81D5405685A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D03F94CF-B283-4730-B177-21A57641061F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D03F94CF-B283-4730-B177-21A57641061F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D03F94CF-B283-4730-B177-21A57641061F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D03F94CF-B283-4730-B177-21A57641061F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

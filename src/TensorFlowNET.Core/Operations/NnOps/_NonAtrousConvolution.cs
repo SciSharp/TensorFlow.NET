@@ -36,7 +36,7 @@ namespace Tensorflow.Operations
         {
             this.padding = padding;
             this.name = name;
-            var conv_dims = input_shape.NDim - 2;
+            var conv_dims = input_shape.ndim - 2;
             if (conv_dims == 1)
             {
                 throw new NotImplementedException("_NonAtrousConvolution conv_dims 1");

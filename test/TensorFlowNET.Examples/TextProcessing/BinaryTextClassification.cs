@@ -27,7 +27,7 @@ namespace TensorFlowNET.Examples
         {
             PrepareData();
 
-            Console.WriteLine($"Training entries: {train_data.len}, labels: {train_labels.len}");
+            Console.WriteLine($"Training entries: {train_data.shape[0]}, labels: {train_labels.shape[0]}");
 
             // A dictionary mapping words to an integer index
             var word_index = GetWordIndex();
@@ -76,8 +76,8 @@ namespace TensorFlowNET.Examples
             labels_test = labels_test[indices_test];
 
             // not completed
-            var xs = x_train.hstack<string>(x_test);
-            var labels = labels_train.hstack<int>(labels_test);
+            var xs = x_train.hstack(x_test);
+            var labels = labels_train.hstack(labels_test);
 
             var idx = x_train.size;
             var y_train = labels_train;
@@ -85,12 +85,12 @@ namespace TensorFlowNET.Examples
 
             // convert x_train
             train_data = new NDArray(np.int32, (x_train.size, 256));
-            for (int i = 0; i < x_train.size; i++)
-                train_data[i] = x_train[i].Data<string>(0).Split(',').Select(x => int.Parse(x)).ToArray();
+            /*for (int i = 0; i < x_train.size; i++)
+                train_data[i] = x_train[i].Data<string>()[1].Split(',').Select(x => int.Parse(x)).ToArray();*/
 
             test_data = new NDArray(np.int32, (x_test.size, 256));
-            for (int i = 0; i < x_test.size; i++)
-                test_data[i] = x_test[i].Data<string>(0).Split(',').Select(x => int.Parse(x)).ToArray();
+            /*for (int i = 0; i < x_test.size; i++)
+                test_data[i] = x_test[i].Data<string>()[1].Split(',').Select(x => int.Parse(x)).ToArray();*/
 
             train_labels = y_train;
             test_labels = y_test;

@@ -14,6 +14,10 @@
    limitations under the License.
 ******************************************************************************/
 
+using Google.Protobuf;
+using System.IO;
+using Tensorflow.Util;
+
 namespace Tensorflow
 {
     public partial class Graph
@@ -23,21 +27,21 @@ namespace Tensorflow
             var buffer = new Buffer();
             c_api.TF_GraphToGraphDef(_handle, buffer, s);
             s.Check(true);
-            // var def = GraphDef.Parser.ParseFrom(buffer);
-            // buffer.Dispose();
 
             return buffer;
         }
 
         private GraphDef _as_graph_def(bool add_shapes = false)
         {
-            var status = new Status();
-            var buffer = ToGraphDef(status);
-            status.Check(true);
-            status.Dispose();
-
-            var def = GraphDef.Parser.ParseFrom(buffer);
-            buffer.Dispose();
+            GraphDef def;
+            using (var status = new Status())
+            using (var buffer = ToGraphDef(status))
+            {
+                status.Check(true);
+                // limit size to 250M, recursion to max 100
+                var inputStream = CodedInputStream.CreateWithLimits(buffer.MemoryBlock.Stream(), 250 * 1024 * 1024, 100);
+                def = GraphDef.Parser.ParseFrom(inputStream);
+            }
 
             // Strip the experimental library field iff it's empty.
             // if(def.Library.Function.Count == 0)
@@ -45,7 +49,7 @@ namespace Tensorflow
             return def;
         }
 
-        public GraphDef as_graph_def(bool add_shapes = false) 
+        public GraphDef as_graph_def(bool add_shapes = false)
             => _as_graph_def(add_shapes);
     }
 }

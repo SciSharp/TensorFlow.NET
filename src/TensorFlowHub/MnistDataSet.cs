@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using NumSharp;
 using Tensorflow;
@@ -20,11 +21,16 @@ namespace Tensorflow.Hub
             NumOfExamples = images.shape[0];
 
             images = images.reshape(images.shape[0], images.shape[1] * images.shape[2]);
-            images.astype(dataType);
+            images = images.astype(dataType);
+            // for debug np.multiply performance
+            var sw = new Stopwatch();
+            sw.Start();
             images = np.multiply(images, 1.0f / 255.0f);
+            sw.Stop();
+            Console.WriteLine($"{sw.ElapsedMilliseconds}ms");
             Data = images;
 
-            labels.astype(dataType);
+            labels = labels.astype(dataType);
             Labels = labels;
         }
 

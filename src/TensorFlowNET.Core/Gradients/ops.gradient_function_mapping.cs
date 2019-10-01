@@ -39,6 +39,14 @@ namespace Tensorflow
             gradientFunctions[name] = func;
         }
 
+        public static void RegisterNoGradientFunction(string name)
+        {
+            if (gradientFunctions == null)
+                gradientFunctions = new Dictionary<string, Func<Operation, Tensor[], Tensor[]>>();
+
+            gradientFunctions[name] = null;
+        }
+
         public static Func<Operation, Tensor[], Tensor[]> get_gradient_function(Operation op)
         {
             if (op.inputs == null) return null;
@@ -68,11 +76,18 @@ namespace Tensorflow
                                     args: new object[] { oper, out_grads }) as Tensor[]
                         );
                     }
+
+                    // REGISTER_NO_GRADIENT_OP
+                    methods = g.GetMethods().Where(x => x.GetCustomAttribute<RegisterNoGradient>() != null)
+                        .ToArray();
+
+                    foreach (var m in methods)
+                        RegisterNoGradientFunction(m.GetCustomAttribute<RegisterNoGradient>().Name);
                 }
             }
 
             if (!gradientFunctions.ContainsKey(op.type))
-                throw new NotImplementedException($"can't get graident function through get_gradient_function {op.type}");
+                throw new LookupError($"can't get graident function through get_gradient_function {op.type}");
 
             return gradientFunctions[op.type];
         }

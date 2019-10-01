@@ -17,7 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Operations;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -50,7 +50,7 @@ namespace Tensorflow
             string data_format = null, 
             string name = null)
         {
-            return Python.tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
+            return tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
             {
                 name = scope;
                 value = ops.convert_to_tensor(value, name: "input");
@@ -81,7 +81,7 @@ namespace Tensorflow
                 rate = ops.convert_to_tensor(rate, dtype: x.dtype, name: "rate");
                 // Do nothing if we know rate == 0
                 var val = tensor_util.constant_value(rate);
-                if (!(val is null) && val.Data<float>(0) == 0)
+                if (!(val is null) && val.Data<float>()[0] == 0)
                     return x;
 
                 noise_shape = _get_noise_shape(x, noise_shape);
@@ -98,7 +98,7 @@ namespace Tensorflow
                 // float to be selected, hence we use a >= comparison.
                 var keep_mask = random_tensor >= rate;
                 var ret = x * scale * math_ops.cast(keep_mask, x.dtype);
-                ret.SetShape(x.TensorShape);
+                ret.set_shape(x.TensorShape);
                 return ret;
             });
         }
@@ -114,6 +114,25 @@ namespace Tensorflow
         public static Tensor log_softmax(Tensor logits, int axis = -1, string name = null)
         {
             return _softmax(logits, gen_nn_ops.log_softmax, axis, name);
+        }
+
+        /// <param name="axis">equivalent to `dim`</param>
+        public static Tensor softmax(Tensor logits, int axis = -1, string name = null)
+        {
+            return _softmax(logits, gen_nn_ops.softmax, axis, name);
+        }
+
+        public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "LeakyRelu", new { features, alpha }), scope =>
+            {
+                name = scope;
+                features = ops.convert_to_tensor(features, name: "features");
+                if (features.dtype.is_integer())
+                    features = math_ops.cast(features, dtypes.float32);
+                return gen_nn_ops.leaky_relu(features, alpha: alpha, name: name);
+                //return math_ops.maximum(alpha * features, features, name: name);
+            });
         }
 
         /// <summary>
@@ -185,7 +204,7 @@ namespace Tensorflow
                         logits.get_shape()[:-1].is_fully_defined());*/
 
                 // Check if no reshapes are required.
-                if(logits.TensorShape.NDim == 2)
+                if(logits.TensorShape.ndim == 2)
                 {
                     var (cost, _) = gen_nn_ops.sparse_softmax_cross_entropy_with_logits(
                         precise_logits, labels, name: name);
@@ -257,11 +276,11 @@ namespace Tensorflow
             // Set output shape if known.
             // if not context.executing_eagerly():
             var shape = logits.TensorShape;
-            if(shape != null && shape.NDim > 0)
+            if(shape != null && shape.ndim > 0)
             {
                 var product = 1;
                 var product_valid = true;
-                foreach(var d in shape.Dimensions.Take(shape.NDim - 1))
+                foreach(var d in shape.dims.Take(shape.ndim - 1))
                 {
                     if(d == -1)
                     {

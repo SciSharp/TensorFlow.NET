@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Operations.Activation;
-using static Tensorflow.tf;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -51,7 +51,7 @@ namespace Tensorflow.Keras.Layers
 
         protected override void build(TensorShape input_shape)
         {
-            var last_dim = input_shape.Dimensions.Last();
+            var last_dim = input_shape.dims.Last();
             var axes = new Dictionary<int, int>();
             axes[-1] = last_dim;
             input_spec = new InputSpec(min_ndim: 2, axes: axes);
@@ -86,7 +86,7 @@ namespace Tensorflow.Keras.Layers
             }
 
             if (use_bias)
-                outputs = nn.bias_add(outputs, bias);
+                outputs = tf.nn.bias_add(outputs, bias);
             if (activation != null)
                 return activation.Activate(outputs);
 

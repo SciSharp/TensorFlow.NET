@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Operations.ControlFlows;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {
@@ -152,9 +152,9 @@ namespace Tensorflow.Operations
         public (T, Tensor) BuildCondBranch<T>(Func<T> fn)
         {
             // Add the subgraph defined by fn() to the graph.
-            var pre_summaries = ops.get_collection(ops.GraphKeys._SUMMARY_COLLECTION);
+            var pre_summaries = ops.get_collection(tf.GraphKeys._SUMMARY_COLLECTION);
             var original_result = fn();
-            var post_summaries = ops.get_collection(ops.GraphKeys._SUMMARY_COLLECTION);
+            var post_summaries = ops.get_collection(tf.GraphKeys._SUMMARY_COLLECTION);
 
             //TODO: port this chunck of missing code:
             /*
@@ -191,9 +191,9 @@ namespace Tensorflow.Operations
         public (T[], Tensor[]) BuildCondBranch<T>(Func<T[]> fn)
         {
             // Add the subgraph defined by fn() to the graph.
-            var pre_summaries = ops.get_collection(ops.GraphKeys._SUMMARY_COLLECTION);
+            var pre_summaries = ops.get_collection(tf.GraphKeys._SUMMARY_COLLECTION);
             var original_result = fn();
-            var post_summaries = ops.get_collection(ops.GraphKeys._SUMMARY_COLLECTION);
+            var post_summaries = ops.get_collection(tf.GraphKeys._SUMMARY_COLLECTION);
 
             switch (original_result)
             {

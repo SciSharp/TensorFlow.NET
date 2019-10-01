@@ -51,7 +51,7 @@ namespace Tensorflow
         /// </summary>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static unsafe extern IntPtr TF_NewStatus();
+        public static extern IntPtr TF_NewStatus();
 
         /// <summary>
         /// Record <code, msg> in *s.  Any previous information is lost.

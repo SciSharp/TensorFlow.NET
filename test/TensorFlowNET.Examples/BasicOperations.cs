@@ -1,7 +1,7 @@
 ﻿using NumSharp;
 using System;
 using Tensorflow;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -95,7 +95,7 @@ namespace TensorFlowNET.Examples
                 Console.WriteLine(result.ToString()); // ==> [[ 12.]]
             };
 
-            // `BatchMatMul` is actually embedded into the `MatMul` operation on the tensorflow.dll side. Every time we ask
+            // `BatchMatMul` is actually embedded into the `MatMul` operation on the tf.dll side. Every time we ask
             // for a multiplication between matrices with rank > 2, the first rank - 2 dimensions are checked to be consistent
             // across the two matrices and a common matrix multiplication is done on the residual 2 dimensions.
             //

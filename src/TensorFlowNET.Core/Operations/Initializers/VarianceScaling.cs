@@ -45,7 +45,7 @@ namespace Tensorflow.Operations.Initializers
             _dtype = dtype;
         }
 
-        public Tensor call(TensorShape shape, TF_DataType dtype)
+        public Tensor call(TensorShape shape, TF_DataType dtype, bool? verify_shape = null)
         {
             var (fan_in, fan_out) = _compute_fans(shape);
             if (_mode == "fan_in")

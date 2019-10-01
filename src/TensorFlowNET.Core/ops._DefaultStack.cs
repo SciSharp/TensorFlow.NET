@@ -23,7 +23,7 @@ namespace Tensorflow
     {
         _DefaultStack _default_session_stack = new _DefaultStack();
 
-        public class _DefaultStack : IPython
+        public class _DefaultStack : IObjectLife
         {
             Stack<object> stack;
             bool _enforce_nesting = true;
@@ -35,17 +35,27 @@ namespace Tensorflow
 
             public void __enter__()
             {
-                throw new NotImplementedException();
+                
             }
 
             public void __exit__()
             {
-                throw new NotImplementedException();
+                
             }
 
             public void Dispose()
             {
                 throw new NotImplementedException();
+            }
+
+            public void __init__()
+            {
+                
+            }
+
+            public void __del__()
+            {
+                
             }
         }
     }

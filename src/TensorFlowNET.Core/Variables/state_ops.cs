@@ -94,10 +94,15 @@ namespace Tensorflow
         //  Returns:
         //    Same as "ref".  Returned as a convenience for operations that want
         //    to use the new value after the variable has been updated.
-        public static Tensor assign_add(RefVariable @ref,
-            Tensor value,
+        public static Tensor assign_add<T>(RefVariable @ref,
+            T value,
             bool use_locking = false,
-            string name = null) => gen_state_ops.assign_add(@ref, value, use_locking: use_locking, name: name);
+            string name = null)
+        {
+            if (@ref.dtype.is_ref_dtype())
+                return gen_state_ops.assign_add(@ref, value, use_locking: use_locking, name: name);
+            throw new NotImplementedException("assign_add");
+        }
 
         public static Tensor scatter_add(RefVariable @ref, Tensor indices, Tensor updates, bool use_locking = false, string name = null)
         {
@@ -105,6 +110,14 @@ namespace Tensorflow
                 return gen_state_ops.scatter_add(@ref, indices, updates, use_locking: use_locking, name: name);
 
             throw new NotImplementedException("scatter_add");
+        }
+
+        public static Tensor is_variable_initialized(RefVariable @ref, string name = null)
+        {
+            if (@ref.dtype.is_ref_dtype())
+                return gen_state_ops.is_variable_initialized(@ref: @ref, name: name);
+            throw new NotImplementedException("");
+            //return @ref.is_initialized(name: name);
         }
     }
 }

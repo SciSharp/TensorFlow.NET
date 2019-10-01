@@ -27,7 +27,7 @@ namespace Tensorflow
         /// <summary>
         /// Returns a context manager that creates hierarchical names for operations.
         /// </summary>
-        public class NameScope : IPython
+        public class NameScope : IObjectLife
         {
             public string _name;
             public string _default_name;
@@ -68,6 +68,16 @@ namespace Tensorflow
 
             public void __exit__()
             {
+            }
+
+            public void __init__()
+            {
+                
+            }
+
+            public void __del__()
+            {
+                
             }
 
             /// <summary>

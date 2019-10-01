@@ -2,6 +2,7 @@
 using NumSharp;
 using System;
 using Tensorflow;
+using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
 
 namespace TensorFlowNET.UnitTest
@@ -10,7 +11,7 @@ namespace TensorFlowNET.UnitTest
     /// tensorflow\c\c_api_test.cc
     /// `class CApiGradientsTest`
     /// </summary>
-    [TestClass]
+    [TestClass, Ignore]
     public class CApiGradientsTest : CApiTest, IDisposable
     {
         private Graph graph_ = new Graph();
@@ -45,15 +46,18 @@ namespace TensorFlowNET.UnitTest
         private bool GetGraphDef(Graph graph, out GraphDef graph_def)
         {
             graph_def = null;
-            var s = new Status();
-            var buffer = new Buffer();
-            c_api.TF_GraphToGraphDef(graph, buffer, s);
-            bool ret = TF_GetCode(s) == TF_OK;
-            EXPECT_EQ(TF_OK, TF_GetCode(s));
-            if (ret) graph_def = GraphDef.Parser.ParseFrom(buffer.Data);
-            buffer.Dispose();
-            s.Dispose();
-            return ret;
+            using (var s = new Status())
+            {
+                using (var buffer = new Buffer())
+                {
+                    c_api.TF_GraphToGraphDef(graph, buffer, s);
+                    bool ret = TF_GetCode(s) == TF_OK;
+                    EXPECT_EQ(TF_OK, TF_GetCode(s));
+                    if (ret) 
+                        graph_def = GraphDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+                    return ret;
+                }
+            }
         }
 
         private void RunGraphsAndCompareOutputs(TF_Output[] grad_outputs, TF_Output[] expected_grad_outputs)

@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace Tensorflow
 {
-    public class PureVariableScope : IPython
+    public class PureVariableScope : IObjectLife
     {
         private string _name;
         private VariableScope _scope;
@@ -99,6 +99,16 @@ namespace Tensorflow
             else
                 _var_scope_store.close_variable_subscopes(_new_name);
             _var_scope_store.current_scope = _old;
+        }
+
+        public void __init__()
+        {
+            
+        }
+
+        public void __del__()
+        {
+            
         }
 
         public static implicit operator VariableScope(PureVariableScope scope)

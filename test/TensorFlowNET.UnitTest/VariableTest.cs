@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp;
 using Tensorflow;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -23,7 +24,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void StringVar()
         {
-            var mammal1 = tf.Variable("Elephant", name: "var1", dtype: tf.chars);
+            var mammal1 = tf.Variable("Elephant", name: "var1", dtype: tf.@string);
             var mammal2 = tf.Variable("Tiger");
         }
 
@@ -97,7 +98,7 @@ namespace TensorFlowNET.UnitTest
             var sess = tf.Session(graph);
             sess.run(init);
 
-            var result = sess.run(variable);
+            NDArray result = sess.run(variable);
             Assert.IsTrue((int)result == 31);
 
             var assign = variable.assign(12);
@@ -118,7 +119,7 @@ namespace TensorFlowNET.UnitTest
             {
                 sess.run(init_op);
                 // o some work with the model.
-                inc_v1.op.run();
+                inc_v1.op.run(session: sess);
             }
         }
 

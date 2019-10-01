@@ -1,0 +1,14 @@
+{
+  "runtimes": {
+    "linux-x64": {
+      "SciSharp.TensorFlow-Gpu.Redist": {
+        "runtime.linux-x64.SciSharp.Tensorflow-Gpu.Redist": "1.0.0"
+      }
+    },
+    "win-x64": {
+      "SciSharp.TensorFlow-Gpu.Redist": {
+        "runtime.win-x64.SciSharp.Tensorflow-Gpu.Redist": "1.0.0"
+      }
+    }
+  }
+}

@@ -5,8 +5,8 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.10.10</Version>
-    <Authors>Haiping Chen, Meinrad Recheis</Authors>
+    <Version>0.11.4</Version>
+    <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Apache 2.0</Copyright>
@@ -17,27 +17,21 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.10.10.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.9.0:
-
-1. Added full connected Convolution Neural Network example.
-2. Take dependency on SciSharp.TensorFlow.Redist.
-3. Create Tensor from array without copying.
-4. Fix path issue of Transfer Learning example on Linux.
-5. Add back gen_ops.cs.
-6. Add StridedSliceGrad.
-7. Add BatchMatMulGrad.
-8. Upgrade NumSharp.
-9. Fix strided_slice_grad type convention error.
-10. Add AbsGrad.
-11. Fix Session.LoadFromSavedModel(string).
-12. Add Tensor operator overloads.
-13. Fix default graph and operation issue when import model.
-14. Fix TF_String endcode and decode.
-15. Fix Tensor memory leak.
-16. Rename with to tf_with that is only used to build graph purpose.</PackageReleaseNotes>
-    <LangVersion>7.2</LangVersion>
-    <FileVersion>0.10.10.0</FileVersion>
+    <AssemblyVersion>0.11.4.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.10.0:
+1. Upgrade NumSharp to v0.20.3.
+2. Add DisposableObject class to manage object lifetime.
+3. Add tf.no_op, tf.nn.in_top_k, tf.GraphKeys and tf.trainable_variables.
+4. Change tensorflow to non-static class in order to execute some initialization process.
+5. Overload session.run(), make syntax simpler.
+6. Add Local Response Normalization.
+7. Add tf.image related APIs.
+8. Add tf.random_normal, tf.constant, tf.pad, tf.shape, tf.image.resize_nearest_neighbor.
+9. MultiThread is safe.
+10. Support n-dim indexing for tensor.
+11. Add RegisterNoGradient</PackageReleaseNotes>
+    <LangVersion>7.3</LangVersion>
+    <FileVersion>0.11.4.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
@@ -69,11 +63,12 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.5.1" />
-    <PackageReference Include="NumSharp" Version="0.10.6" />
+    <PackageReference Include="NumSharp" Version="0.20.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Distribute\" />
     <Folder Include="Keras\Initializers\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

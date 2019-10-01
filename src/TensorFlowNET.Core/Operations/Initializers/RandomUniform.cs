@@ -28,7 +28,7 @@ namespace Tensorflow.Operations.Initializers
 
         }
 
-        public Tensor call(TensorShape shape, TF_DataType dtype = TF_DataType.DtInvalid)
+        public Tensor call(TensorShape shape, TF_DataType dtype = TF_DataType.DtInvalid, bool? verify_shape = null)
         {
             return random_ops.random_uniform(shape, 
                 minval: minval, 

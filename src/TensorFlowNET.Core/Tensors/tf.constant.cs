@@ -18,11 +18,11 @@ using NumSharp;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
         // public static Tensor constant(NDArray nd, string name = "Const") => constant_op.constant(nd, name: name);
 
-        public static Tensor constant(object value,
+        public Tensor constant(object value,
             TF_DataType dtype = TF_DataType.DtInvalid,
             int[] shape = null,
             string name = "Const",
@@ -33,22 +33,30 @@ namespace Tensorflow
                 verify_shape: verify_shape,
                 allow_broadcast: false);
 
-        public static Tensor constant(float value,
+        public Tensor constant(string value,
+            string name = "Const") => constant_op._constant_impl(value,
+                @string,
+                new int[] { 1 },
+                name,
+                verify_shape: false,
+                allow_broadcast: false);
+
+        public Tensor constant(float value,
             int shape,
             string name = "Const") => constant_op._constant_impl(value,
-                tf.float32,
+                float32,
                 new int[] { shape },
                 name,
                 verify_shape: false,
                 allow_broadcast: false);
 
-        public static Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
+        public Tensor zeros(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
             => array_ops.zeros(shape, dtype, name);
 
-        public static Tensor ones(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
+        public Tensor ones(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
             => array_ops.ones(shape, dtype, name);
 
-        public static Tensor size(Tensor input,
+        public Tensor size(Tensor input,
             string name = null,
             TF_DataType out_type = TF_DataType.TF_INT32) => array_ops.size(input,
                 name,

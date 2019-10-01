@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using static Tensorflow.SaverDef.Types;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -143,6 +144,71 @@ namespace Tensorflow
             if (format_version == CheckpointFormatVersion.V2)
                 return prefix + ".index";
             return prefix;
+        }
+
+        /// <summary>
+        /// Finds the filename of latest saved checkpoint file.
+        /// </summary>
+        /// <param name="checkpoint_dir"></param>
+        /// <param name="latest_filename"></param>
+        /// <returns></returns>
+        public static string latest_checkpoint(string checkpoint_dir, string latest_filename = null)
+        {
+            // Pick the latest checkpoint based on checkpoint state.
+            var ckpt = get_checkpoint_state(checkpoint_dir, latest_filename);
+            if(ckpt != null && !string.IsNullOrEmpty(ckpt.ModelCheckpointPath))
+            {
+                // Look for either a V2 path or a V1 path, with priority for V2.
+                var v2_path = _prefix_to_checkpoint_path(ckpt.ModelCheckpointPath, CheckpointFormatVersion.V2);
+                var v1_path = _prefix_to_checkpoint_path(ckpt.ModelCheckpointPath, CheckpointFormatVersion.V1);
+                if (File.Exists(v2_path) || File.Exists(v1_path))
+                    return ckpt.ModelCheckpointPath;
+                else
+                    throw new ValueError($"Couldn't match files for checkpoint {ckpt.ModelCheckpointPath}");
+            }
+            return null;
+        }
+
+        public static CheckpointState get_checkpoint_state(string checkpoint_dir, string latest_filename = null)
+        {
+            var coord_checkpoint_filename = _GetCheckpointFilename(checkpoint_dir, latest_filename);
+            if (File.Exists(coord_checkpoint_filename))
+            {
+                var file_content = File.ReadAllLines(coord_checkpoint_filename);
+                // https://github.com/protocolbuffers/protobuf/issues/6654
+                // var ckpt = CheckpointState.Parser.ParseFrom(file_content);
+                var ckpt = new CheckpointState();
+                var field = CheckpointState.Descriptor.FindFieldByName("model_checkpoint_path");
+                ckpt.ModelCheckpointPath = file_content.FirstOrDefault(x => x.StartsWith(field.Name + ":")).Substring(field.Name.Length + 2);
+                // remove first and last quote.
+                ckpt.ModelCheckpointPath = ckpt.ModelCheckpointPath.Substring(1, ckpt.ModelCheckpointPath.Length - 2);
+
+                field = CheckpointState.Descriptor.FindFieldByName("all_model_checkpoint_paths");
+                file_content.Where(x => x.StartsWith(field.Name + ":"))
+                    .ToList()
+                    .ForEach(x =>
+                    {
+                        string value = x.Substring(field.Name.Length + 2);
+                        ckpt.AllModelCheckpointPaths.Add(value.Substring(1, value.Length - 2));
+                    });
+
+                if (string.IsNullOrEmpty(ckpt.ModelCheckpointPath))
+                    throw new ValueError($"Invalid checkpoint state loaded from {checkpoint_dir}");
+                // For relative model_checkpoint_path and all_model_checkpoint_paths,
+                // prepend checkpoint_dir.
+                if (!Path.IsPathRooted(ckpt.ModelCheckpointPath))
+                    ckpt.ModelCheckpointPath = Path.Combine(checkpoint_dir, ckpt.ModelCheckpointPath);
+                foreach(var i in range(len(ckpt.AllModelCheckpointPaths)))
+                {
+                    var p = ckpt.AllModelCheckpointPaths[i];
+                    if (!Path.IsPathRooted(p))
+                        ckpt.AllModelCheckpointPaths[i] = Path.Combine(checkpoint_dir, p);
+                }
+
+                return ckpt;
+            }
+
+            return null;
         }
     }
 }

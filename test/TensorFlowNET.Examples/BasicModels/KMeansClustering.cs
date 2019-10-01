@@ -19,7 +19,7 @@ using System;
 using System.Diagnostics;
 using Tensorflow;
 using Tensorflow.Hub;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
@@ -143,7 +143,7 @@ namespace TensorFlowNET.Examples
             var counts = np.zeros((k, num_classes), np.float32);
 
             sw.Start();
-            foreach (var i in range(idx.Length))
+            foreach (var i in range(idx.Count))
             {
                 var x = mnist.Train.Labels[i];
                 counts[idx[i]] += x;

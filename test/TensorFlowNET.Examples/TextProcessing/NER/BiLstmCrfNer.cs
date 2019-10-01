@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Tensorflow;
-using Tensorflow.Estimator;
+using Tensorflow.Estimators;
 
 namespace TensorFlowNET.Examples
 {

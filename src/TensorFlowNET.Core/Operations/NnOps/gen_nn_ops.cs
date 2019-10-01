@@ -156,7 +156,7 @@ namespace Tensorflow.Operations
             return op.output;
         }
 
-        public static Tensor[] _fused_batch_norm(Tensor x,
+        public static Tensor[] fused_batch_norm(Tensor x,
                 Tensor scale,
                 Tensor offset,
                 Tensor mean,
@@ -181,6 +181,31 @@ namespace Tensorflow.Operations
             return _op.outputs;
         }
 
+        /// <summary>
+        /// Local Response Normalization.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="depth_radius"></param>
+        /// <param name="bias"></param>
+        /// <param name="alpha"></param>
+        /// <param name="beta"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor local_response_normalization(Tensor input, int depth_radius = 5, int bias = 1,
+            int alpha = 1, float beta = 0.5f, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LRN", name: name, args: new
+            {
+                input,
+                depth_radius,
+                bias,
+                alpha,
+                beta
+            });
+
+            return _op.output;
+        }
+
         public static Tensor log_softmax(Tensor logits, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("LogSoftmax", name: name, args: new
@@ -189,6 +214,17 @@ namespace Tensorflow.Operations
             });
 
             return _op.outputs[0];
+        }
+
+        public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LeakyRelu", name: name, args: new
+            {
+                features,
+                alpha
+            });
+
+            return _op.output;
         }
 
         public static Tensor max_pool(Tensor input,
@@ -248,6 +284,18 @@ namespace Tensorflow.Operations
             });
 
             return _op.outputs[0];
+        }
+
+        public static Tensor leaky_relu_grad(Tensor gradients, Tensor features, float alpha = 0.2f, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("LeakyReluGrad", name: name, args: new
+            {
+                gradients,
+                features,
+                alpha
+            });
+
+            return _op.output;
         }
 
         public static Tensor softmax(Tensor logits, string name = null)

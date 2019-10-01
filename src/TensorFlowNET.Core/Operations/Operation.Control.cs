@@ -54,6 +54,10 @@ namespace Tensorflow
 
         public void _set_control_flow_context(ControlFlowContext ctx)
         {
+            if(name == "define_loss/conv_sobj_branch/batch_normalization/cond/FusedBatchNorm_1")
+            {
+
+            }
             _control_flow_context = ctx;
         }
 

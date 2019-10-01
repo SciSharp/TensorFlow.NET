@@ -15,28 +15,38 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static VariableV1[] global_variables(string scope = null)
+        public VariableV1[] global_variables(string scope = null)
         {
-            return (ops.get_collection(ops.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
+            return (ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
                 .ToArray();
         }
 
-        public static Operation global_variables_initializer()
+        public Operation global_variables_initializer()
         {
             var g = variables.global_variables();
             return variables.variables_initializer(g.ToArray());
         }
 
-        public static RefVariable get_variable(string name,
+        /// <summary>
+        /// Returns all variables created with `trainable=True`.
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        public VariableV1[] trainable_variables(string scope = null)
+            => (variables.trainable_variables() as List<VariableV1>).ToArray();
+
+        public RefVariable get_variable(string name,
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             object initializer = null, // IInitializer or Tensor
             bool? trainable = null,
+            List<string> collections = null,
             bool? use_resource = null,
             bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
@@ -51,7 +61,11 @@ namespace Tensorflow
                 use_resource: use_resource,
                 validate_shape: validate_shape,
                 initializer: initializer,
-                trainable: trainable);
+                trainable: trainable,
+                collections: collections);
         }
+
+        public VariableScope get_variable_scope()
+            => Tensorflow.variable_scope.get_variable_scope();
     }
 }

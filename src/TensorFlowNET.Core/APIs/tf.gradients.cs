@@ -16,9 +16,9 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static Tensor[] gradients(Tensor[] ys,
+        public Tensor[] gradients(Tensor[] ys,
             Tensor[] xs,
             Tensor[] grad_ys = null,
             string name = "gradients",
@@ -36,7 +36,7 @@ namespace Tensorflow
                 stop_gradients: stop_gradients);
         }
 
-        public static Tensor[] gradients(Tensor ys,
+        public Tensor[] gradients(Tensor ys,
             Tensor[] xs,
             Tensor[] grad_ys = null,
             string name = "gradients",
@@ -54,7 +54,7 @@ namespace Tensorflow
                 stop_gradients: stop_gradients);
         }
 
-        public static Tensor[] gradients(Tensor ys,
+        public Tensor[] gradients(Tensor ys,
             Tensor xs,
             Tensor[] grad_ys = null,
             string name = "gradients",

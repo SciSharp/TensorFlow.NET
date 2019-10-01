@@ -16,7 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Layers
 {
@@ -81,7 +81,7 @@ namespace Tensorflow.Layers
 
 
             // Update global default collections.
-            _add_elements_to_collection(_updates.ToArray(), new string[] { ops.GraphKeys.UPDATE_OPS });
+            _add_elements_to_collection(_updates.ToArray(), new string[] { tf.GraphKeys.UPDATE_OPS });
 
             return outputs;
         }
@@ -90,7 +90,7 @@ namespace Tensorflow.Layers
         {
             foreach(var name in collection_list)
             {
-                var collection = ops.get_collection_ref(name) as List<object>;
+                var collection = ops.get_collection_ref<Operation>(name);
 
                 foreach (var element in elements)
                     if (!collection.Contains(element))

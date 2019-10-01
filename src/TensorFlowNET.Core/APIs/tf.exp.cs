@@ -16,9 +16,9 @@
 
 namespace Tensorflow
 {
-    public static partial class tf
+    public partial class tensorflow
     {
-        public static Tensor exp(Tensor x,
+        public Tensor exp(Tensor x,
                 string name = null) => gen_math_ops.exp(x, name);
 
     }

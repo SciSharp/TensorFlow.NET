@@ -22,6 +22,7 @@ using System.Linq;
 using System.Reflection;
 using Tensorflow;
 using Console = Colorful.Console;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {

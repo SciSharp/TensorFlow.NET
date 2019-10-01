@@ -35,18 +35,18 @@ namespace Tensorflow.Operations
             string name = null,
             string data_format = null)
         {
-            var num_total_dims = filter_shape.NDim;
+            var num_total_dims = filter_shape.ndim;
             var num_spatial_dims = num_total_dims - 2;
             int input_channels_dim;
             int[] spatial_dims;
             if (string.IsNullOrEmpty(data_format) || !data_format.StartsWith("NC"))
             {
-                input_channels_dim = input_shape.Dimensions[num_spatial_dims + 1];
+                input_channels_dim = input_shape.dims[num_spatial_dims + 1];
                 spatial_dims = Enumerable.Range(1, num_spatial_dims).ToArray();
             }
             else
             {
-                input_channels_dim = input_shape.Dimensions[1];
+                input_channels_dim = input_shape.dims[1];
                 spatial_dims = Enumerable.Range(2, num_spatial_dims).ToArray();
             }
 

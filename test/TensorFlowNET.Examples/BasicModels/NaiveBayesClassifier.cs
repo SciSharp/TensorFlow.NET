@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using Tensorflow;
 using NumSharp;
-using static Tensorflow.Python;
+using static Tensorflow.Binding;
 using System.IO;
 using TensorFlowNET.Examples.Utility;
 
@@ -42,10 +42,10 @@ namespace TensorFlowNET.Examples
             fit(X, y);
 
             // Create a regular grid and classify each point 
-            float x_min = X.amin(0).Data<float>(0) - 0.5f;
-            float y_min = X.amin(0).Data<float>(1) - 0.5f;
-            float x_max = X.amax(0).Data<float>(0) + 0.5f;
-            float y_max = X.amax(0).Data<float>(1) + 0.5f;
+            float x_min = X.amin(0).Data<float>()[0] - 0.5f;
+            float y_min = X.amin(0).Data<float>()[1] - 0.5f;
+            float x_max = X.amax(0).Data<float>()[1] + 0.5f;
+            float y_max = X.amax(0).Data<float>()[1] + 0.5f;
 
             var (xx, yy) = np.meshgrid(np.linspace(x_min, x_max, 30), np.linspace(y_min, y_max, 30));
             using (var sess = tf.Session())
@@ -62,7 +62,7 @@ namespace TensorFlowNET.Examples
 
         public void fit(NDArray X, NDArray y)
         {
-            var unique_y = y.unique<int>();
+            var unique_y = np.unique(y);
 
             var dic = new Dictionary<int, List<List<float>>>();
             // Init uy in dic
