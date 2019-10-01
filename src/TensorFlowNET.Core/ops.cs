@@ -227,29 +227,30 @@ namespace Tensorflow
                         throw new NotImplementedException("_create_c_op");
                 }
 
-                var status = new Status();
-
-                // Add control inputs
-                foreach (var control_input in control_inputs)
-                    c_api.TF_AddControlInput(op_desc, control_input);
-
-                // Add attrs
-                foreach (var attr in node_def.Attr)
+                using (var status = new Status())
                 {
-                    var bytes = attr.Value.ToByteArray(); //TODO: we can use attr.Value.WriteTo with a memory stream.
-                    var proto = Marshal.AllocHGlobal(bytes.Length); //TODO: potential memory leak
-                    Marshal.Copy(bytes, 0, proto, bytes.Length);
-                    uint len = (uint) bytes.Length;
-                    c_api.TF_SetAttrValueProto(op_desc, attr.Key, proto, proto_len: len, status: status);
+                    // Add control inputs
+                    foreach (var control_input in control_inputs)
+                        c_api.TF_AddControlInput(op_desc, control_input);
+
+                    // Add attrs
+                    foreach (var attr in node_def.Attr)
+                    {
+                        var bytes = attr.Value.ToByteArray(); //TODO: we can use attr.Value.WriteTo with a memory stream.
+                        var protoHandle = Marshal.AllocHGlobal(bytes.Length);
+                        Marshal.Copy(bytes, 0, protoHandle, bytes.Length);
+                        uint len = (uint)bytes.Length;
+                        c_api.TF_SetAttrValueProto(op_desc, attr.Key, protoHandle, proto_len: len, status: status);
+                        status.Check(true);
+                        Marshal.FreeHGlobal(protoHandle);
+                    }
+
+                    var c_op = c_api.TF_FinishOperation(op_desc, status);
 
                     status.Check(true);
+
+                    return c_op;
                 }
-
-                var c_op = c_api.TF_FinishOperation(op_desc, status);
-
-                status.Check(true);
-
-                return c_op;
             }
         }
 
