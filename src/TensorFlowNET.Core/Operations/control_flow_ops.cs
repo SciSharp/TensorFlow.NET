@@ -518,7 +518,7 @@ namespace Tensorflow
                 inputs = inputs.Select(inp =>
                             ops.internal_convert_to_tensor_or_indexed_slices(inp, as_ref: true))
                         .ToArray();
-                return gen_control_flow_ops.merge(inputs, name).Item1;
+                return gen_control_flow_ops.merge(inputs, name)[0];
             });
         }
 

@@ -54,7 +54,7 @@ namespace Tensorflow
                     clear_devices,
                     import_scope).Item1;
 
-            public (MetaGraphDef, Dictionary<string, RefVariable>) export_meta_graph(string filename = "",
+            public (MetaGraphDef, Dictionary<string, VariableV1>) export_meta_graph(string filename = "",
                 bool as_text = false,
                 bool clear_devices = false,
                 bool clear_extraneous_savers = false,
