@@ -54,6 +54,8 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
         List<RefVariable> first_stage_trainable_var_list;
         Operation train_op_with_frozen_variables;
         Operation train_op_with_all_variables;
+        Saver loader;
+        Saver saver;
         #endregion
 
         public bool Run()
@@ -74,7 +76,9 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
 
         public void Train(Session sess)
         {
-
+            sess.run(tf.global_variables_initializer());
+            print($"=> Restoring weights from: {cfg.TRAIN.INITIAL_WEIGHT} ... ");
+            loader.restore(sess, cfg.TRAIN.INITIAL_WEIGHT);
         }
 
         public void Test(Session sess)
@@ -182,6 +186,21 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
                         });
                     });
                 });
+            });
+
+            tf_with(tf.name_scope("loader_and_saver"), delegate
+            {
+                loader = tf.train.Saver(net_var);
+                saver = tf.train.Saver(tf.global_variables(), max_to_keep: 10);
+            });
+
+            tf_with(tf.name_scope("summary"), delegate
+            {
+                tf.summary.scalar("learn_rate", learn_rate);
+                tf.summary.scalar("giou_loss", giou_loss);
+                tf.summary.scalar("conf_loss", conf_loss);
+                tf.summary.scalar("prob_loss", prob_loss);
+                tf.summary.scalar("total_loss", loss);
             });
 
             return graph;

@@ -43,7 +43,8 @@ namespace Tensorflow
             public ExponentialMovingAverage ExponentialMovingAverage(float decay)
                 => new ExponentialMovingAverage(decay);
 
-            public Saver Saver(VariableV1[] var_list = null) => new Saver(var_list: var_list);
+            public Saver Saver(VariableV1[] var_list = null, int max_to_keep = 5) 
+                => new Saver(var_list: var_list, max_to_keep: max_to_keep);
 
             public string write_graph(Graph graph, string logdir, string name, bool as_text = true) 
                 => graph_io.write_graph(graph, logdir, name, as_text);

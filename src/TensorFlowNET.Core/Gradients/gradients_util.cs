@@ -108,10 +108,7 @@ namespace Tensorflow
                     {
                         // generate gradient subgraph for op.
                         var op = queue.Dequeue();
-                        if(tf.get_default_graph()._nodes_by_name.Count >= 23868)
-                        {
 
-                        }
                         _maybe_colocate_with(op, gradient_uid, colocate_gradients_with_ops);
                         //if (loop_state != null)
                         //loop_state.EnterGradWhileContext(op, before: true);
