@@ -611,7 +611,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
+        public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
             => gen_array_ops.slice(input, begin, size, name: name);
 
         public static Tensor stack(object values, int axis = 0, string name = "stack")

@@ -475,7 +475,7 @@ namespace Tensorflow
             return op.output;
         }
 
-        public static Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
+        public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Slice", name, new { input, begin, size });
             return _op.outputs[0];

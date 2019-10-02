@@ -196,13 +196,13 @@ namespace Tensorflow.Gradients
             var grad = grads[0];
             var x = op.inputs[0];
             var a = op.inputs[1];
-            var pad_before = array_ops.slice(a, new[] { 0, 0 },
-                               new[] { array_ops.stack(new object[] { array_ops.rank(x), 1 }) });
+            var size = array_ops.stack(new object[] { array_ops.rank(x), 1 });
+            var pad_before = array_ops.slice(a, new[] { 0, 0 }, size);
 
             // Make it a 1-D tensor.
             var begin = array_ops.reshape(pad_before, new[] { -1 });
             var sizes = array_ops.shape(x);
-            var x_grad = array_ops.slice(grad, new[] { begin }, new[] { sizes });
+            var x_grad = array_ops.slice(grad, begin, sizes);
 
             if (len(op.inputs) == 3)
                 return new Tensor[] { x_grad, null, null };
