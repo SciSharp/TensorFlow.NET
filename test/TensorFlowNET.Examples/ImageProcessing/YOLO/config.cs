@@ -60,7 +60,7 @@ namespace TensorFlowNET.Examples.ImageProcessing.YOLO
             public TrainConfig(string root)
             {
                 _root = root;
-                INITIAL_WEIGHT = Path.Combine(_root, "data", "checkpoint", "yolov3_coco_demo.ckpt");
+                INITIAL_WEIGHT = Path.Combine(_root, "checkpoint", "yolov3_coco_demo.ckpt");
                 ANNOT_PATH = Path.Combine(_root, "data", "dataset", "voc_train.txt");
             }
         }

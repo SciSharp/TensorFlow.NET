@@ -105,10 +105,13 @@ namespace Tensorflow
 
                 if (_handle == IntPtr.Zero)
                 {
-                    var status = new Status();
-                    c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, status);
-                    status.Check();
-                } else
+                    using (var status = new Status())
+                    {
+                        c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, status);
+                        status.Check();
+                    }
+                }
+                else
                 {
                     for (int i = 0; i < rank; i++)
                         dims[i] = c_api.TF_Dim(_handle, i);
@@ -119,14 +122,15 @@ namespace Tensorflow
 
             set
             {
-                var status = new Status();
+                using (var status = new Status())
+                {
+                    if (value == null)
+                        c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
+                    else
+                        c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
 
-                if (value == null)
-                    c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
-                else
-                    c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
-
-                status.Check(true);
+                    status.Check(true);
+                }
             }
         }
 
@@ -142,16 +146,7 @@ namespace Tensorflow
         /// </summary>
         public void set_shape(TensorShape shape) 
         {
-            this.shape = (int[]) shape.dims.Clone();
-        }
-
-        /// <summary>
-        ///     Updates the shape of this tensor.
-        /// </summary>
-        [Obsolete("Please use set_shape(TensorShape shape) instead.", false)]
-        public void SetShape(TensorShape shape) 
-        {
-            this.shape = (int[]) shape.dims.Clone();
+            this.shape = shape.rank > 0 ? shape.dims : null;
         }
 
         /// <summary>

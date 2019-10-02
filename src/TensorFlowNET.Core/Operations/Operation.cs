@@ -84,9 +84,10 @@ namespace Tensorflow
             _control_flow_context = _graph._get_control_flow_context();
 
             // Note: _control_flow_post_processing() must not be called here, the caller is responsible for calling it when using this constructor.
+            OpInstances[_handle] = this;
         }
 
-        public Operation(Graph g, string opType, string oper_name)
+        /*public Operation(Graph g, string opType, string oper_name)
         {
             _graph = g;
 
@@ -102,7 +103,7 @@ namespace Tensorflow
             // Dict mapping op name to file and line information for op colocation
             // context managers.
             _control_flow_context = graph._get_control_flow_context();
-        }
+        }*/
 
         /// <summary>
         /// Creates an `Operation`.
@@ -151,11 +152,6 @@ namespace Tensorflow
                 }
             }
 
-            if(node_def.Name == "define_loss/conv_lobj_branch/batch_normalization/cond/FusedBatchNorm_1")
-            {
-
-            }
-
             // Dict mapping op name to file and line information for op colocation
             // context managers.
             _control_flow_context = graph._get_control_flow_context();
@@ -180,6 +176,8 @@ namespace Tensorflow
 
             if (_handle != IntPtr.Zero)
                 _control_flow_post_processing();
+
+            OpInstances[_handle] = this;
         }
 
         public void run(FeedItem[] feed_dict = null, Session session = null)
@@ -219,6 +217,9 @@ namespace Tensorflow
 
             return grouped_inputs.ToArray();
         }
+
+        public T get_attr<T>(string name)
+            => (T)get_attr(name);
 
         public object get_attr(string name)
         {

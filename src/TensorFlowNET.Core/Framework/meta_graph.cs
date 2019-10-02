@@ -167,7 +167,7 @@ namespace Tensorflow
         /// <param name="strip_default_attrs"></param>
         /// <param name="meta_info_def"></param>
         /// <returns></returns>
-        public static (MetaGraphDef, Dictionary<string, RefVariable>) export_scoped_meta_graph(string filename = "",
+        public static (MetaGraphDef, Dictionary<string, VariableV1>) export_scoped_meta_graph(string filename = "",
             GraphDef graph_def = null,
             bool as_text = false,
             string unbound_inputs_col_name = "unbound_inputs",
@@ -179,8 +179,8 @@ namespace Tensorflow
         {
             var graph = ops.get_default_graph();
 
-            var var_list = new Dictionary<string, RefVariable>();
-            var variables = graph.get_collection<RefVariable>(tf.GraphKeys.GLOBAL_VARIABLES);
+            var var_list = new Dictionary<string, VariableV1>();
+            var variables = graph.get_collection<VariableV1>(tf.GraphKeys.GLOBAL_VARIABLES);
 
             if (variables != null)
             {

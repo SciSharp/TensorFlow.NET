@@ -36,56 +36,54 @@ namespace Tensorflow.Gradients
         /// </summary>
         /// <returns></returns>
         [RegisterGradient("Switch")]
-        public Tensor[] _SwitchGrad(Tensor op, Tensor[] grads)
+        public static Tensor[] _SwitchGrad(Operation op, Tensor[] grads)
         {
+            var grad = grads[0];
+            var graph = ops.get_default_graph();
+            var op_ctxt = op._get_control_flow_context();
+            var grad_ctxt = graph._get_control_flow_context();
+            switch (op_ctxt)
+            {
+                case WhileContext cwhile:
+                    throw new NotImplementedException("_SwitchGrad WhileContext");
+                case CondContext ccond:
+                    {
+                        var zero_grad = grads[1 - op_ctxt.branch];
+                        // At this point, we have created zero_grad guarded by the right switch.
+                        // Unfortunately, we may still get None here for not trainable data types.
+                        if(zero_grad == null)
+                        {
+                            throw new NotImplementedException("_SwitchGrad CondContext zero_grad");
+                        }
+
+                        return new Tensor[] 
+                        {
+                            merge(grads, name: "cond_grad")[0],
+                            null 
+                        };
+                    }
+                default:
+                        throw new NotImplementedException("_SwitchGrad WhileContext");
+            }
             throw new NotImplementedException("_SwitchGrad");
-            //graph = ops.get_default_graph()
-            //# pylint: disable=protected-access
-            //op_ctxt = op._get_control_flow_context()
-            //grad_ctxt = graph._get_control_flow_context()
-            //# pylint: enable=protected-access
-            //if isinstance(op_ctxt, WhileContext):
-            //  merge_grad = grad_ctxt.grad_state.switch_map.get(op)
-            //  if merge_grad is not None:
-            //    # This is the second time this Switch is visited. It comes from
-            //    # the non-exit branch of the Switch, so update the second input
-            //    # to the Merge.
-            //    # TODO(yuanbyu): Perform shape inference with this new input.
-            //    if grad[1] is not None:
-            //      # pylint: disable=protected-access
-            //      control_flow_ops._AddNextAndBackEdge(merge_grad, grad[1],
-            //                                           enforce_shape_invariant=False)
-            //      # pylint: enable=protected-access
-            //    return None, None
-            //  elif grad[0] is not None:
-            //    # This is the first time this Switch is visited. It comes from
-            //    # the Exit branch, which is grad[0]. grad[1] is empty at this point.
-            //    # Use grad[0] for both inputs to merge for now, but update the second
-            //    # input of merge when we see this Switch the second time.
-            //    merge_grad = merge([grad[0], grad[0]], name="b_switch")[0]
-            //    grad_ctxt.grad_state.switch_map[op] = merge_grad
-            //    return merge_grad, None
-            //  else:
-            //    # This is the first time this Switch is visited. It comes from the
-            //    # Identity branch. Such a Switch has `None` gradient for the Exit branch,
-            //    # meaning the output is not differentiable.
-            //    return None, None
-            //elif isinstance(op_ctxt, CondContext):
-            //  zero_grad = grad[1 - op_ctxt.branch]
-            //  # At this point, we have created zero_grad guarded by the right switch.
-            //  # Unfortunately, we may still get None here for not trainable data types.
-            //  if zero_grad is None:
-            //    # For resource variables we get None always on the other branch, so bypass
-            //    # this.
-            //    if op.inputs[0].dtype == dtypes.resource:
-            //      return merge(
-            //          [grad[op_ctxt.branch]] * 2, name="cond_resource_grad")[0], None
-            //    return None, None
-            //  return merge(grad, name="cond_grad")[0], None
-            //else:
-            //  false_grad = switch(grad[0], op.inputs[1])[0]
-            //  true_grad = switch(grad[1], op.inputs[1])[1]
-            //  return merge([false_grad, true_grad])[0], None
+        }
+
+        /// <summary>
+        /// Returns the value of an available element of `inputs`.
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        internal static Tensor[] merge(Tensor[] inputs, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "Merge", inputs), scope =>
+            {
+                name = scope;
+                if (inputs.Count(x => x.dtype.is_ref_dtype()) == inputs.Length)
+                    return gen_control_flow_ops.ref_merge(inputs, name: name);
+                else
+                    return gen_control_flow_ops.merge(inputs, name: name);
+            });
         }
 
         /// <summary>

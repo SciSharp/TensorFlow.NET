@@ -183,5 +183,19 @@ namespace Tensorflow
 
             return op.output;
         }
+
+        public static Tensor resize_nearest_neighbor_grad<Tsize>(Tensor grads, Tsize size, bool align_corners = false,
+            bool half_pixel_centers = false, string name = null)
+        {
+            var op = _op_def_lib._apply_op_helper("ResizeNearestNeighborGrad", name: name, args: new
+            {
+                grads,
+                size,
+                align_corners,
+                half_pixel_centers
+            });
+
+            return op.output;
+        }
     }
 }

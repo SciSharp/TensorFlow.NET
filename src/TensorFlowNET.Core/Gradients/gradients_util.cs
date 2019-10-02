@@ -108,10 +108,7 @@ namespace Tensorflow
                     {
                         // generate gradient subgraph for op.
                         var op = queue.Dequeue();
-                        if(tf.get_default_graph()._nodes_by_name.Count > 18505)
-                        {
 
-                        }
                         _maybe_colocate_with(op, gradient_uid, colocate_gradients_with_ops);
                         //if (loop_state != null)
                         //loop_state.EnterGradWhileContext(op, before: true);
@@ -216,7 +213,7 @@ namespace Tensorflow
                                     in_grad.Tag == null && // maybe a IndexedSlice
                                     t_in.dtype != TF_DataType.TF_RESOURCE)
                                 {
-                                    in_grad.shape = t_in.shape;
+                                    in_grad.set_shape(t_in.TensorShape);
                                 }
 
                                 _SetGrad(grads, t_in, in_grad);

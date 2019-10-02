@@ -156,6 +156,35 @@ namespace Tensorflow.Operations
             return op.output;
         }
 
+        /// <summary>
+        /// Gradient for batch normalization.
+        /// </summary>
+        /// <param name="y_backprop"></param>
+        /// <param name="x"></param>
+        /// <param name="scale"></param>
+        /// <param name="reserve_space_1"></param>
+        /// <param name="reserve_space_2"></param>
+        /// <param name="epsilon"></param>
+        /// <param name="data_format"></param>
+        /// <param name="is_training"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor[] fused_batch_norm_grad(FusedBatchNormParams @params)
+        {
+            var op = _op_def_lib._apply_op_helper("FusedBatchNormGrad", name: @params.Name, args: new
+            {
+                y_backprop = @params.YBackprop,
+                x = @params.X,
+                scale = @params.Scale,
+                reserve_space_1 = @params.ReserveSpace1,
+                reserve_space_2 = @params.ReserveSpace2,
+                epsilon = @params.Epsilon,
+                data_format = @params.DataFormat,
+                is_training = @params.IsTraining
+            });
+            return op.outputs;
+        }
+
         public static Tensor[] fused_batch_norm(Tensor x,
                 Tensor scale,
                 Tensor offset,

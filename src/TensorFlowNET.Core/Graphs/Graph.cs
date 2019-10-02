@@ -440,6 +440,9 @@ namespace Tensorflow
                 case List<VariableV1> list:
                     t = list.Select(x => (T)(object)x).ToList();
                     break;
+                case List<ResourceVariable> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
                 case List<RefVariable> list:
                     t = list.Select(x => (T)(object)x).ToList();
                     break;
