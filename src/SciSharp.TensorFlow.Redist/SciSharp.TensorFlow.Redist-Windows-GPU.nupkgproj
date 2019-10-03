@@ -41,21 +41,6 @@
                                         include\tensorflow\c\LICENSE"
                       Runtime="win-x64"/>
 
-    <TensorFlowConfig Condition="'$(OS)' != 'Windows_NT'"
-                      Include="linux"
-                      FileExtension=".tar.gz"
-                      FilesFromArchive="lib\libtensorflow.so;
-                                        lib\libtensorflow_framework.so.$(TensorFlowMajorVersion);
-                                        include\tensorflow\c\LICENSE"
-                      Runtime="linux-x64" />
-
-    <TensorFlowConfig Condition="'$(OS)' != 'Windows_NT'"
-                      Include="darwin" FileExtension=".tar.gz"
-                      FilesFromArchive="lib\libtensorflow.dylib;
-                                        lib\libtensorflow_framework.$(TensorFlowMajorVersion).dylib;
-                                        include\tensorflow\c\LICENSE"
-                      Runtime="osx-x64" />
-
     <AdditionalDownloadFile Include="https://raw.githubusercontent.com/tensorflow/tensorflow/master/LICENSE"
                             DownloadFile="$(BinDir)LICENSE" />
   </ItemGroup>
@@ -71,7 +56,7 @@
                          DownloadShaFile="$(BinDir)%(FileName)%(Extension).sha"
                          ExtractDirectory="$(BinDir)%(FileName)"
                          ExtractSemaphore="$(BinDir)%(FileName)\.extracted"
-                         LocalShaFile="$(MSBuildProjectDirectory)\%(FileName)%(Extension).sha"/>
+                         LocalShaFile="$(BinDir)\%(FileName)%(Extension).sha"/>
     </ItemGroup>
     <Message Importance="high" Text="%(TensorFlowConfig.Runtime)"/>
   </Target>
