@@ -36,9 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\TensorFlowHub\TensorFlowHub.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
-    <ProjectReference Include="..\..\src\TensorFlowText\TensorFlowText.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowNET.Datasets\TensorFlowNET.Datasets.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowNET.Hub\TensorFlowNET.Hub.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowNET.Models\TensorFlowNET.Models.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowNET.Text\TensorFlowNET.Text.csproj" />
   </ItemGroup>
 
   <ItemGroup>

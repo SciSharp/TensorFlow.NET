@@ -14,6 +14,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>SciSharp, Dataset, TensorFlow</PackageTags>
     <Copyright>Apache 2.0</Copyright>
+    <RootNamespace>TensorFlow.Datasets</RootNamespace>
+    <AssemblyName>TensorFlow.Datasets</AssemblyName>
   </PropertyGroup>
 
 </Project>

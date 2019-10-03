@@ -15,6 +15,8 @@
     <PackageTags>TensorFlow, SciSharp</PackageTags>
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+    <AssemblyName>TensorFlow.Text</AssemblyName>
+    <RootNamespace>TensorFlow.Text</RootNamespace>
   </PropertyGroup>
 
 </Project>

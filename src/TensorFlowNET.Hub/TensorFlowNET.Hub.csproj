@@ -15,6 +15,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+    <AssemblyName>TensorFlow.Hub</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NumSharp" Version="0.20.3" />
