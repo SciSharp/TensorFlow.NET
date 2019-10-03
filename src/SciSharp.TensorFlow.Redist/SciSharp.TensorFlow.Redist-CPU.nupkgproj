@@ -71,7 +71,7 @@
                          DownloadShaFile="$(BinDir)%(FileName)%(Extension).sha"
                          ExtractDirectory="$(BinDir)%(FileName)"
                          ExtractSemaphore="$(BinDir)%(FileName)\.extracted"
-                         LocalShaFile="$(MSBuildProjectDirectory)\%(FileName)%(Extension).sha"/>
+                         LocalShaFile="$(BinDir)\%(FileName)%(Extension).sha"/>
     </ItemGroup>
     <Message Importance="high" Text="%(TensorFlowConfig.Runtime)"/>
   </Target>
