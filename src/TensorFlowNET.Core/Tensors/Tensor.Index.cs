@@ -27,11 +27,10 @@ namespace Tensorflow
     {
         public Tensor this[int idx] => slice(idx);
 
-        public Tensor this[params string[] slices]
+        public Tensor this[params Slice[] slices]
         {
             get
             {
-                var slice_spec = slices.Select(x => new Slice(x)).ToArray();
                 var begin = new List<int>();
                 var end = new List<int>();
                 var strides = new List<int>();
@@ -41,9 +40,9 @@ namespace Tensorflow
                 var (begin_mask, end_mask) = (0, 0);
                 var ellipsis_mask = 0;
 
-                foreach (var s in slice_spec)
+                foreach (var s in slices)
                 {
-                    if(s.IsNewAxis)
+                    if (s.IsNewAxis)
                     {
                         begin.Add(0);
                         end.Add(0);
@@ -112,6 +111,10 @@ namespace Tensorflow
                 });
             }
         }
+
+        public Tensor this[params string[] slices] 
+            => this[slices.Select(x => new Slice(x)).ToArray()];
+
 
         public Tensor slice(Slice slice)
         {

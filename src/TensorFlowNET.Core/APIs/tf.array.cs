@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Tensorflow
         /// <summary>
         /// A convenient alias for None, useful for indexing arrays.
         /// </summary>
-        public string newaxis = "";
+        public Slice newaxis = Slice.NewAxis;
 
         /// <summary>
         /// BatchToSpace for N-D tensors of type T.
