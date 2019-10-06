@@ -10,7 +10,7 @@
     <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
     <projectUrl>https://www.tensorflow.org/</projectUrl>
     <iconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</iconUrl>
-    <description>$packageId$ contains the TensorFlow C library CPU version $version$ redistributed as a NuGet package.</description>
+    <description>$packageId$ contains the TensorFlow C library GPU for Linux version $version$ redistributed as a NuGet package.</description>
     <releaseNotes>https://github.com/tensorflow/tensorflow/releases/tag/v$version$</releaseNotes>
     <copyright>Copyright 2019 The TensorFlow Authors. All rights reserved.</copyright>
     <tags>TensorFlow</tags>

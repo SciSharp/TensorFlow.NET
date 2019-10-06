@@ -13,6 +13,11 @@ PM> Install-Package SciSharp.TensorFlow.Redist
 PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 ```
 
+* GPU version for Linux
+```powershell
+PM> Install-Package SciSharp.TensorFlow.Redist-Linux-GPU
+```
+
 https://www.nuget.org/packages/SciSharp.TensorFlow.Redist
 
 Related merged [commits](https://github.com/SciSharp/TensorFlow.NET/commit/854a5ba61ad0e400623821236bd117cc24c6cb77).
