@@ -198,7 +198,7 @@ namespace Tensorflow
         /// <param name="max_consumers">int</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe int TF_OperationOutputConsumers(TF_Output oper_out, IntPtr consumers, int max_consumers);
+        public static extern int TF_OperationOutputConsumers(TF_Output oper_out, IntPtr consumers, int max_consumers);
 
         [DllImport(TensorFlowLibName)]
         public static extern TF_DataType TF_OperationOutputType(TF_Output oper_out);

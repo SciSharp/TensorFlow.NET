@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow;
+using Tensorflow.Util;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -22,9 +23,12 @@ namespace TensorFlowNET.UnitTest
 
         public CSession(Graph graph, Status s, bool user_XLA = false)
         {
-            var opts = new SessionOptions();
-            opts.SetConfig(new ConfigProto { InterOpParallelismThreads = 4 });
-            session_ = new Session(graph, opts, s);
+            lock (Locks.ProcessWide)
+            {
+                var opts = new SessionOptions();
+                opts.SetConfig(new ConfigProto {InterOpParallelismThreads = 4});
+                session_ = new Session(graph, opts, s);
+            }
         }
 
         public void SetInputs(Dictionary<Operation, Tensor> inputs)
@@ -64,13 +68,13 @@ namespace TensorFlowNET.UnitTest
         public unsafe void Run(Status s)
         {
             var inputs_ptr = inputs_.ToArray();
-            var input_values_ptr = input_values_.Select(x => (IntPtr)x).ToArray();
+            var input_values_ptr = input_values_.Select(x => (IntPtr) x).ToArray();
             var outputs_ptr = outputs_.ToArray();
             var output_values_ptr = output_values_.Select(x => IntPtr.Zero).ToArray();
             IntPtr[] targets_ptr = new IntPtr[0];
 
             c_api.TF_SessionRun(session_, null, inputs_ptr, input_values_ptr, inputs_ptr.Length,
-                outputs_ptr, output_values_ptr, outputs_.Count, 
+                outputs_ptr, output_values_ptr, outputs_.Count,
                 targets_ptr, targets_.Count,
                 IntPtr.Zero, s);
 

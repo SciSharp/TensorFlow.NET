@@ -70,7 +70,7 @@ namespace Tensorflow
 
         public Buffer() => _handle = TF_NewBuffer();
 
-        internal Buffer(IntPtr handle)
+        public Buffer(IntPtr handle)
         {
             if (handle == IntPtr.Zero)
                 throw new ArgumentException("Handle (IntPtr) can't be zero.", nameof(handle));

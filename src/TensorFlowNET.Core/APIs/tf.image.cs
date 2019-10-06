@@ -40,6 +40,11 @@ namespace Tensorflow
             public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
                 => gen_image_ops.resize_bilinear(images, size, align_corners: align_corners, name: name);
 
+            public Tensor resize_images(Tensor images, Tensor size, ResizeMethod method = ResizeMethod.BILINEAR,
+                    bool align_corners = false, bool preserve_aspect_ratio = false, string name = null)
+                => image_ops_impl.resize_images(images, size, method: method,
+                    align_corners: align_corners, preserve_aspect_ratio: preserve_aspect_ratio, name: name);
+
             public Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name = null)
                 => gen_image_ops.convert_image_dtype(image, dtype, saturate: saturate, name: name);
 
@@ -54,8 +59,22 @@ namespace Tensorflow
             /// <param name="contents"></param>
             /// <param name="name"></param>
             /// <returns></returns>
-            public static Tensor is_jpeg(Tensor contents, string name = null)
+            public Tensor is_jpeg(Tensor contents, string name = null)
                 => image_ops_impl.is_jpeg(contents, name: name);
+
+            /// <summary>
+            /// Resize `images` to `size` using nearest neighbor interpolation.
+            /// </summary>
+            /// <param name="images"></param>
+            /// <param name="size"></param>
+            /// <param name="align_corners"></param>
+            /// <param name="name"></param>
+            /// <param name="half_pixel_centers"></param>
+            /// <returns></returns>
+            public Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false,
+                string name = null, bool half_pixel_centers = false)
+                => image_ops_impl.resize_nearest_neighbor(images, size, align_corners: align_corners,
+                    name: name, half_pixel_centers: half_pixel_centers);
         }
     }
 }

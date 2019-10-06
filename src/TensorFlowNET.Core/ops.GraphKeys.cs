@@ -52,6 +52,8 @@ namespace Tensorflow
             /// </summary>
             public const string LOSSES_ = "losses";
 
+            public const string MOVING_AVERAGE_VARIABLES = "moving_average_variables";
+
             /// <summary>
             /// Key to collect Variable objects that are global (shared across machines).
             /// Default collection for all variables, except local ones.
@@ -101,6 +103,12 @@ namespace Tensorflow
             public string _STREAMING_MODEL_PORTS => _STREAMING_MODEL_PORTS_;
 
             /// <summary>
+            /// Key to collect local variables that are local to the machine and are not
+            /// saved/restored.
+            /// </summary>
+            public string LOCAL_VARIABLES = "local_variables";
+
+            /// <summary>
             /// Key to collect losses
             /// </summary>
             public string LOSSES => LOSSES_;
@@ -114,6 +122,7 @@ namespace Tensorflow
             public string TRAIN_OP => TRAIN_OP_;
 
             public string GLOBAL_STEP => GLOBAL_STEP_;
+            public string GLOBAL_STEP_READ_KEY = "global_step_read_op_cache";
 
             public string[] _VARIABLE_COLLECTIONS => _VARIABLE_COLLECTIONS_;
             /// <summary>

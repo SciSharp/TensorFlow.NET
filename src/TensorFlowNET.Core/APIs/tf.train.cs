@@ -25,16 +25,26 @@ namespace Tensorflow
 
         public class train_internal
         {
+            public RefVariable create_global_step(Graph graph)
+                => TrainingUtil.create_global_step(graph);
+
+            public RefVariable get_global_step(Graph graph)
+                => TrainingUtil.get_global_step(graph);
+
             public Optimizer GradientDescentOptimizer(float learning_rate) 
                 => new GradientDescentOptimizer(learning_rate);
 
             public Optimizer AdamOptimizer(float learning_rate, string name = "Adam") 
                 => new AdamOptimizer(learning_rate, name: name);
 
+            public Optimizer AdamOptimizer(Tensor learning_rate, string name = "Adam")
+                => new AdamOptimizer(learning_rate, name: name);
+
             public ExponentialMovingAverage ExponentialMovingAverage(float decay)
                 => new ExponentialMovingAverage(decay);
 
-            public Saver Saver(VariableV1[] var_list = null) => new Saver(var_list: var_list);
+            public Saver Saver(VariableV1[] var_list = null, int max_to_keep = 5) 
+                => new Saver(var_list: var_list, max_to_keep: max_to_keep);
 
             public string write_graph(Graph graph, string logdir, string name, bool as_text = true) 
                 => graph_io.write_graph(graph, logdir, name, as_text);
@@ -45,7 +55,7 @@ namespace Tensorflow
                     clear_devices,
                     import_scope).Item1;
 
-            public (MetaGraphDef, Dictionary<string, RefVariable>) export_meta_graph(string filename = "",
+            public (MetaGraphDef, Dictionary<string, VariableV1>) export_meta_graph(string filename = "",
                 bool as_text = false,
                 bool clear_devices = false,
                 bool clear_extraneous_savers = false,
@@ -54,6 +64,12 @@ namespace Tensorflow
                     clear_devices: clear_devices,
                     clear_extraneous_savers: clear_extraneous_savers,
                     strip_default_attrs: strip_default_attrs);
+
+            public string latest_checkpoint(string checkpoint_dir, string latest_filename = null)
+                => checkpoint_management.latest_checkpoint(checkpoint_dir, latest_filename: latest_filename);
+
+            public CheckpointState get_checkpoint_state(string checkpoint_dir, string latest_filename = null)
+                => checkpoint_management.get_checkpoint_state(checkpoint_dir, latest_filename: latest_filename);
         }
     }
 }

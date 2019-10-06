@@ -45,10 +45,19 @@ namespace Tensorflow.Operations
         /// The predicate tensor in this branch
         /// </summary>
         protected Tensor _pivot;
-        public Tensor pivot
-        {
-            get => _pivot;
-        }
+        public Tensor pivot => _pivot;
+
+        /// <summary>
+        /// The boolean tensor for the cond predicate
+        /// </summary>
+        protected Tensor _pred;
+        public Tensor pred => _pred;
+
+        /// <summary>
+        /// 0 or 1 representing this branch
+        /// </summary>
+        protected int _branch;
+        public int branch => _branch;
 
         protected Stack<ControlFlowContext> _context_stack;
         protected ControlFlowContext _outer_context;

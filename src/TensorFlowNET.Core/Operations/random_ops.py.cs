@@ -104,6 +104,19 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        /// Randomly shuffles a tensor along its first dimension.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="seed"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor random_shuffle(Tensor value, int? seed = null, string name = null)
+        {
+            var (seed1, seed2) = random_seed.get_seed(seed);
+            return gen_random_ops.random_shuffle(value, seed: seed1.Value, seed2: seed2.Value, name: name);
+        }
+
         public static Tensor truncated_normal(int[] shape,
             float mean = 0.0f,
             float stddev = 1.0f,

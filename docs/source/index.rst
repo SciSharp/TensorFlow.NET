@@ -22,6 +22,7 @@ Welcome to TensorFlow.NET's documentation!
    Graph
    Session
    Operation
+   Queue
    Gradient
    Train
    EagerMode

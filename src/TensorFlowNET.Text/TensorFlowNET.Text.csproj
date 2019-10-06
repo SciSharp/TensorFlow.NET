@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>SciSharp.TensorFlowText</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>Haiping Chen</Authors>
+    <Company>SciSharp STACK</Company>
+    <Product>TensorFlowText</Product>
+    <Description>TensorFlow Text provides a collection of text related classes and ops ready to use with TensorFlow 2.0. The library can perform the preprocessing regularly required by text-based models, and includes other features useful for sequence modeling not provided by core TensorFlow.</Description>
+    <Copyright>Apache 2.0</Copyright>
+    <PackageProjectUrl>http://scisharpstack.org</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
+    <PackageTags>TensorFlow, SciSharp</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+    <AssemblyName>TensorFlow.Text</AssemblyName>
+    <RootNamespace>TensorFlow.Text</RootNamespace>
+  </PropertyGroup>
+
+</Project>

@@ -7730,7 +7730,7 @@ namespace Tensorflow.Operations
         /// </returns>
         /// <remarks>
         ///    RFC 4180 format is expected for the CSV records.
-        ///    (https://tools.ietf.org/html/rfc4180)
+        ///    (https://tools.ietensorflow.org/html/rfc4180)
         ///    Note that we allow leading and trailing spaces with int or float field.
         /// </remarks>
         public static Tensor[] decode_c_s_v (Tensor records, Tensor[] record_defaults, string field_delim = null, bool? use_quote_delim = null, string na_value = null, int[] select_cols = null, string name = "DecodeCSV")

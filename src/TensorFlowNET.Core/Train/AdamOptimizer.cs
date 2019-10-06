@@ -41,6 +41,14 @@ namespace Tensorflow.Train
             _epsilon = epsilon;
         }
 
+        public AdamOptimizer(Tensor learning_rate, float beta1 = 0.9f, float beta2 = 0.999f, float epsilon = 1e-8f, bool use_locking = false, string name = "Adam")
+            : base(learning_rate, use_locking, name)
+        {
+            _beta1 = beta1;
+            _beta2 = beta2;
+            _epsilon = epsilon;
+        }
+
         public override Operation _apply_sparse(IndexedSlices grad, RefVariable var)
         {
             return _apply_sparse_shared(grad.values, var, grad.indices, (x, i, v) =>
@@ -146,10 +154,10 @@ namespace Tensorflow.Train
             var beta2 = _call_if_callable(_beta2);
             var epsilon = _call_if_callable(_epsilon);
 
-            _lr_t = ops.convert_to_tensor(lr, name: "learning_rate");
-            _beta1_t = ops.convert_to_tensor(beta1, name: "beta1");
-            _beta2_t = ops.convert_to_tensor(beta2, name: "beta2");
-            _epsilon_t = ops.convert_to_tensor(epsilon, name: "epsilon");
+            _lr_t = _lr_t ?? ops.convert_to_tensor(lr, name: "learning_rate");
+            _beta1_t = _beta1_t ?? ops.convert_to_tensor(beta1, name: "beta1");
+            _beta2_t = _beta2_t ?? ops.convert_to_tensor(beta2, name: "beta2");
+            _epsilon_t = _epsilon_t ?? ops.convert_to_tensor(epsilon, name: "epsilon");
         }
     }
 }

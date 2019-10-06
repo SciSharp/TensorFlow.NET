@@ -107,34 +107,9 @@ Run this example in [Jupyter Notebook](https://github.com/SciSharp/SciSharpCube)
 
 Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html).
 
-### More examples:
+There are many examples reside at [TensorFlow.NET Examples](https://github.com/SciSharp/TensorFlow.NET-Examples).
 
-Run specific example in shell:
-
-```cs
-dotnet TensorFlowNET.Examples.dll -ex "MNIST CNN"
-```
-
-Example runner will download all the required files like training data and model pb files.
-
-* [Hello World](test/TensorFlowNET.Examples/HelloWorld.cs)
-* [Basic Operations](test/TensorFlowNET.Examples/BasicOperations.cs)
-* [Linear Regression](test/TensorFlowNET.Examples/BasicModels/LinearRegression.cs)
-* [Logistic Regression](test/TensorFlowNET.Examples/BasicModels/LogisticRegression.cs)
-* [Nearest Neighbor](test/TensorFlowNET.Examples/BasicModels/NearestNeighbor.cs)
-* [Naive Bayes Classification](test/TensorFlowNET.Examples/BasicModels/NaiveBayesClassifier.cs)
-* [Full Connected Neural Network](test/TensorFlowNET.Examples/ImageProcess/DigitRecognitionNN.cs)
-* [Image Processing](test/TensorFlowNET.Examples/ImageProcessing)
-* [K-means Clustering](test/TensorFlowNET.Examples/BasicModels/KMeansClustering.cs)
-* [NN XOR](test/TensorFlowNET.Examples/BasicModels/NeuralNetXor.cs)
-* [Object Detection](test/TensorFlowNET.Examples/ImageProcessing/ObjectDetection.cs)
-* [Text Classification](test/TensorFlowNET.Examples/TextProcessing/BinaryTextClassification.cs)
-* [CNN Text Classification](test/TensorFlowNET.Examples/TextProcessing/cnn_models/VdCnn.cs)
-* [MNIST CNN](test/TensorFlowNET.Examples/ImageProcessing/DigitRecognitionCNN.cs)
-* [Named Entity Recognition](test/TensorFlowNET.Examples/TextProcessing/NER)
-* [Transfer Learning for Image Classification in InceptionV3](test/TensorFlowNET.Examples/ImageProcessing/RetrainImageClassifier.cs)
-
-More troubleshooting of running example refer [here](tensorflowlib/README.md).
+Troubleshooting of running example or installation, please  refer [here](tensorflowlib/README.md).
 
 ### Contribute:
 

@@ -49,5 +49,18 @@ namespace Tensorflow
             int? seed = null,
             string name = null)
             => random_ops.truncated_normal(shape, mean, stddev, dtype, seed, name);
+
+        /// <summary>
+        /// Randomly shuffles a tensor along its first dimension.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="seed"></param>
+        /// <param name="name"></param>
+        /// <returns>
+        /// A tensor of same shape and type as value, shuffled along its 
+        /// first dimension.
+        /// </returns>
+        public Tensor random_shuffle(Tensor value, int? seed = null, string name = null)
+            => random_ops.random_shuffle(value, seed: seed, name: name);
     }
 }

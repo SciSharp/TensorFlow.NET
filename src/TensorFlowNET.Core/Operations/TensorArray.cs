@@ -33,9 +33,13 @@ namespace Tensorflow.Operations
     {
         _GraphTensorArray _implementation;
 
-        public TensorArray(TF_DataType dtype, Tensor size = null, bool? clear_after_read = null, bool? dynamic_size = null,
+        public TF_DataType dtype => _implementation._dtype;
+        public Tensor handle => _implementation._handle;
+        public Tensor flow => _implementation._flow;
+
+        public TensorArray(TF_DataType dtype, Tensor size = default, bool? clear_after_read = null, bool? dynamic_size = null,
             string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
-            bool infer_shape = true, TensorShape element_shape = null,
+            bool infer_shape = true, TensorShape[] element_shape = null,
             bool colocate_with_first_write_call = true, string name = null)
         {
             _implementation = new _GraphTensorArray(dtype, 
@@ -50,5 +54,8 @@ namespace Tensorflow.Operations
                 colocate_with_first_write_call: colocate_with_first_write_call,
                 name: name);
         }
+
+        public TensorArray unstack(Tensor value, string name = null)
+            => _implementation.unstack(value, name: name);
     }
 }

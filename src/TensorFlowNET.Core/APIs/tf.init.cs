@@ -20,6 +20,8 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
+        public IInitializer constant_initializer<T>(T value, TF_DataType dtype = TF_DataType.TF_FLOAT, bool verify_shape = false) 
+            => new Constant<T>(value, dtype: dtype, verify_shape: verify_shape);
         public IInitializer zeros_initializer => new Zeros();
         public IInitializer ones_initializer => new Ones();
         public IInitializer glorot_uniform_initializer => new GlorotUniform();
@@ -58,6 +60,26 @@ namespace Tensorflow
             int? seed = null,
             TF_DataType dtype = TF_DataType.DtInvalid) => new RandomNormal(mean: mean,
                 stddev: stddev,
+                seed: seed,
+                dtype: dtype);
+
+        /// <summary>
+        /// Initializer capable of adapting its scale to the shape of weights tensors.
+        /// </summary>
+        /// <param name="scale"></param>
+        /// <param name="mode"></param>
+        /// <param name="distribution"></param>
+        /// <param name="seed"></param>
+        /// <param name="dtype"></param>
+        /// <returns></returns>
+        public IInitializer variance_scaling_initializer(float scale = 1.0f,
+            string mode = "fan_in",
+            string distribution = "truncated_normal",
+            int? seed = null,
+            TF_DataType dtype = TF_DataType.TF_FLOAT) => new VarianceScaling(
+                scale: scale,
+                mode: mode,
+                distribution: distribution,
                 seed: seed,
                 dtype: dtype);
     }

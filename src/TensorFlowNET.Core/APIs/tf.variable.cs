@@ -46,6 +46,7 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             object initializer = null, // IInitializer or Tensor
             bool? trainable = null,
+            List<string> collections = null,
             bool? use_resource = null,
             bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
@@ -60,7 +61,11 @@ namespace Tensorflow
                 use_resource: use_resource,
                 validate_shape: validate_shape,
                 initializer: initializer,
-                trainable: trainable);
+                trainable: trainable,
+                collections: collections);
         }
+
+        public VariableScope get_variable_scope()
+            => Tensorflow.variable_scope.get_variable_scope();
     }
 }

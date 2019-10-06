@@ -29,7 +29,19 @@ namespace Tensorflow
             return ops.get_default_graph();
         }
 
-        public Graph Graph() 
+        /// <summary>
+        ///     Equivalent to <see cref="get_default_graph"/> but does not create a new graph if it there is none.
+        /// </summary>
+        public Graph peak_default_graph()
+        {
+            return ops.default_graph_stack.peak_controller();
+        }
+
+        /// <summary>
+        ///     Creates a new graph.
+        /// </summary>
+        ///<remarks>Has no interaction with graph defaulting. Equivalent to new Graph();</remarks>
+        public Graph Graph()
             => new Graph();
     }
 }

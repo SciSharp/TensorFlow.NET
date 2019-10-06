@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,39 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
+        /// <summary>
+        /// A convenient alias for None, useful for indexing arrays.
+        /// </summary>
+        public Slice newaxis = Slice.NewAxis;
+
+        /// <summary>
+        /// BatchToSpace for N-D tensors of type T.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="block_shape"></param>
+        /// <param name="crops"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor batch_to_space_nd<T>(T input, int[] block_shape, int[,] crops, string name = null)
+            => gen_array_ops.batch_to_space_nd(input, block_shape, crops, name: name);
+
+        /// <summary>
+        /// Apply boolean mask to tensor.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="tensor">N-D tensor.</param>
+        /// <param name="mask">K-D boolean tensor, K <= N and K must be known statically.</param>
+        /// <param name="name"></param>
+        /// <param name="axis">A 0-D int Tensor representing the axis in tensor to mask from. </param>
+        /// <returns>(N-K+1)-dimensional tensor populated by entries in tensor corresponding to True values in mask.</returns>
+        public Tensor boolean_mask<T1, T2>(T1 tensor, T2 mask, string name = "boolean_mask", int axis = 0)
+            => array_ops.boolean_mask(tensor, mask, name: name, axis: axis);
+
+        public Tensor check_numerics(Tensor tensor, string message, string name = null)
+            => gen_array_ops.check_numerics(tensor, message, name: name);
+
         /// <summary>
         /// Concatenates tensors along one dimension.
         /// </summary>
@@ -62,6 +96,26 @@ namespace Tensorflow
             => gen_array_ops.fill(dims, value, name: name);
 
         /// <summary>
+        /// Return a tensor with the same shape and contents as input.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor identity(Tensor input, string name = null)
+            => array_ops.identity(input, name: name);
+
+        /// <summary>
+        /// Gather slices from params axis axis according to indices.
+        /// </summary>
+        /// <param name="params"></param>
+        /// <param name="indices"></param>
+        /// <param name="name"></param>
+        /// <param name="axis"></param>
+        /// <returns></returns>
+        public Tensor gather(Tensor @params, Tensor indices, string name = null, int axis = 0)
+            => array_ops.gather(@params, indices, name: name, axis: axis);
+
+        /// <summary>
         /// Return the elements, either from `x` or `y`, depending on the `condition`.
         /// </summary>
         /// <returns></returns>
@@ -79,6 +133,39 @@ namespace Tensorflow
         public Tensor transpose<T1>(T1 a, int[] perm = null, string name = "transpose", bool conjugate = false)
             => array_ops.transpose(a, perm, name, conjugate);
 
+        /// <summary>
+        /// Reverses specific dimensions of a tensor.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor reverse(Tensor tensor, int[] axis, string name = null)
+            => gen_array_ops.reverse(tensor, axis, name: name);
+
+        public static Tensor reverse(Tensor tensor, Tensor axis, string name = null)
+            => gen_array_ops.reverse(tensor, axis, name: name);
+
+        /// <summary>
+        /// Returns the rank of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <returns>Returns a 0-D `int32` `Tensor` representing the rank of `input`.</returns>
+        public Tensor rank(Tensor input, string name = null)
+            => array_ops.rank(input, name: name);
+
+        /// <summary>
+        /// Extracts a slice from a tensor.
+        /// </summary>
+        /// <param name="input">A `Tensor`.</param>
+        /// <param name="begin">An `int32` or `int64` `Tensor`.</param>
+        /// <param name="size">An `int32` or `int64` `Tensor`.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <returns>A `Tensor` the same type as `input`.</returns>
+        public Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
+            => array_ops.slice(input, begin, size, name: name);
+
         public Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
             => gen_array_ops.squeeze(input, axis, name);
 
@@ -92,12 +179,38 @@ namespace Tensorflow
         public Tensor stack(object values, int axis = 0, string name = "stack")
             => array_ops.stack(values, axis, name: name);
 
+        /// <summary>
+        /// Creates a tensor with all elements set to 1.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <param name="optimize">
+        /// if true, attempt to statically determine the shape of 'tensor' and
+        /// encode it as a constant.
+        /// </param>
+        /// <returns>A `Tensor` with all elements set to 1.</returns>
+        public Tensor ones_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
+            => array_ops.ones_like(tensor, dtype: dtype, name: name, optimize: optimize);
+
         public Tensor one_hot(Tensor indices, int depth,
             Tensor on_value = null,
             Tensor off_value = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             int axis = -1,
             string name = null) => array_ops.one_hot(indices, depth, dtype: dtype, axis: axis, name: name);
+
+        /// <summary>
+        /// Pads a tensor
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="paddings"></param>
+        /// <param name="mode"></param>
+        /// <param name="name"></param>
+        /// <param name="constant_values"></param>
+        /// <returns></returns>
+        public Tensor pad(Tensor tensor, Tensor paddings, string mode = "CONSTANT", string name = null, int constant_values = 0)
+            => array_ops.pad(tensor, paddings, mode: mode, name: name, constant_values: constant_values);
 
         /// <summary>
         /// A placeholder op that passes through `input` when its output is not fed.
@@ -112,5 +225,47 @@ namespace Tensorflow
         /// <returns>A `Tensor`. Has the same type as `input`.</returns>
         public Tensor placeholder_with_default<T>(T input, int[] shape, string name = null)
             => gen_array_ops.placeholder_with_default(input, shape, name: name);
+
+        /// <summary>
+        /// Returns the shape of a tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <param name="out_type"></param>
+        /// <returns></returns>
+        public Tensor shape(Tensor input, string name = null, TF_DataType out_type = TF_DataType.TF_INT32)
+            => array_ops.shape_internal(input, name, optimize: true, out_type: out_type);
+
+        /// <summary>
+        /// Stacks a list of rank-`R` tensors into one rank-`(R+1)` tensor.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns>A stacked `Tensor` with the same type as `values`.</returns>
+        public Tensor stack(Tensor[] values, int axis = 0, string name = "stack")
+            => array_ops.stack(values, axis: axis, name: name);
+
+        /// <summary>
+        /// Unpacks the given dimension of a rank-`R` tensor into rank-`(R-1)` tensors.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="num"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor[] unstack(Tensor value, int? num = null, int axis = 0, string name = "unstack")
+            => array_ops.unstack(value, num: num, axis: axis, name: name);
+
+        /// <summary>
+        /// Creates a tensor with all elements set to zero.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <param name="optimize"></param>
+        /// <returns>A `Tensor` with all elements set to zero.</returns>
+        public Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
+            => array_ops.zeros_like(tensor, dtype: dtype, name: name, optimize: optimize);
     }
 }

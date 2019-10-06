@@ -16,12 +16,14 @@
 
 using System;
 using System.Numerics;
+using NumSharp;
 using NumSharp.Backends;
 
 namespace Tensorflow
 {
     public static class dtypes
     {
+        public static TF_DataType @bool = TF_DataType.TF_BOOL;
         public static TF_DataType int8 = TF_DataType.TF_INT8;
         public static TF_DataType int32 = TF_DataType.TF_INT32;
         public static TF_DataType int64 = TF_DataType.TF_INT64;
@@ -31,6 +33,7 @@ namespace Tensorflow
         public static TF_DataType float32 = TF_DataType.TF_FLOAT; // is that float32?
         public static TF_DataType float16 = TF_DataType.TF_HALF;
         public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
+        public static TF_DataType resource = TF_DataType.TF_RESOURCE;
 
         /// <summary>
         /// 
@@ -45,6 +48,8 @@ namespace Tensorflow
                     return typeof(bool);
                 case TF_DataType.TF_UINT8:
                     return typeof(byte);
+                case TF_DataType.TF_INT8:
+                    return typeof(sbyte);
                 case TF_DataType.TF_INT64:
                     return typeof(long);
                 case TF_DataType.TF_UINT64:
@@ -243,7 +248,8 @@ namespace Tensorflow
         public static bool is_integer(this TF_DataType type)
         {
             return type == TF_DataType.TF_INT8 || type == TF_DataType.TF_INT16 || type == TF_DataType.TF_INT32 || type == TF_DataType.TF_INT64 ||
-                type == TF_DataType.TF_UINT8 || type == TF_DataType.TF_UINT16 || type == TF_DataType.TF_UINT32 || type == TF_DataType.TF_UINT64;
+                type == TF_DataType.TF_UINT8 || type == TF_DataType.TF_UINT16 || type == TF_DataType.TF_UINT32 || type == TF_DataType.TF_UINT64 ||
+                type == TF_DataType.DtInt32Ref || type == TF_DataType.DtInt64Ref;
         }
 
         public static bool is_floating(this TF_DataType type)

@@ -17,6 +17,8 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Tensorflow.Framework;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -54,6 +56,8 @@ namespace Tensorflow
                         return _constant_if_small(0.0D, shape, dtype, name);
                     case TF_DataType.TF_FLOAT:
                         return _constant_if_small(0.0F, shape, dtype, name);
+                    case TF_DataType.TF_INT64:
+                        return _constant_if_small(0l, shape, dtype, name);
                     case TF_DataType.TF_INT32:
                         return _constant_if_small(0, shape, dtype, name);
                     case TF_DataType.TF_INT8:
@@ -62,6 +66,44 @@ namespace Tensorflow
                         throw new TypeError("can't find type for zeros");
                 }
             });
+        }
+
+        public static Tensor boolean_mask<T1, T2>(T1 tensor, T2 mask, string name = "boolean_mask", int axis = 0)
+        {
+            return tf_with(ops.name_scope(name, values: new { tensor, mask }), delegate
+            {
+                var tensor_tensor = ops.convert_to_tensor(tensor, name: "tensor");
+                var mask_tensor = ops.convert_to_tensor(mask, name: "mask");
+
+                var shape_mask = mask_tensor.TensorShape;
+                var ndims_mask = shape_mask.ndim;
+                var shape_tensor = tensor_tensor.TensorShape;
+
+                if (ndims_mask < 1)
+                    throw new ValueError("mask cannot be scalar.");
+
+                var leading_size = gen_math_ops.prod(shape(tensor_tensor)[$"{axis}:{axis + ndims_mask}"], new[] { 0 });
+                var shape1 = concat(new[]
+                {
+                    shape(tensor_tensor)[$":{axis}"],
+                    tf.expand_dims(leading_size, 0),
+                    shape(tensor_tensor)[$"{axis + ndims_mask}:"]
+                }, 0);
+                tensor_tensor = reshape(tensor, shape1);
+                var first_dim = shape_tensor.dims.Skip(axis).Take(ndims_mask).First();
+                var s1 = tensor_shape.as_shape(shape_tensor.dims.Take(axis).ToArray());
+                var s2 = s1.concatenate(new[] { first_dim }).concatenate(shape_tensor.dims.Skip(axis + ndims_mask).ToArray());
+                tensor_tensor.set_shape(s2);
+
+                mask_tensor = reshape(mask_tensor, new[] { -1 });
+                return _apply_mask_1d(tensor_tensor, mask_tensor, axis);
+            });
+        }
+
+        private static Tensor _apply_mask_1d(Tensor reshaped_tensor, Tensor mask, int axis = 0)
+        {
+            var indices = squeeze(where(mask), axis: new[] { 1 });
+            return gather(reshaped_tensor, indices, axis: axis);
         }
 
         public static Tensor zeros(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
@@ -306,11 +348,40 @@ namespace Tensorflow
         public static (Tensor, Tensor) unique(Tensor x, TF_DataType out_idx = TF_DataType.TF_INT32, string name = null)
             => gen_array_ops.unique(x, out_idx: out_idx, name: name);
 
+        public static Tensor stack(Tensor[] values, int axis = 0, string name = "stack")
+        {
+            if (axis == 0)
+            {
+                return ops.convert_to_tensor(values, name: name);
+            }
+
+            var value_shape = ops.convert_to_tensor(values[0], name: name).TensorShape;
+
+            return gen_array_ops.pack(values, axis: axis, name: name);
+        }
+
+        public static Tensor[] unstack(Tensor value, int? num = null, int axis = 0, string name = "unstack")
+        {
+            if(num == null)
+            {
+                value = ops.convert_to_tensor(value);
+                var value_shape = value.TensorShape;
+                num = value_shape.dims[axis];
+            }
+
+            return gen_array_ops.unpack(value, num: num.Value, axis: axis, name: name);
+        }
+
         public static Tensor where(Tensor condition, object x = null, object y = null, string name = null)
         {
             if( x == null && y == null)
             {
-                throw new NotImplementedException("where");
+                return tf_with(ops.name_scope(name, "Where", new { condition }), scope =>
+                {
+                    name = scope;
+                    condition = ops.convert_to_tensor(condition, preferred_dtype: dtypes.@bool, name: "condition");
+                    return gen_array_ops.where(condition: condition, name: name);
+                });
             }
             else if(x != null && y != null)
             {
@@ -338,7 +409,7 @@ namespace Tensorflow
         public static Tensor size(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
             => size_internal(input, name, optimize: optimize, out_type: out_type);
 
-        private static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
+        public static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
             return tf_with(ops.name_scope(name, "Shape", new { input }), scope =>
             {
@@ -540,7 +611,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
+        public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
             => gen_array_ops.slice(input, begin, size, name: name);
 
         public static Tensor stack(object values, int axis = 0, string name = "stack")
@@ -550,6 +621,40 @@ namespace Tensorflow
                 return ops.convert_to_tensor(values, name: name);
 
             throw new NotImplementedException("array_ops.stack");
+        }
+
+        public static Tensor pad(Tensor tensor, Tensor paddings, string mode = "CONSTANT", string name = null, int constant_values = 0)
+        {
+            Tensor result = null;
+            mode = mode.ToUpper();
+            if(mode == "CONSTANT")
+            {
+                if (constant_values != 0)
+                    throw new NotImplementedException("gen_array_ops.pad_v2");
+                else
+                    result = gen_array_ops.pad(tensor, paddings, name: name);
+            }
+
+            // Restore shape information where possible.
+            var paddings_constant = tensor_util.constant_value(
+                result.op.inputs[1], partial: true);
+            var input_shape = result.op.inputs[0].TensorShape;
+            if (input_shape.ndim > -1 &&
+                !result.TensorShape.is_fully_defined() &&
+                !(paddings_constant is null))
+            {
+                var new_shape = new List<int>();
+                foreach((NDArray padding, int dim) in zip(paddings_constant.GetNDArrays(), np.array(input_shape.dims).GetNDArrays()))
+                {
+                    if (padding is null || dim == -1 || padding.GetData<int>().Contains(-1))
+                        new_shape.Add(-1);
+                    else
+                        new_shape.Add(np.sum(padding) + dim);
+                }
+                result.set_shape(new_shape.ToArray());
+            }
+
+            return result;
         }
 
         public static Tensor placeholder(TF_DataType dtype)

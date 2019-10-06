@@ -47,6 +47,15 @@ namespace Tensorflow.Gradients
             return new Tensor[] { gen_nn_ops.relu_grad(grads[0], op.outputs[0]) };
         }
 
+        [RegisterGradient("LeakyRelu")]
+        public static Tensor[] _LeakyReluGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+            var alpha = (float)op.get_attr("alpha");
+            return new Tensor[] { gen_nn_ops.leaky_relu_grad(grad, x, alpha: alpha)};
+        }
+
         /// <summary>
         /// The derivative of the softmax nonlinearity.
         /// </summary>
@@ -155,6 +164,94 @@ namespace Tensorflow.Gradients
                     DataFormat = data_format.ToString()
                 })
             };
+        }
+
+        [RegisterGradient("FusedBatchNorm")]
+        public static Tensor[] _FusedBatchNormGrad(Operation op, Tensor[] grads)
+            => _BaseFusedBatchNormGrad(op, 0, grads);
+
+        /// <summary>
+        /// Return the gradients for the 3 inputs of BatchNorm.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="version"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        public static Tensor[] _BaseFusedBatchNormGrad(Operation op, int version, Tensor[] grads)
+        {
+            var x = op.inputs[0];
+            var grad_y = grads[0];
+            var scale = op.inputs[1];
+            var epsilon = op.get_attr<float>("epsilon");
+            var data_format = op.get_attr<string>("data_format");
+            var is_training = op.get_attr<bool>("is_training");
+            Func<FusedBatchNormParams, Tensor[]> grad_fun = null;
+
+            switch (version)
+            {
+                case 2:
+                    throw new NotImplementedException("");
+                case 1:
+                    throw new NotImplementedException("");
+                default:
+                    grad_fun = gen_nn_ops.fused_batch_norm_grad;
+                    break;
+            }
+
+            if (is_training)
+            {
+                return grad_fun(new FusedBatchNormParams
+                {
+                    YBackprop = grad_y,
+                    X = x,
+                    Scale = scale,
+                    ReserveSpace1 = op.outputs[3],
+                    ReserveSpace2 = op.outputs[4],
+                    ReserveSpace3 = version == 2 ? op.outputs[5] : null,
+                    Epsilon = epsilon,
+                    DataFormat = data_format,
+                    IsTraining = is_training
+                });
+            }
+            else
+            {
+                var pop_mean = op.inputs[3];
+                var pop_var = op.inputs[4];
+                if (data_format == "NCHW")
+                    throw new NotImplementedException("");
+
+                var results = grad_fun(new FusedBatchNormParams
+                {
+                    YBackprop = grad_y,
+                    X = x,
+                    Scale = scale,
+                    ReserveSpace1 = op.outputs[3],
+                    ReserveSpace2 = op.outputs[4],
+                    ReserveSpace3 = version == 2 ? op.outputs[5] : null,
+                    Epsilon = epsilon,
+                    DataFormat = data_format,
+                    IsTraining = is_training
+                });
+
+                var (dx, dscale, doffset) = (results[0], results[1], results[2]);
+                if (data_format == "NCHW")
+                    throw new NotImplementedException("");
+
+                return new Tensor[]
+                {
+                    dx, 
+                    dscale, 
+                    doffset, 
+                    null, 
+                    null
+                };
+            }
+        }
+
+        [RegisterGradient("BatchNormWithGlobalNormalization")]
+        public static Tensor _BatchNormWithGlobalNormalizationGrad(Operation op, Tensor[] grads)
+        {
+            throw new NotImplementedException("BatchNormWithGlobalNormalization");
         }
 
         private static bool IsZero(Tensor g)

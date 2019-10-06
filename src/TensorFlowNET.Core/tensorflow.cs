@@ -14,12 +14,15 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Threading;
 using Tensorflow.Eager;
 
 namespace Tensorflow
 {
     public partial class tensorflow : IObjectLife
     {
+        protected internal readonly ThreadLocal<Session> _defaultSessionFactory;
+
         public TF_DataType @byte = TF_DataType.TF_UINT8;
         public TF_DataType @sbyte = TF_DataType.TF_INT8;
         public TF_DataType int16 = TF_DataType.TF_INT16;
@@ -34,7 +37,13 @@ namespace Tensorflow
 
         public Context context = new Context(new ContextOptions(), new Status());
 
-        public Session defaultSession;
+
+        public tensorflow()
+        {
+            _defaultSessionFactory = new ThreadLocal<Session>(() => new Session());
+        }
+
+        public Session defaultSession => _defaultSessionFactory.Value;
 
         public RefVariable Variable<T>(T data,
             bool trainable = true,
@@ -64,17 +73,17 @@ namespace Tensorflow
 
         public Session Session()
         {
-            return new Session();
+            return new Session().as_default();
         }
 
         public Session Session(Graph graph, SessionOptions opts = null)
         {
-            return new Session(graph, opts: opts);
+            return new Session(graph, opts: opts).as_default();
         }
 
         public Session Session(SessionOptions opts)
         {
-            return new Session(null, opts);
+            return new Session(null, opts).as_default();
         }
 
         public void __init__()

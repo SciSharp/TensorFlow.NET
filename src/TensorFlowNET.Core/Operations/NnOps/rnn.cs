@@ -145,7 +145,7 @@ namespace Tensorflow.Operations
             {
                 var ta = new TensorArray(dtype: dtype_,
                                         size: time_steps,
-                                        element_shape: element_shape,
+                                        element_shape: new[] { element_shape },
                                         tensor_array_name: base_name + name);
                 return ta;
             };

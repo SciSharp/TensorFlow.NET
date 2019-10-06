@@ -207,7 +207,7 @@ namespace TensorFlowNET.UnitTest
         public void ImportGraphDef()
         {
             var s = new Status();
-            var graph = new Graph();
+            var graph = new Graph().as_default();
 
             // Create a simple graph.
             c_test_util.Placeholder(graph, s);
@@ -221,7 +221,7 @@ namespace TensorFlowNET.UnitTest
 
             // Import it, with a prefix, in a fresh graph.
             graph.Dispose();
-            graph = new Graph();
+            graph = new Graph().as_default();
             var opts = c_api.TF_NewImportGraphDefOptions();
             c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported");
             c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
@@ -359,7 +359,7 @@ namespace TensorFlowNET.UnitTest
         public void ImportGraphDef_WithReturnOutputs()
         {
             var s = new Status();
-            var graph = new Graph();
+            var graph = new Graph().as_default();
 
             // Create a graph with two nodes: x and 3
             c_test_util.Placeholder(graph, s);
@@ -375,7 +375,7 @@ namespace TensorFlowNET.UnitTest
 
             // Import it in a fresh graph with return outputs.
             graph.Dispose();
-            graph = new Graph();
+            graph = new Graph().as_default();
             var opts = new ImportGraphDefOptions();
             opts.AddReturnOutput("feed", 0);
             opts.AddReturnOutput("scalar", 0);
@@ -411,17 +411,18 @@ namespace TensorFlowNET.UnitTest
 
         }
 
+        [Ignore]
         [TestMethod]
         public void ImportGraphMeta()
         {
             var dir = "my-save-dir/";
             using (var sess = tf.Session())
             {
-                var new_saver = tf.train.import_meta_graph(@"D:\tmp\resnet_v2_101_2017_04_14\eval.graph");
+                var new_saver = tf.train.import_meta_graph(dir + "my-model-10000.meta");
                 new_saver.restore(sess, dir + "my-model-10000");
                 var labels = tf.constant(0, dtype: tf.int32, shape: new int[] { 100 }, name: "labels");
                 var batch_size = tf.size(labels);
-                var logits = (tf.get_collection("logits") as List<ITensorOrOperation>)[0] as Tensor;
+                var logits = tf.get_collection<ITensorOrOperation>("logits")[0] as Tensor;
                 var loss = tf.losses.sparse_softmax_cross_entropy(labels: labels,
                                                 logits: logits);
             }

@@ -15,62 +15,77 @@
 ******************************************************************************/
 
 using System;
+using System.IO;
+using System.Runtime.CompilerServices;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public class Session : BaseSession, IObjectLife
     {
-        public Session(string target = "", Graph g = null)
-            : base(target, g, null)
-        {
+        public Session(string target = "", Graph g = null) : base(target, g, null)
+        { }
 
-        }
-
-        public Session(IntPtr handle, Graph g = null)
-            : base("", g, null)
+        public Session(IntPtr handle, Graph g = null) : base("", g, null)
         {
             _handle = handle;
         }
 
-        public Session(Graph g, SessionOptions opts = null, Status s = null)
-            : base("", g, opts)
-        {
-            if (s == null)
-                s = new Status();
-        }
+        public Session(Graph g, SessionOptions opts = null, Status s = null) : base("", g, opts, s)
+        { }
 
         public Session as_default()
         {
-            tf.defaultSession = this;
+            tf._defaultSessionFactory.Value = this;
             return this;
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public static Session LoadFromSavedModel(string path)
         {
-            var graph = c_api.TF_NewGraph();
-            var status = new Status();
-            var opt = new SessionOptions();
+            lock (Locks.ProcessWide)
+            {
+                var graph = c_api.TF_NewGraph();
+                var status = new Status();
+                var opt = new SessionOptions();
 
-            var tags = new string[] { "serve" };
-            var buffer = new TF_Buffer();
+                var tags = new string[] {"serve"};
+                var buffer = new TF_Buffer();
 
-            var sess = c_api.TF_LoadSessionFromSavedModel(opt,
-                IntPtr.Zero,
-                path,
-                tags,
-                tags.Length,
-                graph,
-                ref buffer,
-                status);
+                IntPtr sess;
+                try
+                {
+                    sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                        IntPtr.Zero,
+                        path,
+                        tags,
+                        tags.Length,
+                        graph,
+                        ref buffer,
+                        status);
+                    status.Check(true);
+                } catch (TensorflowException ex) when (ex.Message.Contains("Could not find SavedModel"))
+                {
+                    status = new Status();
+                    sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                        IntPtr.Zero,
+                        Path.GetFullPath(path),
+                        tags,
+                        tags.Length,
+                        graph,
+                        ref buffer,
+                        status);
+                    status.Check(true);
+                }
 
-            // load graph bytes
-            // var data = new byte[buffer.length];
-            // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
-            // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
-            status.Check(true);
+                // load graph bytes
+                // var data = new byte[buffer.length];
+                // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
+                // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
 
-            return new Session(sess, g: new Graph(graph).as_default());
+                return new Session(sess, g: new Graph(graph)).as_default();
+            }
         }
 
         public static implicit operator IntPtr(Session session) => session._handle;

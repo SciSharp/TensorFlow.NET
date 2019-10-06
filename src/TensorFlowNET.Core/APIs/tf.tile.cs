@@ -20,12 +20,8 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public Tensor tile(Tensor input,
-                Tensor multiples,
+        public Tensor tile<T>(Tensor input,
+                T multiples,
                 string name = null) => gen_array_ops.tile(input, multiples, name);
-        public Tensor tile(NDArray input,
-                int[] multiples,
-                string name = null) => gen_array_ops.tile(input, multiples, name);
-
     }
 }

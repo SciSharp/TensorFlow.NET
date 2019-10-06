@@ -33,5 +33,22 @@ namespace TensorFlowNET.UnitTest.Basics
                 }
             }
         }
+
+        [TestMethod]
+        public void Bug397()
+        {
+            // fix bug https://github.com/SciSharp/TensorFlow.NET/issues/397
+            var W = tf.Variable(-1, name: "weight_" + 1, dtype: tf.float32);
+            var init = tf.global_variables_initializer();
+            var reluEval = tf.nn.relu(W);
+            var nonZero = tf.assign(W, reluEval);
+
+            using (var sess = tf.Session())
+            {
+                sess.run(init);
+                float result = nonZero.eval();
+                Assert.IsTrue(result == 0f);
+            }
+        }
     }
 }

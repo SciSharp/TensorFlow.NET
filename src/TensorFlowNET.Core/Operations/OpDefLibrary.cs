@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Tensorflow.OpDef.Types;
 using static Tensorflow.Binding;
+using Google.Protobuf;
 
 namespace Tensorflow
 {
@@ -194,7 +195,9 @@ namespace Tensorflow
                     if (attrs.ContainsKey(key))
                     {
                         attr_protos[key] = SetAttrValue(op_def, attr_def, attrs[key]);
-                    } else {
+                    }
+                    else
+                    {
                         if (attr_def.DefaultValue == null)
                         {
                             throw new TypeError("Missing required positional argument " + key);
@@ -311,6 +314,16 @@ namespace Tensorflow
                 input_types.AddRange(base_types);
         }
 
+        public ByteString _MakeStr(string value, AttrDef attr_def)
+        {
+            return ByteString.CopyFromUtf8(value ?? string.Empty);
+        }
+
+        public TensorShapeProto _MakeShape(TensorShape shape, AttrDef attr_def)
+        {
+            return shape.as_proto();
+        }
+
         public DataType _MakeType(TF_DataType v, AttrDef attr_def)
         {
             return v.as_base_dtype().as_datatype_enum();
@@ -330,7 +343,7 @@ namespace Tensorflow
             switch (attr_def.Type)
             {
                 case "string":
-                    attr_value.S = Google.Protobuf.ByteString.CopyFromUtf8((string)value);
+                    attr_value.S = _MakeStr((string)value, attr_def);
                     break;
                 case "type":
                     attr_value.Type = _MakeType((TF_DataType)value, attr_def);
@@ -363,6 +376,9 @@ namespace Tensorflow
                     else if (value is int[] val3)
                         attr_value.Shape = tensor_util.as_shape(val3);
 
+                    break;
+                case "list(shape)":
+                    attr_value.List.Shape.AddRange((value as TensorShape[]).Select(x => _MakeShape(x, attr_def)));
                     break;
                 default:
                     throw new TypeError($"SetAttrValue: can't not convert attr_def.Type '{attr_def.Type}' to protos.");

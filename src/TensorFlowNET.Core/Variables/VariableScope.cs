@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -50,6 +51,7 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             object initializer = null, // IInitializer or Tensor
             bool? trainable = null,
+            List<string> collections = null,
             bool? use_resource = null,
             bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
@@ -67,6 +69,7 @@ namespace Tensorflow
                     initializer: initializer,
                     reuse: resue,
                     trainable: trainable,
+                    collections: collections,
                     synchronization: synchronization,
                     aggregation: aggregation);
             });

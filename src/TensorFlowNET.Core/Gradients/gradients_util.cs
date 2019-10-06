@@ -61,7 +61,7 @@ namespace Tensorflow
                     string grad_scope = scope;
                     // Get a uid for this call to gradients that can be used to help
                     // cluster ops for compilation.
-                    var gradient_uid = ops.get_default_graph().unique_name("uid");
+                    var gradient_uid = curr_graph.unique_name("uid");
                     ys = ops.convert_n_to_tensor_or_indexed_slices(ys, name: "y");
                     xs = ops.internal_convert_n_to_tensor_or_indexed_slices(xs, name: "x", as_ref: true);
                     grad_ys = _DefaultGradYs(grad_ys, ys, colocate_gradients_with_ops, gradient_uid);
@@ -80,7 +80,7 @@ namespace Tensorflow
                     var to_ops = ys.Select(x => x.op).ToList();
                     var from_ops = xs.Select(x => x.op).ToList();
                     var stop_gradient_ops = stop_gradients.Select(x => x.op).ToList();
-                    (var reachable_to_ops, var pending_count, var loop_state) = _PendingCount(to_ops, from_ops, colocate_gradients_with_ops, new List<object>(), xs);
+                    var (reachable_to_ops, pending_count, loop_state) = _PendingCount(to_ops, from_ops, colocate_gradients_with_ops, new List<object>(), xs);
 
                     foreach (var (y, grad_y) in zip(ys, grad_ys))
                         _SetGrad(grads, y, grad_y);
@@ -117,23 +117,52 @@ namespace Tensorflow
                         Tensor[] in_grads = null;
                         var is_partitioned_call = _IsPartitionedCall(op);
                         var is_func_call = false;
-                        var has_out_grads = true;
+                        var has_out_grads = out_grads.Exists(x => x != null);
                         if (has_out_grads && !stop_ops.Contains(op))
                         {
                             // A grad_fn must be defined, either as a function or as None
                             // for ops that do not have gradients.
-                            var grad_fn = ops.get_gradient_function(op);
 
-                            if (is_func_call)
+                            Func<Operation, Tensor[], Tensor[]> grad_fn = null;
+                            try
                             {
-
+                                grad_fn = ops.get_gradient_function(op);
                             }
-                            else
+                            catch (LookupError)
                             {
+                                if (is_func_call)
+                                {
+                                    if (is_partitioned_call)
+                                    {
+
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                                else
+                                {
+                                    throw new LookupError($"No gradient defined for operation '{op.name}' (op type: {op.type})");
+                                }
+                            }
+
+                            // if (loop_state)
+                                //loop_state.EnterGradWhileContext(op, before: false);
+
+                            if ((is_func_call || grad_fn != null) && has_out_grads)
+                            {
+                                // NOTE: If _AggregatedGrads didn't compute a value for the i'th
+                                // output, it means that the cost does not depend on output[i],
+                                // therefore dC/doutput[i] is 0.
                                 foreach (var (i, out_grad) in enumerate(out_grads))
                                 {
-                                    if (out_grad == null)
+                                    if (out_grad == null &&
+                                        (grad_fn == null || _IsTrainable(op.outputs[i])))
                                     {
+                                        // Only trainable outputs or outputs for a function call that
+                                        // will use SymbolicGradient get a zero gradient. Gradient
+                                        // functions should ignore the gradient for other outputs.
                                         if (loop_state != null)
                                             ;
                                         else
@@ -143,19 +172,31 @@ namespace Tensorflow
 
                                 tf_with(ops.name_scope(op.name + "_grad"), scope1 =>
                                 {
-                                    string name1 = scope1;
                                     if (grad_fn != null)
                                     {
-                                        in_grads = _MaybeCompile(grad_scope, op, out_grads.Select(x => x[0]).ToArray(), null, grad_fn);
-                                        _VerifyGeneratedGradients(in_grads, op);
+                                        in_grads = _MaybeCompile(grad_scope,
+                                            op,
+                                            out_grads.Where(x => x != null).Select(x => x[0]).ToArray(),
+                                            null,
+                                            grad_fn);
                                     }
-
+                                    else
+                                    {
+                                        throw new NotImplementedException("lambda: _SymGrad(op, out_grads)");
+                                    }
+                                    _VerifyGeneratedGradients(in_grads, op);
                                     if (gate_gradients && in_grads.Count(x => x != null) > 1)
                                     {
                                         ops._colocate_with_for_gradient(null, gradient_uid, ignore_existing: true);
                                         in_grads = control_flow_ops.tuple(in_grads);
                                     }
                                 });
+                            }
+                            else
+                            {
+                                // If no grad_fn is defined or none of out_grads is available,
+                                // just propagate a list of None backwards.
+                                in_grads = new Tensor[_NonEagerInputs(op, xs).Count()];
                             }
                         }
                         else
@@ -168,11 +209,11 @@ namespace Tensorflow
                         {
                             if (in_grad != null)
                             {
-                                if (in_grad is Tensor &&
+                                if (!(in_grad is null) &&
                                     in_grad.Tag == null && // maybe a IndexedSlice
                                     t_in.dtype != TF_DataType.TF_RESOURCE)
                                 {
-                                    in_grad.shape = t_in.shape;
+                                    in_grad.set_shape(t_in.TensorShape);
                                 }
 
                                 _SetGrad(grads, t_in, in_grad);

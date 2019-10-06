@@ -22,16 +22,18 @@ namespace Tensorflow
 
         public static Tensor dynamic_stitch(Tensor[] indices, Tensor[] data, string name = null)
         {
-            var _attr_N = indices.Length;
             var _op = _op_def_lib._apply_op_helper("DynamicStitch", name, new { indices, data });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
-        public static (Tensor, Tensor) tensor_array_v3(Tensor size, TF_DataType dtype = TF_DataType.DtInvalid, 
-            int[] element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
+        public static (Tensor, Tensor) tensor_array_v3<T>(T size, TF_DataType dtype = TF_DataType.DtInvalid, 
+            TensorShape[] element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
             bool identical_element_shapes = false, string tensor_array_name = "tensor_array_name", string name = null)
         {
+            if (tensor_array_name == null)
+                tensor_array_name = string.Empty;
+
             var _op = _op_def_lib._apply_op_helper("TensorArrayV3", name, new
             {
                 size,
@@ -43,7 +45,161 @@ namespace Tensorflow
                 tensor_array_name
             });
 
-            return (null, null);
+            return (_op.outputs[0], _op.outputs[1]);
+        }
+
+        public static Tensor tensor_array_scatter_v3(Tensor handle, Tensor indices, Tensor value, 
+            Tensor flow_in, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArrayScatterV3", name, new
+            {
+                handle,
+                indices,
+                value,
+                flow_in
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor padding_fifo_queue_v2(TF_DataType[] component_types, TensorShape[] shapes, 
+            int capacity = -1, string container = "", string shared_name = "", 
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("PaddingFIFOQueueV2", name, new
+            {
+                component_types,
+                shapes,
+                capacity,
+                container,
+                shared_name
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor fifo_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+            int capacity = -1, string container = "", string shared_name = "",
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("FIFOQueueV2", name, new
+            {
+                component_types,
+                shapes,
+                capacity,
+                container,
+                shared_name
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor priority_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+            int capacity = -1, string container = "", string shared_name = "",
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("PriorityQueueV2", name, new
+            {
+                component_types,
+                shapes,
+                capacity,
+                container,
+                shared_name
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor random_shuffle_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+            int capacity = -1, int min_after_dequeue = 0, int seed = 0, int seed2 = 0,
+            string container = "", string shared_name = "", string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("RandomShuffleQueueV2", name, new
+            {
+                component_types,
+                shapes,
+                capacity,
+                min_after_dequeue,
+                seed,
+                seed2,
+                container,
+                shared_name
+            });
+
+            return _op.output;
+        }
+
+        public static Operation queue_enqueue(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueEnqueue", name, new
+            {
+                handle,
+                components,
+                timeout_ms
+            });
+
+            return _op;
+        }
+
+        public static Operation queue_enqueue_v2(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueEnqueueV2", name, new
+            {
+                handle,
+                components,
+                timeout_ms
+            });
+
+            return _op;
+        }
+
+        public static Tensor[] queue_dequeue_v2(Tensor handle, TF_DataType[] component_types, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueDequeueV2", name, new
+            {
+                handle,
+                component_types,
+                timeout_ms
+            });
+
+            return _op.outputs;
+        }
+
+        public static Tensor[] queue_dequeue(Tensor handle, TF_DataType[] component_types, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueDequeue", name, new
+            {
+                handle,
+                component_types,
+                timeout_ms
+            });
+
+            return _op.outputs;
+        }
+
+        public static Operation queue_enqueue_many_v2(Tensor handle, Tensor[] components, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueEnqueueManyV2", name, new
+            {
+                handle,
+                components,
+                timeout_ms
+            });
+
+            return _op;
+        }
+
+        public static Tensor[] queue_dequeue_many_v2(Tensor handle, int n, TF_DataType[] component_types, int timeout_ms = -1, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("QueueDequeueManyV2", name, new
+            {
+                handle,
+                n,
+                component_types,
+                timeout_ms
+            });
+
+            return _op.outputs;
         }
     }
 }

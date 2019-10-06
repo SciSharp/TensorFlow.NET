@@ -42,6 +42,7 @@ namespace Tensorflow
             object initializer = null, // IInitializer or Tensor
             bool? reuse = null,
             bool? trainable = null,
+            List<string> collections = null,
             bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
             VariableAggregation aggregation = VariableAggregation.None)
@@ -54,6 +55,7 @@ namespace Tensorflow
                 dtype: dtype, 
                 initializer: initializer,
                 trainable: trainable,
+                collections: collections,
                 validate_shape: validate_shape,
                 synchronization: synchronization,
                 aggregation: aggregation);
@@ -64,6 +66,7 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             object initializer = null,
             bool? trainable = null,
+            List<string> collections = null,
             bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
             VariableAggregation aggregation = VariableAggregation.None)
@@ -77,6 +80,7 @@ namespace Tensorflow
                     dtype: dtype,
                     initializer: init,
                     trainable: trainable,
+                    collections: collections,
                     validate_shape: validate_shape,
                     synchronization: synchronization,
                     aggregation: aggregation);
@@ -112,6 +116,7 @@ namespace Tensorflow
             IInitializer initializer = null,
             bool reuse = false,
             bool? trainable = null,
+            List<string> collections = null,
             bool validate_shape = false,
             bool? use_resource = null,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
@@ -157,6 +162,7 @@ namespace Tensorflow
                     v = variable_scope.default_variable_creator(init_val,
                         name: name,
                         trainable: trainable,
+                        collections: collections,
                         dtype: variable_dtype,
                         validate_shape: validate_shape,
                         synchronization: synchronization,

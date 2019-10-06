@@ -175,6 +175,10 @@ namespace Tensorflow
 
                     if (_nodes_by_name.ContainsKey(op_name))
                         return _nodes_by_name[op_name].outputs[out_n];
+                    else
+                        throw new KeyError($"The name {name} refers to a Tensor which does not " +
+                            $"exist. The operation, {op_name}, does not exist in the " +
+                            "graph.");
                 }
                 else if (!name.Contains(":") & allow_operation)
                 {
@@ -223,6 +227,10 @@ namespace Tensorflow
 
         public void add_to_collection<T>(string name, T value)
         {
+            if(name == "update_ops")
+            {
+
+            }
             _check_not_finalized();
             if (_collections.ContainsKey(name))
                 (_collections[name] as List<T>).Add(value);
@@ -242,7 +250,7 @@ namespace Tensorflow
                 throw new RuntimeError("Graph is finalized and cannot be modified.");
         }
 
-        public unsafe Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes,
+        public Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes,
             TF_DataType[] input_types = null, string name = null,
             Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)
         {
@@ -282,6 +290,11 @@ namespace Tensorflow
             Console.WriteLine();*/
 
             return op;
+        }
+
+        public void device(string device_name)
+        {
+            throw new NotImplementedException("");
         }
 
         private void _create_op_helper(Operation op, bool compute_device = true)
@@ -420,14 +433,36 @@ namespace Tensorflow
 
         public List<T> get_collection<T>(string name, string scope = null)
         {
-            return _collections.ContainsKey(name) ? _collections[name] as List<T> : new List<T>();
+            List<T> t = default;
+            var collection = _collections.ContainsKey(name) ? _collections[name] : new List<T>();
+            switch (collection)
+            {
+                case List<VariableV1> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<ResourceVariable> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<RefVariable> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<Tensor> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<Operation> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                default:
+                    throw new NotImplementedException($"get_collection<{typeof(T).FullName}>");
+            }
+            return t;
         }
 
-        public object get_collection_ref(string name)
+        public List<T> get_collection_ref<T>(string name)
         {
             if (!_collections.ContainsKey(name))
-                _collections[name] = new List<object>();
-            return _collections[name];
+                _collections[name] = new List<T>();
+            return _collections[name] as List<T>;
         }
 
         public void prevent_feeding(Tensor tensor)

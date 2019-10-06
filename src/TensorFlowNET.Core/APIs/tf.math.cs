@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Operations;
+
 namespace Tensorflow
 {
     public partial class tensorflow
@@ -41,6 +43,15 @@ namespace Tensorflow
 
         public Tensor add<Tx, Ty>(Tx a, Ty b, string name = null) 
             => gen_math_ops.add(a, b, name: name);
+
+        /// <summary>
+        /// Adds all input tensors element-wise.
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="name"></param>
+        /// <returns>A `Tensor` of same shape and type as the elements of `inputs`.</returns>
+        public Tensor add_n(Tensor[] inputs, string name = null)
+            => math_ops.add_n(inputs, name: name);
 
         /// <summary>
         /// Computes atan of x element-wise.
@@ -211,6 +222,36 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
             => gen_math_ops._clip_by_value(t, clip_value_min, clip_value_max);
+        
+        /// <summary>
+        ///    Clips tensor values to a specified min and max.
+        /// </summary>
+        /// <param name="t">
+        ///    A <c>Tensor</c>.
+        /// </param>
+        /// <param name="clip_value_min">
+        ///    A 0-D (scalar) <c>Tensor</c>, or a <c>Tensor</c> with the same shape
+        ///    as <c>t</c>. The minimum value to clip by.
+        /// </param>
+        /// <param name="clip_value_max">
+        ///    A 0-D (scalar) <c>Tensor</c>, or a <c>Tensor</c> with the same shape
+        ///    as <c>t</c>. The maximum value to clip by.
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'ClipByValue'.
+        /// </param>
+        /// <returns>
+        ///    A clipped <c>Tensor</c> with the same shape as input 't'.
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    Given a tensor <c>t</c>, this operation returns a tensor of the same type and
+        ///    shape as <c>t</c> with its values clipped to <c>clip_value_min</c> and <c>clip_value_max</c>.
+        ///    Any values less than <c>clip_value_min</c> are set to <c>clip_value_min</c>. Any values
+        ///    greater than <c>clip_value_max</c> are set to <c>clip_value_max</c>.
+        /// </remarks>
+        public Tensor clip_by_value (Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = "ClipByValue") 
+            => gen_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
 
         public Tensor sub(Tensor a, Tensor b) 
             => gen_math_ops.sub(a, b);
@@ -300,6 +341,16 @@ namespace Tensorflow
             => gen_math_ops.neg(x, name);
 
         /// <summary>
+        /// Returns the truth value of (x != y) element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns>A `Tensor` of type bool with the same size as that of x or y.</returns>
+        public Tensor not_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+            => math_ops.not_equal(x, y, name: name);
+
+        /// <summary>
         /// Divides x / y elementwise (using Python 2 division operator semantics).
         /// </summary>
         /// <param name="x"></param>
@@ -316,20 +367,83 @@ namespace Tensorflow
             => gen_math_ops.pow(x, y);
 
         /// <summary>
+        /// Divides `x / y` elementwise, rounding toward the most negative integer.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns>`x / y` rounded down.</returns>
+        public Tensor floordiv(Tensor x, Tensor y, string name = null)
+            => math_ops.floordiv(x, y, name: name);
+
+        /// <summary>
+        /// Divides x / y elementwise (using Python 3 division operator semantics).
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns>`x / y` evaluated in floating point.</returns>
+        public static Tensor truediv(Tensor x, Tensor y, string name = null)
+            => math_ops.truediv(x, y, name: name);
+
+        public Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
+            => math_ops.range(start, limit: limit, delta: delta, dtype: dtype, name: name);
+
+        /// <summary>
+        /// Computes the "logical or" of elements across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input_tensor">The boolean tensor to reduce.</param>
+        /// <param name="axis">The dimensions to reduce.</param>
+        /// <param name="keepdims">If true, retains reduced dimensions with length 1.</param>
+        /// <param name="name"></param>
+        /// <returns>The reduced tensor.</returns>
+        public Tensor reduce_any(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_any(input_tensor, axis: axis, keepdims: keepdims, name: name);
+
+        public Tensor reduce_any(Tensor input_tensor, int axis = 0, bool keepdims = false, string name = null)
+            => math_ops.reduce_any(input_tensor, axis: new[] { axis }, keepdims: keepdims, name: name);
+
+        /// <summary>
+        /// Computes the "logical and" of elements across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input_tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        /// <returns>The reduced tensor.</returns>
+        public Tensor reduce_all(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_all(input_tensor, axis: axis, keepdims: keepdims, name: name);
+
+        /// <summary>
+        /// Computes the product of elements across dimensions of a tensor.
+        /// </summary>
+        /// <param name="input_tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor reduce_prod(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_prod(input_tensor, axis: axis, keepdims: keepdims, name: name);
+
+        /// <summary>
         /// Computes the sum of elements across dimensions of a tensor.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="axis"></param>
         /// <returns></returns>
-        public Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null)
+        public Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null, 
+            bool keepdims = false, string name = null)
         {
             if(!axis.HasValue && reduction_indices.HasValue)
                 return math_ops.reduce_sum(input, reduction_indices.Value);
-            return math_ops.reduce_sum(input);
+            else if (axis.HasValue && !reduction_indices.HasValue)
+                return math_ops.reduce_sum(input, axis.Value);
+            return math_ops.reduce_sum(input, keepdims: keepdims, name: name);
         }
 
-        public Tensor reduce_sum(Tensor input, int axis, int? reduction_indices = null)
-            => math_ops.reduce_sum(input, axis);
+        public Tensor reduce_sum(Tensor input, int[] axis, int? reduction_indices = null, 
+            bool keepdims = false, string name = null)
+            => math_ops.reduce_sum(input, axis, keepdims: keepdims, name: name);
 
         /// <summary>
         /// Computes the maximum of elements across dimensions of a tensor.

@@ -90,7 +90,7 @@ namespace Tensorflow.Layers
         {
             foreach(var name in collection_list)
             {
-                var collection = ops.get_collection_ref(name) as List<object>;
+                var collection = ops.get_collection_ref<Operation>(name);
 
                 foreach (var element in elements)
                     if (!collection.Contains(element))

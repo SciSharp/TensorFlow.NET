@@ -28,7 +28,6 @@ using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using NumSharp.Utilities;
 using Tensorflow.Framework;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -106,10 +105,13 @@ namespace Tensorflow
 
                 if (_handle == IntPtr.Zero)
                 {
-                    var status = new Status();
-                    c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, status);
-                    status.Check();
-                } else
+                    using (var status = new Status())
+                    {
+                        c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, status);
+                        status.Check();
+                    }
+                }
+                else
                 {
                     for (int i = 0; i < rank; i++)
                         dims[i] = c_api.TF_Dim(_handle, i);
@@ -120,37 +122,31 @@ namespace Tensorflow
 
             set
             {
-                var status = new Status();
+                using (var status = new Status())
+                {
+                    if (value == null)
+                        c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
+                    else
+                        c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
 
-                if (value == null)
-                    c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
-                else
-                    c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
+                    status.Check(true);
+                }
             }
         }
 
         public int[] _shape_tuple()
         {
-            return (int[]) shape.Clone();
+            return rank < 0 ? null : shape;
         }
 
-        public TensorShape TensorShape => tensor_util.to_shape(shape);
+        public TensorShape TensorShape => rank < 0 ? new TensorShape() : tensor_util.to_shape(shape);
 
         /// <summary>
         ///     Updates the shape of this tensor.
         /// </summary>
         public void set_shape(TensorShape shape) 
         {
-            this.shape = (int[]) shape.dims.Clone();
-        }
-
-        /// <summary>
-        ///     Updates the shape of this tensor.
-        /// </summary>
-        [Obsolete("Please use set_shape(TensorShape shape) instead.", false)]
-        public void SetShape(TensorShape shape) 
-        {
-            this.shape = (int[]) shape.dims.Clone();
+            this.shape = shape.rank > 0 ? shape.dims : null;
         }
 
         /// <summary>
@@ -164,6 +160,7 @@ namespace Tensorflow
 
         /// <summary>
         /// number of dimensions <br></br>
+        /// -1 Unknown  <br></br>
         /// 0	Scalar (magnitude only) <br></br>
         /// 1	Vector (magnitude and direction) <br></br>
         /// 2	Matrix (table of numbers) <br></br>
@@ -177,11 +174,13 @@ namespace Tensorflow
             {
                 if (_handle == IntPtr.Zero)
                 {
-                    var status = new Status();
-                    var output = _as_tf_output();
-                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
-                    status.Check();
-                    return ndim;
+                    using (var status = new Status())
+                    {
+                        var output = _as_tf_output();
+                        int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
+                        status.Check();
+                        return ndim;
+                    }
                 }
 
                 return c_api.TF_NumDims(_handle);
@@ -260,31 +259,31 @@ namespace Tensorflow
 		                switch (dtype.as_numpy_dtype().GetTypeCode())
 		                {
 			                %foreach supported_dtypes,supported_dtypes_lowercase%
-			                case NPTypeCode.#1: return new T[] {Converts.ChangeType<T>(*(#2*) buffer, NPTypeCode.#1)};
+			                case NPTypeCode.#1: return new T[] {Converts.ChangeType<T>(*(#2*) buffer)};
 			                %
-			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this, NPTypeCode.String)};
+			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this)};
 			                default:
 				                throw new NotSupportedException();
 		                }
 		                #endregion
 #else
 		                #region Compute
-		                switch (dtype.as_numpy_dtype()?.GetTypeCode())
+		                switch (dtype.as_numpy_dtype().GetTypeCode())
 		                {
-			                case NPTypeCode.Boolean: return new T[] {Converts.ChangeType<T>(*(bool*) buffer, NPTypeCode.Boolean)};
-			                case NPTypeCode.Byte: return new T[] {Converts.ChangeType<T>(*(byte*) buffer, NPTypeCode.Byte)};
-			                case NPTypeCode.Int16: return new T[] {Converts.ChangeType<T>(*(short*) buffer, NPTypeCode.Int16)};
-			                case NPTypeCode.UInt16: return new T[] {Converts.ChangeType<T>(*(ushort*) buffer, NPTypeCode.UInt16)};
-			                case NPTypeCode.Int32: return new T[] {Converts.ChangeType<T>(*(int*) buffer, NPTypeCode.Int32)};
-			                case NPTypeCode.UInt32: return new T[] {Converts.ChangeType<T>(*(uint*) buffer, NPTypeCode.UInt32)};
-			                case NPTypeCode.Int64: return new T[] {Converts.ChangeType<T>(*(long*) buffer, NPTypeCode.Int64)};
-			                case NPTypeCode.UInt64: return new T[] {Converts.ChangeType<T>(*(ulong*) buffer, NPTypeCode.UInt64)};
-			                case NPTypeCode.Char: return new T[] {Converts.ChangeType<T>(*(char*) buffer, NPTypeCode.Char)};
-			                case NPTypeCode.Double: return new T[] {Converts.ChangeType<T>(*(double*) buffer, NPTypeCode.Double)};
-			                case NPTypeCode.Single: return new T[] {Converts.ChangeType<T>(*(float*) buffer, NPTypeCode.Single)};
-			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this, NPTypeCode.String)};
+			                case NPTypeCode.Boolean: return new T[] {Converts.ChangeType<T>(*(bool*) buffer)};
+			                case NPTypeCode.Byte: return new T[] {Converts.ChangeType<T>(*(byte*) buffer)};
+			                case NPTypeCode.Int16: return new T[] {Converts.ChangeType<T>(*(short*) buffer)};
+			                case NPTypeCode.UInt16: return new T[] {Converts.ChangeType<T>(*(ushort*) buffer)};
+			                case NPTypeCode.Int32: return new T[] {Converts.ChangeType<T>(*(int*) buffer)};
+			                case NPTypeCode.UInt32: return new T[] {Converts.ChangeType<T>(*(uint*) buffer)};
+			                case NPTypeCode.Int64: return new T[] {Converts.ChangeType<T>(*(long*) buffer)};
+			                case NPTypeCode.UInt64: return new T[] {Converts.ChangeType<T>(*(ulong*) buffer)};
+			                case NPTypeCode.Char: return new T[] {Converts.ChangeType<T>(*(char*) buffer)};
+			                case NPTypeCode.Double: return new T[] {Converts.ChangeType<T>(*(double*) buffer)};
+			                case NPTypeCode.Single: return new T[] {Converts.ChangeType<T>(*(float*) buffer)};
+			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this)};
 			                default:
-                                throw new NotSupportedException();
+				                throw new NotSupportedException();
 		                }
 		                #endregion
 #endif
@@ -436,128 +435,49 @@ namespace Tensorflow
             return ops._eval_using_default_session(this, feed_dict, graph, session);
         }
 
-        public Tensor slice(Slice slice)
-        {
-            var slice_spec = new int[] {slice.Start.Value};
-            var begin = new List<int>();
-            var end = new List<int>();
-            var strides = new List<int>();
-
-            var index = 0;
-            var (new_axis_mask, shrink_axis_mask) = (0, 0);
-            var (begin_mask, end_mask) = (0, 0);
-            var ellipsis_mask = 0;
-
-            foreach (var s in slice_spec)
-            {
-                begin.Add(s);
-                if (slice.Stop.HasValue)
-                {
-                    end.Add(slice.Stop.Value);
-                } else
-                {
-                    end.Add(0);
-                    end_mask |= (1 << index);
-                }
-
-                strides.Add(slice.Step);
-
-                index += 1;
-            }
-
-            return tf_with(ops.name_scope(null, "strided_slice", new {begin, end, strides}), scope =>
-            {
-                string name = scope;
-                if (begin != null)
-                {
-                    var (packed_begin, packed_end, packed_strides) =
-                        (array_ops.stack(begin.ToArray()),
-                            array_ops.stack(end.ToArray()),
-                            array_ops.stack(strides.ToArray()));
-
-                    return gen_array_ops.strided_slice(
-                        this,
-                        packed_begin,
-                        packed_end,
-                        packed_strides,
-                        begin_mask: begin_mask,
-                        end_mask: end_mask,
-                        shrink_axis_mask: shrink_axis_mask,
-                        new_axis_mask: new_axis_mask,
-                        ellipsis_mask: ellipsis_mask,
-                        name: name);
-                }
-
-                throw new NotImplementedException("");
-            });
-        }
-
-        public Tensor slice(int start)
-        {
-            var slice_spec = new int[] {start};
-            var begin = new List<int>();
-            var end = new List<int>();
-            var strides = new List<int>();
-
-            var index = 0;
-            var (new_axis_mask, shrink_axis_mask) = (0, 0);
-            var (begin_mask, end_mask) = (0, 0);
-            var ellipsis_mask = 0;
-
-            foreach (var s in slice_spec)
-            {
-                begin.Add(s);
-                end.Add(s + 1);
-                strides.Add(1);
-                shrink_axis_mask |= (1 << index);
-                index += 1;
-            }
-
-            return tf_with(ops.name_scope(null, "strided_slice", new {begin, end, strides}), scope =>
-            {
-                string name = scope;
-                if (begin != null)
-                {
-                    var (packed_begin, packed_end, packed_strides) =
-                        (array_ops.stack(begin.ToArray()),
-                            array_ops.stack(end.ToArray()),
-                            array_ops.stack(strides.ToArray()));
-
-                    return gen_array_ops.strided_slice(
-                        this,
-                        packed_begin,
-                        packed_end,
-                        packed_strides,
-                        begin_mask: begin_mask,
-                        end_mask: end_mask,
-                        shrink_axis_mask: shrink_axis_mask,
-                        new_axis_mask: new_axis_mask,
-                        ellipsis_mask: ellipsis_mask,
-                        name: name);
-                }
-
-                throw new NotImplementedException("");
-            });
-        }
-
         public override string ToString()
         {
             // this can throw IndexOutOfRangeException 
-            //if(NDims == 0)
-            //{
-            //    switch (dtype)
-            //    {
-            //        case TF_DataType.TF_INT32:
-            //            return Data<int>()[0].ToString();
-            //    }
-            //}
-
-            return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
+            switch (rank)
+            {
+                case -1:
+                    return $"tf.Tensor '{name}' shape=<unknown> dtype={dtype}";
+                case 0:
+                    return $"tf.Tensor '{name}' shape=() dtype={dtype}";
+                default:
+                    return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
+            }
         }
 
+        /// <summary>
+        ///     Dispose any managed resources.
+        /// </summary>
+        /// <remarks>Equivalent to what you would perform inside <see cref="DisposableObject.Dispose"/></remarks>
+        protected override void DisposeManagedResources()
+        {
+            AllocationReferenceHolder = null;
+        }
+
+        [SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             c_api.TF_DeleteTensor(handle);
+
+            if (AllocationHandle == null) 
+                return;
+
+            if (AllocationType == AllocationType.GCHandle)
+            {
+                ((GCHandle) AllocationHandle).Free();
+                AllocationHandle = null;
+                AllocationType = AllocationType.None;
+            } else if (AllocationType == AllocationType.Marshal)
+            {
+                Marshal.FreeHGlobal((IntPtr) AllocationHandle);
+                AllocationHandle = null;
+                AllocationType = AllocationType.None;
+            } else
+                throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
         }
 
         public bool IsDisposed => _disposed;

@@ -59,14 +59,30 @@ namespace Tensorflow
             return return_opers;
         }
 
+        /// <summary>
+        ///     Get operation with given <paramref name="operName"/>
+        /// </summary>
+        /// <exception cref="ValueError">When <paramref name="operName"/> is not found current graph.</exception>
+        /// <exception cref="RuntimeError">When tf.get_default_graph() is not current graph.</exception>
+        /// <example>
+        ///     graph.GetOperationByName("CustomInputName");
+        /// </example>
         public Operation OperationByName(string operName)
         {
+            if (operName == null) 
+                throw new ArgumentNullException(nameof(operName));
+
             var handle = c_api.TF_GraphOperationByName(_handle, operName);
-            if(graph_key != tf.get_default_graph().graph_key)
+            if (handle == IntPtr.Zero)
+                throw new ValueError($"Could not find operation \"{operName}\" inside graph \"{_graph_key}\".");
+
+            var defaultKey = tf.get_default_graph().graph_key;
+            if (graph_key != defaultKey)
             {
-                Console.WriteLine($"Current graph is not default graph.");
-                // throw new ValueError($"Current graph is not default graph.");
+                //Console.WriteLine($"Current graph is not default graph.");
+                throw new RuntimeError($"Current graph is not default graph. Default Graph Key: {defaultKey}, Current Graph Key: {graph_key}");
             }
+
             return new Operation(handle, g: this);
         }
 

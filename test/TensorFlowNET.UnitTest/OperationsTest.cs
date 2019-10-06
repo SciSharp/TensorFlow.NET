@@ -1494,5 +1494,23 @@ namespace TensorFlowNET.UnitTest
             }
             #endregion
         }
+
+        [Ignore("Not finished yet")]
+        [TestMethod]
+        public void map_fn()
+        {
+            var a = tf.constant(new[] { 1, 2, 3, 4 });
+            var b = tf.constant(new[] { 17, 12, 11, 10 });
+            var ab = tf.stack(new[] { a, b }, 1);
+
+            Func<Tensor, Tensor> map_operation = (value_ab) =>
+            {
+                var value_a = value_ab[0];
+                var value_b = value_ab[1];
+                return value_a + value_b;
+            };
+
+            var map_result = tf.map_fn(map_operation, ab);
+        }
     }
 }

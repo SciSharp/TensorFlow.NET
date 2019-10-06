@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Tensorflow.Hub</RootNamespace>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.0.3</Version>
+    <Authors>Kerry Jiang</Authors>
+    <Company>SciSharp STACK</Company>
+    <Copyright>Apache 2.0</Copyright>
+    <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>http://scisharpstack.org</PackageProjectUrl>
+    <PackageTags>TensorFlow, SciSharp, MachineLearning</PackageTags>
+    <Description>TensorFlow Hub is a library to foster the publication, discovery, and consumption of reusable parts of machine learning models.</Description>
+    <PackageId>SciSharp.TensorFlowHub</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+    <AssemblyName>TensorFlow.Hub</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NumSharp" Version="0.20.3" />
+  </ItemGroup>
+</Project>

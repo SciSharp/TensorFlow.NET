@@ -53,7 +53,7 @@ namespace Tensorflow
                     for (int i = 0; i < NumInputs; i++)
                     {
                         var tf_output = Input(i);
-                        var op = new Operation(tf_output.oper);
+                        var op = GetOperation(tf_output.oper);
                         retval[i] = op.outputs[tf_output.index];
                     }
 

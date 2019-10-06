@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using NumSharp.Utilities;
 
 namespace Tensorflow
 {
@@ -29,9 +30,37 @@ namespace Tensorflow
     /// </summary>
     public static partial class Binding
     {
+        private static string _tostring(object obj)
+        {
+            switch (obj)
+            {
+                case NDArray nd:
+                    return nd.ToString(false);
+                case Array arr:
+                    if (arr.Rank!=1 || arr.GetType().GetElementType()?.IsArray == true)
+                        arr = Arrays.Flatten(arr);
+                    var objs = toObjectArray(arr);
+                    return $"[{string.Join(", ", objs.Select(_tostring))}]";
+                default:
+                    return obj?.ToString() ?? "null";
+            }
+
+            object[] toObjectArray(Array arr)
+            {
+                var len = arr.LongLength;
+                var ret = new object[len];
+                for (long i = 0; i < len; i++)
+                {
+                    ret[i] = arr.GetValue(i);
+                }
+
+                return ret;
+            }
+        }
+
         public static void print(object obj)
         {
-            Console.WriteLine(obj.ToString());
+            Console.WriteLine(_tostring(obj));
         }
 
         public static int len(object a)
@@ -77,11 +106,6 @@ namespace Tensorflow
                 py.__enter__();
                 action(py);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
             finally
             {
                 py.__exit__();
@@ -97,11 +121,6 @@ namespace Tensorflow
                 py.__enter__();
                 action(py);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
             finally
             {
                 py.__exit__();
@@ -116,11 +135,6 @@ namespace Tensorflow
             {
                 py.__enter__();
                 return action(py);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return default(TOut);
             }
             finally
             {
@@ -139,7 +153,7 @@ namespace Tensorflow
         {
             var a = t1.AsIterator<T>();
             var b = t2.AsIterator<T>();
-            while (a.HasNext())
+            while (a.HasNext() && b.HasNext())
                 yield return (a.MoveNext(), b.MoveNext());
         }
 
@@ -155,19 +169,13 @@ namespace Tensorflow
         {
             var a = t1.AsIterator<T1>();
             var b = t2.AsIterator<T2>();
-            while(a.HasNext())
+            while(a.HasNext() && b.HasNext())
                 yield return (a.MoveNext(), b.MoveNext());
         }
 
         public static IEnumerable<(T1, T2)> zip<T1, T2>(IEnumerable<T1> e1, IEnumerable<T2> e2)
         {
-            var iter2 = e2.GetEnumerator();
-            foreach (var v1 in e1)
-            {
-                iter2.MoveNext();
-                var v2 = iter2.Current;
-                yield return (v1, v2);
-            }
+            return e1.Zip(e2, (t1, t2) => (t1, t2));
         }
 
         public static IEnumerable<(TKey, TValue)> enumerate<TKey, TValue>(Dictionary<TKey, TValue> values)
@@ -277,39 +285,6 @@ namespace Tensorflow
             return (__memberobject__.Length > 0) ? true : false;
         }
 
-        public delegate object __object__(params object[] args);
-
-        public static __object__ getattr(object obj, string key, params Type[] ___parameter_type__)
-        {
-            var __dyn_obj__ = obj.GetType().GetMember(key);
-            if (__dyn_obj__.Length == 0)
-                throw new Exception("The object \"" + nameof(obj) + "\" doesnot have a defination \"" + key + "\"");
-            var __type__ = __dyn_obj__[0];
-            if (__type__.MemberType == System.Reflection.MemberTypes.Method)
-            {
-                try
-                {
-                    var __method__ = (___parameter_type__.Length > 0) ? obj.GetType().GetMethod(key, ___parameter_type__) : obj.GetType().GetMethod(key);
-                    return (object[] args) => __method__.Invoke(obj, args);
-                }
-                catch (System.Reflection.AmbiguousMatchException ex)
-                {
-                    throw new Exception("AmbigousFunctionMatchFound : (Probable cause : Function Overloading) Please add parameter types of the function.");
-                }
-            }
-            else if (__type__.MemberType == System.Reflection.MemberTypes.Field)
-            {
-                var __field__ = obj.GetType().GetField(key).GetValue(obj);
-                return (object[] args) => { return __field__; };
-            }
-            else if (__type__.MemberType == System.Reflection.MemberTypes.Property)
-            {
-                var __property__ = obj.GetType().GetProperty(key).GetValue(obj);
-                return (object[] args) => { return __property__; };
-            }
-            return (object[] args) => { return "NaN"; };
-        }
-
         public static IEnumerable TupleToEnumerable(object tuple)
         {
             Type t = tuple.GetType();
@@ -337,6 +312,16 @@ namespace Tensorflow
                 if (isinstance(Item1, (Type) t))
                     return true;
             return false;
+        }
+
+        public static Func<Tin1, Tout> partial<Tin1, Tout>(Func<Tin1, Tout> func, Tin1 args)
+        {
+            Func<Tin1, Tout> newfunc = (args1) =>
+            {
+                return func(args1);
+            };
+
+            return newfunc;
         }
     }
 }

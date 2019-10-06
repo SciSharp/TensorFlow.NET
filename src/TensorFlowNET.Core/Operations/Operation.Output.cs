@@ -17,13 +17,14 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public partial class Operation
     {
         public int NumOutputs => c_api.TF_OperationNumOutputs(_handle);
-        public TF_DataType OutputType(int index) => c_api.TF_OperationOutputType(new TF_Output(_handle, index));
+        public TF_DataType OutputType(int index) => c_api.TF_OperationOutputType(_tf_output(index));
 
         public int OutputListLength(string name)
         {
@@ -47,6 +48,20 @@ namespace Tensorflow
         public int OutputNumConsumers(int index) => c_api.TF_OperationOutputNumConsumers(new TF_Output(_handle, index));
 
         public TF_Output this[int index] => _tf_output(index);
+
+        /// <summary>
+        /// List this operation's output types.
+        /// </summary>
+        public TF_DataType[] _output_types
+        {
+            get
+            {
+                var output_types = range(NumOutputs)
+                    .Select(i => OutputType(i))
+                    .ToArray();
+                return output_types;
+            }
+        }
 
         public unsafe TF_Input[] OutputConsumers(int index, int max_consumers)
         {
