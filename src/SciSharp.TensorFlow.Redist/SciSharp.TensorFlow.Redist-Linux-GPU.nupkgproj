@@ -17,7 +17,7 @@
     <NoBuild>true</NoBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
 
-    <NuspecFile>Redist-Windows-GPU.nuspec</NuspecFile>
+    <NuspecFile>Redist-Linux-GPU.nuspec</NuspecFile>
     <NuspecProperties>packageId=$(PackageId);version=$(PackageVersion)</NuspecProperties>
     <NuspecBasePath>$(ProjDir)</NuspecBasePath>
 
