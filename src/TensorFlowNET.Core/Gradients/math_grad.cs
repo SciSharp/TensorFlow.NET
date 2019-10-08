@@ -58,6 +58,20 @@ namespace Tensorflow.Gradients
             return new Tensor[] { r1, r2 };
         }
 
+        [RegisterGradient("Cumsum")]
+        public static Tensor[] _CumsumGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var axis = op.inputs[1];
+            var exclusive = op.get_attr<bool>("exclusive");
+            var reverse = op.get_attr<bool>("reverse");
+            return new Tensor[]
+            {
+                math_ops.cumsum(grad, axis, exclusive: exclusive, reverse: !reverse),
+                null
+            };
+        }
+
         [RegisterGradient("DivNoNan")]
         public static Tensor[] _DivNoNanGrad(Operation op, Tensor[] grads)
         {

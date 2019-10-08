@@ -11,6 +11,39 @@ namespace TensorFlowNET.UnitTest.gradients_test
     [TestClass]
     public class GradientsTest : PythonTest
     {
+        [TestMethod]
+        public void BroadcastToGrad()
+        {
+            var graph = tf.Graph().as_default();
+
+            var x = tf.constant(2, dtype: dtypes.float32);
+            var y = tf.broadcast_to(x, (2, 4, 3));
+            var grad = tf.gradients(y, x);
+
+            using (var sess = tf.Session(graph))
+            {
+                float result = sess.run(grad[0]);
+                Assert.AreEqual(result, 24.0f);
+            }
+        }
+
+        [TestMethod]
+        public void CumsumGrad()
+        {
+            var graph = tf.Graph().as_default();
+
+            var x = tf.constant(2, dtype: dtypes.float32);
+            var y = tf.broadcast_to(x, (2, 4, 3));
+            var z = tf.cumsum(y, axis: 1);
+            var grad = tf.gradients(z, x);
+
+            using (var sess = tf.Session(graph))
+            {
+                float result = sess.run(grad[0]);
+                Assert.AreEqual(result, 60.0f);
+            }
+        }
+
         [Ignore("TODO")]
         [TestMethod]
         public void testGradients()

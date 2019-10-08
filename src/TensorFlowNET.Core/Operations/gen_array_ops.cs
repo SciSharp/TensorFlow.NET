@@ -515,5 +515,19 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+
+        /// <summary>
+        /// Broadcast an array for a compatible shape.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="shape"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor broadcast_to(Tensor input, int[] shape, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("BroadcastTo", name, args: new { input, shape, name });
+
+            return _op.outputs[0];
+        }
     }
 }
