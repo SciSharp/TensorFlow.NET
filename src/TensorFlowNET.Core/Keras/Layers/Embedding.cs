@@ -23,20 +23,23 @@ namespace Tensorflow.Keras.Layers
         private int input_dim;
         private int output_dim;
         private bool mask_zero;
-        public RefVariable embeddings;
+        public VariableV1 embeddings;
         public IInitializer embeddings_initializer;
+        int input_length;
 
         public Embedding(int input_dim, int output_dim,
             IInitializer embeddings_initializer = null,
             bool mask_zero = false,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
-            int[] input_shape = null) : base(dtype: dtype, input_shape: input_shape)
+            int[] input_shape = null,
+            int input_length = -1) : base(dtype: dtype, input_shape: input_shape ?? new[] { input_length })
         {
             this.input_dim = input_dim;
             this.output_dim = output_dim;
             this.embeddings_initializer = embeddings_initializer == null ? tf.uniform_initializer : embeddings_initializer;
             this.mask_zero = mask_zero;
             supports_masking = mask_zero;
+            this.input_length = input_length;
         }
 
         protected override void build(TensorShape input_shape)
@@ -45,6 +48,16 @@ namespace Tensorflow.Keras.Layers
                 initializer: embeddings_initializer,
                 name: "embeddings");
             built = true;
+        }
+
+        protected override Tensor call(Tensor inputs, Tensor training = null)
+        {
+            var dtype = inputs.dtype;
+            if (dtype != tf.int32 && dtype != tf.int64)
+                inputs = math_ops.cast(inputs, tf.int32);
+
+            var @out = embedding_ops.embedding_lookup(embeddings, inputs);
+            return @out;
         }
     }
 }

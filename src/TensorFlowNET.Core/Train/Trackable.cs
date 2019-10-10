@@ -26,11 +26,11 @@ namespace Tensorflow.Train
         /// Restore-on-create for a variable be saved with this `Checkpointable`.
         /// </summary>
         /// <returns></returns>
-        protected virtual RefVariable _add_variable_with_custom_getter(string name,
+        protected virtual VariableV1 _add_variable_with_custom_getter(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
-            Func<string, int[], TF_DataType, IInitializer, bool, RefVariable> getter = null,
+            Func<string, int[], TF_DataType, IInitializer, bool, VariableV1> getter = null,
             bool overwrite = false,
             bool trainable = false)
         {
@@ -59,7 +59,7 @@ namespace Tensorflow.Train
             // TODO
         }
 
-        protected RefVariable _track_checkpointable(RefVariable checkpointable, string name, bool overwrite = false)
+        protected VariableV1 _track_checkpointable(VariableV1 checkpointable, string name, bool overwrite = false)
         {
             return checkpointable;
         }

@@ -28,14 +28,14 @@ namespace Tensorflow
         public Tensor _initial_value;
         public string _graph_key;
         public bool _trainable;
-        public Tensor _variable;
+        
         public Tensor _snapshot;
         public bool _save_slice_info;
 
         private Operation _initializer_op;
         public override Operation initializer => _initializer_op;
         public override Operation op => _variable.op;
-        public Graph graph => _variable.graph;
+        
         public TF_DataType dtype => _variable.dtype;
         public TensorShape shape => tensor_util.to_shape(_variable.shape);
 

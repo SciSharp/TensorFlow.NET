@@ -34,7 +34,8 @@ namespace Tensorflow
         public virtual Tensor graph_element { get; }
         public virtual Operation op { get; }
         public virtual Operation initializer { get; }
-
+        public Tensor _variable;
+        public Graph graph => _variable.graph;
         public VariableV1(object initial_value = null,
             bool trainable = true,
             List<string> collections = null,

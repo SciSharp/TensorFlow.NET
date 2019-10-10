@@ -600,7 +600,7 @@ namespace Tensorflow
             return gen_array_ops.concat_v2(values, axis, name: name);
         }
 
-        public static Tensor gather(Tensor @params, Tensor indices, string name = null, int axis = 0)
+        public static Tensor gather<T1, T2>(T1 @params, T2 indices, string name = null, int axis = 0)
             => gen_array_ops.gather_v2(@params, indices, axis, name: name);
 
         public static Tensor transpose<T1, T2>(T1 a, T2 perm, string name = "transpose", bool conjugate = false)

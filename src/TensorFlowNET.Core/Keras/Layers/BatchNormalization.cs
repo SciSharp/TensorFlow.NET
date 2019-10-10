@@ -95,7 +95,7 @@ namespace Tensorflow.Keras.Layers
             var param_shape = new int[] { input_shape.dims[axis[0]] };
 
             if (scale)
-                gamma = add_weight("gamma",
+                gamma = (RefVariable)add_weight("gamma",
                     param_shape,
                     dtype: param_dtype,
                     initializer: gamma_initializer,
@@ -104,7 +104,7 @@ namespace Tensorflow.Keras.Layers
                 throw new NotImplementedException("add_weight gamma");
 
             if (center)
-                beta = add_weight("beta",
+                beta = (RefVariable)add_weight("beta",
                     param_shape,
                     dtype: param_dtype,
                     initializer: beta_initializer,
@@ -117,7 +117,7 @@ namespace Tensorflow.Keras.Layers
                 
             }
 
-            moving_mean = add_weight("moving_mean",
+            moving_mean = (RefVariable)add_weight("moving_mean",
                 param_shape,
                 dtype: param_dtype,
                 initializer: moving_mean_initializer,
@@ -125,7 +125,7 @@ namespace Tensorflow.Keras.Layers
                 trainable: false,
                 aggregation: VariableAggregation.Mean);
 
-            moving_variance = add_weight("moving_variance",
+            moving_variance = (RefVariable)add_weight("moving_variance",
               shape: param_shape,
               dtype: param_dtype,
               initializer: moving_variance_initializer,

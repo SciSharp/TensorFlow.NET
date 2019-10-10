@@ -42,7 +42,7 @@ namespace Tensorflow.Layers
             this._reuse = _reuse;
 
             // Avoid an incorrect lint error
-            _trainable_weights = new List<RefVariable>();
+            _trainable_weights = new List<VariableV1>();
             this.built = false;
             _keras_style = false;
         }
@@ -109,7 +109,7 @@ namespace Tensorflow.Layers
         /// <param name="synchronization"></param>
         /// <param name="aggregation"></param>
         /// <returns></returns>
-        protected virtual RefVariable add_weight(string name,
+        protected virtual VariableV1 add_weight(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,

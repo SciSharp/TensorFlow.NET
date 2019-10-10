@@ -106,7 +106,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor gather_v2(Tensor @params, Tensor indices, int axis, string name = null)
+        public static Tensor gather_v2<T1, T2>(T1 @params, T2 indices, int axis, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("GatherV2", name: name, new { @params, indices, axis });
 
