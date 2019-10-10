@@ -84,7 +84,7 @@ namespace Tensorflow.Operations.Initializers
                 // Assuming convolution kernels (2D, 3D, or more).
                 // kernel shape: (..., input_depth, depth)
                 int receptive_field_size = 1;
-                foreach (var dim in shape.Take(2))
+                foreach (var dim in shape.Take(shape.Length - 2))
                     receptive_field_size *= dim;
                 var fan_in = shape[shape.Length - 2] * receptive_field_size;
                 var fan_out = shape[shape.Length - 1] * receptive_field_size;
