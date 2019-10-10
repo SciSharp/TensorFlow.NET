@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -53,7 +54,8 @@ namespace Tensorflow
             string name = null,
             VariableDef variable_def = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            string import_scope = "") : base(initial_value,
+            string import_scope = "",
+            TensorShape shape = null) : base(initial_value,
                     trainable,
                     collections,
                     validate_shape,
@@ -69,9 +71,29 @@ namespace Tensorflow
             }
             else
             {
-                throw new NotImplementedException("ResourceVariable _init_from_args");
-                //_init_from_args(initial_value, trainable, collections, validate_shape, caching_device, name, dtype);
+                _init_from_args(initial_value: initial_value, 
+                    trainable: trainable, 
+                    collections: collections, 
+                    caching_device: caching_device, 
+                    name: name, 
+                    dtype: dtype,
+                    shape: shape);
             }
+        }
+
+        private void _init_from_args(object initial_value = null,
+            bool trainable = true,
+            List<string> collections = null,
+            string caching_device = "",
+            string name = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            TensorShape shape = null)
+        {
+            var init_from_fn = initial_value.GetType().Name == "Func`1";
+            if(collections == null)
+                collections = new List<string>() { tf.GraphKeys.GLOBAL_VARIABLES };
+            
+            throw new NotImplementedException("");
         }
 
         private void _init_from_proto(VariableDef variable_def, string import_scope = null)

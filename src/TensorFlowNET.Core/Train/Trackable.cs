@@ -53,7 +53,7 @@ namespace Tensorflow.Train
         /// </summary>
         /// <param name="name"></param>
         /// <param name="trackable"></param>
-        protected void _handle_deferred_dependencies(string name, RefVariable trackable)
+        protected void _handle_deferred_dependencies(string name, VariableV1 trackable)
         {
             _maybe_initialize_trackable();
             // TODO

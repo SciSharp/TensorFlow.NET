@@ -28,7 +28,7 @@ namespace Tensorflow
     /// the variable are fixed. The value can be changed using one of the assign methods.
     /// https://tensorflow.org/guide/variables
     /// </summary>
-    public class VariableV1
+    public abstract class VariableV1
     {
         public virtual string name { get; }
         public virtual Tensor graph_element { get; }

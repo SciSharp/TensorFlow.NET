@@ -36,7 +36,7 @@ namespace Tensorflow
             _store_eager_variables = false;
         }
 
-        public RefVariable get_variable(string name,
+        public VariableV1 get_variable(string name,
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             object initializer = null, // IInitializer or Tensor
@@ -61,7 +61,7 @@ namespace Tensorflow
                 aggregation: aggregation);
         }
 
-        private RefVariable _true_getter(string name,
+        private VariableV1 _true_getter(string name,
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             object initializer = null,
@@ -110,7 +110,7 @@ namespace Tensorflow
             }
         }
 
-        private RefVariable _get_single_variable(string name,
+        private VariableV1 _get_single_variable(string name,
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
@@ -136,7 +136,7 @@ namespace Tensorflow
                 throw new NotImplementedException("_get_single_variable");
             }
 
-            RefVariable v = null;
+            VariableV1 v = null;
             // Create the tensor to initialize the variable with default value.
             if (initializer == null)
             {

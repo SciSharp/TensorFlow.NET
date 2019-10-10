@@ -44,7 +44,7 @@ namespace Tensorflow
         public Tensor LearningRateTensor => _lr_t;
         public bool _use_locking;
         public Dictionary<string, Dictionary<string, RefVariable>> _slots;
-        public Dictionary<string, RefVariable> _non_slot_dict;
+        public Dictionary<string, VariableV1> _non_slot_dict;
         public Dictionary<string, object> _deferred_slot_restorations;
         SlotCreator slot_creator = new SlotCreator();
 
@@ -58,7 +58,7 @@ namespace Tensorflow
             _lr = learning_rate;
             // Dictionary of slots.
             _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
-            _non_slot_dict = new Dictionary<string, RefVariable>();
+            _non_slot_dict = new Dictionary<string, VariableV1>();
             _deferred_slot_restorations = new Dictionary<string, object>();
         }
 
@@ -72,7 +72,7 @@ namespace Tensorflow
             _lr_t = learning_rate;
             // Dictionary of slots.
             _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
-            _non_slot_dict = new Dictionary<string, RefVariable>();
+            _non_slot_dict = new Dictionary<string, VariableV1>();
             _deferred_slot_restorations = new Dictionary<string, object>();
         }
 
@@ -239,7 +239,7 @@ namespace Tensorflow
         /// <param name="initial_value"></param>
         /// <param name="name"></param>
         /// <param name="colocate_with"></param>
-        protected RefVariable _create_non_slot_variable(float initial_value, string name, RefVariable colocate_with)
+        protected VariableV1 _create_non_slot_variable(float initial_value, string name, RefVariable colocate_with)
         {
             // Recommendation: Use OptimizerV2 if your optimizer uses non-slot variables.
             var graph = colocate_with.graph;
@@ -333,7 +333,7 @@ namespace Tensorflow
             return $"{var.op.graph.graph_key}.{var.op.name}";
         }
 
-        protected RefVariable _get_non_slot_variable(string name, Graph graph = null)
+        protected VariableV1 _get_non_slot_variable(string name, Graph graph = null)
         {
             var key = $"{name}.{graph.graph_key}";
             var non_slot = _non_slot_dict.ContainsKey(key) ? _non_slot_dict[key] : null;
