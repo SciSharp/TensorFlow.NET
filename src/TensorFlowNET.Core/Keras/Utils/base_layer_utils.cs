@@ -32,36 +32,21 @@ namespace Tensorflow.Keras.Utils
         /// <param name="initializer"></param>
         /// <param name="trainable"></param>
         /// <returns></returns>
-        public static RefVariable make_variable(string name,
+        public static VariableV1 make_variable(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
-            bool trainable = true) => make_variable(name, shape, dtype, initializer, trainable, true);
-
-        /// <summary>
-        /// Adds a new variable to the layer.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="shape"></param>
-        /// <param name="dtype"></param>
-        /// <param name="initializer"></param>
-        /// <param name="trainable"></param>
-        /// <returns></returns>
-        public static RefVariable make_variable(string name,
-            int[] shape,
-            TF_DataType dtype = TF_DataType.TF_FLOAT,
-            IInitializer initializer = null,
-            bool trainable = true,
-            bool use_resource = true)
+            bool trainable = true)
         {
             var initializing_from_value = false;
+            bool use_resource = true;
 
             ops.init_scope();
 
             Func<Tensor> init_val = () => initializer.call(new TensorShape(shape), dtype: dtype);
 
             var variable_dtype = dtype.as_base_dtype();
-            var v = tf.Variable(init_val);
+            var v = tf.VariableV1(init_val);
 
             return v;
         }

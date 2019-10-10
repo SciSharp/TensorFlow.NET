@@ -37,8 +37,8 @@ namespace Tensorflow.Keras.Layers
         private IInitializer gamma_initializer;
         private IInitializer moving_mean_initializer;
         private IInitializer moving_variance_initializer;
-        private RefVariable gamma;
-        private RefVariable beta;
+        private VariableV1 gamma;
+        private VariableV1 beta;
         private RefVariable moving_mean;
         private RefVariable moving_variance;
 
@@ -95,7 +95,7 @@ namespace Tensorflow.Keras.Layers
             var param_shape = new int[] { input_shape.dims[axis[0]] };
 
             if (scale)
-                gamma = (RefVariable)add_weight("gamma",
+                gamma = add_weight("gamma",
                     param_shape,
                     dtype: param_dtype,
                     initializer: gamma_initializer,
@@ -104,7 +104,7 @@ namespace Tensorflow.Keras.Layers
                 throw new NotImplementedException("add_weight gamma");
 
             if (center)
-                beta = (RefVariable)add_weight("beta",
+                beta = add_weight("beta",
                     param_shape,
                     dtype: param_dtype,
                     initializer: beta_initializer,
