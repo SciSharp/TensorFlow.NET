@@ -35,7 +35,11 @@ namespace Tensorflow
         public virtual Operation op { get; }
         public virtual Operation initializer { get; }
         public Tensor _variable;
+        protected string _graph_key;
         public Graph graph => _variable.graph;
+
+        public Tensor _is_initialized_op { get; set; }
+
         public VariableV1(object initial_value = null,
             bool trainable = true,
             List<string> collections = null,

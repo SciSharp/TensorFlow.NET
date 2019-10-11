@@ -266,7 +266,7 @@ namespace Tensorflow
                 name = op_type;
             // If a names ends with a '/' it is a "name scope" and we use it as-is,
             // after removing the trailing '/'.
-            name = name.EndsWith("/") ? ops._name_from_scope_name(name) : unique_name(name);
+            name = name.EndsWith("/") ? ops.name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
 
             var input_ops = inputs.Select(x => x.op).ToArray();
@@ -341,7 +341,7 @@ namespace Tensorflow
             if (string.IsNullOrEmpty(name))
                 new_stack = "";
             else if (name.EndsWith("/"))
-                new_stack = ops._name_from_scope_name(name);
+                new_stack = ops.name_from_scope_name(name);
             else
                 new_stack = unique_name(name);
 

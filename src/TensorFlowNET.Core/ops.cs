@@ -274,7 +274,7 @@ namespace Tensorflow
             return node_def;
         }
 
-        public static string _name_from_scope_name(string name)
+        public static string name_from_scope_name(string name)
         {
             if (name.EndsWith("/"))
             {

@@ -49,7 +49,8 @@ namespace Tensorflow.Keras.Utils
             var v = tf.VariableV1(init_val, 
                 use_resource: use_resource,
                 dtype: dtype,
-                shape: shape);
+                shape: shape,
+                name: name);
 
             return v;
         }

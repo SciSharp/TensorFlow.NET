@@ -8,6 +8,9 @@ using NumSharp;
 
 namespace TensorFlowNET.UnitTest.Keras
 {
+    /// <summary>
+    /// https://www.tensorflow.org/versions/r1.14/api_docs/python/tf/keras/layers/Embedding
+    /// </summary>
     [TestClass]
     public class EmbeddingTest
     {

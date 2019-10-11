@@ -143,7 +143,7 @@ namespace Tensorflow
                     // Use attr_scope and device(None) to simulate the behavior of
                     // colocate_with when the variable we want to colocate with doesn't
                     // yet exist.
-                    string true_name = ops._name_from_scope_name(name);
+                    string true_name = ops.name_from_scope_name(name);
                     var attr = new AttrValue
                     {
                         List = new AttrValue.Types.ListValue()

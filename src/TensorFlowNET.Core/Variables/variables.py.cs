@@ -84,6 +84,60 @@ namespace Tensorflow
                 return gen_control_flow_ops.no_op(name: name);
         }
 
+        public static Tensor _try_guard_against_uninitialized_dependencies(string name, Tensor initial_value)
+        {
+            return _safe_initial_value_from_tensor(name, initial_value, new Dictionary<string, Operation>());
+        }
+
+        public static Tensor _safe_initial_value_from_tensor(string name, Tensor tensor, Dictionary<string, Operation> op_cache)
+        {
+            var op = tensor.op;
+            Operation new_op = op_cache.ContainsKey(op.name) ? op_cache[op.name] : null;
+            if(new_op == null)
+            {
+                new_op = _safe_initial_value_from_op(name, op, op_cache);
+                op_cache[op.name] = new_op;
+            }
+
+            return new_op.outputs[tensor.value_index];
+        }
+
+        /// <summary>
+        /// Replace dependencies on variables with their initialized values.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="op"></param>
+        /// <param name="op_cache"></param>
+        /// <returns></returns>
+        public static Operation _safe_initial_value_from_op(string name, Operation op, Dictionary<string, Operation> op_cache)
+        {
+            var op_type = op.node_def.Op;
+            if (op_type == "IsVariableInitialized" ||
+                op_type == "VarIsInitializedOp" ||
+                op_type == "ReadVariableOp")
+                return op;
+
+            if(op_type == "Variable" ||
+                op_type == "VariableV2" ||
+                op_type == "VarHandleOp")
+            {
+                throw new NotImplementedException("");
+            }
+
+            // Recursively build initializer expressions for inputs.
+            bool modified = false;
+            var new_op_inputs = new List<Tensor>();
+            foreach(Tensor op_input in op.inputs)
+            {
+                var new_op_input = _safe_initial_value_from_tensor(name, op_input, op_cache);
+                new_op_inputs.Add(new_op_input);
+                modified = modified || new_op_input != op_input;
+            }
+
+            // If at least one input was modified, replace the op.
+            return op;
+        }
+
         public static Tensor global_variables_initializer()
         {
             throw new NotImplementedException();
