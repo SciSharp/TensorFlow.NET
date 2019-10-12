@@ -80,7 +80,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor cumsum(Tensor x, int axis = 0, bool exclusive = false, bool reverse = false, string name = null)
+        public static Tensor cumsum<T>(Tensor x, T axis = default, bool exclusive = false, bool reverse = false, string name = null)
         {
             return tf_with(ops.name_scope(name, "Cumsum", new {x}), scope =>
             {

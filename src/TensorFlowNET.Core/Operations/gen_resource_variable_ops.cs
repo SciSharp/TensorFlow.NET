@@ -26,5 +26,12 @@ namespace Tensorflow
 
             return _op;
         }
+
+        public static Tensor var_is_initialized_op(Tensor resource, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("VarIsInitializedOp", name, new { resource });
+
+            return _op;
+        }
     }
 }

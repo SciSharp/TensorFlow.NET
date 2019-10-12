@@ -71,7 +71,7 @@ namespace Tensorflow
                     trainable: trainable,
                     collections: collections,
                     synchronization: synchronization,
-                    aggregation: aggregation);
+                    aggregation: aggregation) as RefVariable;
             });
         }
     }

@@ -172,11 +172,12 @@ namespace Tensorflow
             return $"{prefix}_{idx}";
         }
 
-        public static RefVariable default_variable_creator(object initial_value,
+        public static VariableV1 default_variable_creator(object initial_value,
             string name = null,
             bool? trainable = null,
             List<string> collections = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
+            int[] shape = null,
             bool validate_shape = false,
             bool ? use_resource = null, 
             VariableSynchronization synchronization = VariableSynchronization.Auto,
@@ -193,7 +194,13 @@ namespace Tensorflow
 
             if (use_resource.Value)
             {
-                throw new NotImplementedException();
+                return new ResourceVariable(initial_value,
+                    trainable: trainable.Value,
+                    validate_shape: validate_shape,
+                    collections: collections,
+                    name: name,
+                    dtype: dtype,
+                    shape: shape);
             }
             else
             {

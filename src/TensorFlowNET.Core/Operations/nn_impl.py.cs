@@ -97,9 +97,9 @@ namespace Tensorflow
         /// <param name="is_training"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor[] fused_batch_norm(Tensor x, 
-            RefVariable scale,
-            RefVariable offset,
+        public static Tensor[] fused_batch_norm(Tensor x,
+            VariableV1 scale,
+            VariableV1 offset,
             Tensor mean,
             Tensor variance,
             float epsilon = 0.001f,

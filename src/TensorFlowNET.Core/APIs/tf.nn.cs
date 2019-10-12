@@ -115,8 +115,8 @@ namespace Tensorflow
             public Tensor relu(Tensor features, string name = null) => gen_nn_ops.relu(features, name);
 
             public Tensor[] fused_batch_norm(Tensor x,
-                RefVariable scale,
-                RefVariable offset,
+                VariableV1 scale,
+                VariableV1 offset,
                 Tensor mean = null,
                 Tensor variance = null,
                 float epsilon = 0.001f,

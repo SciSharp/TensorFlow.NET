@@ -37,8 +37,8 @@ namespace Tensorflow.Keras.Layers
         private IInitializer gamma_initializer;
         private IInitializer moving_mean_initializer;
         private IInitializer moving_variance_initializer;
-        private RefVariable gamma;
-        private RefVariable beta;
+        private VariableV1 gamma;
+        private VariableV1 beta;
         private RefVariable moving_mean;
         private RefVariable moving_variance;
 
@@ -117,7 +117,7 @@ namespace Tensorflow.Keras.Layers
                 
             }
 
-            moving_mean = add_weight("moving_mean",
+            moving_mean = (RefVariable)add_weight("moving_mean",
                 param_shape,
                 dtype: param_dtype,
                 initializer: moving_mean_initializer,
@@ -125,7 +125,7 @@ namespace Tensorflow.Keras.Layers
                 trainable: false,
                 aggregation: VariableAggregation.Mean);
 
-            moving_variance = add_weight("moving_variance",
+            moving_variance = (RefVariable)add_weight("moving_variance",
               shape: param_shape,
               dtype: param_dtype,
               initializer: moving_variance_initializer,

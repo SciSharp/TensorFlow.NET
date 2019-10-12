@@ -143,8 +143,8 @@ namespace Tensorflow.Train
         {
             ops.init_scope();
             var graph = ops.get_default_graph();
-            return (_get_non_slot_variable("beta1_power", graph: graph),
-                _get_non_slot_variable("beta2_power", graph: graph));
+            return (_get_non_slot_variable("beta1_power", graph: graph) as RefVariable,
+                _get_non_slot_variable("beta2_power", graph: graph) as RefVariable);
         }
 
         public override void _prepare()

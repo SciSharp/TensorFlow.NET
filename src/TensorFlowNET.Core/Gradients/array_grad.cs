@@ -27,6 +27,27 @@ namespace Tensorflow.Gradients
     [RegisterGradient("array_grad")]
     public class array_grad
     {
+        [RegisterGradient("BroadcastTo")]
+        public static Tensor[] _BroadcastToGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var input_value = op.inputs[0];
+            var broadcast_shape = op.inputs[1];
+            var input_value_shape = array_ops.shape(input_value);
+            var (_, reduction_axes) = gen_array_ops.broadcast_gradient_args(broadcast_shape,
+                                                            input_value_shape);
+            var updates_grad_reshaped = math_ops.reduce_sum(grad,
+                                              axis: reduction_axes,
+                                              keepdims: true);
+            var updates_grad = array_ops.reshape(updates_grad_reshaped, input_value_shape);
+
+            return new Tensor[] 
+            {
+                updates_grad,
+                null
+            };
+        }
+
         [RegisterGradient("ConcatV2")]
         public static Tensor[] _ConcatGradV2(Operation op, Tensor[] grads)
         {

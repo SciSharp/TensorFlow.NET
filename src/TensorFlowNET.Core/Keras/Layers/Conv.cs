@@ -75,13 +75,13 @@ namespace Tensorflow.Keras.Layers
                 input_shape.dims[input_shape.ndim + channel_axis] : 
                 input_shape.dims[channel_axis];
             var kernel_shape = new int[] { kernel_size[0], kernel_size[1], input_dim, filters };
-            kernel = add_weight(name: "kernel",
+            kernel = (RefVariable)add_weight(name: "kernel",
                 shape: kernel_shape,
                 initializer: kernel_initializer,
                 trainable: true,
                 dtype: _dtype);
             if (use_bias)
-                bias = add_weight(name: "bias",
+                bias = (RefVariable)add_weight(name: "bias",
                     shape: new int[] { filters },
                     initializer: bias_initializer,
                     trainable: true,

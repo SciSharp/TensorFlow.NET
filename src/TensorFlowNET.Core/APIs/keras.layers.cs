@@ -38,13 +38,22 @@ namespace Tensorflow
                 var batch_size = batch_shape[0];
                 var shape = batch_shape.Skip(1).ToArray();
 
-                var input_layer = new InputLayer(
-                    input_shape: shape,
-                    batch_size: batch_size,
-                    name: name,
-                    dtype: dtype,
-                    sparse: sparse,
-                    input_tensor: tensor);
+                InputLayer input_layer = null;
+                if (batch_shape != null)
+                    input_layer = new InputLayer(
+                        batch_input_shape: batch_shape,
+                        name: name,
+                        dtype: dtype,
+                        sparse: sparse,
+                        input_tensor: tensor);
+                else
+                    input_layer = new InputLayer(
+                        input_shape: shape,
+                        batch_size: batch_size,
+                        name: name,
+                        dtype: dtype,
+                        sparse: sparse,
+                        input_tensor: tensor);
 
                 var outputs = input_layer.inbound_nodes[0].output_tensors;
 

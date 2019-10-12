@@ -75,6 +75,29 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Creates a variable handle with information to do shape inference.
+        /// </summary>
+        /// <param name="initial_value"></param>
+        /// <param name="shape"></param>
+        /// <param name="shared_name"></param>
+        /// <param name="name"></param>
+        /// <param name="graph_mode"></param>
+        /// <returns></returns>
+        public static Tensor eager_safe_variable_handle(Tensor initial_value, TensorShape shape, 
+            string shared_name, string name, bool graph_mode)
+        {
+            var dtype = initial_value.dtype.as_base_dtype();
+            return variable_handle_from_shape_and_dtype(
+                shape, dtype, shared_name, name, graph_mode, initial_value);
+        }
+
+        public static Tensor variable_handle_from_shape_and_dtype(TensorShape shape, TF_DataType dtype, 
+            string shared_name, string name, bool graph_mode, Tensor extra_handle_data = null)
+        {
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
         /// Represents a future for a read of a variable.
         /// Pretends to be the tensor if anyone looks.
         /// </summary>

@@ -18,6 +18,6 @@
     <AssemblyName>TensorFlow.Hub</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NumSharp" Version="0.20.3" />
+    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
   </ItemGroup>
 </Project>

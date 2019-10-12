@@ -55,14 +55,14 @@ namespace Tensorflow.Keras.Layers
             var axes = new Dictionary<int, int>();
             axes[-1] = last_dim;
             input_spec = new InputSpec(min_ndim: 2, axes: axes);
-            kernel = add_weight(
+            kernel = (RefVariable)add_weight(
                 "kernel",
                 shape: new int[] { last_dim, units },
                 initializer: kernel_initializer,
                 dtype: _dtype,
                 trainable: true);
             if (use_bias)
-                bias = add_weight(
+                bias = (RefVariable)add_weight(
                   "bias",
                   shape: new int[] { units },
                   initializer: bias_initializer,

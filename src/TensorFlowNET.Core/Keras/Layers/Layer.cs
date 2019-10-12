@@ -51,7 +51,7 @@ namespace Tensorflow.Keras.Layers
         /// </summary>
         protected InputSpec input_spec;
         protected bool supports_masking;
-        protected List<RefVariable> _trainable_weights;
+        protected List<VariableV1> _trainable_weights;
         private string _name;
         public string name => _name;
         protected string _base_name;
@@ -64,6 +64,8 @@ namespace Tensorflow.Keras.Layers
 
         private List<Node> _outbound_nodes;
         public List<Node> outbound_nodes => _outbound_nodes;
+
+        float _initial_weights;
 
         public Layer(bool trainable = true, 
             string name = null, 
@@ -81,13 +83,18 @@ namespace Tensorflow.Keras.Layers
             this.supports_masking = false;
 
             _init_set_name(name);
-            _trainable_weights = new List<RefVariable>();
+            _trainable_weights = new List<VariableV1>();
             _compute_previous_mask = false;
             _updates = new List<Operation>();
 
             // Manage input shape information if passed.
-
-            _batch_input_shape = new int[] { -1, -1 };
+            if(input_shape != null)
+            {
+                var shapes = new List<int> { -1 };
+                shapes.AddRange(input_shape);
+                _batch_input_shape = shapes.ToArray();
+            }
+            
 
             _dtype = dtype;
 
@@ -186,12 +193,12 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected virtual RefVariable add_weight(string name,
+        protected virtual VariableV1 add_weight(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
             bool? trainable = null,
-            Func<string, int[], TF_DataType, IInitializer, bool, RefVariable> getter = null)
+            Func<string, int[], TF_DataType, IInitializer, bool, VariableV1> getter = null)
         {
             if (dtype == TF_DataType.DtInvalid)
                 dtype = TF_DataType.TF_FLOAT;

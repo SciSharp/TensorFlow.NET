@@ -53,6 +53,16 @@ namespace Tensorflow
         public Tensor boolean_mask<T1, T2>(T1 tensor, T2 mask, string name = "boolean_mask", int axis = 0)
             => array_ops.boolean_mask(tensor, mask, name: name, axis: axis);
 
+        /// <summary>
+        /// Broadcast an array for a compatible shape.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="shape"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor broadcast_to(Tensor input, TensorShape shape, string name = null)
+            => gen_array_ops.broadcast_to(input, shape, name: name);
+
         public Tensor check_numerics(Tensor tensor, string message, string name = null)
             => gen_array_ops.check_numerics(tensor, message, name: name);
 

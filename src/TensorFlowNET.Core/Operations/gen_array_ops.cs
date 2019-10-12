@@ -106,7 +106,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor gather_v2(Tensor @params, Tensor indices, int axis, string name = null)
+        public static Tensor gather_v2<T1, T2>(T1 @params, T2 indices, int axis, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("GatherV2", name: name, new { @params, indices, axis });
 
@@ -512,6 +512,20 @@ namespace Tensorflow
         public static Tensor broadcast_args(Tensor s0, Tensor s1, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("BroadcastArgs", name, args: new { s0, s1, name });
+
+            return _op.outputs[0];
+        }
+
+        /// <summary>
+        /// Broadcast an array for a compatible shape.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="shape"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor broadcast_to(Tensor input, int[] shape, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("BroadcastTo", name, args: new { input, shape, name });
 
             return _op.outputs[0];
         }

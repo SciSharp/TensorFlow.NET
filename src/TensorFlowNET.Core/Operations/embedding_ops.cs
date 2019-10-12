@@ -52,6 +52,38 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        /// Helper function for embedding_lookup and _compute_sampled_logits.
+        /// </summary>
+        /// <param name="params"></param>
+        /// <param name="ids"></param>
+        /// <param name="partition_strategy"></param>
+        /// <param name="name"></param>
+        /// <param name="max_norm"></param>
+        /// <returns></returns>
+        public static Tensor _embedding_lookup_and_transform(VariableV1 @params,
+            Tensor ids,
+            string partition_strategy = "mod",
+            string name = null,
+            string max_norm = null)
+        {
+            return tf_with(ops.name_scope(name, "embedding_lookup", new { @params, ids }), scope =>
+            {
+                name = scope;
+                int np = 1;
+                ids = ops.convert_to_tensor(ids, name: "ids");
+                if (np == 1)
+                {
+                    var gather = array_ops.gather(@params, ids, name: name);
+                    var result = _clip(gather, ids, max_norm);
+
+                    return array_ops.identity(result);
+                }
+
+                throw new NotImplementedException("_embedding_lookup_and_transform");
+            });
+        }
+
         public static Tensor _embedding_lookup_and_transform(Tensor[] @params,
                 Tensor ids,
                 string partition_strategy = "mod",
@@ -88,6 +120,19 @@ namespace Tensorflow
 
         public static Tensor embedding_lookup(Tensor[] @params, Tensor ids, 
             string partition_strategy = "mod", 
+            string name = null,
+            bool validate_indices = true,
+            string max_norm = null)
+        {
+            return _embedding_lookup_and_transform(@params: @params,
+              ids: ids,
+              partition_strategy: partition_strategy,
+              name: name,
+              max_norm: max_norm);
+        }
+
+        public static Tensor embedding_lookup(VariableV1 @params, Tensor ids,
+            string partition_strategy = "mod",
             string name = null,
             bool validate_indices = true,
             string max_norm = null)
