@@ -65,15 +65,12 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.5.1" />
+    <PackageReference Include="NumSharp" Version="0.20.4" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Distribute\" />
     <Folder Include="Keras\Initializers\" />
     <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
   </ItemGroup>
 </Project>

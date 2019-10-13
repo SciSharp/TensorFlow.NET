@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Hub", "src\Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlowNET.Datasets", "src\TensorFlowNET.Datasets\TensorFlowNET.Datasets.csproj", "{494D6CAD-2C0D-4C0B-90E2-B097DB039383}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NumSharp.Core", "..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj", "{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,18 +97,6 @@ Global
 		{494D6CAD-2C0D-4C0B-90E2-B097DB039383}.Release|Any CPU.Build.0 = Release|Any CPU
 		{494D6CAD-2C0D-4C0B-90E2-B097DB039383}.Release|x64.ActiveCfg = Release|Any CPU
 		{494D6CAD-2C0D-4C0B-90E2-B097DB039383}.Release|x64.Build.0 = Release|Any CPU
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Debug|x64.ActiveCfg = Debug|x64
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Debug|x64.Build.0 = Debug|x64
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Publish|Any CPU.Build.0 = Publish|Any CPU
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Publish|x64.ActiveCfg = Publish|x64
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Publish|x64.Build.0 = Publish|x64
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Release|x64.ActiveCfg = Release|x64
-		{9249BCC4-3FEB-4EF5-8AB9-789FFE4040B4}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
