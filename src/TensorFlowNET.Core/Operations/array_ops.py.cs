@@ -605,8 +605,9 @@ namespace Tensorflow
             if (axis != 0)
                 return gen_array_ops.gather_v2(@params, indices, axis, name: name);
 
-            if (@params is ResourceVariable variable)
-                return variable.sparse_read();
+            if (@params is ResourceVariable variable &&
+                indices is Tensor indices_tensor)
+                return variable.sparse_read(indices_tensor, name);
 
             return gen_array_ops.gather_v2(@params, indices, axis, name: name);
         }

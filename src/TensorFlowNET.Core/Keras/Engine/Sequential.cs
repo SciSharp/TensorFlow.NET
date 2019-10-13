@@ -56,9 +56,9 @@ namespace Tensorflow.Keras.Engine
                     {
                         // Instantiate an input layer.
                         var x = keras.layers.Input(
-                          batch_shape: batch_shape,
-                          dtype: dtype,
-                          name: layer.name + "_input");
+                              batch_shape: batch_shape,
+                              dtype: dtype,
+                              name: layer.name + "_input");
 
                         // This will build the current layer
                         // and create the node connecting the current layer
@@ -71,7 +71,7 @@ namespace Tensorflow.Keras.Engine
                 if (set_inputs)
                 {
                     // If an input layer (placeholder) is available.
-                    // outputs = layer._inbound_nodes;
+                    // outputs = layer.inbound_nodes;
                 }
 
             }

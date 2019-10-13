@@ -73,5 +73,20 @@ namespace Tensorflow
 
             return _op.output;
         }
+
+        public static Tensor resource_gather(Tensor resource, Tensor indices, TF_DataType dtype, 
+            int batch_dims = 0, bool validate_indices = true, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ResourceGather", name, new
+            {
+                resource,
+                indices,
+                dtype,
+                batch_dims,
+                validate_indices
+            });
+
+            return _op.output;
+        }
     }
 }

@@ -216,6 +216,18 @@ namespace Tensorflow
             _dtype = dtypes.as_tf_dtype((DataType)_handle.op.get_attr("dtype"));
         }
 
+        public Tensor sparse_read(Tensor indices, string name = "Gather")
+        {
+            return tf_with(ops.name_scope(name), scope =>
+            {
+                name = scope;
+                var value = gen_resource_variable_ops.resource_gather(
+                    _handle, indices, dtype: _dtype, name: name);
+
+                return array_ops.identity(value);
+            });
+        }
+
         public override string ToString()
         {
             return $"tf.ResourceVariable '{name}' shape={shape} dtype={dtype}";
