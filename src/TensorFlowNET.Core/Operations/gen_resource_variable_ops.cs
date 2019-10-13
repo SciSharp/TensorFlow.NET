@@ -33,5 +33,27 @@ namespace Tensorflow
 
             return _op;
         }
+
+        /// <summary>
+        /// Creates a handle to a Variable resource.
+        /// </summary>
+        /// <param name="dtype"></param>
+        /// <param name="shape"></param>
+        /// <param name="container"></param>
+        /// <param name="shared_name"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape, 
+            string container ="", string shared_name = "", string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("VarHandleOp", name, new {
+                dtype,
+                shape,
+                container,
+                shared_name
+            });
+
+            return _op;
+        }
     }
 }

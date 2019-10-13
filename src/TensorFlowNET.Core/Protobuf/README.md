@@ -5,7 +5,7 @@ Work in command line
 cd tensorflow
 
 set SRC_DIR=D:/Projects/tensorflow
-set DST_DIR=D:/Projects/TensorFlow.NET/src/TensorFlowNET.Core/Protobuf
+set DST_DIR=D:/SciSharp/TensorFlow.NET/src/TensorFlowNET.Core/Protobuf
 
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/resource_handle.proto
 ... tensorflow/core/framework/tensor_shape.proto
@@ -38,5 +38,6 @@ protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/resource_ha
 ... tensorflow/core/protobuf/control_flow.proto
 ... tensorflow/core/util/event.proto
 ... tensorflow/python/training/checkpoint_state.proto
+... tensorflow/python/framework/cpp_shape_inference.proto
 ```
 
