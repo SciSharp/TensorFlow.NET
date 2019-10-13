@@ -224,7 +224,7 @@ namespace Tensorflow.Keras.Layers
                 overwrite: true,
                 initializer: initializer,
                 trainable: trainable.Value);
-            backend.track_variable(variable);
+            //backend.track_variable(variable);
             _trainable_weights.Add(variable);
 
             return variable;

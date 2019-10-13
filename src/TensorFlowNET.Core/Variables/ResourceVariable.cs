@@ -149,12 +149,20 @@ namespace Tensorflow
                     // messages.
                     tf_with(ops.name_scope("Read"), delegate
                     {
-                        
+                        var value = _read_variable_op();
+                        _graph_element = value;
                     });
                 }
-            });
 
-            throw new NotImplementedException("");
+                ops.add_to_collections(collections, this);
+            });
+        }
+
+        private Tensor _read_variable_op()
+        {
+            var result = gen_resource_variable_ops.read_variable_op(_handle, _dtype);
+            // _maybe_set_handle_data(_dtype, _handle, result);
+            return result;
         }
 
         private void _init_from_proto(VariableDef variable_def, string import_scope = null)

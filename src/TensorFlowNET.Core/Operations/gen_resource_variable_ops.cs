@@ -31,7 +31,7 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("VarIsInitializedOp", name, new { resource });
 
-            return _op;
+            return _op.output;
         }
 
         /// <summary>
@@ -53,7 +53,25 @@ namespace Tensorflow
                 shared_name
             });
 
-            return _op;
+            return _op.output;
+        }
+
+        /// <summary>
+        /// Reads the value of a variable.
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor read_variable_op(Tensor resource, TF_DataType dtype, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ReadVariableOp", name, new
+            {
+                resource,
+                dtype
+            });
+
+            return _op.output;
         }
     }
 }
