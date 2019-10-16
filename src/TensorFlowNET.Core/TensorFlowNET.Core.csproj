@@ -32,7 +32,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 11. Add RegisterNoGradients
 12. Add CumsumGrad, BroadcastToGrad.
 13. Return VariableV1 instead of RefVariable.
-14.</PackageReleaseNotes>
+14. Add Tensor overload to GradientDescentOptimizer.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
     <FileVersion>0.11.7.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
