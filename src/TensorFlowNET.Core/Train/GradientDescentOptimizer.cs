@@ -41,6 +41,12 @@ namespace Tensorflow.Train
             _lr = learning_rate;
         }
 
+        public GradientDescentOptimizer(Tensor learning_rate, bool use_locking = false, string name = "GradientDescent")
+            : base(learning_rate, use_locking, name)
+        {
+            _lr_t = learning_rate;
+        }
+
         public override void _prepare()
         {
             var lr = _call_if_callable(_lr);
