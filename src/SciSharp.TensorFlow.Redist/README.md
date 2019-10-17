@@ -26,7 +26,7 @@ Related merged [commits](https://github.com/SciSharp/TensorFlow.NET/commit/854a5
 
 On Windows, the tar command does not support extracting archives with symlinks. So when `dotnet pack` runs on Windows it will only package the Windows binaries.
 
-1. Run `dotnet pack SciSharp.TensorFlow.Redist-CPU.nupkgproj` under `src/SciSharp.TensorFlow.Redist` directory in Linux.
-2. Run `dotnet nuget push SciSharp.TensorFlow.Redist.1.14.0.nupkg -k APIKEY -s https://api.nuget.org/v3/index.json`
+1. Run `dotnet pack SciSharp.TensorFlow.Redist.nupkgproj` under `src/SciSharp.TensorFlow.Redist` directory in Linux.
+2. Run `dotnet nuget push SciSharp.TensorFlow.Redist.1.15.0.nupkg -k APIKEY -s https://api.nuget.org/v3/index.json`
 
 

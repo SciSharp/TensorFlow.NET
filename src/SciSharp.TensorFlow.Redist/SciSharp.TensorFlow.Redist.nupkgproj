@@ -7,7 +7,7 @@
 
     <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <TensorFlowVersion>1.14.0</TensorFlowVersion>
+    <TensorFlowVersion>1.15.0</TensorFlowVersion>
     <TensorFlowMajorVersion>1</TensorFlowMajorVersion>
 
     <PackageAssetsPath>$(BinDir)packages\</PackageAssetsPath>
@@ -38,7 +38,7 @@
     <TensorFlowConfig Include="windows"
                       FileExtension=".zip"
                       FilesFromArchive="lib\tensorflow.dll;
-                                        include\tensorflow\c\LICENSE"
+                                        LICENSE"
                       Runtime="win-x64"/>
 
     <TensorFlowConfig Condition="'$(OS)' != 'Windows_NT'"
@@ -46,14 +46,14 @@
                       FileExtension=".tar.gz"
                       FilesFromArchive="lib\libtensorflow.so;
                                         lib\libtensorflow_framework.so.$(TensorFlowMajorVersion);
-                                        include\tensorflow\c\LICENSE"
+                                        LICENSE"
                       Runtime="linux-x64" />
 
     <TensorFlowConfig Condition="'$(OS)' != 'Windows_NT'"
                       Include="darwin" FileExtension=".tar.gz"
                       FilesFromArchive="lib\libtensorflow.dylib;
                                         lib\libtensorflow_framework.$(TensorFlowMajorVersion).dylib;
-                                        include\tensorflow\c\LICENSE"
+                                        LICENSE"
                       Runtime="osx-x64" />
 
     <AdditionalDownloadFile Include="https://raw.githubusercontent.com/tensorflow/tensorflow/master/LICENSE"
