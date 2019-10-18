@@ -115,6 +115,7 @@ namespace Tensorflow
                         dtype: dtype);
                 });
                 _shape = shape ?? (initial_value as Tensor).TensorShape;
+                _initial_value = initial_value as Tensor;
                 _handle = resource_variable_ops.eager_safe_variable_handle(
                       initial_value: _initial_value,
                       shape: _shape,
@@ -122,7 +123,6 @@ namespace Tensorflow
                       name: name,
                       graph_mode: _in_graph_mode);
                 _unique_id = unique_id;
-                _initial_value = initial_value as Tensor;
                 _handle_name = handle_name + ":0";
                 _dtype = _initial_value.dtype.as_base_dtype();
                 // _constraint = constraint;
@@ -133,6 +133,7 @@ namespace Tensorflow
                     {
                         _is_initialized_op = gen_resource_variable_ops.var_is_initialized_op(_handle);
                     });
+
                     if(initial_value != null)
                     {
                         tf_with(ops.name_scope("Assign"), scope1 =>
@@ -143,10 +144,25 @@ namespace Tensorflow
                                 name: n);
                         });
                     }
-                }
-            });
 
-            throw new NotImplementedException("");
+                    // Manually assign reads to the handle's device to avoid log
+                    // messages.
+                    tf_with(ops.name_scope("Read"), delegate
+                    {
+                        var value = _read_variable_op();
+                        _graph_element = value;
+                    });
+                }
+
+                ops.add_to_collections(collections, this);
+            });
+        }
+
+        private Tensor _read_variable_op()
+        {
+            var result = gen_resource_variable_ops.read_variable_op(_handle, _dtype);
+            // _maybe_set_handle_data(_dtype, _handle, result);
+            return result;
         }
 
         private void _init_from_proto(VariableDef variable_def, string import_scope = null)
@@ -198,6 +214,18 @@ namespace Tensorflow
             }
 
             _dtype = dtypes.as_tf_dtype((DataType)_handle.op.get_attr("dtype"));
+        }
+
+        public Tensor sparse_read(Tensor indices, string name = "Gather")
+        {
+            return tf_with(ops.name_scope(name), scope =>
+            {
+                name = scope;
+                var value = gen_resource_variable_ops.resource_gather(
+                    _handle, indices, dtype: _dtype, name: name);
+
+                return array_ops.identity(value);
+            });
         }
 
         public override string ToString()

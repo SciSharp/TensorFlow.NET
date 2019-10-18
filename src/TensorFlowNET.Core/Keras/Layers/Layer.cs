@@ -106,6 +106,7 @@ namespace Tensorflow.Keras.Layers
             VariableScope scope = null)
         {
             var input_list = inputs;
+            var input = inputs[0];
             Tensor outputs = null;
 
             // We will attempt to build a TF graph if & only if all inputs are symbolic.
@@ -139,12 +140,19 @@ namespace Tensorflow.Keras.Layers
                     _maybe_build(inputs[0]);
 
                     outputs = call(inputs[0], training: training);
+                    (input, outputs) = _set_connectivity_metadata_(input, outputs);
                     _handle_activity_regularization(inputs[0], outputs);
                     _set_mask_metadata(inputs[0], outputs, null);
                 });
             }
 
             return outputs;
+        }
+
+        private (Tensor, Tensor) _set_connectivity_metadata_(Tensor inputs, Tensor outputs)
+        {
+            //_add_inbound_node(input_tensors: inputs, output_tensors: outputs);
+            return (inputs, outputs);
         }
 
         private void _handle_activity_regularization(Tensor inputs, Tensor outputs)
@@ -224,7 +232,7 @@ namespace Tensorflow.Keras.Layers
                 overwrite: true,
                 initializer: initializer,
                 trainable: trainable.Value);
-            backend.track_variable(variable);
+            //backend.track_variable(variable);
             _trainable_weights.Add(variable);
 
             return variable;

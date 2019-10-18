@@ -25,6 +25,7 @@ using System.Text;
 using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using static Tensorflow.c_api;
+using Newtonsoft.Json;
 
 namespace Tensorflow
 {
@@ -44,11 +45,17 @@ namespace Tensorflow
         /// <summary>
         ///     True if this Tensor holds data allocated by C#.
         /// </summary>
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public bool IsMemoryOwner => AllocationType >= AllocationType.Marshal;
 
         /// <summary>
         ///     The allocation method used to create this Tensor.
         /// </summary>
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public AllocationType AllocationType { get; protected set; }
 
         /// <summary>

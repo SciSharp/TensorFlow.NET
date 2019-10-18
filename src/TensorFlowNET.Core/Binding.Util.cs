@@ -129,6 +129,7 @@ namespace Tensorflow
             }
         }
 
+        [DebuggerStepThrough]
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
         public static TOut tf_with<TIn, TOut>(TIn py, Func<TIn, TOut> action) where TIn : IObjectLife
         {

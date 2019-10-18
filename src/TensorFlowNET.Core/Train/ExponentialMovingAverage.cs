@@ -46,7 +46,7 @@ namespace Tensorflow.Train
                         value,
                         name,
                         colocate_with_primary: true);
-                    ops.add_to_collection(ops.GraphKeys.MOVING_AVERAGE_VARIABLES, var);
+                    ops.add_to_collection(tf.GraphKeys.MOVING_AVERAGE_VARIABLES, var);
                     _averages[var] = avg;
                 }
                 else

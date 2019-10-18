@@ -16,6 +16,7 @@
 
 using System;
 using Tensorflow.Framework;
+using static Tensorflow.CppShapeInferenceResult.Types;
 
 namespace Tensorflow
 {
@@ -91,10 +92,78 @@ namespace Tensorflow
                 shape, dtype, shared_name, name, graph_mode, initial_value);
         }
 
+        /// <summary>
+        /// Create a new variable handle, optionally copying in `extra_handle_data`
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="dtype"></param>
+        /// <param name="shared_name"></param>
+        /// <param name="name"></param>
+        /// <param name="graph_mode"></param>
+        /// <param name="extra_handle_data"></param>
+        /// <returns></returns>
         public static Tensor variable_handle_from_shape_and_dtype(TensorShape shape, TF_DataType dtype, 
             string shared_name, string name, bool graph_mode, Tensor extra_handle_data = null)
         {
+            var container = "";// ops.get_default_graph().container;
+            var handle = gen_resource_variable_ops.var_handle_op(shape: shape,
+                dtype: dtype,
+                shared_name: shared_name,
+                name: name,
+                container: container);
+
+            if (extra_handle_data == null)
+                extra_handle_data = handle;
+
+            if (graph_mode)
+            {
+                var full_handle_data = _combine_handle_data(handle, extra_handle_data);
+                _set_handle_shapes_and_types(handle, full_handle_data, graph_mode);
+                return handle;
+            }
+            else
+            {
+                throw new NotImplementedException("");
+            }
+        }
+
+        private static void _set_handle_shapes_and_types(Tensor handle, HandleData full_handle_data, bool graph_mode)
+        {
+
+        }
+
+        /// <summary>
+        /// Concats HandleData from tensors `handle` and `initial_value`.
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="initial_value"></param>
+        /// <returns></returns>
+        private static HandleData _combine_handle_data(Tensor handle, Tensor initial_value)
+        {
+            var variable_handle_data = get_eager_safe_handle_data(initial_value);
+
+            if (initial_value.dtype != dtypes.variant)
+                return variable_handle_data;
+
             throw new NotImplementedException("");
+        }
+
+        private static HandleData get_eager_safe_handle_data(Tensor handle)
+        {
+            if(handle == IntPtr.Zero)
+            {
+                var data = new HandleData();
+                data.ShapeAndType.Add(new HandleShapeAndType
+                {
+                    Shape = handle.TensorShape.as_proto(),
+                    Dtype = handle.dtype.as_datatype_enum()
+                });
+                return data;
+            }
+            else
+            {
+                return HandleData.Parser.ParseFrom(handle.BufferToArray());
+            }
         }
 
         /// <summary>
