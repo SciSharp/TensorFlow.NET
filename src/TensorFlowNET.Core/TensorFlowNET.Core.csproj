@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.11.7</Version>
+    <Version>0.11.8</Version>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -17,7 +17,7 @@
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.11.7.0</AssemblyVersion>
+    <AssemblyVersion>0.11.8.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.10.0:
 1. Upgrade NumSharp to v0.20.3.
 2. Add DisposableObject class to manage object lifetime.
@@ -34,7 +34,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 13. Return VariableV1 instead of RefVariable.
 14. Add Tensor overload to GradientDescentOptimizer.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <FileVersion>0.11.7.0</FileVersion>
+    <FileVersion>0.11.8.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
@@ -43,7 +43,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SERIALIZABLE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -66,6 +66,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.5.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NumSharp" Version="0.20.4" />
   </ItemGroup>
 

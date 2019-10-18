@@ -30,8 +30,10 @@ namespace Tensorflow
         public class GraphKeys
         {
             #region const
-
-            
+            /// <summary>
+            /// Key to collect concatenated sharded variables.
+            /// </summary>
+            public const string CONCATENATED_VARIABLES_ = "concatenated_variables";
             /// <summary>
             /// the subset of `Variable` objects that will be trained by an optimizer.
             /// </summary>
@@ -52,7 +54,12 @@ namespace Tensorflow
             /// </summary>
             public const string LOSSES_ = "losses";
 
-            public const string MOVING_AVERAGE_VARIABLES = "moving_average_variables";
+            public const string LOCAL_VARIABLES_ = "local_variables";
+
+            public const string METRIC_VARIABLES_ = "metric_variables";
+            public const string MODEL_VARIABLES_ = "model_variables";
+
+            public const string MOVING_AVERAGE_VARIABLES_ = "moving_average_variables";
 
             /// <summary>
             /// Key to collect Variable objects that are global (shared across machines).
@@ -64,7 +71,21 @@ namespace Tensorflow
 
             public const string GLOBAL_STEP_ = "global_step";
 
-            public string[] _VARIABLE_COLLECTIONS_ = new string[] { "variables", "trainable_variables", "model_variables" }; 
+            /// <summary>
+            /// List of all collections that keep track of variables.
+            /// </summary>
+            public string[] _VARIABLE_COLLECTIONS_ = new string[] 
+            {
+                GLOBAL_VARIABLES_,
+                LOCAL_VARIABLES_,
+                METRIC_VARIABLES_,
+                MODEL_VARIABLES_,
+                TRAINABLE_VARIABLES_,
+                MOVING_AVERAGE_VARIABLES_,
+                CONCATENATED_VARIABLES_,
+                TRAINABLE_RESOURCE_VARIABLES_
+            }; 
+
             /// <summary>
             /// Key to collect BaseSaverBuilder.SaveableObject instances for checkpointing.
             /// </summary>
@@ -86,7 +107,8 @@ namespace Tensorflow
 
             #endregion
 
-            
+
+            public string CONCATENATED_VARIABLES => CONCATENATED_VARIABLES_;
             /// <summary>
             /// the subset of `Variable` objects that will be trained by an optimizer.
             /// </summary>
@@ -106,12 +128,15 @@ namespace Tensorflow
             /// Key to collect local variables that are local to the machine and are not
             /// saved/restored.
             /// </summary>
-            public string LOCAL_VARIABLES = "local_variables";
+            public string LOCAL_VARIABLES = LOCAL_VARIABLES_;
 
             /// <summary>
             /// Key to collect losses
             /// </summary>
             public string LOSSES => LOSSES_;
+
+            public string METRIC_VARIABLES => METRIC_VARIABLES_;
+            public string MOVING_AVERAGE_VARIABLES = MOVING_AVERAGE_VARIABLES_;
 
             /// <summary>
             /// Key to collect Variable objects that are global (shared across machines).

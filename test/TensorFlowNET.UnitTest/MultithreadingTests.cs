@@ -82,8 +82,7 @@ namespace TensorFlowNET.UnitTest
                     var sess_graph = sess.GetPrivate<Graph>("_graph");
                     sess_graph.Should().NotBeNull();
                     default_graph.Should().NotBeNull()
-                        .And.BeEquivalentTo(sess_graph)
-                        .And.BeEquivalentTo(beforehand);
+                        .And.BeEquivalentTo(sess_graph);
 
                     Console.WriteLine($"{tid}-{default_graph.graph_key}");
 

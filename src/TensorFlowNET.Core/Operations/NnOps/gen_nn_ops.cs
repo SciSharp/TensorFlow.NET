@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using static Tensorflow.Binding;
+
 namespace Tensorflow.Operations
 {
     public class gen_nn_ops

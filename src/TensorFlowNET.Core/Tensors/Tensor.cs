@@ -28,6 +28,7 @@ using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using NumSharp.Utilities;
 using Tensorflow.Framework;
+using Newtonsoft.Json;
 
 namespace Tensorflow
 {
@@ -43,19 +44,29 @@ namespace Tensorflow
         private readonly int _value_index;
         private TF_Output? _tf_output;
         private readonly TF_DataType _override_dtype;
-
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public int Id => _id;
 
         /// <summary>
         ///     The Graph that contains this tensor.
         /// </summary>
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public Graph graph => op?.graph;
 
         /// <summary>
         ///     The Operation that produces this tensor as an output.
         /// </summary>
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public Operation op => _op;
-
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public Tensor[] outputs => op.outputs;
 
         /// <summary>
@@ -72,24 +83,40 @@ namespace Tensorflow
         ///     The DType of elements in this tensor.
         /// </summary>
         public TF_DataType dtype => _handle == IntPtr.Zero ? _override_dtype : c_api.TF_TensorType(_handle);
-
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public ulong bytesize => _handle == IntPtr.Zero ? 0 : c_api.TF_TensorByteSize(_handle);
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public ulong itemsize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / itemsize;
-        public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
+        private IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public int NDims => rank;
 
         /// <summary>
         ///     The name of the device on which this tensor will be produced, or null.
         /// </summary>
         public string Device => op.Device;
-
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public int[] dims => shape;
 
         /// <summary>
         ///     Used for keep other pointer when do implicit operating
         /// </summary>
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public object Tag { get; set; }
 
 
@@ -139,6 +166,9 @@ namespace Tensorflow
             return rank < 0 ? null : shape;
         }
 
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public TensorShape TensorShape => rank < 0 ? new TensorShape() : tensor_util.to_shape(shape);
 
         /// <summary>
@@ -479,9 +509,11 @@ namespace Tensorflow
             } else
                 throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
         }
-
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public bool IsDisposed => _disposed;
 
-        public int tensor_int_val { get; set; }
+        // public int tensor_int_val { get; set; }
     }
 }

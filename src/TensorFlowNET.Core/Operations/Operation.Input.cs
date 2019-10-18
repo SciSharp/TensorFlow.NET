@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -37,7 +38,9 @@ namespace Tensorflow
             }
             return num;
         }
-
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public int NumInputs => c_api.TF_OperationNumInputs(_handle);
         private TF_DataType[] _input_types => _inputs._inputs.Select(x => x.dtype).ToArray();
 

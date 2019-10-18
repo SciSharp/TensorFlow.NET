@@ -134,7 +134,7 @@ namespace Tensorflow
                                         }
                                         break;
                                     default:
-                                        Console.WriteLine("import_scoped_meta_graph_with_return_elements");
+                                        Console.WriteLine($"import_scoped_meta_graph_with_return_elements {col.Key}");
                                         continue;
                                 }
                             }

@@ -1,4 +1,5 @@
-﻿using NumSharp;
+﻿using Newtonsoft.Json;
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -35,6 +36,9 @@ namespace Tensorflow
         /// <summary>
         ///     Returns the size this shape represents.
         /// </summary>
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public int size
         {
             get
