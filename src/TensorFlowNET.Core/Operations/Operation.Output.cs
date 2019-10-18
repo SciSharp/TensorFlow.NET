@@ -18,7 +18,7 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 #if SERIALIZABLE
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 #endif
 using static Tensorflow.Binding;
 

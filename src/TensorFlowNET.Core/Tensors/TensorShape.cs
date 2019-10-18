@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 #if SERIALIZABLE
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 #endif
 using static Tensorflow.Binding;
 

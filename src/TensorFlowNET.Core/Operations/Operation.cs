@@ -16,7 +16,7 @@
 
 using Google.Protobuf.Collections;
 #if SERIALIZABLE
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 #endif
 using System;
 using System.Collections.Generic;

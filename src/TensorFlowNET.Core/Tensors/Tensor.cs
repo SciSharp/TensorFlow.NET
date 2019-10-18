@@ -29,7 +29,7 @@ using NumSharp.Backends.Unmanaged;
 using NumSharp.Utilities;
 using Tensorflow.Framework;
 #if SERIALIZABLE
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 #endif
 
 namespace Tensorflow
