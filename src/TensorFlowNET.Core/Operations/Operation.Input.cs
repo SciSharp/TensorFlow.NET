@@ -14,10 +14,12 @@
    limitations under the License.
 ******************************************************************************/
 
-using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+#if SERIALIZABLE
+using System.Text.Json.Serialization;
+#endif
 
 namespace Tensorflow
 {

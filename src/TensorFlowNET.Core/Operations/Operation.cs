@@ -16,7 +16,7 @@
 
 using Google.Protobuf.Collections;
 #if SERIALIZABLE
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 #endif
 using System;
 using System.Collections.Generic;
@@ -65,7 +65,7 @@ namespace Tensorflow
 #if SERIALIZABLE
         [JsonIgnore]
 #endif
-        public int _id_value;
+        public int _id_value { get; set; }
 #if SERIALIZABLE
         [JsonIgnore]
 #endif

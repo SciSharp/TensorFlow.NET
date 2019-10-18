@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
-using NumSharp;
+﻿using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
+#if SERIALIZABLE
+using System.Text.Json.Serialization;
+#endif
 using static Tensorflow.Binding;
 
 namespace Tensorflow

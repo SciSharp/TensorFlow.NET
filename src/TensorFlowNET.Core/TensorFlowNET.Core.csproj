@@ -43,7 +43,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE;DEBUG;SERIALIZABLE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SERIALIZABLE_</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -65,8 +65,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.5.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Google.Protobuf" Version="3.10.0" />
     <PackageReference Include="NumSharp" Version="0.20.4" />
   </ItemGroup>
 

@@ -25,7 +25,9 @@ using System.Text;
 using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using static Tensorflow.c_api;
-using Newtonsoft.Json;
+#if SERIALIZABLE
+using System.Text.Json.Serialization;
+#endif
 
 namespace Tensorflow
 {
