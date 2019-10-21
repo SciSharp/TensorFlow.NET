@@ -93,14 +93,14 @@ namespace Tensorflow
             return new Session().as_default();
         }
 
-        public Session Session(Graph graph, SessionOptions opts = null)
+        public Session Session(Graph graph, ConfigProto config = null)
         {
-            return new Session(graph, opts: opts).as_default();
+            return new Session(graph, config: config).as_default();
         }
 
-        public Session Session(SessionOptions opts)
+        public Session Session(ConfigProto config)
         {
-            return new Session(null, opts).as_default();
+            return new Session(null, config).as_default();
         }
 
         public void __init__()

@@ -44,7 +44,7 @@ namespace Tensorflow.Operations
 
         public _GraphTensorArray(TF_DataType dtype, Tensor size, bool? dynamic_size = null,
             bool? clear_after_read = null, string tensor_array_name = null, Tensor handle = null, Tensor flow = null, 
-            bool infer_shape = true, TensorShape[] element_shape = null, 
+            bool infer_shape = true, TensorShape element_shape = null, 
             bool colocate_with_first_write_call = true, string name = null)
         {
             clear_after_read = clear_after_read ?? true;
@@ -68,7 +68,7 @@ namespace Tensorflow.Operations
             else
             {
                 _infer_shape = true;
-                _element_shape = new List<TensorShape> { };
+                _element_shape = new List<TensorShape> { element_shape };
             }
 
             tf_with(ops.name_scope(name, "TensorArray", new { handle, size, flow }), scope =>
@@ -135,7 +135,7 @@ namespace Tensorflow.Operations
 
                 var ta = new TensorArray(_dtype,
                     infer_shape:_infer_shape,
-                    element_shape: _element_shape.ToArray(),
+                    element_shape: _element_shape[0],
                     dynamic_size: _dynamic_size,
                     handle: _handle,
                     flow: flow_out,

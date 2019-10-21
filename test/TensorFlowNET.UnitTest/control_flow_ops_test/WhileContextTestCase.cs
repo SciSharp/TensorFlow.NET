@@ -18,10 +18,10 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
             var i = constant_op.constant(0, name: "i");
             var c = new Func<Tensor, Tensor>(x => tf.less(x, 10, name: "c"));
             var b = new Func<Tensor, Tensor>(x => tf.add(x, 1, name: "c"));
-            var r = control_flow_ops.while_loop(c, b, new[] { i });
+            var r = control_flow_ops.while_loop(c, b, i);
         }
 
-        private void _testWhileContextHelper(int? maximum_iterations = null)
+        private void _testWhileContextHelper(int maximum_iterations)
         {
             // TODO: implement missing code dependencies
             using (var sess = this.cached_session())
@@ -30,7 +30,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
                 var c = new Func<Tensor, Tensor>(x => gen_math_ops.less(x, 10, name: "c"));
                 var b = new Func<Tensor, Tensor>(x => gen_math_ops.add(x, 1, name: "c"));
                 control_flow_ops.while_loop(
-                      c, b, new[] { i }, maximum_iterations: maximum_iterations);
+                      c, b, i , maximum_iterations: tf.constant(maximum_iterations));
                 foreach (Operation op in sess.graph.get_operations())
                 {
                     var control_flow_context = op._get_control_flow_context();
@@ -40,13 +40,6 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
                                 control_flow_context.to_proto()).to_proto(), "");*/
                 }
             }
-        }
-
-        [Ignore("TODO")]
-        [TestMethod]
-        public void testWhileContext()
-        {
-            _testWhileContextHelper();
         }
 
         [Ignore("TODO")]

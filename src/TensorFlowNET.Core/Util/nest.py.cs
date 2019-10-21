@@ -223,7 +223,6 @@ namespace Tensorflow.Util
 
         private static void _flatten_recursive<T>(T obj, List<T> list)
         {
-
             switch(obj)
             {
                 case IDictionary dict:

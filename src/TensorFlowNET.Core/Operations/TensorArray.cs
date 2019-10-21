@@ -39,7 +39,7 @@ namespace Tensorflow.Operations
 
         public TensorArray(TF_DataType dtype, Tensor size = default, bool? clear_after_read = null, bool? dynamic_size = null,
             string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
-            bool infer_shape = true, TensorShape[] element_shape = null,
+            bool infer_shape = true, TensorShape element_shape = null,
             bool colocate_with_first_write_call = true, string name = null)
         {
             _implementation = new _GraphTensorArray(dtype, 

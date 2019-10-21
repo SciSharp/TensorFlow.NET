@@ -485,7 +485,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor[] _convert_flows_to_tensorarrays<T>(T[] tensors_or_tensorarrays, Tensor[] tensors_or_flows)
+        public static Tensor[] _convert_flows_to_tensorarrays<T>(T tensors_or_tensorarrays, Tensor[] tensors_or_flows)
         {
             // zip(tensors_or_tensorarrays, tensors_or_flows).Select((ta, t_or_flow) => ta).ToArray();
             return tensors_or_flows;
@@ -591,18 +591,18 @@ namespace Tensorflow
         /// <param name="body"></param>
         /// <param name="loop_vars"></param>
         /// <param name="i"></param>
-        public static Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
+        public static Tensor while_loop<TItem>(Func<TItem, Tensor> cond, Func<TItem, TItem> body, TItem loop_vars,
             TensorShape shape_invariants = null,
             int parallel_iterations = 10,
             bool back_prop = true,
             bool swap_memory = false,
             string name = null,
-            int? maximum_iterations = null,
+            Tensor maximum_iterations = null,
             bool return_same_structure = false)
         {
             tf_with(ops.name_scope(name, "while", loop_vars), scope =>
             {
-                if (loop_vars == null || loop_vars.Length == 0)
+                if (loop_vars == null)
                     throw new ValueError("No loop variables provided");
                 if (cond == null)
                     throw new ValueError("cond must be callable.");
@@ -610,6 +610,28 @@ namespace Tensorflow
                     throw new ValueError("body must be callable.");
                 if (parallel_iterations < 1)
                     throw new ValueError("parallel_iterations must be a positive integer.");
+
+                var try_to_pack = loop_vars is Tensor && !return_same_structure;
+                var counter = constant_op.constant(0, dtype: maximum_iterations.dtype, name: "iteration_counter");
+                var orig_cond = cond;
+                var orig_body = body;
+
+                LoopVar<TItem> loop_vars_1 = null;
+                Func<Tensor, TItem, LoopVar<TItem>> body_buildloop = null;
+                Func<Tensor, TItem, Tensor> cond_buildloop = null;
+
+                if (try_to_pack)
+                {
+
+                }
+                else
+                {
+                    loop_vars_1 = new LoopVar<TItem>(counter, loop_vars);
+                    cond_buildloop = (i, lv) => 
+                            math_ops.logical_and(i < maximum_iterations, orig_cond(lv));
+                    body_buildloop = (i, lv) => new LoopVar<TItem>(i + 1, orig_body(lv));
+                }
+                try_to_pack = false;
 
                 var loop_context = new WhileContext(
                     maximum_iterations: maximum_iterations,
@@ -620,7 +642,7 @@ namespace Tensorflow
                 if (loop_context.outer_context == null)
                     ops.add_to_collection(tf.GraphKeys.WHILE_CONTEXT, loop_context);
 
-                var results = loop_context.BuildLoop(cond, body, loop_vars, shape_invariants,
+                var results = loop_context.BuildLoop(cond_buildloop, body_buildloop, loop_vars, shape_invariants,
                                     return_same_structure);
 
                 if (maximum_iterations != null)

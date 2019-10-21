@@ -28,12 +28,9 @@ namespace Tensorflow
         }
 
         public static (Tensor, Tensor) tensor_array_v3<T>(T size, TF_DataType dtype = TF_DataType.DtInvalid, 
-            TensorShape[] element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
-            bool identical_element_shapes = false, string tensor_array_name = "tensor_array_name", string name = null)
+            TensorShape element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
+            bool identical_element_shapes = false, string tensor_array_name = "", string name = null)
         {
-            if (tensor_array_name == null)
-                tensor_array_name = string.Empty;
-
             var _op = _op_def_lib._apply_op_helper("TensorArrayV3", name, new
             {
                 size,

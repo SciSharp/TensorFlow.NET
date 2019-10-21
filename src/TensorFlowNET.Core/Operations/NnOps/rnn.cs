@@ -145,7 +145,7 @@ namespace Tensorflow.Operations
             {
                 var ta = new TensorArray(dtype: dtype_,
                                         size: time_steps,
-                                        element_shape: new[] { element_shape },
+                                        element_shape: element_shape,
                                         tensor_array_name: base_name + name);
                 return ta;
             };
@@ -178,19 +178,29 @@ namespace Tensorflow.Operations
 
             // Make sure that we run at least 1 step, if necessary, to ensure
             // the TensorArrays pick up the dynamic shape.
-            Tensor loop_bound;
+            Tensor loop_bound = null;
             if (in_graph_mode)
                 loop_bound = math_ops.minimum(
                     time_steps, math_ops.maximum(1, max_sequence_length));
 
-            /*Func<Tensor, Tensor> cond = (ctime) =>
+            Func<BodyItemInRnnWhileLoop, Tensor> cond = (item) =>
             {
-                return null;
+                return time < loop_bound;
             };
 
-            control_flow_ops.while_loop(
+            // Take a time step of the dynamic RNN.
+            Func<BodyItemInRnnWhileLoop, BodyItemInRnnWhileLoop> _time_step = (item) =>
+            {
+                return item;
+            };
+
+            control_flow_ops.while_loop<BodyItemInRnnWhileLoop>(
               cond: cond,
-              body = );*/
+              body: _time_step,
+              loop_vars: new BodyItemInRnnWhileLoop(time, output_ta.ToArray(), state),
+              parallel_iterations: parallel_iterations,
+              maximum_iterations: time_steps,
+              swap_memory: swap_memory);
 
             throw new NotImplementedException("");
         }
