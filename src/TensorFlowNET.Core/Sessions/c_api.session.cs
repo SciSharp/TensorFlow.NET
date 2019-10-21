@@ -116,6 +116,9 @@ namespace Tensorflow
         /// <param name="proto_len">size_t</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_SetConfig(IntPtr options, IntPtr proto, ulong proto_len, IntPtr status);
+        public static extern void TF_SetConfig(IntPtr options, IntPtr proto, ulong proto_len, IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetTarget(IntPtr options, string target);
     }
 }

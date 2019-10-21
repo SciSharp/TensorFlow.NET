@@ -20,11 +20,14 @@ using System.Runtime.InteropServices;
 
 namespace Tensorflow
 {
-    public class SessionOptions : DisposableObject
+    internal class SessionOptions : DisposableObject
     {
-        public SessionOptions()
+        public SessionOptions(string target = "", ConfigProto config = null)
         {
             _handle = c_api.TF_NewSessionOptions();
+            c_api.TF_SetTarget(_handle, target);
+            if (config != null)
+                SetConfig(config);
         }
 
         public SessionOptions(IntPtr handle)
@@ -35,10 +38,10 @@ namespace Tensorflow
         protected override void DisposeUnmanagedResources(IntPtr handle)
             => c_api.TF_DeleteSessionOptions(handle);
 
-        public void SetConfig(ConfigProto config)
+        private void SetConfig(ConfigProto config)
         {
-            var bytes = config.ToByteArray(); //TODO! we can use WriteTo
-            var proto = Marshal.AllocHGlobal(bytes.Length); //TODO! potential memory leak
+            var bytes = config.ToByteArray();
+            var proto = Marshal.AllocHGlobal(bytes.Length);
             Marshal.Copy(bytes, 0, proto, bytes.Length);
 
             using (var status = new Status())

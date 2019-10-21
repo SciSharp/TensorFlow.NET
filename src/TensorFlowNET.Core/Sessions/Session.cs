@@ -32,7 +32,7 @@ namespace Tensorflow
             _handle = handle;
         }
 
-        public Session(Graph g, SessionOptions opts = null, Status s = null) : base("", g, opts, s)
+        public Session(Graph g, ConfigProto config = null, Status s = null) : base("", g, config, s)
         { }
 
         public Session as_default()
