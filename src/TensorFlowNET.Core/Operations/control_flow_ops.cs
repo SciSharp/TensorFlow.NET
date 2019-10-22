@@ -642,7 +642,7 @@ namespace Tensorflow
                 if (loop_context.outer_context == null)
                     ops.add_to_collection(tf.GraphKeys.WHILE_CONTEXT, loop_context);
 
-                var results = loop_context.BuildLoop(cond_buildloop, body_buildloop, loop_vars, shape_invariants,
+                var results = loop_context.BuildLoop(cond_buildloop, body_buildloop, loop_vars_1, shape_invariants,
                                     return_same_structure);
 
                 if (maximum_iterations != null)

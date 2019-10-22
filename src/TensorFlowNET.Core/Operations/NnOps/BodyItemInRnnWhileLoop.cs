@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Operations
 {
-    internal class BodyItemInRnnWhileLoop
+    internal class BodyItemInRnnWhileLoop : ICanBeFlattened
     {
         /// <summary>
         /// int32 scalar Tensor.
@@ -28,5 +28,13 @@ namespace Tensorflow.Operations
 
         public static implicit operator (Tensor, TensorArray[], Tensor)(BodyItemInRnnWhileLoop item)
             => (item.time, item.output_ta_t, item.state);
+
+        public object[] Flatten()
+        {
+            var elements = new List<object> { time };
+            elements.AddRange(output_ta_t);
+            elements.Add(state);
+            return elements.ToArray();
+        }
     }
 }

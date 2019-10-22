@@ -4,22 +4,25 @@ using System.Text;
 
 namespace Tensorflow.Operations
 {
-    internal class LoopVar<TItem>
+    internal class LoopVar<TItem> : ICanBeFlattened
     {
         public Tensor Counter { get; }
-        public TItem[] Items { get; }
         public TItem Item { get; }
-
-        public LoopVar(Tensor counter, TItem[] items)
-        {
-            Counter = counter;
-            Items = items;
-        }
 
         public LoopVar(Tensor counter, TItem item)
         {
             Counter = counter;
             Item = item;
+        }
+
+        public object[] Flatten()
+        {
+            var elements = new List<object> { Counter };
+            if (typeof(TItem).GetInterface(typeof(ICanBeFlattened).Name) != null)
+                elements.AddRange((Item as ICanBeFlattened).Flatten());
+            else
+                elements.Add(Item);
+            return elements.ToArray();
         }
     }
 }

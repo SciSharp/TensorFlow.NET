@@ -109,7 +109,7 @@ namespace Tensorflow.Operations
         /// </summary>
         internal Tensor[] BuildLoop<TItem>(Func<Tensor, TItem, Tensor> pred, 
             Func<Tensor, TItem, LoopVar<TItem>> body,
-            TItem loop_vars,
+            LoopVar<TItem> loop_vars,
             TensorShape shape_invariants,
             bool return_same_structure)
         {
@@ -143,8 +143,8 @@ namespace Tensorflow.Operations
 
         private (Tensor[], Tensor[]) _BuildLoop<TItem>(Func<Tensor, TItem, Tensor> pred,
             Func<Tensor, TItem, LoopVar<TItem>> body,
-            TItem original_loop_vars,
-            TItem loop_vars,
+            LoopVar<TItem> original_loop_vars,
+            LoopVar<TItem> loop_vars,
             TensorShape shape_invariants)
         {
             var flat_loop_vars = original_loop_vars;
@@ -152,7 +152,7 @@ namespace Tensorflow.Operations
             // Convert TensorArrays to their flow variables
             var loop_vars_tensor = nest.map_structure(
                 _convert_tensorarray_to_flow,
-                nest.flatten(loop_vars));
+                nest.flatten2(loop_vars));
 
             // Let the context know the loop variables so the loop variables
             // would be added in the outer contexts properly.

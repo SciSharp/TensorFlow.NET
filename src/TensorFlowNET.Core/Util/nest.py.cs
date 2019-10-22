@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NumSharp;
+using Tensorflow.Operations;
 
 namespace Tensorflow.Util
 {
@@ -219,6 +220,11 @@ namespace Tensorflow.Util
             var list = new List<T>();
             _flatten_recursive(structure, list);
             return list;
+        }
+
+        public static object[] flatten2(ICanBeFlattened structure)
+        {
+            return structure.Flatten();
         }
 
         private static void _flatten_recursive<T>(T obj, List<T> list)
