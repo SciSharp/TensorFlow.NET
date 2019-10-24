@@ -223,9 +223,10 @@ namespace Tensorflow.Util
         }
 
         public static object[] flatten2(ICanBeFlattened structure)
-        {
-            return structure.Flatten();
-        }
+            => structure.Flatten();
+
+        public static T[] flatten2<T>(T[] structure)
+            => structure;
 
         private static void _flatten_recursive<T>(T obj, List<T> list)
         {
@@ -423,7 +424,7 @@ namespace Tensorflow.Util
         /// <returns> `flat_sequence` converted to have the same recursive structure as
         /// `structure`.
         /// </returns>
-        public static object pack_sequence_as(object structure, IEnumerable<object> flat_sequence)
+        public static object pack_sequence_as(object structure, IEnumerable<object> flat_sequence, bool expand_composites = false)
         {
             List<object> flat = null;
             if (flat_sequence is List<object>)

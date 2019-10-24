@@ -39,7 +39,7 @@ namespace Tensorflow
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
     [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
-    public partial class Tensor : DisposableObject, ITensorOrOperation, _TensorLike
+    public partial class Tensor : DisposableObject, ITensorOrOperation, _TensorLike, ITensorOrTensorArray
     {
         private readonly int _id;
         private readonly Operation _op;
@@ -178,7 +178,7 @@ namespace Tensorflow
         /// </summary>
         public void set_shape(TensorShape shape) 
         {
-            this.shape = shape.rank > 0 ? shape.dims : null;
+            this.shape = shape.rank >= 0 ? shape.dims : null;
         }
 
         /// <summary>

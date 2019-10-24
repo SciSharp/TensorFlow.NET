@@ -25,6 +25,7 @@ namespace Tensorflow.Operations
     internal class _GraphTensorArray
     {
         internal TF_DataType _dtype;
+        public TF_DataType dtype => _dtype;
 
         /// <summary>
         /// Used to keep track of what tensors the TensorArray should be
@@ -32,14 +33,17 @@ namespace Tensorflow.Operations
         /// first tensor written to it.
         /// </summary>
         bool _colocate_with_first_write_call;
+        public bool colocate_with_first_write_call => _colocate_with_first_write_call;
 
         bool _infer_shape;
-        bool _dynamic_size;
-        List<TensorShape> _element_shape;
+        public bool infer_shape => _infer_shape;
+        public bool _dynamic_size;
+        public List<TensorShape> _element_shape;
 
-        List<Tensor> _colocate_with;
+        public List<Tensor> _colocate_with;
 
         internal Tensor _handle;
+        public Tensor handle => _handle;
         internal Tensor _flow;
 
         public _GraphTensorArray(TF_DataType dtype, Tensor size, bool? dynamic_size = null,

@@ -172,7 +172,8 @@ namespace Tensorflow.Operations
 
                 for (int i = 0; i < input_ta.Count; i++)
                 {
-                    var (ta, input_) = (input_ta[0], flat_input[0]);
+                    var (ta, input_) = (input_ta[i], flat_input[i]);
+                    ta.unstack(input_);
                 }
             }
 
@@ -185,16 +186,16 @@ namespace Tensorflow.Operations
 
             Func<BodyItemInRnnWhileLoop, Tensor> cond = (item) =>
             {
-                return time < loop_bound;
+                return item.time < loop_bound;
             };
 
             // Take a time step of the dynamic RNN.
             Func<BodyItemInRnnWhileLoop, BodyItemInRnnWhileLoop> _time_step = (item) =>
             {
-                return item;
+                throw new NotImplementedException("");
             };
 
-            control_flow_ops.while_loop<BodyItemInRnnWhileLoop>(
+            control_flow_ops.while_loop(
               cond: cond,
               body: _time_step,
               loop_vars: new BodyItemInRnnWhileLoop(time, output_ta.ToArray(), state),

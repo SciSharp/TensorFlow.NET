@@ -14,7 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using Tensorflow.Operations;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -52,6 +54,26 @@ namespace Tensorflow
             if (ctxt != null && IsLoopExit(op))
                 ctxt = ctxt.outer_context;
             return ctxt;
+        }
+
+        public static void CheckInputFromValidContext(Operation op, Operation input_op)
+        {
+            var op_ctxt = op._get_control_flow_context();
+            var input_ctxt = GetOutputContext(input_op);
+            var valid = false;
+            if (input_ctxt == null)
+                valid = true;
+            else if (op_ctxt == input_ctxt)
+                valid = true;
+            else
+            {
+                throw new NotImplementedException("");
+            }
+
+            if (!valid)
+            {
+                throw new NotImplementedException("");
+            }
         }
     }
 }

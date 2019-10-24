@@ -20,7 +20,8 @@ Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.12.0.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.11.0:
-</PackageReleaseNotes>
+1: Add ICanBeFlattened for nest.flatten2.
+2:</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
     <FileVersion>0.12.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

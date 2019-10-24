@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Tensorflow.Util;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

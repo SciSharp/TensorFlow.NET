@@ -21,6 +21,7 @@ using Tensorflow.Operations;
 using Tensorflow.Operations.ControlFlows;
 using util = Tensorflow.control_flow_util;
 using static Tensorflow.Binding;
+using Tensorflow.Util;
 
 namespace Tensorflow
 {
@@ -251,12 +252,16 @@ namespace Tensorflow
                 return gen_array_ops.identity(data, name: name);
         }
 
-        public static void _SetShapeInvariants(Tensor[] input_vars, Tensor[] enter_vars, TensorShape shapes = null)
+        public static void _SetShapeInvariants(Tensor[] input_vars, Tensor[] enter_vars, TensorShape[] shapes = null)
         {
             if (shapes == null)
                 return;
 
-            throw new NotImplementedException("_SetShapeInvariants");
+            var flat_shapes = nest.flatten2(shapes);
+            foreach (var (inp, var, shape) in zip(input_vars, enter_vars, flat_shapes))
+            {
+                var.set_shape(shape);
+            }
         }
 
         ///  <summary>
@@ -428,12 +433,12 @@ namespace Tensorflow
                     .Select(pair => merge(new Tensor[] { pair.Item1, pair.Item2 }))
                     .ToArray();
 
-                merges = _convert_flows_to_tensorarrays(new Tensor[] { (Tensor)orig_res_t }, merges);
+                var merges2 = _convert_flows_to_tensorarrays(new ITensorOrTensorArray[] { (Tensor)orig_res_t }, merges);
 
                 ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_t);
                 ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_f);
 
-                return merges[0];
+                return new Tensor(IntPtr.Zero);
             });
         }
 
@@ -473,22 +478,28 @@ namespace Tensorflow
                 var res_f_flat = res_f;
 
                 var merges = zip(res_f_flat, res_t_flat)
-                    .Select(pair => merge(new Tensor[] { pair.Item1, pair.Item2 }))
+                    .Select(pair => merge(new [] { pair.Item1, pair.Item2 }))
                     .ToArray();
 
-                merges = _convert_flows_to_tensorarrays(orig_res_t, merges);
+                var merges2 = _convert_flows_to_tensorarrays(orig_res_t.Select(x => (ITensorOrTensorArray)x).ToArray(), merges);
 
                 ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_t);
                 ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_f);
 
-                return merges;
+                return new[] { new Tensor(IntPtr.Zero) };
             });
         }
 
-        public static Tensor[] _convert_flows_to_tensorarrays<T>(T tensors_or_tensorarrays, Tensor[] tensors_or_flows)
+        public static ITensorOrTensorArray[] _convert_flows_to_tensorarrays(ITensorOrTensorArray[] tensors_or_tensorarrays, Tensor[] tensors_or_flows)
         {
-            // zip(tensors_or_tensorarrays, tensors_or_flows).Select((ta, t_or_flow) => ta).ToArray();
-            return tensors_or_flows;
+            return zip(tensors_or_tensorarrays, tensors_or_flows).Select(x =>
+            {
+                var (ta, t_or_flow) = (x.Item1, x.Item2);
+                if (ta is TensorArray ta_1)
+                    return tensor_array_ops.build_ta_with_new_flow(ta_1, t_or_flow) as ITensorOrTensorArray;
+                else
+                    return t_or_flow as ITensorOrTensorArray;
+            }).ToArray();
         }
 
         /// <summary>
@@ -592,7 +603,7 @@ namespace Tensorflow
         /// <param name="loop_vars"></param>
         /// <param name="i"></param>
         public static Tensor while_loop<TItem>(Func<TItem, Tensor> cond, Func<TItem, TItem> body, TItem loop_vars,
-            TensorShape shape_invariants = null,
+            TensorShape[] shape_invariants = null,
             int parallel_iterations = 10,
             bool back_prop = true,
             bool swap_memory = false,
@@ -617,8 +628,8 @@ namespace Tensorflow
                 var orig_body = body;
 
                 LoopVar<TItem> loop_vars_1 = null;
-                Func<Tensor, TItem, LoopVar<TItem>> body_buildloop = null;
-                Func<Tensor, TItem, Tensor> cond_buildloop = null;
+                Func<LoopVar<TItem>, LoopVar<TItem>> body_buildloop = null;
+                Func<LoopVar<TItem>, Tensor> cond_buildloop = null;
 
                 if (try_to_pack)
                 {
@@ -627,9 +638,18 @@ namespace Tensorflow
                 else
                 {
                     loop_vars_1 = new LoopVar<TItem>(counter, loop_vars);
-                    cond_buildloop = (i, lv) => 
-                            math_ops.logical_and(i < maximum_iterations, orig_cond(lv));
-                    body_buildloop = (i, lv) => new LoopVar<TItem>(i + 1, orig_body(lv));
+                    cond_buildloop = (item) =>
+                    {
+                        var (i, lv) = (item.Counter, item.Item);
+                        var oc = orig_cond(lv);
+                        return math_ops.logical_and(i < maximum_iterations, oc);
+                    };
+
+                    body_buildloop = (item) =>
+                    {
+                        var (i, lv) = (item.Counter, item.Item);
+                        return new LoopVar<TItem>(i + 1, orig_body(lv));
+                    };
                 }
                 try_to_pack = false;
 
