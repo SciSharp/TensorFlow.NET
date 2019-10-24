@@ -24,5 +24,10 @@ namespace Tensorflow.Operations
                 elements.Add(Item);
             return elements.ToArray();
         }
+
+        public static implicit operator (Tensor, TItem)(LoopVar<TItem> loopVar)
+        {
+            return (loopVar.Counter, loopVar.Item);
+        }
     }
 }

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Operations.ControlFlows;
 using static Tensorflow.ControlFlowContextDef;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {
@@ -72,6 +73,7 @@ namespace Tensorflow.Operations
         public ControlFlowContext()
         {
             _context_stack = new Stack<ControlFlowContext>();
+            _external_values = new Dictionary<string, ITensorOrOperation>();
         }
 
         public string name { get => _name; }
@@ -180,6 +182,11 @@ namespace Tensorflow.Operations
 
         public virtual bool back_prop => throw new NotImplementedException("abstract method");
 
+        /// <summary>
+        /// Add `val` to the current context and its outer context recursively.
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
         public virtual Tensor AddValue(Tensor val)
         {
             // to be overridden
@@ -203,7 +210,25 @@ namespace Tensorflow.Operations
         /// </summary>
         protected virtual void _AddOpInternal(Operation op)
         {
-            
+            if (op.name == "rnn/while/Less")
+            {
+
+            }
+
+            if(op == null)
+            {
+                throw new NotImplementedException("");
+            }
+            else
+            {
+                foreach(var index in range(len(op.inputs)))
+                {
+                    var x = op.inputs[index];
+                    var real_x = AddValue(x);
+                    if (real_x != x)
+                        op._update_input(index, real_x);
+                }
+            }
         }
 
         protected bool OpInContext(Operation op)
