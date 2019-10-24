@@ -17,8 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Operations;
 
-namespace Tensorflow.Operations
+namespace Tensorflow
 {
     /// <summary>
     /// TensorArray is designed to hide an underlying implementation object
@@ -29,9 +30,9 @@ namespace Tensorflow.Operations
     /// `while_loop` and `map_fn`.  It supports gradient back-propagation via special
     /// "flow" control flow dependencies.
     /// </summary>
-    public class TensorArray
+    public class TensorArray : ITensorOrTensorArray
     {
-        _GraphTensorArray _implementation;
+        internal _GraphTensorArray _implementation;
 
         public TF_DataType dtype => _implementation._dtype;
         public Tensor handle => _implementation._handle;
