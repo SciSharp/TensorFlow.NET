@@ -192,7 +192,12 @@ namespace Tensorflow.Operations
             // Take a time step of the dynamic RNN.
             Func<BodyItemInRnnWhileLoop, BodyItemInRnnWhileLoop> _time_step = (item) =>
             {
-                throw new NotImplementedException("");
+                if (in_graph_mode)
+                {
+                    input_ta.Select(ta => ta.read(time)).ToArray();
+                }
+
+                return item;
             };
 
             control_flow_ops.while_loop(

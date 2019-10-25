@@ -33,6 +33,26 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Returns true if `op` is an Enter.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        public static bool IsLoopEnter(Operation op)
+        {
+            return op.type == "Enter" || op.type == "RefEnter";
+        }
+
+        /// <summary>
+        /// Return true iff op is a loop invariant.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        public static bool IsLoopConstantEnter(Operation op)
+        {
+            return IsLoopEnter(op) && op.get_attr<bool>("is_constant");
+        }
+
+        /// <summary>
         /// Return true if `op` is a Switch.
         /// </summary>
         /// <param name="op"></param>

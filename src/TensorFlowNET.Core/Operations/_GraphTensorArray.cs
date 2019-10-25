@@ -159,5 +159,20 @@ namespace Tensorflow.Operations
         {
             _colocate_with.Add(value);
         }
+
+        public Tensor read(Tensor index, string name = null)
+        {
+            var value = gen_data_flow_ops.tensor_array_read_v3(
+                handle: _handle,
+                index: index,
+                flow_in: _flow,
+                dtype: _dtype,
+                name: name);
+
+            if (_element_shape != null)
+                value.set_shape(_element_shape[0].dims);
+
+            return value;
+        }
     }
 }

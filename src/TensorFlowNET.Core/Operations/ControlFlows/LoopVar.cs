@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow.Operations
 {
-    internal class LoopVar<TItem> : ICanBeFlattened
+    internal class LoopVar<TItem> : ICanBeFlattened, IPackable
     {
-        public Tensor Counter { get; }
-        public TItem Item { get; }
+        public Tensor Counter { get; set; }
+        public TItem Item { get; set; }
 
         public LoopVar(Tensor counter, TItem item)
         {
@@ -23,6 +24,13 @@ namespace Tensorflow.Operations
             else
                 elements.Add(Item);
             return elements.ToArray();
+        }
+
+        public void Pack(object[] sequences)
+        {
+            Counter = sequences[0] as Tensor;
+            if (typeof(TItem).GetInterface(typeof(IPackable).Name) != null)
+                (Item as IPackable).Pack(sequences.Skip(1).ToArray());
         }
 
         public static implicit operator (Tensor, TItem)(LoopVar<TItem> loopVar)

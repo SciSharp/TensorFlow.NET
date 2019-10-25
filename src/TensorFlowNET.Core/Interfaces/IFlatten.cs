@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Operations
+namespace Tensorflow
 {
     public interface ICanBeFlattened
     {

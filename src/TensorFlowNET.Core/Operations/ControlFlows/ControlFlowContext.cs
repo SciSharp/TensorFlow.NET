@@ -170,7 +170,7 @@ namespace Tensorflow.Operations
         /// <summary>
         /// Add `op` to the current context.
         /// </summary>
-        public void AddOp(Operation op)
+        public virtual void AddOp(Operation op)
         {
             _AddOpInternal(op);
         }
@@ -210,11 +210,6 @@ namespace Tensorflow.Operations
         /// </summary>
         protected virtual void _AddOpInternal(Operation op)
         {
-            if (op.name == "rnn/while/Less")
-            {
-
-            }
-
             if(op == null)
             {
                 throw new NotImplementedException("");
@@ -255,9 +250,34 @@ namespace Tensorflow.Operations
             throw new NotImplementedException("_IsInOuterContext");
         }
 
-        protected virtual void _RemoveExternalControlEdges(Operation op)
+        /// <summary>
+        /// Remove any external control dependency on this op.
+        /// </summary>
+        /// <param name="op"></param>
+        protected virtual (Operation[], Operation[]) _RemoveExternalControlEdges(Operation op)
         {
-            var internal_control_inputs = op.control_inputs;
+            var while_ctxt = GetWhileContext();
+
+            var internal_control_inputs = new List<Operation>();
+            // A control input of `op` is internal if it is in the same while
+            // loop context as the enclosing while loop context of self.
+            if (while_ctxt == null)
+            {
+                internal_control_inputs = op.control_inputs.ToList();
+            }
+            else
+            {
+                foreach(Tensor x in op.control_inputs)
+                {
+                    throw new NotImplementedException("");
+                }
+            }
+
+            var external_control_inputs = new List<Operation>();
+            if (len(internal_control_inputs) != len(op.control_inputs))
+                throw new NotImplementedException("");
+
+            return (internal_control_inputs.ToArray(), external_control_inputs.ToArray());
         }
 
         /// <summary>

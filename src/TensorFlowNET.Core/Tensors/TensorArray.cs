@@ -58,5 +58,8 @@ namespace Tensorflow
 
         public TensorArray unstack(Tensor value, string name = null)
             => _implementation.unstack(value, name: name);
+
+        public Tensor read(Tensor index, string name = null)
+            => _implementation.read(index, name: name);
     }
 }

@@ -401,6 +401,13 @@ namespace Tensorflow.Util
 
         private static int len(IEnumerable<object> x) => x.Count();
 
+        public static T pack_sequence_as2<T>(T structure, object[] flat_sequence, bool expand_composites = false)
+            where T : IPackable
+        {
+            structure.Pack(flat_sequence);
+            return structure;
+        }
+
         /// <summary>
         /// Returns a given flattened sequence packed into a given structure.
         /// If `structure` is a scalar, `flat_sequence` must be a single-element list;

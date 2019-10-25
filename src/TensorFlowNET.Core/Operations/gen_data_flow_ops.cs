@@ -198,5 +198,27 @@ namespace Tensorflow
 
             return _op.outputs;
         }
+
+        /// <summary>
+        /// Read an element from the TensorArray into output `value`.
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="index"></param>
+        /// <param name="flow_in"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor tensor_array_read_v3(Tensor handle, Tensor index, Tensor flow_in, TF_DataType dtype, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArrayReadV3", name, new
+            {
+                handle,
+                index,
+                flow_in,
+                dtype
+            });
+
+            return _op.output;
+        }
     }
 }

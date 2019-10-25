@@ -240,10 +240,13 @@ namespace Tensorflow.Operations
 
             // Build the graph for body.
             var vars_for_body = switch_vars.Select(x => _Identity(x[1])).ToArray();
+            _pivot_for_body = vars_for_body[0];
             // Convert TensorArray flow variables inside the context back into
             // their associated TensorArrays for calling the body.
-            var packed_vars_for_body = _convert_flows_to_tensorarrays(flat_loop_vars, vars_for_body);
-            var body_result = body(original_loop_vars);
+            var vars_for_body_with_tensor_arrays = _convert_flows_to_tensorarrays(flat_loop_vars, vars_for_body);
+            var packed_vars_for_body = nest.pack_sequence_as2(original_loop_vars, vars_for_body_with_tensor_arrays);
+            var pre_summaries = ops.get_collection(tf.GraphKeys._SUMMARY_COLLECTION);
+            var body_result = body(packed_vars_for_body);
             var post_summaries = ops.get_collection(tf.GraphKeys._SUMMARY_COLLECTION);
 
             // Store body_result to keep track of TensorArrays returned by body
@@ -267,17 +270,27 @@ namespace Tensorflow.Operations
         private void _FixControlInputsAndContext(Tensor[] enters)
         {
             var graph = ops.get_default_graph();
-            foreach(var e in enters)
+            foreach(var x in enters)
             {
-                var inp_op = e.op.inputs[0].op;
+                var inp_op = x.op.inputs[0].op;
                 var control_inputs = graph._control_dependencies_for_inputs(new[] { inp_op });
+                var outer_control_inputs = new List<Operation>();
+                foreach(Operation op in control_inputs)
+                {
+                    // We need to keep control inputs that are in any ancestor
+                    // ControlFlowContext, and within outer WhileContext.
+                    var keep_as_control_input = true;
+                    var op_ctxt = control_flow_util.GetOutputContext(op);
+                    var outer_ctxt = outer_context;
+                    throw new NotImplementedException("");
+                }
                 // op for op in control_inputs if self._IsInOuterContext(op)
-                var outer_control_inputs = control_inputs.Where(x => _IsInOuterContext(x.op))
+                /*var outer_control_inputs = control_inputs.Where(x => _IsInOuterContext(x.op))
                     .Select(x => x.op)
-                    .ToArray();
-                e.op._set_control_flow_context(this);
-                e.op._add_control_inputs(outer_control_inputs);
-                graph._record_op_seen_by_control_dependencies(e.op);
+                    .ToArray();*/
+                x.op._set_control_flow_context(this);
+                x.op._add_control_inputs(outer_control_inputs.ToArray());
+                graph._record_op_seen_by_control_dependencies(x.op);
             }
         }
 
@@ -288,13 +301,127 @@ namespace Tensorflow.Operations
                 _values.Add(x.name);
         }
 
+        protected override void _AddOpInternal(Operation op)
+        {
+            Operation[] external_inputs = new Operation[0];
+            if (op == null)
+            {
+                throw new NotImplementedException("");
+            }
+            else
+            {
+                foreach (var index in range(len(op.inputs)))
+                {
+                    var x = op.inputs[index];
+                    var real_x = AddValue(x);
+                    if (real_x != x)
+                        op._update_input(index, real_x);
+                }
+
+                // Remove any external control dependency on this op.
+                (_, external_inputs) = _RemoveExternalControlEdges(op);
+                // Add a control dependency to prevent loop invariants from
+                // enabling ops that should not be executed.
+                _MaybeAddControlDependency(op);
+                foreach (Tensor x in op.outputs)
+                    _values.Add(x.name);
+            }
+
+            if (external_inputs.Length > 0)
+            {
+                throw new NotImplementedException("external_inputs.Length > 0");
+            }
+
+            if (_outer_context != null || !IsLoopExit(op))
+                foreach (Tensor x in op.outputs)
+                    op.graph.prevent_feeding(x);
+
+            if (_outer_context != null)
+                _outer_context.AddInnerOp(op);
+        }
+
+        protected void _MaybeAddControlDependency(Operation op)
+        {
+            // Determines if `op` needs a control dependency.
+            Func<Operation, bool> _IsOpFree = (op1) =>
+            {
+                if (op1.control_inputs.Length > 0)
+                    return false;
+
+                if (op1.type == "SymbolicGradient")
+                    return true;
+
+                foreach (Tensor x in op1.inputs)
+                    if (!control_flow_util.IsLoopConstantEnter(x.op))
+                        return false;
+
+                return true;
+            };
+
+            if (_IsOpFree(op))
+                op._add_control_input(GetControlPivot().op);
+        }
+
+        private Tensor GetControlPivot()
+        {
+            if (_pivot_for_body != null)
+                return _pivot_for_body;
+            return _pivot_for_pred;
+        }
+
+        public override void AddOp(Operation op)
+        {
+            _AddOpInternal(op);
+        }
+
         public override Tensor AddValue(Tensor val)
         {
             var result = val;
-            var new_value = _values.Contains(val.name);
+            var new_value = !_values.Contains(val.name);
             new_value &= val.op._get_control_flow_context() != this;
             if (new_value)
-                throw new NotImplementedException("");
+            {
+                _values.Add(val.name);
+
+                // If we are in a grad context and val is from its forward context,
+                // use GetRealValue(), which adds the logic to save the history of
+                // val in forward.
+                var grad_ctxt = ops.get_default_graph()._get_control_flow_context();
+                if(grad_ctxt != null)
+                {
+                    grad_ctxt = grad_ctxt.GetWhileContext();
+                    if (grad_ctxt.grad_state != null)
+                    {
+                        throw new NotImplementedException("");
+                    }
+                }
+
+                if (_outer_context != null)
+                {
+                    result = _outer_context.AddValue(val);
+                }
+
+                // Create an Enter to make `result` known to this loop context.
+                Tensor enter = null;
+                tf_with(ops.control_dependencies(new ITensorOrOperation[0]), delegate
+                {
+                    enter = _Enter(
+                        result,
+                        _name,
+                        is_constant: true,
+                        parallel_iterations: _parallel_iterations);
+                    enter.graph.prevent_feeding(enter);
+                    if (_outer_context != null)
+                        _outer_context.AddInnerOp(enter.op);
+                });
+
+                // Fix the control inputs and control flow context of these enter ops.
+                _FixControlInputsAndContext(new[] { enter });
+                // Add `enter` in this context.
+                _values.Add(enter.name);
+                _external_values[val.name] = enter;
+                result = enter;
+            }
             else
             {
                 var actual_val = _external_values.ContainsKey(val.name) ? _external_values[val.name] : null;

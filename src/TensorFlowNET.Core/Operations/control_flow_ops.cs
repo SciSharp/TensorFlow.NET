@@ -648,7 +648,8 @@ namespace Tensorflow
                     body_buildloop = (item) =>
                     {
                         var (i, lv) = (item.Counter, item.Item);
-                        return new LoopVar<TItem>(i + 1, orig_body(lv));
+                        var ob = orig_body(lv);
+                        return new LoopVar<TItem>(i + 1, ob);
                     };
                 }
                 try_to_pack = false;
