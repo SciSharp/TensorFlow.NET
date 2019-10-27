@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public interface IPackable
+    public interface IPackable<T>
     {
-        void Pack(object[] sequences);
+        T Pack(object[] sequences);
     }
 }

@@ -63,7 +63,7 @@ namespace Tensorflow
                     trainable: trainable,
                     name: name);
 
-                return layer.apply(inputs);
+                return layer.apply(inputs).Item1;
             }
 
             /// <summary>
@@ -117,7 +117,7 @@ namespace Tensorflow
                     trainable: trainable,
                     name: name);
 
-                return layer.apply(inputs, training: training);
+                return layer.apply(inputs, training: training).Item1;
             }
 
             /// <summary>
@@ -143,7 +143,7 @@ namespace Tensorflow
                     data_format: data_format,
                     name: name);
 
-                return layer.apply(inputs);
+                return layer.apply(inputs).Item1;
             }
 
             /// <summary>
@@ -179,7 +179,7 @@ namespace Tensorflow
                     kernel_initializer: kernel_initializer, 
                     trainable: trainable);
 
-                return layer.apply(inputs);
+                return layer.apply(inputs).Item1;
             }
 
             /// <summary>

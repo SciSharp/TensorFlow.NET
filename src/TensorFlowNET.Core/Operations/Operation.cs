@@ -305,7 +305,7 @@ namespace Tensorflow
             var output = tensor._as_tf_output();
 
             // Reset cached inputs.
-            _inputs = null;
+            _inputs_val = null;
             // after the c_api call next time _inputs is accessed 
             // the updated inputs are reloaded from the c_api
             lock (Locks.ProcessWide)

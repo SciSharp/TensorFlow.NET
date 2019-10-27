@@ -20,8 +20,8 @@ namespace Tensorflow.Operations
 {
     public class rnn_cell_impl
     {
-        public BasicRNNCell BasicRNNCell(int num_units)
-            => new BasicRNNCell(num_units);
+        public BasicRnnCell BasicRNNCell(int num_units)
+            => new BasicRnnCell(num_units);
 
         public static Tensor _concat(Tensor prefix, int suffix, bool @static = false)
         {

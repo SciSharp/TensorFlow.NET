@@ -72,7 +72,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor call(Tensor inputs, Tensor training = null)
+        protected override (Tensor, Tensor) call(Tensor inputs, Tensor training = null)
         {
             Tensor outputs = null;
             var rank = inputs.rank;
@@ -88,9 +88,9 @@ namespace Tensorflow.Keras.Layers
             if (use_bias)
                 outputs = tf.nn.bias_add(outputs, bias);
             if (activation != null)
-                return activation.Activate(outputs);
+                outputs = activation.Activate(outputs);
 
-            return outputs;
+            return (outputs, outputs);
         }
     }
 }

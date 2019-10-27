@@ -136,27 +136,6 @@ namespace Tensorflow.Operations
             graph._set_control_flow_context(this);
         }
 
-        protected virtual Tensor _Enter(Tensor data, string frame_name,
-            bool is_constant = false, 
-            int parallel_iterations = 10,
-            bool use_ref = true,
-            bool use_input_shape = true,
-            string name = null)
-        {
-            Tensor result;
-            data = ops.internal_convert_to_tensor_or_indexed_slices(data, as_ref: true);
-            if (data.dtype.is_ref_dtype() && use_ref)
-                throw new NotImplementedException("_Enter");
-            else
-                result = gen_control_flow_ops.enter(
-                    data, frame_name, is_constant, parallel_iterations, name: name);
-
-            if (use_input_shape)
-                result.set_shape(data.TensorShape);
-
-            return result;
-        }
-
         /// <summary>
         /// Exit this control flow context.
         /// </summary>

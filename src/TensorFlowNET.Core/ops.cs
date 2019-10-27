@@ -508,6 +508,8 @@ namespace Tensorflow
                     return null;
                 case TensorShape ts:
                     return constant_op.constant(ts.dims, dtype: dtype, name: name);
+                case int[] dims:
+                    return constant_op.constant(dims, dtype: dtype, name: name);
                 case object[] objects:
                     return array_ops._autopacking_conversion_function(objects, dtype: dtype, name: name);
                 default:

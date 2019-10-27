@@ -47,12 +47,12 @@ namespace Tensorflow.Layers
             _keras_style = false;
         }
 
-        public virtual Tensor apply(Tensor inputs, Tensor training = null)
+        public virtual (Tensor, Tensor) apply(Tensor inputs, Tensor training = null)
         {
             return __call__(inputs, training: training);
         }
 
-        public Tensor __call__(Tensor inputs,
+        public (Tensor, Tensor) __call__(Tensor inputs,
             Tensor training = null,
             VariableScope scope = null)
         {
@@ -71,7 +71,7 @@ namespace Tensorflow.Layers
                     auxiliary_name_scope: false);
             }
 
-            Tensor outputs = null;
+            (Tensor, Tensor) outputs = (null, null);
             tf_with(scope_context_manager, scope2 =>
             {
                 _current_scope = scope2;

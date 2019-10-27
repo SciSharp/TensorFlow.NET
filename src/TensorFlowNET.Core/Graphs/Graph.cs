@@ -262,15 +262,11 @@ namespace Tensorflow
 
             if (string.IsNullOrEmpty(name))
                 name = op_type;
+
             // If a names ends with a '/' it is a "name scope" and we use it as-is,
             // after removing the trailing '/'.
             name = name.EndsWith("/") ? ops.name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
-
-            if (name.Contains("define_loss/bigger_box_loss/mul_13"))
-            {
-
-            }
 
             var input_ops = inputs.Select(x => x.op).ToArray();
             var control_inputs = _control_dependencies_for_inputs(input_ops);
@@ -378,6 +374,10 @@ namespace Tensorflow
         /// to name the operation being created.</returns>
         public string unique_name(string name, bool mark_as_used = true)
         {
+            if (name.EndsWith("basic_r_n_n_cell"))
+            {
+
+            }
             if (!String.IsNullOrEmpty(_name_stack))
                 name = _name_stack + "/" + name;
             // For the sake of checking for names in use, we treat names as case

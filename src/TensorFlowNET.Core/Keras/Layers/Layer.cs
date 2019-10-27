@@ -101,7 +101,7 @@ namespace Tensorflow.Keras.Layers
             _inbound_nodes = new List<Node>();
         }
 
-        public Tensor __call__(Tensor[] inputs,
+        public (Tensor, Tensor) __call__(Tensor[] inputs,
             Tensor training = null,
             VariableScope scope = null)
         {
@@ -139,14 +139,14 @@ namespace Tensorflow.Keras.Layers
                     // overridden).
                     _maybe_build(inputs[0]);
 
-                    outputs = call(inputs[0], training: training);
+                    (input, outputs) = call(inputs[0], training: training);
                     (input, outputs) = _set_connectivity_metadata_(input, outputs);
                     _handle_activity_regularization(inputs[0], outputs);
                     _set_mask_metadata(inputs[0], outputs, null);
                 });
             }
 
-            return outputs;
+            return (input, outputs);
         }
 
         private (Tensor, Tensor) _set_connectivity_metadata_(Tensor inputs, Tensor outputs)
@@ -173,9 +173,9 @@ namespace Tensorflow.Keras.Layers
             return null;
         }
 
-        protected virtual Tensor call(Tensor inputs, Tensor training = null)
+        protected virtual (Tensor, Tensor) call(Tensor inputs, Tensor training = null)
         {
-            return inputs;
+            return (inputs, inputs);
         }
 
         protected virtual string _name_scope()

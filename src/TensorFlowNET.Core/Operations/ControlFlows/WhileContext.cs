@@ -184,7 +184,7 @@ namespace Tensorflow.Operations
             Tensor[] enter_vars = null;
             tf_with(ops.control_dependencies(null), delegate
             {
-                enter_vars = real_vars.Select(x => _Enter(x,
+                enter_vars = real_vars.Select(x => control_flow_ops._Enter(x,
                     _name,
                     is_constant: false,
                     parallel_iterations: _parallel_iterations,
@@ -294,6 +294,10 @@ namespace Tensorflow.Operations
             }
         }
 
+        /// <summary>
+        /// Makes the values known to this context.
+        /// </summary>
+        /// <param name="values"></param>
         private void _InitializeValues(Tensor[] values)
         {
             _values = new HashSet<string>();
@@ -303,8 +307,14 @@ namespace Tensorflow.Operations
 
         protected override void _AddOpInternal(Operation op)
         {
+            if(op.name == "rnn/while/basic_rnn_cell/MatMul" ||
+                op.name == "rnn/while/TensorArrayReadV3")
+            {
+
+            }
+
             Operation[] external_inputs = new Operation[0];
-            if (op == null)
+            if (op.inputs.Length == 0)
             {
                 throw new NotImplementedException("");
             }
@@ -374,6 +384,11 @@ namespace Tensorflow.Operations
             _AddOpInternal(op);
         }
 
+        /// <summary>
+        /// Add `val` to the current context and its outer context recursively.
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
         public override Tensor AddValue(Tensor val)
         {
             var result = val;
@@ -403,9 +418,9 @@ namespace Tensorflow.Operations
 
                 // Create an Enter to make `result` known to this loop context.
                 Tensor enter = null;
-                tf_with(ops.control_dependencies(new ITensorOrOperation[0]), delegate
+                tf_with(ops.control_dependencies(null), delegate
                 {
-                    enter = _Enter(
+                    enter = control_flow_ops._Enter(
                         result,
                         _name,
                         is_constant: true,

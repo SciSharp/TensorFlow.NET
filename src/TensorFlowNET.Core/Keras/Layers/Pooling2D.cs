@@ -43,7 +43,7 @@ namespace Tensorflow.Keras.Layers
             this.input_spec = new InputSpec(ndim: 4);
         }
 
-        protected override Tensor call(Tensor inputs, Tensor training = null)
+        protected override (Tensor, Tensor) call(Tensor inputs, Tensor training = null)
         {
             int[] pool_shape;
             if (data_format == "channels_last")
@@ -64,7 +64,7 @@ namespace Tensorflow.Keras.Layers
                 padding: padding.ToUpper(),
                 data_format: conv_utils.convert_data_format(data_format, 4));
 
-            return outputs;
+            return (outputs, outputs);
         }
     }
 }

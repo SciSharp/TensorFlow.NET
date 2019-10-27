@@ -44,14 +44,14 @@ namespace Tensorflow
         [JsonIgnore]
 #endif
         public int NumInputs => c_api.TF_OperationNumInputs(_handle);
-        private TF_DataType[] _input_types => _inputs._inputs.Select(x => x.dtype).ToArray();
+        private TF_DataType[] _input_types => _inputs_val._inputs.Select(x => x.dtype).ToArray();
 
-        private InputList _inputs;
+        private InputList _inputs_val;
         public InputList inputs
         {
             get
             {
-                if (_inputs == null)
+                if (_inputs_val == null)
                 {
                     var retval = new Tensor[NumInputs];
 
@@ -62,10 +62,10 @@ namespace Tensorflow
                         retval[i] = op.outputs[tf_output.index];
                     }
 
-                    _inputs = new InputList(retval);
+                    _inputs_val = new InputList(retval);
                 }
 
-                return _inputs;
+                return _inputs_val;
             }
         }
 

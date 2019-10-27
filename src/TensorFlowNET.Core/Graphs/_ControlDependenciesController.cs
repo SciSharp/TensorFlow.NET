@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using Tensorflow.Operations;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

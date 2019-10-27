@@ -16,9 +16,9 @@
 
 namespace Tensorflow
 {
-    public class LayerRNNCell : RNNCell
+    public class LayerRnnCell : RnnCell
     {
-        public LayerRNNCell(bool? _reuse = null,
+        public LayerRnnCell(bool? _reuse = null,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid) : base(_reuse: _reuse,
                     name: name,

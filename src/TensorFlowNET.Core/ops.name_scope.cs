@@ -45,7 +45,10 @@ namespace Tensorflow
             public void __enter__()
             {
                 _name = _name ?? _default_name;
+                if (_name.EndsWith("basic_r_n_n_cell"))
+                {
 
+                }
                 Graph g = null;
 
                 if (_values is List<Tensor> vList)

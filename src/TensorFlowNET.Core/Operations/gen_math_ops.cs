@@ -568,7 +568,7 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("MatMul", name, args: new { a, b, transpose_a, transpose_b });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         /// <summary>

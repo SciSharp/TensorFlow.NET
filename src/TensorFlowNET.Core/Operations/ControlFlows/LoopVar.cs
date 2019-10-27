@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow.Operations
 {
-    internal class LoopVar<TItem> : ICanBeFlattened, IPackable
+    internal class LoopVar<TItem> : ICanBeFlattened, IPackable<LoopVar<TItem>>
     {
         public Tensor Counter { get; set; }
         public TItem Item { get; set; }
@@ -26,11 +26,13 @@ namespace Tensorflow.Operations
             return elements.ToArray();
         }
 
-        public void Pack(object[] sequences)
+        public LoopVar<TItem> Pack(object[] sequences)
         {
-            Counter = sequences[0] as Tensor;
-            if (typeof(TItem).GetInterface(typeof(IPackable).Name) != null)
-                (Item as IPackable).Pack(sequences.Skip(1).ToArray());
+            var counter = sequences[0] as Tensor;
+            var item = default(TItem);
+            if (typeof(TItem).GetInterface(typeof(IPackable<TItem>).Name) != null)
+                item = (Item as IPackable<TItem>).Pack(sequences.Skip(1).ToArray());
+            return new LoopVar<TItem>(counter, item);
         }
 
         public static implicit operator (Tensor, TItem)(LoopVar<TItem> loopVar)
