@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Operations
 {
-    internal class BodyItemInRnnWhileLoop : ICanBeFlattened, IPackable
+    internal class BodyItemInRnnWhileLoop : ICanBeFlattened, IPackable<BodyItemInRnnWhileLoop>
     {
         /// <summary>
         /// int32 scalar Tensor.
@@ -37,11 +37,13 @@ namespace Tensorflow.Operations
             return elements.ToArray();
         }
 
-        public void Pack(object[] sequences)
+        public BodyItemInRnnWhileLoop Pack(object[] sequences)
         {
             time = sequences[0] as Tensor;
             output_ta_t = new[] { sequences[1] as TensorArray };
             state = sequences[2] as Tensor;
+
+            return new BodyItemInRnnWhileLoop(time, output_ta_t, state);
         }
     }
 }
