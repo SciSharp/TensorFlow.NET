@@ -125,6 +125,9 @@ namespace Tensorflow
         {
             get
             {
+                if (!slice.Stop.HasValue)
+                    slice.Stop = dims.Length - slice.Start + 1;
+
                 if (slice.Start.HasValue == false || slice.Length.HasValue == false)
                     throw new ArgumentException("Slice must has Start and Length.");
 
