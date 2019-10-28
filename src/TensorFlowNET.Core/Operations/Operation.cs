@@ -78,6 +78,7 @@ namespace Tensorflow
 #if SERIALIZABLE
         [JsonIgnore]
 #endif
+        bool _is_stateful;
         public NodeDef node_def
         {
             get
@@ -173,6 +174,8 @@ namespace Tensorflow
                 }
             }
 
+            _id_value = _graph._next_id();
+
             // Dict mapping op name to file and line information for op colocation
             // context managers.
             _control_flow_context = graph._get_control_flow_context();
@@ -183,6 +186,8 @@ namespace Tensorflow
 
             var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
             _handle = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
+
+            _is_stateful = op_def.IsStateful;
 
             // Initialize self._outputs.
             output_types = new TF_DataType[NumOutputs];

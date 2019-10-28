@@ -133,66 +133,69 @@ namespace Tensorflow
             if (trainable && !collections.Contains(tf.GraphKeys.TRAINABLE_VARIABLES))
                 collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
 
-            ops.init_scope();
-            var values = init_from_fn ? new object[0] : new object[] { initial_value };
-            tf_with(ops.name_scope(name, "Variable", values), scope =>
+            tf_with(ops.init_scope2(), delegate
             {
-                name = scope;
-                if (init_from_fn)
+                var values = init_from_fn ? new object[0] : new object[] { initial_value };
+                tf_with(ops.name_scope(name, "Variable", values), scope =>
                 {
-                    // Use attr_scope and device(None) to simulate the behavior of
-                    // colocate_with when the variable we want to colocate with doesn't
-                    // yet exist.
-                    string true_name = ops.name_from_scope_name(name);
-                    var attr = new AttrValue
+                    name = scope;
+
+                    if (init_from_fn)
                     {
-                        List = new AttrValue.Types.ListValue()
-                    };
-                    attr.List.S.Add(ByteString.CopyFromUtf8($"loc:{true_name}"));
-                    tf_with(ops.name_scope("Initializer"), scope2 =>
+                        // Use attr_scope and device(None) to simulate the behavior of
+                        // colocate_with when the variable we want to colocate with doesn't
+                        // yet exist.
+                        string true_name = ops.name_from_scope_name(name);
+                        var attr = new AttrValue
+                        {
+                            List = new AttrValue.Types.ListValue()
+                        };
+                        attr.List.S.Add(ByteString.CopyFromUtf8($"loc:{true_name}"));
+                        tf_with(ops.name_scope("Initializer"), scope2 =>
+                        {
+                            _initial_value = (initial_value as Func<Tensor>)();
+                            _initial_value = ops.convert_to_tensor(_initial_value, name: "initial_value", dtype: dtype);
+                        });
+                        _variable = state_ops.variable_op_v2(_initial_value.shape, _initial_value.dtype.as_base_dtype(), name: name);
+                    }
+                    // Or get the initial value from a Tensor or Python object.
+                    else
                     {
-                        _initial_value = (initial_value as Func<Tensor>)();
-                        _initial_value = ops.convert_to_tensor(_initial_value, name: "initial_value", dtype: dtype);
-                    });
-                    _variable = state_ops.variable_op_v2(_initial_value.shape, _initial_value.dtype.as_base_dtype(), name: name);
-                }
-                // Or get the initial value from a Tensor or Python object.
-                else
-                {
-                    _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value", dtype: dtype);
+                        _initial_value = ops.convert_to_tensor(initial_value, name: "initial_value", dtype: dtype);
 
-                    var shape = _initial_value.shape;
-                    dtype = _initial_value.dtype;
-                    _variable = gen_state_ops.variable_v2(shape, dtype.as_base_dtype(), scope);
-                }
+                        var shape = _initial_value.shape;
+                        dtype = _initial_value.dtype;
+                        _variable = gen_state_ops.variable_v2(shape, dtype.as_base_dtype(), scope);
+                    }
 
-                // Manually overrides the variable's shape with the initial value's.
-                if (validate_shape)
-                {
-                    var initial_value_shape = _initial_value.TensorShape;
-                    if (!initial_value_shape.is_fully_defined())
-                        throw new ValueError($"initial_value must have a shape specified: {_initial_value}");
-                }
+                    // Manually overrides the variable's shape with the initial value's.
+                    if (validate_shape)
+                    {
+                        var initial_value_shape = _initial_value.TensorShape;
+                        if (!initial_value_shape.is_fully_defined())
+                            throw new ValueError($"initial_value must have a shape specified: {_initial_value}");
+                    }
 
-                // If 'initial_value' makes use of other variables, make sure we don't
-                // have an issue if these other variables aren't initialized first by
-                // using their initialized_value() method.
-                var _initial_value2 = _try_guard_against_uninitialized_dependencies(name, _initial_value);
+                    // If 'initial_value' makes use of other variables, make sure we don't
+                    // have an issue if these other variables aren't initialized first by
+                    // using their initialized_value() method.
+                    var _initial_value2 = _try_guard_against_uninitialized_dependencies(name, _initial_value);
 
-                _initializer_op = gen_state_ops.assign(_variable, _initial_value2, validate_shape).op;
+                    _initializer_op = gen_state_ops.assign(_variable, _initial_value2, validate_shape).op;
 
-                if (!String.IsNullOrEmpty(caching_device))
-                {
+                    if (!String.IsNullOrEmpty(caching_device))
+                    {
 
-                }
-                else
-                {
-                    ops.colocate_with(_initializer_op);
+                    }
+                    else
+                    {
+                        ops.colocate_with(_initializer_op);
 
-                    _snapshot = gen_array_ops.identity(_variable, name = "read");
-                }
+                        _snapshot = gen_array_ops.identity(_variable, name = "read");
+                    }
 
-                ops.add_to_collections(collections, this as VariableV1);
+                    ops.add_to_collections(collections, this as VariableV1);
+                });
             });
         }
 

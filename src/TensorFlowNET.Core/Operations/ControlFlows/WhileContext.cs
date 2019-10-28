@@ -307,12 +307,6 @@ namespace Tensorflow.Operations
 
         protected override void _AddOpInternal(Operation op)
         {
-            if(op.name == "rnn/while/basic_rnn_cell/MatMul" ||
-                op.name == "rnn/while/TensorArrayReadV3")
-            {
-
-            }
-
             Operation[] external_inputs = new Operation[0];
             if (op.inputs.Length == 0)
             {
@@ -412,10 +406,12 @@ namespace Tensorflow.Operations
                 }
 
                 if (_outer_context != null)
-                {
                     result = _outer_context.AddValue(val);
-                }
 
+                if (tf.get_default_graph()._nodes_by_name.Count >= 83)
+                {
+
+                }
                 // Create an Enter to make `result` known to this loop context.
                 Tensor enter = null;
                 tf_with(ops.control_dependencies(null), delegate

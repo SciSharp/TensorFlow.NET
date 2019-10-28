@@ -43,7 +43,7 @@ namespace Tensorflow.Keras.Layers
             this.input_spec = new InputSpec(ndim: 4);
         }
 
-        protected override (Tensor, Tensor) call(Tensor inputs, Tensor training = null)
+        protected override (Tensor, Tensor) call(Tensor inputs, Tensor training = null, Tensor state = null)
         {
             int[] pool_shape;
             if (data_format == "channels_last")

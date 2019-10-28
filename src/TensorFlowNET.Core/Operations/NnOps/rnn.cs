@@ -214,7 +214,7 @@ namespace Tensorflow.Operations
                 if (sequence_length != null)
                     throw new NotImplementedException("sequence_length != null");
                 else
-                    a = cell.__call__(input_t_t, state1);
+                    a = cell.__call__(input_t_t, state: state1);
 
                 return item;
             };

@@ -52,6 +52,7 @@ namespace Tensorflow.Keras.Layers
         protected InputSpec input_spec;
         protected bool supports_masking;
         protected List<VariableV1> _trainable_weights;
+        protected List<VariableV1> _non_trainable_weights;
         private string _name;
         public string name => _name;
         protected string _base_name;
@@ -84,6 +85,7 @@ namespace Tensorflow.Keras.Layers
 
             _init_set_name(name);
             _trainable_weights = new List<VariableV1>();
+            _non_trainable_weights = new List<VariableV1>();
             _compute_previous_mask = false;
             _updates = new List<Operation>();
 
@@ -103,6 +105,7 @@ namespace Tensorflow.Keras.Layers
 
         public (Tensor, Tensor) __call__(Tensor[] inputs,
             Tensor training = null,
+            Tensor state = null,
             VariableScope scope = null)
         {
             var input_list = inputs;
@@ -139,7 +142,9 @@ namespace Tensorflow.Keras.Layers
                     // overridden).
                     _maybe_build(inputs[0]);
 
-                    (input, outputs) = call(inputs[0], training: training);
+                    (input, outputs) = call(inputs[0], 
+                        training: training,
+                        state: state);
                     (input, outputs) = _set_connectivity_metadata_(input, outputs);
                     _handle_activity_regularization(inputs[0], outputs);
                     _set_mask_metadata(inputs[0], outputs, null);
@@ -173,7 +178,7 @@ namespace Tensorflow.Keras.Layers
             return null;
         }
 
-        protected virtual (Tensor, Tensor) call(Tensor inputs, Tensor training = null)
+        protected virtual (Tensor, Tensor) call(Tensor inputs, Tensor training = null, Tensor state = null)
         {
             return (inputs, inputs);
         }
@@ -233,7 +238,10 @@ namespace Tensorflow.Keras.Layers
                 initializer: initializer,
                 trainable: trainable.Value);
             //backend.track_variable(variable);
-            _trainable_weights.Add(variable);
+            if (trainable == true)
+                _trainable_weights.Add(variable);
+            else
+                _non_trainable_weights.Add(variable);
 
             return variable;
         }

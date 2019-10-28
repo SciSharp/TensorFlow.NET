@@ -70,6 +70,8 @@ namespace Tensorflow
             }
 
             _seen_nodes = new List<ITensorOrOperation>();
+            _old_stack = null;
+            _old_control_flow_context = null;
         }
 
         public void add_op(ITensorOrOperation op)
