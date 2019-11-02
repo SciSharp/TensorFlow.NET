@@ -103,14 +103,14 @@ namespace Tensorflow.Keras.Layers
             _inbound_nodes = new List<Node>();
         }
 
-        public (Tensor, Tensor) __call__(Tensor[] inputs,
+        public Tensor[] __call__(Tensor[] inputs,
             Tensor training = null,
             Tensor state = null,
             VariableScope scope = null)
         {
             var input_list = inputs;
             var input = inputs[0];
-            Tensor outputs = null;
+            Tensor[] outputs = null;
 
             // We will attempt to build a TF graph if & only if all inputs are symbolic.
             // This is always the case in graph mode. It can also be the case in eager
@@ -142,25 +142,26 @@ namespace Tensorflow.Keras.Layers
                     // overridden).
                     _maybe_build(inputs[0]);
 
-                    (input, outputs) = call(inputs[0], 
+                    outputs = call(inputs[0], 
                         training: training,
                         state: state);
+
                     (input, outputs) = _set_connectivity_metadata_(input, outputs);
                     _handle_activity_regularization(inputs[0], outputs);
                     _set_mask_metadata(inputs[0], outputs, null);
                 });
             }
 
-            return (input, outputs);
+            return outputs;
         }
 
-        private (Tensor, Tensor) _set_connectivity_metadata_(Tensor inputs, Tensor outputs)
+        private (Tensor, Tensor[]) _set_connectivity_metadata_(Tensor inputs, Tensor[] outputs)
         {
             //_add_inbound_node(input_tensors: inputs, output_tensors: outputs);
             return (inputs, outputs);
         }
 
-        private void _handle_activity_regularization(Tensor inputs, Tensor outputs)
+        private void _handle_activity_regularization(Tensor inputs, Tensor[] outputs)
         {
             //if(_activity_regularizer != null)
             {
@@ -168,7 +169,7 @@ namespace Tensorflow.Keras.Layers
             }
         }
 
-        private void _set_mask_metadata(Tensor inputs, Tensor outputs, Tensor previous_mask)
+        private void _set_mask_metadata(Tensor inputs, Tensor[] outputs, Tensor previous_mask)
         {
 
         }
@@ -178,9 +179,9 @@ namespace Tensorflow.Keras.Layers
             return null;
         }
 
-        protected virtual (Tensor, Tensor) call(Tensor inputs, Tensor training = null, Tensor state = null)
+        protected virtual Tensor[] call(Tensor inputs, Tensor training = null, Tensor state = null)
         {
-            return (inputs, inputs);
+            throw new NotImplementedException("");
         }
 
         protected virtual string _name_scope()

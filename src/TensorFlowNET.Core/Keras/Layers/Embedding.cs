@@ -50,14 +50,14 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override (Tensor, Tensor) call(Tensor inputs, Tensor training = null, Tensor state = null)
+        protected override Tensor[] call(Tensor inputs, Tensor training = null, Tensor state = null)
         {
             var dtype = inputs.dtype;
             if (dtype != tf.int32 && dtype != tf.int64)
                 inputs = math_ops.cast(inputs, tf.int32);
 
             var @out = embedding_ops.embedding_lookup(embeddings, inputs);
-            return (@out, @out);
+            return new[] { @out, @out };
         }
     }
 }

@@ -139,14 +139,14 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override (Tensor, Tensor) call(Tensor inputs, Tensor training = null, Tensor state = null)
+        protected override Tensor[] call(Tensor inputs, Tensor training = null, Tensor state = null)
         {
             Tensor outputs = null;
 
             if (fused)
             {
                 outputs = _fused_batch_norm(inputs, training: training);
-                return (outputs, outputs);
+                return new[] { outputs, outputs };
             }
 
             throw new NotImplementedException("BatchNormalization call");
