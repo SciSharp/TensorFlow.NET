@@ -220,5 +220,44 @@ namespace Tensorflow
 
             return _op.output;
         }
+
+        public static Tensor tensor_array_write_v3(Tensor handle, Tensor index, Tensor value, Tensor flow_in, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArrayWriteV3", name, new
+            {
+                handle,
+                index,
+                value,
+                flow_in
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor tensor_array_size_v3(Tensor handle, Tensor flow_in, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArraySizeV3", name, new
+            {
+                handle,
+                flow_in
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor tensor_array_gather_v3(Tensor handle, Tensor indices, Tensor flow_in, 
+            TF_DataType dtype, TensorShape element_shape = null, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArrayGatherV3", name, new
+            {
+                handle,
+                indices,
+                dtype,
+                element_shape,
+                flow_in
+            });
+
+            return _op.output;
+        }
     }
 }
