@@ -61,5 +61,11 @@ namespace Tensorflow
 
         public Tensor read(Tensor index, string name = null)
             => _implementation.read(index, name: name);
+
+        public TensorArray write(Tensor index, Tensor value, string name = null)
+            => _implementation.write(index, value, name: name);
+
+        public Tensor stack(string name = null)
+            => _implementation.stack(name: name);
     }
 }

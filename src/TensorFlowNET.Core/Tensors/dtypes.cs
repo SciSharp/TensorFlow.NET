@@ -33,6 +33,9 @@ namespace Tensorflow
         public static TF_DataType float32 = TF_DataType.TF_FLOAT; // is that float32?
         public static TF_DataType float16 = TF_DataType.TF_HALF;
         public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
+        public static TF_DataType complex = TF_DataType.TF_COMPLEX;
+        public static TF_DataType complex64 = TF_DataType.TF_COMPLEX64;
+        public static TF_DataType complex128 = TF_DataType.TF_COMPLEX128;
         public static TF_DataType variant = TF_DataType.TF_VARIANT;
         public static TF_DataType resource = TF_DataType.TF_RESOURCE;
 
