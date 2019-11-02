@@ -530,10 +530,9 @@ namespace Tensorflow.Operations
                         }
                         if(forward_ctxt == grad_ctxt.grad_state.forward_context)
                         {
-                            throw new NotImplementedException("forward_ctxt == grad_ctxt.grad_state.forward_context");
-                            /*real_val = grad_ctxt.grad_state.GetRealValue(val);
+                            var real_val = grad_ctxt.grad_state.GetRealValue(val);
                             _external_values[val.name] = real_val;
-                            return real_val;*/
+                            return real_val;
                         }
                     }
                 }

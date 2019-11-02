@@ -15,17 +15,14 @@
 ******************************************************************************/
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public partial class Operation
     {
-        // cache the mapping between managed and unmanaged op
-        // some data is stored in managed instance, so when
-        // create Operation by IntPtr, it will lost some data.
-        private static Dictionary<IntPtr, Operation> OpInstances = new Dictionary<IntPtr, Operation>();
-
         /// <summary>
         /// Get operation by handle 
         /// </summary>
@@ -33,9 +30,17 @@ namespace Tensorflow
         /// <returns></returns>
         public Operation GetOperation(IntPtr handle)
         {
-            return OpInstances.ContainsKey(handle) ? 
-                OpInstances[handle] : 
-                new Operation(handle);
+            var nodes = tf.get_default_graph()._nodes_by_name;
+            foreach(var node in nodes.Values)
+            {
+                if (node is Operation op)
+                {
+                    if (op == handle)
+                        return op;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Operations;
+
 namespace Tensorflow
 {
     public class gen_control_flow_ops
@@ -148,18 +150,18 @@ namespace Tensorflow
             return new []{_op.outputs[0], _op.outputs[1]};
         }
 
-        public static Tensor[] ref_merge(Tensor[] inputs, string name = null)
+        public static MergeOutput ref_merge(Tensor[] inputs, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("RefMerge", name, new { inputs });
 
-            return _op.outputs;
+            return new MergeOutput(_op.outputs);
         }
 
-        public static Tensor[] merge(Tensor[] inputs, string name = null)
+        public static MergeOutput merge(Tensor[] inputs, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("Merge", name, new { inputs });
 
-            return _op.outputs;
+            return new MergeOutput(_op.outputs);
         }
     }
 }

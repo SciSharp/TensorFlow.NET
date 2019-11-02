@@ -259,5 +259,31 @@ namespace Tensorflow
 
             return _op.output;
         }
+
+        public static Tensor stack_v2(Tensor max_size, TF_DataType elem_type, string stack_name = "", 
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StackV2", name, new
+            {
+                max_size,
+                elem_type,
+                stack_name
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor stack_push_v2(Tensor handle, Tensor elem, bool swap_memory = false, 
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StackPushV2", name, new
+            {
+                handle,
+                elem,
+                swap_memory
+            });
+
+            return _op.output;
+        }
     }
 }

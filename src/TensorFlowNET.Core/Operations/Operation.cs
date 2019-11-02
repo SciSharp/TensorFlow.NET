@@ -106,7 +106,6 @@ namespace Tensorflow
             _control_flow_context = _graph._get_control_flow_context();
 
             // Note: _control_flow_post_processing() must not be called here, the caller is responsible for calling it when using this constructor.
-            OpInstances[_handle] = this;
         }
 
         /*public Operation(Graph g, string opType, string oper_name)
@@ -183,10 +182,12 @@ namespace Tensorflow
             // This will be set by self.inputs.
             if (op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
+            if(node_def.Name == "gradients/rnn/while/basic_rnn_cell/Tanh_grad/TanhGrad/f_acc")
+            {
 
+            }
             var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
             _handle = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
-
             _is_stateful = op_def.IsStateful;
 
             // Initialize self._outputs.
@@ -202,8 +203,6 @@ namespace Tensorflow
 
             if (_handle != IntPtr.Zero)
                 _control_flow_post_processing();
-
-            OpInstances[_handle] = this;
         }
 
         public void run(FeedItem[] feed_dict = null, Session session = null)

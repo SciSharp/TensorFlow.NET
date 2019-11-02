@@ -30,7 +30,7 @@ namespace Tensorflow.Operations
             TF_DataType dtype = TF_DataType.DtInvalid,
             int? parallel_iterations = null, bool swap_memory = false, bool time_major = false)
         {
-            tf_with(tf.variable_scope("rnn"), scope =>
+            return tf_with(tf.variable_scope("rnn"), scope =>
             {
                 VariableScope varscope = scope;
                 var flat_input = nest.flatten(inputs_tensor);
@@ -64,9 +64,12 @@ namespace Tensorflow.Operations
                     swap_memory: swap_memory,
                     sequence_length: sequence_length,
                     dtype: dtype);
-            });
 
-            throw new NotImplementedException("");
+                if (!time_major)
+                    outputs = nest.map_structure(_transpose_batch_time, outputs);
+
+                return (outputs, final_state);
+            });
         }
 
         /// <summary>
@@ -210,16 +213,28 @@ namespace Tensorflow.Operations
                 var input_t_t = nest.pack_sequence_as2(structure: inputs, flat_sequence: input_t);
                 // Keras RNN cells only accept state as list, even if it's a single tensor.
                 // var is_keras_rnn_cell = _is_keras_rnn_cell(cell);
-                (Tensor, Tensor) a = (null, null);
+                Tensor[] outputs = null;
                 if (sequence_length != null)
                     throw new NotImplementedException("sequence_length != null");
                 else
-                    a = cell.__call__(input_t_t, state: state1);
+                    outputs = cell.__call__(input_t_t, state: state1);
 
-                return item;
+                var (output, new_state) = (outputs[0], outputs[1]);
+                // Keras cells always wrap state as list, even if it's a single tensor.
+                // if(is_keras_rnn_cell && len(new_state)) == 1
+                // Pack state if using state tuples
+                outputs = nest.flatten2(output).Select(x => x as Tensor).ToArray();
+
+                output_ta_t = zip(output_ta_t, outputs).Select(x =>
+                {
+                    var(ta, @out) = (x.Item1, x.Item2);
+                    return ta.write(item.time, @out);
+                }).ToArray();
+
+                return new BodyItemInRnnWhileLoop(item.time + 1, output_ta_t, new_state);
             };
 
-            control_flow_ops.while_loop(
+            var while_loop_result = control_flow_ops.while_loop(
               cond: cond,
               body: _time_step,
               loop_vars: new BodyItemInRnnWhileLoop(time, output_ta.ToArray(), state),
@@ -227,7 +242,18 @@ namespace Tensorflow.Operations
               maximum_iterations: time_steps,
               swap_memory: swap_memory);
 
-            throw new NotImplementedException("");
+            (_, TensorArray[] output_final_ta, Tensor final_state) = (while_loop_result.time, while_loop_result.output_ta_t, while_loop_result.state);
+
+            // Unpack final output if not using output tuples.
+            var final_outputs = output_final_ta.Select(ta => ta.stack()).ToArray();
+            // Restore some shape information
+            foreach (var (output, output_size) in zip(final_outputs, flat_output_size))
+            {
+                var shape = rnn_cell_impl._concat(new[] { const_time_steps, const_batch_size }, output_size, @static: true);
+                output.set_shape(shape);
+            }
+
+            return (final_outputs[0], final_state);
         }
 
         private static TensorShape _maybe_tensor_shape_from_tensor(Tensor shape)

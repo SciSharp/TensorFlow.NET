@@ -52,12 +52,21 @@ namespace Tensorflow
 
         public void _set_control_flow_context(ControlFlowContext ctx)
         {
+            if (name.Contains("gradients/rnn/while/basic_rnn_cell/Tanh_grad/TanhGrad/f_acc"))
+            {
+
+            }
             _control_flow_context = ctx;
         }
 
         public ControlFlowContext _get_control_flow_context()
         {
             return _control_flow_context;
+        }
+
+        public WhileContext GetWhileContext()
+        {
+            return _control_flow_context as WhileContext;
         }
     }
 }

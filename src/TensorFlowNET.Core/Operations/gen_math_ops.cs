@@ -282,7 +282,7 @@ namespace Tensorflow
         /// <param name="dy"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor tanh_grad(Tensor y, Tensor dy, string name = "TanhGrad")
+        public static Tensor tanh_grad(Tensor y, Tensor dy, string name = null)
             => _op_def_lib._apply_op_helper("TanhGrad", name: name, args: new { y, dy }).output;
 
         public static Tensor floor(Tensor x, string name = null)
