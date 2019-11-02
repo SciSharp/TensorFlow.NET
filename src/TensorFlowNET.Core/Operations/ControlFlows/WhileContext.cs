@@ -32,12 +32,17 @@ namespace Tensorflow.Operations
         bool _back_prop=true;
         GradLoopState _grad_state =null;
         Tensor _maximum_iterations;
+        public Tensor maximum_iterations => _maximum_iterations;
         int _parallel_iterations;
+        public int parallel_iterations => _parallel_iterations;
         bool _swap_memory;
+        public bool swap_memory => _swap_memory;
         Tensor _pivot_for_pred;
         Tensor _pivot_for_body;
         List<Tensor> _loop_exits;
+        public List<Tensor> loop_exits => _loop_exits;
         List<Tensor> _loop_enters;
+        public List<Tensor> loop_enters => _loop_enters;
         Graph _graph;
         public override GradLoopState grad_state => _grad_state;
         public override bool back_prop => _back_prop;
@@ -109,7 +114,7 @@ namespace Tensorflow.Operations
         /// <summary>
         /// Add the loop termination condition and body to the graph.
         /// </summary>
-        internal Tensor[] BuildLoop<TItem>(Func<LoopVar<TItem>, Tensor> pred, 
+        internal LoopVar<TItem> BuildLoop<TItem>(Func<LoopVar<TItem>, Tensor> pred, 
             Func<LoopVar<TItem>, LoopVar<TItem>> body,
             LoopVar<TItem> loop_vars,
             TensorShape[] shape_invariants,
@@ -132,14 +137,16 @@ namespace Tensorflow.Operations
                 pred, body, original_loop_vars, loop_vars_tensors, shape_invariants);
             Exit();
 
-            var flat_result = original_body_result;
+            var flat_result = nest.flatten2(original_body_result)
+                .Select(x => x as ITensorOrTensorArray)
+                .ToArray();
 
             var exit_vars_with_tensor_arrays = _convert_flows_to_tensorarrays(flat_result, exit_vars);
-            var packed_exit_vars = nest.pack_sequence_as(
+            var packed_exit_vars = nest.pack_sequence_as2(
                 structure: original_body_result,
                 flat_sequence: exit_vars_with_tensor_arrays);
 
-            return packed_exit_vars as Tensor[];
+            return packed_exit_vars;
         }
 
         private Tensor _convert_tensorarray_to_flow(object tensor_or_tensor_array)
@@ -167,7 +174,7 @@ namespace Tensorflow.Operations
         /// <param name="loop_vars"></param>
         /// <param name="shape_invariants"></param>
         /// <returns></returns>
-        private (Tensor[], Tensor[]) _BuildLoop<TItem>(Func<LoopVar<TItem>, Tensor> pred,
+        private (LoopVar<TItem>, Tensor[]) _BuildLoop<TItem>(Func<LoopVar<TItem>, Tensor> pred,
             Func<LoopVar<TItem>, LoopVar<TItem>> body,
             LoopVar<TItem> original_loop_vars,
             Tensor[] loop_vars,
@@ -221,6 +228,7 @@ namespace Tensorflow.Operations
 
             var merge_vars = enter_vars
                 .Select(x => merge(new[] { x, x }))
+                .Select(m => (Tensor)m)
                 .ToArray();
 
             _pivot_for_pred = merge_vars[0];
@@ -250,13 +258,15 @@ namespace Tensorflow.Operations
             var post_summaries = ops.get_collection(tf.GraphKeys._SUMMARY_COLLECTION);
 
             // Store body_result to keep track of TensorArrays returned by body
-            var original_body_result = new[] { body_result };
+            var original_body_result = body_result;
             // Convert TensorArrays returned by body into their flow variables
-            var result = new[] { body_result };
-
+            var result = nest.flatten2(body_result)
+                .Select(x => _convert_tensorarray_to_flow(x))
+                .ToArray();
+            // result = ops.convert_n_to_tensor_or_composite(result);
             var next_vars = new List<Tensor>();
-            //foreach (var (m, v) in zip(merge_vars, result))
-                //next_vars.Add(_AddNextAndBackEdge(m, v));
+            foreach (var (m, v) in zip(merge_vars, result))
+                next_vars.Add(_AddNextAndBackEdge(m, v));
 
             // Add the exit ops.
             var exit_vars = switch_vars.Select(x => exit(x[0])).ToList();
@@ -264,7 +274,7 @@ namespace Tensorflow.Operations
 
             // Exit the loop.
             // ExitResult(exit_vars);
-            return (null, exit_vars.ToArray());
+            return (original_body_result, exit_vars.ToArray());
         }
 
         private void _FixControlInputsAndContext(Tensor[] enters)
@@ -282,7 +292,18 @@ namespace Tensorflow.Operations
                     var keep_as_control_input = true;
                     var op_ctxt = control_flow_util.GetOutputContext(op);
                     var outer_ctxt = outer_context;
-                    throw new NotImplementedException("");
+                    var outer_while_context = outer_ctxt == null ? null : outer_ctxt.GetWhileContext();
+                    while (outer_ctxt != op_ctxt)
+                    {
+                        if (outer_ctxt == null || outer_ctxt == outer_while_context)
+                        {
+                            keep_as_control_input = false;
+                            break;
+                        }
+                        outer_ctxt = outer_ctxt.outer_context;
+                    }
+                    if (keep_as_control_input)
+                        outer_control_inputs.append(op);
                 }
                 // op for op in control_inputs if self._IsInOuterContext(op)
                 /*var outer_control_inputs = control_inputs.Where(x => _IsInOuterContext(x.op))
@@ -307,10 +328,21 @@ namespace Tensorflow.Operations
 
         protected override void _AddOpInternal(Operation op)
         {
+            if (op.name == "gradients/rnn/while/basic_rnn_cell/Tanh_grad/TanhGrad")
+            {
+
+            }
+        
             Operation[] external_inputs = new Operation[0];
+            Operation[] control_inputs = new Operation[0];
             if (op.inputs.Length == 0)
             {
-                throw new NotImplementedException("");
+                // Remove any external control dependency on this op
+                (control_inputs, external_inputs) = _RemoveExternalControlEdges(op);
+                if (control_inputs.Length == 0)
+                    op._add_control_input(GetControlPivot().op);
+                foreach (var x in op.outputs)
+                    _values.Add(x.name);
             }
             else
             {
@@ -379,6 +411,93 @@ namespace Tensorflow.Operations
         }
 
         /// <summary>
+        /// Adds a loop that counts the number of iterations.
+        /// </summary>
+        /// <param name="outer_grad_state">The outer grad state. None if not nested.</param>
+        /// <returns>The number of iterations taken by the forward loop and the loop index.</returns>
+        public (Tensor, Tensor) AddForwardLoopCounter(GradLoopState outer_grad_state)
+        {
+            var n = constant_op.constant(0, name: "f_count");
+            if (outer_grad_state != null)
+                throw new NotImplementedException("AddForwardLoopCounter");
+
+            Enter();
+            AddName(n.name);
+            var enter_n = _Enter(n, 
+                _name, 
+                is_constant: false, 
+                parallel_iterations: _parallel_iterations, 
+                name: "f_count");
+            _loop_enters.Add(enter_n);
+
+            var m1 = merge(new[] { enter_n, enter_n });
+            var merge_n = m1[0];
+            var switch_n = @switch (merge_n, _pivot);
+
+            var index = math_ops.add(switch_n[1], 1);
+            var next_n = _NextIteration(index);
+            merge_n.op._update_input(1, next_n);
+
+            var total_iterations = exit(switch_n[0], name: "f_count");
+            loop_exits.append(total_iterations);
+            ExitResult(new[] { total_iterations });
+            Exit();
+
+            return (total_iterations, next_n);
+        }
+
+        /// <summary>
+        /// Add the backprop loop that controls the iterations.
+        /// </summary>
+        /// <param name="count">The number of iterations for backprop.</param>
+        /// <param name="outer_grad_state">The outer grad state. None if not nested.</param>
+        /// <returns>The loop index.</returns>
+        public Tensor AddBackpropLoopCounter(Tensor count, GradLoopState outer_grad_state)
+        {
+            Tensor one = null;
+            var in_separate_functions = count.graph != ops.get_default_graph();
+            if (in_separate_functions)
+                // Brings the count into this graph
+                count = array_ops.identity(count);
+            else
+                one = constant_op.constant(1, name: "b_count");
+
+            Enter();
+            AddName(count.name);
+            var enter_count = _Enter(
+                count,
+                _name,
+                is_constant: false,
+                parallel_iterations: _parallel_iterations,
+                name: "b_count");
+            loop_enters.append(enter_count);
+
+            var merge_count = merge(new[] { enter_count, enter_count })[0];
+            _pivot_for_pred = merge_count;
+            if (in_separate_functions)
+                one = constant_op.constant(1, name: "b_count");
+            var pred = math_ops.greater_equal(merge_count, one);
+            _pivot = gen_control_flow_ops.loop_cond(pred, name: "b_count");
+            var switch_count = @switch(merge_count, _pivot);
+
+            var index = math_ops.subtract(switch_count[1], one);
+            _pivot_for_body = index;
+            var next_count = _NextIteration(index);
+            merge_count.op._update_input(1, next_count);
+
+            var final_zero = exit(switch_count[0], name: "b_count");
+            loop_exits.append(final_zero);
+            // Force the stack pops of i-th execution of an inner loop to be ordered
+            // before the pops of (i+1)-th execution of the same inner loop.
+            if (outer_grad_state != null)
+                throw new NotImplementedException("outer_grad_state");
+                //outer_grad_state.grad_sync._add_control_input(final_zero.op);
+            ExitResult(new[] { final_zero });
+            Exit();
+            return next_count;
+        }
+
+        /// <summary>
         /// Add `val` to the current context and its outer context recursively.
         /// </summary>
         /// <param name="val"></param>
@@ -401,17 +520,27 @@ namespace Tensorflow.Operations
                     grad_ctxt = grad_ctxt.GetWhileContext();
                     if (grad_ctxt.grad_state != null)
                     {
-                        throw new NotImplementedException("");
+                        var forward_ctxt = val.op.GetWhileContext();
+                        if (control_flow_util.IsLoopExit(val.op))
+                        {
+                            forward_ctxt = forward_ctxt.outer_context as WhileContext;
+                            if (forward_ctxt != null)
+                                forward_ctxt = forward_ctxt.GetWhileContext();
+                            throw new NotImplementedException("control_flow_util.IsLoopExit");
+                        }
+                        if(forward_ctxt == grad_ctxt.grad_state.forward_context)
+                        {
+                            throw new NotImplementedException("forward_ctxt == grad_ctxt.grad_state.forward_context");
+                            /*real_val = grad_ctxt.grad_state.GetRealValue(val);
+                            _external_values[val.name] = real_val;
+                            return real_val;*/
+                        }
                     }
                 }
 
                 if (_outer_context != null)
                     result = _outer_context.AddValue(val);
 
-                if (tf.get_default_graph()._nodes_by_name.Count >= 83)
-                {
-
-                }
                 // Create an Enter to make `result` known to this loop context.
                 Tensor enter = null;
                 tf_with(ops.control_dependencies(null), delegate
@@ -442,6 +571,9 @@ namespace Tensorflow.Operations
 
             return result;
         }
+
+        public override bool IsWhileContext()
+            => true;
 
         public override WhileContext GetWhileContext()
         {

@@ -20,6 +20,7 @@ using System.Linq;
 using Tensorflow.Operations.ControlFlows;
 using static Tensorflow.ControlFlowContextDef;
 using static Tensorflow.Binding;
+using util = Tensorflow.control_flow_util;
 
 namespace Tensorflow.Operations
 {
@@ -146,6 +147,14 @@ namespace Tensorflow.Operations
             graph._set_control_flow_context(last_context);
         }
 
+        public void ExitResult(Tensor[] result)
+        {
+            if(_outer_context != null)
+            {
+                throw new NotImplementedException("ExitResult");
+            }
+        }
+
         /// <summary>
         /// Add `op` to the current context.
         /// </summary>
@@ -170,6 +179,11 @@ namespace Tensorflow.Operations
         {
             // to be overridden
             return null;
+        }
+
+        public void AddName(string name)
+        {
+            _values.Add(name);
         }
 
         /// <summary>
@@ -246,9 +260,11 @@ namespace Tensorflow.Operations
             }
             else
             {
-                foreach(Tensor x in op.control_inputs)
+                foreach(Operation x in op.control_inputs)
                 {
-                    throw new NotImplementedException("");
+                    var ctxt = util.GetOutputContext(x);
+                    if (ctxt != null && ctxt.GetWhileContext() == while_ctxt)
+                        internal_control_inputs.append(x);
                 }
             }
 
@@ -287,6 +303,14 @@ namespace Tensorflow.Operations
 
             throw new NotImplementedException($"Unknown ControlFlowContextDef field: {context_def.CtxtCase}");
         }
+
+        public virtual bool IsWhileContext()
+        {
+            throw new NotImplementedException("IsWhileContext");
+        }
+
+        public virtual bool IsCondContext()
+            => false;
 
         public object to_proto()
         {
