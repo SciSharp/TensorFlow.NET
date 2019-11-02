@@ -50,10 +50,11 @@ namespace Tensorflow.Layers
 
         public virtual (Tensor, Tensor) apply(Tensor inputs, Tensor training = null)
         {
-            return __call__(inputs, training: training);
+            var results = __call__(inputs, training: training);
+            return (results[0], results[1]);
         }
 
-        public (Tensor, Tensor) __call__(Tensor inputs,
+        public Tensor[] __call__(Tensor inputs,
             Tensor training = null,
             Tensor state = null,
             VariableScope scope = null)
@@ -73,7 +74,7 @@ namespace Tensorflow.Layers
                     auxiliary_name_scope: false);
             }
 
-            (Tensor, Tensor) outputs = (null, null);
+            Tensor[] outputs = null;
             tf_with(scope_context_manager, scope2 =>
             {
                 _current_scope = scope2;

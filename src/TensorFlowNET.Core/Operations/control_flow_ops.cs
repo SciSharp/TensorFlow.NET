@@ -151,26 +151,49 @@ namespace Tensorflow
         /// <param name="colocate_gradients_with_ops"></param>
         public static ControlFlowState MaybeCreateControlFlowState(List<Operation> between_op_list, List<Operation> between_ops, bool colocate_gradients_with_ops)
         {
+            var flag = new List<Operation>();
             ControlFlowState loop_state = null;
 
-            foreach (var op in between_op_list)
+            int pos = 0;
+            while(pos < between_op_list.Count)
             {
+                var op = between_op_list[pos];
                 if (IsLoopExit(op))
                 {
-                    if(loop_state == null)
+                    if (loop_state == null)
                     {
                         loop_state = new ControlFlowState();
                     }
+                    if (colocate_gradients_with_ops)
+                        ops.colocate_with(op);
+                    loop_state.AddWhileContext(op, between_op_list, between_ops);
                 }
+                pos++;
             }
 
             return loop_state;
         }
 
         public static bool IsLoopExit(Operation op)
+            => op.OpType == "Exit" || op.OpType == "RefExit";
+
+        public static bool IsLoopSwitch(Operation op)
         {
-            return op.OpType == "Exit" || op.OpType == "RefExit";
+            if(IsSwitch(op))
+            {
+                var ctxt = op._get_control_flow_context();
+                return ctxt != null && ctxt.IsWhileContext() && !IsCondSwitch(op);
+            }
+            return false;
         }
+
+        public static bool IsCondSwitch(Operation op)
+        {
+            throw new NotImplementedException("IsCondSwitch");
+        }
+
+        public static bool IsSwitch(Operation op)
+            => op.type == "Switch" || op.type == "RefSwitch";
 
         public static Tensor[] tuple(Tensor[] tensors, string name = null, Operation[] control_inputs = null)
         {
@@ -224,15 +247,10 @@ namespace Tensorflow
             //TODO: missing original code
             //if context.executing_eagerly():
             //    return output_tensor
-            var values = new List<object>();
-            values.AddRange(dependencies);
-            values.Add(output_tensor);
-
-            return tf_with(ops.name_scope(name, "control_dependency", values), scope =>
+            return tf_with(ops.name_scope(name, "control_dependency", new { dependencies, output_tensor }), scope =>
             {
                 name = scope;
-                // TODO: missing original code
-                //with ops.colocate_with(output_tensor):
+                ops.colocate_with(output_tensor);
                 {
                     return tf_with(ops.control_dependencies(dependencies), ctl =>
                     {
@@ -431,6 +449,7 @@ namespace Tensorflow
                 
                 var merges = zip(res_f_flat, res_t_flat)
                     .Select(pair => merge(new Tensor[] { pair.Item1, pair.Item2 }))
+                    .Select(m => (Tensor)m)
                     .ToArray();
 
                 var merges2 = _convert_flows_to_tensorarrays(new ITensorOrTensorArray[] { (Tensor)orig_res_t }, merges);
@@ -479,6 +498,7 @@ namespace Tensorflow
 
                 var merges = zip(res_f_flat, res_t_flat)
                     .Select(pair => merge(new [] { pair.Item1, pair.Item2 }))
+                    .Select(m => (Tensor)m)
                     .ToArray();
 
                 var merges2 = _convert_flows_to_tensorarrays(orig_res_t.Select(x => (ITensorOrTensorArray)x).ToArray(), merges);
@@ -519,7 +539,7 @@ namespace Tensorflow
         /// <param name="inputs">inputs: The input tensors, at most one of which is available.</param>
         /// <param name="name">A name for this operation (optional).</param>
         /// <returns></returns>
-        public static Tensor merge(Tensor[] inputs, string name = null)
+        public static MergeOutput merge(Tensor[] inputs, string name = null)
         {
             if (inputs.Any(x => x == null))
                 throw new ValueError($"At least one of the merge inputs is null: {inputs}");
@@ -529,7 +549,7 @@ namespace Tensorflow
                 inputs = inputs.Select(inp =>
                             ops.internal_convert_to_tensor_or_indexed_slices(inp, as_ref: true))
                         .ToArray();
-                return gen_control_flow_ops.merge(inputs, name)[0];
+                return gen_control_flow_ops.merge(inputs, name);
             });
         }
 
@@ -602,7 +622,7 @@ namespace Tensorflow
         /// <param name="body"></param>
         /// <param name="loop_vars"></param>
         /// <param name="i"></param>
-        public static Tensor while_loop<TItem>(Func<TItem, Tensor> cond, Func<TItem, TItem> body, TItem loop_vars,
+        public static TItem while_loop<TItem>(Func<TItem, Tensor> cond, Func<TItem, TItem> body, TItem loop_vars,
             TensorShape[] shape_invariants = null,
             int parallel_iterations = 10,
             bool back_prop = true,
@@ -611,7 +631,7 @@ namespace Tensorflow
             Tensor maximum_iterations = null,
             bool return_same_structure = false)
         {
-            tf_with(ops.name_scope(name, "while", loop_vars), scope =>
+            return tf_with(ops.name_scope(name, "while", loop_vars), scope =>
             {
                 if (loop_vars == null)
                     throw new ValueError("No loop variables provided");
@@ -666,13 +686,11 @@ namespace Tensorflow
                 var results = loop_context.BuildLoop(cond_buildloop, body_buildloop, loop_vars_1, shape_invariants,
                                     return_same_structure);
 
-                if (maximum_iterations != null)
-                    return results[1];
-                else
-                    return results[0];
+                //if (maximum_iterations != null)
+                    return results.Item;
+                //else
+                    //return results;
             });
-
-            throw new NotImplementedException("while_loop");
         }
 
         /// <summary>

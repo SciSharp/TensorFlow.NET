@@ -159,6 +159,8 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.greater_equal<Tx, Ty>(x, y, name: name);
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.equal(x, y, name: name);
 
