@@ -22,6 +22,15 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
+        public static Operation control_trigger(string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("ControlTrigger", name, new
+            {
+            });
+
+            return _op;
+        }
+
         /// <summary>
         /// Creates or finds a child frame, and makes `data` available to the child frame.
         /// </summary>
