@@ -48,7 +48,12 @@ namespace Tensorflow.Gradients
                     {
                         var merge_grad = grad_ctxt.grad_state.switch_map.get(op);
                         if (merge_grad != null)
-                            throw new NotImplementedException("_SwitchGrad merge_grad != null");
+                        {
+                            if (grads[1] != null)
+                                control_flow_ops._AddNextAndBackEdge(merge_grad, grads[1],
+                                             enforce_shape_invariant: false);
+                            return new Tensor[] { null, null };
+                        }
                         else if (grads[0] != null)
                         {
                             merge_grad = merge(new[] { grads[0], grads[0] }, name: "b_switch")[0];
@@ -233,17 +238,9 @@ namespace Tensorflow.Gradients
                 return grads;
             if (op.get_attr<bool>("is_constant"))
             {
-                throw new NotImplementedException("_EnterGrad is_constant");
-                //  Add a gradient accumulator for each loop invariant.
-                //    if isinstance(grad, ops.Tensor) :
-                //      result = grad_ctxt.AddBackpropAccumulator(op, grad)
-                //    elif isinstance(grad, ops.IndexedSlices) :
-                //      result = grad_ctxt.AddBackpropIndexedSlicesAccumulator(op, grad)
-                //    else:
-                //      # TODO(yuanbyu, lukasr): Add support for SparseTensor.
-                //      raise TypeError("Type %s not supported" % type(grad))
+                // Add a gradient accumulator for each loop invariant.
+                result = grad_ctxt.AddBackpropAccumulator(op, grad);
             }
-
             else
             {
                 result = control_flow_ops.exit(grad);

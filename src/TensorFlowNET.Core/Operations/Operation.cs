@@ -182,10 +182,7 @@ namespace Tensorflow
             // This will be set by self.inputs.
             if (op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
-            if(node_def.Name == "gradients/rnn/while/basic_rnn_cell/Tanh_grad/TanhGrad/f_acc")
-            {
 
-            }
             var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
             _handle = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
             _is_stateful = op_def.IsStateful;
