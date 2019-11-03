@@ -134,7 +134,7 @@ namespace Tensorflow
                 => nn_ops.max_pool(value, ksize, strides, padding, data_format: data_format, name: name);
 
             public Tensor in_top_k(Tensor predictions, Tensor targets, int k, string name = "InTopK")
-                => gen_ops.in_top_k(predictions, targets, k, name);
+                => nn_ops.in_top_k(predictions, targets, k, name);
 
             public Tensor[] top_k(Tensor input, int k = 1, bool sorted = true, string name = null)
                 => gen_nn_ops.top_kv2(input, k: k, sorted: sorted, name: name);
