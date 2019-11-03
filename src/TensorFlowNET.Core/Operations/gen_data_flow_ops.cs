@@ -285,5 +285,16 @@ namespace Tensorflow
 
             return _op.output;
         }
+
+        public static Tensor stack_pop_v2(Tensor handle, TF_DataType elem_type, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StackPopV2", name, new
+            {
+                handle,
+                elem_type
+            });
+
+            return _op.output;
+        }
     }
 }
