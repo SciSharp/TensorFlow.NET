@@ -25,7 +25,7 @@ namespace Tensorflow
     {
         protected List<ITensorOrOperation> _unique_fetches = new List<ITensorOrOperation>();
         protected List<int[]> _value_indices = new List<int[]>();
-        public static _FetchMapper for_fetch(object fetch)
+        public static _FetchMapper for_fetch(object fetch, Graph graph = null)
         {
             var fetches = fetch.GetType().IsArray ? (object[])fetch : new object[] { fetch };
 
@@ -34,7 +34,7 @@ namespace Tensorflow
             if (fetch.GetType().IsArray)
                 return new _ListFetchMapper(fetches);
             else
-                return new _ElementFetchMapper(fetches, (List<NDArray> fetched_vals) => fetched_vals[0]);
+                return new _ElementFetchMapper(fetches, (List<NDArray> fetched_vals) => fetched_vals[0], graph: graph);
         }
 
         public virtual NDArray[] build_results(List<NDArray> values)

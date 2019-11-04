@@ -43,17 +43,20 @@ namespace Tensorflow.Layers
 
             // Avoid an incorrect lint error
             _trainable_weights = new List<VariableV1>();
+            _non_trainable_weights = new List<VariableV1>();
             this.built = false;
             _keras_style = false;
         }
 
-        public virtual Tensor apply(Tensor inputs, Tensor training = null)
+        public virtual (Tensor, Tensor) apply(Tensor inputs, Tensor training = null)
         {
-            return __call__(inputs, training: training);
+            var results = __call__(inputs, training: training);
+            return (results[0], results[1]);
         }
 
-        public Tensor __call__(Tensor inputs,
+        public Tensor[] __call__(Tensor inputs,
             Tensor training = null,
+            Tensor state = null,
             VariableScope scope = null)
         {
             _set_scope(scope);
@@ -71,12 +74,14 @@ namespace Tensorflow.Layers
                     auxiliary_name_scope: false);
             }
 
-            Tensor outputs = null;
+            Tensor[] outputs = null;
             tf_with(scope_context_manager, scope2 =>
             {
                 _current_scope = scope2;
                 // Actually call layer
-                outputs = base.__call__(new Tensor[] { inputs }, training: training);
+                outputs = base.__call__(new Tensor[] { inputs }, 
+                    training: training,
+                    state: state);
             });
 
 
@@ -120,6 +125,11 @@ namespace Tensorflow.Layers
             var default_graph = ops.get_default_graph();
             Graph init_graph = null;
             VariableV1[] existing_variables = null;
+
+            if (synchronization == VariableSynchronization.OnRead)
+                trainable = false;
+            else if (!trainable.HasValue)
+                trainable = true;
 
             if (default_graph.building_function)
             {

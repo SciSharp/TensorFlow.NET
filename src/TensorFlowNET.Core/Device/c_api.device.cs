@@ -14,13 +14,19 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Runtime.InteropServices;
 
-namespace Tensorflow.Sessions
+namespace Tensorflow
 {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct TF_DeprecatedSession
+    public partial class c_api
     {
-        Session session;
+        /// <summary>
+        /// Specify the device for `desc`.  Defaults to empty, meaning unconstrained.
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <param name="device"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetDevice(IntPtr desc, string device);
     }
 }

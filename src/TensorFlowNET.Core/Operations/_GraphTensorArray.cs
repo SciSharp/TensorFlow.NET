@@ -22,9 +22,10 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {
-    internal class _GraphTensorArray
+    public class _GraphTensorArray
     {
         internal TF_DataType _dtype;
+        public TF_DataType dtype => _dtype;
 
         /// <summary>
         /// Used to keep track of what tensors the TensorArray should be
@@ -32,19 +33,22 @@ namespace Tensorflow.Operations
         /// first tensor written to it.
         /// </summary>
         bool _colocate_with_first_write_call;
+        public bool colocate_with_first_write_call => _colocate_with_first_write_call;
 
         bool _infer_shape;
-        bool _dynamic_size;
-        List<TensorShape> _element_shape;
+        public bool infer_shape => _infer_shape;
+        public bool _dynamic_size;
+        public List<TensorShape> _element_shape;
 
-        List<Tensor> _colocate_with;
+        public List<Tensor> _colocate_with;
 
         internal Tensor _handle;
+        public Tensor handle => _handle;
         internal Tensor _flow;
 
         public _GraphTensorArray(TF_DataType dtype, Tensor size, bool? dynamic_size = null,
             bool? clear_after_read = null, string tensor_array_name = null, Tensor handle = null, Tensor flow = null, 
-            bool infer_shape = true, TensorShape[] element_shape = null, 
+            bool infer_shape = true, TensorShape element_shape = null, 
             bool colocate_with_first_write_call = true, string name = null)
         {
             clear_after_read = clear_after_read ?? true;
@@ -68,7 +72,7 @@ namespace Tensorflow.Operations
             else
             {
                 _infer_shape = true;
-                _element_shape = new List<TensorShape> { };
+                _element_shape = new List<TensorShape> { element_shape };
             }
 
             tf_with(ops.name_scope(name, "TensorArray", new { handle, size, flow }), scope =>
@@ -135,7 +139,7 @@ namespace Tensorflow.Operations
 
                 var ta = new TensorArray(_dtype,
                     infer_shape:_infer_shape,
-                    element_shape: _element_shape.ToArray(),
+                    element_shape: _element_shape[0],
                     dynamic_size: _dynamic_size,
                     handle: _handle,
                     flow: flow_out,
@@ -154,6 +158,73 @@ namespace Tensorflow.Operations
         public void _maybe_colocate_with(Tensor value)
         {
             _colocate_with.Add(value);
+        }
+
+        public Tensor read(Tensor index, string name = null)
+        {
+            var value = gen_data_flow_ops.tensor_array_read_v3(
+                handle: _handle,
+                index: index,
+                flow_in: _flow,
+                dtype: _dtype,
+                name: name);
+
+            if (_element_shape != null)
+                value.set_shape(_element_shape[0].dims);
+
+            return value;
+        }
+
+        public TensorArray write(Tensor index, Tensor value, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "TensorArrayWrite", new { _handle, index, value }), delegate
+            {
+                value = ops.convert_to_tensor(value, preferred_dtype: _dtype, name: "value");
+                _maybe_colocate_with(value);
+                var flow_out = gen_data_flow_ops.tensor_array_write_v3(
+                    handle: _handle,
+                    index: index,
+                    value: value,
+                    flow_in: _flow,
+                    name: name);
+
+                return tensor_array_ops.build_ta_with_new_flow(this, flow_out);
+            });
+        }
+
+        private Tensor size(string name = null)
+        {
+            return gen_data_flow_ops.tensor_array_size_v3(_handle, _flow, name: name);
+        }
+
+        public Tensor stack(string name = null)
+        {
+            ops.colocate_with(_handle);
+            return tf_with(ops.name_scope(name, "TensorArrayStack", new { _handle }), delegate
+            {
+                return gather(math_ops.range(0, size()), name: name);
+            });
+        }
+
+        public Tensor gather(Tensor indices, string name = null)
+        {
+            var element_shape = new TensorShape();
+
+            if (_element_shape.Count > 0)
+                element_shape = _element_shape[0];
+
+            var value = gen_data_flow_ops.tensor_array_gather_v3(
+                handle: _handle,
+                indices: indices,
+                flow_in: _flow,
+                dtype: _dtype,
+                name: name,
+                element_shape: element_shape);
+
+            //if (element_shape != null)
+                //value.set_shape(-1, element_shape.dims);
+
+            return value;
         }
     }
 }

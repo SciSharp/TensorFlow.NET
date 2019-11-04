@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.0</TargetTensorFlow>
-    <Version>0.11.8</Version>
+    <Version>0.12.0</Version>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -16,25 +16,15 @@
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
     <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
-Docs: https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.11.8.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.10.0:
-1. Upgrade NumSharp to v0.20.3.
-2. Add DisposableObject class to manage object lifetime.
-3. Add tf.no_op, tf.nn.in_top_k, tf.GraphKeys and tf.trainable_variables.
-4. Change tensorflow to non-static class in order to execute some initialization process.
-5. Overload session.run(), make syntax simpler.
-6. Add Local Response Normalization.
-7. Add tf.image related APIs.
-8. Add tf.random_normal, tf.constant, tf.pad, tf.shape, tf.image.resize_nearest_neighbor.
-9. MultiThread is safe.
-10. Support n-dim indexing for tensor.
-11. Add RegisterNoGradients
-12. Add CumsumGrad, BroadcastToGrad.
-13. Return VariableV1 instead of RefVariable.
-14. Add Tensor overload to GradientDescentOptimizer.</PackageReleaseNotes>
+Building, training and infering deep learning models.
+https://tensorflownet.readthedocs.io</Description>
+    <AssemblyVersion>0.12.0.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.11.0:
+1: Add ICanBeFlattened for nest.flatten2.
+2: Complete the WhileContext.
+3: Add tf.nn.rnn_cell.BasicRNNCell and tf.nn.dynamic_rnn.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <FileVersion>0.11.8.0</FileVersion>
+    <FileVersion>0.12.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
@@ -43,7 +33,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE;DEBUG;SERIALIZABLE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SERIALIZABLE_</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -65,8 +55,7 @@ Docs: https://tensorflownet.readthedocs.io</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.5.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Google.Protobuf" Version="3.10.0" />
     <PackageReference Include="NumSharp" Version="0.20.4" />
   </ItemGroup>
 

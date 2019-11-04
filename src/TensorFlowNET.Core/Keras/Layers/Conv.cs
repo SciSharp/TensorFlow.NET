@@ -108,7 +108,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor call(Tensor inputs, Tensor training = null)
+        protected override Tensor[] call(Tensor inputs, Tensor training = null, Tensor state = null)
         {
             var outputs = _convolution_op.__call__(inputs, kernel);
             if (use_bias)
@@ -124,9 +124,9 @@ namespace Tensorflow.Keras.Layers
             }
 
             if (activation != null)
-                return activation.Activate(outputs);
+                outputs = activation.Activate(outputs);
 
-            return outputs;
+            return new[] { outputs, outputs };
         }
     }
 }

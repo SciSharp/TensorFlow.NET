@@ -21,6 +21,7 @@ using Tensorflow.Operations;
 using Tensorflow.Operations.ControlFlows;
 using util = Tensorflow.control_flow_util;
 using static Tensorflow.Binding;
+using Tensorflow.Util;
 
 namespace Tensorflow
 {
@@ -150,26 +151,49 @@ namespace Tensorflow
         /// <param name="colocate_gradients_with_ops"></param>
         public static ControlFlowState MaybeCreateControlFlowState(List<Operation> between_op_list, List<Operation> between_ops, bool colocate_gradients_with_ops)
         {
+            var flag = new List<Operation>();
             ControlFlowState loop_state = null;
 
-            foreach (var op in between_op_list)
+            int pos = 0;
+            while(pos < between_op_list.Count)
             {
+                var op = between_op_list[pos];
                 if (IsLoopExit(op))
                 {
-                    if(loop_state == null)
+                    if (loop_state == null)
                     {
                         loop_state = new ControlFlowState();
                     }
+                    if (colocate_gradients_with_ops)
+                        ops.colocate_with(op);
+                    loop_state.AddWhileContext(op, between_op_list, between_ops);
                 }
+                pos++;
             }
 
             return loop_state;
         }
 
         public static bool IsLoopExit(Operation op)
+            => op.OpType == "Exit" || op.OpType == "RefExit";
+
+        public static bool IsLoopSwitch(Operation op)
         {
-            return op.OpType == "Exit" || op.OpType == "RefExit";
+            if(IsSwitch(op))
+            {
+                var ctxt = op._get_control_flow_context();
+                return ctxt != null && ctxt.IsWhileContext() && !IsCondSwitch(op);
+            }
+            return false;
         }
+
+        public static bool IsCondSwitch(Operation op)
+        {
+            throw new NotImplementedException("IsCondSwitch");
+        }
+
+        public static bool IsSwitch(Operation op)
+            => op.type == "Switch" || op.type == "RefSwitch";
 
         public static Tensor[] tuple(Tensor[] tensors, string name = null, Operation[] control_inputs = null)
         {
@@ -223,15 +247,10 @@ namespace Tensorflow
             //TODO: missing original code
             //if context.executing_eagerly():
             //    return output_tensor
-            var values = new List<object>();
-            values.AddRange(dependencies);
-            values.Add(output_tensor);
-
-            return tf_with(ops.name_scope(name, "control_dependency", values), scope =>
+            return tf_with(ops.name_scope(name, "control_dependency", new { dependencies, output_tensor }), scope =>
             {
                 name = scope;
-                // TODO: missing original code
-                //with ops.colocate_with(output_tensor):
+                ops.colocate_with(output_tensor);
                 {
                     return tf_with(ops.control_dependencies(dependencies), ctl =>
                     {
@@ -251,12 +270,16 @@ namespace Tensorflow
                 return gen_array_ops.identity(data, name: name);
         }
 
-        public static void _SetShapeInvariants(Tensor[] input_vars, Tensor[] enter_vars, TensorShape shapes = null)
+        public static void _SetShapeInvariants(Tensor[] input_vars, Tensor[] enter_vars, TensorShape[] shapes = null)
         {
             if (shapes == null)
                 return;
 
-            throw new NotImplementedException("_SetShapeInvariants");
+            var flat_shapes = nest.flatten2(shapes);
+            foreach (var (inp, var, shape) in zip(input_vars, enter_vars, flat_shapes))
+            {
+                var.set_shape(shape);
+            }
         }
 
         ///  <summary>
@@ -426,14 +449,15 @@ namespace Tensorflow
                 
                 var merges = zip(res_f_flat, res_t_flat)
                     .Select(pair => merge(new Tensor[] { pair.Item1, pair.Item2 }))
+                    .Select(m => (Tensor)m)
                     .ToArray();
 
-                merges = _convert_flows_to_tensorarrays(new Tensor[] { (Tensor)orig_res_t }, merges);
+                var merges2 = _convert_flows_to_tensorarrays(new ITensorOrTensorArray[] { (Tensor)orig_res_t }, merges);
 
                 ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_t);
                 ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_f);
 
-                return merges[0];
+                return new Tensor(IntPtr.Zero);
             });
         }
 
@@ -473,22 +497,29 @@ namespace Tensorflow
                 var res_f_flat = res_f;
 
                 var merges = zip(res_f_flat, res_t_flat)
-                    .Select(pair => merge(new Tensor[] { pair.Item1, pair.Item2 }))
+                    .Select(pair => merge(new [] { pair.Item1, pair.Item2 }))
+                    .Select(m => (Tensor)m)
                     .ToArray();
 
-                merges = _convert_flows_to_tensorarrays(orig_res_t, merges);
+                var merges2 = _convert_flows_to_tensorarrays(orig_res_t.Select(x => (ITensorOrTensorArray)x).ToArray(), merges);
 
                 ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_t);
                 ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_f);
 
-                return merges;
+                return new[] { new Tensor(IntPtr.Zero) };
             });
         }
 
-        public static Tensor[] _convert_flows_to_tensorarrays<T>(T[] tensors_or_tensorarrays, Tensor[] tensors_or_flows)
+        public static ITensorOrTensorArray[] _convert_flows_to_tensorarrays(ITensorOrTensorArray[] tensors_or_tensorarrays, Tensor[] tensors_or_flows)
         {
-            // zip(tensors_or_tensorarrays, tensors_or_flows).Select((ta, t_or_flow) => ta).ToArray();
-            return tensors_or_flows;
+            return zip(tensors_or_tensorarrays, tensors_or_flows).Select(x =>
+            {
+                var (ta, t_or_flow) = (x.Item1, x.Item2);
+                if (ta is TensorArray ta_1)
+                    return tensor_array_ops.build_ta_with_new_flow(ta_1, t_or_flow) as ITensorOrTensorArray;
+                else
+                    return t_or_flow as ITensorOrTensorArray;
+            }).ToArray();
         }
 
         /// <summary>
@@ -508,7 +539,7 @@ namespace Tensorflow
         /// <param name="inputs">inputs: The input tensors, at most one of which is available.</param>
         /// <param name="name">A name for this operation (optional).</param>
         /// <returns></returns>
-        public static Tensor merge(Tensor[] inputs, string name = null)
+        public static MergeOutput merge(Tensor[] inputs, string name = null)
         {
             if (inputs.Any(x => x == null))
                 throw new ValueError($"At least one of the merge inputs is null: {inputs}");
@@ -518,7 +549,7 @@ namespace Tensorflow
                 inputs = inputs.Select(inp =>
                             ops.internal_convert_to_tensor_or_indexed_slices(inp, as_ref: true))
                         .ToArray();
-                return gen_control_flow_ops.merge(inputs, name)[0];
+                return gen_control_flow_ops.merge(inputs, name);
             });
         }
 
@@ -591,18 +622,18 @@ namespace Tensorflow
         /// <param name="body"></param>
         /// <param name="loop_vars"></param>
         /// <param name="i"></param>
-        public static Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
-            TensorShape shape_invariants = null,
+        public static TItem while_loop<TItem>(Func<TItem, Tensor> cond, Func<TItem, TItem> body, TItem loop_vars,
+            TensorShape[] shape_invariants = null,
             int parallel_iterations = 10,
             bool back_prop = true,
             bool swap_memory = false,
             string name = null,
-            int? maximum_iterations = null,
+            Tensor maximum_iterations = null,
             bool return_same_structure = false)
         {
-            tf_with(ops.name_scope(name, "while", loop_vars), scope =>
+            return tf_with(ops.name_scope(name, "while", loop_vars), scope =>
             {
-                if (loop_vars == null || loop_vars.Length == 0)
+                if (loop_vars == null)
                     throw new ValueError("No loop variables provided");
                 if (cond == null)
                     throw new ValueError("cond must be callable.");
@@ -610,6 +641,38 @@ namespace Tensorflow
                     throw new ValueError("body must be callable.");
                 if (parallel_iterations < 1)
                     throw new ValueError("parallel_iterations must be a positive integer.");
+
+                var try_to_pack = loop_vars is Tensor && !return_same_structure;
+                var counter = constant_op.constant(0, dtype: maximum_iterations.dtype, name: "iteration_counter");
+                var orig_cond = cond;
+                var orig_body = body;
+
+                LoopVar<TItem> loop_vars_1 = null;
+                Func<LoopVar<TItem>, LoopVar<TItem>> body_buildloop = null;
+                Func<LoopVar<TItem>, Tensor> cond_buildloop = null;
+
+                if (try_to_pack)
+                {
+
+                }
+                else
+                {
+                    loop_vars_1 = new LoopVar<TItem>(counter, loop_vars);
+                    cond_buildloop = (item) =>
+                    {
+                        var (i, lv) = (item.Counter, item.Item);
+                        var oc = orig_cond(lv);
+                        return math_ops.logical_and(i < maximum_iterations, oc);
+                    };
+
+                    body_buildloop = (item) =>
+                    {
+                        var (i, lv) = (item.Counter, item.Item);
+                        var ob = orig_body(lv);
+                        return new LoopVar<TItem>(i + 1, ob);
+                    };
+                }
+                try_to_pack = false;
 
                 var loop_context = new WhileContext(
                     maximum_iterations: maximum_iterations,
@@ -620,17 +683,46 @@ namespace Tensorflow
                 if (loop_context.outer_context == null)
                     ops.add_to_collection(tf.GraphKeys.WHILE_CONTEXT, loop_context);
 
-                var results = loop_context.BuildLoop(cond, body, loop_vars, shape_invariants,
+                var results = loop_context.BuildLoop(cond_buildloop, body_buildloop, loop_vars_1, shape_invariants,
                                     return_same_structure);
 
-                if (maximum_iterations != null)
-                    return results[1];
-                else
-                    return results[0];
+                //if (maximum_iterations != null)
+                    return results.Item;
+                //else
+                    //return results;
             });
-
-            throw new NotImplementedException("while_loop");
         }
 
+        /// <summary>
+        /// Creates or finds a child frame, and makes `data` available to it.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="frame_name"></param>
+        /// <param name="is_constant"></param>
+        /// <param name="parallel_iterations"></param>
+        /// <param name="use_ref"></param>
+        /// <param name="use_input_shape"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor _Enter(Tensor data, string frame_name,
+            bool is_constant = false,
+            int parallel_iterations = 10,
+            bool use_ref = true,
+            bool use_input_shape = true,
+            string name = null)
+        {
+            Tensor result;
+            data = ops.internal_convert_to_tensor_or_indexed_slices(data, as_ref: true);
+            if (data.dtype.is_ref_dtype() && use_ref)
+                throw new NotImplementedException("_Enter");
+            else
+                result = gen_control_flow_ops.enter(
+                    data, frame_name, is_constant, parallel_iterations, name: name);
+
+            if (use_input_shape)
+                result.set_shape(data.TensorShape);
+
+            return result;
+        }
     }
 }

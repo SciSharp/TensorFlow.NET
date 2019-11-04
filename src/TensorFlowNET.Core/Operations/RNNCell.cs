@@ -42,7 +42,7 @@ namespace Tensorflow
     /// matching structure of Tensors having shape `[batch_size].concatenate(s)`
     /// for each `s` in `self.batch_size`.
     /// </summary>
-    public abstract class RNNCell : Layers.Layer
+    public abstract class RnnCell : Layers.Layer
     {
         /// <summary>
         /// Attribute that indicates whether the cell is a TF RNN cell, due the slight
@@ -53,7 +53,7 @@ namespace Tensorflow
 
         public virtual int output_size { get; }
 
-        public RNNCell(bool trainable = true,
+        public RnnCell(bool trainable = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool? _reuse = null) : base(trainable: trainable, 

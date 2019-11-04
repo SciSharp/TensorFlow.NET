@@ -75,7 +75,10 @@ namespace Tensorflow
     ///     then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
     /// </summary>
     /// <remarks>https://www.tensorflow.org/guide/graphs <br></br>https://www.tensorflow.org/api_docs/python/tf/Graph</remarks>
-    public partial class Graph : DisposableObject//, IEnumerable<Operation>
+    public partial class Graph : DisposableObject,
+#if !SERIALIZABLE
+        IEnumerable<Operation>
+#endif
     {
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
         public Dictionary<string, ITensorOrOperation> _nodes_by_name;
@@ -259,15 +262,11 @@ namespace Tensorflow
 
             if (string.IsNullOrEmpty(name))
                 name = op_type;
+
             // If a names ends with a '/' it is a "name scope" and we use it as-is,
             // after removing the trailing '/'.
             name = name.EndsWith("/") ? ops.name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
-
-            if (name.Contains("define_loss/bigger_box_loss/mul_13"))
-            {
-
-            }
 
             var input_ops = inputs.Select(x => x.op).ToArray();
             var control_inputs = _control_dependencies_for_inputs(input_ops);
@@ -375,6 +374,10 @@ namespace Tensorflow
         /// to name the operation being created.</returns>
         public string unique_name(string name, bool mark_as_used = true)
         {
+            if (name.EndsWith("basic_r_n_n_cell"))
+            {
+
+            }
             if (!String.IsNullOrEmpty(_name_stack))
                 name = _name_stack + "/" + name;
             // For the sake of checking for names in use, we treat names as case
@@ -526,14 +529,16 @@ namespace Tensorflow
             return debugString;*/
         }
 
-        /*private IEnumerable<Operation> GetEnumerable()
+#if !SERIALIZABLE
+        private IEnumerable<Operation> GetEnumerable()
             => c_api_util.tf_operations(this);
 
         IEnumerator<Operation> IEnumerable<Operation>.GetEnumerator()
             => GetEnumerable().GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() 
-            => throw new NotImplementedException();*/
+            => throw new NotImplementedException();
+#endif
 
         public static implicit operator IntPtr(Graph graph)
         {

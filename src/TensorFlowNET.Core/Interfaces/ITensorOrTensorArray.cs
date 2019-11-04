@@ -16,14 +16,12 @@
 
 namespace Tensorflow
 {
-    public class LayerRnnCell : RnnCell
+    /// <summary>
+    /// in order to limit function return value 
+    /// is Tensor or TensorArray
+    /// </summary>
+    public interface ITensorOrTensorArray
     {
-        public LayerRnnCell(bool? _reuse = null,
-            string name = null,
-            TF_DataType dtype = TF_DataType.DtInvalid) : base(_reuse: _reuse,
-                    name: name,
-                    dtype: dtype)
-        {
-        }
+
     }
 }

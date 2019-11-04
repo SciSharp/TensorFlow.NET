@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using Tensorflow.Operations;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -30,11 +31,8 @@ namespace Tensorflow
         /// </summary>
         public void _control_flow_post_processing()
         {
-            foreach(var input_tensor in inputs)
-            {
-                //TODO: implement below code dependency
-                //control_flow_util.CheckInputFromValidContext(this, input_tensor.op);
-            }
+            foreach(Tensor input_tensor in inputs)
+                control_flow_util.CheckInputFromValidContext(this, input_tensor.op);
 
             if (_control_flow_context != null)
                 _control_flow_context.AddOp(this);
@@ -54,12 +52,21 @@ namespace Tensorflow
 
         public void _set_control_flow_context(ControlFlowContext ctx)
         {
+            if (name.Contains("gradients/rnn/while/basic_rnn_cell/Tanh_grad/TanhGrad/f_acc"))
+            {
+
+            }
             _control_flow_context = ctx;
         }
 
         public ControlFlowContext _get_control_flow_context()
         {
             return _control_flow_context;
+        }
+
+        public WhileContext GetWhileContext()
+        {
+            return _control_flow_context as WhileContext;
         }
     }
 }

@@ -30,6 +30,20 @@ namespace Tensorflow
     /// </summary>
     public static partial class Binding
     {
+        public static T2 get<T1, T2>(this Dictionary<T1, T2> dict, T1 key)
+            => key == null ? 
+                default(T2) : 
+            (dict.ContainsKey(key) ? dict[key] : default(T2));
+
+        public static void add<T>(this IList<T> list, T element)
+            => list.Add(element);
+
+        public static void append<T>(this IList<T> list, T element)
+            => list.Add(element);
+
+        public static void extend<T>(this List<T> list, IEnumerable<T> elements)
+            => list.AddRange(elements);
+
         private static string _tostring(object obj)
         {
             switch (obj)
@@ -80,6 +94,9 @@ namespace Tensorflow
             }
             throw new NotImplementedException("len() not implemented for type: " + a.GetType());
         }
+
+        public static T[] list<T>(IEnumerable<T> list)
+            => list.ToArray();
 
         public static IEnumerable<int> range(int end)
         {
@@ -165,6 +182,12 @@ namespace Tensorflow
                 yield return (t1[i], t2[i]);
         }
 
+        public static IEnumerable<(T1, T2, T3)> zip<T1, T2, T3>(IList<T1> t1, IList<T2> t2, IList<T3> t3)
+        {
+            for (int i = 0; i < t1.Count; i++)
+                yield return (t1[i], t2[i], t3[i]);
+        }
+
         public static IEnumerable<(T1, T2)> zip<T1, T2>(NDArray t1, NDArray t2) 
             where T1: unmanaged
             where T2: unmanaged
@@ -203,6 +226,7 @@ namespace Tensorflow
                 yield return (i, values[i]);
         }
 
+        [DebuggerStepThrough]
         public static Dictionary<string, object> ConvertToDict(object dyn)
         {
             var dictionary = new Dictionary<string, object>();

@@ -28,12 +28,9 @@ namespace Tensorflow
         }
 
         public static (Tensor, Tensor) tensor_array_v3<T>(T size, TF_DataType dtype = TF_DataType.DtInvalid, 
-            TensorShape[] element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
-            bool identical_element_shapes = false, string tensor_array_name = "tensor_array_name", string name = null)
+            TensorShape element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
+            bool identical_element_shapes = false, string tensor_array_name = "", string name = null)
         {
-            if (tensor_array_name == null)
-                tensor_array_name = string.Empty;
-
             var _op = _op_def_lib._apply_op_helper("TensorArrayV3", name, new
             {
                 size,
@@ -200,6 +197,104 @@ namespace Tensorflow
             });
 
             return _op.outputs;
+        }
+
+        /// <summary>
+        /// Read an element from the TensorArray into output `value`.
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="index"></param>
+        /// <param name="flow_in"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor tensor_array_read_v3(Tensor handle, Tensor index, Tensor flow_in, TF_DataType dtype, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArrayReadV3", name, new
+            {
+                handle,
+                index,
+                flow_in,
+                dtype
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor tensor_array_write_v3(Tensor handle, Tensor index, Tensor value, Tensor flow_in, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArrayWriteV3", name, new
+            {
+                handle,
+                index,
+                value,
+                flow_in
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor tensor_array_size_v3(Tensor handle, Tensor flow_in, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArraySizeV3", name, new
+            {
+                handle,
+                flow_in
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor tensor_array_gather_v3(Tensor handle, Tensor indices, Tensor flow_in, 
+            TF_DataType dtype, TensorShape element_shape = null, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("TensorArrayGatherV3", name, new
+            {
+                handle,
+                indices,
+                dtype,
+                element_shape,
+                flow_in
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor stack_v2(Tensor max_size, TF_DataType elem_type, string stack_name = "", 
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StackV2", name, new
+            {
+                max_size,
+                elem_type,
+                stack_name
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor stack_push_v2(Tensor handle, Tensor elem, bool swap_memory = false, 
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StackPushV2", name, new
+            {
+                handle,
+                elem,
+                swap_memory
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor stack_pop_v2(Tensor handle, TF_DataType elem_type, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("StackPopV2", name, new
+            {
+                handle,
+                elem_type
+            });
+
+            return _op.output;
         }
     }
 }

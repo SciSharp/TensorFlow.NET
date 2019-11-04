@@ -16,6 +16,7 @@
 
 using System;
 using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations.Initializers
 {

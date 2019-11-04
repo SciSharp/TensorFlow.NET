@@ -159,6 +159,8 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.greater_equal<Tx, Ty>(x, y, name: name);
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.equal(x, y, name: name);
 
@@ -543,6 +545,23 @@ namespace Tensorflow
         public static Tensor maximum<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.maximum(x, y, name: name);
 
+        /// <summary>
+        /// Multiplies matrix `a` by matrix `b`, producing `a` * `b`.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="transpose_a">If `True`, `a` is transposed before multiplication.</param>
+        /// <param name="transpose_b">If `True`, `b` is transposed before multiplication.</param>
+        /// <param name="adjoint_a">If `True`, `a` is conjugated and transposed before multiplication.</param>
+        /// <param name="adjoint_b">If `True`, `b` is conjugated and transposed before multiplication.</param>
+        /// <param name="a_is_sparse">If `True`, `a` is treated as a sparse matrix.</param>
+        /// <param name="b_is_sparse">If `True`, `b` is treated as a sparse matrix.</param>
+        /// <param name="name">Name for the operation (optional).</param>
+        /// <returns>
+        /// A `Tensor` of the same type as `a` and `b` where each inner-most matrix is
+        /// the product of the corresponding matrices in `a` and `b`, e.g. if all
+        /// transpose or adjoint attributes are `False`:
+        /// </returns>
         public static Tensor matmul(Tensor a, Tensor b,
             bool transpose_a = false, bool transpose_b = false,
             bool adjoint_a = false, bool adjoint_b = false,

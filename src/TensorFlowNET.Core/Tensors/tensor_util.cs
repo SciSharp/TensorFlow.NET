@@ -335,5 +335,10 @@ namespace Tensorflow
 
             return shape;
         }
+
+        public static Tensor shape_tensor(int[] shape)
+        {
+            return ops.convert_to_tensor(shape, dtype: TF_DataType.TF_INT32, name: "shape");
+        }
     }
 }

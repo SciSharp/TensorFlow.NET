@@ -28,9 +28,9 @@ namespace Tensorflow
     {
         private Func<List<NDArray>, object> _contraction_fn;
 
-        public _ElementFetchMapper(object[] fetches, Func<List<NDArray>, object> contraction_fn)
+        public _ElementFetchMapper(object[] fetches, Func<List<NDArray>, object> contraction_fn, Graph graph = null)
         {
-            var g = ops.get_default_graph();
+            var g = graph ?? ops.get_default_graph();
 
             foreach(var fetch in fetches)
             {

@@ -37,7 +37,7 @@ namespace Tensorflow
         public Operation group<T>(T[] inputs, string name = null) where T : ITensorOrOperation
             => control_flow_ops.group(inputs, name: name);
 
-        public Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
+        /*public Tensor while_loop(Func<Tensor, Tensor> cond, Func<Tensor, Tensor> body, Tensor[] loop_vars,
             TensorShape shape_invariants = null,
             int parallel_iterations = 10,
             bool back_prop = true,
@@ -52,7 +52,7 @@ namespace Tensorflow
                 swap_memory: swap_memory,
                 name: name,
                 maximum_iterations: maximum_iterations,
-                return_same_structure: return_same_structure);
+                return_same_structure: return_same_structure);*/
 
         public _ControlDependenciesController control_dependencies(ITensorOrOperation[] control_inputs) 
             => ops.control_dependencies(control_inputs);

@@ -25,9 +25,8 @@ namespace TensorFlowNET.UnitTest
         {
             lock (Locks.ProcessWide)
             {
-                var opts = new SessionOptions();
-                opts.SetConfig(new ConfigProto {InterOpParallelismThreads = 4});
-                session_ = new Session(graph, opts, s);
+                var config = new ConfigProto {InterOpParallelismThreads = 4};
+                session_ = new Session(graph, config, s);
             }
         }
 

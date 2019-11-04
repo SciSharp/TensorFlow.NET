@@ -36,19 +36,20 @@ namespace Tensorflow
         protected byte[] _target;
         public Graph graph => _graph;
 
-        public BaseSession(string target = "", Graph g = null, SessionOptions opts = null, Status status = null)
+        public BaseSession(string target = "", Graph g = null, ConfigProto config = null, Status status = null)
         {
             _graph = g ?? ops.get_default_graph();
             _graph.as_default();
             _target = Encoding.UTF8.GetBytes(target);
 
-            SessionOptions lopts = opts ?? new SessionOptions();
-
-            lock (Locks.ProcessWide)
+            using (var opts = new SessionOptions(target, config))
             {
-                status = status ?? new Status();
-                _handle = c_api.TF_NewSession(_graph, opts ?? lopts, status);
-                status.Check(true);
+                lock (Locks.ProcessWide)
+                {
+                    status = status ?? new Status();
+                    _handle = c_api.TF_NewSession(_graph, opts, status);
+                    status.Check(true);
+                }
             }
         }
 

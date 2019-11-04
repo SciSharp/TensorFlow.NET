@@ -111,6 +111,14 @@ namespace Tensorflow
                 return noise_shape;
         }
 
+        public static Tensor in_top_k(Tensor predictions, Tensor targets, int k, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "in_top_k"), delegate
+            {
+                return gen_nn_ops.in_top_kv2(predictions, targets, k, name: name);
+            });
+        }
+
         public static Tensor log_softmax(Tensor logits, int axis = -1, string name = null)
         {
             return _softmax(logits, gen_nn_ops.log_softmax, axis, name);

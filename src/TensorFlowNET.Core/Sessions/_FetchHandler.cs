@@ -34,7 +34,7 @@ namespace Tensorflow
 
         public _FetchHandler(Graph graph, object fetches, Dictionary<object, object> feeds = null, Action feed_handles = null)
         {
-            _fetch_mapper = _FetchMapper.for_fetch(fetches);
+            _fetch_mapper = _FetchMapper.for_fetch(fetches, graph: graph);
             foreach(var fetch in _fetch_mapper.unique_fetches())
             {
                 switch (fetch)

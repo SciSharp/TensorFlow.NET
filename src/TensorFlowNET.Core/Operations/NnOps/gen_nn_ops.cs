@@ -244,7 +244,27 @@ namespace Tensorflow.Operations
                 logits
             });
 
-            return _op.outputs[0];
+            return _op.output;
+        }
+
+        /// <summary>
+        /// Says whether the targets are in the top `K` predictions.
+        /// </summary>
+        /// <param name="predictions"></param>
+        /// <param name="targets"></param>
+        /// <param name="k"></param>
+        /// <param name="name"></param>
+        /// <returns>A `Tensor` of type `bool`.</returns>
+        public static Tensor in_top_kv2(Tensor predictions, Tensor targets, int k, string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("InTopKV2", name: name, args: new
+            {
+                predictions,
+                targets,
+                k
+            });
+
+            return _op.output;
         }
 
         public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)

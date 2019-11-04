@@ -9,7 +9,7 @@
 [![Documentation Status](https://readthedocs.org/projects/tensorflownet/badge/?version=latest)](https://tensorflownet.readthedocs.io/en/latest/?badge=latest)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 
-TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp). <a href="http://scisharpstack.org"><img src="https://github.com/SciSharp/SciSharp/blob/master/art/scisharp_badge.png" width="200" height="200" align="right" /></a>
+TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
 
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
@@ -25,6 +25,13 @@ SciSharp's philosophy allows a large number of machine learning code written in 
 In comparison to other projects, like for instance TensorFlowSharp which only provide Tensorflow's low-level C++ API and can only run models that were built using Python, Tensorflow.NET also implements Tensorflow's high level API where all the magic happens. This computation graph building layer is still under active development. Once it is completely implemented you can build new Machine Learning models in C#. 
 
 ### How to use
+
+| TensorFlow  | tf 1.13 | tf 1.14 | tf 1.15 | tf 2.0 |
+| ----------- | ------- | ------- | ------- | ------ |
+| tf.net 0.12 |         | x       |         |        |
+| tf.net 0.11 | x       | x       |         |        |
+| tf.net 0.10 | x       | x       |         |        |
+| tf.net 0.9  | x       |         |         |        |
 
 Install TF.NET and TensorFlow binary through NuGet.
 ```sh

@@ -17,8 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Operations;
 
-namespace Tensorflow.Operations
+namespace Tensorflow
 {
     /// <summary>
     /// TensorArray is designed to hide an underlying implementation object
@@ -29,9 +30,9 @@ namespace Tensorflow.Operations
     /// `while_loop` and `map_fn`.  It supports gradient back-propagation via special
     /// "flow" control flow dependencies.
     /// </summary>
-    public class TensorArray
+    public class TensorArray : ITensorOrTensorArray
     {
-        _GraphTensorArray _implementation;
+        internal _GraphTensorArray _implementation;
 
         public TF_DataType dtype => _implementation._dtype;
         public Tensor handle => _implementation._handle;
@@ -39,7 +40,7 @@ namespace Tensorflow.Operations
 
         public TensorArray(TF_DataType dtype, Tensor size = default, bool? clear_after_read = null, bool? dynamic_size = null,
             string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
-            bool infer_shape = true, TensorShape[] element_shape = null,
+            bool infer_shape = true, TensorShape element_shape = null,
             bool colocate_with_first_write_call = true, string name = null)
         {
             _implementation = new _GraphTensorArray(dtype, 
@@ -57,5 +58,14 @@ namespace Tensorflow.Operations
 
         public TensorArray unstack(Tensor value, string name = null)
             => _implementation.unstack(value, name: name);
+
+        public Tensor read(Tensor index, string name = null)
+            => _implementation.read(index, name: name);
+
+        public TensorArray write(Tensor index, Tensor value, string name = null)
+            => _implementation.write(index, value, name: name);
+
+        public Tensor stack(string name = null)
+            => _implementation.stack(name: name);
     }
 }

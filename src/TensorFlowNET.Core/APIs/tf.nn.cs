@@ -76,7 +76,7 @@ namespace Tensorflow
             /// <param name="swap_memory"></param>
             /// <param name="time_major"></param>
             /// <returns>A pair (outputs, state)</returns>
-            public (Tensor, Tensor) dynamic_rnn(RNNCell cell, Tensor inputs,
+            public (Tensor, Tensor) dynamic_rnn(RnnCell cell, Tensor inputs,
                 Tensor sequence_length = null, TF_DataType dtype = TF_DataType.DtInvalid,
                 int? parallel_iterations = null, bool swap_memory = false, bool time_major = false)
                 => rnn.dynamic_rnn(cell, inputs, sequence_length: sequence_length, dtype: dtype,
@@ -134,7 +134,7 @@ namespace Tensorflow
                 => nn_ops.max_pool(value, ksize, strides, padding, data_format: data_format, name: name);
 
             public Tensor in_top_k(Tensor predictions, Tensor targets, int k, string name = "InTopK")
-                => gen_ops.in_top_k(predictions, targets, k, name);
+                => nn_ops.in_top_k(predictions, targets, k, name);
 
             public Tensor[] top_k(Tensor input, int k = 1, bool sorted = true, string name = null)
                 => gen_nn_ops.top_kv2(input, k: k, sorted: sorted, name: name);

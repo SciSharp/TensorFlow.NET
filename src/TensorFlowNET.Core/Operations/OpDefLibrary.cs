@@ -228,6 +228,15 @@ namespace Tensorflow
                     output_types.AddRange(types);
                 }
 
+                // We add an explicit colocation constraint between
+                // the newly created op and any of its reference-typed inputs.
+                var must_colocate_inputs = zip(op_def.InputArg, inputs)
+                    .Where(x => x.Item1.IsRef)
+                    .Select(x => x.Item2)
+                    .ToArray();
+
+                _MaybeColocateWith(must_colocate_inputs);
+
                 // Add Op to graph
                 var op = g.create_op(op_type_name, 
                     inputs.ToArray(), 
@@ -239,6 +248,11 @@ namespace Tensorflow
 
                 return op;
             });
+        }
+
+        private void _MaybeColocateWith(ITensorOrOperation[] inputs)
+        {
+
         }
 
         private void SetAttrs(string op_type_name, 

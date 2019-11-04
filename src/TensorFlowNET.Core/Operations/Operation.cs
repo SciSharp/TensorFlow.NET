@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Tensorflow.Util;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -65,7 +66,7 @@ namespace Tensorflow
 #if SERIALIZABLE
         [JsonIgnore]
 #endif
-        public int _id_value;
+        public int _id_value { get; set; }
 #if SERIALIZABLE
         [JsonIgnore]
 #endif
@@ -77,6 +78,7 @@ namespace Tensorflow
 #if SERIALIZABLE
         [JsonIgnore]
 #endif
+        bool _is_stateful;
         public NodeDef node_def
         {
             get
@@ -104,7 +106,6 @@ namespace Tensorflow
             _control_flow_context = _graph._get_control_flow_context();
 
             // Note: _control_flow_post_processing() must not be called here, the caller is responsible for calling it when using this constructor.
-            OpInstances[_handle] = this;
         }
 
         /*public Operation(Graph g, string opType, string oper_name)
@@ -172,6 +173,8 @@ namespace Tensorflow
                 }
             }
 
+            _id_value = _graph._next_id();
+
             // Dict mapping op name to file and line information for op colocation
             // context managers.
             _control_flow_context = graph._get_control_flow_context();
@@ -182,6 +185,7 @@ namespace Tensorflow
 
             var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
             _handle = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
+            _is_stateful = op_def.IsStateful;
 
             // Initialize self._outputs.
             output_types = new TF_DataType[NumOutputs];
@@ -196,8 +200,6 @@ namespace Tensorflow
 
             if (_handle != IntPtr.Zero)
                 _control_flow_post_processing();
-
-            OpInstances[_handle] = this;
         }
 
         public void run(FeedItem[] feed_dict = null, Session session = null)
@@ -304,7 +306,7 @@ namespace Tensorflow
             var output = tensor._as_tf_output();
 
             // Reset cached inputs.
-            _inputs = null;
+            _inputs_val = null;
             // after the c_api call next time _inputs is accessed 
             // the updated inputs are reloaded from the c_api
             lock (Locks.ProcessWide)

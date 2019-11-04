@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Operations.ControlFlows;
 using static Tensorflow.ControlFlowContextDef;
+using static Tensorflow.Binding;
+using util = Tensorflow.control_flow_util;
 
 namespace Tensorflow.Operations
 {
@@ -72,6 +74,7 @@ namespace Tensorflow.Operations
         public ControlFlowContext()
         {
             _context_stack = new Stack<ControlFlowContext>();
+            _external_values = new Dictionary<string, ITensorOrOperation>();
         }
 
         public string name { get => _name; }
@@ -134,27 +137,6 @@ namespace Tensorflow.Operations
             graph._set_control_flow_context(this);
         }
 
-        protected virtual Tensor _Enter(Tensor data, string frame_name,
-            bool is_constant = false, 
-            int parallel_iterations = 10,
-            bool use_ref = true,
-            bool use_input_shape = true,
-            string name = null)
-        {
-            Tensor result;
-            data = ops.internal_convert_to_tensor_or_indexed_slices(data, as_ref: true);
-            if (data.dtype.is_ref_dtype() && use_ref)
-                throw new NotImplementedException("_Enter");
-            else
-                result = gen_control_flow_ops.enter(
-                    data, frame_name, is_constant, parallel_iterations, name: name);
-
-            if (use_input_shape)
-                result.set_shape(data.TensorShape);
-
-            return result;
-        }
-
         /// <summary>
         /// Exit this control flow context.
         /// </summary>
@@ -165,10 +147,18 @@ namespace Tensorflow.Operations
             graph._set_control_flow_context(last_context);
         }
 
+        public void ExitResult(Tensor[] result)
+        {
+            if(_outer_context != null)
+            {
+                throw new NotImplementedException("ExitResult");
+            }
+        }
+
         /// <summary>
         /// Add `op` to the current context.
         /// </summary>
-        public void AddOp(Operation op)
+        public virtual void AddOp(Operation op)
         {
             _AddOpInternal(op);
         }
@@ -180,10 +170,20 @@ namespace Tensorflow.Operations
 
         public virtual bool back_prop => throw new NotImplementedException("abstract method");
 
+        /// <summary>
+        /// Add `val` to the current context and its outer context recursively.
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
         public virtual Tensor AddValue(Tensor val)
         {
             // to be overridden
             return null;
+        }
+
+        public void AddName(string name)
+        {
+            _values.Add(name);
         }
 
         /// <summary>
@@ -203,7 +203,20 @@ namespace Tensorflow.Operations
         /// </summary>
         protected virtual void _AddOpInternal(Operation op)
         {
-            
+            if(op == null)
+            {
+                throw new NotImplementedException("");
+            }
+            else
+            {
+                foreach(var index in range(len(op.inputs)))
+                {
+                    var x = op.inputs[index];
+                    var real_x = AddValue(x);
+                    if (real_x != x)
+                        op._update_input(index, real_x);
+                }
+            }
         }
 
         protected bool OpInContext(Operation op)
@@ -230,9 +243,36 @@ namespace Tensorflow.Operations
             throw new NotImplementedException("_IsInOuterContext");
         }
 
-        protected virtual void _RemoveExternalControlEdges(Operation op)
+        /// <summary>
+        /// Remove any external control dependency on this op.
+        /// </summary>
+        /// <param name="op"></param>
+        protected virtual (Operation[], Operation[]) _RemoveExternalControlEdges(Operation op)
         {
-            var internal_control_inputs = op.control_inputs;
+            var while_ctxt = GetWhileContext();
+
+            var internal_control_inputs = new List<Operation>();
+            // A control input of `op` is internal if it is in the same while
+            // loop context as the enclosing while loop context of self.
+            if (while_ctxt == null)
+            {
+                internal_control_inputs = op.control_inputs.ToList();
+            }
+            else
+            {
+                foreach(Operation x in op.control_inputs)
+                {
+                    var ctxt = util.GetOutputContext(x);
+                    if (ctxt != null && ctxt.GetWhileContext() == while_ctxt)
+                        internal_control_inputs.append(x);
+                }
+            }
+
+            var external_control_inputs = new List<Operation>();
+            if (len(internal_control_inputs) != len(op.control_inputs))
+                throw new NotImplementedException("");
+
+            return (internal_control_inputs.ToArray(), external_control_inputs.ToArray());
         }
 
         /// <summary>
@@ -263,6 +303,14 @@ namespace Tensorflow.Operations
 
             throw new NotImplementedException($"Unknown ControlFlowContextDef field: {context_def.CtxtCase}");
         }
+
+        public virtual bool IsWhileContext()
+        {
+            throw new NotImplementedException("IsWhileContext");
+        }
+
+        public virtual bool IsCondContext()
+            => false;
 
         public object to_proto()
         {

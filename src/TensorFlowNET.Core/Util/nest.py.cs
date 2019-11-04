@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NumSharp;
+using Tensorflow.Operations;
 
 namespace Tensorflow.Util
 {
@@ -221,9 +222,14 @@ namespace Tensorflow.Util
             return list;
         }
 
+        public static object[] flatten2(ICanBeFlattened structure)
+            => structure.Flatten();
+
+        public static T[] flatten2<T>(T[] structure)
+            => structure;
+
         private static void _flatten_recursive<T>(T obj, List<T> list)
         {
-
             switch(obj)
             {
                 case IDictionary dict:
@@ -395,6 +401,10 @@ namespace Tensorflow.Util
 
         private static int len(IEnumerable<object> x) => x.Count();
 
+        public static T pack_sequence_as2<T>(T structure, object[] flat_sequence, bool expand_composites = false)
+            where T : IPackable<T>
+            => structure.Pack(flat_sequence);
+
         /// <summary>
         /// Returns a given flattened sequence packed into a given structure.
         /// If `structure` is a scalar, `flat_sequence` must be a single-element list;
@@ -418,7 +428,7 @@ namespace Tensorflow.Util
         /// <returns> `flat_sequence` converted to have the same recursive structure as
         /// `structure`.
         /// </returns>
-        public static object pack_sequence_as(object structure, IEnumerable<object> flat_sequence)
+        public static object pack_sequence_as(object structure, IEnumerable<object> flat_sequence, bool expand_composites = false)
         {
             List<object> flat = null;
             if (flat_sequence is List<object>)
@@ -509,6 +519,14 @@ namespace Tensorflow.Util
         }
 
         public static Tensor map_structure<T>(Func<T, Tensor> func, T structure)
+        {
+            var flat_structure = flatten(structure);
+            var mapped_flat_structure = flat_structure.Select(func).ToList();
+
+            return pack_sequence_as(structure, mapped_flat_structure) as Tensor;
+        }
+
+        public static Tensor map_structure2<T>(Func<T, Tensor> func, T structure)
         {
             var flat_structure = flatten(structure);
             var mapped_flat_structure = flat_structure.Select(func).ToList();

@@ -28,7 +28,9 @@ using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using NumSharp.Utilities;
 using Tensorflow.Framework;
+#if SERIALIZABLE
 using Newtonsoft.Json;
+#endif
 
 namespace Tensorflow
 {
@@ -37,7 +39,12 @@ namespace Tensorflow
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
     [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
-    public partial class Tensor : DisposableObject, ITensorOrOperation, _TensorLike
+    public partial class Tensor : DisposableObject, 
+        ITensorOrOperation, 
+        _TensorLike, 
+        ITensorOrTensorArray, 
+        IPackable<Tensor>,
+        ICanBeFlattened
     {
         private readonly int _id;
         private readonly Operation _op;
@@ -95,7 +102,7 @@ namespace Tensorflow
         [JsonIgnore]
 #endif
         public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / itemsize;
-        private IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
+        public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
 #if SERIALIZABLE
         [JsonIgnore]
@@ -176,7 +183,7 @@ namespace Tensorflow
         /// </summary>
         public void set_shape(TensorShape shape) 
         {
-            this.shape = shape.rank > 0 ? shape.dims : null;
+            this.shape = shape.rank >= 0 ? shape.dims : null;
         }
 
         /// <summary>

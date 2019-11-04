@@ -27,10 +27,10 @@ namespace Tensorflow {
             "CiV0ZW5zb3JmbG93L2NvcmUvcHJvdG9idWYvY29uZmlnLnByb3RvEgp0ZW5z",
             "b3JmbG93Gip0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL2Nvc3RfZ3JhcGgu",
             "cHJvdG8aJXRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvZ3JhcGgucHJvdG8a",
-            "KnRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvc3RlcF9zdGF0cy5wcm90bxok",
-            "dGVuc29yZmxvdy9jb3JlL3Byb3RvYnVmL2RlYnVnLnByb3RvGiZ0ZW5zb3Jm",
-            "bG93L2NvcmUvcHJvdG9idWYvY2x1c3Rlci5wcm90bxoudGVuc29yZmxvdy9j",
-            "b3JlL3Byb3RvYnVmL3Jld3JpdGVyX2NvbmZpZy5wcm90byKtBAoKR1BVT3B0",
+            "KnRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvc3RlcF9zdGF0cy5wcm90bxom",
+            "dGVuc29yZmxvdy9jb3JlL3Byb3RvYnVmL2NsdXN0ZXIucHJvdG8aJHRlbnNv",
+            "cmZsb3cvY29yZS9wcm90b2J1Zi9kZWJ1Zy5wcm90bxoudGVuc29yZmxvdy9j",
+            "b3JlL3Byb3RvYnVmL3Jld3JpdGVyX2NvbmZpZy5wcm90byK3BQoKR1BVT3B0",
             "aW9ucxInCh9wZXJfcHJvY2Vzc19ncHVfbWVtb3J5X2ZyYWN0aW9uGAEgASgB",
             "EhQKDGFsbG93X2dyb3d0aBgEIAEoCBIWCg5hbGxvY2F0b3JfdHlwZRgCIAEo",
             "CRIfChdkZWZlcnJlZF9kZWxldGlvbl9ieXRlcxgDIAEoAxIbChN2aXNpYmxl",
@@ -38,89 +38,102 @@ namespace Tensorflow {
             "ZWNzGAYgASgFEiQKHHBvbGxpbmdfaW5hY3RpdmVfZGVsYXlfbXNlY3MYByAB",
             "KAUSHAoUZm9yY2VfZ3B1X2NvbXBhdGlibGUYCCABKAgSOQoMZXhwZXJpbWVu",
             "dGFsGAkgASgLMiMudGVuc29yZmxvdy5HUFVPcHRpb25zLkV4cGVyaW1lbnRh",
-            "bBrmAQoMRXhwZXJpbWVudGFsEksKD3ZpcnR1YWxfZGV2aWNlcxgBIAMoCzIy",
+            "bBrwAgoMRXhwZXJpbWVudGFsEksKD3ZpcnR1YWxfZGV2aWNlcxgBIAMoCzIy",
             "LnRlbnNvcmZsb3cuR1BVT3B0aW9ucy5FeHBlcmltZW50YWwuVmlydHVhbERl",
             "dmljZXMSGgoSdXNlX3VuaWZpZWRfbWVtb3J5GAIgASgIEiMKG251bV9kZXZf",
             "dG9fZGV2X2NvcHlfc3RyZWFtcxgDIAEoBRIdChVjb2xsZWN0aXZlX3Jpbmdf",
-            "b3JkZXIYBCABKAkaKQoOVmlydHVhbERldmljZXMSFwoPbWVtb3J5X2xpbWl0",
-            "X21iGAEgAygCIoUDChBPcHRpbWl6ZXJPcHRpb25zEisKI2RvX2NvbW1vbl9z",
-            "dWJleHByZXNzaW9uX2VsaW1pbmF0aW9uGAEgASgIEhsKE2RvX2NvbnN0YW50",
-            "X2ZvbGRpbmcYAiABKAgSJAocbWF4X2ZvbGRlZF9jb25zdGFudF9pbl9ieXRl",
-            "cxgGIAEoAxIcChRkb19mdW5jdGlvbl9pbmxpbmluZxgEIAEoCBI1CglvcHRf",
-            "bGV2ZWwYAyABKA4yIi50ZW5zb3JmbG93Lk9wdGltaXplck9wdGlvbnMuTGV2",
-            "ZWwSRQoQZ2xvYmFsX2ppdF9sZXZlbBgFIAEoDjIrLnRlbnNvcmZsb3cuT3B0",
-            "aW1pemVyT3B0aW9ucy5HbG9iYWxKaXRMZXZlbCIgCgVMZXZlbBIGCgJMMRAA",
-            "Eg8KAkwwEP///////////wEiQwoOR2xvYmFsSml0TGV2ZWwSCwoHREVGQVVM",
-            "VBAAEhAKA09GRhD///////////8BEggKBE9OXzEQARIICgRPTl8yEAIi7gIK",
-            "DEdyYXBoT3B0aW9ucxIeChZlbmFibGVfcmVjdl9zY2hlZHVsaW5nGAIgASgI",
-            "EjcKEW9wdGltaXplcl9vcHRpb25zGAMgASgLMhwudGVuc29yZmxvdy5PcHRp",
-            "bWl6ZXJPcHRpb25zEhgKEGJ1aWxkX2Nvc3RfbW9kZWwYBCABKAMSHgoWYnVp",
-            "bGRfY29zdF9tb2RlbF9hZnRlchgJIAEoAxIUCgxpbmZlcl9zaGFwZXMYBSAB",
-            "KAgSGgoScGxhY2VfcHJ1bmVkX2dyYXBoGAYgASgIEiAKGGVuYWJsZV9iZmxv",
-            "YXQxNl9zZW5kcmVjdhgHIAEoCBIVCg10aW1lbGluZV9zdGVwGAggASgFEjMK",
-            "D3Jld3JpdGVfb3B0aW9ucxgKIAEoCzIaLnRlbnNvcmZsb3cuUmV3cml0ZXJD",
-            "b25maWdKBAgBEAJSJXNraXBfY29tbW9uX3N1YmV4cHJlc3Npb25fZWxpbWlu",
-            "YXRpb24iQQoVVGhyZWFkUG9vbE9wdGlvblByb3RvEhMKC251bV90aHJlYWRz",
-            "GAEgASgFEhMKC2dsb2JhbF9uYW1lGAIgASgJImwKClJQQ09wdGlvbnMSJAoc",
-            "dXNlX3JwY19mb3JfaW5wcm9jZXNzX21hc3RlchgBIAEoCBIdChVjb21wcmVz",
-            "c2lvbl9hbGdvcml0aG0YAiABKAkSGQoRY29tcHJlc3Npb25fbGV2ZWwYAyAB",
-            "KAUi3wYKC0NvbmZpZ1Byb3RvEj4KDGRldmljZV9jb3VudBgBIAMoCzIoLnRl",
-            "bnNvcmZsb3cuQ29uZmlnUHJvdG8uRGV2aWNlQ291bnRFbnRyeRIkChxpbnRy",
-            "YV9vcF9wYXJhbGxlbGlzbV90aHJlYWRzGAIgASgFEiQKHGludGVyX29wX3Bh",
-            "cmFsbGVsaXNtX3RocmVhZHMYBSABKAUSHwoXdXNlX3Blcl9zZXNzaW9uX3Ro",
-            "cmVhZHMYCSABKAgSRwocc2Vzc2lvbl9pbnRlcl9vcF90aHJlYWRfcG9vbBgM",
-            "IAMoCzIhLnRlbnNvcmZsb3cuVGhyZWFkUG9vbE9wdGlvblByb3RvEhgKEHBs",
-            "YWNlbWVudF9wZXJpb2QYAyABKAUSFgoOZGV2aWNlX2ZpbHRlcnMYBCADKAkS",
-            "KwoLZ3B1X29wdGlvbnMYBiABKAsyFi50ZW5zb3JmbG93LkdQVU9wdGlvbnMS",
-            "HAoUYWxsb3dfc29mdF9wbGFjZW1lbnQYByABKAgSHAoUbG9nX2RldmljZV9w",
-            "bGFjZW1lbnQYCCABKAgSLwoNZ3JhcGhfb3B0aW9ucxgKIAEoCzIYLnRlbnNv",
-            "cmZsb3cuR3JhcGhPcHRpb25zEh8KF29wZXJhdGlvbl90aW1lb3V0X2luX21z",
-            "GAsgASgDEisKC3JwY19vcHRpb25zGA0gASgLMhYudGVuc29yZmxvdy5SUENP",
-            "cHRpb25zEisKC2NsdXN0ZXJfZGVmGA4gASgLMhYudGVuc29yZmxvdy5DbHVz",
-            "dGVyRGVmEh0KFWlzb2xhdGVfc2Vzc2lvbl9zdGF0ZRgPIAEoCBI6CgxleHBl",
-            "cmltZW50YWwYECABKAsyJC50ZW5zb3JmbG93LkNvbmZpZ1Byb3RvLkV4cGVy",
-            "aW1lbnRhbBoyChBEZXZpY2VDb3VudEVudHJ5EgsKA2tleRgBIAEoCRINCgV2",
-            "YWx1ZRgCIAEoBToCOAEagwEKDEV4cGVyaW1lbnRhbBIfChdjb2xsZWN0aXZl",
-            "X2dyb3VwX2xlYWRlchgBIAEoCRIVCg1leGVjdXRvcl90eXBlGAMgASgJEhoK",
-            "EnJlY3ZfYnVmX21heF9jaHVuaxgEIAEoBRIZChF1c2VfbnVtYV9hZmZpbml0",
-            "eRgFIAEoCEoECAIQAyLYAwoKUnVuT3B0aW9ucxI2Cgt0cmFjZV9sZXZlbBgB",
-            "IAEoDjIhLnRlbnNvcmZsb3cuUnVuT3B0aW9ucy5UcmFjZUxldmVsEhUKDXRp",
-            "bWVvdXRfaW5fbXMYAiABKAMSHAoUaW50ZXJfb3BfdGhyZWFkX3Bvb2wYAyAB",
-            "KAUSHwoXb3V0cHV0X3BhcnRpdGlvbl9ncmFwaHMYBSABKAgSLwoNZGVidWdf",
-            "b3B0aW9ucxgGIAEoCzIYLnRlbnNvcmZsb3cuRGVidWdPcHRpb25zEioKInJl",
-            "cG9ydF90ZW5zb3JfYWxsb2NhdGlvbnNfdXBvbl9vb20YByABKAgSOQoMZXhw",
-            "ZXJpbWVudGFsGAggASgLMiMudGVuc29yZmxvdy5SdW5PcHRpb25zLkV4cGVy",
-            "aW1lbnRhbBpKCgxFeHBlcmltZW50YWwSHAoUY29sbGVjdGl2ZV9ncmFwaF9r",
-            "ZXkYASABKAMSHAoUdXNlX3J1bl9oYW5kbGVyX3Bvb2wYAiABKAgiUgoKVHJh",
-            "Y2VMZXZlbBIMCghOT19UUkFDRRAAEhIKDlNPRlRXQVJFX1RSQUNFEAESEgoO",
-            "SEFSRFdBUkVfVFJBQ0UQAhIOCgpGVUxMX1RSQUNFEANKBAgEEAUilgEKC1J1",
-            "bk1ldGFkYXRhEikKCnN0ZXBfc3RhdHMYASABKAsyFS50ZW5zb3JmbG93LlN0",
-            "ZXBTdGF0cxIsCgpjb3N0X2dyYXBoGAIgASgLMhgudGVuc29yZmxvdy5Db3N0",
-            "R3JhcGhEZWYSLgoQcGFydGl0aW9uX2dyYXBocxgDIAMoCzIULnRlbnNvcmZs",
-            "b3cuR3JhcGhEZWYiOgoQVGVuc29yQ29ubmVjdGlvbhITCgtmcm9tX3RlbnNv",
-            "chgBIAEoCRIRCgl0b190ZW5zb3IYAiABKAkisAMKD0NhbGxhYmxlT3B0aW9u",
-            "cxIMCgRmZWVkGAEgAygJEg0KBWZldGNoGAIgAygJEg4KBnRhcmdldBgDIAMo",
-            "CRIrCgtydW5fb3B0aW9ucxgEIAEoCzIWLnRlbnNvcmZsb3cuUnVuT3B0aW9u",
-            "cxI3ChF0ZW5zb3JfY29ubmVjdGlvbhgFIAMoCzIcLnRlbnNvcmZsb3cuVGVu",
-            "c29yQ29ubmVjdGlvbhJCCgxmZWVkX2RldmljZXMYBiADKAsyLC50ZW5zb3Jm",
-            "bG93LkNhbGxhYmxlT3B0aW9ucy5GZWVkRGV2aWNlc0VudHJ5EkQKDWZldGNo",
-            "X2RldmljZXMYByADKAsyLS50ZW5zb3JmbG93LkNhbGxhYmxlT3B0aW9ucy5G",
-            "ZXRjaERldmljZXNFbnRyeRIXCg9mZXRjaF9za2lwX3N5bmMYCCABKAgaMgoQ",
-            "RmVlZERldmljZXNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6",
-            "AjgBGjMKEUZldGNoRGV2aWNlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1",
-            "ZRgCIAEoCToCOAFCLQoYb3JnLnRlbnNvcmZsb3cuZnJhbWV3b3JrQgxDb25m",
-            "aWdQcm90b3NQAfgBAWIGcHJvdG8z"));
+            "b3JkZXIYBCABKAkSHQoVdGltZXN0YW1wZWRfYWxsb2NhdG9yGAUgASgIEiMK",
+            "G2tlcm5lbF90cmFja2VyX21heF9pbnRlcnZhbBgHIAEoBRIgChhrZXJuZWxf",
+            "dHJhY2tlcl9tYXhfYnl0ZXMYCCABKAUSIgoaa2VybmVsX3RyYWNrZXJfbWF4",
+            "X3BlbmRpbmcYCSABKAUaKQoOVmlydHVhbERldmljZXMSFwoPbWVtb3J5X2xp",
+            "bWl0X21iGAEgAygCIoUDChBPcHRpbWl6ZXJPcHRpb25zEisKI2RvX2NvbW1v",
+            "bl9zdWJleHByZXNzaW9uX2VsaW1pbmF0aW9uGAEgASgIEhsKE2RvX2NvbnN0",
+            "YW50X2ZvbGRpbmcYAiABKAgSJAocbWF4X2ZvbGRlZF9jb25zdGFudF9pbl9i",
+            "eXRlcxgGIAEoAxIcChRkb19mdW5jdGlvbl9pbmxpbmluZxgEIAEoCBI1Cglv",
+            "cHRfbGV2ZWwYAyABKA4yIi50ZW5zb3JmbG93Lk9wdGltaXplck9wdGlvbnMu",
+            "TGV2ZWwSRQoQZ2xvYmFsX2ppdF9sZXZlbBgFIAEoDjIrLnRlbnNvcmZsb3cu",
+            "T3B0aW1pemVyT3B0aW9ucy5HbG9iYWxKaXRMZXZlbCIgCgVMZXZlbBIGCgJM",
+            "MRAAEg8KAkwwEP///////////wEiQwoOR2xvYmFsSml0TGV2ZWwSCwoHREVG",
+            "QVVMVBAAEhAKA09GRhD///////////8BEggKBE9OXzEQARIICgRPTl8yEAIi",
+            "7gIKDEdyYXBoT3B0aW9ucxIeChZlbmFibGVfcmVjdl9zY2hlZHVsaW5nGAIg",
+            "ASgIEjcKEW9wdGltaXplcl9vcHRpb25zGAMgASgLMhwudGVuc29yZmxvdy5P",
+            "cHRpbWl6ZXJPcHRpb25zEhgKEGJ1aWxkX2Nvc3RfbW9kZWwYBCABKAMSHgoW",
+            "YnVpbGRfY29zdF9tb2RlbF9hZnRlchgJIAEoAxIUCgxpbmZlcl9zaGFwZXMY",
+            "BSABKAgSGgoScGxhY2VfcHJ1bmVkX2dyYXBoGAYgASgIEiAKGGVuYWJsZV9i",
+            "ZmxvYXQxNl9zZW5kcmVjdhgHIAEoCBIVCg10aW1lbGluZV9zdGVwGAggASgF",
+            "EjMKD3Jld3JpdGVfb3B0aW9ucxgKIAEoCzIaLnRlbnNvcmZsb3cuUmV3cml0",
+            "ZXJDb25maWdKBAgBEAJSJXNraXBfY29tbW9uX3N1YmV4cHJlc3Npb25fZWxp",
+            "bWluYXRpb24iQQoVVGhyZWFkUG9vbE9wdGlvblByb3RvEhMKC251bV90aHJl",
+            "YWRzGAEgASgFEhMKC2dsb2JhbF9uYW1lGAIgASgJImwKClJQQ09wdGlvbnMS",
+            "JAocdXNlX3JwY19mb3JfaW5wcm9jZXNzX21hc3RlchgBIAEoCBIdChVjb21w",
+            "cmVzc2lvbl9hbGdvcml0aG0YAiABKAkSGQoRY29tcHJlc3Npb25fbGV2ZWwY",
+            "AyABKAUisggKC0NvbmZpZ1Byb3RvEj4KDGRldmljZV9jb3VudBgBIAMoCzIo",
+            "LnRlbnNvcmZsb3cuQ29uZmlnUHJvdG8uRGV2aWNlQ291bnRFbnRyeRIkChxp",
+            "bnRyYV9vcF9wYXJhbGxlbGlzbV90aHJlYWRzGAIgASgFEiQKHGludGVyX29w",
+            "X3BhcmFsbGVsaXNtX3RocmVhZHMYBSABKAUSHwoXdXNlX3Blcl9zZXNzaW9u",
+            "X3RocmVhZHMYCSABKAgSRwocc2Vzc2lvbl9pbnRlcl9vcF90aHJlYWRfcG9v",
+            "bBgMIAMoCzIhLnRlbnNvcmZsb3cuVGhyZWFkUG9vbE9wdGlvblByb3RvEhgK",
+            "EHBsYWNlbWVudF9wZXJpb2QYAyABKAUSFgoOZGV2aWNlX2ZpbHRlcnMYBCAD",
+            "KAkSKwoLZ3B1X29wdGlvbnMYBiABKAsyFi50ZW5zb3JmbG93LkdQVU9wdGlv",
+            "bnMSHAoUYWxsb3dfc29mdF9wbGFjZW1lbnQYByABKAgSHAoUbG9nX2Rldmlj",
+            "ZV9wbGFjZW1lbnQYCCABKAgSLwoNZ3JhcGhfb3B0aW9ucxgKIAEoCzIYLnRl",
+            "bnNvcmZsb3cuR3JhcGhPcHRpb25zEh8KF29wZXJhdGlvbl90aW1lb3V0X2lu",
+            "X21zGAsgASgDEisKC3JwY19vcHRpb25zGA0gASgLMhYudGVuc29yZmxvdy5S",
+            "UENPcHRpb25zEisKC2NsdXN0ZXJfZGVmGA4gASgLMhYudGVuc29yZmxvdy5D",
+            "bHVzdGVyRGVmEh0KFWlzb2xhdGVfc2Vzc2lvbl9zdGF0ZRgPIAEoCBI6Cgxl",
+            "eHBlcmltZW50YWwYECABKAsyJC50ZW5zb3JmbG93LkNvbmZpZ1Byb3RvLkV4",
+            "cGVyaW1lbnRhbBoyChBEZXZpY2VDb3VudEVudHJ5EgsKA2tleRgBIAEoCRIN",
+            "CgV2YWx1ZRgCIAEoBToCOAEa1gIKDEV4cGVyaW1lbnRhbBIfChdjb2xsZWN0",
+            "aXZlX2dyb3VwX2xlYWRlchgBIAEoCRIVCg1leGVjdXRvcl90eXBlGAMgASgJ",
+            "EhoKEnJlY3ZfYnVmX21heF9jaHVuaxgEIAEoBRIZChF1c2VfbnVtYV9hZmZp",
+            "bml0eRgFIAEoCBI1Ci1jb2xsZWN0aXZlX2RldGVybWluaXN0aWNfc2VxdWVu",
+            "dGlhbF9leGVjdXRpb24YBiABKAgSFwoPY29sbGVjdGl2ZV9uY2NsGAcgASgI",
+            "EjYKLnNoYXJlX3Nlc3Npb25fc3RhdGVfaW5fY2x1c3RlcnNwZWNfcHJvcGFn",
+            "YXRpb24YCCABKAgSHwoXZGlzYWJsZV90aHJlYWRfc3Bpbm5pbmcYCSABKAgS",
+            "KAogc2hhcmVfY2x1c3Rlcl9kZXZpY2VzX2luX3Nlc3Npb24YCiABKAhKBAgC",
+            "EAMi2AMKClJ1bk9wdGlvbnMSNgoLdHJhY2VfbGV2ZWwYASABKA4yIS50ZW5z",
+            "b3JmbG93LlJ1bk9wdGlvbnMuVHJhY2VMZXZlbBIVCg10aW1lb3V0X2luX21z",
+            "GAIgASgDEhwKFGludGVyX29wX3RocmVhZF9wb29sGAMgASgFEh8KF291dHB1",
+            "dF9wYXJ0aXRpb25fZ3JhcGhzGAUgASgIEi8KDWRlYnVnX29wdGlvbnMYBiAB",
+            "KAsyGC50ZW5zb3JmbG93LkRlYnVnT3B0aW9ucxIqCiJyZXBvcnRfdGVuc29y",
+            "X2FsbG9jYXRpb25zX3Vwb25fb29tGAcgASgIEjkKDGV4cGVyaW1lbnRhbBgI",
+            "IAEoCzIjLnRlbnNvcmZsb3cuUnVuT3B0aW9ucy5FeHBlcmltZW50YWwaSgoM",
+            "RXhwZXJpbWVudGFsEhwKFGNvbGxlY3RpdmVfZ3JhcGhfa2V5GAEgASgDEhwK",
+            "FHVzZV9ydW5faGFuZGxlcl9wb29sGAIgASgIIlIKClRyYWNlTGV2ZWwSDAoI",
+            "Tk9fVFJBQ0UQABISCg5TT0ZUV0FSRV9UUkFDRRABEhIKDkhBUkRXQVJFX1RS",
+            "QUNFEAISDgoKRlVMTF9UUkFDRRADSgQIBBAFIocDCgtSdW5NZXRhZGF0YRIp",
+            "CgpzdGVwX3N0YXRzGAEgASgLMhUudGVuc29yZmxvdy5TdGVwU3RhdHMSLAoK",
+            "Y29zdF9ncmFwaBgCIAEoCzIYLnRlbnNvcmZsb3cuQ29zdEdyYXBoRGVmEi4K",
+            "EHBhcnRpdGlvbl9ncmFwaHMYAyADKAsyFC50ZW5zb3JmbG93LkdyYXBoRGVm",
+            "Ej8KD2Z1bmN0aW9uX2dyYXBocxgEIAMoCzImLnRlbnNvcmZsb3cuUnVuTWV0",
+            "YWRhdGEuRnVuY3Rpb25HcmFwaHMarQEKDkZ1bmN0aW9uR3JhcGhzEi4KEHBh",
+            "cnRpdGlvbl9ncmFwaHMYASADKAsyFC50ZW5zb3JmbG93LkdyYXBoRGVmEjQK",
+            "FnByZV9vcHRpbWl6YXRpb25fZ3JhcGgYAiABKAsyFC50ZW5zb3JmbG93Lkdy",
+            "YXBoRGVmEjUKF3Bvc3Rfb3B0aW1pemF0aW9uX2dyYXBoGAMgASgLMhQudGVu",
+            "c29yZmxvdy5HcmFwaERlZiI6ChBUZW5zb3JDb25uZWN0aW9uEhMKC2Zyb21f",
+            "dGVuc29yGAEgASgJEhEKCXRvX3RlbnNvchgCIAEoCSKwAwoPQ2FsbGFibGVP",
+            "cHRpb25zEgwKBGZlZWQYASADKAkSDQoFZmV0Y2gYAiADKAkSDgoGdGFyZ2V0",
+            "GAMgAygJEisKC3J1bl9vcHRpb25zGAQgASgLMhYudGVuc29yZmxvdy5SdW5P",
+            "cHRpb25zEjcKEXRlbnNvcl9jb25uZWN0aW9uGAUgAygLMhwudGVuc29yZmxv",
+            "dy5UZW5zb3JDb25uZWN0aW9uEkIKDGZlZWRfZGV2aWNlcxgGIAMoCzIsLnRl",
+            "bnNvcmZsb3cuQ2FsbGFibGVPcHRpb25zLkZlZWREZXZpY2VzRW50cnkSRAoN",
+            "ZmV0Y2hfZGV2aWNlcxgHIAMoCzItLnRlbnNvcmZsb3cuQ2FsbGFibGVPcHRp",
+            "b25zLkZldGNoRGV2aWNlc0VudHJ5EhcKD2ZldGNoX3NraXBfc3luYxgIIAEo",
+            "CBoyChBGZWVkRGV2aWNlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgC",
+            "IAEoCToCOAEaMwoRRmV0Y2hEZXZpY2VzRW50cnkSCwoDa2V5GAEgASgJEg0K",
+            "BXZhbHVlGAIgASgJOgI4AUItChhvcmcudGVuc29yZmxvdy5mcmFtZXdvcmtC",
+            "DENvbmZpZ1Byb3Rvc1AB+AEBYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Tensorflow.CostGraphReflection.Descriptor, global::Tensorflow.GraphReflection.Descriptor, global::Tensorflow.StepStatsReflection.Descriptor, global::Tensorflow.DebugReflection.Descriptor, global::Tensorflow.ClusterReflection.Descriptor, global::Tensorflow.RewriterConfigReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Tensorflow.CostGraphReflection.Descriptor, global::Tensorflow.GraphReflection.Descriptor, global::Tensorflow.StepStatsReflection.Descriptor, global::Tensorflow.ClusterReflection.Descriptor, global::Tensorflow.DebugReflection.Descriptor, global::Tensorflow.RewriterConfigReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GPUOptions), global::Tensorflow.GPUOptions.Parser, new[]{ "PerProcessGpuMemoryFraction", "AllowGrowth", "AllocatorType", "DeferredDeletionBytes", "VisibleDeviceList", "PollingActiveDelayUsecs", "PollingInactiveDelayMsecs", "ForceGpuCompatible", "Experimental" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GPUOptions.Types.Experimental), global::Tensorflow.GPUOptions.Types.Experimental.Parser, new[]{ "VirtualDevices", "UseUnifiedMemory", "NumDevToDevCopyStreams", "CollectiveRingOrder" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GPUOptions.Types.Experimental.Types.VirtualDevices), global::Tensorflow.GPUOptions.Types.Experimental.Types.VirtualDevices.Parser, new[]{ "MemoryLimitMb" }, null, null, null)})}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GPUOptions), global::Tensorflow.GPUOptions.Parser, new[]{ "PerProcessGpuMemoryFraction", "AllowGrowth", "AllocatorType", "DeferredDeletionBytes", "VisibleDeviceList", "PollingActiveDelayUsecs", "PollingInactiveDelayMsecs", "ForceGpuCompatible", "Experimental" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GPUOptions.Types.Experimental), global::Tensorflow.GPUOptions.Types.Experimental.Parser, new[]{ "VirtualDevices", "UseUnifiedMemory", "NumDevToDevCopyStreams", "CollectiveRingOrder", "TimestampedAllocator", "KernelTrackerMaxInterval", "KernelTrackerMaxBytes", "KernelTrackerMaxPending" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GPUOptions.Types.Experimental.Types.VirtualDevices), global::Tensorflow.GPUOptions.Types.Experimental.Types.VirtualDevices.Parser, new[]{ "MemoryLimitMb" }, null, null, null)})}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OptimizerOptions), global::Tensorflow.OptimizerOptions.Parser, new[]{ "DoCommonSubexpressionElimination", "DoConstantFolding", "MaxFoldedConstantInBytes", "DoFunctionInlining", "OptLevel", "GlobalJitLevel" }, null, new[]{ typeof(global::Tensorflow.OptimizerOptions.Types.Level), typeof(global::Tensorflow.OptimizerOptions.Types.GlobalJitLevel) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphOptions), global::Tensorflow.GraphOptions.Parser, new[]{ "EnableRecvScheduling", "OptimizerOptions", "BuildCostModel", "BuildCostModelAfter", "InferShapes", "PlacePrunedGraph", "EnableBfloat16Sendrecv", "TimelineStep", "RewriteOptions" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ThreadPoolOptionProto), global::Tensorflow.ThreadPoolOptionProto.Parser, new[]{ "NumThreads", "GlobalName" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RPCOptions), global::Tensorflow.RPCOptions.Parser, new[]{ "UseRpcForInprocessMaster", "CompressionAlgorithm", "CompressionLevel" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ConfigProto), global::Tensorflow.ConfigProto.Parser, new[]{ "DeviceCount", "IntraOpParallelismThreads", "InterOpParallelismThreads", "UsePerSessionThreads", "SessionInterOpThreadPool", "PlacementPeriod", "DeviceFilters", "GpuOptions", "AllowSoftPlacement", "LogDevicePlacement", "GraphOptions", "OperationTimeoutInMs", "RpcOptions", "ClusterDef", "IsolateSessionState", "Experimental" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ConfigProto.Types.Experimental), global::Tensorflow.ConfigProto.Types.Experimental.Parser, new[]{ "CollectiveGroupLeader", "ExecutorType", "RecvBufMaxChunk", "UseNumaAffinity" }, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ConfigProto), global::Tensorflow.ConfigProto.Parser, new[]{ "DeviceCount", "IntraOpParallelismThreads", "InterOpParallelismThreads", "UsePerSessionThreads", "SessionInterOpThreadPool", "PlacementPeriod", "DeviceFilters", "GpuOptions", "AllowSoftPlacement", "LogDevicePlacement", "GraphOptions", "OperationTimeoutInMs", "RpcOptions", "ClusterDef", "IsolateSessionState", "Experimental" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ConfigProto.Types.Experimental), global::Tensorflow.ConfigProto.Types.Experimental.Parser, new[]{ "CollectiveGroupLeader", "ExecutorType", "RecvBufMaxChunk", "UseNumaAffinity", "CollectiveDeterministicSequentialExecution", "CollectiveNccl", "ShareSessionStateInClusterspecPropagation", "DisableThreadSpinning", "ShareClusterDevicesInSession" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunOptions), global::Tensorflow.RunOptions.Parser, new[]{ "TraceLevel", "TimeoutInMs", "InterOpThreadPool", "OutputPartitionGraphs", "DebugOptions", "ReportTensorAllocationsUponOom", "Experimental" }, null, new[]{ typeof(global::Tensorflow.RunOptions.Types.TraceLevel) }, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunOptions.Types.Experimental), global::Tensorflow.RunOptions.Types.Experimental.Parser, new[]{ "CollectiveGraphKey", "UseRunHandlerPool" }, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunMetadata), global::Tensorflow.RunMetadata.Parser, new[]{ "StepStats", "CostGraph", "PartitionGraphs" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunMetadata), global::Tensorflow.RunMetadata.Parser, new[]{ "StepStats", "CostGraph", "PartitionGraphs", "FunctionGraphs" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunMetadata.Types.FunctionGraphs), global::Tensorflow.RunMetadata.Types.FunctionGraphs.Parser, new[]{ "PartitionGraphs", "PreOptimizationGraph", "PostOptimizationGraph" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorConnection), global::Tensorflow.TensorConnection.Parser, new[]{ "FromTensor", "ToTensor" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CallableOptions), global::Tensorflow.CallableOptions.Parser, new[]{ "Feed", "Fetch", "Target", "RunOptions", "TensorConnection", "FeedDevices", "FetchDevices", "FetchSkipSync" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, })
           }));
@@ -605,6 +618,10 @@ namespace Tensorflow {
           useUnifiedMemory_ = other.useUnifiedMemory_;
           numDevToDevCopyStreams_ = other.numDevToDevCopyStreams_;
           collectiveRingOrder_ = other.collectiveRingOrder_;
+          timestampedAllocator_ = other.timestampedAllocator_;
+          kernelTrackerMaxInterval_ = other.kernelTrackerMaxInterval_;
+          kernelTrackerMaxBytes_ = other.kernelTrackerMaxBytes_;
+          kernelTrackerMaxPending_ = other.kernelTrackerMaxPending_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -703,6 +720,77 @@ namespace Tensorflow {
           }
         }
 
+        /// <summary>Field number for the "timestamped_allocator" field.</summary>
+        public const int TimestampedAllocatorFieldNumber = 5;
+        private bool timestampedAllocator_;
+        /// <summary>
+        /// If true then extra work is done by GPUDevice and GPUBFCAllocator to
+        /// keep track of when GPU memory is freed and when kernels actually
+        /// complete so that we can know when a nominally free memory chunk
+        /// is really not subject to pending use.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool TimestampedAllocator {
+          get { return timestampedAllocator_; }
+          set {
+            timestampedAllocator_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "kernel_tracker_max_interval" field.</summary>
+        public const int KernelTrackerMaxIntervalFieldNumber = 7;
+        private int kernelTrackerMaxInterval_;
+        /// <summary>
+        /// Parameters for GPUKernelTracker.  By default no kernel tracking is done.
+        /// Note that timestamped_allocator is only effective if some tracking is
+        /// specified.
+        ///
+        /// If kernel_tracker_max_interval = n > 0, then a tracking event
+        /// is inserted after every n kernels without an event.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int KernelTrackerMaxInterval {
+          get { return kernelTrackerMaxInterval_; }
+          set {
+            kernelTrackerMaxInterval_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "kernel_tracker_max_bytes" field.</summary>
+        public const int KernelTrackerMaxBytesFieldNumber = 8;
+        private int kernelTrackerMaxBytes_;
+        /// <summary>
+        /// If kernel_tracker_max_bytes = n > 0, then a tracking event is
+        /// inserted after every series of kernels allocating a sum of
+        /// memory >= n.  If one kernel allocates b * n bytes, then one
+        /// event will be inserted after it, but it will count as b against
+        /// the pending limit.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int KernelTrackerMaxBytes {
+          get { return kernelTrackerMaxBytes_; }
+          set {
+            kernelTrackerMaxBytes_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "kernel_tracker_max_pending" field.</summary>
+        public const int KernelTrackerMaxPendingFieldNumber = 9;
+        private int kernelTrackerMaxPending_;
+        /// <summary>
+        /// If kernel_tracker_max_pending > 0 then no more than this many
+        /// tracking events can be outstanding at a time.  An attempt to
+        /// launch an additional kernel will stall until an event
+        /// completes.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int KernelTrackerMaxPending {
+          get { return kernelTrackerMaxPending_; }
+          set {
+            kernelTrackerMaxPending_ = value;
+          }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override bool Equals(object other) {
           return Equals(other as Experimental);
@@ -720,6 +808,10 @@ namespace Tensorflow {
           if (UseUnifiedMemory != other.UseUnifiedMemory) return false;
           if (NumDevToDevCopyStreams != other.NumDevToDevCopyStreams) return false;
           if (CollectiveRingOrder != other.CollectiveRingOrder) return false;
+          if (TimestampedAllocator != other.TimestampedAllocator) return false;
+          if (KernelTrackerMaxInterval != other.KernelTrackerMaxInterval) return false;
+          if (KernelTrackerMaxBytes != other.KernelTrackerMaxBytes) return false;
+          if (KernelTrackerMaxPending != other.KernelTrackerMaxPending) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -730,6 +822,10 @@ namespace Tensorflow {
           if (UseUnifiedMemory != false) hash ^= UseUnifiedMemory.GetHashCode();
           if (NumDevToDevCopyStreams != 0) hash ^= NumDevToDevCopyStreams.GetHashCode();
           if (CollectiveRingOrder.Length != 0) hash ^= CollectiveRingOrder.GetHashCode();
+          if (TimestampedAllocator != false) hash ^= TimestampedAllocator.GetHashCode();
+          if (KernelTrackerMaxInterval != 0) hash ^= KernelTrackerMaxInterval.GetHashCode();
+          if (KernelTrackerMaxBytes != 0) hash ^= KernelTrackerMaxBytes.GetHashCode();
+          if (KernelTrackerMaxPending != 0) hash ^= KernelTrackerMaxPending.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -756,6 +852,22 @@ namespace Tensorflow {
             output.WriteRawTag(34);
             output.WriteString(CollectiveRingOrder);
           }
+          if (TimestampedAllocator != false) {
+            output.WriteRawTag(40);
+            output.WriteBool(TimestampedAllocator);
+          }
+          if (KernelTrackerMaxInterval != 0) {
+            output.WriteRawTag(56);
+            output.WriteInt32(KernelTrackerMaxInterval);
+          }
+          if (KernelTrackerMaxBytes != 0) {
+            output.WriteRawTag(64);
+            output.WriteInt32(KernelTrackerMaxBytes);
+          }
+          if (KernelTrackerMaxPending != 0) {
+            output.WriteRawTag(72);
+            output.WriteInt32(KernelTrackerMaxPending);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -773,6 +885,18 @@ namespace Tensorflow {
           }
           if (CollectiveRingOrder.Length != 0) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(CollectiveRingOrder);
+          }
+          if (TimestampedAllocator != false) {
+            size += 1 + 1;
+          }
+          if (KernelTrackerMaxInterval != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(KernelTrackerMaxInterval);
+          }
+          if (KernelTrackerMaxBytes != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(KernelTrackerMaxBytes);
+          }
+          if (KernelTrackerMaxPending != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(KernelTrackerMaxPending);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -794,6 +918,18 @@ namespace Tensorflow {
           }
           if (other.CollectiveRingOrder.Length != 0) {
             CollectiveRingOrder = other.CollectiveRingOrder;
+          }
+          if (other.TimestampedAllocator != false) {
+            TimestampedAllocator = other.TimestampedAllocator;
+          }
+          if (other.KernelTrackerMaxInterval != 0) {
+            KernelTrackerMaxInterval = other.KernelTrackerMaxInterval;
+          }
+          if (other.KernelTrackerMaxBytes != 0) {
+            KernelTrackerMaxBytes = other.KernelTrackerMaxBytes;
+          }
+          if (other.KernelTrackerMaxPending != 0) {
+            KernelTrackerMaxPending = other.KernelTrackerMaxPending;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -820,6 +956,22 @@ namespace Tensorflow {
               }
               case 34: {
                 CollectiveRingOrder = input.ReadString();
+                break;
+              }
+              case 40: {
+                TimestampedAllocator = input.ReadBool();
+                break;
+              }
+              case 56: {
+                KernelTrackerMaxInterval = input.ReadInt32();
+                break;
+              }
+              case 64: {
+                KernelTrackerMaxBytes = input.ReadInt32();
+                break;
+              }
+              case 72: {
+                KernelTrackerMaxPending = input.ReadInt32();
                 break;
               }
             }
@@ -2189,6 +2341,7 @@ namespace Tensorflow {
     /// inter_op_parallelism_threads available in each process.
     ///
     /// 0 means the system picks an appropriate number.
+    /// Negative means all operations are performed in caller's thread.
     ///
     /// Note that the first Session created in the process sets the
     /// number of threads for all future sessions unless use_per_session_threads is
@@ -2397,7 +2550,8 @@ namespace Tensorflow {
     private bool isolateSessionState_;
     /// <summary>
     /// If true, any resources such as Variables used in the session will not be
-    /// shared with other sessions.
+    /// shared with other sessions. However, when clusterspec propagation is
+    /// enabled, this field is ignored and sessions are always isolated.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool IsolateSessionState {
@@ -2787,6 +2941,11 @@ namespace Tensorflow {
           executorType_ = other.executorType_;
           recvBufMaxChunk_ = other.recvBufMaxChunk_;
           useNumaAffinity_ = other.useNumaAffinity_;
+          collectiveDeterministicSequentialExecution_ = other.collectiveDeterministicSequentialExecution_;
+          collectiveNccl_ = other.collectiveNccl_;
+          shareSessionStateInClusterspecPropagation_ = other.shareSessionStateInClusterspecPropagation_;
+          disableThreadSpinning_ = other.disableThreadSpinning_;
+          shareClusterDevicesInSession_ = other.shareClusterDevicesInSession_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -2856,6 +3015,103 @@ namespace Tensorflow {
           }
         }
 
+        /// <summary>Field number for the "collective_deterministic_sequential_execution" field.</summary>
+        public const int CollectiveDeterministicSequentialExecutionFieldNumber = 6;
+        private bool collectiveDeterministicSequentialExecution_;
+        /// <summary>
+        /// If true, make collective op execution order sequential and deterministic
+        /// for potentially concurrent collective instances.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool CollectiveDeterministicSequentialExecution {
+          get { return collectiveDeterministicSequentialExecution_; }
+          set {
+            collectiveDeterministicSequentialExecution_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "collective_nccl" field.</summary>
+        public const int CollectiveNcclFieldNumber = 7;
+        private bool collectiveNccl_;
+        /// <summary>
+        /// If true, use NCCL for CollectiveOps.  This feature is highly
+        /// experimental.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool CollectiveNccl {
+          get { return collectiveNccl_; }
+          set {
+            collectiveNccl_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "share_session_state_in_clusterspec_propagation" field.</summary>
+        public const int ShareSessionStateInClusterspecPropagationFieldNumber = 8;
+        private bool shareSessionStateInClusterspecPropagation_;
+        /// <summary>
+        /// In the following, session state means the value of a variable, elements
+        /// in a hash table, or any other resource, accessible by worker sessions
+        /// held by a TF server.
+        ///
+        /// When ClusterSpec propagation is enabled, the value of
+        /// isolate_session_state is ignored when deciding whether to share session
+        /// states in a TF server (for backwards compatibility reasons).
+        /// - If share_session_state_in_clusterspec_propagation is true, the session
+        /// states are shared.
+        /// - If share_session_state_in_clusterspec_propagation is false, session
+        /// states are isolated.
+        ///
+        /// When clusterspec propagation is not used, the value of
+        /// share_session_state_in_clusterspec_propagation is ignored when deciding
+        /// whether to share session states in a TF server.
+        /// - If isolate_session_state is true, session states are isolated.
+        /// - If isolate_session_state is false, session states are shared.
+        ///
+        /// TODO(b/129330037): Add a single API that consistently treats
+        /// isolate_session_state and ClusterSpec propagation.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool ShareSessionStateInClusterspecPropagation {
+          get { return shareSessionStateInClusterspecPropagation_; }
+          set {
+            shareSessionStateInClusterspecPropagation_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "disable_thread_spinning" field.</summary>
+        public const int DisableThreadSpinningFieldNumber = 9;
+        private bool disableThreadSpinning_;
+        /// <summary>
+        /// If using a direct session, disable spinning while waiting for work in
+        /// the thread pool. This may result in higher latency for completing ops,
+        /// but in the case where there is a lot of spinning may result in lower
+        /// CPU usage.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool DisableThreadSpinning {
+          get { return disableThreadSpinning_; }
+          set {
+            disableThreadSpinning_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "share_cluster_devices_in_session" field.</summary>
+        public const int ShareClusterDevicesInSessionFieldNumber = 10;
+        private bool shareClusterDevicesInSession_;
+        /// <summary>
+        /// When true, WorkerSessions are created with device attributes from the
+        /// full cluster.
+        /// This is helpful when a worker wants to partition a graph
+        /// (for example during a PartitionedCallOp).
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool ShareClusterDevicesInSession {
+          get { return shareClusterDevicesInSession_; }
+          set {
+            shareClusterDevicesInSession_ = value;
+          }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override bool Equals(object other) {
           return Equals(other as Experimental);
@@ -2873,6 +3129,11 @@ namespace Tensorflow {
           if (ExecutorType != other.ExecutorType) return false;
           if (RecvBufMaxChunk != other.RecvBufMaxChunk) return false;
           if (UseNumaAffinity != other.UseNumaAffinity) return false;
+          if (CollectiveDeterministicSequentialExecution != other.CollectiveDeterministicSequentialExecution) return false;
+          if (CollectiveNccl != other.CollectiveNccl) return false;
+          if (ShareSessionStateInClusterspecPropagation != other.ShareSessionStateInClusterspecPropagation) return false;
+          if (DisableThreadSpinning != other.DisableThreadSpinning) return false;
+          if (ShareClusterDevicesInSession != other.ShareClusterDevicesInSession) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -2883,6 +3144,11 @@ namespace Tensorflow {
           if (ExecutorType.Length != 0) hash ^= ExecutorType.GetHashCode();
           if (RecvBufMaxChunk != 0) hash ^= RecvBufMaxChunk.GetHashCode();
           if (UseNumaAffinity != false) hash ^= UseNumaAffinity.GetHashCode();
+          if (CollectiveDeterministicSequentialExecution != false) hash ^= CollectiveDeterministicSequentialExecution.GetHashCode();
+          if (CollectiveNccl != false) hash ^= CollectiveNccl.GetHashCode();
+          if (ShareSessionStateInClusterspecPropagation != false) hash ^= ShareSessionStateInClusterspecPropagation.GetHashCode();
+          if (DisableThreadSpinning != false) hash ^= DisableThreadSpinning.GetHashCode();
+          if (ShareClusterDevicesInSession != false) hash ^= ShareClusterDevicesInSession.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -2912,6 +3178,26 @@ namespace Tensorflow {
             output.WriteRawTag(40);
             output.WriteBool(UseNumaAffinity);
           }
+          if (CollectiveDeterministicSequentialExecution != false) {
+            output.WriteRawTag(48);
+            output.WriteBool(CollectiveDeterministicSequentialExecution);
+          }
+          if (CollectiveNccl != false) {
+            output.WriteRawTag(56);
+            output.WriteBool(CollectiveNccl);
+          }
+          if (ShareSessionStateInClusterspecPropagation != false) {
+            output.WriteRawTag(64);
+            output.WriteBool(ShareSessionStateInClusterspecPropagation);
+          }
+          if (DisableThreadSpinning != false) {
+            output.WriteRawTag(72);
+            output.WriteBool(DisableThreadSpinning);
+          }
+          if (ShareClusterDevicesInSession != false) {
+            output.WriteRawTag(80);
+            output.WriteBool(ShareClusterDevicesInSession);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -2930,6 +3216,21 @@ namespace Tensorflow {
             size += 1 + pb::CodedOutputStream.ComputeInt32Size(RecvBufMaxChunk);
           }
           if (UseNumaAffinity != false) {
+            size += 1 + 1;
+          }
+          if (CollectiveDeterministicSequentialExecution != false) {
+            size += 1 + 1;
+          }
+          if (CollectiveNccl != false) {
+            size += 1 + 1;
+          }
+          if (ShareSessionStateInClusterspecPropagation != false) {
+            size += 1 + 1;
+          }
+          if (DisableThreadSpinning != false) {
+            size += 1 + 1;
+          }
+          if (ShareClusterDevicesInSession != false) {
             size += 1 + 1;
           }
           if (_unknownFields != null) {
@@ -2954,6 +3255,21 @@ namespace Tensorflow {
           }
           if (other.UseNumaAffinity != false) {
             UseNumaAffinity = other.UseNumaAffinity;
+          }
+          if (other.CollectiveDeterministicSequentialExecution != false) {
+            CollectiveDeterministicSequentialExecution = other.CollectiveDeterministicSequentialExecution;
+          }
+          if (other.CollectiveNccl != false) {
+            CollectiveNccl = other.CollectiveNccl;
+          }
+          if (other.ShareSessionStateInClusterspecPropagation != false) {
+            ShareSessionStateInClusterspecPropagation = other.ShareSessionStateInClusterspecPropagation;
+          }
+          if (other.DisableThreadSpinning != false) {
+            DisableThreadSpinning = other.DisableThreadSpinning;
+          }
+          if (other.ShareClusterDevicesInSession != false) {
+            ShareClusterDevicesInSession = other.ShareClusterDevicesInSession;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -2980,6 +3296,26 @@ namespace Tensorflow {
               }
               case 40: {
                 UseNumaAffinity = input.ReadBool();
+                break;
+              }
+              case 48: {
+                CollectiveDeterministicSequentialExecution = input.ReadBool();
+                break;
+              }
+              case 56: {
+                CollectiveNccl = input.ReadBool();
+                break;
+              }
+              case 64: {
+                ShareSessionStateInClusterspecPropagation = input.ReadBool();
+                break;
+              }
+              case 72: {
+                DisableThreadSpinning = input.ReadBool();
+                break;
+              }
+              case 80: {
+                ShareClusterDevicesInSession = input.ReadBool();
                 break;
               }
             }
@@ -3553,6 +3889,7 @@ namespace Tensorflow {
       stepStats_ = other.stepStats_ != null ? other.stepStats_.Clone() : null;
       costGraph_ = other.costGraph_ != null ? other.costGraph_.Clone() : null;
       partitionGraphs_ = other.partitionGraphs_.Clone();
+      functionGraphs_ = other.functionGraphs_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3604,6 +3941,28 @@ namespace Tensorflow {
       get { return partitionGraphs_; }
     }
 
+    /// <summary>Field number for the "function_graphs" field.</summary>
+    public const int FunctionGraphsFieldNumber = 4;
+    private static readonly pb::FieldCodec<global::Tensorflow.RunMetadata.Types.FunctionGraphs> _repeated_functionGraphs_codec
+        = pb::FieldCodec.ForMessage(34, global::Tensorflow.RunMetadata.Types.FunctionGraphs.Parser);
+    private readonly pbc::RepeatedField<global::Tensorflow.RunMetadata.Types.FunctionGraphs> functionGraphs_ = new pbc::RepeatedField<global::Tensorflow.RunMetadata.Types.FunctionGraphs>();
+    /// <summary>
+    /// This is only populated for graphs that are run as functions in TensorFlow
+    /// V2. There will be an entry below for each function that is traced.
+    /// The main use cases of the post_optimization_graph and the partition_graphs
+    /// is to give the caller insight into the graphs that were actually run by the
+    /// runtime. Additional information (such as those in step_stats) will match
+    /// these graphs.
+    /// We also include the pre_optimization_graph since it is usually easier to
+    /// read, and is helpful in situations where the caller wants to get a high
+    /// level idea of what the built graph looks like (since the various graph
+    /// optimization passes might change the structure of the graph significantly).
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Tensorflow.RunMetadata.Types.FunctionGraphs> FunctionGraphs {
+      get { return functionGraphs_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as RunMetadata);
@@ -3620,6 +3979,7 @@ namespace Tensorflow {
       if (!object.Equals(StepStats, other.StepStats)) return false;
       if (!object.Equals(CostGraph, other.CostGraph)) return false;
       if(!partitionGraphs_.Equals(other.partitionGraphs_)) return false;
+      if(!functionGraphs_.Equals(other.functionGraphs_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3629,6 +3989,7 @@ namespace Tensorflow {
       if (stepStats_ != null) hash ^= StepStats.GetHashCode();
       if (costGraph_ != null) hash ^= CostGraph.GetHashCode();
       hash ^= partitionGraphs_.GetHashCode();
+      hash ^= functionGraphs_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3651,6 +4012,7 @@ namespace Tensorflow {
         output.WriteMessage(CostGraph);
       }
       partitionGraphs_.WriteTo(output, _repeated_partitionGraphs_codec);
+      functionGraphs_.WriteTo(output, _repeated_functionGraphs_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3666,6 +4028,7 @@ namespace Tensorflow {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(CostGraph);
       }
       size += partitionGraphs_.CalculateSize(_repeated_partitionGraphs_codec);
+      size += functionGraphs_.CalculateSize(_repeated_functionGraphs_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -3690,6 +4053,7 @@ namespace Tensorflow {
         CostGraph.MergeFrom(other.CostGraph);
       }
       partitionGraphs_.Add(other.partitionGraphs_);
+      functionGraphs_.Add(other.functionGraphs_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -3719,9 +4083,212 @@ namespace Tensorflow {
             partitionGraphs_.AddEntriesFrom(input, _repeated_partitionGraphs_codec);
             break;
           }
+          case 34: {
+            functionGraphs_.AddEntriesFrom(input, _repeated_functionGraphs_codec);
+            break;
+          }
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the RunMetadata message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public sealed partial class FunctionGraphs : pb::IMessage<FunctionGraphs> {
+        private static readonly pb::MessageParser<FunctionGraphs> _parser = new pb::MessageParser<FunctionGraphs>(() => new FunctionGraphs());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<FunctionGraphs> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::Tensorflow.RunMetadata.Descriptor.NestedTypes[0]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FunctionGraphs() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FunctionGraphs(FunctionGraphs other) : this() {
+          partitionGraphs_ = other.partitionGraphs_.Clone();
+          preOptimizationGraph_ = other.preOptimizationGraph_ != null ? other.preOptimizationGraph_.Clone() : null;
+          postOptimizationGraph_ = other.postOptimizationGraph_ != null ? other.postOptimizationGraph_.Clone() : null;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FunctionGraphs Clone() {
+          return new FunctionGraphs(this);
+        }
+
+        /// <summary>Field number for the "partition_graphs" field.</summary>
+        public const int PartitionGraphsFieldNumber = 1;
+        private static readonly pb::FieldCodec<global::Tensorflow.GraphDef> _repeated_partitionGraphs_codec
+            = pb::FieldCodec.ForMessage(10, global::Tensorflow.GraphDef.Parser);
+        private readonly pbc::RepeatedField<global::Tensorflow.GraphDef> partitionGraphs_ = new pbc::RepeatedField<global::Tensorflow.GraphDef>();
+        /// <summary>
+        /// TODO(nareshmodi): Include some sort of function/cache-key identifier?
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<global::Tensorflow.GraphDef> PartitionGraphs {
+          get { return partitionGraphs_; }
+        }
+
+        /// <summary>Field number for the "pre_optimization_graph" field.</summary>
+        public const int PreOptimizationGraphFieldNumber = 2;
+        private global::Tensorflow.GraphDef preOptimizationGraph_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Tensorflow.GraphDef PreOptimizationGraph {
+          get { return preOptimizationGraph_; }
+          set {
+            preOptimizationGraph_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "post_optimization_graph" field.</summary>
+        public const int PostOptimizationGraphFieldNumber = 3;
+        private global::Tensorflow.GraphDef postOptimizationGraph_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Tensorflow.GraphDef PostOptimizationGraph {
+          get { return postOptimizationGraph_; }
+          set {
+            postOptimizationGraph_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as FunctionGraphs);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(FunctionGraphs other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if(!partitionGraphs_.Equals(other.partitionGraphs_)) return false;
+          if (!object.Equals(PreOptimizationGraph, other.PreOptimizationGraph)) return false;
+          if (!object.Equals(PostOptimizationGraph, other.PostOptimizationGraph)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          hash ^= partitionGraphs_.GetHashCode();
+          if (preOptimizationGraph_ != null) hash ^= PreOptimizationGraph.GetHashCode();
+          if (postOptimizationGraph_ != null) hash ^= PostOptimizationGraph.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+          partitionGraphs_.WriteTo(output, _repeated_partitionGraphs_codec);
+          if (preOptimizationGraph_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(PreOptimizationGraph);
+          }
+          if (postOptimizationGraph_ != null) {
+            output.WriteRawTag(26);
+            output.WriteMessage(PostOptimizationGraph);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          size += partitionGraphs_.CalculateSize(_repeated_partitionGraphs_codec);
+          if (preOptimizationGraph_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(PreOptimizationGraph);
+          }
+          if (postOptimizationGraph_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(PostOptimizationGraph);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(FunctionGraphs other) {
+          if (other == null) {
+            return;
+          }
+          partitionGraphs_.Add(other.partitionGraphs_);
+          if (other.preOptimizationGraph_ != null) {
+            if (preOptimizationGraph_ == null) {
+              preOptimizationGraph_ = new global::Tensorflow.GraphDef();
+            }
+            PreOptimizationGraph.MergeFrom(other.PreOptimizationGraph);
+          }
+          if (other.postOptimizationGraph_ != null) {
+            if (postOptimizationGraph_ == null) {
+              postOptimizationGraph_ = new global::Tensorflow.GraphDef();
+            }
+            PostOptimizationGraph.MergeFrom(other.PostOptimizationGraph);
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                partitionGraphs_.AddEntriesFrom(input, _repeated_partitionGraphs_codec);
+                break;
+              }
+              case 18: {
+                if (preOptimizationGraph_ == null) {
+                  preOptimizationGraph_ = new global::Tensorflow.GraphDef();
+                }
+                input.ReadMessage(preOptimizationGraph_);
+                break;
+              }
+              case 26: {
+                if (postOptimizationGraph_ == null) {
+                  postOptimizationGraph_ = new global::Tensorflow.GraphDef();
+                }
+                input.ReadMessage(postOptimizationGraph_);
+                break;
+              }
+            }
+          }
+        }
+
+      }
+
+    }
+    #endregion
 
   }
 

@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
-using NumSharp;
+﻿using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
+#if SERIALIZABLE
+using Newtonsoft.Json;
+#endif
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -123,6 +125,9 @@ namespace Tensorflow
         {
             get
             {
+                if (!slice.Stop.HasValue)
+                    slice.Stop = dims.Length - slice.Start + 1;
+
                 if (slice.Start.HasValue == false || slice.Length.HasValue == false)
                     throw new ArgumentException("Slice must has Start and Length.");
 
