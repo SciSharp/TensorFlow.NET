@@ -21,7 +21,8 @@ https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.12.0.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.11.0:
 1: Add ICanBeFlattened for nest.flatten2.
-2:</PackageReleaseNotes>
+2: Complete the WhileContext.
+3: Add tf.nn.rnn_cell.BasicRNNCell and tf.nn.dynamic_rnn.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
     <FileVersion>0.12.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

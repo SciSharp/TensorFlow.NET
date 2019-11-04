@@ -26,6 +26,13 @@ In comparison to other projects, like for instance TensorFlowSharp which only pr
 
 ### How to use
 
+| TensorFlow  | tf 1.13 | tf 1.14 | tf 1.15 | tf 2.0 |
+| ----------- | ------- | ------- | ------- | ------ |
+| tf.net 0.12 |         | x       |         |        |
+| tf.net 0.11 | x       | x       |         |        |
+| tf.net 0.10 | x       | x       |         |        |
+| tf.net 0.9  | x       |         |         |        |
+
 Install TF.NET and TensorFlow binary through NuGet.
 ```sh
 ### install tensorflow C# binding

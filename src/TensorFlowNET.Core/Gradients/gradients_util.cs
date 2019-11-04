@@ -362,16 +362,11 @@ namespace Tensorflow
                 grads[op.name] = op_grads;
             }
             var t_grads = op_grads[t.value_index];
-            if (t_grads.Count == 0)
-                t_grads.Add(grad);
-            else
+            if (t_grads.Count > 0 &&
+                control_flow_util.IsLoopSwitch(op))
                 op_grads[t.value_index][0] = grad;
-
-            /*if (control_flow_util.IsLoopSwitch(op) &&
-                t_grads[0] == null)
-                op_grads[t.value_index] = new List<Tensor> { grad };
             else
-                t_grads.Add(grad);*/
+                t_grads.Add(grad);
         }
 
         private static IEnumerable<Tensor> _NonEagerInputs(Operation op, Tensor[] xs)
