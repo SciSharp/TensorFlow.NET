@@ -75,9 +75,9 @@ namespace Tensorflow
     ///     then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
     /// </summary>
     /// <remarks>https://www.tensorflow.org/guide/graphs <br></br>https://www.tensorflow.org/api_docs/python/tf/Graph</remarks>
-    public partial class Graph : DisposableObject,
+    public partial class Graph : DisposableObject
 #if !SERIALIZABLE
-        IEnumerable<Operation>
+        ,IEnumerable<Operation>
 #endif
     {
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;

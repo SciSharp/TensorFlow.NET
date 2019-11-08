@@ -79,6 +79,9 @@ namespace Tensorflow
         [JsonIgnore]
 #endif
         bool _is_stateful;
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public NodeDef node_def
         {
             get
