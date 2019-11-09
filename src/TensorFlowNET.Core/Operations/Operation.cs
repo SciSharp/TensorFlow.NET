@@ -186,6 +186,11 @@ namespace Tensorflow
             if (op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
 
+            if (node_def.Name.Equals("learn_rate/cond/pred_id"))
+            {
+
+            }
+
             var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
             _handle = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
             _is_stateful = op_def.IsStateful;

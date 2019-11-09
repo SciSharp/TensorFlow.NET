@@ -441,7 +441,7 @@ namespace Tensorflow
             return math_ops.reduce_sum(input, keepdims: keepdims, name: name);
         }
 
-        public Tensor reduce_sum(Tensor input, int[] axis, int? reduction_indices = null, 
+        public Tensor reduce_sum(Tensor input, TensorShape axis, int? reduction_indices = null, 
             bool keepdims = false, string name = null)
             => math_ops.reduce_sum(input, axis, keepdims: keepdims, name: name);
 
@@ -454,6 +454,9 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_max(input_tensor, axis, keepdims, name);
+
+        public Tensor reduce_max(Tensor input_tensor, int axis, bool keepdims = false, string name = null)
             => math_ops.reduce_max(input_tensor, axis, keepdims, name);
 
         public Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)

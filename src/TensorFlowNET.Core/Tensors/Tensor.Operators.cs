@@ -328,18 +328,16 @@ namespace Tensorflow
                 switch (name.ToLowerInvariant())
                 {
                     case "add":
-                        result = gen_math_ops.add(x1, y1, name: scope);
+                        result = math_ops.add(x1, y1, name: scope);
                         break;
                     case "div":
-                        result = _intTfDataTypes.Contains(x1.dtype) || _intTfDataTypes.Contains(y1.dtype)
-                            ? gen_math_ops.floor_div(x1, y1, name: scope)
-                            : gen_math_ops.real_div(x1, y1, name: scope);
+                        result = math_ops.div(x1, y1, name: scope);
                         break;
                     case "floordiv":
                         result = gen_math_ops.floor_div(x1, y1, name: scope);
                         break;
                     case "truediv":
-                        result = gen_math_ops.real_div(x1, y1, name: scope);
+                        result = math_ops.truediv(x1, y1, name: scope);
                         break;
                     case "mul":
                         result = gen_math_ops.mul(x1, y1, name: scope);
