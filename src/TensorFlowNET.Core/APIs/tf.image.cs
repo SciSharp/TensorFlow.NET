@@ -48,7 +48,7 @@ namespace Tensorflow
             /// <param name="method">An optional string from: "bilinear", "nearest". Defaults to "bilinear". A string specifying the sampling method for resizing. It can be either "bilinear" or "nearest" and default to "bilinear". Currently two sampling methods are supported: Bilinear and Nearest Neighbor.</param>
             /// <param name="extrapolation_value">An optional float. Defaults to 0. Value used for extrapolation, when applicable.</param>
             /// <param name="name">A name for the operation (optional).</param>
-            /// <returns></returns>
+            /// <returns>A 4-D tensor of shape [num_boxes, crop_height, crop_width, depth].</returns>
             public Tensor crop_and_resize(Tensor image, Tensor boxes, Tensor box_ind, Tensor crop_size, string method = "bilinear", float extrapolation_value = 0f, string name = null) =>
                 image_ops_impl.crop_and_resize(image, boxes, box_ind, crop_size, method, extrapolation_value, name);
 
