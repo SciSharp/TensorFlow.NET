@@ -33,18 +33,19 @@ namespace TensorFlowNET.UnitTest.img_test
             {
                 sess.run(init);
 
-                var cropped = image_ops_impl.CropAndResize(image, box, boxInd, cropSize1_1);
+                var cropped = tf.image.crop_and_resize(image, box, boxInd, cropSize1_1);
                
                 var result = sess.run(cropped);
                 // check if cropped to 1x1 center was succesfull
                 result.size.Should().Be(1);
                 result[0, 0, 0, 0].Should().Be(4f);
 
-                cropped = image_ops_impl.CropAndResize(image2, box, boxInd, cropSize2_2);
+                cropped = tf.image.crop_and_resize(image2, box, boxInd, cropSize2_2);
                 result = sess.run(cropped);
                 // check if flipped and no cropping occured
                 result.size.Should().Be(16);
                 result[0, 0, 0, 0].Should().Be(12f);
+
             }
 
         }
