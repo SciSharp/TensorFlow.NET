@@ -66,9 +66,11 @@ namespace Tensorflow.Estimators
             Initialize();
         }
 
-        public RunConfig(string model_dir)
+        public RunConfig(string model_dir,
+            int save_checkpoints_secs)
         {
-            this.model_dir = model_dir;      
+            this.model_dir = model_dir;
+            this.save_checkpoints_secs = save_checkpoints_secs;
             Initialize();
         }
 

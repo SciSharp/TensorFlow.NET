@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
+    <AssemblyName>TensorFlow.NET</AssemblyName>
+    <RootNamespace>Tensorflow</RootNamespace>
+    <TargetTensorFlow>1.14.1</TargetTensorFlow>
+    <Version>0.12.1</Version>
+    <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
+    <Company>SciSharp STACK</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Apache 2.0</Copyright>
+    <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>http://scisharpstack.org</PackageProjectUrl>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+    <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
+    <Description>Google's TensorFlow full binding in .NET Standard.
+Building, training and infering deep learning models.
+https://tensorflownet.readthedocs.io</Description>
+    <AssemblyVersion>0.12.1.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.11.0:
+1: Add ICanBeFlattened for nest.flatten2.
+2: Complete the WhileContext.
+3: Add tf.nn.rnn_cell.BasicRNNCell and tf.nn.dynamic_rnn.
+4: Add EstimatorSpec.</PackageReleaseNotes>
+    <LangVersion>7.3</LangVersion>
+    <FileVersion>0.12.1.0</FileVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;DEBUG;SERIALIZABLE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="runtimes\**" />
+    <EmbeddedResource Remove="runtimes\**" />
+    <None Remove="runtimes\**" />
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Protobuf\README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.10.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NumSharp" Version="0.20.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Distribute\" />
+    <Folder Include="Keras\Initializers\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+</Project>

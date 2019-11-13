@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Tensorflow.Estimators
 {
-    public class _NewCheckpointListenerForEvaluate
+    public class _NewCheckpointListenerForEvaluate<Thyp>
     {
-        _Evaluator _evaluator;
+        _Evaluator<Thyp> _evaluator;
 
-        public _NewCheckpointListenerForEvaluate(_Evaluator evaluator, int eval_throttle_secs)
+        public _NewCheckpointListenerForEvaluate(_Evaluator<Thyp> evaluator, int eval_throttle_secs)
         {
             _evaluator = evaluator;
         }

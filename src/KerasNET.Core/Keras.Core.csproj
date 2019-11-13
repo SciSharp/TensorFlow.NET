@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TensorFlowNET.Core\TensorFlowNET.Core.csproj" />
+    <ProjectReference Include="..\TensorFlowNET.Core\TensorFlow.Binding.csproj" />
   </ItemGroup>
 
 </Project>

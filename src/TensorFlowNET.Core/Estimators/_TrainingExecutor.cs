@@ -7,13 +7,13 @@ namespace Tensorflow.Estimators
     /// <summary>
     /// The executor to run `Estimator` training and evaluation.
     /// </summary>
-    internal class _TrainingExecutor
+    internal class _TrainingExecutor<Thyp>
     {
-        Estimator _estimator;
+        Estimator<Thyp> _estimator;
         EvalSpec _eval_spec;
         TrainSpec _train_spec;
 
-        public _TrainingExecutor(Estimator estimator, TrainSpec train_spec, EvalSpec eval_spec)
+        public _TrainingExecutor(Estimator<Thyp> estimator, TrainSpec train_spec, EvalSpec eval_spec)
         {
             _estimator = estimator;
             _train_spec = train_spec;
@@ -37,8 +37,8 @@ namespace Tensorflow.Estimators
                 "after every checkpoint. Checkpoint frequency is determined " +
                 $"based on RunConfig arguments: save_checkpoints_steps {_estimator.config.save_checkpoints_steps} or " +
                 $"save_checkpoints_secs {_estimator.config.save_checkpoints_secs}.");
-            var evaluator = new _Evaluator(_estimator, _eval_spec, _train_spec.max_steps);
-            var saving_listeners = new _NewCheckpointListenerForEvaluate[0];
+            var evaluator = new _Evaluator<Thyp>(_estimator, _eval_spec, _train_spec.max_steps);
+            var saving_listeners = new _NewCheckpointListenerForEvaluate<Thyp>[0];
             _estimator.train(input_fn: _train_spec.input_fn,
                  max_steps: _train_spec.max_steps,
                  hooks: train_hooks,

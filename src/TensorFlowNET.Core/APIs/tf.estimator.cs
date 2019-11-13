@@ -27,13 +27,17 @@ namespace Tensorflow
 
         public class Estimator_Internal
         {
-            public Estimator Estimator(Action model_fn, RunConfig config) 
-                => new Estimator(model_fn: model_fn, config: config);
+            public Experimental experimental { get; } = new Experimental();
+            public Estimator<Thyp> Estimator<Thyp>(Func<IEstimatorInputs, EstimatorSpec> model_fn,
+                string model_dir = null,
+                RunConfig config = null,
+                Thyp hyperParams = default)
+                => new Estimator<Thyp>(model_fn: model_fn, model_dir: model_dir, config: config, hyperParams: hyperParams);
 
-            public RunConfig RunConfig(string model_dir)
-                => new RunConfig(model_dir: model_dir);
+            public RunConfig RunConfig(string model_dir = null, int save_checkpoints_secs = 180)
+                => new RunConfig(model_dir: model_dir, save_checkpoints_secs: save_checkpoints_secs);
 
-            public void train_and_evaluate(Estimator estimator, TrainSpec train_spec, EvalSpec eval_spec)
+            public void train_and_evaluate<Thyp>(Estimator<Thyp> estimator, TrainSpec train_spec, EvalSpec eval_spec)
                 => Training.train_and_evaluate(estimator: estimator, train_spec: train_spec, eval_spec: eval_spec);
 
             public TrainSpec TrainSpec(Func<DatasetV1Adapter> input_fn, int max_steps)

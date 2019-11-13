@@ -12,7 +12,7 @@ namespace Tensorflow.Estimators
     /// <summary>
     /// Estimator class to train and evaluate TensorFlow models.
     /// </summary>
-    public class Estimator : IObjectLife
+    public class Estimator<Thyp> : IObjectLife
     {
         RunConfig _config;
         public RunConfig config => _config;
@@ -20,24 +20,28 @@ namespace Tensorflow.Estimators
         ConfigProto _session_config;
         public ConfigProto session_config => _session_config;
 
-        string _model_dir;
+        Func<IEstimatorInputs, EstimatorSpec> _model_fn;
 
-        Action _model_fn;
+        Thyp _hyperParams;
 
-        public Estimator(Action model_fn, RunConfig config)
+        public Estimator(Func<IEstimatorInputs, EstimatorSpec> model_fn,
+            string model_dir,
+            RunConfig config,
+            Thyp hyperParams)
         {
             _config = config;
-            _model_dir = _config.model_dir;
-            _session_config = _config.session_config;
+            _config.model_dir = config.model_dir ?? model_dir;
+            _session_config = config.session_config;
             _model_fn = model_fn;
+            _hyperParams = hyperParams;
         }
 
-        public Estimator train(Func<DatasetV1Adapter> input_fn, int max_steps = 1, Action[] hooks = null,
-            _NewCheckpointListenerForEvaluate[] saving_listeners = null)
+        public Estimator<Thyp> train(Func<DatasetV1Adapter> input_fn, int max_steps = 1, Action[] hooks = null,
+            _NewCheckpointListenerForEvaluate<Thyp>[] saving_listeners = null)
         {
             if(max_steps > 0)
             {
-                var start_step = _load_global_step_from_checkpoint_dir(_model_dir);
+                var start_step = _load_global_step_from_checkpoint_dir(_config.model_dir);
                 if (max_steps <= start_step)
                 {
                     Console.WriteLine("Skipping training since max_steps has already saved.");
@@ -110,6 +114,11 @@ namespace Tensorflow.Estimators
             return tf.train.create_global_step(graph);
         }
 
+        public string eval_dir(string name = null)
+        {
+            return Path.Combine(config.model_dir, string.IsNullOrEmpty(name) ? "eval" : $"eval_" + name);
+        }
+
         public void __init__()
         {
             throw new NotImplementedException();
@@ -132,7 +141,7 @@ namespace Tensorflow.Estimators
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
