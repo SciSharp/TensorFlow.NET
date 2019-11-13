@@ -13,6 +13,8 @@ namespace TensorFlowNET.UnitTest.img_test
         [TestMethod]
         public void TestCropAndResize()
         {
+            var graph = tf.Graph().as_default();
+
             // 3x3 'Image' with numbered coordinates
             var input = np.array(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f);
             var image = tf.reshape(input, new int[] { 1, 3, 3, 1 });

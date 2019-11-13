@@ -14,6 +14,7 @@ namespace TensorFlowNET.UnitTest.Keras
     [TestClass]
     public class EmbeddingTest
     {
+        [Ignore]
         [TestMethod]
         public void Embedding()
         {

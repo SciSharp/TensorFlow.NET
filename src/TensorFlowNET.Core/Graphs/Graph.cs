@@ -230,10 +230,6 @@ namespace Tensorflow
 
         public void add_to_collection<T>(string name, T value)
         {
-            if(name == "update_ops")
-            {
-
-            }
             _check_not_finalized();
             if (_collections.ContainsKey(name))
                 (_collections[name] as List<T>).Add(value);
