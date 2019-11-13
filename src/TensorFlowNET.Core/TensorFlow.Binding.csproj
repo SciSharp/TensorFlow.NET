@@ -42,8 +42,14 @@ https://tensorflownet.readthedocs.io</Description>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Distribute\**" />
+    <Compile Remove="Models\**" />
     <Compile Remove="runtimes\**" />
+    <EmbeddedResource Remove="Distribute\**" />
+    <EmbeddedResource Remove="Models\**" />
     <EmbeddedResource Remove="runtimes\**" />
+    <None Remove="Distribute\**" />
+    <None Remove="Models\**" />
     <None Remove="runtimes\**" />
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
@@ -61,8 +67,7 @@ https://tensorflownet.readthedocs.io</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Distribute\" />
+    <Folder Include="Estimators\" />
     <Folder Include="Keras\Initializers\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 </Project>
