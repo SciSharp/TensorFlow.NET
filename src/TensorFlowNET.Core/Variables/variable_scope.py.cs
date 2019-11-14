@@ -229,8 +229,6 @@ namespace Tensorflow
             return get_variable_scope_store().current_scope;
         }
 
-
-        // TODO: Misses RefVariable as possible value type?
         public static _VariableScopeStore get_variable_scope_store()
         {
             var scope_store = ops.get_collection<_VariableScopeStore>(_VARSCOPESTORE_KEY).FirstOrDefault();
