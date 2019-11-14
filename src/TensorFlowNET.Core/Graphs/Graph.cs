@@ -424,16 +424,21 @@ namespace Tensorflow
             return get_collection<object>(name, scope);
         }
 
-        private IEnumerable<object> findObjects(string name, string scope)
-        {
-            return (from c in _collections where c.name == name && (scope == null || c.scope == scope) select c.item);
-        }
 
         public List<T> get_collection<T>(string name, string scope = null)
         {
-           
-           return (from c in findObjects(name, scope) where c.GetType().IsSubclassOf(typeof(T)) select (T)c).ToList();
-                   
+
+            return (from c in _collections
+                    where c.name == name && 
+                        (scope == null || c.scope == scope) &&
+                        implementationOf<T>(c.item)
+                    select (T)(c.item)).ToList();
+
+        }
+
+        private static bool implementationOf<T>(object item)
+        {
+            return (item.GetType() == typeof(T) || item.GetType().IsSubclassOf(typeof(T)));
         }
 
         public List<T> get_collection_ref<T>(string name)
