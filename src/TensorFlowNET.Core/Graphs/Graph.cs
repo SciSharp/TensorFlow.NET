@@ -100,10 +100,12 @@ namespace Tensorflow
         /// </summary>
         private bool _finalized = false;
 
+
         /// <summary>
-        /// Arbitrary collections of objects.
+        /// Arbitrary collections of objects inside the graph.
+        /// TODO: Access might be slow (-> O(n)) depending on size.
         /// </summary>
-        private Dictionary<string, object> _collections = new Dictionary<string, object>();
+        private readonly ICollection<(string name, string scope, object item)> _collections = new List<(string name, string scope, object item)>();
 
         public bool building_function;
         
@@ -228,16 +230,14 @@ namespace Tensorflow
             throw new Exception($"Can not convert a {obj.GetType().Name} into a {types_str}.");
         }
 
-        public void add_to_collection<T>(string name, T value)
+        public void add_to_collection(string name, object value)
         {
             _check_not_finalized();
-            if (_collections.ContainsKey(name))
-                (_collections[name] as List<T>).Add(value);
-            else
-                _collections[name] = new List<T> { value };
+            _collections.Add((name, null, value));
         }
 
-        public void add_to_collections<T>(List<string> names, T value)
+
+        public void add_to_collections(List<string> names, object value)
         {
             foreach (string name in names)
                 add_to_collection(name, value);
@@ -277,12 +277,6 @@ namespace Tensorflow
                 op_def: op_def);
 
             _create_op_helper(op, true);
-
-            /*Console.Write($"create_op: {op_type} '{node_def.Name}'");
-            Console.Write($", inputs: {(inputs.Length == 0 ? "empty" : String.Join(", ", inputs.Select(x => x.name)))}");
-            Console.Write($", control_inputs: {(control_inputs.Length == 0 ? "empty" : String.Join(", ", control_inputs.Select(x => x.name)))}");
-            Console.Write($", outputs: {(op.outputs.Length == 0 ? "empty" : String.Join(", ", op.outputs.Select(x => x.name)))}");
-            Console.WriteLine();*/
 
             return op;
         }
@@ -422,46 +416,34 @@ namespace Tensorflow
 
         public string[] get_all_collection_keys()
         {
-            return _collections.Keys.Where(x => !x.StartsWith("__")).ToArray();
+            return (from c in _collections where !c.name.StartsWith("__") select c.name).ToArray();
         }
 
-        public object get_collection(string name, string scope = null)
+        public List<object> get_collection(string name, string scope = null)
         {
-            return _collections.ContainsKey(name) ? _collections[name] : null;
+            return get_collection<object>(name, scope);
         }
+
 
         public List<T> get_collection<T>(string name, string scope = null)
         {
-            List<T> t = default;
-            var collection = _collections.ContainsKey(name) ? _collections[name] : new List<T>();
-            switch (collection)
-            {
-                case List<VariableV1> list:
-                    t = list.Select(x => (T)(object)x).ToList();
-                    break;
-                case List<ResourceVariable> list:
-                    t = list.Select(x => (T)(object)x).ToList();
-                    break;
-                case List<RefVariable> list:
-                    t = list.Select(x => (T)(object)x).ToList();
-                    break;
-                case List<Tensor> list:
-                    t = list.Select(x => (T)(object)x).ToList();
-                    break;
-                case List<Operation> list:
-                    t = list.Select(x => (T)(object)x).ToList();
-                    break;
-                default:
-                    throw new NotImplementedException($"get_collection<{typeof(T).FullName}>");
-            }
-            return t;
+
+            return (from c in _collections
+                    where c.name == name && 
+                        (scope == null || c.scope == scope) &&
+                        implementationOf<T>(c.item)
+                    select (T)(c.item)).ToList();
+
+        }
+
+        private static bool implementationOf<T>(object item)
+        {
+            return (item.GetType() == typeof(T) || item.GetType().IsSubclassOf(typeof(T)));
         }
 
         public List<T> get_collection_ref<T>(string name)
         {
-            if (!_collections.ContainsKey(name))
-                _collections[name] = new List<T>();
-            return _collections[name] as List<T>;
+            return get_collection<T>(name);
         }
 
         public void prevent_feeding(Tensor tensor)

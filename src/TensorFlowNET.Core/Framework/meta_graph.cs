@@ -264,26 +264,22 @@ namespace Tensorflow
             if (!meta_graph_def.CollectionDef.ContainsKey(key))
                 meta_graph_def.CollectionDef[key] = new CollectionDef();
             var col_def = meta_graph_def.CollectionDef[key];
-
-            switch (graph.get_collection(key))
+            col_def.NodeList = new Types.NodeList();
+            col_def.BytesList = new Types.BytesList();
+            foreach (object value in graph.get_collection(key))
             {
-                case List<RefVariable> collection_list:
-                    col_def.BytesList = new Types.BytesList();
-                    foreach (var x in collection_list)
-                    {
+                switch (value)
+                {
+                    case RefVariable x:
                         var proto = x.to_proto(export_scope);
                         col_def.BytesList.Value.Add(proto.ToByteString());
-                    }
-                    
-                    break;
-                case List<object> collection_list:
-                    col_def.NodeList = new Types.NodeList();
-                    foreach (var x in collection_list)
-                        if (x is ITensorOrOperation x2)
-                            col_def.NodeList.Value.Add(ops.strip_name_scope(x2.name, export_scope));
-                    break;
-                case List<Operation> collection_list:
-                    break;
+                        break;
+                    case ITensorOrOperation x2:
+                        col_def.NodeList.Value.Add(ops.strip_name_scope(x2.name, export_scope));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

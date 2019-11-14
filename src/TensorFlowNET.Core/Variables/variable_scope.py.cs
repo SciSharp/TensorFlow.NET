@@ -215,13 +215,13 @@ namespace Tensorflow
 
         public static _VariableStore _get_default_variable_store()
         {
-            var store = ops.get_collection(_VARSTORE_KEY);
-            if (store != null)
-                return (store as List<_VariableStore>)[0];
-
-            var store1 = new _VariableStore();
-            ops.add_to_collection(_VARSTORE_KEY, store1);
-            return store1;
+            var store = ops.get_collection<_VariableStore>(_VARSTORE_KEY).FirstOrDefault();
+            if (store == null)
+            {
+                store = new _VariableStore();
+                ops.add_to_collection(_VARSTORE_KEY, store);
+            }
+            return store;
         }
 
         public static VariableScope get_variable_scope()
@@ -231,30 +231,15 @@ namespace Tensorflow
 
         public static _VariableScopeStore get_variable_scope_store()
         {
-            _VariableScopeStore ret = null;
-            var scope_store = ops.get_collection(_VARSCOPESTORE_KEY);
+            var scope_store = ops.get_collection<_VariableScopeStore>(_VARSCOPESTORE_KEY).FirstOrDefault();
+            if (scope_store == null)
+                scope_store = ops.get_collection<RefVariable>(_VARSCOPESTORE_KEY).FirstOrDefault();
             if (scope_store == null)
             {
-                ret = new _VariableScopeStore();
-                ops.add_to_collection(_VARSCOPESTORE_KEY, ret);
+                scope_store = new _VariableScopeStore();
+                ops.add_to_collection(_VARSCOPESTORE_KEY, scope_store);
             }
-            else
-            {
-                switch (scope_store)
-                {
-                    case List<RefVariable> values:
-                        ret = values[0];
-                        break;
-                    case List<_VariableScopeStore> values:
-                        ret = values[0];
-                        break;
-                    default:
-                        throw new InvalidOperationException("get_variable_scope_store");
-                }
-                
-            }
-
-            return ret;
+            return scope_store;
         }
 
         public static bool _get_trainable_value(VariableSynchronization synchronization, bool? trainable = true)
