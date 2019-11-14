@@ -41,13 +41,8 @@ namespace Tensorflow
         {
             var all = new List<VariableV1>();
 
-            var collection = ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope);
-            if(collection != null)
-                all.AddRange(collection as List<VariableV1>);
-
-            collection = ops.get_collection(tf.GraphKeys.SAVEABLE_OBJECTS, scope);
-            if (collection != null)
-                all.AddRange(collection as List<VariableV1>);
+            all.AddRange(ops.get_collection<VariableV1>(tf.GraphKeys.GLOBAL_VARIABLES, scope));
+            all.AddRange(ops.get_collection<VariableV1>(tf.GraphKeys.SAVEABLE_OBJECTS, scope));
 
             return all.ToArray();
         }
@@ -65,9 +60,8 @@ namespace Tensorflow
         /// <returns>A list of `Variable` objects.</returns>
         public static List<VariableV1> global_variables(string scope = null)
         {
-            var result = ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope);
+            return ops.get_collection<VariableV1>(tf.GraphKeys.GLOBAL_VARIABLES, scope);
 
-            return result == null ? new List<VariableV1>() : result as List<VariableV1>;
         }
 
         /// <summary>
