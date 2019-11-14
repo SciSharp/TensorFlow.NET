@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Train
+namespace Tensorflow.Training
 {
     public class SessionRunValues
     {

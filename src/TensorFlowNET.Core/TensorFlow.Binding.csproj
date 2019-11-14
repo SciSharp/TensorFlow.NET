@@ -67,7 +67,6 @@ https://tensorflownet.readthedocs.io</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Estimators\" />
     <Folder Include="Keras\Initializers\" />
   </ItemGroup>
 </Project>
