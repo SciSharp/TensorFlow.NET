@@ -39,11 +39,8 @@ namespace Tensorflow.Summaries
 
         public Tensor merge_all(string key = "summaries", string scope= null, string name= null)
         {
-            var summary_ops = ops.get_collection(key, scope: scope);
-            if (summary_ops == null)
-                return null;
-            else
-                return merge((summary_ops as List<ITensorOrOperation>).Select(x => x as Tensor).ToArray(), name: name);
+            var summary_ops = ops.get_collection<ITensorOrOperation>(key, scope: scope);
+            return merge(summary_ops.Select(x => x as Tensor).ToArray(), name: name);
         }
 
         /// <summary>
