@@ -23,14 +23,14 @@ namespace Tensorflow
     {
         public VariableV1[] global_variables(string scope = null)
         {
-            return (ops.get_collection<VariableV1>(tf.GraphKeys.GLOBAL_VARIABLES, scope))
+            return (ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
                 .ToArray();
         }
 
         public Operation global_variables_initializer()
         {
             var g = variables.global_variables();
-            return variables.variables_initializer(g?.ToArray());
+            return variables.variables_initializer(g.ToArray());
         }
 
         /// <summary>
@@ -54,9 +54,9 @@ namespace Tensorflow
         {
             var scope = Tensorflow.variable_scope.get_variable_scope();
             var store = Tensorflow.variable_scope._get_default_variable_store();
-            return scope.get_variable(store, 
-                name, 
-                shape: shape, 
+            return scope.get_variable(store,
+                name,
+                shape: shape,
                 dtype: dtype,
                 use_resource: use_resource,
                 validate_shape: validate_shape,

@@ -16,7 +16,7 @@ namespace Tensorflow.Train
             // Create in proper graph and base name_scope.
             var g = graph.as_default();
             g.name_scope(null);
-            var v = tf.get_variable(tf.GraphKeys.GLOBAL_STEP, new TensorShape(), dtype: dtypes.int64,
+            var v = tf.get_variable(tf.GraphKeys.GLOBAL_STEP, new int[0], dtype: dtypes.int64,
                 initializer: tf.zeros_initializer,
                 trainable: false,
                 aggregation: VariableAggregation.OnlyFirstReplica,

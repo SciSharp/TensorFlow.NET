@@ -63,7 +63,7 @@ namespace Tensorflow
         /// list contains the values in the order under which they were
         /// collected.
         /// </returns>
-        public static List<object> get_collection(string key, string scope = null)
+        public static object get_collection(string key, string scope = null)
         {
             return get_default_graph().get_collection(key, scope);
         }

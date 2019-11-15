@@ -77,7 +77,7 @@ namespace Tensorflow
     /// <remarks>https://www.tensorflow.org/guide/graphs <br></br>https://www.tensorflow.org/api_docs/python/tf/Graph</remarks>
     public partial class Graph : DisposableObject
 #if !SERIALIZABLE
-        ,IEnumerable<Operation>
+        , IEnumerable<Operation>
 #endif
     {
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
@@ -100,15 +100,13 @@ namespace Tensorflow
         /// </summary>
         private bool _finalized = false;
 
-
         /// <summary>
-        /// Arbitrary collections of objects inside the graph.
-        /// TODO: Access might be slow (-> O(n)) depending on size.
+        /// Arbitrary collections of objects.
         /// </summary>
-        private readonly ICollection<(string name, string scope, object item)> _collections = new List<(string name, string scope, object item)>();
+        private Dictionary<string, object> _collections = new Dictionary<string, object>();
 
         public bool building_function;
-        
+
         public Graph()
         {
             _handle = c_api.TF_NewGraph();
@@ -230,14 +228,16 @@ namespace Tensorflow
             throw new Exception($"Can not convert a {obj.GetType().Name} into a {types_str}.");
         }
 
-        public void add_to_collection(string name, object value)
+        public void add_to_collection<T>(string name, T value)
         {
             _check_not_finalized();
-            _collections.Add((name, null, value));
+            if (_collections.ContainsKey(name))
+                (_collections[name] as List<T>).Add(value);
+            else
+                _collections[name] = new List<T> { value };
         }
 
-
-        public void add_to_collections(List<string> names, object value)
+        public void add_to_collections<T>(List<string> names, T value)
         {
             foreach (string name in names)
                 add_to_collection(name, value);
@@ -277,6 +277,12 @@ namespace Tensorflow
                 op_def: op_def);
 
             _create_op_helper(op, true);
+
+            /*Console.Write($"create_op: {op_type} '{node_def.Name}'");
+            Console.Write($", inputs: {(inputs.Length == 0 ? "empty" : String.Join(", ", inputs.Select(x => x.name)))}");
+            Console.Write($", control_inputs: {(control_inputs.Length == 0 ? "empty" : String.Join(", ", control_inputs.Select(x => x.name)))}");
+            Console.Write($", outputs: {(op.outputs.Length == 0 ? "empty" : String.Join(", ", op.outputs.Select(x => x.name)))}");
+            Console.WriteLine();*/
 
             return op;
         }
@@ -394,7 +400,7 @@ namespace Tensorflow
                     _names_in_use[name_key] = 1;
 
                 // Return the new name with the original capitalization of the given name.
-                name = $"{name}_{i-1}";
+                name = $"{name}_{i - 1}";
             }
             return name;
         }
@@ -407,8 +413,8 @@ namespace Tensorflow
             TF_Output[] return_outputs = new TF_Output[num_return_outputs];
             unsafe
             {
-                var tf_output_ptr = (TF_Output*) return_output_handle;
-                for (int i = 0; i < num_return_outputs; i++) 
+                var tf_output_ptr = (TF_Output*)return_output_handle;
+                for (int i = 0; i < num_return_outputs; i++)
                     return_outputs[i] = *(tf_output_ptr + i);
                 return return_outputs;
             }
@@ -416,34 +422,46 @@ namespace Tensorflow
 
         public string[] get_all_collection_keys()
         {
-            return (from c in _collections where !c.name.StartsWith("__") select c.name).ToArray();
+            return _collections.Keys.Where(x => !x.StartsWith("__")).ToArray();
         }
 
-        public List<object> get_collection(string name, string scope = null)
+        public object get_collection(string name, string scope = null)
         {
-            return get_collection<object>(name, scope);
+            return _collections.ContainsKey(name) ? _collections[name] : null;
         }
-
 
         public List<T> get_collection<T>(string name, string scope = null)
         {
-
-            return (from c in _collections
-                    where c.name == name && 
-                        (scope == null || c.scope == scope) &&
-                        implementationOf<T>(c.item)
-                    select (T)(c.item)).ToList();
-
-        }
-
-        private static bool implementationOf<T>(object item)
-        {
-            return (item.GetType() == typeof(T) || item.GetType().IsSubclassOf(typeof(T)));
+            List<T> t = default;
+            var collection = _collections.ContainsKey(name) ? _collections[name] : new List<T>();
+            switch (collection)
+            {
+                case List<VariableV1> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<ResourceVariable> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<RefVariable> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<Tensor> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                case List<Operation> list:
+                    t = list.Select(x => (T)(object)x).ToList();
+                    break;
+                default:
+                    throw new NotImplementedException($"get_collection<{typeof(T).FullName}>");
+            }
+            return t;
         }
 
         public List<T> get_collection_ref<T>(string name)
         {
-            return get_collection<T>(name);
+            if (!_collections.ContainsKey(name))
+                _collections[name] = new List<T>();
+            return _collections[name] as List<T>;
         }
 
         public void prevent_feeding(Tensor tensor)
@@ -497,7 +515,7 @@ namespace Tensorflow
         string debugString = string.Empty;
         public override string ToString()
         {
-            return $"{graph_key}, ({_handle})"; 
+            return $"{graph_key}, ({_handle})";
             /*if (string.IsNullOrEmpty(debugString))
             {
                 int len = 0;
@@ -514,7 +532,7 @@ namespace Tensorflow
         IEnumerator<Operation> IEnumerable<Operation>.GetEnumerator()
             => GetEnumerable().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() 
+        IEnumerator IEnumerable.GetEnumerator()
             => throw new NotImplementedException();
 #endif
 
