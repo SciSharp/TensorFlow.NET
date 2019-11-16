@@ -24,6 +24,9 @@ namespace Tensorflow
 
         public GraphKeys GraphKeys { get; } = new GraphKeys();
 
+        public void reset_default_graph() 
+            => ops.reset_default_graph();
+
         public Graph get_default_graph()
         {
             return ops.get_default_graph();
