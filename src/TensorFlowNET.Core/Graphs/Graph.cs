@@ -107,6 +107,16 @@ namespace Tensorflow
 
         public bool building_function;
 
+        int _seed;
+        public int seed
+        {
+            get => _seed;
+            set
+            {
+                _seed = value;
+            }
+        }
+
         public Graph()
         {
             _handle = c_api.TF_NewGraph();

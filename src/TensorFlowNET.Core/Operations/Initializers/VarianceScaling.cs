@@ -31,17 +31,22 @@ namespace Tensorflow.Operations.Initializers
         protected int? _seed;
         protected TF_DataType _dtype;
 
-        public VarianceScaling(float scale = 1.0f,
-            string mode = "fan_in",
-            string distribution = "truncated_normal",
+        public VarianceScaling(float factor = 2.0f,
+            string mode = "FAN_IN",
+            bool uniform = false,
             int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
-            if (scale < 0)
+            if (!dtype.is_floating())
+                throw new TypeError("Cannot create initializer for non-floating point type.");
+            if (!new string[] { "FAN_IN", "FAN_OUT", "FAN_AVG" }.Contains(mode))
+                throw new TypeError($"Unknown {mode} %s [FAN_IN, FAN_OUT, FAN_AVG]");
+
+            if (factor < 0)
                 throw new ValueError("`scale` must be positive float.");
-            _scale = scale;
+
+            _scale = factor;
             _mode = mode;
-            _distribution = distribution;
             _seed = seed;
             _dtype = dtype;
         }

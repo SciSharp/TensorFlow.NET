@@ -273,6 +273,9 @@ namespace Tensorflow
             return sum;
         }
 
+        public static double sum(IEnumerable<int> enumerable)
+            => enumerable.Sum();
+
         public static double sum<TKey, TValue>(Dictionary<TKey, TValue> values)
         {
             return sum(values.Keys);

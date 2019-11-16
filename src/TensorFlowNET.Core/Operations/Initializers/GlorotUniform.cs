@@ -22,7 +22,10 @@ namespace Tensorflow.Operations.Initializers
             string mode = "fan_avg",
             string distribution = "uniform",
             int? seed = null,
-            TF_DataType dtype = TF_DataType.TF_FLOAT) : base(scale, mode, distribution, seed, dtype)
+            TF_DataType dtype = TF_DataType.TF_FLOAT) : base(factor: scale, 
+                mode: mode, 
+                seed: seed, 
+                dtype: dtype)
         {
 
         }

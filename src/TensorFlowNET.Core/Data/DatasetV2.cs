@@ -1,4 +1,6 @@
-﻿namespace Tensorflow.Data
+﻿using System;
+
+namespace Tensorflow.Data
 {
     /// <summary>
     /// Represents a potentially large set of elements.
@@ -11,5 +13,9 @@
     /// </summary>
     public class DatasetV2
     {
+        public static DatasetV2 from_generator()
+        {
+            throw new NotImplementedException("");
+        }
     }
 }
