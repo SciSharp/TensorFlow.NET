@@ -111,6 +111,7 @@ namespace Tensorflow
                     name: name);
 
             public IActivation relu() => new relu();
+            public IActivation swish() => new swish();
 
             public Tensor relu(Tensor features, string name = null) => gen_nn_ops.relu(features, name);
 
@@ -206,6 +207,9 @@ namespace Tensorflow
 
             public Tensor softmax_cross_entropy_with_logits_v2(Tensor labels, Tensor logits, int axis = -1, string name = null)
                 => nn_ops.softmax_cross_entropy_with_logits_v2_helper(labels, logits, axis: axis, name: name);
+
+            public Tensor sigmoid<T>(T x, string name = null)
+                => math_ops.sigmoid(x, name: name);
         }
     }
 }
