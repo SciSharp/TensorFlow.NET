@@ -36,7 +36,7 @@ namespace Tensorflow.Keras.Optimizers
 
         public Tensor __call__(RefVariable step)
         {
-            tf_with(ops.name_scope(name ?? "PolynomialDecay"), scope =>
+            return tf_with(ops.name_scope(name ?? "PolynomialDecay"), scope =>
             {
                 name = scope;
                 var initial_learning_rate_tensor = ops.convert_to_tensor(initial_learning_rate, name: "initial_learning_rate");
@@ -53,10 +53,17 @@ namespace Tensorflow.Keras.Optimizers
                 }
                 else
                 {
-
+                    // Make sure that the global_step used is not bigger than decay_steps.
+                    global_step_recomp = math_ops.minimum(global_step_recomp, decay_steps);
                 }
+
+                var p = tf.divide(global_step_recomp, decay_steps_recomp);
+                var pow = tf.pow(1 - p, power_tensor);
+                var m = math_ops.multiply(initial_learning_rate_tensor - end_learning_rate_tensor, pow);
+                return math_ops.add(m,
+                  end_learning_rate_tensor,
+                  name: name);
             });
-            throw new NotImplementedException("");
         }
     }
 }
