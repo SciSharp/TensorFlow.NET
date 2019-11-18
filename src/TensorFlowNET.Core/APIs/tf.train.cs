@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using Tensorflow.Keras.Optimizers;
 using Tensorflow.Train;
 
 namespace Tensorflow
@@ -73,6 +74,26 @@ namespace Tensorflow
 
             public CheckpointState get_checkpoint_state(string checkpoint_dir, string latest_filename = null)
                 => checkpoint_management.get_checkpoint_state(checkpoint_dir, latest_filename: latest_filename);
+
+            public Tensor polynomial_decay(float learning_rate,
+                RefVariable global_step,
+                float decay_steps,
+                float end_learning_rate = 0.0001f,
+                float power = 1.0f,
+                bool cycle = false,
+                string name = null)
+            {
+                var decayed = new PolynomialDecay(learning_rate,
+                    decay_steps,
+                    end_learning_rate: end_learning_rate,
+                    power: power,
+                    cycle: cycle,
+                    name: name);
+
+                var decayed_lr = decayed.__call__(global_step);
+
+                return decayed_lr;
+            }
         }
     }
 }

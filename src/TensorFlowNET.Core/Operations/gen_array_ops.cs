@@ -383,7 +383,7 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("StopGradient", name, args: new { input = x, name });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         public static Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides,

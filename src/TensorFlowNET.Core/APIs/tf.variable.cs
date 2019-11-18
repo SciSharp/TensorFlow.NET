@@ -27,6 +27,15 @@ namespace Tensorflow
                 .ToArray();
         }
 
+        /// <summary>
+        /// Returns an Op that initializes a list of variables.
+        /// </summary>
+        /// <param name="var_list">List of `Variable` objects to initialize.</param>
+        /// <param name="name">Optional name for the returned operation.</param>
+        /// <returns>An Op that run the initializers of all the specified variables.</returns>
+        public Operation variables_initializer(VariableV1[] var_list, string name = "init")
+            => variables.variables_initializer(var_list, name: name);
+
         public Operation global_variables_initializer()
         {
             var g = variables.global_variables();

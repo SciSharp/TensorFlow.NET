@@ -142,6 +142,35 @@ namespace Tensorflow
         {
             return ops.convert_to_tensor(shape, name: "shape");
         }
+
+        public static Tensor multinomial(Tensor logits, int num_samples, int? seed = null,
+            string name = null, TF_DataType output_dtype = TF_DataType.DtInvalid)
+        {
+            return tf_with(ops.name_scope(name, "multinomial", new { logits }), delegate
+            {
+                return multinomial_categorical_impl(logits, num_samples, output_dtype, seed);
+            });
+        }
+
+        /// <summary>
+        /// Implementation for random.categorical (v1) and random.categorical (v2).
+        /// </summary>
+        /// <param name="logits"></param>
+        /// <param name="num_samples"></param>
+        /// <param name="output_dtype"></param>
+        /// <param name="seed"></param>
+        /// <returns></returns>
+        private static Tensor multinomial_categorical_impl(Tensor logits, int num_samples, TF_DataType dtype = TF_DataType.DtInvalid,
+            int? seed = null)
+        {
+            logits = ops.convert_to_tensor(logits, name: "logits");
+            var (seed1, seed2) = random_seed.get_seed(seed);
+            return gen_random_ops.multinomial(logits, 
+                num_samples, 
+                seed: seed1, 
+                seed2: seed2, 
+                output_dtype: dtype);
+        }
     }
 }
 

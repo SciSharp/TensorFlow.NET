@@ -115,7 +115,7 @@ namespace Tensorflow
         {
             var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         public static Tensor prod<T1, T2>(T1 input, T2 axis, bool keep_dims = false, string name = null)

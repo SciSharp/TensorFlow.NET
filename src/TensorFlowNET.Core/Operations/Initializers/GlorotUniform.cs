@@ -19,8 +19,7 @@ namespace Tensorflow.Operations.Initializers
     public class GlorotUniform : VarianceScaling
     {
         public GlorotUniform(float scale = 1.0f,
-            string mode = "fan_avg",
-            string distribution = "uniform",
+            string mode = "FAN_AVG",
             int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT) : base(factor: scale, 
                 mode: mode, 
@@ -36,7 +35,6 @@ namespace Tensorflow.Operations.Initializers
             {
                 scale = _scale,
                 mode = _mode,
-                distribution = _distribution,
                 seed = _seed,
                 dtype = _dtype
             };

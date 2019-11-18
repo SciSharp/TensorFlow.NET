@@ -98,7 +98,8 @@ namespace Tensorflow
         /// <param name="seed2"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0, string name = null)
+        public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0, 
+            string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("RandomShuffle",
                 name: name,
@@ -116,7 +117,8 @@ namespace Tensorflow
         /// <param name="seed2"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor truncated_normal(Tensor shape, TF_DataType dtype, int? seed = 0, int? seed2 = 0, string name = null)
+        public static Tensor truncated_normal(Tensor shape, TF_DataType dtype, int? seed = 0, 
+            int? seed2 = 0, string name = null)
         {
             if (!seed.HasValue)
                 seed = 0;
@@ -127,7 +129,24 @@ namespace Tensorflow
                 name: name,
                 args: new { shape, dtype, seed, seed2 });
 
-            return _op.outputs[0];
+            return _op.output;
+        }
+
+        public static Tensor multinomial(Tensor logits, int num_samples, int? seed = 0, 
+            int? seed2 = 0, TF_DataType output_dtype = TF_DataType.TF_INT64, string name = null)
+        {
+            if (!seed.HasValue)
+                seed = 0;
+            if (!seed2.HasValue)
+                seed2 = 0;
+            if (output_dtype == TF_DataType.DtInvalid)
+                output_dtype = TF_DataType.TF_INT64;
+
+            var _op = _op_def_lib._apply_op_helper("Multinomial",
+                name: name,
+                args: new { logits, num_samples, seed, seed2, output_dtype });
+
+            return _op.output;
         }
     }
 }
