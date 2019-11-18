@@ -115,6 +115,7 @@ namespace Tensorflow
             return instance;
         }
 
+        [DebuggerStepThrough]
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
         public static void tf_with(IObjectLife py, Action<IObjectLife> action)
         {
@@ -273,6 +274,12 @@ namespace Tensorflow
             return sum;
         }
 
+        public static float sum(IEnumerable<float> enumerable)
+            => enumerable.Sum();
+
+        public static int sum(IEnumerable<int> enumerable)
+            => enumerable.Sum();
+
         public static double sum<TKey, TValue>(Dictionary<TKey, TValue> values)
         {
             return sum(values.Keys);
@@ -338,16 +345,6 @@ namespace Tensorflow
                 if (isinstance(Item1, (Type) t))
                     return true;
             return false;
-        }
-
-        public static Func<Tin1, Tout> partial<Tin1, Tout>(Func<Tin1, Tout> func, Tin1 args)
-        {
-            Func<Tin1, Tout> newfunc = (args1) =>
-            {
-                return func(args1);
-            };
-
-            return newfunc;
         }
     }
 }

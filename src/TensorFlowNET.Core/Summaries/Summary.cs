@@ -37,7 +37,7 @@ namespace Tensorflow.Summaries
             return val;
         }
 
-        public Tensor merge_all(string key = "summaries", string scope= null, string name= null)
+        public Tensor merge_all(string key = "summaries", string scope = null, string name = null)
         {
             var summary_ops = ops.get_collection(key, scope: scope);
             if (summary_ops == null)

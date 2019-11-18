@@ -14,9 +14,11 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -102,6 +104,27 @@ namespace Tensorflow
             });
         }
 
+        internal static Tensor resize_images(Tensor images, Tensor size, ResizeMethod method, bool align_corners, bool preserve_aspect_ratio, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        
+        public static Tensor crop_and_resize(Tensor image, Tensor boxes, Tensor box_ind, Tensor crop_size, string method, float extrapolation_value, string name)
+        {
+            var _op = gen_nn_ops._op_def_lib._apply_op_helper("CropAndResize", name: name, args: new
+            {
+                image,
+                boxes,
+                box_ind,
+                crop_size,
+                method,
+                extrapolation_value
+            });
+
+            return _op.outputs[0];
+        }
+
         public static Tensor is_jpeg(Tensor contents, string name = null)
         {
             return tf_with(ops.name_scope(name, "is_jpeg"), scope =>
@@ -126,22 +149,6 @@ namespace Tensorflow
             if (dtype == image.dtype)
                 return array_ops.identity(image, name: name);
 
-            throw new NotImplementedException("");
-        }
-
-        /// <summary>
-        /// Resize `images` to `size` using the specified `method`.
-        /// </summary>
-        /// <param name="images"></param>
-        /// <param name="size"></param>
-        /// <param name="method"></param>
-        /// <param name="align_corners"></param>
-        /// <param name="preserve_aspect_ratio"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static Tensor resize_images(Tensor images, Tensor size, ResizeMethod method = ResizeMethod.BILINEAR,
-            bool align_corners = false, bool preserve_aspect_ratio = false, string name = null)
-        {
             throw new NotImplementedException("");
         }
 

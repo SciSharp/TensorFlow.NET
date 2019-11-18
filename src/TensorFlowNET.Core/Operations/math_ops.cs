@@ -31,6 +31,7 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "Abs", new { x }), scope =>
             {
+                name = scope;
                 x = ops.convert_to_tensor(x, name: "x");
                 if (x.dtype.is_complex())
                     throw new NotImplementedException("math_ops.abs for dtype.is_complex");
@@ -77,6 +78,21 @@ namespace Tensorflow
                     x = gen_math_ops.cast(x, base_type, name: name);
 
                 return x;
+            });
+        }
+
+        public static Tensor cast(float x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
+        {
+            var base_type = dtype.as_base_dtype();
+
+            return tf_with(ops.name_scope(name, "Cast", new { x }), scope =>
+            {
+                name = scope;
+                var x_tensor = ops.convert_to_tensor(x, name: "x");
+                if (x_tensor.dtype.as_base_dtype() != base_type)
+                    x_tensor = gen_math_ops.cast(x_tensor, base_type, name: name);
+
+                return x_tensor;
             });
         }
 
@@ -201,6 +217,12 @@ namespace Tensorflow
                 var m = gen_math_ops.mean(input_tensor, axis, keepdims, name);
                 return _may_reduce_to_scalar(keepdims, axis, m);
             }
+        }
+
+        public static Tensor reduce_mean(Tensor[] input_tensors, int axis, bool keepdims = false, string name = null)
+        {
+            var m = gen_math_ops.mean(input_tensors, axis, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
         /// <summary>
@@ -379,6 +401,13 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
+        public static Tensor reduce_max(Tensor input_tensor, int axis, bool keepdims = false, string name = null)
+        {
+            var r = _ReductionDims(input_tensor, axis);
+            var max = gen_math_ops._max(input_tensor, r, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis, max);
+        }
+
         public static Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
@@ -434,15 +463,14 @@ namespace Tensorflow
 
         public static Tensor reduce_sum(Tensor input_tensor, int[] axis, bool keepdims = false, string name = null)
         {
-            var r = _ReductionDims(input_tensor, axis);
-            var m = gen_math_ops._sum(input_tensor, r, keep_dims: keepdims, name: name);
+            var m = gen_math_ops._sum(input_tensor, axis, keep_dims: keepdims, name: name);
             return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
         public static Tensor reduce_sum(Tensor input_tensor, int axis, bool keepdims = false, string name = null)
         {
             var m = gen_math_ops._sum(input_tensor, axis, keep_dims: keepdims, name: name);
-            return _may_reduce_to_scalar(keepdims, new int[] { axis }, m);
+            return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
         private static Tensor _may_reduce_to_scalar(bool keepdims, Tensor axis, Tensor output)
@@ -464,6 +492,11 @@ namespace Tensorflow
             return output;
         }
 
+        private static Tensor _may_reduce_to_scalar(bool keepdims, int axis, Tensor output)
+        {
+            return output;
+        }
+
         private static Tensor _ReductionDims(Tensor x, Tensor axis)
         {
             if (axis != null)
@@ -475,6 +508,11 @@ namespace Tensorflow
                 var rank = array_ops.rank(x);
                 return range(0, rank, 1);
             }
+        }
+
+        private static int _ReductionDims(Tensor x, int axis)
+        {
+            return axis;
         }
 
         private static Tensor _ReductionDims(Tensor x, int[] axis)

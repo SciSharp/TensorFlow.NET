@@ -434,14 +434,17 @@ namespace Tensorflow
         public Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null, 
             bool keepdims = false, string name = null)
         {
-            if(!axis.HasValue && reduction_indices.HasValue)
+            if (!axis.HasValue && reduction_indices.HasValue && !keepdims)
                 return math_ops.reduce_sum(input, reduction_indices.Value);
-            else if (axis.HasValue && !reduction_indices.HasValue)
+            else if (axis.HasValue && !reduction_indices.HasValue && !keepdims)
                 return math_ops.reduce_sum(input, axis.Value);
-            return math_ops.reduce_sum(input, keepdims: keepdims, name: name);
+            else if (axis.HasValue && !reduction_indices.HasValue && keepdims)
+                return math_ops.reduce_sum(input, keepdims: keepdims, axis: axis.Value, name: name);
+            else
+                return math_ops.reduce_sum(input, keepdims: keepdims, name: name);
         }
 
-        public Tensor reduce_sum(Tensor input, int[] axis, int? reduction_indices = null, 
+        public Tensor reduce_sum(Tensor input, TensorShape axis, int? reduction_indices = null, 
             bool keepdims = false, string name = null)
             => math_ops.reduce_sum(input, axis, keepdims: keepdims, name: name);
 
@@ -456,6 +459,9 @@ namespace Tensorflow
         public Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_max(input_tensor, axis, keepdims, name);
 
+        public Tensor reduce_max(Tensor input_tensor, int axis, bool keepdims = false, string name = null)
+            => math_ops.reduce_max(input_tensor, axis, keepdims, name);
+
         public Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_min(input_tensor, axis, keepdims, name);
 
@@ -467,6 +473,9 @@ namespace Tensorflow
 
         public Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);
+
+        public Tensor reduce_mean(Tensor[] input_tensors, int axis, bool keepdims = false, string name = null)
+            => math_ops.reduce_mean(input_tensors, axis: axis, keepdims: keepdims, name: name);
 
         public Tensor round(Tensor x, string name = null)
             => gen_math_ops.round(x, name: name);

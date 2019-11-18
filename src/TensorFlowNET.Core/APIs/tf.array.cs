@@ -17,7 +17,9 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -76,7 +78,14 @@ namespace Tensorflow
         public Tensor concat(IList<Tensor> values, int axis, string name = "concat")
         {
             if (values.Count == 1)
-                throw new NotImplementedException("tf.concat length is 1");
+            {
+                return tf_with(ops.name_scope(name), scope =>
+                {
+                    var tensor = ops.convert_to_tensor(axis, name: "concat_dim", dtype: dtypes.int32);
+                    Debug.Assert(tensor.TensorShape.ndim == 0);
+                    return identity(values[0], name: scope);
+                });
+            }
 
             return gen_array_ops.concat_v2(values.ToArray(), axis, name: name);
         }
@@ -111,7 +120,7 @@ namespace Tensorflow
         /// <param name="input"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor identity(Tensor input, string name = null)
+        public Tensor identity(Tensor input, string name = null)
             => array_ops.identity(input, name: name);
 
         /// <summary>
@@ -150,10 +159,10 @@ namespace Tensorflow
         /// <param name="axis"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor reverse(Tensor tensor, int[] axis, string name = null)
+        public Tensor reverse(Tensor tensor, int[] axis, string name = null)
             => gen_array_ops.reverse(tensor, axis, name: name);
 
-        public static Tensor reverse(Tensor tensor, Tensor axis, string name = null)
+        public Tensor reverse(Tensor tensor, Tensor axis, string name = null)
             => gen_array_ops.reverse(tensor, axis, name: name);
 
         /// <summary>
@@ -277,5 +286,14 @@ namespace Tensorflow
         /// <returns>A `Tensor` with all elements set to zero.</returns>
         public Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
             => array_ops.zeros_like(tensor, dtype: dtype, name: name, optimize: optimize);
+
+        /// <summary>
+        /// Stops gradient computation.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor stop_gradient(Tensor x, string name = null)
+            => gen_array_ops.stop_gradient(x, name: name);
     }
 }

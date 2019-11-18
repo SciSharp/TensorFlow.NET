@@ -79,6 +79,8 @@ namespace Tensorflow
                         }
 
                         strides.Add(s.Step);
+                        if (s.IsIndex)
+                            shrink_axis_mask |= (1 << index);
                     }
 
                     index += 1;

@@ -66,20 +66,20 @@ namespace Tensorflow
         /// <summary>
         /// Initializer capable of adapting its scale to the shape of weights tensors.
         /// </summary>
-        /// <param name="scale"></param>
+        /// <param name="factor"></param>
         /// <param name="mode"></param>
         /// <param name="distribution"></param>
         /// <param name="seed"></param>
         /// <param name="dtype"></param>
         /// <returns></returns>
-        public IInitializer variance_scaling_initializer(float scale = 1.0f,
-            string mode = "fan_in",
-            string distribution = "truncated_normal",
+        public IInitializer variance_scaling_initializer(float factor = 1.0f,
+            string mode = "FAN_IN",
+            bool uniform = false,
             int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT) => new VarianceScaling(
-                scale: scale,
+                factor: factor,
                 mode: mode,
-                distribution: distribution,
+                uniform: uniform,
                 seed: seed,
                 dtype: dtype);
     }
