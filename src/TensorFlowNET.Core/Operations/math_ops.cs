@@ -219,10 +219,19 @@ namespace Tensorflow
             }
         }
 
-        public static Tensor reduce_mean(Tensor[] input_tensors, int axis, bool keepdims = false, string name = null)
+        public static Tensor reduce_mean(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
         {
-            var m = gen_math_ops.mean(input_tensors, axis, keepdims, name);
-            return _may_reduce_to_scalar(keepdims, axis, m);
+            if(axis == null)
+            {
+                var r = _ReductionDims(input_tensors, axis);
+                var m = gen_math_ops.mean(input_tensors, r, keepdims, name);
+                return _may_reduce_to_scalar(keepdims, axis, m);
+            }
+            else
+            {
+                var m = gen_math_ops.mean(input_tensors, axis, keepdims, name);
+                return _may_reduce_to_scalar(keepdims, axis, m);
+            }
         }
 
         /// <summary>
@@ -492,7 +501,7 @@ namespace Tensorflow
             return output;
         }
 
-        private static Tensor _may_reduce_to_scalar(bool keepdims, int axis, Tensor output)
+        private static Tensor _may_reduce_to_scalar(bool keepdims, int? axis, Tensor output)
         {
             return output;
         }
@@ -513,6 +522,11 @@ namespace Tensorflow
         private static int _ReductionDims(Tensor x, int axis)
         {
             return axis;
+        }
+
+        private static Tensor _ReductionDims(Tensor[] x, int? axis = null, string name = null)
+        {
+            return range(0, array_ops.rank(x));
         }
 
         private static Tensor _ReductionDims(Tensor x, int[] axis)

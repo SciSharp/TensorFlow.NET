@@ -474,7 +474,7 @@ namespace Tensorflow
         public Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);
 
-        public Tensor reduce_mean(Tensor[] input_tensors, int axis, bool keepdims = false, string name = null)
+        public Tensor reduce_mean(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_mean(input_tensors, axis: axis, keepdims: keepdims, name: name);
 
         public Tensor round(Tensor x, string name = null)
