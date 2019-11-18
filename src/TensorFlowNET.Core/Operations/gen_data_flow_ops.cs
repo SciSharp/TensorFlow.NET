@@ -27,6 +27,19 @@ namespace Tensorflow
             return _op.output;
         }
 
+        public static Tensor[] dynamic_partition(Tensor data, Tensor partitions, int num_partitions, 
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("DynamicPartition", name, new 
+            { 
+                data,
+                partitions,
+                num_partitions
+            });
+
+            return _op.outputs;
+        }
+
         public static (Tensor, Tensor) tensor_array_v3<T>(T size, TF_DataType dtype = TF_DataType.DtInvalid, 
             TensorShape element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
             bool identical_element_shapes = false, string tensor_array_name = "", string name = null)
