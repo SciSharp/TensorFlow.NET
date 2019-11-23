@@ -49,7 +49,7 @@ namespace Tensorflow
         /// difference between TF and Keras RNN cell.
         /// </summary>
         protected bool _is_tf_rnn_cell = false;
-        public virtual int state_size { get; }
+        public virtual LSTMStateTuple state_size { get; }
 
         public virtual int output_size { get; }
 

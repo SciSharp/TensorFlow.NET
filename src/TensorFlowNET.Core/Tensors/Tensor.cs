@@ -162,9 +162,9 @@ namespace Tensorflow
                 using (var status = new Status())
                 {
                     if (value == null)
-                        c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
+                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, status);
                     else
-                        c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
+                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
 
                     status.Check(true);
                 }

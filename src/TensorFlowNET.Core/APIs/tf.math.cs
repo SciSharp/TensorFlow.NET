@@ -251,7 +251,7 @@ namespace Tensorflow
         ///    greater than <c>clip_value_max</c> are set to <c>clip_value_max</c>.
         /// </remarks>
         public Tensor clip_by_value (Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = "ClipByValue") 
-            => gen_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
+            => clip_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
 
         public Tensor sub(Tensor a, Tensor b) 
             => gen_math_ops.sub(a, b);

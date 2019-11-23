@@ -18,13 +18,106 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Framework;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {
-    internal class rnn
+    public class rnn
     {
+        /// <summary>
+        /// Creates a bidirectional recurrent neural network.
+        /// </summary>
+        public static void static_bidirectional_rnn(BasicLSTMCell cell_fw, 
+            BasicLSTMCell cell_bw,
+            Tensor[] inputs,
+            Tensor initial_state_fw = null,
+            Tensor initial_state_bw = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            Tensor sequence_length = null,
+            string scope = null)
+        {
+            if (inputs == null || inputs.Length == 0)
+                throw new ValueError("inputs must not be empty");
+
+            tf_with(tf.variable_scope(scope ?? "bidirectional_rnn"), delegate
+            {
+                // Forward direction
+                tf_with(tf.variable_scope("fw"), fw_scope =>
+                {
+                    static_rnn(
+                      cell_fw,
+                      inputs,
+                      initial_state_fw,
+                      dtype,
+                      sequence_length,
+                      scope: fw_scope);
+                });
+            });
+        }
+
+        public static void static_rnn(BasicLSTMCell cell,
+            Tensor[] inputs,
+            Tensor initial_state,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            Tensor sequence_length = null,
+            VariableScope scope = null)
+        {
+            // Create a new scope in which the caching device is either
+            // determined by the parent scope, or is set to place the cached
+            // Variable using the same placement as for the rest of the RNN.
+            if (scope == null)
+                tf_with(tf.variable_scope("rnn"), varscope =>
+                {
+                    throw new NotImplementedException("static_rnn");
+                });
+            else
+                tf_with(tf.variable_scope(scope), varscope =>
+                {
+                    Dimension fixed_batch_size = null;
+                    Dimension batch_size = null;
+                    Tensor batch_size_tensor = null;
+
+                    // Obtain the first sequence of the input
+                    var first_input = inputs[0];
+                    if (first_input.TensorShape.rank != 1)
+                    {
+                        var input_shape = first_input.TensorShape.with_rank_at_least(2);
+                        fixed_batch_size = input_shape.dims[0];
+                        var flat_inputs = nest.flatten2(inputs);
+                        foreach (var flat_input in flat_inputs)
+                        {
+                            input_shape = flat_input.TensorShape.with_rank_at_least(2);
+                            batch_size = tensor_shape.dimension_at_index(input_shape, 0);
+                            var input_size = input_shape[1];
+                            fixed_batch_size.merge_with(batch_size);
+                            foreach (var (i, size) in enumerate(input_size.dims))
+                            {
+                                if (size < 0)
+                                    throw new ValueError($"Input size (dimension {i} of inputs) must be accessible via " +
+                                        "shape inference, but saw value None.");
+                            }
+                        }
+                    }
+                    else
+                        fixed_batch_size = first_input.TensorShape.with_rank_at_least(1).dims[0];
+
+                    if (tensor_shape.dimension_value(fixed_batch_size) >= 0)
+                        batch_size = tensor_shape.dimension_value(fixed_batch_size);
+                    else
+                        batch_size_tensor = array_ops.shape(first_input)[0];
+
+                    Tensor state = null;
+                    if (initial_state != null)
+                        state = initial_state;
+                    else
+                    {
+                        cell.get_initial_state(batch_size: batch_size_tensor, dtype: dtype);
+                    }
+                });
+        }
+
         public static (Tensor, Tensor) dynamic_rnn(RnnCell cell, Tensor inputs_tensor,
             Tensor sequence_length = null, Tensor initial_state = null, 
             TF_DataType dtype = TF_DataType.DtInvalid,
