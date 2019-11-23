@@ -112,6 +112,7 @@ namespace Tensorflow
 
             public IActivation relu() => new relu();
             public IActivation swish() => new swish();
+            public IActivation tanh() => new tanh();
 
             public Tensor relu(Tensor features, string name = null) => gen_nn_ops.relu(features, name);
 
