@@ -20,9 +20,11 @@ namespace Tensorflow.Operations.Initializers
     {
         public GlorotUniform(float scale = 1.0f,
             string mode = "FAN_AVG",
+            bool uniform = true,
             int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT) : base(factor: scale, 
                 mode: mode, 
+                uniform: uniform,
                 seed: seed, 
                 dtype: dtype)
         {
