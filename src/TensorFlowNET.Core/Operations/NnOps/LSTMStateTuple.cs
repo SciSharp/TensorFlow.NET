@@ -12,15 +12,10 @@ namespace Tensorflow.Operations
     /// 
     /// Only used when `state_is_tuple=True`.
     /// </summary>
-    public class LSTMStateTuple
+    public class LSTMStateTuple : ICanBeFlattened
     {
-        int c;
-        int h;
-
-        public LSTMStateTuple(int c)
-        {
-            this.c = c;
-        }
+        public object c;
+        public object h;
 
         public LSTMStateTuple(int c, int h)
         {
@@ -28,14 +23,13 @@ namespace Tensorflow.Operations
             this.h = h;
         }
 
-        public static implicit operator int(LSTMStateTuple tuple)
+        public LSTMStateTuple(Tensor c, Tensor h)
         {
-            return tuple.c;
+            this.c = c;
+            this.h = h;
         }
 
-        public static implicit operator LSTMStateTuple(int c)
-        {
-            return new LSTMStateTuple(c);
-        }
+        public object[] Flatten()
+            => new[] { c, h };
     }
 }

@@ -49,7 +49,7 @@ namespace Tensorflow
         /// difference between TF and Keras RNN cell.
         /// </summary>
         protected bool _is_tf_rnn_cell = false;
-        public virtual LSTMStateTuple state_size { get; }
+        public virtual object state_size { get; }
 
         public virtual int output_size { get; }
 
@@ -64,7 +64,7 @@ namespace Tensorflow
             _is_tf_rnn_cell = true;
         }
 
-        public virtual Tensor get_initial_state(Tensor inputs = null, Tensor batch_size = null, TF_DataType dtype = TF_DataType.DtInvalid)
+        public virtual object get_initial_state(Tensor inputs = null, Tensor batch_size = null, TF_DataType dtype = TF_DataType.DtInvalid)
         {
             if (inputs != null)
                 throw new NotImplementedException("get_initial_state input is not null");
@@ -78,11 +78,10 @@ namespace Tensorflow
         /// <param name="batch_size"></param>
         /// <param name="dtype"></param>
         /// <returns></returns>
-        public Tensor zero_state(Tensor batch_size, TF_DataType dtype)
+        private Tensor zero_state(Tensor batch_size, TF_DataType dtype)
         {
             Tensor output = null;
-            var state_size = this.state_size;
-            tf_with(ops.name_scope($"{this.GetType().Name}ZeroState", values: new { batch_size }), delegate
+            tf_with(ops.name_scope($"{GetType().Name}ZeroState", values: new { batch_size }), delegate
             {
                 output = _zero_state_tensors(state_size, batch_size, dtype);
             });
@@ -90,20 +89,25 @@ namespace Tensorflow
             return output;
         }
 
-        private Tensor _zero_state_tensors(int state_size, Tensor batch_size, TF_DataType dtype)
+        private Tensor _zero_state_tensors(object state_size, Tensor batch_size, TF_DataType dtype)
         {
-            var output = nest.map_structure(s =>
+            if(state_size is int state_size_int)
             {
-                var c = rnn_cell_impl._concat(batch_size, s);
-                var size = array_ops.zeros(c, dtype: dtype);
+                var output = nest.map_structure(s =>
+                {
+                    var c = rnn_cell_impl._concat(batch_size, s);
+                    var size = array_ops.zeros(c, dtype: dtype);
 
-                var c_static = rnn_cell_impl._concat(batch_size, s, @static: true);
-                size.set_shape(c_static);
+                    var c_static = rnn_cell_impl._concat(batch_size, s, @static: true);
+                    size.set_shape(c_static);
 
-                return size;
-            }, state_size);
+                    return size;
+                }, state_size_int);
 
-            return output;
+                return output;
+            }
+
+            throw new NotImplementedException("_zero_state_tensors");
         }
     }
 }

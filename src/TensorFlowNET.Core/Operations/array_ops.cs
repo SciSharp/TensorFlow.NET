@@ -604,6 +604,11 @@ namespace Tensorflow
             return gen_array_ops.concat_v2(values, axis, name: name);
         }
 
+        public static Tensor concat(Tensor[] values, Tensor axis, string name = "concat")
+        {
+            return gen_array_ops.concat_v2(values, axis, name: name);
+        }
+
         public static Tensor concat(object[] values, int axis, string name = "concat")
         {
             return gen_array_ops.concat_v2(values, axis, name: name);
@@ -627,6 +632,16 @@ namespace Tensorflow
             {
                 return gen_array_ops.transpose(a, perm, name: scope);
             });
+        }
+
+        public static Tensor[] split(Tensor value, int num_or_size_splits, Tensor axis, 
+            string name = "split")
+        {
+            var size_splits = ops.convert_to_tensor(num_or_size_splits);
+            return gen_array_ops.split(axis: axis,
+                num_split: num_or_size_splits,
+                value: value,
+                name: name);
         }
 
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)

@@ -26,7 +26,7 @@ namespace Tensorflow
         int _num_units;
         Func<Tensor, string, Tensor> _activation;
 
-        public override LSTMStateTuple state_size => _num_units;
+        public override object state_size => _num_units;
         public override int output_size => _num_units;
         public VariableV1 _kernel;
         string _WEIGHTS_VARIABLE_NAME = "kernel";
