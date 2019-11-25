@@ -231,6 +231,12 @@ namespace Tensorflow.Gradients
                 return new Tensor[] { x_grad, null };
         }
 
+        [RegisterGradient("Split")]
+        public static Tensor[] _SplitGrad(Operation op, Tensor[] grads)
+        {
+            return new Tensor[] { null, array_ops.concat(list(grads), op.inputs[0]) };
+        }
+
         [RegisterGradient("Squeeze")]
         public static Tensor[] _SqueezeGrad(Operation op, Tensor[] grads)
         {
