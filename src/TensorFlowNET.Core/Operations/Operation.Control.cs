@@ -52,10 +52,6 @@ namespace Tensorflow
 
         public void _set_control_flow_context(ControlFlowContext ctx)
         {
-            if (name.Contains("gradients/rnn/while/basic_rnn_cell/Tanh_grad/TanhGrad/f_acc"))
-            {
-
-            }
             _control_flow_context = ctx;
         }
 

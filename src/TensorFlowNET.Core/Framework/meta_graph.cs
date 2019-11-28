@@ -268,6 +268,22 @@ namespace Tensorflow
 
             switch (graph.get_collection(key))
             {
+                case List<VariableV1> collection_list:
+                    col_def.BytesList = new Types.BytesList();
+                    foreach (var x in collection_list)
+                    {
+                        if(x is RefVariable x_ref_var)
+                        {
+                            var proto = x_ref_var.to_proto(export_scope);
+                            col_def.BytesList.Value.Add(proto.ToByteString());
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Can't find to_proto method for type {x.GetType().Name}");
+                        }
+                    }
+
+                    break;
                 case List<RefVariable> collection_list:
                     col_def.BytesList = new Types.BytesList();
                     foreach (var x in collection_list)

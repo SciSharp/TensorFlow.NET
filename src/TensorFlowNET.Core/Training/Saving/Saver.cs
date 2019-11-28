@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -170,7 +171,7 @@ namespace Tensorflow
         {
             if (string.IsNullOrEmpty(latest_filename))
                 latest_filename = "checkpoint";
-            object model_checkpoint_path = "";
+            NDArray[] model_checkpoint_path = null;
             string checkpoint_file = "";
 
             if (global_step > 0)
@@ -183,15 +184,14 @@ namespace Tensorflow
             if (!_is_empty)
             {
                 model_checkpoint_path = sess.run(_saver_def.SaveTensorName,
-                    new FeedItem(_saver_def.FilenameTensorName, checkpoint_file)
-                );
+                    (_saver_def.FilenameTensorName, checkpoint_file));
 
                 if (write_state)
                 {
-                    _RecordLastCheckpoint(model_checkpoint_path.ToString());
+                    _RecordLastCheckpoint(model_checkpoint_path[0].ToString());
                     checkpoint_management.update_checkpoint_state_internal(
                         save_dir: save_path_parent,
-                        model_checkpoint_path: model_checkpoint_path.ToString(),
+                        model_checkpoint_path: model_checkpoint_path[0].ToString(),
                         all_model_checkpoint_paths: _last_checkpoints.Keys.Select(x => x).ToList(),
                         latest_filename: latest_filename,
                         save_relative_paths: _save_relative_paths);

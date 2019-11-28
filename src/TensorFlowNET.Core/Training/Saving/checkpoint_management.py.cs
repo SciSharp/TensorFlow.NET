@@ -44,8 +44,7 @@ namespace Tensorflow
             float? last_preserved_timestamp = null
             )
         {
-            CheckpointState ckpt = null;
-
+            CheckpointState ckpt = null; 
             // Writes the "checkpoint" file for the coordinator for later restoration.
             string coord_checkpoint_filename = _GetCheckpointFilename(save_dir, latest_filename);
             if (save_relative_paths)
@@ -65,7 +64,12 @@ namespace Tensorflow
                 throw new RuntimeError($"Save path '{model_checkpoint_path}' conflicts with path used for " +
                     "checkpoint state.  Please use a different save path.");
 
-            File.WriteAllText(coord_checkpoint_filename, ckpt.ToString());
+            // File.WriteAllText(coord_checkpoint_filename, ckpt.ToString());
+            File.WriteAllLines(coord_checkpoint_filename, new[] 
+            {
+                $"model_checkpoint_path: \"{ckpt.ModelCheckpointPath}\"",
+                $"all_model_checkpoint_paths: \"{ckpt.AllModelCheckpointPaths[0]}\"",
+            });
         }
 
         /// <summary>
@@ -98,7 +102,14 @@ namespace Tensorflow
                 all_model_checkpoint_paths.Add(model_checkpoint_path);
 
             // Relative paths need to be rewritten to be relative to the "save_dir"
-            // if model_checkpoint_path already contains "save_dir".
+            if (model_checkpoint_path.StartsWith(save_dir))
+            {
+                model_checkpoint_path = model_checkpoint_path.Substring(save_dir.Length + 1);
+                all_model_checkpoint_paths = all_model_checkpoint_paths
+                    .Select(x => x.Substring(save_dir.Length + 1))
+                    .ToList();
+            }
+                
 
             var coord_checkpoint_proto = new CheckpointState()
             {

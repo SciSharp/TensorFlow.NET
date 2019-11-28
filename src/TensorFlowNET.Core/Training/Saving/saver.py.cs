@@ -29,13 +29,11 @@ namespace Tensorflow
         {
             var meta_graph_def = meta_graph.read_meta_graph_file(meta_graph_or_file);
 
-            var meta = meta_graph.import_scoped_meta_graph_with_return_elements(
+            var (imported_vars, imported_return_elements) = meta_graph.import_scoped_meta_graph_with_return_elements(
                         meta_graph_def,
                         clear_devices: clear_devices,
                         import_scope: import_scope,
                         return_elements: return_elements);
-
-            var (imported_vars, imported_return_elements) = meta;
 
             var saver = _create_saver_from_imported_meta_graph(
                 meta_graph_def, import_scope, imported_vars);
