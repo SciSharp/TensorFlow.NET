@@ -25,7 +25,8 @@ https://tensorflownet.readthedocs.io</Description>
 3: Add tf.nn.rnn_cell.BasicRNNCell and tf.nn.dynamic_rnn.
 4: Add EstimatorSpec.
 5: Add rnn.static_rnn.
-6: Add array_grad._SplitGrad().</PackageReleaseNotes>
+6: Add array_grad._SplitGrad().
+7: Fix import_meta_graph exception if variables is empty.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
     <FileVersion>0.13.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
