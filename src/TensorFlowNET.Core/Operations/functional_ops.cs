@@ -28,7 +28,7 @@ namespace Tensorflow
         public static Tensor scan(
             Func<Tensor, Tensor, Tensor> fn,
             Tensor elems,
-            IInitializer initializer = null,
+            Tensor initializer = null,
             int parallel_iterations = 10,
             bool back_prop = true,
             bool swap_memory = false,
@@ -108,11 +108,9 @@ namespace Tensorflow
                 }
                 else
                 {
-                    throw new NotImplementedException("Initializer not handled yet");
-                    // todo the below in python, initializer is able to be passed as a List<Tensor>
-                    //List<Tensor> initializer_flat = output_flatten(initializer);
-                    //a_flat = initializer_flat.Select(init => ops.convert_to_tensor(init)).ToList();
-                    //i = 0;
+                    List<Tensor> initializer_flat = output_flatten(initializer);
+                    a_flat = initializer_flat.Select(init => ops.convert_to_tensor(init)).ToList();
+                    i = 0;
                 }
 
                 var accs_ta = a_flat.Select(init => new TensorArray(

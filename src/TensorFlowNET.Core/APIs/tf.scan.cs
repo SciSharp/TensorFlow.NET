@@ -23,7 +23,7 @@ namespace Tensorflow
         public Tensor scan(
             Func<Tensor, Tensor, Tensor> fn,
             Tensor elems,
-            IInitializer initializer = null,
+            Tensor initializer = null,
             int parallel_iterations = 10,
             bool back_prop = true,
             bool swap_memory = false,
