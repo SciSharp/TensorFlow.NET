@@ -39,12 +39,12 @@ namespace Tensorflow
         {
             bool input_is_sequence = nest.is_sequence(elems);
 
-            List<Tensor> input_flatten(Tensor x) => input_is_sequence ? nest.flatten(x) : new List<Tensor> {x};
-            Tensor input_pack(List<Tensor> x) => input_is_sequence ? (Tensor)nest.pack_sequence_as(elems, x) : x[0];
+            Tensor[] input_flatten(Tensor x) => input_is_sequence ? nest.flatten(x).ToArray() : new [] {x};
+            Tensor input_pack(Tensor[] x) => input_is_sequence ? (Tensor)nest.pack_sequence_as(elems, x) : x[0];
 
             bool output_is_sequence;
-            Func<Tensor, List<Tensor>> output_flatten;
-            Func<List<Tensor>, Tensor> output_pack;
+            Func<Tensor, Tensor[]> output_flatten;
+            Func<Tensor[], Tensor> output_pack;
             if (initializer == null)
             {
                 output_is_sequence = input_is_sequence;
@@ -54,31 +54,31 @@ namespace Tensorflow
             else
             {
                 output_is_sequence = nest.is_sequence(initializer);
-                output_flatten = (x) => output_is_sequence ? nest.flatten(x) : new List<Tensor> {x};
+                output_flatten = (x) => output_is_sequence ? nest.flatten(x).ToArray() : new [] {x};
                 output_pack = (x) => output_is_sequence ? (Tensor)nest.pack_sequence_as(initializer, x) : x[0];
             }
 
             var elems_flat = input_flatten(elems);
 
-            bool in_graph_mode = true; // todo !context.executing_eagerly()
+            bool in_graph_mode = tf.context.executing_eagerly();
 
             return tf_with(ops.name_scope(name, "scan", new { elems_flat }), scope =>
             {
-                // todo tf.net doesn't expose .caching_device
-                //if (in_graph_mode)
-                //{
-                //    // Any get_variable calls in fn will cache the first call locally
-                //    // and not issue repeated network I/O requests for each iteration.
-                //    var varscope = variable_scope.get_variable_scope();
-                //    bool varscope_caching_device_was_none = false;
-                //    if (varscope.caching_device = null)
-                //    {
-                //        //      varscope.set_caching_device(lambda op: op.device)
-                //        //      varscope_caching_device_was_none = True
-                //    }
-                //}
+                if (in_graph_mode)
+                {
+                    // todo tf.net doesn't expose .caching_device
+                    //// Any get_variable calls in fn will cache the first call locally
+                    //// and not issue repeated network I/O requests for each iteration.
+                    //var varscope = variable_scope.get_variable_scope();
+                    //bool varscope_caching_device_was_none = false;
+                    //if (varscope.caching_device = null)
+                    //{
+                    //    //      varscope.set_caching_device(lambda op: op.device)
+                    //    //      varscope_caching_device_was_none = True
+                    //}
+                }
 
-                elems_flat = elems_flat.Select(elem => ops.convert_to_tensor(elem, name: "elem")).ToList();
+                elems_flat = elems_flat.Select(elem => ops.convert_to_tensor(elem, name: "elem")).ToArray();
 
                 var n = tensor_shape.dimension_value(elems_flat[0].shape[0]);
 
@@ -100,17 +100,17 @@ namespace Tensorflow
                     elems_ta[index].unstack(elems_flat[index]);
                 }
 
-                List<Tensor> a_flat;
+                Tensor[] a_flat;
                 int i;
                 if (initializer == null)
                 {
-                    a_flat = elems_ta.Select(elem => elem.read(tf.constant(reverse ? n - 1 : 0))).ToList();
+                    a_flat = elems_ta.Select(elem => elem.read(tf.constant(reverse ? n - 1 : 0))).ToArray();
                     i = 1;
                 }
                 else
                 {
-                    List<Tensor> initializer_flat = output_flatten(initializer);
-                    a_flat = initializer_flat.Select(init => ops.convert_to_tensor(init)).ToList();
+                    Tensor[] initializer_flat = output_flatten(initializer);
+                    a_flat = initializer_flat.Select(init => ops.convert_to_tensor(init)).ToArray();
                     i = 0;
                 }
 
@@ -119,11 +119,11 @@ namespace Tensorflow
                     size: tf.constant(n),
                     element_shape: infer_shape ? init.shape : null,
                     dynamic_size: false,
-                    infer_shape: infer_shape)).ToList();
+                    infer_shape: infer_shape)).ToArray();
 
                 if (initializer == null)
                 {
-                    for (int index = 0; index < accs_ta.Count; index++)
+                    for (int index = 0; index < accs_ta.Length; index++)
                     {
                         accs_ta[index].write(tf.constant(reverse ? n - 1 : 0), a_flat[index]);
                     }
@@ -131,14 +131,14 @@ namespace Tensorflow
 
                 BodyItem compute(BodyItem item)
                 {
-                    var packed_elems = input_pack(elems_ta.Select(elem_ta => elem_ta.read(tf.constant(item.I))).ToList());
+                    var packed_elems = input_pack(elems_ta.Select(elem_ta => elem_ta.read(item.I)).ToArray());
                     var packed_a = output_pack(item.A_Flat);
                     var a_out = fn(packed_a, packed_elems);
 
                     var flat_a_out = output_flatten(a_out);
-                    for (int j = 0; j < item.Accs_ta.Count; j++)
+                    for (int j = 0; j < item.Accs_ta.Length; j++)
                     {
-                        item.Accs_ta[j].write(tf.constant(i), flat_a_out[j]);
+                        item.Accs_ta[j].write(item.I, flat_a_out[j]);
                     }
 
                     var next_i = reverse ? item.I - 1 : item.I + 1;
@@ -150,12 +150,12 @@ namespace Tensorflow
                 if (reverse)
                 {
                     initial_i = n - 1 - i;
-                    condition = x => tf.constant(x.I >= 0);
+                    condition = x => x.I >= 0;
                 }
                 else
                 {
                     initial_i = i;
-                    condition = x => tf.constant(x.I < n);
+                    condition = x => x.I < n;
                 }
 
                 BodyItem bodyItem =
@@ -168,7 +168,7 @@ namespace Tensorflow
                         swap_memory: swap_memory,
                         maximum_iterations: tf.constant(n));
 
-                var results_flat = bodyItem.Accs_ta.Select(r => r.stack()).ToList();
+                var results_flat = bodyItem.Accs_ta.Select(r => r.stack()).ToArray();
 
                 var n_static = new Dimension(tensor_shape.dimension_value(elems_flat[0].TensorShape.with_rank_at_least(1).dims[0]));
                 
@@ -179,7 +179,7 @@ namespace Tensorflow
 
                 foreach (Tensor r in results_flat)
                 {
-                    r.set_shape(new TensorShape(n_static).concatenate(r.TensorShape[new Slice("1:")]));
+                    r.set_shape(new TensorShape(n_static).concatenate(r.dims.Skip(1).ToArray()));
                 }
 
                 // todo get working when the above caching_device is fixed
@@ -191,13 +191,17 @@ namespace Tensorflow
             });
         }
 
-        internal class BodyItem : ICanBeFlattened, IPackable<BodyItem>
+        internal class BodyItem : ICanBeFlattened, IPackable<BodyItem>, IFromMergeVars<BodyItem>
         {
             public Tensor I { get; set; }
-            public List<Tensor> A_Flat { get; set; }
-            public List<TensorArray> Accs_ta { get; set; }
+            public Tensor[] A_Flat { get; set; }
+            public TensorArray[] Accs_ta { get; set; }
 
-            public BodyItem(Tensor i, List<Tensor> a_flat, List<TensorArray> accs_ta)
+            public BodyItem()
+            {
+            }
+
+            public BodyItem(Tensor i, Tensor[] a_flat, TensorArray[] accs_ta)
             {
                 I = i;
                 A_Flat = a_flat;
@@ -215,10 +219,18 @@ namespace Tensorflow
             public BodyItem Pack(object[] sequences)
             {
                 I = sequences[0] as Tensor;
-                A_Flat = new List<Tensor> { sequences[1] as Tensor };
-                Accs_ta = new List<TensorArray> { sequences[2] as TensorArray };
+                A_Flat = new [] { sequences[1] as Tensor };
+                Accs_ta = new [] { sequences[2] as TensorArray };
                 
                 return new BodyItem(I, A_Flat, Accs_ta);
+            }
+
+            public BodyItem FromMergeVars(ITensorOrTensorArray[] merge_vars)
+            {
+                I = (Tensor)merge_vars[1];
+                A_Flat = new [] {(Tensor) merge_vars[2]};
+                Accs_ta = new [] {(TensorArray) merge_vars[3]};
+                return this;
             }
         }
     }

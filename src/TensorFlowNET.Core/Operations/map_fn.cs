@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NumSharp;
+using Tensorflow.Framework;
 using Tensorflow.Operations;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -30,10 +33,40 @@ namespace Tensorflow
             bool infer_shape = true,
             string name = null)
         {
-            var elems_flat = new[] { elems };
-            tf_with(ops.name_scope(name, "map", elems_flat), delegate
+            bool input_is_sequence = nest.is_sequence(elems);
+            Tensor[] input_flatten(Tensor x) => input_is_sequence ? nest.flatten(x).ToArray() : new [] {x};
+            Tensor input_pack(Tensor[] x) => input_is_sequence ? (Tensor)nest.pack_sequence_as(elems, x) : x[0];
+
+            bool output_is_sequence;
+            Func<Tensor, Tensor[]> output_flatten;
+            Func<Tensor[], Tensor> output_pack;
+            if (dtype == TF_DataType.DtInvalid)
             {
-                var varscope = tf.get_variable_scope();
+                output_is_sequence = input_is_sequence;
+                output_flatten = input_flatten;
+                output_pack = input_pack;
+            }
+            else
+            {
+                output_is_sequence = nest.is_sequence(dtype);
+                output_flatten = (x) => output_is_sequence ? nest.flatten(x).ToArray() : new [] {x};
+                output_pack = (x) => output_is_sequence ? (Tensor)nest.pack_sequence_as(dtype, x) : x[0];
+            }
+
+            var elems_flat = input_flatten(elems);
+            return tf_with(ops.name_scope(name, "map", elems_flat), delegate
+            {
+                //if in_graph_mode:
+                //# Any get_variable calls in fn will cache the first call locally
+                //# and not issue repeated network I/O requests for each iteration.
+                //varscope = vs.get_variable_scope()
+                //varscope_caching_device_was_none = False
+                //if varscope.caching_device is None:
+                //  # TODO(ebrevdo): Change to using colocate_with here and in other
+                //  # methods.
+                //  varscope.set_caching_device(lambda op: op.device)
+                //  varscope_caching_device_was_none = True
+
                 elems_flat = elems_flat.Select(elem => ops.convert_to_tensor(elem, name: "elem"))
                     .ToArray();
 
@@ -65,22 +98,89 @@ namespace Tensorflow
                         dynamic_size: false,
                         infer_shape: infer_shape)).ToArray();
 
-                /*Func<Tensor, TensorArray> compute = (i, tas) =>
+
+                BodyItem compute(BodyItem item)
                 {
-                    throw new NotImplementedException("");
-                };
+                    var packed_values  = input_pack(elems_ta.Select(elem_ta => elem_ta.read(item.I)).ToArray());
+                    var packed_fn_values = fn(packed_values);
+                    //nest.assert_same_structure(dtype or elems, packed_fn_values)
+
+                    var flat_fn_values  = output_flatten(packed_fn_values);
+                    for (int j = 0; j < item.Accs_ta.Length; j++)
+                    {
+                        item.Accs_ta[j].write(item.I, flat_fn_values[j]);
+                    }
+
+                    return new BodyItem(item.I + 1, item.Accs_ta);
+                }
 
                 var r_a = control_flow_ops.while_loop(
-                    (i, _) => i < n, 
+                    (x) => x.I < n, 
                     compute, 
-                    new[] { i, accs_ta },
+                    new BodyItem(i, accs_ta),
                     parallel_iterations: parallel_iterations,
                     back_prop: back_prop,
                     swap_memory: swap_memory,
-                    maximum_iterations: n);*/
-            });
+                    maximum_iterations: tf.constant(n));
+                var results_flat = r_a.Accs_ta.Select(r => r.stack()).ToArray();
 
-            throw new NotImplementedException("");
+                var n_static = new Dimension(tensor_shape.dimension_value(elems_flat[0].TensorShape.with_rank_at_least(1).dims[0]));
+                
+                foreach (var elem in elems_flat.Skip(1))
+                {
+                    n_static.merge_with(new Dimension(tensor_shape.dimension_value(elem.TensorShape.with_rank_at_least(1).dims[0])));
+                }
+
+                foreach (Tensor r in results_flat)
+                {
+                    r.set_shape(new TensorShape(n_static).concatenate(r.dims.Skip(1).ToArray()));
+                }
+
+                // todo get working when the above caching_device is fixed
+                //if (in_graph_mode && varscope_caching_device_was_none) {
+                //    varscope.set_caching_device(None);
+                //}
+
+                return output_pack(results_flat);
+            });
+        }
+
+        internal class BodyItem : ICanBeFlattened, IPackable<BodyItem>, IFromMergeVars<BodyItem>
+        {
+            public Tensor I { get; set; }
+            public TensorArray[] Accs_ta { get; set; }
+
+            public BodyItem()
+            {
+            }
+
+            public BodyItem(Tensor i, TensorArray[] accs_ta)
+            {
+                I = i;
+                Accs_ta = accs_ta;
+            }
+
+            public object[] Flatten()
+            {
+                var elements = new List<object> { I };
+                elements.AddRange(Accs_ta);
+                return elements.ToArray();
+            }
+
+            public BodyItem Pack(object[] sequences)
+            {
+                I = sequences[0] as Tensor;
+                Accs_ta = new [] { sequences[1] as TensorArray };
+                
+                return new BodyItem(I, Accs_ta);
+            }
+
+            public BodyItem FromMergeVars(ITensorOrTensorArray[] merge_vars)
+            {
+                I = (Tensor)merge_vars[1];
+                Accs_ta = new [] {(TensorArray) merge_vars[2]};
+                return this;
+            }
         }
     }
 }

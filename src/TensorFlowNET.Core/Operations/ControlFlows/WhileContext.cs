@@ -118,7 +118,7 @@ namespace Tensorflow.Operations
             Func<LoopVar<TItem>, LoopVar<TItem>> body,
             LoopVar<TItem> loop_vars,
             TensorShape[] shape_invariants,
-            bool return_same_structure)
+            bool return_same_structure) where TItem : IFromMergeVars<TItem>, new()
         {
             // Keep original_loop_vars to identify which are TensorArrays
             var original_loop_vars = loop_vars;
@@ -178,7 +178,7 @@ namespace Tensorflow.Operations
             Func<LoopVar<TItem>, LoopVar<TItem>> body,
             LoopVar<TItem> original_loop_vars,
             Tensor[] loop_vars,
-            TensorShape[] shape_invariants)
+            TensorShape[] shape_invariants) where TItem : IFromMergeVars<TItem>, new()
         {
             var flat_loop_vars = nest.flatten2(original_loop_vars)
                 .Select(x => (ITensorOrTensorArray)x)
@@ -235,11 +235,9 @@ namespace Tensorflow.Operations
 
             // Build the graph for pred.
             var merge_vars_with_tensor_arrays = _convert_flows_to_tensorarrays(flat_loop_vars, merge_vars);
-            //var packed_vars = nest.pack_sequence_as(original_loop_vars, merge_vars_with_tensor_arrays, expand_composites: true);
-            var packed_vars = new LoopVar<TItem>((Tensor)merge_vars_with_tensor_arrays[0],
-                (TItem)(object)new BodyItemInRnnWhileLoop((Tensor)merge_vars_with_tensor_arrays[1],
-                new[] { (TensorArray)merge_vars_with_tensor_arrays[2] },
-                (Tensor)merge_vars_with_tensor_arrays[3]));
+            var packed_vars = new LoopVar<TItem>(
+                (Tensor) merge_vars_with_tensor_arrays[0],
+                new TItem().FromMergeVars(merge_vars_with_tensor_arrays));
             var pp = pred(packed_vars);
             var c = ops.convert_to_tensor(pp);
             _pivot = gen_control_flow_ops.loop_cond(c, name: "LoopCond");
