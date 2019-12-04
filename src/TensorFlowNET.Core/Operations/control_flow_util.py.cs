@@ -132,7 +132,18 @@ namespace Tensorflow
 
                 if (while_ctxt == null)
                 {
-                    throw new NotImplementedException("CheckInputFromValidContext");
+                    // Neither op nor input_op is in a while loop, but one or both are in
+                    // conds. We allow this, although execution will fail if the branch
+                    // corresponding to input_op's cond context isn't taken.
+                    if (input_while_ctxt == null)
+                        valid = true;
+                    // Invalid if op isn't in a while loop and input_op is. Unless...
+                    if (IsLoopEnter(op))
+                        // WhileContext._BuildLoop clears context for Enter nodes.
+                        valid = true;
+                    if (IsSwitch(op))
+                        // CondContext.AddValue clears context for Switch nodes.
+                        valid = true;
                 }
                 else if (IsContainingContext(while_ctxt, input_while_ctxt))
                 {

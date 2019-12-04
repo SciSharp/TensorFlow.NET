@@ -7,20 +7,6 @@ namespace Tensorflow
 {
     public partial class Tensor
     {
-        /// <summary>
-        /// Issue unresolved, will cause name_scope problem.
-        /// </summary>
-        /// <param name="scalar"></param>
-        /*public static implicit operator Tensor(double scalar)
-        {
-            return constant_op.constant(scalar);
-        }*/
-
-        /*public static implicit operator Tensor(int scalar)
-        {
-            return constant_op.constant(scalar);
-        }*/
-
         public static implicit operator IntPtr(Tensor tensor)
         {
             if (tensor._handle == IntPtr.Zero)

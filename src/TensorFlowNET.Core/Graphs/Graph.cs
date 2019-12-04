@@ -75,9 +75,9 @@ namespace Tensorflow
     ///     then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
     /// </summary>
     /// <remarks>https://www.tensorflow.org/guide/graphs <br></br>https://www.tensorflow.org/api_docs/python/tf/Graph</remarks>
-    public partial class Graph : DisposableObject,
+    public partial class Graph : DisposableObject
 #if !SERIALIZABLE
-        IEnumerable<Operation>
+        , IEnumerable<Operation>
 #endif
     {
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
@@ -106,7 +106,17 @@ namespace Tensorflow
         private Dictionary<string, object> _collections = new Dictionary<string, object>();
 
         public bool building_function;
-        
+
+        int _seed;
+        public int seed
+        {
+            get => _seed;
+            set
+            {
+                _seed = value;
+            }
+        }
+
         public Graph()
         {
             _handle = c_api.TF_NewGraph();
@@ -230,10 +240,6 @@ namespace Tensorflow
 
         public void add_to_collection<T>(string name, T value)
         {
-            if(name == "update_ops")
-            {
-
-            }
             _check_not_finalized();
             if (_collections.ContainsKey(name))
                 (_collections[name] as List<T>).Add(value);
@@ -404,7 +410,7 @@ namespace Tensorflow
                     _names_in_use[name_key] = 1;
 
                 // Return the new name with the original capitalization of the given name.
-                name = $"{name}_{i-1}";
+                name = $"{name}_{i - 1}";
             }
             return name;
         }
@@ -417,8 +423,8 @@ namespace Tensorflow
             TF_Output[] return_outputs = new TF_Output[num_return_outputs];
             unsafe
             {
-                var tf_output_ptr = (TF_Output*) return_output_handle;
-                for (int i = 0; i < num_return_outputs; i++) 
+                var tf_output_ptr = (TF_Output*)return_output_handle;
+                for (int i = 0; i < num_return_outputs; i++)
                     return_outputs[i] = *(tf_output_ptr + i);
                 return return_outputs;
             }
@@ -519,7 +525,7 @@ namespace Tensorflow
         string debugString = string.Empty;
         public override string ToString()
         {
-            return $"{graph_key}, ({_handle})"; 
+            return $"{graph_key}, ({_handle})";
             /*if (string.IsNullOrEmpty(debugString))
             {
                 int len = 0;
@@ -536,7 +542,7 @@ namespace Tensorflow
         IEnumerator<Operation> IEnumerable<Operation>.GetEnumerator()
             => GetEnumerable().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() 
+        IEnumerator IEnumerable.GetEnumerator()
             => throw new NotImplementedException();
 #endif
 

@@ -65,7 +65,9 @@ namespace Tensorflow.Layers
             variable_scope scope_context_manager = null;
             if (built)
             {
-
+                scope_context_manager = tf.variable_scope(_scope,
+                    reuse: true,
+                    auxiliary_name_scope: false);
             }
             else
             {
@@ -181,7 +183,7 @@ namespace Tensorflow.Layers
             return _current_scope.original_name_scope;
         }
 
-        private void _set_scope(VariableScope scope = null)
+        protected void _set_scope(VariableScope scope = null)
         {
             if (_scope == null)
             {

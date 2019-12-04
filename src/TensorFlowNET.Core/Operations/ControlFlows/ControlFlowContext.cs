@@ -305,9 +305,7 @@ namespace Tensorflow.Operations
         }
 
         public virtual bool IsWhileContext()
-        {
-            throw new NotImplementedException("IsWhileContext");
-        }
+            => false;
 
         public virtual bool IsCondContext()
             => false;

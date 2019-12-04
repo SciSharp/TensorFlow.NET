@@ -74,5 +74,10 @@ namespace Tensorflow
                     aggregation: aggregation) as RefVariable;
             });
         }
+
+        public void reuse_variables()
+        {
+            _reuse = _ReuseMode.AUTO_REUSE;
+        }
     }
 }

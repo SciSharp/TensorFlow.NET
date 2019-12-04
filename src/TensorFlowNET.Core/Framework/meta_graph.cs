@@ -46,9 +46,9 @@ namespace Tensorflow
 
             if (!string.IsNullOrEmpty(unbound_inputs_col_name))
             {
-                foreach(var col in meta_graph_def.CollectionDef)
+                foreach (var col in meta_graph_def.CollectionDef)
                 {
-                    if(col.Key == unbound_inputs_col_name)
+                    if (col.Key == unbound_inputs_col_name)
                     {
                         throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
                     }
@@ -78,7 +78,7 @@ namespace Tensorflow
 
             // Restores all the other collections.
             var variable_objects = new Dictionary<ByteString, VariableV1>();
-            foreach(var col in meta_graph_def.CollectionDef.OrderBy(x => x.Key))
+            foreach (var col in meta_graph_def.CollectionDef.OrderBy(x => x.Key))
             {
                 // Don't add unbound_inputs to the new graph.
                 if (col.Key == unbound_inputs_col_name)
@@ -87,7 +87,7 @@ namespace Tensorflow
                 switch (col.Value.KindCase)
                 {
                     case KindOneofCase.NodeList:
-                        foreach(var value in col.Value.NodeList.Value)
+                        foreach (var value in col.Value.NodeList.Value)
                         {
                             var col_op = graph.as_graph_element(ops.prepend_name_scope(value, scope_to_prepend_to_names));
                             graph.add_to_collection(col.Key, col_op);
@@ -115,7 +115,7 @@ namespace Tensorflow
                         }
                         else
                         {
-                            foreach(var value in col.Value.BytesList.Value)
+                            foreach (var value in col.Value.BytesList.Value)
                             {
                                 switch (col.Key)
                                 {
@@ -139,10 +139,11 @@ namespace Tensorflow
                                 }
                             }
                         }
-                        
+
                         break;
                     default:
-                        throw new NotImplementedException("import_scoped_meta_graph_with_return_elements");
+                        Console.WriteLine($"Cannot identify data type for collection {col.Key}. Skipping.");
+                        break;
                 }
             }
 
@@ -173,8 +174,8 @@ namespace Tensorflow
             string unbound_inputs_col_name = "unbound_inputs",
             bool clear_devices = false,
             SaverDef saver_def = null,
-            bool clear_extraneous_savers= false,
-            bool strip_default_attrs= false,
+            bool clear_extraneous_savers = false,
+            bool strip_default_attrs = false,
             byte[] meta_info_def = null)
         {
             var graph = ops.get_default_graph();
@@ -236,12 +237,12 @@ namespace Tensorflow
                 meta_graph_def.GraphDef = graph_def;
 
             // Fills in meta_info_def.stripped_op_list using the ops from graph_def.
-            if (meta_graph_def.MetaInfoDef.StrippedOpList == null || 
+            if (meta_graph_def.MetaInfoDef.StrippedOpList == null ||
                 meta_graph_def.MetaInfoDef.StrippedOpList.Op.Count == 0)
                 meta_graph_def.MetaInfoDef.StrippedOpList = stripped_op_list_for_graph(meta_graph_def.GraphDef);
 
             var clist = graph.get_all_collection_keys();
-            foreach(var ctype in clist)
+            foreach (var ctype in clist)
             {
                 if (clear_extraneous_savers)
                 {
@@ -256,8 +257,8 @@ namespace Tensorflow
             return meta_graph_def;
         }
 
-        private static void add_collection_def(MetaGraphDef meta_graph_def, 
-            string key, 
+        private static void add_collection_def(MetaGraphDef meta_graph_def,
+            string key,
             Graph graph = null,
             string export_scope = "")
         {
@@ -267,6 +268,22 @@ namespace Tensorflow
 
             switch (graph.get_collection(key))
             {
+                case List<VariableV1> collection_list:
+                    col_def.BytesList = new Types.BytesList();
+                    foreach (var x in collection_list)
+                    {
+                        if(x is RefVariable x_ref_var)
+                        {
+                            var proto = x_ref_var.to_proto(export_scope);
+                            col_def.BytesList.Value.Add(proto.ToByteString());
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Can't find to_proto method for type {x.GetType().Name}");
+                        }
+                    }
+
+                    break;
                 case List<RefVariable> collection_list:
                     col_def.BytesList = new Types.BytesList();
                     foreach (var x in collection_list)
@@ -274,7 +291,7 @@ namespace Tensorflow
                         var proto = x.to_proto(export_scope);
                         col_def.BytesList.Value.Add(proto.ToByteString());
                     }
-                    
+
                     break;
                 case List<object> collection_list:
                     col_def.NodeList = new Types.NodeList();

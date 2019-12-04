@@ -60,6 +60,9 @@ namespace Tensorflow
         /// <summary>
         /// List this operation's output types.
         /// </summary>
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public TF_DataType[] _output_types
         {
             get

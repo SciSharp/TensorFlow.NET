@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
 using static Tensorflow.Binding;
@@ -41,7 +42,7 @@ namespace TensorFlowNET.UnitTest
                 tf_with(tf.variable_scope("bar"), delegate
                 {
                     var v = tf.get_variable("v", new TensorShape(1));
-                    Assert.AreEqual(v.name, "foo/bar/v:0");
+                    v.name.Should().Be("foo/bar/v:0");
                 });
             });
         }

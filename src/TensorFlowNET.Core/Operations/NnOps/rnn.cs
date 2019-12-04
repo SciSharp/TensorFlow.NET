@@ -18,13 +18,160 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Framework;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {
-    internal class rnn
+    public class rnn
     {
+        /// <summary>
+        /// Creates a bidirectional recurrent neural network.
+        /// </summary>
+        public static (Tensor[], LSTMStateTuple, LSTMStateTuple) static_bidirectional_rnn(BasicLstmCell cell_fw, 
+            BasicLstmCell cell_bw,
+            Tensor[] inputs,
+            Tensor initial_state_fw = null,
+            Tensor initial_state_bw = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            Tensor sequence_length = null,
+            string scope = null)
+        {
+            if (inputs == null || inputs.Length == 0)
+                throw new ValueError("inputs must not be empty");
+
+            Tensor[] output_fw = null;
+            Tensor[] output_bw = null;
+            LSTMStateTuple output_state_fw = null;
+            LSTMStateTuple output_state_bw = null;
+
+            tf_with(tf.variable_scope(scope ?? "bidirectional_rnn"), delegate
+            {
+                // Forward direction
+                tf_with(tf.variable_scope("fw"), fw_scope =>
+                {
+                    (output_fw, output_state_fw) = static_rnn(
+                      cell_fw,
+                      inputs,
+                      initial_state_fw,
+                      dtype,
+                      sequence_length,
+                      scope: fw_scope);
+                });
+
+                // backward direction
+                tf_with(tf.variable_scope("bw"), bw_scope =>
+                {
+                    var reversed_inputs = _reverse_seq(inputs, sequence_length);
+                    (output_bw, output_state_bw) = static_rnn(
+                      cell_bw,
+                      reversed_inputs,
+                      initial_state_bw,
+                      dtype,
+                      sequence_length,
+                      scope: bw_scope);
+                });
+            });
+
+            output_bw = _reverse_seq(output_bw, sequence_length);
+
+            var flat_outputs = zip(output_fw, output_bw)
+                .Select(x => array_ops.concat(new[] { x.Item1, x.Item2 }, 1))
+                .ToArray();
+
+            return (flat_outputs, output_state_fw, output_state_bw);
+        }
+
+        private static Tensor[] _reverse_seq(Tensor[] input_seq, Tensor lengths)
+        {
+            if (lengths == null)
+                return input_seq.Reverse().ToArray();
+
+            throw new NotImplementedException("_reverse_seq");
+        }
+
+        public static (Tensor[], LSTMStateTuple) static_rnn(BasicLstmCell cell,
+            Tensor[] inputs,
+            Tensor initial_state,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            Tensor sequence_length = null,
+            VariableScope scope = null)
+        {
+            List<Tensor> outputs = new List<Tensor>();
+            object state = null;
+
+            // Create a new scope in which the caching device is either
+            // determined by the parent scope, or is set to place the cached
+            // Variable using the same placement as for the rest of the RNN.
+            if (scope == null)
+                tf_with(tf.variable_scope("rnn"), varscope =>
+                {
+                    throw new NotImplementedException("static_rnn");
+                });
+            else
+                tf_with(tf.variable_scope(scope), scope1 =>
+                {
+                    Dimension fixed_batch_size = null;
+                    Dimension batch_size = null;
+                    Tensor batch_size_tensor = null;
+                    VariableScope varscope = scope1;
+                    // Obtain the first sequence of the input
+                    var first_input = inputs[0];
+                    if (first_input.TensorShape.rank != 1)
+                    {
+                        var input_shape = first_input.TensorShape.with_rank_at_least(2);
+                        fixed_batch_size = input_shape.dims[0];
+                        var flat_inputs = nest.flatten2(inputs);
+                        foreach (var flat_input in flat_inputs)
+                        {
+                            input_shape = flat_input.TensorShape.with_rank_at_least(2);
+                            batch_size = tensor_shape.dimension_at_index(input_shape, 0);
+                            var input_size = input_shape[1];
+                            fixed_batch_size.merge_with(batch_size);
+                            foreach (var (i, size) in enumerate(input_size.dims))
+                            {
+                                if (size < 0)
+                                    throw new ValueError($"Input size (dimension {i} of inputs) must be accessible via " +
+                                        "shape inference, but saw value None.");
+                            }
+                        }
+                    }
+                    else
+                        fixed_batch_size = first_input.TensorShape.with_rank_at_least(1).dims[0];
+
+                    if (tensor_shape.dimension_value(fixed_batch_size) >= 0)
+                        batch_size = tensor_shape.dimension_value(fixed_batch_size);
+                    else
+                        batch_size_tensor = array_ops.shape(first_input)[0];
+
+                    if (initial_state != null)
+                        state = initial_state;
+                    else
+                    {
+                        state = cell.get_initial_state(batch_size: batch_size_tensor, dtype: dtype);
+                    }
+
+                    Tensor output = null;
+                    if (state is LSTMStateTuple state_tuple)
+                    {
+                        foreach (var (time, input_) in enumerate(inputs))
+                        {
+                            if (time > 0)
+                                varscope.reuse_variables();
+                            if (sequence_length != null)
+                                throw new NotImplementedException("static_rnn");
+
+                            var results = cell.__call__(input_, state_tuple);
+                            (output, state_tuple) = (results[1], new LSTMStateTuple(results[0], results[1]));
+                            outputs.Add(output);
+                        }
+                    }
+                });
+
+            return (outputs.ToArray(), state as LSTMStateTuple);
+        }
+
         public static (Tensor, Tensor) dynamic_rnn(RnnCell cell, Tensor inputs_tensor,
             Tensor sequence_length = null, Tensor initial_state = null, 
             TF_DataType dtype = TF_DataType.DtInvalid,
@@ -52,7 +199,7 @@ namespace Tensorflow.Operations
                 if (initial_state != null)
                     state = initial_state;
                 else
-                    state = cell.get_initial_state(batch_size: batch_size, dtype: dtype);
+                    state = cell.get_initial_state(batch_size: batch_size, dtype: dtype) as Tensor;
 
                 var inputs = nest.pack_sequence_as(structure: inputs_tensor, flat_sequence: flat_input);
 

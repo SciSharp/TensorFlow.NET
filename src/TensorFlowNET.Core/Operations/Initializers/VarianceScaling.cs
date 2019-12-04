@@ -30,45 +30,51 @@ namespace Tensorflow.Operations.Initializers
         protected string _distribution;
         protected int? _seed;
         protected TF_DataType _dtype;
+        protected bool _uniform;
 
-        public VarianceScaling(float scale = 1.0f,
-            string mode = "fan_in",
-            string distribution = "truncated_normal",
+        public VarianceScaling(float factor = 2.0f,
+            string mode = "FAN_IN",
+            bool uniform = false,
             int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
-            if (scale < 0)
+            if (!dtype.is_floating())
+                throw new TypeError("Cannot create initializer for non-floating point type.");
+            if (!new string[] { "FAN_IN", "FAN_OUT", "FAN_AVG" }.Contains(mode))
+                throw new TypeError($"Unknown {mode} %s [FAN_IN, FAN_OUT, FAN_AVG]");
+
+            if (factor < 0)
                 throw new ValueError("`scale` must be positive float.");
-            _scale = scale;
+
+            _scale = factor;
             _mode = mode;
-            _distribution = distribution;
             _seed = seed;
             _dtype = dtype;
+            _uniform = uniform;
         }
 
         public Tensor call(TensorShape shape, TF_DataType dtype, bool? verify_shape = null)
         {
+            float n = 0;
             var (fan_in, fan_out) = _compute_fans(shape);
-            if (_mode == "fan_in")
-                _scale /= Math.Max(1, fan_in);
-            else if (_mode == "fan_out")
-                _scale /= Math.Max(1, fan_out);
-            else
-                _scale /= Math.Max(1, (fan_in + fan_out) / 2);
+            if (_mode == "FAN_IN")
+                n = fan_in;
+            else if (_mode == "FAN_OUT")
+                n = fan_out;
+            else if(_mode == "FAN_AVG")
+                n = (fan_in + fan_out) / 2.0f;
 
-            if (_distribution == "normal" || _distribution == "truncated_normal")
+            if(_uniform)
             {
-                float stddev = (float)Math.Sqrt(_scale) / .87962566103423978f;
-                return random_ops.truncated_normal(shape, mean: 0.0f, stddev: stddev, dtype: dtype, seed: _seed);
-            }
-            else if (_distribution == "untruncated_normal")
-            {
-                throw new NotImplementedException("truncated_normal");
+                var limit = Convert.ToSingle(Math.Sqrt(3.0f * _scale / n));
+                return random_ops.random_uniform(shape, -limit, limit,
+                                                 dtype, seed: _seed);
             }
             else
             {
-                var limit = Math.Sqrt(3.0f * _scale);
-                return random_ops.random_uniform(shape, (float)-limit, (float)limit, dtype, seed: _seed);
+                var trunc_stddev = Convert.ToSingle(Math.Sqrt(1.3f * _scale / n));
+                return random_ops.truncated_normal(shape, 0.0f, trunc_stddev, dtype,
+                                                   seed: _seed);
             }
         }
 
@@ -101,6 +107,7 @@ namespace Tensorflow.Operations.Initializers
                 mode = _mode,
                 distribution = _distribution,
                 seed = _seed,
+                uniform = _uniform,
                 dtype = _dtype
             };
         }

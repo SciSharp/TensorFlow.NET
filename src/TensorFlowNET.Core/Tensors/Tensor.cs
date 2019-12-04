@@ -102,6 +102,9 @@ namespace Tensorflow
         [JsonIgnore]
 #endif
         public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / itemsize;
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
 #if SERIALIZABLE
@@ -159,9 +162,9 @@ namespace Tensorflow
                 using (var status = new Status())
                 {
                     if (value == null)
-                        c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), null, -1, status);
+                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, status);
                     else
-                        c_api.TF_GraphSetTensorShape(this.graph, this._as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
+                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
 
                     status.Check(true);
                 }

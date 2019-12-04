@@ -43,7 +43,7 @@ namespace Tensorflow
         protected Graph _graph;
         bool _building_function;
 
-        public variable_scope(string name, 
+        public variable_scope(string name,
             string default_name = "",
             Tensor[] values = null,
             bool? reuse = null,
@@ -113,7 +113,7 @@ namespace Tensorflow
             {
                 // Reenter the current name scope
                 string name_scope = ops.get_name_scope();
-                if(!string.IsNullOrEmpty(name_scope))
+                if (!string.IsNullOrEmpty(name_scope))
                     // Hack to reenter
                     name_scope += "/";
                 current_name_scope = ops.name_scope(name_scope);
@@ -128,8 +128,8 @@ namespace Tensorflow
                 string current_name_scope_name = current_name_scope;
                 _current_name_scope = current_name_scope;
                 string old_name_scope = _scope == null ? current_name_scope_name : _scope.original_name_scope;
-                
-                if(_scope == null)
+
+                if (_scope == null)
                     pure_variable_scope = new PureVariableScope(_name, old_name_scope: old_name_scope);
                 else
                     pure_variable_scope = new PureVariableScope(_scope, old_name_scope: old_name_scope);
@@ -179,7 +179,7 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             int[] shape = null,
             bool validate_shape = false,
-            bool ? use_resource = null, 
+            bool? use_resource = null,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
             VariableAggregation aggregation = VariableAggregation.None)
         {
@@ -189,7 +189,7 @@ namespace Tensorflow
                 use_resource = get_variable_scope().use_resource;
             }
 
-            if(!use_resource.HasValue)
+            if (!use_resource.HasValue)
                 use_resource = _DEFAULT_USE_RESOURCE;
 
             if (use_resource.Value)
@@ -204,7 +204,7 @@ namespace Tensorflow
             }
             else
             {
-                return new RefVariable(initial_value, 
+                return new RefVariable(initial_value,
                     trainable: trainable.Value,
                     validate_shape: validate_shape,
                     collections: collections,
@@ -251,7 +251,7 @@ namespace Tensorflow
                     default:
                         throw new InvalidOperationException("get_variable_scope_store");
                 }
-                
+
             }
 
             return ret;
@@ -271,7 +271,7 @@ namespace Tensorflow
             {
                 trainable = true;
             }
-            
+
             return trainable.Value;
         }
 
@@ -294,7 +294,7 @@ namespace Tensorflow
         }
 
         // TODO for Switch/Case
-        public static RefVariable get_variable(string embeddingMatrix, IInitializer initializer, bool use_resource, 
+        public static RefVariable get_variable(string embeddingMatrix, IInitializer initializer, bool use_resource,
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool trainable = false,
@@ -305,12 +305,12 @@ namespace Tensorflow
 
         public void __init__()
         {
-            
+
         }
 
         public void __del__()
         {
-            
+
         }
     }
 }

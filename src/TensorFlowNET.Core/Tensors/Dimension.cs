@@ -22,6 +22,12 @@ namespace Tensorflow
                 return new Dimension(_value);
         }
 
+        public static implicit operator Dimension(int value)
+            => new Dimension(value);
+
+        public static implicit operator int(Dimension dimension)
+            => dimension.value;
+
         public override string ToString() => $"Dimension({_value})";
     }
 }

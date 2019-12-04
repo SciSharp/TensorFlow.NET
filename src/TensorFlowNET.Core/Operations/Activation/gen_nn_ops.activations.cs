@@ -102,6 +102,14 @@ namespace Tensorflow.Operations.Activation
         }
     }
 
+    public class swish : IActivation
+    {
+        public Tensor Activate(Tensor x, string name = null)
+        {
+            return tf.multiply(x, tf.nn.sigmoid(x));
+        }
+    }
+
     public class linear : IActivation
     {
         public Tensor Activate(Tensor x, string name = null)

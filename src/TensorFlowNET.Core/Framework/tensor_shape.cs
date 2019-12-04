@@ -24,6 +24,16 @@ namespace Tensorflow.Framework
             }
         }
 
+        public static Dimension dimension_at_index(TensorShape shape, int index)
+        {
+            return shape.rank < 0 ?
+                new Dimension(-1) :
+                new Dimension(shape.dims[index]);
+        }
+
+        public static int dimension_value(Dimension dimension)
+            => dimension.value;
+
         public static TensorShape as_shape(this Shape shape)
              => new TensorShape(shape.Dimensions);
     }
