@@ -88,6 +88,11 @@ namespace Tensorflow
 
         public string VERSION => c_api.StringPiece(c_api.TF_Version());
 
+        public Session get_default_session()
+        {
+            return ops.get_default_session();
+        }
+
         public Session Session()
         {
             return new Session().as_default();
