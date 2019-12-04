@@ -252,9 +252,10 @@ namespace Tensorflow
         /// </remarks>
         public Tensor clip_by_value (Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = "ClipByValue") 
             => clip_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
+        
+        public Tensor sub<Tx, Ty>(Tx a, Ty b, string name = null)
+            => gen_math_ops.sub(a, b, name: name);
 
-        public Tensor sub(Tensor a, Tensor b) 
-            => gen_math_ops.sub(a, b);
 
         public Tensor divide(Tensor a, Tensor b)
             => gen_math_ops.real_div(a, b);
