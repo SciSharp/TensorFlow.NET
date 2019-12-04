@@ -16,9 +16,6 @@ namespace Tensorflow
                     args = arg,
                     invoke = func
                 };
-
-            public static Func<Tin1, Tin2, Tout> partial<Tin1, Tin2, Tout>(Func<Tin1, Tin2, Tout> func, (Tin1, Tin2) args)
-                => (arg1, arg2) => func(args.Item1, args.Item2);
         }
 
         public class PartialFunc<Tin, Tout>
