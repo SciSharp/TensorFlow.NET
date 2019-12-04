@@ -37,8 +37,7 @@ namespace Tensorflow
 
         public Session as_default()
         {
-            tf._defaultSessionFactory.Value = this;
-            return this;
+            return ops.set_default_session(this);
         }
 
         [MethodImpl(MethodImplOptions.NoOptimization)]

@@ -21,8 +21,6 @@ namespace Tensorflow
 {
     public partial class tensorflow : IObjectLife
     {
-        protected internal readonly ThreadLocal<Session> _defaultSessionFactory;
-
         public TF_DataType @byte = TF_DataType.TF_UINT8;
         public TF_DataType @sbyte = TF_DataType.TF_INT8;
         public TF_DataType int16 = TF_DataType.TF_INT16;
@@ -40,10 +38,10 @@ namespace Tensorflow
 
         public tensorflow()
         {
-            _defaultSessionFactory = new ThreadLocal<Session>(() => new Session());
+            _constructThreadingObjects();
         }
 
-        public Session defaultSession => _defaultSessionFactory.Value;
+
 
         public RefVariable Variable<T>(T data,
             bool trainable = true,
