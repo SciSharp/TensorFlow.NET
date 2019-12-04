@@ -254,7 +254,6 @@ namespace Tensorflow
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        /// <exception cref="ArgumentException">When <typeparam name="T"> is string </typeparam></exception>
         public T[] ToArray<T>() where T : unmanaged
         {
             //Are the types matching?
