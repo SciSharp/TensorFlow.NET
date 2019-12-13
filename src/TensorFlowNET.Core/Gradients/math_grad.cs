@@ -319,7 +319,7 @@ namespace Tensorflow.Gradients
         [RegisterGradient("Maximum")]
         public static Tensor[] _MaximumGrad(Operation op, Tensor[] grads)
         {
-            return _MaximumMinimumGrad(op, grads[0]);
+            return _MaximumMinimumGrad(true, op, grads[0]);
         }
 
         /// <summary>
@@ -331,7 +331,7 @@ namespace Tensorflow.Gradients
         [RegisterGradient("Minimum")]
         public static Tensor[] _MinimumGrad(Operation op, Tensor[] grads)
         {
-            return _MaximumMinimumGrad(op, grads[0]);
+            return _MaximumMinimumGrad(false, op, grads[0]);
         }
 
         /// <summary>
@@ -340,7 +340,7 @@ namespace Tensorflow.Gradients
         /// <param name="op"></param>
         /// <param name="grad"></param>
         /// <returns></returns>
-        private static Tensor[] _MaximumMinimumGrad(Operation op, Tensor grad)
+        private static Tensor[] _MaximumMinimumGrad(bool isMaximum, Operation op, Tensor grad)
         {
             var x = op.inputs[0];
             var y = op.inputs[1];
@@ -349,7 +349,10 @@ namespace Tensorflow.Gradients
             var sy = array_ops.shape(y);
             var gradshape = array_ops.shape(grad);
             var zeros = array_ops.zeros(gradshape, gdtype);
-            var xmask = gen_math_ops.greater_equal(x, y);
+            var xmask =
+                isMaximum
+                    ? gen_math_ops.greater_equal(x, y)
+                    : gen_math_ops.less_equal(x, y);
             var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
             var xgrad = array_ops.where(xmask, grad, zeros);
             var ygrad = array_ops.where(xmask, zeros, grad);
@@ -509,6 +512,72 @@ namespace Tensorflow.Gradients
                 x = math_ops.conj(x);
                 var y = constant_op.constant(2.0f, dtype: x.dtype);
                 return new Tensor[] { math_ops.multiply(grad, math_ops.multiply(x, y)) };
+            });
+        }
+
+        [RegisterGradient("Sqrt")]
+        public static Tensor[] _SqrtGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var y = op.outputs[0];
+
+            return tf_with(ops.control_dependencies(grads), delegate
+            {
+                y = math_ops.conj(y);
+                var factor = constant_op.constant(0.5f, dtype: y.dtype);
+                return new Tensor[] { grad * (factor * math_ops.reciprocal(y)) };
+            });
+        }
+
+        [RegisterGradient("Sin")]
+        public static Tensor[] _SinGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            return tf_with(ops.control_dependencies(grads), delegate
+            {
+                x = math_ops.conj(x);
+                return new Tensor[] { math_ops.multiply(grad, gen_math_ops.cos(x)) };
+            });
+        }
+
+        [RegisterGradient("Sinh")]
+        public static Tensor[] _SinhGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            return tf_with(ops.control_dependencies(grads), delegate
+            {
+                x = math_ops.conj(x);
+                return new Tensor[] { math_ops.multiply(grad, gen_math_ops.cosh(x)) };
+            });
+        }
+
+        [RegisterGradient("Cos")]
+        public static Tensor[] _CosGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            return tf_with(ops.control_dependencies(grads), delegate
+            {
+                x = math_ops.conj(x);
+                return new Tensor[] { math_ops.multiply(grad, -gen_math_ops.sin(x)) };
+            });
+        }
+
+        [RegisterGradient("Cosh")]
+        public static Tensor[] _CoshGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            return tf_with(ops.control_dependencies(grads), delegate
+            {
+                x = math_ops.conj(x);
+                return new Tensor[] { math_ops.multiply(grad, gen_math_ops.sinh(x)) };
             });
         }
 
