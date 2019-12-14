@@ -139,19 +139,19 @@ namespace TensorFlowNET.UnitTest
 
             // Compare with first GraphDef + added NodeDef.
             graph_def.Node.Add(node_def);
-            EXPECT_EQ(graph_def.ToString(), graph_def2.ToString());
+            EXPECT_EQ(graph_def, graph_def2);
 
             // Look up some nodes by name.
             Operation neg2 = c_api.TF_GraphOperationByName(graph, "neg");
             EXPECT_EQ(neg, neg2);
             var node_def2 = neg2.node_def;
-            EXPECT_EQ(node_def.ToString(), node_def2.ToString());
+            EXPECT_EQ(node_def, node_def2);
 
             Operation feed2 = c_api.TF_GraphOperationByName(graph, "feed");
             EXPECT_EQ(feed, feed2);
             node_def = feed.node_def;
             node_def2 = feed2.node_def;
-            EXPECT_EQ(node_def.ToString(), node_def2.ToString());
+            EXPECT_EQ(node_def, node_def2);
 
             // Test iterating through the nodes of a graph.
             found_placeholder = false;
