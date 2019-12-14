@@ -12,6 +12,7 @@ namespace TensorFlowNET.UnitTest.functional_ops_test
     [TestClass]
     public class ScanTestCase
     {
+        [Ignore("TODO")]
         [TestMethod]
         public void ScanForward()
         {
@@ -24,6 +25,7 @@ namespace TensorFlowNET.UnitTest.functional_ops_test
             sess.run(scan, (input, np.array(1,2,3,4,5,6))).Should().Be(np.array(1,3,6,10,15,21));
         }
 
+        [Ignore("TODO")]
         [TestMethod]
         public void ScanReverse()
         {
