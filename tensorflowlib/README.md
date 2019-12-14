@@ -81,5 +81,5 @@ TF_CAPI_EXPORT extern void UpdateEdge(TF_Graph* graph, TF_Output new_src, TF_Inp
 TF_CAPI_EXPORT extern void RemoveAllControlInputs(TF_Graph* graph, TF_Operation* op);
 ```
 
-
-
+For Linux version, these APIs symbols should also be put into `tensorflow/c/version_script.lds` to be exported. 
+Please refer to commit `https://github.com/SciSharp/tensorflow/commit/58122da06be3e7707500ad889dfd5c760a3e0424`
