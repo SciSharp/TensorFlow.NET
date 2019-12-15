@@ -52,6 +52,17 @@ namespace TensorFlowNET.UnitTest
             assertItemsEqual(given, expected);
         }
 
+        public void assertFloat32Equal(float expected, float actual, string msg)
+        {
+            float eps = 1e-6f;
+            Assert.IsTrue(Math.Abs(expected - actual) < eps * Math.Max(1.0f, Math.Abs(expected)), $"{msg}: expected {expected} vs actual {actual}");
+        }
+
+        public void assertFloat64Equal(double expected, double actual, string msg)
+        {
+            double eps = 1e-16f;
+            Assert.IsTrue(Math.Abs(expected - actual) < eps * Math.Max(1.0f, Math.Abs(expected)), $"{msg}: expected {expected} vs actual {actual}");
+        }
 
         public void assertEqual(object given, object expected)
         {
@@ -68,6 +79,16 @@ namespace TensorFlowNET.UnitTest
             if (given is ICollection && expected is ICollection)
             {
                 assertItemsEqual(given as ICollection, expected as ICollection);
+                return;
+            }
+            if (given is float && expected is float)
+            {
+                assertFloat32Equal((float)expected, (float)given, "");
+                return;
+            }
+            if (given is double && expected is double)
+            {
+                assertFloat64Equal((double)expected, (double)given, "");
                 return;
             }
             Assert.AreEqual(expected, given);
