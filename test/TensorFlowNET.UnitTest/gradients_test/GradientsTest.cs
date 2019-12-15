@@ -110,12 +110,6 @@ namespace TensorFlowNET.UnitTest.gradients_test
                 }
             }
 
-            void assertFloat32Equal(float expected, float actual, string msg)
-            {
-                float eps = 1e-6f;
-                Assert.IsTrue(Math.Abs(expected - actual) < eps * Math.Max(1.0f, Math.Abs(expected)), $"{msg}: expected {expected} vs actual {actual}");
-            }
-
             void test(string name, Func<Tensor, Tensor> tfF, Func<double, (double, double)> targetF, double[] values)
             {
                 foreach (var x in values)
@@ -124,14 +118,14 @@ namespace TensorFlowNET.UnitTest.gradients_test
 
                     {
                         var (actualY, actualDY) = evaluateDerivatives(tfF, x);
-                        Assert.AreEqual(expectedY, actualY, $"value {name}/float64 at {x}");
-                        Assert.AreEqual(expectedDY, actualDY, $"derivative {name}/float64 at {x}");
+                        self.assertFloat64Equal(expectedY, actualY, $"value {name}/float64 at {x}");
+                        self.assertFloat64Equal(expectedDY, actualDY, $"derivative {name}/float64 at {x}");
                     }
 
                     {
                         var (actualY, actualDY) = evaluateDerivatives(tfF, (float)x);
-                        assertFloat32Equal((float)expectedY, actualY, $"value {name}/float32 at {x}");
-                        assertFloat32Equal((float)expectedDY, actualDY, $"derivative {name}/float32 at {x}");
+                        self.assertFloat32Equal((float)expectedY, actualY, $"value {name}/float32 at {x}");
+                        self.assertFloat32Equal((float)expectedDY, actualDY, $"derivative {name}/float32 at {x}");
                     }
                 }
             }
