@@ -21,7 +21,7 @@ namespace Tensorflow
     public partial class tensorflow
     {
         public graph_util_impl graph_util => new graph_util_impl();
-
+        public GraphTransformer graph_transforms => new GraphTransformer();
         public GraphKeys GraphKeys { get; } = new GraphKeys();
 
         public void reset_default_graph() 
