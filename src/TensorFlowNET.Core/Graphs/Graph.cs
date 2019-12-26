@@ -494,6 +494,12 @@ namespace Tensorflow
             c_api.TF_DeleteGraph(handle);
         }
 
+        public Tensor get_tensor_by_tf_output(TF_Output tf_output)
+        {
+            var op = _get_operation_by_tf_operation(tf_output.oper);
+            return op.outputs[tf_output.index];
+        }
+
         /// <summary>
         /// Returns the <see cref="Tensor"/> with the given <paramref name="name"/>.
         /// This method may be called concurrently from multiple threads.
