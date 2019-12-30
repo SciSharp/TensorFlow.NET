@@ -54,6 +54,7 @@ namespace Tensorflow
                 input_map = _ConvertInputMapValues(name, input_map);
             });
 
+            TF_ImportGraphDefResults results = null;
             var bytes = graph_def.ToByteString().ToArray();
             using (var buffer = c_api_util.tf_buffer(bytes))
             using (var scoped_options = c_api_util.ScopedTFImportGraphDefOptions())
@@ -61,9 +62,8 @@ namespace Tensorflow
             {
                 _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements);
                 // need to create a class ImportGraphDefWithResults with IDisposal
-                var results = c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status);
+                results = c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status);
                 status.Check(true);
-                c_api.TF_DeleteImportGraphDefResults(results);
             }
 
             _ProcessNewOps(graph);
@@ -71,7 +71,34 @@ namespace Tensorflow
             if (return_elements == null)
                 return null;
             else
-                throw new NotImplementedException("import_graph_def return_elements");
+                return _GatherReturnElements(return_elements, graph, results);
+        }
+
+        private static ITensorOrOperation[] _GatherReturnElements(string[] requested_return_elements, 
+            Graph graph, 
+            TF_ImportGraphDefResults results)
+        {
+            var return_outputs = results.return_tensors;
+            var return_opers = results.return_opers;
+
+            var combined_return_elements = new List<ITensorOrOperation>();
+            int outputs_idx = 0;
+            int opers_idx = 0;
+            foreach(var name in requested_return_elements)
+            {
+                if (name.Contains(":"))
+                {
+                    combined_return_elements.append(graph.get_tensor_by_tf_output(return_outputs[outputs_idx]));
+                    outputs_idx += 1;
+                }
+                else
+                {
+                    throw new NotImplementedException("_GatherReturnElements");
+                    // combined_return_elements.append(graph._get_operation_by_tf_operation(return_opers[opers_idx]));
+                }
+            }
+
+            return combined_return_elements.ToArray();
         }
 
         private static void _ProcessNewOps(Graph graph)
@@ -100,8 +127,29 @@ namespace Tensorflow
 
             foreach (var name in return_elements)
             {
-                throw new NotImplementedException("_PopulateTFImportGraphDefOptions");
+                if(name.Contains(":"))
+                {
+                    var (op_name, index) = _ParseTensorName(name);
+                    c_api.TF_ImportGraphDefOptionsAddReturnOutput(options, op_name, index);
+                }
+                else
+                {
+                    c_api.TF_ImportGraphDefOptionsAddReturnOperation(options, name);
+                }
             }
+
+            // c_api.TF_ImportGraphDefOptionsSetValidateColocationConstraints(options, validate_colocation_constraints);
+        }
+
+        private static (string, int) _ParseTensorName(string tensor_name)
+        {
+            var components = tensor_name.Split(':');
+            if (components.Length == 2)
+                return (components[0], int.Parse(components[1]));
+            else if (components.Length == 1)
+                return (components[0], 0);
+            else
+                throw new ValueError($"Cannot convert {tensor_name} to a tensor name.");
         }
 
         public static Dictionary<string, Tensor> _ConvertInputMapValues(string name, Dictionary<string, Tensor> input_map)

@@ -95,6 +95,9 @@ namespace Tensorflow
             throw new NotImplementedException("len() not implemented for type: " + a.GetType());
         }
 
+        public static float min(float a, float b)
+            => Math.Min(a, b);
+
         public static T[] list<T>(IEnumerable<T> list)
             => list.ToArray();
 
