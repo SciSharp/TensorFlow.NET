@@ -278,8 +278,8 @@ namespace Tensorflow
                             ret = NDArray.Scalar(*(bool*) srcAddress);
                             break;
                         case TF_DataType.TF_STRING:
-                            using (var reader = new CodedInputStream(new IntPtr(srcAddress).Stream(8, (long)tensor.bytesize)))
-                                ret = new NDArray(reader.ReadBytes().ToByteArray());
+                            using (var reader = new CodedInputStream(new IntPtr(srcAddress).Stream(8, (long) tensor.bytesize)))
+                            	ret = new NDArray(reader.ReadBytes().ToByteArray());
                             break;
                         case TF_DataType.TF_UINT8:
                             ret = NDArray.Scalar(*(byte*) srcAddress);
