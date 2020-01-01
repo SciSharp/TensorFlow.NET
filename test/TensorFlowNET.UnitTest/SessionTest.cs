@@ -126,8 +126,8 @@ namespace TensorFlowNET.UnitTest
                 var c = tf.strings.substr(a, 0, size - 5000);
                 using (var sess = tf.Session())
                 {
-                    var result = (string) c.eval(sess);
-                    Console.WriteLine((string) result);
+                    var result = UTF8Encoding.UTF8.GetString((byte[])c.eval(sess));
+                    Console.WriteLine(result);
                     result.Should().HaveLength(size - 5000).And.ContainAll("a");
                 }
             }
