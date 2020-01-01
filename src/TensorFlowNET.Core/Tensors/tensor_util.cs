@@ -18,6 +18,7 @@ using NumSharp;
 using System;
 using System.Linq;
 using NumSharp.Utilities;
+using System.Text;
 
 namespace Tensorflow
 {
@@ -256,7 +257,7 @@ namespace Tensorflow
                     nd = np.array(doubleVals);
                     break;
                 case string strVal:
-                    nd = NDArray.FromString(strVal);
+                    nd = new NDArray(Encoding.ASCII.GetBytes(strVal));
                     break;
                 case string[] strVals:
                     nd = strVals;

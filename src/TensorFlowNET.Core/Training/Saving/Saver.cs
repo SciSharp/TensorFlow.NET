@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -188,10 +189,12 @@ namespace Tensorflow
 
                 if (write_state)
                 {
+                    var path = UTF8Encoding.UTF8.GetString((byte[])model_checkpoint_path[0]);
+                    _RecordLastCheckpoint(path);
                     _RecordLastCheckpoint(model_checkpoint_path[0].ToString());
                     checkpoint_management.update_checkpoint_state_internal(
                         save_dir: save_path_parent,
-                        model_checkpoint_path: model_checkpoint_path[0].ToString(),
+                        model_checkpoint_path: path,
                         all_model_checkpoint_paths: _last_checkpoints.Keys.Select(x => x).ToList(),
                         latest_filename: latest_filename,
                         save_relative_paths: _save_relative_paths);
@@ -205,7 +208,7 @@ namespace Tensorflow
                 export_meta_graph(meta_graph_filename, strip_default_attrs: strip_default_attrs, save_debug_info: save_debug_info);
             }
 
-            return _is_empty ? string.Empty : model_checkpoint_path.ToString();
+            return _is_empty ? string.Empty : UTF8Encoding.UTF8.GetString((byte[])model_checkpoint_path[0]);
         }
 
         public (Saver, object) import_meta_graph(string meta_graph_or_file, 

@@ -138,7 +138,7 @@ namespace Tensorflow
                     dtype = TF_DataType.TF_INT8;
                     break;
                 case "Byte":
-                    dtype = TF_DataType.TF_UINT8;
+                    dtype = dtype ?? TF_DataType.TF_UINT8;
                     break;
                 case "Int16":
                     dtype = TF_DataType.TF_INT16;
