@@ -19,14 +19,12 @@
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.14.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.12.0:
-1: Add ICanBeFlattened for nest.flatten2.
-2: Complete the WhileContext.
-3: Add tf.nn.rnn_cell.BasicRNNCell and tf.nn.dynamic_rnn.
-4: Add EstimatorSpec.
-5: Add rnn.static_rnn.
-6: Add array_grad._SplitGrad().
-7: Fix import_meta_graph exception if variables is empty.</PackageReleaseNotes>
+    <PackageReleaseNotes>Changes since v0.13.0:
+1: Upgrade NumSharp to v0.20.5
+2: Return byte[] for TF_String
+3: Fix return_tensors for import_graph_def
+4: Add tf.nn.ctc_greedy_decoder
+5: Fix calling RegisterGradientFunction too early</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
     <FileVersion>0.14.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -66,7 +64,7 @@ https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.11.2" />
-    <PackageReference Include="NumSharp" Version="0.20.4" />
+    <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>
 
   <ItemGroup>
