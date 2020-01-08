@@ -4,7 +4,21 @@ using System.Text;
 
 namespace Tensorflow.Keras.Engine
 {
-    class Training
+    public class Training
     {
+        public class Model
+        {
+
+        }
+
+        public class _TrainingEndpoint
+        {
+
+        }
+
+        public class _TrainingTarget
+        {
+
+        }
     }
 }

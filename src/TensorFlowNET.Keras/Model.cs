@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using Tensorflow;
 using static Tensorflow.Binding;
 
-namespace Keras
+namespace Tensorflow.Keras
 {
     public class Model
     {
