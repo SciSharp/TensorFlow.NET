@@ -336,3 +336,4 @@ test/TensorFlowNET.Examples/mnist
 
 # training model resources
 .resources
+/redist
