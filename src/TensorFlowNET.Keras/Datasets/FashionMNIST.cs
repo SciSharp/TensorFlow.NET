@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Tensorflow.Keras.Datasets
 {
-    class FashionMNIST
+    public class FashionMNIST
     {
+        public static ((Tensor, Tensor), (Tensor, Tensor)) load_data() => throw new NotImplementedException();
     }
 }
