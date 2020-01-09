@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Keras.Metrics
 {
-    class Metric
+    public abstract class Metric
     {
     }
 }

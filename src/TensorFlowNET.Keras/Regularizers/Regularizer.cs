@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Keras.Regularizers
 {
-    class Regularizer
+    public class Regularizer
     {
     }
 }

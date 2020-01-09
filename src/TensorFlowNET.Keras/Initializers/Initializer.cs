@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Keras.Initializers
 {
-    class Initializer
+    public abstract class Initializer
     {
     }
 }

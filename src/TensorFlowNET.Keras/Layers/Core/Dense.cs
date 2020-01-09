@@ -23,7 +23,7 @@ using static Tensorflow.Binding;
 
 namespace Keras.Layers
 {
-    public class Dense : ILayer
+    public class Dense : Layer
     {
         RefVariable W;
         int units;
@@ -37,7 +37,7 @@ namespace Keras.Layers
             this.units = units;
             this.name = (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))?this.GetType().Name + "_" + this.GetType().GUID:name;
         }
-        public ILayer __build__(TensorShape input_shape, int seed = 1, float stddev = -1f)
+        public Layer __build__(TensorShape input_shape, int seed = 1, float stddev = -1f)
         {
             Console.WriteLine("Building Layer \"" + name + "\" ...");
             if (stddev == -1)

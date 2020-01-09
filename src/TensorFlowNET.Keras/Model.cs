@@ -26,20 +26,20 @@ namespace Tensorflow.Keras
     public class Model
     {
         public Tensor Flow;
-        List<ILayer> layer_stack;
+        List<Layer> layer_stack;
 
         public TensorShape InputShape;
 
         public Model()
         {
-            layer_stack = new List<ILayer>();
+            layer_stack = new List<Layer>();
         }
-        public Model Add(ILayer layer)
+        public Model Add(Layer layer)
         {
             layer_stack.Add(layer);
             return this;
         }
-        public Model Add(IEnumerable<ILayer> layers)
+        public Model Add(IEnumerable<Layer> layers)
         {
             layer_stack.AddRange(layers);
             return this;
@@ -83,9 +83,9 @@ namespace Tensorflow.Keras
             Flow = features;
             for (int i = 0; i < layer_stack.Count; i++)
             {
-                layer_stack[i].__build__(flow_shape);
-                flow_shape = layer_stack[i].output_shape(flow_shape);
-                Flow = layer_stack[i].__call__(Flow);
+                //layer_stack[i].build(flow_shape);
+                //flow_shape = layer_stack[i].output_shape(flow_shape);
+                //Flow = layer_stack[i].__call__(Flow);
             }
             var predictions = tf.sigmoid(tf.squeeze(Flow));
             

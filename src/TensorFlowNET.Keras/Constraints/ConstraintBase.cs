@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Keras.Constraints
 {
-    class ConstraintBase
+    public abstract class ConstraintBase
     {
     }
 }

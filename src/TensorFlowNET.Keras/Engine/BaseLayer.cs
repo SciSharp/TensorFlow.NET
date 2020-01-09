@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Keras.Engine
 {
-    class BaseLayer
+    public class Layer
     {
     }
 }
