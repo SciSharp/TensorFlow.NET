@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Keras.Losses
 {
-    class Loss
+    public abstract class Loss
     {
     }
 }
