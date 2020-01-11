@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Keras.Layers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.Initializers;
@@ -20,5 +21,25 @@ namespace Tensorflow.Keras.Engine
         public bool have_all_keras_metadata(Tensor[] tensors) => throw new NotImplementedException();
 
         public static dynamic generate_placeholders_from_shape(TensorShape shape) => throw new NotImplementedException();
+
+        public Layer[] create_keras_history(Tensor[] tensors) => throw new NotImplementedException();   
+
+        private void _create_keras_history_helper(Tensor[] tensors, TensorFlowOpLayer[] processed_ops, Layer[] created_layers) => throw new NotImplementedException();
+
+        public Tensor[] unnest_if_single_tensor(Tensor[] input_tensors) => throw new NotImplementedException();
+
+        public bool needs_keras_history(Tensor[] tensors, bool ignore_call_context= false) => throw new NotImplementedException();
+
+        public bool is_in_keras_graph() => throw new NotImplementedException();
+
+        public string is_in_eager_or_tf_function() => throw new NotImplementedException();
+
+        public bool is_in_tf_function() => throw new NotImplementedException();
+
+        public bool uses_keras_history(Tensor[] tensors) => throw new NotImplementedException();
+
+        public Tensor[] mark_checked(Tensor[] tensors) => throw new NotImplementedException();
+
+        public CallContext call_context() => throw new NotImplementedException();
     }
 }
