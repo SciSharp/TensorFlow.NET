@@ -20,7 +20,7 @@ namespace Tensorflow.Keras.Engine
 
         }
 
-        public void enter(Layer layer, Tensor[] inputs, Graph build_graph, bool training, Saving saving = null) => throw new NotImplementedException();
+        public void enter(Layer layer, Tensor[] inputs, Graph build_graph, bool training) => throw new NotImplementedException();
 
         public bool training_arg_passed_to_call(string[] argspec, Dictionary<string, object> args, Dictionary<string, object>  kwargs) => throw new NotImplementedException();
 

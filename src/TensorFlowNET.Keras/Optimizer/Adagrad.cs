@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Keras.Regularizers
+namespace Tensorflow.Keras
 {
-    public class L1L2 : Regularizer
+    public class Adagrad : Optimizer
     {
-        public L1L2(float l1 = 0f, float l2 = 0f)
+        public Adagrad(float lr= 0.01f, float? epsilon = null, float decay = 0) : base(null)
         {
             throw new NotImplementedException();
         }
 
-        public override float call(Tensor x)
+        public override Tensor[] get_updates(Tensor loss, variables @params)
         {
             throw new NotImplementedException();
         }
