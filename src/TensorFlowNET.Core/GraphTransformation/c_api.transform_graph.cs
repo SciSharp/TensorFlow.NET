@@ -14,21 +14,20 @@
    limitations under the License.
 ******************************************************************************/
 
-using System.Collections.Generic;
-using Tensorflow.IO;
+using System;
+using System.Runtime.InteropServices;
 
 namespace Tensorflow
 {
-    public partial class tensorflow
+    public partial class c_api
     {
-        public GFile gfile = new GFile();
-        public Tensor read_file(string filename, string name = null) => gen_io_ops.read_file(filename, name);
-        public Tensor read_file(Tensor filename, string name = null) => gen_io_ops.read_file(filename, name);
-
-        public ITensorOrOperation[] import_graph_def(GraphDef graph_def,
-            Dictionary<string, Tensor> input_map = null,
-            string[] return_elements = null,
-            string name = null,
-            OpList producer_op_list = null) => importer.import_graph_def(graph_def, input_map, return_elements, name, producer_op_list);
+        [DllImport(TensorFlowLibName)]
+        public static extern int TransformGraphWithStringInputs(byte[] graph_def_string,
+                                      int graph_def_string_len,
+                                      string inputs_string,
+                                      string outputs_string,
+                                      string transforms_string,
+                                      IntPtr output_buffer,
+                                      IntPtr status);
     }
 }

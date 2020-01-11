@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.1</TargetTensorFlow>
-    <Version>0.14.0</Version>
+    <Version>0.15.0</Version>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -18,15 +18,11 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.14.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.13.0:
-1: Upgrade NumSharp to v0.20.5
-2: Return byte[] for TF_String
-3: Fix return_tensors for import_graph_def
-4: Add tf.nn.ctc_greedy_decoder
-5: Fix calling RegisterGradientFunction too early</PackageReleaseNotes>
+    <AssemblyVersion>0.15.0.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.14.0:
+1: Add TransformGraphWithStringInputs.</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <FileVersion>0.14.0.0</FileVersion>
+    <FileVersion>0.15.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>

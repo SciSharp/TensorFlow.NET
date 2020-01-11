@@ -34,7 +34,7 @@ namespace Tensorflow
             return _op.outputs;
         }
 
-        public static Tensor read_file(string filename, string name = null)
+        public static Tensor read_file<T>(T filename, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("ReadFile", name: name, args: new { filename });
 
