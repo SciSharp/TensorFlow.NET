@@ -35,5 +35,29 @@ namespace Tensorflow.Keras.Metrics
         public void add_weight(string name, TensorShape shape= null, VariableAggregation aggregation= VariableAggregation.Sum,
                                 VariableSynchronization synchronization = VariableSynchronization.OnRead, Initializers.Initializer initializer= null, 
                                 string dtype= null) => throw new NotImplementedException();
+
+        public static Tensor accuracy(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
+
+        public static Tensor binary_accuracy(Tensor y_true, Tensor y_pred, float threshold = 0.5f) => throw new NotImplementedException();
+
+        public static Tensor categorical_accuracy(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
+
+        public static Tensor sparse_categorical_accuracy(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
+
+        public static Tensor top_k_categorical_accuracy(Tensor y_true, Tensor y_pred, int k = 5) => throw new NotImplementedException();
+
+        public static Tensor sparse_top_k_categorical_accuracy(Tensor y_true, Tensor y_pred, int k = 5) => throw new NotImplementedException();
+
+        public static Tensor cosine_proximity(Tensor y_true, Tensor y_pred, int axis = -1) => throw new NotImplementedException();
+
+        public static Metric clone_metric(Metric metric) => throw new NotImplementedException();
+
+        public static Metric[] clone_metrics(Metric[] metric) => throw new NotImplementedException();
+
+        public static string serialize(Metric metric) => throw new NotImplementedException();
+
+        public static Metric deserialize(string config, object custom_objects = null) => throw new NotImplementedException();
+
+        public static Metric get(object identifier) => throw new NotImplementedException();
     }
 }

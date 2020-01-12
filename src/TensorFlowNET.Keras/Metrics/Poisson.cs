@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Tensorflow.Keras.Metrics
 {
-    class Poisson
+    public class Poisson : MeanMetricWrapper
     {
+        public Poisson(string name = "logcosh", string dtype = null)
+            : base(Losses.Loss.logcosh, name, dtype)
+        {
+        }
     }
 }

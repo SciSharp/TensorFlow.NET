@@ -28,7 +28,7 @@ namespace Tensorflow.Keras
 
         public static string serialize(Optimizer optimizer) => throw new NotImplementedException();
 
-        public static string deserialize(string config, object custom_objects = null) => throw new NotImplementedException();
+        public static Optimizer deserialize(string config, object custom_objects = null) => throw new NotImplementedException();
 
         public static Optimizer get(object identifier) => throw new NotImplementedException();
 

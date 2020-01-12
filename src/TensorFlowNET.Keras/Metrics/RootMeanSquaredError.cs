@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Tensorflow.Keras.Metrics
 {
-    class RootMeanSquaredError
+    public class RootMeanSquaredError : Mean
     {
+        public RootMeanSquaredError(string name = "root_mean_squared_error", string dtype = null)
+            : base(name, dtype)
+        {
+        }
     }
 }

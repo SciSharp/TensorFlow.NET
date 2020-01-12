@@ -4,7 +4,12 @@ using System.Text;
 
 namespace Tensorflow.Keras.Metrics
 {
-    class Mean
+    public class Mean : Reduce
     {
+        public Mean(string name, string dtype = null)
+           : base(Reduction.MEAN, name, dtype)
+        {
+        }
+
     }
 }

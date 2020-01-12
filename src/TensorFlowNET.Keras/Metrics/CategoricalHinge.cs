@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Tensorflow.Keras.Metrics
 {
-    class CategoricalHinge
+    public class CategoricalHinge : MeanMetricWrapper
     {
+        public CategoricalHinge(string name = "categorical_hinge", string dtype = null)
+            : base(Losses.Loss.categorical_hinge, name, dtype)
+        {
+        }
     }
 }
