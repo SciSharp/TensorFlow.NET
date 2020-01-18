@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Tensorflow.Keras.Engine
 {
-    class Sequential
+    public class Sequential
     {
+        
     }
 }

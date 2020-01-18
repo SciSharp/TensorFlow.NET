@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Tensorflow.Keras.Metrics
 {
-    class Sum
+    public class Sum : Reduce
     {
+        public Sum(string name, string dtype = null)
+           : base(Reduction.SUM, name, dtype)
+        {
+        }
     }
 }

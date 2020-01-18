@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Tensorflow.Keras.Metrics
 {
-    class MeanSquaredError
+    public class MeanSquaredError : MeanMetricWrapper
     {
+        public MeanSquaredError(string name = "mean_squared_error", string dtype = null)
+            : base(Losses.Loss.mean_squared_error, name, dtype)
+        {
+        }
     }
 }

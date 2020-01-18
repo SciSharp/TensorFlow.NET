@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Tensorflow.Keras.Metrics
 {
-    class LogCoshError
+    public class LogCoshError : MeanMetricWrapper
     {
+        public LogCoshError(string name = "logcosh", string dtype = null)
+            : base(Losses.Loss.logcosh, name, dtype)
+        {
+        }
     }
 }

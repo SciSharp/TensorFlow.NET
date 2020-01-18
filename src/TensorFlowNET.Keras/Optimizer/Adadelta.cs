@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Keras.Metrics
+namespace Tensorflow.Keras
 {
-    public class PrecisionAtRecall : SensitivitySpecificityBase
+    public class Adadelta : Optimizer
     {
-        public PrecisionAtRecall(float recall, int num_thresholds = 200, string name = null, string dtype = null) : base(recall, num_thresholds, name, dtype)
+        public Adadelta(float lr= 0.01f, float rho = 0.95f, float? epsilon = null, float decay = 0) : base(null)
         {
             throw new NotImplementedException();
         }
 
-        public override Tensor result()
+        public override Tensor[] get_updates(Tensor loss, variables @params)
         {
             throw new NotImplementedException();
         }

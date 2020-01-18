@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Tensorflow.Keras.Metrics
 {
-    class SquaredHinge
+    public class SquaredHinge : MeanMetricWrapper
     {
+        public SquaredHinge(string name = "squared_hinge", string dtype = null)
+            : base(Losses.Loss.squared_hinge, name, dtype)
+        {
+        }
     }
 }
