@@ -22,7 +22,7 @@ namespace Tensorflow.Keras.Metrics
             }
         }
 
-        public MeanTensor(int num_classes, string name = "mean_tensor", string dtype) : base(name, dtype)
+        public MeanTensor(int num_classes, string name = "mean_tensor", string dtype = null) : base(name, dtype)
         {
         }
 
