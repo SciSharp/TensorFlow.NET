@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TensorFlowNET.Core\TensorFlow.Binding.csproj" />
+    <ProjectReference Include="..\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
   </ItemGroup>
 
 </Project>

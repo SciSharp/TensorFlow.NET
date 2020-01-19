@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorFlow.Binding", "src\TensorFlowNET.Core\TensorFlow.Binding.csproj", "{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.Binding", "src\TensorFlowNET.Core\Tensorflow.Binding.csproj", "{FD682AC0-7B2D-45D3-8B0D-C6D678B04144}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmark", "src\TensorFlowNet.Benchmarks\Benchmark.csproj", "{3A6EB896-604F-4E25-B677-B8103BCF3D2E}"
 EndProject
