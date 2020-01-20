@@ -35,10 +35,11 @@ namespace Tensorflow.Keras.Layers
 
         public Dense(int units,
             IActivation activation,
+            string name = null,
             bool use_bias = true,
             bool trainable = false,
             IInitializer kernel_initializer = null,
-            IInitializer bias_initializer = null) : base(trainable: trainable)
+            IInitializer bias_initializer = null) : base(trainable: trainable, name: name)
         {
             this.units = units;
             this.activation = activation;

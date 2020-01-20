@@ -177,7 +177,8 @@ namespace Tensorflow
                     use_bias: use_bias,
                     bias_initializer: bias_initializer,
                     kernel_initializer: kernel_initializer, 
-                    trainable: trainable);
+                    trainable: trainable,
+                    name: name);
 
                 return layer.apply(inputs).Item1;
             }
