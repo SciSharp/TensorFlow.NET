@@ -21,6 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\NumSharp\src\NumSharp.Core\NumSharp.Core.csproj" />
+    <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>
 </Project>
