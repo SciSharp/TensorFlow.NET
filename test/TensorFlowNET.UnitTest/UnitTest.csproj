@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowNET.Hub\Tensorflow.Hub.csproj" />
   </ItemGroup>
 
   <ItemGroup>
