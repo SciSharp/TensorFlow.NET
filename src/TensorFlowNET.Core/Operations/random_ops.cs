@@ -80,7 +80,7 @@ namespace Tensorflow
         }
 
         public static Tensor random_uniform(Tensor shape,
-            long minval = 0,
+            int minval = 0,
             Tensor maxval = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             int? seed = null,

@@ -60,7 +60,7 @@ https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.11.2" />
-    <PackageReference Include="NumSharp" Version="0.20.5" />
+    <PackageReference Include="NumSharp" Version="0.30.0-alpha" />
   </ItemGroup>
 
   <ItemGroup>

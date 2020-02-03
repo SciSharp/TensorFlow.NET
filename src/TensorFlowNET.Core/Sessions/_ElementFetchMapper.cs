@@ -58,51 +58,18 @@ namespace Tensorflow
                     case NDArray value:
                         result = new[] { value };
                         break;
-#if _REGEN
-        %types=["sbyte", "bool", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
-        %foreach types%
-                    case #1 value:
-                        result = new[] { NDArray.Scalar(value) };
-                        break;
-         %
-#else
-                    case sbyte value:
-                        result = new[] { NDArray.Scalar(value) };
-                        break;
                     case bool value:
                         result = new[] { NDArray.Scalar(value) };
                         break;
                     case byte value:
                         result = new[] { NDArray.Scalar(value) };
                         break;
-                    case short value:
-                        result = new[] { NDArray.Scalar(value) };
-                        break;
-                    case ushort value:
-                        result = new[] { NDArray.Scalar(value) };
-                        break;
                     case int value:
-                        result = new[] { NDArray.Scalar(value) };
-                        break;
-                    case uint value:
-                        result = new[] { NDArray.Scalar(value) };
-                        break;
-                    case long value:
-                        result = new[] { NDArray.Scalar(value) };
-                        break;
-                    case ulong value:
                         result = new[] { NDArray.Scalar(value) };
                         break;
                     case float value:
                         result = new[] { NDArray.Scalar(value) };
                         break;
-                    case double value:
-                        result = new[] { NDArray.Scalar(value) };
-                        break;
-                    case Complex value:
-                        result = new[] { NDArray.Scalar(value) };
-                        break;
-#endif
                     default:
                         break;
                 }

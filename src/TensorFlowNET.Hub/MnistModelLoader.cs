@@ -116,7 +116,7 @@ namespace Tensorflow.Hub
                     throw new Exception($"Invalid magic number {magic} in MNIST image file: {file}");
                 
                 var num_images =  Read32(bytestream);
-                num_images = limit == null ? num_images : Math.Min(num_images, (uint)limit);
+                num_images = limit == null ? num_images : Math.Min(num_images, (int)limit);
 
                 var rows = Read32(bytestream);
                 var cols = Read32(bytestream);
@@ -125,8 +125,8 @@ namespace Tensorflow.Hub
 
                 bytestream.Read(buf, 0, buf.Length);
 
-                var data = np.frombuffer(buf, np.uint8);
-                data = data.reshape((int)num_images, (int)rows, (int)cols, 1);
+                var data = np.frombuffer(buf, np.@byte);
+                data = data.reshape(num_images, rows, cols, 1);
 
                 return data;
             }
@@ -144,7 +144,7 @@ namespace Tensorflow.Hub
                     throw new Exception($"Invalid magic number {magic} in MNIST label file: {file}");
                 
                 var num_items = Read32(bytestream);
-                num_items = limit == null ? num_items : Math.Min(num_items, (uint)limit);
+                num_items = limit == null ? num_items : Math.Min(num_items, (int)limit);
                 
                 var buf = new byte[num_items];
 
@@ -174,11 +174,11 @@ namespace Tensorflow.Hub
             return labels_one_hot;
         }
 
-        private uint Read32(FileStream bytestream)
+        private int Read32(FileStream bytestream)
         {
             var buffer = new byte[sizeof(uint)];
             var count = bytestream.Read(buffer, 0, 4);
-            return np.frombuffer(buffer, ">u4").Data<uint>()[0];
+            return np.frombuffer(buffer, ">u4").Data<int>()[0];
         }
     }
 }
