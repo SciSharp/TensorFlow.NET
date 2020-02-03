@@ -137,12 +137,12 @@ namespace TensorFlowNET.UnitTest
         public void Autocast_Case1()
         {
             var sess = tf.Session().as_default();
-            var input = tf.placeholder(tf.float64, shape: new TensorShape(6));
+            var input = tf.placeholder(tf.float32, shape: new TensorShape(6));
             var op = tf.reshape(input, new int[] {2, 3});
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6)));
 
-            ret.Should().BeOfType<double>().And.BeShaped(2, 3).And.BeOfValues(1, 2, 3, 4, 5, 6);
+            ret.Should().BeOfType<float>().And.BeShaped(2, 3).And.BeOfValues(1, 2, 3, 4, 5, 6);
             print(ret.dtype);
             print(ret);
         }
@@ -165,12 +165,12 @@ namespace TensorFlowNET.UnitTest
         public void Autocast_Case3()
         {
             var sess = tf.Session().as_default();
-            var input = tf.placeholder(tf.int16, shape: new TensorShape(6));
+            var input = tf.placeholder(tf.int64, shape: new TensorShape(6));
             var op = tf.reshape(input, new int[] {2, 3});
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(NPTypeCode.Single) + 0.1f));
 
-            ret.Should().BeOfType<short>().And.BeShaped(2, 3).And.BeOfValues(1, 2, 3, 4, 5, 6);
+            ret.Should().BeOfType<long>().And.BeShaped(2, 3).And.BeOfValues(1, 2, 3, 4, 5, 6);
             print(ret.dtype);
             print(ret);
         }
