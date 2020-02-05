@@ -2,7 +2,7 @@
 
 namespace Tensorflow.Eager
 {
-    public class Context : DisposableObject
+    public sealed class Context : IDisposable
     {
         public const int GRAPH_MODE = 0;
         public const int EAGER_MODE = 1;
@@ -12,9 +12,11 @@ namespace Tensorflow.Eager
         public string scope_name = "";
         bool _initialized = false;
 
+        public SafeContextHandle Handle { get; }
+
         public Context(ContextOptions opts, Status status)
         {
-            _handle = c_api.TFE_NewContext(opts, status.Handle);
+            Handle = c_api.TFE_NewContext(opts, status.Handle);
             status.Check(true);
         }
 
@@ -29,16 +31,10 @@ namespace Tensorflow.Eager
         }
 
         public void start_step()
-            => c_api.TFE_ContextStartStep(_handle);
+            => c_api.TFE_ContextStartStep(Handle);
 
         public void end_step()
-            => c_api.TFE_ContextEndStep(_handle);
-
-        /// <summary>
-        ///     Dispose any unmanaged resources related to given <paramref name="handle"/>.
-        /// </summary>
-        protected sealed override void DisposeUnmanagedResources(IntPtr handle) 
-            => c_api.TFE_DeleteContext(_handle);
+            => c_api.TFE_ContextEndStep(Handle);
 
         public bool executing_eagerly() 
             => default_execution_mode == EAGER_MODE;
@@ -48,10 +44,7 @@ namespace Tensorflow.Eager
                 name : 
                 "cd2c89b7-88b7-44c8-ad83-06c2a9158347";
 
-        public static implicit operator IntPtr(Context ctx) 
-            => ctx._handle;
-
-        public static implicit operator TFE_Context(Context ctx)
-            => new TFE_Context(ctx._handle);
+        public void Dispose()
+            => Handle.Dispose();
     }
 }

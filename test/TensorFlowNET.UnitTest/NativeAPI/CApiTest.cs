@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
+using Tensorflow.Eager;
 using Buffer = System.Buffer;
 
 namespace TensorFlowNET.UnitTest
@@ -92,7 +93,7 @@ namespace TensorFlowNET.UnitTest
         protected void TFE_OpSetAttrString(IntPtr op, string attr_name, string value, uint length)
             => c_api.TFE_OpSetAttrString(op, attr_name, value, length);
 
-        protected IntPtr TFE_NewOp(IntPtr ctx, string op_or_function_name, SafeStatusHandle status)
+        protected IntPtr TFE_NewOp(SafeContextHandle ctx, string op_or_function_name, SafeStatusHandle status)
             => c_api.TFE_NewOp(ctx, op_or_function_name, status);
 
         protected IntPtr TFE_NewTensorHandle(IntPtr t, SafeStatusHandle status)
@@ -104,10 +105,7 @@ namespace TensorFlowNET.UnitTest
         protected IntPtr TFE_NewContextOptions()
             => c_api.TFE_NewContextOptions();
 
-        protected void TFE_DeleteContext(IntPtr t)
-            => c_api.TFE_DeleteContext(t);
-
-        protected IntPtr TFE_NewContext(IntPtr opts, SafeStatusHandle status)
+        protected SafeContextHandle TFE_NewContext(IntPtr opts, SafeStatusHandle status)
             => c_api.TFE_NewContext(opts, status);
 
         protected void TFE_DeleteContextOptions(IntPtr opts)
@@ -131,7 +129,7 @@ namespace TensorFlowNET.UnitTest
         protected void TFE_DeleteExecutor(IntPtr executor)
             => c_api.TFE_DeleteExecutor(executor);
 
-        protected IntPtr TFE_ContextGetExecutorForThread(IntPtr ctx)
+        protected IntPtr TFE_ContextGetExecutorForThread(SafeContextHandle ctx)
             => c_api.TFE_ContextGetExecutorForThread(ctx);
 
         protected void TFE_ExecutorWaitForAllPendingNodes(IntPtr executor, SafeStatusHandle status)
@@ -146,7 +144,7 @@ namespace TensorFlowNET.UnitTest
         protected string TFE_TensorHandleBackingDeviceName(IntPtr h, SafeStatusHandle status)
             => c_api.StringPiece(c_api.TFE_TensorHandleBackingDeviceName(h, status));
 
-        protected IntPtr TFE_ContextListDevices(IntPtr ctx, SafeStatusHandle status)
+        protected IntPtr TFE_ContextListDevices(SafeContextHandle ctx, SafeStatusHandle status)
             => c_api.TFE_ContextListDevices(ctx, status);
 
         protected int TF_DeviceListCount(IntPtr list)
@@ -161,7 +159,7 @@ namespace TensorFlowNET.UnitTest
         protected void TF_DeleteDeviceList(IntPtr list)
             => c_api.TF_DeleteDeviceList(list);
 
-        protected IntPtr TFE_TensorHandleCopyToDevice(IntPtr h, IntPtr ctx, string device_name, SafeStatusHandle status)
+        protected IntPtr TFE_TensorHandleCopyToDevice(IntPtr h, SafeContextHandle ctx, string device_name, SafeStatusHandle status)
             => c_api.TFE_TensorHandleCopyToDevice(h, ctx, device_name, status);
 
         protected void TFE_OpSetDevice(IntPtr op, string device_name, SafeStatusHandle status)
