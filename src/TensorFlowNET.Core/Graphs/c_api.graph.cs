@@ -92,7 +92,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>TF_ImportGraphDefResults*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_GraphImportGraphDefWithResults(IntPtr graph, SafeBufferHandle graph_def, SafeImportGraphDefOptionsHandle options, SafeStatusHandle status);
+        public static extern SafeImportGraphDefResultsHandle TF_GraphImportGraphDefWithResults(IntPtr graph, SafeBufferHandle graph_def, SafeImportGraphDefOptionsHandle options, SafeStatusHandle status);
 
         /// <summary>
         /// Import the graph serialized in `graph_def` into `graph`.
@@ -258,7 +258,7 @@ namespace Tensorflow
         /// <param name="num_opers">int*</param>
         /// <param name="opers">TF_Operation***</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_ImportGraphDefResultsReturnOperations(IntPtr results, ref int num_opers, ref TF_Operation opers);
+        public static extern void TF_ImportGraphDefResultsReturnOperations(SafeImportGraphDefResultsHandle results, ref int num_opers, ref TF_Operation opers);
 
         /// <summary>
         /// Fetches the return outputs requested via
@@ -270,7 +270,7 @@ namespace Tensorflow
         /// <param name="num_outputs">int*</param>
         /// <param name="outputs">TF_Output**</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_ImportGraphDefResultsReturnOutputs(IntPtr results, ref int num_outputs, ref IntPtr outputs);
+        public static extern void TF_ImportGraphDefResultsReturnOutputs(SafeImportGraphDefResultsHandle results, ref int num_outputs, ref IntPtr outputs);
 
         /// <summary>
         /// This function creates a new TF_Session (which is created on success) using

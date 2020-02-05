@@ -33,7 +33,7 @@ namespace Tensorflow
             return c_api.TF_NewOperation(_handle, opType, opName);
         }
 
-        public Operation[] ReturnOperations(IntPtr results)
+        public Operation[] ReturnOperations(SafeImportGraphDefResultsHandle results)
         {
             TF_Operation return_oper_handle = new TF_Operation();
             int num_return_opers = 0;
