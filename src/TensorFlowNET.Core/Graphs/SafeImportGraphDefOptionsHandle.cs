@@ -15,27 +15,26 @@
 ******************************************************************************/
 
 using System;
+using Tensorflow.Util;
 
 namespace Tensorflow
 {
-    public sealed class ImportGraphDefOptions : IDisposable
+    public sealed class SafeImportGraphDefOptionsHandle : SafeTensorflowHandle
     {
-        public SafeImportGraphDefOptionsHandle Handle { get; }
-
-        public int NumReturnOutputs 
-            => c_api.TF_ImportGraphDefOptionsNumReturnOutputs(Handle);
-
-        public ImportGraphDefOptions()
+        public SafeImportGraphDefOptionsHandle()
         {
-            Handle = c_api.TF_NewImportGraphDefOptions();
         }
 
-        public void AddReturnOutput(string name, int index)
+        public SafeImportGraphDefOptionsHandle(IntPtr handle)
+            : base(handle)
         {
-            c_api.TF_ImportGraphDefOptionsAddReturnOutput(Handle, name, index);
         }
 
-        public void Dispose()
-            => Handle.Dispose();
+        protected override bool ReleaseHandle()
+        {
+            c_api.TF_DeleteImportGraphDefOptions(handle);
+            SetHandle(IntPtr.Zero);
+            return true;
+        }
     }
 }
