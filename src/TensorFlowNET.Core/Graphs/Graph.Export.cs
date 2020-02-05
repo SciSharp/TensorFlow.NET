@@ -25,7 +25,7 @@ namespace Tensorflow
         public Buffer ToGraphDef(Status s)
         {
             var buffer = new Buffer();
-            c_api.TF_GraphToGraphDef(_handle, buffer, s.Handle);
+            c_api.TF_GraphToGraphDef(_handle, buffer.Handle, s.Handle);
             s.Check(true);
 
             return buffer;
@@ -39,7 +39,7 @@ namespace Tensorflow
             {
                 status.Check(true);
                 // limit size to 250M, recursion to max 100
-                var inputStream = CodedInputStream.CreateWithLimits(buffer.MemoryBlock.Stream(), 250 * 1024 * 1024, 100);
+                var inputStream = CodedInputStream.CreateWithLimits(buffer.DangerousMemoryBlock.Stream(), 250 * 1024 * 1024, 100);
                 def = GraphDef.Parser.ParseFrom(inputStream);
             }
 

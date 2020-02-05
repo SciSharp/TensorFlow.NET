@@ -236,10 +236,10 @@ namespace Tensorflow
             lock (Locks.ProcessWide)
             {
                 using var buf = new Buffer();
-                c_api.TF_OperationGetAttrValueProto(_handle, name, buf, tf.status.Handle);
+                c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.status.Handle);
                 tf.status.Check(true);
 
-                x = AttrValue.Parser.ParseFrom(buf.MemoryBlock.Stream());
+                x = AttrValue.Parser.ParseFrom(buf.DangerousMemoryBlock.Stream());
             }
 
             string oneof_value = x.ValueCase.ToString();
@@ -269,10 +269,10 @@ namespace Tensorflow
                 using (var s = new Status())
                 using (var buffer = new Buffer())
                 {
-                    c_api.TF_OperationToNodeDef(_handle, buffer, s.Handle);
+                    c_api.TF_OperationToNodeDef(_handle, buffer.Handle, s.Handle);
                     s.Check();
 
-                    return NodeDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+                    return NodeDef.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
                 }
         }
 

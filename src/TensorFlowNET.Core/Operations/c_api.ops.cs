@@ -38,7 +38,7 @@ namespace Tensorflow
         /// </summary>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_GetAllOpList();
+        public static extern SafeBufferHandle TF_GetAllOpList();
 
         /// <summary>
         /// For inputs that take a single tensor.
@@ -204,7 +204,7 @@ namespace Tensorflow
         public static extern TF_DataType TF_OperationOutputType(TF_Output oper_out);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_OperationToNodeDef(IntPtr oper, IntPtr buffer, SafeStatusHandle status);
+        public static extern void TF_OperationToNodeDef(IntPtr oper, SafeBufferHandle buffer, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern int TF_OperationOutputListLength(IntPtr oper, string arg_name, SafeStatusHandle status);

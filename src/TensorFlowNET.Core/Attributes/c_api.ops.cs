@@ -55,7 +55,7 @@ namespace Tensorflow
         /// <param name="oper"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TF_OperationGetAttrValueProto(IntPtr oper, string attr_name, IntPtr output_attr_value, SafeStatusHandle status);
+        public static extern int TF_OperationGetAttrValueProto(IntPtr oper, string attr_name, SafeBufferHandle output_attr_value, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TF_SetAttrBool(IntPtr desc, string attr_name, bool value);
