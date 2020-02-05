@@ -413,7 +413,7 @@ namespace Tensorflow
             return name;
         }
 
-        public TF_Output[] ReturnOutputs(IntPtr results)
+        public TF_Output[] ReturnOutputs(SafeImportGraphDefResultsHandle results)
         {
             IntPtr return_output_handle = IntPtr.Zero;
             int num_return_outputs = 0;

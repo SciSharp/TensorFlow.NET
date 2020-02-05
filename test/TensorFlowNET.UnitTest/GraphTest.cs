@@ -258,11 +258,9 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             EXPECT_EQ(0, neg.NumControlOutputs);
             EXPECT_EQ(0, neg.GetControlOutputs().Length);
 
-            // Import it again, with an input mapping, return outputs, and a return
-            // operation, into the same graph.
-            IntPtr results;
-            using (var opts = c_api.TF_NewImportGraphDefOptions())
+            static SafeImportGraphDefResultsHandle ImportGraph(Status s, Graph graph, Buffer graph_def, Operation scalar)
             {
+                using var opts = c_api.TF_NewImportGraphDefOptions();
                 c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported2");
                 c_api.TF_ImportGraphDefOptionsAddInputMapping(opts, "scalar", 0, new TF_Output(scalar, 0));
                 c_api.TF_ImportGraphDefOptionsAddReturnOutput(opts, "feed", 0);
@@ -270,32 +268,39 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 EXPECT_EQ(2, c_api.TF_ImportGraphDefOptionsNumReturnOutputs(opts));
                 c_api.TF_ImportGraphDefOptionsAddReturnOperation(opts, "scalar");
                 EXPECT_EQ(1, c_api.TF_ImportGraphDefOptionsNumReturnOperations(opts));
-                results = c_api.TF_GraphImportGraphDefWithResults(graph, graph_def.Handle, opts, s.Handle);
+                var results = c_api.TF_GraphImportGraphDefWithResults(graph, graph_def.Handle, opts, s.Handle);
                 EXPECT_EQ(TF_Code.TF_OK, s.Code);
+
+                return results;
             }
 
-            Operation scalar2 = graph.OperationByName("imported2/scalar");
-            Operation feed2 = graph.OperationByName("imported2/feed");
-            Operation neg2 = graph.OperationByName("imported2/neg");
+            // Import it again, with an input mapping, return outputs, and a return
+            // operation, into the same graph.
+            Operation feed2;
+            using (SafeImportGraphDefResultsHandle results = ImportGraph(s, graph, graph_def, scalar))
+            {
+                Operation scalar2 = graph.OperationByName("imported2/scalar");
+                feed2 = graph.OperationByName("imported2/feed");
+                Operation neg2 = graph.OperationByName("imported2/neg");
 
-            // Check input mapping
-            neg_input = neg.Input(0);
-            EXPECT_EQ(scalar, neg_input.oper);
-            EXPECT_EQ(0, neg_input.index);
+                // Check input mapping
+                neg_input = neg.Input(0);
+                EXPECT_EQ(scalar, neg_input.oper);
+                EXPECT_EQ(0, neg_input.index);
 
-            // Check return outputs
-            var return_outputs = graph.ReturnOutputs(results);
-            ASSERT_EQ(2, return_outputs.Length);
-            EXPECT_EQ(feed2, return_outputs[0].oper);
-            EXPECT_EQ(0, return_outputs[0].index);
-            EXPECT_EQ(scalar, return_outputs[1].oper);  // remapped
-            EXPECT_EQ(0, return_outputs[1].index);
+                // Check return outputs
+                var return_outputs = graph.ReturnOutputs(results);
+                ASSERT_EQ(2, return_outputs.Length);
+                EXPECT_EQ(feed2, return_outputs[0].oper);
+                EXPECT_EQ(0, return_outputs[0].index);
+                EXPECT_EQ(scalar, return_outputs[1].oper);  // remapped
+                EXPECT_EQ(0, return_outputs[1].index);
 
-            // Check return operation
-            var return_opers = graph.ReturnOperations(results);
-            ASSERT_EQ(1, return_opers.Length);
-            EXPECT_EQ(scalar2, return_opers[0]);  // not remapped
-            c_api.TF_DeleteImportGraphDefResults(results);
+                // Check return operation
+                var return_opers = graph.ReturnOperations(results);
+                ASSERT_EQ(1, return_opers.Length);
+                EXPECT_EQ(scalar2, return_opers[0]);  // not remapped
+            }
 
             // Import again, with control dependencies, into the same graph.
             using (var opts = c_api.TF_NewImportGraphDefOptions())
