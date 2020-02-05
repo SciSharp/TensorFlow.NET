@@ -22,8 +22,8 @@ namespace TensorFlowNET.UnitTest.Basics
         public void GetAllOpList()
         {
             var handle = c_api.TF_GetAllOpList();
-            var buffer = new Buffer(handle);
-            var op_list = OpList.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+            using var buffer = new Buffer(handle);
+            var op_list = OpList.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
 
             var _registered_ops = new Dictionary<string, OpDef>();
             foreach (var op_def in op_list.Op)

@@ -29,7 +29,7 @@ namespace Tensorflow
         /// </summary>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_NewBuffer();
+        public static extern SafeBufferHandle TF_NewBuffer();
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_GetBuffer(TF_Buffer buffer);
@@ -42,6 +42,6 @@ namespace Tensorflow
         /// <param name="proto_len">size_t</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_NewBufferFromString(IntPtr proto, ulong proto_len);
+        public static extern SafeBufferHandle TF_NewBufferFromString(IntPtr proto, ulong proto_len);
     }
 }

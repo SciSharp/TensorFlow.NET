@@ -15,19 +15,26 @@
 ******************************************************************************/
 
 using System;
-using System.Runtime.InteropServices;
+using Tensorflow.Util;
 
 namespace Tensorflow
 {
-    public partial class c_api
+    public sealed class SafeBufferHandle : SafeTensorflowHandle
     {
-        [DllImport(TensorFlowLibName)]
-        public static extern int TransformGraphWithStringInputs(byte[] graph_def_string,
-                                      int graph_def_string_len,
-                                      string inputs_string,
-                                      string outputs_string,
-                                      string transforms_string,
-                                      SafeBufferHandle output_buffer,
-                                      SafeStatusHandle status);
+        private SafeBufferHandle()
+        {
+        }
+
+        public SafeBufferHandle(IntPtr handle)
+            : base(handle)
+        {
+        }
+
+        protected override bool ReleaseHandle()
+        {
+            c_api.TF_DeleteBuffer(handle);
+            SetHandle(IntPtr.Zero);
+            return true;
+        }
     }
 }

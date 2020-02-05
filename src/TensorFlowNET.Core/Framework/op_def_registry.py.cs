@@ -30,7 +30,7 @@ namespace Tensorflow
             {
                 _registered_ops = new Dictionary<string, OpDef>();
                 using var buffer = new Buffer(c_api.TF_GetAllOpList());
-                using var stream = buffer.MemoryBlock.Stream();
+                using var stream = buffer.DangerousMemoryBlock.Stream();
                 var op_list = OpList.Parser.ParseFrom(stream);
                 foreach (var op_def in op_list.Op)
                     _registered_ops[op_def.Name] = op_def;

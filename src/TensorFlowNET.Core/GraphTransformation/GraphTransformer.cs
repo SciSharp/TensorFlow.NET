@@ -34,7 +34,7 @@ namespace Tensorflow
                     inputs_string,
                     outputs_string,
                     transforms_string,
-                    buffer,
+                    buffer.Handle,
                     status.Handle);
 
                 status.Check(false);

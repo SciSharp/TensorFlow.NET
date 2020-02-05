@@ -14,10 +14,11 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp.Backends.Unmanaged;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using NumSharp.Backends.Unmanaged;
+using Tensorflow.Util;
 using static Tensorflow.c_api;
 
 namespace Tensorflow
@@ -25,34 +26,30 @@ namespace Tensorflow
     /// <summary>
     ///     Represents a TF_Buffer that can be passed to Tensorflow.
     /// </summary>
-    public class Buffer : DisposableObject
+    public sealed class Buffer : IDisposable
     {
-        private unsafe TF_Buffer buffer
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => *bufferptr;
-        }
+        public SafeBufferHandle Handle { get; }
 
-        private unsafe TF_Buffer* bufferptr
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => (TF_Buffer*) _handle;
-        }
+        /// <remarks>
+        /// <inheritdoc cref="SafeHandleLease" path="/devdoc/usage"/>
+        /// </remarks>
+        private unsafe ref readonly TF_Buffer DangerousBuffer
+            => ref Unsafe.AsRef<TF_Buffer>(Handle.DangerousGetHandle().ToPointer());
 
         /// <summary>
         ///     The memory block representing this buffer.
         /// </summary>
-        /// <remarks>The deallocator is set to null.</remarks>
-        public UnmanagedMemoryBlock<byte> MemoryBlock
+        /// <remarks>
+        /// <para>The deallocator is set to null.</para>
+        ///
+        /// <inheritdoc cref="SafeHandleLease" path="/devdoc/usage"/>
+        /// </remarks>
+        public unsafe UnmanagedMemoryBlock<byte> DangerousMemoryBlock
         {
             get
             {
-                unsafe
-                {
-                    EnsureNotDisposed();
-                    var buff = (TF_Buffer*) _handle;
-                    return new UnmanagedMemoryBlock<byte>((byte*) buff->data.ToPointer(), (long) buff->length);
-                }
+                ref readonly TF_Buffer buffer = ref DangerousBuffer;
+                return new UnmanagedMemoryBlock<byte>((byte*)buffer.data.ToPointer(), (long)buffer.length);
             }
         }
 
@@ -63,25 +60,23 @@ namespace Tensorflow
         {
             get
             {
-                EnsureNotDisposed();
-                return buffer.length;
+                using (Handle.Lease())
+                {
+                    return DangerousBuffer.length;
+                }
             }
         }
 
-        public Buffer() => _handle = TF_NewBuffer();
+        public Buffer()
+            => Handle = TF_NewBuffer();
 
-        public Buffer(IntPtr handle)
-        {
-            if (handle == IntPtr.Zero)
-                throw new ArgumentException("Handle (IntPtr) can't be zero.", nameof(handle));
+        public Buffer(SafeBufferHandle handle)
+            => Handle = handle;
 
-            _handle = handle;
-        }
+        public Buffer(byte[] data)
+            => Handle = _toBuffer(data);
 
-        public Buffer(byte[] data) : this(_toBuffer(data))
-        { }
-
-        private static IntPtr _toBuffer(byte[] data)
+        private static SafeBufferHandle _toBuffer(byte[] data)
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
@@ -93,38 +88,25 @@ namespace Tensorflow
             }
         }
 
-        public static implicit operator IntPtr(Buffer buffer)
-        {
-            buffer.EnsureNotDisposed();
-            return buffer._handle;
-        }
-
-        public static explicit operator byte[](Buffer buffer) => buffer.ToArray(); //has to be explicit, developer will assume it doesn't cost.
-
         /// <summary>
         ///     Copies this buffer's contents onto a <see cref="byte"/> array.
         /// </summary>
         public byte[] ToArray()
         {
-            EnsureNotDisposed();
-
-            unsafe
+            using (Handle.Lease())
             {
-                var len = buffer.length;
+                var block = DangerousMemoryBlock;
+                var len = block.Count;
                 if (len == 0)
                     return Array.Empty<byte>();
 
-                byte[] data = new byte[len];
-                fixed (byte* dst = data)
-                    System.Buffer.MemoryCopy((void*) bufferptr->data, dst, len, len);
-
+                var data = new byte[len];
+                block.CopyTo(data, 0);
                 return data;
             }
         }
 
-        protected override void DisposeUnmanagedResources(IntPtr handle)
-        {
-            TF_DeleteBuffer(handle);
-        }
+        public void Dispose()
+            => Handle.Dispose();
     }
 }

@@ -47,7 +47,7 @@ namespace Tensorflow
         public static extern string TF_GraphDebugString(IntPtr graph, out int len);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_GraphGetOpDef(IntPtr graph, string op_name, IntPtr output_op_def, SafeStatusHandle status);
+        public static extern void TF_GraphGetOpDef(IntPtr graph, string op_name, SafeBufferHandle output_op_def, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the shape of the Tensor referenced by `output` in `graph`
@@ -78,7 +78,7 @@ namespace Tensorflow
         /// <param name="num_return_outputs">int</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_GraphImportGraphDefWithReturnOutputs(IntPtr graph, IntPtr graph_def, SafeImportGraphDefOptionsHandle options, IntPtr return_outputs, int num_return_outputs, SafeStatusHandle status);
+        public static extern unsafe void TF_GraphImportGraphDefWithReturnOutputs(IntPtr graph, SafeBufferHandle graph_def, SafeImportGraphDefOptionsHandle options, IntPtr return_outputs, int num_return_outputs, SafeStatusHandle status);
 
         /// <summary>
         /// Import the graph serialized in `graph_def` into `graph`.  Returns nullptr and
@@ -92,7 +92,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>TF_ImportGraphDefResults*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_GraphImportGraphDefWithResults(IntPtr graph, IntPtr graph_def, SafeImportGraphDefOptionsHandle options, SafeStatusHandle status);
+        public static extern IntPtr TF_GraphImportGraphDefWithResults(IntPtr graph, SafeBufferHandle graph_def, SafeImportGraphDefOptionsHandle options, SafeStatusHandle status);
 
         /// <summary>
         /// Import the graph serialized in `graph_def` into `graph`.
@@ -102,7 +102,7 @@ namespace Tensorflow
         /// <param name="options">TF_ImportGraphDefOptions*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_GraphImportGraphDef(IntPtr graph, IntPtr graph_def, SafeImportGraphDefOptionsHandle options, SafeStatusHandle status);
+        public static extern void TF_GraphImportGraphDef(IntPtr graph, SafeBufferHandle graph_def, SafeImportGraphDefOptionsHandle options, SafeStatusHandle status);
         
         /// <summary>
         /// Iterate through the operations of a graph.
@@ -138,7 +138,7 @@ namespace Tensorflow
         /// <param name="output_graph_def">TF_Buffer*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_GraphToGraphDef(IntPtr graph, IntPtr output_graph_def, SafeStatusHandle status);
+        public static extern void TF_GraphToGraphDef(IntPtr graph, SafeBufferHandle output_graph_def, SafeStatusHandle status);
         
         /// <summary>
         /// Returns the number of dimensions of the Tensor referenced by `output`

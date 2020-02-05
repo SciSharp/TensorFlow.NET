@@ -50,11 +50,11 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             {
                 using (var buffer = new Buffer())
                 {
-                    c_api.TF_GraphToGraphDef(graph, buffer, s.Handle);
+                    c_api.TF_GraphToGraphDef(graph, buffer.Handle, s.Handle);
                     bool ret = TF_GetCode(s) == TF_OK;
                     EXPECT_EQ(TF_OK, TF_GetCode(s));
                     if (ret) 
-                        graph_def = GraphDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+                        graph_def = GraphDef.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
                     return ret;
                 }
             }

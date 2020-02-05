@@ -23,6 +23,16 @@ namespace Tensorflow.Util
     /// Represents a lease of a <see cref="SafeHandle"/>.
     /// </summary>
     /// <seealso cref="SafeHandleExtensions.Lease"/>
+    /// <devdoc>
+    /// <para>Elements in this section may be referenced by <c>&lt;inheritdoc&gt;</c> elements to provide common
+    /// language in documentation remarks.</para>
+    ///
+    /// <usage>
+    /// <para>The result of this method is only valid when the underlying handle has not been disposed. If the lifetime
+    /// of the object is unclear, a lease may be used to prevent disposal while the object is in use. See
+    /// <see cref="SafeHandleExtensions.Lease(SafeHandle)"/>.</para>
+    /// </usage>
+    /// </devdoc>
     public readonly struct SafeHandleLease : IDisposable
     {
         private readonly SafeHandle _handle;

@@ -38,8 +38,8 @@ namespace TensorFlowNET.UnitTest
             {
                 using (var buffer = new Buffer())
                 {
-                    c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer, s.Handle);
-                    attr_value = AttrValue.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+                    c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer.Handle, s.Handle);
+                    attr_value = AttrValue.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
                 }
 
                 return s.Code == TF_Code.TF_OK;
@@ -53,9 +53,9 @@ namespace TensorFlowNET.UnitTest
                 using (var s = new Status())
                 using (var buffer = new Buffer())
                 {
-                    c_api.TF_GraphToGraphDef(graph, buffer, s.Handle);
+                    c_api.TF_GraphToGraphDef(graph, buffer.Handle, s.Handle);
                     s.Check();
-                    return GraphDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+                    return GraphDef.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
                 }
             }
         }
