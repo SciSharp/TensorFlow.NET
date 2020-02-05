@@ -14,38 +14,27 @@
    limitations under the License.
 ******************************************************************************/
 
-using Google.Protobuf;
 using System;
+using Tensorflow.Util;
 
 namespace Tensorflow
 {
-    internal sealed class SessionOptions : IDisposable
+    public sealed class SafeSessionOptionsHandle : SafeTensorflowHandle
     {
-        public SafeSessionOptionsHandle Handle { get; }
-
-        public SessionOptions(string target = "", ConfigProto config = null)
+        public SafeSessionOptionsHandle()
         {
-            Handle = c_api.TF_NewSessionOptions();
-            c_api.TF_SetTarget(Handle, target);
-            if (config != null)
-                SetConfig(config);
         }
 
-        public void Dispose()
-            => Handle.Dispose();
-
-        private unsafe void SetConfig(ConfigProto config)
+        public SafeSessionOptionsHandle(IntPtr handle)
+            : base(handle)
         {
-            var bytes = config.ToByteArray();
+        }
 
-            fixed (byte* proto2 = bytes)
-            {
-                using (var status = new Status())
-                {
-                    c_api.TF_SetConfig(Handle, (IntPtr)proto2, (ulong)bytes.Length, status.Handle);
-                    status.Check(false);
-                }
-            }
+        protected override bool ReleaseHandle()
+        {
+            c_api.TF_DeleteSessionOptions(handle);
+            SetHandle(IntPtr.Zero);
+            return true;
         }
     }
 }
