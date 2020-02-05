@@ -38,7 +38,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(attr_value.Type, DataType.DtInt32);
 
             // Test not found errors in TF_Operation*() query functions.
-            EXPECT_EQ(-1, c_api.TF_OperationOutputListLength(feed, "bogus", s));
+            EXPECT_EQ(-1, c_api.TF_OperationOutputListLength(feed, "bogus", s.Handle));
             EXPECT_EQ(TF_Code.TF_INVALID_ARGUMENT, s.Code);
             Assert.IsFalse(c_test_util.GetAttrValue(feed, "missing", ref attr_value, s));
             EXPECT_EQ("Operation 'feed' has no attr named 'missing'.", s.Message);
@@ -216,7 +216,7 @@ namespace TensorFlowNET.UnitTest
 
             // Export to a GraphDef.
             var graph_def = new Buffer();
-            c_api.TF_GraphToGraphDef(graph, graph_def, s);
+            c_api.TF_GraphToGraphDef(graph, graph_def, s.Handle);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             // Import it, with a prefix, in a fresh graph.
@@ -224,7 +224,7 @@ namespace TensorFlowNET.UnitTest
             graph = new Graph().as_default();
             var opts = c_api.TF_NewImportGraphDefOptions();
             c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported");
-            c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
+            c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s.Handle);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             Operation scalar = graph.OperationByName("imported/scalar");
@@ -267,7 +267,7 @@ namespace TensorFlowNET.UnitTest
             EXPECT_EQ(2, c_api.TF_ImportGraphDefOptionsNumReturnOutputs(opts));
             c_api.TF_ImportGraphDefOptionsAddReturnOperation(opts, "scalar");
             EXPECT_EQ(1, c_api.TF_ImportGraphDefOptionsNumReturnOperations(opts));
-            var results = c_api.TF_GraphImportGraphDefWithResults(graph, graph_def, opts, s);
+            var results = c_api.TF_GraphImportGraphDefWithResults(graph, graph_def, opts, s.Handle);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             Operation scalar2 = graph.OperationByName("imported2/scalar");
@@ -299,7 +299,7 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported3");
             c_api.TF_ImportGraphDefOptionsAddControlDependency(opts, feed);
             c_api.TF_ImportGraphDefOptionsAddControlDependency(opts, feed2);
-            c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
+            c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s.Handle);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             var scalar3 = graph.OperationByName("imported3/scalar");
@@ -323,7 +323,7 @@ namespace TensorFlowNET.UnitTest
 
             // Export to a graph def so we can import a graph with control dependencies
             graph_def = new Buffer();
-            c_api.TF_GraphToGraphDef(graph, graph_def, s);
+            c_api.TF_GraphToGraphDef(graph, graph_def, s.Handle);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             // Import again, with remapped control dependency, into the same graph
@@ -331,7 +331,7 @@ namespace TensorFlowNET.UnitTest
             opts = c_api.TF_NewImportGraphDefOptions();
             c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported4");
             c_api.TF_ImportGraphDefOptionsRemapControlDependency(opts, "imported/feed", feed);
-            c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
+            c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s.Handle);
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
 
             var scalar4 = graph.OperationByName("imported4/imported3/scalar");

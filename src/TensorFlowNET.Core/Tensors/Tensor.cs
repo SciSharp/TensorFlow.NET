@@ -109,7 +109,7 @@ namespace Tensorflow
                 {
                     using (var status = new Status())
                     {
-                        c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, status);
+                        c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, status.Handle);
                         status.Check();
                     }
                 }
@@ -127,9 +127,9 @@ namespace Tensorflow
                 using (var status = new Status())
                 {
                     if (value == null)
-                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, status);
+                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, status.Handle);
                     else
-                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status);
+                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status.Handle);
 
                     status.Check(true);
                 }
@@ -179,7 +179,7 @@ namespace Tensorflow
                     using (var status = new Status())
                     {
                         var output = _as_tf_output();
-                        int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
+                        int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status.Handle);
                         status.Check();
                         return ndim;
                     }

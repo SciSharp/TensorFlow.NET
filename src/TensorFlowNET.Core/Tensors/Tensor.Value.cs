@@ -228,7 +228,7 @@ namespace Tensorflow
                 {
                     IntPtr dst = IntPtr.Zero;
                     UIntPtr dstLen = UIntPtr.Zero;
-                    var read = c_api.TF_StringDecode((byte*)src, (UIntPtr)(srcLen.ToInt64() - src.ToInt64()), (byte**)&dst, &dstLen, status);
+                    var read = c_api.TF_StringDecode((byte*)src, (UIntPtr)(srcLen.ToInt64() - src.ToInt64()), (byte**)&dst, &dstLen, status.Handle);
                     status.Check(true);
                     buffer[i] = new byte[(int)dstLen];
                     Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);

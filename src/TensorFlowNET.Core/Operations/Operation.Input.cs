@@ -32,7 +32,7 @@ namespace Tensorflow
             int num = 0;
             using(var status = new Status())
             {
-                num = c_api.TF_OperationInputListLength(_handle, name, status);
+                num = c_api.TF_OperationInputListLength(_handle, name, status.Handle);
                 status.Check(true);
             }
             return num;

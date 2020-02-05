@@ -44,7 +44,7 @@ namespace Tensorflow.Eager
                     }
                 }
 
-                c_api.TFE_OpSetDevice(op, device_name, status);
+                c_api.TFE_OpSetDevice(op, device_name, status.Handle);
                 status.Check(true);
 
                 // Add inferred attrs and inputs.
@@ -98,7 +98,7 @@ namespace Tensorflow.Eager
                 }
 
                 var retVals = new IntPtr[num_retvals];
-                c_api.TFE_Execute(op, retVals, ref num_retvals, status);
+                c_api.TFE_Execute(op, retVals, ref num_retvals, status.Handle);
                 status.Check(true);
 
                 return num_retvals == 0 ? null : new EagerTensor(retVals[0]);
@@ -110,11 +110,11 @@ namespace Tensorflow.Eager
             var maybe_op = ReleaseThreadLocalOp();
             if (maybe_op != IntPtr.Zero)
             {
-                c_api.TFE_OpReset(ctx, op_or_function_name, status, maybe_op);
+                c_api.TFE_OpReset(ctx, op_or_function_name, status.Handle, maybe_op);
             }
             else
             {
-                maybe_op = c_api.TFE_NewOp(ctx, op_or_function_name, status);
+                maybe_op = c_api.TFE_NewOp(ctx, op_or_function_name, status.Handle);
                 op = maybe_op;
             }
 
@@ -165,7 +165,7 @@ namespace Tensorflow.Eager
                 c_api.TFE_OpSetAttrType(op, input_arg.TypeAttr, dtype);
             }
 
-            c_api.TFE_OpAddInput(op, input_handle, status);
+            c_api.TFE_OpAddInput(op, input_handle, status.Handle);
             status.Check(true);
 
             return true;
@@ -180,7 +180,7 @@ namespace Tensorflow.Eager
                 var value = attrs[start_index + i + 1];
 
                 byte is_list = 0;
-                var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, out_status);
+                var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, out_status.Handle);
                 if (!out_status.ok()) return;
                 if (is_list != 0)
                     SetOpAttrList(ctx, op, key, value, type, null, out_status);
@@ -209,7 +209,7 @@ namespace Tensorflow.Eager
             Status status)
         {
             byte is_list = 0;
-            var type = c_api.TFE_OpGetAttrType(op, attr_name, ref is_list, status);
+            var type = c_api.TFE_OpGetAttrType(op, attr_name, ref is_list, status.Handle);
             if (status.Code != TF_Code.TF_OK) return;
 
             if(attr_value == null)
@@ -259,7 +259,7 @@ namespace Tensorflow.Eager
                     break;
                 case TF_AttrType.TF_ATTR_SHAPE:
                     var dims = (value as int[]).Select(x => (long)x).ToArray();
-                    c_api.TFE_OpSetAttrShape(op, key, dims, dims.Length, status);
+                    c_api.TFE_OpSetAttrShape(op, key, dims, dims.Length, status.Handle);
                     status.Check(true);
                     break;
                 default:

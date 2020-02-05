@@ -17,17 +17,16 @@ namespace TensorFlowNET.UnitTest.Eager
             var t = c_api.TF_AllocateTensor(TF_FLOAT, dims, dims.Length, (ulong)data.Length * sizeof(float));
             memcpy(c_api.TF_TensorData(t), data, data.Length * sizeof(float));
             
-            var status = c_api.TF_NewStatus();
+            using var status = c_api.TF_NewStatus();
             var th = c_api.TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             c_api.TF_DeleteTensor(t);
-            c_api.TF_DeleteStatus(status);
             return th;
         }
 
         IntPtr MatMulOp(IntPtr ctx, IntPtr a, IntPtr b)
         {
-            var status = TF_NewStatus();
+            using var status = TF_NewStatus();
 
             var op = TFE_NewOp(ctx, "MatMul", status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -35,7 +34,6 @@ namespace TensorFlowNET.UnitTest.Eager
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             TFE_OpAddInput(op, b, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TF_DeleteStatus(status);
             TFE_OpSetAttrType(op, "T", TFE_TensorHandleDataType(a));
 
             return op;
@@ -68,19 +66,18 @@ namespace TensorFlowNET.UnitTest.Eager
 
         IntPtr ShapeOp(IntPtr ctx, IntPtr a)
         {
-            var status = TF_NewStatus();
+            using var status = TF_NewStatus();
 
             var op = TFE_NewOp(ctx, "Shape", status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             TFE_OpAddInput(op, a, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TF_DeleteStatus(status);
             TFE_OpSetAttrType(op, "T", TFE_TensorHandleDataType(a));
 
             return op;
         }
 
-        unsafe IntPtr CreateVariable(IntPtr ctx, float value, IntPtr status)
+        unsafe IntPtr CreateVariable(IntPtr ctx, float value, SafeStatusHandle status)
         {
             var op = TFE_NewOp(ctx, "VarHandleOp", status);
             if (TF_GetCode(status) != TF_OK) return IntPtr.Zero;
@@ -127,11 +124,10 @@ namespace TensorFlowNET.UnitTest.Eager
             var data = new int[] { 1 };
             var t = c_api.TF_AllocateTensor(TF_DataType.TF_INT32, dims, 1, sizeof(int));
             memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
-            var status = TF_NewStatus();
+            using var status = TF_NewStatus();
             var th = c_api.TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             TF_DeleteTensor(t);
-            TF_DeleteStatus(status);
             return th;
         }
 
@@ -140,11 +136,10 @@ namespace TensorFlowNET.UnitTest.Eager
             var data = new[] { value };
             var t = c_api.TF_AllocateTensor(TF_BOOL, null, 0, sizeof(bool));
             memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
-            var status = TF_NewStatus();
+            using var status = TF_NewStatus();
             var th = TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             TF_DeleteTensor(t);
-            TF_DeleteStatus(status);
             return th;
         }
 
@@ -153,11 +148,10 @@ namespace TensorFlowNET.UnitTest.Eager
             var data = new [] { value };
             var t = c_api.TF_AllocateTensor(TF_FLOAT, null, 0, sizeof(float));
             memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
-            var status = TF_NewStatus();
+            using var status = TF_NewStatus();
             var th = TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             TF_DeleteTensor(t);
-            TF_DeleteStatus(status);
             return th;
         }
     }

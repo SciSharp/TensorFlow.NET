@@ -60,7 +60,7 @@ namespace TensorFlowNET.UnitTest
 
         private void VerifyCollocation(Operation op, string[] expected)
         {
-            var handle = c_api.TF_OperationGetAttrMetadata(op, "_class", s_);
+            var handle = c_api.TF_OperationGetAttrMetadata(op, "_class", s_.Handle);
             TF_AttrMetadata m = new TF_AttrMetadata();
             if (expected.Length == 0)
             {

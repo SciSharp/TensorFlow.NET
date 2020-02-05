@@ -46,7 +46,7 @@ namespace Tensorflow
 
             using (var status = new Status())
             {
-                c_api.TF_SetConfig(_handle, proto, (ulong)bytes.Length, status);
+                c_api.TF_SetConfig(_handle, proto, (ulong)bytes.Length, status.Handle);
                 status.Check(false);
             }
 

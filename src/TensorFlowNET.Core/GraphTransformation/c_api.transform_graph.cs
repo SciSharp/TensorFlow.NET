@@ -28,6 +28,6 @@ namespace Tensorflow
                                       string outputs_string,
                                       string transforms_string,
                                       IntPtr output_buffer,
-                                      IntPtr status);
+                                      SafeStatusHandle status);
     }
 }

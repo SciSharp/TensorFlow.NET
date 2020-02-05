@@ -124,45 +124,45 @@ namespace TensorFlowNET.UnitTest
             var feed_out_0 = new TF_Output(feed, 0);
 
             // Fetch the shape, it should be completely unknown.
-            int num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s);
+            int num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s.Handle);
 
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(-1, num_dims);
 
             // Set the shape to be unknown, expect no change.
-            c_api.TF_GraphSetTensorShape(graph, feed_out_0, null, -1, s);
+            c_api.TF_GraphSetTensorShape(graph, feed_out_0, null, -1, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
-            num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s);
+            num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s.Handle);
             EXPECT_EQ(-1, num_dims);
 
             // Set the shape to be 2 x Unknown
             long[] dims = {2, -1};
-            c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, dims.Length, s);
+            c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, dims.Length, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
-            num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s);
+            num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s.Handle);
             EXPECT_EQ(2, num_dims);
 
             // Get the dimension vector appropriately.
             var returned_dims = new long[dims.Length];
-            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
+            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             Assert.IsTrue(Enumerable.SequenceEqual(dims, returned_dims));
 
             // Set to a new valid shape: [2, 3]
             dims[1] = 3;
-            c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, dims.Length, s);
+            c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, dims.Length, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
 
             // Fetch and see that the new value is returned.
-            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
+            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             Assert.IsTrue(Enumerable.SequenceEqual(dims, returned_dims));
 
             // Try to set 'unknown' with unknown rank on the shape and see that
             // it doesn't change.
-            c_api.TF_GraphSetTensorShape(graph, feed_out_0, null, -1, s);
+            c_api.TF_GraphSetTensorShape(graph, feed_out_0, null, -1, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
-            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
+            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(2, num_dims);
             EXPECT_EQ(2, (int) returned_dims[0]);
@@ -172,21 +172,21 @@ namespace TensorFlowNET.UnitTest
             // it doesn't change.
             dims[0] = -1;
             dims[1] = -1;
-            c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, 2, s);
+            c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, 2, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
-            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s);
+            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(2, num_dims);
             EXPECT_EQ(2, (int) returned_dims[0]);
             EXPECT_EQ(3, (int) returned_dims[1]);
 
             // Try to fetch a shape with the wrong num_dims
-            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, 5, s);
+            c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, 5, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_INVALID_ARGUMENT);
 
             // Try to set an invalid shape (cannot change 2x3 to a 2x5).
             dims[1] = 5;
-            c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, 2, s);
+            c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, 2, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_INVALID_ARGUMENT);
 
             // Test for a scalar.
@@ -194,10 +194,10 @@ namespace TensorFlowNET.UnitTest
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             var three_out_0 = new TF_Output(three, 0);
 
-            num_dims = c_api.TF_GraphGetTensorNumDims(graph, three_out_0, s);
+            num_dims = c_api.TF_GraphGetTensorNumDims(graph, three_out_0, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(0, num_dims);
-            c_api.TF_GraphGetTensorShape(graph, feed_out_0, null, num_dims, s);
+            c_api.TF_GraphGetTensorShape(graph, feed_out_0, null, num_dims, s.Handle);
             //Assert.IsTrue(s.Code == TF_Code.TF_OK);
 
             // graph.Dispose();

@@ -451,7 +451,7 @@ namespace Tensorflow
             IntPtr tensor = c_api.TF_TensorData(handle);
             Marshal.WriteInt64(tensor, 0);
             fixed (byte* src = buffer)
-                c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, status);
+                c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, status.Handle);
             _handle = handle;
             status.Check(true);
         }
@@ -475,7 +475,7 @@ namespace Tensorflow
                     Marshal.WriteInt64(tensor, 0);
 
                     var status = new Status();
-                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (sbyte*) (tensor + sizeof(Int64)), size, status);
+                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (sbyte*) (tensor + sizeof(Int64)), size, status.Handle);
 
                     status.Check(true);
                     _handle = handle;
@@ -491,7 +491,7 @@ namespace Tensorflow
 
                     var status = new Status();
                     fixed (byte* src = buffer)
-                        c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status);
+                        c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status.Handle);
 
                     status.Check(true);
                     _handle = handle;
@@ -552,7 +552,7 @@ namespace Tensorflow
                 {
                     fixed (byte* src = &buffer[i][0])
                     {
-                        var written = TF_StringEncode(src, (UIntPtr) buffer[i].Length, (sbyte*) dst, (UIntPtr) (dstLimit.ToInt64() - dst.ToInt64()), status);
+                        var written = TF_StringEncode(src, (UIntPtr) buffer[i].Length, (sbyte*) dst, (UIntPtr) (dstLimit.ToInt64() - dst.ToInt64()), status.Handle);
                         status.Check(true);
                         pOffset += 8;
                         dst += (int) written;
@@ -600,7 +600,7 @@ namespace Tensorflow
 
                 var status = new Status();
                 fixed (byte* src = buffer)
-                    c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status);
+                    c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status.Handle);
 
                 status.Check(true);
                 return handle;

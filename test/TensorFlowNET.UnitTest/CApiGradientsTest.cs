@@ -50,7 +50,7 @@ namespace TensorFlowNET.UnitTest
             {
                 using (var buffer = new Buffer())
                 {
-                    c_api.TF_GraphToGraphDef(graph, buffer, s);
+                    c_api.TF_GraphToGraphDef(graph, buffer, s.Handle);
                     bool ret = TF_GetCode(s) == TF_OK;
                     EXPECT_EQ(TF_OK, TF_GetCode(s));
                     if (ret) 
@@ -113,7 +113,7 @@ namespace TensorFlowNET.UnitTest
 
                 IntPtr[] handles = new IntPtr[2] { IntPtr.Zero, IntPtr.Zero };
                 c_api.TF_AddGradientsWithPrefix(graph_, prefix, outputs, noutputs, inputs,
-                                      ninputs, grad_inputs, s_, handles);
+                                      ninputs, grad_inputs, s_.Handle, handles);
                 
                 var op = new Operation(handles[0]);
             }

@@ -75,7 +75,7 @@ namespace TensorFlowNET.UnitTest
             c_api.TF_SessionRun(session_, null, inputs_ptr, input_values_ptr, inputs_ptr.Length,
                 outputs_ptr, output_values_ptr, outputs_.Count,
                 targets_ptr, targets_.Count,
-                IntPtr.Zero, s);
+                IntPtr.Zero, s.Handle);
 
             s.Check();
 

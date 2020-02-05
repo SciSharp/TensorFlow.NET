@@ -71,7 +71,7 @@ namespace Tensorflow
 
                         using (var status = new Status())
                         {
-                            c_api.TF_StringDecode((byte*) this.buffer + 8, (UIntPtr) (this.bytesize), (byte**) &stringStartAddress, &dstLen, status);
+                            c_api.TF_StringDecode((byte*) this.buffer + 8, (UIntPtr) (this.bytesize), (byte**) &stringStartAddress, &dstLen, status.Handle);
                             status.Check(true);
                         }
 

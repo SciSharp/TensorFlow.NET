@@ -17,6 +17,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Tensorflow.Util;
 using static Tensorflow.c_api;
 
 namespace Tensorflow
@@ -25,26 +26,37 @@ namespace Tensorflow
     /// TF_Status holds error information. It either has an OK code, or
     /// else an error code with an associated error message.
     /// </summary>
-    public class Status : DisposableObject
+    public sealed class Status : IDisposable
     {
         /// <summary>
         /// Error message
         /// </summary>
-        public string Message => c_api.StringPiece(TF_Message(_handle));
+        public string Message
+        {
+            get
+            {
+                using (Handle.Lease())
+                {
+                    return StringPiece(TF_Message(Handle));
+                }
+            }
+        }
 
         /// <summary>
         /// Error code
         /// </summary>
-        public TF_Code Code => TF_GetCode(_handle);
+        public TF_Code Code => TF_GetCode(Handle);
+
+        public SafeStatusHandle Handle { get; }
 
         public Status()
         {
-            _handle = TF_NewStatus();
+            Handle = TF_NewStatus();
         }
 
         public void SetStatus(TF_Code code, string msg)
         {
-            TF_SetStatus(_handle, code, msg);
+            TF_SetStatus(Handle, code, msg);
         }
 
         public bool ok() => Code == TF_Code.TF_OK;
@@ -60,19 +72,17 @@ namespace Tensorflow
         {
             if (Code != TF_Code.TF_OK)
             {
-                Console.WriteLine(Message);
+                var message = Message;
+                Console.WriteLine(message);
                 if (throwException)
-                    throw new TensorflowException(Message);
+                    throw new TensorflowException(message);
             }
         }
 
-        public static implicit operator IntPtr(Status status)
-            => status._handle;
-
-        protected override void DisposeUnmanagedResources(IntPtr handle)
-            => TF_DeleteStatus(handle);
+        public void Dispose()
+            => Handle.Dispose();
 
         public override string ToString()
-            => $"{Code} 0x{_handle.ToString("x16")}";
+            => $"{Code} 0x{Handle.DangerousGetHandle():x16}";
     }
 }

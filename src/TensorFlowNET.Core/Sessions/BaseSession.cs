@@ -47,7 +47,7 @@ namespace Tensorflow
                 lock (Locks.ProcessWide)
                 {
                     status = status ?? new Status();
-                    _handle = c_api.TF_NewSession(_graph, opts, status);
+                    _handle = c_api.TF_NewSession(_graph, opts, status.Handle);
                     status.Check(true);
                 }
             }
@@ -250,7 +250,7 @@ namespace Tensorflow
                 target_opers: target_list.Select(f => (IntPtr) f).ToArray(),
                 ntargets: target_list.Count,
                 run_metadata: IntPtr.Zero,
-                status: status);
+                status: status.Handle);
 
             status.Check(true);
 
@@ -462,7 +462,7 @@ namespace Tensorflow
             lock (Locks.ProcessWide)
                 using (var status = new Status())
                 {
-                    c_api.TF_DeleteSession(handle, status);
+                    c_api.TF_DeleteSession(handle, status.Handle);
                     status.Check(true);
                 }
         }

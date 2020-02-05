@@ -29,7 +29,7 @@ namespace Tensorflow.Eager
         {
             var op = GetOp(ctx, op_name, status);
             status.Check(true);
-            c_api.TFE_OpSetDevice(op, device_name, status);
+            c_api.TFE_OpSetDevice(op, device_name, status.Handle);
             if(status.ok())
             {
                 for (int i = 0; i < inputs.Length; ++i)
@@ -41,10 +41,10 @@ namespace Tensorflow.Eager
                             tensor_handle = (TFE_TensorHandle)et;
                             break;
                         default:
-                            tensor_handle = c_api.TFE_NewTensorHandle(inputs[i], status);
+                            tensor_handle = c_api.TFE_NewTensorHandle(inputs[i], status.Handle);
                             break;
                     }
-                    c_api.TFE_OpAddInput(op, tensor_handle, status);
+                    c_api.TFE_OpAddInput(op, tensor_handle, status.Handle);
                 }
             }
             if (status.ok())
@@ -53,7 +53,7 @@ namespace Tensorflow.Eager
             var outputs = new IntPtr[num_outputs];
             if (status.ok())
             {
-                c_api.TFE_Execute(op, outputs, ref num_outputs, status);
+                c_api.TFE_Execute(op, outputs, ref num_outputs, status.Handle);
                 status.Check(true);
             }
             return outputs;

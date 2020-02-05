@@ -24,7 +24,7 @@ namespace TensorFlowNET.UnitTest
 
                 c_api.TF_AddInputList(desc, inputs, inputs.Length);
 
-                var op = c_api.TF_FinishOperation(desc, s);
+                var op = c_api.TF_FinishOperation(desc, s.Handle);
                 s.Check();
 
                 return op;
@@ -38,7 +38,7 @@ namespace TensorFlowNET.UnitTest
             {
                 using (var buffer = new Buffer())
                 {
-                    c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer, s);
+                    c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer, s.Handle);
                     attr_value = AttrValue.Parser.ParseFrom(buffer.MemoryBlock.Stream());
                 }
 
@@ -53,7 +53,7 @@ namespace TensorFlowNET.UnitTest
                 using (var s = new Status())
                 using (var buffer = new Buffer())
                 {
-                    c_api.TF_GraphToGraphDef(graph, buffer, s);
+                    c_api.TF_GraphToGraphDef(graph, buffer, s.Handle);
                     s.Check();
                     return GraphDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
                 }
@@ -175,7 +175,7 @@ namespace TensorFlowNET.UnitTest
                 OperationDescription desc = c_api.TF_NewOperation(graph, "Neg", name);
                 var neg_input = new TF_Output(n, 0);
                 c_api.TF_AddInput(desc, neg_input);
-                var op = c_api.TF_FinishOperation(desc, s);
+                var op = c_api.TF_FinishOperation(desc, s.Handle);
                 s.Check();
 
                 return op;
@@ -193,7 +193,7 @@ namespace TensorFlowNET.UnitTest
                     c_api.TF_SetAttrShape(desc, "shape", dims, dims.Length);
                 }
 
-                var op = c_api.TF_FinishOperation(desc, s);
+                var op = c_api.TF_FinishOperation(desc, s.Handle);
                 s.Check();
 
                 return op;
@@ -205,10 +205,10 @@ namespace TensorFlowNET.UnitTest
             lock (Locks.ProcessWide)
             {
                 var desc = c_api.TF_NewOperation(graph, "Const", name);
-                c_api.TF_SetAttrTensor(desc, "value", t, s);
+                c_api.TF_SetAttrTensor(desc, "value", t, s.Handle);
                 s.Check();
                 c_api.TF_SetAttrType(desc, "dtype", t.dtype);
-                var op = c_api.TF_FinishOperation(desc, s);
+                var op = c_api.TF_FinishOperation(desc, s.Handle);
                 s.Check();
 
                 return op;

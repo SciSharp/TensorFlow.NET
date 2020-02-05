@@ -189,12 +189,12 @@ namespace Tensorflow
                         var protoHandle = Marshal.AllocHGlobal(bytes.Length);
                         Marshal.Copy(bytes, 0, protoHandle, bytes.Length);
                         uint len = (uint)bytes.Length;
-                        c_api.TF_SetAttrValueProto(op_desc, attr.Key, protoHandle, proto_len: len, status: status);
+                        c_api.TF_SetAttrValueProto(op_desc, attr.Key, protoHandle, proto_len: len, status: status.Handle);
                         status.Check(true);
                         Marshal.FreeHGlobal(protoHandle);
                     }
 
-                    var c_op = c_api.TF_FinishOperation(op_desc, status);
+                    var c_op = c_api.TF_FinishOperation(op_desc, status.Handle);
 
                     status.Check(true);
 

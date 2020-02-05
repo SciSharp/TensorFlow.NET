@@ -235,7 +235,7 @@ namespace Tensorflow
                 using (var status = new Status())
                 using (var buf = new Buffer())
                 {
-                    c_api.TF_OperationGetAttrValueProto(_handle, name, buf, status);
+                    c_api.TF_OperationGetAttrValueProto(_handle, name, buf, status.Handle);
                     status.Check(true);
 
                     x = AttrValue.Parser.ParseFrom(buf.MemoryBlock.Stream());
@@ -259,7 +259,7 @@ namespace Tensorflow
 
         public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)
         {
-            return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s);
+            return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s.Handle);
         }
 
         private NodeDef GetNodeDef()
@@ -268,7 +268,7 @@ namespace Tensorflow
                 using (var s = new Status())
                 using (var buffer = new Buffer())
                 {
-                    c_api.TF_OperationToNodeDef(_handle, buffer, s);
+                    c_api.TF_OperationToNodeDef(_handle, buffer, s.Handle);
                     s.Check();
 
                     return NodeDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
@@ -296,7 +296,7 @@ namespace Tensorflow
             lock (Locks.ProcessWide)
                 using (var status = new Status())
                 {
-                    c_api.UpdateEdge(_graph, output, input, status);
+                    c_api.UpdateEdge(_graph, output, input, status.Handle);
                     //var updated_inputs = inputs;
                     status.Check();
                 }

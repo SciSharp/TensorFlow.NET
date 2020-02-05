@@ -14,7 +14,7 @@ namespace Tensorflow.Eager
 
         public Context(ContextOptions opts, Status status)
         {
-            _handle = c_api.TFE_NewContext(opts, status);
+            _handle = c_api.TFE_NewContext(opts, status.Handle);
             status.Check(true);
         }
 

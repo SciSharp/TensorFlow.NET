@@ -30,7 +30,7 @@ namespace Tensorflow
             using (var buffer = new Buffer())
             using (var status = new Status())
             {
-                c_api.TF_GraphGetOpDef(_handle, type, buffer, status);
+                c_api.TF_GraphGetOpDef(_handle, type, buffer, status.Handle);
                 return OpDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
             }
         }
@@ -41,7 +41,7 @@ namespace Tensorflow
             using (var buffer = new Buffer())
             using (var status = new Status())
             {
-                c_api.TF_GraphGetOpDef(handle, type, buffer, status);
+                c_api.TF_GraphGetOpDef(handle, type, buffer, status.Handle);
                 return OpDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
             }
         }
