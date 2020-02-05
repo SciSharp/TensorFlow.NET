@@ -1,10 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using Tensorflow;
 using Tensorflow.Eager;
-using Buffer = System.Buffer;
-using System.Linq;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
 {
@@ -17,10 +14,15 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         public unsafe void OpInferMixedTypeInputListAttrs()
         {
             using var status = TF_NewStatus();
-            var opts = TFE_NewContextOptions();
-            using var ctx = TFE_NewContext(opts, status);
+
+            static SafeContextHandle NewContext(SafeStatusHandle status)
+            {
+                using var opts = c_api.TFE_NewContextOptions();
+                return c_api.TFE_NewContext(opts, status);
+            }
+
+            using var ctx = NewContext(status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TFE_DeleteContextOptions(opts);
 
             var condition = TestScalarTensorHandle(true);
             var t1 = TestMatrixTensorHandle();

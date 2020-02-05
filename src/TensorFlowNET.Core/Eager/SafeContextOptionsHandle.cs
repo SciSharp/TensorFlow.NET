@@ -15,19 +15,26 @@
 ******************************************************************************/
 
 using System;
+using Tensorflow.Util;
 
 namespace Tensorflow.Eager
 {
-    public sealed class ContextOptions : IDisposable
+    public sealed class SafeContextOptionsHandle : SafeTensorflowHandle
     {
-        public SafeContextOptionsHandle Handle { get; }
-
-        public ContextOptions()
+        public SafeContextOptionsHandle()
         {
-            Handle = c_api.TFE_NewContextOptions();
         }
 
-        public void Dispose()
-            => Handle.Dispose();
+        public SafeContextOptionsHandle(IntPtr handle)
+            : base(handle)
+        {
+        }
+
+        protected override bool ReleaseHandle()
+        {
+            c_api.TFE_DeleteContextOptions(handle);
+            SetHandle(IntPtr.Zero);
+            return true;
+        }
     }
 }

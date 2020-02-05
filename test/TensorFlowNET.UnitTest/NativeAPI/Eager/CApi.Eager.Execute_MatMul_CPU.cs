@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
@@ -19,14 +20,18 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         unsafe void Execute_MatMul_CPU(bool async)
         {
             using var status = TF_NewStatus();
-            var opts = TFE_NewContextOptions();
-            c_api.TFE_ContextOptionsSetAsync(opts, Convert.ToByte(async));
+
+            static SafeContextHandle NewContext(bool async, SafeStatusHandle status)
+            {
+                using var opts = c_api.TFE_NewContextOptions();
+                c_api.TFE_ContextOptionsSetAsync(opts, Convert.ToByte(async));
+                return c_api.TFE_NewContext(opts, status);
+            }
 
             IntPtr t;
-            using (var ctx = TFE_NewContext(opts, status))
+            using (var ctx = NewContext(async, status))
             {
                 CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-                TFE_DeleteContextOptions(opts);
 
                 var m = TestMatrixTensorHandle();
                 var matmul = MatMulOp(ctx, m, m);
