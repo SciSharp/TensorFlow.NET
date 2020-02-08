@@ -191,7 +191,6 @@ namespace Tensorflow
                 {
                     var path = UTF8Encoding.UTF8.GetString((byte[])model_checkpoint_path[0]);
                     _RecordLastCheckpoint(path);
-                    _RecordLastCheckpoint(model_checkpoint_path[0].ToString());
                     checkpoint_management.update_checkpoint_state_internal(
                         save_dir: save_path_parent,
                         model_checkpoint_path: path,

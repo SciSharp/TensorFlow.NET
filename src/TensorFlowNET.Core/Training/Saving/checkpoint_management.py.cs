@@ -65,11 +65,13 @@ namespace Tensorflow
                     "checkpoint state.  Please use a different save path.");
 
             // File.WriteAllText(coord_checkpoint_filename, ckpt.ToString());
-            File.WriteAllLines(coord_checkpoint_filename, new[] 
+            var checkpoints = new List<string>
             {
-                $"model_checkpoint_path: \"{ckpt.ModelCheckpointPath}\"",
-                $"all_model_checkpoint_paths: \"{ckpt.AllModelCheckpointPaths[0]}\"",
-            });
+                $"model_checkpoint_path: \"{ckpt.ModelCheckpointPath}\""
+            };
+            checkpoints.AddRange(all_model_checkpoint_paths.Select(x => $"all_model_checkpoint_paths: \"{x}\""));
+
+            File.WriteAllLines(coord_checkpoint_filename, checkpoints);
         }
 
         /// <summary>
