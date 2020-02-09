@@ -85,7 +85,9 @@ namespace Tensorflow
             }
         }
 
-        public static string freeze_graph(string checkpoint_dir, string output_pb_name)
+        public static string freeze_graph(string checkpoint_dir, 
+            string output_pb_name,
+            string[] output_node_names)
         {
             var checkpoint = checkpoint_management.latest_checkpoint(checkpoint_dir);
             if (!File.Exists($"{checkpoint}.meta")) return null;
@@ -99,7 +101,7 @@ namespace Tensorflow
                 saver.restore(sess, checkpoint);
                 var output_graph_def = tf.graph_util.convert_variables_to_constants(sess,
                     graph.as_graph_def(),
-                    new string[] { "output/ArgMax" });
+                    output_node_names);
                 Console.WriteLine($"Froze {output_graph_def.Node.Count} nodes.");
                 File.WriteAllBytes(output_pb, output_graph_def.ToByteArray());
                 return output_pb;
