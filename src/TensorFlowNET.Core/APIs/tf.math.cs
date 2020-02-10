@@ -251,10 +251,11 @@ namespace Tensorflow
         ///    greater than <c>clip_value_max</c> are set to <c>clip_value_max</c>.
         /// </remarks>
         public Tensor clip_by_value (Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = "ClipByValue") 
-            => gen_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
+            => clip_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
+        
+        public Tensor sub<Tx, Ty>(Tx a, Ty b, string name = null)
+            => gen_math_ops.sub(a, b, name: name);
 
-        public Tensor sub(Tensor a, Tensor b) 
-            => gen_math_ops.sub(a, b);
 
         public Tensor divide(Tensor a, Tensor b)
             => gen_math_ops.real_div(a, b);
@@ -474,7 +475,7 @@ namespace Tensorflow
         public Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);
 
-        public Tensor reduce_mean(Tensor[] input_tensors, int axis, bool keepdims = false, string name = null)
+        public Tensor reduce_mean(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_mean(input_tensors, axis: axis, keepdims: keepdims, name: name);
 
         public Tensor round(Tensor x, string name = null)

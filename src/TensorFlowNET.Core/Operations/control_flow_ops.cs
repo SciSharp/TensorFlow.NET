@@ -625,7 +625,7 @@ namespace Tensorflow
             bool swap_memory = false,
             string name = null,
             Tensor maximum_iterations = null,
-            bool return_same_structure = false)
+            bool return_same_structure = false) where TItem : IFromMergeVars<TItem>, new()
         {
             return tf_with(ops.name_scope(name, "while", loop_vars), scope =>
             {

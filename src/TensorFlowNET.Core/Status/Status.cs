@@ -65,9 +65,7 @@ namespace Tensorflow
         }
 
         public static implicit operator IntPtr(Status status)
-        {
-            return status._handle;
-        }
+            => status._handle;
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
             => TF_DeleteStatus(handle);

@@ -231,6 +231,33 @@ namespace Tensorflow.Gradients
                 return new Tensor[] { x_grad, null };
         }
 
+        [RegisterGradient("Split")]
+        public static Tensor[] _SplitGrad(Operation op, Tensor[] grads)
+        {
+            return new Tensor[] { null, array_ops.concat(list(grads), op.inputs[0]) };
+        }
+
+        [RegisterGradient("Slice")]
+        public static Tensor[] _SliceGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var input_vec = op.inputs[0];
+            var begin_vec = op.inputs[1];
+            var input_rank = array_ops.rank(input_vec);
+            var slice_size = array_ops.shape(op.outputs[0]);
+
+            var shape = array_ops.stack(new Tensor[] { input_rank, new Tensor(1) });
+            var before_pad = array_ops.reshape(begin_vec, shape);
+            var after_pad = array_ops.reshape(array_ops.shape(input_vec) - slice_size - begin_vec, shape);
+            var paddings = array_ops.concat(new Tensor[] { before_pad, after_pad }, 1);
+            return new Tensor[] 
+            {
+                array_ops.pad(grad, paddings), 
+                null, 
+                null
+            };
+        }
+
         [RegisterGradient("Squeeze")]
         public static Tensor[] _SqueezeGrad(Operation op, Tensor[] grads)
         {

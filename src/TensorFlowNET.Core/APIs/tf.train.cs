@@ -53,6 +53,12 @@ namespace Tensorflow
             public string write_graph(Graph graph, string logdir, string name, bool as_text = true) 
                 => graph_io.write_graph(graph, logdir, name, as_text);
 
+            public Graph load_graph(string freeze_graph_pb)
+                => saver.load_graph(freeze_graph_pb);
+
+            public string freeze_graph(string checkpoint_dir, string output_pb_name, string[] output_node_names)
+                => saver.freeze_graph(checkpoint_dir, output_pb_name, output_node_names);
+
             public Saver import_meta_graph(string meta_graph_or_file,
                 bool clear_devices = false,
                 string import_scope = "") => saver._import_meta_graph_with_return_elements(meta_graph_or_file,

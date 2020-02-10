@@ -60,12 +60,12 @@ namespace Tensorflow
             }
         }
 
-        /*public Graph Import(string file_path, string name = null)
+        public Graph ImportGraphDef(string file_path, string name = null)
         {
             as_default();
             var graph_def = GraphDef.Parser.ParseFrom(File.ReadAllBytes(file_path));
             importer.import_graph_def(graph_def, name: name);
             return this;
-        }*/
+        }
     }
 }

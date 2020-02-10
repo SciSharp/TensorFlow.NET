@@ -88,12 +88,15 @@ namespace Tensorflow
                 case ICollection arr:
                     return arr.Count;
                 case NDArray ndArray:
-                    return ndArray.shape[0];
+                    return ndArray.ndim == 0 ? 1 : ndArray.shape[0];
                 case IEnumerable enumerable:
                     return enumerable.OfType<object>().Count();
             }
             throw new NotImplementedException("len() not implemented for type: " + a.GetType());
         }
+
+        public static float min(float a, float b)
+            => Math.Min(a, b);
 
         public static T[] list<T>(IEnumerable<T> list)
             => list.ToArray();

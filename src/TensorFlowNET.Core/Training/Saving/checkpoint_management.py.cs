@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using static Tensorflow.SaverDef.Types;
 using static Tensorflow.Binding;
+using Protobuf.Text;
 
 namespace Tensorflow
 {
@@ -44,8 +45,7 @@ namespace Tensorflow
             float? last_preserved_timestamp = null
             )
         {
-            CheckpointState ckpt = null;
-
+            CheckpointState ckpt = null; 
             // Writes the "checkpoint" file for the coordinator for later restoration.
             string coord_checkpoint_filename = _GetCheckpointFilename(save_dir, latest_filename);
             if (save_relative_paths)
@@ -65,7 +65,14 @@ namespace Tensorflow
                 throw new RuntimeError($"Save path '{model_checkpoint_path}' conflicts with path used for " +
                     "checkpoint state.  Please use a different save path.");
 
-            File.WriteAllText(coord_checkpoint_filename, ckpt.ToString());
+            // File.WriteAllText(coord_checkpoint_filename, ckpt.ToString());
+            var checkpoints = new List<string>
+            {
+                $"model_checkpoint_path: \"{ckpt.ModelCheckpointPath}\""
+            };
+            checkpoints.AddRange(all_model_checkpoint_paths.Select(x => $"all_model_checkpoint_paths: \"{x}\""));
+
+            File.WriteAllLines(coord_checkpoint_filename, checkpoints);
         }
 
         /// <summary>
@@ -98,7 +105,14 @@ namespace Tensorflow
                 all_model_checkpoint_paths.Add(model_checkpoint_path);
 
             // Relative paths need to be rewritten to be relative to the "save_dir"
-            // if model_checkpoint_path already contains "save_dir".
+            if (model_checkpoint_path.StartsWith(save_dir))
+            {
+                model_checkpoint_path = model_checkpoint_path.Substring(save_dir.Length + 1);
+                all_model_checkpoint_paths = all_model_checkpoint_paths
+                    .Select(x => x.Substring(save_dir.Length + 1))
+                    .ToList();
+            }
+                
 
             var coord_checkpoint_proto = new CheckpointState()
             {
@@ -174,24 +188,9 @@ namespace Tensorflow
             var coord_checkpoint_filename = _GetCheckpointFilename(checkpoint_dir, latest_filename);
             if (File.Exists(coord_checkpoint_filename))
             {
-                var file_content = File.ReadAllLines(coord_checkpoint_filename);
+                var file_content = File.ReadAllText(coord_checkpoint_filename);
                 // https://github.com/protocolbuffers/protobuf/issues/6654
-                // var ckpt = CheckpointState.Parser.ParseFrom(file_content);
-                var ckpt = new CheckpointState();
-                var field = CheckpointState.Descriptor.FindFieldByName("model_checkpoint_path");
-                ckpt.ModelCheckpointPath = file_content.FirstOrDefault(x => x.StartsWith(field.Name + ":")).Substring(field.Name.Length + 2);
-                // remove first and last quote.
-                ckpt.ModelCheckpointPath = ckpt.ModelCheckpointPath.Substring(1, ckpt.ModelCheckpointPath.Length - 2);
-
-                field = CheckpointState.Descriptor.FindFieldByName("all_model_checkpoint_paths");
-                file_content.Where(x => x.StartsWith(field.Name + ":"))
-                    .ToList()
-                    .ForEach(x =>
-                    {
-                        string value = x.Substring(field.Name.Length + 2);
-                        ckpt.AllModelCheckpointPaths.Add(value.Substring(1, value.Length - 2));
-                    });
-
+                var ckpt = CheckpointState.Parser.ParseText(file_content);
                 if (string.IsNullOrEmpty(ckpt.ModelCheckpointPath))
                     throw new ValueError($"Invalid checkpoint state loaded from {checkpoint_dir}");
                 // For relative model_checkpoint_path and all_model_checkpoint_paths,

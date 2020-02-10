@@ -46,6 +46,9 @@ namespace Tensorflow
                 return gen_nn_ops.conv2d(parameters);
             }
 
+            public Tensor[] ctc_greedy_decoder(Tensor inputs, Tensor sequence_length, bool merge_repeated = true, string name = null)
+                => gen_ctc_ops.ctc_greedy_decoder(inputs, sequence_length, merge_repeated: merge_repeated, name: name);
+
             /// <summary>
             /// Computes dropout.
             /// </summary>
@@ -112,6 +115,7 @@ namespace Tensorflow
 
             public IActivation relu() => new relu();
             public IActivation swish() => new swish();
+            public IActivation tanh() => new tanh();
 
             public Tensor relu(Tensor features, string name = null) => gen_nn_ops.relu(features, name);
 

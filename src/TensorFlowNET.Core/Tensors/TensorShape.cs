@@ -154,7 +154,7 @@ namespace Tensorflow
         [SuppressMessage("ReSharper", "ParameterHidesMember")]
         public TensorShape with_rank_at_least(int rank)
         {
-            if (rank != ndim)
+            if (ndim < rank)
                 throw new ValueError($"Shape {this} must have rank at least {rank}");
             else
                 return this;

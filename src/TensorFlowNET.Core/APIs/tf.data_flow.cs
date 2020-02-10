@@ -27,7 +27,19 @@ namespace Tensorflow
         /// <param name="data"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor dynamic_stitch(Tensor[] indices, Tensor[] data, string name = null)
+        public Tensor dynamic_stitch(Tensor[] indices, Tensor[] data, string name = null)
             => gen_data_flow_ops.dynamic_stitch(indices, data, name: name);
+
+        /// <summary>
+        /// Partitions `data` into `num_partitions` tensors using indices from `partitions`.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="partitions"></param>
+        /// <param name="num_partitions">The number of partitions to output.</param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor[] dynamic_partition(Tensor data, Tensor partitions, int num_partitions,
+            string name = null)
+            => gen_data_flow_ops.dynamic_partition(data, partitions, num_partitions, name: name);
     }
 }

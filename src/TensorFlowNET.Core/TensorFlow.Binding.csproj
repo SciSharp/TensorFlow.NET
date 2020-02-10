@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.1</TargetTensorFlow>
-    <Version>0.12.1</Version>
+    <Version>0.14.2.0</Version>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -18,14 +18,13 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.12.1.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.11.0:
-1: Add ICanBeFlattened for nest.flatten2.
-2: Complete the WhileContext.
-3: Add tf.nn.rnn_cell.BasicRNNCell and tf.nn.dynamic_rnn.
-4: Add EstimatorSpec.</PackageReleaseNotes>
+    <AssemblyVersion>0.14.2.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.14.0:
+1: Add TransformGraphWithStringInputs.
+2: tf.trainer.load_graph, tf.trainer.freeze_graph
+3: Import Protobuf.Text</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <FileVersion>0.12.1.0</FileVersion>
+    <FileVersion>0.14.2.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
@@ -62,8 +61,9 @@ https://tensorflownet.readthedocs.io</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.10.1" />
-    <PackageReference Include="NumSharp" Version="0.20.4" />
+    <PackageReference Include="Google.Protobuf" Version="3.11.3" />
+    <PackageReference Include="NumSharp" Version="0.30.0-alpha" />
+    <PackageReference Include="Protobuf.Text" Version="0.4.0" />
   </ItemGroup>
 
   <ItemGroup>

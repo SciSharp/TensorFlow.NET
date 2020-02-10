@@ -14,10 +14,12 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -170,7 +172,7 @@ namespace Tensorflow
         {
             if (string.IsNullOrEmpty(latest_filename))
                 latest_filename = "checkpoint";
-            object model_checkpoint_path = "";
+            NDArray[] model_checkpoint_path = null;
             string checkpoint_file = "";
 
             if (global_step > 0)
@@ -183,15 +185,15 @@ namespace Tensorflow
             if (!_is_empty)
             {
                 model_checkpoint_path = sess.run(_saver_def.SaveTensorName,
-                    new FeedItem(_saver_def.FilenameTensorName, checkpoint_file)
-                );
+                    (_saver_def.FilenameTensorName, checkpoint_file));
 
                 if (write_state)
                 {
-                    _RecordLastCheckpoint(model_checkpoint_path.ToString());
+                    var path = UTF8Encoding.UTF8.GetString((byte[])model_checkpoint_path[0]);
+                    _RecordLastCheckpoint(path);
                     checkpoint_management.update_checkpoint_state_internal(
                         save_dir: save_path_parent,
-                        model_checkpoint_path: model_checkpoint_path.ToString(),
+                        model_checkpoint_path: path,
                         all_model_checkpoint_paths: _last_checkpoints.Keys.Select(x => x).ToList(),
                         latest_filename: latest_filename,
                         save_relative_paths: _save_relative_paths);
@@ -205,7 +207,7 @@ namespace Tensorflow
                 export_meta_graph(meta_graph_filename, strip_default_attrs: strip_default_attrs, save_debug_info: save_debug_info);
             }
 
-            return _is_empty ? string.Empty : model_checkpoint_path.ToString();
+            return _is_empty ? string.Empty : UTF8Encoding.UTF8.GetString((byte[])model_checkpoint_path[0]);
         }
 
         public (Saver, object) import_meta_graph(string meta_graph_or_file, 

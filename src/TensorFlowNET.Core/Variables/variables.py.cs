@@ -61,7 +61,6 @@ namespace Tensorflow
         public static List<VariableV1> global_variables(string scope = null)
         {
             return ops.get_collection<VariableV1>(tf.GraphKeys.GLOBAL_VARIABLES, scope);
-
         }
 
         /// <summary>

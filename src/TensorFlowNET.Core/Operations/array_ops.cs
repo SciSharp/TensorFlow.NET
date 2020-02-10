@@ -228,6 +228,16 @@ namespace Tensorflow
         public static Tensor rank(Tensor input, string name = null)
             => rank_internal(input, name, optimize: true);
 
+        public static Tensor rank(Tensor[] inputs, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "Rank", new { inputs }), scope =>
+            {
+                name = scope;
+                var input_tensor = ops.convert_to_tensor(inputs);
+                return constant_op.constant(input_tensor.NDims, dtype: tf.int32, name: name);
+            });
+        }
+
         public static Tensor rank_internal(Tensor input, string name = null, bool optimize = true)
         {
             return tf_with(ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
@@ -594,6 +604,11 @@ namespace Tensorflow
             return gen_array_ops.concat_v2(values, axis, name: name);
         }
 
+        public static Tensor concat(Tensor[] values, Tensor axis, string name = "concat")
+        {
+            return gen_array_ops.concat_v2(values, axis, name: name);
+        }
+
         public static Tensor concat(object[] values, int axis, string name = "concat")
         {
             return gen_array_ops.concat_v2(values, axis, name: name);
@@ -617,6 +632,16 @@ namespace Tensorflow
             {
                 return gen_array_ops.transpose(a, perm, name: scope);
             });
+        }
+
+        public static Tensor[] split(Tensor value, int num_or_size_splits, Tensor axis, 
+            string name = "split")
+        {
+            var size_splits = ops.convert_to_tensor(num_or_size_splits);
+            return gen_array_ops.split(axis: axis,
+                num_split: num_or_size_splits,
+                value: value,
+                name: name);
         }
 
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)

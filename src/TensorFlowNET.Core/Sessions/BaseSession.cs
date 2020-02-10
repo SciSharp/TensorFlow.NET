@@ -68,6 +68,14 @@ namespace Tensorflow
             return _run(fetche, feed_dict)[0];
         }
 
+        public virtual (NDArray, NDArray, NDArray, NDArray, NDArray) run(
+            (ITensorOrOperation, ITensorOrOperation, ITensorOrOperation, ITensorOrOperation, ITensorOrOperation) fetches, 
+            params FeedItem[] feed_dict)
+        {
+            var results = _run(new object[] { fetches.Item1, fetches.Item2, fetches.Item3, fetches.Item4, fetches.Item5 }, feed_dict);
+            return (results[0], results[1], results[2], results[3], results[4]);
+        }
+
         public virtual (NDArray, NDArray, NDArray, NDArray) run((ITensorOrOperation, ITensorOrOperation, ITensorOrOperation, ITensorOrOperation) fetches, params FeedItem[] feed_dict)
         {
             var results = _run(new object[] {fetches.Item1, fetches.Item2, fetches.Item3, fetches.Item4}, feed_dict);
@@ -271,7 +279,7 @@ namespace Tensorflow
                             break;
                         case TF_DataType.TF_STRING:
                             using (var reader = new CodedInputStream(new IntPtr(srcAddress).Stream(8, (long) tensor.bytesize)))
-                                ret = NDArray.FromString(reader.ReadString());
+                            	ret = new NDArray(reader.ReadBytes().ToByteArray());
                             break;
                         case TF_DataType.TF_UINT8:
                             ret = NDArray.Scalar(*(byte*) srcAddress);
