@@ -32,7 +32,7 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            return _handle == IntPtr.Zero ? "tf.Operation Undefined" : $"tf.Operation '{name}' type={OpType}";
+            return _handle == IntPtr.Zero ? "tf.Operation Undefined" : $"<tf.Operation '{name}' type={OpType}>";
         }
 
         public override bool Equals(object obj)

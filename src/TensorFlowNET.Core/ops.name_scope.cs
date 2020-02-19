@@ -68,7 +68,7 @@ namespace Tensorflow
                 var g = get_default_graph();
                 g._name_stack = old_stack;
             }
-
+            
             public void __exit__()
             {
             }
@@ -82,7 +82,7 @@ namespace Tensorflow
             {
                 
             }
-
+            
             /// <summary>
             /// __enter__()
             /// </summary>

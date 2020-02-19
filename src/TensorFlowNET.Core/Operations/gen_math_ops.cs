@@ -141,7 +141,8 @@ namespace Tensorflow
 
         public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
+            // forward_compatible(2019, 6, 25):
+            var _op = _op_def_lib._apply_op_helper("AddV2", name, args: new { x, y });
 
             return _op.output;
         }

@@ -45,6 +45,9 @@ namespace Tensorflow
         }
 
         private Tensor[] _outputs;
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public Tensor[] outputs => _outputs;
 #if SERIALIZABLE
         [JsonIgnore]

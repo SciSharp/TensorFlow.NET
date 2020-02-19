@@ -115,6 +115,9 @@ namespace Tensorflow
         /// <summary>
         ///     The name of the device on which this tensor will be produced, or null.
         /// </summary>
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public string Device => op.Device;
 #if SERIALIZABLE
         [JsonIgnore]

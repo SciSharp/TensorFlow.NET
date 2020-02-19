@@ -355,6 +355,9 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, all);
         }
 
+        public static Tensor realdiv(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.real_div(x, y, name: name);
+
         /// <summary>
         /// Computes log(sum(exp(elements across dimensions of a tensor))).
         /// Reduces `input_tensor` along the dimensions given in `axis`.
@@ -560,6 +563,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor rsqrt(Tensor x, string name = null)
             => gen_math_ops.rsqrt(x, name: name);
+
+        public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.pow(x, y, name: name);
 
         public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
         {

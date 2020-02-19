@@ -74,6 +74,9 @@ namespace Tensorflow
         public TF_DataType dtype => TF_DataType.DtInvalid;
         public string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationOpType(_handle));
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public string Device => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 #if SERIALIZABLE
         [JsonIgnore]
@@ -152,6 +155,10 @@ namespace Tensorflow
         {
             _graph = g;
 
+#if DEBUG
+            if (node_def.Name == "define_second_stage_train/gradients/define_loss/conv_lobj_branch/batch_normalization/cond/FusedBatchNormV3_1_grad/FusedBatchNormGradV3")
+                ;
+#endif
             // Build the list of control inputs.
             var control_input_ops = new List<Operation>();
             if (control_inputs != null)

@@ -117,7 +117,7 @@ namespace Tensorflow
             var min_epsilon = 1.001e-5f;
             epsilon = epsilon > min_epsilon ? epsilon : min_epsilon;
 
-            var results = gen_nn_ops.fused_batch_norm(x,
+            var results = gen_nn_ops.fused_batch_norm_v3(x,
                 scale_tensor,
                 offset_tensor,
                 mean,
