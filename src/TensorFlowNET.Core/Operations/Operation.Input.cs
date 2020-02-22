@@ -40,13 +40,11 @@ namespace Tensorflow
             }
             return num;
         }
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
         public int NumInputs => c_api.TF_OperationNumInputs(_handle);
         private TF_DataType[] _input_types => _inputs_val._inputs.Select(x => x.dtype).ToArray();
 
         private InputList _inputs_val;
+
         public InputList inputs
         {
             get
@@ -69,8 +67,10 @@ namespace Tensorflow
             }
         }
 
-        public int NumControlInputs => c_api.TF_OperationNumControlInputs(_handle);
+        public int NumControlInputs
+            => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationNumControlInputs(_handle);
 
+        Operation[] _control_inputs;
         /// <summary>
         /// The `Operation` objects on which this op has a control dependency.
         /// 
@@ -87,7 +87,9 @@ namespace Tensorflow
         {
             get
             {
-                return GetControlInputs();
+                if (_control_inputs == null || _control_inputs.Length == 0)
+                    _control_inputs = GetControlInputs();
+                return _control_inputs;
             }
         }
 

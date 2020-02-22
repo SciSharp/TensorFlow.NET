@@ -154,11 +154,6 @@ namespace Tensorflow
         public Operation(NodeDef node_def, Graph g, Tensor[] inputs = null, TF_DataType[] output_types = null, ITensorOrOperation[] control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
             _graph = g;
-
-#if DEBUG
-            if (node_def.Name == "define_second_stage_train/gradients/define_loss/conv_lobj_branch/batch_normalization/cond/FusedBatchNormV3_1_grad/FusedBatchNormGradV3")
-                ;
-#endif
             // Build the list of control inputs.
             var control_input_ops = new List<Operation>();
             if (control_inputs != null)

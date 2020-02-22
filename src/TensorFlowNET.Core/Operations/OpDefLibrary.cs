@@ -65,10 +65,6 @@ namespace Tensorflow
                 var base_types = new List<TF_DataType>();
                 var types = new List<TF_DataType>();
 
-#if DEBUG
-                if (op_type_name == "FusedBatchNormGradV3")
-                    ;
-#endif
                 // Perform input type inference
                 foreach (var input_arg in op_def.InputArg)
                 {

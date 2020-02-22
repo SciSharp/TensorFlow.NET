@@ -33,10 +33,14 @@ namespace Tensorflow.Gradients
             var x = op.inputs[0];
             var grad = grads[0];
 
-            return new Tensor[] { gen_ops.mul(grad, gen_math_ops.sign(x)) };
+            return new Tensor[] { grad * math_ops.sign(x) };
         }
 
         [RegisterGradient("AddV2")]
+        public static Tensor[] _AddV2Grad(Operation op, Tensor[] grads)
+            => _AddGrad(op, grads);
+
+        [RegisterGradient("Add")]
         public static Tensor[] _AddGrad(Operation op, Tensor[] grads)
         {
             var x = op.inputs[0];

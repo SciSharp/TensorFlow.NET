@@ -26,9 +26,6 @@ namespace Tensorflow
 {
     public partial class Operation
     {
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
         public int NumOutputs => c_api.TF_OperationNumOutputs(_handle);
         public TF_DataType OutputType(int index) => c_api.TF_OperationOutputType(_tf_output(index));
 
