@@ -27,8 +27,12 @@ namespace Tensorflow
         public static implicit operator Operation(IntPtr handle) 
             => new Operation(handle);
 
-        public static implicit operator IntPtr(Operation op) => op._handle;
-        public static implicit operator Tensor(Operation op) => op.output;
+        public static implicit operator IntPtr(Operation op) 
+            => op._handle;
+        public static implicit operator Tensor(Operation op) 
+            => op.output;
+        public static implicit operator RefVariable(Operation op) 
+            => new RefVariable(op);
 
         public override string ToString()
         {

@@ -61,7 +61,11 @@ namespace Tensorflow
         {
             _in_graph_mode = true;
 
-            if (variable_def != null)
+            if(initial_value is Operation op)
+            {
+                _init_from_op(op);
+            }
+            else if (variable_def != null)
             {
                 if (initial_value != null)
                     throw new ValueError("variable_def and initial_value are mutually exclusive.");
@@ -71,6 +75,13 @@ namespace Tensorflow
             {
                 _init_from_args(initial_value, trainable, collections, validate_shape, caching_device, name, dtype);
             }
+        }
+
+        private void _init_from_op(Operation op)
+        {
+            var g = ops.get_default_graph();
+            _initializer_op = op;
+            _variable = op.output;
         }
 
         private void _init_from_proto(VariableDef variable_def, string import_scope = "")
