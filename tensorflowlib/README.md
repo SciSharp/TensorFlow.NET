@@ -19,7 +19,7 @@ sudo apt install libgdiplus
 More information about [System.Drawing on Linux](<https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx>).
 
 ### Run TensorFlow in GPU
-Before running verify you installed  CUDA and cuDNN (TensorFlow v1.15 is compatible with CUDA v10.0 and cuDNN v7.4), and make sure the corresponding cuda version is compatible. 
+Before running verify you installed  CUDA and cuDNN (TensorFlow v1.15 is compatible with CUDA v10.0 and cuDNN v7.4 , TensorFlow v2.x is compatible with CUDA v10.2 and cuDNN v7.65), and make sure the corresponding cuda version is compatible. 
 
 #### Run in Mac OS
 There is no GPU support for macOS.
