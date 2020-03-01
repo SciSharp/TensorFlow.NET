@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.1</TargetTensorFlow>
-    <Version>0.15.0</Version>
+    <Version>0.20.0</Version>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -18,15 +18,15 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.15.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.14.0:
+    <AssemblyVersion>0.20.0.0</AssemblyVersion>
+    <PackageReleaseNotes>Changes since v0.15.0:
 1: Add TransformGraphWithStringInputs.
 2: tf.trainer.load_graph, tf.trainer.freeze_graph
 3: Import Protobuf.Text
 4: Support YOLOv3 object detection
 5: Add implicitation for Operation to RefVariable</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <FileVersion>0.15.0.0</FileVersion>
+    <FileVersion>0.20.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>

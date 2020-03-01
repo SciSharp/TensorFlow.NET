@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using NumSharp;
 
-namespace Tensorflow.Hub
+namespace Tensorflow
 {
     public class MnistModelLoader : IModelLoader<MnistDataSet>
     {

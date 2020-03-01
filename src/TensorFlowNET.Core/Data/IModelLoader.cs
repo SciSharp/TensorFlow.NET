@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using NumSharp;
 
-namespace Tensorflow.Hub
+namespace Tensorflow
 {
     public interface IModelLoader<TDataSet>
         where TDataSet : IDataSet

@@ -4,11 +4,12 @@
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/wx4td43v2d3f2xj6?svg=true)](https://ci.appveyor.com/project/Haiping-Chen/tensorflow-net)
-[![codecov](https://codecov.io/gh/SciSharp/NumSharp/branch/master/graph/badge.svg)](https://codecov.io/gh/SciSharp/NumSharp)
 [![NuGet](https://img.shields.io/nuget/dt/TensorFlow.NET.svg)](https://www.nuget.org/packages/TensorFlow.NET)
 [![Documentation Status](https://readthedocs.org/projects/tensorflownet/badge/?version=latest)](https://tensorflownet.readthedocs.io/en/latest/?badge=latest)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/javiercp/BinderTF.NET/master?urlpath=lab)
+
+*master branch is based on tensorflow 2.1 now, v0.15-tensorflow1.15 is from tensorflow1.15.*
 
 TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
 
@@ -29,10 +30,9 @@ In comparison to other projects, like for instance TensorFlowSharp which only pr
 
 | TensorFlow  | tf 1.13 | tf 1.14 | tf 1.15 | tf 2.0 |
 | ----------- | ------- | ------- | ------- | ------ |
-| tf.net 0.14 |         | x       | x       |        |
-| tf.net 0.13 |         | x       | x       |        |
-| tf.net 0.12 | x       | x       |         |        |
-| tf.net 0.11 | x       | x       |         |        |
+| tf.net 0.20 |         |         | x       | x      |
+| tf.net 0.15 |         | x       | x       |        |
+| tf.net 0.14 | x       | x       |         |        |
 
 Install TF.NET and TensorFlow binary through NuGet.
 ```sh

@@ -3,14 +3,12 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Tensorflow.Data;
 using Tensorflow.Keras.Initializers;
 
 namespace Tensorflow.Keras.Engine
 {
     public abstract class PreprocessingLayer : Layer
     {
-        public abstract void adapt(Data.DatasetV1 data, bool reset_state = true);
     }
 
     public abstract class Combiner
@@ -44,15 +42,6 @@ namespace Tensorflow.Keras.Engine
 
         private Dictionary<string, NDArray> _restore_updates() => throw new NotImplementedException();
 
-        private bool _dataset_is_infinite(DatasetV1 dataset) => throw new NotImplementedException();
-
-        private dynamic _get_dataset_iterator(DatasetV1 dataset) => throw new NotImplementedException();
-
         private void _set_state_variables(Dictionary<string, Tensor> updates) => throw new NotImplementedException();
-
-        public override void adapt(DatasetV1 data, bool reset_state = true)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

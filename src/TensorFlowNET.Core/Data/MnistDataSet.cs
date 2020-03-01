@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using NumSharp;
-using Tensorflow;
 
-namespace Tensorflow.Hub
+namespace Tensorflow
 {
     public class MnistDataSet : DataSetBase
     {

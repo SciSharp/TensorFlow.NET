@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NumSharp;
 
-namespace Tensorflow.Hub
+namespace Tensorflow
 {
     public class Datasets<TDataSet> where TDataSet : IDataSet
     {

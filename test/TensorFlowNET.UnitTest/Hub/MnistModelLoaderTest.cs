@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
-using Tensorflow.Hub;
+using Tensorflow;
 
 namespace TensorFlowNET.UnitTest
 {

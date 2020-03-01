@@ -18,39 +18,33 @@ sudo apt install libgdiplus
 
 More information about [System.Drawing on Linux](<https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx>).
 
-### Run TensorFlow in GPU
+### Run TensorFlow with GPU
 Before running verify you installed  CUDA and cuDNN (TensorFlow v1.15 is compatible with CUDA v10.0 and cuDNN v7.4 , TensorFlow v2.x is compatible with CUDA v10.2 and cuDNN v7.65), and make sure the corresponding cuda version is compatible. 
 
-#### Run in Mac OS
+#### Mac OS
 There is no GPU support for macOS.
 
-#### Tensorflow GPU for Windows
+#### GPU for Windows
 
 ```powershell
 PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 ```
 
-#### Tensorflow GPU for Linux
+#### GPU for Linux
 ```powershell
 PM> Install-Package SciSharp.TensorFlow.Redist-Linux-GPU
 ```
 
 ### Download prebuild binary manually
 
-Here are some pre-built TensorFlow binaries you can use for each platform:
-
-- Linux
-  - CPU-only: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-1.15.0.tar.gz
-  - GPU-enabled: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-linux-x86_64-1.15.0.tar.gz
-- Mac: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-darwin-x86_64-1.15.0.tar.gz
-- Windows
-  - CPU-only: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-windows-x86_64-1.15.0.zip
-  - GPU-enabled: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-windows-x86_64-1.15.0.zip
+We can't found official prebuild binaries for each platform since tensorflow 2.0. If you know where we can download, please PR here.
 
 
 ### Build from source for Windows
 
 https://www.tensorflow.org/install/source_windows
+
+Download [Bazel 0.29.1](https://github.com/bazelbuild/bazel/releases/tag/0.29.1) to build tensorflow2.x. We build customized binary to export c_api from this [fork](https://github.com/SciSharp/tensorflow).
 
 `pacman -S git patch unzip`
 
