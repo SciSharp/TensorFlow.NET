@@ -269,6 +269,16 @@ namespace Tensorflow
         public Tensor subtract<T>(Tensor x, T[] y, string name = null) where T : struct
             => gen_math_ops.sub(x, ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y"), name);
 
+        /// <summary>
+        /// return x - y
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor subtract(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.sub(x, y, name);
+
         public Tensor log(Tensor x, string name = null)
             => gen_math_ops.log(x, name);
 
@@ -335,8 +345,17 @@ namespace Tensorflow
         public Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
             => gen_math_ops.minimum(x, y, name: name);
 
-        public Tensor multiply<Tx, Ty>(Tx x, Ty y) 
-            => gen_math_ops.mul(x, y);
+        /// <summary>
+        /// return x * y
+        /// </summary>
+        /// <typeparam name="Tx"></typeparam>
+        /// <typeparam name="Ty"></typeparam>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null) 
+            => gen_math_ops.mul(x, y, name: name);
 
         public Tensor negative(Tensor x, string name = null)
             => gen_math_ops.neg(x, name);

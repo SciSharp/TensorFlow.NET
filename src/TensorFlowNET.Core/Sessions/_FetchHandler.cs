@@ -80,6 +80,9 @@ namespace Tensorflow
                             case NPTypeCode.Single:
                                 full_values.Add(float.NaN);
                                 break;
+                            case NPTypeCode.Double:
+                                full_values.Add(float.NaN);
+                                break;
                             case NPTypeCode.String:
                                 full_values.Add(float.NaN);
                                 break;
