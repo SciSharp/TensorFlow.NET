@@ -35,13 +35,16 @@ namespace Tensorflow
                 x = ops.convert_to_tensor(x, name: "x");
                 if (x.dtype.is_complex())
                     throw new NotImplementedException("math_ops.abs for dtype.is_complex");
-                    //return gen_math_ops.complex_abs(x, Tout: x.dtype.real_dtype, name: name);
+                //return gen_math_ops.complex_abs(x, Tout: x.dtype.real_dtype, name: name);
                 return gen_math_ops._abs(x, name: name);
             });
         }
 
-        public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null) 
+        public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.add(x, y, name);
+
+        public static Tensor add_v2<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.add_v2(x, y, name);
 
         /// <summary>
         /// Adds all input tensors element-wise.
@@ -53,21 +56,38 @@ namespace Tensorflow
         {
             inputs = ops.convert_n_to_tensor_or_indexed_slices(inputs);
 
-            if(inputs.Length == 1)
+            if (inputs.Length == 1)
             {
                 var values = inputs[0];
                 if (name != null)
                     return array_ops.identity(values, name: name);
                 return values;
             }
-            
+
             return gen_math_ops.add_n(inputs, name: name);
+        }
+
+        public static Tensor cast(RefVariable x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
+        {
+            var base_type = dtype.as_base_dtype();
+            if (base_type == x.dtype)
+                return x;
+
+            return tf_with(ops.name_scope(name, "Cast", new { x }), scope =>
+            {
+                name = scope;
+                var t_x = ops.convert_to_tensor(x, name: "x");
+                if (t_x.dtype.as_base_dtype() != base_type)
+                    t_x = gen_math_ops.cast(t_x, base_type, name: name);
+
+                return x;
+            });
         }
 
         public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             var base_type = dtype.as_base_dtype();
-            if(base_type == x.dtype)
+            if (base_type == x.dtype)
                 return x;
 
             return tf_with(ops.name_scope(name, "Cast", new { x }), scope =>
@@ -98,13 +118,13 @@ namespace Tensorflow
 
         public static Tensor cumsum<T>(Tensor x, T axis = default, bool exclusive = false, bool reverse = false, string name = null)
         {
-            return tf_with(ops.name_scope(name, "Cumsum", new {x}), scope =>
-            {
-                name = scope;
-                x = ops.convert_to_tensor(x, name: "x");
+            return tf_with(ops.name_scope(name, "Cumsum", new { x }), scope =>
+              {
+                  name = scope;
+                  x = ops.convert_to_tensor(x, name: "x");
 
-                return gen_math_ops.cumsum(x, axis: axis, exclusive: exclusive, reverse: reverse, name: name);
-            });
+                  return gen_math_ops.cumsum(x, axis: axis, exclusive: exclusive, reverse: reverse, name: name);
+              });
         }
 
         /// <summary>
@@ -221,7 +241,7 @@ namespace Tensorflow
 
         public static Tensor reduce_mean(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
         {
-            if(axis == null)
+            if (axis == null)
             {
                 var r = _ReductionDims(input_tensors, axis);
                 var m = gen_math_ops.mean(input_tensors, r, keepdims, name);
@@ -263,14 +283,8 @@ namespace Tensorflow
             return gen_math_ops.sigmoid(x_tensor, name: name);
         }
 
-        public static Tensor sign(Tensor x, string name = null)
-        {
-            return tf_with(ops.name_scope(name, "Sign", new {x}), scope =>
-            {
-                x = ops.convert_to_tensor(x, name: "x");
-                return gen_math_ops.sign(x);
-            });
-        }
+        public static Tensor sign<T>(T x, string name = null)
+            => gen_math_ops.sign(x, name: name);
 
         /// <summary>
         /// Returns (x - y)(x - y) element-wise.
@@ -354,6 +368,9 @@ namespace Tensorflow
 
             return _may_reduce_to_scalar(keepdims, axis, all);
         }
+
+        public static Tensor realdiv(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.real_div(x, y, name: name);
 
         /// <summary>
         /// Computes log(sum(exp(elements across dimensions of a tensor))).
@@ -560,6 +577,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor rsqrt(Tensor x, string name = null)
             => gen_math_ops.rsqrt(x, name: name);
+
+        public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
+            => gen_math_ops.pow(x, y, name: name);
 
         public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
         {

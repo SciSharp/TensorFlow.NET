@@ -27,12 +27,16 @@ namespace Tensorflow
         public static implicit operator Operation(IntPtr handle) 
             => new Operation(handle);
 
-        public static implicit operator IntPtr(Operation op) => op._handle;
-        public static implicit operator Tensor(Operation op) => op.output;
+        public static implicit operator IntPtr(Operation op) 
+            => op._handle;
+        public static implicit operator Tensor(Operation op) 
+            => op.output;
+        public static implicit operator RefVariable(Operation op) 
+            => new RefVariable(op);
 
         public override string ToString()
         {
-            return _handle == IntPtr.Zero ? "tf.Operation Undefined" : $"tf.Operation '{name}' type={OpType}";
+            return _handle == IntPtr.Zero ? "tf.Operation Undefined" : $"<tf.Operation '{name}' type={OpType}>";
         }
 
         public override bool Equals(object obj)

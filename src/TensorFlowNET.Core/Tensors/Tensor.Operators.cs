@@ -328,7 +328,7 @@ namespace Tensorflow
                 switch (name.ToLowerInvariant())
                 {
                     case "add":
-                        result = math_ops.add(x1, y1, name: scope);
+                        result = math_ops.add_v2(x1, y1, name: scope);
                         break;
                     case "div":
                         result = math_ops.div(x1, y1, name: scope);

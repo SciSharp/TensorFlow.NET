@@ -141,7 +141,16 @@ namespace Tensorflow
 
         public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
         {
+            // forward_compatible(2019, 6, 25):
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
+
+            return _op.output;
+        }
+
+        public static Tensor add_v2<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            // forward_compatible(2019, 6, 25):
+            var _op = _op_def_lib._apply_op_helper("AddV2", name, args: new { x, y });
 
             return _op.output;
         }
@@ -212,7 +221,7 @@ namespace Tensorflow
             return op.outputs[0];
         }
 
-        public static Tensor sign(Tensor x, string name = "Sign")
+        public static Tensor sign<T>(T x, string name = "Sign")
         {
             var op = _op_def_lib._apply_op_helper("Sign", name: name, args: new {x});
 
@@ -447,7 +456,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate= false, string name= "")
+        public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate= false, string name= null)
         {
             var _op = _op_def_lib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate });
 

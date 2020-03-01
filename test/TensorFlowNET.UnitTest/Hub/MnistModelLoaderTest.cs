@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using Tensorflow.Hub;
 
-namespace UnitTest
+namespace TensorFlowNET.UnitTest
 {
     [TestClass]
     public class MnistModelLoaderTest

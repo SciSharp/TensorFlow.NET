@@ -74,6 +74,9 @@ namespace Tensorflow
         public TF_DataType dtype => TF_DataType.DtInvalid;
         public string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationOpType(_handle));
+#if SERIALIZABLE
+        [JsonIgnore]
+#endif
         public string Device => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 #if SERIALIZABLE
         [JsonIgnore]
@@ -103,7 +106,7 @@ namespace Tensorflow
             _outputs = new Tensor[NumOutputs];
             for (int i = 0; i < NumOutputs; i++)
                 _outputs[i] = new Tensor(this, i, OutputType(i));
-
+            
             // Dict mapping op name to file and line information for op colocation
             // context managers.
             _control_flow_context = _graph._get_control_flow_context();
@@ -151,7 +154,6 @@ namespace Tensorflow
         public Operation(NodeDef node_def, Graph g, Tensor[] inputs = null, TF_DataType[] output_types = null, ITensorOrOperation[] control_inputs = null, TF_DataType[] input_types = null, string original_op = "", OpDef op_def = null)
         {
             _graph = g;
-
             // Build the list of control inputs.
             var control_input_ops = new List<Operation>();
             if (control_inputs != null)

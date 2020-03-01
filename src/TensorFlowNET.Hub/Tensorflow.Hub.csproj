@@ -2,7 +2,7 @@
   <PropertyGroup>
     <RootNamespace>Tensorflow.Hub</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.0.6</Version>
+    <Version>0.1.1</Version>
     <Authors>Kerry Jiang, Haiping Chen</Authors>
     <Company>SciSharp STACK</Company>
     <Copyright>Apache 2.0</Copyright>
@@ -14,7 +14,7 @@
     <PackageId>SciSharp.TensorFlowHub</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>Fix GetNextBatch() bug.
-Change to NumSharp compact version.</PackageReleaseNotes>
+Upgrade NumSharp.Lite 0.1.4.</PackageReleaseNotes>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
     <AssemblyName>TensorFlow.Hub</AssemblyName>
   </PropertyGroup>
@@ -22,6 +22,6 @@ Change to NumSharp compact version.</PackageReleaseNotes>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NumSharp" Version="0.30.0-alpha" />
+    <PackageReference Include="NumSharp.Lite" Version="0.1.4" />
   </ItemGroup>
 </Project>

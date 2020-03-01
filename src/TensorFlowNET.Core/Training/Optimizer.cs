@@ -205,7 +205,9 @@ namespace Tensorflow
                         //}
                         //else
                         {
-                            apply_updates = state_ops.assign_add(global_step, tf.constant(1), name: name);
+                            apply_updates = state_ops.assign_add(global_step,
+                                ops.convert_to_tensor(1, dtype: global_step.dtype),
+                                name: name);
                         }
                     });
                 }

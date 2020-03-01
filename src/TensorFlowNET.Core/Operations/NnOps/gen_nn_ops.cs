@@ -187,6 +187,23 @@ namespace Tensorflow.Operations
             return op.outputs;
         }
 
+        public static Tensor[] fused_batch_norm_grad_v3(FusedBatchNormParams @params)
+        {
+            var op = _op_def_lib._apply_op_helper("FusedBatchNormGradV3", name: @params.Name, args: new
+            {
+                y_backprop = @params.YBackprop,
+                x = @params.X,
+                scale = @params.Scale,
+                reserve_space_1 = @params.ReserveSpace1,
+                reserve_space_2 = @params.ReserveSpace2,
+                reserve_space_3 = @params.ReserveSpace3,
+                epsilon = @params.Epsilon,
+                data_format = @params.DataFormat,
+                is_training = @params.IsTraining
+            });
+            return op.outputs;
+        }
+
         public static Tensor[] fused_batch_norm(Tensor x,
                 Tensor scale,
                 Tensor offset,
@@ -198,6 +215,31 @@ namespace Tensorflow.Operations
                 string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("FusedBatchNorm", name: name, args: new
+            {
+                x,
+                scale,
+                offset,
+                mean,
+                variance,
+                epsilon,
+                data_format,
+                is_training
+            });
+
+            return _op.outputs;
+        }
+
+        public static Tensor[] fused_batch_norm_v3(Tensor x,
+        Tensor scale,
+        Tensor offset,
+        Tensor mean,
+        Tensor variance,
+        float epsilon = 0.0001f,
+        string data_format = "NHWC",
+        bool is_training = true,
+        string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("FusedBatchNormV3", name: name, args: new
             {
                 x,
                 scale,

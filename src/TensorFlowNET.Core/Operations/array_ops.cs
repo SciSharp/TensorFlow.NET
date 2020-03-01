@@ -427,7 +427,7 @@ namespace Tensorflow
                 if (!tf.context.executing_eagerly())
                 {
                     var input_tensor = ops.convert_to_tensor(input);
-                    var input_shape = tensor_util.to_shape(input_tensor.shape);
+                    var input_shape = input_tensor.TensorShape;
                     if (optimize && input_tensor.NDims > -1 && input_shape.is_fully_defined())
                     {
                         var nd = np.array(input_tensor.shape).astype(out_type.as_numpy_dtype());
