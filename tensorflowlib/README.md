@@ -1,26 +1,11 @@
-TensorFlow.NET pack all required libraries in architecture-specific assemblies folders per NuGet standard [Deprecated] .
+TensorFlow.NET pack all required libraries in architecture-specific assemblies folders per NuGet standard.
 
-We changed to use `Microsoft.ML.TensorFlow.Redist` to maintain the TensorFlow library.
-
-
-
-### Download manually
-
-Here are some pre-built TensorFlow binaries you can use for each platform:
-
-- Linux
-  - CPU-only: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz
-  - GPU-enabled: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-linux-x86_64-1.14.0.tar.gz
-- Mac: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-darwin-x86_64-1.14.0.tar.gz
-- Windows
-  - CPU-only: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-windows-x86_64-1.14.0.zip
-  - GPU-enabled: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-windows-x86_64-1.14.0.zip
-
-
+```powershell
+PM> Install-Package TensorFlow.NET
+PM> Install-Package SciSharp.TensorFlow.Redist
+```
 
 ### Run in Linux
-
-`Install-Package TensorFlow.NET`
 
 Download Linux pre-built library and unzip `libtensorflow.so` and `libtensorflow_framework.so` into current running directory.
 
@@ -33,20 +18,34 @@ sudo apt install libgdiplus
 
 More information about [System.Drawing on Linux](<https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx>).
 
+### Run TensorFlow in GPU
+Before running verify you installed  CUDA and cuDNN (TensorFlow v1.15 is compatible with CUDA v10.0 and cuDNN v7.4), and make sure the corresponding cuda version is compatible. 
 
+#### Run in Mac OS
+There is no GPU support for macOS.
 
-### Run in Mac OS
-
-
-
-### Tensorflow GPU for Windows
-
-Before running verify you installed  CUDA and cuDNN (TensorFlow v1.14 is compatible with CUDA v10.0 and cuDNN v7.4), and make sure the corresponding cuda version is compatible. 
+#### Tensorflow GPU for Windows
 
 ```powershell
 PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 ```
 
+#### Tensorflow GPU for Linux
+```powershell
+PM> Install-Package SciSharp.TensorFlow.Redist-Linux-GPU
+```
+
+### Download prebuild binary manually
+
+Here are some pre-built TensorFlow binaries you can use for each platform:
+
+- Linux
+  - CPU-only: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-1.15.0.tar.gz
+  - GPU-enabled: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-linux-x86_64-1.15.0.tar.gz
+- Mac: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-darwin-x86_64-1.15.0.tar.gz
+- Windows
+  - CPU-only: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-windows-x86_64-1.15.0.zip
+  - GPU-enabled: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-windows-x86_64-1.15.0.zip
 
 
 ### Build from source for Windows
@@ -69,7 +68,7 @@ https://www.tensorflow.org/install/source_windows
 
 4. Install from local wheel file.
 
-`pip install C:/tmp/tensorflow_pkg/tensorflow-1.14.0-cp36-cp36m-win_amd64.whl`
+`pip install C:/tmp/tensorflow_pkg/tensorflow-1.15.0-cp36-cp36m-win_amd64.whl`
 
 ### Export more APIs
 
