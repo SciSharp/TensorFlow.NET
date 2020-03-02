@@ -6,6 +6,7 @@
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.1</TargetTensorFlow>
     <Version>0.20.0</Version>
+    <LangVersion>8.0</LangVersion>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -25,7 +26,6 @@ https://tensorflownet.readthedocs.io</Description>
 3: Import Protobuf.Text
 4: Support YOLOv3 object detection
 5: Add implicitation for Operation to RefVariable</PackageReleaseNotes>
-    <LangVersion>7.3</LangVersion>
     <FileVersion>0.20.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

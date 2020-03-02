@@ -79,7 +79,7 @@ namespace Tensorflow
         /// <summary>
         ///     The string name of this tensor.
         /// </summary>
-        public string name => $"{(op == null ? "<unnamed Operation>" : $"{op.name}:{_value_index}")}";
+        public string name => $"{(op == null ? "<unnamed>" : $"{op.name}:{_value_index}")}";
 
         /// <summary>
         ///     The index of this tensor in the outputs of its Operation.
@@ -381,13 +381,21 @@ namespace Tensorflow
         }
 
         /// <summary>
-        ///     Copies the memory of current buffer onto newly allocated array.
+        /// Copy of the contents of this Tensor into a NumPy array or scalar.
         /// </summary>
-        /// <returns></returns>
-        [Obsolete("Please use set_shape(TensorShape shape) instead.", false)]
-        public byte[] Data()
+        /// <returns>
+        /// A NumPy array of the same shape and dtype or a NumPy scalar, if this
+        /// Tensor has rank 0.
+        /// </returns>
+        public NDArray numpy()
         {
-            return BufferToArray();
+            switch (dtype)
+            {
+                case TF_DataType.TF_STRING:
+                    return StringData()[0];
+                default:
+                    return BufferToArray();
+            }
         }
 
         /// <summary>
@@ -399,7 +407,7 @@ namespace Tensorflow
             unsafe
             {
                 // ReSharper disable once LocalVariableHidesMember
-                var bytesize = (long) this.bytesize;
+                var bytesize = (long)this.bytesize;
                 var data = new byte[bytesize];
                 fixed (byte* dst = data) 
                     System.Buffer.MemoryCopy(buffer.ToPointer(), dst, bytesize, bytesize);
@@ -427,7 +435,7 @@ namespace Tensorflow
 
             var buffer = new byte[size][];
             var src = c_api.TF_TensorData(_handle);
-            var srcLen = (IntPtr) (src.ToInt64() + (long) bytesize);
+            var srcLen = (IntPtr)(src.ToInt64() + (long)bytesize);
             src += (int) (size * 8);
             for (int i = 0; i < buffer.Length; i++)
             {
@@ -435,7 +443,7 @@ namespace Tensorflow
                 {
                     IntPtr dst = IntPtr.Zero;
                     UIntPtr dstLen = UIntPtr.Zero;
-                    var read = c_api.TF_StringDecode((byte*) src, (UIntPtr) (srcLen.ToInt64() - src.ToInt64()), (byte**) &dst, &dstLen, status);
+                    var read = c_api.TF_StringDecode((byte*)src, (UIntPtr)(srcLen.ToInt64() - src.ToInt64()), (byte**)&dst, &dstLen, status);
                     status.Check(true);
                     buffer[i] = new byte[(int) dstLen];
                     Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);

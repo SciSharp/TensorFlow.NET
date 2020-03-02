@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -39,11 +40,18 @@ namespace Tensorflow
             return _constant_impl(value, dtype, shape, name, verify_shape: false, allow_broadcast: true);
         }
 
-        public static Tensor _constant_impl(object value, TF_DataType dtype, int[] shape, string name, bool verify_shape, bool allow_broadcast)
+        public static Tensor _constant_impl(object value, 
+            TF_DataType dtype, 
+            int[] shape, 
+            string name, 
+            bool verify_shape, 
+            bool allow_broadcast)
         {
             if (tf.context.executing_eagerly())
             {
-
+                var t = convert_to_eager_tensor(value, tf.context, dtype: dtype);
+                if (shape == null)
+                    return t;
             }
 
             Graph g = ops.get_default_graph();
@@ -70,6 +78,17 @@ namespace Tensorflow
                 name: name);
 
             return op.outputs[0];
+        }
+
+        private static EagerTensor convert_to_eager_tensor(object value, Context ctx, TF_DataType dtype = TF_DataType.DtInvalid)
+        {
+            switch (value)
+            {
+                case string str:
+                    return new EagerTensor(str, ctx.device_name);
+                default:
+                    throw new NotImplementedException($"convert_to_eager_tensor {value.GetType()}");
+            }
         }
 
         /// <summary>

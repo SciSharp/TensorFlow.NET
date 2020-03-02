@@ -8,6 +8,7 @@ namespace Tensorflow.Eager
         public const int EAGER_MODE = 1;
 
         public int default_execution_mode;
+        public string device_name = "";
 
         public Context(ContextOptions opts, Status status)
         {
@@ -22,7 +23,7 @@ namespace Tensorflow.Eager
             => c_api.TFE_DeleteContext(_handle);
 
 
-        public bool executing_eagerly() => false;
+        public bool executing_eagerly() => true;
 
         public static implicit operator IntPtr(Context ctx) 
             => ctx._handle;

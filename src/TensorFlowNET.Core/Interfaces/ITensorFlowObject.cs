@@ -18,7 +18,7 @@ using System;
 
 namespace Tensorflow
 {
-    public interface IObjectLife : IDisposable
+    public interface ITensorFlowObject : IDisposable
     {
         /// <summary>
         /// Called when the instance is created.

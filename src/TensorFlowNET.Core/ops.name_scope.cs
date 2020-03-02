@@ -27,7 +27,7 @@ namespace Tensorflow
         /// <summary>
         /// Returns a context manager that creates hierarchical names for operations.
         /// </summary>
-        public class NameScope : IObjectLife
+        public class NameScope : ITensorFlowObject
         {
             public string _name;
             public string _default_name;

@@ -41,7 +41,7 @@ namespace Tensorflow.Operations
     /// 4. A ControlFlowContext has _context_stack.
     /// Pushed and popped by ctxt.Enter() and ctxt.Exit()
     /// </summary>
-    public abstract class ControlFlowContext : IObjectLife
+    public abstract class ControlFlowContext : ITensorFlowObject
     {
         /// <summary>
         /// The predicate tensor in this branch

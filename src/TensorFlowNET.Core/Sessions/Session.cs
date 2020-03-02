@@ -22,7 +22,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public class Session : BaseSession, IObjectLife
+    public class Session : BaseSession, ITensorFlowObject
     {
         public Session(string target = "", Graph g = null) : base(target, g, null)
         { }

@@ -197,6 +197,13 @@ namespace Tensorflow
             return (int)type;
         }
 
+        public static string as_numpy_name(this TF_DataType type)
+            => type switch
+            {
+                TF_DataType.TF_STRING => "string",
+                _ => type.ToString()
+            };
+
         public static Type as_numpy_dtype(this DataType type)
         {
             return type.as_tf_dtype().as_numpy_dtype();

@@ -455,14 +455,14 @@ namespace Tensorflow
         {
             var status = new Status();
             var buffer = Encoding.UTF8.GetBytes(str);
-            var size = c_api.TF_StringEncodedSize((UIntPtr) buffer.Length);
-            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
+            var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
+            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
             AllocationType = AllocationType.Tensorflow;
 
             IntPtr tensor = c_api.TF_TensorData(handle);
             Marshal.WriteInt64(tensor, 0);
             fixed (byte* src = buffer)
-                c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status);
+                c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, status);
             _handle = handle;
             status.Check(true);
         }

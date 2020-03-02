@@ -254,7 +254,7 @@ namespace Tensorflow
             });
         }
 
-        public static IObjectLife init_scope2()
+        public static ITensorFlowObject init_scope2()
         {
             // Retrieve the active name scope: entering an `init_scope` preserves
             // the name scope of the current context.

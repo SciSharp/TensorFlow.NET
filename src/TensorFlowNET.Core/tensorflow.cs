@@ -19,7 +19,7 @@ using Tensorflow.Eager;
 
 namespace Tensorflow
 {
-    public partial class tensorflow : IObjectLife
+    public partial class tensorflow : ITensorFlowObject
     {
         public TF_DataType @byte = TF_DataType.TF_UINT8;
         public TF_DataType @sbyte = TF_DataType.TF_INT8;

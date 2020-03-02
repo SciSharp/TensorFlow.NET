@@ -18,7 +18,7 @@ using Tensorflow.Keras.Layers;
 
 namespace Tensorflow.Keras.Engine
 {
-    public class Sequential : Model, IObjectLife
+    public class Sequential : Model, ITensorFlowObject
     {
         bool _is_graph_network;
         Tensor[] outputs;

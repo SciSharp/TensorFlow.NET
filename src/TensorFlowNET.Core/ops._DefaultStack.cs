@@ -23,7 +23,7 @@ namespace Tensorflow
     {
         _DefaultStack _default_session_stack = new _DefaultStack();
 
-        public class _DefaultStack : IObjectLife
+        public class _DefaultStack : ITensorFlowObject
         {
             Stack<object> stack;
             bool _enforce_nesting = true;

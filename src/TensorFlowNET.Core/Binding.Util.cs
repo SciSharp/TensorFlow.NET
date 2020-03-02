@@ -111,7 +111,7 @@ namespace Tensorflow
             return Enumerable.Range(start, end - start);
         }
 
-        public static T New<T>() where T : IObjectLife, new()
+        public static T New<T>() where T : ITensorFlowObject, new()
         {
             var instance = new T();
             instance.__init__();
@@ -120,7 +120,7 @@ namespace Tensorflow
 
         [DebuggerStepThrough]
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
-        public static void tf_with(IObjectLife py, Action<IObjectLife> action)
+        public static void tf_with(ITensorFlowObject py, Action<ITensorFlowObject> action)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace Tensorflow
 
         [DebuggerStepThrough]
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
-        public static void tf_with<T>(T py, Action<T> action) where T : IObjectLife
+        public static void tf_with<T>(T py, Action<T> action) where T : ITensorFlowObject
         {
             try
             {
@@ -152,7 +152,7 @@ namespace Tensorflow
 
         [DebuggerStepThrough]
         [DebuggerNonUserCode()] // with "Just My Code" enabled this lets the debugger break at the origin of the exception
-        public static TOut tf_with<TIn, TOut>(TIn py, Func<TIn, TOut> action) where TIn : IObjectLife
+        public static TOut tf_with<TIn, TOut>(TIn py, Func<TIn, TOut> action) where TIn : ITensorFlowObject
         {
             try
             {

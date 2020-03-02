@@ -23,7 +23,7 @@ namespace Tensorflow
     /// <summary>
     /// A context manager for defining ops that creates variables (layers).
     /// </summary>
-    public class variable_scope : IObjectLife
+    public class variable_scope : ITensorFlowObject
     {
         public static string _VARSTORE_KEY = "__variable_store";
         public static string _VARSCOPESTORE_KEY = "__varscope";

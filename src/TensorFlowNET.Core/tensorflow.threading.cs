@@ -19,7 +19,7 @@ using System.Threading;
 
 namespace Tensorflow
 {
-    public partial class tensorflow : IObjectLife
+    public partial class tensorflow : ITensorFlowObject
     {
         protected ThreadLocal<Session> _defaultSessionFactory;
 

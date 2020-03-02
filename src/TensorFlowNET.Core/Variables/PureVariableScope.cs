@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace Tensorflow
 {
-    public class PureVariableScope : IObjectLife
+    public class PureVariableScope : ITensorFlowObject
     {
         private string _name;
         private VariableScope _scope;

@@ -23,7 +23,7 @@ namespace Tensorflow
     /// <summary>
     /// Context manager for `control_dependencies()`
     /// </summary>
-    public class _ControlDependenciesController : IObjectLife
+    public class _ControlDependenciesController : ITensorFlowObject
     {
         private Graph _graph;
         private List<ITensorOrOperation> _control_inputs_val;
