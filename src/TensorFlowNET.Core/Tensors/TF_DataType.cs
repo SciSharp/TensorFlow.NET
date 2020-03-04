@@ -35,6 +35,25 @@
         DtFloatRef = 101, // DT_FLOAT_REF
         DtDoubleRef = 102, // DT_DOUBLE_REF
         DtInt32Ref = 103, // DT_INT32_REF
-        DtInt64Ref = 109 // DT_INT64_REF
+        DtUint8Ref = 104,
+        DtInt16Ref = 105,
+        DtInt8Ref = 106,
+        DtStringRef = 107,
+        DtComplex64Ref = 108,
+        DtInt64Ref = 109, // DT_INT64_REF
+        DtBoolRef = 110,
+        DtQint8Ref = 111,
+        DtQuint8Ref = 112,
+        DtQint32Ref = 113,
+        DtBfloat16Ref = 114,
+        DtQint16Ref = 115,
+        DtQuint16Ref = 116,
+        DtUint16Ref = 117,
+        DtComplex128Ref = 118,
+        DtHalfRef = 119,
+        DtResourceRef = 120,
+        DtVariantRef = 121,
+        DtUint32Ref = 122,
+        DtUint64Ref = 123,
     }
 }

@@ -46,7 +46,7 @@ namespace Tensorflow
         /// <returns><see cref="System.Type"/> equivalent to <paramref name="type"/>, if none exists, returns null.</returns>
         public static Type as_numpy_dtype(this TF_DataType type)
         {
-            switch (type)
+            switch (type.as_base_dtype())
             {
                 case TF_DataType.TF_BOOL:
                     return typeof(bool);
@@ -182,14 +182,12 @@ namespace Tensorflow
 
         public static DataType as_datatype_enum(this TF_DataType type)
         {
-            return Enum.TryParse(((int) type).ToString(), out DataType dtype) ? dtype : DataType.DtInvalid;
+            return (DataType)type;
         }
 
         public static TF_DataType as_base_dtype(this TF_DataType type)
         {
-            return (int)type > 100 ?
-                (TF_DataType)Enum.Parse(typeof(TF_DataType), ((int)type - 100).ToString()) :
-                type;
+            return (int)type > 100 ? (TF_DataType)((int)type - 100) : type;
         }
 
         public static int name(this TF_DataType type)
@@ -211,21 +209,17 @@ namespace Tensorflow
 
         public static DataType as_base_dtype(this DataType type)
         {
-            return (int)type > 100 ?
-                (DataType)Enum.Parse(typeof(DataType), ((int)type - 100).ToString()) :
-                type;
+            return (int)type > 100 ? (DataType)((int)type - 100) : type;
         }
 
         public static TF_DataType as_tf_dtype(this DataType type)
         {
-            return Enum.TryParse(((int) type).ToString(), out TF_DataType dtype) ? dtype : TF_DataType.DtInvalid;
+            return (TF_DataType)type;
         }
 
         public static TF_DataType as_ref(this TF_DataType type)
         {
-            return (int)type < 100 ?
-                (TF_DataType)Enum.Parse(typeof(TF_DataType), ((int)type + 100).ToString()) :
-                type;
+            return (int)type < 100 ? (TF_DataType)((int)type + 100) : type;
         }
 
         public static long max(this TF_DataType type)
