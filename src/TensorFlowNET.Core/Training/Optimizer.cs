@@ -253,6 +253,7 @@ namespace Tensorflow
                 v = variable_scope.default_variable_creator(
                     initial_value, 
                     name: name, 
+                    dtype: colocate_with.dtype.as_base_dtype(),
                     trainable: false,
                     use_resource: resource_variable_ops.is_resource_variable(
                         colocate_with));
