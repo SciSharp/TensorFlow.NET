@@ -1,0 +1,38 @@
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using Tensorflow;
+using Tensorflow.Eager;
+using Buffer = System.Buffer;
+
+namespace TensorFlowNET.UnitTest.Eager
+{
+    public partial class CApiEagerTest
+    {
+        /// <summary>
+        /// TEST(CAPI, TensorHandle)
+        /// </summary>
+        [TestMethod]
+        public unsafe void TensorHandle()
+        {
+            var h = TestMatrixTensorHandle();
+            EXPECT_EQ(TF_FLOAT, c_api.TFE_TensorHandleDataType(h));
+
+            var status = c_api.TF_NewStatus();
+            var t = c_api.TFE_TensorHandleResolve(h, status);
+            ASSERT_EQ(16ul, c_api.TF_TensorByteSize(t));
+
+            var data = new float[] { 0f, 0f, 0f, 0f };
+            fixed (void* src = &data[0])
+            {
+                Buffer.MemoryCopy((void*)c_api.TF_TensorData(t), src, data.Length * sizeof(float), (long)c_api.TF_TensorByteSize(t));
+            }
+
+            EXPECT_EQ(1.0f, data[0]);
+            EXPECT_EQ(2.0f, data[1]);
+            EXPECT_EQ(3.0f, data[2]);
+            EXPECT_EQ(4.0f, data[3]);
+            c_api.TF_DeleteTensor(t);
+            c_api.TFE_DeleteTensorHandle(h);
+        }
+    }
+}

@@ -140,6 +140,17 @@ namespace Tensorflow
         public static extern TF_DataType TFE_TensorHandleDataType(IntPtr h);
 
         /// <summary>
+        /// This function will block till the operation that produces `h` has
+        /// completed. The memory returned might alias the internal memory used by
+        /// TensorFlow.
+        /// </summary>
+        /// <param name="h">TFE_TensorHandle*</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_TensorHandleResolve(IntPtr h, IntPtr status);
+
+        /// <summary>
         /// This function will block till the operation that produces `h` has completed.
         /// </summary>
         /// <param name="h">TFE_TensorHandle*</param>
@@ -156,5 +167,12 @@ namespace Tensorflow
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_ContextListDevices(IntPtr ctx, IntPtr status);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="h">TFE_TensorHandle*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_DeleteTensorHandle(IntPtr h);
     }
 }

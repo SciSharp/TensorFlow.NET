@@ -15,6 +15,9 @@ namespace TensorFlowNET.UnitTest
         protected void EXPECT_EQ(object expected, object actual, string msg = "")
             => Assert.AreEqual(expected, actual, msg);
 
+        protected void CHECK_EQ(object expected, object actual, string msg = "")
+            => Assert.AreEqual(expected, actual, msg);
+
         protected void EXPECT_NE(object expected, object actual, string msg = "")
             => Assert.AreNotEqual(expected, actual, msg);
 
