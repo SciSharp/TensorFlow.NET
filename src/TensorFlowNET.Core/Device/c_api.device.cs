@@ -28,5 +28,32 @@ namespace Tensorflow
         /// <param name="device"></param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_SetDevice(IntPtr desc, string device);
+
+        /// <summary>
+        /// Counts the number of elements in the device list.
+        /// </summary>
+        /// <param name="list">TF_DeviceList*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_DeviceListCount(IntPtr list);
+
+        /// <summary>
+        /// Deallocates the device list.
+        /// </summary>
+        /// <param name="list">TF_DeviceList*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_DeleteDeviceList(IntPtr list);
+
+        /// <summary>
+        /// Retrieves the full name of the device (e.g. /job:worker/replica:0/...)
+        /// The return value will be a pointer to a null terminated string. The caller
+        /// must not modify or delete the string. It will be deallocated upon a call to
+        /// TF_DeleteDeviceList.
+        /// </summary>
+        /// <param name="list">TF_DeviceList*</param>
+        /// <param name="index"></param>
+        /// <param name="status">TF_Status*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern string TF_DeviceListName(IntPtr list, int index, IntPtr status);
     }
 }
