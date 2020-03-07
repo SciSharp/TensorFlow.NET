@@ -35,6 +35,17 @@ namespace Tensorflow
             }
         }
 
+        public static OpDef TFE_GetOpDef(string type)
+        {
+            IntPtr handle = tf.get_default_graph();
+            using (var buffer = new Buffer())
+            using (var status = new Status())
+            {
+                c_api.TF_GraphGetOpDef(handle, type, buffer, status);
+                return OpDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
+            }
+        }
+
         public OperationDescription NewOperation(string opType, string opName)
         {
             return c_api.TF_NewOperation(_handle, opType, opName);

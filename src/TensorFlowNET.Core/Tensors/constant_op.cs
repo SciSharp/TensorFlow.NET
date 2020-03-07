@@ -86,6 +86,8 @@ namespace Tensorflow
             {
                 case string str:
                     return new EagerTensor(str, ctx.device_name);
+                case int int32:
+                    return new EagerTensor(int32, ctx.device_name);
                 default:
                     throw new NotImplementedException($"convert_to_eager_tensor {value.GetType()}");
             }

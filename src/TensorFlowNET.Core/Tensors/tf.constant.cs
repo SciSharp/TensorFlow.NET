@@ -31,33 +31,13 @@ namespace Tensorflow
         public Tensor constant(object value,
             TF_DataType dtype = TF_DataType.DtInvalid,
             TensorShape shape = null,
-            string name = "Const") 
-        {
-            switch (value)
-            {
-                case string str:
-                    return constant_op._constant_impl(str,
-                        @string,
-                        null,
-                        name,
-                        verify_shape: false,
-                        allow_broadcast: true);
-                case float val:
-                    return constant_op._constant_impl(value,
-                        float32,
-                        new int[] { (int)shape },
-                        name,
-                        verify_shape: false,
-                        allow_broadcast: true);
-                default:
-                    return constant_op._constant_impl(value,
-                        dtype,
-                        shape,
-                        name,
-                        verify_shape: false,
-                        allow_broadcast: true);
-            }
-        } 
+            string name = "Const")
+            => constant_op._constant_impl(value,
+                dtype,
+                shape,
+                name,
+                verify_shape: false,
+                allow_broadcast: true);
 
         public Tensor zeros(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
             => array_ops.zeros(shape, dtype, name);

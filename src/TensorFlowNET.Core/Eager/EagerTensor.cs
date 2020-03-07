@@ -14,6 +14,10 @@ namespace Tensorflow.Eager
         {
         }
 
+        public EagerTensor(int value, string device_name) : base(value)
+        {
+        }
+
         public override string ToString()
         {
             switch (rank)

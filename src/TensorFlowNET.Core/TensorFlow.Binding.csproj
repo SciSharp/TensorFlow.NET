@@ -71,4 +71,8 @@ https://tensorflownet.readthedocs.io</Description>
   <ItemGroup>
     <Folder Include="Keras\Initializers\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\NumSharp.Lite\NumSharp\NumSharp.Lite.csproj" />
+  </ItemGroup>
 </Project>

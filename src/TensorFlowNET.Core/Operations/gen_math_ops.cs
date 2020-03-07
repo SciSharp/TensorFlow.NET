@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -139,9 +140,20 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static EagerTensor add(Tensor x, Tensor y, string name = null)
+        {
+            // _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
+
+            if (tf.context.executing_eagerly())
+            {
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Add", name, new[] { x, y });
+            }
+
+            return null;
+        }
+
         public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            // forward_compatible(2019, 6, 25):
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
 
             return _op.output;

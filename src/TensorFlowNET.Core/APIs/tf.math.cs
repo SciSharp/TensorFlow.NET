@@ -41,6 +41,9 @@ namespace Tensorflow
         public Tensor asin(Tensor x, string name = null)
             => gen_math_ops.asin(x, name);
 
+        public Tensor add(Tensor a, Tensor b, string name = null)
+            => gen_math_ops.add(a, b, name: name);
+
         public Tensor add<Tx, Ty>(Tx a, Ty b, string name = null) 
             => gen_math_ops.add(a, b, name: name);
 

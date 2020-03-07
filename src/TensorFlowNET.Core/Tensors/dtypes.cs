@@ -201,6 +201,8 @@ namespace Tensorflow
             => type switch
             {
                 TF_DataType.TF_STRING => "string",
+                TF_DataType.TF_INT32 => "int32",
+                TF_DataType.TF_FLOAT => "float32",
                 _ => type.ToString()
             };
 
