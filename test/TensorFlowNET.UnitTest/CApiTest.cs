@@ -52,6 +52,9 @@ namespace TensorFlowNET.UnitTest
         protected TF_DataType TFE_TensorHandleDataType(IntPtr h)
             => c_api.TFE_TensorHandleDataType(h);
 
+        protected int TFE_TensorHandleNumDims(IntPtr h, IntPtr status)
+            => c_api.TFE_TensorHandleNumDims(h, status);
+
         protected TF_Code TF_GetCode(Status s)
             => s.Code;
 
@@ -79,8 +82,17 @@ namespace TensorFlowNET.UnitTest
         protected void TFE_OpSetAttrType(IntPtr op, string attr_name, TF_DataType value)
             => c_api.TFE_OpSetAttrType(op, attr_name, value);
 
+        protected void TFE_OpSetAttrShape(IntPtr op, string attr_name, long[] dims, int num_dims, IntPtr out_status)
+            => c_api.TFE_OpSetAttrShape(op, attr_name, dims, num_dims, out_status);
+
+        protected void TFE_OpSetAttrString(IntPtr op, string attr_name, string value, uint length)
+            => c_api.TFE_OpSetAttrString(op, attr_name, value, length);
+
         protected IntPtr TFE_NewOp(IntPtr ctx, string op_or_function_name, IntPtr status)
             => c_api.TFE_NewOp(ctx, op_or_function_name, status);
+
+        protected void TFE_Execute(IntPtr op, IntPtr[] retvals, ref int num_retvals, IntPtr status)
+            => c_api.TFE_Execute(op, retvals, ref num_retvals, status);
 
         protected IntPtr TFE_NewContextOptions()
             => c_api.TFE_NewContextOptions();
@@ -139,37 +151,49 @@ namespace TensorFlowNET.UnitTest
         protected void TFE_OpSetDevice(IntPtr op, string device_name, IntPtr status)
             => c_api.TFE_OpSetDevice(op, device_name, status);
 
-        protected unsafe void memcpy(void * src, IntPtr dst, ulong size)
-        {
-            Buffer.MemoryCopy(src, dst.ToPointer(), size, size);
-        }
-
-        protected unsafe void memcpy<T>(T[] src, IntPtr dst, ulong size)
+        protected unsafe void memcpy<T>(T* dst, void* src, ulong size)
             where T : unmanaged
         {
-            fixed (void* p = &src[0])
-                Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
+            Buffer.MemoryCopy(src, dst, size, size);
         }
 
-        protected unsafe void memcpy<T>(T[] src, IntPtr dst, long size)
+        protected unsafe void memcpy<T>(void* dst, T* src, ulong size)
             where T : unmanaged
         {
-            fixed (void* p = &src[0])
-                Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
+            Buffer.MemoryCopy(src, dst, size, size);
         }
 
-        protected unsafe void memcpy<T>(IntPtr src, T[] dst, ulong size)
+        protected unsafe void memcpy(void * dst, IntPtr src, ulong size)
+        {
+            Buffer.MemoryCopy(src.ToPointer(), dst, size, size);
+        }
+
+        protected unsafe void memcpy<T>(T[] dst, IntPtr src, ulong size)
             where T : unmanaged
         {
             fixed (void* p = &dst[0])
                 Buffer.MemoryCopy(src.ToPointer(), p, size, size);
         }
 
-        protected unsafe void memcpy<T>(IntPtr src, T[] dst, long size)
+        protected unsafe void memcpy<T>(T[] dst, IntPtr src, long size)
+            where T : unmanaged
+        {
+            fixed (void* p = &dst[0])
+                Buffer.MemoryCopy(src.ToPointer(), p, size, size);
+        }
+
+        protected unsafe void memcpy<T>(IntPtr dst, T[] src, ulong size)
+            where T : unmanaged
+        {
+            fixed (void* p = &src[0])
+                Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
+        }
+
+        protected unsafe void memcpy<T>(IntPtr dst, T[] src, long size)
             where T: unmanaged
         {
-            fixed (void* p = &dst[0])
-                Buffer.MemoryCopy(src.ToPointer(), p, size, size);
+            fixed (void* p = &src[0])
+                Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
         }
     }
 }

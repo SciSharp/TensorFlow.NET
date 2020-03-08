@@ -85,7 +85,7 @@ namespace Tensorflow
         /// <param name="num_dims">const int</param>
         /// <param name="out_status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrShape(IntPtr op, string attr_name, long[] dims, int num_dims, Status out_status);
+        public static extern void TFE_OpSetAttrShape(IntPtr op, string attr_name, long[] dims, int num_dims, IntPtr out_status);
 
         /// <summary>
         /// 

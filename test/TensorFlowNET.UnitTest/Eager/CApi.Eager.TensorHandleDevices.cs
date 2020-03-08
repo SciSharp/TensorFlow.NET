@@ -61,10 +61,10 @@ namespace TensorFlowNET.UnitTest.Eager
 
             TFE_DeleteTensorHandle(hcpu);
             // not export api
-            /*var executor = TFE_ContextGetExecutorForThread(ctx);
+            var executor = TFE_ContextGetExecutorForThread(ctx);
             TFE_ExecutorWaitForAllPendingNodes(executor, status);
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TFE_DeleteExecutor(executor);*/
+            TFE_DeleteExecutor(executor);
             TFE_DeleteContext(ctx);
         }
     }

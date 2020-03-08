@@ -43,7 +43,7 @@ namespace TensorFlowNET.UnitTest.Eager
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             var product = new float[4];
             EXPECT_EQ(product.Length * sizeof(float), (int)TF_TensorByteSize(t));
-            memcpy(TF_TensorData(t), product, TF_TensorByteSize(t));
+            memcpy(product, TF_TensorData(t), TF_TensorByteSize(t));
 
             c_api.TF_DeleteTensor(t);
             EXPECT_EQ(7f, product[0]);
