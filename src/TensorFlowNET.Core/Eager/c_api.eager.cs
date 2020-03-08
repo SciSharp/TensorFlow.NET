@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using TFE_Executor = System.IntPtr;
 
 namespace Tensorflow
 {
@@ -196,5 +197,55 @@ namespace Tensorflow
         /// <param name="h">TFE_TensorHandle*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_DeleteTensorHandle(IntPtr h);
+
+        /// <summary>
+        /// Creates a new eager Executor. Nodes in one executor are guaranteed to be
+        /// executed in sequence. Assigning nodes to different executors allows executing
+        /// nodes in parallel.
+        /// </summary>
+        /// <param name="is_async"></param>
+        /// <returns>TFE_Executor*</returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_NewExecutor(bool is_async);
+
+        /// <summary>
+        /// Deletes the eager Executor without waiting for enqueued nodes. Please call
+        /// TFE_ExecutorWaitForAllPendingNodes before calling this API if you want to
+        /// make sure all nodes are finished.
+        /// </summary>
+        /// <param name="e">TFE_Executor*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_DeleteExecutor(IntPtr executor);
+
+        /// <summary>
+        /// Causes the calling thread to block till all ops dispatched in this executor
+        /// have been executed. Note that "execution" here refers to kernel execution /
+        /// scheduling of copies, etc. Similar to sync execution, it doesn't guarantee
+        /// that lower level device queues (like GPU streams) have been flushed.
+        /// 
+        /// This call may not block for execution of ops enqueued concurrently with this
+        /// call.
+        /// </summary>
+        /// <param name="executor">TFE_Executor*</param>
+        /// <param name="status">TF_Status*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ExecutorWaitForAllPendingNodes(TFE_Executor executor, IntPtr status);
+
+        /// <summary>
+        /// Sets a custom Executor for current thread. All nodes created by this thread
+        /// will be added to this Executor. It will override current executor.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="executor"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ContextSetExecutorForThread(IntPtr ctx, TFE_Executor executor);
+
+        /// <summary>
+        /// Returns the Executor for current thread.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns>TFE_Executor*</returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern TFE_Executor TFE_ContextGetExecutorForThread(IntPtr ctx);
     }
 }

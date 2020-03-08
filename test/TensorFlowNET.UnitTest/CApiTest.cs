@@ -100,6 +100,15 @@ namespace TensorFlowNET.UnitTest
         protected void TFE_DeleteOp(IntPtr op)
             => c_api.TFE_DeleteOp(op);
 
+        protected void TFE_DeleteExecutor(IntPtr executor)
+            => c_api.TFE_DeleteExecutor(executor);
+
+        protected IntPtr TFE_ContextGetExecutorForThread(IntPtr ctx)
+            => c_api.TFE_ContextGetExecutorForThread(ctx);
+
+        protected void TFE_ExecutorWaitForAllPendingNodes(IntPtr executor, IntPtr status)
+            => c_api.TFE_ExecutorWaitForAllPendingNodes(executor, status);
+
         protected IntPtr TFE_TensorHandleResolve(IntPtr h, IntPtr status)
             => c_api.TFE_TensorHandleResolve(h, status);
 
@@ -126,6 +135,9 @@ namespace TensorFlowNET.UnitTest
 
         protected IntPtr TFE_TensorHandleCopyToDevice(IntPtr h, IntPtr ctx, string device_name, IntPtr status)
             => c_api.TFE_TensorHandleCopyToDevice(h, ctx, device_name, status);
+
+        protected void TFE_OpSetDevice(IntPtr op, string device_name, IntPtr status)
+            => c_api.TFE_OpSetDevice(op, device_name, status);
 
         protected unsafe void memcpy(void * src, IntPtr dst, ulong size)
         {

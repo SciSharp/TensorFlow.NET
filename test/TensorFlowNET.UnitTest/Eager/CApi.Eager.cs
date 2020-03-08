@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
-using Tensorflow.Eager;
-using Buffer = System.Buffer;
 
 namespace TensorFlowNET.UnitTest.Eager
 {
@@ -66,6 +64,20 @@ namespace TensorFlowNET.UnitTest.Eager
 
             TF_DeleteDeviceList(devices);
             return false;
+        }
+
+        IntPtr ShapeOp(IntPtr ctx, IntPtr a)
+        {
+            var status = TF_NewStatus();
+
+            var op = TFE_NewOp(ctx, "Shape", status);
+            CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+            TFE_OpAddInput(op, a, status);
+            CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+            TF_DeleteStatus(status);
+            TFE_OpSetAttrType(op, "T", TFE_TensorHandleDataType(a));
+
+            return op;
         }
     }
 }
