@@ -160,6 +160,28 @@ namespace Tensorflow
         public static extern int TFE_TensorHandleNumDims(IntPtr h, IntPtr status);
 
         /// <summary>
+        /// Returns the device of the operation that produced `h`. If `h` was produced by
+        /// a copy, returns the destination device of the copy. Note that the returned
+        /// device name is not always the device holding the tensor handle's memory. If
+        /// you want the latter, use TFE_TensorHandleBackingDeviceName. This function
+        /// will block till the operation that produces `h` has completed.
+        /// </summary>
+        /// <param name="h">TFE_TensorHandle*</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_TensorHandleDeviceName(IntPtr h, IntPtr status);
+
+        /// <summary>
+        /// Returns the name of the device in whose memory `h` resides.
+        /// </summary>
+        /// <param name="h">TFE_TensorHandle*</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_TensorHandleBackingDeviceName(IntPtr h, IntPtr status);
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="ctx">TFE_Context*</param>

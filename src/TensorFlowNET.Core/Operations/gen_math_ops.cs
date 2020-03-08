@@ -140,19 +140,14 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static EagerTensor add(Tensor x, Tensor y, string name = null)
+        public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Add", name, new[] { x, y });
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Add", name, x, y);
                 return _result;
             }
 
-            return null;
-        }
-
-        public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
-        {
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
 
             return _op.output;
@@ -469,6 +464,12 @@ namespace Tensorflow
 
         public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate= false, string name= null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Cast", name, x, "DstT", DstT, "Truncate", Truncate);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate });
 
             return _op.outputs[0];
@@ -490,6 +491,12 @@ namespace Tensorflow
 
         public static Tensor sub<Tx, Ty>(Tx x, Ty y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Sub", name, x, y);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Sub", name, args: new { x, y });
 
             return _op.outputs[0];
@@ -535,6 +542,12 @@ namespace Tensorflow
 
         public static Tensor mul<Tx, Ty>(Tx x, Ty y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Mul", name, x, y);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Mul", name, args: new { x, y });
 
             return _op.outputs[0];
@@ -549,6 +562,12 @@ namespace Tensorflow
 
         public static Tensor real_div(Tensor x, Tensor y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "RealDiv", name, x, y);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("RealDiv", name, args: new { x, y });
 
             return _op.outputs[0];
@@ -570,6 +589,12 @@ namespace Tensorflow
 
         public static Tensor floor_div(Tensor x, Tensor y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "FloorDiv", name, x, y);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("FloorDiv", name, args: new { x, y });
 
             return _op.outputs[0];

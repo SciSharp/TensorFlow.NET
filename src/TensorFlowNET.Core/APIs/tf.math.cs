@@ -261,7 +261,7 @@ namespace Tensorflow
 
 
         public Tensor divide(Tensor a, Tensor b)
-            => gen_math_ops.real_div(a, b);
+            => a / b;
 
         public Tensor sqrt(Tensor a, string name = null) 
             => gen_math_ops.sqrt(a, name);

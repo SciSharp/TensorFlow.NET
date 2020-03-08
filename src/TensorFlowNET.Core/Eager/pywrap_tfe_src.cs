@@ -14,7 +14,7 @@ namespace Tensorflow.Eager
             string device_name, 
             string opName, 
             string name, 
-            params Tensor[] inputs)
+            params object[] inputs)
         {
             IntPtr op = IntPtr.Zero;
             var attr_list_sizes = new Dictionary<string, int>();
@@ -42,7 +42,14 @@ namespace Tensorflow.Eager
                     else
                     {
                         // The item is a single item.
-                        AddInputToOp(inputs[i], true, input_arg, op, status);
+                        switch (inputs[i])
+                        {
+                            case Tensor inputTensor:
+                                AddInputToOp(inputTensor, true, input_arg, op, status);
+                                break;
+                            default:
+                                throw new NotImplementedException("");
+                        }
                     }
                 }
 

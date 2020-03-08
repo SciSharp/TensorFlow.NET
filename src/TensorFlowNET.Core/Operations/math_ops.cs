@@ -712,6 +712,22 @@ namespace Tensorflow
                 var x_dtype = x.dtype.as_base_dtype();
                 var y_dtype = y.dtype.as_base_dtype();
 
+                if (x_dtype != y_dtype)
+                    throw new TypeError($"x and y must have the same dtype, got {x_dtype} != {y_dtype}");
+
+                var dtype = x_dtype switch
+                {
+                    TF_DataType.TF_UINT8 => TF_DataType.TF_FLOAT,
+                    TF_DataType.TF_INT8 => TF_DataType.TF_FLOAT,
+                    TF_DataType.TF_INT16 => TF_DataType.TF_FLOAT,
+                    TF_DataType.TF_UINT16 => TF_DataType.TF_FLOAT,
+                    TF_DataType.TF_INT32 => TF_DataType.TF_DOUBLE,
+                    TF_DataType.TF_INT64 => TF_DataType.TF_DOUBLE,
+                    _ => x_dtype
+                };
+                x = cast(x, dtype);
+                y = cast(y, dtype);
+
                 return gen_math_ops.real_div(x, y, name: name);
             });
         }

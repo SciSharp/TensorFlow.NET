@@ -103,6 +103,30 @@ namespace TensorFlowNET.UnitTest
         protected IntPtr TFE_TensorHandleResolve(IntPtr h, IntPtr status)
             => c_api.TFE_TensorHandleResolve(h, status);
 
+        protected string TFE_TensorHandleDeviceName(IntPtr h, IntPtr status)
+            => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(h, status));
+
+        protected string TFE_TensorHandleBackingDeviceName(IntPtr h, IntPtr status)
+            => c_api.StringPiece(c_api.TFE_TensorHandleBackingDeviceName(h, status));
+
+        protected IntPtr TFE_ContextListDevices(IntPtr ctx, IntPtr status)
+            => c_api.TFE_ContextListDevices(ctx, status);
+
+        protected int TF_DeviceListCount(IntPtr list)
+            => c_api.TF_DeviceListCount(list);
+
+        protected string TF_DeviceListType(IntPtr list, int index, IntPtr status)
+            => c_api.StringPiece(c_api.TF_DeviceListType(list, index, status));
+
+        protected string TF_DeviceListName(IntPtr list, int index, IntPtr status)
+            => c_api.StringPiece(c_api.TF_DeviceListName(list, index, status));
+
+        protected void TF_DeleteDeviceList(IntPtr list)
+            => c_api.TF_DeleteDeviceList(list);
+
+        protected IntPtr TFE_TensorHandleCopyToDevice(IntPtr h, IntPtr ctx, string device_name, IntPtr status)
+            => c_api.TFE_TensorHandleCopyToDevice(h, ctx, device_name, status);
+
         protected unsafe void memcpy(void * src, IntPtr dst, ulong size)
         {
             Buffer.MemoryCopy(src, dst.ToPointer(), size, size);

@@ -77,6 +77,19 @@ namespace Tensorflow
             Console.WriteLine(_tostring(obj));
         }
 
+        public static void print(string format, params object[] objects)
+        {
+            if (!format.Contains("{}"))
+                Console.WriteLine(format, string.Join(" ", objects.Select(x => x.ToString())));
+
+            foreach(var obj in objects)
+            {
+
+            }
+
+            Console.WriteLine(format);
+        }
+
         public static int len(object a)
         {
             switch (a)

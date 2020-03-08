@@ -33,7 +33,7 @@ namespace TensorFlowNET.UnitTest.Eager
                 EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             }
 
-            // c_api.TF_DeleteDeviceList(devices);
+            c_api.TF_DeleteDeviceList(devices);
             c_api.TF_DeleteStatus(status);
         }
     }

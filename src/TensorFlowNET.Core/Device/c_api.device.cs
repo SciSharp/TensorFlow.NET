@@ -38,11 +38,33 @@ namespace Tensorflow
         public static extern int TF_DeviceListCount(IntPtr list);
 
         /// <summary>
+        /// Retrieves the type of the device at the given index.
+        /// </summary>
+        /// <param name="list">TF_DeviceList*</param>
+        /// <param name="index">int</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_DeviceListType(IntPtr list, int index, IntPtr status);
+
+        /// <summary>
         /// Deallocates the device list.
         /// </summary>
         /// <param name="list">TF_DeviceList*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_DeleteDeviceList(IntPtr list);
+
+        /// <summary>
+        /// Create a new TFE_TensorHandle with the same contents as 'h' but placed
+        /// in the memory of the device name 'device_name'.
+        /// </summary>
+        /// <param name="h">TFE_TensorHandle*</param>
+        /// <param name="ctx">TFE_Context*</param>
+        /// <param name="device_name">char*</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns>TFE_TensorHandle*</returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_TensorHandleCopyToDevice(IntPtr h, IntPtr ctx, string device_name, IntPtr status);
 
         /// <summary>
         /// Retrieves the full name of the device (e.g. /job:worker/replica:0/...)
@@ -54,6 +76,6 @@ namespace Tensorflow
         /// <param name="index"></param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern string TF_DeviceListName(IntPtr list, int index, IntPtr status);
+        public static extern IntPtr TF_DeviceListName(IntPtr list, int index, IntPtr status);
     }
 }
