@@ -142,11 +142,10 @@ namespace Tensorflow
 
         public static EagerTensor add(Tensor x, Tensor y, string name = null)
         {
-            // _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
-
             if (tf.context.executing_eagerly())
             {
                 var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Add", name, new[] { x, y });
+                return _result;
             }
 
             return null;

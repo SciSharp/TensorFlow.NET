@@ -63,12 +63,11 @@ namespace Tensorflow.Eager
                 var retVals = new IntPtr[num_retvals];
                 c_api.TFE_Execute(op, retVals, ref num_retvals, status);
 
-                var h = c_api.TFE_NewTensorHandle(retVals[0], status);
-                var data = new Tensor(h);
+                var t = c_api.TFE_TensorHandleResolve(retVals[0], status);
                 status.Check(true);
-            }
 
-            throw new NotImplementedException("");
+                return new EagerTensor(t);
+            }
         }
 
         /// <summary>
