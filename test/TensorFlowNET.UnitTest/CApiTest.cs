@@ -22,6 +22,9 @@ namespace TensorFlowNET.UnitTest
         protected void EXPECT_NE(object expected, object actual, string msg = "")
             => Assert.AreNotEqual(expected, actual, msg);
 
+        protected void CHECK_NE(object expected, object actual, string msg = "")
+            => Assert.AreNotEqual(expected, actual, msg);
+
         protected void EXPECT_GE(int expected, int actual, string msg = "")
             => Assert.IsTrue(expected >= actual, msg);
 
@@ -105,6 +108,15 @@ namespace TensorFlowNET.UnitTest
 
         protected void TFE_DeleteContextOptions(IntPtr opts)
             => c_api.TFE_DeleteContextOptions(opts);
+
+        protected int TFE_OpGetInputLength(IntPtr op, string input_name, IntPtr status)
+            => c_api.TFE_OpGetInputLength(op, input_name, status);
+
+        protected int TFE_OpAddInputList(IntPtr op, IntPtr[] inputs, int num_inputs, IntPtr status)
+            => c_api.TFE_OpAddInputList(op, inputs, num_inputs, status);
+
+        protected int TFE_OpGetOutputLength(IntPtr op, string input_name, IntPtr status)
+            => c_api.TFE_OpGetOutputLength(op, input_name, status);
 
         protected void TFE_DeleteTensorHandle(IntPtr h)
             => c_api.TFE_DeleteTensorHandle(h);

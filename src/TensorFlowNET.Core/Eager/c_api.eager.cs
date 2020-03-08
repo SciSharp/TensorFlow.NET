@@ -21,6 +21,38 @@ namespace Tensorflow
         public static extern void TFE_DeleteContextOptions(IntPtr options);
 
         /// <summary>
+        /// Returns the length (number of tensors) of the input argument `input_name`
+        /// found in the provided `op`.
+        /// </summary>
+        /// <param name="op">TFE_Op*</param>
+        /// <param name="input_name">const char*</param>
+        /// <param name="status">TF_Status*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TFE_OpGetInputLength(IntPtr op, string input_name, IntPtr status);
+
+        /// <summary>
+        /// Returns the length (number of tensors) of the output argument `output_name`
+        /// found in the provided `op`.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="input_name"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TFE_OpGetOutputLength(IntPtr op, string input_name, IntPtr status);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op">TFE_Op*</param>
+        /// <param name="inputs">TFE_TensorHandle**</param>
+        /// <param name="num_inputs">int</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern int TFE_OpAddInputList(IntPtr op, IntPtr[] inputs, int num_inputs, IntPtr status);
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="opts">const TFE_ContextOptions*</param>
