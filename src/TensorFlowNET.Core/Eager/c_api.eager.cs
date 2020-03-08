@@ -123,13 +123,13 @@ namespace Tensorflow
         public static extern IntPtr TFE_NewTensorHandle(IntPtr t, IntPtr status);
 
         /// <summary>
-        /// 
+        /// Sets the default execution mode (sync/async). Note that this can be
+        /// overridden per thread using TFE_ContextSetExecutorForThread.
         /// </summary>
-        /// <param name="t"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
+        /// <param name="opts">TFE_ContextOptions*</param>
+        /// <param name="enable">unsigned char</param>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_DeleteTensorHandle(IntPtr t, IntPtr status);
+        public static extern void TFE_ContextOptionsSetAsync(IntPtr opts, byte enable);
 
         /// <summary>
         /// 

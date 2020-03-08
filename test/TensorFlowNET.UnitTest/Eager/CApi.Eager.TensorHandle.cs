@@ -22,10 +22,7 @@ namespace TensorFlowNET.UnitTest.Eager
             ASSERT_EQ(16ul, c_api.TF_TensorByteSize(t));
 
             var data = new float[] { 0f, 0f, 0f, 0f };
-            fixed (void* src = &data[0])
-            {
-                Buffer.MemoryCopy((void*)c_api.TF_TensorData(t), src, data.Length * sizeof(float), (long)c_api.TF_TensorByteSize(t));
-            }
+            memcpy(c_api.TF_TensorData(t), data, data.Length * sizeof(float));
 
             EXPECT_EQ(1.0f, data[0]);
             EXPECT_EQ(2.0f, data[1]);

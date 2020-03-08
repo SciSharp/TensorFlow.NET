@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
+using Buffer = System.Buffer;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -48,6 +49,9 @@ namespace TensorFlowNET.UnitTest
         protected void TF_SetAttrBool(OperationDescription desc, string attrName, bool value)
             => c_api.TF_SetAttrBool(desc, attrName, value);
 
+        protected TF_DataType TFE_TensorHandleDataType(IntPtr h)
+            => c_api.TFE_TensorHandleDataType(h);
+
         protected TF_Code TF_GetCode(Status s)
             => s.Code;
 
@@ -56,5 +60,80 @@ namespace TensorFlowNET.UnitTest
 
         protected string TF_Message(IntPtr s)
             => c_api.StringPiece(c_api.TF_Message(s));
+
+        protected IntPtr TF_NewStatus()
+            => c_api.TF_NewStatus();
+
+        protected void TF_DeleteStatus(IntPtr s)
+            => c_api.TF_DeleteStatus(s);
+
+        protected IntPtr TF_TensorData(IntPtr t)
+            => c_api.TF_TensorData(t);
+
+        protected ulong TF_TensorByteSize(IntPtr t)
+            => c_api.TF_TensorByteSize(t);
+
+        protected void TFE_OpAddInput(IntPtr op, IntPtr h, IntPtr status)
+            => c_api.TFE_OpAddInput(op, h, status);
+
+        protected void TFE_OpSetAttrType(IntPtr op, string attr_name, TF_DataType value)
+            => c_api.TFE_OpSetAttrType(op, attr_name, value);
+
+        protected IntPtr TFE_NewOp(IntPtr ctx, string op_or_function_name, IntPtr status)
+            => c_api.TFE_NewOp(ctx, op_or_function_name, status);
+
+        protected IntPtr TFE_NewContextOptions()
+            => c_api.TFE_NewContextOptions();
+
+        protected void TFE_DeleteContext(IntPtr t)
+            => c_api.TFE_DeleteContext(t);
+
+        protected IntPtr TFE_NewContext(IntPtr opts, IntPtr status)
+            => c_api.TFE_NewContext(opts, status);
+
+        protected void TFE_DeleteContextOptions(IntPtr opts)
+            => c_api.TFE_DeleteContextOptions(opts);
+
+        protected void TFE_DeleteTensorHandle(IntPtr h)
+            => c_api.TFE_DeleteTensorHandle(h);
+
+        protected void TFE_DeleteOp(IntPtr op)
+            => c_api.TFE_DeleteOp(op);
+
+        protected IntPtr TFE_TensorHandleResolve(IntPtr h, IntPtr status)
+            => c_api.TFE_TensorHandleResolve(h, status);
+
+        protected unsafe void memcpy(void * src, IntPtr dst, ulong size)
+        {
+            Buffer.MemoryCopy(src, dst.ToPointer(), size, size);
+        }
+
+        protected unsafe void memcpy<T>(T[] src, IntPtr dst, ulong size)
+            where T : unmanaged
+        {
+            fixed (void* p = &src[0])
+                Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
+        }
+
+        protected unsafe void memcpy<T>(T[] src, IntPtr dst, long size)
+            where T : unmanaged
+        {
+            fixed (void* p = &src[0])
+                Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
+        }
+
+        protected unsafe void memcpy<T>(IntPtr src, T[] dst, ulong size)
+            where T : unmanaged
+        {
+            fixed (void* p = &dst[0])
+                Buffer.MemoryCopy(src.ToPointer(), p, size, size);
+        }
+
+        protected unsafe void memcpy<T>(IntPtr src, T[] dst, long size)
+            where T: unmanaged
+        {
+            fixed (void* p = &dst[0])
+                Buffer.MemoryCopy(src.ToPointer(), p, size, size);
+        }
     }
 }
