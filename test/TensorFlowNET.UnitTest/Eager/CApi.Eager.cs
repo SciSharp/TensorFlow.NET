@@ -120,5 +120,45 @@ namespace TensorFlowNET.UnitTest.Eager
 
             return var_handle[0];
         }
+
+        IntPtr TestAxisTensorHandle()
+        {
+            var dims = new long[] { 1 };
+            var data = new int[] { 1 };
+            var t = c_api.TF_AllocateTensor(TF_DataType.TF_INT32, dims, 1, sizeof(int));
+            memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
+            var status = TF_NewStatus();
+            var th = c_api.TFE_NewTensorHandle(t, status);
+            CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+            TF_DeleteTensor(t);
+            TF_DeleteStatus(status);
+            return th;
+        }
+
+        IntPtr TestScalarTensorHandle(bool value)
+        {
+            var data = new[] { value };
+            var t = c_api.TF_AllocateTensor(TF_BOOL, null, 0, sizeof(bool));
+            memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
+            var status = TF_NewStatus();
+            var th = TFE_NewTensorHandle(t, status);
+            CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+            TF_DeleteTensor(t);
+            TF_DeleteStatus(status);
+            return th;
+        }
+
+        IntPtr TestScalarTensorHandle(float value)
+        {
+            var data = new [] { value };
+            var t = c_api.TF_AllocateTensor(TF_FLOAT, null, 0, sizeof(float));
+            memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
+            var status = TF_NewStatus();
+            var th = TFE_NewTensorHandle(t, status);
+            CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+            TF_DeleteTensor(t);
+            TF_DeleteStatus(status);
+            return th;
+        }
     }
 }

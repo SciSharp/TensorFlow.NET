@@ -9,6 +9,7 @@ namespace TensorFlowNET.UnitTest
     {
         protected TF_Code TF_OK = TF_Code.TF_OK;
         protected TF_DataType TF_FLOAT = TF_DataType.TF_FLOAT;
+        protected TF_DataType TF_BOOL = TF_DataType.TF_BOOL;
 
         protected void EXPECT_TRUE(bool expected, string msg = "")
             => Assert.IsTrue(expected, msg);
@@ -73,6 +74,9 @@ namespace TensorFlowNET.UnitTest
         protected void TF_DeleteStatus(IntPtr s)
             => c_api.TF_DeleteStatus(s);
 
+        protected void TF_DeleteTensor(IntPtr t)
+            => c_api.TF_DeleteTensor(t);
+
         protected IntPtr TF_TensorData(IntPtr t)
             => c_api.TF_TensorData(t);
 
@@ -93,6 +97,9 @@ namespace TensorFlowNET.UnitTest
 
         protected IntPtr TFE_NewOp(IntPtr ctx, string op_or_function_name, IntPtr status)
             => c_api.TFE_NewOp(ctx, op_or_function_name, status);
+
+        protected IntPtr TFE_NewTensorHandle(IntPtr t, IntPtr status)
+            => c_api.TFE_NewTensorHandle(t, status);
 
         protected void TFE_Execute(IntPtr op, IntPtr[] retvals, ref int num_retvals, IntPtr status)
             => c_api.TFE_Execute(op, retvals, ref num_retvals, status);
