@@ -166,7 +166,7 @@ namespace Tensorflow
             switch(dtype)
             {
                 case TF_DataType.TF_STRING:
-                    return StringData()[0];
+                    return (NDArray)StringData()[0];
                 case TF_DataType.TF_INT32:
                     return *(int*)buffer;
                 default:
