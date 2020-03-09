@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>1.14.1</TargetTensorFlow>
-    <Version>0.15.0</Version>
+    <Version>0.15.1</Version>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -18,7 +18,7 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.15.0.0</AssemblyVersion>
+    <AssemblyVersion>0.15.1.0</AssemblyVersion>
     <PackageReleaseNotes>Changes since v0.14.0:
 1: Add TransformGraphWithStringInputs.
 2: tf.trainer.load_graph, tf.trainer.freeze_graph
@@ -26,7 +26,7 @@ https://tensorflownet.readthedocs.io</Description>
 4: Support YOLOv3 object detection
 5: Add implicitation for Operation to RefVariable</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <FileVersion>0.15.0.0</FileVersion>
+    <FileVersion>0.15.1.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
@@ -36,6 +36,7 @@ https://tensorflownet.readthedocs.io</Description>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>TRACE;DEBUG;SERIALIZABLE_</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -64,7 +65,7 @@ https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.11.4" />
-    <PackageReference Include="NumSharp.Lite" Version="0.1.4" />
+    <PackageReference Include="NumSharp.Lite" Version="0.1.5" />
     <PackageReference Include="Protobuf.Text" Version="0.4.0" />
   </ItemGroup>
 
