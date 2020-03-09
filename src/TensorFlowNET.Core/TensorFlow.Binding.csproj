@@ -31,12 +31,13 @@ https://tensorflownet.readthedocs.io</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
+    <UserSecretsId>48689ca8-0ff8-4926-be46-cb50bbda5686</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>TRACE;DEBUG;SERIALIZABLE_</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -65,7 +66,7 @@ https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.11.4" />
-    <PackageReference Include="NumSharp.Lite" Version="0.1.5" />
+    <PackageReference Include="NumSharp.Lite" Version="0.1.7" />
     <PackageReference Include="Protobuf.Text" Version="0.4.0" />
   </ItemGroup>
 
