@@ -97,9 +97,6 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid)
         {
-            if (value is Tensor tensor)
-                return tensor;
-
             return convert_to_tensor_v2(value, dtype, preferred_dtype, name);
         }
 

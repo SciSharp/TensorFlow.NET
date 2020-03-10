@@ -122,6 +122,12 @@ namespace Tensorflow
 
         public static Tensor pack(Tensor[] values, int axis = 0, string name = null)
         {
+            if(tf.context.executing_eagerly())
+            {
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, tf.context.device_name, "Pack", name, null, values, "axis", axis);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Pack", name: name, args: new { values, axis });
 
             return _op.outputs[0];
