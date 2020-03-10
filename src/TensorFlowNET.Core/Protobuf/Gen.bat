@@ -1,6 +1,6 @@
 @ECHO OFF
 
-set SRC_DIR=D:/Projects/tensorflow2.x
+set SRC_DIR=D:/SciSharp/tensorflow
 set DST_DIR=D:/SciSharp/TensorFlow.NET/src/TensorFlowNET.Core/Protobuf
 
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/resource_handle.proto

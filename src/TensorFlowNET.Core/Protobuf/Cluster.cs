@@ -34,9 +34,9 @@ namespace Tensorflow {
             "L3Byb3RvYnVm+AEBYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.JobDef), global::Tensorflow.JobDef.Parser, new[]{ "Name", "Tasks" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ClusterDef), global::Tensorflow.ClusterDef.Parser, new[]{ "Job" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.JobDef), global::Tensorflow.JobDef.Parser, new[]{ "Name", "Tasks" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ClusterDef), global::Tensorflow.ClusterDef.Parser, new[]{ "Job" }, null, null, null, null)
           }));
     }
     #endregion
@@ -98,7 +98,7 @@ namespace Tensorflow {
     /// <summary>Field number for the "tasks" field.</summary>
     public const int TasksFieldNumber = 2;
     private static readonly pbc::MapField<int, string>.Codec _map_tasks_codec
-        = new pbc::MapField<int, string>.Codec(pb::FieldCodec.ForInt32(8), pb::FieldCodec.ForString(18), 18);
+        = new pbc::MapField<int, string>.Codec(pb::FieldCodec.ForInt32(8, 0), pb::FieldCodec.ForString(18, ""), 18);
     private readonly pbc::MapField<int, string> tasks_ = new pbc::MapField<int, string>();
     /// <summary>
     /// Mapping from task ID to "hostname:port" string.

@@ -25,16 +25,22 @@ namespace Tensorflow {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ci90ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3Jlc291cmNlX2hhbmRsZS5w",
-            "cm90bxIKdGVuc29yZmxvdyJyChNSZXNvdXJjZUhhbmRsZVByb3RvEg4KBmRl",
-            "dmljZRgBIAEoCRIRCgljb250YWluZXIYAiABKAkSDAoEbmFtZRgDIAEoCRIR",
-            "CgloYXNoX2NvZGUYBCABKAQSFwoPbWF5YmVfdHlwZV9uYW1lGAUgASgJQm4K",
-            "GG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0IOUmVzb3VyY2VIYW5kbGVQAVo9",
-            "Z2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9n",
-            "by9jb3JlL2ZyYW1ld29ya/gBAWIGcHJvdG8z"));
+            "cm90bxIKdGVuc29yZmxvdxosdGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay90",
+            "ZW5zb3Jfc2hhcGUucHJvdG8aJXRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsv",
+            "dHlwZXMucHJvdG8inwIKE1Jlc291cmNlSGFuZGxlUHJvdG8SDgoGZGV2aWNl",
+            "GAEgASgJEhEKCWNvbnRhaW5lchgCIAEoCRIMCgRuYW1lGAMgASgJEhEKCWhh",
+            "c2hfY29kZRgEIAEoBBIXCg9tYXliZV90eXBlX25hbWUYBSABKAkSSAoRZHR5",
+            "cGVzX2FuZF9zaGFwZXMYBiADKAsyLS50ZW5zb3JmbG93LlJlc291cmNlSGFu",
+            "ZGxlUHJvdG8uRHR5cGVBbmRTaGFwZRphCg1EdHlwZUFuZFNoYXBlEiMKBWR0",
+            "eXBlGAEgASgOMhQudGVuc29yZmxvdy5EYXRhVHlwZRIrCgVzaGFwZRgCIAEo",
+            "CzIcLnRlbnNvcmZsb3cuVGVuc29yU2hhcGVQcm90b0JuChhvcmcudGVuc29y",
+            "Zmxvdy5mcmFtZXdvcmtCDlJlc291cmNlSGFuZGxlUAFaPWdpdGh1Yi5jb20v",
+            "dGVuc29yZmxvdy90ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28vY29yZS9mcmFt",
+            "ZXdvcmv4AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ResourceHandleProto), global::Tensorflow.ResourceHandleProto.Parser, new[]{ "Device", "Container", "Name", "HashCode", "MaybeTypeName" }, null, null, null)
+          new pbr::FileDescriptor[] { global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ResourceHandleProto), global::Tensorflow.ResourceHandleProto.Parser, new[]{ "Device", "Container", "Name", "HashCode", "MaybeTypeName", "DtypesAndShapes" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape), global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape.Parser, new[]{ "Dtype", "Shape" }, null, null, null, null)})
           }));
     }
     #endregion
@@ -76,6 +82,7 @@ namespace Tensorflow {
       name_ = other.name_;
       hashCode_ = other.hashCode_;
       maybeTypeName_ = other.maybeTypeName_;
+      dtypesAndShapes_ = other.dtypesAndShapes_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -156,6 +163,19 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "dtypes_and_shapes" field.</summary>
+    public const int DtypesAndShapesFieldNumber = 6;
+    private static readonly pb::FieldCodec<global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape> _repeated_dtypesAndShapes_codec
+        = pb::FieldCodec.ForMessage(50, global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape.Parser);
+    private readonly pbc::RepeatedField<global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape> dtypesAndShapes_ = new pbc::RepeatedField<global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape>();
+    /// <summary>
+    /// Data types and shapes for the underlying resource.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape> DtypesAndShapes {
+      get { return dtypesAndShapes_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as ResourceHandleProto);
@@ -174,6 +194,7 @@ namespace Tensorflow {
       if (Name != other.Name) return false;
       if (HashCode != other.HashCode) return false;
       if (MaybeTypeName != other.MaybeTypeName) return false;
+      if(!dtypesAndShapes_.Equals(other.dtypesAndShapes_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -185,6 +206,7 @@ namespace Tensorflow {
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (HashCode != 0UL) hash ^= HashCode.GetHashCode();
       if (MaybeTypeName.Length != 0) hash ^= MaybeTypeName.GetHashCode();
+      hash ^= dtypesAndShapes_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -218,6 +240,7 @@ namespace Tensorflow {
         output.WriteRawTag(42);
         output.WriteString(MaybeTypeName);
       }
+      dtypesAndShapes_.WriteTo(output, _repeated_dtypesAndShapes_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -241,6 +264,7 @@ namespace Tensorflow {
       if (MaybeTypeName.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(MaybeTypeName);
       }
+      size += dtypesAndShapes_.CalculateSize(_repeated_dtypesAndShapes_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -267,6 +291,7 @@ namespace Tensorflow {
       if (other.MaybeTypeName.Length != 0) {
         MaybeTypeName = other.MaybeTypeName;
       }
+      dtypesAndShapes_.Add(other.dtypesAndShapes_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -298,9 +323,186 @@ namespace Tensorflow {
             MaybeTypeName = input.ReadString();
             break;
           }
+          case 50: {
+            dtypesAndShapes_.AddEntriesFrom(input, _repeated_dtypesAndShapes_codec);
+            break;
+          }
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the ResourceHandleProto message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      /// <summary>
+      /// Protocol buffer representing a pair of (data type, tensor shape).
+      /// </summary>
+      public sealed partial class DtypeAndShape : pb::IMessage<DtypeAndShape> {
+        private static readonly pb::MessageParser<DtypeAndShape> _parser = new pb::MessageParser<DtypeAndShape>(() => new DtypeAndShape());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<DtypeAndShape> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::Tensorflow.ResourceHandleProto.Descriptor.NestedTypes[0]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public DtypeAndShape() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public DtypeAndShape(DtypeAndShape other) : this() {
+          dtype_ = other.dtype_;
+          shape_ = other.shape_ != null ? other.shape_.Clone() : null;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public DtypeAndShape Clone() {
+          return new DtypeAndShape(this);
+        }
+
+        /// <summary>Field number for the "dtype" field.</summary>
+        public const int DtypeFieldNumber = 1;
+        private global::Tensorflow.DataType dtype_ = global::Tensorflow.DataType.DtInvalid;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Tensorflow.DataType Dtype {
+          get { return dtype_; }
+          set {
+            dtype_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "shape" field.</summary>
+        public const int ShapeFieldNumber = 2;
+        private global::Tensorflow.TensorShapeProto shape_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Tensorflow.TensorShapeProto Shape {
+          get { return shape_; }
+          set {
+            shape_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as DtypeAndShape);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(DtypeAndShape other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Dtype != other.Dtype) return false;
+          if (!object.Equals(Shape, other.Shape)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Dtype != global::Tensorflow.DataType.DtInvalid) hash ^= Dtype.GetHashCode();
+          if (shape_ != null) hash ^= Shape.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+          if (Dtype != global::Tensorflow.DataType.DtInvalid) {
+            output.WriteRawTag(8);
+            output.WriteEnum((int) Dtype);
+          }
+          if (shape_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(Shape);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (Dtype != global::Tensorflow.DataType.DtInvalid) {
+            size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Dtype);
+          }
+          if (shape_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Shape);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(DtypeAndShape other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Dtype != global::Tensorflow.DataType.DtInvalid) {
+            Dtype = other.Dtype;
+          }
+          if (other.shape_ != null) {
+            if (shape_ == null) {
+              Shape = new global::Tensorflow.TensorShapeProto();
+            }
+            Shape.MergeFrom(other.Shape);
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                Dtype = (global::Tensorflow.DataType) input.ReadEnum();
+                break;
+              }
+              case 18: {
+                if (shape_ == null) {
+                  Shape = new global::Tensorflow.TensorShapeProto();
+                }
+                input.ReadMessage(Shape);
+                break;
+              }
+            }
+          }
+        }
+
+      }
+
+    }
+    #endregion
 
   }
 

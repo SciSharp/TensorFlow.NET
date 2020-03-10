@@ -33,8 +33,8 @@ namespace Tensorflow {
             "b3cvdGVuc29yZmxvdy9nby9jb3JlL2ZyYW1ld29ya/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorSliceProto), global::Tensorflow.TensorSliceProto.Parser, new[]{ "Extent" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorSliceProto.Types.Extent), global::Tensorflow.TensorSliceProto.Types.Extent.Parser, new[]{ "Start", "Length" }, new[]{ "HasLength" }, null, null)})
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorSliceProto), global::Tensorflow.TensorSliceProto.Parser, new[]{ "Extent" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorSliceProto.Types.Extent), global::Tensorflow.TensorSliceProto.Types.Extent.Parser, new[]{ "Start", "Length" }, new[]{ "HasLength" }, null, null, null)})
           }));
     }
     #endregion

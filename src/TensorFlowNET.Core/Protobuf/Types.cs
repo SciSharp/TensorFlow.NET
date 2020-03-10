@@ -48,13 +48,14 @@ namespace Tensorflow {
             "c29yZmxvdy9nby9jb3JlL2ZyYW1ld29ya/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.DataType), }, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.DataType), }, null, null));
     }
     #endregion
 
   }
   #region Enums
   /// <summary>
+  /// (== suppress_warning documentation-presence ==)
   /// LINT.IfChange
   /// </summary>
   public enum DataType {

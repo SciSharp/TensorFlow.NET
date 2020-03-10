@@ -26,58 +26,65 @@ namespace Tensorflow {
           string.Concat(
             "Ci50ZW5zb3JmbG93L2NvcmUvcHJvdG9idWYvcmV3cml0ZXJfY29uZmlnLnBy",
             "b3RvEgp0ZW5zb3JmbG93Gip0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL2F0",
-            "dHJfdmFsdWUucHJvdG8iOwoTQXV0b1BhcmFsbGVsT3B0aW9ucxIOCgZlbmFi",
-            "bGUYASABKAgSFAoMbnVtX3JlcGxpY2FzGAIgASgFIisKFlNjb3BlZEFsbG9j",
-            "YXRvck9wdGlvbnMSEQoJZW5hYmxlX29wGAEgAygJIvUNCg5SZXdyaXRlckNv",
-            "bmZpZxI7ChBsYXlvdXRfb3B0aW1pemVyGAEgASgOMiEudGVuc29yZmxvdy5S",
-            "ZXdyaXRlckNvbmZpZy5Ub2dnbGUSOwoQY29uc3RhbnRfZm9sZGluZxgDIAEo",
-            "DjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEj0KEnNoYXBl",
-            "X29wdGltaXphdGlvbhgNIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25m",
-            "aWcuVG9nZ2xlEjQKCXJlbWFwcGluZxgOIAEoDjIhLnRlbnNvcmZsb3cuUmV3",
-            "cml0ZXJDb25maWcuVG9nZ2xlEkIKF2FyaXRobWV0aWNfb3B0aW1pemF0aW9u",
-            "GAcgASgOMiEudGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSQgoX",
-            "ZGVwZW5kZW5jeV9vcHRpbWl6YXRpb24YCCABKA4yIS50ZW5zb3JmbG93LlJl",
-            "d3JpdGVyQ29uZmlnLlRvZ2dsZRI8ChFsb29wX29wdGltaXphdGlvbhgJIAEo",
-            "DjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEkAKFWZ1bmN0",
-            "aW9uX29wdGltaXphdGlvbhgKIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJD",
-            "b25maWcuVG9nZ2xlEjkKDmRlYnVnX3N0cmlwcGVyGAsgASgOMiEudGVuc29y",
-            "Zmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSHQoVZGlzYWJsZV9tb2RlbF9w",
-            "cnVuaW5nGAIgASgIEkgKHXNjb3BlZF9hbGxvY2F0b3Jfb3B0aW1pemF0aW9u",
-            "GA8gASgOMiEudGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSQwoY",
-            "cGluX3RvX2hvc3Rfb3B0aW1pemF0aW9uGBIgASgOMiEudGVuc29yZmxvdy5S",
-            "ZXdyaXRlckNvbmZpZy5Ub2dnbGUSHgoWZGlzYWJsZV9tZXRhX29wdGltaXpl",
-            "chgTIAEoCBJPChltZXRhX29wdGltaXplcl9pdGVyYXRpb25zGAwgASgOMiwu",
-            "dGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5OdW1JdGVyYXRpb25zVHlwZRIX",
-            "Cg9taW5fZ3JhcGhfbm9kZXMYESABKAUSQgoTbWVtb3J5X29wdGltaXphdGlv",
-            "bhgEIAEoDjIlLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuTWVtT3B0VHlw",
-            "ZRIvCidtZW1vcnlfb3B0aW1pemVyX3RhcmdldF9ub2RlX25hbWVfc2NvcGUY",
-            "BiABKAkSIQoZbWV0YV9vcHRpbWl6ZXJfdGltZW91dF9tcxgUIAEoAxI2Cg1h",
-            "dXRvX3BhcmFsbGVsGAUgASgLMh8udGVuc29yZmxvdy5BdXRvUGFyYWxsZWxP",
-            "cHRpb25zEiAKGGZhaWxfb25fb3B0aW1pemVyX2Vycm9ycxgVIAEoCBJBChVz",
-            "Y29wZWRfYWxsb2NhdG9yX29wdHMYECABKAsyIi50ZW5zb3JmbG93LlNjb3Bl",
-            "ZEFsbG9jYXRvck9wdGlvbnMSEgoKb3B0aW1pemVycxhkIAMoCRJLChFjdXN0",
-            "b21fb3B0aW1pemVycxjIASADKAsyLy50ZW5zb3JmbG93LlJld3JpdGVyQ29u",
-            "ZmlnLkN1c3RvbUdyYXBoT3B0aW1pemVyGsoBChRDdXN0b21HcmFwaE9wdGlt",
-            "aXplchIMCgRuYW1lGAEgASgJElgKDXBhcmFtZXRlcl9tYXAYAiADKAsyQS50",
-            "ZW5zb3JmbG93LlJld3JpdGVyQ29uZmlnLkN1c3RvbUdyYXBoT3B0aW1pemVy",
-            "LlBhcmFtZXRlck1hcEVudHJ5GkoKEVBhcmFtZXRlck1hcEVudHJ5EgsKA2tl",
-            "eRgBIAEoCRIkCgV2YWx1ZRgCIAEoCzIVLnRlbnNvcmZsb3cuQXR0clZhbHVl",
-            "OgI4ASI2CgZUb2dnbGUSCwoHREVGQVVMVBAAEgYKAk9OEAESBwoDT0ZGEAIS",
-            "DgoKQUdHUkVTU0lWRRADIjwKEU51bUl0ZXJhdGlvbnNUeXBlEhUKEURFRkFV",
-            "TFRfTlVNX0lURVJTEAASBwoDT05FEAESBwoDVFdPEAIinwEKCk1lbU9wdFR5",
-            "cGUSEwoPREVGQVVMVF9NRU1fT1BUEAASDgoKTk9fTUVNX09QVBABEgoKBk1B",
-            "TlVBTBACEhcKE1NXQVBQSU5HX0hFVVJJU1RJQ1MQBBIcChhSRUNPTVBVVEFU",
-            "SU9OX0hFVVJJU1RJQ1MQBRIZChVTQ0hFRFVMSU5HX0hFVVJJU1RJQ1MQBhIO",
-            "CgpIRVVSSVNUSUNTEANCcwoYb3JnLnRlbnNvcmZsb3cuZnJhbWV3b3JrQhRS",
-            "ZXdyaXRlckNvbmZpZ1Byb3Rvc1ABWjxnaXRodWIuY29tL3RlbnNvcmZsb3cv",
-            "dGVuc29yZmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvcHJvdG9idWb4AQFiBnBy",
-            "b3RvMw=="));
+            "dHJfdmFsdWUucHJvdG8aLnRlbnNvcmZsb3cvY29yZS9wcm90b2J1Zi92ZXJp",
+            "Zmllcl9jb25maWcucHJvdG8iOwoTQXV0b1BhcmFsbGVsT3B0aW9ucxIOCgZl",
+            "bmFibGUYASABKAgSFAoMbnVtX3JlcGxpY2FzGAIgASgFIisKFlNjb3BlZEFs",
+            "bG9jYXRvck9wdGlvbnMSEQoJZW5hYmxlX29wGAEgAygJIogQCg5SZXdyaXRl",
+            "ckNvbmZpZxI7ChBsYXlvdXRfb3B0aW1pemVyGAEgASgOMiEudGVuc29yZmxv",
+            "dy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSOwoQY29uc3RhbnRfZm9sZGluZxgD",
+            "IAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEj0KEnNo",
+            "YXBlX29wdGltaXphdGlvbhgNIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJD",
+            "b25maWcuVG9nZ2xlEjQKCXJlbWFwcGluZxgOIAEoDjIhLnRlbnNvcmZsb3cu",
+            "UmV3cml0ZXJDb25maWcuVG9nZ2xlEkIKF2FyaXRobWV0aWNfb3B0aW1pemF0",
+            "aW9uGAcgASgOMiEudGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUS",
+            "QgoXZGVwZW5kZW5jeV9vcHRpbWl6YXRpb24YCCABKA4yIS50ZW5zb3JmbG93",
+            "LlJld3JpdGVyQ29uZmlnLlRvZ2dsZRI8ChFsb29wX29wdGltaXphdGlvbhgJ",
+            "IAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEkAKFWZ1",
+            "bmN0aW9uX29wdGltaXphdGlvbhgKIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0",
+            "ZXJDb25maWcuVG9nZ2xlEjkKDmRlYnVnX3N0cmlwcGVyGAsgASgOMiEudGVu",
+            "c29yZmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSHQoVZGlzYWJsZV9tb2Rl",
+            "bF9wcnVuaW5nGAIgASgIEkgKHXNjb3BlZF9hbGxvY2F0b3Jfb3B0aW1pemF0",
+            "aW9uGA8gASgOMiEudGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUS",
+            "QwoYcGluX3RvX2hvc3Rfb3B0aW1pemF0aW9uGBIgASgOMiEudGVuc29yZmxv",
+            "dy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSQgoXaW1wbGVtZW50YXRpb25fc2Vs",
+            "ZWN0b3IYFiABKA4yIS50ZW5zb3JmbG93LlJld3JpdGVyQ29uZmlnLlRvZ2ds",
+            "ZRI/ChRhdXRvX21peGVkX3ByZWNpc2lvbhgXIAEoDjIhLnRlbnNvcmZsb3cu",
+            "UmV3cml0ZXJDb25maWcuVG9nZ2xlEh4KFmRpc2FibGVfbWV0YV9vcHRpbWl6",
+            "ZXIYEyABKAgSTwoZbWV0YV9vcHRpbWl6ZXJfaXRlcmF0aW9ucxgMIAEoDjIs",
+            "LnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuTnVtSXRlcmF0aW9uc1R5cGUS",
+            "FwoPbWluX2dyYXBoX25vZGVzGBEgASgFEkIKE21lbW9yeV9vcHRpbWl6YXRp",
+            "b24YBCABKA4yJS50ZW5zb3JmbG93LlJld3JpdGVyQ29uZmlnLk1lbU9wdFR5",
+            "cGUSLwonbWVtb3J5X29wdGltaXplcl90YXJnZXRfbm9kZV9uYW1lX3Njb3Bl",
+            "GAYgASgJEiEKGW1ldGFfb3B0aW1pemVyX3RpbWVvdXRfbXMYFCABKAMSNgoN",
+            "YXV0b19wYXJhbGxlbBgFIAEoCzIfLnRlbnNvcmZsb3cuQXV0b1BhcmFsbGVs",
+            "T3B0aW9ucxIgChhmYWlsX29uX29wdGltaXplcl9lcnJvcnMYFSABKAgSQQoV",
+            "c2NvcGVkX2FsbG9jYXRvcl9vcHRzGBAgASgLMiIudGVuc29yZmxvdy5TY29w",
+            "ZWRBbGxvY2F0b3JPcHRpb25zEhIKCm9wdGltaXplcnMYZCADKAkSSwoRY3Vz",
+            "dG9tX29wdGltaXplcnMYyAEgAygLMi8udGVuc29yZmxvdy5SZXdyaXRlckNv",
+            "bmZpZy5DdXN0b21HcmFwaE9wdGltaXplchJECh9pbnRlcl9vcHRpbWl6ZXJf",
+            "dmVyaWZpZXJfY29uZmlnGKwCIAEoCzIaLnRlbnNvcmZsb3cuVmVyaWZpZXJD",
+            "b25maWcSRgohcG9zdF9vcHRpbWl6YXRpb25fdmVyaWZpZXJfY29uZmlnGK0C",
+            "IAEoCzIaLnRlbnNvcmZsb3cuVmVyaWZpZXJDb25maWcaygEKFEN1c3RvbUdy",
+            "YXBoT3B0aW1pemVyEgwKBG5hbWUYASABKAkSWAoNcGFyYW1ldGVyX21hcBgC",
+            "IAMoCzJBLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuQ3VzdG9tR3JhcGhP",
+            "cHRpbWl6ZXIuUGFyYW1ldGVyTWFwRW50cnkaSgoRUGFyYW1ldGVyTWFwRW50",
+            "cnkSCwoDa2V5GAEgASgJEiQKBXZhbHVlGAIgASgLMhUudGVuc29yZmxvdy5B",
+            "dHRyVmFsdWU6AjgBIjYKBlRvZ2dsZRILCgdERUZBVUxUEAASBgoCT04QARIH",
+            "CgNPRkYQAhIOCgpBR0dSRVNTSVZFEAMiPAoRTnVtSXRlcmF0aW9uc1R5cGUS",
+            "FQoRREVGQVVMVF9OVU1fSVRFUlMQABIHCgNPTkUQARIHCgNUV08QAiKfAQoK",
+            "TWVtT3B0VHlwZRITCg9ERUZBVUxUX01FTV9PUFQQABIOCgpOT19NRU1fT1BU",
+            "EAESCgoGTUFOVUFMEAISFwoTU1dBUFBJTkdfSEVVUklTVElDUxAEEhwKGFJF",
+            "Q09NUFVUQVRJT05fSEVVUklTVElDUxAFEhkKFVNDSEVEVUxJTkdfSEVVUklT",
+            "VElDUxAGEg4KCkhFVVJJU1RJQ1MQA0JzChhvcmcudGVuc29yZmxvdy5mcmFt",
+            "ZXdvcmtCFFJld3JpdGVyQ29uZmlnUHJvdG9zUAFaPGdpdGh1Yi5jb20vdGVu",
+            "c29yZmxvdy90ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28vY29yZS9wcm90b2J1",
+            "ZvgBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.AutoParallelOptions), global::Tensorflow.AutoParallelOptions.Parser, new[]{ "Enable", "NumReplicas" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ScopedAllocatorOptions), global::Tensorflow.ScopedAllocatorOptions.Parser, new[]{ "EnableOp" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RewriterConfig), global::Tensorflow.RewriterConfig.Parser, new[]{ "LayoutOptimizer", "ConstantFolding", "ShapeOptimization", "Remapping", "ArithmeticOptimization", "DependencyOptimization", "LoopOptimization", "FunctionOptimization", "DebugStripper", "DisableModelPruning", "ScopedAllocatorOptimization", "PinToHostOptimization", "DisableMetaOptimizer", "MetaOptimizerIterations", "MinGraphNodes", "MemoryOptimization", "MemoryOptimizerTargetNodeNameScope", "MetaOptimizerTimeoutMs", "AutoParallel", "FailOnOptimizerErrors", "ScopedAllocatorOpts", "Optimizers", "CustomOptimizers" }, null, new[]{ typeof(global::Tensorflow.RewriterConfig.Types.Toggle), typeof(global::Tensorflow.RewriterConfig.Types.NumIterationsType), typeof(global::Tensorflow.RewriterConfig.Types.MemOptType) }, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RewriterConfig.Types.CustomGraphOptimizer), global::Tensorflow.RewriterConfig.Types.CustomGraphOptimizer.Parser, new[]{ "Name", "ParameterMap" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, })})
+          new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, global::Tensorflow.VerifierConfigReflection.Descriptor, },
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.AutoParallelOptions), global::Tensorflow.AutoParallelOptions.Parser, new[]{ "Enable", "NumReplicas" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ScopedAllocatorOptions), global::Tensorflow.ScopedAllocatorOptions.Parser, new[]{ "EnableOp" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RewriterConfig), global::Tensorflow.RewriterConfig.Parser, new[]{ "LayoutOptimizer", "ConstantFolding", "ShapeOptimization", "Remapping", "ArithmeticOptimization", "DependencyOptimization", "LoopOptimization", "FunctionOptimization", "DebugStripper", "DisableModelPruning", "ScopedAllocatorOptimization", "PinToHostOptimization", "ImplementationSelector", "AutoMixedPrecision", "DisableMetaOptimizer", "MetaOptimizerIterations", "MinGraphNodes", "MemoryOptimization", "MemoryOptimizerTargetNodeNameScope", "MetaOptimizerTimeoutMs", "AutoParallel", "FailOnOptimizerErrors", "ScopedAllocatorOpts", "Optimizers", "CustomOptimizers", "InterOptimizerVerifierConfig", "PostOptimizationVerifierConfig" }, null, new[]{ typeof(global::Tensorflow.RewriterConfig.Types.Toggle), typeof(global::Tensorflow.RewriterConfig.Types.NumIterationsType), typeof(global::Tensorflow.RewriterConfig.Types.MemOptType) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RewriterConfig.Types.CustomGraphOptimizer), global::Tensorflow.RewriterConfig.Types.CustomGraphOptimizer.Parser, new[]{ "Name", "ParameterMap" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, })})
           }));
     }
     #endregion
@@ -406,6 +413,8 @@ namespace Tensorflow {
       disableModelPruning_ = other.disableModelPruning_;
       scopedAllocatorOptimization_ = other.scopedAllocatorOptimization_;
       pinToHostOptimization_ = other.pinToHostOptimization_;
+      implementationSelector_ = other.implementationSelector_;
+      autoMixedPrecision_ = other.autoMixedPrecision_;
       disableMetaOptimizer_ = other.disableMetaOptimizer_;
       metaOptimizerIterations_ = other.metaOptimizerIterations_;
       minGraphNodes_ = other.minGraphNodes_;
@@ -417,6 +426,8 @@ namespace Tensorflow {
       scopedAllocatorOpts_ = other.scopedAllocatorOpts_ != null ? other.scopedAllocatorOpts_.Clone() : null;
       optimizers_ = other.optimizers_.Clone();
       customOptimizers_ = other.customOptimizers_.Clone();
+      interOptimizerVerifierConfig_ = other.interOptimizerVerifierConfig_ != null ? other.interOptimizerVerifierConfig_.Clone() : null;
+      postOptimizationVerifierConfig_ = other.postOptimizationVerifierConfig_ != null ? other.postOptimizationVerifierConfig_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -427,7 +438,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "layout_optimizer" field.</summary>
     public const int LayoutOptimizerFieldNumber = 1;
-    private global::Tensorflow.RewriterConfig.Types.Toggle layoutOptimizer_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle layoutOptimizer_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Optimize tensor layouts (default is ON)
     /// e.g. This will try to use NCHW layout on GPU which is faster.
@@ -442,7 +453,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "constant_folding" field.</summary>
     public const int ConstantFoldingFieldNumber = 3;
-    private global::Tensorflow.RewriterConfig.Types.Toggle constantFolding_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle constantFolding_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Fold constants (default is ON)
     /// Statically infer the value of tensors when possible, and materialize the
@@ -458,7 +469,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "shape_optimization" field.</summary>
     public const int ShapeOptimizationFieldNumber = 13;
-    private global::Tensorflow.RewriterConfig.Types.Toggle shapeOptimization_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle shapeOptimization_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Shape optimizations (default is ON)
     /// Simplify computations made on shapes.
@@ -473,7 +484,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "remapping" field.</summary>
     public const int RemappingFieldNumber = 14;
-    private global::Tensorflow.RewriterConfig.Types.Toggle remapping_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle remapping_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Remapping (default is ON)
     /// Remap subgraphs onto more efficient implementations.
@@ -488,7 +499,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "arithmetic_optimization" field.</summary>
     public const int ArithmeticOptimizationFieldNumber = 7;
-    private global::Tensorflow.RewriterConfig.Types.Toggle arithmeticOptimization_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle arithmeticOptimization_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Arithmetic optimizations (default is ON)
     /// e.g. Simplify arithmetic ops; merge ops with same value (like constants).
@@ -503,7 +514,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "dependency_optimization" field.</summary>
     public const int DependencyOptimizationFieldNumber = 8;
-    private global::Tensorflow.RewriterConfig.Types.Toggle dependencyOptimization_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle dependencyOptimization_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Control dependency optimizations (default is ON).
     /// Remove redundant control dependencies, which may enable other optimization.
@@ -518,7 +529,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "loop_optimization" field.</summary>
     public const int LoopOptimizationFieldNumber = 9;
-    private global::Tensorflow.RewriterConfig.Types.Toggle loopOptimization_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle loopOptimization_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Loop optimizations (default is ON).
     /// </summary>
@@ -532,7 +543,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "function_optimization" field.</summary>
     public const int FunctionOptimizationFieldNumber = 10;
-    private global::Tensorflow.RewriterConfig.Types.Toggle functionOptimization_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle functionOptimization_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Function optimizations (default is ON).
     /// </summary>
@@ -546,7 +557,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "debug_stripper" field.</summary>
     public const int DebugStripperFieldNumber = 11;
-    private global::Tensorflow.RewriterConfig.Types.Toggle debugStripper_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle debugStripper_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Strips debug-related nodes from the graph (off by default).
     /// </summary>
@@ -574,7 +585,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "scoped_allocator_optimization" field.</summary>
     public const int ScopedAllocatorOptimizationFieldNumber = 15;
-    private global::Tensorflow.RewriterConfig.Types.Toggle scopedAllocatorOptimization_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle scopedAllocatorOptimization_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Try to allocate some independent Op outputs contiguously in order to
     /// merge or eliminate downstream Ops (off by default).
@@ -589,7 +600,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "pin_to_host_optimization" field.</summary>
     public const int PinToHostOptimizationFieldNumber = 18;
-    private global::Tensorflow.RewriterConfig.Types.Toggle pinToHostOptimization_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.Toggle pinToHostOptimization_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
     /// <summary>
     /// Force small ops onto the CPU (default is OFF).
     /// </summary>
@@ -598,6 +609,38 @@ namespace Tensorflow {
       get { return pinToHostOptimization_; }
       set {
         pinToHostOptimization_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "implementation_selector" field.</summary>
+    public const int ImplementationSelectorFieldNumber = 22;
+    private global::Tensorflow.RewriterConfig.Types.Toggle implementationSelector_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
+    /// <summary>
+    /// Enable the swap of kernel implementations based on the device placement
+    /// (default is ON).
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.RewriterConfig.Types.Toggle ImplementationSelector {
+      get { return implementationSelector_; }
+      set {
+        implementationSelector_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "auto_mixed_precision" field.</summary>
+    public const int AutoMixedPrecisionFieldNumber = 23;
+    private global::Tensorflow.RewriterConfig.Types.Toggle autoMixedPrecision_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
+    /// <summary>
+    /// Optimize data types (default is OFF).
+    /// e.g., This will try to use float16 on GPU which is faster.
+    /// Note that this can change the numerical stability of the graph and may
+    /// require the use of loss scaling to maintain model convergence.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.RewriterConfig.Types.Toggle AutoMixedPrecision {
+      get { return autoMixedPrecision_; }
+      set {
+        autoMixedPrecision_ = value;
       }
     }
 
@@ -617,7 +660,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "meta_optimizer_iterations" field.</summary>
     public const int MetaOptimizerIterationsFieldNumber = 12;
-    private global::Tensorflow.RewriterConfig.Types.NumIterationsType metaOptimizerIterations_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.NumIterationsType metaOptimizerIterations_ = global::Tensorflow.RewriterConfig.Types.NumIterationsType.DefaultNumIters;
     /// <summary>
     /// Controls how many times we run the optimizers in meta optimizer (default
     /// is once).
@@ -649,7 +692,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "memory_optimization" field.</summary>
     public const int MemoryOptimizationFieldNumber = 4;
-    private global::Tensorflow.RewriterConfig.Types.MemOptType memoryOptimization_ = 0;
+    private global::Tensorflow.RewriterConfig.Types.MemOptType memoryOptimization_ = global::Tensorflow.RewriterConfig.Types.MemOptType.DefaultMemOpt;
     /// <summary>
     /// Configures memory optimization passes through the meta-optimizer. Has no
     /// effect on manually requested memory optimization passes in the optimizers
@@ -779,6 +822,35 @@ namespace Tensorflow {
       get { return customOptimizers_; }
     }
 
+    /// <summary>Field number for the "inter_optimizer_verifier_config" field.</summary>
+    public const int InterOptimizerVerifierConfigFieldNumber = 300;
+    private global::Tensorflow.VerifierConfig interOptimizerVerifierConfig_;
+    /// <summary>
+    /// VerifierConfig specifying the verifiers to be run after every optimizer.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.VerifierConfig InterOptimizerVerifierConfig {
+      get { return interOptimizerVerifierConfig_; }
+      set {
+        interOptimizerVerifierConfig_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "post_optimization_verifier_config" field.</summary>
+    public const int PostOptimizationVerifierConfigFieldNumber = 301;
+    private global::Tensorflow.VerifierConfig postOptimizationVerifierConfig_;
+    /// <summary>
+    /// VerifierConfig specifying the verifiers to be run at the end, after all
+    /// optimizers have run.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.VerifierConfig PostOptimizationVerifierConfig {
+      get { return postOptimizationVerifierConfig_; }
+      set {
+        postOptimizationVerifierConfig_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as RewriterConfig);
@@ -804,6 +876,8 @@ namespace Tensorflow {
       if (DisableModelPruning != other.DisableModelPruning) return false;
       if (ScopedAllocatorOptimization != other.ScopedAllocatorOptimization) return false;
       if (PinToHostOptimization != other.PinToHostOptimization) return false;
+      if (ImplementationSelector != other.ImplementationSelector) return false;
+      if (AutoMixedPrecision != other.AutoMixedPrecision) return false;
       if (DisableMetaOptimizer != other.DisableMetaOptimizer) return false;
       if (MetaOptimizerIterations != other.MetaOptimizerIterations) return false;
       if (MinGraphNodes != other.MinGraphNodes) return false;
@@ -815,28 +889,32 @@ namespace Tensorflow {
       if (!object.Equals(ScopedAllocatorOpts, other.ScopedAllocatorOpts)) return false;
       if(!optimizers_.Equals(other.optimizers_)) return false;
       if(!customOptimizers_.Equals(other.customOptimizers_)) return false;
+      if (!object.Equals(InterOptimizerVerifierConfig, other.InterOptimizerVerifierConfig)) return false;
+      if (!object.Equals(PostOptimizationVerifierConfig, other.PostOptimizationVerifierConfig)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (LayoutOptimizer != 0) hash ^= LayoutOptimizer.GetHashCode();
-      if (ConstantFolding != 0) hash ^= ConstantFolding.GetHashCode();
-      if (ShapeOptimization != 0) hash ^= ShapeOptimization.GetHashCode();
-      if (Remapping != 0) hash ^= Remapping.GetHashCode();
-      if (ArithmeticOptimization != 0) hash ^= ArithmeticOptimization.GetHashCode();
-      if (DependencyOptimization != 0) hash ^= DependencyOptimization.GetHashCode();
-      if (LoopOptimization != 0) hash ^= LoopOptimization.GetHashCode();
-      if (FunctionOptimization != 0) hash ^= FunctionOptimization.GetHashCode();
-      if (DebugStripper != 0) hash ^= DebugStripper.GetHashCode();
+      if (LayoutOptimizer != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= LayoutOptimizer.GetHashCode();
+      if (ConstantFolding != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= ConstantFolding.GetHashCode();
+      if (ShapeOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= ShapeOptimization.GetHashCode();
+      if (Remapping != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= Remapping.GetHashCode();
+      if (ArithmeticOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= ArithmeticOptimization.GetHashCode();
+      if (DependencyOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= DependencyOptimization.GetHashCode();
+      if (LoopOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= LoopOptimization.GetHashCode();
+      if (FunctionOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= FunctionOptimization.GetHashCode();
+      if (DebugStripper != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= DebugStripper.GetHashCode();
       if (DisableModelPruning != false) hash ^= DisableModelPruning.GetHashCode();
-      if (ScopedAllocatorOptimization != 0) hash ^= ScopedAllocatorOptimization.GetHashCode();
-      if (PinToHostOptimization != 0) hash ^= PinToHostOptimization.GetHashCode();
+      if (ScopedAllocatorOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= ScopedAllocatorOptimization.GetHashCode();
+      if (PinToHostOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= PinToHostOptimization.GetHashCode();
+      if (ImplementationSelector != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= ImplementationSelector.GetHashCode();
+      if (AutoMixedPrecision != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= AutoMixedPrecision.GetHashCode();
       if (DisableMetaOptimizer != false) hash ^= DisableMetaOptimizer.GetHashCode();
-      if (MetaOptimizerIterations != 0) hash ^= MetaOptimizerIterations.GetHashCode();
+      if (MetaOptimizerIterations != global::Tensorflow.RewriterConfig.Types.NumIterationsType.DefaultNumIters) hash ^= MetaOptimizerIterations.GetHashCode();
       if (MinGraphNodes != 0) hash ^= MinGraphNodes.GetHashCode();
-      if (MemoryOptimization != 0) hash ^= MemoryOptimization.GetHashCode();
+      if (MemoryOptimization != global::Tensorflow.RewriterConfig.Types.MemOptType.DefaultMemOpt) hash ^= MemoryOptimization.GetHashCode();
       if (MemoryOptimizerTargetNodeNameScope.Length != 0) hash ^= MemoryOptimizerTargetNodeNameScope.GetHashCode();
       if (MetaOptimizerTimeoutMs != 0L) hash ^= MetaOptimizerTimeoutMs.GetHashCode();
       if (autoParallel_ != null) hash ^= AutoParallel.GetHashCode();
@@ -844,6 +922,8 @@ namespace Tensorflow {
       if (scopedAllocatorOpts_ != null) hash ^= ScopedAllocatorOpts.GetHashCode();
       hash ^= optimizers_.GetHashCode();
       hash ^= customOptimizers_.GetHashCode();
+      if (interOptimizerVerifierConfig_ != null) hash ^= InterOptimizerVerifierConfig.GetHashCode();
+      if (postOptimizationVerifierConfig_ != null) hash ^= PostOptimizationVerifierConfig.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -857,7 +937,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (LayoutOptimizer != 0) {
+      if (LayoutOptimizer != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(8);
         output.WriteEnum((int) LayoutOptimizer);
       }
@@ -865,11 +945,11 @@ namespace Tensorflow {
         output.WriteRawTag(16);
         output.WriteBool(DisableModelPruning);
       }
-      if (ConstantFolding != 0) {
+      if (ConstantFolding != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(24);
         output.WriteEnum((int) ConstantFolding);
       }
-      if (MemoryOptimization != 0) {
+      if (MemoryOptimization != global::Tensorflow.RewriterConfig.Types.MemOptType.DefaultMemOpt) {
         output.WriteRawTag(32);
         output.WriteEnum((int) MemoryOptimization);
       }
@@ -881,39 +961,39 @@ namespace Tensorflow {
         output.WriteRawTag(50);
         output.WriteString(MemoryOptimizerTargetNodeNameScope);
       }
-      if (ArithmeticOptimization != 0) {
+      if (ArithmeticOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(56);
         output.WriteEnum((int) ArithmeticOptimization);
       }
-      if (DependencyOptimization != 0) {
+      if (DependencyOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(64);
         output.WriteEnum((int) DependencyOptimization);
       }
-      if (LoopOptimization != 0) {
+      if (LoopOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(72);
         output.WriteEnum((int) LoopOptimization);
       }
-      if (FunctionOptimization != 0) {
+      if (FunctionOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(80);
         output.WriteEnum((int) FunctionOptimization);
       }
-      if (DebugStripper != 0) {
+      if (DebugStripper != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(88);
         output.WriteEnum((int) DebugStripper);
       }
-      if (MetaOptimizerIterations != 0) {
+      if (MetaOptimizerIterations != global::Tensorflow.RewriterConfig.Types.NumIterationsType.DefaultNumIters) {
         output.WriteRawTag(96);
         output.WriteEnum((int) MetaOptimizerIterations);
       }
-      if (ShapeOptimization != 0) {
+      if (ShapeOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(104);
         output.WriteEnum((int) ShapeOptimization);
       }
-      if (Remapping != 0) {
+      if (Remapping != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(112);
         output.WriteEnum((int) Remapping);
       }
-      if (ScopedAllocatorOptimization != 0) {
+      if (ScopedAllocatorOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(120);
         output.WriteEnum((int) ScopedAllocatorOptimization);
       }
@@ -925,7 +1005,7 @@ namespace Tensorflow {
         output.WriteRawTag(136, 1);
         output.WriteInt32(MinGraphNodes);
       }
-      if (PinToHostOptimization != 0) {
+      if (PinToHostOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         output.WriteRawTag(144, 1);
         output.WriteEnum((int) PinToHostOptimization);
       }
@@ -941,8 +1021,24 @@ namespace Tensorflow {
         output.WriteRawTag(168, 1);
         output.WriteBool(FailOnOptimizerErrors);
       }
+      if (ImplementationSelector != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
+        output.WriteRawTag(176, 1);
+        output.WriteEnum((int) ImplementationSelector);
+      }
+      if (AutoMixedPrecision != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
+        output.WriteRawTag(184, 1);
+        output.WriteEnum((int) AutoMixedPrecision);
+      }
       optimizers_.WriteTo(output, _repeated_optimizers_codec);
       customOptimizers_.WriteTo(output, _repeated_customOptimizers_codec);
+      if (interOptimizerVerifierConfig_ != null) {
+        output.WriteRawTag(226, 18);
+        output.WriteMessage(InterOptimizerVerifierConfig);
+      }
+      if (postOptimizationVerifierConfig_ != null) {
+        output.WriteRawTag(234, 18);
+        output.WriteMessage(PostOptimizationVerifierConfig);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -951,52 +1047,58 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (LayoutOptimizer != 0) {
+      if (LayoutOptimizer != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) LayoutOptimizer);
       }
-      if (ConstantFolding != 0) {
+      if (ConstantFolding != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ConstantFolding);
       }
-      if (ShapeOptimization != 0) {
+      if (ShapeOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ShapeOptimization);
       }
-      if (Remapping != 0) {
+      if (Remapping != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Remapping);
       }
-      if (ArithmeticOptimization != 0) {
+      if (ArithmeticOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ArithmeticOptimization);
       }
-      if (DependencyOptimization != 0) {
+      if (DependencyOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) DependencyOptimization);
       }
-      if (LoopOptimization != 0) {
+      if (LoopOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) LoopOptimization);
       }
-      if (FunctionOptimization != 0) {
+      if (FunctionOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) FunctionOptimization);
       }
-      if (DebugStripper != 0) {
+      if (DebugStripper != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) DebugStripper);
       }
       if (DisableModelPruning != false) {
         size += 1 + 1;
       }
-      if (ScopedAllocatorOptimization != 0) {
+      if (ScopedAllocatorOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ScopedAllocatorOptimization);
       }
-      if (PinToHostOptimization != 0) {
+      if (PinToHostOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) PinToHostOptimization);
+      }
+      if (ImplementationSelector != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
+        size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) ImplementationSelector);
+      }
+      if (AutoMixedPrecision != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
+        size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) AutoMixedPrecision);
       }
       if (DisableMetaOptimizer != false) {
         size += 2 + 1;
       }
-      if (MetaOptimizerIterations != 0) {
+      if (MetaOptimizerIterations != global::Tensorflow.RewriterConfig.Types.NumIterationsType.DefaultNumIters) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MetaOptimizerIterations);
       }
       if (MinGraphNodes != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(MinGraphNodes);
       }
-      if (MemoryOptimization != 0) {
+      if (MemoryOptimization != global::Tensorflow.RewriterConfig.Types.MemOptType.DefaultMemOpt) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MemoryOptimization);
       }
       if (MemoryOptimizerTargetNodeNameScope.Length != 0) {
@@ -1016,6 +1118,12 @@ namespace Tensorflow {
       }
       size += optimizers_.CalculateSize(_repeated_optimizers_codec);
       size += customOptimizers_.CalculateSize(_repeated_customOptimizers_codec);
+      if (interOptimizerVerifierConfig_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(InterOptimizerVerifierConfig);
+      }
+      if (postOptimizationVerifierConfig_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(PostOptimizationVerifierConfig);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1027,52 +1135,58 @@ namespace Tensorflow {
       if (other == null) {
         return;
       }
-      if (other.LayoutOptimizer != 0) {
+      if (other.LayoutOptimizer != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         LayoutOptimizer = other.LayoutOptimizer;
       }
-      if (other.ConstantFolding != 0) {
+      if (other.ConstantFolding != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         ConstantFolding = other.ConstantFolding;
       }
-      if (other.ShapeOptimization != 0) {
+      if (other.ShapeOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         ShapeOptimization = other.ShapeOptimization;
       }
-      if (other.Remapping != 0) {
+      if (other.Remapping != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         Remapping = other.Remapping;
       }
-      if (other.ArithmeticOptimization != 0) {
+      if (other.ArithmeticOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         ArithmeticOptimization = other.ArithmeticOptimization;
       }
-      if (other.DependencyOptimization != 0) {
+      if (other.DependencyOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         DependencyOptimization = other.DependencyOptimization;
       }
-      if (other.LoopOptimization != 0) {
+      if (other.LoopOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         LoopOptimization = other.LoopOptimization;
       }
-      if (other.FunctionOptimization != 0) {
+      if (other.FunctionOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         FunctionOptimization = other.FunctionOptimization;
       }
-      if (other.DebugStripper != 0) {
+      if (other.DebugStripper != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         DebugStripper = other.DebugStripper;
       }
       if (other.DisableModelPruning != false) {
         DisableModelPruning = other.DisableModelPruning;
       }
-      if (other.ScopedAllocatorOptimization != 0) {
+      if (other.ScopedAllocatorOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         ScopedAllocatorOptimization = other.ScopedAllocatorOptimization;
       }
-      if (other.PinToHostOptimization != 0) {
+      if (other.PinToHostOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         PinToHostOptimization = other.PinToHostOptimization;
+      }
+      if (other.ImplementationSelector != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
+        ImplementationSelector = other.ImplementationSelector;
+      }
+      if (other.AutoMixedPrecision != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
+        AutoMixedPrecision = other.AutoMixedPrecision;
       }
       if (other.DisableMetaOptimizer != false) {
         DisableMetaOptimizer = other.DisableMetaOptimizer;
       }
-      if (other.MetaOptimizerIterations != 0) {
+      if (other.MetaOptimizerIterations != global::Tensorflow.RewriterConfig.Types.NumIterationsType.DefaultNumIters) {
         MetaOptimizerIterations = other.MetaOptimizerIterations;
       }
       if (other.MinGraphNodes != 0) {
         MinGraphNodes = other.MinGraphNodes;
       }
-      if (other.MemoryOptimization != 0) {
+      if (other.MemoryOptimization != global::Tensorflow.RewriterConfig.Types.MemOptType.DefaultMemOpt) {
         MemoryOptimization = other.MemoryOptimization;
       }
       if (other.MemoryOptimizerTargetNodeNameScope.Length != 0) {
@@ -1083,7 +1197,7 @@ namespace Tensorflow {
       }
       if (other.autoParallel_ != null) {
         if (autoParallel_ == null) {
-          autoParallel_ = new global::Tensorflow.AutoParallelOptions();
+          AutoParallel = new global::Tensorflow.AutoParallelOptions();
         }
         AutoParallel.MergeFrom(other.AutoParallel);
       }
@@ -1092,12 +1206,24 @@ namespace Tensorflow {
       }
       if (other.scopedAllocatorOpts_ != null) {
         if (scopedAllocatorOpts_ == null) {
-          scopedAllocatorOpts_ = new global::Tensorflow.ScopedAllocatorOptions();
+          ScopedAllocatorOpts = new global::Tensorflow.ScopedAllocatorOptions();
         }
         ScopedAllocatorOpts.MergeFrom(other.ScopedAllocatorOpts);
       }
       optimizers_.Add(other.optimizers_);
       customOptimizers_.Add(other.customOptimizers_);
+      if (other.interOptimizerVerifierConfig_ != null) {
+        if (interOptimizerVerifierConfig_ == null) {
+          InterOptimizerVerifierConfig = new global::Tensorflow.VerifierConfig();
+        }
+        InterOptimizerVerifierConfig.MergeFrom(other.InterOptimizerVerifierConfig);
+      }
+      if (other.postOptimizationVerifierConfig_ != null) {
+        if (postOptimizationVerifierConfig_ == null) {
+          PostOptimizationVerifierConfig = new global::Tensorflow.VerifierConfig();
+        }
+        PostOptimizationVerifierConfig.MergeFrom(other.PostOptimizationVerifierConfig);
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1110,7 +1236,7 @@ namespace Tensorflow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            layoutOptimizer_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            LayoutOptimizer = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 16: {
@@ -1118,18 +1244,18 @@ namespace Tensorflow {
             break;
           }
           case 24: {
-            constantFolding_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            ConstantFolding = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 32: {
-            memoryOptimization_ = (global::Tensorflow.RewriterConfig.Types.MemOptType) input.ReadEnum();
+            MemoryOptimization = (global::Tensorflow.RewriterConfig.Types.MemOptType) input.ReadEnum();
             break;
           }
           case 42: {
             if (autoParallel_ == null) {
-              autoParallel_ = new global::Tensorflow.AutoParallelOptions();
+              AutoParallel = new global::Tensorflow.AutoParallelOptions();
             }
-            input.ReadMessage(autoParallel_);
+            input.ReadMessage(AutoParallel);
             break;
           }
           case 50: {
@@ -1137,46 +1263,46 @@ namespace Tensorflow {
             break;
           }
           case 56: {
-            arithmeticOptimization_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            ArithmeticOptimization = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 64: {
-            dependencyOptimization_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            DependencyOptimization = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 72: {
-            loopOptimization_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            LoopOptimization = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 80: {
-            functionOptimization_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            FunctionOptimization = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 88: {
-            debugStripper_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            DebugStripper = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 96: {
-            metaOptimizerIterations_ = (global::Tensorflow.RewriterConfig.Types.NumIterationsType) input.ReadEnum();
+            MetaOptimizerIterations = (global::Tensorflow.RewriterConfig.Types.NumIterationsType) input.ReadEnum();
             break;
           }
           case 104: {
-            shapeOptimization_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            ShapeOptimization = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 112: {
-            remapping_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            Remapping = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 120: {
-            scopedAllocatorOptimization_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            ScopedAllocatorOptimization = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 130: {
             if (scopedAllocatorOpts_ == null) {
-              scopedAllocatorOpts_ = new global::Tensorflow.ScopedAllocatorOptions();
+              ScopedAllocatorOpts = new global::Tensorflow.ScopedAllocatorOptions();
             }
-            input.ReadMessage(scopedAllocatorOpts_);
+            input.ReadMessage(ScopedAllocatorOpts);
             break;
           }
           case 136: {
@@ -1184,7 +1310,7 @@ namespace Tensorflow {
             break;
           }
           case 144: {
-            pinToHostOptimization_ = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            PinToHostOptimization = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
           case 152: {
@@ -1199,12 +1325,34 @@ namespace Tensorflow {
             FailOnOptimizerErrors = input.ReadBool();
             break;
           }
+          case 176: {
+            ImplementationSelector = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            break;
+          }
+          case 184: {
+            AutoMixedPrecision = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            break;
+          }
           case 802: {
             optimizers_.AddEntriesFrom(input, _repeated_optimizers_codec);
             break;
           }
           case 1602: {
             customOptimizers_.AddEntriesFrom(input, _repeated_customOptimizers_codec);
+            break;
+          }
+          case 2402: {
+            if (interOptimizerVerifierConfig_ == null) {
+              InterOptimizerVerifierConfig = new global::Tensorflow.VerifierConfig();
+            }
+            input.ReadMessage(InterOptimizerVerifierConfig);
+            break;
+          }
+          case 2410: {
+            if (postOptimizationVerifierConfig_ == null) {
+              PostOptimizationVerifierConfig = new global::Tensorflow.VerifierConfig();
+            }
+            input.ReadMessage(PostOptimizationVerifierConfig);
             break;
           }
         }
@@ -1323,7 +1471,7 @@ namespace Tensorflow {
         /// <summary>Field number for the "parameter_map" field.</summary>
         public const int ParameterMapFieldNumber = 2;
         private static readonly pbc::MapField<string, global::Tensorflow.AttrValue>.Codec _map_parameterMap_codec
-            = new pbc::MapField<string, global::Tensorflow.AttrValue>.Codec(pb::FieldCodec.ForString(10), pb::FieldCodec.ForMessage(18, global::Tensorflow.AttrValue.Parser), 18);
+            = new pbc::MapField<string, global::Tensorflow.AttrValue>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::Tensorflow.AttrValue.Parser), 18);
         private readonly pbc::MapField<string, global::Tensorflow.AttrValue> parameterMap_ = new pbc::MapField<string, global::Tensorflow.AttrValue>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::MapField<string, global::Tensorflow.AttrValue> ParameterMap {

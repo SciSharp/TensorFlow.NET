@@ -40,11 +40,11 @@ namespace Tensorflow {
             "bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.InterconnectLink), global::Tensorflow.InterconnectLink.Parser, new[]{ "DeviceId", "Type", "Strength" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.LocalLinks), global::Tensorflow.LocalLinks.Parser, new[]{ "Link" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DeviceLocality), global::Tensorflow.DeviceLocality.Parser, new[]{ "BusId", "NumaNode", "Links" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DeviceAttributes), global::Tensorflow.DeviceAttributes.Parser, new[]{ "Name", "DeviceType", "MemoryLimit", "Locality", "Incarnation", "PhysicalDeviceDesc" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.InterconnectLink), global::Tensorflow.InterconnectLink.Parser, new[]{ "DeviceId", "Type", "Strength" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.LocalLinks), global::Tensorflow.LocalLinks.Parser, new[]{ "Link" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DeviceLocality), global::Tensorflow.DeviceLocality.Parser, new[]{ "BusId", "NumaNode", "Links" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DeviceAttributes), global::Tensorflow.DeviceAttributes.Parser, new[]{ "Name", "DeviceType", "MemoryLimit", "Locality", "Incarnation", "PhysicalDeviceDesc" }, null, null, null, null)
           }));
     }
     #endregion
@@ -522,7 +522,7 @@ namespace Tensorflow {
       }
       if (other.links_ != null) {
         if (links_ == null) {
-          links_ = new global::Tensorflow.LocalLinks();
+          Links = new global::Tensorflow.LocalLinks();
         }
         Links.MergeFrom(other.Links);
       }
@@ -547,9 +547,9 @@ namespace Tensorflow {
           }
           case 26: {
             if (links_ == null) {
-              links_ = new global::Tensorflow.LocalLinks();
+              Links = new global::Tensorflow.LocalLinks();
             }
-            input.ReadMessage(links_);
+            input.ReadMessage(Links);
             break;
           }
         }
@@ -799,7 +799,7 @@ namespace Tensorflow {
       }
       if (other.locality_ != null) {
         if (locality_ == null) {
-          locality_ = new global::Tensorflow.DeviceLocality();
+          Locality = new global::Tensorflow.DeviceLocality();
         }
         Locality.MergeFrom(other.Locality);
       }
@@ -834,9 +834,9 @@ namespace Tensorflow {
           }
           case 42: {
             if (locality_ == null) {
-              locality_ = new global::Tensorflow.DeviceLocality();
+              Locality = new global::Tensorflow.DeviceLocality();
             }
-            input.ReadMessage(locality_);
+            input.ReadMessage(Locality);
             break;
           }
           case 49: {

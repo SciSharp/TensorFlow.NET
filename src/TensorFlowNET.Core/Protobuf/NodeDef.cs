@@ -26,20 +26,21 @@ namespace Tensorflow {
           string.Concat(
             "Cih0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL25vZGVfZGVmLnByb3RvEgp0",
             "ZW5zb3JmbG93Gip0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL2F0dHJfdmFs",
-            "dWUucHJvdG8itQIKB05vZGVEZWYSDAoEbmFtZRgBIAEoCRIKCgJvcBgCIAEo",
+            "dWUucHJvdG8i0gIKB05vZGVEZWYSDAoEbmFtZRgBIAEoCRIKCgJvcBgCIAEo",
             "CRINCgVpbnB1dBgDIAMoCRIOCgZkZXZpY2UYBCABKAkSKwoEYXR0chgFIAMo",
             "CzIdLnRlbnNvcmZsb3cuTm9kZURlZi5BdHRyRW50cnkSSgoXZXhwZXJpbWVu",
             "dGFsX2RlYnVnX2luZm8YBiABKAsyKS50ZW5zb3JmbG93Lk5vZGVEZWYuRXhw",
             "ZXJpbWVudGFsRGVidWdJbmZvGkIKCUF0dHJFbnRyeRILCgNrZXkYASABKAkS",
-            "JAoFdmFsdWUYAiABKAsyFS50ZW5zb3JmbG93LkF0dHJWYWx1ZToCOAEaNAoV",
+            "JAoFdmFsdWUYAiABKAsyFS50ZW5zb3JmbG93LkF0dHJWYWx1ZToCOAEaUQoV",
             "RXhwZXJpbWVudGFsRGVidWdJbmZvEhsKE29yaWdpbmFsX25vZGVfbmFtZXMY",
-            "ASADKAlCaQoYb3JnLnRlbnNvcmZsb3cuZnJhbWV3b3JrQglOb2RlUHJvdG9Q",
-            "AVo9Z2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29yZmxv",
-            "dy9nby9jb3JlL2ZyYW1ld29ya/gBAWIGcHJvdG8z"));
+            "ASADKAkSGwoTb3JpZ2luYWxfZnVuY19uYW1lcxgCIAMoCUJpChhvcmcudGVu",
+            "c29yZmxvdy5mcmFtZXdvcmtCCU5vZGVQcm90b1ABWj1naXRodWIuY29tL3Rl",
+            "bnNvcmZsb3cvdGVuc29yZmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvZnJhbWV3",
+            "b3Jr+AEBYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NodeDef), global::Tensorflow.NodeDef.Parser, new[]{ "Name", "Op", "Input", "Device", "Attr", "ExperimentalDebugInfo" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NodeDef.Types.ExperimentalDebugInfo), global::Tensorflow.NodeDef.Types.ExperimentalDebugInfo.Parser, new[]{ "OriginalNodeNames" }, null, null, null)})
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NodeDef), global::Tensorflow.NodeDef.Parser, new[]{ "Name", "Op", "Input", "Device", "Attr", "ExperimentalDebugInfo" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NodeDef.Types.ExperimentalDebugInfo), global::Tensorflow.NodeDef.Types.ExperimentalDebugInfo.Parser, new[]{ "OriginalNodeNames", "OriginalFuncNames" }, null, null, null, null)})
           }));
     }
     #endregion
@@ -91,7 +92,7 @@ namespace Tensorflow {
     /// <summary>
     /// The name given to this operator. Used for naming inputs,
     /// logging, visualization, etc.  Unique within a single GraphDef.
-    /// Must match the regexp "[A-Za-z0-9.][A-Za-z0-9_./]*".
+    /// Must match the regexp "[A-Za-z0-9.][A-Za-z0-9_>./]*".
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Name {
@@ -169,7 +170,7 @@ namespace Tensorflow {
     /// <summary>Field number for the "attr" field.</summary>
     public const int AttrFieldNumber = 5;
     private static readonly pbc::MapField<string, global::Tensorflow.AttrValue>.Codec _map_attr_codec
-        = new pbc::MapField<string, global::Tensorflow.AttrValue>.Codec(pb::FieldCodec.ForString(10), pb::FieldCodec.ForMessage(18, global::Tensorflow.AttrValue.Parser), 42);
+        = new pbc::MapField<string, global::Tensorflow.AttrValue>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::Tensorflow.AttrValue.Parser), 42);
     private readonly pbc::MapField<string, global::Tensorflow.AttrValue> attr_ = new pbc::MapField<string, global::Tensorflow.AttrValue>();
     /// <summary>
     /// Operation-specific graph-construction-time configuration.
@@ -312,7 +313,7 @@ namespace Tensorflow {
       attr_.Add(other.attr_);
       if (other.experimentalDebugInfo_ != null) {
         if (experimentalDebugInfo_ == null) {
-          experimentalDebugInfo_ = new global::Tensorflow.NodeDef.Types.ExperimentalDebugInfo();
+          ExperimentalDebugInfo = new global::Tensorflow.NodeDef.Types.ExperimentalDebugInfo();
         }
         ExperimentalDebugInfo.MergeFrom(other.ExperimentalDebugInfo);
       }
@@ -349,9 +350,9 @@ namespace Tensorflow {
           }
           case 50: {
             if (experimentalDebugInfo_ == null) {
-              experimentalDebugInfo_ = new global::Tensorflow.NodeDef.Types.ExperimentalDebugInfo();
+              ExperimentalDebugInfo = new global::Tensorflow.NodeDef.Types.ExperimentalDebugInfo();
             }
-            input.ReadMessage(experimentalDebugInfo_);
+            input.ReadMessage(ExperimentalDebugInfo);
             break;
           }
         }
@@ -388,6 +389,7 @@ namespace Tensorflow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public ExperimentalDebugInfo(ExperimentalDebugInfo other) : this() {
           originalNodeNames_ = other.originalNodeNames_.Clone();
+          originalFuncNames_ = other.originalFuncNames_.Clone();
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -415,6 +417,25 @@ namespace Tensorflow {
           get { return originalNodeNames_; }
         }
 
+        /// <summary>Field number for the "original_func_names" field.</summary>
+        public const int OriginalFuncNamesFieldNumber = 2;
+        private static readonly pb::FieldCodec<string> _repeated_originalFuncNames_codec
+            = pb::FieldCodec.ForString(18);
+        private readonly pbc::RepeatedField<string> originalFuncNames_ = new pbc::RepeatedField<string>();
+        /// <summary>
+        /// This is intended to store the list of names of the functions from the
+        /// original graph that this node was derived. For example if this node, say
+        /// C, was result of a fusion of node A in function FA and node B in function
+        /// FB, then `original_funcs` would be {FA, FB}. If the node is in the top
+        /// level graph, the `original_func` is empty. This information, with the
+        /// `original_node_names` can be used to map errors originating at the
+        /// current ndoe to some top level source code.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<string> OriginalFuncNames {
+          get { return originalFuncNames_; }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override bool Equals(object other) {
           return Equals(other as ExperimentalDebugInfo);
@@ -429,6 +450,7 @@ namespace Tensorflow {
             return true;
           }
           if(!originalNodeNames_.Equals(other.originalNodeNames_)) return false;
+          if(!originalFuncNames_.Equals(other.originalFuncNames_)) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -436,6 +458,7 @@ namespace Tensorflow {
         public override int GetHashCode() {
           int hash = 1;
           hash ^= originalNodeNames_.GetHashCode();
+          hash ^= originalFuncNames_.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -450,6 +473,7 @@ namespace Tensorflow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public void WriteTo(pb::CodedOutputStream output) {
           originalNodeNames_.WriteTo(output, _repeated_originalNodeNames_codec);
+          originalFuncNames_.WriteTo(output, _repeated_originalFuncNames_codec);
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -459,6 +483,7 @@ namespace Tensorflow {
         public int CalculateSize() {
           int size = 0;
           size += originalNodeNames_.CalculateSize(_repeated_originalNodeNames_codec);
+          size += originalFuncNames_.CalculateSize(_repeated_originalFuncNames_codec);
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
           }
@@ -471,6 +496,7 @@ namespace Tensorflow {
             return;
           }
           originalNodeNames_.Add(other.originalNodeNames_);
+          originalFuncNames_.Add(other.originalFuncNames_);
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 
@@ -484,6 +510,10 @@ namespace Tensorflow {
                 break;
               case 10: {
                 originalNodeNames_.AddEntriesFrom(input, _repeated_originalNodeNames_codec);
+                break;
+              }
+              case 18: {
+                originalFuncNames_.AddEntriesFrom(input, _repeated_originalFuncNames_codec);
                 break;
               }
             }

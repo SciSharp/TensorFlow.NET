@@ -52,23 +52,26 @@ namespace Tensorflow {
             "bW9yeV9zdGF0cxgMIAEoCzIXLnRlbnNvcmZsb3cuTWVtb3J5U3RhdHMSFwoP",
             "YWxsX3N0YXJ0X25hbm9zGA0gASgDEhoKEm9wX3N0YXJ0X3JlbF9uYW5vcxgO",
             "IAEoAxIYChBvcF9lbmRfcmVsX25hbm9zGA8gASgDEhkKEWFsbF9lbmRfcmVs",
-            "X25hbm9zGBAgASgDEhcKD3NjaGVkdWxlZF9uYW5vcxgRIAEoAyJQCg9EZXZp",
-            "Y2VTdGVwU3RhdHMSDgoGZGV2aWNlGAEgASgJEi0KCm5vZGVfc3RhdHMYAiAD",
-            "KAsyGS50ZW5zb3JmbG93Lk5vZGVFeGVjU3RhdHMiOwoJU3RlcFN0YXRzEi4K",
-            "CWRldl9zdGF0cxgBIAMoCzIbLnRlbnNvcmZsb3cuRGV2aWNlU3RlcFN0YXRz",
-            "Qm8KGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0IPU3RlcFN0YXRzUHJvdG9z",
-            "UAFaPWdpdGh1Yi5jb20vdGVuc29yZmxvdy90ZW5zb3JmbG93L3RlbnNvcmZs",
-            "b3cvZ28vY29yZS9mcmFtZXdvcmv4AQFiBnByb3RvMw=="));
+            "X25hbm9zGBAgASgDEhcKD3NjaGVkdWxlZF9uYW5vcxgRIAEoAyLIAQoPRGV2",
+            "aWNlU3RlcFN0YXRzEg4KBmRldmljZRgBIAEoCRItCgpub2RlX3N0YXRzGAIg",
+            "AygLMhkudGVuc29yZmxvdy5Ob2RlRXhlY1N0YXRzEkIKDHRocmVhZF9uYW1l",
+            "cxgDIAMoCzIsLnRlbnNvcmZsb3cuRGV2aWNlU3RlcFN0YXRzLlRocmVhZE5h",
+            "bWVzRW50cnkaMgoQVGhyZWFkTmFtZXNFbnRyeRILCgNrZXkYASABKA0SDQoF",
+            "dmFsdWUYAiABKAk6AjgBIjsKCVN0ZXBTdGF0cxIuCglkZXZfc3RhdHMYASAD",
+            "KAsyGy50ZW5zb3JmbG93LkRldmljZVN0ZXBTdGF0c0JvChhvcmcudGVuc29y",
+            "Zmxvdy5mcmFtZXdvcmtCD1N0ZXBTdGF0c1Byb3Rvc1ABWj1naXRodWIuY29t",
+            "L3RlbnNvcmZsb3cvdGVuc29yZmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvZnJh",
+            "bWV3b3Jr+AEBYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.AllocationDescriptionReflection.Descriptor, global::Tensorflow.TensorDescriptionReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.AllocationRecord), global::Tensorflow.AllocationRecord.Parser, new[]{ "AllocMicros", "AllocBytes" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.AllocatorMemoryUsed), global::Tensorflow.AllocatorMemoryUsed.Parser, new[]{ "AllocatorName", "TotalBytes", "PeakBytes", "LiveBytes", "AllocationRecords", "AllocatorBytesInUse" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NodeOutput), global::Tensorflow.NodeOutput.Parser, new[]{ "Slot", "TensorDescription" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryStats), global::Tensorflow.MemoryStats.Parser, new[]{ "TempMemorySize", "PersistentMemorySize", "PersistentTensorAllocIds", "DeviceTempMemorySize", "DevicePersistentMemorySize", "DevicePersistentTensorAllocIds" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NodeExecStats), global::Tensorflow.NodeExecStats.Parser, new[]{ "NodeName", "AllStartMicros", "OpStartRelMicros", "OpEndRelMicros", "AllEndRelMicros", "Memory", "Output", "TimelineLabel", "ScheduledMicros", "ThreadId", "ReferencedTensor", "MemoryStats", "AllStartNanos", "OpStartRelNanos", "OpEndRelNanos", "AllEndRelNanos", "ScheduledNanos" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DeviceStepStats), global::Tensorflow.DeviceStepStats.Parser, new[]{ "Device", "NodeStats" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.StepStats), global::Tensorflow.StepStats.Parser, new[]{ "DevStats" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.AllocationRecord), global::Tensorflow.AllocationRecord.Parser, new[]{ "AllocMicros", "AllocBytes" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.AllocatorMemoryUsed), global::Tensorflow.AllocatorMemoryUsed.Parser, new[]{ "AllocatorName", "TotalBytes", "PeakBytes", "LiveBytes", "AllocationRecords", "AllocatorBytesInUse" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NodeOutput), global::Tensorflow.NodeOutput.Parser, new[]{ "Slot", "TensorDescription" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryStats), global::Tensorflow.MemoryStats.Parser, new[]{ "TempMemorySize", "PersistentMemorySize", "PersistentTensorAllocIds", "DeviceTempMemorySize", "DevicePersistentMemorySize", "DevicePersistentTensorAllocIds" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NodeExecStats), global::Tensorflow.NodeExecStats.Parser, new[]{ "NodeName", "AllStartMicros", "OpStartRelMicros", "OpEndRelMicros", "AllEndRelMicros", "Memory", "Output", "TimelineLabel", "ScheduledMicros", "ThreadId", "ReferencedTensor", "MemoryStats", "AllStartNanos", "OpStartRelNanos", "OpEndRelNanos", "AllEndRelNanos", "ScheduledNanos" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DeviceStepStats), global::Tensorflow.DeviceStepStats.Parser, new[]{ "Device", "NodeStats", "ThreadNames" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.StepStats), global::Tensorflow.StepStats.Parser, new[]{ "DevStats" }, null, null, null, null)
           }));
     }
     #endregion
@@ -649,7 +652,7 @@ namespace Tensorflow {
       }
       if (other.tensorDescription_ != null) {
         if (tensorDescription_ == null) {
-          tensorDescription_ = new global::Tensorflow.TensorDescription();
+          TensorDescription = new global::Tensorflow.TensorDescription();
         }
         TensorDescription.MergeFrom(other.TensorDescription);
       }
@@ -670,9 +673,9 @@ namespace Tensorflow {
           }
           case 26: {
             if (tensorDescription_ == null) {
-              tensorDescription_ = new global::Tensorflow.TensorDescription();
+              TensorDescription = new global::Tensorflow.TensorDescription();
             }
-            input.ReadMessage(tensorDescription_);
+            input.ReadMessage(TensorDescription);
             break;
           }
         }
@@ -1403,7 +1406,7 @@ namespace Tensorflow {
       referencedTensor_.Add(other.referencedTensor_);
       if (other.memoryStats_ != null) {
         if (memoryStats_ == null) {
-          memoryStats_ = new global::Tensorflow.MemoryStats();
+          MemoryStats = new global::Tensorflow.MemoryStats();
         }
         MemoryStats.MergeFrom(other.MemoryStats);
       }
@@ -1479,9 +1482,9 @@ namespace Tensorflow {
           }
           case 98: {
             if (memoryStats_ == null) {
-              memoryStats_ = new global::Tensorflow.MemoryStats();
+              MemoryStats = new global::Tensorflow.MemoryStats();
             }
-            input.ReadMessage(memoryStats_);
+            input.ReadMessage(MemoryStats);
             break;
           }
           case 104: {
@@ -1537,6 +1540,7 @@ namespace Tensorflow {
     public DeviceStepStats(DeviceStepStats other) : this() {
       device_ = other.device_;
       nodeStats_ = other.nodeStats_.Clone();
+      threadNames_ = other.threadNames_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1566,6 +1570,19 @@ namespace Tensorflow {
       get { return nodeStats_; }
     }
 
+    /// <summary>Field number for the "thread_names" field.</summary>
+    public const int ThreadNamesFieldNumber = 3;
+    private static readonly pbc::MapField<uint, string>.Codec _map_threadNames_codec
+        = new pbc::MapField<uint, string>.Codec(pb::FieldCodec.ForUInt32(8, 0), pb::FieldCodec.ForString(18, ""), 26);
+    private readonly pbc::MapField<uint, string> threadNames_ = new pbc::MapField<uint, string>();
+    /// <summary>
+    /// Its key is thread id.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::MapField<uint, string> ThreadNames {
+      get { return threadNames_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as DeviceStepStats);
@@ -1581,6 +1598,7 @@ namespace Tensorflow {
       }
       if (Device != other.Device) return false;
       if(!nodeStats_.Equals(other.nodeStats_)) return false;
+      if (!ThreadNames.Equals(other.ThreadNames)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1589,6 +1607,7 @@ namespace Tensorflow {
       int hash = 1;
       if (Device.Length != 0) hash ^= Device.GetHashCode();
       hash ^= nodeStats_.GetHashCode();
+      hash ^= ThreadNames.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1607,6 +1626,7 @@ namespace Tensorflow {
         output.WriteString(Device);
       }
       nodeStats_.WriteTo(output, _repeated_nodeStats_codec);
+      threadNames_.WriteTo(output, _map_threadNames_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1619,6 +1639,7 @@ namespace Tensorflow {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Device);
       }
       size += nodeStats_.CalculateSize(_repeated_nodeStats_codec);
+      size += threadNames_.CalculateSize(_map_threadNames_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1634,6 +1655,7 @@ namespace Tensorflow {
         Device = other.Device;
       }
       nodeStats_.Add(other.nodeStats_);
+      threadNames_.Add(other.threadNames_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1651,6 +1673,10 @@ namespace Tensorflow {
           }
           case 18: {
             nodeStats_.AddEntriesFrom(input, _repeated_nodeStats_codec);
+            break;
+          }
+          case 26: {
+            threadNames_.AddEntriesFrom(input, _map_threadNames_codec);
             break;
           }
         }

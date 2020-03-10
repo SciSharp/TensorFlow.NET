@@ -53,13 +53,13 @@ namespace Tensorflow {
             "b3Jr+AEBYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TensorReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryDescription), global::Tensorflow.SummaryDescription.Parser, new[]{ "TypeHint" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.HistogramProto), global::Tensorflow.HistogramProto.Parser, new[]{ "Min", "Max", "Num", "Sum", "SumSquares", "BucketLimit", "Bucket" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryMetadata), global::Tensorflow.SummaryMetadata.Parser, new[]{ "PluginData", "DisplayName", "SummaryDescription" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryMetadata.Types.PluginData), global::Tensorflow.SummaryMetadata.Types.PluginData.Parser, new[]{ "PluginName", "Content" }, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary), global::Tensorflow.Summary.Parser, new[]{ "Value" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary.Types.Image), global::Tensorflow.Summary.Types.Image.Parser, new[]{ "Height", "Width", "Colorspace", "EncodedImageString" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary.Types.Audio), global::Tensorflow.Summary.Types.Audio.Parser, new[]{ "SampleRate", "NumChannels", "LengthFrames", "EncodedAudioString", "ContentType" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary.Types.Value), global::Tensorflow.Summary.Types.Value.Parser, new[]{ "NodeName", "Tag", "Metadata", "SimpleValue", "ObsoleteOldStyleHistogram", "Image", "Histo", "Audio", "Tensor" }, new[]{ "Value" }, null, null)})
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryDescription), global::Tensorflow.SummaryDescription.Parser, new[]{ "TypeHint" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.HistogramProto), global::Tensorflow.HistogramProto.Parser, new[]{ "Min", "Max", "Num", "Sum", "SumSquares", "BucketLimit", "Bucket" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryMetadata), global::Tensorflow.SummaryMetadata.Parser, new[]{ "PluginData", "DisplayName", "SummaryDescription" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryMetadata.Types.PluginData), global::Tensorflow.SummaryMetadata.Types.PluginData.Parser, new[]{ "PluginName", "Content" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary), global::Tensorflow.Summary.Parser, new[]{ "Value" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary.Types.Image), global::Tensorflow.Summary.Types.Image.Parser, new[]{ "Height", "Width", "Colorspace", "EncodedImageString" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary.Types.Audio), global::Tensorflow.Summary.Types.Audio.Parser, new[]{ "SampleRate", "NumChannels", "LengthFrames", "EncodedAudioString", "ContentType" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary.Types.Value), global::Tensorflow.Summary.Types.Value.Parser, new[]{ "NodeName", "Tag", "Metadata", "SimpleValue", "ObsoleteOldStyleHistogram", "Image", "Histo", "Audio", "Tensor" }, new[]{ "Value" }, null, null, null)})
           }));
     }
     #endregion
@@ -658,7 +658,7 @@ namespace Tensorflow {
       }
       if (other.pluginData_ != null) {
         if (pluginData_ == null) {
-          pluginData_ = new global::Tensorflow.SummaryMetadata.Types.PluginData();
+          PluginData = new global::Tensorflow.SummaryMetadata.Types.PluginData();
         }
         PluginData.MergeFrom(other.PluginData);
       }
@@ -681,9 +681,9 @@ namespace Tensorflow {
             break;
           case 10: {
             if (pluginData_ == null) {
-              pluginData_ = new global::Tensorflow.SummaryMetadata.Types.PluginData();
+              PluginData = new global::Tensorflow.SummaryMetadata.Types.PluginData();
             }
-            input.ReadMessage(pluginData_);
+            input.ReadMessage(PluginData);
             break;
           }
           case 18: {
@@ -1824,7 +1824,7 @@ namespace Tensorflow {
           }
           if (other.metadata_ != null) {
             if (metadata_ == null) {
-              metadata_ = new global::Tensorflow.SummaryMetadata();
+              Metadata = new global::Tensorflow.SummaryMetadata();
             }
             Metadata.MergeFrom(other.Metadata);
           }
@@ -1926,9 +1926,9 @@ namespace Tensorflow {
               }
               case 74: {
                 if (metadata_ == null) {
-                  metadata_ = new global::Tensorflow.SummaryMetadata();
+                  Metadata = new global::Tensorflow.SummaryMetadata();
                 }
-                input.ReadMessage(metadata_);
+                input.ReadMessage(Metadata);
                 break;
               }
             }

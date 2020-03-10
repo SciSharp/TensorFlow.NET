@@ -42,13 +42,14 @@ namespace Tensorflow {
             "ZWdhdGlvbhIdChlWQVJJQUJMRV9BR0dSRUdBVElPTl9OT05FEAASHAoYVkFS",
             "SUFCTEVfQUdHUkVHQVRJT05fU1VNEAESHQoZVkFSSUFCTEVfQUdHUkVHQVRJ",
             "T05fTUVBThACEisKJ1ZBUklBQkxFX0FHR1JFR0FUSU9OX09OTFlfRklSU1Rf",
-            "UkVQTElDQRADQi8KGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0IOVmFyaWFi",
-            "bGVQcm90b3NQAfgBAWIGcHJvdG8z"));
+            "UkVQTElDQRADQm4KGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0IOVmFyaWFi",
+            "bGVQcm90b3NQAVo9Z2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cv",
+            "dGVuc29yZmxvdy9nby9jb3JlL2ZyYW1ld29ya/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.VariableSynchronization), typeof(global::Tensorflow.VariableAggregation), }, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.VariableDef), global::Tensorflow.VariableDef.Parser, new[]{ "VariableName", "InitialValueName", "InitializerName", "SnapshotName", "SaveSliceInfoDef", "IsResource", "Trainable", "Synchronization", "Aggregation" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SaveSliceInfoDef), global::Tensorflow.SaveSliceInfoDef.Parser, new[]{ "FullName", "FullShape", "VarOffset", "VarShape" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.VariableSynchronization), typeof(global::Tensorflow.VariableAggregation), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.VariableDef), global::Tensorflow.VariableDef.Parser, new[]{ "VariableName", "InitialValueName", "InitializerName", "SnapshotName", "SaveSliceInfoDef", "IsResource", "Trainable", "Synchronization", "Aggregation" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SaveSliceInfoDef), global::Tensorflow.SaveSliceInfoDef.Parser, new[]{ "FullName", "FullShape", "VarOffset", "VarShape" }, null, null, null, null)
           }));
     }
     #endregion
@@ -257,7 +258,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "synchronization" field.</summary>
     public const int SynchronizationFieldNumber = 8;
-    private global::Tensorflow.VariableSynchronization synchronization_ = 0;
+    private global::Tensorflow.VariableSynchronization synchronization_ = global::Tensorflow.VariableSynchronization.Auto;
     /// <summary>
     /// Indicates when a distributed variable will be synced.
     /// </summary>
@@ -271,7 +272,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "aggregation" field.</summary>
     public const int AggregationFieldNumber = 9;
-    private global::Tensorflow.VariableAggregation aggregation_ = 0;
+    private global::Tensorflow.VariableAggregation aggregation_ = global::Tensorflow.VariableAggregation.None;
     /// <summary>
     /// Indicates how a distributed variable will be aggregated.
     /// </summary>
@@ -318,8 +319,8 @@ namespace Tensorflow {
       if (saveSliceInfoDef_ != null) hash ^= SaveSliceInfoDef.GetHashCode();
       if (IsResource != false) hash ^= IsResource.GetHashCode();
       if (Trainable != false) hash ^= Trainable.GetHashCode();
-      if (Synchronization != 0) hash ^= Synchronization.GetHashCode();
-      if (Aggregation != 0) hash ^= Aggregation.GetHashCode();
+      if (Synchronization != global::Tensorflow.VariableSynchronization.Auto) hash ^= Synchronization.GetHashCode();
+      if (Aggregation != global::Tensorflow.VariableAggregation.None) hash ^= Aggregation.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -361,11 +362,11 @@ namespace Tensorflow {
         output.WriteRawTag(56);
         output.WriteBool(Trainable);
       }
-      if (Synchronization != 0) {
+      if (Synchronization != global::Tensorflow.VariableSynchronization.Auto) {
         output.WriteRawTag(64);
         output.WriteEnum((int) Synchronization);
       }
-      if (Aggregation != 0) {
+      if (Aggregation != global::Tensorflow.VariableAggregation.None) {
         output.WriteRawTag(72);
         output.WriteEnum((int) Aggregation);
       }
@@ -398,10 +399,10 @@ namespace Tensorflow {
       if (Trainable != false) {
         size += 1 + 1;
       }
-      if (Synchronization != 0) {
+      if (Synchronization != global::Tensorflow.VariableSynchronization.Auto) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Synchronization);
       }
-      if (Aggregation != 0) {
+      if (Aggregation != global::Tensorflow.VariableAggregation.None) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Aggregation);
       }
       if (_unknownFields != null) {
@@ -429,7 +430,7 @@ namespace Tensorflow {
       }
       if (other.saveSliceInfoDef_ != null) {
         if (saveSliceInfoDef_ == null) {
-          saveSliceInfoDef_ = new global::Tensorflow.SaveSliceInfoDef();
+          SaveSliceInfoDef = new global::Tensorflow.SaveSliceInfoDef();
         }
         SaveSliceInfoDef.MergeFrom(other.SaveSliceInfoDef);
       }
@@ -439,10 +440,10 @@ namespace Tensorflow {
       if (other.Trainable != false) {
         Trainable = other.Trainable;
       }
-      if (other.Synchronization != 0) {
+      if (other.Synchronization != global::Tensorflow.VariableSynchronization.Auto) {
         Synchronization = other.Synchronization;
       }
-      if (other.Aggregation != 0) {
+      if (other.Aggregation != global::Tensorflow.VariableAggregation.None) {
         Aggregation = other.Aggregation;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -470,9 +471,9 @@ namespace Tensorflow {
           }
           case 34: {
             if (saveSliceInfoDef_ == null) {
-              saveSliceInfoDef_ = new global::Tensorflow.SaveSliceInfoDef();
+              SaveSliceInfoDef = new global::Tensorflow.SaveSliceInfoDef();
             }
-            input.ReadMessage(saveSliceInfoDef_);
+            input.ReadMessage(SaveSliceInfoDef);
             break;
           }
           case 40: {
@@ -488,11 +489,11 @@ namespace Tensorflow {
             break;
           }
           case 64: {
-            synchronization_ = (global::Tensorflow.VariableSynchronization) input.ReadEnum();
+            Synchronization = (global::Tensorflow.VariableSynchronization) input.ReadEnum();
             break;
           }
           case 72: {
-            aggregation_ = (global::Tensorflow.VariableAggregation) input.ReadEnum();
+            Aggregation = (global::Tensorflow.VariableAggregation) input.ReadEnum();
             break;
           }
         }

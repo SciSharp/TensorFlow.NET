@@ -38,9 +38,9 @@ namespace Tensorflow {
             "L2ZyYW1ld29ya/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.KernelDef), global::Tensorflow.KernelDef.Parser, new[]{ "Op", "DeviceType", "Constraint", "HostMemoryArg", "Label", "Priority" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.KernelDef.Types.AttrConstraint), global::Tensorflow.KernelDef.Types.AttrConstraint.Parser, new[]{ "Name", "AllowedValues" }, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.KernelList), global::Tensorflow.KernelList.Parser, new[]{ "Kernel" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.KernelDef), global::Tensorflow.KernelDef.Parser, new[]{ "Op", "DeviceType", "Constraint", "HostMemoryArg", "Label", "Priority" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.KernelDef.Types.AttrConstraint), global::Tensorflow.KernelDef.Types.AttrConstraint.Parser, new[]{ "Name", "AllowedValues" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.KernelList), global::Tensorflow.KernelList.Parser, new[]{ "Kernel" }, null, null, null, null)
           }));
     }
     #endregion
@@ -460,7 +460,7 @@ namespace Tensorflow {
           }
           if (other.allowedValues_ != null) {
             if (allowedValues_ == null) {
-              allowedValues_ = new global::Tensorflow.AttrValue();
+              AllowedValues = new global::Tensorflow.AttrValue();
             }
             AllowedValues.MergeFrom(other.AllowedValues);
           }
@@ -481,9 +481,9 @@ namespace Tensorflow {
               }
               case 18: {
                 if (allowedValues_ == null) {
-                  allowedValues_ = new global::Tensorflow.AttrValue();
+                  AllowedValues = new global::Tensorflow.AttrValue();
                 }
-                input.ReadMessage(allowedValues_);
+                input.ReadMessage(AllowedValues);
                 break;
               }
             }

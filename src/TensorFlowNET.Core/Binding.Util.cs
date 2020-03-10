@@ -80,7 +80,10 @@ namespace Tensorflow
         public static void print(string format, params object[] objects)
         {
             if (!format.Contains("{}"))
-                Console.WriteLine(format, string.Join(" ", objects.Select(x => x.ToString())));
+            {
+                Console.WriteLine(format + " " + string.Join(" ", objects.Select(x => x.ToString())));
+                return;
+            }
 
             foreach(var obj in objects)
             {

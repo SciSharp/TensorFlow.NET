@@ -40,11 +40,11 @@ namespace Tensorflow {
             "Zmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvcHJvdG9idWb4AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DebugTensorWatch), global::Tensorflow.DebugTensorWatch.Parser, new[]{ "NodeName", "OutputSlot", "DebugOps", "DebugUrls", "TolerateDebugOpCreationFailures" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DebugOptions), global::Tensorflow.DebugOptions.Parser, new[]{ "DebugTensorWatchOpts", "GlobalStep", "ResetDiskByteUsage" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DebuggedSourceFile), global::Tensorflow.DebuggedSourceFile.Parser, new[]{ "Host", "FilePath", "LastModified", "Bytes", "Lines" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DebuggedSourceFiles), global::Tensorflow.DebuggedSourceFiles.Parser, new[]{ "SourceFiles" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DebugTensorWatch), global::Tensorflow.DebugTensorWatch.Parser, new[]{ "NodeName", "OutputSlot", "DebugOps", "DebugUrls", "TolerateDebugOpCreationFailures" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DebugOptions), global::Tensorflow.DebugOptions.Parser, new[]{ "DebugTensorWatchOpts", "GlobalStep", "ResetDiskByteUsage" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DebuggedSourceFile), global::Tensorflow.DebuggedSourceFile.Parser, new[]{ "Host", "FilePath", "LastModified", "Bytes", "Lines" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.DebuggedSourceFiles), global::Tensorflow.DebuggedSourceFiles.Parser, new[]{ "SourceFiles" }, null, null, null, null)
           }));
     }
     #endregion
@@ -97,6 +97,8 @@ namespace Tensorflow {
     private string nodeName_ = "";
     /// <summary>
     /// Name of the node to watch.
+    /// Use "*" for wildcard. But note: currently, regex is not supported in
+    /// general.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string NodeName {
@@ -111,10 +113,10 @@ namespace Tensorflow {
     private int outputSlot_;
     /// <summary>
     /// Output slot to watch.
-    /// The semantics of output_slot == -1 is that the node is only watched for
-    /// completion, but not for any output tensors. See NodeCompletionCallback
-    /// in debug_gateway.h.
-    /// TODO(cais): Implement this semantics.
+    /// The semantics of output_slot == -1 is that all outputs of the node
+    /// will be watched (i.e., a wildcard).
+    /// Other negative values of output_slot are invalid and will lead to
+    /// errors currently.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int OutputSlot {

@@ -49,11 +49,11 @@ namespace Tensorflow {
             "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDef), global::Tensorflow.ApiDef.Parser, new[]{ "GraphOpName", "DeprecationMessage", "DeprecationVersion", "Visibility", "Endpoint", "InArg", "OutArg", "ArgOrder", "Attr", "Summary", "Description", "DescriptionPrefix", "DescriptionSuffix" }, null, new[]{ typeof(global::Tensorflow.ApiDef.Types.Visibility) }, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDef.Types.Endpoint), global::Tensorflow.ApiDef.Types.Endpoint.Parser, new[]{ "Name", "Deprecated", "DeprecationVersion" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDef.Types.Arg), global::Tensorflow.ApiDef.Types.Arg.Parser, new[]{ "Name", "RenameTo", "Description" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDef.Types.Attr), global::Tensorflow.ApiDef.Types.Attr.Parser, new[]{ "Name", "RenameTo", "DefaultValue", "Description" }, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDefs), global::Tensorflow.ApiDefs.Parser, new[]{ "Op" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDef), global::Tensorflow.ApiDef.Parser, new[]{ "GraphOpName", "DeprecationMessage", "DeprecationVersion", "Visibility", "Endpoint", "InArg", "OutArg", "ArgOrder", "Attr", "Summary", "Description", "DescriptionPrefix", "DescriptionSuffix" }, null, new[]{ typeof(global::Tensorflow.ApiDef.Types.Visibility) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDef.Types.Endpoint), global::Tensorflow.ApiDef.Types.Endpoint.Parser, new[]{ "Name", "Deprecated", "DeprecationVersion" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDef.Types.Arg), global::Tensorflow.ApiDef.Types.Arg.Parser, new[]{ "Name", "RenameTo", "Description" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDef.Types.Attr), global::Tensorflow.ApiDef.Types.Attr.Parser, new[]{ "Name", "RenameTo", "DefaultValue", "Description" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ApiDefs), global::Tensorflow.ApiDefs.Parser, new[]{ "Op" }, null, null, null, null)
           }));
     }
     #endregion
@@ -172,7 +172,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "visibility" field.</summary>
     public const int VisibilityFieldNumber = 2;
-    private global::Tensorflow.ApiDef.Types.Visibility visibility_ = 0;
+    private global::Tensorflow.ApiDef.Types.Visibility visibility_ = global::Tensorflow.ApiDef.Types.Visibility.DefaultVisibility;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Tensorflow.ApiDef.Types.Visibility Visibility {
       get { return visibility_; }
@@ -325,7 +325,7 @@ namespace Tensorflow {
       if (GraphOpName.Length != 0) hash ^= GraphOpName.GetHashCode();
       if (DeprecationMessage.Length != 0) hash ^= DeprecationMessage.GetHashCode();
       if (DeprecationVersion != 0) hash ^= DeprecationVersion.GetHashCode();
-      if (Visibility != 0) hash ^= Visibility.GetHashCode();
+      if (Visibility != global::Tensorflow.ApiDef.Types.Visibility.DefaultVisibility) hash ^= Visibility.GetHashCode();
       hash ^= endpoint_.GetHashCode();
       hash ^= inArg_.GetHashCode();
       hash ^= outArg_.GetHashCode();
@@ -352,7 +352,7 @@ namespace Tensorflow {
         output.WriteRawTag(10);
         output.WriteString(GraphOpName);
       }
-      if (Visibility != 0) {
+      if (Visibility != global::Tensorflow.ApiDef.Types.Visibility.DefaultVisibility) {
         output.WriteRawTag(16);
         output.WriteEnum((int) Visibility);
       }
@@ -402,7 +402,7 @@ namespace Tensorflow {
       if (DeprecationVersion != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(DeprecationVersion);
       }
-      if (Visibility != 0) {
+      if (Visibility != global::Tensorflow.ApiDef.Types.Visibility.DefaultVisibility) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Visibility);
       }
       size += endpoint_.CalculateSize(_repeated_endpoint_codec);
@@ -442,7 +442,7 @@ namespace Tensorflow {
       if (other.DeprecationVersion != 0) {
         DeprecationVersion = other.DeprecationVersion;
       }
-      if (other.Visibility != 0) {
+      if (other.Visibility != global::Tensorflow.ApiDef.Types.Visibility.DefaultVisibility) {
         Visibility = other.Visibility;
       }
       endpoint_.Add(other.endpoint_);
@@ -478,7 +478,7 @@ namespace Tensorflow {
             break;
           }
           case 16: {
-            visibility_ = (global::Tensorflow.ApiDef.Types.Visibility) input.ReadEnum();
+            Visibility = (global::Tensorflow.ApiDef.Types.Visibility) input.ReadEnum();
             break;
           }
           case 26: {
@@ -1152,7 +1152,7 @@ namespace Tensorflow {
           }
           if (other.defaultValue_ != null) {
             if (defaultValue_ == null) {
-              defaultValue_ = new global::Tensorflow.AttrValue();
+              DefaultValue = new global::Tensorflow.AttrValue();
             }
             DefaultValue.MergeFrom(other.DefaultValue);
           }
@@ -1180,9 +1180,9 @@ namespace Tensorflow {
               }
               case 26: {
                 if (defaultValue_ == null) {
-                  defaultValue_ = new global::Tensorflow.AttrValue();
+                  DefaultValue = new global::Tensorflow.AttrValue();
                 }
-                input.ReadMessage(defaultValue_);
+                input.ReadMessage(DefaultValue);
                 break;
               }
               case 34: {

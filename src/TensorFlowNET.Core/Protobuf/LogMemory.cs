@@ -46,13 +46,13 @@ namespace Tensorflow {
             "a/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TensorDescriptionReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogStep), global::Tensorflow.MemoryLogStep.Parser, new[]{ "StepId", "Handle" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogTensorAllocation), global::Tensorflow.MemoryLogTensorAllocation.Parser, new[]{ "StepId", "KernelName", "Tensor" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogTensorDeallocation), global::Tensorflow.MemoryLogTensorDeallocation.Parser, new[]{ "AllocationId", "AllocatorName" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogTensorOutput), global::Tensorflow.MemoryLogTensorOutput.Parser, new[]{ "StepId", "KernelName", "Index", "Tensor" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogRawAllocation), global::Tensorflow.MemoryLogRawAllocation.Parser, new[]{ "StepId", "Operation", "NumBytes", "Ptr", "AllocationId", "AllocatorName" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogRawDeallocation), global::Tensorflow.MemoryLogRawDeallocation.Parser, new[]{ "StepId", "Operation", "AllocationId", "AllocatorName", "Deferred" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogStep), global::Tensorflow.MemoryLogStep.Parser, new[]{ "StepId", "Handle" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogTensorAllocation), global::Tensorflow.MemoryLogTensorAllocation.Parser, new[]{ "StepId", "KernelName", "Tensor" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogTensorDeallocation), global::Tensorflow.MemoryLogTensorDeallocation.Parser, new[]{ "AllocationId", "AllocatorName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogTensorOutput), global::Tensorflow.MemoryLogTensorOutput.Parser, new[]{ "StepId", "KernelName", "Index", "Tensor" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogRawAllocation), global::Tensorflow.MemoryLogRawAllocation.Parser, new[]{ "StepId", "Operation", "NumBytes", "Ptr", "AllocationId", "AllocatorName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MemoryLogRawDeallocation), global::Tensorflow.MemoryLogRawDeallocation.Parser, new[]{ "StepId", "Operation", "AllocationId", "AllocatorName", "Deferred" }, null, null, null, null)
           }));
     }
     #endregion
@@ -387,7 +387,7 @@ namespace Tensorflow {
       }
       if (other.tensor_ != null) {
         if (tensor_ == null) {
-          tensor_ = new global::Tensorflow.TensorDescription();
+          Tensor = new global::Tensorflow.TensorDescription();
         }
         Tensor.MergeFrom(other.Tensor);
       }
@@ -412,9 +412,9 @@ namespace Tensorflow {
           }
           case 26: {
             if (tensor_ == null) {
-              tensor_ = new global::Tensorflow.TensorDescription();
+              Tensor = new global::Tensorflow.TensorDescription();
             }
-            input.ReadMessage(tensor_);
+            input.ReadMessage(Tensor);
             break;
           }
         }
@@ -779,7 +779,7 @@ namespace Tensorflow {
       }
       if (other.tensor_ != null) {
         if (tensor_ == null) {
-          tensor_ = new global::Tensorflow.TensorDescription();
+          Tensor = new global::Tensorflow.TensorDescription();
         }
         Tensor.MergeFrom(other.Tensor);
       }
@@ -808,9 +808,9 @@ namespace Tensorflow {
           }
           case 34: {
             if (tensor_ == null) {
-              tensor_ = new global::Tensorflow.TensorDescription();
+              Tensor = new global::Tensorflow.TensorDescription();
             }
-            input.ReadMessage(tensor_);
+            input.ReadMessage(Tensor);
             break;
           }
         }

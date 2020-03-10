@@ -60,15 +60,15 @@ namespace Tensorflow {
             "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TypesReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferNodeInput), global::Tensorflow.GraphTransferNodeInput.Parser, new[]{ "NodeId", "OutputPort" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferNodeInfo), global::Tensorflow.GraphTransferNodeInfo.Parser, new[]{ "Name", "NodeId", "TypeName", "SocOpId", "PaddingId", "InputCount", "OutputCount" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferConstNodeInfo), global::Tensorflow.GraphTransferConstNodeInfo.Parser, new[]{ "Name", "NodeId", "Shape", "Data", "Dtype" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferNodeInputInfo), global::Tensorflow.GraphTransferNodeInputInfo.Parser, new[]{ "NodeId", "NodeInput" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferNodeOutputInfo), global::Tensorflow.GraphTransferNodeOutputInfo.Parser, new[]{ "NodeId", "MaxByteSize" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferGraphInputNodeInfo), global::Tensorflow.GraphTransferGraphInputNodeInfo.Parser, new[]{ "Name", "Shape", "Dtype" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferGraphOutputNodeInfo), global::Tensorflow.GraphTransferGraphOutputNodeInfo.Parser, new[]{ "Name", "Shape", "Dtype" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferInfo), global::Tensorflow.GraphTransferInfo.Parser, new[]{ "NodeInfo", "ConstNodeInfo", "NodeInputInfo", "NodeOutputInfo", "GraphInputNodeInfo", "GraphOutputNodeInfo", "Destination" }, null, new[]{ typeof(global::Tensorflow.GraphTransferInfo.Types.Destination) }, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferNodeInput), global::Tensorflow.GraphTransferNodeInput.Parser, new[]{ "NodeId", "OutputPort" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferNodeInfo), global::Tensorflow.GraphTransferNodeInfo.Parser, new[]{ "Name", "NodeId", "TypeName", "SocOpId", "PaddingId", "InputCount", "OutputCount" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferConstNodeInfo), global::Tensorflow.GraphTransferConstNodeInfo.Parser, new[]{ "Name", "NodeId", "Shape", "Data", "Dtype" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferNodeInputInfo), global::Tensorflow.GraphTransferNodeInputInfo.Parser, new[]{ "NodeId", "NodeInput" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferNodeOutputInfo), global::Tensorflow.GraphTransferNodeOutputInfo.Parser, new[]{ "NodeId", "MaxByteSize" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferGraphInputNodeInfo), global::Tensorflow.GraphTransferGraphInputNodeInfo.Parser, new[]{ "Name", "Shape", "Dtype" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferGraphOutputNodeInfo), global::Tensorflow.GraphTransferGraphOutputNodeInfo.Parser, new[]{ "Name", "Shape", "Dtype" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphTransferInfo), global::Tensorflow.GraphTransferInfo.Parser, new[]{ "NodeInfo", "ConstNodeInfo", "NodeInputInfo", "NodeOutputInfo", "GraphInputNodeInfo", "GraphOutputNodeInfo", "Destination" }, null, new[]{ typeof(global::Tensorflow.GraphTransferInfo.Types.Destination) }, null, null)
           }));
     }
     #endregion
@@ -612,7 +612,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "dtype" field.</summary>
     public const int DtypeFieldNumber = 5;
-    private global::Tensorflow.DataType dtype_ = 0;
+    private global::Tensorflow.DataType dtype_ = global::Tensorflow.DataType.DtInvalid;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Tensorflow.DataType Dtype {
       get { return dtype_; }
@@ -649,7 +649,7 @@ namespace Tensorflow {
       if (NodeId != 0) hash ^= NodeId.GetHashCode();
       hash ^= shape_.GetHashCode();
       if (Data.Length != 0) hash ^= Data.GetHashCode();
-      if (Dtype != 0) hash ^= Dtype.GetHashCode();
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) hash ^= Dtype.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -676,7 +676,7 @@ namespace Tensorflow {
         output.WriteRawTag(34);
         output.WriteBytes(Data);
       }
-      if (Dtype != 0) {
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
         output.WriteRawTag(40);
         output.WriteEnum((int) Dtype);
       }
@@ -698,7 +698,7 @@ namespace Tensorflow {
       if (Data.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(Data);
       }
-      if (Dtype != 0) {
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Dtype);
       }
       if (_unknownFields != null) {
@@ -722,7 +722,7 @@ namespace Tensorflow {
       if (other.Data.Length != 0) {
         Data = other.Data;
       }
-      if (other.Dtype != 0) {
+      if (other.Dtype != global::Tensorflow.DataType.DtInvalid) {
         Dtype = other.Dtype;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -754,7 +754,7 @@ namespace Tensorflow {
             break;
           }
           case 40: {
-            dtype_ = (global::Tensorflow.DataType) input.ReadEnum();
+            Dtype = (global::Tensorflow.DataType) input.ReadEnum();
             break;
           }
         }
@@ -1121,7 +1121,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "dtype" field.</summary>
     public const int DtypeFieldNumber = 3;
-    private global::Tensorflow.DataType dtype_ = 0;
+    private global::Tensorflow.DataType dtype_ = global::Tensorflow.DataType.DtInvalid;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Tensorflow.DataType Dtype {
       get { return dtype_; }
@@ -1154,7 +1154,7 @@ namespace Tensorflow {
       int hash = 1;
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       hash ^= shape_.GetHashCode();
-      if (Dtype != 0) hash ^= Dtype.GetHashCode();
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) hash ^= Dtype.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1173,7 +1173,7 @@ namespace Tensorflow {
         output.WriteString(Name);
       }
       shape_.WriteTo(output, _repeated_shape_codec);
-      if (Dtype != 0) {
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
         output.WriteRawTag(24);
         output.WriteEnum((int) Dtype);
       }
@@ -1189,7 +1189,7 @@ namespace Tensorflow {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
       }
       size += shape_.CalculateSize(_repeated_shape_codec);
-      if (Dtype != 0) {
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Dtype);
       }
       if (_unknownFields != null) {
@@ -1207,7 +1207,7 @@ namespace Tensorflow {
         Name = other.Name;
       }
       shape_.Add(other.shape_);
-      if (other.Dtype != 0) {
+      if (other.Dtype != global::Tensorflow.DataType.DtInvalid) {
         Dtype = other.Dtype;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -1231,7 +1231,7 @@ namespace Tensorflow {
             break;
           }
           case 24: {
-            dtype_ = (global::Tensorflow.DataType) input.ReadEnum();
+            Dtype = (global::Tensorflow.DataType) input.ReadEnum();
             break;
           }
         }
@@ -1299,7 +1299,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "dtype" field.</summary>
     public const int DtypeFieldNumber = 3;
-    private global::Tensorflow.DataType dtype_ = 0;
+    private global::Tensorflow.DataType dtype_ = global::Tensorflow.DataType.DtInvalid;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Tensorflow.DataType Dtype {
       get { return dtype_; }
@@ -1332,7 +1332,7 @@ namespace Tensorflow {
       int hash = 1;
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       hash ^= shape_.GetHashCode();
-      if (Dtype != 0) hash ^= Dtype.GetHashCode();
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) hash ^= Dtype.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1351,7 +1351,7 @@ namespace Tensorflow {
         output.WriteString(Name);
       }
       shape_.WriteTo(output, _repeated_shape_codec);
-      if (Dtype != 0) {
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
         output.WriteRawTag(24);
         output.WriteEnum((int) Dtype);
       }
@@ -1367,7 +1367,7 @@ namespace Tensorflow {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
       }
       size += shape_.CalculateSize(_repeated_shape_codec);
-      if (Dtype != 0) {
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Dtype);
       }
       if (_unknownFields != null) {
@@ -1385,7 +1385,7 @@ namespace Tensorflow {
         Name = other.Name;
       }
       shape_.Add(other.shape_);
-      if (other.Dtype != 0) {
+      if (other.Dtype != global::Tensorflow.DataType.DtInvalid) {
         Dtype = other.Dtype;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -1409,7 +1409,7 @@ namespace Tensorflow {
             break;
           }
           case 24: {
-            dtype_ = (global::Tensorflow.DataType) input.ReadEnum();
+            Dtype = (global::Tensorflow.DataType) input.ReadEnum();
             break;
           }
         }
@@ -1528,7 +1528,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "destination" field.</summary>
     public const int DestinationFieldNumber = 7;
-    private global::Tensorflow.GraphTransferInfo.Types.Destination destination_ = 0;
+    private global::Tensorflow.GraphTransferInfo.Types.Destination destination_ = global::Tensorflow.GraphTransferInfo.Types.Destination.Nop;
     /// <summary>
     /// Destination of graph transfer
     /// </summary>
@@ -1572,7 +1572,7 @@ namespace Tensorflow {
       hash ^= nodeOutputInfo_.GetHashCode();
       hash ^= graphInputNodeInfo_.GetHashCode();
       hash ^= graphOutputNodeInfo_.GetHashCode();
-      if (Destination != 0) hash ^= Destination.GetHashCode();
+      if (Destination != global::Tensorflow.GraphTransferInfo.Types.Destination.Nop) hash ^= Destination.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1592,7 +1592,7 @@ namespace Tensorflow {
       nodeOutputInfo_.WriteTo(output, _repeated_nodeOutputInfo_codec);
       graphInputNodeInfo_.WriteTo(output, _repeated_graphInputNodeInfo_codec);
       graphOutputNodeInfo_.WriteTo(output, _repeated_graphOutputNodeInfo_codec);
-      if (Destination != 0) {
+      if (Destination != global::Tensorflow.GraphTransferInfo.Types.Destination.Nop) {
         output.WriteRawTag(56);
         output.WriteEnum((int) Destination);
       }
@@ -1610,7 +1610,7 @@ namespace Tensorflow {
       size += nodeOutputInfo_.CalculateSize(_repeated_nodeOutputInfo_codec);
       size += graphInputNodeInfo_.CalculateSize(_repeated_graphInputNodeInfo_codec);
       size += graphOutputNodeInfo_.CalculateSize(_repeated_graphOutputNodeInfo_codec);
-      if (Destination != 0) {
+      if (Destination != global::Tensorflow.GraphTransferInfo.Types.Destination.Nop) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Destination);
       }
       if (_unknownFields != null) {
@@ -1630,7 +1630,7 @@ namespace Tensorflow {
       nodeOutputInfo_.Add(other.nodeOutputInfo_);
       graphInputNodeInfo_.Add(other.graphInputNodeInfo_);
       graphOutputNodeInfo_.Add(other.graphOutputNodeInfo_);
-      if (other.Destination != 0) {
+      if (other.Destination != global::Tensorflow.GraphTransferInfo.Types.Destination.Nop) {
         Destination = other.Destination;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -1669,7 +1669,7 @@ namespace Tensorflow {
             break;
           }
           case 56: {
-            destination_ = (global::Tensorflow.GraphTransferInfo.Types.Destination) input.ReadEnum();
+            Destination = (global::Tensorflow.GraphTransferInfo.Types.Destination) input.ReadEnum();
             break;
           }
         }

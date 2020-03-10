@@ -27,34 +27,34 @@ namespace Tensorflow {
             "CiZ0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL29wX2RlZi5wcm90bxIKdGVu",
             "c29yZmxvdxoqdGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay9hdHRyX3ZhbHVl",
             "LnByb3RvGiV0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3R5cGVzLnByb3Rv",
-            "IrgFCgVPcERlZhIMCgRuYW1lGAEgASgJEisKCWlucHV0X2FyZxgCIAMoCzIY",
+            "ItAFCgVPcERlZhIMCgRuYW1lGAEgASgJEisKCWlucHV0X2FyZxgCIAMoCzIY",
             "LnRlbnNvcmZsb3cuT3BEZWYuQXJnRGVmEiwKCm91dHB1dF9hcmcYAyADKAsy",
-            "GC50ZW5zb3JmbG93Lk9wRGVmLkFyZ0RlZhInCgRhdHRyGAQgAygLMhkudGVu",
-            "c29yZmxvdy5PcERlZi5BdHRyRGVmEi4KC2RlcHJlY2F0aW9uGAggASgLMhku",
-            "dGVuc29yZmxvdy5PcERlcHJlY2F0aW9uEg8KB3N1bW1hcnkYBSABKAkSEwoL",
-            "ZGVzY3JpcHRpb24YBiABKAkSFgoOaXNfY29tbXV0YXRpdmUYEiABKAgSFAoM",
-            "aXNfYWdncmVnYXRlGBAgASgIEhMKC2lzX3N0YXRlZnVsGBEgASgIEiIKGmFs",
-            "bG93c191bmluaXRpYWxpemVkX2lucHV0GBMgASgIGp8BCgZBcmdEZWYSDAoE",
-            "bmFtZRgBIAEoCRITCgtkZXNjcmlwdGlvbhgCIAEoCRIiCgR0eXBlGAMgASgO",
-            "MhQudGVuc29yZmxvdy5EYXRhVHlwZRIRCgl0eXBlX2F0dHIYBCABKAkSEwoL",
-            "bnVtYmVyX2F0dHIYBSABKAkSFgoOdHlwZV9saXN0X2F0dHIYBiABKAkSDgoG",
-            "aXNfcmVmGBAgASgIGr0BCgdBdHRyRGVmEgwKBG5hbWUYASABKAkSDAoEdHlw",
-            "ZRgCIAEoCRIsCg1kZWZhdWx0X3ZhbHVlGAMgASgLMhUudGVuc29yZmxvdy5B",
-            "dHRyVmFsdWUSEwoLZGVzY3JpcHRpb24YBCABKAkSEwoLaGFzX21pbmltdW0Y",
-            "BSABKAgSDwoHbWluaW11bRgGIAEoAxItCg5hbGxvd2VkX3ZhbHVlcxgHIAEo",
-            "CzIVLnRlbnNvcmZsb3cuQXR0clZhbHVlIjUKDU9wRGVwcmVjYXRpb24SDwoH",
-            "dmVyc2lvbhgBIAEoBRITCgtleHBsYW5hdGlvbhgCIAEoCSInCgZPcExpc3QS",
-            "HQoCb3AYASADKAsyES50ZW5zb3JmbG93Lk9wRGVmQmsKGG9yZy50ZW5zb3Jm",
-            "bG93LmZyYW1ld29ya0ILT3BEZWZQcm90b3NQAVo9Z2l0aHViLmNvbS90ZW5z",
-            "b3JmbG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL2ZyYW1ld29y",
-            "a/gBAWIGcHJvdG8z"));
+            "GC50ZW5zb3JmbG93Lk9wRGVmLkFyZ0RlZhIWCg5jb250cm9sX291dHB1dBgU",
+            "IAMoCRInCgRhdHRyGAQgAygLMhkudGVuc29yZmxvdy5PcERlZi5BdHRyRGVm",
+            "Ei4KC2RlcHJlY2F0aW9uGAggASgLMhkudGVuc29yZmxvdy5PcERlcHJlY2F0",
+            "aW9uEg8KB3N1bW1hcnkYBSABKAkSEwoLZGVzY3JpcHRpb24YBiABKAkSFgoO",
+            "aXNfY29tbXV0YXRpdmUYEiABKAgSFAoMaXNfYWdncmVnYXRlGBAgASgIEhMK",
+            "C2lzX3N0YXRlZnVsGBEgASgIEiIKGmFsbG93c191bmluaXRpYWxpemVkX2lu",
+            "cHV0GBMgASgIGp8BCgZBcmdEZWYSDAoEbmFtZRgBIAEoCRITCgtkZXNjcmlw",
+            "dGlvbhgCIAEoCRIiCgR0eXBlGAMgASgOMhQudGVuc29yZmxvdy5EYXRhVHlw",
+            "ZRIRCgl0eXBlX2F0dHIYBCABKAkSEwoLbnVtYmVyX2F0dHIYBSABKAkSFgoO",
+            "dHlwZV9saXN0X2F0dHIYBiABKAkSDgoGaXNfcmVmGBAgASgIGr0BCgdBdHRy",
+            "RGVmEgwKBG5hbWUYASABKAkSDAoEdHlwZRgCIAEoCRIsCg1kZWZhdWx0X3Zh",
+            "bHVlGAMgASgLMhUudGVuc29yZmxvdy5BdHRyVmFsdWUSEwoLZGVzY3JpcHRp",
+            "b24YBCABKAkSEwoLaGFzX21pbmltdW0YBSABKAgSDwoHbWluaW11bRgGIAEo",
+            "AxItCg5hbGxvd2VkX3ZhbHVlcxgHIAEoCzIVLnRlbnNvcmZsb3cuQXR0clZh",
+            "bHVlIjUKDU9wRGVwcmVjYXRpb24SDwoHdmVyc2lvbhgBIAEoBRITCgtleHBs",
+            "YW5hdGlvbhgCIAEoCSInCgZPcExpc3QSHQoCb3AYASADKAsyES50ZW5zb3Jm",
+            "bG93Lk9wRGVmQmsKGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0ILT3BEZWZQ",
+            "cm90b3NQAVo9Z2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVu",
+            "c29yZmxvdy9nby9jb3JlL2ZyYW1ld29ya/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef), global::Tensorflow.OpDef.Parser, new[]{ "Name", "InputArg", "OutputArg", "Attr", "Deprecation", "Summary", "Description", "IsCommutative", "IsAggregate", "IsStateful", "AllowsUninitializedInput" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.ArgDef), global::Tensorflow.OpDef.Types.ArgDef.Parser, new[]{ "Name", "Description", "Type", "TypeAttr", "NumberAttr", "TypeListAttr", "IsRef" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.AttrDef), global::Tensorflow.OpDef.Types.AttrDef.Parser, new[]{ "Name", "Type", "DefaultValue", "Description", "HasMinimum", "Minimum", "AllowedValues" }, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDeprecation), global::Tensorflow.OpDeprecation.Parser, new[]{ "Version", "Explanation" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpList), global::Tensorflow.OpList.Parser, new[]{ "Op" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef), global::Tensorflow.OpDef.Parser, new[]{ "Name", "InputArg", "OutputArg", "ControlOutput", "Attr", "Deprecation", "Summary", "Description", "IsCommutative", "IsAggregate", "IsStateful", "AllowsUninitializedInput" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.ArgDef), global::Tensorflow.OpDef.Types.ArgDef.Parser, new[]{ "Name", "Description", "Type", "TypeAttr", "NumberAttr", "TypeListAttr", "IsRef" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.AttrDef), global::Tensorflow.OpDef.Types.AttrDef.Parser, new[]{ "Name", "Type", "DefaultValue", "Description", "HasMinimum", "Minimum", "AllowedValues" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDeprecation), global::Tensorflow.OpDeprecation.Parser, new[]{ "Version", "Explanation" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpList), global::Tensorflow.OpList.Parser, new[]{ "Op" }, null, null, null, null)
           }));
     }
     #endregion
@@ -94,6 +94,7 @@ namespace Tensorflow {
       name_ = other.name_;
       inputArg_ = other.inputArg_.Clone();
       outputArg_ = other.outputArg_.Clone();
+      controlOutput_ = other.controlOutput_.Clone();
       attr_ = other.attr_.Clone();
       deprecation_ = other.deprecation_ != null ? other.deprecation_.Clone() : null;
       summary_ = other.summary_;
@@ -115,7 +116,7 @@ namespace Tensorflow {
     private string name_ = "";
     /// <summary>
     /// Op names starting with an underscore are reserved for internal use.
-    /// Names should be CamelCase and match the regexp "[A-Z][a-zA-Z0-9_]*".
+    /// Names should be CamelCase and match the regexp "[A-Z][a-zA-Z0-9>_]*".
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Name {
@@ -149,6 +150,20 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::Tensorflow.OpDef.Types.ArgDef> OutputArg {
       get { return outputArg_; }
+    }
+
+    /// <summary>Field number for the "control_output" field.</summary>
+    public const int ControlOutputFieldNumber = 20;
+    private static readonly pb::FieldCodec<string> _repeated_controlOutput_codec
+        = pb::FieldCodec.ForString(162);
+    private readonly pbc::RepeatedField<string> controlOutput_ = new pbc::RepeatedField<string>();
+    /// <summary>
+    /// Named control outputs for this operation. Useful only for composite
+    /// operations (i.e. functions) which want to name different control outputs.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<string> ControlOutput {
+      get { return controlOutput_; }
     }
 
     /// <summary>Field number for the "attr" field.</summary>
@@ -295,6 +310,7 @@ namespace Tensorflow {
       if (Name != other.Name) return false;
       if(!inputArg_.Equals(other.inputArg_)) return false;
       if(!outputArg_.Equals(other.outputArg_)) return false;
+      if(!controlOutput_.Equals(other.controlOutput_)) return false;
       if(!attr_.Equals(other.attr_)) return false;
       if (!object.Equals(Deprecation, other.Deprecation)) return false;
       if (Summary != other.Summary) return false;
@@ -312,6 +328,7 @@ namespace Tensorflow {
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       hash ^= inputArg_.GetHashCode();
       hash ^= outputArg_.GetHashCode();
+      hash ^= controlOutput_.GetHashCode();
       hash ^= attr_.GetHashCode();
       if (deprecation_ != null) hash ^= Deprecation.GetHashCode();
       if (Summary.Length != 0) hash ^= Summary.GetHashCode();
@@ -368,6 +385,7 @@ namespace Tensorflow {
         output.WriteRawTag(152, 1);
         output.WriteBool(AllowsUninitializedInput);
       }
+      controlOutput_.WriteTo(output, _repeated_controlOutput_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -381,6 +399,7 @@ namespace Tensorflow {
       }
       size += inputArg_.CalculateSize(_repeated_inputArg_codec);
       size += outputArg_.CalculateSize(_repeated_outputArg_codec);
+      size += controlOutput_.CalculateSize(_repeated_controlOutput_codec);
       size += attr_.CalculateSize(_repeated_attr_codec);
       if (deprecation_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Deprecation);
@@ -419,10 +438,11 @@ namespace Tensorflow {
       }
       inputArg_.Add(other.inputArg_);
       outputArg_.Add(other.outputArg_);
+      controlOutput_.Add(other.controlOutput_);
       attr_.Add(other.attr_);
       if (other.deprecation_ != null) {
         if (deprecation_ == null) {
-          deprecation_ = new global::Tensorflow.OpDeprecation();
+          Deprecation = new global::Tensorflow.OpDeprecation();
         }
         Deprecation.MergeFrom(other.Deprecation);
       }
@@ -481,9 +501,9 @@ namespace Tensorflow {
           }
           case 66: {
             if (deprecation_ == null) {
-              deprecation_ = new global::Tensorflow.OpDeprecation();
+              Deprecation = new global::Tensorflow.OpDeprecation();
             }
-            input.ReadMessage(deprecation_);
+            input.ReadMessage(Deprecation);
             break;
           }
           case 128: {
@@ -500,6 +520,10 @@ namespace Tensorflow {
           }
           case 152: {
             AllowsUninitializedInput = input.ReadBool();
+            break;
+          }
+          case 162: {
+            controlOutput_.AddEntriesFrom(input, _repeated_controlOutput_codec);
             break;
           }
         }
@@ -583,7 +607,7 @@ namespace Tensorflow {
 
         /// <summary>Field number for the "type" field.</summary>
         public const int TypeFieldNumber = 3;
-        private global::Tensorflow.DataType type_ = 0;
+        private global::Tensorflow.DataType type_ = global::Tensorflow.DataType.DtInvalid;
         /// <summary>
         /// Describes the type of one or more tensors that are accepted/produced
         /// by this input/output arg.  The only legal combinations are:
@@ -691,7 +715,7 @@ namespace Tensorflow {
           int hash = 1;
           if (Name.Length != 0) hash ^= Name.GetHashCode();
           if (Description.Length != 0) hash ^= Description.GetHashCode();
-          if (Type != 0) hash ^= Type.GetHashCode();
+          if (Type != global::Tensorflow.DataType.DtInvalid) hash ^= Type.GetHashCode();
           if (TypeAttr.Length != 0) hash ^= TypeAttr.GetHashCode();
           if (NumberAttr.Length != 0) hash ^= NumberAttr.GetHashCode();
           if (TypeListAttr.Length != 0) hash ^= TypeListAttr.GetHashCode();
@@ -717,7 +741,7 @@ namespace Tensorflow {
             output.WriteRawTag(18);
             output.WriteString(Description);
           }
-          if (Type != 0) {
+          if (Type != global::Tensorflow.DataType.DtInvalid) {
             output.WriteRawTag(24);
             output.WriteEnum((int) Type);
           }
@@ -751,7 +775,7 @@ namespace Tensorflow {
           if (Description.Length != 0) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(Description);
           }
-          if (Type != 0) {
+          if (Type != global::Tensorflow.DataType.DtInvalid) {
             size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Type);
           }
           if (TypeAttr.Length != 0) {
@@ -783,7 +807,7 @@ namespace Tensorflow {
           if (other.Description.Length != 0) {
             Description = other.Description;
           }
-          if (other.Type != 0) {
+          if (other.Type != global::Tensorflow.DataType.DtInvalid) {
             Type = other.Type;
           }
           if (other.TypeAttr.Length != 0) {
@@ -818,7 +842,7 @@ namespace Tensorflow {
                 break;
               }
               case 24: {
-                type_ = (global::Tensorflow.DataType) input.ReadEnum();
+                Type = (global::Tensorflow.DataType) input.ReadEnum();
                 break;
               }
               case 34: {
@@ -1115,7 +1139,7 @@ namespace Tensorflow {
           }
           if (other.defaultValue_ != null) {
             if (defaultValue_ == null) {
-              defaultValue_ = new global::Tensorflow.AttrValue();
+              DefaultValue = new global::Tensorflow.AttrValue();
             }
             DefaultValue.MergeFrom(other.DefaultValue);
           }
@@ -1130,7 +1154,7 @@ namespace Tensorflow {
           }
           if (other.allowedValues_ != null) {
             if (allowedValues_ == null) {
-              allowedValues_ = new global::Tensorflow.AttrValue();
+              AllowedValues = new global::Tensorflow.AttrValue();
             }
             AllowedValues.MergeFrom(other.AllowedValues);
           }
@@ -1155,9 +1179,9 @@ namespace Tensorflow {
               }
               case 26: {
                 if (defaultValue_ == null) {
-                  defaultValue_ = new global::Tensorflow.AttrValue();
+                  DefaultValue = new global::Tensorflow.AttrValue();
                 }
-                input.ReadMessage(defaultValue_);
+                input.ReadMessage(DefaultValue);
                 break;
               }
               case 34: {
@@ -1174,9 +1198,9 @@ namespace Tensorflow {
               }
               case 58: {
                 if (allowedValues_ == null) {
-                  allowedValues_ = new global::Tensorflow.AttrValue();
+                  AllowedValues = new global::Tensorflow.AttrValue();
                 }
-                input.ReadMessage(allowedValues_);
+                input.ReadMessage(AllowedValues);
                 break;
               }
             }

@@ -42,10 +42,12 @@ namespace Tensorflow {
             "c2lvblN0YXR1cxIWChJTVEFUVVNfVU5TUEVDSUZJRUQQABIJCgVTVEFSVBAB",
             "EggKBFNUT1AQAhIOCgpDSEVDS1BPSU5UEAMiNgoRVGFnZ2VkUnVuTWV0YWRh",
             "dGESCwoDdGFnGAEgASgJEhQKDHJ1bl9tZXRhZGF0YRgCIAEoDCIkCg5XYXRj",
-            "aGRvZ0NvbmZpZxISCgp0aW1lb3V0X21zGAEgASgDIoQBChZXb3JrZXJIZWFy",
-            "dGJlYXRSZXF1ZXN0EjUKDXNodXRkb3duX21vZGUYASABKA4yHi50ZW5zb3Jm",
-            "bG93LldvcmtlclNodXRkb3duTW9kZRIzCg93YXRjaGRvZ19jb25maWcYAiAB",
-            "KAsyGi50ZW5zb3JmbG93LldhdGNoZG9nQ29uZmlnIoMBChdXb3JrZXJIZWFy",
+            "aGRvZ0NvbmZpZxISCgp0aW1lb3V0X21zGAEgASgDIiYKEVJlcXVlc3RlZEV4",
+            "aXRDb2RlEhEKCWV4aXRfY29kZRgBIAEoBSK2AQoWV29ya2VySGVhcnRiZWF0",
+            "UmVxdWVzdBI1Cg1zaHV0ZG93bl9tb2RlGAEgASgOMh4udGVuc29yZmxvdy5X",
+            "b3JrZXJTaHV0ZG93bk1vZGUSMwoPd2F0Y2hkb2dfY29uZmlnGAIgASgLMhou",
+            "dGVuc29yZmxvdy5XYXRjaGRvZ0NvbmZpZxIwCglleGl0X2NvZGUYAyABKAsy",
+            "HS50ZW5zb3JmbG93LlJlcXVlc3RlZEV4aXRDb2RlIoMBChdXb3JrZXJIZWFy",
             "dGJlYXRSZXNwb25zZRIvCg1oZWFsdGhfc3RhdHVzGAEgASgOMhgudGVuc29y",
             "Zmxvdy5Xb3JrZXJIZWFsdGgSJQoKd29ya2VyX2xvZxgCIAMoCzIRLnRlbnNv",
             "cmZsb3cuRXZlbnQSEAoIaG9zdG5hbWUYAyABKAkqWwoMV29ya2VySGVhbHRo",
@@ -57,14 +59,15 @@ namespace Tensorflow {
             "AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.SummaryReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.WorkerHealth), typeof(global::Tensorflow.WorkerShutdownMode), }, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Event), global::Tensorflow.Event.Parser, new[]{ "WallTime", "Step", "FileVersion", "GraphDef", "Summary", "LogMessage", "SessionLog", "TaggedRunMetadata", "MetaGraphDef" }, new[]{ "What" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.LogMessage), global::Tensorflow.LogMessage.Parser, new[]{ "Level", "Message" }, null, new[]{ typeof(global::Tensorflow.LogMessage.Types.Level) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SessionLog), global::Tensorflow.SessionLog.Parser, new[]{ "Status", "CheckpointPath", "Msg" }, null, new[]{ typeof(global::Tensorflow.SessionLog.Types.SessionStatus) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TaggedRunMetadata), global::Tensorflow.TaggedRunMetadata.Parser, new[]{ "Tag", "RunMetadata" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.WatchdogConfig), global::Tensorflow.WatchdogConfig.Parser, new[]{ "TimeoutMs" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.WorkerHeartbeatRequest), global::Tensorflow.WorkerHeartbeatRequest.Parser, new[]{ "ShutdownMode", "WatchdogConfig" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.WorkerHeartbeatResponse), global::Tensorflow.WorkerHeartbeatResponse.Parser, new[]{ "HealthStatus", "WorkerLog", "Hostname" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.WorkerHealth), typeof(global::Tensorflow.WorkerShutdownMode), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Event), global::Tensorflow.Event.Parser, new[]{ "WallTime", "Step", "FileVersion", "GraphDef", "Summary", "LogMessage", "SessionLog", "TaggedRunMetadata", "MetaGraphDef" }, new[]{ "What" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.LogMessage), global::Tensorflow.LogMessage.Parser, new[]{ "Level", "Message" }, null, new[]{ typeof(global::Tensorflow.LogMessage.Types.Level) }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SessionLog), global::Tensorflow.SessionLog.Parser, new[]{ "Status", "CheckpointPath", "Msg" }, null, new[]{ typeof(global::Tensorflow.SessionLog.Types.SessionStatus) }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TaggedRunMetadata), global::Tensorflow.TaggedRunMetadata.Parser, new[]{ "Tag", "RunMetadata" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.WatchdogConfig), global::Tensorflow.WatchdogConfig.Parser, new[]{ "TimeoutMs" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RequestedExitCode), global::Tensorflow.RequestedExitCode.Parser, new[]{ "ExitCode" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.WorkerHeartbeatRequest), global::Tensorflow.WorkerHeartbeatRequest.Parser, new[]{ "ShutdownMode", "WatchdogConfig", "ExitCode" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.WorkerHeartbeatResponse), global::Tensorflow.WorkerHeartbeatResponse.Parser, new[]{ "HealthStatus", "WorkerLog", "Hostname" }, null, null, null, null)
           }));
     }
     #endregion
@@ -607,7 +610,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "level" field.</summary>
     public const int LevelFieldNumber = 1;
-    private global::Tensorflow.LogMessage.Types.Level level_ = 0;
+    private global::Tensorflow.LogMessage.Types.Level level_ = global::Tensorflow.LogMessage.Types.Level.Unknown;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Tensorflow.LogMessage.Types.Level Level {
       get { return level_; }
@@ -648,7 +651,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Level != 0) hash ^= Level.GetHashCode();
+      if (Level != global::Tensorflow.LogMessage.Types.Level.Unknown) hash ^= Level.GetHashCode();
       if (Message.Length != 0) hash ^= Message.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -663,7 +666,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Level != 0) {
+      if (Level != global::Tensorflow.LogMessage.Types.Level.Unknown) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Level);
       }
@@ -679,7 +682,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Level != 0) {
+      if (Level != global::Tensorflow.LogMessage.Types.Level.Unknown) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Level);
       }
       if (Message.Length != 0) {
@@ -696,7 +699,7 @@ namespace Tensorflow {
       if (other == null) {
         return;
       }
-      if (other.Level != 0) {
+      if (other.Level != global::Tensorflow.LogMessage.Types.Level.Unknown) {
         Level = other.Level;
       }
       if (other.Message.Length != 0) {
@@ -714,7 +717,7 @@ namespace Tensorflow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            level_ = (global::Tensorflow.LogMessage.Types.Level) input.ReadEnum();
+            Level = (global::Tensorflow.LogMessage.Types.Level) input.ReadEnum();
             break;
           }
           case 18: {
@@ -790,7 +793,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "status" field.</summary>
     public const int StatusFieldNumber = 1;
-    private global::Tensorflow.SessionLog.Types.SessionStatus status_ = 0;
+    private global::Tensorflow.SessionLog.Types.SessionStatus status_ = global::Tensorflow.SessionLog.Types.SessionStatus.StatusUnspecified;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Tensorflow.SessionLog.Types.SessionStatus Status {
       get { return status_; }
@@ -846,7 +849,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Status != 0) hash ^= Status.GetHashCode();
+      if (Status != global::Tensorflow.SessionLog.Types.SessionStatus.StatusUnspecified) hash ^= Status.GetHashCode();
       if (CheckpointPath.Length != 0) hash ^= CheckpointPath.GetHashCode();
       if (Msg.Length != 0) hash ^= Msg.GetHashCode();
       if (_unknownFields != null) {
@@ -862,7 +865,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Status != 0) {
+      if (Status != global::Tensorflow.SessionLog.Types.SessionStatus.StatusUnspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Status);
       }
@@ -882,7 +885,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Status != 0) {
+      if (Status != global::Tensorflow.SessionLog.Types.SessionStatus.StatusUnspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Status);
       }
       if (CheckpointPath.Length != 0) {
@@ -902,7 +905,7 @@ namespace Tensorflow {
       if (other == null) {
         return;
       }
-      if (other.Status != 0) {
+      if (other.Status != global::Tensorflow.SessionLog.Types.SessionStatus.StatusUnspecified) {
         Status = other.Status;
       }
       if (other.CheckpointPath.Length != 0) {
@@ -923,7 +926,7 @@ namespace Tensorflow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            status_ = (global::Tensorflow.SessionLog.Types.SessionStatus) input.ReadEnum();
+            Status = (global::Tensorflow.SessionLog.Types.SessionStatus) input.ReadEnum();
             break;
           }
           case 18: {
@@ -1250,6 +1253,135 @@ namespace Tensorflow {
 
   }
 
+  public sealed partial class RequestedExitCode : pb::IMessage<RequestedExitCode> {
+    private static readonly pb::MessageParser<RequestedExitCode> _parser = new pb::MessageParser<RequestedExitCode>(() => new RequestedExitCode());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<RequestedExitCode> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Tensorflow.EventReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RequestedExitCode() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RequestedExitCode(RequestedExitCode other) : this() {
+      exitCode_ = other.exitCode_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RequestedExitCode Clone() {
+      return new RequestedExitCode(this);
+    }
+
+    /// <summary>Field number for the "exit_code" field.</summary>
+    public const int ExitCodeFieldNumber = 1;
+    private int exitCode_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ExitCode {
+      get { return exitCode_; }
+      set {
+        exitCode_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as RequestedExitCode);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(RequestedExitCode other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ExitCode != other.ExitCode) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ExitCode != 0) hash ^= ExitCode.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (ExitCode != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(ExitCode);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (ExitCode != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ExitCode);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(RequestedExitCode other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ExitCode != 0) {
+        ExitCode = other.ExitCode;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            ExitCode = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   public sealed partial class WorkerHeartbeatRequest : pb::IMessage<WorkerHeartbeatRequest> {
     private static readonly pb::MessageParser<WorkerHeartbeatRequest> _parser = new pb::MessageParser<WorkerHeartbeatRequest>(() => new WorkerHeartbeatRequest());
     private pb::UnknownFieldSet _unknownFields;
@@ -1258,7 +1390,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.EventReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Tensorflow.EventReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1277,6 +1409,7 @@ namespace Tensorflow {
     public WorkerHeartbeatRequest(WorkerHeartbeatRequest other) : this() {
       shutdownMode_ = other.shutdownMode_;
       watchdogConfig_ = other.watchdogConfig_ != null ? other.watchdogConfig_.Clone() : null;
+      exitCode_ = other.exitCode_ != null ? other.exitCode_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1287,7 +1420,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "shutdown_mode" field.</summary>
     public const int ShutdownModeFieldNumber = 1;
-    private global::Tensorflow.WorkerShutdownMode shutdownMode_ = 0;
+    private global::Tensorflow.WorkerShutdownMode shutdownMode_ = global::Tensorflow.WorkerShutdownMode.Default;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Tensorflow.WorkerShutdownMode ShutdownMode {
       get { return shutdownMode_; }
@@ -1307,6 +1440,17 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "exit_code" field.</summary>
+    public const int ExitCodeFieldNumber = 3;
+    private global::Tensorflow.RequestedExitCode exitCode_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.RequestedExitCode ExitCode {
+      get { return exitCode_; }
+      set {
+        exitCode_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as WorkerHeartbeatRequest);
@@ -1322,14 +1466,16 @@ namespace Tensorflow {
       }
       if (ShutdownMode != other.ShutdownMode) return false;
       if (!object.Equals(WatchdogConfig, other.WatchdogConfig)) return false;
+      if (!object.Equals(ExitCode, other.ExitCode)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (ShutdownMode != 0) hash ^= ShutdownMode.GetHashCode();
+      if (ShutdownMode != global::Tensorflow.WorkerShutdownMode.Default) hash ^= ShutdownMode.GetHashCode();
       if (watchdogConfig_ != null) hash ^= WatchdogConfig.GetHashCode();
+      if (exitCode_ != null) hash ^= ExitCode.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1343,13 +1489,17 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (ShutdownMode != 0) {
+      if (ShutdownMode != global::Tensorflow.WorkerShutdownMode.Default) {
         output.WriteRawTag(8);
         output.WriteEnum((int) ShutdownMode);
       }
       if (watchdogConfig_ != null) {
         output.WriteRawTag(18);
         output.WriteMessage(WatchdogConfig);
+      }
+      if (exitCode_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(ExitCode);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1359,11 +1509,14 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (ShutdownMode != 0) {
+      if (ShutdownMode != global::Tensorflow.WorkerShutdownMode.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ShutdownMode);
       }
       if (watchdogConfig_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(WatchdogConfig);
+      }
+      if (exitCode_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ExitCode);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1376,14 +1529,20 @@ namespace Tensorflow {
       if (other == null) {
         return;
       }
-      if (other.ShutdownMode != 0) {
+      if (other.ShutdownMode != global::Tensorflow.WorkerShutdownMode.Default) {
         ShutdownMode = other.ShutdownMode;
       }
       if (other.watchdogConfig_ != null) {
         if (watchdogConfig_ == null) {
-          watchdogConfig_ = new global::Tensorflow.WatchdogConfig();
+          WatchdogConfig = new global::Tensorflow.WatchdogConfig();
         }
         WatchdogConfig.MergeFrom(other.WatchdogConfig);
+      }
+      if (other.exitCode_ != null) {
+        if (exitCode_ == null) {
+          ExitCode = new global::Tensorflow.RequestedExitCode();
+        }
+        ExitCode.MergeFrom(other.ExitCode);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1397,14 +1556,21 @@ namespace Tensorflow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            shutdownMode_ = (global::Tensorflow.WorkerShutdownMode) input.ReadEnum();
+            ShutdownMode = (global::Tensorflow.WorkerShutdownMode) input.ReadEnum();
             break;
           }
           case 18: {
             if (watchdogConfig_ == null) {
-              watchdogConfig_ = new global::Tensorflow.WatchdogConfig();
+              WatchdogConfig = new global::Tensorflow.WatchdogConfig();
             }
-            input.ReadMessage(watchdogConfig_);
+            input.ReadMessage(WatchdogConfig);
+            break;
+          }
+          case 26: {
+            if (exitCode_ == null) {
+              ExitCode = new global::Tensorflow.RequestedExitCode();
+            }
+            input.ReadMessage(ExitCode);
             break;
           }
         }
@@ -1421,7 +1587,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.EventReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Tensorflow.EventReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1451,7 +1617,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "health_status" field.</summary>
     public const int HealthStatusFieldNumber = 1;
-    private global::Tensorflow.WorkerHealth healthStatus_ = 0;
+    private global::Tensorflow.WorkerHealth healthStatus_ = global::Tensorflow.WorkerHealth.Ok;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Tensorflow.WorkerHealth HealthStatus {
       get { return healthStatus_; }
@@ -1503,7 +1669,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (HealthStatus != 0) hash ^= HealthStatus.GetHashCode();
+      if (HealthStatus != global::Tensorflow.WorkerHealth.Ok) hash ^= HealthStatus.GetHashCode();
       hash ^= workerLog_.GetHashCode();
       if (Hostname.Length != 0) hash ^= Hostname.GetHashCode();
       if (_unknownFields != null) {
@@ -1519,7 +1685,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (HealthStatus != 0) {
+      if (HealthStatus != global::Tensorflow.WorkerHealth.Ok) {
         output.WriteRawTag(8);
         output.WriteEnum((int) HealthStatus);
       }
@@ -1536,7 +1702,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (HealthStatus != 0) {
+      if (HealthStatus != global::Tensorflow.WorkerHealth.Ok) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) HealthStatus);
       }
       size += workerLog_.CalculateSize(_repeated_workerLog_codec);
@@ -1554,7 +1720,7 @@ namespace Tensorflow {
       if (other == null) {
         return;
       }
-      if (other.HealthStatus != 0) {
+      if (other.HealthStatus != global::Tensorflow.WorkerHealth.Ok) {
         HealthStatus = other.HealthStatus;
       }
       workerLog_.Add(other.workerLog_);
@@ -1573,7 +1739,7 @@ namespace Tensorflow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            healthStatus_ = (global::Tensorflow.WorkerHealth) input.ReadEnum();
+            HealthStatus = (global::Tensorflow.WorkerHealth) input.ReadEnum();
             break;
           }
           case 18: {

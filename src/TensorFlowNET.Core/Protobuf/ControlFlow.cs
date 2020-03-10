@@ -50,11 +50,11 @@ namespace Tensorflow {
             "cHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ValuesDef), global::Tensorflow.ValuesDef.Parser, new[]{ "Values", "ExternalValues" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ControlFlowContextDef), global::Tensorflow.ControlFlowContextDef.Parser, new[]{ "CondCtxt", "WhileCtxt" }, new[]{ "Ctxt" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CondContextDef), global::Tensorflow.CondContextDef.Parser, new[]{ "ContextName", "PredName", "PivotName", "Branch", "ValuesDef", "NestedContexts" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.WhileContextDef), global::Tensorflow.WhileContextDef.Parser, new[]{ "ContextName", "ParallelIterations", "BackProp", "SwapMemory", "PivotName", "PivotForPredName", "PivotForBodyName", "LoopExitNames", "LoopEnterNames", "ValuesDef", "MaximumIterationsName", "NestedContexts" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ValuesDef), global::Tensorflow.ValuesDef.Parser, new[]{ "Values", "ExternalValues" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ControlFlowContextDef), global::Tensorflow.ControlFlowContextDef.Parser, new[]{ "CondCtxt", "WhileCtxt" }, new[]{ "Ctxt" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CondContextDef), global::Tensorflow.CondContextDef.Parser, new[]{ "ContextName", "PredName", "PivotName", "Branch", "ValuesDef", "NestedContexts" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.WhileContextDef), global::Tensorflow.WhileContextDef.Parser, new[]{ "ContextName", "ParallelIterations", "BackProp", "SwapMemory", "PivotName", "PivotForPredName", "PivotForBodyName", "LoopExitNames", "LoopEnterNames", "ValuesDef", "MaximumIterationsName", "NestedContexts" }, null, null, null, null)
           }));
     }
     #endregion
@@ -115,7 +115,7 @@ namespace Tensorflow {
     /// <summary>Field number for the "external_values" field.</summary>
     public const int ExternalValuesFieldNumber = 2;
     private static readonly pbc::MapField<string, string>.Codec _map_externalValues_codec
-        = new pbc::MapField<string, string>.Codec(pb::FieldCodec.ForString(10), pb::FieldCodec.ForString(18), 18);
+        = new pbc::MapField<string, string>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForString(18, ""), 18);
     private readonly pbc::MapField<string, string> externalValues_ = new pbc::MapField<string, string>();
     /// <summary>
     /// Value names referenced by but external to this context.
@@ -658,7 +658,7 @@ namespace Tensorflow {
       }
       if (other.valuesDef_ != null) {
         if (valuesDef_ == null) {
-          valuesDef_ = new global::Tensorflow.ValuesDef();
+          ValuesDef = new global::Tensorflow.ValuesDef();
         }
         ValuesDef.MergeFrom(other.ValuesDef);
       }
@@ -692,9 +692,9 @@ namespace Tensorflow {
           }
           case 42: {
             if (valuesDef_ == null) {
-              valuesDef_ = new global::Tensorflow.ValuesDef();
+              ValuesDef = new global::Tensorflow.ValuesDef();
             }
-            input.ReadMessage(valuesDef_);
+            input.ReadMessage(ValuesDef);
             break;
           }
           case 50: {
@@ -1089,7 +1089,7 @@ namespace Tensorflow {
       loopEnterNames_.Add(other.loopEnterNames_);
       if (other.valuesDef_ != null) {
         if (valuesDef_ == null) {
-          valuesDef_ = new global::Tensorflow.ValuesDef();
+          ValuesDef = new global::Tensorflow.ValuesDef();
         }
         ValuesDef.MergeFrom(other.ValuesDef);
       }
@@ -1142,9 +1142,9 @@ namespace Tensorflow {
           }
           case 74: {
             if (valuesDef_ == null) {
-              valuesDef_ = new global::Tensorflow.ValuesDef();
+              ValuesDef = new global::Tensorflow.ValuesDef();
             }
-            input.ReadMessage(valuesDef_);
+            input.ReadMessage(ValuesDef);
             break;
           }
           case 82: {

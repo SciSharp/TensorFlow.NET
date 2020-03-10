@@ -30,24 +30,33 @@ namespace Tensorflow {
             "cHJvdG8aJnRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvb3BfZGVmLnByb3Rv",
             "ImoKEkZ1bmN0aW9uRGVmTGlicmFyeRIpCghmdW5jdGlvbhgBIAMoCzIXLnRl",
             "bnNvcmZsb3cuRnVuY3Rpb25EZWYSKQoIZ3JhZGllbnQYAiADKAsyFy50ZW5z",
-            "b3JmbG93LkdyYWRpZW50RGVmIrACCgtGdW5jdGlvbkRlZhIkCglzaWduYXR1",
+            "b3JmbG93LkdyYWRpZW50RGVmIrYFCgtGdW5jdGlvbkRlZhIkCglzaWduYXR1",
             "cmUYASABKAsyES50ZW5zb3JmbG93Lk9wRGVmEi8KBGF0dHIYBSADKAsyIS50",
-            "ZW5zb3JmbG93LkZ1bmN0aW9uRGVmLkF0dHJFbnRyeRIlCghub2RlX2RlZhgD",
-            "IAMoCzITLnRlbnNvcmZsb3cuTm9kZURlZhItCgNyZXQYBCADKAsyIC50ZW5z",
-            "b3JmbG93LkZ1bmN0aW9uRGVmLlJldEVudHJ5GkIKCUF0dHJFbnRyeRILCgNr",
-            "ZXkYASABKAkSJAoFdmFsdWUYAiABKAsyFS50ZW5zb3JmbG93LkF0dHJWYWx1",
-            "ZToCOAEaKgoIUmV0RW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJ",
-            "OgI4AUoECAIQAyI7CgtHcmFkaWVudERlZhIVCg1mdW5jdGlvbl9uYW1lGAEg",
-            "ASgJEhUKDWdyYWRpZW50X2Z1bmMYAiABKAlCbgoYb3JnLnRlbnNvcmZsb3cu",
-            "ZnJhbWV3b3JrQg5GdW5jdGlvblByb3Rvc1ABWj1naXRodWIuY29tL3RlbnNv",
-            "cmZsb3cvdGVuc29yZmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvZnJhbWV3b3Jr",
-            "+AEBYgZwcm90bzM="));
+            "ZW5zb3JmbG93LkZ1bmN0aW9uRGVmLkF0dHJFbnRyeRI2CghhcmdfYXR0chgH",
+            "IAMoCzIkLnRlbnNvcmZsb3cuRnVuY3Rpb25EZWYuQXJnQXR0ckVudHJ5EiUK",
+            "CG5vZGVfZGVmGAMgAygLMhMudGVuc29yZmxvdy5Ob2RlRGVmEi0KA3JldBgE",
+            "IAMoCzIgLnRlbnNvcmZsb3cuRnVuY3Rpb25EZWYuUmV0RW50cnkSPAoLY29u",
+            "dHJvbF9yZXQYBiADKAsyJy50ZW5zb3JmbG93LkZ1bmN0aW9uRGVmLkNvbnRy",
+            "b2xSZXRFbnRyeRpCCglBdHRyRW50cnkSCwoDa2V5GAEgASgJEiQKBXZhbHVl",
+            "GAIgASgLMhUudGVuc29yZmxvdy5BdHRyVmFsdWU6AjgBGogBCghBcmdBdHRy",
+            "cxI4CgRhdHRyGAEgAygLMioudGVuc29yZmxvdy5GdW5jdGlvbkRlZi5BcmdB",
+            "dHRycy5BdHRyRW50cnkaQgoJQXR0ckVudHJ5EgsKA2tleRgBIAEoCRIkCgV2",
+            "YWx1ZRgCIAEoCzIVLnRlbnNvcmZsb3cuQXR0clZhbHVlOgI4ARpQCgxBcmdB",
+            "dHRyRW50cnkSCwoDa2V5GAEgASgNEi8KBXZhbHVlGAIgASgLMiAudGVuc29y",
+            "Zmxvdy5GdW5jdGlvbkRlZi5BcmdBdHRyczoCOAEaKgoIUmV0RW50cnkSCwoD",
+            "a2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ARoxCg9Db250cm9sUmV0RW50",
+            "cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4AUoECAIQAyI7CgtH",
+            "cmFkaWVudERlZhIVCg1mdW5jdGlvbl9uYW1lGAEgASgJEhUKDWdyYWRpZW50",
+            "X2Z1bmMYAiABKAlCbgoYb3JnLnRlbnNvcmZsb3cuZnJhbWV3b3JrQg5GdW5j",
+            "dGlvblByb3Rvc1ABWj1naXRodWIuY29tL3RlbnNvcmZsb3cvdGVuc29yZmxv",
+            "dy90ZW5zb3JmbG93L2dvL2NvcmUvZnJhbWV3b3Jr+AEBYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, global::Tensorflow.NodeDefReflection.Descriptor, global::Tensorflow.OpDefReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionDefLibrary), global::Tensorflow.FunctionDefLibrary.Parser, new[]{ "Function", "Gradient" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionDef), global::Tensorflow.FunctionDef.Parser, new[]{ "Signature", "Attr", "NodeDef", "Ret" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GradientDef), global::Tensorflow.GradientDef.Parser, new[]{ "FunctionName", "GradientFunc" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionDefLibrary), global::Tensorflow.FunctionDefLibrary.Parser, new[]{ "Function", "Gradient" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionDef), global::Tensorflow.FunctionDef.Parser, new[]{ "Signature", "Attr", "ArgAttr", "NodeDef", "Ret", "ControlRet" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionDef.Types.ArgAttrs), global::Tensorflow.FunctionDef.Types.ArgAttrs.Parser, new[]{ "Attr" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            null, null, null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GradientDef), global::Tensorflow.GradientDef.Parser, new[]{ "FunctionName", "GradientFunc" }, null, null, null, null)
           }));
     }
     #endregion
@@ -233,8 +242,10 @@ namespace Tensorflow {
     public FunctionDef(FunctionDef other) : this() {
       signature_ = other.signature_ != null ? other.signature_.Clone() : null;
       attr_ = other.attr_.Clone();
+      argAttr_ = other.argAttr_.Clone();
       nodeDef_ = other.nodeDef_.Clone();
       ret_ = other.ret_.Clone();
+      controlRet_ = other.controlRet_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -261,7 +272,7 @@ namespace Tensorflow {
     /// <summary>Field number for the "attr" field.</summary>
     public const int AttrFieldNumber = 5;
     private static readonly pbc::MapField<string, global::Tensorflow.AttrValue>.Codec _map_attr_codec
-        = new pbc::MapField<string, global::Tensorflow.AttrValue>.Codec(pb::FieldCodec.ForString(10), pb::FieldCodec.ForMessage(18, global::Tensorflow.AttrValue.Parser), 42);
+        = new pbc::MapField<string, global::Tensorflow.AttrValue>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::Tensorflow.AttrValue.Parser), 42);
     private readonly pbc::MapField<string, global::Tensorflow.AttrValue> attr_ = new pbc::MapField<string, global::Tensorflow.AttrValue>();
     /// <summary>
     /// Attributes specific to this function definition.
@@ -269,6 +280,16 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::MapField<string, global::Tensorflow.AttrValue> Attr {
       get { return attr_; }
+    }
+
+    /// <summary>Field number for the "arg_attr" field.</summary>
+    public const int ArgAttrFieldNumber = 7;
+    private static readonly pbc::MapField<uint, global::Tensorflow.FunctionDef.Types.ArgAttrs>.Codec _map_argAttr_codec
+        = new pbc::MapField<uint, global::Tensorflow.FunctionDef.Types.ArgAttrs>.Codec(pb::FieldCodec.ForUInt32(8, 0), pb::FieldCodec.ForMessage(18, global::Tensorflow.FunctionDef.Types.ArgAttrs.Parser), 58);
+    private readonly pbc::MapField<uint, global::Tensorflow.FunctionDef.Types.ArgAttrs> argAttr_ = new pbc::MapField<uint, global::Tensorflow.FunctionDef.Types.ArgAttrs>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::MapField<uint, global::Tensorflow.FunctionDef.Types.ArgAttrs> ArgAttr {
+      get { return argAttr_; }
     }
 
     /// <summary>Field number for the "node_def" field.</summary>
@@ -289,7 +310,7 @@ namespace Tensorflow {
     /// <summary>Field number for the "ret" field.</summary>
     public const int RetFieldNumber = 4;
     private static readonly pbc::MapField<string, string>.Codec _map_ret_codec
-        = new pbc::MapField<string, string>.Codec(pb::FieldCodec.ForString(10), pb::FieldCodec.ForString(18), 34);
+        = new pbc::MapField<string, string>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForString(18, ""), 34);
     private readonly pbc::MapField<string, string> ret_ = new pbc::MapField<string, string>();
     /// <summary>
     /// A mapping from the output arg names from `signature` to the
@@ -298,6 +319,20 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::MapField<string, string> Ret {
       get { return ret_; }
+    }
+
+    /// <summary>Field number for the "control_ret" field.</summary>
+    public const int ControlRetFieldNumber = 6;
+    private static readonly pbc::MapField<string, string>.Codec _map_controlRet_codec
+        = new pbc::MapField<string, string>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForString(18, ""), 50);
+    private readonly pbc::MapField<string, string> controlRet_ = new pbc::MapField<string, string>();
+    /// <summary>
+    /// A mapping from control output names from `signature` to node names in
+    /// `node_def` which should be control outputs of this function.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::MapField<string, string> ControlRet {
+      get { return controlRet_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -315,8 +350,10 @@ namespace Tensorflow {
       }
       if (!object.Equals(Signature, other.Signature)) return false;
       if (!Attr.Equals(other.Attr)) return false;
+      if (!ArgAttr.Equals(other.ArgAttr)) return false;
       if(!nodeDef_.Equals(other.nodeDef_)) return false;
       if (!Ret.Equals(other.Ret)) return false;
+      if (!ControlRet.Equals(other.ControlRet)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -325,8 +362,10 @@ namespace Tensorflow {
       int hash = 1;
       if (signature_ != null) hash ^= Signature.GetHashCode();
       hash ^= Attr.GetHashCode();
+      hash ^= ArgAttr.GetHashCode();
       hash ^= nodeDef_.GetHashCode();
       hash ^= Ret.GetHashCode();
+      hash ^= ControlRet.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -347,6 +386,8 @@ namespace Tensorflow {
       nodeDef_.WriteTo(output, _repeated_nodeDef_codec);
       ret_.WriteTo(output, _map_ret_codec);
       attr_.WriteTo(output, _map_attr_codec);
+      controlRet_.WriteTo(output, _map_controlRet_codec);
+      argAttr_.WriteTo(output, _map_argAttr_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -359,8 +400,10 @@ namespace Tensorflow {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Signature);
       }
       size += attr_.CalculateSize(_map_attr_codec);
+      size += argAttr_.CalculateSize(_map_argAttr_codec);
       size += nodeDef_.CalculateSize(_repeated_nodeDef_codec);
       size += ret_.CalculateSize(_map_ret_codec);
+      size += controlRet_.CalculateSize(_map_controlRet_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -374,13 +417,15 @@ namespace Tensorflow {
       }
       if (other.signature_ != null) {
         if (signature_ == null) {
-          signature_ = new global::Tensorflow.OpDef();
+          Signature = new global::Tensorflow.OpDef();
         }
         Signature.MergeFrom(other.Signature);
       }
       attr_.Add(other.attr_);
+      argAttr_.Add(other.argAttr_);
       nodeDef_.Add(other.nodeDef_);
       ret_.Add(other.ret_);
+      controlRet_.Add(other.controlRet_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -394,9 +439,9 @@ namespace Tensorflow {
             break;
           case 10: {
             if (signature_ == null) {
-              signature_ = new global::Tensorflow.OpDef();
+              Signature = new global::Tensorflow.OpDef();
             }
-            input.ReadMessage(signature_);
+            input.ReadMessage(Signature);
             break;
           }
           case 26: {
@@ -411,9 +456,149 @@ namespace Tensorflow {
             attr_.AddEntriesFrom(input, _map_attr_codec);
             break;
           }
+          case 50: {
+            controlRet_.AddEntriesFrom(input, _map_controlRet_codec);
+            break;
+          }
+          case 58: {
+            argAttr_.AddEntriesFrom(input, _map_argAttr_codec);
+            break;
+          }
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the FunctionDef message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      /// <summary>
+      /// Attributes for function arguments. These attributes are the same set of
+      /// valid attributes as to _Arg nodes.
+      /// </summary>
+      public sealed partial class ArgAttrs : pb::IMessage<ArgAttrs> {
+        private static readonly pb::MessageParser<ArgAttrs> _parser = new pb::MessageParser<ArgAttrs>(() => new ArgAttrs());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<ArgAttrs> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::Tensorflow.FunctionDef.Descriptor.NestedTypes[1]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public ArgAttrs() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public ArgAttrs(ArgAttrs other) : this() {
+          attr_ = other.attr_.Clone();
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public ArgAttrs Clone() {
+          return new ArgAttrs(this);
+        }
+
+        /// <summary>Field number for the "attr" field.</summary>
+        public const int AttrFieldNumber = 1;
+        private static readonly pbc::MapField<string, global::Tensorflow.AttrValue>.Codec _map_attr_codec
+            = new pbc::MapField<string, global::Tensorflow.AttrValue>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::Tensorflow.AttrValue.Parser), 10);
+        private readonly pbc::MapField<string, global::Tensorflow.AttrValue> attr_ = new pbc::MapField<string, global::Tensorflow.AttrValue>();
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::MapField<string, global::Tensorflow.AttrValue> Attr {
+          get { return attr_; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as ArgAttrs);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(ArgAttrs other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (!Attr.Equals(other.Attr)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          hash ^= Attr.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+          attr_.WriteTo(output, _map_attr_codec);
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          size += attr_.CalculateSize(_map_attr_codec);
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(ArgAttrs other) {
+          if (other == null) {
+            return;
+          }
+          attr_.Add(other.attr_);
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                attr_.AddEntriesFrom(input, _map_attr_codec);
+                break;
+              }
+            }
+          }
+        }
+
+      }
+
+    }
+    #endregion
 
   }
 

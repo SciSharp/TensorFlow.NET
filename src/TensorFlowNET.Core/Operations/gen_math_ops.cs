@@ -144,7 +144,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Add", name, x, y);
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Add", name, null, x, y);
                 return _result;
             }
 
@@ -466,7 +466,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Cast", name, x, "DstT", DstT, "Truncate", Truncate);
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Cast", name, null, x, "DstT", DstT, "Truncate", Truncate);
                 return _result;
             }
 
@@ -493,7 +493,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Sub", name, x, y);
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Sub", name, null, x, y);
                 return _result;
             }
 
@@ -544,7 +544,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Mul", name, x, y);
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Mul", name, null, x, y);
                 return _result;
             }
 
@@ -564,7 +564,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "RealDiv", name, x, y);
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "RealDiv", name, null, x, y);
                 return _result;
             }
 
@@ -591,7 +591,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "FloorDiv", name, x, y);
+                var _result = pywrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "FloorDiv", name, null, x, y);
                 return _result;
             }
 

@@ -37,8 +37,8 @@ namespace Tensorflow {
             "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.NodeDefReflection.Descriptor, global::Tensorflow.FunctionReflection.Descriptor, global::Tensorflow.VersionsReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphDef), global::Tensorflow.GraphDef.Parser, new[]{ "Node", "Versions", "Version", "Library" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GraphDef), global::Tensorflow.GraphDef.Parser, new[]{ "Node", "Versions", "Version", "Library" }, null, null, null, null)
           }));
     }
     #endregion
@@ -253,7 +253,7 @@ namespace Tensorflow {
       node_.Add(other.node_);
       if (other.versions_ != null) {
         if (versions_ == null) {
-          versions_ = new global::Tensorflow.VersionDef();
+          Versions = new global::Tensorflow.VersionDef();
         }
         Versions.MergeFrom(other.Versions);
       }
@@ -262,7 +262,7 @@ namespace Tensorflow {
       }
       if (other.library_ != null) {
         if (library_ == null) {
-          library_ = new global::Tensorflow.FunctionDefLibrary();
+          Library = new global::Tensorflow.FunctionDefLibrary();
         }
         Library.MergeFrom(other.Library);
       }
@@ -283,9 +283,9 @@ namespace Tensorflow {
           }
           case 18: {
             if (library_ == null) {
-              library_ = new global::Tensorflow.FunctionDefLibrary();
+              Library = new global::Tensorflow.FunctionDefLibrary();
             }
-            input.ReadMessage(library_);
+            input.ReadMessage(Library);
             break;
           }
           case 24: {
@@ -294,9 +294,9 @@ namespace Tensorflow {
           }
           case 34: {
             if (versions_ == null) {
-              versions_ = new global::Tensorflow.VersionDef();
+              Versions = new global::Tensorflow.VersionDef();
             }
-            input.ReadMessage(versions_);
+            input.ReadMessage(Versions);
             break;
           }
         }

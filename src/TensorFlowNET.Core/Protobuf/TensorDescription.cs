@@ -38,8 +38,8 @@ namespace Tensorflow {
             "AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.AllocationDescriptionReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorDescription), global::Tensorflow.TensorDescription.Parser, new[]{ "Dtype", "Shape", "AllocationDescription" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorDescription), global::Tensorflow.TensorDescription.Parser, new[]{ "Dtype", "Shape", "AllocationDescription" }, null, null, null, null)
           }));
     }
     #endregion
@@ -84,7 +84,7 @@ namespace Tensorflow {
 
     /// <summary>Field number for the "dtype" field.</summary>
     public const int DtypeFieldNumber = 1;
-    private global::Tensorflow.DataType dtype_ = 0;
+    private global::Tensorflow.DataType dtype_ = global::Tensorflow.DataType.DtInvalid;
     /// <summary>
     /// Data type of tensor elements
     /// </summary>
@@ -146,7 +146,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Dtype != 0) hash ^= Dtype.GetHashCode();
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) hash ^= Dtype.GetHashCode();
       if (shape_ != null) hash ^= Shape.GetHashCode();
       if (allocationDescription_ != null) hash ^= AllocationDescription.GetHashCode();
       if (_unknownFields != null) {
@@ -162,7 +162,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Dtype != 0) {
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Dtype);
       }
@@ -182,7 +182,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Dtype != 0) {
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Dtype);
       }
       if (shape_ != null) {
@@ -202,18 +202,18 @@ namespace Tensorflow {
       if (other == null) {
         return;
       }
-      if (other.Dtype != 0) {
+      if (other.Dtype != global::Tensorflow.DataType.DtInvalid) {
         Dtype = other.Dtype;
       }
       if (other.shape_ != null) {
         if (shape_ == null) {
-          shape_ = new global::Tensorflow.TensorShapeProto();
+          Shape = new global::Tensorflow.TensorShapeProto();
         }
         Shape.MergeFrom(other.Shape);
       }
       if (other.allocationDescription_ != null) {
         if (allocationDescription_ == null) {
-          allocationDescription_ = new global::Tensorflow.AllocationDescription();
+          AllocationDescription = new global::Tensorflow.AllocationDescription();
         }
         AllocationDescription.MergeFrom(other.AllocationDescription);
       }
@@ -229,21 +229,21 @@ namespace Tensorflow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            dtype_ = (global::Tensorflow.DataType) input.ReadEnum();
+            Dtype = (global::Tensorflow.DataType) input.ReadEnum();
             break;
           }
           case 18: {
             if (shape_ == null) {
-              shape_ = new global::Tensorflow.TensorShapeProto();
+              Shape = new global::Tensorflow.TensorShapeProto();
             }
-            input.ReadMessage(shape_);
+            input.ReadMessage(Shape);
             break;
           }
           case 34: {
             if (allocationDescription_ == null) {
-              allocationDescription_ = new global::Tensorflow.AllocationDescription();
+              AllocationDescription = new global::Tensorflow.AllocationDescription();
             }
-            input.ReadMessage(allocationDescription_);
+            input.ReadMessage(AllocationDescription);
             break;
           }
         }

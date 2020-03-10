@@ -21,6 +21,17 @@ namespace Tensorflow
         public static extern void TFE_DeleteContextOptions(IntPtr options);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op">TFE_Op*</param>
+        /// <param name="attr_name">const char*</param>
+        /// <param name="is_list">unsigned char*</param>
+        /// <param name="status">TF_Status*</param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_AttrType TFE_OpGetAttrType(IntPtr op, string attr_name, ref byte is_list, IntPtr status);
+
+        /// <summary>
         /// Returns the length (number of tensors) of the input argument `input_name`
         /// found in the provided `op`.
         /// </summary>
@@ -118,6 +129,9 @@ namespace Tensorflow
         /// <param name="out_status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrShape(IntPtr op, string attr_name, long[] dims, int num_dims, IntPtr out_status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_OpSetAttrBool(IntPtr op, string attr_name, bool value);
 
         /// <summary>
         /// 
