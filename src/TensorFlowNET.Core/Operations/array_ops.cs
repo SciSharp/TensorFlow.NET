@@ -178,6 +178,13 @@ namespace Tensorflow
             return dtype;
         }
 
+        /// <summary>
+        /// Converts the given list or tuple to a tensor by packing.
+        /// </summary>
+        /// <param name="list_or_tuple">A (possibly nested) list or tuple containing a tensor.</param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <returns>A `tf.Tensor` with value equivalent to `list_or_tuple`.</returns>
         public static Tensor _autopacking_helper(object[] list_or_tuple, TF_DataType dtype, string name)
         {
             var must_pack = false;
