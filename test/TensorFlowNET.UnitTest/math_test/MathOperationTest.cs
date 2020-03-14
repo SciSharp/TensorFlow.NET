@@ -17,8 +17,17 @@ namespace TensorFlowNET.UnitTest.math_test
         [TestMethod]
         public void Sin()
         {
-            var b = tf.sin(a, name: "sin");
+            var b = tf.sin(a, name: "Sin");
             var expected = new float[] { 0.84147096f, -0.47942555f, -0.2555412f, -0.8632094f /*python output -0.86320937*/,  0f, -0.21511999f };
+            var actual = b.ToArray<float>();
+            Assert.IsTrue(Enumerable.SequenceEqual(expected, actual));
+        }
+
+        [TestMethod]
+        public void Tan()
+        {
+            var b = tf.tan(a, name: "Tan");
+            var expected = new float[] { 1.5574077f, -0.5463025f, 0.264317f, 1.709847f, 0f, -0.2202772f };
             var actual = b.ToArray<float>();
             Assert.IsTrue(Enumerable.SequenceEqual(expected, actual));
         }

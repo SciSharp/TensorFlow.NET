@@ -321,6 +321,14 @@ namespace Tensorflow
 
         public static Tensor tan(Tensor x, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Tan", name, null,
+                    x);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Tan", name, args: new { x });
 
             return _op.outputs[0];
