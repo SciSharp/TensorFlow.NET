@@ -638,6 +638,14 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor mat_mul(Tensor a, Tensor b, bool transpose_a = false, bool transpose_b = false, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, tf.context.device_name, 
+                    "MatMul", name, null,
+                    a, b, "transpose_a", transpose_a, "transpose_b", transpose_b);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("MatMul", name, args: new { a, b, transpose_a, transpose_b });
 
             return _op.output;
@@ -738,15 +746,35 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, tf.context.device_name, 
-                    "Sum", name, null, 
-                    input, axis, "keep_dims", keep_dims);
-                return _result;
+                try
+                {
+                    var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, tf.context.device_name,
+                        "Sum", name, null,
+                        input, axis, "keep_dims", keep_dims);
+                    return _result;
+                }
+                catch (Exception)
+                {
+                    return _sum_eager_fallback(input as Tensor[], axis as Tensor, 
+                        keep_dims: keep_dims, name: name, ctx: tf.context);
+                }
             }
 
             var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
+        }
+
+        private static Tensor _sum_eager_fallback(Tensor[] inputs, Tensor axis, bool keep_dims = false, string name = null, Context ctx = null)
+        {
+            var (_attr_T, input) = _execute.args_to_matching_eager(inputs, ctx);
+            var (_attr_Tidx, axis1) = _execute.args_to_matching_eager(new[] { axis }, ctx, TF_DataType.TF_INT32);
+            var _inputs_flat = new Tensor[] { input, axis1 };
+
+            var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
+
+            var _result = _execute.execute(ctx, "Sum", _inputs_flat, _attrs, name: name);
+            return _result;
         }
 
         /// <summary>

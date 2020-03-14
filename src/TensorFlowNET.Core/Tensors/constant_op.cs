@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using Tensorflow.Eager;
@@ -84,6 +85,8 @@ namespace Tensorflow
         {
             switch (value)
             {
+                case NDArray nd:
+                    return new EagerTensor(nd, ctx.device_name);
                 case string str:
                     return new EagerTensor(str, ctx.device_name);
                 case int int32:

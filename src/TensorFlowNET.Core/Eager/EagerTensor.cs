@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,6 +16,10 @@ namespace Tensorflow.Eager
         }
 
         public EagerTensor(int value, string device_name) : base(value)
+        {
+        }
+
+        public EagerTensor(NDArray value, string device_name) : base(value)
         {
         }
 

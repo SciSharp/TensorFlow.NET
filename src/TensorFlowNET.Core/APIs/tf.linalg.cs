@@ -22,7 +22,7 @@ namespace Tensorflow
             => gen_array_ops.diag(diagonal, name: name);
 
         public Tensor matmul(Tensor a, Tensor b) 
-            => gen_math_ops.mat_mul(a, b);
+            => math_ops.matmul(a, b);
 
         public Tensor batch_matmul(Tensor x, Tensor y)
             => gen_math_ops.batch_mat_mul(x, y);

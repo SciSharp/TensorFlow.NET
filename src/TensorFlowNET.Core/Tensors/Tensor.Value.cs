@@ -163,6 +163,8 @@ namespace Tensorflow
                         return StringData();
                     case TF_DataType.TF_INT32:
                         return ToArray<int>();
+                    case TF_DataType.TF_FLOAT:
+                        return ToArray<float>();
                     default:
                         return BufferToArray();
                 }
