@@ -157,7 +157,15 @@ namespace Tensorflow
             }
             else
             {
-                throw new NotImplementedException("numpy not implemented when ndim > 0");
+                switch (dtype)
+                {
+                    case TF_DataType.TF_STRING:
+                        return StringData();
+                    case TF_DataType.TF_INT32:
+                        return ToArray<int>();
+                    default:
+                        return BufferToArray();
+                }
             }
         }
 

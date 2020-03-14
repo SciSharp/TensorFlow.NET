@@ -8,7 +8,7 @@ namespace Tensorflow.Eager
     /// <summary>
     /// python\eager\pywrap_tfe_src.cc
     /// </summary>
-    public class pywrap_tfe_src
+    public partial class wrap_tfe_src
     {
         static int kFastPathExecuteInputStartIndex = 0;
         public static EagerTensor TFE_Py_FastPathExecute(Context ctx, 
@@ -19,11 +19,10 @@ namespace Tensorflow.Eager
             params object[] args)
         {
             int args_size = args.Length;
-            IntPtr op = IntPtr.Zero;
             var attr_list_sizes = new Dictionary<string, long>();
             using (var status = new Status())
             {
-                op = c_api.TFE_NewOp(ctx, opName, status);
+                var op = c_api.TFE_NewOp(ctx, opName, status);
 
                 var op_def = Graph.TFE_GetOpDef(opName);
 
@@ -52,9 +51,9 @@ namespace Tensorflow.Eager
                 for (int i = 0; i < op_def.InputArg.Count; i++)
                 {
                     var input_arg = op_def.InputArg[i];
-                    int len = (args[kFastPathExecuteInputStartIndex + i] as object[]).Length;
                     if (!string.IsNullOrEmpty(input_arg.NumberAttr))
                     {
+                        int len = (args[kFastPathExecuteInputStartIndex + i] as object[]).Length;
                         c_api.TFE_OpSetAttrInt(op, input_arg.NumberAttr, len);
                         attr_list_sizes[input_arg.NumberAttr] = len;
 
@@ -125,12 +124,15 @@ namespace Tensorflow.Eager
             IntPtr op, 
             Status status)
         {
-            IntPtr input_handle = IntPtr.Zero;
+            TFE_TensorHandle input_handle;
 
             switch (inputs)
             {
                 case Tensor input:
                     input_handle = c_api.TFE_NewTensorHandle(input, status);
+                    break;
+                case Tensor[] input_list:
+                    input_handle = c_api.TFE_NewTensorHandle(input_list[0], status);
                     break;
                 default:
                     throw new NotImplementedException("");
@@ -146,6 +148,25 @@ namespace Tensorflow.Eager
             c_api.TFE_OpAddInput(op, input_handle, status);
             status.Check(true);
             return true;
+        }
+
+        private static void SetOpAttrs(Context ctx, TFE_Op op, object[] attrs, int start_index, Status out_status)
+        {
+            var len = attrs.Length;
+            for (int i = 0; i < len; i += 2)
+            {
+                var key = attrs[start_index + i].ToString();
+                var value = attrs[start_index + i + 1];
+
+                byte is_list = 0;
+                var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, out_status);
+                if (!out_status.ok()) return;
+                if (is_list != 0)
+                    SetOpAttrList(ctx, op, key, value, type, null, out_status);
+                else
+                    SetOpAttrScalar(ctx, op, key, value, type, null, out_status);
+                out_status.Check(true);
+            }
         }
 
         /// <summary>
@@ -188,6 +209,14 @@ namespace Tensorflow.Eager
             }
         }
 
+        private static bool SetOpAttrList(Context ctx, IntPtr op,
+            string key, object value, TF_AttrType type,
+            Dictionary<string, long> attr_list_sizes,
+            Status status)
+        {
+            return false;
+        }
+
         private static bool SetOpAttrScalar(Context ctx, IntPtr op, 
             string key, object value, TF_AttrType type,
             Dictionary<string, long> attr_list_sizes,
@@ -212,26 +241,6 @@ namespace Tensorflow.Eager
             }
 
             return true;
-        }
-
-        public static void RecordGradient(string op_name, Tensor[] inputs, Dictionary<string, object> attrs, Tensor[] results, string name = null)
-        {
-            var input_ids = inputs.Select(x => x.Id).ToArray();
-            var input_dtypes = inputs.Select(x => x.dtype).ToArray();
-
-            bool should_record = false;
-            foreach (var input_dtype in input_dtypes)
-            {
-                if (Tape.IsDtypeTrainable(input_dtype.as_datatype_enum()))
-                {
-                    should_record = true;
-                    break;
-                }
-            }
-            if (!should_record) return;
-
-            var op_outputs = results;
-            var op_inputs = inputs;
         }
     }
 }

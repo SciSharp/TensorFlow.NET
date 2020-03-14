@@ -9,11 +9,19 @@ namespace Tensorflow.Eager
 
         public int default_execution_mode;
         public string device_name = "";
+        bool _initialized = false;
 
         public Context(ContextOptions opts, Status status)
         {
             _handle = c_api.TFE_NewContext(opts, status);
             status.Check(true);
+        }
+
+        public void ensure_initialized()
+        {
+            if (_initialized)
+                return;
+            _initialized = true;
         }
 
         /// <summary>
@@ -27,5 +35,8 @@ namespace Tensorflow.Eager
 
         public static implicit operator IntPtr(Context ctx) 
             => ctx._handle;
+
+        public static implicit operator TFE_Context(Context ctx)
+            => new TFE_Context(ctx._handle);
     }
 }

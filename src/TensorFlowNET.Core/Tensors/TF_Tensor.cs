@@ -3,11 +3,20 @@ using System.Runtime.InteropServices;
 
 namespace Tensorflow
 {
-    [StructLayout(LayoutKind.Sequential)]
     public struct TF_Tensor
     {
-        public TF_DataType dtype;
-        public IntPtr shape;
-        public IntPtr buffer;
+        IntPtr _handle;
+
+        public TF_Tensor(IntPtr handle)
+            => _handle = handle;
+
+        public static implicit operator TF_Tensor(IntPtr handle)
+            => new TF_Tensor(handle);
+
+        public static implicit operator IntPtr(TF_Tensor tensor)
+            => tensor._handle;
+
+        public override string ToString()
+            => $"TF_Tensor {_handle}";
     }
 }

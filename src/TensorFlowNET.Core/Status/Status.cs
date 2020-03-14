@@ -47,6 +47,8 @@ namespace Tensorflow
             TF_SetStatus(_handle, code, msg);
         }
 
+        public bool ok() => Code == TF_Code.TF_OK;
+
         /// <summary>
         /// Check status 
         /// Throw exception with error message if code != TF_OK

@@ -451,6 +451,17 @@ namespace Tensorflow
         /// <summary>
         /// Computes the sum of elements across dimensions of a tensor.
         /// </summary>
+        /// <param name="input_tensors"></param>
+        /// <param name="axis"></param>
+        /// <param name="keepdims"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor reduce_sum(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_sum(input_tensors, axis: axis, keepdims: keepdims, name: name);
+
+        /// <summary>
+        /// Computes the sum of elements across dimensions of a tensor.
+        /// </summary>
         /// <param name="input"></param>
         /// <param name="axis"></param>
         /// <returns></returns>

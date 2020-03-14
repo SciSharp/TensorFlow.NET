@@ -480,6 +480,13 @@ namespace Tensorflow
             throw new NotImplementedException();
         }
 
+        public static Tensor reduce_sum(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
+        {
+            var dims = _ReductionDims(input_tensors, axis);
+            var m = gen_math_ops._sum(input_tensors, dims, keep_dims: keepdims, name: name);
+            return _may_reduce_to_scalar(keepdims, axis, m);
+        }
+
         public static Tensor reduce_sum(Tensor input_tensor, Tensor axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);

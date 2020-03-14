@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Eager;
 
 namespace Tensorflow
 {
@@ -15,13 +16,12 @@ namespace Tensorflow
         }
 
         public static implicit operator Operation(Tensor tensor)
-        {
-            return tensor.op;
-        }
+            => tensor.op;
+
+        public static implicit operator TF_Tensor(Tensor tensor)
+            => new TF_Tensor(tensor._handle);
 
         public static implicit operator Tensor(IntPtr handle)
-        {
-            return new Tensor(handle);
-        }
+            => new Tensor(handle);
     }
 }

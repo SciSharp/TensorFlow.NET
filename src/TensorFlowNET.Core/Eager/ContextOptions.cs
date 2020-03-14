@@ -17,6 +17,10 @@ namespace Tensorflow.Eager
 
         public static implicit operator IntPtr(ContextOptions opts) 
             => opts._handle;
+
+        public static implicit operator TFE_ContextOptions(ContextOptions opts)
+            => new TFE_ContextOptions(opts._handle);
+        
     }
 
 }

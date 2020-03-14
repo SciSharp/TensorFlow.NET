@@ -23,6 +23,7 @@ using System.Threading;
 using NumSharp;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
+using Tensorflow.Eager;
 
 namespace Tensorflow
 {
@@ -95,15 +96,19 @@ namespace Tensorflow
         /// <param name="dtype"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid)
+        public static Tensor convert_to_tensor(object value, 
+            TF_DataType dtype = TF_DataType.DtInvalid, 
+            string name = null, 
+            TF_DataType preferred_dtype = TF_DataType.DtInvalid,
+            Context ctx = null)
         {
-            return convert_to_tensor_v2(value, dtype, preferred_dtype, name);
+            return internal_convert_to_tensor(value,
+                dtype: dtype,
+                name: name,
+                preferred_dtype: preferred_dtype,
+                as_ref: false);
         }
 
-        public static Tensor convert_to_tensor_v2(object value, TF_DataType dtype = TF_DataType.DtInvalid, TF_DataType dtype_hint = TF_DataType.DtInvalid, string name = null)
-        {
-            return internal_convert_to_tensor(value, dtype: dtype, name: name, preferred_dtype: dtype_hint, as_ref: false);
-        }
 
         public static Tensor convert_to_tensor_or_composite(Tensor value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {

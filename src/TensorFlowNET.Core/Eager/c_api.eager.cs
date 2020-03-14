@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Tensorflow.Eager;
 using TFE_Executor = System.IntPtr;
 
 namespace Tensorflow
@@ -11,7 +12,7 @@ namespace Tensorflow
         /// </summary>
         /// <returns>TFE_ContextOptions*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_NewContextOptions();
+        public static extern TFE_ContextOptions TFE_NewContextOptions();
 
         /// <summary>
         /// Destroy an options object.
@@ -70,7 +71,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>TFE_Context*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_NewContext(IntPtr opts, IntPtr status);
+        public static extern TFE_Context TFE_NewContext(IntPtr opts, IntPtr status);
 
         /// <summary>
         /// 
@@ -88,7 +89,7 @@ namespace Tensorflow
         /// <param name="num_retvals">int*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_Execute(IntPtr op, IntPtr[] retvals, ref int num_retvals, IntPtr status);
+        public static extern void TFE_Execute(TFE_Op op, IntPtr[] retvals, ref int num_retvals, IntPtr status);
 
         /// <summary>
         /// 
@@ -98,7 +99,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_NewOp(IntPtr ctx, string op_or_function_name, IntPtr status);
+        public static extern TFE_Op TFE_NewOp(IntPtr ctx, string op_or_function_name, IntPtr status);
 
         /// <summary>
         /// 
@@ -150,7 +151,7 @@ namespace Tensorflow
         /// <param name="device_name"></param>
         /// <param name="status"></param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetDevice(IntPtr op, string device_name, IntPtr status);
+        public static extern void TFE_OpSetDevice(TFE_Op op, string device_name, IntPtr status);
 
         /// <summary>
         /// 
@@ -167,7 +168,7 @@ namespace Tensorflow
         /// <param name="t">const tensorflow::Tensor&</param>
         /// <returns>TFE_TensorHandle*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_NewTensorHandle(IntPtr t, IntPtr status);
+        public static extern TFE_TensorHandle TFE_NewTensorHandle(IntPtr t, IntPtr status);
 
         /// <summary>
         /// Sets the default execution mode (sync/async). Note that this can be
@@ -195,7 +196,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TensorHandleResolve(IntPtr h, IntPtr status);
+        public static extern TF_Tensor TFE_TensorHandleResolve(IntPtr h, IntPtr status);
 
         /// <summary>
         /// This function will block till the operation that produces `h` has completed.
@@ -252,7 +253,7 @@ namespace Tensorflow
         /// <param name="is_async"></param>
         /// <returns>TFE_Executor*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_NewExecutor(bool is_async);
+        public static extern TFE_Executor TFE_NewExecutor(bool is_async);
 
         /// <summary>
         /// Deletes the eager Executor without waiting for enqueued nodes. Please call
