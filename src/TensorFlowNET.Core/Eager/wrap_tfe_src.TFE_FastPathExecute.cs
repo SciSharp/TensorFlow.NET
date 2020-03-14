@@ -11,7 +11,7 @@ namespace Tensorflow.Eager
     public partial class wrap_tfe_src
     {
         static int kFastPathExecuteInputStartIndex = 0;
-        public static EagerTensor TFE_Py_FastPathExecute(Context ctx, 
+        public static EagerTensor TFE_FastPathExecute(Context ctx, 
             string device_name, 
             string opName, 
             string name, 

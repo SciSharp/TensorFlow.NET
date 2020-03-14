@@ -43,34 +43,19 @@ namespace Tensorflow
 
 
 
-        public RefVariable Variable<T>(T data,
-            bool trainable = true,
-            bool validate_shape = true,
-            string name = null,
-            TF_DataType dtype = TF_DataType.DtInvalid)
-        {
-            return Tensorflow.variable_scope.default_variable_creator(data,
-                trainable: trainable,
-                validate_shape: validate_shape,
-                name: name,
-                dtype: dtype) as RefVariable;
-        }
-
-        public VariableV1 VariableV1<T>(T data,
+        public ResourceVariable Variable<T>(T data,
             bool trainable = true,
             bool validate_shape = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            bool use_resource = false,
             int[] shape = null)
         {
-            return Tensorflow.variable_scope.default_variable_creator(data,
-                trainable: trainable,
-                validate_shape: validate_shape,
-                name: name,
-                dtype: dtype,
-                use_resource: use_resource,
-                shape: shape);
+            return new ResourceVariable(data,
+                    trainable: trainable,
+                    validate_shape: validate_shape,
+                    name: name,
+                    dtype: dtype,
+                    shape: shape);
         }
 
         public unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)

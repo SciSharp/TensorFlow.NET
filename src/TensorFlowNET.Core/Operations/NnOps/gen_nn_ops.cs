@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
@@ -463,50 +464,30 @@ namespace Tensorflow.Operations
         /// <returns>A `Tensor`. Has the same type as `features`.</returns>
         public static Tensor relu(Tensor features, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Relu", name, null,
+                    features);
+                return _result;
+            }
 
-            //_ctx = _context._context
-            //if _ctx is not None and _ctx._eager_context.is_eager:
-            //  try:
-            //    _result = _pywrap_tensorflow.TFE_Py_FastPathExecute(
-            //      _ctx._context_handle, _ctx._eager_context.device_name, "Relu", name,
-            //      _ctx._post_execution_callbacks, features)
-            //    return _result
-            //  except _core._FallbackException:
-            //    try:
-            //      return relu_eager_fallback(
-            //          features, name=name, ctx=_ctx)
-            //    except _core._SymbolicException:
-            //      pass  # Add nodes to the TensorFlow graph.
-            //    except (TypeError, ValueError):
-            //      result = _dispatch.dispatch(
-            //            relu, features=features, name=name)
-            //      if result is not _dispatch.OpDispatcher.NOT_SUPPORTED:
-            //        return result
-            //      raise
-            //  except _core._NotOkStatusException as e:
-            //    if name is not None:
-            //      message = e.message + " name: " + name
-            //    else:
-            //      message = e.message
-            //    _six.raise_from(_core._status_to_exception(e.code, message), None)
-            //# Add nodes to the TensorFlow graph.
-            //try:
-            OpDefLibrary _op_def_lib = new OpDefLibrary();
             var _op = _op_def_lib._apply_op_helper("Relu", name: name, args: new { features });
             return _op.outputs[0];
-            //except (TypeError, ValueError):
-            //  result = _dispatch.dispatch(
-            //        relu, features=features, name=name)
-            //  if result is not _dispatch.OpDispatcher.NOT_SUPPORTED:
-            //    return result
-            //  raise
-            // var _result = _op.outputs.ToArray();
-            //_inputs_flat = _op.inputs
-            //_attrs = ("T", _op.get_attr("T"))
-            //_execute.record_gradient(
-            //    "Relu", _inputs_flat, _attrs, _result, name)
-            //_result, = _result
-            // return _result;
+        }
+
+        public static Tensor tanh(Tensor x, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Tanh", name, null,
+                    x);
+                return _result;
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Tanh", name: name, args: new { x });
+            return _op.outputs[0];
         }
     }
 }

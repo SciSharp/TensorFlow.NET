@@ -125,7 +125,7 @@ namespace Tensorflow
         {
             if(tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, tf.context.device_name, "Pack", name, null, values, "axis", axis);
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, "Pack", name, null, values, "axis", axis);
                 return _result;
             }
 

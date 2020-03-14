@@ -116,8 +116,11 @@ namespace Tensorflow
             public IActivation relu() => new relu();
             public IActivation swish() => new swish();
             public IActivation tanh() => new tanh();
+            public Tensor tanh(Tensor x, string name = null)
+                => gen_nn_ops.tanh(x, name);
 
-            public Tensor relu(Tensor features, string name = null) => gen_nn_ops.relu(features, name);
+            public Tensor relu(Tensor features, string name = null) 
+                => gen_nn_ops.relu(features, name);
 
             public Tensor[] fused_batch_norm(Tensor x,
                 VariableV1 scale,
@@ -212,6 +215,14 @@ namespace Tensorflow
             public Tensor softmax_cross_entropy_with_logits_v2(Tensor labels, Tensor logits, int axis = -1, string name = null)
                 => nn_ops.softmax_cross_entropy_with_logits_v2_helper(labels, logits, axis: axis, name: name);
 
+            /// <summary>
+            /// Computes sigmoid of `x` element-wise.
+            /// Specifically, `y = 1 / (1 + exp(-x))`.
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="x"></param>
+            /// <param name="name">A name for the operation (optional).</param>
+            /// <returns>A Tensor with the same type as `x`.</returns>
             public Tensor sigmoid<T>(T x, string name = null)
                 => math_ops.sigmoid(x, name: name);
         }

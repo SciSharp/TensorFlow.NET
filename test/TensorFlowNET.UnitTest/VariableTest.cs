@@ -111,7 +111,7 @@ namespace TensorFlowNET.UnitTest
         public void Assign2()
         {
             var v1 = tf.Variable(10.0f, name: "v1"); //tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);
-            var inc_v1 = v1.assign(v1 + 1.0f);
+            var inc_v1 = v1.assign((RefVariable)v1 + 1.0f);
 
             // Add an op to initialize the variables.
             var init_op = tf.global_variables_initializer();

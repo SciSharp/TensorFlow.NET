@@ -98,10 +98,10 @@ namespace Tensorflow.Clustering
                 var cluster_counts = _use_mini_batch ? tf.Variable(ones) : null;
                 return new RefVariable[]
                 {
-                    cluster_centers,
+                    /*cluster_centers,
                     cluster_centers_initialized,
                     cluster_counts,
-                    cluster_centers_updated,
+                    cluster_centers_updated,*/
                     update_in_steps
                 };
             }

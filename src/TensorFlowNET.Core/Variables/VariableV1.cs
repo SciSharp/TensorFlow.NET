@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
 
 namespace Tensorflow
@@ -49,6 +50,19 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid)
         {
 
+        }
+
+        public virtual Tensor eval()
+        {
+            throw new NotImplementedException("");
+        }
+
+        public virtual ITensorOrOperation assign(object value, bool use_locking = false, string name = null, bool read_value = true)
+        {
+            var assign = gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
+            if (read_value)
+                return assign;
+            return assign.op;
         }
     }
 }

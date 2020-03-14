@@ -24,7 +24,7 @@ namespace Tensorflow
     /// <summary>
     /// Variable based on resource handles.
     /// </summary>
-    public class ResourceVariable : VariableV1
+    public partial class ResourceVariable : VariableV1
     {
         bool _in_graph_mode;
         Tensor _handle;

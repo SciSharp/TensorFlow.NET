@@ -33,6 +33,9 @@ namespace Tensorflow
         public Tensor assign(RefVariable @ref, object value, bool validate_shape = true, bool use_locking = true, string name = null)
             => state_ops.assign(@ref, value, validate_shape, use_locking, name);
 
+        public Tensor assign(ResourceVariable @ref, object value, bool validate_shape = true, bool use_locking = true, string name = null)
+            => state_ops.assign(@ref, value, validate_shape, use_locking, name);
+
         public void device(string device_name)
             => get_default_graph().device(device_name);
 

@@ -120,7 +120,7 @@ namespace Tensorflow
             {
                 try
                 {
-                    var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, tf.context.device_name, "Mean", name, null, input, axis, "keep_dims", keep_dims);
+                    var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, "Mean", name, null, input, axis, "keep_dims", keep_dims);
                     return _result;
                 }
                 catch (Exception ex)
@@ -171,7 +171,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Add", name, null, x, y);
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, "", "Add", name, null, x, y);
                 return _result;
             }
 
@@ -204,6 +204,14 @@ namespace Tensorflow
 
         public static Tensor sin(Tensor x, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sin", name, null,
+                    x);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Sin", name, args: new { x });
 
             return _op.outputs[0];
@@ -225,6 +233,14 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor sigmoid(Tensor x, string name = "Sigmoid")
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sigmoid", name, null,
+                    x);
+                return _result;
+            }
+
             var op = _op_def_lib._apply_op_helper("Sigmoid", name: name, new { x });
 
             return op.output;
@@ -493,7 +509,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Cast", name, null, x, "DstT", DstT, "Truncate", Truncate);
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, "", "Cast", name, null, x, "DstT", DstT, "Truncate", Truncate);
                 return _result;
             }
 
@@ -520,7 +536,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Sub", name, null, x, y);
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, "", "Sub", name, null, x, y);
                 return _result;
             }
 
@@ -571,7 +587,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "Mul", name, null, x, y);
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, "", "Mul", name, null, x, y);
                 return _result;
             }
 
@@ -591,7 +607,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "RealDiv", name, null, x, y);
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, "", "RealDiv", name, null, x, y);
                 return _result;
             }
 
@@ -618,7 +634,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, "", "FloorDiv", name, null, x, y);
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, "", "FloorDiv", name, null, x, y);
                 return _result;
             }
 
@@ -640,7 +656,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, tf.context.device_name, 
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
                     "MatMul", name, null,
                     a, b, "transpose_a", transpose_a, "transpose_b", transpose_b);
                 return _result;
@@ -748,7 +764,7 @@ namespace Tensorflow
             {
                 try
                 {
-                    var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, tf.context.device_name,
+                    var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
                         "Sum", name, null,
                         input, axis, "keep_dims", keep_dims);
                     return _result;
@@ -789,7 +805,7 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_Py_FastPathExecute(tf.context, tf.context.device_name, "Range", name, null, start, limit, delta);
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, "Range", name, null, start, limit, delta);
                 return _result;
             }
 

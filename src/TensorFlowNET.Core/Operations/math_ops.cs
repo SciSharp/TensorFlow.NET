@@ -278,10 +278,12 @@ namespace Tensorflow
         }
 
         public static Tensor sigmoid<T>(T x, string name = null)
-        {
-            var x_tensor = ops.convert_to_tensor(x, name: "x");
-            return gen_math_ops.sigmoid(x_tensor, name: name);
-        }
+            => tf_with(ops.name_scope(name, "Sigmoid", x), scope =>
+            {
+                name = scope;
+                var x_tensor = ops.convert_to_tensor(x, name: "x");
+                return gen_math_ops.sigmoid(x_tensor, name: name);
+            });
 
         public static Tensor sign<T>(T x, string name = null)
             => gen_math_ops.sign(x, name: name);

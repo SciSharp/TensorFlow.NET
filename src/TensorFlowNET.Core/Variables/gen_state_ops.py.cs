@@ -101,6 +101,26 @@ namespace Tensorflow
             return _result[0];
         }
 
+        public static Tensor assign(ResourceVariable @ref, object value,
+            bool validate_shape = true,
+            bool use_locking = true,
+            string name = null)
+        {
+            var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
+
+            var _result = _op.outputs;
+            var _inputs_flat = _op.inputs;
+
+            var _attrs = new Dictionary<string, object>();
+            _attrs["T"] = _op.get_attr("T");
+            _attrs["validate_shape"] = _op.get_attr("validate_shape");
+            _attrs["use_locking"] = _op.get_attr("use_locking");
+
+            _execute.record_gradient("Assign", _inputs_flat, _attrs, _result, name);
+
+            return _result[0];
+        }
+
         public static Tensor assign_sub(RefVariable @ref,
             Tensor value,
             bool use_locking = false,
