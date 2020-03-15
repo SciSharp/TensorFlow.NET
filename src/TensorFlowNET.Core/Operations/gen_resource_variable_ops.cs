@@ -14,6 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Eager;
+using static Tensorflow.Binding;
+
 namespace Tensorflow
 {
     public static class gen_resource_variable_ops
@@ -29,6 +32,14 @@ namespace Tensorflow
 
         public static Tensor var_is_initialized_op(Tensor resource, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "VarIsInitializedOp", name, null,
+                    resource);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("VarIsInitializedOp", name, new { resource });
 
             return _op.output;
@@ -46,6 +57,14 @@ namespace Tensorflow
         public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape, 
             string container ="", string shared_name = "", string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "VarHandleOp", name, null,
+                    "container", container, "shared_name", shared_name, "dtype", dtype, "shape", shape.dims);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("VarHandleOp", name, new {
                 dtype,
                 shape,

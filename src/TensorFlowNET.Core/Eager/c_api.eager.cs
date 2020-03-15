@@ -89,7 +89,7 @@ namespace Tensorflow
         /// <param name="num_retvals">int*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_Execute(TFE_Op op, IntPtr[] retvals, ref int num_retvals, IntPtr status);
+        public static extern void TFE_Execute(IntPtr op, IntPtr[] retvals, ref int num_retvals, IntPtr status);
 
         /// <summary>
         /// 

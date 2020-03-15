@@ -18,6 +18,6 @@ namespace Tensorflow.Eager
             => tensor._handle;
 
         public override string ToString()
-            => $"TFE_TensorHandle {_handle}";
+            => $"TFE_TensorHandle 0x{_handle.ToString("x16")}";
     }
 }

@@ -241,6 +241,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static void init_scope()
         {
+            if (tf.context.executing_eagerly())
+                return;
+
             // Retrieve the active name scope: entering an `init_scope` preserves
             // the name scope of the current context.
             var default_graph = get_default_graph();

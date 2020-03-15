@@ -181,6 +181,8 @@ namespace Tensorflow
                     return (NDArray)StringData()[0];
                 case TF_DataType.TF_INT32:
                     return *(int*)buffer;
+                case TF_DataType.TF_FLOAT:
+                    return *(float*)buffer;
                 case TF_DataType.TF_DOUBLE:
                     return *(double*)buffer;
                 default:

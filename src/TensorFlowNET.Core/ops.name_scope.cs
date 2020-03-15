@@ -15,6 +15,8 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -32,8 +34,8 @@ namespace Tensorflow
             public string _name;
             public string _default_name;
             public object _values;
-            public string _name_scope;
-            public string old_stack = "";
+            public string scope_name;
+            public string old_scope_name = "";
             
             public NameScope(string name, string default_name = "", object values = null)
             {
@@ -44,29 +46,54 @@ namespace Tensorflow
 
             public void __enter__()
             {
-                _name = _name ?? _default_name;
-                if (_name.EndsWith("basic_r_n_n_cell"))
+                if (tf.context.executing_eagerly())
                 {
-
+                    (scope_name, old_scope_name) = enter_eager_name_scope(tf.context, _name);
                 }
-                Graph g = null;
+                else
+                {
+                    _name = _name ?? _default_name;
+                    Graph g = null;
 
-                if (_values is List<Tensor> vList)
-                    g = _get_graph_from_inputs(vList.ToArray());
-                else if (_values is Tensor[] vArray)
-                    g = _get_graph_from_inputs(vArray);
+                    if (_values is List<Tensor> vList)
+                        g = _get_graph_from_inputs(vList.ToArray());
+                    else if (_values is Tensor[] vArray)
+                        g = _get_graph_from_inputs(vArray);
 
-                if (g == null)
-                    g = get_default_graph();
+                    if (g == null)
+                        g = get_default_graph();
 
-                old_stack = g._name_stack;
-                _name_scope = g.name_scope(_name);
+                    old_scope_name = g._name_stack;
+                    scope_name = g.name_scope(_name);
+                }
+            }
+
+            private (string, string) enter_eager_name_scope(Context ctx, string name)
+            {
+                if (name == null)
+                    name = "";
+
+                var scope_name = name;
+                var old_name = ctx.scope_name;
+                // A trailing slash breaks out of nested name scopes, indicating a
+                // fully specified scope name, for compatibility with Graph.name_scope.
+                if (!name.EndsWith("/"))
+                {
+                    scope_name = name + "/";
+                    if (!string.IsNullOrEmpty(old_name))
+                        scope_name = old_name + scope_name;
+                }
+
+                ctx.scope_name = scope_name;
+                return (scope_name, old_name);
             }
 
             public void Dispose()
             {
-                var g = get_default_graph();
-                g._name_stack = old_stack;
+                if (tf.context.executing_eagerly())
+                    tf.context.scope_name = old_scope_name;
+                else
+                    get_default_graph()._name_stack = old_scope_name;
             }
             
             public void __exit__()
@@ -89,7 +116,7 @@ namespace Tensorflow
             /// <param name="ns"></param>
             public static implicit operator string(NameScope ns)
             {
-                return ns._name_scope;
+                return ns.scope_name;
             }
         }
     }

@@ -71,5 +71,8 @@ namespace Tensorflow
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
             => TF_DeleteStatus(handle);
+
+        public override string ToString()
+            => $"{Code} 0x{_handle.ToString("x16")}";
     }
 }

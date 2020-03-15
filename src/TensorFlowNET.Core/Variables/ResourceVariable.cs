@@ -94,20 +94,28 @@ namespace Tensorflow
             if(collections == null)
                 collections = new List<string>() { tf.GraphKeys.GLOBAL_VARIABLES };
             _trainable = trainable;
-            _graph_key = ops.get_default_graph().graph_key;
+
+            if (trainable && !collections.Contains(tf.GraphKeys.TRAINABLE_VARIABLES))
+                collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
 
             ops.init_scope();
-            _in_graph_mode = true;
+            _in_graph_mode = !tf.context.executing_eagerly();
             tf_with(ops.name_scope(name, "Variable"), scope =>
             {
                 name = scope;
                 var handle_name = ops.name_from_scope_name(name);
-                var shared_name = handle_name;
-                var unique_id = shared_name;
+                var unique_id = $"{handle_name}_{ops.uid()}";
+                var shared_name = tf.context.shared_name();
+
+                if (_in_graph_mode)
+                {
+                    shared_name = handle_name;
+                    unique_id = shared_name;
+                }
 
                 var attr = new AttrValue();
                 attr.List = new AttrValue.Types.ListValue();
-                attr.List.S.Add(ByteString.CopyFromUtf8($"loc:{handle_name}"));
+                attr.List.S.Add(ByteString.CopyFromUtf8($"loc:@{handle_name}"));
                 tf_with(ops.name_scope("Initializer"), delegate
                 {
                     initial_value = ops.convert_to_tensor(init_from_fn ? (initial_value as Func<Tensor>)() : initial_value,

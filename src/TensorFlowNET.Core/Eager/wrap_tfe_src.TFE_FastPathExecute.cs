@@ -147,6 +147,7 @@ namespace Tensorflow.Eager
 
             c_api.TFE_OpAddInput(op, input_handle, status);
             status.Check(true);
+
             return true;
         }
 
@@ -236,8 +237,13 @@ namespace Tensorflow.Eager
                 case TF_AttrType.TF_ATTR_INT:
                     c_api.TFE_OpSetAttrInt(op, key, Convert.ToInt64(value));
                     break;
+                case TF_AttrType.TF_ATTR_SHAPE:
+                    var dims = (value as int[]).Select(x => (long)x).ToArray();
+                    c_api.TFE_OpSetAttrShape(op, key, dims, dims.Length, status);
+                    status.Check(true);
+                    break;
                 default:
-                    throw new NotImplementedException("");
+                    throw new NotImplementedException($"SetOpAttrScalar for {type}");
             }
 
             return true;

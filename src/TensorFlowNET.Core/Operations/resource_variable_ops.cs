@@ -100,10 +100,10 @@ namespace Tensorflow
         /// <param name="shared_name"></param>
         /// <param name="name"></param>
         /// <param name="graph_mode"></param>
-        /// <param name="extra_handle_data"></param>
+        /// <param name="initial_value"></param>
         /// <returns></returns>
         public static Tensor variable_handle_from_shape_and_dtype(TensorShape shape, TF_DataType dtype, 
-            string shared_name, string name, bool graph_mode, Tensor extra_handle_data = null)
+            string shared_name, string name, bool graph_mode, Tensor initial_value = null)
         {
             var container = "";// ops.get_default_graph().container;
             var handle = gen_resource_variable_ops.var_handle_op(shape: shape,
@@ -112,17 +112,22 @@ namespace Tensorflow
                 name: name,
                 container: container);
 
-            if (extra_handle_data == null)
-                extra_handle_data = handle;
+            if (initial_value == null)
+                initial_value = handle;
 
             if (graph_mode)
             {
-                var full_handle_data = _combine_handle_data(handle, extra_handle_data);
+                var full_handle_data = _combine_handle_data(handle, initial_value);
                 _set_handle_shapes_and_types(handle, full_handle_data, graph_mode);
                 return handle;
             }
             else
             {
+                // We do not want two distinct ResourceVariable objects for the same
+                // underlying resource in the runtime.
+                // When in eager mode, explicitly ensure so here. When in graph mode, it's
+                // ensured by always generating different variable names.
+                var exists = gen_resource_variable_ops.var_is_initialized_op(handle);
                 throw new NotImplementedException("");
             }
         }

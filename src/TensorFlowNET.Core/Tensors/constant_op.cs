@@ -91,6 +91,10 @@ namespace Tensorflow
                     return new EagerTensor(str, ctx.device_name);
                 case int int32:
                     return new EagerTensor(int32, ctx.device_name);
+                case float float32:
+                    return new EagerTensor(float32, ctx.device_name);
+                case double double64:
+                    return new EagerTensor(double64, ctx.device_name);
                 case float[] float32s:
                     return new EagerTensor(float32s, ctx.device_name);
                 case double[] double64s:

@@ -9,6 +9,7 @@ namespace Tensorflow.Eager
 
         public int default_execution_mode;
         public string device_name = "";
+        public string scope_name = "";
         bool _initialized = false;
 
         public Context(ContextOptions opts, Status status)
@@ -32,6 +33,11 @@ namespace Tensorflow.Eager
 
 
         public bool executing_eagerly() => true;
+
+        public string shared_name(string name = null)
+            => !string.IsNullOrEmpty(name) || !executing_eagerly() ? 
+                name : 
+                "cd2c89b7-88b7-44c8-ad83-06c2a9158347";
 
         public static implicit operator IntPtr(Context ctx) 
             => ctx._handle;
