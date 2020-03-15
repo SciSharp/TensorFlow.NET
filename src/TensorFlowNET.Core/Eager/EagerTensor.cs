@@ -19,6 +19,14 @@ namespace Tensorflow.Eager
         {
         }
 
+        public EagerTensor(float[] value, string device_name) : base(value)
+        {
+        }
+
+        public EagerTensor(double[] value, string device_name) : base(value)
+        {
+        }
+
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
         }

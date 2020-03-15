@@ -83,7 +83,7 @@ namespace Tensorflow
         {
             unsafe
             {
-                _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (UIntPtr) num_bytes);
+                _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (ulong)num_bytes);
                 AllocationType = TF_TensorData(_handle) == data_ptr ? AllocationType.FromPointer : AllocationType.Tensorflow;
             }
         }
@@ -99,7 +99,7 @@ namespace Tensorflow
         /// <param name="num_bytes">Size of the tensor in memory</param>
         public unsafe Tensor(void* data_ptr, long[] shape, TF_DataType dType, int num_bytes)
         {
-            _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (UIntPtr) num_bytes);
+            _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (ulong) num_bytes);
             AllocationType = TF_TensorData(_handle).ToPointer() == data_ptr ? AllocationType.FromPointer : AllocationType.Tensorflow;
         }
 
@@ -372,9 +372,9 @@ namespace Tensorflow
         /// <summary>
         ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
-        public Tensor(float[] data, TF_DataType? dType = null)
+        public Tensor(float[] data)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(float)), new long[] {data.Length}, data, sizeof(float));
+            _handle = CreateTensorFromArray(TF_DataType.TF_FLOAT, new long[] { data.Length }, data, sizeof(float));
         }
 
         /// <summary>
@@ -526,7 +526,7 @@ namespace Tensorflow
                 dims: nd.shape.Select(i => (long) i).ToArray(),
                 num_dims: nd.ndim,
                 data: arraySlice.Address,
-                len: (UIntPtr) (nd.size * nd.dtypesize));
+                len: (ulong) (nd.size * nd.dtypesize));
 
             //if TF decided not to perform copy, hold reference for given NDArray.
             if (TF_TensorData(handle).ToPointer() == arraySlice.Address)
@@ -647,9 +647,9 @@ namespace Tensorflow
             //call NewTensor
             IntPtr handle;
             if (shape == null || shape.Length == 0)
-                handle = TF_NewTensor(dt, new long[0], 0, pinnedAddr + start * element_size, (UIntPtr) (count * element_size));
+                handle = TF_NewTensor(dt, new long[0], 0, pinnedAddr + start * element_size, (ulong) (count * element_size));
             else 
-                handle = TF_NewTensor(dt, shape, shape.Length, pinnedAddr + start * element_size, (UIntPtr) (count * element_size));
+                handle = TF_NewTensor(dt, shape, shape.Length, pinnedAddr + start * element_size, (ulong) (count * element_size));
 
             //Figure if TF decided to clone or not.
             if (c_api.TF_TensorData(handle) == pinnedAddr)

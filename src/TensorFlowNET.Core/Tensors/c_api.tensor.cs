@@ -90,7 +90,7 @@ namespace Tensorflow
         /// <param name="deallocator_arg"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len, Deallocator deallocator, IntPtr deallocator_arg);
+        public static extern IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len, Deallocator deallocator, IntPtr deallocator_arg);
 
         /// <summary>
         /// Return a new tensor that holds the bytes data[0,len-1]
@@ -103,9 +103,9 @@ namespace Tensorflow
         /// <param name="deallocator"></param>
         /// <param name="deallocator_arg"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len)
+        public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len)
         {
-            return TF_NewTensor(dataType, dims, num_dims, data, len, EmptyDeallocator, DeallocatorArgs.Empty);
+            return c_api.TF_NewTensor(dataType, dims, num_dims, data, len, EmptyDeallocator, DeallocatorArgs.Empty);
         }
         /// <summary>
         /// Return a new tensor that holds the bytes data[0,len-1]
@@ -118,7 +118,7 @@ namespace Tensorflow
         /// <param name="deallocator"></param>
         /// <param name="deallocator_arg"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, void* data, UIntPtr len)
+        public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, void* data, ulong len)
         {
             return TF_NewTensor(dataType, dims, num_dims, new IntPtr(data), len);
         }

@@ -93,6 +93,8 @@ namespace Tensorflow
                     return new EagerTensor(int32, ctx.device_name);
                 case float[] float32s:
                     return new EagerTensor(float32s, ctx.device_name);
+                case double[] double64s:
+                    return new EagerTensor(double64s, ctx.device_name);
                 default:
                     throw new NotImplementedException($"convert_to_eager_tensor {value.GetType()}");
             }

@@ -165,6 +165,8 @@ namespace Tensorflow
                         return ToArray<int>();
                     case TF_DataType.TF_FLOAT:
                         return ToArray<float>();
+                    case TF_DataType.TF_DOUBLE:
+                        return ToArray<double>();
                     default:
                         return BufferToArray();
                 }

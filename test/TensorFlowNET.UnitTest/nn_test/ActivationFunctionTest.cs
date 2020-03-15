@@ -9,7 +9,7 @@ using static Tensorflow.Binding;
 namespace TensorFlowNET.UnitTest.nn_test
 {
     [TestClass]
-    public class ActivationFunctionTest
+    public class ActivationFunctionTest : TFNetApiTest
     {
         // A constant vector of size 6
         Tensor a = tf.constant(new float[] { 1.0f, -0.5f, 3.4f, -2.1f, 0.0f, -6.5f });
@@ -18,11 +18,9 @@ namespace TensorFlowNET.UnitTest.nn_test
         public void Sigmoid()
         {
             var b = tf.nn.sigmoid(a, name: "sigmoid");
-            // from python
-            // [0.7310586f, 0.37754068f, 0.9677046f, 0.10909683f, 0.5f, 0.00150118f]
-            var expected = new float[] { 0.7310586f, 0.377540678f, 0.9677046f, 0.109096833f, 0.5f, 0.00150118221f };
+            var expected = new float[] { 0.7310586f, 0.37754068f, 0.9677046f, 0.10909683f, 0.5f, 0.00150118f };
             var actual = b.ToArray<float>();
-            Assert.IsTrue(Enumerable.SequenceEqual(expected, actual));
+            Assert.IsTrue(Equal(expected, actual));
         }
 
         [TestMethod]
@@ -31,7 +29,7 @@ namespace TensorFlowNET.UnitTest.nn_test
             var b = tf.nn.relu(a, name: "ReLU");
             var expected = new float[] { 1f, 0f, 3.4f, 0f, 0f, 0f };
             var actual = b.ToArray<float>();
-            Assert.IsTrue(Enumerable.SequenceEqual(expected, actual));
+            Assert.IsTrue(Equal(expected, actual));
         }
 
         [TestMethod]
@@ -40,7 +38,7 @@ namespace TensorFlowNET.UnitTest.nn_test
             var b = tf.nn.tanh(a, name: "TanH");
             var expected = new float[] { 0.7615942f, -0.46211717f,  0.9977749f , -0.970452f,  0f, -0.99999547f };
             var actual = b.ToArray<float>();
-            Assert.IsTrue(Enumerable.SequenceEqual(expected, actual));
+            Assert.IsTrue(Equal(expected, actual));
         }
     }
 }
