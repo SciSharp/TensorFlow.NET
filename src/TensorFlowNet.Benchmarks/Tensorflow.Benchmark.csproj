@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="1.15.1" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.1.0" />
     <PackageReference Include="TensorFlow.NET" Version="0.15.1" />
   </ItemGroup>
 

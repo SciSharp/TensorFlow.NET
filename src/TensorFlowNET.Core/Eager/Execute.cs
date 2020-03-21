@@ -32,31 +32,41 @@ namespace Tensorflow.Eager
             ctx.ensure_initialized();
             using (var status = new Status())
             {
-                var retVals = wrap_tfe_src.TFE_Py_Execute(ctx, ctx.device_name, op_name, inputs, attrs, 1, status);
+                var retVals = wrap_tfe_src.TFE_Execute(ctx, ctx.device_name, op_name, inputs, attrs, 1, status);
 
-                var t = c_api.TFE_TensorHandleResolve(retVals[0], status);
-                status.Check(true);
-
-                return new EagerTensor(t);
+                return new EagerTensor(retVals[0]);
             }
         }
 
-        public (TF_DataType, Tensor) args_to_matching_eager(Tensor[] l, Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid)
+        public (TF_DataType, Tensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)
         {
-            var dtype = default_dtype;
-            if(dtype == TF_DataType.DtInvalid)
+            if (args.Length == 0 && default_dtype != TF_DataType.DtInvalid)
+                return (default_dtype, null);
+
+            if (args.Count(x => x is EagerTensor) == args.Length)
+                return ((args[0] as EagerTensor).dtype, args.Select(x => x as EagerTensor).ToArray());
+
+            var dtype = TF_DataType.DtInvalid;
+            foreach (var x in args)
             {
-                var tensor = ops.convert_to_tensor(l, dtype, preferred_dtype: default_dtype, ctx: ctx);
+                if (x is EagerTensor et)
+                    dtype = et.dtype;
+            }
 
-                if (dtype == TF_DataType.DtInvalid)
-                    dtype = tensor.dtype;
+            if (dtype == TF_DataType.DtInvalid)
+            {
+                var ret = new List<Tensor>();
+                foreach (var t in args)
+                {
+                    ret.Add(ops.convert_to_tensor(t, dtype, preferred_dtype: default_dtype, ctx: ctx));
+                    if (dtype == TF_DataType.DtInvalid)
+                        dtype = ret.Last().dtype;
+                }
 
-                return (dtype, tensor);
+                return (dtype, ret.ToArray());
             }
             else
-            {
-                return (dtype, l[0]);
-            }
+                throw new NotImplementedException("");
         }
 
         public void record_gradient(string op_name, InputList inputs, Dictionary<string, object> attrs, Tensor[] results, string name = null)

@@ -31,6 +31,7 @@ namespace Tensorflow
     /// </summary>
     public abstract class VariableV1
     {
+        protected string _name;
         public virtual string name { get; }
         public virtual Tensor graph_element { get; }
         public virtual Operation op { get; }
@@ -41,13 +42,10 @@ namespace Tensorflow
 
         public Tensor _is_initialized_op { get; set; }
 
-        public VariableV1(object initial_value = null,
-            bool trainable = true,
-            List<string> collections = null,
-            bool validate_shape = true,
-            string caching_device = "",
-            string name = null,
-            TF_DataType dtype = TF_DataType.DtInvalid)
+        protected TF_DataType _dtype;
+        public TF_DataType dtype => _dtype;
+
+        public VariableV1()
         {
 
         }
@@ -57,12 +55,13 @@ namespace Tensorflow
             throw new NotImplementedException("");
         }
 
-        public virtual ITensorOrOperation assign(object value, bool use_locking = false, string name = null, bool read_value = true)
+        public virtual BaseResourceVariable assign(object value, bool use_locking = false, string name = null, bool read_value = true)
         {
-            var assign = gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
+            throw new NotImplementedException("");
+            /*var assign = gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
             if (read_value)
                 return assign;
-            return assign.op;
+            return assign.op;*/
         }
     }
 }

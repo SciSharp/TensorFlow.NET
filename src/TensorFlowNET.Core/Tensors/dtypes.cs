@@ -201,6 +201,7 @@ namespace Tensorflow
                 TF_DataType.TF_STRING => "string",
                 TF_DataType.TF_INT32 => "int32",
                 TF_DataType.TF_FLOAT => "float32",
+                TF_DataType.TF_BOOL => "bool",
                 _ => type.ToString()
             };
 

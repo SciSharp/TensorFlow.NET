@@ -17,9 +17,6 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-#if SERIALIZABLE
-using Newtonsoft.Json;
-#endif
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -42,13 +39,7 @@ namespace Tensorflow
         }
 
         private Tensor[] _outputs;
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
         public Tensor[] outputs => _outputs;
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
         public Tensor output => _outputs.FirstOrDefault();
 
         public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);
@@ -60,9 +51,6 @@ namespace Tensorflow
         /// <summary>
         /// List this operation's output types.
         /// </summary>
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
         public TF_DataType[] _output_types
         {
             get

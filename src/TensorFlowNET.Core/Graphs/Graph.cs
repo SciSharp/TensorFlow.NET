@@ -76,9 +76,7 @@ namespace Tensorflow
     /// </summary>
     /// <remarks>https://www.tensorflow.org/guide/graphs <br></br>https://www.tensorflow.org/api_docs/python/tf/Graph</remarks>
     public partial class Graph : DisposableObject
-#if !SERIALIZABLE
         , IEnumerable<Operation>
-#endif
     {
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
         public Dictionary<string, ITensorOrOperation> _nodes_by_name;
@@ -541,7 +539,6 @@ namespace Tensorflow
             return debugString;*/
         }
 
-#if !SERIALIZABLE
         private IEnumerable<Operation> GetEnumerable()
             => c_api_util.tf_operations(this);
 
@@ -550,7 +547,6 @@ namespace Tensorflow
 
         IEnumerator IEnumerable.GetEnumerator()
             => throw new NotImplementedException();
-#endif
 
         public static implicit operator IntPtr(Graph graph)
         {

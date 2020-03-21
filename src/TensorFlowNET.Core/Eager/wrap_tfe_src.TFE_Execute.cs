@@ -10,16 +10,16 @@ namespace Tensorflow.Eager
     /// </summary>
     public partial class wrap_tfe_src
     {
-        public static IntPtr[] TFE_Py_Execute(Context ctx,
+        public static IntPtr[] TFE_Execute(Context ctx,
             string device_name,
             string op_name,
             Tensor[] inputs,
             object[] attrs,
             int num_outputs,
             Status status)
-             => TFE_Py_ExecuteCancelable(ctx, device_name, op_name, inputs, attrs, num_outputs, status);
+             => TFE_ExecuteCancelable(ctx, device_name, op_name, inputs, attrs, num_outputs, status);
 
-        public static IntPtr[] TFE_Py_ExecuteCancelable(Context ctx,
+        public static IntPtr[] TFE_ExecuteCancelable(Context ctx,
             string device_name,
             string op_name,
             Tensor[] inputs,
@@ -27,14 +27,23 @@ namespace Tensorflow.Eager
             int num_outputs,
             Status status)
         {
-            var op = c_api.TFE_NewOp(ctx, op_name, status);
+            var op = GetOp(ctx, op_name, status);
             status.Check(true);
             c_api.TFE_OpSetDevice(op, device_name, status);
             if(status.ok())
             {
                 for (int i = 0; i < inputs.Length; ++i)
                 {
-                    var tensor_handle = c_api.TFE_NewTensorHandle(inputs[i], status);
+                    TFE_TensorHandle tensor_handle;
+                    switch (inputs[i])
+                    {
+                        case EagerTensor et:
+                            tensor_handle = (TFE_TensorHandle)et;
+                            break;
+                        default:
+                            tensor_handle = c_api.TFE_NewTensorHandle(inputs[i], status);
+                            break;
+                    }
                     c_api.TFE_OpAddInput(op, tensor_handle, status);
                 }
             }

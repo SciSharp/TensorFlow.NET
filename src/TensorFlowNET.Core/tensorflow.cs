@@ -21,8 +21,8 @@ namespace Tensorflow
 {
     public partial class tensorflow : ITensorFlowObject
     {
-        public TF_DataType @byte = TF_DataType.TF_UINT8;
-        public TF_DataType @sbyte = TF_DataType.TF_INT8;
+        public TF_DataType byte8 = TF_DataType.TF_UINT8;
+        public TF_DataType int8 = TF_DataType.TF_INT8;
         public TF_DataType int16 = TF_DataType.TF_INT16;
         public TF_DataType int32 = TF_DataType.TF_INT32;
         public TF_DataType int64 = TF_DataType.TF_INT64;
@@ -41,27 +41,21 @@ namespace Tensorflow
             _constructThreadingObjects();
         }
 
-
-
         public ResourceVariable Variable<T>(T data,
             bool trainable = true,
             bool validate_shape = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             int[] shape = null)
-        {
-            return new ResourceVariable(data,
+            => new ResourceVariable(data,
                     trainable: trainable,
                     validate_shape: validate_shape,
                     name: name,
                     dtype: dtype,
                     shape: shape);
-        }
 
         public unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
-        {
-            return gen_array_ops.placeholder(dtype, shape, name);
-        }
+            => gen_array_ops.placeholder(dtype, shape, name);
 
         public void enable_eager_execution()
         {
@@ -72,9 +66,7 @@ namespace Tensorflow
         public string VERSION => c_api.StringPiece(c_api.TF_Version());
 
         public Session get_default_session()
-        {
-            return ops.get_default_session();
-        }
+            => ops.get_default_session();
 
         public Session Session()
         {

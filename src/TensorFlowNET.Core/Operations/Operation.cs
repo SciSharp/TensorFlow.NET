@@ -15,15 +15,11 @@
 ******************************************************************************/
 
 using Google.Protobuf.Collections;
-#if SERIALIZABLE
-using Newtonsoft.Json;
-#endif
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Tensorflow.Util;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -51,40 +47,23 @@ namespace Tensorflow
 
         private readonly Graph _graph;
         private NodeDef _node_def;
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
+
         public string type => OpType;
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
+
         public Graph graph => _graph;
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
+
         public int _id => _id_value;
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
+
         public int _id_value { get; set; }
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
         public Operation op => this;
         public TF_DataType dtype => TF_DataType.DtInvalid;
         public string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationOpType(_handle));
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
+
         public string Device => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
+
         bool _is_stateful;
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
+
         public NodeDef node_def
         {
             get

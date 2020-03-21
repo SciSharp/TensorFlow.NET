@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using static Tensorflow.Binding;
 using Tensorflow.Eager;
+using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -50,9 +52,34 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor concat_v2<T, Ta>(T[] values, Ta axis, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
+            if (tf.context.executing_eagerly())
+            {
+                try
+                {
+                    var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                        "ConcatV2", name, null,
+                        values, axis);
+                    return _result;
+                }
+                catch (Exception)
+                {
+                    return concat_v2_eager_fallback(values, axis, name, tf.context);
+                }
+            }
 
-            return _op.outputs[0];
+            var _op = _op_def_lib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
+            return _op.output;
+        }
+
+        private static Tensor concat_v2_eager_fallback<T1, T2>(T1[] values, T2 axis, string name, Context ctx)
+        {
+            var _attr_N = len(values);
+            var (_attr_T, input) = _execute.args_to_matching_eager(ctx, args: values.Select(x => (object)x).ToArray());
+            var (_attr_Tidx, axis1) = _execute.args_to_matching_eager(ctx, default_dtype: tf.int32, args: new object[] { axis });
+            var _inputs_flat = input.concat(axis1);
+            var _attrs = new object[] { "N", _attr_N, "T", _attr_T, "Tidx", _attr_Tidx };
+
+            return _execute.execute(ctx, "ConcatV2", _inputs_flat, _attrs, name: name);
         }
 
         public static Tensor[] concat_offset(Tensor concat_dim, Tensor[] shape, string name = null)
@@ -130,8 +157,7 @@ namespace Tensorflow
             }
 
             var _op = _op_def_lib._apply_op_helper("Pack", name: name, args: new { values, axis });
-
-            return _op.outputs[0];
+            return _op.output;
         }
 
         public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
@@ -223,9 +249,16 @@ namespace Tensorflow
         /// <returns>A `Tensor`. Has the same type as `value`.</returns>
         public static Tensor fill<T>(Tensor dims, T value, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Fill", name, new { dims, value });
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Fill", name, null,
+                    dims, value);
+                return _result;
+            }
 
-            return _op.outputs[0];
+            var _op = _op_def_lib._apply_op_helper("Fill", name, new { dims, value });
+            return _op.output;
         }
 
         /// <summary>
@@ -325,6 +358,14 @@ namespace Tensorflow
 
         public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Shape", name, null,
+                    input, "out_type", out_type);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Shape", name, new { input, out_type });
             return _op.outputs[0];
         }
@@ -401,6 +442,16 @@ namespace Tensorflow
             int shrink_axis_mask = 0,
             string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "StridedSlice", name, null,
+                    input, begin, end, strides, "begin_mask", begin_mask, 
+                    "end_mask", end_mask, "ellipsis_mask", ellipsis_mask, 
+                    "new_axis_mask", new_axis_mask, "shrink_axis_mask", shrink_axis_mask);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("StridedSlice", name, new
             {
                 input,

@@ -18,19 +18,9 @@ using NumSharp;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
-using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
-using NumSharp.Backends;
-using NumSharp.Backends.Unmanaged;
 using NumSharp.Utilities;
-using static Tensorflow.c_api;
-
-#if SERIALIZABLE
-using Newtonsoft.Json;
-#endif
 
 namespace Tensorflow
 {

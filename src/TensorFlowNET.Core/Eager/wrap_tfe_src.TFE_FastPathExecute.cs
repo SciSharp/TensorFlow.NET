@@ -22,7 +22,7 @@ namespace Tensorflow.Eager
             var attr_list_sizes = new Dictionary<string, long>();
             using (var status = new Status())
             {
-                var op = c_api.TFE_NewOp(ctx, opName, status);
+                var op = GetOp(ctx, opName, status);
 
                 var op_def = Graph.TFE_GetOpDef(opName);
 
@@ -101,11 +101,31 @@ namespace Tensorflow.Eager
                 c_api.TFE_Execute(op, retVals, ref num_retvals, status);
                 status.Check(true);
 
-                var t = c_api.TFE_TensorHandleResolve(retVals[0], status);
-                status.Check(true);
-
-                return new EagerTensor(t);
+                return num_retvals == 0 ? null : new EagerTensor(retVals[0]);
             }
+        }
+
+        private static TFE_Op GetOp(Context ctx, string op_or_function_name, Status status) 
+        {
+            var maybe_op = ReleaseThreadLocalOp();
+            if (maybe_op != IntPtr.Zero)
+            {
+                c_api.TFE_OpReset(ctx, op_or_function_name, status, maybe_op);
+            }
+            else
+            {
+                maybe_op = c_api.TFE_NewOp(ctx, op_or_function_name, status);
+                op = maybe_op;
+            }
+
+            status.Check(true);
+            return maybe_op;
+        }
+
+        static TFE_Op op;
+        private static TFE_Op ReleaseThreadLocalOp()
+        {
+            return op;
         }
 
         /// <summary>
@@ -126,18 +146,18 @@ namespace Tensorflow.Eager
         {
             TFE_TensorHandle input_handle;
 
+            // ConvertToTensor();
             switch (inputs)
             {
-                case Tensor input:
-                    input_handle = c_api.TFE_NewTensorHandle(input, status);
+                case EagerTensor input:
+                    input_handle = (TFE_TensorHandle)input;
                     break;
-                case Tensor[] input_list:
-                    input_handle = c_api.TFE_NewTensorHandle(input_list[0], status);
+                case EagerTensor[] input_list:
+                    input_handle = (TFE_TensorHandle)input_list[0];
                     break;
                 default:
                     throw new NotImplementedException("");
             }
-
 
             if(add_type_attr && !string.IsNullOrEmpty(input_arg.TypeAttr))
             {

@@ -26,7 +26,6 @@ namespace Tensorflow
     {
         public bool _in_graph_mode = true;
         public Tensor _initial_value;
-        public string _graph_key;
         public bool _trainable;
         
         public Tensor _snapshot;
@@ -51,13 +50,7 @@ namespace Tensorflow
             string name = null,
             VariableDef variable_def = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            string import_scope = "") : base(initial_value,
-                    trainable,
-                    collections,
-                    validate_shape,
-                    caching_device,
-                    name,
-                    dtype)
+            string import_scope = "") : base()
         {
             _in_graph_mode = true;
 

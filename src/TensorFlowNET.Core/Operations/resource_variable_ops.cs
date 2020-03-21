@@ -128,8 +128,9 @@ namespace Tensorflow
                 // When in eager mode, explicitly ensure so here. When in graph mode, it's
                 // ensured by always generating different variable names.
                 var exists = gen_resource_variable_ops.var_is_initialized_op(handle);
-                throw new NotImplementedException("");
             }
+
+            return handle;
         }
 
         private static void _set_handle_shapes_and_types(Tensor handle, HandleData full_handle_data, bool graph_mode)

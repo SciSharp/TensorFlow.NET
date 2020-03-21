@@ -57,7 +57,7 @@ namespace Tensorflow
                     case TF_DataType.TF_FLOAT:
                         return _constant_if_small(0.0F, shape, dtype, name);
                     case TF_DataType.TF_INT64:
-                        return _constant_if_small(0l, shape, dtype, name);
+                        return _constant_if_small(0L, shape, dtype, name);
                     case TF_DataType.TF_INT32:
                         return _constant_if_small(0, shape, dtype, name);
                     case TF_DataType.TF_INT8:
@@ -86,7 +86,7 @@ namespace Tensorflow
                 var shape1 = concat(new[]
                 {
                     shape(tensor_tensor)[$":{axis}"],
-                    tf.expand_dims(leading_size, 0),
+                    leading_size,
                     shape(tensor_tensor)[$"{axis + ndims_mask}:"]
                 }, 0);
                 tensor_tensor = reshape(tensor, shape1);
@@ -136,16 +136,16 @@ namespace Tensorflow
 
         private static Tensor _constant_if_small<T>(T value, TensorShape shape, TF_DataType dtype, string name)
         {
-            Tensor tShape = null;
+            Tensor shape_t = null;
             if (shape.size < 1000)
             {
                 return constant_op.constant(value, shape: shape, dtype: dtype, name: name);
             }
             else
             {
-                tShape = constant_op._tensor_shape_tensor_conversion_function(shape);
+                shape_t = constant_op._tensor_shape_tensor_conversion_function(shape);
                 var c = constant_op.constant(0, dtype: dtype);
-                return gen_array_ops.fill(tShape, c, name: name);
+                return gen_array_ops.fill(shape_t, c, name: name);
             }
         }
 
@@ -313,15 +313,20 @@ namespace Tensorflow
         }
 
         public static Tensor ones(int[] dims, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
-        {
-            dtype = dtype.as_base_dtype();
-            return tf_with(ops.name_scope(name, "ones", new { dims }), scope =>
+            => tf_with(ops.name_scope(name, "ones", new { dims }), scope =>
             {
+                dtype = dtype.as_base_dtype();
                 name = scope;
-                var output = _constant_if_small(1, dims, dtype, name);
-                return output;
+                switch (dtype)
+                {
+                    case TF_DataType.TF_DOUBLE:
+                        return _constant_if_small(1.0d, dims, dtype, name);
+                    case TF_DataType.TF_FLOAT:
+                        return _constant_if_small(1.0f, dims, dtype, name);
+                    default:
+                        return _constant_if_small(1, dims, dtype, name);
+                }
             });
-        }
 
         public static Tensor one_hot(Tensor indices, int depth, 
             Tensor on_value = null,

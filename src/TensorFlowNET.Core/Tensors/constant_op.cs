@@ -19,11 +19,14 @@ using System;
 using System.Collections.Generic;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
+using System.Linq;
 
 namespace Tensorflow
 {
     public class constant_op
     {
+        public static Execute _execute = new Execute();
+
         /// <summary>
         /// Creates a constant tensor.
         /// 
@@ -43,7 +46,7 @@ namespace Tensorflow
 
         public static Tensor _constant_impl(object value, 
             TF_DataType dtype, 
-            int[] shape, 
+            TensorShape shape, 
             string name, 
             bool verify_shape, 
             bool allow_broadcast)
@@ -53,6 +56,23 @@ namespace Tensorflow
                 var t = convert_to_eager_tensor(value, tf.context, dtype: dtype);
                 if (shape == null)
                     return t;
+
+                if (t.shape.SequenceEqual(shape.dims))
+                    return t;
+
+                if (verify_shape)
+                    throw new TypeError($"Expected Tensor's shape: {shape}, got {t.shape}.");
+
+                var num_t = t.TensorShape.num_elements();
+                if (num_t == shape.num_elements())
+                    throw new NotImplementedException("");
+                if(num_t == 1)
+                {
+                    if (t.dtype == dtypes.@bool)
+                        throw new NotImplementedException("");
+                    else
+                        return _eager_fill(shape, t, tf.context);
+                }
             }
 
             Graph g = ops.get_default_graph();
@@ -81,24 +101,38 @@ namespace Tensorflow
             return op.outputs[0];
         }
 
+        private static Tensor _eager_fill(int[] dims, Tensor value, Context ctx)
+        {
+            var attr_t = value.dtype.as_datatype_enum();
+            var dims_t = convert_to_eager_tensor(dims, ctx, dtypes.int32);
+            var inputs_flat = new[] { dims_t, value };
+            var attrs = new object[] { "T", attr_t, "index_type", TF_DataType.TF_INT32 };
+            var result = _execute.execute(ctx, "Fill", inputs_flat, attrs);
+            return result;
+        }
+
         private static EagerTensor convert_to_eager_tensor(object value, Context ctx, TF_DataType dtype = TF_DataType.DtInvalid)
         {
             switch (value)
             {
-                case NDArray nd:
-                    return new EagerTensor(nd, ctx.device_name);
-                case string str:
-                    return new EagerTensor(str, ctx.device_name);
-                case int int32:
-                    return new EagerTensor(int32, ctx.device_name);
-                case float float32:
-                    return new EagerTensor(float32, ctx.device_name);
-                case double double64:
-                    return new EagerTensor(double64, ctx.device_name);
-                case float[] float32s:
-                    return new EagerTensor(float32s, ctx.device_name);
-                case double[] double64s:
-                    return new EagerTensor(double64s, ctx.device_name);
+                case NDArray val:
+                    return new EagerTensor(val, ctx.device_name);
+                case string val:
+                    return new EagerTensor(val, ctx.device_name);
+                case int val:
+                    return new EagerTensor(val, ctx.device_name);
+                case int[] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case int[,] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case float val:
+                    return new EagerTensor(val, ctx.device_name);
+                case double val:
+                    return new EagerTensor(val, ctx.device_name);
+                case float[] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case double[] val:
+                    return new EagerTensor(val, ctx.device_name);
                 default:
                     throw new NotImplementedException($"convert_to_eager_tensor {value.GetType()}");
             }
@@ -112,7 +146,10 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="as_ref"></param>
         /// <returns></returns>
-        public static Tensor _tensor_shape_tensor_conversion_function(TensorShape s, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
+        public static Tensor _tensor_shape_tensor_conversion_function(TensorShape s, 
+            TF_DataType dtype = TF_DataType.DtInvalid, 
+            string name = null, 
+            bool as_ref = false)
         {
             var s_list = s.dims;
             var int64_value = 0;
@@ -125,15 +162,12 @@ namespace Tensorflow
                 }
             }
 
-            if(int64_value > 0)
-            {
-                dtype = TF_DataType.TF_INT32;
-            }
+            dtype = int64_value > 0 ? TF_DataType.TF_INT64 : TF_DataType.TF_INT32;
 
             if (string.IsNullOrEmpty(name))
                 name = "shape_as_tensor";
 
-            return constant_op.constant(s_list, name: name);
+            return constant_op.constant(s_list, dtype: dtype, name: name);
         }
 
         public static bool is_constant(ITensorOrOperation tensor_or_op)

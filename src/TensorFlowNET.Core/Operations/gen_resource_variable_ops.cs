@@ -25,6 +25,14 @@ namespace Tensorflow
 
         public static Operation assign_variable_op(Tensor resource, Tensor value, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AssignVariableOp", name, null,
+                    resource, value);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("AssignVariableOp", name, new { resource, value });
 
             return _op;
@@ -84,6 +92,14 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor read_variable_op(Tensor resource, TF_DataType dtype, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ReadVariableOp", name, null,
+                    resource, "dtype", dtype);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("ReadVariableOp", name, new
             {
                 resource,

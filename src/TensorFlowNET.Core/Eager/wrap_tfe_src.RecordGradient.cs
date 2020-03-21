@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System;
-using static Tensorflow.OpDef.Types;
+using Tensorflow.Gradients;
 
 namespace Tensorflow.Eager
 {

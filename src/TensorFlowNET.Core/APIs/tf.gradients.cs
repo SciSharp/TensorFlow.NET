@@ -14,10 +14,15 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Gradients;
+
 namespace Tensorflow
 {
     public partial class tensorflow
     {
+        public GradientActor GradientTape() 
+            => new GradientActor();
+
         public Tensor[] gradients(Tensor[] ys,
             Tensor[] xs,
             Tensor[] grad_ys = null,

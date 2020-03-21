@@ -64,15 +64,9 @@ Download [Bazel 0.29.1](https://github.com/bazelbuild/bazel/releases/tag/0.29.1)
 
 `pip install C:/tmp/tensorflow_pkg/tensorflow-1.15.0-cp36-cp36m-win_amd64.whl`
 
-### Export more APIs
+### Build specific version for tf.net
 
-Add more api to `c_api.h`
-
-```c++
-TF_CAPI_EXPORT extern void AddControlInput(TF_Graph* graph, TF_Operation* op, TF_Operation* input);
-TF_CAPI_EXPORT extern void UpdateEdge(TF_Graph* graph, TF_Output new_src, TF_Input dst, TF_Status* status);
-TF_CAPI_EXPORT extern void RemoveAllControlInputs(TF_Graph* graph, TF_Operation* op);
-```
+https://github.com/SciSharp/tensorflow
 
 For Linux version, these APIs symbols should also be put into `tensorflow/c/version_script.lds` to be exported. 
 Please refer to commit `https://github.com/SciSharp/tensorflow/commit/58122da06be3e7707500ad889dfd5c760a3e0424`

@@ -5,30 +5,39 @@ using System.Text;
 
 namespace Tensorflow.Eager
 {
-    public class EagerTensor : Tensor
+    public partial class EagerTensor : Tensor
     {
+        Status status = new Status();
+        TFE_TensorHandle tfe_tensor_handle;
         public EagerTensor(IntPtr handle) : base(handle)
         {
+            tfe_tensor_handle = handle;
+            _handle = c_api.TFE_TensorHandleResolve(handle, status);
         }
 
         public EagerTensor(string value, string device_name) : base(value)
         {
+            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
         }
 
         public EagerTensor(int value, string device_name) : base(value)
         {
+            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
         }
 
         public EagerTensor(float[] value, string device_name) : base(value)
         {
+            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
         }
 
         public EagerTensor(double[] value, string device_name) : base(value)
         {
+            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
         }
 
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
+            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
         }
 
         public override string ToString()
@@ -51,6 +60,8 @@ namespace Tensorflow.Eager
             {
                 case TF_DataType.TF_STRING:
                     return $"b'{(string)nd}'";
+                case TF_DataType.TF_BOOL:
+                    return (nd.GetByte(0) > 0).ToString();
                 default:
                     return nd.ToString();
             }

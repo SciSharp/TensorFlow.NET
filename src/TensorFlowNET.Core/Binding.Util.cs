@@ -41,6 +41,14 @@ namespace Tensorflow
         public static void append<T>(this IList<T> list, T element)
             => list.Add(element);
 
+        public static T[] concat<T>(this IList<T> list1, IList<T> list2)
+        {
+            var list = new List<T>();
+            list.AddRange(list1);
+            list.AddRange(list2);
+            return list.ToArray();
+        }
+
         public static void extend<T>(this List<T> list, IEnumerable<T> elements)
             => list.AddRange(elements);
 

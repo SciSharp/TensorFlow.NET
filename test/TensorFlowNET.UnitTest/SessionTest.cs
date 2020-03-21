@@ -179,7 +179,7 @@ namespace TensorFlowNET.UnitTest
         public void Autocast_Case4()
         {
             var sess = tf.Session().as_default();
-            var input = tf.placeholder(tf.@byte, shape: new TensorShape(6));
+            var input = tf.placeholder(tf.byte8, shape: new TensorShape(6));
             var op = tf.reshape(input, new int[] {2, 3});
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(NPTypeCode.Single) + 0.1f));

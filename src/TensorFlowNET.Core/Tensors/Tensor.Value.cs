@@ -150,30 +150,26 @@ namespace Tensorflow
         /// Tensor has rank 0.
         /// </returns>
         public NDArray numpy()
+            => NDims == 0 ? GetScalar(dtype) : GetNDArray(dtype);
+
+        protected unsafe NDArray GetNDArray(TF_DataType dtype)
         {
-            if(NDims == 0)
+            switch (dtype)
             {
-                return GetScalar(dtype);
-            }
-            else
-            {
-                switch (dtype)
-                {
-                    case TF_DataType.TF_STRING:
-                        return StringData();
-                    case TF_DataType.TF_INT32:
-                        return ToArray<int>();
-                    case TF_DataType.TF_FLOAT:
-                        return ToArray<float>();
-                    case TF_DataType.TF_DOUBLE:
-                        return ToArray<double>();
-                    default:
-                        return BufferToArray();
-                }
+                case TF_DataType.TF_STRING:
+                    return StringData();
+                case TF_DataType.TF_INT32:
+                    return ToArray<int>();
+                case TF_DataType.TF_FLOAT:
+                    return ToArray<float>();
+                case TF_DataType.TF_DOUBLE:
+                    return ToArray<double>();
+                default:
+                    return BufferToArray();
             }
         }
 
-        private unsafe NDArray GetScalar(TF_DataType dtype)
+        protected unsafe NDArray GetScalar(TF_DataType dtype)
         {
             switch(dtype)
             {

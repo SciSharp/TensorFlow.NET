@@ -17,9 +17,6 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-#if SERIALIZABLE
-using Newtonsoft.Json;
-#endif
 
 namespace Tensorflow
 {
@@ -80,9 +77,6 @@ namespace Tensorflow
         /// reasons, or to ensure that the side effects of an op are observed
         /// in the correct order.
         /// </summary>
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
         public Operation[] control_inputs
         {
             get

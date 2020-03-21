@@ -267,11 +267,7 @@ namespace TensorFlowNET.UnitTest
             var tensor = new[] { 0, 1, 2, 3 };
             var mask = np.array(new[] { true, false, true, false });
             var masked = tf.boolean_mask(tensor, mask);
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(masked);
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 2 }, result.ToArray<int>()));
-            }
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 2 }, masked.ToArray<int>()));
         }
     }
 }

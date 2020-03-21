@@ -46,13 +46,13 @@ namespace Tensorflow
 
             public void __enter__()
             {
+                _name = _name ?? _default_name;
                 if (tf.context.executing_eagerly())
                 {
                     (scope_name, old_scope_name) = enter_eager_name_scope(tf.context, _name);
                 }
                 else
                 {
-                    _name = _name ?? _default_name;
                     Graph g = null;
 
                     if (_values is List<Tensor> vList)

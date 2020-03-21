@@ -16,7 +16,7 @@ namespace Tensorflow
         }
 
         public static implicit operator Operation(Tensor tensor)
-            => tensor.op;
+            => tensor?.op;
 
         public static implicit operator TF_Tensor(Tensor tensor)
             => new TF_Tensor(tensor._handle);

@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
-#if SERIALIZABLE
-using Newtonsoft.Json;
-#endif
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -38,9 +35,6 @@ namespace Tensorflow
         /// <summary>
         ///     Returns the size this shape represents.
         /// </summary>
-#if SERIALIZABLE
-        [JsonIgnore]
-#endif
         public int size
         {
             get
@@ -244,6 +238,19 @@ namespace Tensorflow
             return (int[]) dims.Clone();
         }
 
+        public int num_elements()
+        {
+            if(is_fully_defined())
+            {
+                var size = 1;
+                foreach (var dim in dims)
+                    size *= dim;
+                return size;
+            }   
+            
+            return -1;
+        }
+
         public override string ToString()
         {
             return shape.ToString();
@@ -253,7 +260,7 @@ namespace Tensorflow
         public static implicit operator Shape(TensorShape shape) => new Shape((int[]) shape.dims.Clone());
         
         public static implicit operator int[](TensorShape shape) => shape == null ? null : (int[])shape.dims.Clone(); //we clone to avoid any changes
-        public static implicit operator TensorShape(int[] dims) => dims == null ? new TensorShape(new int[0]) : new TensorShape(dims);
+        public static implicit operator TensorShape(int[] dims) => dims == null ? null : new TensorShape(dims);
 
         public static explicit operator int(TensorShape shape) => shape.size;
         public static implicit operator TensorShape(int dim) => new TensorShape(dim);

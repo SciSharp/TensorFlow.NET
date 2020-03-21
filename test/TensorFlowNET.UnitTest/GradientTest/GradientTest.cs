@@ -6,10 +6,10 @@ using NumSharp;
 using Tensorflow;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.gradients_test
+namespace TensorFlowNET.UnitTest.Gradient
 {
     [TestClass]
-    public class GradientsTest : PythonTest
+    public class GradientTest : PythonTest
     {
         [TestMethod]
         public void BroadcastToGrad()

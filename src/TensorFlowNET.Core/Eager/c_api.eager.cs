@@ -104,6 +104,16 @@ namespace Tensorflow
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="ctx">TFE_Context*</param>
+        /// <param name="op_or_function_name">const char*</param>
+        /// <param name="status">TF_Status*</param>
+        /// <param name="op_to_reset">TFE_Op*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_OpReset(IntPtr ctx, string op_or_function_name, IntPtr status, IntPtr op_to_reset);
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="op">TFE_Op*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_DeleteOp(IntPtr op);

@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using Google.Protobuf;
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using static Tensorflow.Binding;
@@ -24,25 +25,14 @@ namespace Tensorflow
     /// <summary>
     /// Variable based on resource handles.
     /// </summary>
-    public partial class ResourceVariable : VariableV1
+    public partial class ResourceVariable : BaseResourceVariable
     {
-        bool _in_graph_mode;
-        Tensor _handle;
-        TensorShape _shape;
-        public TensorShape shape => _shape;
-        string _handle_name;
-        string _unique_id;
+        public override string name => _handle_name;
         Operation _initializer_op;
         public override Operation initializer => _initializer_op;
-        Tensor _initial_value;
-        bool _trainable;
-        public bool tranable => _trainable;
         Tensor _cached_value;
         Tensor _graph_element;
         public override Tensor graph_element => _graph_element;
-        TF_DataType _dtype;
-        public TF_DataType dtype => _dtype;
-        public override string name => _handle.name;
         public string Device => _handle.Device;
         public Graph Graph => _handle.graph;
         public override Operation op => _handle.op;
@@ -56,13 +46,7 @@ namespace Tensorflow
             VariableDef variable_def = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             string import_scope = "",
-            TensorShape shape = null) : base(initial_value,
-                    trainable,
-                    collections,
-                    validate_shape,
-                    caching_device,
-                    name,
-                    dtype)
+            TensorShape shape = null) : base()
         {
             if (variable_def != null)
             {
@@ -80,6 +64,8 @@ namespace Tensorflow
                     dtype: dtype,
                     shape: shape);
             }
+
+            _handle.ResourceVar = this;
         }
 
         private void _init_from_args(object initial_value = null,
@@ -130,10 +116,8 @@ namespace Tensorflow
                       shared_name: shared_name,
                       name: name,
                       graph_mode: _in_graph_mode);
-                _unique_id = unique_id;
-                _handle_name = handle_name + ":0";
+                
                 _dtype = _initial_value.dtype.as_base_dtype();
-                // _constraint = constraint;
 
                 if (_in_graph_mode)
                 {
@@ -160,17 +144,20 @@ namespace Tensorflow
                         var value = _read_variable_op();
                         _graph_element = value;
                     });
+
+                    ops.add_to_collections(collections, this);
+                }
+                else
+                {
+                    gen_resource_variable_ops.assign_variable_op(_handle, _initial_value);
                 }
 
-                ops.add_to_collections(collections, this);
+                base.__init__(trainable: trainable,
+                    handle: _handle,
+                    name: name,
+                    unique_id: unique_id,
+                    handle_name: handle_name);
             });
-        }
-
-        private Tensor _read_variable_op()
-        {
-            var result = gen_resource_variable_ops.read_variable_op(_handle, _dtype);
-            // _maybe_set_handle_data(_dtype, _handle, result);
-            return result;
         }
 
         private void _init_from_proto(VariableDef variable_def, string import_scope = null)
@@ -184,8 +171,7 @@ namespace Tensorflow
             var prepend_name_scope = ops.prepend_name_scope(variable_def.VariableName, import_scope: import_scope);
             _handle = g.as_graph_element(prepend_name_scope) as Tensor;
             _shape = new TensorShape(_handle.op.get_attr("shape") as TensorShapeProto);
-            _handle_name = _handle.name;
-            _unique_id = _handle_name;
+            
             prepend_name_scope = ops.prepend_name_scope(variable_def.InitializerName, import_scope: import_scope);
             _initializer_op = g.as_graph_element(prepend_name_scope) as Operation;
             if (!string.IsNullOrEmpty(variable_def.InitialValueName))
@@ -234,11 +220,6 @@ namespace Tensorflow
 
                 return array_ops.identity(value);
             });
-        }
-
-        public override string ToString()
-        {
-            return $"tf.ResourceVariable '{name}' shape={shape} dtype={dtype}";
         }
     }
 }

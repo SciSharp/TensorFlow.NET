@@ -13,14 +13,10 @@
         }
 
         public static implicit operator Tensor(ResourceVariable var)
-        {
-            return null;
-        }
+            => var.handle;
 
         public static implicit operator ResourceVariable(Tensor var)
-        {
-            return null;
-        }
+            => var.ResourceVar;
 
         public static implicit operator RefVariable(ResourceVariable var)
         {
