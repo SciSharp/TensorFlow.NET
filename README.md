@@ -9,7 +9,7 @@
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/javiercp/BinderTF.NET/master?urlpath=lab)
 
-*master branch is based on tensorflow 2.1 now, v0.15-tensorflow1.15 is from tensorflow1.15.*
+*master branch is based on tensorflow 2.2 now, v0.15-tensorflow1.15 is from tensorflow1.15.*
 
 TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
 
@@ -28,7 +28,7 @@ In comparison to other projects, like for instance TensorFlowSharp which only pr
 
 ### How to use
 
-| TensorFlow  | tf 1.13 | tf 1.14 | tf 1.15 | tf 2.0 |
+| TensorFlow  | tf 1.13 | tf 1.14 | tf 1.15 | tf 2.2 |
 | ----------- | ------- | ------- | ------- | ------ |
 | tf.net 0.20 |         |         | x       | x      |
 | tf.net 0.15 |         | x       | x       |        |

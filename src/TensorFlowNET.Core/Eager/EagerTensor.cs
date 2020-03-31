@@ -13,31 +13,37 @@ namespace Tensorflow.Eager
         {
             tfe_tensor_handle = handle;
             _handle = c_api.TFE_TensorHandleResolve(handle, status);
+            _id = ops.uid();
         }
 
         public EagerTensor(string value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
+            _id = ops.uid();
         }
 
         public EagerTensor(int value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
+            _id = ops.uid();
         }
 
         public EagerTensor(float[] value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
+            _id = ops.uid();
         }
 
         public EagerTensor(double[] value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
+            _id = ops.uid();
         }
 
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
+            _id = ops.uid();
         }
 
         public override string ToString()

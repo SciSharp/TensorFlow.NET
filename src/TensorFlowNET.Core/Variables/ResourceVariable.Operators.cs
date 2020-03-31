@@ -30,6 +30,8 @@ namespace Tensorflow
         public static Tensor operator -(ResourceVariable x, double y) => op_helper("sub", x, y);
         public static Tensor operator -(ResourceVariable x, Tensor y) => op_helper("sub", x, y);
 
+        public static Tensor operator *(ResourceVariable x, ResourceVariable y) => gen_math_ops.mul(x, y);
+
         public static Tensor operator <(ResourceVariable x, Tensor y) => gen_math_ops.less(x.value(), y);
 
         public static Tensor operator >(ResourceVariable x, Tensor y) => gen_math_ops.greater(x.value(), y);

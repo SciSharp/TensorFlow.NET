@@ -4,10 +4,20 @@ using System.Text;
 
 namespace Tensorflow.Gradients
 {
-    public class Tape
+    public class Tape : DisposableObject
     {
         public GradientTape tape { get; set; }
         public int nesting_id { get; set; }
+
+        public Tape(bool persistent, bool watch_accessed_variables)
+        {
+            _handle = c_api.TFE_TapeSetNew(persistent, watch_accessed_variables);
+        }
+
+        public void watch(Tensor x)
+        {
+            c_api.TFE_TapeWatch(_handle, x, x.Id);
+        }
 
         public static bool IsDtypeTrainable(DataType dtype)
         {
@@ -26,5 +36,12 @@ namespace Tensorflow.Gradients
                     return false;
             }
         }
+
+        protected override void DisposeUnmanagedResources(IntPtr handle)
+        {
+        }
+
+        public static implicit operator IntPtr(Tape tape)
+            => tape._handle;
     }
 }

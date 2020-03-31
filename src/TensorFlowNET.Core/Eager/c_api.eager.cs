@@ -102,14 +102,20 @@ namespace Tensorflow
         public static extern TFE_Op TFE_NewOp(IntPtr ctx, string op_or_function_name, IntPtr status);
 
         /// <summary>
-        /// 
+        /// Resets `op_to_reset` with `op_or_function_name` and `raw_device_name`. This
+        /// is for performance optimization by reusing an exiting unused op rather than
+        /// creating a new op every time. If `raw_device_name` is `NULL` or empty, it
+        /// does not set the device name. If it's not `NULL`, then it attempts to parse
+        /// and set the device name. It's effectively `TFE_OpSetDevice`, but it is faster
+        /// than separately calling it because if the existing op has the same
+        /// `raw_device_name`, it skips parsing and just leave as it is.
         /// </summary>
-        /// <param name="ctx">TFE_Context*</param>
-        /// <param name="op_or_function_name">const char*</param>
-        /// <param name="status">TF_Status*</param>
         /// <param name="op_to_reset">TFE_Op*</param>
+        /// <param name="op_or_function_name">const char*</param>
+        /// <param name="raw_device_name">const char*</param>
+        /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpReset(IntPtr ctx, string op_or_function_name, IntPtr status, IntPtr op_to_reset);
+        public static extern void TFE_OpReset(IntPtr op_to_reset, string op_or_function_name, string raw_device_name, IntPtr status);
 
         /// <summary>
         /// 
@@ -304,5 +310,17 @@ namespace Tensorflow
         /// <returns>TFE_Executor*</returns>
         [DllImport(TensorFlowLibName)]
         public static extern TFE_Executor TFE_ContextGetExecutorForThread(IntPtr ctx);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_Test();
+
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_TapeSetNew(bool persistent, bool watch_accessed_variables);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_TapeWatch(IntPtr tape, IntPtr tensor, int tensor_id);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_TapeGradient(IntPtr tape, long[] targetTensorIds, IntPtr[] target, long[] sourcesTensorIds, IntPtr status);
     }
 }

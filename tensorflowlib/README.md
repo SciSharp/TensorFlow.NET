@@ -44,7 +44,9 @@ We can't found official prebuild binaries for each platform since tensorflow 2.0
 
 https://www.tensorflow.org/install/source_windows
 
-Download [Bazel 0.29.1](https://github.com/bazelbuild/bazel/releases/tag/0.29.1) to build tensorflow2.x. We build customized binary to export c_api from this [fork](https://github.com/SciSharp/tensorflow).
+Download [Bazel 2.0.0](https://github.com/bazelbuild/bazel/releases/tag/2.0.0) to build tensorflow2.x. We build customized binary to export c_api from this [fork](https://github.com/SciSharp/tensorflow).
+
+Set ENV `BAZEL_VC=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC`.
 
 `pacman -S git patch unzip`
 

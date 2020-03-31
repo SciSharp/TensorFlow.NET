@@ -39,7 +39,7 @@ namespace Tensorflow
         IPackable<Tensor>,
         ICanBeFlattened
     {
-        private readonly int _id;
+        protected int _id;
         private readonly Operation _op;
         private readonly int _value_index;
         private TF_Output? _tf_output;

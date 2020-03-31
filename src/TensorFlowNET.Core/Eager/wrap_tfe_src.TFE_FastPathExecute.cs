@@ -110,7 +110,7 @@ namespace Tensorflow.Eager
             var maybe_op = ReleaseThreadLocalOp();
             if (maybe_op != IntPtr.Zero)
             {
-                c_api.TFE_OpReset(ctx, op_or_function_name, status, maybe_op);
+                c_api.TFE_OpReset(maybe_op, op_or_function_name, ctx.device_name, status);
             }
             else
             {

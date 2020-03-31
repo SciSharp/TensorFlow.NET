@@ -23,7 +23,6 @@ namespace Tensorflow.Gradients
         bool _watch_accessed_variables;
         bool _created_eagerly;
         Tape _tape;
-        int tape_nesting_id_counter = 0;
 
         public GradientActor(bool persistent = false,
             bool watch_accessed_variables = true)
@@ -41,18 +40,28 @@ namespace Tensorflow.Gradients
                     "re-enter an already-active tape.");
 
             if (_tape == null)
-            {
-                _tape = new Tape();
-                _tape.tape = new GradientTape(_persistent, _watch_accessed_variables);
-                _tape.nesting_id = tape_nesting_id_counter++;
-            }
+                _tape = new Tape(_persistent, _watch_accessed_variables);
+            else
+                throw new NotImplementedException("");
 
             _recording = true;
         }
 
+        /// <summary>
+        /// Marks this tensor to be watched by the given tape.
+        /// </summary>
+        /// <param name="x"></param>
         public void watch(Tensor x)
         {
+            _tape.watch(x);
+        }
 
+        public Tensor gradient(Tensor target, Tensor sources)
+        {
+            c_api.TFE_Test();
+            //using (var status = new Status())
+                //c_api.TFE_TapeGradient(_tape, new long[] { target.Id }, status);
+            return null;
         }
 
         public void Dispose()
