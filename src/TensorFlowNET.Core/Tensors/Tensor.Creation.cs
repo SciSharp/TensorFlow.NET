@@ -508,7 +508,7 @@ namespace Tensorflow
             if (nd.typecode == NPTypeCode.String)
                 throw new NotImplementedException("Support for NDArray of type string not implemented yet");
 
-            var arraySlice = nd.Unsafe.Storage.Shape.IsContiguous ? nd.GetData() : nd.CloneData();
+            var arraySlice = nd.Unsafe.Storage.Shape.IsContiguous ? nd.CloneData() : nd.CloneData();
 
             var handle = TF_NewTensor(
                 given_dtype ?? nd.dtype.as_dtype(),
