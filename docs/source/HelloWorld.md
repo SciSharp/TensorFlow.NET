@@ -25,7 +25,15 @@ TensorFlow.NET uses the .NET Standard 2.0 standard, so your new project Target F
 
 
 ```cmd
+### install tensorflow C# binding
 PM> Install-Package TensorFlow.NET
+
+### Install tensorflow binary
+### For CPU version - Using this for tutorials recommended
+PM> Install-Package SciSharp.TensorFlow.Redist
+
+### For GPU version (CUDA and cuDNN are required)
+PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 ```
 
 ### Start coding Hello World
@@ -37,19 +45,27 @@ After installing the TensorFlow.NET package, you can use the `using Tensorflow` 
 ```csharp
 using System;
 using Tensorflow;
-
-namespace TensorFlowNET.Examples
+using static Tensorflow.Binding;
+namespace Tutorial
 {
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            new HelloWorld().Run();
+        }
+    }
+
     /// <summary>
     /// Simple hello world using TensorFlow
     /// </summary>
-    public class HelloWorld : IExample
+    public class HelloWorld
     {
         public void Run()
         {
             /* Create a Constant op
                The op is added as a node to the default graph.
-            
+
                The value returned by the constructor represents the output
                of the Constant op. */
             var hello = tf.constant("Hello, TensorFlow!");
@@ -59,7 +75,7 @@ namespace TensorFlowNET.Examples
             {
                 // Run the op
                 var result = sess.run(hello);
-                Console.WriteLine(result);
+                Console.WriteLine((string)result);
             }
         }
     }
@@ -67,10 +83,10 @@ namespace TensorFlowNET.Examples
 ```
 After CTRL + F5 run, you will get the output.
 ```cmd
-2019-01-05 10:53:42.145931: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
+2020-04-24 10:50:30.498955: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
 Hello, TensorFlow!
 Press any key to continue . . .
 ```
 
-This sample code can be found at [here](https://github.com/SciSharp/TensorFlow.NET/blob/master/test/TensorFlowNET.Examples/HelloWorld.cs).
+
 
