@@ -88,5 +88,5 @@ Hello, TensorFlow!
 Press any key to continue . . .
 ```
 
-
+This sample code can be found at [here](https://github.com/SciSharp/SciSharp-Stack-Examples/blob/master/src/TensorFlowNET.Examples/HelloWorld.cs).
 
