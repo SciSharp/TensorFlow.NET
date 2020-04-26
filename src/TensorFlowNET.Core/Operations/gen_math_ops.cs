@@ -192,6 +192,28 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor add(Tensor x, Tensor y, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                using (var status = new Status())
+                {
+                    var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                        "Add", name, new IntPtr[] 
+                        {
+                            (x as EagerTensor).EagerTensorHandle,
+                            (y as EagerTensor).EagerTensorHandle
+                        }, 2, status);
+                    status.Check(true);
+                    return new EagerTensor(_result);
+                }
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
+
+            return _op.output;
+        }
+
         public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             if (tf.context.executing_eagerly())
@@ -593,6 +615,28 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor sub(Tensor x, Tensor y, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                using (var status = new Status())
+                {
+                        var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                        "Sub", name, new IntPtr[]
+                        {
+                            (x as EagerTensor).EagerTensorHandle,
+                            (y as EagerTensor).EagerTensorHandle
+                        }, 2, status);
+                    status.Check(true);
+                    return new EagerTensor(_result);
+                }
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Sub", name, args: new { x, y });
+
+            return _op.output;
+        }
+
         public static Tensor sub<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             if (tf.context.executing_eagerly())
@@ -667,6 +711,28 @@ namespace Tensorflow
             return _op.output;
         }
 
+        public static Tensor mul(Tensor x, Tensor y, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                using (var status = new Status())
+                {
+                    var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Mul", name, new IntPtr[]
+                    {
+                        (x as EagerTensor).EagerTensorHandle,
+                        (y as EagerTensor).EagerTensorHandle
+                    }, 2, status);
+                    status.Check(true);
+                    return new EagerTensor(_result);
+                }
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Mul", name, args: new { x, y });
+
+            return _op.output;
+        }
+
         public static Tensor mul<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             if (tf.context.executing_eagerly())
@@ -693,8 +759,17 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, "", "RealDiv", name, null, x, y);
-                return _result;
+                using (var status = new Status())
+                {
+                    var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "RealDiv", name, new IntPtr[]
+                    {
+                        (x as EagerTensor).EagerTensorHandle,
+                        (y as EagerTensor).EagerTensorHandle
+                    }, 2, status);
+                    status.Check(true);
+                    return new EagerTensor(_result);
+                }
             }
 
             var _op = _op_def_lib._apply_op_helper("RealDiv", name, args: new { x, y });

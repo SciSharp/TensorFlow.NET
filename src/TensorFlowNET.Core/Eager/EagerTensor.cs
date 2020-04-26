@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
@@ -9,41 +10,44 @@ namespace Tensorflow.Eager
     {
         Status status = new Status();
         TFE_TensorHandle tfe_tensor_handle;
+        public IntPtr EagerTensorHandle { get; set; }
+
         public EagerTensor(IntPtr handle) : base(handle)
         {
             tfe_tensor_handle = handle;
             _handle = c_api.TFE_TensorHandleResolve(handle, status);
-            _id = ops.uid();
         }
 
         public EagerTensor(string value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            _id = ops.uid();
         }
 
         public EagerTensor(int value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            _id = ops.uid();
+            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
+        }
+
+        public EagerTensor(float value, string device_name) : base(value)
+        {
+            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
+            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
         }
 
         public EagerTensor(float[] value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            _id = ops.uid();
         }
 
         public EagerTensor(double[] value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            _id = ops.uid();
         }
 
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            _id = ops.uid();
         }
 
         public override string ToString()

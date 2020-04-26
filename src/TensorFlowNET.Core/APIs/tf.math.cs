@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Eager;
 using Tensorflow.Operations;
 
 namespace Tensorflow
@@ -259,7 +260,6 @@ namespace Tensorflow
         public Tensor sub<Tx, Ty>(Tx a, Ty b, string name = null)
             => gen_math_ops.sub(a, b, name: name);
 
-
         public Tensor divide(Tensor a, Tensor b)
             => a / b;
 
@@ -347,6 +347,9 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
             => gen_math_ops.minimum(x, y, name: name);
+
+        public Tensor multiply(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.mul(x, y, name: name);
 
         /// <summary>
         /// return x * y

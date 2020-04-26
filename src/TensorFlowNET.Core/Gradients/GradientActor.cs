@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
@@ -53,14 +54,16 @@ namespace Tensorflow.Gradients
         /// <param name="x"></param>
         public void watch(Tensor x)
         {
-            _tape.watch(x);
+            _tape.watch(x as EagerTensor);
         }
 
         public Tensor gradient(Tensor target, Tensor sources)
         {
-            c_api.TFE_Test();
-            //using (var status = new Status())
-                //c_api.TFE_TapeGradient(_tape, new long[] { target.Id }, status);
+            using (var status = new Status())
+            {
+                c_api.TFE_TapeGradient(_tape, new IntPtr[] { target }, IntPtr.Zero, status);
+            }
+                
             return null;
         }
 

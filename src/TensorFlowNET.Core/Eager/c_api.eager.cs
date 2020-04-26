@@ -7,6 +7,12 @@ namespace Tensorflow
 {
     public partial class c_api
     {
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_RegisterGradientFunction(_gradient_function_callback callbackPointer);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        public delegate void _gradient_function_callback(string op_name, int num_inputs, IntPtr attrs, int num_attrs);
+
         /// <summary>
         /// Return a new options object.
         /// </summary>
@@ -186,6 +192,9 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern TFE_TensorHandle TFE_NewTensorHandle(IntPtr t, IntPtr status);
 
+        [DllImport(TensorFlowLibName)]
+        public static extern TFE_TensorHandle TFE_EagerTensorFromHandle(IntPtr ctx, IntPtr h);
+
         /// <summary>
         /// Sets the default execution mode (sync/async). Note that this can be
         /// overridden per thread using TFE_ContextSetExecutorForThread.
@@ -312,15 +321,21 @@ namespace Tensorflow
         public static extern TFE_Executor TFE_ContextGetExecutorForThread(IntPtr ctx);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_Test();
+        public static extern IntPtr TFE_FastPathExecute(IntPtr ctx, 
+            string device_name, 
+            string op_name,
+            string name,
+            IntPtr[] args,
+            int input_size,
+            IntPtr status);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_TapeSetNew(bool persistent, bool watch_accessed_variables);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_TapeWatch(IntPtr tape, IntPtr tensor, int tensor_id);
+        public static extern void TFE_TapeWatch(IntPtr tape, IntPtr tensor);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_TapeGradient(IntPtr tape, long[] targetTensorIds, IntPtr[] target, long[] sourcesTensorIds, IntPtr status);
+        public static extern void TFE_TapeGradient(IntPtr tape, IntPtr[] target, IntPtr sources, IntPtr status);
     }
 }

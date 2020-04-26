@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
-    <TargetTensorFlow>2.01.0</TargetTensorFlow>
+    <TargetTensorFlow>2.2.0</TargetTensorFlow>
     <Version>0.20.0</Version>
     <LangVersion>8.0</LangVersion>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>

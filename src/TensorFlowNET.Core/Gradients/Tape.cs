@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Eager;
 
 namespace Tensorflow.Gradients
 {
@@ -14,9 +15,9 @@ namespace Tensorflow.Gradients
             _handle = c_api.TFE_TapeSetNew(persistent, watch_accessed_variables);
         }
 
-        public void watch(Tensor x)
+        public void watch(EagerTensor x)
         {
-            c_api.TFE_TapeWatch(_handle, x, x.Id);
+            c_api.TFE_TapeWatch(_handle, x.EagerTensorHandle);
         }
 
         public static bool IsDtypeTrainable(DataType dtype)
