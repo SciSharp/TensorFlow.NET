@@ -715,17 +715,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                using (var status = new Status())
+                using var status = new Status();
+                var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                "Mul", name, new IntPtr[]
                 {
-                    var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Mul", name, new IntPtr[]
-                    {
-                        (x as EagerTensor).EagerTensorHandle,
-                        (y as EagerTensor).EagerTensorHandle
-                    }, 2, status);
-                    status.Check(true);
-                    return new EagerTensor(_result);
-                }
+                    (x as EagerTensor).EagerTensorHandle,
+                    (y as EagerTensor).EagerTensorHandle
+                }, 2, status);
+                status.Check(true);
+                return new EagerTensor(_result);
             }
 
             var _op = _op_def_lib._apply_op_helper("Mul", name, args: new { x, y });

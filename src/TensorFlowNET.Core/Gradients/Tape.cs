@@ -20,6 +20,11 @@ namespace Tensorflow.Gradients
             c_api.TFE_TapeWatch(_handle, x.EagerTensorHandle);
         }
 
+        public void pop_tape(Tape tape)
+        {
+            c_api.TFE_TapeSetRemove(tape);
+        }
+
         public static bool IsDtypeTrainable(DataType dtype)
         {
             switch (dtype)

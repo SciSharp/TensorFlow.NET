@@ -48,6 +48,14 @@ namespace Tensorflow.Gradients
             _recording = true;
         }
 
+        private void _pop_tape()
+        {
+            if (!_recording)
+                throw new ValueError("Tape is not recording.");
+            _tape.pop_tape(_tape);
+            _recording = false;
+        }
+
         /// <summary>
         /// Marks this tensor to be watched by the given tape.
         /// </summary>
@@ -59,12 +67,19 @@ namespace Tensorflow.Gradients
 
         public Tensor gradient(Tensor target, Tensor sources)
         {
-            using (var status = new Status())
+            if(_recording)
             {
-                c_api.TFE_TapeGradient(_tape, new IntPtr[] { target }, IntPtr.Zero, status);
+                if (!_persistent)
+                    _pop_tape();
             }
-                
-            return null;
+
+            using var status = new Status();
+            var et = c_api.TFE_TapeGradient(_tape, 
+                new IntPtr[] { (target as EagerTensor).EagerTensorHandle }, 1,
+                new IntPtr[] { (sources as EagerTensor).EagerTensorHandle }, 1,
+                status);
+            status.Check(true);
+            return et;
         }
 
         public void Dispose()
