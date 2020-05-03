@@ -193,6 +193,9 @@ namespace Tensorflow
         public static extern TFE_TensorHandle TFE_NewTensorHandle(IntPtr t, IntPtr status);
 
         [DllImport(TensorFlowLibName)]
+        public static extern TFE_TensorHandle EagerTensor_Handle(IntPtr t);
+
+        [DllImport(TensorFlowLibName)]
         public static extern TFE_TensorHandle TFE_EagerTensorFromHandle(IntPtr ctx, IntPtr h);
 
         /// <summary>
@@ -333,9 +336,14 @@ namespace Tensorflow
         public static extern IntPtr TFE_TapeSetNew(bool persistent, bool watch_accessed_variables);
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TFE_TapeSetRemove(IntPtr tape);
+
+        [DllImport(TensorFlowLibName)]
         public static extern void TFE_TapeWatch(IntPtr tape, IntPtr tensor);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_TapeGradient(IntPtr tape, IntPtr[] target, IntPtr sources, IntPtr status);
+        public static extern IntPtr TFE_TapeGradient(IntPtr tape, IntPtr[] target, int target_size, 
+            IntPtr[] sources, int source_size, 
+            IntPtr status);
     }
 }
