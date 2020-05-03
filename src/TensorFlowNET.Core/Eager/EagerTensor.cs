@@ -14,8 +14,9 @@ namespace Tensorflow.Eager
 
         public EagerTensor(IntPtr handle) : base(handle)
         {
-            tfe_tensor_handle = handle;
-            _handle = c_api.TFE_TensorHandleResolve(handle, status);
+            EagerTensorHandle = handle;
+            tfe_tensor_handle = c_api.EagerTensor_Handle(handle);
+            _handle = c_api.TFE_TensorHandleResolve(tfe_tensor_handle, status);
         }
 
         public EagerTensor(string value, string device_name) : base(value)
