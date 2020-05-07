@@ -132,6 +132,17 @@ namespace TensorFlowNET.UnitTest
                 }
             }
         }
+        
+        [TestMethod]
+        public void Autocast_Case0()
+        {
+            var sess = tf.Session().as_default();
+            ITensorOrOperation operation = tf.global_variables_initializer();
+            // the cast to ITensorOrOperation is essential for the test of this method signature
+            var ret = sess.run(operation);
+
+            ret.Should().BeNull();
+        }        
 
         [TestMethod]
         public void Autocast_Case1()
