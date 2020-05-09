@@ -32,10 +32,10 @@ namespace Tensorflow
                 using var status = new Status();
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "AssignVariableOp", name,
-                    new[]
+                    new IntPtr[]
                     {
-                        (resource as EagerTensor).EagerTensorHandle,
-                        (value as EagerTensor).EagerTensorHandle
+                        resource as EagerTensor,
+                        value as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
                 return tensor;
@@ -53,7 +53,7 @@ namespace Tensorflow
                 using var status = new Status();
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "VarIsInitializedOp", name, 
-                    new[] { (resource as EagerTensor).EagerTensorHandle }, 
+                    new IntPtr[] { resource as EagerTensor }, 
                     1, null, status);
                 status.Check(true);
                 return new EagerTensor(tensor);
@@ -80,13 +80,15 @@ namespace Tensorflow
             {
                 using var status = new Status();
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "VarHandleOp", name, null, 0, op =>
-                    {
-                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "container", container, null, status);
-                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "shared_name", shared_name, null, status);
-                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "dtype", dtype, null, status);
-                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "shape", shape.dims, null, status);
-                    }, status);
+                    "VarHandleOp", name, null, 0,
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[]
+                        {
+                            "container", container,
+                            "shared_name", shared_name,
+                            "dtype", dtype,
+                            "shape", shape.dims
+                        }, 0, status),
+                    status);
                 status.Check(true);
                 return new EagerTensor(tensor);
             }
@@ -114,8 +116,9 @@ namespace Tensorflow
             {
                 using var status = new Status();
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "ReadVariableOp", name, new IntPtr[] { (resource as EagerTensor).EagerTensorHandle }, 1,
-                    (op) => wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "dtype", dtype, null, status),
+                    "ReadVariableOp", name, 
+                    new IntPtr[] { resource as EagerTensor }, 1,
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "dtype", dtype }, 0, status),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);

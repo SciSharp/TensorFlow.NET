@@ -138,16 +138,19 @@ namespace Tensorflow
                         "Mean", name,
                         new IntPtr[]
                         {
-                            (input as EagerTensor).EagerTensorHandle,
-                            (axis as EagerTensor).EagerTensorHandle
+                            input as EagerTensor,
+                            axis as EagerTensor
                         }, 2,
-                        (op) => wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "keep_dims", keep_dims, null, status),
+                        op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, 0, status),
                         status);
                     status.Check(true);
                     return new EagerTensor(tensor);
                 }
                 catch (Exception)
                 {
+                    /*tensors = c_api.TFE_Execute(tf.context, tf.context.device_name, op_name,
+                                        inputs, attrs, num_outputs);*/
+
                     return mean_eager_fallback(input as Tensor[], axis as Tensor, keep_dims: keep_dims, name: name, ctx: tf.context);
                 }
             }
@@ -220,8 +223,8 @@ namespace Tensorflow
                 var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Add", name, new IntPtr[] 
                     {
-                        (x as EagerTensor).EagerTensorHandle,
-                        (y as EagerTensor).EagerTensorHandle
+                        x as EagerTensor,
+                        y as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
                 return new EagerTensor(_result);
@@ -595,12 +598,8 @@ namespace Tensorflow
                 using var status = new Status();
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Cast", name,
-                    new IntPtr[] { (x as EagerTensor).EagerTensorHandle }, 1,
-                    (op) =>
-                    {
-                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "DstT", DstT, null, status);
-                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "Truncate", Truncate, null, status);
-                    },
+                    new IntPtr[] { x as EagerTensor }, 1,
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "DstT", DstT, "Truncate", Truncate }, 0, status),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);
@@ -649,8 +648,8 @@ namespace Tensorflow
                 var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Sub", name, new IntPtr[]
                     {
-                        (x as EagerTensor).EagerTensorHandle,
-                        (y as EagerTensor).EagerTensorHandle
+                        x as EagerTensor,
+                        y as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
                 return new EagerTensor(_result);
@@ -743,8 +742,8 @@ namespace Tensorflow
                 var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Mul", name, new IntPtr[]
                     {
-                        (x as EagerTensor).EagerTensorHandle,
-                        (y as EagerTensor).EagerTensorHandle
+                        x as EagerTensor,
+                        y as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
                 return new EagerTensor(_result);
@@ -785,8 +784,8 @@ namespace Tensorflow
                 var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "RealDiv", name, new IntPtr[]
                     {
-                        (x as EagerTensor).EagerTensorHandle,
-                        (y as EagerTensor).EagerTensorHandle
+                        x as EagerTensor,
+                        y as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
                 return new EagerTensor(_result);
@@ -988,9 +987,9 @@ namespace Tensorflow
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Range", name, new IntPtr[]
                     {
-                        (start as EagerTensor).EagerTensorHandle,
-                        (limit as EagerTensor).EagerTensorHandle,
-                        (delta as EagerTensor).EagerTensorHandle
+                        start as EagerTensor,
+                        limit as EagerTensor,
+                        delta as EagerTensor
                     }, 3, null, status);
                 status.Check(true);
                 return new EagerTensor(tensor);

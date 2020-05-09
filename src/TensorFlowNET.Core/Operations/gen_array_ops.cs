@@ -156,7 +156,7 @@ namespace Tensorflow
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name, 
                     "Pack", name,
                     values.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), 1, 
-                    (op) => wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "axis", axis, null, status),
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "axis", axis }, 0 , status),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);

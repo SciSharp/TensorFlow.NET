@@ -173,7 +173,7 @@ namespace Tensorflow.Eager
             return true;
         }
 
-        private static void SetOpAttrs(Context ctx, TFE_Op op, object[] attrs, int start_index, Status out_status)
+        public static void SetOpAttrs(Context ctx, TFE_Op op, object[] attrs, int start_index, Status out_status)
         {
             var len = attrs.Length;
             for (int i = 0; i < len; i += 2)
@@ -181,7 +181,7 @@ namespace Tensorflow.Eager
                 var key = attrs[start_index + i].ToString();
                 var value = attrs[start_index + i + 1];
 
-                byte is_list = 0;
+                byte is_list = 0; 
                 var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, out_status);
                 if (!out_status.ok()) return;
                 if (is_list != 0)
@@ -205,7 +205,7 @@ namespace Tensorflow.Eager
         /// <param name="attr_value"></param>
         /// <param name="attr_list_sizes"></param>
         /// <param name="status"></param>
-        public static void SetOpAttrWithDefaults(Context ctx, IntPtr op, AttrDef attr, 
+        private static void SetOpAttrWithDefaults(Context ctx, IntPtr op, AttrDef attr, 
             string attr_name, object attr_value,  
             Dictionary<string, long> attr_list_sizes,
             Status status)

@@ -333,6 +333,18 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern TFE_Executor TFE_ContextGetExecutorForThread(IntPtr ctx);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="device_name"></param>
+        /// <param name="op_name"></param>
+        /// <param name="name"></param>
+        /// <param name="args"></param>
+        /// <param name="input_size"></param>
+        /// <param name="set_op_attrs"></param>
+        /// <param name="status"></param>
+        /// <returns>EagerTensorHandle</returns>
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_FastPathExecute(IntPtr ctx, 
             string device_name, 
