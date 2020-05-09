@@ -24,31 +24,10 @@ namespace Tensorflow.Eager
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
         }
 
-        public EagerTensor(int value, string device_name) : base(value)
-        {
-            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
-        }
-
-        public EagerTensor(float value, string device_name) : base(value)
-        {
-            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
-        }
-
-        public EagerTensor(float[] value, string device_name) : base(value)
-        {
-            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-        }
-
-        public EagerTensor(double[] value, string device_name) : base(value)
-        {
-            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-        }
-
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
+            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
         }
 
         public override string ToString()
@@ -56,23 +35,24 @@ namespace Tensorflow.Eager
             switch (rank)
             {
                 case -1:
-                    return $"tf.Tensor: shape=<unknown>, dtype={dtype.as_numpy_name()}, numpy={GetFormattedString()}";
+                    return $"tf.Tensor: shape=<unknown>, dtype={dtype.as_numpy_name()}, numpy={GetFormattedString(dtype, numpy())}";
                 case 0:
-                    return $"tf.Tensor: shape=(), dtype={dtype.as_numpy_name()}, numpy={GetFormattedString()}";
+                    return $"tf.Tensor: shape=(), dtype={dtype.as_numpy_name()}, numpy={GetFormattedString(dtype, numpy())}";
                 default:
-                    return $"tf.Tensor: shape=({string.Join(",", shape)}), dtype={dtype.as_numpy_name()}, numpy={GetFormattedString()}";
+                    return $"tf.Tensor: shape=({string.Join(",", shape)}), dtype={dtype.as_numpy_name()}, numpy={GetFormattedString(dtype, numpy())}";
             }
         }
 
-        private string GetFormattedString()
+        public static string GetFormattedString(TF_DataType dtype, NDArray nd)
         {
-            var nd = numpy();
             switch (dtype)
             {
                 case TF_DataType.TF_STRING:
                     return $"b'{(string)nd}'";
                 case TF_DataType.TF_BOOL:
                     return (nd.GetByte(0) > 0).ToString();
+                case TF_DataType.TF_RESOURCE:
+                    return "<unprintable>";
                 default:
                     return nd.ToString();
             }

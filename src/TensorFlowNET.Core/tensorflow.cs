@@ -14,6 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Tensorflow.Eager;
 
@@ -39,6 +42,45 @@ namespace Tensorflow
         public tensorflow()
         {
             _constructThreadingObjects();
+            InitGradientEnvironment();
+        }
+
+        private unsafe void InitGradientEnvironment()
+        {
+            var vspace = c_api.VSpace_Handle((shape, dims, dtype) =>
+            {
+                var ones = constant_op.constant(1.0f, dtype: dtype) as EagerTensor;
+                return ones.EagerTensorHandle;
+            }, (gradients, num_grads) =>
+            {
+                var input_grads = new EagerTensor[num_grads];
+                for (int i = 0; i < num_grads; i++)
+                    input_grads[i] = new EagerTensor(*((IntPtr*)gradients + i));
+
+                var add_n = gen_math_ops.add_n(input_grads);
+                return (add_n as EagerTensor).EagerTensorHandle;
+            });
+
+            ops.RegisterFromAssembly();
+            c_api.TFE_RegisterGradientFunction((op_name, num_inputs, op_inputs, num_attrs, output_grads) =>
+            {
+                var output_grad_tensors = output_grads.Select(x => new EagerTensor(x)).ToArray();
+
+                var input_tensors = new EagerTensor[num_inputs];
+                for (int i = 0; i < num_inputs; i++)
+                    input_tensors[i] = new EagerTensor(op_inputs[op_inputs.Length == 1 ? 0 : i]);
+
+                var gradients = ops.gradientFunctions[op_name](new EagerOperation
+                {
+                    NumInputs = num_inputs,
+                    Inputs = input_tensors
+                }, output_grad_tensors);
+
+                var ret_tensors = Marshal.AllocHGlobal(sizeof(IntPtr) * num_inputs);
+                Marshal.Copy(gradients.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), 0, ret_tensors, 2);
+                // Marshal.FreeHGlobal(ret_tensors);
+                return ret_tensors;
+            });
         }
 
         public ResourceVariable Variable<T>(T data,

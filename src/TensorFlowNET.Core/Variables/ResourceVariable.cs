@@ -18,6 +18,7 @@ using Google.Protobuf;
 using NumSharp;
 using System;
 using System.Collections.Generic;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -220,6 +221,11 @@ namespace Tensorflow
 
                 return array_ops.identity(value);
             });
+        }
+
+        public override string ToString()
+        {
+            return $"tf.Variable: '{name}' shape={string.Join(",", shape)}, dtype={dtype.as_numpy_name()}, numpy={EagerTensor.GetFormattedString(dtype, numpy())}";
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Tensorflow.Eager
     public partial class wrap_tfe_src
     {
         static int kFastPathExecuteInputStartIndex = 0;
+
+        [Obsolete]
         public static EagerTensor TFE_FastPathExecute(Context ctx, 
             string device_name, 
             string opName, 
@@ -203,7 +205,7 @@ namespace Tensorflow.Eager
         /// <param name="attr_value"></param>
         /// <param name="attr_list_sizes"></param>
         /// <param name="status"></param>
-        private static void SetOpAttrWithDefaults(Context ctx, IntPtr op, AttrDef attr, 
+        public static void SetOpAttrWithDefaults(Context ctx, IntPtr op, AttrDef attr, 
             string attr_name, object attr_value,  
             Dictionary<string, long> attr_list_sizes,
             Status status)

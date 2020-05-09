@@ -41,6 +41,18 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor add_n(Tensor[] inputs, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AddN", name,
+                    inputs.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), inputs.Length,
+                    null,
+                    status);
+                status.Check(true);
+                return new EagerTensor(_result);
+            }
+
             var _op = _op_def_lib._apply_op_helper("AddN", name, args: new { inputs });
 
             return _op.outputs[0];
@@ -121,10 +133,18 @@ namespace Tensorflow
             {
                 try
                 {
-                    var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
-                        "Mean", name, null, 
-                        input, axis, "keep_dims", keep_dims);
-                    return _result;
+                    using var status = new Status();
+                    var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                        "Mean", name,
+                        new IntPtr[]
+                        {
+                            (input as EagerTensor).EagerTensorHandle,
+                            (axis as EagerTensor).EagerTensorHandle
+                        }, 2,
+                        (op) => wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "keep_dims", keep_dims, null, status),
+                        status);
+                    status.Check(true);
+                    return new EagerTensor(tensor);
                 }
                 catch (Exception)
                 {
@@ -196,17 +216,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                using (var status = new Status())
-                {
-                    var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                        "Add", name, new IntPtr[] 
-                        {
-                            (x as EagerTensor).EagerTensorHandle,
-                            (y as EagerTensor).EagerTensorHandle
-                        }, 2, status);
-                    status.Check(true);
-                    return new EagerTensor(_result);
-                }
+                using var status = new Status();
+                var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Add", name, new IntPtr[] 
+                    {
+                        (x as EagerTensor).EagerTensorHandle,
+                        (y as EagerTensor).EagerTensorHandle
+                    }, 2, null, status);
+                status.Check(true);
+                return new EagerTensor(_result);
             }
 
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
@@ -574,10 +592,18 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
-                    "Cast", name, null, 
-                    x, "DstT", DstT, "Truncate", Truncate);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Cast", name,
+                    new IntPtr[] { (x as EagerTensor).EagerTensorHandle }, 1,
+                    (op) =>
+                    {
+                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "DstT", DstT, null, status);
+                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "Truncate", Truncate, null, status);
+                    },
+                    status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate });
@@ -619,17 +645,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                using (var status = new Status())
-                {
-                        var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                        "Sub", name, new IntPtr[]
-                        {
-                            (x as EagerTensor).EagerTensorHandle,
-                            (y as EagerTensor).EagerTensorHandle
-                        }, 2, status);
-                    status.Check(true);
-                    return new EagerTensor(_result);
-                }
+                using var status = new Status();
+                var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sub", name, new IntPtr[]
+                    {
+                        (x as EagerTensor).EagerTensorHandle,
+                        (y as EagerTensor).EagerTensorHandle
+                    }, 2, null, status);
+                status.Check(true);
+                return new EagerTensor(_result);
             }
 
             var _op = _op_def_lib._apply_op_helper("Sub", name, args: new { x, y });
@@ -717,11 +741,11 @@ namespace Tensorflow
             {
                 using var status = new Status();
                 var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                "Mul", name, new IntPtr[]
-                {
-                    (x as EagerTensor).EagerTensorHandle,
-                    (y as EagerTensor).EagerTensorHandle
-                }, 2, status);
+                    "Mul", name, new IntPtr[]
+                    {
+                        (x as EagerTensor).EagerTensorHandle,
+                        (y as EagerTensor).EagerTensorHandle
+                    }, 2, null, status);
                 status.Check(true);
                 return new EagerTensor(_result);
             }
@@ -757,17 +781,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                using (var status = new Status())
-                {
-                    var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                using var status = new Status();
+                var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "RealDiv", name, new IntPtr[]
                     {
                         (x as EagerTensor).EagerTensorHandle,
                         (y as EagerTensor).EagerTensorHandle
-                    }, 2, status);
-                    status.Check(true);
-                    return new EagerTensor(_result);
-                }
+                    }, 2, null, status);
+                status.Check(true);
+                return new EagerTensor(_result);
             }
 
             var _op = _op_def_lib._apply_op_helper("RealDiv", name, args: new { x, y });
@@ -962,8 +984,16 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, "Range", name, null, start, limit, delta);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Range", name, new IntPtr[]
+                    {
+                        (start as EagerTensor).EagerTensorHandle,
+                        (limit as EagerTensor).EagerTensorHandle,
+                        (delta as EagerTensor).EagerTensorHandle
+                    }, 3, null, status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("Range", name, new { start, limit, delta });

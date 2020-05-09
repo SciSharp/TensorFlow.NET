@@ -40,9 +40,9 @@ namespace Tensorflow
         public int NumInputs => c_api.TF_OperationNumInputs(_handle);
         private TF_DataType[] _input_types => _inputs_val._inputs.Select(x => x.dtype).ToArray();
 
-        private InputList _inputs_val;
+        protected InputList _inputs_val;
 
-        public InputList inputs
+        public virtual InputList inputs
         {
             get
             {

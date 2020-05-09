@@ -11,8 +11,18 @@ namespace Tensorflow
         public static extern void TFE_RegisterGradientFunction(_gradient_function_callback callbackPointer);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate void _gradient_function_callback(string op_name, int num_inputs, IntPtr attrs, int num_attrs);
+        public delegate IntPtr _gradient_function_callback(string op_name, int num_inputs, IntPtr[] op_inputs, int num_attrs, IntPtr[] output_grads);
 
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr VSpace_Handle(VSpace_callback_Ones ones, VSpace_callback_AggregateGrads aggregate_grads);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        public delegate IntPtr VSpace_callback_Ones(long[] shape, int dims, TF_DataType dtype);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        public delegate IntPtr VSpace_callback_AggregateGrads(IntPtr gradients, int num_grads);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_RegisterVSpace(IntPtr vspace);
+        
         /// <summary>
         /// Return a new options object.
         /// </summary>
@@ -330,7 +340,10 @@ namespace Tensorflow
             string name,
             IntPtr[] args,
             int input_size,
+            TFE_FastPathExecute_SetOpAttrs set_op_attrs,
             IntPtr status);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        public delegate void TFE_FastPathExecute_SetOpAttrs(IntPtr op);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_TapeSetNew(bool persistent, bool watch_accessed_variables);
@@ -342,7 +355,8 @@ namespace Tensorflow
         public static extern void TFE_TapeWatch(IntPtr tape, IntPtr tensor);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TapeGradient(IntPtr tape, IntPtr[] target, int target_size, 
+        public static extern IntPtr TFE_TapeGradient(IntPtr tape, 
+            IntPtr[] target, int target_size, 
             IntPtr[] sources, int source_size, 
             IntPtr status);
     }

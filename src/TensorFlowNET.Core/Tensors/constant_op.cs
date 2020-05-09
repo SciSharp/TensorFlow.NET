@@ -127,6 +127,8 @@ namespace Tensorflow
                     return new EagerTensor(val, ctx.device_name);
                 case float val:
                     return new EagerTensor(val, ctx.device_name);
+                case float[,] val:
+                    return new EagerTensor(val, ctx.device_name);
                 case double val:
                     return new EagerTensor(val, ctx.device_name);
                 case float[] val:

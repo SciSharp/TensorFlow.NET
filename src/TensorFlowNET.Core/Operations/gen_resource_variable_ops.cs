@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
+using System.Linq;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
@@ -27,10 +29,16 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "AssignVariableOp", name, null,
-                    resource, value);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AssignVariableOp", name,
+                    new[]
+                    {
+                        (resource as EagerTensor).EagerTensorHandle,
+                        (value as EagerTensor).EagerTensorHandle
+                    }, 2, null, status);
+                status.Check(true);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("AssignVariableOp", name, new { resource, value });
@@ -42,10 +50,13 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "VarIsInitializedOp", name, null,
-                    resource);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "VarIsInitializedOp", name, 
+                    new[] { (resource as EagerTensor).EagerTensorHandle }, 
+                    1, null, status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("VarIsInitializedOp", name, new { resource });
@@ -67,10 +78,17 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "VarHandleOp", name, null,
-                    "container", container, "shared_name", shared_name, "dtype", dtype, "shape", shape.dims);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "VarHandleOp", name, null, 0, op =>
+                    {
+                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "container", container, null, status);
+                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "shared_name", shared_name, null, status);
+                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "dtype", dtype, null, status);
+                        wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "shape", shape.dims, null, status);
+                    }, status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("VarHandleOp", name, new {
@@ -94,10 +112,13 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "ReadVariableOp", name, null,
-                    resource, "dtype", dtype);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ReadVariableOp", name, new IntPtr[] { (resource as EagerTensor).EagerTensorHandle }, 1,
+                    (op) => wrap_tfe_src.SetOpAttrWithDefaults(tf.context, op, null, "dtype", dtype, null, status),
+                    status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("ReadVariableOp", name, new

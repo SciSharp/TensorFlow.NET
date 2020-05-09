@@ -74,12 +74,12 @@ namespace Tensorflow.Gradients
             }
 
             using var status = new Status();
-            var et = c_api.TFE_TapeGradient(_tape, 
-                new IntPtr[] { (target as EagerTensor).EagerTensorHandle }, 1,
-                new IntPtr[] { (sources as EagerTensor).EagerTensorHandle }, 1,
+            var et = c_api.TFE_TapeGradient(_tape,
+                new [] { (target as EagerTensor).EagerTensorHandle }, 1,
+                new [] { (sources as EagerTensor).EagerTensorHandle }, 1,
                 status);
             status.Check(true);
-            return et;
+            return new EagerTensor(et);
         }
 
         public void Dispose()

@@ -10,5 +10,8 @@ namespace Tensorflow.Eager
     {
         public static explicit operator TFE_TensorHandle(EagerTensor tensor)
             => tensor.tfe_tensor_handle;
+
+        public static implicit operator IntPtr(EagerTensor tensor)
+            => tensor.EagerTensorHandle;
     }
 }
