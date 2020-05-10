@@ -53,6 +53,9 @@ namespace Tensorflow.Eager
 
         public static string GetFormattedString(TF_DataType dtype, NDArray nd)
         {
+            if (nd.size == 0)
+                return "[]";
+
             switch (dtype)
             {
                 case TF_DataType.TF_STRING:

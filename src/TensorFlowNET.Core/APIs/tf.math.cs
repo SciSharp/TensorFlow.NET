@@ -390,7 +390,7 @@ namespace Tensorflow
             => x / ops.convert_to_tensor(y, dtype: x.dtype.as_base_dtype(), name: "y");
 
         public Tensor pow<T1, T2>(T1 x, T2 y, string name = "pow")
-            => gen_math_ops.pow(x, y, name: name);
+            => math_ops.pow(x, y, name: name);
 
         /// <summary>
         /// Divides `x / y` elementwise, rounding toward the most negative integer.

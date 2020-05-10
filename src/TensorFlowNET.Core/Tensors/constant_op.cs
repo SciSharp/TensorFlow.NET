@@ -113,6 +113,21 @@ namespace Tensorflow
 
         private static EagerTensor convert_to_eager_tensor(object value, Context ctx, TF_DataType dtype = TF_DataType.DtInvalid)
         {
+            // convert data type
+            if (dtype != TF_DataType.DtInvalid &&
+                value.GetType().Name != "NDArray" &&
+                dtypes.as_base_dtype(dtype) != dtypes.as_dtype(value.GetType()))
+            {
+                switch (dtype)
+                {
+                    case TF_DataType.TF_FLOAT:
+                        value = Convert.ToSingle(value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             switch (value)
             {
                 case NDArray val:

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
@@ -65,7 +66,7 @@ namespace Tensorflow.Gradients
             _tape.watch(x as EagerTensor);
         }
 
-        public Tensor gradient(Tensor target, Tensor sources)
+        public Tensor gradient(Tensor target, Tensor source)
         {
             if(_recording)
             {
@@ -76,15 +77,33 @@ namespace Tensorflow.Gradients
             using var status = new Status();
             var et = c_api.TFE_TapeGradient(_tape,
                 new [] { (target as EagerTensor).EagerTensorHandle }, 1,
-                new [] { (sources as EagerTensor).EagerTensorHandle }, 1,
+                new [] { (source as EagerTensor).EagerTensorHandle }, 1,
                 status);
             status.Check(true);
             return new EagerTensor(et);
         }
 
+        public Tensor gradient(Tensor target, ResourceVariable[] sources)
+        {
+            if (_recording)
+            {
+                if (!_persistent)
+                    _pop_tape();
+            }
+
+            using var status = new Status();
+            EagerTensorHandle et = c_api.TFE_TapeGradient(_tape,
+                new[] { (target as EagerTensor).EagerTensorHandle }, 1,
+                sources.Select(x => (x.handle as EagerTensor).EagerTensorHandle).ToArray(), sources.Length,
+                status);
+            status.Check(true);
+            return et;
+        }
+
         public void Dispose()
         {
-            
+            if (_recording)
+                _pop_tape();
         }
     }
 }

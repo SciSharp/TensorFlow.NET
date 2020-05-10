@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Gradients;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -65,6 +66,7 @@ namespace Tensorflow
 
         protected Tensor _read_variable_op()
         {
+            variable_accessed(this);
             var result = gen_resource_variable_ops.read_variable_op(_handle, _dtype);
             // _maybe_set_handle_data(_dtype, _handle, result);
             return result;
@@ -82,12 +84,26 @@ namespace Tensorflow
         void variable_accessed(BaseResourceVariable variable)
         {
             if (variable.trainable)
-                ; // tape.variable_accessed(variable)
+                Tape.variable_accessed(variable as ResourceVariable);
         }
+
+        /// <summary>
+        /// Constructs an op which reads the value of this variable.
+        /// 
+        /// Should be used when there are multiple reads, or when it is desirable to
+        /// read the value only after some condition is true.
+        /// </summary>
+        /// <returns></returns>
+        Tensor read_value()
+            => tf_with(ops.name_scope("Read"), delegate
+            {
+                var value = _read_variable_op();
+                return array_ops.identity(value);
+            });
 
         public override string ToString()
             => $"tf.Variable '{name}' shape={shape} dtype={dtype.as_numpy_name()}, numpy={numpy()}";
 
-        public NDArray numpy() => _read_variable_op().numpy();
+        public NDArray numpy() => read_value().numpy();
     }
 }

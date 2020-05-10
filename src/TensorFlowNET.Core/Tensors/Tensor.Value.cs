@@ -43,7 +43,7 @@ namespace Tensorflow
                     {
                         //T can only be unmanaged, I believe it is safe to say that MemoryCopy is valid for all cases this method can be called.
                         var src = (T*)buffer;
-                        len *= ((long)itemsize);
+                        len *= (long)itemsize;
                         System.Buffer.MemoryCopy(src, dst, len, len);
                     }
                 }

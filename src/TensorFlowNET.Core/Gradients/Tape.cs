@@ -25,6 +25,11 @@ namespace Tensorflow.Gradients
             c_api.TFE_TapeSetRemove(tape);
         }
 
+        public static void variable_accessed(ResourceVariable variable)
+        {
+            c_api.TFE_TapeVariableAccessed(variable.handle as EagerTensor);
+        }
+
         public static bool IsDtypeTrainable(DataType dtype)
         {
             switch (dtype)

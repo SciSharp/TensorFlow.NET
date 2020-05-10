@@ -376,6 +376,9 @@ namespace Tensorflow
         public static extern void TFE_TapeWatch(IntPtr tape, IntPtr tensor);
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TFE_TapeVariableAccessed(IntPtr variable);
+        
+        [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_TapeGradient(IntPtr tape, 
             IntPtr[] target, int target_size, 
             IntPtr[] sources, int source_size, 

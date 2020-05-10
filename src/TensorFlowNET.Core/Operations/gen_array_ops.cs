@@ -220,6 +220,18 @@ namespace Tensorflow
         /// <param name="name"></param>
         public static Tensor identity(Tensor input, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Identity", name, new IntPtr[]
+                    {
+                        input as EagerTensor
+                    }, 1, null, status);
+                status.Check(true);
+                return tensor;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Identity", name, new { input });
 
             return _op.output;
@@ -258,14 +270,14 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Fill", name, new IntPtr[]
                     {
                         dims as EagerTensor,
                         value as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
-                return new EagerTensor(tensor);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("Fill", name, new { dims, value });
@@ -281,6 +293,18 @@ namespace Tensorflow
         /// <returns>A tuple of `Tensor` objects (r0, r1).</returns>
         public static (Tensor, Tensor) broadcast_gradient_args(Tensor s0, Tensor s1, string name = "")
         {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "BroadcastGradientArgs", name, new IntPtr[]
+                    {
+                        s0 as EagerTensor,
+                        s1 as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+            }
+
             var _op = _op_def_lib._apply_op_helper("BroadcastGradientArgs", name, new { s0, s1 });
 
             return (_op.outputs[0], _op.outputs[1]);
@@ -371,10 +395,19 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Shape", name, null,
-                    input, "out_type", out_type);
-                return _result;
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Shape", name, new IntPtr[]
+                    {
+                        input as EagerTensor,
+                    }, 1, 
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] 
+                        { 
+                            "out_type", out_type 
+                        }, status), 
+                    status);
+                status.Check(true);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("Shape", name, new { input, out_type });
@@ -455,12 +488,26 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "StridedSlice", name, null,
-                    input, begin, end, strides, "begin_mask", begin_mask, 
-                    "end_mask", end_mask, "ellipsis_mask", ellipsis_mask, 
-                    "new_axis_mask", new_axis_mask, "shrink_axis_mask", shrink_axis_mask);
-                return _result;
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "StridedSlice", name, new IntPtr[]
+                    {
+                        input as EagerTensor,
+                        begin as EagerTensor,
+                        end as EagerTensor,
+                        strides as EagerTensor,
+                    }, 4,
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[]
+                        {
+                            "begin_mask", begin_mask,
+                            "end_mask", end_mask, 
+                            "ellipsis_mask", ellipsis_mask,
+                            "new_axis_mask", new_axis_mask, 
+                            "shrink_axis_mask", shrink_axis_mask
+                        }, status),
+                    status);
+                status.Check(true);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("StridedSlice", name, new

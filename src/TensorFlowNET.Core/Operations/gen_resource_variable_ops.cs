@@ -115,13 +115,13 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "ReadVariableOp", name, 
                     new IntPtr[] { resource as EagerTensor }, 1,
                     op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "dtype", dtype }, status),
                     status);
                 status.Check(true);
-                return new EagerTensor(tensor);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("ReadVariableOp", name, new

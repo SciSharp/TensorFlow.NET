@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using static Tensorflow.Binding;
 
@@ -31,6 +32,7 @@ namespace Tensorflow
         public static Tensor operator -(ResourceVariable x, Tensor y) => op_helper("sub", x, y);
 
         public static Tensor operator *(ResourceVariable x, ResourceVariable y) => gen_math_ops.mul(x, y);
+        public static Tensor operator *(ResourceVariable x, NDArray y) => op_helper("mul", x, y);
 
         public static Tensor operator <(ResourceVariable x, Tensor y) => gen_math_ops.less(x.value(), y);
 
@@ -52,6 +54,9 @@ namespace Tensorflow
                         break;
                     case "sub":
                         result = gen_math_ops.sub(xVal, yTensor, name);
+                        break;
+                    case "mul":
+                        result = gen_math_ops.mul(xVal, yTensor, name: name);
                         break;
                     default:
                         throw new NotImplementedException("");
