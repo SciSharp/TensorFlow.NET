@@ -27,15 +27,30 @@ namespace Tensorflow.Eager
         /// <param name="ctx">The value of context.context().</param>
         /// <param name="name">Customized name for the operation.</param>
         /// <returns>List of output Tensor objects. The list is empty if there are no outputs</returns>
-        public Tensor execute(Context ctx, string op_name, Tensor[] inputs, object[] attrs, string name = null)
+        public Tensor execute(Context ctx, string op_name, int num_outputs, 
+            Tensor[] inputs, object[] attrs, 
+            string name = null)
         {
             ctx.ensure_initialized();
-            using (var status = new Status())
-            {
-                var retVals = wrap_tfe_src.TFE_Execute(ctx, ctx.device_name, op_name, inputs, attrs, 1, status);
 
-                return new EagerTensor(retVals[0]);
-            }
+            // TFE_TensorHandle
+            using var status = new Status();
+            var retVals = wrap_tfe_src.TFE_Execute(ctx, ctx.device_name, op_name, inputs, attrs, num_outputs, status);
+
+            return new EagerTensor((TFE_TensorHandle)retVals[0]);
+
+            /*IntPtr[] outputs = new IntPtr[num_outputs];
+             c_api.TFE_QuickExecute(ctx, ctx.device_name,
+                "Sum",
+                inputs.Select(x => (IntPtr)(TFE_TensorHandle)(x as EagerTensor)).ToArray(), inputs.Length,
+                op => wrap_tfe_src.SetOpAttrs(ctx, op, attrs, 0, status),
+                outputs, num_outputs,
+                status);
+            status.Check(true);
+
+            var tfe_tensor_handle = outputs[0];
+            var eager_tensor_handle = c_api.TFE_EagerTensorFromHandle(ctx, tfe_tensor_handle);
+            return new EagerTensor(eager_tensor_handle);*/
         }
 
         public (TF_DataType, Tensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)

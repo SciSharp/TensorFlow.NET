@@ -79,7 +79,7 @@ namespace Tensorflow
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "N", _attr_N, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return _execute.execute(ctx, "ConcatV2", _inputs_flat, _attrs, name: name);
+            return _execute.execute(ctx, "ConcatV2", 1, _inputs_flat, _attrs, name: name);
         }
 
         public static Tensor[] concat_offset(Tensor concat_dim, Tensor[] shape, string name = null)
@@ -155,8 +155,8 @@ namespace Tensorflow
                 using var status = new Status();
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name, 
                     "Pack", name,
-                    values.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), 1, 
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "axis", axis }, 0 , status),
+                    values.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), values.Length, 
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "axis", axis } , status),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);

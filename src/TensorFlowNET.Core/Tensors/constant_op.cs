@@ -107,7 +107,7 @@ namespace Tensorflow
             var dims_t = convert_to_eager_tensor(dims, ctx, dtypes.int32);
             var inputs_flat = new[] { dims_t, value };
             var attrs = new object[] { "T", attr_t, "index_type", TF_DataType.TF_INT32 };
-            var result = _execute.execute(ctx, "Fill", inputs_flat, attrs);
+            var result = _execute.execute(ctx, "Fill", 1, inputs_flat, attrs);
             return result;
         }
 

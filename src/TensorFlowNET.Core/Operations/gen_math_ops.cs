@@ -141,16 +141,13 @@ namespace Tensorflow
                             input as EagerTensor,
                             axis as EagerTensor
                         }, 2,
-                        op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, 0, status),
+                        op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, status),
                         status);
                     status.Check(true);
                     return new EagerTensor(tensor);
                 }
                 catch (Exception)
                 {
-                    /*tensors = c_api.TFE_Execute(tf.context, tf.context.device_name, op_name,
-                                        inputs, attrs, num_outputs);*/
-
                     return mean_eager_fallback(input as Tensor[], axis as Tensor, keep_dims: keep_dims, name: name, ctx: tf.context);
                 }
             }
@@ -167,7 +164,7 @@ namespace Tensorflow
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return _execute.execute(ctx, "Mean", _inputs_flat, _attrs, name: name);
+            return _execute.execute(ctx, "Mean", 1, _inputs_flat, _attrs, name: name);
         }
 
         public static Tensor prod<T1, T2>(T1 input, T2 axis, bool keep_dims = false, string name = null)
@@ -198,7 +195,7 @@ namespace Tensorflow
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return _execute.execute(ctx, "Prod", _inputs_flat, _attrs, name: name);
+            return _execute.execute(ctx, "Prod", 1, _inputs_flat, _attrs, name: name);
         }
 
         public static Tensor acos(Tensor x, string name = null)
@@ -599,7 +596,7 @@ namespace Tensorflow
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Cast", name,
                     new IntPtr[] { x as EagerTensor }, 1,
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "DstT", DstT, "Truncate", Truncate }, 0, status),
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "DstT", DstT, "Truncate", Truncate }, status),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);
@@ -836,10 +833,24 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
-                    "MatMul", name, null,
-                    a, b, "transpose_a", transpose_a, "transpose_b", transpose_b);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "MatMul", name,
+                    new IntPtr[]
+                    {
+                        a as EagerTensor,
+                        b as EagerTensor
+                    }, 2,
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[]
+                        {
+                            "transpose_a",
+                            transpose_a,
+                            "transpose_b",
+                            transpose_b
+                        }, status),
+                    status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("MatMul", name, args: new { a, b, transpose_a, transpose_b });
@@ -944,10 +955,18 @@ namespace Tensorflow
             {
                 try
                 {
-                    var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                        "Sum", name, null,
-                        input, axis, "keep_dims", keep_dims);
-                    return _result;
+                    using var status = new Status();
+                    var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                        "Sum", name,
+                        new IntPtr[]
+                        {
+                            input as EagerTensor,
+                            axis as EagerTensor
+                        }, 2,
+                        op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, status),
+                        status);
+                    status.Check(true);
+                    return new EagerTensor(tensor);
                 }
                 catch (Exception)
                 {
@@ -968,7 +987,7 @@ namespace Tensorflow
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return _execute.execute(ctx, "Sum", _inputs_flat, _attrs, name: name);
+            return _execute.execute(ctx, "Sum", 1, _inputs_flat, _attrs, name: name);
         }
 
         /// <summary>

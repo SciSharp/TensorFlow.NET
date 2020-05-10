@@ -173,13 +173,13 @@ namespace Tensorflow.Eager
             return true;
         }
 
-        public static void SetOpAttrs(Context ctx, TFE_Op op, object[] attrs, int start_index, Status out_status)
+        public static void SetOpAttrs(Context ctx, TFE_Op op, object[] attrs, Status out_status)
         {
             var len = attrs.Length;
             for (int i = 0; i < len; i += 2)
             {
-                var key = attrs[start_index + i].ToString();
-                var value = attrs[start_index + i + 1];
+                var key = attrs[i].ToString();
+                var value = attrs[i + 1];
 
                 byte is_list = 0; 
                 var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, out_status);

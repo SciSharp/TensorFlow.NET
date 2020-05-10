@@ -87,7 +87,7 @@ namespace Tensorflow
                             "shared_name", shared_name,
                             "dtype", dtype,
                             "shape", shape.dims
-                        }, 0, status),
+                        }, status),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);
@@ -118,7 +118,7 @@ namespace Tensorflow
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "ReadVariableOp", name, 
                     new IntPtr[] { resource as EagerTensor }, 1,
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "dtype", dtype }, 0, status),
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "dtype", dtype }, status),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);

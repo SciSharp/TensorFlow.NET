@@ -19,6 +19,13 @@ namespace Tensorflow.Eager
             _handle = c_api.TFE_TensorHandleResolve(tfe_tensor_handle, status);
         }
 
+        public EagerTensor(TFE_TensorHandle handle) : base(handle)
+        {
+            tfe_tensor_handle = handle;
+            _handle = c_api.TFE_TensorHandleResolve(tfe_tensor_handle, status);
+            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
+        }
+
         public EagerTensor(string value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);

@@ -48,7 +48,7 @@ namespace Tensorflow.Eager
                 }
             }
             if (status.ok())
-                SetOpAttrs(ctx, op, attrs, 0, status);
+                SetOpAttrs(ctx, op, attrs, status);
 
             var outputs = new IntPtr[num_outputs];
             if (status.ok())

@@ -358,6 +358,15 @@ namespace Tensorflow
         public delegate void TFE_FastPathExecute_SetOpAttrs(IntPtr op);
 
         [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_QuickExecute(IntPtr ctx,
+            string device_name,
+            string op_name,
+            IntPtr[] inputs, int input_size,
+            TFE_FastPathExecute_SetOpAttrs set_op_attrs,
+            IntPtr[] outputs, int output_size,
+            IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_TapeSetNew(bool persistent, bool watch_accessed_variables);
 
         [DllImport(TensorFlowLibName)]
