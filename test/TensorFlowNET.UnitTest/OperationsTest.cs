@@ -10,6 +10,7 @@ using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {
+    [Ignore]
     [TestClass]
     public class OperationsTest
     {

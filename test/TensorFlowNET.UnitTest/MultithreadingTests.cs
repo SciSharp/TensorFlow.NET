@@ -182,6 +182,7 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
+        [Ignore]
         [TestMethod]
         public void SessionRun()
         {
@@ -205,6 +206,7 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
+        [Ignore]
         [TestMethod]
         public void SessionRun_InsideSession()
         {
@@ -262,7 +264,7 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
-
+        [Ignore]
         [TestMethod]
         public void TF_GraphOperationByName()
         {
@@ -285,6 +287,7 @@ namespace TensorFlowNET.UnitTest
 
         private static readonly string modelPath = Path.GetFullPath("./Utilities/models/example1/");
 
+        [Ignore]
         [TestMethod]
         public void TF_GraphOperationByName_FromModel()
         {

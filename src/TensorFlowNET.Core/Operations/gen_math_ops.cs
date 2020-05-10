@@ -252,10 +252,15 @@ namespace Tensorflow
             // forward_compatible(2019, 6, 25):
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "AddV2", name, null,
-                    x, y);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AddV2", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("AddV2", name, args: new { x, y });
@@ -281,10 +286,14 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Sin", name, null,
-                    x);
-                return _result;
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sin", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null, status);
+                status.Check(true);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("Sin", name, args: new { x });
@@ -310,10 +319,14 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Sigmoid", name, null,
-                    x);
-                return _result;
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sigmoid", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null, status);
+                status.Check(true);
+                return tensor;
             }
 
             var op = _op_def_lib._apply_op_helper("Sigmoid", name: name, new { x });
@@ -398,10 +411,14 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Tan", name, null,
-                    x);
-                return _result;
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Tan", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null, status);
+                status.Check(true);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("Tan", name, args: new { x });
@@ -611,10 +628,14 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Neg", name, null, 
-                    x);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Neg", name, new IntPtr[]
+                    {
+                        x as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("Neg", name, args: new { x });

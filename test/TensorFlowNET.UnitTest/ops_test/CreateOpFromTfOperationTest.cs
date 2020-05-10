@@ -17,6 +17,7 @@ namespace TensorFlowNET.UnitTest.ops_test
     ///         # that might not be obvious to test will fail). Thus we instead explicitly test
     ///         # the low-level behavior.
     /// </summary>
+    [Ignore]
     [TestClass]
     public class CreateOpFromTfOperationTest : PythonTest
     {

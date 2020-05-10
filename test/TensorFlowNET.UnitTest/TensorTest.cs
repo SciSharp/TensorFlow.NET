@@ -11,6 +11,7 @@ using Tensorflow.Framework;
 
 namespace TensorFlowNET.UnitTest
 {
+    [Ignore]
     [TestClass]
     public class TensorTest : CApiTest
     {

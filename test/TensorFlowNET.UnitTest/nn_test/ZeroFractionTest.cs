@@ -9,7 +9,6 @@ namespace TensorFlowNET.UnitTest.nn_test
     [TestClass]
     public class ZeroFractionTest : PythonTest
     {
-
         protected double _ZeroFraction(NDArray x)
         {
             assert(x.shape);

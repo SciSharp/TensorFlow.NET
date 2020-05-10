@@ -257,10 +257,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Fill", name, null,
-                    dims, value);
-                return _result;
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Fill", name, new IntPtr[]
+                    {
+                        dims as EagerTensor,
+                        value as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("Fill", name, new { dims, value });

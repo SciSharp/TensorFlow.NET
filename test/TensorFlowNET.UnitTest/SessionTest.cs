@@ -14,6 +14,7 @@ using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {
+    [Ignore]
     [TestClass]
     public class SessionTest : CApiTest
     {

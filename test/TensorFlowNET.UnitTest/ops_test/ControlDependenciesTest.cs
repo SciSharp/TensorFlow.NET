@@ -10,6 +10,7 @@ namespace TensorFlowNET.UnitTest.ops_test
     /// <summary>
     /// excerpt of tensorflow/python/framework/ops_test.py
     /// </summary>
+    [Ignore]
     [TestClass]
     public class ControlDependenciesTest : PythonTest
     {

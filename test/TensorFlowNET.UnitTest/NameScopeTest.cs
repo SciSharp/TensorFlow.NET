@@ -10,6 +10,7 @@ namespace TensorFlowNET.UnitTest
     {
         string name = "";
 
+        [Ignore]
         [TestMethod]
         public void NestedNameScope()
         {

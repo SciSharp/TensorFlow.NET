@@ -7,6 +7,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
     /// <summary>
     /// excerpt of tensorflow/python/framework/ops/control_flow_ops_test.py
     /// </summary>
+    [Ignore]
     [TestClass]
     public class CondTestCases : PythonTest
     {

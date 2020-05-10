@@ -29,6 +29,7 @@ namespace Tensorflow.Eager
         public EagerTensor(string value, string device_name) : base(value)
         {
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
+            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
         }
 
         public EagerTensor(NDArray value, string device_name) : base(value)
