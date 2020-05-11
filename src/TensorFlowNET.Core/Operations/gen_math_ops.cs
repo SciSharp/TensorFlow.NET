@@ -843,14 +843,14 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "RealDiv", name, new IntPtr[]
                     {
                         x as EagerTensor,
                         y as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
-                return new EagerTensor(_result);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("RealDiv", name, args: new { x, y });

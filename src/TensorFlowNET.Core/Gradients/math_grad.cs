@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Linq;
 using Tensorflow.Operations;
@@ -438,8 +439,18 @@ namespace Tensorflow.Gradients
                     var rank = input_0_shape.Length;
                     if (Enumerable.SequenceEqual(Enumerable.Range(0, rank), axes.Data<int>()))
                     {
-                        var new_shape = range(rank).Select(x => 1).ToArray();
-                        grad = array_ops.reshape(grad, new_shape);
+                        if (tf.context.executing_eagerly())
+                        {
+                            // should add ones_rank_cache
+                            var new_shape_tensor = constant_op.constant(np.array(new int[] { 1 }) * rank, dtype: TF_DataType.TF_INT32);
+                            grad = array_ops.reshape(grad, new_shape_tensor);
+                        }
+                        else
+                        {
+                            var new_shape = range(rank).Select(x => 1).ToArray();
+                            grad = array_ops.reshape(grad, new_shape);
+                        }
+
                         // If shape is not fully defined (but rank is), we use Shape.
                         if (!input_0_shape.Contains(-1))
                             input_shape = constant_op.constant(input_0_shape);
@@ -605,6 +616,18 @@ namespace Tensorflow.Gradients
             var grad = grads[0];
             var x = op.inputs[0];
             var y = op.inputs[1];
+
+            if (tf.context.executing_eagerly())
+            {
+                x = math_ops.conj(x);
+                y = math_ops.conj(y);
+                return new Tensor[]
+                {
+                    grad * y * math_ops.pow(x, y - 1),
+                    null
+                };
+            }
+
             var z = op.outputs[0];
 
             var (sx, sy) = SmartBroadcastGradientArgs(x, y);

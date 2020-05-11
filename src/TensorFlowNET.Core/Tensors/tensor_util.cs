@@ -19,6 +19,7 @@ using System;
 using System.Linq;
 using NumSharp.Utilities;
 using System.Text;
+using Tensorflow.Eager;
 
 namespace Tensorflow
 {
@@ -39,6 +40,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static NDArray constant_value(Tensor tensor, bool partial = false)
         {
+            if (tensor is EagerTensor)
+                return tensor.numpy();
+
             NDArray ret = _ConstantValue(tensor, partial);
             if (!(ret is null))
                 tensor.graph.prevent_feeding(tensor);

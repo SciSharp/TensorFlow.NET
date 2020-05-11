@@ -62,13 +62,15 @@ namespace Tensorflow
             });
 
             ops.RegisterFromAssembly();
-            c_api.TFE_RegisterGradientFunction((op_name, num_inputs, op_inputs, num_attrs, output_grads) =>
+            c_api.TFE_RegisterGradientFunction((op_name, num_inputs, op_inputs, num_attrs, num_outputs, output_grads) =>
             {
-                var output_grad_tensors = output_grads.Select(x => new EagerTensor(x)).ToArray();
-
                 var input_tensors = new EagerTensor[num_inputs];
                 for (int i = 0; i < num_inputs; i++)
-                    input_tensors[i] = new EagerTensor(op_inputs[op_inputs.Length == 1 ? 0 : i]);
+                    input_tensors[i] = new EagerTensor(*((IntPtr*)op_inputs + i));
+
+                var output_grad_tensors = new EagerTensor[num_outputs];
+                for (int i = 0; i < num_outputs; i++)
+                    output_grad_tensors[i] = new EagerTensor(*((IntPtr*)output_grads + i));
 
                 var gradients = ops.gradientFunctions[op_name](new EagerOperation
                 {
@@ -77,7 +79,7 @@ namespace Tensorflow
                 }, output_grad_tensors);
 
                 var ret_tensors = Marshal.AllocHGlobal(sizeof(IntPtr) * num_inputs);
-                Marshal.Copy(gradients.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), 0, ret_tensors, 2);
+                Marshal.Copy(gradients.Select(x => x == null ? IntPtr.Zero : (x as EagerTensor).EagerTensorHandle).ToArray(), 0, ret_tensors, 2);
                 // Marshal.FreeHGlobal(ret_tensors);
                 return ret_tensors;
             });

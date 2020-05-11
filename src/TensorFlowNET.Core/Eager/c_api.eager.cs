@@ -11,7 +11,7 @@ namespace Tensorflow
         public static extern void TFE_RegisterGradientFunction(_gradient_function_callback callbackPointer);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate IntPtr _gradient_function_callback(string op_name, int num_inputs, IntPtr[] op_inputs, int num_attrs, IntPtr[] output_grads);
+        public delegate IntPtr _gradient_function_callback(string op_name, int num_inputs, IntPtr op_inputs, int num_attrs, int num_outputs, IntPtr output_grads);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr VSpace_Handle(VSpace_callback_Ones ones, VSpace_callback_AggregateGrads aggregate_grads);

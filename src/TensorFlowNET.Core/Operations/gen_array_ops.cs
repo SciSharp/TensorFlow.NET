@@ -291,7 +291,7 @@ namespace Tensorflow
         /// <param name="s1">A `Tensor`. Must have the same type as `s0`.</param>
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A tuple of `Tensor` objects (r0, r1).</returns>
-        public static (Tensor, Tensor) broadcast_gradient_args(Tensor s0, Tensor s1, string name = "")
+        public unsafe static (Tensor, Tensor) broadcast_gradient_args(Tensor s0, Tensor s1, string name = "")
         {
             if (tf.context.executing_eagerly())
             {
@@ -303,6 +303,7 @@ namespace Tensorflow
                         s1 as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
+                return (new EagerTensor(*(IntPtr*)_result), new EagerTensor(*((IntPtr*)_result + 1)));
             }
 
             var _op = _op_def_lib._apply_op_helper("BroadcastGradientArgs", name, new { s0, s1 });
@@ -318,6 +319,19 @@ namespace Tensorflow
 
         public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                EagerTensorHandle _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Reshape", name, new IntPtr[]
+                    {
+                        tensor as EagerTensor,
+                        shape as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+                return _result;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
             return _op.output;
         }
@@ -455,6 +469,19 @@ namespace Tensorflow
 
         public static Tensor tile<T>(Tensor input, T multiples, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Tile", name, new IntPtr[]
+                    {
+                        input as EagerTensor,
+                        multiples as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+                return tensor;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Tile", name, new { input, multiples });
             return _op.outputs[0];
         }
