@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
 {
@@ -32,10 +33,20 @@ namespace Tensorflow.Train
             IInitializer initializer = null,
             Func<string, int[], TF_DataType, IInitializer, bool, IVariableV1> getter = null,
             bool overwrite = false,
-            bool trainable = false)
+            bool trainable = false,
+            bool use_resource = false,
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation = VariableAggregation.None)
         {
-            var checkpoint_initializer = true;
-            var new_variable = getter(name, shape, dtype, initializer, trainable);
+            ops.init_scope();
+            IInitializer checkpoint_initializer = null;
+            if (tf.context.executing_eagerly())
+                ;
+            else
+                checkpoint_initializer = null;
+
+            IVariableV1 new_variable;
+            new_variable = getter(name, shape, dtype, initializer, trainable);
 
             // If we set an initializer and the variable processed it, tracking will not
             // assign again. It will add this variable to our dependencies, and if there

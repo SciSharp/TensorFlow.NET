@@ -46,7 +46,7 @@ namespace Tensorflow.Keras.Utils
             Func<Tensor> init_val = () => initializer.call(new TensorShape(shape), dtype: dtype);
 
             var variable_dtype = dtype.as_base_dtype();
-            var v = tf.Variable(init_val, 
+            var v = tf.Variable(init_val,
                 dtype: dtype,
                 shape: shape,
                 name: name);

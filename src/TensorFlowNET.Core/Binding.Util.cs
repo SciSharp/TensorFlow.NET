@@ -195,6 +195,17 @@ namespace Tensorflow
             return (float)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
         }
 
+        public static IEnumerable<(T1, T2)> zip<T1, T2>((T1, T1) t1, (T2, T2) t2)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                if (i == 0)
+                    yield return (t1.Item1, t2.Item1);
+                else
+                    yield return (t1.Item2, t2.Item2);
+            }
+        }
+
         public static IEnumerable<(T, T)> zip<T>(NDArray t1, NDArray t2)
             where T : unmanaged
         {
