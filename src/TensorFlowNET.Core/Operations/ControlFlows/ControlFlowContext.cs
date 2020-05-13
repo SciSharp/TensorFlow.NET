@@ -77,7 +77,7 @@ namespace Tensorflow.Operations
             _external_values = new Dictionary<string, ITensorOrOperation>();
         }
 
-        public string name { get => _name; }
+        public string Name { get => _name; }
         protected string _name;
 
         public void __init__(ValuesDef values_def = null, string import_scope = null)

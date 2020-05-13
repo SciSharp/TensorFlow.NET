@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Tensorflow.Eager;
 
@@ -7,7 +8,6 @@ namespace Tensorflow.Gradients
 {
     public class Tape : DisposableObject
     {
-        public GradientTape tape { get; set; }
         public int nesting_id { get; set; }
 
         public Tape(bool persistent, bool watch_accessed_variables)
@@ -27,7 +27,21 @@ namespace Tensorflow.Gradients
 
         public static void variable_accessed(ResourceVariable variable)
         {
-            c_api.TFE_TapeVariableAccessed(variable.handle as EagerTensor);
+            c_api.TFE_TapeVariableAccessed(variable);
+        }
+
+        public unsafe ResourceVariable[] watched_variables()
+        {
+            BindingArray result = c_api.TFE_TapeWatchedVariables(_handle);
+            var variables = new ResourceVariable[result.length];
+            for (int i = 0; i < result.length; i++)
+            {
+                var handle = *((IntPtr*)result.array + i);
+                var tensor = c_api.ResourceVariable_Handle(handle);
+                variables[i] = new ResourceVariable(handle, tensor);
+            }
+
+            return variables;
         }
 
         public static bool IsDtypeTrainable(DataType dtype)

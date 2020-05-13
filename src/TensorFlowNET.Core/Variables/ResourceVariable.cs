@@ -28,15 +28,15 @@ namespace Tensorflow
     /// </summary>
     public partial class ResourceVariable : BaseResourceVariable
     {
-        public override string name => _handle_name;
-        Operation _initializer_op;
-        public override Operation initializer => _initializer_op;
         Tensor _cached_value;
-        Tensor _graph_element;
-        public override Tensor graph_element => _graph_element;
-        public string Device => _handle.Device;
-        public Graph Graph => _handle.graph;
-        public override Operation op => _handle.op;
+        public string Device => handle.Device;
+        public Graph Graph => handle.graph;
+        public Operation op => handle.op;
+        public Tensor is_initialized_op { get; set; }
+
+        public ResourceVariable(IntPtr handle, IntPtr tensor) : base(handle, tensor)
+        {
+        }
 
         public ResourceVariable(object initial_value = null,
             bool trainable = true,
@@ -47,7 +47,7 @@ namespace Tensorflow
             VariableDef variable_def = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             string import_scope = "",
-            TensorShape shape = null) : base()
+            TensorShape shape = null)
         {
             if (variable_def != null)
             {
@@ -66,7 +66,7 @@ namespace Tensorflow
                     shape: shape);
             }
 
-            _handle.ResourceVar = this;
+            // handle.ResourceVar = this;
         }
 
         private void _init_from_args(object initial_value = null,
@@ -91,13 +91,18 @@ namespace Tensorflow
             {
                 name = scope;
                 var handle_name = ops.name_from_scope_name(name);
-                var unique_id = $"{handle_name}_{ops.uid()}";
-                var shared_name = tf.context.shared_name();
+                string unique_id = "";
+                string shared_name = "";
 
                 if (_in_graph_mode)
                 {
                     shared_name = handle_name;
                     unique_id = shared_name;
+                }
+                else
+                {
+                    unique_id = $"{handle_name}_{ops.uid()}";
+                    shared_name = tf.context.shared_name();
                 }
 
                 var attr = new AttrValue();
@@ -111,7 +116,7 @@ namespace Tensorflow
                 });
                 _shape = shape ?? (initial_value as Tensor).TensorShape;
                 _initial_value = initial_value as Tensor;
-                _handle = resource_variable_ops.eager_safe_variable_handle(
+                handle = resource_variable_ops.eager_safe_variable_handle(
                       initial_value: _initial_value,
                       shape: _shape,
                       shared_name: shared_name,
@@ -124,7 +129,7 @@ namespace Tensorflow
                 {
                     tf_with(ops.name_scope("IsInitialized"), delegate
                     {
-                        _is_initialized_op = gen_resource_variable_ops.var_is_initialized_op(_handle);
+                        is_initialized_op = gen_resource_variable_ops.var_is_initialized_op(handle);
                     });
 
                     if(initial_value != null)
@@ -132,7 +137,7 @@ namespace Tensorflow
                         tf_with(ops.name_scope("Assign"), scope1 =>
                         {
                             string n = scope1;
-                            _initializer_op = gen_resource_variable_ops.assign_variable_op(_handle, 
+                            initializer_op = gen_resource_variable_ops.assign_variable_op(handle, 
                                 variables._try_guard_against_uninitialized_dependencies(name, _initial_value),
                                 name: n);
                         });
@@ -150,11 +155,18 @@ namespace Tensorflow
                 }
                 else
                 {
-                    gen_resource_variable_ops.assign_variable_op(_handle, _initial_value);
+                    gen_resource_variable_ops.assign_variable_op(handle, _initial_value);
+                    is_initialized_op = null;
+                    initializer_op = null;
+                    _graph_element = null;
+                    initial_value = _in_graph_mode ? initial_value : null;
+
+                    c_api.TFE_SetResourceVariableHandle(_handle, handle as EagerTensor);
+                    c_api.TFE_SetResourceVariableName(_handle, handle_name + ":0");
                 }
 
                 base.__init__(trainable: trainable,
-                    handle: _handle,
+                    handle: handle,
                     name: name,
                     unique_id: unique_id,
                     handle_name: handle_name);
@@ -170,11 +182,11 @@ namespace Tensorflow
             // Create from variable_def.
             var g = ops.get_default_graph();
             var prepend_name_scope = ops.prepend_name_scope(variable_def.VariableName, import_scope: import_scope);
-            _handle = g.as_graph_element(prepend_name_scope) as Tensor;
-            _shape = new TensorShape(_handle.op.get_attr("shape") as TensorShapeProto);
+            handle = g.as_graph_element(prepend_name_scope) as Tensor;
+            _shape = new TensorShape(handle.op.get_attr("shape") as TensorShapeProto);
             
             prepend_name_scope = ops.prepend_name_scope(variable_def.InitializerName, import_scope: import_scope);
-            _initializer_op = g.as_graph_element(prepend_name_scope) as Operation;
+            initializer_op = g.as_graph_element(prepend_name_scope) as Operation;
             if (!string.IsNullOrEmpty(variable_def.InitialValueName))
             {
                 prepend_name_scope = ops.prepend_name_scope(variable_def.InitialValueName, import_scope: import_scope);
@@ -208,7 +220,7 @@ namespace Tensorflow
                 throw new NotImplementedException("SaveSliceInfoDef _init_from_proto");
             }
 
-            _dtype = dtypes.as_tf_dtype((DataType)_handle.op.get_attr("dtype"));
+            _dtype = dtypes.as_tf_dtype((DataType)handle.op.get_attr("dtype"));
         }
 
         public Tensor sparse_read(Tensor indices, string name = "Gather")
@@ -217,7 +229,7 @@ namespace Tensorflow
             {
                 name = scope;
                 var value = gen_resource_variable_ops.resource_gather(
-                    _handle, indices, dtype: _dtype, name: name);
+                    handle, indices, dtype: _dtype, name: name);
 
                 return array_ops.identity(value);
             });
@@ -225,7 +237,7 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            return $"tf.Variable: '{name}' shape={string.Join(",", shape)}, dtype={dtype.as_numpy_name()}, numpy={EagerTensor.GetFormattedString(dtype, numpy())}";
+            return $"tf.Variable: '{Name}' shape={string.Join(",", shape)}, dtype={dtype.as_numpy_name()}, numpy={EagerTensor.GetFormattedString(dtype, numpy())}";
         }
     }
 }

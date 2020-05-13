@@ -123,8 +123,8 @@ namespace Tensorflow
                 => gen_nn_ops.relu(features, name);
 
             public Tensor[] fused_batch_norm(Tensor x,
-                VariableV1 scale,
-                VariableV1 offset,
+                IVariableV1 scale,
+                IVariableV1 offset,
                 Tensor mean = null,
                 Tensor variance = null,
                 float epsilon = 0.001f,

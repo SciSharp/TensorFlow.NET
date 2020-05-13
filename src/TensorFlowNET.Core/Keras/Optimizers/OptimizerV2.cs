@@ -10,5 +10,15 @@ namespace Tensorflow.Keras.Optimizers
     /// </summary>
     public class OptimizerV2 : Trackable, IOptimizer
     {
+        public OptimizerV2() : base()
+        {
+
+        }
+
+        public void apply_gradients((Tensor, Tensor) gradients, 
+            (ResourceVariable, ResourceVariable) vars)
+        {
+
+        }
     }
 }

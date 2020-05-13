@@ -44,7 +44,7 @@ namespace Tensorflow
         public Tensor LearningRateTensor => _lr_t;
         public bool _use_locking;
         public Dictionary<string, Dictionary<string, RefVariable>> _slots;
-        public Dictionary<string, VariableV1> _non_slot_dict;
+        public Dictionary<string, IVariableV1> _non_slot_dict;
         public Dictionary<string, object> _deferred_slot_restorations;
         SlotCreator slot_creator = new SlotCreator();
 
@@ -58,7 +58,7 @@ namespace Tensorflow
             _lr = learning_rate;
             // Dictionary of slots.
             _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
-            _non_slot_dict = new Dictionary<string, VariableV1>();
+            _non_slot_dict = new Dictionary<string, IVariableV1>();
             _deferred_slot_restorations = new Dictionary<string, object>();
         }
 
@@ -72,7 +72,7 @@ namespace Tensorflow
             _lr_t = learning_rate;
             // Dictionary of slots.
             _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
-            _non_slot_dict = new Dictionary<string, VariableV1>();
+            _non_slot_dict = new Dictionary<string, IVariableV1>();
             _deferred_slot_restorations = new Dictionary<string, object>();
         }
 
@@ -122,7 +122,7 @@ namespace Tensorflow
             var vars_with_grad = grads_and_vars.Where(x => x.Item1 != null).Select(x => x.Item2).ToArray();
             if (vars_with_grad.Length == 0)
                 throw new ValueError($"No gradients provided for any variable, check your graph for ops" +
-                    $" that do not support gradients, between variables {string.Join(",", vars_with_grad.Select(x => x.name))} and loss {loss}.");
+                    $" that do not support gradients, between variables {string.Join(",", vars_with_grad.Select(x => x.Name))} and loss {loss}.");
 
             return apply_gradients(grads_and_vars, global_step:global_step, name:name);
         }
@@ -175,7 +175,7 @@ namespace Tensorflow
                     if (grad == null)
                         continue;
 
-                    var scope_name = var.op.name;
+                    var scope_name = var.Op.name;
                     tf_with(ops.name_scope("update_" + scope_name), scope2 =>
                     {
                         var op = processor.update_op(this, grad);
@@ -241,10 +241,10 @@ namespace Tensorflow
         /// <param name="initial_value"></param>
         /// <param name="name"></param>
         /// <param name="colocate_with"></param>
-        protected VariableV1 _create_non_slot_variable(float initial_value, string name, RefVariable colocate_with)
+        protected IVariableV1 _create_non_slot_variable(float initial_value, string name, RefVariable colocate_with)
         {
             // Recommendation: Use OptimizerV2 if your optimizer uses non-slot variables.
-            var graph = colocate_with.graph;
+            var graph = colocate_with.Graph;
             var key = $"{name}.{graph.graph_key}";
             var v = _non_slot_dict.ContainsKey(key) ? _non_slot_dict[key] : null;
             if(v == null)
@@ -333,10 +333,10 @@ namespace Tensorflow
 
         private string _var_key(RefVariable var)
         {
-            return $"{var.op.graph.graph_key}.{var.op.name}";
+            return $"{var.Op.graph.graph_key}.{var.Op.name}";
         }
 
-        protected VariableV1 _get_non_slot_variable(string name, Graph graph = null)
+        protected IVariableV1 _get_non_slot_variable(string name, Graph graph = null)
         {
             var key = $"{name}.{graph.graph_key}";
             var non_slot = _non_slot_dict.ContainsKey(key) ? _non_slot_dict[key] : null;
@@ -385,7 +385,7 @@ namespace Tensorflow
                     case List<RefVariable> values:
                         var_list = values.Concat(vars).ToList();
                         break;
-                    case List<VariableV1> values:
+                    case List<IVariableV1> values:
                         var_list = values.Select(x => x as RefVariable).Concat(vars).ToList();
                         break;
                 }

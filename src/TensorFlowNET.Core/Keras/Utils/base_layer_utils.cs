@@ -32,7 +32,7 @@ namespace Tensorflow.Keras.Utils
         /// <param name="initializer"></param>
         /// <param name="trainable"></param>
         /// <returns></returns>
-        public static VariableV1 make_variable(string name,
+        public static IVariableV1 make_variable(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,

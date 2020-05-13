@@ -11,14 +11,14 @@ namespace Tensorflow
     /// </summary>
     public class _UnreadVariable : BaseResourceVariable
     {
-        public override string name => _in_graph_mode ? _parent_op.name : "UnreadVariable";
+        public override string Name => _in_graph_mode ? _parent_op.name : "UnreadVariable";
 
         public _UnreadVariable(Tensor handle, TF_DataType dtype, TensorShape shape,
             bool in_graph_mode, string unique_id) : base()
         {
             _dtype = dtype;
             _shape = shape;
-            _handle = handle;
+            base.handle = handle;
             _unique_id = unique_id;
             _in_graph_mode = in_graph_mode;
 

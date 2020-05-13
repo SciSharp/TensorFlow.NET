@@ -17,6 +17,7 @@
 using NumSharp;
 using System;
 using System.Linq;
+using Tensorflow.Eager;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
@@ -169,10 +170,28 @@ namespace Tensorflow.Gradients
             var x = op.inputs[0];
             var y = op.inputs[1];
             var grad = grads[0];
-            if (grad is Tensor && 
+
+            if (op is EagerOperation op_eager &&
+                op_eager.SkipInputIndices.Contains(1) &&
+                y.NDims == 0)
+            {
+                return new Tensor[]
+                {
+                    gen_math_ops.mul(grad, math_ops.conj(y)),
+                    null
+                };
+            }
+
+            if (grad is Tensor &&
                 _ShapesFullySpecifiedAndEqual(x, y, grad) &&
                 new TF_DataType[] { tf.int32, tf.float32 }.Contains(grad.dtype))
-                return new Tensor[] { gen_math_ops.mul(grad, y), gen_math_ops.mul(grad, x) };
+            {
+                return new Tensor[]
+                {
+                    gen_math_ops.mul(grad, y),
+                    gen_math_ops.mul(grad, x)
+                };
+            }
 
             var (sx, sy) = SmartBroadcastGradientArgs(x, y);
             var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
@@ -180,15 +199,39 @@ namespace Tensorflow.Gradients
             x = math_ops.conj(x);
             y = math_ops.conj(y);
 
-            var mul1 = gen_math_ops.mul(grad, y);
-            var reduce_sum1 = math_ops.reduce_sum(mul1, rx);
-            var reshape1 = gen_array_ops.reshape(reduce_sum1, sx);
+            Tensor gx = null, gy = null;
 
-            var mul2 = gen_math_ops.mul(x, grad);
-            var reduce_sum2 = math_ops.reduce_sum(mul2, ry);
-            var reshape2 = gen_array_ops.reshape(reduce_sum2, sy);
+            if (op is EagerOperation op_eager1 &&
+                op_eager1.SkipInputIndices.Contains(0))
+            {
+                return new Tensor[]
+                {
+                    gen_math_ops.mul(grad, math_ops.conj(y)),
+                    null
+                };
+            }
+            // else if not must_reduce_x:
+            // gx = gen_math_ops.mul(grad, y)
+            else
+            {
+                gx = array_ops.reshape(
+                    math_ops.reduce_sum(gen_math_ops.mul(grad, y), rx), sx);
+            }
 
-            return new Tensor[] { reshape1, reshape2 };
+            if (op is EagerOperation op_eager2 &&
+                op_eager2.SkipInputIndices.Contains(1))
+            {
+
+            }
+            // else if not must_reduce_y:
+            // gy = gen_math_ops.mul(x, grad)
+            else
+            {
+                gy = array_ops.reshape(
+                    math_ops.reduce_sum(gen_math_ops.mul(x, grad), ry), sy);
+            }
+
+            return new Tensor[] { gx, gy };
         }
 
         [RegisterGradient("MatMul")]
@@ -617,7 +660,9 @@ namespace Tensorflow.Gradients
             var x = op.inputs[0];
             var y = op.inputs[1];
 
-            if (tf.context.executing_eagerly())
+            if (op is EagerOperation op_eager && 
+                op_eager.SkipInputIndices.Contains(1) &&
+                y.NDims == 0)
             {
                 x = math_ops.conj(x);
                 y = math_ops.conj(y);

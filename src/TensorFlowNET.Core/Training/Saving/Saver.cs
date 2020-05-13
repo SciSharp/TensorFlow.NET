@@ -29,7 +29,7 @@ namespace Tensorflow
     /// </summary>
     public class Saver
     {
-        private VariableV1[] _var_list;
+        private IVariableV1[] _var_list;
         private bool _reshape;
         private bool _sharded;
         private int _max_to_keep;
@@ -50,7 +50,7 @@ namespace Tensorflow
         private Dictionary<string, float> _last_checkpoints;
         private Dictionary<string, float> _checkpoints_to_be_deleted;
 
-        public Saver(VariableV1[] var_list = null,
+        public Saver(IVariableV1[] var_list = null,
             bool reshape = false,
             bool sharded = false,
             int max_to_keep = 5,

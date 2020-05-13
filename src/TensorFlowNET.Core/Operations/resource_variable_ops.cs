@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Linq;
 using Tensorflow.Framework;
 using static Tensorflow.CppShapeInferenceResult.Types;
 
@@ -70,7 +71,7 @@ namespace Tensorflow
             throw new NotImplementedException();
         }
 
-        public static bool is_resource_variable(VariableV1 var)
+        public static bool is_resource_variable(IVariableV1 var)
         {
             return var is ResourceVariable;
         }
@@ -128,14 +129,34 @@ namespace Tensorflow
                 // When in eager mode, explicitly ensure so here. When in graph mode, it's
                 // ensured by always generating different variable names.
                 var exists = gen_resource_variable_ops.var_is_initialized_op(handle);
-            }
 
-            return handle;
+                // We create an assert Op instead of checking right away in order to be
+                // compatible with ASYNC execution mode. Further, since not all devices
+                // support string tensors, we encode the assertion string in the Op name
+                /*gen_logging_ops._assert(
+                    math_ops.logical_not(exists), [exists], name = "EagerVariableNameReuse");*/
+                var handle_data = new HandleData();
+                handle_data.IsSet = true;
+                handle_data.ShapeAndType.Add(new HandleShapeAndType
+                {
+                    Dtype = dtype.as_datatype_enum(),
+                    Shape = shape.as_proto()
+                });
+                _set_handle_shapes_and_types(handle, handle_data, graph_mode);
+                return handle;
+            }
         }
 
-        private static void _set_handle_shapes_and_types(Tensor handle, HandleData full_handle_data, bool graph_mode)
+        /// <summary>
+        /// Sets the shape inference result HandleData on tensor.
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="full_handle_data"></param>
+        /// <param name="graph_mode"></param>
+        private static void _set_handle_shapes_and_types(Tensor handle, HandleData handle_data, bool graph_mode)
         {
-
+            if (!graph_mode)
+                return;
         }
 
         /// <summary>
@@ -170,21 +191,6 @@ namespace Tensorflow
             {
                 return HandleData.Parser.ParseFrom(handle.BufferToArray());
             }
-        }
-
-        /// <summary>
-        /// Represents a future for a read of a variable.
-        /// Pretends to be the tensor if anyone looks.
-        /// </summary>
-        public class _UnreadVariable : BaseResourceVariable
-        {
-        }
-
-        /// <summary>
-        /// A python variable from an existing handle.
-        /// </summary>
-        public class BaseResourceVariable : VariableV1
-        {
         }
     }
 }

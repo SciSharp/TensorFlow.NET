@@ -21,8 +21,8 @@ namespace Tensorflow
         bool _state_is_tuple;
         IActivation _activation;
         LSTMStateTuple _state;
-        VariableV1 _kernel;
-        VariableV1 _bias;
+        IVariableV1 _kernel;
+        IVariableV1 _bias;
         string _WEIGHTS_VARIABLE_NAME = "kernel";
         string _BIAS_VARIABLE_NAME = "bias";
 

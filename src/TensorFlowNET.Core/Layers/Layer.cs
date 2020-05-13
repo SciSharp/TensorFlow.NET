@@ -42,8 +42,8 @@ namespace Tensorflow.Layers
             this._reuse = _reuse;
 
             // Avoid an incorrect lint error
-            _trainable_weights = new List<VariableV1>();
-            _non_trainable_weights = new List<VariableV1>();
+            _trainable_weights = new List<IVariableV1>();
+            _non_trainable_weights = new List<IVariableV1>();
             this.built = false;
             _keras_style = false;
         }
@@ -116,7 +116,7 @@ namespace Tensorflow.Layers
         /// <param name="synchronization"></param>
         /// <param name="aggregation"></param>
         /// <returns></returns>
-        protected virtual VariableV1 add_weight(string name,
+        protected virtual IVariableV1 add_weight(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
@@ -126,7 +126,7 @@ namespace Tensorflow.Layers
         {
             var default_graph = ops.get_default_graph();
             Graph init_graph = null;
-            VariableV1[] existing_variables = null;
+            IVariableV1[] existing_variables = null;
 
             if (synchronization == VariableSynchronization.OnRead)
                 trainable = false;

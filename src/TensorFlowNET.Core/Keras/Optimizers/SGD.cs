@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Tensorflow.Keras.Optimizers
 {
-    public class SGD
+    public class SGD : OptimizerV2
     {
-        public SGD(float learning_rate)
+        public SGD(float learning_rate) : base()
         {
 
         }

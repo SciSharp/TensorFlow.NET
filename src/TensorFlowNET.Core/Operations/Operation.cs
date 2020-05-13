@@ -64,6 +64,7 @@ namespace Tensorflow
 
         bool _is_stateful;
 
+
         public NodeDef node_def
         {
             get

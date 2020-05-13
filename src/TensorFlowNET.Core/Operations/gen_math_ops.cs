@@ -821,7 +821,7 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor,
-                    }, 1, null, status);
+                    }, 2, null, status);
                 status.Check(true);
                 return tensor;
             }

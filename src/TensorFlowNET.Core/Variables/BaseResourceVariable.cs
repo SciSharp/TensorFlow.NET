@@ -2,13 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Eager;
 using Tensorflow.Gradients;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public class BaseResourceVariable : VariableV1
+    public class BaseResourceVariable : DisposableObject, IVariableV1
     {
+        protected string _name;
+        public virtual string Name => _handle_name;
+        protected TF_DataType _dtype;
+        public TF_DataType dtype => _dtype;
         protected string _handle_name;
         protected string handle_name => _handle_name;
 
@@ -26,17 +31,30 @@ namespace Tensorflow
         protected Tensor _parent_op;
         public Tensor parent_op => _parent_op;
 
-        protected Tensor _handle;
         /// <summary>
-        /// Variable handle
+        /// Tensor handle
         /// </summary>
-        public Tensor handle => _handle;
-
+        protected Tensor handle;
+        public Tensor Handle => handle;
+        protected Tensor _graph_element;
+        public Tensor GraphElement => _graph_element;
         protected TensorShape _shape;
         public TensorShape shape => _shape;
 
-        public BaseResourceVariable() : base()
+        protected Operation initializer_op;
+        public Operation Initializer => initializer_op;
+        public Operation Op => handle.op;
+        public Graph Graph => handle.graph;
+
+        public BaseResourceVariable()
         {
+            _handle = c_api.TFE_NewResourceVariable();
+        }
+
+        public BaseResourceVariable(IntPtr handle, IntPtr tensor)
+        {
+            _handle = handle;
+            this.handle = new EagerTensor(tensor);
         }
 
         public void __init__(bool trainable = true,
@@ -48,15 +66,17 @@ namespace Tensorflow
             _trainable = trainable;
             _handle_name = handle_name + ":0";
             _unique_id = unique_id;
-            _handle = handle;
+            this.handle = handle;
             _name = name;
+
+            // handle_deleter
         }
 
-        public override BaseResourceVariable assign(object value, bool use_locking = false, string name = null, bool read_value = true)
+        public BaseResourceVariable assign(object value, bool use_locking = false, string name = null, bool read_value = true)
         {
             var value_tensor = ops.convert_to_tensor(value, dtype: dtype);
             var assign_op = gen_resource_variable_ops.assign_variable_op(
-                _handle, value_tensor, name: name);
+                handle, value_tensor, name: name);
             if (read_value)
                 return _lazy_read(assign_op, value_tensor);
             return null;
@@ -67,7 +87,7 @@ namespace Tensorflow
         protected Tensor _read_variable_op()
         {
             variable_accessed(this);
-            var result = gen_resource_variable_ops.read_variable_op(_handle, _dtype);
+            var result = gen_resource_variable_ops.read_variable_op(handle, _dtype);
             // _maybe_set_handle_data(_dtype, _handle, result);
             return result;
         }
@@ -75,7 +95,7 @@ namespace Tensorflow
         BaseResourceVariable _lazy_read(Operation op, Tensor value)
         {
             variable_accessed(this);
-            return new _UnreadVariable(_handle, _dtype, _shape, _in_graph_mode, _unique_id);
+            return new _UnreadVariable(handle, _dtype, _shape, _in_graph_mode, _unique_id);
         }
 
         /// <summary>
@@ -102,8 +122,13 @@ namespace Tensorflow
             });
 
         public override string ToString()
-            => $"tf.Variable '{name}' shape={shape} dtype={dtype.as_numpy_name()}, numpy={numpy()}";
+            => $"tf.Variable '{Name}' shape={shape} dtype={dtype.as_numpy_name()}, numpy={numpy()}";
 
         public NDArray numpy() => read_value().numpy();
+
+        protected override void DisposeUnmanagedResources(IntPtr handle)
+        {
+            // delete
+        }
     }
 }

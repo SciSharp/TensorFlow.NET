@@ -92,7 +92,7 @@ namespace TensorFlowNET.UnitTest.ops_test
             self.assertEqual(op.graph, g);
             self.assertIsNotNone(op._get_control_flow_context());
             var cond_text = op._get_control_flow_context() as ControlFlowContext;
-            self.assertEqual(cond_text.name, "cond/cond_text");
+            self.assertEqual(cond_text.Name, "cond/cond_text");
         }
 
         [Ignore("Todo: Port")]
@@ -122,7 +122,7 @@ namespace TensorFlowNET.UnitTest.ops_test
             self.assertItemsEqual(op_input.inputs.OfType<Operation>().ToArray(), new[] {x});
             self.assertEqual(op.graph, graph);
             self.assertIsNotNone(op._get_control_flow_context());
-            self.assertEqual(((ControlFlowContext)op._get_control_flow_context()).name, "myloop/while_context");
+            self.assertEqual(((ControlFlowContext)op._get_control_flow_context()).Name, "myloop/while_context");
             /*
                   @test_util.run_v1_only("b/120545219")
                   def testWhileLoop(self):

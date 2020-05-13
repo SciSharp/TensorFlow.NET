@@ -141,7 +141,7 @@ namespace Tensorflow.Operations.ControlFlows
                   parallel_iterations: forward_ctxt.parallel_iterations,
                   back_prop: forward_ctxt.back_prop,
                   swap_memory: forward_ctxt.swap_memory,
-                  name: forward_ctxt.name,
+                  name: forward_ctxt.Name,
                   grad_state: this);
                 _grad_index = _grad_context.AddBackpropLoopCounter(cnt, outer_grad_state);
                 if (outer_forward_ctxt != null)

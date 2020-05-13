@@ -62,7 +62,7 @@ namespace Tensorflow
             });
 
             ops.RegisterFromAssembly();
-            c_api.TFE_RegisterGradientFunction((op_name, num_inputs, op_inputs, num_attrs, num_outputs, output_grads) =>
+            c_api.TFE_RegisterGradientFunction((op_name, num_inputs, op_inputs, num_attrs, num_outputs, output_grads, num_skip_inputs, skip_input_indices) =>
             {
                 var input_tensors = new EagerTensor[num_inputs];
                 for (int i = 0; i < num_inputs; i++)
@@ -72,16 +72,21 @@ namespace Tensorflow
                 for (int i = 0; i < num_outputs; i++)
                     output_grad_tensors[i] = new EagerTensor(*((IntPtr*)output_grads + i));
 
+                var skip_input_indices_param = new int[num_skip_inputs];
+                for (int i = 0; i < num_skip_inputs; i++)
+                    skip_input_indices_param[i] = *((int*)skip_input_indices + i);
+
                 var gradients = ops.gradientFunctions[op_name](new EagerOperation
                 {
                     NumInputs = num_inputs,
-                    Inputs = input_tensors
+                    Inputs = input_tensors,
+                    SkipInputIndices = skip_input_indices_param
                 }, output_grad_tensors);
 
-                var ret_tensors = Marshal.AllocHGlobal(sizeof(IntPtr) * num_inputs);
-                Marshal.Copy(gradients.Select(x => x == null ? IntPtr.Zero : (x as EagerTensor).EagerTensorHandle).ToArray(), 0, ret_tensors, 2);
-                // Marshal.FreeHGlobal(ret_tensors);
-                return ret_tensors;
+                var gradients_handles = gradients.Select(x => x == null ? IntPtr.Zero : (x as EagerTensor).EagerTensorHandle).ToArray();
+                var wrap_handle = c_api.TFE_WrapGradientResult(gradients_handles, gradients.Length);
+
+                return wrap_handle;
             });
         }
 

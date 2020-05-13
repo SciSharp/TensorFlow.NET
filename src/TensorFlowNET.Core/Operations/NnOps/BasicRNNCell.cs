@@ -28,9 +28,9 @@ namespace Tensorflow
 
         public override object state_size => _num_units;
         public override int output_size => _num_units;
-        public VariableV1 _kernel;
+        public IVariableV1 _kernel;
         string _WEIGHTS_VARIABLE_NAME = "kernel";
-        public VariableV1 _bias;
+        public IVariableV1 _bias;
         string _BIAS_VARIABLE_NAME = "bias";
 
         public BasicRnnCell(int num_units,

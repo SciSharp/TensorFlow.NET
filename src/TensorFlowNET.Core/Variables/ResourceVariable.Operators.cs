@@ -31,7 +31,7 @@ namespace Tensorflow
         public static Tensor operator -(ResourceVariable x, double y) => op_helper("sub", x, y);
         public static Tensor operator -(ResourceVariable x, Tensor y) => op_helper("sub", x, y);
 
-        public static Tensor operator *(ResourceVariable x, ResourceVariable y) => gen_math_ops.mul(x, y);
+        public static Tensor operator *(ResourceVariable x, ResourceVariable y) => op_helper("mul", x, y);
         public static Tensor operator *(ResourceVariable x, NDArray y) => op_helper("mul", x, y);
 
         public static Tensor operator <(ResourceVariable x, Tensor y) => gen_math_ops.less(x.value(), y);
@@ -62,8 +62,8 @@ namespace Tensorflow
                         throw new NotImplementedException("");
                 }
 
-                x.assign(result);
-                result.ResourceVar = x;
+                // x.assign(result);
+                // result.ResourceVar = x;
                 return result;
             });
     }

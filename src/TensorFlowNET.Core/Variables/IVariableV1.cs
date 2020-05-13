@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2020 The TensorFlow.NET Authors. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -29,39 +29,13 @@ namespace Tensorflow
     /// the variable are fixed. The value can be changed using one of the assign methods.
     /// https://tensorflow.org/guide/variables
     /// </summary>
-    public abstract class VariableV1
+    public interface IVariableV1
     {
-        protected string _name;
-        public virtual string name { get; }
-        public virtual Tensor graph_element { get; }
-        public virtual Operation op { get; }
-        public virtual Operation initializer { get; }
-        public Tensor _variable;
-        protected string _graph_key;
-        public Graph graph => _variable.graph;
-
-        public Tensor _is_initialized_op { get; set; }
-
-        protected TF_DataType _dtype;
-        public TF_DataType dtype => _dtype;
-
-        public VariableV1()
-        {
-
-        }
-
-        public virtual Tensor eval()
-        {
-            throw new NotImplementedException("");
-        }
-
-        public virtual BaseResourceVariable assign(object value, bool use_locking = false, string name = null, bool read_value = true)
-        {
-            throw new NotImplementedException("");
-            /*var assign = gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
-            if (read_value)
-                return assign;
-            return assign.op;*/
-        }
+        public string Name { get; }
+        public Tensor Handle { get; }
+        public Operation Initializer { get; }
+        public Operation Op { get; }
+        public Tensor GraphElement { get; }
+        public Graph Graph { get; }
     }
 }

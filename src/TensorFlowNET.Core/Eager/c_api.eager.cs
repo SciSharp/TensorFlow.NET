@@ -11,7 +11,17 @@ namespace Tensorflow
         public static extern void TFE_RegisterGradientFunction(_gradient_function_callback callbackPointer);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate IntPtr _gradient_function_callback(string op_name, int num_inputs, IntPtr op_inputs, int num_attrs, int num_outputs, IntPtr output_grads);
+        public delegate IntPtr _gradient_function_callback(string op_name, 
+            int num_inputs, 
+            IntPtr op_inputs, 
+            int num_attrs, 
+            int num_outputs, 
+            IntPtr output_grads, 
+            int num_skip_inputs,
+            IntPtr skip_input_indices);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_WrapGradientResult(IntPtr[] gradients, int num_gradients);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr VSpace_Handle(VSpace_callback_Ones ones, VSpace_callback_AggregateGrads aggregate_grads);
@@ -373,11 +383,17 @@ namespace Tensorflow
         public static extern void TFE_TapeSetRemove(IntPtr tape);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_TapeWatch(IntPtr tape, IntPtr tensor);
+        public static extern void TFE_TapeWatch(IntPtr tape, IntPtr variable);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_TapeVariableAccessed(IntPtr variable);
-        
+
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_TapeWatchedVariables(IntPtr tape);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr ResourceVariable_Handle(IntPtr variable);
+
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_TapeGradient(IntPtr tape, 
             IntPtr[] target, int target_size, 

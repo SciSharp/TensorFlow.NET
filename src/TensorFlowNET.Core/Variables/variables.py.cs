@@ -37,12 +37,12 @@ namespace Tensorflow
         /// </summary>
         /// <param name="scope"></param>
         /// <returns></returns>
-        public static VariableV1[] _all_saveable_objects(string scope = "")
+        public static IVariableV1[] _all_saveable_objects(string scope = "")
         {
-            var all = new List<VariableV1>();
+            var all = new List<IVariableV1>();
 
-            all.AddRange(ops.get_collection<VariableV1>(tf.GraphKeys.GLOBAL_VARIABLES, scope));
-            all.AddRange(ops.get_collection<VariableV1>(tf.GraphKeys.SAVEABLE_OBJECTS, scope));
+            all.AddRange(ops.get_collection<IVariableV1>(tf.GraphKeys.GLOBAL_VARIABLES, scope));
+            all.AddRange(ops.get_collection<IVariableV1>(tf.GraphKeys.SAVEABLE_OBJECTS, scope));
 
             return all.ToArray();
         }
@@ -58,9 +58,9 @@ namespace Tensorflow
         /// special tokens filters by prefix.
         /// </param>
         /// <returns>A list of `Variable` objects.</returns>
-        public static List<VariableV1> global_variables(string scope = null)
+        public static List<IVariableV1> global_variables(string scope = null)
         {
-            return ops.get_collection<VariableV1>(tf.GraphKeys.GLOBAL_VARIABLES, scope);
+            return ops.get_collection<IVariableV1>(tf.GraphKeys.GLOBAL_VARIABLES, scope);
         }
 
         /// <summary>
@@ -69,10 +69,10 @@ namespace Tensorflow
         /// <param name="var_list">List of `Variable` objects to initialize.</param>
         /// <param name="name">Optional name for the returned operation.</param>
         /// <returns>An Op that run the initializers of all the specified variables.</returns>
-        public static Operation variables_initializer(VariableV1[] var_list, string name = "init")
+        public static Operation variables_initializer(IVariableV1[] var_list, string name = "init")
         {
             if (var_list.Length > 0)
-                return control_flow_ops.group(var_list.Select(x => x.initializer).ToArray(), name);
+                return control_flow_ops.group(var_list.Select(x => x.Initializer).ToArray(), name);
             else
                 return gen_control_flow_ops.no_op(name: name);
         }

@@ -8,6 +8,7 @@ namespace Tensorflow.Eager
     {
         public int NumInputs;
         public Tensor[] Inputs { get; set; }
+        public int[] SkipInputIndices { get; set; }
 
         public EagerOperation() : base(IntPtr.Zero) { }
 
