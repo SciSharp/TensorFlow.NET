@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
-    <Version>0.20.0</Version>
+    <Version>0.20.0-alpha</Version>
     <LangVersion>8.0</LangVersion>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
@@ -15,17 +15,15 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>http://scisharpstack.org</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
-    <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#</PackageTags>
+    <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#, TF.NET</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.20.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Changes since v0.15.0:
-1: Add TransformGraphWithStringInputs.
-2: tf.trainer.load_graph, tf.trainer.freeze_graph
-3: Import Protobuf.Text
-4: Support YOLOv3 object detection
-5: Add implicitation for Operation to RefVariable</PackageReleaseNotes>
+    <PackageReleaseNotes>tf.net 0.20.x and above are based on tensorflow native 2.x.
+Eager Mode is added finally.
+It's not stable at this moment and missing many APIs, tf.net 0.15.x is more stable for production.
+Please be patient, we're working hard on missing functions, providing full tensorflow binding is our mission.</PackageReleaseNotes>
     <FileVersion>0.20.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
