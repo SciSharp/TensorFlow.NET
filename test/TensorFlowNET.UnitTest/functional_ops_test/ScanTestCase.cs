@@ -9,6 +9,7 @@ namespace TensorFlowNET.UnitTest.functional_ops_test
     /// <summary>
     /// https://www.tensorflow.org/api_docs/python/tf/scan
     /// </summary>
+    [Ignore]
     [TestClass]
     public class ScanTestCase
     {

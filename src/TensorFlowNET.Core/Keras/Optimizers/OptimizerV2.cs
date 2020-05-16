@@ -21,6 +21,7 @@ namespace Tensorflow.Keras.Optimizers
         Dictionary<string, float> _hyper = new Dictionary<string, float>();
         Dictionary<string, ResourceVariable> _hyper_variables = new Dictionary<string, ResourceVariable>();
         protected bool _momentum;
+        protected float _initial_decay = 0.0f;
 
         public OptimizerV2() : base()
         {
@@ -40,16 +41,49 @@ namespace Tensorflow.Keras.Optimizers
                 //var apply_state = 
                 _prepare(var_list);
 
+                _aggregate_gradients(grads_and_vars);
+
                 return control_flow_ops.no_op();
             });
         }
 
+        void _aggregate_gradients(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars)
+        {
+            var lr_t = _hyper_variables["learning_rate"];
+            foreach (var grad_and_var in grads_and_vars)
+            {
+                var grad = grad_and_var.Item1;
+                var variable = grad_and_var.Item2;
+                // variable.Handle - grad * lr_t.Handle;
+            }
+        }
+
         void _prepare(ResourceVariable[] var_list)
         {
+            var keys = new HashSet<(string, TF_DataType)>();
             foreach(var variable in var_list)
+            {
+                var lr_t = _prepare_local(variable.Device, variable.dtype.as_base_dtype());
+                var momentum = _get_hyper("momentum", variable.dtype);
+                array_ops.identity(momentum);
+            }
+        }
+
+        ResourceVariable _prepare_local(string var_device, TF_DataType var_dtype)
+        {
+            var lr_t = _get_hyper("learning_rate", var_dtype);
+            if(_initial_decay > 0)
             {
 
             }
+
+            return lr_t;
+        }
+
+        ResourceVariable _get_hyper(string name, TF_DataType dtype = TF_DataType.DtInvalid)
+        {
+            var value = _hyper_variables[name];
+            return math_ops.cast(value, dtype);
         }
 
         void _create_all_weights(ResourceVariable[] var_list)

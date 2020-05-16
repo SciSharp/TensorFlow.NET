@@ -54,17 +54,26 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                try
-                {
-                    var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                        "ConcatV2", name, null,
-                        values, axis);
-                    return _result;
-                }
-                catch (Exception)
-                {
-                    return concat_v2_eager_fallback(values, axis, name, tf.context);
-                }
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ConcatV2", name, new IntPtr[]
+                    {
+                        values as EagerTensor,
+                        axis as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+                return tensor;
+            }
+
+            var _op = _op_def_lib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
+            return _op.output;
+        }
+
+        public static Tensor concat_v2(Tensor[] values, Tensor axis, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                return concat_v2_eager_fallback(values, axis, name, tf.context);
             }
 
             var _op = _op_def_lib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
@@ -175,8 +184,6 @@ namespace Tensorflow
             var _attrs = new Dictionary<string, object>();
             _attrs["dtype"] = _op.get_attr("dtype");
             _attrs["shape"] = _op.get_attr("shape");
-
-            _execute.record_gradient("Placeholder", _inputs_flat, _attrs, _result, name);
 
             return new Tensor(_op, 0, dtype);
         }

@@ -16,13 +16,10 @@ namespace Tensorflow
         }
 
         public static implicit operator Tensor(ResourceVariable var)
-            => var.Handle;
+            => var._dense_var_to_tensor();
 
         public static implicit operator EagerTensor(ResourceVariable var)
-            => var.Handle as EagerTensor;
-
-        /*public static implicit operator ResourceVariable(Tensor var)
-            => var.ResourceVar;*/
+            => var._dense_var_to_tensor() as EagerTensor;
 
         public static implicit operator RefVariable(ResourceVariable var)
         {
@@ -31,5 +28,12 @@ namespace Tensorflow
 
         public static implicit operator IntPtr(ResourceVariable var)
             => var._handle;
+
+        Tensor _dense_var_to_tensor(TF_DataType dtype = TF_DataType.DtInvalid, 
+            string name = null, 
+            bool as_ref = false)
+        {
+            return value();
+        }
     }
 }

@@ -131,28 +131,33 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                try
-                {
-                    using var status = new Status();
-                    var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                        "Mean", name,
-                        new IntPtr[]
-                        {
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Mean", name,
+                    new IntPtr[]
+                    {
                             input as EagerTensor,
                             axis as EagerTensor
-                        }, 2,
-                        op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, status),
-                        status);
-                    status.Check(true);
-                    return new EagerTensor(tensor);
-                }
-                catch (Exception)
-                {
-                    return mean_eager_fallback(input as Tensor[], axis as Tensor, keep_dims: keep_dims, name: name, ctx: tf.context);
-                }
+                    }, 2,
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, status),
+                    status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
+
+            return _op.output;
+        }
+
+        public static Tensor mean(Tensor[] inputs, Tensor axis, bool keep_dims = false, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                return mean_eager_fallback(inputs, axis, keep_dims: keep_dims, name: name, ctx: tf.context);
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { inputs, reduction_indices = axis, keep_dims = keep_dims });
 
             return _op.output;
         }
@@ -1036,29 +1041,34 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                try
-                {
-                    using var status = new Status();
-                    var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                        "Sum", name,
-                        new IntPtr[]
-                        {
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sum", name,
+                    new IntPtr[]
+                    {
                             input as EagerTensor,
                             axis as EagerTensor
-                        }, 2,
-                        op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, status),
-                        status);
-                    status.Check(true);
-                    return new EagerTensor(tensor);
-                }
-                catch (Exception)
-                {
-                    return _sum_eager_fallback(input as Tensor[], axis as Tensor, 
-                        keep_dims: keep_dims, name: name, ctx: tf.context);
-                }
+                    }, 2,
+                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, status),
+                    status);
+                status.Check(true);
+                return new EagerTensor(tensor);
             }
 
             var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _sum(Tensor[] inputs, Tensor axis = default, bool keep_dims = false, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                return _sum_eager_fallback(inputs, axis,
+                        keep_dims: keep_dims, name: name, ctx: tf.context);
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { inputs, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }

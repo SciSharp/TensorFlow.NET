@@ -8,6 +8,7 @@ using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.Gradient
 {
+    [Ignore]
     [TestClass]
     public class GradientTest : PythonTest
     {

@@ -116,6 +116,7 @@ namespace Tensorflow
             // convert data type
             if (dtype != TF_DataType.DtInvalid &&
                 value.GetType().Name != "NDArray" &&
+                value.GetType().BaseType.Name != "Array" &&
                 dtypes.as_base_dtype(dtype) != dtypes.as_dtype(value.GetType()))
             {
                 switch (dtype)

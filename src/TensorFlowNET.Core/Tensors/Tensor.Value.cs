@@ -1,4 +1,5 @@
 ﻿using NumSharp;
+using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using NumSharp.Utilities;
 using System;
@@ -150,26 +151,37 @@ namespace Tensorflow
         /// Tensor has rank 0.
         /// </returns>
         public NDArray numpy()
-            => NDims == 0 ? GetScalar(dtype) : GetNDArray(dtype);
+            => GetNDArray(dtype);
 
         protected unsafe NDArray GetNDArray(TF_DataType dtype)
         {
+            UnmanagedStorage storage;
             switch (dtype)
             {
                 case TF_DataType.TF_STRING:
                     return StringData();
                 case TF_DataType.TF_INT32:
-                    return ToArray<int>();
+                    storage = new UnmanagedStorage(NPTypeCode.Int32);
+                    break;
                 case TF_DataType.TF_FLOAT:
-                    return ToArray<float>();
+                    storage = new UnmanagedStorage(NPTypeCode.Float);
+                    break;
                 case TF_DataType.TF_DOUBLE:
-                    return ToArray<double>();
+                    storage = new UnmanagedStorage(NPTypeCode.Double);
+                    break;
                 default:
                     return BufferToArray();
             }
+
+            storage.Allocate(new Shape(shape));
+
+            var bytesize = (long)this.bytesize;
+            System.Buffer.MemoryCopy(buffer.ToPointer(), storage.Address, bytesize, bytesize);
+
+            return new NDArray(storage);
         }
 
-        protected unsafe NDArray GetScalar(TF_DataType dtype)
+        /*protected unsafe NDArray GetScalar(TF_DataType dtype)
         {
             switch(dtype)
             {
@@ -184,7 +196,7 @@ namespace Tensorflow
                 default:
                     return BufferToArray();
             }
-        }
+        }*/
 
         /// <summary>
         /// Copies the memory of current buffer onto newly allocated array.

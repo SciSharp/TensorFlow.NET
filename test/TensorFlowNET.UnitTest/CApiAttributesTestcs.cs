@@ -8,6 +8,7 @@ namespace TensorFlowNET.UnitTest
     /// tensorflow\c\c_api_test.cc
     /// `class CApiAttributesTest`
     /// </summary>
+    [Ignore]
     [TestClass]
     public class CApiAttributesTestcs : CApiTest, IDisposable
     {

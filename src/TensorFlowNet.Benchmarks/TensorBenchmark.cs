@@ -6,7 +6,7 @@ using static Tensorflow.Binding;
 
 namespace TensorFlowBenchmark
 {
-    [SimpleJob(launchCount: 1, warmupCount: 2, targetCount: 10)]
+    [SimpleJob(launchCount: 1, warmupCount: 1, targetCount: 10)]
     [MinColumn, MaxColumn, MeanColumn, MedianColumn]
     public class TensorBenchmark
     {
@@ -64,7 +64,7 @@ namespace TensorFlowBenchmark
         public void TensorFromNDArray()
         {
             var g = new Graph();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 using (var tensor = new Tensor(new NDArray(data)))
                 {
@@ -73,15 +73,14 @@ namespace TensorFlowBenchmark
             }
         }
 
-        //[Benchmark]
-        //public void Constant()
-        //{
-        //    for (int i = 0; i < 100; i++)
-        //    {
-        //        //var tensor = new Tensor(new NDArray(data));
-        //        var c = tf.constant(42.0);
-        //    }
-        //}
+        [Benchmark]
+        public void Constant()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var c = tf.constant(3112);
+            }
+        }
 
     }
 }

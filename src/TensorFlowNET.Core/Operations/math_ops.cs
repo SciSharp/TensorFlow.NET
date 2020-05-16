@@ -85,6 +85,23 @@ namespace Tensorflow
             });
         }
 
+        public static ResourceVariable cast(ResourceVariable x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
+        {
+            var base_type = dtype.as_base_dtype();
+            if (base_type == x.dtype)
+                return x;
+
+            return tf_with(ops.name_scope(name, "Cast", new { x }), scope =>
+            {
+                name = scope;
+                var t_x = ops.convert_to_tensor(x, name: "x");
+                if (t_x.dtype.as_base_dtype() != base_type)
+                    t_x = gen_math_ops.cast(t_x, base_type, name: name);
+
+                return x;
+            });
+        }
+
         public static Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             var base_type = dtype.as_base_dtype();

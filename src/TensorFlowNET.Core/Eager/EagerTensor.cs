@@ -39,6 +39,9 @@ namespace Tensorflow.Eager
             EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
         }
 
+        public IntPtr GetTfeTensorHandle()
+            => tfe_tensor_handle;
+
         public override string ToString()
         {
             switch (rank)

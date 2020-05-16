@@ -23,6 +23,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Tensorflow.c_api;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -57,6 +58,14 @@ namespace Tensorflow
         {
             _handle = handle;
             //no need to set AllocationType = AllocationType.None;
+        }
+
+        public Tensor(int value)
+        {
+            unsafe
+            {
+                _handle = TF_NewTensor(tf.int32, dims: null, num_dims: 0, data: null, len: sizeof(int));
+            }
         }
 
         /// <summary>

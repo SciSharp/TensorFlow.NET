@@ -35,22 +35,24 @@ namespace Tensorflow.Eager
 
             // TFE_TensorHandle
             using var status = new Status();
-            var retVals = wrap_tfe_src.TFE_Execute(ctx, ctx.device_name, op_name, inputs, attrs, num_outputs, status);
+            /*var retVals = wrap_tfe_src.TFE_Execute(ctx, ctx.device_name, op_name, inputs, attrs, num_outputs, status);
 
-            return new EagerTensor((TFE_TensorHandle)retVals[0]);
+            return new EagerTensor((TFE_TensorHandle)retVals[0]);*/
 
-            /*IntPtr[] outputs = new IntPtr[num_outputs];
-             c_api.TFE_QuickExecute(ctx, ctx.device_name,
-                "Sum",
-                inputs.Select(x => (IntPtr)(TFE_TensorHandle)(x as EagerTensor)).ToArray(), inputs.Length,
-                op => wrap_tfe_src.SetOpAttrs(ctx, op, attrs, 0, status),
-                outputs, num_outputs,
-                status);
+            IntPtr[] outputs = new IntPtr[num_outputs];
+            c_api.TFE_QuickExecute(ctx,
+                ctx.device_name,
+               op_name,
+               inputs.Select(x => (x as EagerTensor).GetTfeTensorHandle()).ToArray(), 
+               inputs.Length,
+               op => wrap_tfe_src.SetOpAttrs(ctx, op, attrs, status),
+               outputs, 
+               num_outputs,
+               status);
             status.Check(true);
 
-            var tfe_tensor_handle = outputs[0];
-            var eager_tensor_handle = c_api.TFE_EagerTensorFromHandle(ctx, tfe_tensor_handle);
-            return new EagerTensor(eager_tensor_handle);*/
+            TFE_TensorHandle tfe_tensor_handle = outputs[0];
+            return new EagerTensor(tfe_tensor_handle);
         }
 
         public (TF_DataType, Tensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)
@@ -82,11 +84,6 @@ namespace Tensorflow.Eager
             }
             else
                 throw new NotImplementedException("");
-        }
-
-        public void record_gradient(string op_name, InputList inputs, Dictionary<string, object> attrs, Tensor[] results, string name = null)
-        {
-            wrap_tfe_src.RecordGradient(op_name, inputs._inputs, attrs, results, name);
         }
     }
 }

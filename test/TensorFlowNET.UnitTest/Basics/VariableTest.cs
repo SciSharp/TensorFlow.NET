@@ -10,12 +10,10 @@ namespace TensorFlowNET.UnitTest.Basics
     [TestClass]
     public class VariableTest
     {
-        [Ignore]
         [TestMethod]
         public void NewVariable()
         {
-            var x = tf.Variable(10, name: "new_variable_x");
-            Assert.AreEqual("new_variable_x:0", x.Name);
+            var x = tf.Variable(10, name: "x");
             Assert.AreEqual(0, x.shape.ndim);
             Assert.AreEqual(10, (int)x.numpy());
         }

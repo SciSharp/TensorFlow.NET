@@ -227,6 +227,21 @@ namespace Tensorflow
             => gen_array_ops.expand_dims(input, axis, name);
 
         /// <summary>
+        /// Creates a tensor filled with a scalar value.
+        /// This operation creates a tensor of shape `dims` and fills it with `value`.
+        /// </summary>
+        /// <param name="dims">A 1-D sequence of non-negative numbers.</param>
+        /// <param name="value">A value to fill the returned `tf.Tensor`.</param>
+        /// <param name="name">Optional string. The name of the output `tf.Tensor`.</param>
+        /// <returns>A `tf.Tensor` with shape `dims` and the same dtype as `value`.</returns>
+        public static Tensor fill(Tensor dims, Tensor value, string name = null)
+        {
+            var result = gen_array_ops.fill(dims, value, name: name);
+            // tensor_util.maybe_set_static_shape(result, dims)
+            return result;
+        }
+
+        /// <summary>
         /// Returns the rank of a tensor.
         /// </summary>
         /// <param name="input"></param>
@@ -312,20 +327,26 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor ones(int[] dims, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
-            => tf_with(ops.name_scope(name, "ones", new { dims }), scope =>
+        public static Tensor ones(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+            => tf_with(ops.name_scope(name, "ones", shape), scope =>
             {
                 dtype = dtype.as_base_dtype();
                 name = scope;
+                var shape_tensor = constant_op._tensor_shape_tensor_conversion_function(shape);
+                Tensor ones = null;
                 switch (dtype)
                 {
                     case TF_DataType.TF_DOUBLE:
-                        return _constant_if_small(1.0d, dims, dtype, name);
+                        ones = constant(1.0d);
+                        break;
                     case TF_DataType.TF_FLOAT:
-                        return _constant_if_small(1.0f, dims, dtype, name);
+                        ones = constant(1.0f);
+                        break;
                     default:
-                        return _constant_if_small(1, dims, dtype, name);
+                        ones = constant(1);
+                        break;
                 }
+                return fill(shape_tensor, ones, name: name);
             });
 
         public static Tensor one_hot(Tensor indices, int depth, 
