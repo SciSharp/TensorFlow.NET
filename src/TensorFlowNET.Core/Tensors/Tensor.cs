@@ -82,7 +82,7 @@ namespace Tensorflow
         /// <summary>
         ///     The name of the device on which this tensor will be produced, or null.
         /// </summary>
-        public string Device => op.Device;
+        public virtual string Device => op.Device;
         public int[] dims => shape;
 
         /// <summary>

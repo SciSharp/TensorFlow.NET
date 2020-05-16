@@ -246,6 +246,7 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern TF_Tensor TFE_TensorHandleResolve(IntPtr h, IntPtr status);
 
+
         /// <summary>
         /// This function will block till the operation that produces `h` has completed.
         /// </summary>

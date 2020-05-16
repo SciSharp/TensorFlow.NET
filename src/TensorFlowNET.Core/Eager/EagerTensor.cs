@@ -11,6 +11,7 @@ namespace Tensorflow.Eager
         Status status = new Status();
         TFE_TensorHandle tfe_tensor_handle;
         public IntPtr EagerTensorHandle { get; set; }
+        public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(tfe_tensor_handle, status));
 
         public EagerTensor(IntPtr handle) : base(handle)
         {
