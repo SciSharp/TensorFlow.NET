@@ -2,6 +2,7 @@
 using System.Linq;
 using System;
 using static Tensorflow.OpDef.Types;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
@@ -10,8 +11,9 @@ namespace Tensorflow.Eager
     /// </summary>
     public partial class wrap_tfe_src
     {
-        public static void SetOpAttrs(Context ctx, TFE_Op op, object[] attrs, Status out_status)
+        public static void SetOpAttrs(TFE_Op op, params object[] attrs)
         {
+            using var status = new Status();
             var len = attrs.Length;
             for (int i = 0; i < len; i += 2)
             {
@@ -19,13 +21,13 @@ namespace Tensorflow.Eager
                 var value = attrs[i + 1];
 
                 byte is_list = 0; 
-                var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, out_status);
-                if (!out_status.ok()) return;
+                var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, status);
+                if (!status.ok()) return;
                 if (is_list != 0)
-                    SetOpAttrList(ctx, op, key, value, type, null, out_status);
+                    SetOpAttrList(tf.context, op, key, value, type, null, status);
                 else
-                    SetOpAttrScalar(ctx, op, key, value, type, null, out_status);
-                out_status.Check(true);
+                    SetOpAttrScalar(tf.context, op, key, value, type, null, status);
+                status.Check(true);
             }
         }
 

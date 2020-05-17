@@ -13,6 +13,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ******************************************************************************/
+using System;
+using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -35,6 +38,23 @@ namespace Tensorflow
                 seed = 0;
             if (!seed2.HasValue)
                 seed2 = 0;
+
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "RandomStandardNormal", name, new IntPtr[]
+                    {
+                        shape as EagerTensor,
+                    }, 1,
+                    op => wrap_tfe_src.SetOpAttrs(op,
+                            "seed", seed,
+                            "seed2", seed2,
+                            "dtype", dtype), 
+                    status);
+                status.Check(true);
+                return tensor;
+            }
 
             var _op = _op_def_lib._apply_op_helper("RandomStandardNormal", 
                 name: name,

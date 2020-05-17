@@ -47,6 +47,7 @@ namespace Tensorflow
                 var rnd = gen_random_ops.random_standard_normal(shape_tensor, dtype: dtype, seed: seed1, seed2: seed2);
                 var mul = rnd * stddev_tensor;
                 var value = math_ops.add(mul, mean_tensor, name: name);
+                // tensor_util.maybe_set_static_shape(value, shape)
                 return value;
             });
         }

@@ -165,7 +165,7 @@ namespace Tensorflow
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name, 
                     "Pack", name,
                     values.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), values.Length, 
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "axis", axis } , status),
+                    op => wrap_tfe_src.SetOpAttrs(op, "axis", axis),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);
@@ -421,11 +421,8 @@ namespace Tensorflow
                     "Shape", name, new IntPtr[]
                     {
                         input as EagerTensor,
-                    }, 1, 
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] 
-                        { 
-                            "out_type", out_type 
-                        }, status), 
+                    }, 1,
+                    op => wrap_tfe_src.SetOpAttrs(op, "out_type", out_type),
                     status);
                 status.Check(true);
                 return tensor;
@@ -531,14 +528,12 @@ namespace Tensorflow
                         end as EagerTensor,
                         strides as EagerTensor,
                     }, 4,
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[]
-                        {
+                    op => wrap_tfe_src.SetOpAttrs(op,
                             "begin_mask", begin_mask,
                             "end_mask", end_mask, 
                             "ellipsis_mask", ellipsis_mask,
                             "new_axis_mask", new_axis_mask, 
-                            "shrink_axis_mask", shrink_axis_mask
-                        }, status),
+                            "shrink_axis_mask", shrink_axis_mask), 
                     status);
                 status.Check(true);
                 return tensor;

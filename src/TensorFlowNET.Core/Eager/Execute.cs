@@ -45,7 +45,7 @@ namespace Tensorflow.Eager
                op_name,
                inputs.Select(x => (x as EagerTensor).GetTfeTensorHandle()).ToArray(), 
                inputs.Length,
-               op => wrap_tfe_src.SetOpAttrs(ctx, op, attrs, status),
+               op => wrap_tfe_src.SetOpAttrs(op, attrs),
                outputs, 
                num_outputs,
                status);

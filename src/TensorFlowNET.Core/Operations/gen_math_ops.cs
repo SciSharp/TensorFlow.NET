@@ -44,13 +44,13 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                EagerTensorHandle _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "AddN", name,
                     inputs.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), inputs.Length,
                     null,
                     status);
                 status.Check(true);
-                return new EagerTensor(_result);
+                return _result;
             }
 
             var _op = _op_def_lib._apply_op_helper("AddN", name, args: new { inputs });
@@ -132,17 +132,17 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Mean", name,
                     new IntPtr[]
                     {
                             input as EagerTensor,
                             axis as EagerTensor
                     }, 2,
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, status),
+                    op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims),
                     status);
                 status.Check(true);
-                return new EagerTensor(tensor);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
@@ -185,10 +185,7 @@ namespace Tensorflow
                             input as EagerTensor,
                             axis as EagerTensor
                         }, 2,
-                        op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[]
-                            {
-                                "keep_dims", keep_dims
-                            }, status),
+                        op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims), 
                         status);
                     status.Check(true);
                     return tensor;
@@ -232,14 +229,14 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                EagerTensorHandle _result = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Add", name, new IntPtr[] 
                     {
                         x as EagerTensor,
                         y as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
-                return new EagerTensor(_result);
+                return _result;
             }
 
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
@@ -273,14 +270,14 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "AddV2", name, new IntPtr[]
                     {
                         x as EagerTensor,
                         y as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
-                return new EagerTensor(tensor);
+                return tensor;
             }
 
             var _op = _op_def_lib._apply_op_helper("AddV2", name, args: new { x, y });
@@ -574,6 +571,18 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `x`.</returns>
         public static Tensor square(Tensor x, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Square", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null, status);
+                status.Check(true);
+                return tensor;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Square", name, args: new { x });
 
             return _op.outputs[0];
@@ -633,7 +642,7 @@ namespace Tensorflow
                 var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Cast", name,
                     new IntPtr[] { x as EagerTensor }, 1,
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "DstT", DstT, "Truncate", Truncate }, status),
+                    op => wrap_tfe_src.SetOpAttrs(op, "DstT", DstT, "Truncate", Truncate),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);
@@ -918,11 +927,9 @@ namespace Tensorflow
                         a as EagerTensor,
                         b as EagerTensor
                     }, 2,
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[]
-                        {
+                    op => wrap_tfe_src.SetOpAttrs(op, 
                             "transpose_a", transpose_a,
-                            "transpose_b", transpose_b
-                        }, status),
+                            "transpose_b", transpose_b), 
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);
@@ -1049,7 +1056,7 @@ namespace Tensorflow
                             input as EagerTensor,
                             axis as EagerTensor
                     }, 2,
-                    op => wrap_tfe_src.SetOpAttrs(tf.context, op, new object[] { "keep_dims", keep_dims }, status),
+                    op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims),
                     status);
                 status.Check(true);
                 return new EagerTensor(tensor);
