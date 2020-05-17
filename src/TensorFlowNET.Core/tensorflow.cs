@@ -62,24 +62,30 @@ namespace Tensorflow
             });
 
             ops.RegisterFromAssembly();
-            c_api.TFE_RegisterGradientFunction((op_name, num_inputs, op_inputs, num_attrs, num_outputs, output_grads, num_skip_inputs, skip_input_indices) =>
+            c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, num_attrs, output_grads, skip_input_indices) =>
             {
-                var input_tensors = new EagerTensor[num_inputs];
-                for (int i = 0; i < num_inputs; i++)
-                    input_tensors[i] = new EagerTensor(*((IntPtr*)op_inputs + i));
+                var input_tensors = new EagerTensor[op_inputs.length];
+                for (int i = 0; i < op_inputs.length; i++)
+                    input_tensors[i] = new EagerTensor(*((IntPtr*)op_inputs.array + i));
 
-                var output_grad_tensors = new EagerTensor[num_outputs];
-                for (int i = 0; i < num_outputs; i++)
-                    output_grad_tensors[i] = new EagerTensor(*((IntPtr*)output_grads + i));
+                var output_tensors = new EagerTensor[op_outputs.length];
+                for (int i = 0; i < op_outputs.length; i++)
+                    if (op_outputs.array != IntPtr.Zero)
+                        output_tensors[i] = new EagerTensor(*((IntPtr*)op_outputs.array + i));
 
-                var skip_input_indices_param = new int[num_skip_inputs];
-                for (int i = 0; i < num_skip_inputs; i++)
-                    skip_input_indices_param[i] = *((int*)skip_input_indices + i);
+                var output_grad_tensors = new EagerTensor[output_grads.length];
+                for (int i = 0; i < output_grads.length; i++)
+                    output_grad_tensors[i] = new EagerTensor(*((IntPtr*)output_grads.array + i));
+
+                var skip_input_indices_param = new int[skip_input_indices.length];
+                for (int i = 0; i < skip_input_indices.length; i++)
+                    skip_input_indices_param[i] = *((int*)skip_input_indices.array + i);
 
                 var gradients = ops.gradientFunctions[op_name](new EagerOperation
                 {
-                    NumInputs = num_inputs,
+                    NumInputs = input_tensors.Length,
                     Inputs = input_tensors,
+                    Outputs = output_tensors,
                     SkipInputIndices = skip_input_indices_param
                 }, output_grad_tensors);
 

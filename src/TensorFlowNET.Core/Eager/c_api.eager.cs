@@ -11,14 +11,12 @@ namespace Tensorflow
         public static extern void TFE_RegisterGradientFunction(_gradient_function_callback callbackPointer);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate IntPtr _gradient_function_callback(string op_name, 
-            int num_inputs, 
-            IntPtr op_inputs, 
-            int num_attrs, 
-            int num_outputs, 
-            IntPtr output_grads, 
-            int num_skip_inputs,
-            IntPtr skip_input_indices);
+        public delegate IntPtr _gradient_function_callback(string op_name,
+            BindingArray op_inputs,
+            BindingArray op_outputs,
+            int num_attrs,
+            BindingArray output_grads, 
+            BindingArray skip_input_indices);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_WrapGradientResult(IntPtr[] gradients, int num_gradients);

@@ -43,7 +43,7 @@ namespace Tensorflow.Keras.Optimizers
 
                 _aggregate_gradients(grads_and_vars);
 
-                return control_flow_ops.no_op();
+                return null;
             });
         }
 

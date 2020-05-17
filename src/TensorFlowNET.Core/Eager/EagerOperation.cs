@@ -8,6 +8,8 @@ namespace Tensorflow.Eager
     {
         public int NumInputs;
         public Tensor[] Inputs { get; set; }
+        public int NumOutputs;
+        public Tensor[] Outputs { get; set; }
         public int[] SkipInputIndices { get; set; }
 
         public EagerOperation() : base(IntPtr.Zero) { }
@@ -29,6 +31,19 @@ namespace Tensorflow.Eager
                 }
 
                 return _inputs_val;
+            }
+        }
+
+        public override Tensor[] outputs
+        {
+            get
+            {
+                if (_outputs == null)
+                {
+                    _outputs = Outputs;
+                }
+
+                return _outputs;
             }
         }
     }

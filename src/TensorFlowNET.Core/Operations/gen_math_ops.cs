@@ -508,6 +508,19 @@ namespace Tensorflow
 
         public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Less", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+                return tensor;
+            }
+
             var _op = _op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
 
             return _op.outputs[0];

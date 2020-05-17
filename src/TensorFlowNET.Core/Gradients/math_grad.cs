@@ -310,11 +310,23 @@ namespace Tensorflow.Gradients
             var input_shape = op.inputs[0]._shape_tuple();
             var output_shape = op.outputs[0]._shape_tuple();
 
-            var input_shape_tensor = array_ops.shape(op.inputs[0]);
-            var output_shape_tensor = array_ops.shape(op.outputs[0]);
-            var factor = _safe_shape_div(math_ops.reduce_prod(input_shape_tensor), math_ops.reduce_prod(output_shape_tensor));
+            if(input_shape != null &&
+                output_shape != null)
+            {
+                var input_size = np.prod(input_shape);
+                var output_size = np.prod(output_shape);
+                var factor = (int)input_size / Math.Max((int)output_size, 1);
+                var factor_tensor = constant_op.constant((int)input_size, dtype: sum_grad.dtype);
+                return new Tensor[] { math_ops.truediv(sum_grad, math_ops.cast(factor_tensor, sum_grad.dtype)), null };
+            }
+            else
+            {
+                var input_shape_tensor = array_ops.shape(op.inputs[0]);
+                var output_shape_tensor = array_ops.shape(op.outputs[0]);
+                var factor = _safe_shape_div(math_ops.reduce_prod(input_shape_tensor), math_ops.reduce_prod(output_shape_tensor));
 
-            return new Tensor[] { math_ops.truediv(sum_grad, math_ops.cast(factor, sum_grad.dtype)), null };
+                return new Tensor[] { math_ops.truediv(sum_grad, math_ops.cast(factor, sum_grad.dtype)), null };
+            }
         }
 
         /// <summary>

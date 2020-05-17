@@ -38,10 +38,11 @@ namespace TensorFlowNET.UnitTest.Training
             var noise = tf.random.normal(shape: NUM_EXAMPLES);
             var outputs = inputs * TRUE_W + TRUE_b + noise;
 
-            print($"Current loss: {loss(model(inputs), outputs).numpy()}");
+            Tensor init_loss = loss(model(inputs), outputs);
+            // print($"Current loss: {init_loss.numpy()}");
 
             // Define a training loop
-            Action<Tensor, Tensor, float> train = (inputs, outputs, learning_rate)
+            Func<Tensor, Tensor, float, Tensor> train = (inputs, outputs, learning_rate)
                 =>
                 {
                     using var t = tf.GradientTape();
@@ -49,13 +50,17 @@ namespace TensorFlowNET.UnitTest.Training
                     var (dW, db) = t.gradient(current_loss, (W, b));
                     W.assign_sub(learning_rate * dW);
                     b.assign_sub(learning_rate * db);
+                    return current_loss;
                 };
 
             var epochs = range(10);
             foreach(var epoch in epochs)
             {
-                train(inputs, outputs, 0.1f);
-                print($"Epoch %2d: W=%1.2f b=%1.2f, loss=%2.5f");
+                var current_loss = train(inputs, outputs, 0.1f);
+                print($"Epoch {epoch}: W={(float)W.numpy()} b={(float)b.numpy()}, loss={(float)current_loss.numpy()}");
+
+                if (epoch > 0) // skip first epoch
+                    Assert.IsTrue((bool)(current_loss < init_loss));
             }
         }
     }
