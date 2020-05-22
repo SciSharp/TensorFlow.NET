@@ -38,8 +38,8 @@ namespace Tensorflow
             public Optimizer GradientDescentOptimizer(Tensor learning_rate)
                 => new GradientDescentOptimizer(learning_rate);
 
-            public Optimizer AdamOptimizer(float learning_rate, string name = "Adam") 
-                => new AdamOptimizer(learning_rate, name: name);
+            public Optimizer AdamOptimizer(float learning_rate, float epsilon = 1e-8f, string name = "Adam") 
+                => new AdamOptimizer(learning_rate, epsilon:epsilon, name: name);
 
             public Optimizer AdamOptimizer(float learning_rate, TF_DataType dtype, string name = "Adam")
                 => new AdamOptimizer(learning_rate, name: name, dtype: dtype);
