@@ -38,6 +38,12 @@ namespace Tensorflow
                 TF_DataType dtype = TF_DataType.TF_FLOAT,
                 int? seed = null,
                 string name = null) => random_ops.random_normal(shape, mean, stddev, dtype, seed, name);
+            public Tensor categorical(
+                Tensor logits,
+                int num_samples,
+                int? seed = null,
+                string name = null,
+                TF_DataType output_dtype = TF_DataType.DtInvalid) => random_ops.multinomial(logits, num_samples, seed: seed, name: name, output_dtype: output_dtype);
         }
 
         public Tensor random_uniform(TensorShape shape,
