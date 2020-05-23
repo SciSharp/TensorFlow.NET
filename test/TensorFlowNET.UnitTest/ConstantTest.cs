@@ -160,6 +160,7 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.AreEqual(6.0, (double)c);
         }
 
+        [Ignore]
         [TestMethod]
         public void StringEncode()
         {
