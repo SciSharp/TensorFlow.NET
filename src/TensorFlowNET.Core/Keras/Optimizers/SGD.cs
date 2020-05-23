@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Tensorflow.Eager;
 
 namespace Tensorflow.Keras.Optimizers
 {
@@ -23,6 +25,29 @@ namespace Tensorflow.Keras.Optimizers
             _set_hyper("momentum", momentum);
 
             nesterov = nesterov;
+        }
+
+        protected override void _prepare_local(DeviceDType device_dtype, 
+            Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
+        {
+            base._prepare_local(device_dtype, _apply_state);
+
+            _apply_state[device_dtype]["momentum"] = array_ops.identity(
+                _get_hyper("momentum", device_dtype.DType));
+        }
+
+        protected override Operation _resource_apply_dense(ResourceVariable var, EagerTensor grad, Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
+        {
+            if (_momentum)
+            {
+                throw new NotImplementedException("_resource_apply_dense");
+            }
+            var device_dtype = _apply_state.Keys.FirstOrDefault(x => x.Device == var.Device && x.DType == var.dtype.as_base_dtype());
+
+            return gen_training_ops.resource_apply_gradient_descent(var.Handle as EagerTensor, 
+                _apply_state[device_dtype]["lr_t"] as EagerTensor, 
+                grad,
+                use_locking: _use_locking);
         }
     }
 }

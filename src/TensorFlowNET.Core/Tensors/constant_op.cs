@@ -124,6 +124,9 @@ namespace Tensorflow
                     case TF_DataType.TF_FLOAT:
                         value = Convert.ToSingle(value);
                         break;
+                    case TF_DataType.TF_INT64:
+                        value = Convert.ToInt64(value);
+                        break;
                     default:
                         break;
                 }

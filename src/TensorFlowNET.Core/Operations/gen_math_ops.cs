@@ -894,6 +894,19 @@ namespace Tensorflow
 
         public static Tensor floor_mod(Tensor x, Tensor y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "FloorMod", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+                return tensor;
+            }
+
             var _op = _op_def_lib._apply_op_helper("FloorMod", name, args: new { x, y });
 
             return _op.outputs[0];

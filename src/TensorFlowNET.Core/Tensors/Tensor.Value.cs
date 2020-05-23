@@ -163,6 +163,9 @@ namespace Tensorflow
                 case TF_DataType.TF_INT32:
                     storage = new UnmanagedStorage(NPTypeCode.Int32);
                     break;
+                case TF_DataType.TF_INT64:
+                    storage = new UnmanagedStorage(NPTypeCode.Int64);
+                    break;
                 case TF_DataType.TF_FLOAT:
                     storage = new UnmanagedStorage(NPTypeCode.Float);
                     break;

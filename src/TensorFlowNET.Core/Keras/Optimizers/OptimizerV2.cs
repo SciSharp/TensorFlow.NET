@@ -5,6 +5,8 @@ using System.Text;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
+using Tensorflow;
+using Tensorflow.Eager;
 
 namespace Tensorflow.Keras.Optimizers
 {
@@ -17,18 +19,32 @@ namespace Tensorflow.Keras.Optimizers
         protected virtual string _name { get; }
 
         ResourceVariable _iterations;
-        List<ResourceVariable> _weight = new List<ResourceVariable>();
-        Dictionary<string, float> _hyper = new Dictionary<string, float>();
-        Dictionary<string, ResourceVariable> _hyper_variables = new Dictionary<string, ResourceVariable>();
+        List<ResourceVariable> _weight;
+        Dictionary<string, float> _hyper;
+        Dictionary<string, ResourceVariable> _hyper_variables;
         protected bool _momentum;
         protected float _initial_decay = 0.0f;
+        protected bool _use_locking = true;
+
+        Dictionary<DeviceDType, Dictionary<string, Tensor>> apply_state;
 
         public OptimizerV2() : base()
         {
-
+            _weight = new List<ResourceVariable>();
+            _hyper = new Dictionary<string, float>();
+            _hyper_variables = new Dictionary<string, ResourceVariable>();
+            apply_state = new Dictionary<DeviceDType, Dictionary<string, Tensor>>();
         }
 
-        public void apply_gradients(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars)
+        /// <summary>
+        /// Apply gradients to variables.
+        /// </summary>
+        /// <param name="grads_and_vars"></param>
+        /// <param name="name"></param>
+        /// <param name="experimental_aggregate_gradients"></param>
+        public void apply_gradients(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars,
+            string name = null,
+            bool experimental_aggregate_gradients = true)
         {
             var var_list = grads_and_vars.Select(x => x.Item2).ToArray();
             tf_with(ops.name_scope(_name), delegate
@@ -38,49 +54,91 @@ namespace Tensorflow.Keras.Optimizers
                 if (grads_and_vars == null || grads_and_vars.Count() == 0)
                     return control_flow_ops.no_op();
 
-                //var apply_state = 
-                _prepare(var_list);
-
-                _aggregate_gradients(grads_and_vars);
+                apply_state = _prepare(var_list);
+                if(experimental_aggregate_gradients)
+                {
+                    // var reduced_grads = _aggregate_gradients(grads_and_vars);
+                    _distributed_apply(grads_and_vars, name, apply_state);
+                }
 
                 return null;
             });
         }
 
-        void _aggregate_gradients(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars)
+        void apply_grad_to_update_var(ResourceVariable var, EagerTensor grad)
         {
-            var lr_t = _hyper_variables["learning_rate"];
-            foreach (var grad_and_var in grads_and_vars)
+            _resource_apply_dense(var, grad, apply_state);
+        }
+
+        protected virtual Operation _resource_apply_dense(ResourceVariable var, 
+            EagerTensor grad, 
+            Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
+        {
+            throw new NotImplementedException("_resource_apply_dense");
+        }
+
+        void _distributed_apply(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars,
+            string name,
+            Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
+        {
+            tf_with(ops.name_scope(name, "", new { skip_on_eager = true }), delegate
             {
-                var grad = grad_and_var.Item1;
-                var variable = grad_and_var.Item2;
-                // variable.Handle - grad * lr_t.Handle;
+                foreach(var (grad, var) in grads_and_vars)
+                {
+                    tf_with(ops.name_scope("update"), delegate
+                    {
+                        apply_grad_to_update_var(var, grad as EagerTensor);
+                    });
+                }
+
+                _iterations.assign_add(ops.convert_to_tensor(1, dtype: _iterations.dtype));
+            });
+        }
+
+        Tensor[] _aggregate_gradients(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars)
+        {
+            return grads_and_vars.Select(x => x.Item1).ToArray();
+        }
+
+        Dictionary<DeviceDType, Dictionary<string, Tensor>> _prepare(ResourceVariable[] var_list)
+        {
+            var _apply_state = new Dictionary<DeviceDType, Dictionary<string, Tensor>>();
+            var keys = var_list.Select(x => new DeviceDType
+            {
+                Device = x.Device,
+                DType = x.dtype.as_base_dtype()
+            }).Distinct(new DeviceDType()).ToArray();
+
+            foreach(var device_dtype in keys)
+            {
+                _apply_state[device_dtype] = new Dictionary<string, Tensor>();
+                _prepare_local(device_dtype, _apply_state);
+            }
+
+            return _apply_state;
+        }
+
+        protected virtual void _prepare_local(DeviceDType device_dtype, 
+            Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
+        {
+            if (_hyper.ContainsKey("learning_rate"))
+            {
+                var lr_t = array_ops.identity(_decayed_lr(device_dtype.DType));
+                _apply_state[device_dtype]["lr_t"] = lr_t;
             }
         }
 
-        void _prepare(ResourceVariable[] var_list)
-        {
-            var keys = new HashSet<(string, TF_DataType)>();
-            foreach(var variable in var_list)
-            {
-                var lr_t = _prepare_local(variable.Device, variable.dtype.as_base_dtype());
-                var momentum = _get_hyper("momentum", variable.dtype);
-                array_ops.identity(momentum);
-            }
-        }
-
-        ResourceVariable _prepare_local(string var_device, TF_DataType var_dtype)
+        Tensor _decayed_lr(TF_DataType var_dtype)
         {
             var lr_t = _get_hyper("learning_rate", var_dtype);
-            if(_initial_decay > 0)
+            if(_initial_decay > 0.0f)
             {
-
+                throw new NotImplementedException("");
             }
-
             return lr_t;
         }
 
-        ResourceVariable _get_hyper(string name, TF_DataType dtype = TF_DataType.DtInvalid)
+        protected ResourceVariable _get_hyper(string name, TF_DataType dtype = TF_DataType.DtInvalid)
         {
             var value = _hyper_variables[name];
             return math_ops.cast(value, dtype);

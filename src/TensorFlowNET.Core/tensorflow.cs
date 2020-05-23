@@ -57,21 +57,28 @@ namespace Tensorflow
                 for (int i = 0; i < num_grads; i++)
                     input_grads[i] = new EagerTensor(*((IntPtr*)gradients + i));
 
-                var add_n = gen_math_ops.add_n(input_grads);
-                return (add_n as EagerTensor).EagerTensorHandle;
+                var add_n = gen_math_ops.add_n(input_grads) as EagerTensor;
+                return add_n.EagerTensorHandle;
             });
 
             ops.RegisterFromAssembly();
-            c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, num_attrs, output_grads, skip_input_indices) =>
+            c_api.TFE_RegisterGradientFunction((op_name, op_inputs_handle, op_outputs, num_attrs, output_grads, skip_input_indices) =>
             {
+                var op_inputs = Marshal.PtrToStructure<BindingArray>(op_inputs_handle);
                 var input_tensors = new EagerTensor[op_inputs.length];
                 for (int i = 0; i < op_inputs.length; i++)
+                {
+                    // Console.WriteLine($"debug 4: {op_name} op_inputs=" + (*(IntPtr*)op_inputs_handle).ToString("x16").ToUpper() + $" op_inputs[{i}]=" + (*((IntPtr*)op_inputs.array + i)).ToString("x16").ToUpper());
+                    if((*((IntPtr*)op_inputs.array + i)).ToString("x16").ToUpper().StartsWith("FFFFF"))
+                    {
+
+                    }
                     input_tensors[i] = new EagerTensor(*((IntPtr*)op_inputs.array + i));
+                }
 
                 var output_tensors = new EagerTensor[op_outputs.length];
                 for (int i = 0; i < op_outputs.length; i++)
-                    if (op_outputs.array != IntPtr.Zero)
-                        output_tensors[i] = new EagerTensor(*((IntPtr*)op_outputs.array + i));
+                    output_tensors[i] = new EagerTensor(*((IntPtr*)op_outputs.array + i));
 
                 var output_grad_tensors = new EagerTensor[output_grads.length];
                 for (int i = 0; i < output_grads.length; i++)
@@ -85,6 +92,7 @@ namespace Tensorflow
                 {
                     NumInputs = input_tensors.Length,
                     Inputs = input_tensors,
+                    NumOutputs = output_tensors.Length,
                     Outputs = output_tensors,
                     SkipInputIndices = skip_input_indices_param
                 }, output_grad_tensors);

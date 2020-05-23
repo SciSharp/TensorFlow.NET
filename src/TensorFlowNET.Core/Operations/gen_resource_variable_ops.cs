@@ -44,6 +44,32 @@ namespace Tensorflow
             return null;
         }
 
+        /// <summary>
+        /// Adds a value to the current value of a variable.
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="value"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Operation assign_add_variable_op(Tensor resource, Tensor value, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AssignAddVariableOp", name,
+                    new IntPtr[]
+                    {
+                        resource as EagerTensor,
+                        value as EagerTensor
+                    }, 2, null, status);
+                status.Check(true);
+                return tensor;
+            }
+
+            return null;
+        }
+
         public static Operation assign_variable_op(Tensor resource, Tensor value, string name = null)
         {
             if (tf.context.executing_eagerly())

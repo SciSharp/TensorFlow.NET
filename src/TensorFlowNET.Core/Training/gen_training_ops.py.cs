@@ -14,6 +14,10 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
+using Tensorflow.Eager;
+using static Tensorflow.Binding;
+
 namespace Tensorflow
 {
     public class gen_training_ops
@@ -46,6 +50,35 @@ namespace Tensorflow
         public static Tensor apply_gradient_descent(RefVariable var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
         {
             var _op = _op_def_lib._apply_op_helper("ApplyGradientDescent", name, new
+            {
+                var,
+                alpha,
+                delta,
+                use_locking
+            });
+
+            return _op.outputs[0];
+        }
+
+        public static Operation resource_apply_gradient_descent(EagerTensor var, EagerTensor alpha, EagerTensor delta, bool use_locking = false, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                using var status = new Status();
+                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ResourceApplyGradientDescent", name, new IntPtr[]
+                    {
+                        var,
+                        alpha,
+                        delta
+                    }, 3, 
+                    op => wrap_tfe_src.SetOpAttrs(op, "use_locking", use_locking), 
+                    status);
+                status.Check(true);
+                return tensor;
+            }
+
+            var _op = _op_def_lib._apply_op_helper("ResourceApplyGradientDescent", name, new
             {
                 var,
                 alpha,

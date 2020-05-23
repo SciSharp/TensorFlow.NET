@@ -33,5 +33,17 @@ namespace Tensorflow
         {
             gen_resource_variable_ops.assign_sub_variable_op(handle, delta, name: name);
         }
+
+        /// <summary>
+        /// Adds a value to this variable.
+        /// </summary>
+        /// <param name="delta"></param>
+        /// <param name="use_locking"></param>
+        /// <param name="name"></param>
+        /// <param name="read_value"></param>
+        public void assign_add(Tensor delta, bool use_locking = false, string name = null, bool read_value = true)
+        {
+            gen_resource_variable_ops.assign_add_variable_op(handle, delta, name: name);
+        }
     }
 }

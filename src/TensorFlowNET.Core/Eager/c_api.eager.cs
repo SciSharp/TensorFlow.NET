@@ -12,7 +12,7 @@ namespace Tensorflow
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate IntPtr _gradient_function_callback(string op_name,
-            BindingArray op_inputs,
+            IntPtr op_inputs,
             BindingArray op_outputs,
             int num_attrs,
             BindingArray output_grads, 
