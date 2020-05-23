@@ -528,5 +528,7 @@ namespace Tensorflow
 
         public Tensor square(Tensor x, string name = null)
             => gen_math_ops.square(x, name: name);
+        public Tensor squared_difference(Tensor x, Tensor y, string name = null)
+            => gen_math_ops.squared_difference(x: x, y: y, name: name);
     }
 }
