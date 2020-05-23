@@ -5,7 +5,7 @@ using Tensorflow;
 using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.NativeAPI
 {
     /// <summary>
     /// tensorflow\c\c_api_test.cc

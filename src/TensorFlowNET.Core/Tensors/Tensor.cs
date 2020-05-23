@@ -32,7 +32,8 @@ namespace Tensorflow
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
     [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
-    public partial class Tensor : DisposableObject, 
+    public partial class Tensor : DisposableObject,
+        ITensor,
         ITensorOrOperation, 
         _TensorLike, 
         ITensorOrTensorArray, 

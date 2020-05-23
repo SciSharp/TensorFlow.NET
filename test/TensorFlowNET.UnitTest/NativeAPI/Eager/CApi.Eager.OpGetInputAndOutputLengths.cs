@@ -4,7 +4,7 @@ using Tensorflow;
 using Tensorflow.Eager;
 using Buffer = System.Buffer;
 
-namespace TensorFlowNET.UnitTest.Eager
+namespace TensorFlowNET.UnitTest.NativeAPI
 {
     public partial class CApiEagerTest
     {

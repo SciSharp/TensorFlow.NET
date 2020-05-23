@@ -3,7 +3,7 @@ using System;
 using System.Runtime.InteropServices;
 using Tensorflow;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.NativeAPI
 {
     /// <summary>
     /// tensorflow\c\c_api_test.cc

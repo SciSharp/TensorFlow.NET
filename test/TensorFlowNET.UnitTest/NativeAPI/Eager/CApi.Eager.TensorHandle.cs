@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
-using Tensorflow.Eager;
-using Buffer = System.Buffer;
+using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.Eager
+namespace TensorFlowNET.UnitTest.NativeAPI
 {
     public partial class CApiEagerTest
     {
@@ -22,7 +21,7 @@ namespace TensorFlowNET.UnitTest.Eager
             ASSERT_EQ(16ul, c_api.TF_TensorByteSize(t));
 
             var data = new float[] { 0f, 0f, 0f, 0f };
-            memcpy(data, c_api.TF_TensorData(t), data.Length * sizeof(float));
+            tf.memcpy(data, c_api.TF_TensorData(t), data.Length * sizeof(float));
 
             EXPECT_EQ(1.0f, data[0]);
             EXPECT_EQ(2.0f, data[1]);

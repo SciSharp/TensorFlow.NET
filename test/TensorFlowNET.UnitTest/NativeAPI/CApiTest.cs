@@ -169,50 +169,5 @@ namespace TensorFlowNET.UnitTest
 
         protected void TFE_OpSetDevice(IntPtr op, string device_name, IntPtr status)
             => c_api.TFE_OpSetDevice(op, device_name, status);
-
-        protected unsafe void memcpy<T>(T* dst, void* src, ulong size)
-            where T : unmanaged
-        {
-            Buffer.MemoryCopy(src, dst, size, size);
-        }
-
-        protected unsafe void memcpy<T>(void* dst, T* src, ulong size)
-            where T : unmanaged
-        {
-            Buffer.MemoryCopy(src, dst, size, size);
-        }
-
-        protected unsafe void memcpy(void * dst, IntPtr src, ulong size)
-        {
-            Buffer.MemoryCopy(src.ToPointer(), dst, size, size);
-        }
-
-        protected unsafe void memcpy<T>(T[] dst, IntPtr src, ulong size)
-            where T : unmanaged
-        {
-            fixed (void* p = &dst[0])
-                Buffer.MemoryCopy(src.ToPointer(), p, size, size);
-        }
-
-        protected unsafe void memcpy<T>(T[] dst, IntPtr src, long size)
-            where T : unmanaged
-        {
-            fixed (void* p = &dst[0])
-                Buffer.MemoryCopy(src.ToPointer(), p, size, size);
-        }
-
-        protected unsafe void memcpy<T>(IntPtr dst, T[] src, ulong size)
-            where T : unmanaged
-        {
-            fixed (void* p = &src[0])
-                Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
-        }
-
-        protected unsafe void memcpy<T>(IntPtr dst, T[] src, long size)
-            where T: unmanaged
-        {
-            fixed (void* p = &src[0])
-                Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
-        }
     }
 }

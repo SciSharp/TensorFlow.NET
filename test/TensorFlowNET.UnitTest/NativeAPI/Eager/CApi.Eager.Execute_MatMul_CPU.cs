@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
-using Tensorflow.Eager;
-using Buffer = System.Buffer;
+using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.Eager
+namespace TensorFlowNET.UnitTest.NativeAPI
 {
     public partial class CApiEagerTest
     {
@@ -43,7 +42,7 @@ namespace TensorFlowNET.UnitTest.Eager
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             var product = new float[4];
             EXPECT_EQ(product.Length * sizeof(float), (int)TF_TensorByteSize(t));
-            memcpy(product, TF_TensorData(t), TF_TensorByteSize(t));
+            tf.memcpy(product, TF_TensorData(t), TF_TensorByteSize(t));
 
             c_api.TF_DeleteTensor(t);
             EXPECT_EQ(7f, product[0]);

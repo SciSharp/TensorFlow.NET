@@ -17,12 +17,26 @@ namespace Tensorflow
         /// </summary>
         public void TensorCreation()
         {
-            int total = 10 * 1000 * 1000;
-            for(int i = 0; i < total; i++)
+            int total = 1 * 1000 * 1000;
+            for (int i = 0; i < total; i++)
             {
-                var const1 = tf.constant(3112.0f);
-                // const1.Dispose();
+                /*var const1 = new Tensor(new float[,]
+                 {
+                    { 3.0f, 1.0f },
+                    { 1.0f, 2.0f }
+                 });
+                const1.Dispose();*/
+
+                var tensor = new EagerTensorV2(new float[,]
+                 {
+                    { 3.0f, 1.0f },
+                    { 1.0f, 2.0f }
+                 });
+
+                tensor.Dispose();
             }
+
+            GC.Collect();
         }
     }
 }

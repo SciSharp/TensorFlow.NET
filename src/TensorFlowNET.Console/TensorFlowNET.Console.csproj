@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
   </ItemGroup>
 

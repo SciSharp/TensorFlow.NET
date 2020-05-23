@@ -9,7 +9,7 @@ using Tensorflow;
 using static Tensorflow.Binding;
 using Tensorflow.Framework;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.NativeAPI
 {
     [Ignore]
     [TestClass]

@@ -78,6 +78,9 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len, Deallocator deallocator, ref DeallocatorArgs deallocator_arg);
 
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_Tensor TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, long len, DeallocatorV2 deallocator, IntPtr args);
+
         /// <summary>
         /// Return a new tensor that holds the bytes data[0,len-1]
         /// </summary>

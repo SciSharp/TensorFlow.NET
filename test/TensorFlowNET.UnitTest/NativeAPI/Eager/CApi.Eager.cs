@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
+using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.Eager
+namespace TensorFlowNET.UnitTest.NativeAPI
 {
     /// <summary>
     /// tensorflow\c\eager\c_api_test.cc
@@ -15,7 +16,7 @@ namespace TensorFlowNET.UnitTest.Eager
             var dims = new long[] { 2, 2 };
             var data = new float[] { 1.0f, 2.0f, 3.0f, 4.0f };
             var t = c_api.TF_AllocateTensor(TF_FLOAT, dims, dims.Length, (ulong)data.Length * sizeof(float));
-            memcpy(c_api.TF_TensorData(t), data, data.Length * sizeof(float));
+            tf.memcpy(c_api.TF_TensorData(t), data, data.Length * sizeof(float));
             
             var status = c_api.TF_NewStatus();
             var th = c_api.TFE_NewTensorHandle(t, status);
@@ -104,7 +105,7 @@ namespace TensorFlowNET.UnitTest.Eager
 
             // Convert 'value' to a TF_Tensor then a TFE_TensorHandle.
             var t = c_api.TF_AllocateTensor(TF_DataType.TF_FLOAT, new long[0], 0, sizeof(float));
-            memcpy(TF_TensorData(t).ToPointer(), &value, TF_TensorByteSize(t));
+            tf.memcpy(TF_TensorData(t).ToPointer(), &value, TF_TensorByteSize(t));
 
             var value_handle = c_api.TFE_NewTensorHandle(t, status);
             if (TF_GetCode(status) != TF_OK) return IntPtr.Zero;
@@ -126,7 +127,7 @@ namespace TensorFlowNET.UnitTest.Eager
             var dims = new long[] { 1 };
             var data = new int[] { 1 };
             var t = c_api.TF_AllocateTensor(TF_DataType.TF_INT32, dims, 1, sizeof(int));
-            memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
+            tf.memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
             var status = TF_NewStatus();
             var th = c_api.TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -139,7 +140,7 @@ namespace TensorFlowNET.UnitTest.Eager
         {
             var data = new[] { value };
             var t = c_api.TF_AllocateTensor(TF_BOOL, null, 0, sizeof(bool));
-            memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
+            tf.memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
             var status = TF_NewStatus();
             var th = TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -152,7 +153,7 @@ namespace TensorFlowNET.UnitTest.Eager
         {
             var data = new [] { value };
             var t = c_api.TF_AllocateTensor(TF_FLOAT, null, 0, sizeof(float));
-            memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
+            tf.memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
             var status = TF_NewStatus();
             var th = TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));

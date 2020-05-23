@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Attributes;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace TensorFlowBenchmark
@@ -18,7 +19,7 @@ namespace TensorFlowBenchmark
             data = new double[100];
         }
 
-        [Benchmark]
+        /*[Benchmark]
         public void ScalarTensor()
         {
             var g = new Graph();
@@ -71,17 +72,27 @@ namespace TensorFlowBenchmark
 
                 }
             }
+        }*/
+
+        [Benchmark]
+        public void RawTensorV1()
+        {
+            var c = new EagerTensor(new float[,]
+            {
+                { 3.0f, 1.0f },
+                { 1.0f, 2.0f }
+            }, "");
         }
 
         [Benchmark]
-        public void Constant()
+        public void RawTensorV2()
         {
-            for (int i = 0; i < 100; i++)
+            var c = new EagerTensorV2(new float[,]
             {
-                var c = tf.constant(3112);
-            }
+                { 3.0f, 1.0f },
+                { 1.0f, 2.0f }
+            });
         }
-
     }
 }
 
