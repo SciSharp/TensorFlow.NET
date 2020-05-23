@@ -26,6 +26,17 @@ namespace Tensorflow
         public int length;
 
         public static implicit operator BindingArray(IntPtr handle)
-            => Marshal.PtrToStructure<BindingArray>(handle);
+            => handle == IntPtr.Zero ? default : Marshal.PtrToStructure<BindingArray>(handle);
+
+        public unsafe IntPtr this[int index]
+            => array == IntPtr.Zero ? IntPtr.Zero : * ((IntPtr*)array + index);
+
+        public unsafe IntPtr[] Data()
+        {
+            var results = new IntPtr[length];
+            for (int i = 0; i < length; i++)
+                results[i] = array == IntPtr.Zero ? IntPtr.Zero : * ((IntPtr*)array + i);
+            return results;
+        }
     }
 }

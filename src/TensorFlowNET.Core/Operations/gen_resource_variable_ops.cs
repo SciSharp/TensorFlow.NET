@@ -30,7 +30,7 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "AssignSubVariableOp", name,
                     new IntPtr[] 
                     { 
@@ -38,7 +38,7 @@ namespace Tensorflow
                         value as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
-                return tensor;
+                return results[0];
             }
 
             return null;
@@ -56,7 +56,7 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "AssignAddVariableOp", name,
                     new IntPtr[]
                     {
@@ -64,7 +64,7 @@ namespace Tensorflow
                         value as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
-                return tensor;
+                return results[0];
             }
 
             return null;
@@ -75,7 +75,7 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "AssignVariableOp", name,
                     new IntPtr[]
                     {
@@ -83,7 +83,7 @@ namespace Tensorflow
                         value as EagerTensor
                     }, 2, null, status);
                 status.Check(true);
-                return tensor;
+                return null;
             }
 
             var _op = _op_def_lib._apply_op_helper("AssignVariableOp", name, new { resource, value });
@@ -96,12 +96,12 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "VarIsInitializedOp", name, 
                     new IntPtr[] { resource as EagerTensor }, 
                     1, null, status);
                 status.Check(true);
-                return tensor;
+                return new EagerTensor(results[0]);
             }
 
             var _op = _op_def_lib._apply_op_helper("VarIsInitializedOp", name, new { resource });
@@ -121,10 +121,10 @@ namespace Tensorflow
         public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape, 
             string container ="", string shared_name = "", string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if(tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "VarHandleOp", name, null, 0,
                     op => wrap_tfe_src.SetOpAttrs(op,
                             "container", container,
@@ -133,7 +133,7 @@ namespace Tensorflow
                             "shape", shape.dims), 
                     status);
                 status.Check(true);
-                return tensor;
+                return new EagerTensor(results[0]);
             }
 
             var _op = _op_def_lib._apply_op_helper("VarHandleOp", name, new {
@@ -158,13 +158,13 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "ReadVariableOp", name, 
                     new IntPtr[] { resource as EagerTensor }, 1,
                     op => wrap_tfe_src.SetOpAttrs(op, "dtype", dtype),
                     status);
                 status.Check(true);
-                return tensor;
+                return new EagerTensor(results[0]);
             }
 
             var _op = _op_def_lib._apply_op_helper("ReadVariableOp", name, new

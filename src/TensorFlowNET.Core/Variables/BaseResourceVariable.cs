@@ -129,6 +129,7 @@ namespace Tensorflow
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             // delete
+            // c_api.TFE_DeleteResourceVariable(handle);
         }
     }
 }

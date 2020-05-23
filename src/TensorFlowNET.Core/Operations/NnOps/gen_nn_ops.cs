@@ -468,13 +468,13 @@ namespace Tensorflow.Operations
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Relu", name, new IntPtr[]
                     {
                         features as EagerTensor,
                     }, 1, null, status);
                 status.Check(true);
-                return tensor;
+                return new EagerTensor(results[0]);
             }
 
             var _op = _op_def_lib._apply_op_helper("Relu", name: name, args: new { features });
@@ -486,13 +486,13 @@ namespace Tensorflow.Operations
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Tanh", name, new IntPtr[]
                     {
                         x as EagerTensor,
                     }, 1, null, status);
                 status.Check(true);
-                return new EagerTensor(tensor);
+                return new EagerTensor(results[0]);
             }
 
             var _op = _op_def_lib._apply_op_helper("Tanh", name: name, args: new { x });

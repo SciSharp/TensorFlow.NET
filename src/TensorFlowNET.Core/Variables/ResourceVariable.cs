@@ -239,5 +239,11 @@ namespace Tensorflow
         {
             return $"tf.Variable: '{Name}' shape={string.Join(",", shape)}, dtype={dtype.as_numpy_name()}, numpy={EagerTensor.GetFormattedString(dtype, numpy())}";
         }
+
+        protected override void DisposeUnmanagedResources(IntPtr handle)
+        {
+            // delete
+            // c_api.TFE_DeleteResourceVariable(handle);
+        }
     }
 }

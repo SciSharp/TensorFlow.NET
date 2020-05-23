@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Tensorflow.Eager;
@@ -33,13 +34,11 @@ namespace Tensorflow.Gradients
         public unsafe ResourceVariable[] watched_variables()
         {
             BindingArray result = c_api.TFE_TapeWatchedVariables(_handle);
-            var variables = new ResourceVariable[result.length];
-            for (int i = 0; i < result.length; i++)
+            var variables = result.Data().Select(x =>
             {
-                var handle = *((IntPtr*)result.array + i);
-                var tensor = c_api.ResourceVariable_Handle(handle);
-                variables[i] = new ResourceVariable(handle, tensor);
-            }
+                var tensor = c_api.ResourceVariable_Handle(x);
+                return new ResourceVariable(x, tensor);
+            }).ToArray();
 
             return variables;
         }

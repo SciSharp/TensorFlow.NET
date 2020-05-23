@@ -17,6 +17,6 @@ namespace Tensorflow
             => tensor._handle;
 
         public override string ToString()
-            => $"TF_Tensor {_handle}";
+            => $"TF_Tensor 0x{_handle.ToString("x16")}";
     }
 }

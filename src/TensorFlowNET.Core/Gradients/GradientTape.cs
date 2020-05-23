@@ -94,15 +94,22 @@ namespace Tensorflow.Gradients
             }
 
             using var status = new Status();
-            IntPtr et = c_api.TFE_TapeGradient(_tape,
-                new IntPtr[] { target as EagerTensor }, 1,
-                new IntPtr[] { sources.Item1.Handle as EagerTensor, sources.Item2.Handle as EagerTensor }, 2,
+            BindingArray result_handle = c_api.TFE_TapeGradient(_tape,
+                new IntPtr[] 
+                { 
+                    target as EagerTensor 
+                }, 1,
+                new IntPtr[] 
+                { 
+                    (sources.Item1.Handle as EagerTensor).EagerTensorHandle, 
+                    (sources.Item2.Handle as EagerTensor).EagerTensorHandle 
+                }, 2,
                 status);
             status.Check(true);
 
-            var results = new Tensor[2];
-            for (int i = 0; i < 2; i++)
-                results[i] = new EagerTensor(*((IntPtr*)et + i));
+            var results = result_handle.Data().Select(x => new EagerTensor(x)).ToArray();
+
+
             if (!_persistent)
             {
                 // Keep track of watched variables before setting tape to None

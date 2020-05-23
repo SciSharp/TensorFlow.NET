@@ -27,35 +27,27 @@ namespace Tensorflow.Eager
         /// <param name="ctx">The value of context.context().</param>
         /// <param name="name">Customized name for the operation.</param>
         /// <returns>List of output Tensor objects. The list is empty if there are no outputs</returns>
-        public Tensor execute(Context ctx, string op_name, int num_outputs, 
-            Tensor[] inputs, object[] attrs, 
+        public EagerTensor[] execute(Context ctx, string op_name, int num_outputs,
+            EagerTensor[] inputs, object[] attrs, 
             string name = null)
         {
             ctx.ensure_initialized();
 
-            // TFE_TensorHandle
             using var status = new Status();
-            /*var retVals = wrap_tfe_src.TFE_Execute(ctx, ctx.device_name, op_name, inputs, attrs, num_outputs, status);
 
-            return new EagerTensor((TFE_TensorHandle)retVals[0]);*/
-
-            IntPtr[] outputs = new IntPtr[num_outputs];
-            c_api.TFE_QuickExecute(ctx,
-                ctx.device_name,
+            BindingArray results = c_api.TFE_QuickExecute(ctx,
+               ctx.device_name,
                op_name,
-               inputs.Select(x => (x as EagerTensor).GetTfeTensorHandle()).ToArray(), 
+               inputs.Select(x => x.EagerTensorHandle).ToArray(),
                inputs.Length,
                op => wrap_tfe_src.SetOpAttrs(op, attrs),
-               outputs, 
-               num_outputs,
                status);
             status.Check(true);
 
-            TFE_TensorHandle tfe_tensor_handle = outputs[0];
-            return new EagerTensor(tfe_tensor_handle);
+            return results.Data().Select(x => new EagerTensor(x)).ToArray();
         }
 
-        public (TF_DataType, Tensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)
+        public (TF_DataType, EagerTensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)
         {
             if (args.Length == 0 && default_dtype != TF_DataType.DtInvalid)
                 return (default_dtype, null);
@@ -72,10 +64,10 @@ namespace Tensorflow.Eager
 
             if (dtype == TF_DataType.DtInvalid)
             {
-                var ret = new List<Tensor>();
+                var ret = new List<EagerTensor>();
                 foreach (var t in args)
                 {
-                    ret.Add(ops.convert_to_tensor(t, dtype, preferred_dtype: default_dtype, ctx: ctx));
+                    ret.Add(ops.convert_to_tensor(t, dtype, preferred_dtype: default_dtype, ctx: ctx) as EagerTensor);
                     if (dtype == TF_DataType.DtInvalid)
                         dtype = ret.Last().dtype;
                 }

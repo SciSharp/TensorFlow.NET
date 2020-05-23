@@ -42,7 +42,7 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                EagerTensorHandle tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "RandomStandardNormal", name, new IntPtr[]
                     {
                         shape as EagerTensor,
@@ -53,7 +53,7 @@ namespace Tensorflow
                             "dtype", dtype), 
                     status);
                 status.Check(true);
-                return tensor;
+                return new EagerTensor(results[0]);
             }
 
             var _op = _op_def_lib._apply_op_helper("RandomStandardNormal", 

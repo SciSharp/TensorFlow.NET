@@ -11,6 +11,9 @@ namespace Tensorflow
         public static extern IntPtr TFE_NewResourceVariable();
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TFE_DeleteResourceVariable(IntPtr variable);
+
+        [DllImport(TensorFlowLibName)]
         public static extern void TFE_SetResourceVariableHandle(IntPtr variable, IntPtr tensor);
 
         [DllImport(TensorFlowLibName)]

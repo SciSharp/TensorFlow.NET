@@ -159,7 +159,7 @@ namespace Tensorflow
             switch (dtype)
             {
                 case TF_DataType.TF_STRING:
-                    return StringData();
+                    return (NDArray)StringData()[0];
                 case TF_DataType.TF_INT32:
                     storage = new UnmanagedStorage(NPTypeCode.Int32);
                     break;

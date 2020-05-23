@@ -8,15 +8,21 @@ namespace Tensorflow
     public partial class c_api
     {
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_RegisterGradientFunction(_gradient_function_callback callbackPointer);
+        public static extern void TFE_RegisterGradientFunction(gradient_function_callback gradientFunctionCallback,
+            delete_backward_function_callback deleteBackwardFunctionCallback);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate IntPtr _gradient_function_callback(string op_name,
-            IntPtr op_inputs,
+        public delegate IntPtr gradient_function_callback(string op_name,
+            BindingArray op_inputs,
             BindingArray op_outputs,
             int num_attrs,
             BindingArray output_grads, 
             BindingArray skip_input_indices);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        public delegate void delete_backward_function_callback(string op_name,
+            BindingArray op_inputs,
+            BindingArray op_outputs);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_WrapGradientResult(IntPtr[] gradients, int num_gradients);
@@ -26,7 +32,7 @@ namespace Tensorflow
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate IntPtr VSpace_callback_Ones(long[] shape, int dims, TF_DataType dtype);
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate IntPtr VSpace_callback_AggregateGrads(IntPtr gradients, int num_grads);
+        public delegate IntPtr VSpace_callback_AggregateGrads(BindingArray gradients);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_RegisterVSpace(IntPtr vspace);
@@ -208,13 +214,13 @@ namespace Tensorflow
         /// <param name="t">const tensorflow::Tensor&</param>
         /// <returns>TFE_TensorHandle*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_TensorHandle TFE_NewTensorHandle(IntPtr t, IntPtr status);
+        public static extern IntPtr TFE_NewTensorHandle(IntPtr t, IntPtr status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_TensorHandle EagerTensor_Handle(IntPtr t);
+        public static extern IntPtr EagerTensor_Handle(IntPtr t);
 
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_TensorHandle TFE_EagerTensorFromHandle(IntPtr ctx, IntPtr h);
+        public static extern IntPtr TFE_EagerTensorFromHandle(IntPtr ctx, IntPtr h);
 
         /// <summary>
         /// Sets the default execution mode (sync/async). Note that this can be
@@ -242,7 +248,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TF_Tensor TFE_TensorHandleResolve(IntPtr h, IntPtr status);
+        public static extern IntPtr TFE_TensorHandleResolve(IntPtr h, IntPtr status);
 
 
         /// <summary>
@@ -292,6 +298,13 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_DeleteTensorHandle(IntPtr h);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="h">TFE_TensorHandle*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_DeleteEagerTensor(IntPtr h);
+        
         /// <summary>
         /// Creates a new eager Executor. Nodes in one executor are guaranteed to be
         /// executed in sequence. Assigning nodes to different executors allows executing
@@ -370,9 +383,15 @@ namespace Tensorflow
         public static extern IntPtr TFE_QuickExecute(IntPtr ctx,
             string device_name,
             string op_name,
-            IntPtr[] inputs, int input_size,
+            IntPtr[] inputs, 
+            int input_size,
             TFE_FastPathExecute_SetOpAttrs set_op_attrs,
-            IntPtr[] outputs, int output_size,
+            IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_QuickExecute1(
+            string op_name,
+            int input_size,
             IntPtr status);
 
         [DllImport(TensorFlowLibName)]

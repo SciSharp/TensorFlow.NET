@@ -9,38 +9,9 @@ namespace Tensorflow.Eager
     public partial class EagerTensor : Tensor
     {
         Status status = new Status();
-        TFE_TensorHandle tfe_tensor_handle;
+        IntPtr tfe_tensor_handle;
         public IntPtr EagerTensorHandle { get; set; }
         public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(tfe_tensor_handle, status));
-
-        public EagerTensor(IntPtr handle) : base(handle)
-        {
-            EagerTensorHandle = handle;
-            tfe_tensor_handle = c_api.EagerTensor_Handle(handle);
-            _handle = c_api.TFE_TensorHandleResolve(tfe_tensor_handle, status);
-        }
-
-        public EagerTensor(TFE_TensorHandle handle) : base(handle)
-        {
-            tfe_tensor_handle = handle;
-            _handle = c_api.TFE_TensorHandleResolve(tfe_tensor_handle, status);
-            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
-        }
-
-        public EagerTensor(string value, string device_name) : base(value)
-        {
-            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
-        }
-
-        public EagerTensor(NDArray value, string device_name) : base(value)
-        {
-            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
-        }
-
-        public IntPtr GetTfeTensorHandle()
-            => tfe_tensor_handle;
 
         public override string ToString()
         {

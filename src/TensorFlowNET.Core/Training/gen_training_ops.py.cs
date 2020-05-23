@@ -65,7 +65,7 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 using var status = new Status();
-                var tensor = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "ResourceApplyGradientDescent", name, new IntPtr[]
                     {
                         var,
@@ -75,7 +75,7 @@ namespace Tensorflow
                     op => wrap_tfe_src.SetOpAttrs(op, "use_locking", use_locking), 
                     status);
                 status.Check(true);
-                return tensor;
+                return results[0];
             }
 
             var _op = _op_def_lib._apply_op_helper("ResourceApplyGradientDescent", name, new

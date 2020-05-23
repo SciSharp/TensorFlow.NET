@@ -513,7 +513,11 @@ namespace Tensorflow.Gradients
                             input_shape = array_ops.shape(op.inputs[0]);
                         return new Tensor[] { gen_array_ops.tile(grad, input_shape), null };
                     }
-                }
+                    else
+                    {
+
+                    }
+                 }
             }
 
             input_shape = array_ops.shape(op.inputs[0]);

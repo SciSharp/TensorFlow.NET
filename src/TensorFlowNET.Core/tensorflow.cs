@@ -51,39 +51,19 @@ namespace Tensorflow
             {
                 var ones = constant_op.constant(1.0f, dtype: dtype) as EagerTensor;
                 return ones.EagerTensorHandle;
-            }, (gradients, num_grads) =>
+            }, (gradients) =>
             {
-                var input_grads = new EagerTensor[num_grads];
-                for (int i = 0; i < num_grads; i++)
-                    input_grads[i] = new EagerTensor(*((IntPtr*)gradients + i));
-
+                var input_grads = gradients.Data().Select(x => new EagerTensor(x)).ToArray();
                 var add_n = gen_math_ops.add_n(input_grads) as EagerTensor;
                 return add_n.EagerTensorHandle;
             });
 
             ops.RegisterFromAssembly();
-            c_api.TFE_RegisterGradientFunction((op_name, op_inputs_handle, op_outputs, num_attrs, output_grads, skip_input_indices) =>
+            c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, num_attrs, output_grads, skip_input_indices) =>
             {
-                var op_inputs = Marshal.PtrToStructure<BindingArray>(op_inputs_handle);
-                var input_tensors = new EagerTensor[op_inputs.length];
-                for (int i = 0; i < op_inputs.length; i++)
-                {
-                    // Console.WriteLine($"debug 4: {op_name} op_inputs=" + (*(IntPtr*)op_inputs_handle).ToString("x16").ToUpper() + $" op_inputs[{i}]=" + (*((IntPtr*)op_inputs.array + i)).ToString("x16").ToUpper());
-                    if((*((IntPtr*)op_inputs.array + i)).ToString("x16").ToUpper().StartsWith("FFFFF"))
-                    {
-
-                    }
-                    input_tensors[i] = new EagerTensor(*((IntPtr*)op_inputs.array + i));
-                }
-
-                var output_tensors = new EagerTensor[op_outputs.length];
-                for (int i = 0; i < op_outputs.length; i++)
-                    output_tensors[i] = new EagerTensor(*((IntPtr*)op_outputs.array + i));
-
-                var output_grad_tensors = new EagerTensor[output_grads.length];
-                for (int i = 0; i < output_grads.length; i++)
-                    output_grad_tensors[i] = new EagerTensor(*((IntPtr*)output_grads.array + i));
-
+                var input_tensors = op_inputs.Data().Select(x => new EagerTensor(x)).ToArray();
+                var output_tensors = op_outputs.Data().Select(x => new EagerTensor(x)).ToArray();
+                var output_grad_tensors = output_grads.Data().Select(x => new EagerTensor(x)).ToArray();
                 var skip_input_indices_param = new int[skip_input_indices.length];
                 for (int i = 0; i < skip_input_indices.length; i++)
                     skip_input_indices_param[i] = *((int*)skip_input_indices.array + i);
@@ -101,6 +81,9 @@ namespace Tensorflow
                 var wrap_handle = c_api.TFE_WrapGradientResult(gradients_handles, gradients.Length);
 
                 return wrap_handle;
+            }, (op_name, op_inputs, op_outputs) =>
+            {
+
             });
         }
 
