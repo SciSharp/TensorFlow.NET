@@ -14,11 +14,14 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -38,7 +41,6 @@ namespace Tensorflow
 
         public Context context = new Context(new ContextOptions(), new Status());
 
-
         public tensorflow()
         {
             _constructThreadingObjects();
@@ -53,20 +55,20 @@ namespace Tensorflow
                 return ones.EagerTensorHandle;
             }, (gradients) =>
             {
-                var input_grads = gradients.Data().Select(x => new EagerTensor(x)).ToArray();
+                var input_grads = gradients.Data.Select(x => new EagerTensor(x)).ToArray();
                 var add_n = gen_math_ops.add_n(input_grads) as EagerTensor;
                 return add_n.EagerTensorHandle;
             });
 
             ops.RegisterFromAssembly();
+            // ops.RegisterFromAssemblyEager();
+
             c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, num_attrs, output_grads, skip_input_indices) =>
             {
-                var input_tensors = op_inputs.Data().Select(x => new EagerTensor(x)).ToArray();
-                var output_tensors = op_outputs.Data().Select(x => new EagerTensor(x)).ToArray();
-                var output_grad_tensors = output_grads.Data().Select(x => new EagerTensor(x)).ToArray();
-                var skip_input_indices_param = new int[skip_input_indices.length];
-                for (int i = 0; i < skip_input_indices.length; i++)
-                    skip_input_indices_param[i] = *((int*)skip_input_indices.array + i);
+                var input_tensors = new BindingTensorArray(op_inputs).Data.Select(x => new EagerTensor(x)).ToArray();
+                var output_tensors = new BindingTensorArray(op_outputs).Data.Select(x => new EagerTensor(x)).ToArray();
+                var output_grad_tensors = new BindingTensorArray(output_grads).Data.Select(x => new EagerTensor(x)).ToArray();
+                var skip_input_indices_param = new BindingArray(skip_input_indices).Data.Select(x => *(int*)x).ToArray();
 
                 var gradients = ops.gradientFunctions[op_name](new EagerOperation
                 {

@@ -10,7 +10,6 @@ namespace TensorFlowNET.UnitTest.Gradient
     [TestClass]
     public class GradientEagerTest : PythonTest
     {
-        [Ignore]
         [TestMethod]
         public void ConstantSq()
         {

@@ -19,13 +19,13 @@ using System.Runtime.InteropServices;
 
 namespace Tensorflow
 {
-    public class BindingArray : DisposableObject
+    public class BindingTensorArray : DisposableObject
     {
         TF_BindingArray data;
         public IntPtr Address => data.array;
         public int Length => data.length;
 
-        public BindingArray(IntPtr handle) : base(handle)
+        public BindingTensorArray(IntPtr handle) : base(handle)
         {
             if (_handle != IntPtr.Zero)
                 data = Marshal.PtrToStructure<TF_BindingArray>(_handle);
@@ -33,8 +33,8 @@ namespace Tensorflow
                 data = default;
         }
 
-        public static implicit operator BindingArray(IntPtr handle)
-            => new BindingArray(handle);
+        public static implicit operator BindingTensorArray(IntPtr handle)
+            => new BindingTensorArray(handle);
 
         public unsafe IntPtr this[int index]
             => data[index];
@@ -44,7 +44,7 @@ namespace Tensorflow
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
-            c_api.TF_DeleteBindingArray(_handle);
+            c_api.TFE_DeleteBindingTensorArray(_handle);
         }
     }
 }

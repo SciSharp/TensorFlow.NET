@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 using System;
+using System.Linq;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
@@ -41,8 +42,8 @@ namespace Tensorflow
 
             if (tf.context.executing_eagerly())
             {
-                using var status = new Status();
-                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = new[] { new EagerTensor() };
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "RandomStandardNormal", name, new IntPtr[]
                     {
                         shape as EagerTensor,
@@ -50,10 +51,10 @@ namespace Tensorflow
                     op => wrap_tfe_src.SetOpAttrs(op,
                             "seed", seed,
                             "seed2", seed2,
-                            "dtype", dtype), 
-                    status);
+                            "dtype", dtype),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
-                return new EagerTensor(results[0]);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("RandomStandardNormal", 

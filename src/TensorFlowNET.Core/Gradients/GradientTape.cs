@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
@@ -21,7 +22,8 @@ namespace Tensorflow.Gradients
     /// </summary>
     public class GradientTape : IDisposable
     {
-        bool _recording;
+        static bool _recording;
+        public static bool Recording => _recording;
         bool _persistent;
         bool _watch_accessed_variables;
         ResourceVariable[] _watched_variables;
@@ -76,13 +78,13 @@ namespace Tensorflow.Gradients
                     _pop_tape();
             }
 
-            using var status = new Status();
-            var et = c_api.TFE_TapeGradient(_tape,
+            var results = new[] { new EagerTensor() };
+            Status status = c_api.TFE_TapeGradient(_tape,
                 new [] { (target as EagerTensor).EagerTensorHandle }, 1,
                 new [] { (source as EagerTensor).EagerTensorHandle }, 1,
-                status);
+                results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
             status.Check(true);
-            return new EagerTensor(et);
+            return results[0];
         }
 
         public unsafe (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources)
@@ -93,8 +95,8 @@ namespace Tensorflow.Gradients
                     _pop_tape();
             }
 
-            using var status = new Status();
-            BindingArray result_handle = c_api.TFE_TapeGradient(_tape,
+            var results = new[] { new EagerTensor(), new EagerTensor() };
+            Status status = c_api.TFE_TapeGradient(_tape,
                 new IntPtr[] 
                 { 
                     target as EagerTensor 
@@ -104,11 +106,8 @@ namespace Tensorflow.Gradients
                     (sources.Item1.Handle as EagerTensor).EagerTensorHandle, 
                     (sources.Item2.Handle as EagerTensor).EagerTensorHandle 
                 }, 2,
-                status);
+                results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
             status.Check(true);
-
-            var results = result_handle.Data().Select(x => new EagerTensor(x)).ToArray();
-
 
             if (!_persistent)
             {

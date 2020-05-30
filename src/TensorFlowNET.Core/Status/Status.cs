@@ -42,6 +42,11 @@ namespace Tensorflow
             _handle = TF_NewStatus();
         }
 
+        public Status(IntPtr handle)
+        {
+            _handle = handle;
+        }
+
         public void SetStatus(TF_Code code, string msg)
         {
             TF_SetStatus(_handle, code, msg);
@@ -68,6 +73,9 @@ namespace Tensorflow
 
         public static implicit operator IntPtr(Status status)
             => status._handle;
+
+        public static implicit operator Status(IntPtr handle)
+            => new Status(handle);
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
             => TF_DeleteStatus(handle);

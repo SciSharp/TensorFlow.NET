@@ -11,18 +11,28 @@ namespace Tensorflow
         public static extern void TFE_RegisterGradientFunction(gradient_function_callback gradientFunctionCallback,
             delete_backward_function_callback deleteBackwardFunctionCallback);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op_name"></param>
+        /// <param name="op_inputs"></param>
+        /// <param name="op_outputs"></param>
+        /// <param name="num_attrs"></param>
+        /// <param name="output_grads">previous node ouput</param>
+        /// <param name="skip_input_indices"></param>
+        /// <returns></returns>
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate IntPtr gradient_function_callback(string op_name,
-            BindingArray op_inputs,
-            BindingArray op_outputs,
+            IntPtr op_inputs,
+            IntPtr op_outputs,
             int num_attrs,
-            BindingArray output_grads, 
-            BindingArray skip_input_indices);
+            IntPtr output_grads,
+            IntPtr skip_input_indices);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate void delete_backward_function_callback(string op_name,
-            BindingArray op_inputs,
-            BindingArray op_outputs);
+            IntPtr op_inputs,
+            IntPtr op_outputs);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_WrapGradientResult(IntPtr[] gradients, int num_gradients);
@@ -32,7 +42,7 @@ namespace Tensorflow
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate IntPtr VSpace_callback_Ones(long[] shape, int dims, TF_DataType dtype);
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate IntPtr VSpace_callback_AggregateGrads(BindingArray gradients);
+        public delegate IntPtr VSpace_callback_AggregateGrads(TF_BindingArray gradients);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_RegisterVSpace(IntPtr vspace);
@@ -217,10 +227,16 @@ namespace Tensorflow
         public static extern TFE_TensorHandle TFE_NewTensorHandle(IntPtr t, IntPtr status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr EagerTensor_Handle(IntPtr t);
+        public static extern IntPtr TFE_EagerTensorHandle(IntPtr t);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_EagerTensorFromHandle(IntPtr ctx, IntPtr h);
+        public static extern int TFE_EagerTensorId(IntPtr t);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TFE_NewEagerTensor();
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_SetEagerTensorHandle(IntPtr tensor, IntPtr handle);
 
         /// <summary>
         /// Sets the default execution mode (sync/async). Note that this can be
@@ -259,6 +275,9 @@ namespace Tensorflow
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern int TFE_TensorHandleNumDims(IntPtr h, IntPtr status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern int TFE_TensorHandleDim(IntPtr h, int dim, IntPtr status);
 
         /// <summary>
         /// Returns the device of the operation that produced `h`. If `h` was produced by
@@ -304,7 +323,13 @@ namespace Tensorflow
         /// <param name="h">TFE_TensorHandle*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_DeleteEagerTensor(IntPtr h);
-        
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_DeleteBindingArray(IntPtr h);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_DeleteBindingTensorArray(IntPtr h);
+
         /// <summary>
         /// Creates a new eager Executor. Nodes in one executor are guaranteed to be
         /// executed in sequence. Assigning nodes to different executors allows executing
@@ -372,10 +397,11 @@ namespace Tensorflow
             string device_name, 
             string op_name,
             string name,
-            IntPtr[] args,
+            IntPtr[] inputs,
             int input_size,
             TFE_FastPathExecute_SetOpAttrs set_op_attrs,
-            IntPtr status);
+            IntPtr[] outputs,
+            int output_size);
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate void TFE_FastPathExecute_SetOpAttrs(IntPtr op);
 
@@ -386,13 +412,8 @@ namespace Tensorflow
             IntPtr[] inputs, 
             int input_size,
             TFE_FastPathExecute_SetOpAttrs set_op_attrs,
-            IntPtr status);
-
-        [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_QuickExecute1(
-            string op_name,
-            int input_size,
-            IntPtr status);
+            IntPtr[] outputs,
+            int output_size);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_TapeSetNew(bool persistent, bool watch_accessed_variables);
@@ -415,7 +436,7 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_TapeGradient(IntPtr tape, 
             IntPtr[] target, int target_size, 
-            IntPtr[] sources, int source_size, 
-            IntPtr status);
+            IntPtr[] sources, int source_size,
+            IntPtr[] outputs, int output_size);
     }
 }

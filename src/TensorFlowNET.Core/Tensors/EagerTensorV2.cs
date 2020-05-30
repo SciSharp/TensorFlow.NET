@@ -21,7 +21,7 @@ namespace Tensorflow
         public EagerTensorV2(IntPtr handle)
         {
             EagerTensorHandle = handle;
-            tfe_tensor_handle = c_api.EagerTensor_Handle(handle);
+            tfe_tensor_handle = c_api.TFE_EagerTensorHandle(handle);
             _handle = c_api.TFE_TensorHandleResolve(tfe_tensor_handle, status);
         }
 
@@ -43,7 +43,7 @@ namespace Tensorflow
                     }, IntPtr.Zero);
 
             tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            EagerTensorHandle = c_api.TFE_EagerTensorFromHandle(tf.context, tfe_tensor_handle);
+            EagerTensorHandle = c_api.TFE_NewEagerTensor();
         }
 
         /*public unsafe EagerTensorV2(float[,] value)

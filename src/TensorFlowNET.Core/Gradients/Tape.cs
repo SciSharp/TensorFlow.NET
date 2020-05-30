@@ -34,7 +34,7 @@ namespace Tensorflow.Gradients
         public unsafe ResourceVariable[] watched_variables()
         {
             BindingArray result = c_api.TFE_TapeWatchedVariables(_handle);
-            var variables = result.Data().Select(x =>
+            var variables = result.Data.Select(x =>
             {
                 var tensor = c_api.ResourceVariable_Handle(x);
                 return new ResourceVariable(x, tensor);

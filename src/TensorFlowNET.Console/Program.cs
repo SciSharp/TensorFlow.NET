@@ -7,11 +7,24 @@ namespace Tensorflow
         static void Main(string[] args)
         {
             // boot .net core 10.5M.
-            var memoryTest = new MemoryLeakTesting();
+            var mm = new MemoryMonitor();
             // warm up tensorflow.net 28.5M.
-            memoryTest.WarmUp();
-            // 1 million float tensor 34.5M.
-            memoryTest.TensorCreation();
+            mm.WarmUp();
+            var cases = new MemoryTestingCases();
+
+            int batchSize = 1000;
+
+            // 1 million float tensor 58.5M.
+            // mm.Execute(10, 100 * batchSize, cases.Constant);
+
+            // 100K float variable 80.5M.
+            //mm.Execute(10, 10 * batchSize, cases.Variable);
+
+            // 1 million math add 36.5M.
+            // mm.Execute(10, 100 * batchSize, cases.MathAdd);
+
+            // 100K gradient 211M.
+            mm.Execute(100, 1 * batchSize, cases.Gradient);
 
             Console.WriteLine("Finished.");
             Console.ReadLine();

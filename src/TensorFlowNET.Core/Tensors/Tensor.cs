@@ -171,7 +171,7 @@ namespace Tensorflow
         /// n	n-Tensor (you get the idea)
         /// </summary>
         /// <remarks>https://www.tensorflow.org/api_docs/python/tf/rank</remarks>
-        public int rank
+        public virtual int rank
         {
             get
             {

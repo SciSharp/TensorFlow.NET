@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Linq;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
@@ -64,18 +65,18 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                using var status = new Status();
-                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = new[] { new EagerTensor() };
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "ResourceApplyGradientDescent", name, new IntPtr[]
                     {
                         var,
                         alpha,
                         delta
                     }, 3, 
-                    op => wrap_tfe_src.SetOpAttrs(op, "use_locking", use_locking), 
-                    status);
+                    op => wrap_tfe_src.SetOpAttrs(op, "use_locking", use_locking),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
-                return results[0];
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("ResourceApplyGradientDescent", name, new

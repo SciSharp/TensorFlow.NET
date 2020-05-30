@@ -7,8 +7,10 @@ namespace Tensorflow.Eager
     public class EagerOperation : Operation
     {
         public int NumInputs;
+        public IntPtr[] InputHandles { get; set; }
         public Tensor[] Inputs { get; set; }
         public int NumOutputs;
+        public IntPtr[] OutputHandles { get; set; }
         public Tensor[] Outputs { get; set; }
         public int[] SkipInputIndices { get; set; }
 

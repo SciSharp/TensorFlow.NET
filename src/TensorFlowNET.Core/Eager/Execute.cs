@@ -33,18 +33,17 @@ namespace Tensorflow.Eager
         {
             ctx.ensure_initialized();
 
-            using var status = new Status();
-
-            BindingArray results = c_api.TFE_QuickExecute(ctx,
+            var results = Enumerable.Range(0, num_outputs).Select(x => new EagerTensor()).ToArray();
+            Status status = c_api.TFE_QuickExecute(ctx,
                ctx.device_name,
                op_name,
                inputs.Select(x => x.EagerTensorHandle).ToArray(),
                inputs.Length,
                op => wrap_tfe_src.SetOpAttrs(op, attrs),
-               status);
+               results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
             status.Check(true);
 
-            return results.Data().Select(x => new EagerTensor(x)).ToArray();
+            return results.Select(x => x.Resolve()).ToArray();
         }
 
         public (TF_DataType, EagerTensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)

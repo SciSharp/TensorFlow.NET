@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Linq;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
@@ -467,14 +468,15 @@ namespace Tensorflow.Operations
         {
             if (tf.context.executing_eagerly())
             {
-                using var status = new Status();
-                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = new[] { new EagerTensor() };
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Relu", name, new IntPtr[]
                     {
                         features as EagerTensor,
-                    }, 1, null, status);
+                    }, 1, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
-                return new EagerTensor(results[0]);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Relu", name: name, args: new { features });
@@ -485,14 +487,15 @@ namespace Tensorflow.Operations
         {
             if (tf.context.executing_eagerly())
             {
-                using var status = new Status();
-                BindingArray results = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = new[] { new EagerTensor() };
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Tanh", name, new IntPtr[]
                     {
                         x as EagerTensor,
-                    }, 1, null, status);
+                    }, 1, null, 
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
-                return new EagerTensor(results[0]);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Tanh", name: name, args: new { x });

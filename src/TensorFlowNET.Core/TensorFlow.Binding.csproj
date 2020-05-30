@@ -62,6 +62,7 @@ Please be patient, we're working hard on missing functions, providing full tenso
     <None Remove="Distribute\**" />
     <None Remove="Models\**" />
     <None Remove="runtimes\**" />
+    <Compile Remove="Util\BindingArray2.cs" />
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
