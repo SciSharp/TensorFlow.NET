@@ -65,7 +65,6 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "ResourceApplyGradientDescent", name, new IntPtr[]
                     {
@@ -74,9 +73,9 @@ namespace Tensorflow
                         delta
                     }, 3, 
                     op => wrap_tfe_src.SetOpAttrs(op, "use_locking", use_locking),
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                    null, 0);
                 status.Check(true);
-                return results[0].Resolve();
+                return null;
             }
 
             var _op = _op_def_lib._apply_op_helper("ResourceApplyGradientDescent", name, new

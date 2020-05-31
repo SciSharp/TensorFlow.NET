@@ -62,7 +62,8 @@ namespace Tensorflow.Eager
             GarbageCollector.Decrease(tfe_tensor_handle);
             GarbageCollector.Decrease(EagerTensorHandle);
 
-            /*c_api.TF_DeleteTensor(_handle);
+            /*print($"deleting DeleteTensorHandle {Id} {_handle.ToString("x16")}");
+            c_api.TF_DeleteTensor(_handle);
             print($"deleting DeleteTensorHandle {Id} {tfe_tensor_handle.ToString("x16")}");
             c_api.TFE_DeleteTensorHandle(tfe_tensor_handle);
             print($"deleting DeleteEagerTensor {Id} {EagerTensorHandle.ToString("x16")}");

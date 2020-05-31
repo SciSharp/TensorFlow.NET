@@ -56,7 +56,6 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "AssignAddVariableOp", name,
                     new IntPtr[]
@@ -64,9 +63,9 @@ namespace Tensorflow
                         resource as EagerTensor,
                         value as EagerTensor
                     }, 2, null,
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                    null, 0);
                 status.Check(true);
-                return results[0].Resolve();
+                return null;
             }
 
             return null;
@@ -76,7 +75,6 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var results = new EagerTensor[0];
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "AssignVariableOp", name,
                     new IntPtr[]
@@ -84,7 +82,7 @@ namespace Tensorflow
                         resource as EagerTensor,
                         value as EagerTensor
                     }, 2, null,
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                    null, 0);
                 status.Check(true);
                 return null;
             }

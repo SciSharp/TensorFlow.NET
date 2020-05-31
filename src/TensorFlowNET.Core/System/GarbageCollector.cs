@@ -29,6 +29,9 @@ namespace Tensorflow
 
         public static void Increase(IntPtr handle, GCItemType type)
         {
+            if (handle == IntPtr.Zero)
+                return;
+
             if (container.ContainsKey(handle))
             {
                 container[handle].RefCounter++;
@@ -51,11 +54,8 @@ namespace Tensorflow
 
         public static void Decrease(IntPtr handle)
         {
-            lock (locker)
-            {
-                if (container.ContainsKey(handle))
-                    container[handle].RefCounter--;
-            }
+            if (handle != IntPtr.Zero && container.ContainsKey(handle))
+                container[handle].RefCounter--;
         }
 
         private static void Recycle()
