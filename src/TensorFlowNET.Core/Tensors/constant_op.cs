@@ -101,18 +101,37 @@ namespace Tensorflow
             return op.outputs[0];
         }
 
-        private static Tensor _eager_fill(int[] dims, Tensor value, Context ctx)
+        private static Tensor _eager_fill(int[] dims, EagerTensor value, Context ctx)
         {
             var attr_t = value.dtype.as_datatype_enum();
             var dims_t = convert_to_eager_tensor(dims, ctx, dtypes.int32);
             var inputs_flat = new[] { dims_t, value };
             var attrs = new object[] { "T", attr_t, "index_type", TF_DataType.TF_INT32 };
-            var result = _execute.execute(ctx, "Fill", inputs_flat, attrs);
-            return result;
+            var result = _execute.execute(ctx, "Fill", 1, inputs_flat, attrs);
+            return result[0];
         }
 
         private static EagerTensor convert_to_eager_tensor(object value, Context ctx, TF_DataType dtype = TF_DataType.DtInvalid)
         {
+            // convert data type
+            if (dtype != TF_DataType.DtInvalid &&
+                value.GetType().Name != "NDArray" &&
+                value.GetType().BaseType.Name != "Array" &&
+                dtypes.as_base_dtype(dtype) != dtypes.as_dtype(value.GetType()))
+            {
+                switch (dtype)
+                {
+                    case TF_DataType.TF_FLOAT:
+                        value = Convert.ToSingle(value);
+                        break;
+                    case TF_DataType.TF_INT64:
+                        value = Convert.ToInt64(value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             switch (value)
             {
                 case NDArray val:
@@ -125,7 +144,11 @@ namespace Tensorflow
                     return new EagerTensor(val, ctx.device_name);
                 case int[,] val:
                     return new EagerTensor(val, ctx.device_name);
+                case long val:
+                    return new EagerTensor(val, ctx.device_name);
                 case float val:
+                    return new EagerTensor(val, ctx.device_name);
+                case float[,] val:
                     return new EagerTensor(val, ctx.device_name);
                 case double val:
                     return new EagerTensor(val, ctx.device_name);

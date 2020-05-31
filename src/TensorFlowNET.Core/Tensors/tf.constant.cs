@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using NumSharp;
+using Tensorflow.Eager;
 
 namespace Tensorflow
 {

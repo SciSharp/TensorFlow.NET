@@ -13,6 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ******************************************************************************/
+using System;
+using System.Linq;
+using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -35,6 +39,23 @@ namespace Tensorflow
                 seed = 0;
             if (!seed2.HasValue)
                 seed2 = 0;
+
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "RandomStandardNormal", name, new IntPtr[]
+                    {
+                        shape as EagerTensor,
+                    }, 1,
+                    op => wrap_tfe_src.SetOpAttrs(op,
+                            "seed", seed,
+                            "seed2", seed2,
+                            "dtype", dtype),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
 
             var _op = _op_def_lib._apply_op_helper("RandomStandardNormal", 
                 name: name,

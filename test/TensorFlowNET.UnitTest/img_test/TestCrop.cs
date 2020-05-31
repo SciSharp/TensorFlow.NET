@@ -6,6 +6,7 @@ using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.img_test
 {
+    [Ignore]
     [TestClass]
     public class TestCrop
     {

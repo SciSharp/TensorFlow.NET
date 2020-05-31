@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using Tensorflow;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.Basics
 {
     [TestClass]
     public class ConstantTest
@@ -17,8 +17,11 @@ namespace TensorFlowNET.UnitTest
         public void ScalarConst()
         {
             var tensor1 = tf.constant(8); // int
+            Assert.AreEqual(tensor1.dtype, TF_DataType.TF_INT32);
             var tensor2 = tf.constant(6.0f); // float
+            Assert.AreEqual(tensor2.dtype, TF_DataType.TF_FLOAT);
             var tensor3 = tf.constant(6.0); // double
+            Assert.AreEqual(tensor3.dtype, TF_DataType.TF_DOUBLE);
         }
 
         /*[DataTestMethod]
@@ -157,6 +160,7 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual(6.0, (double)c);
         }
 
+        [Ignore]
         [TestMethod]
         public void StringEncode()
         {
@@ -172,16 +176,6 @@ namespace TensorFlowNET.UnitTest
             Assert.AreEqual(encoded_str, str);
             Assert.AreEqual(str.Length, Marshal.ReadByte(dst));
             //c_api.TF_StringDecode(dst, (ulong)str.Length, IntPtr.Zero, ref dst_len, status);
-        }
-
-        /// <summary>
-        /// tensorflow\c\c_api_test.cc
-        /// TestEncodeDecode
-        /// </summary>
-        [TestMethod]
-        public void EncodeDecode()
-        {
-
         }
     }
 }

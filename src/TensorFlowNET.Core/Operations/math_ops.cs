@@ -17,6 +17,7 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
+using Tensorflow.Eager;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
 
@@ -68,6 +69,23 @@ namespace Tensorflow
         }
 
         public static Tensor cast(RefVariable x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
+        {
+            var base_type = dtype.as_base_dtype();
+            if (base_type == x.dtype)
+                return x;
+
+            return tf_with(ops.name_scope(name, "Cast", new { x }), scope =>
+            {
+                name = scope;
+                var t_x = ops.convert_to_tensor(x, name: "x");
+                if (t_x.dtype.as_base_dtype() != base_type)
+                    t_x = gen_math_ops.cast(t_x, base_type, name: name);
+
+                return x;
+            });
+        }
+
+        public static ResourceVariable cast(ResourceVariable x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             var base_type = dtype.as_base_dtype();
             if (base_type == x.dtype)
@@ -540,6 +558,11 @@ namespace Tensorflow
             }
             else
             {
+                if(x is EagerTensor)
+                {
+                    return constant_op.constant(np.arange(x.shape.Rank));
+                }
+
                 var rank = array_ops.rank(x);
                 return range(0, rank, 1);
             }
@@ -588,7 +611,14 @@ namespace Tensorflow
             => gen_math_ops.rsqrt(x, name: name);
 
         public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.pow(x, y, name: name);
+            => tf_with(ops.name_scope(name, "Pow", new { x, y }), scope =>
+            {
+                name = scope;
+                var x_tensor = ops.convert_to_tensor(x, name: "x");
+                var y_tensor = ops.convert_to_tensor(y, name: "y", dtype: x_tensor.dtype.as_base_dtype());
+
+                return gen_math_ops.pow(x_tensor, y_tensor, name: name);
+            }); 
 
         public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
         {

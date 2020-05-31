@@ -7,6 +7,7 @@ using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.layers_test
 {
+    [Ignore]
     [TestClass]
     public class flatten
     {

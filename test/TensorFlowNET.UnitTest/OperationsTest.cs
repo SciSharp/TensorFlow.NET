@@ -8,8 +8,9 @@ using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.Basics
 {
+    [Ignore]
     [TestClass]
     public class OperationsTest
     {

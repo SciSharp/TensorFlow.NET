@@ -21,9 +21,9 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public VariableV1[] global_variables(string scope = null)
+        public IVariableV1[] global_variables(string scope = null)
         {
-            return (ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope) as List<VariableV1>)
+            return (ops.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope) as List<IVariableV1>)
                 .ToArray();
         }
 
@@ -33,7 +33,7 @@ namespace Tensorflow
         /// <param name="var_list">List of `Variable` objects to initialize.</param>
         /// <param name="name">Optional name for the returned operation.</param>
         /// <returns>An Op that run the initializers of all the specified variables.</returns>
-        public Operation variables_initializer(VariableV1[] var_list, string name = "init")
+        public Operation variables_initializer(IVariableV1[] var_list, string name = "init")
             => variables.variables_initializer(var_list, name: name);
 
         public Operation global_variables_initializer()
@@ -47,8 +47,8 @@ namespace Tensorflow
         /// </summary>
         /// <param name="scope"></param>
         /// <returns></returns>
-        public VariableV1[] trainable_variables(string scope = null)
-            => (variables.trainable_variables() as List<VariableV1>).ToArray();
+        public IVariableV1[] trainable_variables(string scope = null)
+            => (variables.trainable_variables() as List<IVariableV1>).ToArray();
 
         public RefVariable get_variable(string name,
             TensorShape shape = null,

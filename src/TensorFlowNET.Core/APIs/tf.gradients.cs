@@ -20,8 +20,8 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public GradientActor GradientTape() 
-            => new GradientActor();
+        public GradientTape GradientTape() 
+            => new GradientTape();
 
         public Tensor[] gradients(Tensor[] ys,
             Tensor[] xs,

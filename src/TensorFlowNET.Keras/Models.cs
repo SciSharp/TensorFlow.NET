@@ -36,7 +36,7 @@ namespace Tensorflow.Keras
         public static void in_place_subclassed_model_state_restoration(Model model) => throw new NotImplementedException();
 
         public static void clone_and_build_model(Model model, Tensor[] input_tensors= null, Tensor[] target_tensors= null, object custom_objects= null,
-                                        bool compile_clone= true, bool in_place_reset= false, VariableV1 optimizer_iterations= null, Hashtable optimizer_config= null)
+                                        bool compile_clone= true, bool in_place_reset= false, IVariableV1 optimizer_iterations= null, Hashtable optimizer_config= null)
             => throw new NotImplementedException();
     }
 }

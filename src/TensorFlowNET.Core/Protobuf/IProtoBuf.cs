@@ -6,7 +6,7 @@
     /// </summary>
     public interface IProtoBuf<TProtoDef, TDef>
     {
-        string name { get; }
+        string Name { get; }
 
         /// <summary>
         /// Converts a `Variable` to a `VariableDef` protocol buffer.

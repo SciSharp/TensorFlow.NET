@@ -5,8 +5,9 @@ using Tensorflow;
 using Buffer = Tensorflow.Buffer;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.NativeAPI
 {
+    [Ignore]
     [TestClass]
     public class GraphTest : CApiTest
     {

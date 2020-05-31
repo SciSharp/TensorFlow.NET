@@ -62,7 +62,7 @@ namespace Tensorflow.Train
 
             var g = graph.as_default();
             g.name_scope(null);
-            g.name_scope(global_step_tensor.op.name + "/");
+            g.name_scope(global_step_tensor.Op.name + "/");
             // using initialized_value to ensure that global_step is initialized before
             // this run. This is needed for example Estimator makes all model_fn build
             // under global_step_read_tensor dependency.

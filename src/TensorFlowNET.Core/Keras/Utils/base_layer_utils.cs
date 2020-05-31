@@ -32,7 +32,7 @@ namespace Tensorflow.Keras.Utils
         /// <param name="initializer"></param>
         /// <param name="trainable"></param>
         /// <returns></returns>
-        public static VariableV1 make_variable(string name,
+        public static IVariableV1 make_variable(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
@@ -46,7 +46,7 @@ namespace Tensorflow.Keras.Utils
             Func<Tensor> init_val = () => initializer.call(new TensorShape(shape), dtype: dtype);
 
             var variable_dtype = dtype.as_base_dtype();
-            var v = tf.Variable(init_val, 
+            var v = tf.Variable(init_val,
                 dtype: dtype,
                 shape: shape,
                 name: name);

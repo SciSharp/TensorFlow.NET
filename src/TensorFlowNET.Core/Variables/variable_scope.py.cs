@@ -172,7 +172,7 @@ namespace Tensorflow
             return $"{prefix}_{idx}";
         }
 
-        public static VariableV1 default_variable_creator(object initial_value,
+        public static IVariableV1 default_variable_creator(object initial_value,
             string name = null,
             bool? trainable = null,
             List<string> collections = null,

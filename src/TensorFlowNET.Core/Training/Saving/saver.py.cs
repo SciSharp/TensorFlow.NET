@@ -53,7 +53,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Saver _create_saver_from_imported_meta_graph(MetaGraphDef meta_graph_def, 
             string import_scope, 
-            Dictionary<string, VariableV1> imported_vars)
+            Dictionary<string, IVariableV1> imported_vars)
         {
             if(meta_graph_def.SaverDef != null)
             {
@@ -64,7 +64,7 @@ namespace Tensorflow
                 {
                     var sample_key = var_names[0];
                     var sample_var = imported_vars[sample_key];
-                    scope = string.Join("", sample_var.name.Skip(sample_key.Length));
+                    scope = string.Join("", sample_var.Name.Skip(sample_key.Length));
                 }
                 return new Saver(saver_def: meta_graph_def.SaverDef, name: scope);
             }

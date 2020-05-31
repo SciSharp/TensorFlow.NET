@@ -37,8 +37,8 @@ namespace Tensorflow.Keras.Layers
         private IInitializer gamma_initializer;
         private IInitializer moving_mean_initializer;
         private IInitializer moving_variance_initializer;
-        private VariableV1 gamma;
-        private VariableV1 beta;
+        private IVariableV1 gamma;
+        private IVariableV1 beta;
         private RefVariable moving_mean;
         private RefVariable moving_variance;
 

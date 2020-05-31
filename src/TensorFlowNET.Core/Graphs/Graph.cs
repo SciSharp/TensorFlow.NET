@@ -444,7 +444,7 @@ namespace Tensorflow
             var collection = _collections.ContainsKey(name) ? _collections[name] : new List<T>();
             switch (collection)
             {
-                case List<VariableV1> list:
+                case List<IVariableV1> list:
                     t = list.Select(x => (T)(object)x).ToList();
                     break;
                 case List<ResourceVariable> list:

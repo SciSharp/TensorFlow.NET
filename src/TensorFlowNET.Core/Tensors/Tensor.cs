@@ -32,14 +32,15 @@ namespace Tensorflow
     /// Internally, TensorFlow represents tensors as n-dimensional arrays of base datatypes.
     /// </summary>
     [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
-    public partial class Tensor : DisposableObject, 
+    public partial class Tensor : DisposableObject,
+        ITensor,
         ITensorOrOperation, 
         _TensorLike, 
         ITensorOrTensorArray, 
         IPackable<Tensor>,
         ICanBeFlattened
     {
-        private readonly int _id;
+        protected int _id;
         private readonly Operation _op;
         private readonly int _value_index;
         private TF_Output? _tf_output;
@@ -82,7 +83,7 @@ namespace Tensorflow
         /// <summary>
         ///     The name of the device on which this tensor will be produced, or null.
         /// </summary>
-        public string Device => op.Device;
+        public virtual string Device => op.Device;
         public int[] dims => shape;
 
         /// <summary>
@@ -170,7 +171,7 @@ namespace Tensorflow
         /// n	n-Tensor (you get the idea)
         /// </summary>
         /// <remarks>https://www.tensorflow.org/api_docs/python/tf/rank</remarks>
-        public int rank
+        public virtual int rank
         {
             get
             {

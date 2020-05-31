@@ -24,9 +24,9 @@ namespace Tensorflow
 {
     public partial class ops
     {
-        static Dictionary<string, Func<Operation, Tensor[], Tensor[]>> gradientFunctions = null;
+        public static Dictionary<string, Func<Operation, Tensor[], Tensor[]>> gradientFunctions = null;
 
-        private static void RegisterFromAssembly()
+        public static void RegisterFromAssembly()
         {
             if (gradientFunctions == null)
             {

@@ -79,7 +79,7 @@ namespace Tensorflow
             return gen_io_ops.restore_v2(filename_tensor, names.ToArray(), slices.ToArray(), dtypes.ToArray());
         }
 
-        public virtual SaverDef _build_internal(VariableV1[] names_to_saveables,
+        public virtual SaverDef _build_internal(IVariableV1[] names_to_saveables,
             bool reshape = false,
             bool sharded = false,
             int max_to_keep = 5,

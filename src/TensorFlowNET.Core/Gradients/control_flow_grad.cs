@@ -191,7 +191,7 @@ namespace Tensorflow.Gradients
 
             grad_ctxt.Enter();
             var result = control_flow_ops._Enter(
-                  grad, grad_ctxt.name, is_constant: false,
+                  grad, grad_ctxt.Name, is_constant: false,
                   parallel_iterations: grad_ctxt.parallel_iterations,
                  name: "b_exit");
 

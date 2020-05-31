@@ -51,8 +51,8 @@ namespace Tensorflow.Keras.Layers
         /// </summary>
         protected InputSpec input_spec;
         protected bool supports_masking;
-        protected List<VariableV1> _trainable_weights;
-        protected List<VariableV1> _non_trainable_weights;
+        protected List<IVariableV1> _trainable_weights;
+        protected List<IVariableV1> _non_trainable_weights;
         private string _name;
         public string name => _name;
         protected string _base_name;
@@ -84,8 +84,8 @@ namespace Tensorflow.Keras.Layers
             this.supports_masking = false;
 
             _init_set_name(name);
-            _trainable_weights = new List<VariableV1>();
-            _non_trainable_weights = new List<VariableV1>();
+            _trainable_weights = new List<IVariableV1>();
+            _non_trainable_weights = new List<IVariableV1>();
             _compute_previous_mask = false;
             _updates = new List<Operation>();
 
@@ -207,12 +207,12 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected virtual VariableV1 add_weight(string name,
+        protected virtual IVariableV1 add_weight(string name,
             int[] shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
             bool? trainable = null,
-            Func<string, int[], TF_DataType, IInitializer, bool, VariableV1> getter = null)
+            Func<string, int[], TF_DataType, IInitializer, bool, IVariableV1> getter = null)
         {
             if (dtype == TF_DataType.DtInvalid)
                 dtype = TF_DataType.TF_FLOAT;

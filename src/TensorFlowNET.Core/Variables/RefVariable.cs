@@ -22,8 +22,19 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public partial class RefVariable : VariableV1, IProtoBuf<VariableDef, RefVariable>
+    public partial class RefVariable : IVariableV1, IProtoBuf<VariableDef, RefVariable>
     {
+        protected string _name;
+        public Tensor GraphElement { get; }
+        public Tensor _variable;
+        public Tensor Handle => _variable;
+        protected string _graph_key;
+        public Graph Graph => _variable.graph;
+
+        public Tensor _is_initialized_op { get; set; }
+
+        protected TF_DataType _dtype;
+
         public bool _in_graph_mode = true;
         public Tensor _initial_value;
         public bool _trainable;
@@ -32,13 +43,13 @@ namespace Tensorflow
         public bool _save_slice_info;
 
         private Operation _initializer_op;
-        public override Operation initializer => _initializer_op;
-        public override Operation op => _variable.op;
+        public Operation Initializer => _initializer_op;
+        public Operation Op => _variable.op;
         
         public TF_DataType dtype => _variable.dtype;
         public TensorShape shape => tensor_util.to_shape(_variable.shape);
 
-        public override string name => _variable.name;
+        public string Name => _variable.name;
 
         public Tensor eval() => _variable;
 
@@ -198,7 +209,7 @@ namespace Tensorflow
                         _snapshot = gen_array_ops.identity(_variable, name = "read");
                     }
 
-                    ops.add_to_collections(collections, this as VariableV1);
+                    ops.add_to_collections(collections, this as IVariableV1);
                 });
             });
         }
@@ -299,7 +310,7 @@ namespace Tensorflow
                             tf.GraphKeys.LOCAL_VARIABLES })
             {
                 foreach (var var in variable_op.graph.get_collection<RefVariable>(collection_name))
-                    if (var_names.Contains(var.name))
+                    if (var_names.Contains(var.Name))
                         return var.initialized_value();
             }
 
@@ -330,7 +341,7 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            return $"tf.RefVariable '{name}' shape={shape} dtype={dtype}";
+            return $"tf.RefVariable '{Name}' shape={shape} dtype={dtype}";
         }
 
         public VariableDef to_proto(string export_scope)
@@ -342,7 +353,7 @@ namespace Tensorflow
                 if (_initial_value != null)
                     var_def.InitialValueName = ops.strip_name_scope(_initial_value.name, export_scope);
                 var_def.Trainable = _trainable;
-                var_def.InitializerName = ops.strip_name_scope(initializer.name, export_scope);
+                var_def.InitializerName = ops.strip_name_scope(Initializer.name, export_scope);
                 var_def.SnapshotName = ops.strip_name_scope(_snapshot.name, export_scope);
                 if (_save_slice_info)
                     throw new NotImplementedException("to_proto _save_slice_info");

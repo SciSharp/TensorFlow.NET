@@ -65,7 +65,8 @@ namespace Tensorflow
 
         public virtual NDArray run(ITensorOrOperation fetche, params FeedItem[] feed_dict)
         {
-            return _run(fetche, feed_dict)[0];
+            var results = _run(fetche, feed_dict);
+            return fetche is Tensor ? results[0] : null;
         }
 
         public virtual (NDArray, NDArray, NDArray, NDArray, NDArray) run(

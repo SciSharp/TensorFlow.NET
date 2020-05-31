@@ -6,9 +6,6 @@ namespace Tensorflow.Keras.UnitTest
     [TestClass]
     public class OptimizerTest
     {
-        [TestMethod]
-        public void BaseConstruct()
-        {
-        }
+
     }
 }

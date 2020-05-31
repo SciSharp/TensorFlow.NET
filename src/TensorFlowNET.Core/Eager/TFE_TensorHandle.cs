@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Tensorflow.Eager
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct TFE_TensorHandle
     {
         IntPtr _handle;
-
-        public TFE_TensorHandle(IntPtr handle)
-            => _handle = handle;
-
-        public static implicit operator TFE_TensorHandle(IntPtr handle)
-            => new TFE_TensorHandle(handle);
 
         public static implicit operator IntPtr(TFE_TensorHandle tensor)
             => tensor._handle;

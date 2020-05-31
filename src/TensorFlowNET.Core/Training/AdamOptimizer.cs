@@ -111,7 +111,7 @@ namespace Tensorflow.Train
 
         protected override void _create_slots(RefVariable[] var_list)
         {
-            var first_var = var_list.OrderBy(x => x.name).First();
+            var first_var = var_list.OrderBy(x => x.Name).First();
             _create_non_slot_variable(initial_value: _beta1, name: "beta1_power", colocate_with: first_var);
             _create_non_slot_variable(initial_value: _beta2, name: "beta2_power", colocate_with: first_var);
 

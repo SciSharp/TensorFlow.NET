@@ -27,18 +27,26 @@ namespace Tensorflow.Eager
         /// <param name="ctx">The value of context.context().</param>
         /// <param name="name">Customized name for the operation.</param>
         /// <returns>List of output Tensor objects. The list is empty if there are no outputs</returns>
-        public Tensor execute(Context ctx, string op_name, Tensor[] inputs, object[] attrs, string name = null)
+        public EagerTensor[] execute(Context ctx, string op_name, int num_outputs,
+            EagerTensor[] inputs, object[] attrs, 
+            string name = null)
         {
             ctx.ensure_initialized();
-            using (var status = new Status())
-            {
-                var retVals = wrap_tfe_src.TFE_Execute(ctx, ctx.device_name, op_name, inputs, attrs, 1, status);
 
-                return new EagerTensor(retVals[0]);
-            }
+            var results = Enumerable.Range(0, num_outputs).Select(x => new EagerTensor()).ToArray();
+            using Status status = new Status(c_api.TFE_QuickExecute(ctx,
+               ctx.device_name,
+               op_name,
+               inputs.Select(x => x.EagerTensorHandle).ToArray(),
+               inputs.Length,
+               op => wrap_tfe_src.SetOpAttrs(op, attrs),
+               results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+            status.Check(true);
+
+            return results.Select(x => x.Resolve()).ToArray();
         }
 
-        public (TF_DataType, Tensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)
+        public (TF_DataType, EagerTensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)
         {
             if (args.Length == 0 && default_dtype != TF_DataType.DtInvalid)
                 return (default_dtype, null);
@@ -55,10 +63,10 @@ namespace Tensorflow.Eager
 
             if (dtype == TF_DataType.DtInvalid)
             {
-                var ret = new List<Tensor>();
+                var ret = new List<EagerTensor>();
                 foreach (var t in args)
                 {
-                    ret.Add(ops.convert_to_tensor(t, dtype, preferred_dtype: default_dtype, ctx: ctx));
+                    ret.Add(ops.convert_to_tensor(t, dtype, preferred_dtype: default_dtype, ctx: ctx) as EagerTensor);
                     if (dtype == TF_DataType.DtInvalid)
                         dtype = ret.Last().dtype;
                 }
@@ -67,11 +75,6 @@ namespace Tensorflow.Eager
             }
             else
                 throw new NotImplementedException("");
-        }
-
-        public void record_gradient(string op_name, InputList inputs, Dictionary<string, object> attrs, Tensor[] results, string name = null)
-        {
-            wrap_tfe_src.RecordGradient(op_name, inputs._inputs, attrs, results, name);
         }
     }
 }

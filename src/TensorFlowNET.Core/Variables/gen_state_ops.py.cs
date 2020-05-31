@@ -48,8 +48,6 @@ namespace Tensorflow
             _attrs["container"] = _op.get_attr("container");
             _attrs["shared_name"] = _op.get_attr("shared_name");
 
-            _execute.record_gradient("VariableV2", _inputs_flat, _attrs, _result, name);
-
             return _result[0];
         }
 
@@ -76,8 +74,6 @@ namespace Tensorflow
             _attrs["validate_shape"] = _op.get_attr("validate_shape");
             _attrs["use_locking"] = _op.get_attr("use_locking");
 
-            _execute.record_gradient("Assign", _inputs_flat, _attrs, _result, name);
-
             return _result[0];
         }
 
@@ -96,8 +92,6 @@ namespace Tensorflow
             _attrs["validate_shape"] = _op.get_attr("validate_shape");
             _attrs["use_locking"] = _op.get_attr("use_locking");
 
-            _execute.record_gradient("Assign", _inputs_flat, _attrs, _result, name);
-
             return _result[0];
         }
 
@@ -115,8 +109,6 @@ namespace Tensorflow
             _attrs["T"] = _op.get_attr("T");
             _attrs["validate_shape"] = _op.get_attr("validate_shape");
             _attrs["use_locking"] = _op.get_attr("use_locking");
-
-            _execute.record_gradient("Assign", _inputs_flat, _attrs, _result, name);
 
             return _result[0];
         }

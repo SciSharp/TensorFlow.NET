@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
+using System.Linq;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
@@ -23,14 +25,66 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
+        public static Operation assign_sub_variable_op(Tensor resource, Tensor value, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AssignSubVariableOp", name,
+                    new IntPtr[] 
+                    { 
+                        resource as EagerTensor,
+                        value as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Adds a value to the current value of a variable.
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="value"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Operation assign_add_variable_op(Tensor resource, Tensor value, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AssignAddVariableOp", name,
+                    new IntPtr[]
+                    {
+                        resource as EagerTensor,
+                        value as EagerTensor
+                    }, 2, null,
+                    null, 0));
+                status.Check(true);
+                return null;
+            }
+
+            return null;
+        }
+
         public static Operation assign_variable_op(Tensor resource, Tensor value, string name = null)
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "AssignVariableOp", name, null,
-                    resource, value);
-                return _result;
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AssignVariableOp", name,
+                    new IntPtr[]
+                    {
+                        resource as EagerTensor,
+                        value as EagerTensor
+                    }, 2, null,
+                    null, 0));
+                status.Check(true);
+                return null;
             }
 
             var _op = _op_def_lib._apply_op_helper("AssignVariableOp", name, new { resource, value });
@@ -42,10 +96,14 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "VarIsInitializedOp", name, null,
-                    resource);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "VarIsInitializedOp", name, 
+                    new IntPtr[] { resource as EagerTensor }, 
+                    1, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("VarIsInitializedOp", name, new { resource });
@@ -65,12 +123,19 @@ namespace Tensorflow
         public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape, 
             string container ="", string shared_name = "", string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if(tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "VarHandleOp", name, null,
-                    "container", container, "shared_name", shared_name, "dtype", dtype, "shape", shape.dims);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "VarHandleOp", name, null, 0,
+                    op => wrap_tfe_src.SetOpAttrs(op,
+                            "container", container,
+                            "shared_name", shared_name,
+                            "dtype", dtype,
+                            "shape", shape.dims),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("VarHandleOp", name, new {
@@ -94,10 +159,14 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "ReadVariableOp", name, null,
-                    resource, "dtype", dtype);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ReadVariableOp", name, 
+                    new IntPtr[] { resource as EagerTensor }, 1,
+                    op => wrap_tfe_src.SetOpAttrs(op, "dtype", dtype),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("ReadVariableOp", name, new

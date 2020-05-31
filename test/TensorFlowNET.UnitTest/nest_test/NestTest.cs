@@ -212,6 +212,7 @@ namespace TensorFlowNET.UnitTest.nest_test
             });
         }
 
+        [Ignore]
         [TestMethod]
         public void testIsSequence()
         {

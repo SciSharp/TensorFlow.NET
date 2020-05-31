@@ -373,7 +373,7 @@ namespace Keras.Layers
 
         private void _symbolic_add_metric(Metric value, string aggregation = null, string name = null) => throw new NotImplementedException();
 
-        private void _handle_weight_regularization(string name, VariableV1 variable, Regularizer regularizer) => throw new NotImplementedException();
+        private void _handle_weight_regularization(string name, IVariableV1 variable, Regularizer regularizer) => throw new NotImplementedException();
 
         private void _handle_activity_regularization(Tensor[] inputs, Tensor[] outputs) => throw new NotImplementedException();
 

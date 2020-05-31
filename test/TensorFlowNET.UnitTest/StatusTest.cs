@@ -2,7 +2,7 @@
 using System;
 using Tensorflow;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.Basics
 {
     [TestClass]
     public class StatusTest

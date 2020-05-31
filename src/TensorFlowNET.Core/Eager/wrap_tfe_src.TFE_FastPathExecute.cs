@@ -2,6 +2,7 @@
 using System.Linq;
 using System;
 using static Tensorflow.OpDef.Types;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
@@ -10,183 +11,23 @@ namespace Tensorflow.Eager
     /// </summary>
     public partial class wrap_tfe_src
     {
-        static int kFastPathExecuteInputStartIndex = 0;
-        public static EagerTensor TFE_FastPathExecute(Context ctx, 
-            string device_name, 
-            string opName, 
-            string name, 
-            Action callbacks,
-            params object[] args)
+        public static void SetOpAttrs(TFE_Op op, params object[] attrs)
         {
-            int args_size = args.Length;
-            var attr_list_sizes = new Dictionary<string, long>();
-            using (var status = new Status())
-            {
-                var op = GetOp(ctx, opName, status);
-
-                var op_def = Graph.TFE_GetOpDef(opName);
-
-                // Set non-inferred attrs, including setting defaults if the attr is passed in
-                // as None.
-                for (int i = kFastPathExecuteInputStartIndex + op_def.InputArg.Count; i < args_size; i += 2)
-                {
-                    var attr_name = args[i].ToString();
-                    var attr_value = args[i + 1];
-
-                    foreach(var attr in op_def.Attr)
-                    {
-                        if(attr_name == attr.Name)
-                        {
-                            SetOpAttrWithDefaults(ctx, op, attr, attr_name, attr_value, attr_list_sizes, status);
-                            status.Check(true);
-                            break;
-                        }
-                    }
-                }
-
-                c_api.TFE_OpSetDevice(op, device_name, status.Handle);
-                status.Check(true);
-
-                // Add inferred attrs and inputs.
-                for (int i = 0; i < op_def.InputArg.Count; i++)
-                {
-                    var input_arg = op_def.InputArg[i];
-                    if (!string.IsNullOrEmpty(input_arg.NumberAttr))
-                    {
-                        int len = (args[kFastPathExecuteInputStartIndex + i] as object[]).Length;
-                        c_api.TFE_OpSetAttrInt(op, input_arg.NumberAttr, len);
-                        attr_list_sizes[input_arg.NumberAttr] = len;
-
-                        if (len > 0)
-                        {
-                            var fast_input_array = (object[])args[i];
-                            // First item adds the type attr.
-                            if (!AddInputToOp(fast_input_array[i], true, input_arg, op, status))
-                                return null;
-
-                            for (var j = 1; j < len; j++)
-                            {
-                                // Since the list is homogeneous, we don't need to re-add the attr.
-                                if (!AddInputToOp(fast_input_array[j], false, input_arg, op, status))
-                                    return null;
-                            }
-                        }
-                    }
-                    else if (!string.IsNullOrEmpty(input_arg.TypeListAttr))
-                    {
-
-                    }
-                    else
-                    {
-                        // The item is a single item.
-                        AddInputToOp(args[i], true, input_arg, op, status);
-                    }
-                }
-
-                int num_retvals = 0;
-                for (int i = 0; i < op_def.OutputArg.Count; i++)
-                {
-                    var output_arg = op_def.OutputArg[i];
-                    var delta = 1L;
-                    if (!string.IsNullOrEmpty(output_arg.NumberAttr))
-                        delta = attr_list_sizes[output_arg.NumberAttr];
-                    else if (!string.IsNullOrEmpty(output_arg.TypeListAttr))
-                        delta = attr_list_sizes[output_arg.TypeListAttr];
-                    if(delta < 0)
-                        throw new RuntimeError("Attributes suggest that the size of an output list is less than 0");
-                    num_retvals += (int)delta;
-                }
-
-                var retVals = new IntPtr[num_retvals];
-                c_api.TFE_Execute(op, retVals, ref num_retvals, status.Handle);
-                status.Check(true);
-
-                return num_retvals == 0 ? null : new EagerTensor(retVals[0]);
-            }
-        }
-
-        private static TFE_Op GetOp(Context ctx, string op_or_function_name, Status status) 
-        {
-            var maybe_op = ReleaseThreadLocalOp();
-            if (maybe_op != IntPtr.Zero)
-            {
-                c_api.TFE_OpReset(ctx, op_or_function_name, status.Handle, maybe_op);
-            }
-            else
-            {
-                maybe_op = c_api.TFE_NewOp(ctx, op_or_function_name, status.Handle);
-                op = maybe_op;
-            }
-
-            status.Check(true);
-            return maybe_op;
-        }
-
-        static TFE_Op op;
-        private static TFE_Op ReleaseThreadLocalOp()
-        {
-            return op;
-        }
-
-        /// <summary>
-        /// Adds input and type attr to the op, and to the list of flattened
-        /// inputs/attrs.
-        /// </summary>
-        /// <param name="inputs"></param>
-        /// <param name="add_type_attr"></param>
-        /// <param name="input_arg"></param>
-        /// <param name="op"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
-        private static bool AddInputToOp(object inputs,
-            bool add_type_attr,
-            ArgDef input_arg,
-            IntPtr op, 
-            Status status)
-        {
-            TFE_TensorHandle input_handle;
-
-            // ConvertToTensor();
-            switch (inputs)
-            {
-                case EagerTensor input:
-                    input_handle = (TFE_TensorHandle)input;
-                    break;
-                case EagerTensor[] input_list:
-                    input_handle = (TFE_TensorHandle)input_list[0];
-                    break;
-                default:
-                    throw new NotImplementedException("");
-            }
-
-            if(add_type_attr && !string.IsNullOrEmpty(input_arg.TypeAttr))
-            {
-                var dtype = c_api.TFE_TensorHandleDataType(input_handle);
-                c_api.TFE_OpSetAttrType(op, input_arg.TypeAttr, dtype);
-            }
-
-            c_api.TFE_OpAddInput(op, input_handle, status.Handle);
-            status.Check(true);
-
-            return true;
-        }
-
-        private static void SetOpAttrs(Context ctx, TFE_Op op, object[] attrs, int start_index, Status out_status)
-        {
+            using var status = new Status();
             var len = attrs.Length;
             for (int i = 0; i < len; i += 2)
             {
-                var key = attrs[start_index + i].ToString();
-                var value = attrs[start_index + i + 1];
+                var key = attrs[i].ToString();
+                var value = attrs[i + 1];
 
-                byte is_list = 0;
-                var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, out_status.Handle);
-                if (!out_status.ok()) return;
+                byte is_list = 0; 
+                var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, status.Handle);
+                if (!status.ok()) return;
                 if (is_list != 0)
-                    SetOpAttrList(ctx, op, key, value, type, null, out_status);
+                    SetOpAttrList(tf.context, op, key, value, type, null, status);
                 else
-                    SetOpAttrScalar(ctx, op, key, value, type, null, out_status);
-                out_status.Check(true);
+                    SetOpAttrScalar(tf.context, op, key, value, type, null, status);
+                status.Check(true);
             }
         }
 

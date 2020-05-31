@@ -116,6 +116,8 @@ namespace Tensorflow
             public IActivation relu() => new relu();
             public IActivation swish() => new swish();
             public IActivation tanh() => new tanh();
+
+            public IActivation softmax() => new softmax();
             public Tensor tanh(Tensor x, string name = null)
                 => gen_nn_ops.tanh(x, name);
 
@@ -123,8 +125,8 @@ namespace Tensorflow
                 => gen_nn_ops.relu(features, name);
 
             public Tensor[] fused_batch_norm(Tensor x,
-                VariableV1 scale,
-                VariableV1 offset,
+                IVariableV1 scale,
+                IVariableV1 offset,
                 Tensor mean = null,
                 Tensor variance = null,
                 float epsilon = 0.001f,

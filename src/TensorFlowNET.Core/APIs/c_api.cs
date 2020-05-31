@@ -43,7 +43,7 @@ namespace Tensorflow
     /// </summary>
     public partial class c_api
     {
-        public const string TensorFlowLibName = "tensorflow";
+        public const string TensorFlowLibName = @"D:\SciSharp\tensorflow-google\bazel-bin\tensorflow\tensorflow.dll";
 
         public static string StringPiece(IntPtr handle)
         {
@@ -51,7 +51,7 @@ namespace Tensorflow
         }
 
         public delegate void Deallocator(IntPtr data, IntPtr size, ref DeallocatorArgs args);
-
+        public delegate void DeallocatorV2(IntPtr data, long size, IntPtr args);
         public struct DeallocatorArgs
         {
             internal static unsafe c_api.DeallocatorArgs* EmptyPtr;

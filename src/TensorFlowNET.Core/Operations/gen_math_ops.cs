@@ -16,12 +16,13 @@
 
 using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public static class gen_math_ops
+    public static partial class gen_math_ops
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
         public static Execute _execute = new Execute();
@@ -41,9 +42,33 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor add_n(Tensor[] inputs, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AddN", name,
+                    inputs.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), inputs.Length,
+                    null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("AddN", name, args: new { inputs });
 
             return _op.outputs[0];
+        }
+
+        public static IntPtr add_n(IntPtr[] inputs, string name = null)
+        {
+            var results = new[] { c_api.TFE_NewEagerTensor() };
+            using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                "AddN", name,
+                inputs, inputs.Length,
+                null,
+                results, results.Length));
+            status.Check(true);
+            return results[0];
         }
 
         /// <summary>
@@ -119,20 +144,33 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                try
-                {
-                    var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
-                        "Mean", name, null, 
-                        input, axis, "keep_dims", keep_dims);
-                    return _result;
-                }
-                catch (Exception)
-                {
-                    return mean_eager_fallback(input as Tensor[], axis as Tensor, keep_dims: keep_dims, name: name, ctx: tf.context);
-                }
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Mean", name,
+                    new IntPtr[]
+                    {
+                            input as EagerTensor,
+                            axis as EagerTensor
+                    }, 2,
+                    op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
+
+            return _op.output;
+        }
+
+        public static Tensor mean(Tensor[] inputs, Tensor axis, bool keep_dims = false, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                return mean_eager_fallback(inputs, axis, keep_dims: keep_dims, name: name, ctx: tf.context);
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { inputs, reduction_indices = axis, keep_dims = keep_dims });
 
             return _op.output;
         }
@@ -144,7 +182,7 @@ namespace Tensorflow
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return _execute.execute(ctx, "Mean", _inputs_flat, _attrs, name: name);
+            return _execute.execute(ctx, "Mean", 1, _inputs_flat, _attrs, name: name)[0];
         }
 
         public static Tensor prod<T1, T2>(T1 input, T2 axis, bool keep_dims = false, string name = null)
@@ -153,10 +191,17 @@ namespace Tensorflow
             {
                 try
                 {
-                    var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                        "Prod", name, null,
-                        input, axis, "keep_dims", keep_dims);
-                    return _result;
+                    var results = new[] { new EagerTensor() };
+                    using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                        "Prod", name, new IntPtr[]
+                        {
+                            input as EagerTensor,
+                            axis as EagerTensor
+                        }, 2,
+                        op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims),
+                        results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                    status.Check(true);
+                    return results[0].Resolve();
                 }
                 catch (Exception)
                 {
@@ -175,7 +220,7 @@ namespace Tensorflow
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return _execute.execute(ctx, "Prod", _inputs_flat, _attrs, name: name);
+            return _execute.execute(ctx, "Prod", 1, _inputs_flat, _attrs, name: name)[0];
         }
 
         public static Tensor acos(Tensor x, string name = null)
@@ -192,14 +237,41 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor add(Tensor x, Tensor y, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Add", name, new IntPtr[] 
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
+
+            return _op.output;
+        }
+
         public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
-                    "Add", name, null, 
-                    x, y);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Add", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Add", name, args: new { x, y });
@@ -212,10 +284,16 @@ namespace Tensorflow
             // forward_compatible(2019, 6, 25):
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "AddV2", name, null,
-                    x, y);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AddV2", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("AddV2", name, args: new { x, y });
@@ -241,10 +319,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Sin", name, null,
-                    x);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sin", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Sin", name, args: new { x });
@@ -270,10 +353,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Sigmoid", name, null,
-                    x);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sigmoid", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var op = _op_def_lib._apply_op_helper("Sigmoid", name: name, new { x });
@@ -358,10 +446,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Tan", name, null,
-                    x);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Tan", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Tan", name, args: new { x });
@@ -434,6 +527,20 @@ namespace Tensorflow
 
         public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Less", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
 
             return _op.outputs[0];
@@ -497,6 +604,19 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `x`.</returns>
         public static Tensor square(Tensor x, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Square", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Square", name, args: new { x });
 
             return _op.outputs[0];
@@ -552,10 +672,14 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
-                    "Cast", name, null, 
-                    x, "DstT", DstT, "Truncate", Truncate);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Cast", name,
+                    new IntPtr[] { x as EagerTensor }, 1,
+                    op => wrap_tfe_src.SetOpAttrs(op, "DstT", DstT, "Truncate", Truncate),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate });
@@ -567,10 +691,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Neg", name, null, 
-                    x);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Neg", name, new IntPtr[]
+                    {
+                        x as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Neg", name, args: new { x });
@@ -582,10 +711,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Sqrt", name, null,
-                    x);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sqrt", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Sqrt", name, args: new { x });
@@ -593,14 +727,41 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor sub(Tensor x, Tensor y, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sub", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Sub", name, args: new { x, y });
+
+            return _op.output;
+        }
+
         public static Tensor sub<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
-                    "Sub", name, null, 
-                    x, y);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sub", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Sub", name, args: new { x, y });
@@ -619,10 +780,16 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Equal", name, null,
-                    x, y);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Equal", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Equal", name, args: new { x, y });
@@ -642,10 +809,16 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "NotEqual", name, null,
-                    x, y);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "NotEqual", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("NotEqual", name, args: new { x, y });
@@ -657,13 +830,40 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Atan2", name, null,
-                    y, x);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Atan2", name, new IntPtr[]
+                    {
+                        y as EagerTensor,
+                        x as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Atan2", name, args: new { y, x });
+            return _op.output;
+        }
+
+        public static Tensor mul(Tensor x, Tensor y, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Mul", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Mul", name, args: new { x, y });
+
             return _op.output;
         }
 
@@ -671,10 +871,16 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
-                    "Mul", name, null, 
-                    x, y);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Mul", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor,
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Mul", name, args: new { x, y });
@@ -693,8 +899,16 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, "", "RealDiv", name, null, x, y);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "RealDiv", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("RealDiv", name, args: new { x, y });
@@ -711,6 +925,20 @@ namespace Tensorflow
 
         public static Tensor floor_mod(Tensor x, Tensor y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "FloorMod", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("FloorMod", name, args: new { x, y });
 
             return _op.outputs[0];
@@ -720,8 +948,16 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, "", "FloorDiv", name, null, x, y);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "FloorDiv", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("FloorDiv", name, args: new { x, y });
@@ -742,10 +978,20 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
-                    "MatMul", name, null,
-                    a, b, "transpose_a", transpose_a, "transpose_b", transpose_b);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "MatMul", name,
+                    new IntPtr[]
+                    {
+                        a as EagerTensor,
+                        b as EagerTensor
+                    }, 2,
+                    op => wrap_tfe_src.SetOpAttrs(op, 
+                            "transpose_a", transpose_a,
+                            "transpose_b", transpose_b),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("MatMul", name, args: new { a, b, transpose_a, transpose_b });
@@ -839,6 +1085,20 @@ namespace Tensorflow
 
         public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Pow", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                        y as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Pow", name, args: new { x, y });
 
             return _op.outputs[0];
@@ -848,21 +1108,34 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                try
-                {
-                    var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                        "Sum", name, null,
-                        input, axis, "keep_dims", keep_dims);
-                    return _result;
-                }
-                catch (Exception)
-                {
-                    return _sum_eager_fallback(input as Tensor[], axis as Tensor, 
-                        keep_dims: keep_dims, name: name, ctx: tf.context);
-                }
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Sum", name,
+                    new IntPtr[]
+                    {
+                            input as EagerTensor,
+                            axis as EagerTensor
+                    }, 2,
+                    op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor _sum(Tensor[] inputs, Tensor axis = default, bool keep_dims = false, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                return _sum_eager_fallback(inputs, axis,
+                        keep_dims: keep_dims, name: name, ctx: tf.context);
+            }
+
+            var _op = _op_def_lib._apply_op_helper("Sum", name, args: new { inputs, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
@@ -874,7 +1147,7 @@ namespace Tensorflow
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return _execute.execute(ctx, "Sum", _inputs_flat, _attrs, name: name);
+            return _execute.execute(ctx, "Sum", 1, _inputs_flat, _attrs, name: name)[0];
         }
 
         /// <summary>
@@ -889,8 +1162,17 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var _result = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, "Range", name, null, start, limit, delta);
-                return _result;
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Range", name, new IntPtr[]
+                    {
+                        start as EagerTensor,
+                        limit as EagerTensor,
+                        delta as EagerTensor
+                    }, 3, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Range", name, new { start, limit, delta });

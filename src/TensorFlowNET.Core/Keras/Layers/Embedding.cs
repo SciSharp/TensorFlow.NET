@@ -23,7 +23,7 @@ namespace Tensorflow.Keras.Layers
         private int input_dim;
         private int output_dim;
         private bool mask_zero;
-        public VariableV1 embeddings;
+        public IVariableV1 embeddings;
         public IInitializer embeddings_initializer;
         int input_length;
 

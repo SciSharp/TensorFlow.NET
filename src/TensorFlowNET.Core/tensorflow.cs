@@ -14,8 +14,14 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -35,10 +41,58 @@ namespace Tensorflow
 
         public Context context = new Context(new ContextOptions(), new Status());
 
-
         public tensorflow()
         {
             _constructThreadingObjects();
+            InitGradientEnvironment();
+        }
+
+        private unsafe void InitGradientEnvironment()
+        {
+            GarbageCollector.Init();
+
+            var vspace = c_api.VSpace_Handle((shape, dims, dtype) =>
+            {
+                var ones = constant_op.constant(1.0f, dtype: dtype) as EagerTensor;
+                return ones.EagerTensorHandle;
+            }, (gradients) =>
+            {
+                var add_n = gen_math_ops.add_n(gradients.Data);
+                return add_n;
+            });
+
+            ops.RegisterFromAssembly();
+            // ops.RegisterFromAssemblyEager();
+
+            c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, num_attrs, output_grads, skip_input_indices) =>
+            {
+                /*var input_tensors = new BindingArray(op_inputs);
+                var output_tensors = new BindingArray(op_outputs);
+                var output_grad_tensors = new BindingArray(output_grads);*/
+                var input_tensors = new BindingTensorArray(op_inputs).Data.Select(x => new EagerTensor(x)).ToArray();
+                var output_tensors = new BindingTensorArray(op_outputs).Data.Select(x => new EagerTensor(x)).ToArray();
+                var output_grad_tensors = new BindingTensorArray(output_grads).Data.Select(x => new EagerTensor(x)).ToArray();
+                var skip_input_indices_param = new BindingArray(skip_input_indices).Data.Select(x => *(int*)x).ToArray();
+
+                var gradients = ops.gradientFunctions[op_name](new EagerOperation
+                {
+                    NumInputs = input_tensors.Length,
+                    Inputs = input_tensors,
+                    // InputHandles = input_tensors.Data,
+                    NumOutputs = output_tensors.Length,
+                    Outputs = output_tensors,
+                    // OutputHandles = output_tensors.Data,
+                    SkipInputIndices = skip_input_indices_param
+                }, output_grad_tensors);
+
+                var gradients_handles = gradients.Select(x => x == null ? IntPtr.Zero : (x as EagerTensor).EagerTensorHandle).ToArray();
+                var wrap_handle = c_api.TFE_WrapGradientResult(gradients_handles, gradients.Length);
+
+                return wrap_handle;
+            }, (op_name, op_inputs, op_outputs) =>
+            {
+
+            });
         }
 
         public ResourceVariable Variable<T>(T data,

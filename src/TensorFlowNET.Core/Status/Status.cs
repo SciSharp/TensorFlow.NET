@@ -54,6 +54,11 @@ namespace Tensorflow
             Handle = TF_NewStatus();
         }
 
+        public Status(SafeStatusHandle handle)
+        {
+            Handle = handle ?? throw new ArgumentNullException(nameof(handle));
+        }
+
         public void SetStatus(TF_Code code, string msg)
         {
             TF_SetStatus(Handle, code, msg);

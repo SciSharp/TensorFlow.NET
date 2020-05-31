@@ -33,7 +33,7 @@ namespace Tensorflow.Train
         public RefVariable create_slot(RefVariable primary, Tensor val, string name, bool colocate_with_primary = true)
         {
             var validate_shape = val.TensorShape.is_fully_defined();
-            var prefix = primary.op.name;
+            var prefix = primary.Op.name;
             return tf_with(tf.variable_scope(name: null, prefix + "/" + name), delegate
             {
                 return _create_slot_var(primary, val, "", validate_shape, null, TF_DataType.DtInvalid);
@@ -74,7 +74,7 @@ namespace Tensorflow.Train
             TF_DataType dtype, string name, bool colocate_with_primary = true)
         {
             var validate_shape = shape.is_fully_defined();
-            var prefix = primary.op.name;
+            var prefix = primary.Op.name;
             return tf_with(new variable_scope(string.Empty, prefix + "/" + name), delegate
             {
                 return _create_slot_var(primary, initializer, "", validate_shape, shape, dtype);
@@ -91,7 +91,7 @@ namespace Tensorflow.Train
         /// <param name="shape"></param>
         /// <param name="dtype"></param>
         /// <returns></returns>
-        private RefVariable _create_slot_var(VariableV1 primary, object val, string scope, bool validate_shape, 
+        private RefVariable _create_slot_var(IVariableV1 primary, object val, string scope, bool validate_shape, 
             TensorShape shape, TF_DataType dtype)
         {
             bool use_resource = primary is ResourceVariable;

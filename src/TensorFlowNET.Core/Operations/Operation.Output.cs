@@ -38,8 +38,8 @@ namespace Tensorflow
             return num;
         }
 
-        private Tensor[] _outputs;
-        public Tensor[] outputs => _outputs;
+        protected Tensor[] _outputs;
+        public virtual Tensor[] outputs => _outputs;
         public Tensor output => _outputs.FirstOrDefault();
 
         public int NumControlOutputs => c_api.TF_OperationNumControlOutputs(_handle);

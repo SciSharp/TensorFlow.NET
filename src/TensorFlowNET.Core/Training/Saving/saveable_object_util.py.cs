@@ -28,7 +28,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="names_to_saveables"></param>
         /// <returns></returns>
-        public static SaveableObject[] validate_and_slice_inputs(VariableV1[] names_to_saveables)
+        public static SaveableObject[] validate_and_slice_inputs(IVariableV1[] names_to_saveables)
         {
             var names_to_saveables_dict = op_list_to_dict(names_to_saveables);
             var saveables = new List<SaveableObject>();
@@ -76,9 +76,9 @@ namespace Tensorflow
             }
         }
 
-        public static Dictionary<string, Tensor> op_list_to_dict(VariableV1[] op_list, bool convert_variable_to_tensor = true)
+        public static Dictionary<string, Tensor> op_list_to_dict(IVariableV1[] op_list, bool convert_variable_to_tensor = true)
         {
-            op_list = op_list.OrderBy(x => x.name).ToArray();
+            op_list = op_list.OrderBy(x => x.Name).ToArray();
             var names_to_saveables = new Dictionary<string, Tensor>();
 
             foreach(var var in op_list)
@@ -103,7 +103,7 @@ namespace Tensorflow
                         if (convert_variable_to_tensor)
                         {
                             if (var is ResourceVariable)
-                                tensor = var.graph_element;
+                                tensor = var.GraphElement;
                             else
                                 tensor = ops.internal_convert_to_tensor(var, as_ref: true);
                         }
@@ -111,7 +111,7 @@ namespace Tensorflow
                         if (tensor.op.type == "ReadVariableOp")
                             name = tensor.op.inputs[0].op.name;
                         else
-                            name = var.op.name;
+                            name = var.Op.name;
 
                         if (names_to_saveables.ContainsKey(name))
                             throw new ValueError($"At least two variables have the same name: {name}");

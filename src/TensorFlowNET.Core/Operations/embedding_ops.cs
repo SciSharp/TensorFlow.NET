@@ -61,7 +61,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="max_norm"></param>
         /// <returns></returns>
-        public static Tensor _embedding_lookup_and_transform(VariableV1 @params,
+        public static Tensor _embedding_lookup_and_transform(IVariableV1 @params,
             Tensor ids,
             string partition_strategy = "mod",
             string name = null,
@@ -131,7 +131,7 @@ namespace Tensorflow
               max_norm: max_norm);
         }
 
-        public static Tensor embedding_lookup(VariableV1 @params, Tensor ids,
+        public static Tensor embedding_lookup(IVariableV1 @params, Tensor ids,
             string partition_strategy = "mod",
             string name = null,
             bool validate_indices = true,

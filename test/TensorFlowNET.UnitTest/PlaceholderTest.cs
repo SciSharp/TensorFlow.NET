@@ -7,6 +7,7 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class PlaceholderTest
     {
+        [Ignore]
         [TestMethod]
         public void placeholder()
         {
