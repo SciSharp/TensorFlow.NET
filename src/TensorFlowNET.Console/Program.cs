@@ -15,16 +15,16 @@ namespace Tensorflow
             int batchSize = 1000;
 
             // 1 million float tensor 58.5M.
-            // mm.Execute(10, 100 * batchSize, cases.Constant);
+            mm.Execute(10, 100 * batchSize, cases.Constant);
 
             // 100K float variable 80.5M.
-            //mm.Execute(10, 10 * batchSize, cases.Variable);
+            mm.Execute(10, 10 * batchSize, cases.Variable);
 
             // 1 million math add 36.5M.
-            // mm.Execute(10, 100 * batchSize, cases.MathAdd);
+            mm.Execute(10, 100 * batchSize, cases.MathAdd);
 
-            // 100K gradient 211M.
-            mm.Execute(100, 1 * batchSize, cases.Gradient);
+            // 100K gradient 210M.
+            mm.Execute(10, 10 * batchSize, cases.Gradient);
 
             Console.WriteLine("Finished.");
             Console.ReadLine();

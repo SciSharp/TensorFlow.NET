@@ -314,7 +314,7 @@ namespace Tensorflow
                     }, 2, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
-                return (results[0], results[1]);
+                return (results[0].Resolve(), results[1].Resolve());
             }
 
             var _op = _op_def_lib._apply_op_helper("BroadcastGradientArgs", name, new { s0, s1 });

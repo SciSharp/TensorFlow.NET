@@ -2,27 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public class GarbageCollector
     {
         static Dictionary<IntPtr, GCItemCounter> container = new Dictionary<IntPtr, GCItemCounter>();
-        static Timer timer = null;
+
         static object locker = new object();
+        public static void Init()
+        {
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(100);
+                    Recycle();
+                }
+            });
+
+        }
 
         public static void Increase(IntPtr handle, GCItemType type)
         {
-            if(timer == null)
-            {
-                timer = new Timer(300);
-                // Hook up the Elapsed event for the timer. 
-                timer.Elapsed += OnTimedEvent;
-                timer.AutoReset = true;
-                timer.Enabled = true;
-            }
-
             if (container.ContainsKey(handle))
             {
                 container[handle].RefCounter++;
@@ -52,15 +58,13 @@ namespace Tensorflow
             }
         }
 
-        private static void OnTimedEvent(object source, ElapsedEventArgs e)
+        private static void Recycle()
         {
-            timer.Stop();
-
             // dispose before 1 sec
             lock (locker)
             {
                 var items = container.Values
-                    .Where(x => x.RefCounter <= 0 && (DateTime.Now - x.LastUpdateTime).Milliseconds > 300)
+                    .Where(x => x.RefCounter <= 0 && (DateTime.Now - x.LastUpdateTime).TotalMilliseconds > 100)
                     .ToArray();
 
                 foreach (var item in items)
@@ -70,12 +74,15 @@ namespace Tensorflow
                     switch (item.ItemType)
                     {
                         case GCItemType.TensorHandle:
+                            // print($"c_api.TF_DeleteTensor({item.Handle.ToString("x16")})");
                             c_api.TF_DeleteTensor(item.Handle);
                             break;
                         case GCItemType.LocalTensorHandle:
+                            // print($"c_api.TFE_DeleteTensorHandle({item.Handle.ToString("x16")})");
                             c_api.TFE_DeleteTensorHandle(item.Handle);
                             break;
                         case GCItemType.EagerTensorHandle:
+                            // print($"c_api.TFE_DeleteEagerTensor({item.Handle.ToString("x16")})");
                             c_api.TFE_DeleteEagerTensor(item.Handle);
                             break;
                         default:
@@ -83,8 +90,6 @@ namespace Tensorflow
                     }
                 }
             }
-
-            timer.Start();
         }
     }
 }

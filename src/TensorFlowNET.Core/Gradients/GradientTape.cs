@@ -84,7 +84,7 @@ namespace Tensorflow.Gradients
                 new [] { (source as EagerTensor).EagerTensorHandle }, 1,
                 results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
             status.Check(true);
-            return results[0];
+            return results[0].Resolve();
         }
 
         public unsafe (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources)
@@ -116,7 +116,7 @@ namespace Tensorflow.Gradients
                 _tape = null;
             }
 
-            return (results[0], results[1]);
+            return (results[0].Resolve(), results[1].Resolve());
         }
 
         public void Dispose()

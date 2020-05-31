@@ -49,15 +49,16 @@ namespace Tensorflow
 
         private unsafe void InitGradientEnvironment()
         {
+            GarbageCollector.Init();
+
             var vspace = c_api.VSpace_Handle((shape, dims, dtype) =>
             {
                 var ones = constant_op.constant(1.0f, dtype: dtype) as EagerTensor;
                 return ones.EagerTensorHandle;
             }, (gradients) =>
             {
-                var input_grads = gradients.Data.Select(x => new EagerTensor(x)).ToArray();
-                var add_n = gen_math_ops.add_n(input_grads) as EagerTensor;
-                return add_n.EagerTensorHandle;
+                var add_n = gen_math_ops.add_n(gradients.Data);
+                return add_n;
             });
 
             ops.RegisterFromAssembly();
@@ -65,6 +66,9 @@ namespace Tensorflow
 
             c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, num_attrs, output_grads, skip_input_indices) =>
             {
+                /*var input_tensors = new BindingArray(op_inputs);
+                var output_tensors = new BindingArray(op_outputs);
+                var output_grad_tensors = new BindingArray(output_grads);*/
                 var input_tensors = new BindingTensorArray(op_inputs).Data.Select(x => new EagerTensor(x)).ToArray();
                 var output_tensors = new BindingTensorArray(op_outputs).Data.Select(x => new EagerTensor(x)).ToArray();
                 var output_grad_tensors = new BindingTensorArray(output_grads).Data.Select(x => new EagerTensor(x)).ToArray();
@@ -74,8 +78,10 @@ namespace Tensorflow
                 {
                     NumInputs = input_tensors.Length,
                     Inputs = input_tensors,
+                    // InputHandles = input_tensors.Data,
                     NumOutputs = output_tensors.Length,
                     Outputs = output_tensors,
+                    // OutputHandles = output_tensors.Data,
                     SkipInputIndices = skip_input_indices_param
                 }, output_grad_tensors);
 

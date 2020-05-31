@@ -13,7 +13,7 @@ namespace Tensorflow.Eager
         public IntPtr EagerTensorHandle { get; set; }
         public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(tfe_tensor_handle, status));
 
-        public override int rank => c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, status);
+        // public override int rank => c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, status);
 
         public static int GetRank(IntPtr handle)
         {

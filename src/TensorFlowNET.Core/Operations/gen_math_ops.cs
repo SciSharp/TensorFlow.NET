@@ -59,16 +59,16 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static EagerTensor add_n(IntPtr[] inputs, string name = null)
+        public static IntPtr add_n(IntPtr[] inputs, string name = null)
         {
-            var results = new[] { new EagerTensor() };
+            var results = new[] { c_api.TFE_NewEagerTensor() };
             Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                 "AddN", name,
                 inputs, inputs.Length,
                 null,
-                results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                results, results.Length);
             status.Check(true);
-            return results[0].Resolve();
+            return results[0];
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Tensorflow
                     op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims),
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
-                return results[0];
+                return results[0].Resolve();
             }
 
             var _op = _op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
