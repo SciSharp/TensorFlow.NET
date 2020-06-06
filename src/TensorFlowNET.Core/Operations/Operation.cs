@@ -57,7 +57,7 @@ namespace Tensorflow
         public int _id_value { get; set; }
         public Operation op => this;
         public TF_DataType dtype => TF_DataType.DtInvalid;
-        public string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
+        public virtual string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationOpType(_handle));
 
         public string Device => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
@@ -228,7 +228,7 @@ namespace Tensorflow
         public T get_attr<T>(string name)
             => (T)get_attr(name);
 
-        public object get_attr(string name)
+        public virtual object get_attr(string name)
         {
             AttrValue x = null;
 

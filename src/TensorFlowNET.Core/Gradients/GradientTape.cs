@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.WellKnownTypes;
+using NumSharp.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,7 +73,7 @@ namespace Tensorflow.Gradients
 
         public Tensor gradient(Tensor target, Tensor source)
         {
-            if(_recording)
+            if (_recording)
             {
                 if (!_persistent)
                     _pop_tape();
@@ -80,14 +81,21 @@ namespace Tensorflow.Gradients
 
             var results = new[] { new EagerTensor() };
             Status status = c_api.TFE_TapeGradient(_tape,
-                new [] { (target as EagerTensor).EagerTensorHandle }, 1,
-                new [] { (source as EagerTensor).EagerTensorHandle }, 1,
+                new[] { (target as EagerTensor).EagerTensorHandle }, 1,
+                new[] { (source as EagerTensor).EagerTensorHandle }, 1,
                 results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
             status.Check(true);
             return results[0].Resolve();
         }
 
-        public unsafe (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources)
+        public (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources)
+        {
+            var results = gradient(target as EagerTensor, new[] { sources.Item1, sources.Item2 });
+
+            return (results[0], results[1]);
+        }
+
+        public EagerTensor[] gradient(EagerTensor target, ResourceVariable[] sources)
         {
             if (_recording)
             {
@@ -95,17 +103,13 @@ namespace Tensorflow.Gradients
                     _pop_tape();
             }
 
-            var results = new[] { new EagerTensor(), new EagerTensor() };
+            var results = sources.Select(x => new EagerTensor()).ToArray();
             Status status = c_api.TFE_TapeGradient(_tape,
-                new IntPtr[] 
-                { 
-                    target as EagerTensor 
+                new IntPtr[]
+                {
+                    target.EagerTensorHandle
                 }, 1,
-                new IntPtr[] 
-                { 
-                    (sources.Item1.Handle as EagerTensor).EagerTensorHandle, 
-                    (sources.Item2.Handle as EagerTensor).EagerTensorHandle 
-                }, 2,
+                sources.Select(x => (x.Handle as EagerTensor).EagerTensorHandle).ToArray(), sources.Length,
                 results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
             status.Check(true);
 
@@ -116,7 +120,7 @@ namespace Tensorflow.Gradients
                 _tape = null;
             }
 
-            return (results[0].Resolve(), results[1].Resolve());
+            return results.Select(x => x.Resolve()).ToArray();
         }
 
         public void Dispose()

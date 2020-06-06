@@ -47,7 +47,7 @@ namespace Tensorflow
             InitGradientEnvironment();
         }
 
-        private unsafe void InitGradientEnvironment()
+        private void InitGradientEnvironment()
         {
             GarbageCollector.Init();
 
@@ -64,7 +64,7 @@ namespace Tensorflow
             ops.RegisterFromAssembly();
             // ops.RegisterFromAssemblyEager();
 
-            c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, num_attrs, output_grads, skip_input_indices) =>
+            c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, attrs_handle, output_grads, skip_input_indices) =>
             {
                 /*var input_tensors = new BindingArray(op_inputs);
                 var output_tensors = new BindingArray(op_outputs);
@@ -72,17 +72,20 @@ namespace Tensorflow
                 var input_tensors = new BindingTensorArray(op_inputs).Data.Select(x => new EagerTensor(x)).ToArray();
                 var output_tensors = new BindingTensorArray(op_outputs).Data.Select(x => new EagerTensor(x)).ToArray();
                 var output_grad_tensors = new BindingTensorArray(output_grads).Data.Select(x => new EagerTensor(x)).ToArray();
-                var skip_input_indices_param = new BindingArray(skip_input_indices).Data.Select(x => *(int*)x).ToArray();
+                var skip_input_indices_param = new BindingArray(skip_input_indices);
+                var attrs = new BindingArray(attrs_handle);//.Data.Select(x => *(int*)x).ToArray();
 
                 var gradients = ops.gradientFunctions[op_name](new EagerOperation
                 {
+                    Name = op_name,
                     NumInputs = input_tensors.Length,
                     Inputs = input_tensors,
                     // InputHandles = input_tensors.Data,
                     NumOutputs = output_tensors.Length,
                     Outputs = output_tensors,
                     // OutputHandles = output_tensors.Data,
-                    SkipInputIndices = skip_input_indices_param
+                    SkipInputIndicesArray = skip_input_indices_param,
+                    AttrsArray = attrs
                 }, output_grad_tensors);
 
                 var gradients_handles = gradients.Select(x => x == null ? IntPtr.Zero : (x as EagerTensor).EagerTensorHandle).ToArray();

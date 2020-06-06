@@ -464,6 +464,19 @@ namespace Tensorflow
 
         public static Tensor tanh(Tensor x, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Tanh", name, new IntPtr[]
+                    {
+                        x as EagerTensor,
+                    }, 1, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Tanh", name, args: new { x });
 
             return _op.outputs[0];
@@ -477,7 +490,24 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor tanh_grad(Tensor y, Tensor dy, string name = null)
-            => _op_def_lib._apply_op_helper("TanhGrad", name: name, args: new { y, dy }).output;
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "TanhGrad", name, new IntPtr[]
+                    {
+                        y as EagerTensor,
+                        dy as EagerTensor
+                    }, 2, null,
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
+            var _op = _op_def_lib._apply_op_helper("TanhGrad", name: name, args: new { y, dy }).output;
+            return _op.outputs[0];
+        }
 
         public static Tensor floor(Tensor x, string name = null)
         {

@@ -36,6 +36,13 @@ namespace Tensorflow.Keras.Optimizers
             apply_state = new Dictionary<DeviceDType, Dictionary<string, Tensor>>();
         }
 
+        public void apply_gradients((Tensor, ResourceVariable) grads_and_vars,
+            string name = null,
+            bool experimental_aggregate_gradients = true)
+            => apply_gradients(new (Tensor, ResourceVariable)[] { grads_and_vars },
+                name: name,
+                experimental_aggregate_gradients: experimental_aggregate_gradients);
+
         /// <summary>
         /// Apply gradients to variables.
         /// </summary>

@@ -497,8 +497,8 @@ namespace Tensorflow.Gradients
                         if (tf.context.executing_eagerly())
                         {
                             // should add ones_rank_cache
-                            var new_shape_tensor = constant_op.constant(np.array(new int[] { 1 }) * rank, dtype: TF_DataType.TF_INT32);
-                            grad = array_ops.reshape(grad, new_shape_tensor);
+                            var new_shape = constant_op.constant(range(0, rank).Select(x => 1).ToArray(), dtype: TF_DataType.TF_INT32);
+                            grad = array_ops.reshape(grad, new_shape);
                         }
                         else
                         {

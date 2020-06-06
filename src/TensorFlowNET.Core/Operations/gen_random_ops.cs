@@ -146,6 +146,23 @@ namespace Tensorflow
             if (!seed2.HasValue)
                 seed2 = 0;
 
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "TruncatedNormal", name, new IntPtr[]
+                    {
+                        shape as EagerTensor,
+                    }, 1,
+                    op => wrap_tfe_src.SetOpAttrs(op,
+                            "seed", seed,
+                            "seed2", seed2,
+                            "dtype", dtype),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("TruncatedNormal",
                 name: name,
                 args: new { shape, dtype, seed, seed2 });

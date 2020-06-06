@@ -645,6 +645,21 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Squeeze", name, new IntPtr[]
+                    {
+                        input as EagerTensor
+                    }, 1,
+                    op => wrap_tfe_src.SetOpAttrs(op,
+                            "squeeze_dims", axis),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             if (axis == null) axis = new int[0];
             var _op = _op_def_lib._apply_op_helper("Squeeze", name, args: new { input, squeeze_dims = axis });
 

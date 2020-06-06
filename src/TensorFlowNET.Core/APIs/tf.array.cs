@@ -186,7 +186,7 @@ namespace Tensorflow
             => array_ops.slice(input, begin, size, name: name);
 
         public Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
-            => gen_array_ops.squeeze(input, axis, name);
+            => array_ops.squeeze(input, axis, name);
 
         /// <summary>
         /// Stacks a list of rank-`R` tensors into one rank-`(R+1)` tensor.
