@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.2.0.1" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
