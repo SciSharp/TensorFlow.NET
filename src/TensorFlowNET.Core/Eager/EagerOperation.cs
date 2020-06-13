@@ -18,7 +18,7 @@ namespace Tensorflow.Eager
         public Tensor[] Outputs { get; set; }
         public BindingArray SkipInputIndicesArray { get; set; }
         public unsafe int[] SkipInputIndices => SkipInputIndicesArray.Data.Select(x => *(int*) x).ToArray();
-        public BindingArray AttrsArray { get; set; }
+        public string[] AttrsArray { get; set; }
 
         public EagerOperation() : base(IntPtr.Zero)
         {
@@ -70,14 +70,11 @@ namespace Tensorflow.Eager
             return value;
         }
 
-        public bool get_attr_bool(string attr_name) 
+        public bool get_attr_bool(string attr_name)
         {
-            for (int i = 0; i < AttrsArray.Data.Length; i = i + 2)
-            {
-                //  var a = *(char*)AttrsArray.Data[i];
-                if (op_dict[Name].Attr[i].Name == attr_name)
-                    return (int)AttrsArray.Data[i + 1] == 1;
-            }
+            for (int i = 0; i < AttrsArray.Length; i = i + 2)
+                if (AttrsArray[i] == attr_name)
+                    return AttrsArray[i + 1] == "1";
 
             throw new ValueError($"Can't find attr: {attr_name}");
         }

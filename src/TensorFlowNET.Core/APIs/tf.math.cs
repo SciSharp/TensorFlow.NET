@@ -21,6 +21,13 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
+        public MathApi math { get; } = new MathApi();
+        public class MathApi
+        {
+            public Tensor log(Tensor x, string name = null)
+                => gen_math_ops.log(x, name);
+        }
+
         public Tensor abs(Tensor x, string name = null)
             => math_ops.abs(x, name);
 
@@ -254,7 +261,7 @@ namespace Tensorflow
         ///    Any values less than <c>clip_value_min</c> are set to <c>clip_value_min</c>. Any values
         ///    greater than <c>clip_value_max</c> are set to <c>clip_value_max</c>.
         /// </remarks>
-        public Tensor clip_by_value (Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = "ClipByValue") 
+        public Tensor clip_by_value<T1, T2>(Tensor t, T1 clip_value_min, T2 clip_value_max, string name = "ClipByValue") 
             => clip_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
         
         public Tensor sub<Tx, Ty>(Tx a, Ty b, string name = null)

@@ -48,7 +48,7 @@ namespace Tensorflow
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "AddN", name,
                     inputs.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), inputs.Length,
-                    null,
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -65,7 +65,7 @@ namespace Tensorflow
             Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                 "AddN", name,
                 inputs, inputs.Length,
-                null,
+                null, null,
                 results, results.Length);
             status.Check(true);
             return results[0];
@@ -80,7 +80,23 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
-            => _op_def_lib._apply_op_helper("ArgMax", name, args: new { input, dimension, output_type }).outputs[0];
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(input, dimension);
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ArgMax", name,
+                    inputs.Points, inputs.Length,
+                    wrap_tfe_src.SetOpAttrs2("output_type", output_type),
+                    op => wrap_tfe_src.SetOpAttrs(op, "output_type", output_type),
+                    results.Points, results.Length);
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
+            return _op_def_lib._apply_op_helper("ArgMax", name, args: new { input, dimension, output_type }).output;
+        }
 
         /// <summary>
         /// Returns the index with the smallest value across dimensions of a tensor.
@@ -152,6 +168,7 @@ namespace Tensorflow
                             input as EagerTensor,
                             axis as EagerTensor
                     }, 2,
+                    wrap_tfe_src.SetOpAttrs2("keep_dims", keep_dims),
                     op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims),
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
@@ -198,6 +215,7 @@ namespace Tensorflow
                             input as EagerTensor,
                             axis as EagerTensor
                         }, 2,
+                        wrap_tfe_src.SetOpAttrs2("keep_dims", keep_dims),
                         op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims),
                         results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                     status.Check(true);
@@ -247,7 +265,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -268,7 +287,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -290,7 +310,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -324,7 +345,8 @@ namespace Tensorflow
                     "Sin", name, new IntPtr[]
                     {
                         x as EagerTensor,
-                    }, 1, null,
+                    }, 1, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -358,7 +380,8 @@ namespace Tensorflow
                     "Sigmoid", name, new IntPtr[]
                     {
                         x as EagerTensor,
-                    }, 1, null,
+                    }, 1, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -451,7 +474,8 @@ namespace Tensorflow
                     "Tan", name, new IntPtr[]
                     {
                         x as EagerTensor,
-                    }, 1, null,
+                    }, 1, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -471,7 +495,8 @@ namespace Tensorflow
                     "Tanh", name, new IntPtr[]
                     {
                         x as EagerTensor,
-                    }, 1, null,
+                    }, 1, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -499,7 +524,8 @@ namespace Tensorflow
                     {
                         y as EagerTensor,
                         dy as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -550,6 +576,21 @@ namespace Tensorflow
 
         public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(x, y);
+
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "GreaterEqual", name, 
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length);
+                status.Check(true);
+
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("GreaterEqual", name: name, args: new { x, y });
 
             return _op.outputs[0];
@@ -559,14 +600,13 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(x, y);
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Less", name, new IntPtr[]
-                    {
-                        x as EagerTensor,
-                        y as EagerTensor
-                    }, 2, null,
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                    "Less", name,
+                    inputs.Points, inputs.Length, 
+                    null, null,
+                    results.Points, results.Length);
                 status.Check(true);
                 return results[0].Resolve();
             }
@@ -578,6 +618,19 @@ namespace Tensorflow
 
         public static Tensor less_equal<Tx, Ty>(Tx x, Ty y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(x, y);
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "LessEqual", name,
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length);
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("LessEqual", name: name, args: new { x, y });
 
             return _op.outputs[0];
@@ -641,7 +694,8 @@ namespace Tensorflow
                     "Square", name, new IntPtr[]
                     {
                         x as EagerTensor,
-                    }, 1, null,
+                    }, 1, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -693,6 +747,21 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `x`.</returns>
         public static Tensor log(Tensor x, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(x);
+
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Log", name, 
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length);
+                status.Check(true);
+
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Log", name, args: new { x });
 
             return _op.outputs[0];
@@ -703,12 +772,20 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 var results = new[] { new EagerTensor() };
+                var attrs = new object[]
+                {
+                    "DstT", DstT,
+                    "Truncate", Truncate
+                };
+
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Cast", name,
                     new IntPtr[] { x as EagerTensor }, 1,
-                    op => wrap_tfe_src.SetOpAttrs(op, "DstT", DstT, "Truncate", Truncate),
+                    wrap_tfe_src.SetOpAttrs2(attrs),
+                    op => wrap_tfe_src.SetOpAttrs(op, attrs),
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
+
                 return results[0].Resolve();
             }
 
@@ -721,14 +798,16 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(x);
+
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Neg", name, new IntPtr[]
-                    {
-                        x as EagerTensor
-                    }, 2, null,
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                    "Neg", name, 
+                    inputs.Points, inputs.Length, 
+                    null, null,
+                    results.Points, results.Length);
                 status.Check(true);
+
                 return results[0].Resolve();
             }
 
@@ -746,7 +825,8 @@ namespace Tensorflow
                     "Sqrt", name, new IntPtr[]
                     {
                         x as EagerTensor,
-                    }, 1, null,
+                    }, 1, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -767,7 +847,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -788,7 +869,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -816,7 +898,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -845,7 +928,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -866,7 +950,8 @@ namespace Tensorflow
                     {
                         y as EagerTensor,
                         x as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -886,7 +971,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -907,7 +993,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor,
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -935,7 +1022,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -948,6 +1036,21 @@ namespace Tensorflow
 
         public static Tensor reciprocal(Tensor x, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(x);
+
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Reciprocal", name,
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length);
+                status.Check(true);
+
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Reciprocal", name, args: new { x });
 
             return _op.outputs[0];
@@ -963,7 +1066,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -984,7 +1088,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -1008,18 +1113,19 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(a, b);
+                var attrs = new object[]
+                {
+                    "transpose_a", transpose_a, 
+                    "transpose_b", transpose_b
+                };
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "MatMul", name,
-                    new IntPtr[]
-                    {
-                        a as EagerTensor,
-                        b as EagerTensor
-                    }, 2,
-                    op => wrap_tfe_src.SetOpAttrs(op, 
-                            "transpose_a", transpose_a,
-                            "transpose_b", transpose_b),
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                    inputs.Points, inputs.Length,
+                    wrap_tfe_src.SetOpAttrs2(attrs),
+                    op => wrap_tfe_src.SetOpAttrs(op, attrs),
+                    results.Points, results.Length);
                 status.Check(true);
                 return results[0].Resolve();
             }
@@ -1073,6 +1179,21 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor maximum<T1, T2>(T1 x, T2 y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(x, y);
+
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Maximum", name,
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length);
+                status.Check(true);
+
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Maximum", name, args: new { x, y });
 
             return _op.outputs[0];
@@ -1080,6 +1201,21 @@ namespace Tensorflow
 
         public static Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(x, y);
+
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Minimum", name,
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length);
+                status.Check(true);
+
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Minimum", name, args: new { x, y });
 
             return _op.outputs[0];
@@ -1123,7 +1259,8 @@ namespace Tensorflow
                     {
                         x as EagerTensor,
                         y as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();
@@ -1138,17 +1275,18 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(input, axis);
+                var attrs = new object[] { "keep_dims", keep_dims };
+
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "Sum", name,
-                    new IntPtr[]
-                    {
-                            input as EagerTensor,
-                            axis as EagerTensor
-                    }, 2,
-                    op => wrap_tfe_src.SetOpAttrs(op, "keep_dims", keep_dims),
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                    inputs.Points, inputs.Length,
+                    wrap_tfe_src.SetOpAttrs2(attrs),
+                    op => wrap_tfe_src.SetOpAttrs(op, attrs),
+                    results.Points, results.Length);
                 status.Check(true);
+
                 return results[0].Resolve();
             }
 
@@ -1199,7 +1337,8 @@ namespace Tensorflow
                         start as EagerTensor,
                         limit as EagerTensor,
                         delta as EagerTensor
-                    }, 3, null,
+                    }, 3, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
                 status.Check(true);
                 return results[0].Resolve();

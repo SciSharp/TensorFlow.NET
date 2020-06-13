@@ -11,14 +11,15 @@ namespace Tensorflow
     {
         public static EagerTensor mul(IntPtr x, IntPtr y, string name = null)
         {
-            var results = new[] { new EagerTensor() };
+            var results = EagerTensorPass.Create();
             Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                 "Mul", name, new IntPtr[]
                 {
                     x,
                     y,
-                }, 2, null,
-                results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                }, 2, 
+                null, null,
+                results.Points, results.Length);
             status.Check(true);
             return results[0].Resolve();
         }

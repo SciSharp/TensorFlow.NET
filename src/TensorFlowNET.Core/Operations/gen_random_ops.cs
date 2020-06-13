@@ -42,17 +42,20 @@ namespace Tensorflow
 
             if (tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
+                var results = EagerTensorPass.Create();
+                var attrs = new object[]
+                {
+                    "seed", seed,
+                    "seed2", seed2,
+                    "dtype", dtype
+                };
+                var inputs = EagerTensorPass.From(shape);
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "RandomStandardNormal", name, new IntPtr[]
-                    {
-                        shape as EagerTensor,
-                    }, 1,
-                    op => wrap_tfe_src.SetOpAttrs(op,
-                            "seed", seed,
-                            "seed2", seed2,
-                            "dtype", dtype),
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                    "RandomStandardNormal", name,
+                    inputs.Points, inputs.Length,
+                    wrap_tfe_src.SetOpAttrs2(attrs),
+                    op => wrap_tfe_src.SetOpAttrs(op, attrs),
+                    results.Points, results.Length);
                 status.Check(true);
                 return results[0].Resolve();
             }
@@ -148,17 +151,20 @@ namespace Tensorflow
 
             if (tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(shape);
+                var attrs = new object[]
+                {
+                    "seed", seed, 
+                    "seed2", seed2, 
+                    "dtype", dtype
+                };
                 Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "TruncatedNormal", name, new IntPtr[]
-                    {
-                        shape as EagerTensor,
-                    }, 1,
-                    op => wrap_tfe_src.SetOpAttrs(op,
-                            "seed", seed,
-                            "seed2", seed2,
-                            "dtype", dtype),
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
+                    "TruncatedNormal", name,
+                    inputs.Points, inputs.Length,
+                    wrap_tfe_src.SetOpAttrs2(attrs),
+                    op => wrap_tfe_src.SetOpAttrs(op, attrs),
+                    results.Points, results.Length);
                 status.Check(true);
                 return results[0].Resolve();
             }

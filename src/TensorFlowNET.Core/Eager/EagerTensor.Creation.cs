@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
@@ -49,12 +50,19 @@ namespace Tensorflow.Eager
             print($"new TensorHandle {Id} {tfe_tensor_handle.ToString("x16")}");
             print($"new EagerTensor {Id} {EagerTensorHandle.ToString("x16")}");*/
 
+            if (tfe_tensor_handle == IntPtr.Zero && _id == 0)
+            {
+            }
+
             GarbageCollector.Increase(_handle, GCItemType.TensorHandle);
             GarbageCollector.Increase(tfe_tensor_handle, GCItemType.LocalTensorHandle);
             GarbageCollector.Increase(EagerTensorHandle, GCItemType.EagerTensorHandle);
 
             return this;
         }
+
+        public override IntPtr ToPointer()
+            => EagerTensorHandle;
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {

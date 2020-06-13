@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
@@ -182,7 +183,13 @@ namespace Tensorflow
                 => nn_impl.sigmoid_cross_entropy_with_logits(labels: labels, logits: logits, name: name);
 
             public Tensor softmax(Tensor logits, int axis = -1, string name = null)
-                => gen_nn_ops.softmax(logits, name);
+            {
+                if (axis == -1)
+                    return gen_nn_ops.softmax(logits, name);
+                else
+                    throw new NotImplementedException("");
+            }
+                
 
             /// <summary>
             /// Computes sparse softmax cross entropy between `logits` and `labels`.

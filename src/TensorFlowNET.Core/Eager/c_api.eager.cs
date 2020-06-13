@@ -25,7 +25,7 @@ namespace Tensorflow
         public delegate IntPtr gradient_function_callback(string op_name,
             IntPtr op_inputs,
             IntPtr op_outputs,
-            IntPtr attrs_handle,
+            string attrs_string,
             IntPtr output_grads,
             IntPtr skip_input_indices);
 
@@ -402,6 +402,7 @@ namespace Tensorflow
             string name,
             IntPtr[] inputs,
             int input_size,
+            string attrs_string,
             TFE_FastPathExecute_SetOpAttrs set_op_attrs,
             IntPtr[] outputs,
             int output_size);

@@ -217,7 +217,7 @@ namespace Tensorflow
             Tensor off_value = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             int axis = -1,
-            string name = null) => array_ops.one_hot(indices, depth, dtype: dtype, axis: axis, name: name);
+            string name = null) => array_ops.one_hot(indices, ops.convert_to_tensor(depth), dtype: dtype, axis: axis, name: name);
 
         /// <summary>
         /// Pads a tensor

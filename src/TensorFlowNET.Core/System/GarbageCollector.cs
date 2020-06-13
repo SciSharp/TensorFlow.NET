@@ -54,8 +54,11 @@ namespace Tensorflow
 
         public static void Decrease(IntPtr handle)
         {
-            if (handle != IntPtr.Zero && container.ContainsKey(handle))
-                container[handle].RefCounter--;
+            lock (locker)
+            {
+                if (handle != IntPtr.Zero && container.ContainsKey(handle))
+                    container[handle].RefCounter--;
+            }
         }
 
         private static void Recycle()
@@ -64,7 +67,7 @@ namespace Tensorflow
             lock (locker)
             {
                 var items = container.Values
-                    .Where(x => x.RefCounter <= 0 && (DateTime.Now - x.LastUpdateTime).TotalMilliseconds > 100)
+                    .Where(x => x.RefCounter <= 0 && (DateTime.Now - x.LastUpdateTime).TotalMilliseconds > 300)
                     .ToArray();
 
                 foreach (var item in items)
@@ -74,15 +77,15 @@ namespace Tensorflow
                     switch (item.ItemType)
                     {
                         case GCItemType.TensorHandle:
-                            // print($"c_api.TF_DeleteTensor({item.Handle.ToString("x16")})");
+                            //print($"c_api.TF_DeleteTensor({item.Handle.ToString("x16")})");
                             c_api.TF_DeleteTensor(item.Handle);
                             break;
                         case GCItemType.LocalTensorHandle:
-                            // print($"c_api.TFE_DeleteTensorHandle({item.Handle.ToString("x16")})");
+                            //print($"c_api.TFE_DeleteTensorHandle({item.Handle.ToString("x16")})");
                             c_api.TFE_DeleteTensorHandle(item.Handle);
                             break;
                         case GCItemType.EagerTensorHandle:
-                            // print($"c_api.TFE_DeleteEagerTensor({item.Handle.ToString("x16")})");
+                            //print($"c_api.TFE_DeleteEagerTensor({item.Handle.ToString("x16")})");
                             c_api.TFE_DeleteEagerTensor(item.Handle);
                             break;
                         default:
