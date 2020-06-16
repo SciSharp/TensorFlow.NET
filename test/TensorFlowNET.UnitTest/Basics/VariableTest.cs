@@ -56,10 +56,10 @@ namespace TensorFlowNET.UnitTest.Basics
         public void Accumulation()
         {
             var x = tf.Variable(10, name: "x");
-            /*for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
                 x = x + 1;
 
-            Assert.AreEqual(15, (int)x.numpy());*/
+            Assert.AreEqual(15, (int)x.numpy());
         }
 
         [TestMethod]
