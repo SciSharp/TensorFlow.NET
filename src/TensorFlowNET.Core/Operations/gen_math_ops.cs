@@ -551,6 +551,19 @@ namespace Tensorflow
 
         public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(x, y);
+                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Greater", name,
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length);
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
 
             return _op.outputs[0];

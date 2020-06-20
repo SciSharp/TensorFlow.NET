@@ -57,7 +57,7 @@ namespace TensorFlowNET.UnitTest.Basics
         {
             var x = tf.Variable(10, name: "x");
             for (int i = 0; i < 5; i++)
-                x = x + 1;
+                x.assign(x + 1);
 
             Assert.AreEqual(15, (int)x.numpy());
         }

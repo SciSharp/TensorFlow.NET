@@ -24,24 +24,24 @@ namespace Tensorflow
     {
         public static OpDefLibrary _op_def_lib = new OpDefLibrary();
 
-        public static ResourceVariable operator +(ResourceVariable x, int y) => op_helper("add", x, y);
-        public static ResourceVariable operator +(ResourceVariable x, float y) => op_helper("add", x, y);
-        public static ResourceVariable operator +(ResourceVariable x, double y) => op_helper("add", x, y);
-        public static ResourceVariable operator +(ResourceVariable x, ResourceVariable y) => op_helper("add", x, y);
-        public static ResourceVariable operator -(ResourceVariable x, int y) => op_helper("sub", x, y);
-        public static ResourceVariable operator -(ResourceVariable x, float y) => op_helper("sub", x, y);
-        public static ResourceVariable operator -(ResourceVariable x, double y) => op_helper("sub", x, y);
-        public static ResourceVariable operator -(ResourceVariable x, Tensor y) => op_helper("sub", x, y);
-        public static ResourceVariable operator -(ResourceVariable x, ResourceVariable y) => op_helper("sub", x, y);
+        public static Tensor operator +(ResourceVariable x, int y) => op_helper("add", x, y);
+        public static Tensor operator +(ResourceVariable x, float y) => op_helper("add", x, y);
+        public static Tensor operator +(ResourceVariable x, double y) => op_helper("add", x, y);
+        public static Tensor operator +(ResourceVariable x, ResourceVariable y) => op_helper("add", x, y);
+        public static Tensor operator -(ResourceVariable x, int y) => op_helper("sub", x, y);
+        public static Tensor operator -(ResourceVariable x, float y) => op_helper("sub", x, y);
+        public static Tensor operator -(ResourceVariable x, double y) => op_helper("sub", x, y);
+        public static Tensor operator -(ResourceVariable x, Tensor y) => op_helper("sub", x, y);
+        public static Tensor operator -(ResourceVariable x, ResourceVariable y) => op_helper("sub", x, y);
 
-        public static ResourceVariable operator *(ResourceVariable x, ResourceVariable y) => op_helper("mul", x, y);
-        public static ResourceVariable operator *(ResourceVariable x, NDArray y) => op_helper("mul", x, y);
+        public static Tensor operator *(ResourceVariable x, ResourceVariable y) => op_helper("mul", x, y);
+        public static Tensor operator *(ResourceVariable x, NDArray y) => op_helper("mul", x, y);
 
-        public static ResourceVariable operator <(ResourceVariable x, Tensor y) => less(x.value(), y);
+        public static Tensor operator <(ResourceVariable x, Tensor y) => op_helper("less", x, y);
 
-        public static ResourceVariable operator >(ResourceVariable x, Tensor y) => greater(x.value(), y);
+        public static Tensor operator >(ResourceVariable x, Tensor y) => op_helper("greater", x, y);
 
-        private static ResourceVariable op_helper<T>(string default_name, ResourceVariable x, T y)
+        private static Tensor op_helper<T>(string default_name, ResourceVariable x, T y)
             => tf_with(ops.name_scope(null, default_name, new { x, y }), scope =>
             {
                 string name = scope;
@@ -61,39 +61,19 @@ namespace Tensorflow
                     case "mul":
                         result = gen_math_ops.mul(xVal, yTensor, name: name);
                         break;
+                    case "less":
+                        result = gen_math_ops.less(xVal, yTensor, name);
+                        break;
+                    case "greater":
+                        result = gen_math_ops.greater(xVal, yTensor, name);
+                        break;
                     default:
                         throw new NotImplementedException("");
                 }
 
                 // x.assign(result);
                 // result.ResourceVar = x;
-                return tf.Variable(result);
+                return result;
             });
-
-        private static ResourceVariable less<Tx, Ty>(Tx x, Ty y, string name = null)
-        {
-            if (tf.context.executing_eagerly())
-            {
-                var results = EagerTensorPass.Create();
-                var inputs = EagerTensorPass.From(x, y);
-                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Less", name,
-                    inputs.Points, inputs.Length,
-                    null, null,
-                    results.Points, results.Length);
-                status.Check(true);
-                return tf.Variable(results[0].Resolve());
-            }
-
-            var _op = _op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
-
-            return tf.Variable(_op.outputs[0]);
-        }
-        private static ResourceVariable greater<Tx, Ty>(Tx x, Ty y, string name = null)
-        {
-            var _op = _op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
-
-            return tf.Variable(_op.outputs[0]);
-        }
     }
 }
