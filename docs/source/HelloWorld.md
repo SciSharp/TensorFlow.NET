@@ -25,7 +25,15 @@ TensorFlow.NET uses the .NET Standard 2.0 standard, so your new project Target F
 
 
 ```cmd
+### install tensorflow C# binding
 PM> Install-Package TensorFlow.NET
+
+### Install tensorflow binary
+### For CPU version
+PM> Install-Package SciSharp.TensorFlow.Redist
+
+### For GPU version (CUDA and cuDNN are required)
+PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 ```
 
 ### Start coding Hello World
@@ -36,7 +44,7 @@ After installing the TensorFlow.NET package, you can use the `using Tensorflow` 
 
 ```csharp
 using System;
-using Tensorflow;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Examples
 {
