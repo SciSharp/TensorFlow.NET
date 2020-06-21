@@ -9,11 +9,10 @@ namespace Tensorflow.Eager
     public partial class EagerTensor : Tensor
     {
         Status status = new Status();
-        IntPtr tfe_tensor_handle;
-        public IntPtr EagerTensorHandle { get; set; }
-        public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(tfe_tensor_handle, status));
+        public IntPtr EagerTensorHandle;
+        public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, status));
 
-        public override int rank => c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, status);
+        public override int rank => c_api.TFE_TensorHandleNumDims(EagerTensorHandle, status);
 
         public static int GetRank(IntPtr handle)
         {

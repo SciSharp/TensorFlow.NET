@@ -164,15 +164,12 @@ namespace Tensorflow
         {
             if(tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
-                Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name, 
+                var results = wrap_tfe_src.TFE_FastPathExecute(tf.context, tf.context.device_name, 
                     "Pack", name,
-                    values.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), values.Length,
-                    wrap_tfe_src.SetOpAttrs2("axis", axis),
-                    op => wrap_tfe_src.SetOpAttrs(op, "axis", axis),
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length);
-                status.Check(true);
-                return results[0].Resolve();
+                    null,
+                    values,
+                    "axis", axis);
+                return results[0];
             }
 
             var _op = _op_def_lib._apply_op_helper("Pack", name: name, args: new { values, axis });

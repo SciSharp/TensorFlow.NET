@@ -52,7 +52,7 @@ namespace Tensorflow
         {
             GarbageCollector.Init();
 
-            var vspace = c_api.VSpace_Handle((shape, dims, dtype) =>
+            /*var vspace = c_api.VSpace_Handle((shape, dims, dtype) =>
             {
                 var ones = constant_op.constant(1.0f, dtype: dtype) as EagerTensor;
                 return ones.EagerTensorHandle;
@@ -60,16 +60,13 @@ namespace Tensorflow
             {
                 var add_n = gen_math_ops.add_n(gradients.Data);
                 return add_n;
-            });
+            });*/
 
             ops.RegisterFromAssembly();
             // ops.RegisterFromAssemblyEager();
 
-            c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, attrs_string, output_grads, skip_input_indices) =>
+            /*c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, attrs_string, output_grads, skip_input_indices) =>
             {
-                /*var input_tensors = new BindingArray(op_inputs);
-                var output_tensors = new BindingArray(op_outputs);
-                var output_grad_tensors = new BindingArray(output_grads);*/
                 var input_tensors = new BindingTensorArray(op_inputs)
                     .Data.Select(x => tf.tensorMgr.GetTensor(x)).ToArray();
                 var output_tensors = new BindingTensorArray(op_outputs)
@@ -98,7 +95,7 @@ namespace Tensorflow
             }, (op_name, op_inputs, op_outputs) =>
             {
 
-            });
+            });*/
         }
 
         public ResourceVariable Variable<T>(T data,

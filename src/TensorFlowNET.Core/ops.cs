@@ -29,7 +29,7 @@ namespace Tensorflow
 {
     public partial class ops
     {
-        public static int tensor_id(Tensor tensor)
+        public static long tensor_id(Tensor tensor)
         {
             return tensor.Id;
         }

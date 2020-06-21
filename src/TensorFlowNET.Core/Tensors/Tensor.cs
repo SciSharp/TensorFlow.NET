@@ -41,12 +41,12 @@ namespace Tensorflow
         ICanBeFlattened,
         IPointerInputs
     {
-        protected int _id;
+        protected long _id;
         private readonly Operation _op;
         private readonly int _value_index;
         private TF_Output? _tf_output;
         private readonly TF_DataType _override_dtype;
-        public int Id => _id;
+        public long Id => _id;
 
         /// <summary>
         ///     The Graph that contains this tensor.

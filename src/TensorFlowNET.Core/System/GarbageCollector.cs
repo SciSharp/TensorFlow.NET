@@ -16,15 +16,14 @@ namespace Tensorflow
         static object locker = new object();
         public static void Init()
         {
-            Task.Run(() =>
+            /*Task.Run(() =>
             {
                 while (true)
                 {
                     Thread.Sleep(100);
                     Recycle();
                 }
-            });
-
+            });*/
         }
 
         public static void Increase(IntPtr handle, GCItemType type)
