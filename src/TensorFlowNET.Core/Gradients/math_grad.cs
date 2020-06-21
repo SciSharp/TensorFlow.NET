@@ -310,23 +310,26 @@ namespace Tensorflow.Gradients
             var input_shape = op.inputs[0]._shape_tuple();
             var output_shape = op.outputs[0]._shape_tuple();
 
+            Tensor result, factor_tensor;
             if(input_shape != null &&
                 output_shape != null)
             {
                 var input_size = np.prod(input_shape);
                 var output_size = np.prod(output_shape);
                 var factor = (int)input_size / Math.Max((int)output_size, 1);
-                var factor_tensor = constant_op.constant((int)input_size, dtype: sum_grad.dtype);
-                return new Tensor[] { math_ops.truediv(sum_grad, math_ops.cast(factor_tensor, sum_grad.dtype)), null };
+                factor_tensor = constant_op.constant(factor, dtype: sum_grad.dtype);
             }
             else
             {
                 var input_shape_tensor = array_ops.shape(op.inputs[0]);
                 var output_shape_tensor = array_ops.shape(op.outputs[0]);
                 var factor = _safe_shape_div(math_ops.reduce_prod(input_shape_tensor), math_ops.reduce_prod(output_shape_tensor));
-
-                return new Tensor[] { math_ops.truediv(sum_grad, math_ops.cast(factor, sum_grad.dtype)), null };
+                throw new NotImplementedException("");
+                factor_tensor = null;
             }
+
+            result = math_ops.truediv(sum_grad, math_ops.cast(factor_tensor, sum_grad.dtype));
+            return new Tensor[] { result, null };
         }
 
         /// <summary>
@@ -497,8 +500,8 @@ namespace Tensorflow.Gradients
                         if (tf.context.executing_eagerly())
                         {
                             // should add ones_rank_cache
-                            var new_shape_tensor = constant_op.constant(np.array(new int[] { 1 }) * rank, dtype: TF_DataType.TF_INT32);
-                            grad = array_ops.reshape(grad, new_shape_tensor);
+                            var new_shape = constant_op.constant(range(0, rank).Select(x => 1).ToArray(), dtype: TF_DataType.TF_INT32);
+                            grad = array_ops.reshape(grad, new_shape);
                         }
                         else
                         {
@@ -513,20 +516,23 @@ namespace Tensorflow.Gradients
                             input_shape = array_ops.shape(op.inputs[0]);
                         return new Tensor[] { gen_array_ops.tile(grad, input_shape), null };
                     }
-                    else
+                    else if (!input_0_shape.Contains(-1) && !tf.context.executing_eagerly())
                     {
-
+                        throw new NotImplementedException("");
                     }
                  }
             }
 
             input_shape = array_ops.shape(op.inputs[0]);
-            ops.colocate_with(input_shape);
-            var output_shape_kept_dims = math_ops.reduced_shape(input_shape, op.inputs[1]);
-            var tile_scaling = _safe_shape_div(input_shape, output_shape_kept_dims);
-            grad = gen_array_ops.reshape(grad, output_shape_kept_dims);
+            if (!op.get_attr<bool>("keep_dims"))
+            {
+                ops.colocate_with(input_shape);
+                var output_shape_kept_dims = math_ops.reduced_shape(input_shape, op.inputs[1]);
+                // var tile_scaling = _safe_shape_div(input_shape, output_shape_kept_dims);
+                grad = gen_array_ops.reshape(grad, output_shape_kept_dims);
+            }
 
-            return new Tensor[] { gen_array_ops.tile(grad, tile_scaling), null };
+            return new Tensor[] { gen_array_ops.broadcast_to(grad, input_shape), null };
         }
 
         [RegisterGradient("RealDiv")]

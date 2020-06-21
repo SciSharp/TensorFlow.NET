@@ -25,7 +25,7 @@ namespace Tensorflow
         public delegate IntPtr gradient_function_callback(string op_name,
             IntPtr op_inputs,
             IntPtr op_outputs,
-            int num_attrs,
+            string attrs_string,
             IntPtr output_grads,
             IntPtr skip_input_indices);
 
@@ -71,6 +71,9 @@ namespace Tensorflow
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern TF_AttrType TFE_OpGetAttrType(IntPtr op, string attr_name, ref byte is_list, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_AttrType TFE_OpNameGetAttrType(IntPtr ct, string op_or_function_name, string attr_name, ref byte is_list, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the length (number of tensors) of the input argument `input_name`
@@ -399,6 +402,7 @@ namespace Tensorflow
             string name,
             IntPtr[] inputs,
             int input_size,
+            string attrs_string,
             TFE_FastPathExecute_SetOpAttrs set_op_attrs,
             IntPtr[] outputs,
             int output_size);

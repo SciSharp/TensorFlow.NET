@@ -373,6 +373,19 @@ namespace Tensorflow.Operations
 
         public static Tensor relu_grad(Tensor gradients, Tensor features, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(gradients, features);
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ReluGrad", name,
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("ReluGrad", name: name, args: new
             {
                 gradients,
@@ -396,6 +409,19 @@ namespace Tensorflow.Operations
 
         public static Tensor softmax(Tensor logits, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(logits);
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Softmax", name,
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Softmax", name: name, args: new
             {
                 logits
@@ -473,7 +499,8 @@ namespace Tensorflow.Operations
                     "Relu", name, new IntPtr[]
                     {
                         features as EagerTensor,
-                    }, 1, null,
+                    }, 1, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
                 return results[0].Resolve();
@@ -492,7 +519,8 @@ namespace Tensorflow.Operations
                     "Tanh", name, new IntPtr[]
                     {
                         x as EagerTensor,
-                    }, 1, null, 
+                    }, 1, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
                 return results[0].Resolve();

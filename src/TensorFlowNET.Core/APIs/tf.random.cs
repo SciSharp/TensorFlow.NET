@@ -38,6 +38,24 @@ namespace Tensorflow
                 TF_DataType dtype = TF_DataType.TF_FLOAT,
                 int? seed = null,
                 string name = null) => random_ops.random_normal(shape, mean, stddev, dtype, seed, name);
+
+            /// <summary>
+            /// Outputs random values from a truncated normal distribution.
+            /// </summary>
+            /// <param name="shape"></param>
+            /// <param name="mean"></param>
+            /// <param name="stddev"></param>
+            /// <param name="dtype"></param>
+            /// <param name="seed"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public Tensor truncated_normal(TensorShape shape,
+                float mean = 0.0f,
+                float stddev = 1.0f,
+                TF_DataType dtype = TF_DataType.TF_FLOAT,
+                int? seed = null,
+                string name = null) => random_ops.truncated_normal(shape, mean, stddev, dtype, seed, name);
+
             public Tensor categorical(
                 Tensor logits,
                 int num_samples,

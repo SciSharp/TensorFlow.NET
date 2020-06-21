@@ -1,20 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
     public class EagerOperation : Operation
     {
-        public int NumInputs;
+        static Dictionary<string, OpDef> op_dict;
+        public string Name { get; set; }
+        public new int NumInputs;
         public IntPtr[] InputHandles { get; set; }
         public Tensor[] Inputs { get; set; }
-        public int NumOutputs;
+        public new int NumOutputs;
         public IntPtr[] OutputHandles { get; set; }
         public Tensor[] Outputs { get; set; }
-        public int[] SkipInputIndices { get; set; }
+        public BindingArray SkipInputIndicesArray { get; set; }
+        public unsafe int[] SkipInputIndices => SkipInputIndicesArray.Data.Select(x => *(int*) x).ToArray();
+        public string[] AttrsArray { get; set; }
 
-        public EagerOperation() : base(IntPtr.Zero) { }
+        public EagerOperation() : base(IntPtr.Zero)
+        {
+            if (op_dict == null)
+                op_dict = op_def_registry.get_registered_ops();
+        }
 
         public override InputList inputs
         {
@@ -22,13 +32,6 @@ namespace Tensorflow.Eager
             {
                 if (_inputs_val == null)
                 {
-                    var retval = new Tensor[NumInputs];
-
-                    for (int i = 0; i < NumInputs; i++)
-                    {
-
-                    }
-
                     _inputs_val = new InputList(Inputs);
                 }
 
@@ -48,5 +51,35 @@ namespace Tensorflow.Eager
                 return _outputs;
             }
         }
+
+        public override object get_attr(string attr_name)
+        {
+            object value = null;
+            byte isList = 0;
+            using var status = new Status();
+            var attrType = c_api.TFE_OpNameGetAttrType(tf.context, Name, attr_name, ref isList, status.Handle);
+            switch (attrType)
+            {
+                case TF_AttrType.TF_ATTR_BOOL:
+                    value = get_attr_bool(attr_name);
+                    break;
+                default:
+                    break;
+            }
+
+            return value;
+        }
+
+        public bool get_attr_bool(string attr_name)
+        {
+            for (int i = 0; i < AttrsArray.Length; i = i + 2)
+                if (AttrsArray[i] == attr_name)
+                    return AttrsArray[i + 1] == "1";
+
+            throw new ValueError($"Can't find attr: {attr_name}");
+        }
+
+        public override string ToString()
+            => $"tf.EagerOperation {Name}";
     }
 }

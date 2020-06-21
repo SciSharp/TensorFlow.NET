@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Tensorflow.Eager;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
@@ -81,6 +82,9 @@ namespace Tensorflow
         /// </summary>
         public _ControlDependenciesController control_dependencies(object[] control_inputs)
         {
+            if (tf.context.executing_eagerly())
+                return new _ControlDependenciesController(this, null);
+
             if (control_inputs == null)
                 return new _ControlDependenciesController(this, null);
 

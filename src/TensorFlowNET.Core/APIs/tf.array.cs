@@ -186,7 +186,7 @@ namespace Tensorflow
             => array_ops.slice(input, begin, size, name: name);
 
         public Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
-            => gen_array_ops.squeeze(input, axis, name);
+            => array_ops.squeeze(input, axis, name);
 
         /// <summary>
         /// Stacks a list of rank-`R` tensors into one rank-`(R+1)` tensor.
@@ -217,7 +217,7 @@ namespace Tensorflow
             Tensor off_value = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             int axis = -1,
-            string name = null) => array_ops.one_hot(indices, depth, dtype: dtype, axis: axis, name: name);
+            string name = null) => array_ops.one_hot(indices, ops.convert_to_tensor(depth), dtype: dtype, axis: axis, name: name);
 
         /// <summary>
         /// Pads a tensor

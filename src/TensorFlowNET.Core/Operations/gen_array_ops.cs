@@ -21,6 +21,7 @@ using static Tensorflow.Binding;
 using Tensorflow.Eager;
 using System.Linq;
 using static Tensorflow.Binding;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Tensorflow
 {
@@ -60,7 +61,8 @@ namespace Tensorflow
                     {
                         values as EagerTensor,
                         axis as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
                 return results[0].Resolve();
@@ -165,7 +167,8 @@ namespace Tensorflow
                 var results = new[] { new EagerTensor() };
                 using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name, 
                     "Pack", name,
-                    values.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), values.Length, 
+                    values.Select(x => (x as EagerTensor).EagerTensorHandle).ToArray(), values.Length,
+                    wrap_tfe_src.SetOpAttrs2("axis", axis),
                     op => wrap_tfe_src.SetOpAttrs(op, "axis", axis),
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
@@ -235,7 +238,8 @@ namespace Tensorflow
                     "Identity", name, new IntPtr[]
                     {
                         input as EagerTensor
-                    }, 1, null,
+                    }, 1, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
                 return results[0].Resolve();
@@ -278,15 +282,16 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                var results = new[] { new EagerTensor() };
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(dims, value);
+
                 using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "Fill", name, new IntPtr[]
-                    {
-                        dims as EagerTensor,
-                        value as EagerTensor
-                    }, 2, null,
-                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                    "Fill", name,
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length));
                 status.Check(true);
+
                 return results[0].Resolve();
             }
 
@@ -311,7 +316,8 @@ namespace Tensorflow
                     {
                         s0 as EagerTensor,
                         s1 as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
                 return (results[0].Resolve(), results[1].Resolve());
@@ -338,7 +344,8 @@ namespace Tensorflow
                     {
                         tensor as EagerTensor,
                         shape as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
                 return results[0].Resolve();
@@ -381,13 +388,30 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor one_hot(Tensor indices, int depth,
+        public static Tensor one_hot(Tensor indices, Tensor depth,
             Tensor on_value = null,
             Tensor off_value = null,
             TF_DataType dtype = TF_DataType.DtInvalid, 
             int axis = -1,
             string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(indices, depth, on_value, off_value);
+                var attrs = new object[] { "axis", axis };
+
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "OneHot", name,
+                    inputs.Points, inputs.Length,
+                    wrap_tfe_src.SetOpAttrs2(attrs),
+                    op => wrap_tfe_src.SetOpAttrs(op, attrs),
+                    results.Points, results.Length));
+                status.Check(true);
+
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("OneHot", name, new { indices, depth, on_value, off_value, axis });
             return _op.outputs[0];
         }
@@ -407,6 +431,21 @@ namespace Tensorflow
 
         public static Tensor select<Tx, Ty>(Tensor condition, Tx t, Ty e, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(condition, t, e);
+
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "SelectV2", name, 
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length));
+                status.Check(true);
+
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("Select", name, new { condition, t, e });
             return _op.outputs[0];
         }
@@ -427,6 +466,7 @@ namespace Tensorflow
                     {
                         input as EagerTensor,
                     }, 1,
+                    wrap_tfe_src.SetOpAttrs2("out_type", out_type),
                     op => wrap_tfe_src.SetOpAttrs(op, "out_type", out_type),
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
@@ -486,7 +526,8 @@ namespace Tensorflow
                     {
                         input as EagerTensor,
                         multiples as EagerTensor
-                    }, 2, null,
+                    }, 2, 
+                    null, null,
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
                 return results[0].Resolve();
@@ -526,6 +567,14 @@ namespace Tensorflow
             if (tf.context.executing_eagerly())
             {
                 var results = new[] { new EagerTensor() };
+                var attrs = new object[]
+                {
+                    "begin_mask", begin_mask,
+                    "end_mask", end_mask,
+                    "ellipsis_mask", ellipsis_mask,
+                    "new_axis_mask", new_axis_mask,
+                    "shrink_axis_mask", shrink_axis_mask
+                };
                 using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "StridedSlice", name, new IntPtr[]
                     {
@@ -534,12 +583,8 @@ namespace Tensorflow
                         end as EagerTensor,
                         strides as EagerTensor,
                     }, 4,
-                    op => wrap_tfe_src.SetOpAttrs(op,
-                            "begin_mask", begin_mask,
-                            "end_mask", end_mask, 
-                            "ellipsis_mask", ellipsis_mask,
-                            "new_axis_mask", new_axis_mask, 
-                            "shrink_axis_mask", shrink_axis_mask),
+                    wrap_tfe_src.SetOpAttrs2(attrs),
+                    op => wrap_tfe_src.SetOpAttrs(op, attrs),
                     results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
                 status.Check(true);
                 return results[0].Resolve();
@@ -645,6 +690,21 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = new[] { new EagerTensor() };
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Squeeze", name, new IntPtr[]
+                    {
+                        input as EagerTensor
+                    }, 1,
+                    wrap_tfe_src.SetOpAttrs2("squeeze_dims", axis),
+                    op => wrap_tfe_src.SetOpAttrs(op, "squeeze_dims", axis),
+                    results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             if (axis == null) axis = new int[0];
             var _op = _op_def_lib._apply_op_helper("Squeeze", name, args: new { input, squeeze_dims = axis });
 
@@ -674,8 +734,22 @@ namespace Tensorflow
         /// <param name="shape"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor broadcast_to(Tensor input, int[] shape, string name = null)
+        public static Tensor broadcast_to<T>(Tensor input, T shape, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = EagerTensorPass.Create();
+                var inputs = EagerTensorPass.From(input, shape);
+
+                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "BroadcastTo", name,
+                    inputs.Points, inputs.Length,
+                    null, null,
+                    results.Points, results.Length));
+                status.Check(true);
+                return results[0].Resolve();
+            }
+
             var _op = _op_def_lib._apply_op_helper("BroadcastTo", name, args: new { input, shape, name });
 
             return _op.outputs[0];

@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
@@ -96,15 +97,18 @@ namespace Tensorflow
                     get_default_graph()._name_stack = old_scope_name;
             }
             
+            [DebuggerNonUserCode]
             public void __exit__()
             {
             }
 
+            [DebuggerNonUserCode]
             public void __init__()
             {
                 
             }
 
+            [DebuggerNonUserCode]
             public void __del__()
             {
                 

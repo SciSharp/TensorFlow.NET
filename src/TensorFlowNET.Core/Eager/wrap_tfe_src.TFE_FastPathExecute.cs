@@ -31,6 +31,37 @@ namespace Tensorflow.Eager
             }
         }
 
+        public static string SetOpAttrs2(params object[] attrs)
+        {
+            string attr_string = string.Empty;
+            for(int i = 0; i < attrs.Length; i = i + 2)
+            {
+                object key = attrs[i];
+                object value = attrs[i + 1];
+
+                switch (value)
+                {
+                    case TF_DataType dtype:
+                        value = (int)dtype;
+                        break;
+                    case bool bVal:
+                        value = bVal ? 1 : 0;
+                        break;
+                    case int[] shape:
+                        value = shape.Length == 0 ? "null" : string.Join(" ", shape);
+                        break;
+                    default:
+                        break;
+                }
+
+                attr_string += string.IsNullOrEmpty(attr_string) ?
+                    $"{key},{value}" :
+                    $",{key},{value}";
+            }
+
+            return attr_string;
+        }
+
         /// <summary>
         /// This function will set the op attrs required. If an attr has the value of
         /// None, then it will read the AttrDef to get the default value and set that

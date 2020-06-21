@@ -38,7 +38,8 @@ namespace Tensorflow
         _TensorLike, 
         ITensorOrTensorArray, 
         IPackable<Tensor>,
-        ICanBeFlattened
+        ICanBeFlattened,
+        IPointerInputs
     {
         protected int _id;
         private readonly Operation _op;
@@ -280,6 +281,10 @@ namespace Tensorflow
             } else
                 throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
         }
+
+        public virtual IntPtr ToPointer()
+            => _handle;
+
         public bool IsDisposed => _disposed;
 
         // public int tensor_int_val { get; set; }

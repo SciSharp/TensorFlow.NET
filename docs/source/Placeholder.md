@@ -8,13 +8,13 @@ In this chapter we will talk about another common data type in TensorFlow: Place
 var x = tf.placeholder(tf.int32);
 var y = x * 3;
 
-Python.with<Session>(tf.Session(), sess =>
+using (var sess = tf.Session())
 {
     var result = sess.run(y, feed_dict: new FeedItem[]
     {
         new FeedItem(x, 2)
     });
     // (int)result should be 6;
-});
+}
 ```
 

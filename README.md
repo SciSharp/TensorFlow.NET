@@ -11,8 +11,6 @@
 
 *master branch is based on tensorflow 2.2 now, v0.15-tensorflow1.15 is from tensorflow1.15.*
 
-TF.NET is a member project of [SciSharp STACK](https://github.com/SciSharp).
-
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
@@ -56,59 +54,40 @@ using static Tensorflow.Binding;
 Linear Regression:
 
 ```c#
-// We can set a fixed init value in order to debug
+// Parameters        
+int training_steps = 1000;
+float learning_rate = 0.01f;
+int display_step = 100;
+
+// We can set a fixed init value in order to demo
 var W = tf.Variable(-0.06f, name: "weight");
 var b = tf.Variable(-0.73f, name: "bias");
+var optimizer = tf.optimizers.SGD(learning_rate);
 
-// Construct a linear model
-var pred = tf.add(tf.multiply(X, W), b);
-
-// Mean squared error
-var cost = tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * n_samples);
-
-// Gradient descent
-// Note, minimize() knows to modify W and b because Variable objects are trainable=True by default
-var optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost);
-
-// Initialize the variables (i.e. assign their default value)
-var init = tf.global_variables_initializer();
-
-// Start training
-using(tf.Session()) 
+// Run training for the given number of steps.
+foreach (var step in range(1, training_steps + 1))
 {
-    // Run the initializer
-    sess.run(init);
+    // Run the optimization to update W and b values.
+    // Wrap computation inside a GradientTape for automatic differentiation.
+    using var g = tf.GradientTape();
+    // Linear regression (Wx + b).
+    var pred = W * X + b;
+    // Mean square error.
+    var loss = tf.reduce_sum(tf.pow(pred - Y, 2)) / (2 * n_samples);
+    // should stop recording
+    // Compute gradients.
+    var gradients = g.gradient(loss, (W, b));
 
-    // Fit all training data
-    for (int epoch = 0; epoch < training_epochs; epoch++)
+    // Update W and b following gradients.
+    optimizer.apply_gradients(zip(gradients, (W, b)));
+
+    if (step % display_step == 0)
     {
-        foreach (var (x, y) in zip<float>(train_X, train_Y))
-            sess.run(optimizer, (X, x), (Y, y));
-
-        // Display logs per epoch step
-        if ((epoch + 1) % display_step == 0)
-        {
-            var c = sess.run(cost, (X, train_X), (Y, train_Y));
-            Console.WriteLine($"Epoch: {epoch + 1} cost={c} " + $"W={sess.run(W)} b={sess.run(b)}");
-        }
+        pred = W * X + b;
+        loss = tf.reduce_sum(tf.pow(pred - Y, 2)) / (2 * n_samples);
+        print($"step: {step}, loss: {loss.numpy()}, W: {W.numpy()}, b: {b.numpy()}");
     }
-
-    Console.WriteLine("Optimization Finished!");
-    var training_cost = sess.run(cost, (X, train_X), (Y, train_Y));
-    Console.WriteLine($"Training cost={training_cost} W={sess.run(W)} b={sess.run(b)}");
-
-    // Testing example
-    var test_X = np.array(6.83f, 4.668f, 8.9f, 7.91f, 5.7f, 8.7f, 3.1f, 2.1f);
-    var test_Y = np.array(1.84f, 2.273f, 3.2f, 2.831f, 2.92f, 3.24f, 1.35f, 1.03f);
-    Console.WriteLine("Testing... (Mean square loss Comparison)");
-    var testing_cost = sess.run(tf.reduce_sum(tf.pow(pred - Y, 2.0f)) / (2.0f * test_X.shape[0]),
-                                (X, test_X), (Y, test_Y));
-    Console.WriteLine($"Testing cost={testing_cost}");
-    var diff = Math.Abs((float)training_cost - (float)testing_cost);
-    Console.WriteLine($"Absolute mean square loss difference: {diff}");
-
-    return diff < 0.01;
-});
+}
 ```
 
 Run this example in [Jupyter Notebook](https://github.com/SciSharp/SciSharpCube).

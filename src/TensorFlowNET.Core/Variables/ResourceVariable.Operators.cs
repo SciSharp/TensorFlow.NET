@@ -22,21 +22,24 @@ namespace Tensorflow
 {
     public partial class ResourceVariable
     {
+        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
+
         public static Tensor operator +(ResourceVariable x, int y) => op_helper("add", x, y);
         public static Tensor operator +(ResourceVariable x, float y) => op_helper("add", x, y);
         public static Tensor operator +(ResourceVariable x, double y) => op_helper("add", x, y);
-        
+        public static Tensor operator +(ResourceVariable x, ResourceVariable y) => op_helper("add", x, y);
         public static Tensor operator -(ResourceVariable x, int y) => op_helper("sub", x, y);
         public static Tensor operator -(ResourceVariable x, float y) => op_helper("sub", x, y);
         public static Tensor operator -(ResourceVariable x, double y) => op_helper("sub", x, y);
         public static Tensor operator -(ResourceVariable x, Tensor y) => op_helper("sub", x, y);
+        public static Tensor operator -(ResourceVariable x, ResourceVariable y) => op_helper("sub", x, y);
 
         public static Tensor operator *(ResourceVariable x, ResourceVariable y) => op_helper("mul", x, y);
         public static Tensor operator *(ResourceVariable x, NDArray y) => op_helper("mul", x, y);
 
-        public static Tensor operator <(ResourceVariable x, Tensor y) => gen_math_ops.less(x.value(), y);
+        public static Tensor operator <(ResourceVariable x, Tensor y) => op_helper("less", x, y);
 
-        public static Tensor operator >(ResourceVariable x, Tensor y) => gen_math_ops.greater(x.value(), y);
+        public static Tensor operator >(ResourceVariable x, Tensor y) => op_helper("greater", x, y);
 
         private static Tensor op_helper<T>(string default_name, ResourceVariable x, T y)
             => tf_with(ops.name_scope(null, default_name, new { x, y }), scope =>
@@ -57,6 +60,12 @@ namespace Tensorflow
                         break;
                     case "mul":
                         result = gen_math_ops.mul(xVal, yTensor, name: name);
+                        break;
+                    case "less":
+                        result = gen_math_ops.less(xVal, yTensor, name);
+                        break;
+                    case "greater":
+                        result = gen_math_ops.greater(xVal, yTensor, name);
                         break;
                     default:
                         throw new NotImplementedException("");

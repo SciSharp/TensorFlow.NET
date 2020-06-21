@@ -54,7 +54,7 @@ namespace Tensorflow
         public BaseResourceVariable(IntPtr handle, IntPtr tensor)
         {
             _handle = handle;
-            this.handle = new EagerTensor(tensor);
+            this.handle = tf.tensorMgr.GetTensor(tensor);
         }
 
         public void __init__(bool trainable = true,

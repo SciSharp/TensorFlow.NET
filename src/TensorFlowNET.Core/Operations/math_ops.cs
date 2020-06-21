@@ -348,6 +348,14 @@ namespace Tensorflow
         /// <returns>A 1-D Tensor, the output shape as if keepdims were set to True.</returns>
         public static Tensor reduced_shape(Tensor input_shape, Tensor axes)
         {
+            if(tf.context.executing_eagerly())
+            {
+                var input_shape_val = input_shape.numpy();
+                var axes_val = (int)axes.numpy();
+                input_shape_val[axes_val] = 1;
+                return tf.constant(input_shape_val);
+            }
+
             input_shape = to_int32(input_shape);
             axes = to_int32(axes);
 
@@ -522,7 +530,8 @@ namespace Tensorflow
 
         public static Tensor reduce_sum(Tensor input_tensor, int axis, bool keepdims = false, string name = null)
         {
-            var m = gen_math_ops._sum(input_tensor, axis, keep_dims: keepdims, name: name);
+            var dims = _ReductionDims(input_tensor, axis);
+            var m = gen_math_ops._sum(input_tensor, dims, keep_dims: keepdims, name: name);
             return _may_reduce_to_scalar(keepdims, axis, m);
         }
 

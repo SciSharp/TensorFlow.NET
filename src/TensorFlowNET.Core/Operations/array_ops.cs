@@ -349,7 +349,7 @@ namespace Tensorflow
                 return fill(shape_tensor, ones, name: name);
             });
 
-        public static Tensor one_hot(Tensor indices, int depth, 
+        public static Tensor one_hot(Tensor indices, Tensor depth, 
             Tensor on_value = null,
             Tensor off_value = null,
             TF_DataType dtype = TF_DataType.DtInvalid,

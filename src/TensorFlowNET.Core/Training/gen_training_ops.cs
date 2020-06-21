@@ -72,6 +72,7 @@ namespace Tensorflow
                         alpha,
                         delta
                     }, 3, 
+                    wrap_tfe_src.SetOpAttrs2("use_locking", use_locking),
                     op => wrap_tfe_src.SetOpAttrs(op, "use_locking", use_locking),
                     null, 0));
                 status.Check(true);

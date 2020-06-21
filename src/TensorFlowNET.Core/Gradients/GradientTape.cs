@@ -1,7 +1,9 @@
 ﻿using Google.Protobuf.WellKnownTypes;
+using NumSharp.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Tensorflow.Eager;
@@ -72,22 +74,40 @@ namespace Tensorflow.Gradients
 
         public Tensor gradient(Tensor target, Tensor source)
         {
-            if(_recording)
+            if (_recording)
             {
                 if (!_persistent)
                     _pop_tape();
             }
 
-            var results = new[] { new EagerTensor() };
+            var results = EagerTensorPass.Create();
+            var targets = EagerTensorPass.From(target);
+            var sources = EagerTensorPass.From(source);
+
             using Status status = new Status(c_api.TFE_TapeGradient(_tape,
-                new [] { (target as EagerTensor).EagerTensorHandle }, 1,
-                new [] { (source as EagerTensor).EagerTensorHandle }, 1,
-                results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                targets.Points, targets.Length,
+                sources.Points, sources.Length,
+                results.Points, results.Length));
             status.Check(true);
+
             return results[0].Resolve();
         }
 
-        public unsafe (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources)
+        public Tensor gradient(Tensor target, ResourceVariable source)
+        {
+            var results = gradient(target as EagerTensor, new[] { source });
+
+            return results[0];
+        }
+
+        public (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources)
+        {
+            var results = gradient(target as EagerTensor, new[] { sources.Item1, sources.Item2 });
+
+            return (results[0], results[1]);
+        }
+
+        public EagerTensor[] gradient(EagerTensor target, ResourceVariable[] sources)
         {
             if (_recording)
             {
@@ -95,18 +115,14 @@ namespace Tensorflow.Gradients
                     _pop_tape();
             }
 
-            var results = new[] { new EagerTensor(), new EagerTensor() };
+            var results = EagerTensorPass.Create(sources.Length);
+            var target_inputs = EagerTensorPass.From(target);
+            var source_inputs = EagerTensorPass.From(sources.Select(x => x.Handle).ToArray());
+
             using Status status = new Status(c_api.TFE_TapeGradient(_tape,
-                new IntPtr[] 
-                { 
-                    target as EagerTensor 
-                }, 1,
-                new IntPtr[] 
-                { 
-                    (sources.Item1.Handle as EagerTensor).EagerTensorHandle, 
-                    (sources.Item2.Handle as EagerTensor).EagerTensorHandle 
-                }, 2,
-                results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
+                target_inputs.Points, target_inputs.Length,
+                source_inputs.Points, source_inputs.Length,
+                results.Points, results.Length));
             status.Check(true);
 
             if (!_persistent)
@@ -116,13 +132,15 @@ namespace Tensorflow.Gradients
                 _tape = null;
             }
 
-            return (results[0].Resolve(), results[1].Resolve());
+            return results.Items.Select(x => x.Resolve()).ToArray();
         }
 
         public void Dispose()
         {
             if (_recording)
                 _pop_tape();
+
+            tf.tensorMgr.Reset();
         }
     }
 }
