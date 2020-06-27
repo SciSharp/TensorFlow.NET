@@ -9,7 +9,7 @@
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/javiercp/BinderTF.NET/master?urlpath=lab)
 
-*master branch is based on tensorflow 2.2 now, v0.15-tensorflow1.15 is from tensorflow1.15.*
+*master branch is based on tensorflow 2.3 now, v0.15-tensorflow1.15 is from tensorflow1.15.*
 
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)

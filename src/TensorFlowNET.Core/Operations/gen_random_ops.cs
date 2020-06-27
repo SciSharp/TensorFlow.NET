@@ -22,8 +22,6 @@ namespace Tensorflow
 {
     public class gen_random_ops
     {
-        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
-
         /// <summary>
         /// Outputs random values from a normal distribution.
         /// </summary>
@@ -42,25 +40,18 @@ namespace Tensorflow
 
             if (tf.context.executing_eagerly())
             {
-                var results = EagerTensorPass.Create();
-                var attrs = new object[]
-                {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "RandomStandardNormal", name,
+                    null,
+                    shape,
                     "seed", seed,
                     "seed2", seed2,
-                    "dtype", dtype
-                };
-                var inputs = EagerTensorPass.From(shape);
-                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "RandomStandardNormal", name,
-                    inputs.Points, inputs.Length,
-                    wrap_tfe_src.SetOpAttrs2(attrs),
-                    op => wrap_tfe_src.SetOpAttrs(op, attrs),
-                    results.Points, results.Length));
-                status.Check(true);
-                return results[0].Resolve();
+                    "dtype", dtype);
+
+                return results[0];
             }
 
-            var _op = _op_def_lib._apply_op_helper("RandomStandardNormal", 
+            var _op = tf._op_def_lib._apply_op_helper("RandomStandardNormal", 
                 name: name,
                 args: new { shape, dtype, seed, seed2 });
 
@@ -84,7 +75,7 @@ namespace Tensorflow
             if (!seed2.HasValue)
                 seed2 = 0;
 
-            var _op = _op_def_lib._apply_op_helper("RandomUniformInt",
+            var _op = tf._op_def_lib._apply_op_helper("RandomUniformInt",
                 name: name,
                 args: new { shape, minval, maxval, seed, seed2 });
 
@@ -107,7 +98,7 @@ namespace Tensorflow
             if (!seed2.HasValue)
                 seed2 = 0;
 
-            var _op = _op_def_lib._apply_op_helper("RandomUniform",
+            var _op = tf._op_def_lib._apply_op_helper("RandomUniform",
                 name: name,
                 args: new { shape, dtype, seed, seed2});
 
@@ -125,7 +116,7 @@ namespace Tensorflow
         public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0, 
             string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("RandomShuffle",
+            var _op = tf._op_def_lib._apply_op_helper("RandomShuffle",
                 name: name,
                 args: new { value, seed, seed2 });
 
@@ -151,25 +142,18 @@ namespace Tensorflow
 
             if (tf.context.executing_eagerly())
             {
-                var results = EagerTensorPass.Create();
-                var inputs = EagerTensorPass.From(shape);
-                var attrs = new object[]
-                {
-                    "seed", seed, 
-                    "seed2", seed2, 
-                    "dtype", dtype
-                };
-                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
                     "TruncatedNormal", name,
-                    inputs.Points, inputs.Length,
-                    wrap_tfe_src.SetOpAttrs2(attrs),
-                    op => wrap_tfe_src.SetOpAttrs(op, attrs),
-                    results.Points, results.Length));
-                status.Check(true);
-                return results[0].Resolve();
+                    null,
+                    shape,
+                    "seed", seed,
+                    "seed2", seed2,
+                    "dtype", dtype);
+ 
+                return results[0];
             }
 
-            var _op = _op_def_lib._apply_op_helper("TruncatedNormal",
+            var _op = tf._op_def_lib._apply_op_helper("TruncatedNormal",
                 name: name,
                 args: new { shape, dtype, seed, seed2 });
 
@@ -186,7 +170,7 @@ namespace Tensorflow
             if (output_dtype == TF_DataType.DtInvalid)
                 output_dtype = TF_DataType.TF_INT64;
 
-            var _op = _op_def_lib._apply_op_helper("Multinomial",
+            var _op = tf._op_def_lib._apply_op_helper("Multinomial",
                 name: name,
                 args: new { logits, num_samples, seed, seed2, output_dtype });
 

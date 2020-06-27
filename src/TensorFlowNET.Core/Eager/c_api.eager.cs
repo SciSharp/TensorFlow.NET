@@ -116,6 +116,12 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern TFE_Context TFE_NewContext(IntPtr opts, SafeStatusHandle status);
 
+        [DllImport(TensorFlowLibName)]
+        public static extern TFE_Context TFE_ContextStartStep(IntPtr ctx);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern TFE_Context TFE_ContextEndStep(IntPtr ctx);
+
         /// <summary>
         /// 
         /// </summary>

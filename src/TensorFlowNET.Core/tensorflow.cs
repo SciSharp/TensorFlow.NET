@@ -21,6 +21,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Tensorflow.Eager;
+using Tensorflow.Gradients;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -39,66 +40,23 @@ namespace Tensorflow
         public TF_DataType chars = TF_DataType.TF_STRING;
         public TF_DataType @string = TF_DataType.TF_STRING;
 
+        public delegate Tensor[] BackwardFunction(Tensor[] grads, long[] unneeded_gradients);
+
+        public OpDefLibrary _op_def_lib = new OpDefLibrary();
+        public Execute _execute = new Execute();
+        public IEagerRunner Runner = new EagerRunner();
         public Context context = new Context(new ContextOptions(), new Status());
-        public TensorManager tensorMgr;
+
         public tensorflow()
         {
+            enable_eager_execution();
             _constructThreadingObjects();
             InitGradientEnvironment();
-            tensorMgr = new TensorManager();
         }
 
         private void InitGradientEnvironment()
         {
-            GarbageCollector.Init();
-
-            var vspace = c_api.VSpace_Handle((shape, dims, dtype) =>
-            {
-                var ones = constant_op.constant(1.0f, dtype: dtype) as EagerTensor;
-                return ones.EagerTensorHandle;
-            }, (gradients) =>
-            {
-                var add_n = gen_math_ops.add_n(gradients.Data);
-                return add_n;
-            });
-
             ops.RegisterFromAssembly();
-            // ops.RegisterFromAssemblyEager();
-
-            c_api.TFE_RegisterGradientFunction((op_name, op_inputs, op_outputs, attrs_string, output_grads, skip_input_indices) =>
-            {
-                /*var input_tensors = new BindingArray(op_inputs);
-                var output_tensors = new BindingArray(op_outputs);
-                var output_grad_tensors = new BindingArray(output_grads);*/
-                var input_tensors = new BindingTensorArray(op_inputs)
-                    .Data.Select(x => tf.tensorMgr.GetTensor(x)).ToArray();
-                var output_tensors = new BindingTensorArray(op_outputs)
-                    .Data.Select(x => tf.tensorMgr.GetTensor(x)).ToArray();
-                var output_grad_tensors = new BindingTensorArray(output_grads)
-                    .Data.Select(x => tf.tensorMgr.GetTensor(x)).ToArray();
-                var skip_input_indices_param = new BindingArray(skip_input_indices);
-
-                var gradients = ops.gradientFunctions[op_name](new EagerOperation
-                {
-                    Name = op_name,
-                    NumInputs = input_tensors.Length,
-                    Inputs = input_tensors,
-                    // InputHandles = input_tensors.Data,
-                    NumOutputs = output_tensors.Length,
-                    Outputs = output_tensors,
-                    // OutputHandles = output_tensors.Data,
-                    SkipInputIndicesArray = skip_input_indices_param,
-                    AttrsArray = attrs_string.Split(',')
-                }, output_grad_tensors);
-
-                var gradients_handles = gradients.Select(x => x == null ? IntPtr.Zero : (x as EagerTensor).EagerTensorHandle).ToArray();
-                var wrap_handle = c_api.TFE_WrapGradientResult(gradients_handles, gradients.Length);
-
-                return wrap_handle;
-            }, (op_name, op_inputs, op_outputs) =>
-            {
-
-            });
         }
 
         public ResourceVariable Variable<T>(T data,
@@ -114,7 +72,7 @@ namespace Tensorflow
                     dtype: dtype,
                     shape: shape);
 
-        public unsafe Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
+        public Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
             => gen_array_ops.placeholder(dtype, shape, name);
 
         public void enable_eager_execution()
@@ -141,6 +99,17 @@ namespace Tensorflow
         public Session Session(ConfigProto config)
         {
             return new Session(null, config).as_default();
+        }
+
+        List<ITape> tape_set;
+        public List<ITape> GetTapeSet()
+        {
+            if (tape_set == null)
+            {
+                tape_set = new List<ITape>();
+            }
+                
+            return tape_set;
         }
 
         public void __init__()

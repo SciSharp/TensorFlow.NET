@@ -23,13 +23,11 @@ namespace Tensorflow
 {
     public class gen_training_ops
     {
-        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
-
         public static Tensor apply_adam(RefVariable var, RefVariable m, RefVariable v, Tensor beta1_power, Tensor beta2_power, 
             Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, 
             bool use_locking = false, bool use_nesterov = false, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("ApplyAdam", name, new
+            var _op = tf._op_def_lib._apply_op_helper("ApplyAdam", name, new
             {
                 var,
                 m,
@@ -50,7 +48,7 @@ namespace Tensorflow
 
         public static Tensor apply_gradient_descent(RefVariable var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("ApplyGradientDescent", name, new
+            var _op = tf._op_def_lib._apply_op_helper("ApplyGradientDescent", name, new
             {
                 var,
                 alpha,
@@ -65,21 +63,15 @@ namespace Tensorflow
         {
             if (tf.context.executing_eagerly())
             {
-                using Status status = new Status(c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                    "ResourceApplyGradientDescent", name, new IntPtr[]
-                    {
-                        var,
-                        alpha,
-                        delta
-                    }, 3, 
-                    wrap_tfe_src.SetOpAttrs2("use_locking", use_locking),
-                    op => wrap_tfe_src.SetOpAttrs(op, "use_locking", use_locking),
-                    null, 0));
-                status.Check(true);
+                var result = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ResourceApplyGradientDescent", name, 
+                    null,
+                    var, alpha, delta,
+                    "use_locking", use_locking);
                 return null;
             }
 
-            var _op = _op_def_lib._apply_op_helper("ResourceApplyGradientDescent", name, new
+            var _op = tf._op_def_lib._apply_op_helper("ResourceApplyGradientDescent", name, new
             {
                 var,
                 alpha,

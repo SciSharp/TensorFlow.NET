@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2020 Haiping Chen. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -112,7 +111,7 @@ namespace Tensorflow
         
         public static Tensor crop_and_resize(Tensor image, Tensor boxes, Tensor box_ind, Tensor crop_size, string method, float extrapolation_value, string name)
         {
-            var _op = gen_nn_ops._op_def_lib._apply_op_helper("CropAndResize", name: name, args: new
+            var _op = tf._op_def_lib._apply_op_helper("CropAndResize", name: name, args: new
             {
                 image,
                 boxes,

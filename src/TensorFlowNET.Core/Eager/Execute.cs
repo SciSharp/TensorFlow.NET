@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
@@ -27,23 +28,20 @@ namespace Tensorflow.Eager
         /// <param name="ctx">The value of context.context().</param>
         /// <param name="name">Customized name for the operation.</param>
         /// <returns>List of output Tensor objects. The list is empty if there are no outputs</returns>
-        public EagerTensor[] execute(Context ctx, string op_name, int num_outputs,
-            EagerTensor[] inputs, object[] attrs, 
+        public Tensor[] execute(Context ctx, string op_name, int num_outputs,
+            Tensor[] inputs, object[] attrs, 
             string name = null)
         {
             ctx.ensure_initialized();
 
-            var results = Enumerable.Range(0, num_outputs).Select(x => new EagerTensor()).ToArray();
-            using Status status = new Status(c_api.TFE_QuickExecute(ctx,
+            var results = tf.Runner.TFE_Execute(ctx,
                ctx.device_name,
                op_name,
-               inputs.Select(x => x.EagerTensorHandle).ToArray(),
-               inputs.Length,
-               op => wrap_tfe_src.SetOpAttrs(op, attrs),
-               results.Select(x => x.EagerTensorHandle).ToArray(), results.Length));
-            status.Check(true);
+               inputs,
+               attrs,
+               num_outputs);
 
-            return results.Select(x => x.Resolve()).ToArray();
+            return results;
         }
 
         public (TF_DataType, EagerTensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)

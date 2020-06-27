@@ -20,8 +20,10 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public GradientTape GradientTape() 
-            => new GradientTape();
+        public GradientTape GradientTape(bool persistent = false,
+            bool watch_accessed_variables = true) 
+            => new GradientTape(persistent: persistent, 
+                watch_accessed_variables: watch_accessed_variables);
 
         public Tensor[] gradients(Tensor[] ys,
             Tensor[] xs,

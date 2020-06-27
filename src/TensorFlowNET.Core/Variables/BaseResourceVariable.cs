@@ -48,13 +48,11 @@ namespace Tensorflow
 
         public BaseResourceVariable()
         {
-            _handle = c_api.TFE_NewResourceVariable();
         }
 
         public BaseResourceVariable(IntPtr handle, IntPtr tensor)
         {
             _handle = handle;
-            this.handle = tf.tensorMgr.GetTensor(tensor);
         }
 
         public void __init__(bool trainable = true,
@@ -104,7 +102,10 @@ namespace Tensorflow
         void variable_accessed(BaseResourceVariable variable)
         {
             if (variable.trainable)
-                Tape.variable_accessed(variable as ResourceVariable);
+            {
+                foreach (var tape in tf.GetTapeSet())
+                    tape.VariableAccessed(variable as ResourceVariable);
+            }
         }
 
         /// <summary>

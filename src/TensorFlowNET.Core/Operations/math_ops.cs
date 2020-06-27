@@ -567,10 +567,8 @@ namespace Tensorflow
             }
             else
             {
-                if(x is EagerTensor)
-                {
-                    return constant_op.constant(np.arange(x.shape.Rank));
-                }
+                if(x is Tensor)
+                    return constant_op.constant(np.arange(x.rank));
 
                 var rank = array_ops.rank(x);
                 return range(0, rank, 1);

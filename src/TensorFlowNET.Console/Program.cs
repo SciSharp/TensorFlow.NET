@@ -1,4 +1,5 @@
 ﻿using System;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -14,18 +15,19 @@ namespace Tensorflow
 
             int batchSize = 1000;
 
-            // 1 million float tensor 58.5M.
+            // 1 million float tensor 68M.
             mm.Execute(10, 100 * batchSize, cases.Constant);
 
-            // 100K float variable 80.5M.
+            // 100K float variable 84M.
             mm.Execute(10, 10 * batchSize, cases.Variable);
 
-            // 1 million math add 36.5M.
+            // 1 million math add 39M.
             mm.Execute(10, 100 * batchSize, cases.MathAdd);
 
-            // 100K gradient 210M.
+            // 100K gradient 44M.
             mm.Execute(10, 10 * batchSize, cases.Gradient);
 
+            // 120M
             Console.WriteLine("Finished.");
             Console.ReadLine();
         }

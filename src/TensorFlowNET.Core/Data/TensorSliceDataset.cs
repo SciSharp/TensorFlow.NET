@@ -5,16 +5,15 @@ using System.Text;
 
 namespace Tensorflow
 {
-    public class TensorSliceDataset
+    public class TensorSliceDataset : IDatasetV2
     {
-        public TensorSliceDataset(params NDArray[] elements)
-        {
+        NDArray features;
+        NDArray labels;
 
-        }
-
-        public TensorSliceDataset from_tensor_slices(params NDArray[] elements)
+        public TensorSliceDataset(NDArray features, NDArray labels)
         {
-            throw new NotImplementedException("");
+            this.features = features;
+            this.labels = labels;
         }
     }
 }

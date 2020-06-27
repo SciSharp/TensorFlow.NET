@@ -17,18 +17,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public class gen_string_ops
     {
-        static readonly OpDefLibrary _op_def_lib;
-        static gen_string_ops() { _op_def_lib = new OpDefLibrary(); }
-
         public static Tensor substr(Tensor input, int pos, int len, 
             string name = null, string @uint = "BYTE")
         {
-            var _op = _op_def_lib._apply_op_helper("Substr", name: name, args: new
+            var _op = tf._op_def_lib._apply_op_helper("Substr", name: name, args: new
             {
                 input,
                 pos,

@@ -24,7 +24,7 @@ namespace Tensorflow
 
         public class DataOps
         {
-            public TensorSliceDataset Dataset { get; } = new TensorSliceDataset();
+            public DatasetManager Dataset { get; } = new DatasetManager();
         }
     }
 }

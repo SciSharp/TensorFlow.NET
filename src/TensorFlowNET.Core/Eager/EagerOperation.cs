@@ -8,7 +8,6 @@ namespace Tensorflow.Eager
 {
     public class EagerOperation : Operation
     {
-        static Dictionary<string, OpDef> op_dict;
         public string Name { get; set; }
         public new int NumInputs;
         public IntPtr[] InputHandles { get; set; }
@@ -16,14 +15,12 @@ namespace Tensorflow.Eager
         public new int NumOutputs;
         public IntPtr[] OutputHandles { get; set; }
         public Tensor[] Outputs { get; set; }
-        public BindingArray SkipInputIndicesArray { get; set; }
-        public unsafe int[] SkipInputIndices => SkipInputIndicesArray.Data.Select(x => *(int*) x).ToArray();
-        public string[] AttrsArray { get; set; }
+        public long[] SkipInputIndices { get; set; }
+        public object[] Attrs { get; set; }
 
         public EagerOperation() : base(IntPtr.Zero)
         {
-            if (op_dict == null)
-                op_dict = op_def_registry.get_registered_ops();
+
         }
 
         public override InputList inputs
@@ -72,9 +69,9 @@ namespace Tensorflow.Eager
 
         public bool get_attr_bool(string attr_name)
         {
-            for (int i = 0; i < AttrsArray.Length; i = i + 2)
-                if (AttrsArray[i] == attr_name)
-                    return AttrsArray[i + 1] == "1";
+            for (int i = 0; i < Attrs.Length; i = i + 2)
+                if (Attrs[i].Equals(attr_name))
+                    return Attrs[i + 1].Equals("1");
 
             throw new ValueError($"Can't find attr: {attr_name}");
         }
