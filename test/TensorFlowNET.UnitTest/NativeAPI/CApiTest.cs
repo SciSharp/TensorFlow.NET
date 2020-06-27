@@ -71,9 +71,6 @@ namespace TensorFlowNET.UnitTest
         protected SafeStatusHandle TF_NewStatus()
             => c_api.TF_NewStatus();
 
-        protected void TF_DeleteStatus(IntPtr s)
-            => c_api.TF_DeleteStatus(s);
-
         protected void TF_DeleteTensor(IntPtr t)
             => c_api.TF_DeleteTensor(t);
 
