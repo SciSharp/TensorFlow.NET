@@ -50,8 +50,12 @@ namespace Tensorflow
             return handle == IntPtr.Zero ? String.Empty : Marshal.PtrToStringAnsi(handle);
         }
 
+        [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         public delegate void Deallocator(IntPtr data, IntPtr size, ref DeallocatorArgs args);
+
+        [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         public delegate void DeallocatorV2(IntPtr data, long size, IntPtr args);
+
         public struct DeallocatorArgs
         {
             internal static unsafe c_api.DeallocatorArgs* EmptyPtr;
