@@ -22,7 +22,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Tensorflow.Eager;
 using Tensorflow.Gradients;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -42,11 +41,12 @@ namespace Tensorflow
 
         public delegate Tensor[] BackwardFunction(Tensor[] grads, long[] unneeded_gradients);
 
+        public Status status = new Status();
         public OpDefLibrary _op_def_lib = new OpDefLibrary();
+        public Context context = new Context(new ContextOptions(), new Status());
         public Execute _execute = new Execute();
         public IEagerRunner Runner = new EagerRunner();
-        public Context context = new Context(new ContextOptions(), new Status());
-
+        
         public tensorflow()
         {
             enable_eager_execution();

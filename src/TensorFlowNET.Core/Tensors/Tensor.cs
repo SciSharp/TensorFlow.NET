@@ -22,7 +22,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
+using static Tensorflow.Binding;
 using Tensorflow.Framework;
 
 namespace Tensorflow
@@ -109,11 +109,7 @@ namespace Tensorflow
 
                 if (_handle == IntPtr.Zero)
                 {
-                    using (var status = new Status())
-                    {
-                        c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, status.Handle);
-                        status.Check();
-                    }
+                    c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, tf.status.Handle);
                 }
                 else
                 {
@@ -126,15 +122,12 @@ namespace Tensorflow
 
             set
             {
-                using (var status = new Status())
-                {
-                    if (value == null)
-                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, status.Handle);
-                    else
-                        c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, status.Handle);
+                if (value == null)
+                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.status.Handle);
+                else
+                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, tf.status.Handle);
 
-                    status.Check(true);
-                }
+                tf.status.Check(true);
             }
         }
 
@@ -178,13 +171,9 @@ namespace Tensorflow
             {
                 if (_handle == IntPtr.Zero)
                 {
-                    using (var status = new Status())
-                    {
-                        var output = _as_tf_output();
-                        int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status.Handle);
-                        status.Check();
-                        return ndim;
-                    }
+                    var output = _as_tf_output();
+                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, tf.status.Handle);
+                    return ndim;
                 }
 
                 return c_api.TF_NumDims(_handle);

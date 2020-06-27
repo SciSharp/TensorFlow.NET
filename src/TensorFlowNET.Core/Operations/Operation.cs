@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Tensorflow.Util;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -233,14 +234,13 @@ namespace Tensorflow
             AttrValue x = null;
 
             lock (Locks.ProcessWide)
-                using (var status = new Status())
-                using (var buf = new Buffer())
-                {
-                    c_api.TF_OperationGetAttrValueProto(_handle, name, buf, status.Handle);
-                    status.Check(true);
+            {
+                using var buf = new Buffer();
+                c_api.TF_OperationGetAttrValueProto(_handle, name, buf, tf.status.Handle);
+                tf.status.Check(true);
 
-                    x = AttrValue.Parser.ParseFrom(buf.MemoryBlock.Stream());
-                }
+                x = AttrValue.Parser.ParseFrom(buf.MemoryBlock.Stream());
+            }
 
             string oneof_value = x.ValueCase.ToString();
             if (string.IsNullOrEmpty(oneof_value))
@@ -295,12 +295,11 @@ namespace Tensorflow
             // after the c_api call next time _inputs is accessed 
             // the updated inputs are reloaded from the c_api
             lock (Locks.ProcessWide)
-                using (var status = new Status())
-                {
-                    c_api.UpdateEdge(_graph, output, input, status.Handle);
-                    //var updated_inputs = inputs;
-                    status.Check();
-                }
+            {
+                c_api.UpdateEdge(_graph, output, input, tf.status.Handle);
+                //var updated_inputs = inputs;
+                tf.status.Check();
+            }
         }
 
         private void _assert_same_graph(Tensor tensor)

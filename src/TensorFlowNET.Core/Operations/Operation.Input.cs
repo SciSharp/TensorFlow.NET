@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -30,11 +31,8 @@ namespace Tensorflow
         public int InputListLength(string name)
         {
             int num = 0;
-            using(var status = new Status())
-            {
-                num = c_api.TF_OperationInputListLength(_handle, name, status.Handle);
-                status.Check(true);
-            }
+            num = c_api.TF_OperationInputListLength(_handle, name, tf.status.Handle);
+            tf.status.Check(true);
             return num;
         }
         public int NumInputs => c_api.TF_OperationNumInputs(_handle);

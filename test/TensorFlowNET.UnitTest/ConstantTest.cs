@@ -96,14 +96,14 @@ namespace TensorFlowNET.UnitTest.Basics
         public void ZerosConst()
         {
             // small size
-            var tensor = tf.zeros(new Shape(3, 2), tf.int32, "small");
+            var tensor = tf.zeros((3, 2), tf.int32, "small");
 
             Assert.AreEqual(tensor.shape[0], 3);
             Assert.AreEqual(tensor.shape[1], 2);
             Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 0, 0 }, tensor.numpy().ToArray<int>()));
 
             // big size
-            tensor = tf.zeros(new Shape(200, 100), tf.int32, "big");
+            tensor = tf.zeros((200, 100), tf.int32, "big");
 
             Assert.AreEqual(tensor.shape[0], 200);
             Assert.AreEqual(tensor.shape[1], 100);

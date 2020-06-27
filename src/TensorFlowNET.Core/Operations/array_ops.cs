@@ -43,30 +43,26 @@ namespace Tensorflow
                 allow_broadcast: false);
 
         public static Tensor zeros(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
-        {
-            dtype = dtype.as_base_dtype();
-            return tf_with(ops.name_scope(name, "zeros", shape), scope =>
+            => tf_with(ops.name_scope(name, "zeros", shape), scope =>
             {
+                dtype = dtype.as_base_dtype();
                 name = scope;
+                var shape_tensor = constant_op._tensor_shape_tensor_conversion_function(shape);
+                Tensor zeros = null;
                 switch (dtype)
                 {
-                    case TF_DataType.TF_BOOL:
-                        return _constant_if_small(false, shape, dtype, name);
                     case TF_DataType.TF_DOUBLE:
-                        return _constant_if_small(0.0D, shape, dtype, name);
+                        zeros = constant(0d);
+                        break;
                     case TF_DataType.TF_FLOAT:
-                        return _constant_if_small(0.0F, shape, dtype, name);
-                    case TF_DataType.TF_INT64:
-                        return _constant_if_small(0L, shape, dtype, name);
-                    case TF_DataType.TF_INT32:
-                        return _constant_if_small(0, shape, dtype, name);
-                    case TF_DataType.TF_INT8:
-                        return _constant_if_small<byte>(0, shape, dtype, name);
+                        zeros = constant(0f);
+                        break;
                     default:
-                        throw new TypeError("can't find type for zeros");
+                        zeros = constant(0);
+                        break;
                 }
+                return fill(shape_tensor, zeros, name: name);
             });
-        }
 
         public static Tensor boolean_mask<T1, T2>(T1 tensor, T2 mask, string name = "boolean_mask", int axis = 0)
         {
