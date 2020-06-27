@@ -32,7 +32,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TF_AttrMetadata TF_OperationGetAttrMetadata(IntPtr oper, string attr_name, IntPtr status);
+        public static extern TF_AttrMetadata TF_OperationGetAttrMetadata(IntPtr oper, string attr_name, SafeStatusHandle status);
 
         /// <summary>
         /// Fills in `value` with the value of the attribute `attr_name`.  `value` must
@@ -46,7 +46,7 @@ namespace Tensorflow
         /// <param name="max_length">size_t</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_OperationGetAttrString(IntPtr oper, string attr_name, IntPtr value, uint max_length, IntPtr status);
+        public static extern void TF_OperationGetAttrString(IntPtr oper, string attr_name, IntPtr value, uint max_length, SafeStatusHandle status);
         
         /// <summary>
         /// Sets `output_attr_value` to the binary-serialized AttrValue proto
@@ -55,13 +55,13 @@ namespace Tensorflow
         /// <param name="oper"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TF_OperationGetAttrValueProto(IntPtr oper, string attr_name, IntPtr output_attr_value, IntPtr status);
+        public static extern int TF_OperationGetAttrValueProto(IntPtr oper, string attr_name, IntPtr output_attr_value, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TF_SetAttrBool(IntPtr desc, string attr_name, bool value);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_SetAttrValueProto(IntPtr desc, string attr_name, IntPtr proto, uint proto_len, IntPtr status);
+        public static extern void TF_SetAttrValueProto(IntPtr desc, string attr_name, IntPtr proto, uint proto_len, SafeStatusHandle status);
 
         /// <summary>
         /// Set `num_dims` to -1 to represent "unknown rank".
@@ -99,7 +99,7 @@ namespace Tensorflow
         public static extern void TF_SetAttrStringList(IntPtr desc, string attr_name, IntPtr[] values, uint[] lengths, int num_values);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_SetAttrTensor(IntPtr desc, string attr_name, IntPtr value, IntPtr status);
+        public static extern void TF_SetAttrTensor(IntPtr desc, string attr_name, IntPtr value, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TF_SetAttrType(IntPtr desc, string attr_name, TF_DataType value);

@@ -70,10 +70,10 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TF_AttrType TFE_OpGetAttrType(IntPtr op, string attr_name, ref byte is_list, IntPtr status);
+        public static extern TF_AttrType TFE_OpGetAttrType(IntPtr op, string attr_name, ref byte is_list, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern TF_AttrType TFE_OpNameGetAttrType(IntPtr ct, string op_or_function_name, string attr_name, ref byte is_list, IntPtr status);
+        public static extern TF_AttrType TFE_OpNameGetAttrType(IntPtr ct, string op_or_function_name, string attr_name, ref byte is_list, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the length (number of tensors) of the input argument `input_name`
@@ -83,7 +83,7 @@ namespace Tensorflow
         /// <param name="input_name">const char*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_OpGetInputLength(IntPtr op, string input_name, IntPtr status);
+        public static extern int TFE_OpGetInputLength(IntPtr op, string input_name, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the length (number of tensors) of the output argument `output_name`
@@ -94,7 +94,7 @@ namespace Tensorflow
         /// <param name="status"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_OpGetOutputLength(IntPtr op, string input_name, IntPtr status);
+        public static extern int TFE_OpGetOutputLength(IntPtr op, string input_name, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -105,7 +105,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_OpAddInputList(IntPtr op, IntPtr[] inputs, int num_inputs, IntPtr status);
+        public static extern int TFE_OpAddInputList(IntPtr op, IntPtr[] inputs, int num_inputs, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -114,7 +114,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>TFE_Context*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_Context TFE_NewContext(IntPtr opts, IntPtr status);
+        public static extern TFE_Context TFE_NewContext(IntPtr opts, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern TFE_Context TFE_ContextStartStep(IntPtr ctx);
@@ -138,7 +138,7 @@ namespace Tensorflow
         /// <param name="num_retvals">int*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_Execute(IntPtr op, IntPtr[] retvals, ref int num_retvals, IntPtr status);
+        public static extern void TFE_Execute(IntPtr op, IntPtr[] retvals, ref int num_retvals, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -148,7 +148,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_Op TFE_NewOp(IntPtr ctx, string op_or_function_name, IntPtr status);
+        public static extern TFE_Op TFE_NewOp(IntPtr ctx, string op_or_function_name, SafeStatusHandle status);
 
         /// <summary>
         /// Resets `op_to_reset` with `op_or_function_name` and `raw_device_name`. This
@@ -164,7 +164,7 @@ namespace Tensorflow
         /// <param name="raw_device_name">const char*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpReset(IntPtr op_to_reset, string op_or_function_name, string raw_device_name, IntPtr status);
+        public static extern void TFE_OpReset(IntPtr op_to_reset, string op_or_function_name, string raw_device_name, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -194,7 +194,7 @@ namespace Tensorflow
         /// <param name="num_dims">const int</param>
         /// <param name="out_status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrShape(IntPtr op, string attr_name, long[] dims, int num_dims, IntPtr out_status);
+        public static extern void TFE_OpSetAttrShape(IntPtr op, string attr_name, long[] dims, int num_dims, SafeStatusHandle out_status);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrBool(IntPtr op, string attr_name, bool value);
@@ -216,7 +216,7 @@ namespace Tensorflow
         /// <param name="device_name"></param>
         /// <param name="status"></param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetDevice(TFE_Op op, string device_name, IntPtr status);
+        public static extern void TFE_OpSetDevice(TFE_Op op, string device_name, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -225,7 +225,7 @@ namespace Tensorflow
         /// <param name="h">TFE_TensorHandle*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpAddInput(IntPtr op, IntPtr h, IntPtr status);
+        public static extern void TFE_OpAddInput(IntPtr op, IntPtr h, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -233,7 +233,7 @@ namespace Tensorflow
         /// <param name="t">const tensorflow::Tensor&</param>
         /// <returns>TFE_TensorHandle*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_TensorHandle TFE_NewTensorHandle(IntPtr t, IntPtr status);
+        public static extern TFE_TensorHandle TFE_NewTensorHandle(IntPtr t, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_EagerTensorHandle(IntPtr t);
@@ -273,7 +273,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TensorHandleResolve(IntPtr h, IntPtr status);
+        public static extern IntPtr TFE_TensorHandleResolve(IntPtr h, SafeStatusHandle status);
 
 
         /// <summary>
@@ -283,10 +283,10 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_TensorHandleNumDims(IntPtr h, IntPtr status);
+        public static extern int TFE_TensorHandleNumDims(IntPtr h, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_TensorHandleDim(IntPtr h, int dim, IntPtr status);
+        public static extern int TFE_TensorHandleDim(IntPtr h, int dim, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the device of the operation that produced `h`. If `h` was produced by
@@ -299,7 +299,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TensorHandleDeviceName(IntPtr h, IntPtr status);
+        public static extern IntPtr TFE_TensorHandleDeviceName(IntPtr h, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the name of the device in whose memory `h` resides.
@@ -308,7 +308,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TensorHandleBackingDeviceName(IntPtr h, IntPtr status);
+        public static extern IntPtr TFE_TensorHandleBackingDeviceName(IntPtr h, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -317,7 +317,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_ContextListDevices(IntPtr ctx, IntPtr status);
+        public static extern IntPtr TFE_ContextListDevices(IntPtr ctx, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -370,7 +370,7 @@ namespace Tensorflow
         /// <param name="executor">TFE_Executor*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_ExecutorWaitForAllPendingNodes(TFE_Executor executor, IntPtr status);
+        public static extern void TFE_ExecutorWaitForAllPendingNodes(TFE_Executor executor, SafeStatusHandle status);
 
         /// <summary>
         /// Sets a custom Executor for current thread. All nodes created by this thread
@@ -402,7 +402,7 @@ namespace Tensorflow
         /// <param name="status"></param>
         /// <returns>EagerTensorHandle</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_FastPathExecute(IntPtr ctx, 
+        public static extern SafeStatusHandle TFE_FastPathExecute(IntPtr ctx, 
             string device_name, 
             string op_name,
             string name,
@@ -416,7 +416,7 @@ namespace Tensorflow
         public delegate void TFE_FastPathExecute_SetOpAttrs(IntPtr op);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_QuickExecute(IntPtr ctx,
+        public static extern SafeStatusHandle TFE_QuickExecute(IntPtr ctx,
             string device_name,
             string op_name,
             IntPtr[] inputs, 
@@ -444,7 +444,7 @@ namespace Tensorflow
         public static extern IntPtr ResourceVariable_Handle(IntPtr variable);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TapeGradient(IntPtr tape, 
+        public static extern SafeStatusHandle TFE_TapeGradient(IntPtr tape, 
             IntPtr[] target, int target_size, 
             IntPtr[] sources, int source_size,
             IntPtr[] outputs, int output_size);

@@ -14,7 +14,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         [TestMethod]
         public unsafe void OpGetInputAndOutputLengths()
         {
-            var status = TF_NewStatus();
+            using var status = TF_NewStatus();
             var opts = TFE_NewContextOptions();
             var ctx = TFE_NewContext(opts, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -52,7 +52,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             EXPECT_EQ(2, TFE_OpGetOutputLength(identityOp, "output", status));
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
-            TF_DeleteStatus(status);
             TFE_DeleteOp(identityOp);
             TFE_DeleteTensorHandle(input1);
             TFE_DeleteTensorHandle(input2);

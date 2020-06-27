@@ -236,7 +236,7 @@ namespace Tensorflow
             lock (Locks.ProcessWide)
             {
                 using var buf = new Buffer();
-                c_api.TF_OperationGetAttrValueProto(_handle, name, buf, tf.status);
+                c_api.TF_OperationGetAttrValueProto(_handle, name, buf, tf.status.Handle);
                 tf.status.Check(true);
 
                 x = AttrValue.Parser.ParseFrom(buf.MemoryBlock.Stream());
@@ -260,7 +260,7 @@ namespace Tensorflow
 
         public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)
         {
-            return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s);
+            return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s.Handle);
         }
 
         private NodeDef GetNodeDef()
@@ -269,7 +269,7 @@ namespace Tensorflow
                 using (var s = new Status())
                 using (var buffer = new Buffer())
                 {
-                    c_api.TF_OperationToNodeDef(_handle, buffer, s);
+                    c_api.TF_OperationToNodeDef(_handle, buffer, s.Handle);
                     s.Check();
 
                     return NodeDef.Parser.ParseFrom(buffer.MemoryBlock.Stream());
@@ -295,11 +295,11 @@ namespace Tensorflow
             // after the c_api call next time _inputs is accessed 
             // the updated inputs are reloaded from the c_api
             lock (Locks.ProcessWide)
-                {
-                    c_api.UpdateEdge(_graph, output, input, tf.status);
-                    //var updated_inputs = inputs;
-                    tf.status.Check();
-                }
+            {
+                c_api.UpdateEdge(_graph, output, input, tf.status.Handle);
+                //var updated_inputs = inputs;
+                tf.status.Check();
+            }
         }
 
         private void _assert_same_graph(Tensor tensor)

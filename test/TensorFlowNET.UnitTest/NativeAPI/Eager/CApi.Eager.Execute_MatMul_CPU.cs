@@ -18,7 +18,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
 
         unsafe void Execute_MatMul_CPU(bool async)
         {
-            var status = TF_NewStatus();
+            using var status = TF_NewStatus();
             var opts = TFE_NewContextOptions();
             c_api.TFE_ContextOptionsSetAsync(opts, Convert.ToByte(async));
             var ctx = TFE_NewContext(opts, status);
@@ -49,7 +49,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             EXPECT_EQ(10f, product[1]);
             EXPECT_EQ(15f, product[2]);
             EXPECT_EQ(22f, product[3]);
-            TF_DeleteStatus(status);
         }
     }
 }

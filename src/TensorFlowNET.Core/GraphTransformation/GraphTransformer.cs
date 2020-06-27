@@ -35,7 +35,7 @@ namespace Tensorflow
                     outputs_string,
                     transforms_string,
                     buffer,
-                    status);
+                    status.Handle);
 
                 status.Check(false);
                 var bytes = buffer.ToArray();

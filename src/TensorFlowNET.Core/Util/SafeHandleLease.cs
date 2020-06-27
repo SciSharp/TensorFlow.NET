@@ -17,22 +17,20 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Tensorflow
+namespace Tensorflow.Util
 {
-    public partial class c_api
+    /// <summary>
+    /// Represents a lease of a <see cref="SafeHandle"/>.
+    /// </summary>
+    /// <seealso cref="SafeHandleExtensions.Lease"/>
+    public readonly struct SafeHandleLease : IDisposable
     {
-        /// <summary>
-        /// Write out a serialized representation of `func` (as a FunctionDef protocol
-        /// message) to `output_func_def` (allocated by TF_NewBuffer()).
-        /// `output_func_def`'s underlying buffer will be freed when TF_DeleteBuffer()
-        /// is called.
-        /// </summary>
-        /// <param name="func"></param>
-        /// <param name="output_func_def"></param>
-        /// <param name="status"></param>
-        [DllImport(TensorFlowLibName)]
-        public static extern void TF_FunctionToFunctionDef(IntPtr func, IntPtr output_func_def, SafeStatusHandle status);
+        private readonly SafeHandle _handle;
 
+        internal SafeHandleLease(SafeHandle handle)
+            => _handle = handle;
 
+        public void Dispose()
+            => _handle?.DangerousRelease();
     }
 }

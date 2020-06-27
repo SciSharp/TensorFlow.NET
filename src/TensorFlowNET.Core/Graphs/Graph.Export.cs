@@ -25,7 +25,7 @@ namespace Tensorflow
         public Buffer ToGraphDef(Status s)
         {
             var buffer = new Buffer();
-            c_api.TF_GraphToGraphDef(_handle, buffer, s);
+            c_api.TF_GraphToGraphDef(_handle, buffer, s.Handle);
             s.Check(true);
 
             return buffer;

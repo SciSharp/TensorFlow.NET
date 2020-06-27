@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         [TestMethod]
         public unsafe void Variables()
         {
-            var status = c_api.TF_NewStatus();
+            using var status = c_api.TF_NewStatus();
             var opts = TFE_NewContextOptions();
             var ctx = TFE_NewContext(opts, status);
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -49,7 +49,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             TFE_DeleteTensorHandle(value_handle[0]);
             TFE_DeleteContext(ctx);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TF_DeleteStatus(status);
         }
     }
 }

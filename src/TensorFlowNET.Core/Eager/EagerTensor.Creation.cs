@@ -22,13 +22,13 @@ namespace Tensorflow.Eager
 
         public EagerTensor(string value, string device_name) : base(value)
         {
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status);
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
             Resolve();
         }
         
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status);
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
             Resolve();
         }
 
@@ -37,7 +37,7 @@ namespace Tensorflow.Eager
             _id = get_uid();
 
             if (_handle == IntPtr.Zero)
-                _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.status);
+                _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.status.Handle);
 
             //print($"new Tensor {Id} {_handle.ToString("x16")}");
             //print($"new TensorHandle {Id} {EagerTensorHandle.ToString("x16")}");

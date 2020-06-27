@@ -16,7 +16,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         [TestMethod]
         public unsafe void OpInferMixedTypeInputListAttrs()
         {
-            var status = TF_NewStatus();
+            using var status = TF_NewStatus();
             var opts = TFE_NewContextOptions();
             var ctx = TFE_NewContext(opts, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -45,7 +45,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             TFE_Execute(assertOp, retvals, ref num_retvals, status);
             EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
-            TF_DeleteStatus(status);
             TFE_DeleteOp(assertOp);
             TFE_DeleteTensorHandle(condition);
             TFE_DeleteTensorHandle(t1);

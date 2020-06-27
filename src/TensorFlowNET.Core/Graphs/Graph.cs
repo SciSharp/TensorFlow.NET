@@ -513,14 +513,14 @@ namespace Tensorflow
         public TensorShape GetTensorShape(TF_Output output)
         {
             var status = tf.status;
-            var ndim = c_api.TF_GraphGetTensorNumDims(_handle, output, status);
+            var ndim = c_api.TF_GraphGetTensorNumDims(_handle, output, status.Handle);
             status.Check();
 
             if (ndim == -1)
                 return new TensorShape();
 
             var dims = new long[ndim];
-            c_api.TF_GraphGetTensorShape(_handle, output, dims, dims.Length, status);
+            c_api.TF_GraphGetTensorShape(_handle, output, dims, dims.Length, status.Handle);
             status.Check();
 
             return new TensorShape(dims.Select(x => (int)x).ToArray());

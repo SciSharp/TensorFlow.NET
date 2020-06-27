@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         [TestMethod]
         public void Context()
         {
-            var status = c_api.TF_NewStatus();
+            using var status = c_api.TF_NewStatus();
             var opts = c_api.TFE_NewContextOptions();
             var ctx = c_api.TFE_NewContext(opts, status);
 
@@ -34,7 +34,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             }
 
             c_api.TF_DeleteDeviceList(devices);
-            c_api.TF_DeleteStatus(status);
         }
     }
 }

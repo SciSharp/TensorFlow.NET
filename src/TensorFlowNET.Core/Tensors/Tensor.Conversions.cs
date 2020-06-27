@@ -70,7 +70,7 @@ namespace Tensorflow
                         IntPtr stringStartAddress = IntPtr.Zero;
                         UIntPtr dstLen = UIntPtr.Zero;
 
-                        c_api.TF_StringDecode((byte*) this.buffer + 8, (UIntPtr) (this.bytesize), (byte**) &stringStartAddress, &dstLen, tf.status);
+                        c_api.TF_StringDecode((byte*) this.buffer + 8, (UIntPtr) (this.bytesize), (byte**) &stringStartAddress, &dstLen, tf.status.Handle);
                         tf.status.Check(true);
 
                         var dstLenInt = checked((int) dstLen);

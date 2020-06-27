@@ -83,7 +83,7 @@ namespace Tensorflow
         public static extern void TF_AddInputList(IntPtr desc, TF_Output[] inputs, int num_inputs);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_FinishOperation(IntPtr desc, IntPtr status);
+        public static extern IntPtr TF_FinishOperation(IntPtr desc, SafeStatusHandle status);
 
         /// <summary>
         /// Operation will only be added to *graph when TF_FinishOperation() is
@@ -141,7 +141,7 @@ namespace Tensorflow
         public static extern TF_Output TF_OperationInput(TF_Input oper_in);
 
         [DllImport(TensorFlowLibName)]
-        public static extern int TF_OperationInputListLength(IntPtr oper, string arg_name, IntPtr status);
+        public static extern int TF_OperationInputListLength(IntPtr oper, string arg_name, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern TF_DataType TF_OperationInputType(TF_Input oper_in);
@@ -204,9 +204,9 @@ namespace Tensorflow
         public static extern TF_DataType TF_OperationOutputType(TF_Output oper_out);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_OperationToNodeDef(IntPtr oper, IntPtr buffer, IntPtr status);
+        public static extern void TF_OperationToNodeDef(IntPtr oper, IntPtr buffer, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern int TF_OperationOutputListLength(IntPtr oper, string arg_name, IntPtr status);
+        public static extern int TF_OperationOutputListLength(IntPtr oper, string arg_name, SafeStatusHandle status);
     }
 }

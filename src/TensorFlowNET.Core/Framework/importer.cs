@@ -62,7 +62,7 @@ namespace Tensorflow
             {
                 _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements);
                 // need to create a class ImportGraphDefWithResults with IDisposal
-                results = c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status);
+                results = c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status.Handle);
                 status.Check(true);
             }
 

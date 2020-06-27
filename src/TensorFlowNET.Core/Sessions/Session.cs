@@ -62,7 +62,7 @@ namespace Tensorflow
                         tags.Length,
                         graph,
                         ref buffer,
-                        status);
+                        status.Handle);
                     status.Check(true);
                 } catch (TensorflowException ex) when (ex.Message.Contains("Could not find SavedModel"))
                 {
@@ -73,7 +73,7 @@ namespace Tensorflow
                         tags.Length,
                         graph,
                         ref buffer,
-                        status);
+                        status.Handle);
                     status.Check(true);
                 }
 
