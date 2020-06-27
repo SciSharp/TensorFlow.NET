@@ -13,14 +13,12 @@ namespace Tensorflow
     public class EagerTensorV2 : DisposableObject, ITensor
     {
         IntPtr EagerTensorHandle;
-        public string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, status));
-
-        static Status status = new Status();
+        public string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.status));
 
         public EagerTensorV2(IntPtr handle)
         {
             EagerTensorHandle = c_api.TFE_EagerTensorHandle(handle);
-            _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, status);
+            _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.status);
         }
 
         public unsafe EagerTensorV2(NDArray nd, string device_name = "")
@@ -40,7 +38,7 @@ namespace Tensorflow
 
                     }, IntPtr.Zero);
 
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, status);
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status);
         }
 
         /*public unsafe EagerTensorV2(float[,] value)

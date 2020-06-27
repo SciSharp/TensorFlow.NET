@@ -8,26 +8,23 @@ namespace Tensorflow.Eager
 {
     public partial class EagerTensor : Tensor
     {
-        Status status = new Status();
         public IntPtr EagerTensorHandle;
-        public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, status));
+        public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.status));
 
-        public override int rank => c_api.TFE_TensorHandleNumDims(EagerTensorHandle, status);
+        public override int rank => c_api.TFE_TensorHandleNumDims(EagerTensorHandle, tf.status);
 
         public static int GetRank(IntPtr handle)
         {
             var tfe_tensor_handle = c_api.TFE_EagerTensorHandle(handle);
-            using var status = new Status();
-            return c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, status);
+            return c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, tf.status);
         }
 
         public static int[] GetDims(IntPtr handle)
         {
             var tfe_tensor_handle = c_api.TFE_EagerTensorHandle(handle);
-            using var status = new Status();
-            var dims = new int[c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, status)];
+            var dims = new int[c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, tf.status)];
             for (int i = 0; i < dims.Length; i++)
-                dims[i] = c_api.TFE_TensorHandleDim(tfe_tensor_handle, i, status);
+                dims[i] = c_api.TFE_TensorHandleDim(tfe_tensor_handle, i, tf.status);
             return dims;
         }
 

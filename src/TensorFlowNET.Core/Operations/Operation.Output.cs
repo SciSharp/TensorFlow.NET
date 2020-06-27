@@ -28,12 +28,8 @@ namespace Tensorflow
 
         public int OutputListLength(string name)
         {
-            int num = 0;
-            using (var status = new Status())
-            {
-                num = c_api.TF_OperationOutputListLength(_handle, name, status);
-                status.Check(true);
-            }
+            int num = c_api.TF_OperationOutputListLength(_handle, name, tf.status);
+            tf.status.Check(true);
 
             return num;
         }

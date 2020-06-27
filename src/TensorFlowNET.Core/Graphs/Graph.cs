@@ -512,7 +512,7 @@ namespace Tensorflow
 
         public TensorShape GetTensorShape(TF_Output output)
         {
-            var status = new Status();
+            var status = tf.status;
             var ndim = c_api.TF_GraphGetTensorNumDims(_handle, output, status);
             status.Check();
 

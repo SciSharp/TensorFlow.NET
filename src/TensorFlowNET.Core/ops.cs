@@ -176,30 +176,29 @@ namespace Tensorflow
                         throw new NotImplementedException("_create_c_op");
                 }
 
-                using (var status = new Status())
+                var status = tf.status;
+                
+                // Add control inputs
+                foreach (var control_input in control_inputs)
+                    c_api.TF_AddControlInput(op_desc, control_input);
+
+                // Add attrs
+                foreach (var attr in node_def.Attr)
                 {
-                    // Add control inputs
-                    foreach (var control_input in control_inputs)
-                        c_api.TF_AddControlInput(op_desc, control_input);
-
-                    // Add attrs
-                    foreach (var attr in node_def.Attr)
-                    {
-                        var bytes = attr.Value.ToByteArray(); //TODO: we can use attr.Value.WriteTo with a memory stream.
-                        var protoHandle = Marshal.AllocHGlobal(bytes.Length);
-                        Marshal.Copy(bytes, 0, protoHandle, bytes.Length);
-                        uint len = (uint)bytes.Length;
-                        c_api.TF_SetAttrValueProto(op_desc, attr.Key, protoHandle, proto_len: len, status: status);
-                        status.Check(true);
-                        Marshal.FreeHGlobal(protoHandle);
-                    }
-
-                    var c_op = c_api.TF_FinishOperation(op_desc, status);
-
+                    var bytes = attr.Value.ToByteArray(); //TODO: we can use attr.Value.WriteTo with a memory stream.
+                    var protoHandle = Marshal.AllocHGlobal(bytes.Length);
+                    Marshal.Copy(bytes, 0, protoHandle, bytes.Length);
+                    uint len = (uint)bytes.Length;
+                    c_api.TF_SetAttrValueProto(op_desc, attr.Key, protoHandle, proto_len: len, status: status);
                     status.Check(true);
-
-                    return c_op;
+                    Marshal.FreeHGlobal(protoHandle);
                 }
+
+                var c_op = c_api.TF_FinishOperation(op_desc, status);
+
+                status.Check(true);
+
+                return c_op;
             }
         }
 

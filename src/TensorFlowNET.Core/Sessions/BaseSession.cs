@@ -22,7 +22,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using Google.Protobuf;
-using NumSharp.Backends;
+using static Tensorflow.Binding;
 using Tensorflow.Util;
 
 namespace Tensorflow
@@ -236,7 +236,7 @@ namespace Tensorflow
             // Ensure any changes to the graph are reflected in the runtime.
             _extend_graph();
 
-            var status = new Status();
+            var status = tf.status;
 
             var output_values = fetch_list.Select(x => IntPtr.Zero).ToArray();
 

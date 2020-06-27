@@ -21,6 +21,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
 using NumSharp.Utilities;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -69,11 +70,8 @@ namespace Tensorflow
                         IntPtr stringStartAddress = IntPtr.Zero;
                         UIntPtr dstLen = UIntPtr.Zero;
 
-                        using (var status = new Status())
-                        {
-                            c_api.TF_StringDecode((byte*) this.buffer + 8, (UIntPtr) (this.bytesize), (byte**) &stringStartAddress, &dstLen, status);
-                            status.Check(true);
-                        }
+                        c_api.TF_StringDecode((byte*) this.buffer + 8, (UIntPtr) (this.bytesize), (byte**) &stringStartAddress, &dstLen, tf.status);
+                        tf.status.Check(true);
 
                         var dstLenInt = checked((int) dstLen);
                         var value = Encoding.UTF8.GetString((byte*) stringStartAddress, dstLenInt);

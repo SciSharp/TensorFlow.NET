@@ -451,7 +451,6 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(string str)
         {
-            var status = new Status();
             var buffer = Encoding.UTF8.GetBytes(str);
             var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
             var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
@@ -460,9 +459,9 @@ namespace Tensorflow
             IntPtr tensor = c_api.TF_TensorData(handle);
             Marshal.WriteInt64(tensor, 0);
             fixed (byte* src = buffer)
-                c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, status);
+                c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, tf.status);
             _handle = handle;
-            status.Check(true);
+            tf.status.Check(true);
         }
 
         public unsafe Tensor(NDArray nd, TF_DataType? tensorDType = null)
@@ -483,10 +482,8 @@ namespace Tensorflow
                     IntPtr tensor = c_api.TF_TensorData(handle);
                     Marshal.WriteInt64(tensor, 0);
 
-                    var status = new Status();
-                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (sbyte*) (tensor + sizeof(Int64)), size, status);
-
-                    status.Check(true);
+                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (sbyte*) (tensor + sizeof(Int64)), size, tf.status);
+                    tf.status.Check(true);
                     _handle = handle;
                 } else
                 {
@@ -498,11 +495,10 @@ namespace Tensorflow
                     IntPtr tensor = c_api.TF_TensorData(handle);
                     Marshal.WriteInt64(tensor, 0);
 
-                    var status = new Status();
                     fixed (byte* src = buffer)
-                        c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status);
+                        c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, tf.status);
 
-                    status.Check(true);
+                    tf.status.Check(true);
                     _handle = handle;
                 }
 
@@ -607,11 +603,10 @@ namespace Tensorflow
                 IntPtr tensor = c_api.TF_TensorData(handle);
                 Marshal.WriteInt64(tensor, 0);
 
-                var status = new Status();
                 fixed (byte* src = buffer)
-                    c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, status);
+                    c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(long)), size, tf.status);
 
-                status.Check(true);
+                tf.status.Check(true);
                 return handle;
             }
 

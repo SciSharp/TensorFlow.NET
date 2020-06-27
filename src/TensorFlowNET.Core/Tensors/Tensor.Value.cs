@@ -3,7 +3,7 @@ using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using NumSharp.Utilities;
 using System;
-using System.Collections.Generic;
+using static Tensorflow.Binding;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -237,18 +237,15 @@ namespace Tensorflow
             var src = c_api.TF_TensorData(_handle);
             var srcLen = (IntPtr)(src.ToInt64() + (long)bytesize);
             src += (int)(size * 8);
-            using (var status = new Status())
+            for (int i = 0; i < buffer.Length; i++)
             {
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    IntPtr dst = IntPtr.Zero;
-                    UIntPtr dstLen = UIntPtr.Zero;
-                    var read = c_api.TF_StringDecode((byte*)src, (UIntPtr)(srcLen.ToInt64() - src.ToInt64()), (byte**)&dst, &dstLen, status);
-                    status.Check(true);
-                    buffer[i] = new byte[(int)dstLen];
-                    Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);
-                    src += (int)read;
-                }
+                IntPtr dst = IntPtr.Zero;
+                UIntPtr dstLen = UIntPtr.Zero;
+                var read = c_api.TF_StringDecode((byte*)src, (UIntPtr)(srcLen.ToInt64() - src.ToInt64()), (byte**)&dst, &dstLen, tf.status);
+                tf.status.Check(true);
+                buffer[i] = new byte[(int)dstLen];
+                Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);
+                src += (int)read;
             }
 
             var _str = new string[buffer.Length];

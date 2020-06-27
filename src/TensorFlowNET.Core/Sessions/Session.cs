@@ -46,7 +46,7 @@ namespace Tensorflow
             lock (Locks.ProcessWide)
             {
                 var graph = c_api.TF_NewGraph();
-                var status = new Status();
+                using var status = new Status();
                 var opt = new SessionOptions();
 
                 var tags = new string[] {"serve"};
@@ -66,7 +66,6 @@ namespace Tensorflow
                     status.Check(true);
                 } catch (TensorflowException ex) when (ex.Message.Contains("Could not find SavedModel"))
                 {
-                    status = new Status();
                     sess = c_api.TF_LoadSessionFromSavedModel(opt,
                         IntPtr.Zero,
                         Path.GetFullPath(path),
