@@ -7,7 +7,6 @@ using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
 {
-    [Ignore]
     [TestClass]
     public class GraphTest : CApiTest
     {
