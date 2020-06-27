@@ -9,19 +9,14 @@ namespace Tensorflow
 {
     public static partial class gen_math_ops
     {
-        public static EagerTensor mul(IntPtr x, IntPtr y, string name = null)
+        public static Tensor mul(IntPtr x, IntPtr y, string name = null)
         {
-            var results = EagerTensorPass.Create();
-            Status status = c_api.TFE_FastPathExecute(tf.context, tf.context.device_name,
-                "Mul", name, new IntPtr[]
-                {
-                    x,
-                    y,
-                }, 2, 
-                null, null,
-                results.Points, results.Length);
-            status.Check(true);
-            return results[0].Resolve();
+            var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                "Mul", name,
+                null,
+                x, y);
+
+            return results[0];
         }
     }
 }

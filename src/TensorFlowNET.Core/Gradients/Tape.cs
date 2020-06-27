@@ -1,71 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using Tensorflow.Eager;
+using Tensorflow.Util;
 
 namespace Tensorflow.Gradients
 {
-    public class Tape : DisposableObject
+    public class Tape : ITape
     {
-        public int nesting_id { get; set; }
-
         public Tape(bool persistent, bool watch_accessed_variables)
         {
-            _handle = c_api.TFE_TapeSetNew(persistent, watch_accessed_variables);
+
         }
 
-        public void watch(EagerTensor x)
+        public Tensor[] ComputeGradient(long[] target_tensor_ids, long[] source_tensor_ids, UnorderedMap<long, TapeTensor> sources_that_are_targets, Tensor[] output_gradients)
         {
-            c_api.TFE_TapeWatch(_handle, x.EagerTensorHandle);
+            throw new NotImplementedException();
         }
 
-        public void pop_tape(Tape tape)
+        public void PopTape(ITape tape)
         {
-            c_api.TFE_TapeSetRemove(tape);
+            throw new NotImplementedException();
         }
 
-        public static void variable_accessed(ResourceVariable variable)
+        public void RecordOperation(string op_type, Tensor[] input_tensors, TapeTensor[] output_tensors, long[] input_tensor_id, TF_DataType[] input_dtypes, Func<tensorflow.BackwardFunction> backward_function_getter)
         {
-            c_api.TFE_TapeVariableAccessed(variable);
+            throw new NotImplementedException();
         }
 
-        public unsafe ResourceVariable[] watched_variables()
+        public bool ShouldRecord(long[] tensor_ids, TF_DataType[] dtypes)
         {
-            BindingArray result = c_api.TFE_TapeWatchedVariables(_handle);
-            var variables = result.Data.Select(x =>
-            {
-                var tensor = c_api.ResourceVariable_Handle(x);
-                return new ResourceVariable(x, tensor);
-            }).ToArray();
-
-            return variables;
+            throw new NotImplementedException();
         }
 
-        public static bool IsDtypeTrainable(DataType dtype)
+        public void VariableAccessed(ResourceVariable variable)
         {
-            switch (dtype)
-            {
-                case DataType.DtHalf:
-                case DataType.DtBfloat16:
-                case DataType.DtFloat:
-                case DataType.DtDouble:
-                case DataType.DtComplex64:
-                case DataType.DtComplex128:
-                case DataType.DtResource:
-                case DataType.DtVariant:
-                    return true;
-                default:
-                    return false;
-            }
+            throw new NotImplementedException();
         }
 
-        protected override void DisposeUnmanagedResources(IntPtr handle)
+        public void Watch(long tensor_id)
         {
+            throw new NotImplementedException();
         }
 
-        public static implicit operator IntPtr(Tape tape)
-            => tape._handle;
+        public ResourceVariable[] WatchedVariables()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

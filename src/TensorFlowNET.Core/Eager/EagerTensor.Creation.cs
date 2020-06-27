@@ -42,9 +42,6 @@ namespace Tensorflow.Eager
             //print($"new Tensor {Id} {_handle.ToString("x16")}");
             //print($"new TensorHandle {Id} {EagerTensorHandle.ToString("x16")}");
 
-            /*GarbageCollector.Increase(_handle, GCItemType.TensorHandle);
-            GarbageCollector.Increase(tfe_tensor_handle, GCItemType.LocalTensorHandle);*/
-
             return this;
         }
 
@@ -53,10 +50,6 @@ namespace Tensorflow.Eager
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
-            /*GarbageCollector.Decrease(_handle);
-            GarbageCollector.Decrease(tfe_tensor_handle);
-            GarbageCollector.Decrease(EagerTensorHandle);*/
-
             //print($"deleting DeleteTensorHandle {Id} {_handle.ToString("x16")}");
             c_api.TF_DeleteTensor(_handle);
             //print($"deleting DeleteTensorHandle {Id} {EagerTensorHandle.ToString("x16")}");

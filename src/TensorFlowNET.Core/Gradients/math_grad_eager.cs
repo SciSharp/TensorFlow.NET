@@ -30,7 +30,7 @@ namespace Tensorflow.Gradients
     public class math_grad_eager
     {
         [RegisterGradientEager("Mul")]
-        public static EagerTensor[] _MulGrad(EagerOperation op, IntPtr[] grads)
+        public static Tensor[] _MulGrad(EagerOperation op, IntPtr[] grads)
         {
             var x = op.InputHandles[0];
             var y = op.InputHandles[1];
@@ -39,7 +39,7 @@ namespace Tensorflow.Gradients
             if (op.SkipInputIndices.Contains(1) &&
                 EagerTensor.GetRank(grad) == 0)
             {
-                return new EagerTensor[]
+                return new Tensor[]
                 {
                     null,//gen_math_ops.mul(grad, math_ops.conj(y)),
                     null
@@ -48,7 +48,7 @@ namespace Tensorflow.Gradients
 
             if (_ShapesFullySpecifiedAndEqual(x, y, grad))
             {
-                return new EagerTensor[]
+                return new Tensor[]
                 {
                     gen_math_ops.mul(grad, y),
                     gen_math_ops.mul(grad, x)

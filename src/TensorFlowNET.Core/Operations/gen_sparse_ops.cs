@@ -15,14 +15,12 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
-using Tensorflow.Framework;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public class gen_sparse_ops
     {
-        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
-
         /// <summary>
         /// Converts a sparse representation into a dense tensor.
         /// </summary>
@@ -40,7 +38,7 @@ namespace Tensorflow
             bool validate_indices = true,
             string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("SparseToDense", name, args: new
+            var _op = tf._op_def_lib._apply_op_helper("SparseToDense", name, args: new
             {
                 sparse_indices,
                 output_shape,
@@ -59,7 +57,7 @@ namespace Tensorflow
             bool validate_indices = true,
             string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("SparseToDense", name, args: new
+            var _op = tf._op_def_lib._apply_op_helper("SparseToDense", name, args: new
             {
                 sparse_indices,
                 output_shape,

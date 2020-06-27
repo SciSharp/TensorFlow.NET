@@ -160,9 +160,6 @@ namespace Tensorflow
                     initializer_op = null;
                     _graph_element = null;
                     initial_value = _in_graph_mode ? initial_value : null;
-
-                    c_api.TFE_SetResourceVariableHandle(_handle, handle as EagerTensor);
-                    c_api.TFE_SetResourceVariableName(_handle, handle_name + ":0");
                 }
 
                 base.__init__(trainable: trainable,

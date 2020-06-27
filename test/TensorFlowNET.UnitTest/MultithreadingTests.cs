@@ -229,6 +229,7 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
+        [Ignore]
         [TestMethod]
         public void SessionRun_Initialization()
         {
@@ -248,6 +249,7 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
+        [Ignore]
         [TestMethod]
         public void SessionRun_Initialization_OutsideSession()
         {

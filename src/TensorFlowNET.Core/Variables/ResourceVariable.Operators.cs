@@ -22,8 +22,6 @@ namespace Tensorflow
 {
     public partial class ResourceVariable
     {
-        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
-
         public static Tensor operator +(ResourceVariable x, int y) => op_helper("add", x, y);
         public static Tensor operator +(ResourceVariable x, float y) => op_helper("add", x, y);
         public static Tensor operator +(ResourceVariable x, double y) => op_helper("add", x, y);

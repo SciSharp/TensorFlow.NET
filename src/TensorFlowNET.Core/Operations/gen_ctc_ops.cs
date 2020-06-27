@@ -14,15 +14,15 @@
    limitations under the License.
 ******************************************************************************/
 
+using static Tensorflow.Binding;
+
 namespace Tensorflow
 {
     public class gen_ctc_ops
     {
-        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
-
         public static Tensor[] ctc_greedy_decoder(Tensor inputs, Tensor sequence_length, bool merge_repeated = true, string name = "CTCGreedyDecoder")
         {
-            var op = _op_def_lib._apply_op_helper("CTCGreedyDecoder", name: name, args: new
+            var op = tf._op_def_lib._apply_op_helper("CTCGreedyDecoder", name: name, args: new
             {
                 inputs,
                 sequence_length,

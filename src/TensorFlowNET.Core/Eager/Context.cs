@@ -18,6 +18,9 @@ namespace Tensorflow.Eager
             status.Check(true);
         }
 
+        /// <summary>
+        /// Initialize handle and devices if not already done so.
+        /// </summary>
         public void ensure_initialized()
         {
             if (_initialized)
@@ -25,14 +28,20 @@ namespace Tensorflow.Eager
             _initialized = true;
         }
 
+        public void start_step()
+            => c_api.TFE_ContextStartStep(_handle);
+
+        public void end_step()
+            => c_api.TFE_ContextEndStep(_handle);
+
         /// <summary>
         ///     Dispose any unmanaged resources related to given <paramref name="handle"/>.
         /// </summary>
         protected sealed override void DisposeUnmanagedResources(IntPtr handle) 
             => c_api.TFE_DeleteContext(_handle);
 
-
-        public bool executing_eagerly() => true;
+        public bool executing_eagerly() 
+            => default_execution_mode == EAGER_MODE;
 
         public string shared_name(string name = null)
             => !string.IsNullOrEmpty(name) || !executing_eagerly() ? 

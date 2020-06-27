@@ -30,7 +30,7 @@ namespace Tensorflow.Gradients
         bool _watch_accessed_variables;
         ResourceVariable[] _watched_variables;
         bool _created_eagerly;
-        Tape _tape;
+        ITape _tape;
 
         public GradientTape(bool persistent = false,
             bool watch_accessed_variables = true)
@@ -38,9 +38,20 @@ namespace Tensorflow.Gradients
             _persistent = persistent;
             _watch_accessed_variables = watch_accessed_variables;
             _created_eagerly = tf.context.executing_eagerly();
+            _recording = false;
+            _created_eagerly = tf.context.executing_eagerly();
+            // Enters a context inside which operations are recorded on this tape.
+            if (_created_eagerly)
+            {
+                tf.context.ensure_initialized();
+                tf.context.start_step();
+            }
             _push_tape();
         }
 
+        /// <summary>
+        /// Pushes a new tape onto the tape stack.
+        /// </summary>
         private void _push_tape()
         {
             if (_recording)
@@ -50,8 +61,8 @@ namespace Tensorflow.Gradients
             if (_tape == null)
                 _tape = new Tape(_persistent, _watch_accessed_variables);
             else
-                throw new NotImplementedException("");
-
+                tf.GetTapeSet().Add(_tape);
+           
             _recording = true;
         }
 
@@ -59,7 +70,7 @@ namespace Tensorflow.Gradients
         {
             if (!_recording)
                 throw new ValueError("Tape is not recording.");
-            _tape.pop_tape(_tape);
+            _tape.PopTape(_tape);
             _recording = false;
         }
 
@@ -69,9 +80,15 @@ namespace Tensorflow.Gradients
         /// <param name="x"></param>
         public void watch(Tensor x)
         {
-            _tape.watch(x as EagerTensor);
+            _tape.Watch(x.Id);
         }
 
+        /// <summary>
+        /// Computes the gradient using operations recorded in context of this tape.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public Tensor gradient(Tensor target, Tensor source)
         {
             if (_recording)
@@ -80,34 +97,29 @@ namespace Tensorflow.Gradients
                     _pop_tape();
             }
 
-            var results = EagerTensorPass.Create();
-            var targets = EagerTensorPass.From(target);
-            var sources = EagerTensorPass.From(source);
+            var results = tf.Runner.TFE_TapeGradient(_tape,
+                new[] { target },
+                new[] { source },
+                null);
 
-            Status status = c_api.TFE_TapeGradient(_tape,
-                targets.Points, targets.Length,
-                sources.Points, sources.Length,
-                results.Points, results.Length);
-            status.Check(true);
-
-            return results[0].Resolve();
+            return results[0];
         }
 
         public Tensor gradient(Tensor target, ResourceVariable source)
         {
-            var results = gradient(target as EagerTensor, new[] { source });
+            var results = gradient(target, new[] { source });
 
             return results[0];
         }
 
         public (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources)
         {
-            var results = gradient(target as EagerTensor, new[] { sources.Item1, sources.Item2 });
+            var results = gradient(target, new[] { sources.Item1, sources.Item2 });
 
             return (results[0], results[1]);
         }
 
-        public EagerTensor[] gradient(EagerTensor target, ResourceVariable[] sources)
+        public Tensor[] gradient(Tensor target, ResourceVariable[] sources)
         {
             if (_recording)
             {
@@ -115,24 +127,19 @@ namespace Tensorflow.Gradients
                     _pop_tape();
             }
 
-            var results = EagerTensorPass.Create(sources.Length);
-            var target_inputs = EagerTensorPass.From(target);
-            var source_inputs = EagerTensorPass.From(sources.Select(x => x.Handle).ToArray());
-
-            Status status = c_api.TFE_TapeGradient(_tape,
-                target_inputs.Points, target_inputs.Length,
-                source_inputs.Points, source_inputs.Length,
-                results.Points, results.Length);
-            status.Check(true);
+            var results = tf.Runner.TFE_TapeGradient(_tape, 
+                new[] { target }, 
+                sources.Select(x => x.Handle).ToArray(), 
+                null);
 
             if (!_persistent)
             {
                 // Keep track of watched variables before setting tape to None
-                _watched_variables = _tape.watched_variables();
+                _watched_variables = _tape.WatchedVariables();
                 _tape = null;
             }
 
-            return results.Items.Select(x => x.Resolve()).ToArray();
+            return results;
         }
 
         public void Dispose()
@@ -140,7 +147,8 @@ namespace Tensorflow.Gradients
             if (_recording)
                 _pop_tape();
 
-            tf.tensorMgr.Reset();
+            if (_created_eagerly)
+                tf.context.end_step();
         }
     }
 }

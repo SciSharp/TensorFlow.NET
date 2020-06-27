@@ -21,8 +21,6 @@ namespace Tensorflow
 {
     public class gen_image_ops
     {
-        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
-
         public static Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name= null)
         {
             if (dtype == image.dtype)
@@ -73,7 +71,7 @@ namespace Tensorflow
             }
             else
             {
-                var _op = _op_def_lib._apply_op_helper("DecodeJpeg", name: name, args: new
+                var _op = tf._op_def_lib._apply_op_helper("DecodeJpeg", name: name, args: new
                 {
                     contents,
                     channels,
@@ -98,7 +96,7 @@ namespace Tensorflow
             }
             else
             {
-                var _op = _op_def_lib._apply_op_helper("DecodeGif", name: name, args: new
+                var _op = tf._op_def_lib._apply_op_helper("DecodeGif", name: name, args: new
                 {
                     contents
                 });
@@ -119,7 +117,7 @@ namespace Tensorflow
             }
             else
             {
-                var _op = _op_def_lib._apply_op_helper("DecodePng", name: name, args: new
+                var _op = tf._op_def_lib._apply_op_helper("DecodePng", name: name, args: new
                 {
                     contents,
                     channels,
@@ -141,7 +139,7 @@ namespace Tensorflow
             }
             else
             {
-                var _op = _op_def_lib._apply_op_helper("DecodeBmp", name: name, args: new
+                var _op = tf._op_def_lib._apply_op_helper("DecodeBmp", name: name, args: new
                 {
                     contents,
                     channels
@@ -159,7 +157,7 @@ namespace Tensorflow
             }
             else
             {
-                var _op = _op_def_lib._apply_op_helper("ResizeBilinear", name: name, args: new
+                var _op = tf._op_def_lib._apply_op_helper("ResizeBilinear", name: name, args: new
                 {
                     images,
                     size,
@@ -173,7 +171,7 @@ namespace Tensorflow
         public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false, 
             bool half_pixel_centers = false, string name = null)
         {
-            var op = _op_def_lib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new
+            var op = tf._op_def_lib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new
             {
                 images,
                 size,
@@ -187,7 +185,7 @@ namespace Tensorflow
         public static Tensor resize_nearest_neighbor_grad<Tsize>(Tensor grads, Tsize size, bool align_corners = false,
             bool half_pixel_centers = false, string name = null)
         {
-            var op = _op_def_lib._apply_op_helper("ResizeNearestNeighborGrad", name: name, args: new
+            var op = tf._op_def_lib._apply_op_helper("ResizeNearestNeighborGrad", name: name, args: new
             {
                 grads,
                 size,

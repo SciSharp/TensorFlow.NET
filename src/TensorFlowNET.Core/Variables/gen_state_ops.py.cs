@@ -16,15 +16,12 @@
 
 using System;
 using System.Collections.Generic;
-using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public class gen_state_ops
     {
-        public static OpDefLibrary _op_def_lib = new OpDefLibrary();
-        public static Execute _execute = new Execute();
-
         /// <summary>
         /// Holds state in the form of a tensor that persists across steps.
         /// Outputs a ref to the tensor state so it may be read or modified.
@@ -37,7 +34,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor variable_v2(int[] shape, TF_DataType dtype, string name = null, string container = "", string shared_name = "")
         {
-            var _op = _op_def_lib._apply_op_helper("VariableV2", name: name, args: new { dtype, shape, container, shared_name });
+            var _op = tf._op_def_lib._apply_op_helper("VariableV2", name: name, args: new { dtype, shape, container, shared_name });
 
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
@@ -64,7 +61,7 @@ namespace Tensorflow
             bool use_locking = true,
             string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
+            var _op = tf._op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
 
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
@@ -82,7 +79,7 @@ namespace Tensorflow
             bool use_locking = true,
             string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
+            var _op = tf._op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
 
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
@@ -100,7 +97,7 @@ namespace Tensorflow
             bool use_locking = true,
             string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
+            var _op = tf._op_def_lib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
 
             var _result = _op.outputs;
             var _inputs_flat = _op.inputs;
@@ -118,7 +115,7 @@ namespace Tensorflow
             bool use_locking = false,
             string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("AssignSub", name: name, args: new { @ref, value, use_locking });
+            var _op = tf._op_def_lib._apply_op_helper("AssignSub", name: name, args: new { @ref, value, use_locking });
 
             return _op.outputs[0];
         }
@@ -140,7 +137,7 @@ namespace Tensorflow
         //    A mutable `Tensor`. Has the same type as `ref`.
         public static Tensor assign_add<T>(RefVariable @ref, T value, bool use_locking = false, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("AssignAdd", name: name, args: new { @ref, value, use_locking });
+            var _op = tf._op_def_lib._apply_op_helper("AssignAdd", name: name, args: new { @ref, value, use_locking });
             return _op.outputs[0];
         }
 
@@ -155,13 +152,13 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor scatter_add(RefVariable @ref, Tensor indices, Tensor updates, bool use_locking = false, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("ScatterAdd", name: name, args: new { @ref, indices, updates, use_locking });
+            var _op = tf._op_def_lib._apply_op_helper("ScatterAdd", name: name, args: new { @ref, indices, updates, use_locking });
             return _op.outputs[0];
         }
 
         public static Tensor is_variable_initialized(RefVariable @ref, string name = null)
         {
-            var _op = _op_def_lib._apply_op_helper("IsVariableInitialized", name: name, args: new { @ref });
+            var _op = tf._op_def_lib._apply_op_helper("IsVariableInitialized", name: name, args: new { @ref });
             return _op.output;
         }
     }

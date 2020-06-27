@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
@@ -27,20 +28,18 @@ namespace Tensorflow.Eager
         /// <param name="ctx">The value of context.context().</param>
         /// <param name="name">Customized name for the operation.</param>
         /// <returns>List of output Tensor objects. The list is empty if there are no outputs</returns>
-        public EagerTensor[] execute(Context ctx, string op_name, int num_outputs,
-            EagerTensor[] inputs, object[] attrs, 
+        public Tensor[] execute(Context ctx, string op_name, int num_outputs,
+            Tensor[] inputs, object[] attrs, 
             string name = null)
         {
             ctx.ensure_initialized();
 
-            using var status = new Status();
-            var results = wrap_tfe_src.TFE_Execute(ctx,
+            var results = tf.Runner.TFE_Execute(ctx,
                ctx.device_name,
                op_name,
                inputs,
                attrs,
-               num_outputs,
-               status);
+               num_outputs);
 
             return results;
         }

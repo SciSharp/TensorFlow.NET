@@ -33,9 +33,9 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             TFE_OpAddInputList(assertOp, data, 3, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
-            var attr_values = Graph.TFE_GetOpDef("Assert").Attr;
+            /*var attr_values = Graph.TFE_GetOpDef("Assert").Attr;
             var attr_found = attr_values.First(x => x.Name == "T");
-            EXPECT_NE(attr_found, attr_values.Last());
+            EXPECT_NE(attr_found, attr_values.Last());*/
             // EXPECT_EQ(attr_found.Type[0], "DT_BOOL");
             //EXPECT_EQ(attr_found->second.list().type(1), tensorflow::DataType::DT_FLOAT);
             //EXPECT_EQ(attr_found->second.list().type(2), tensorflow::DataType::DT_INT32);

@@ -12,17 +12,15 @@ namespace Tensorflow
 {
     public class EagerTensorV2 : DisposableObject, ITensor
     {
-        IntPtr tfe_tensor_handle;
-        public IntPtr EagerTensorHandle { get; set; }
-        public string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(tfe_tensor_handle, status));
+        IntPtr EagerTensorHandle;
+        public string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, status));
 
         static Status status = new Status();
 
         public EagerTensorV2(IntPtr handle)
         {
-            EagerTensorHandle = handle;
-            tfe_tensor_handle = c_api.TFE_EagerTensorHandle(handle);
-            _handle = c_api.TFE_TensorHandleResolve(tfe_tensor_handle, status);
+            EagerTensorHandle = c_api.TFE_EagerTensorHandle(handle);
+            _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, status);
         }
 
         public unsafe EagerTensorV2(NDArray nd, string device_name = "")
@@ -42,8 +40,7 @@ namespace Tensorflow
 
                     }, IntPtr.Zero);
 
-            tfe_tensor_handle = c_api.TFE_NewTensorHandle(_handle, status);
-            EagerTensorHandle = c_api.TFE_NewEagerTensor();
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, status);
         }
 
         /*public unsafe EagerTensorV2(float[,] value)
@@ -72,8 +69,7 @@ namespace Tensorflow
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             c_api.TF_DeleteTensor(_handle);
-            c_api.TFE_DeleteTensorHandle(tfe_tensor_handle);
-            c_api.TFE_DeleteEagerTensor(EagerTensorHandle);
+            c_api.TFE_DeleteTensorHandle(EagerTensorHandle);
         }
     }
 }
