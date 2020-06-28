@@ -64,7 +64,7 @@ namespace Tensorflow
         {
             unsafe
             {
-                _handle = TF_NewTensor(tf.int32, dims: null, num_dims: 0, data: null, len: sizeof(int));
+                _handle = TF_NewTensor(tf.int32, dims: null, num_dims: 0, data: &value, len: sizeof(int));
             }
         }
 
