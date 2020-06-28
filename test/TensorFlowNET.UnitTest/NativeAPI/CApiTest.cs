@@ -102,14 +102,11 @@ namespace TensorFlowNET.UnitTest
         protected void TFE_Execute(IntPtr op, IntPtr[] retvals, ref int num_retvals, SafeStatusHandle status)
             => c_api.TFE_Execute(op, retvals, ref num_retvals, status);
 
-        protected IntPtr TFE_NewContextOptions()
+        protected SafeContextOptionsHandle TFE_NewContextOptions()
             => c_api.TFE_NewContextOptions();
 
-        protected SafeContextHandle TFE_NewContext(IntPtr opts, SafeStatusHandle status)
+        protected SafeContextHandle TFE_NewContext(SafeContextOptionsHandle opts, SafeStatusHandle status)
             => c_api.TFE_NewContext(opts, status);
-
-        protected void TFE_DeleteContextOptions(IntPtr opts)
-            => c_api.TFE_DeleteContextOptions(opts);
 
         protected int TFE_OpGetInputLength(IntPtr op, string input_name, SafeStatusHandle status)
             => c_api.TFE_OpGetInputLength(op, input_name, status);

@@ -2,7 +2,6 @@
 using System;
 using Tensorflow;
 using Tensorflow.Eager;
-using Buffer = System.Buffer;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
 {
@@ -15,9 +14,14 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         public unsafe void TensorHandleDevices()
         {
             var status = c_api.TF_NewStatus();
-            var opts = TFE_NewContextOptions();
-            using var ctx = TFE_NewContext(opts, status);
-            TFE_DeleteContextOptions(opts);
+
+            static SafeContextHandle NewContext(SafeStatusHandle status)
+            {
+                using var opts = c_api.TFE_NewContextOptions();
+                return c_api.TFE_NewContext(opts, status);
+            }
+
+            using var ctx = NewContext(status);
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
             var hcpu = TestMatrixTensorHandle();

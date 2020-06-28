@@ -52,7 +52,7 @@ namespace Tensorflow
         /// </summary>
         /// <returns>TFE_ContextOptions*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_ContextOptions TFE_NewContextOptions();
+        public static extern SafeContextOptionsHandle TFE_NewContextOptions();
 
         /// <summary>
         /// Destroy an options object.
@@ -114,7 +114,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>TFE_Context*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern SafeContextHandle TFE_NewContext(IntPtr opts, SafeStatusHandle status);
+        public static extern SafeContextHandle TFE_NewContext(SafeContextOptionsHandle opts, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_ContextStartStep(SafeContextHandle ctx);
@@ -254,7 +254,7 @@ namespace Tensorflow
         /// <param name="opts">TFE_ContextOptions*</param>
         /// <param name="enable">unsigned char</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_ContextOptionsSetAsync(IntPtr opts, byte enable);
+        public static extern void TFE_ContextOptionsSetAsync(SafeContextOptionsHandle opts, byte enable);
 
         /// <summary>
         /// 
