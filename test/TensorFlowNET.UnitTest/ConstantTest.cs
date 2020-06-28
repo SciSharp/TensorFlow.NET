@@ -177,5 +177,16 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.AreEqual(str.Length, Marshal.ReadByte(dst));
             //c_api.TF_StringDecode(dst, (ulong)str.Length, IntPtr.Zero, ref dst_len, status);
         }
+
+        [TestMethod]
+        public void Reshape()
+        {
+            var ones = tf.ones((3, 2), tf.float32, "ones");
+            var reshaped = tf.reshape(ones, (2, 3));
+            Assert.AreEqual(reshaped.dtype, tf.float32);
+            Assert.AreEqual(reshaped.shape[0], 2);
+            Assert.AreEqual(reshaped.shape[1], 3);
+            Assert.IsTrue(new float[] { 1, 1, 1, 1, 1, 1 }.SequenceEqual(ones.numpy().ToArray<float>()));
+        }
     }
 }
