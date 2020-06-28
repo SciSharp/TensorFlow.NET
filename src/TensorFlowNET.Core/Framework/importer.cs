@@ -62,7 +62,7 @@ namespace Tensorflow
             {
                 _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements);
                 // need to create a class ImportGraphDefWithResults with IDisposal
-                results = c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status.Handle);
+                results = c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options.Handle, status.Handle);
                 status.Check(true);
             }
 
@@ -114,8 +114,8 @@ namespace Tensorflow
             Dictionary<string, Tensor> input_map,
             string[] return_elements)
         {
-            c_api.TF_ImportGraphDefOptionsSetPrefix(options, prefix);
-            c_api.TF_ImportGraphDefOptionsSetUniquifyNames(options, (char)1);
+            c_api.TF_ImportGraphDefOptionsSetPrefix(options.Handle, prefix);
+            c_api.TF_ImportGraphDefOptionsSetUniquifyNames(options.Handle, (char)1);
 
             foreach(var input in input_map)
             {
@@ -130,11 +130,11 @@ namespace Tensorflow
                 if(name.Contains(":"))
                 {
                     var (op_name, index) = _ParseTensorName(name);
-                    c_api.TF_ImportGraphDefOptionsAddReturnOutput(options, op_name, index);
+                    c_api.TF_ImportGraphDefOptionsAddReturnOutput(options.Handle, op_name, index);
                 }
                 else
                 {
-                    c_api.TF_ImportGraphDefOptionsAddReturnOperation(options, name);
+                    c_api.TF_ImportGraphDefOptionsAddReturnOperation(options.Handle, name);
                 }
             }
 
