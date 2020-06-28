@@ -73,7 +73,7 @@ namespace Tensorflow
         public static extern TF_AttrType TFE_OpGetAttrType(IntPtr op, string attr_name, ref byte is_list, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern TF_AttrType TFE_OpNameGetAttrType(IntPtr ct, string op_or_function_name, string attr_name, ref byte is_list, SafeStatusHandle status);
+        public static extern TF_AttrType TFE_OpNameGetAttrType(SafeContextHandle ctx, string op_or_function_name, string attr_name, ref byte is_list, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the length (number of tensors) of the input argument `input_name`
@@ -114,13 +114,13 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>TFE_Context*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_Context TFE_NewContext(IntPtr opts, SafeStatusHandle status);
+        public static extern SafeContextHandle TFE_NewContext(IntPtr opts, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_Context TFE_ContextStartStep(IntPtr ctx);
+        public static extern void TFE_ContextStartStep(SafeContextHandle ctx);
 
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_Context TFE_ContextEndStep(IntPtr ctx);
+        public static extern void TFE_ContextEndStep(SafeContextHandle ctx);
 
         /// <summary>
         /// 
@@ -148,7 +148,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_Op TFE_NewOp(IntPtr ctx, string op_or_function_name, SafeStatusHandle status);
+        public static extern TFE_Op TFE_NewOp(SafeContextHandle ctx, string op_or_function_name, SafeStatusHandle status);
 
         /// <summary>
         /// Resets `op_to_reset` with `op_or_function_name` and `raw_device_name`. This
@@ -317,7 +317,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_ContextListDevices(IntPtr ctx, SafeStatusHandle status);
+        public static extern IntPtr TFE_ContextListDevices(SafeContextHandle ctx, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -379,7 +379,7 @@ namespace Tensorflow
         /// <param name="ctx"></param>
         /// <param name="executor"></param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_ContextSetExecutorForThread(IntPtr ctx, TFE_Executor executor);
+        public static extern void TFE_ContextSetExecutorForThread(SafeContextHandle ctx, TFE_Executor executor);
 
         /// <summary>
         /// Returns the Executor for current thread.
@@ -387,7 +387,7 @@ namespace Tensorflow
         /// <param name="ctx"></param>
         /// <returns>TFE_Executor*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_Executor TFE_ContextGetExecutorForThread(IntPtr ctx);
+        public static extern TFE_Executor TFE_ContextGetExecutorForThread(SafeContextHandle ctx);
 
         /// <summary>
         /// 
@@ -402,7 +402,7 @@ namespace Tensorflow
         /// <param name="status"></param>
         /// <returns>EagerTensorHandle</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern SafeStatusHandle TFE_FastPathExecute(IntPtr ctx, 
+        public static extern SafeStatusHandle TFE_FastPathExecute(SafeContextHandle ctx, 
             string device_name, 
             string op_name,
             string name,
@@ -416,7 +416,7 @@ namespace Tensorflow
         public delegate void TFE_FastPathExecute_SetOpAttrs(IntPtr op);
 
         [DllImport(TensorFlowLibName)]
-        public static extern SafeStatusHandle TFE_QuickExecute(IntPtr ctx,
+        public static extern SafeStatusHandle TFE_QuickExecute(SafeContextHandle ctx,
             string device_name,
             string op_name,
             IntPtr[] inputs, 

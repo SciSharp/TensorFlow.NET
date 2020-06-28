@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
@@ -25,7 +26,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             return th;
         }
 
-        IntPtr MatMulOp(IntPtr ctx, IntPtr a, IntPtr b)
+        IntPtr MatMulOp(SafeContextHandle ctx, IntPtr a, IntPtr b)
         {
             using var status = TF_NewStatus();
 
@@ -40,7 +41,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             return op;
         }
 
-        bool GetDeviceName(IntPtr ctx, ref string device_name, string device_type)
+        bool GetDeviceName(SafeContextHandle ctx, ref string device_name, string device_type)
         {
             var status = TF_NewStatus();
             var devices = TFE_ContextListDevices(ctx, status);
@@ -65,7 +66,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             return false;
         }
 
-        IntPtr ShapeOp(IntPtr ctx, IntPtr a)
+        IntPtr ShapeOp(SafeContextHandle ctx, IntPtr a)
         {
             using var status = TF_NewStatus();
 
@@ -78,7 +79,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             return op;
         }
 
-        unsafe IntPtr CreateVariable(IntPtr ctx, float value, SafeStatusHandle status)
+        unsafe IntPtr CreateVariable(SafeContextHandle ctx, float value, SafeStatusHandle status)
         {
             var op = TFE_NewOp(ctx, "VarHandleOp", status);
             if (TF_GetCode(status) != TF_OK) return IntPtr.Zero;

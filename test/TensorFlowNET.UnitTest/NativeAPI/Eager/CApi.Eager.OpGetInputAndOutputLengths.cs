@@ -16,7 +16,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         {
             using var status = TF_NewStatus();
             var opts = TFE_NewContextOptions();
-            var ctx = TFE_NewContext(opts, status);
+            using var ctx = TFE_NewContext(opts, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             TFE_DeleteContextOptions(opts);
 
@@ -57,7 +57,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             TFE_DeleteTensorHandle(input2);
             TFE_DeleteTensorHandle(retvals[0]);
             TFE_DeleteTensorHandle(retvals[1]);
-            TFE_DeleteContext(ctx);
         }
     }
 }

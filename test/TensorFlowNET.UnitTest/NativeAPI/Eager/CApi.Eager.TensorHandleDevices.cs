@@ -16,7 +16,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         {
             var status = c_api.TF_NewStatus();
             var opts = TFE_NewContextOptions();
-            var ctx = TFE_NewContext(opts, status);
+            using var ctx = TFE_NewContext(opts, status);
             TFE_DeleteContextOptions(opts);
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
@@ -65,7 +65,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             TFE_ExecutorWaitForAllPendingNodes(executor, status);
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             TFE_DeleteExecutor(executor);
-            TFE_DeleteContext(ctx);
         }
     }
 }
