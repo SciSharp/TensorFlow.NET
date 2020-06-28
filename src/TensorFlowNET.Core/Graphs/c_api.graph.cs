@@ -287,7 +287,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_LoadSessionFromSavedModel(IntPtr session_options, IntPtr run_options,
+        public static extern IntPtr TF_LoadSessionFromSavedModel(SafeSessionOptionsHandle session_options, IntPtr run_options,
             string export_dir, string[] tags, int tags_len,
             IntPtr graph, ref TF_Buffer meta_graph_def, SafeStatusHandle status);
 

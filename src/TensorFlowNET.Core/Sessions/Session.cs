@@ -55,7 +55,7 @@ namespace Tensorflow
                 IntPtr sess;
                 try
                 {
-                    sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                    sess = c_api.TF_LoadSessionFromSavedModel(opt.Handle,
                         IntPtr.Zero,
                         path,
                         tags,
@@ -66,7 +66,7 @@ namespace Tensorflow
                     status.Check(true);
                 } catch (TensorflowException ex) when (ex.Message.Contains("Could not find SavedModel"))
                 {
-                    sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                    sess = c_api.TF_LoadSessionFromSavedModel(opt.Handle,
                         IntPtr.Zero,
                         Path.GetFullPath(path),
                         tags,

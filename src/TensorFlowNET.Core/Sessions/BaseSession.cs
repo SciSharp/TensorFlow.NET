@@ -47,7 +47,7 @@ namespace Tensorflow
                 lock (Locks.ProcessWide)
                 {
                     status = status ?? new Status();
-                    _handle = c_api.TF_NewSession(_graph, opts, status.Handle);
+                    _handle = c_api.TF_NewSession(_graph, opts.Handle, status.Handle);
                     status.Check(true);
                 }
             }
