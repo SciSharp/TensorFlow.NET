@@ -46,15 +46,15 @@ namespace TensorFlowNET.UnitTest.Gradient
             tape.watch(x);
             var y = tf.reduce_sum(x);
             var z = tf.multiply(y, y);
+            tape.Dispose();
+
             var dz_dx = tape.gradient(z, x);
 
             var expected = new float[] { 8.0f, 8.0f, 8.0f, 8.0f };
             Assert.IsTrue(Enumerable.SequenceEqual(dz_dx.ToArray<float>(), expected));
 
             var dz_dy = tape.gradient(z, y);
-
-            expected = new float[] { 8.0f, 8.0f, 8.0f, 8.0f };
-            Assert.IsTrue(Enumerable.SequenceEqual(dz_dx.ToArray<float>(), expected));
+            Assert.AreEqual((float)dz_dy, 8.0f);
         }
     }
 }

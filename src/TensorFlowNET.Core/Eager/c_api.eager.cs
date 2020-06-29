@@ -389,42 +389,6 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern TFE_Executor TFE_ContextGetExecutorForThread(SafeContextHandle ctx);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="device_name"></param>
-        /// <param name="op_name"></param>
-        /// <param name="name"></param>
-        /// <param name="args"></param>
-        /// <param name="input_size"></param>
-        /// <param name="set_op_attrs"></param>
-        /// <param name="status"></param>
-        /// <returns>EagerTensorHandle</returns>
-        [DllImport(TensorFlowLibName)]
-        public static extern SafeStatusHandle TFE_FastPathExecute(SafeContextHandle ctx, 
-            string device_name, 
-            string op_name,
-            string name,
-            IntPtr[] inputs,
-            int input_size,
-            string attrs_string,
-            TFE_FastPathExecute_SetOpAttrs set_op_attrs,
-            IntPtr[] outputs,
-            int output_size);
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate void TFE_FastPathExecute_SetOpAttrs(IntPtr op);
-
-        [DllImport(TensorFlowLibName)]
-        public static extern SafeStatusHandle TFE_QuickExecute(SafeContextHandle ctx,
-            string device_name,
-            string op_name,
-            IntPtr[] inputs, 
-            int input_size,
-            TFE_FastPathExecute_SetOpAttrs set_op_attrs,
-            IntPtr[] outputs,
-            int output_size);
-
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_TapeSetNew(bool persistent, bool watch_accessed_variables);
 

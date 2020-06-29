@@ -328,7 +328,7 @@ namespace Tensorflow
             {
                 dtype = dtype.as_base_dtype();
                 name = scope;
-                var shape_tensor = constant_op._tensor_shape_tensor_conversion_function(shape);
+                
                 Tensor ones = null;
                 switch (dtype)
                 {
@@ -342,6 +342,11 @@ namespace Tensorflow
                         ones = constant(1);
                         break;
                 }
+
+                if (shape.ndim == 0)
+                    return ones;
+                
+                var shape_tensor = constant_op._tensor_shape_tensor_conversion_function(shape);
                 return fill(shape_tensor, ones, name: name);
             });
 

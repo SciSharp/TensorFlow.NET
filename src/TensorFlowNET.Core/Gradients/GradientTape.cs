@@ -142,6 +142,14 @@ namespace Tensorflow.Gradients
             return results;
         }
 
+        /// <summary>
+        /// Temporarily stops recording operations on this tape.
+        /// </summary>
+        public void stop_recording()
+        {
+            _pop_tape();
+        }
+
         public void Dispose()
         {
             if (_recording)
