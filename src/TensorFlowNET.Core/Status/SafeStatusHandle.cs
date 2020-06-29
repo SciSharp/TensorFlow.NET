@@ -21,7 +21,7 @@ namespace Tensorflow
 {
     public sealed class SafeStatusHandle : SafeTensorflowHandle
     {
-        public SafeStatusHandle()
+        private SafeStatusHandle()
         {
         }
 

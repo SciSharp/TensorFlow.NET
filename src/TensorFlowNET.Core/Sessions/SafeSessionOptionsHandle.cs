@@ -21,7 +21,7 @@ namespace Tensorflow
 {
     public sealed class SafeSessionOptionsHandle : SafeTensorflowHandle
     {
-        public SafeSessionOptionsHandle()
+        private SafeSessionOptionsHandle()
         {
         }
 
