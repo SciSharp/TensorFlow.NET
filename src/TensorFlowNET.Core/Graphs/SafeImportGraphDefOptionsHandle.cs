@@ -21,7 +21,7 @@ namespace Tensorflow
 {
     public sealed class SafeImportGraphDefOptionsHandle : SafeTensorflowHandle
     {
-        public SafeImportGraphDefOptionsHandle()
+        private SafeImportGraphDefOptionsHandle()
         {
         }
 

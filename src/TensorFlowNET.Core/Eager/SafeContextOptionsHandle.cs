@@ -21,7 +21,7 @@ namespace Tensorflow.Eager
 {
     public sealed class SafeContextOptionsHandle : SafeTensorflowHandle
     {
-        public SafeContextOptionsHandle()
+        private SafeContextOptionsHandle()
         {
         }
 
