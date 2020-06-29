@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
+using Tensorflow.Device;
 using Tensorflow.Eager;
 using Buffer = System.Buffer;
 
@@ -8,14 +9,14 @@ namespace TensorFlowNET.UnitTest
 {
     public class CApiTest
     {
-        protected TF_Code TF_OK = TF_Code.TF_OK;
-        protected TF_DataType TF_FLOAT = TF_DataType.TF_FLOAT;
-        protected TF_DataType TF_BOOL = TF_DataType.TF_BOOL;
+        protected static readonly TF_Code TF_OK = TF_Code.TF_OK;
+        protected static readonly TF_DataType TF_FLOAT = TF_DataType.TF_FLOAT;
+        protected static readonly TF_DataType TF_BOOL = TF_DataType.TF_BOOL;
 
         protected void EXPECT_TRUE(bool expected, string msg = "")
             => Assert.IsTrue(expected, msg);
 
-        protected void EXPECT_EQ(object expected, object actual, string msg = "")
+        protected static void EXPECT_EQ(object expected, object actual, string msg = "")
             => Assert.AreEqual(expected, actual, msg);
 
         protected void CHECK_EQ(object expected, object actual, string msg = "")
@@ -63,10 +64,10 @@ namespace TensorFlowNET.UnitTest
         protected TF_Code TF_GetCode(Status s)
             => s.Code;
 
-        protected TF_Code TF_GetCode(SafeStatusHandle s)
+        protected static TF_Code TF_GetCode(SafeStatusHandle s)
             => c_api.TF_GetCode(s);
 
-        protected string TF_Message(SafeStatusHandle s)
+        protected static string TF_Message(SafeStatusHandle s)
             => c_api.StringPiece(c_api.TF_Message(s));
 
         protected SafeStatusHandle TF_NewStatus()
@@ -141,20 +142,17 @@ namespace TensorFlowNET.UnitTest
         protected string TFE_TensorHandleBackingDeviceName(IntPtr h, SafeStatusHandle status)
             => c_api.StringPiece(c_api.TFE_TensorHandleBackingDeviceName(h, status));
 
-        protected IntPtr TFE_ContextListDevices(SafeContextHandle ctx, SafeStatusHandle status)
+        protected SafeDeviceListHandle TFE_ContextListDevices(SafeContextHandle ctx, SafeStatusHandle status)
             => c_api.TFE_ContextListDevices(ctx, status);
 
-        protected int TF_DeviceListCount(IntPtr list)
+        protected int TF_DeviceListCount(SafeDeviceListHandle list)
             => c_api.TF_DeviceListCount(list);
 
-        protected string TF_DeviceListType(IntPtr list, int index, SafeStatusHandle status)
+        protected string TF_DeviceListType(SafeDeviceListHandle list, int index, SafeStatusHandle status)
             => c_api.StringPiece(c_api.TF_DeviceListType(list, index, status));
 
-        protected string TF_DeviceListName(IntPtr list, int index, SafeStatusHandle status)
+        protected string TF_DeviceListName(SafeDeviceListHandle list, int index, SafeStatusHandle status)
             => c_api.StringPiece(c_api.TF_DeviceListName(list, index, status));
-
-        protected void TF_DeleteDeviceList(IntPtr list)
-            => c_api.TF_DeleteDeviceList(list);
 
         protected IntPtr TFE_TensorHandleCopyToDevice(IntPtr h, SafeContextHandle ctx, string device_name, SafeStatusHandle status)
             => c_api.TFE_TensorHandleCopyToDevice(h, ctx, device_name, status);

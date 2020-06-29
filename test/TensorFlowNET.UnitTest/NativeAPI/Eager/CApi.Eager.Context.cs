@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using Tensorflow;
+using Tensorflow.Device;
 using Tensorflow.Eager;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
@@ -21,13 +21,15 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 return c_api.TFE_NewContext(opts, status);
             }
 
-            IntPtr devices;
-            using (var ctx = NewContext(status))
+            static SafeDeviceListHandle ListDevices(SafeStatusHandle status)
             {
-                devices = c_api.TFE_ContextListDevices(ctx, status);
+                using var ctx = NewContext(status);
+                var devices = c_api.TFE_ContextListDevices(ctx, status);
                 EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+                return devices;
             }
 
+            using var devices = ListDevices(status);
             EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
             int num_devices = c_api.TF_DeviceListCount(devices);
@@ -37,8 +39,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 EXPECT_NE("", c_api.TF_DeviceListName(devices, i, status), TF_Message(status));
                 EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             }
-
-            c_api.TF_DeleteDeviceList(devices);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Tensorflow.Device;
 using Tensorflow.Eager;
 using TFE_Executor = System.IntPtr;
 
@@ -317,7 +318,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_ContextListDevices(SafeContextHandle ctx, SafeStatusHandle status);
+        public static extern SafeDeviceListHandle TFE_ContextListDevices(SafeContextHandle ctx, SafeStatusHandle status);
 
         /// <summary>
         /// 
