@@ -32,7 +32,7 @@ namespace Tensorflow
         public static extern SafeBufferHandle TF_NewBuffer();
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_GetBuffer(TF_Buffer buffer);
+        public static extern TF_Buffer TF_GetBuffer(SafeBufferHandle buffer);
 
         /// <summary>
         /// Makes a copy of the input and sets an appropriate deallocator.  Useful for
