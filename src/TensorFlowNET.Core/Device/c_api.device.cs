@@ -16,6 +16,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Tensorflow.Device;
 using Tensorflow.Eager;
 
 namespace Tensorflow
@@ -36,7 +37,7 @@ namespace Tensorflow
         /// <param name="list">TF_DeviceList*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TF_DeviceListCount(IntPtr list);
+        public static extern int TF_DeviceListCount(SafeDeviceListHandle list);
 
         /// <summary>
         /// Retrieves the type of the device at the given index.
@@ -46,7 +47,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_DeviceListType(IntPtr list, int index, SafeStatusHandle status);
+        public static extern IntPtr TF_DeviceListType(SafeDeviceListHandle list, int index, SafeStatusHandle status);
 
         /// <summary>
         /// Deallocates the device list.
@@ -77,6 +78,6 @@ namespace Tensorflow
         /// <param name="index"></param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_DeviceListName(IntPtr list, int index, SafeStatusHandle status);
+        public static extern IntPtr TF_DeviceListName(SafeDeviceListHandle list, int index, SafeStatusHandle status);
     }
 }

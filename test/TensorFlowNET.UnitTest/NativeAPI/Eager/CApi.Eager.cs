@@ -43,8 +43,8 @@ namespace TensorFlowNET.UnitTest.NativeAPI
 
         bool GetDeviceName(SafeContextHandle ctx, ref string device_name, string device_type)
         {
-            var status = TF_NewStatus();
-            var devices = TFE_ContextListDevices(ctx, status);
+            using var status = TF_NewStatus();
+            using var devices = TFE_ContextListDevices(ctx, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
             int num_devices = TF_DeviceListCount(devices);
@@ -57,12 +57,10 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 if (dev_type == device_type)
                 {
                     device_name = dev_name;
-                    TF_DeleteDeviceList(devices);
                     return true;
                 }
             }
 
-            TF_DeleteDeviceList(devices);
             return false;
         }
 
