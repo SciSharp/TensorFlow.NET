@@ -124,13 +124,10 @@ namespace TensorFlowNET.UnitTest
         protected void TFE_DeleteOp(IntPtr op)
             => c_api.TFE_DeleteOp(op);
 
-        protected void TFE_DeleteExecutor(IntPtr executor)
-            => c_api.TFE_DeleteExecutor(executor);
-
-        protected IntPtr TFE_ContextGetExecutorForThread(SafeContextHandle ctx)
+        protected SafeExecutorHandle TFE_ContextGetExecutorForThread(SafeContextHandle ctx)
             => c_api.TFE_ContextGetExecutorForThread(ctx);
 
-        protected void TFE_ExecutorWaitForAllPendingNodes(IntPtr executor, SafeStatusHandle status)
+        protected void TFE_ExecutorWaitForAllPendingNodes(SafeExecutorHandle executor, SafeStatusHandle status)
             => c_api.TFE_ExecutorWaitForAllPendingNodes(executor, status);
 
         protected IntPtr TFE_TensorHandleResolve(IntPtr h, SafeStatusHandle status)

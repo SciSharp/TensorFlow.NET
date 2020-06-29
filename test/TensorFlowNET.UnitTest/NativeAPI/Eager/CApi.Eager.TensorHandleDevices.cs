@@ -65,10 +65,9 @@ namespace TensorFlowNET.UnitTest.NativeAPI
 
             TFE_DeleteTensorHandle(hcpu);
             // not export api
-            var executor = TFE_ContextGetExecutorForThread(ctx);
+            using var executor = TFE_ContextGetExecutorForThread(ctx);
             TFE_ExecutorWaitForAllPendingNodes(executor, status);
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TFE_DeleteExecutor(executor);
         }
     }
 }
