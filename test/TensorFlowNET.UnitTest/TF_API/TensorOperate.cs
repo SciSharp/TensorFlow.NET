@@ -23,6 +23,13 @@ namespace Tensorflow.UnitTest.TF_API
             Assert.IsTrue(Enumerable.SequenceEqual(transpose_a.numpy().ToArray<int>(), b.numpy().ToArray<int>()));
         }
 
+        [TestMethod]
+        public void InitTensorTest()
+        {
+            var a = tf.constant(new NDArray(new[, ,] { { { 1 }, { 2 }, { 3 } }, { { 4 }, { 5 }, { 6 } } }));
+            var b = tf.constant(new[, ,] { { { 1 }, { 2 }, { 3 } }, { { 4 }, { 5 }, { 6 } } });
+            //Test Result : a is OK , and b is error .
 
+        }
     }
 }
