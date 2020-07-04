@@ -57,8 +57,8 @@ namespace Tensorflow
                 return new [] {
                     check_ops.assert_positive(
                         array_ops.shape(image)[-3..^0],
-                        [@"inner 3 dims of 'image.shape'
-                         must be > 0."]),
+                        @"inner 3 dims of 'image.shape'
+                         must be > 0."),
                     check_ops.assert_greater_equal(
                         array_ops.rank(image),
                         3,
