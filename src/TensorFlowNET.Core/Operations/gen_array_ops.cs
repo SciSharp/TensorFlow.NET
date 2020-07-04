@@ -507,6 +507,15 @@ namespace Tensorflow
 
         public static Tensor transpose<T1, T2>(T1 x, T2 perm, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Transpose", name,
+                    null,
+                    x, perm);
+
+                return results[0];
+            }
             var _op = tf._op_def_lib._apply_op_helper("Transpose", name, new { x, perm });
             return _op.outputs[0];
         }
