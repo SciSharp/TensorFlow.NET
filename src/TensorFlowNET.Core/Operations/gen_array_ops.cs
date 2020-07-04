@@ -124,6 +124,16 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor diag(Tensor diagonal, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Diag", name,
+                    null,
+                    diagonal);
+
+                return results[0];
+            }
+
             var op = tf._op_def_lib._apply_op_helper("Diag", name: name, args: new { diagonal });
 
             return op.output;
@@ -131,6 +141,16 @@ namespace Tensorflow
 
         public static Tensor expand_dims(Tensor input, int axis, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ExpandDims", name,
+                    null,
+                    input, tf.convert_to_tensor(axis));
+
+                return results[0];
+            }
+
             var _op = tf._op_def_lib._apply_op_helper("ExpandDims", name: name, args: new { input, dim = axis });
 
             return _op.outputs[0];

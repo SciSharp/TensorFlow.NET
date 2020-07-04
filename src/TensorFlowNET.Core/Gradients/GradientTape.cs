@@ -24,8 +24,8 @@ namespace Tensorflow.Gradients
     /// </summary>
     public class GradientTape : IDisposable
     {
-        static bool _recording;
-        public static bool Recording => _recording;
+        bool _recording;
+        public bool Recording => _recording;
         bool _persistent;
         bool _watch_accessed_variables;
         ResourceVariable[] _watched_variables;

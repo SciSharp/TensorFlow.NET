@@ -28,10 +28,10 @@ namespace Tensorflow.Util
         }
 
         public void push_back(Tk key, Tv value)
-            => Add(key, value);
+            => this[key] = value;
 
         public void emplace(Tk key, Tv value)
-            => Add(key, value);
+            => this[key] = value;
 
         public bool find(Tk key)
             => ContainsKey(key);

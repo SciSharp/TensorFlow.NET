@@ -39,5 +39,8 @@ namespace Tensorflow.Util
         }
 
         public override bool IsInvalid => handle == IntPtr.Zero;
+
+        public override string ToString()
+            => $"0x{handle.ToString("x16")}";
     }
 }

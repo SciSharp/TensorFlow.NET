@@ -64,10 +64,8 @@ namespace Tensorflow.Eager
                 }
             }
 
-            var flattened_inputs = args.Take(op_def.InputArg.Count)
-                .Select(x => x as Tensor)
-                .ToArray();
-            var flattened_attrs = args.Skip(op_def.InputArg.Count).ToArray();
+            var flattened_attrs = new List<object>(op_def.InputArg.Count);
+            var flattened_inputs = new List<Tensor>(op_def.InputArg.Count);
 
             c_api.TFE_OpSetDevice(op, device_name, status.Handle);
             status.Check(true);
@@ -80,31 +78,36 @@ namespace Tensorflow.Eager
                 {
                     int len = (args[kFastPathExecuteInputStartIndex + i] as object[]).Length;
                     c_api.TFE_OpSetAttrInt(op, input_arg.NumberAttr, len);
+                    if (op_exec_info.run_callbacks)
+                    {
+                        flattened_attrs.Add(input_arg.NumberAttr);
+                        flattened_attrs.Add(len);
+                    }
                     attr_list_sizes[input_arg.NumberAttr] = len;
-
+                    
                     if (len > 0)
                     {
                         var fast_input_array = (object[])args[i];
                         // First item adds the type attr.
-                        if (!AddInputToOp(fast_input_array[i], true, input_arg, op, status))
+                        if (!AddInputToOp(fast_input_array[i], true, input_arg, flattened_attrs, flattened_inputs, op, status))
                             return null;
 
                         for (var j = 1; j < len; j++)
                         {
                             // Since the list is homogeneous, we don't need to re-add the attr.
-                            if (!AddInputToOp(fast_input_array[j], false, input_arg, op, status))
+                            if (!AddInputToOp(fast_input_array[j], false, input_arg, flattened_attrs, flattened_inputs, op, status))
                                 return null;
                         }
                     }
                 }
                 else if (!string.IsNullOrEmpty(input_arg.TypeListAttr))
                 {
-
+                    throw new NotImplementedException("");
                 }
                 else
                 {
                     // The item is a single item.
-                    AddInputToOp(args[i], true, input_arg, op, status);
+                    AddInputToOp(args[i], true, input_arg, flattened_attrs, flattened_inputs, op, status);
                 }
             }
 
@@ -133,7 +136,7 @@ namespace Tensorflow.Eager
                 if (!RunCallbacks(
                     op_exec_info, 
                     kFastPathExecuteInputStartIndex + op_def.InputArg.Count(),
-                    flattened_inputs, flattened_attrs, flat_result))
+                    flattened_inputs.ToArray(), flattened_attrs.ToArray(), flat_result))
                 {
                     return null;
                 }
@@ -187,6 +190,8 @@ namespace Tensorflow.Eager
         bool AddInputToOp(object inputs,
             bool add_type_attr,
             ArgDef input_arg,
+            List<object> flattened_attrs,
+            List<Tensor> flattened_inputs,
             IntPtr op,
             Status status)
         {
@@ -197,6 +202,7 @@ namespace Tensorflow.Eager
             {
                 case EagerTensor input:
                     input_handle = input.EagerTensorHandle;
+                    flattened_inputs.Add(input);
                     break;
                 case EagerTensor[] input_list:
                     input_handle = input_list[0].EagerTensorHandle;
@@ -211,6 +217,8 @@ namespace Tensorflow.Eager
             {
                 var dtype = c_api.TFE_TensorHandleDataType(input_handle);
                 c_api.TFE_OpSetAttrType(op, input_arg.TypeAttr, dtype);
+                flattened_attrs.Add(input_arg.TypeAttr);
+                flattened_attrs.Add(dtype);
             }
 
             c_api.TFE_OpAddInput(op, input_handle, status.Handle);

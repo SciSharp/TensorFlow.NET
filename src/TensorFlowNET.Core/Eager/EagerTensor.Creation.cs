@@ -34,7 +34,7 @@ namespace Tensorflow.Eager
 
         public EagerTensor Resolve()
         {
-            _id = get_uid();
+            _id = ops.uid();
 
             if (_handle == IntPtr.Zero)
                 _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.status.Handle);
@@ -55,8 +55,5 @@ namespace Tensorflow.Eager
             //print($"deleting DeleteTensorHandle {Id} {EagerTensorHandle.ToString("x16")}");
             c_api.TFE_DeleteTensorHandle(EagerTensorHandle);
         }
-
-        static long _uid = 0;
-        long get_uid() => _uid++;
     }
 }

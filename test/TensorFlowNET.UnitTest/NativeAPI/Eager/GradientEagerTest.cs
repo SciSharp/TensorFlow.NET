@@ -24,6 +24,25 @@ namespace TensorFlowNET.UnitTest.Gradient
             Assert.AreEqual((float)grad, 3.0f);
         }
 
+        /// <summary>
+        /// Calcute the gradient of w * w * w
+        /// 高阶梯度
+        /// </summary>
+        [TestMethod]
+        public void HighGradient()
+        {
+            var x = tf.Variable(1.0f);
+            using var tape1 = tf.GradientTape();
+            using var tape2 = tf.GradientTape();
+            var y = x * x * x;
+            tape2.Dispose();
+            var dy_dx = tape2.gradient(y, x);
+            Assert.AreEqual((float)dy_dx, 3.0f);
+            tape1.Dispose();
+            var d2y_d2x = tape1.gradient(dy_dx, x);
+            Assert.AreEqual((float)d2y_d2x, 6.0f);
+        }
+
         [TestMethod]
         public void ConstantMultiply()
         {
@@ -55,6 +74,34 @@ namespace TensorFlowNET.UnitTest.Gradient
 
             var dz_dy = tape.gradient(z, y);
             Assert.AreEqual((float)dz_dy, 8.0f);
+        }
+
+        [TestMethod]
+        public void ConditionalMultiply()
+        {
+            Func<Tensor, int, Tensor> func = (x, y) =>
+            {
+                Tensor output = tf.constant(1.0f);
+                foreach (var i in range(y))
+                {
+                    if (i > 1)
+                        output = tf.multiply(output, x);
+                }
+                return output;
+            };
+
+            Func<Tensor, int, Tensor> grad = (x, y) =>
+            {
+                using var tape = tf.GradientTape();
+                tape.watch(x);
+                var output = func(x, y);
+                var grad = tape.gradient(output, x);
+                return grad;
+            };
+
+            var x = tf.constant(2.0f);
+            var result = grad(x, 4);
+            Assert.AreEqual((float)result, 4.0f);
         }
     }
 }
