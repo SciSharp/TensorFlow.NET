@@ -30,7 +30,43 @@ namespace Tensorflow
 
         internal static Array _CheckAtLeast3DImage(Tensor image, bool require_static)
         {
-            throw new NotImplementedException("");
+            try
+            {
+                if ( image.get_shape().NDims == null )
+                {
+                    var image_shape = image.get_shape().with_rank(3);
+                } else {
+                    var image_shape = image.get_shape().with_rank_at_least(3);
+                }
+            }
+            catch (ValueError)
+            {
+                throw new ValueError("'image' must be at least three-dimensional.");
+            }
+            if ( require_static &! image_shape.is_fully_defined() )
+            {
+                throw new ValueError("\'image\' must be fully defined.");
+            }
+            foreach (int x in image_shape[-3..^0])
+            {
+                throw new ValueError("inner 3 dims of \'image.shape\' must be > 0: %s" %
+                                    image_shape);
+            }
+            if ( !image_shape[-3..^0].is_fully_defined() )
+            {
+                return new [] {
+                    check_ops.assert_positive(
+                        array_ops.shape(image)[-3..^0],
+                        [@"inner 3 dims of 'image.shape'
+                         must be > 0."]),
+                    check_ops.assert_greater_equal(
+                        array_ops.rank(image),
+                        3,
+                        message: "'image' must be at least three-dimensional.")
+                };
+            } else {
+                return new [] {};
+            }
         }
 
         public static Tensor random_flip_up_down(Tensor image, int seed = 0)
