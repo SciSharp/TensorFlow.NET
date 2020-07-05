@@ -313,7 +313,7 @@ namespace Tensorflow
         /// <summary>
         /// Uses the default session to evaluate one or more tensors.
         /// </summary>
-        /// <param name="tensors">A single Tensor, or a list of Tensor objects.</param>
+        /// <param name="tensor">A single Tensor, or a list of Tensor objects.</param>
         /// <param name="feed_dict">
         /// A dictionary that maps Tensor objects (or tensor names) to lists,
         /// numpy ndarrays, TensorProtos, or strings.

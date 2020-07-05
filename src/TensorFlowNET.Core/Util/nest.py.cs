@@ -486,13 +486,7 @@ namespace Tensorflow.Util
         ///  and the return value will contain the results in the same structure.
         /// </summary>
         /// <param name="func"> A callable that accepts as many arguments as there are structures.</param>
-        /// <param name="structures">one or many IEnumerable of object</param>
-        /// <param name="check_types">If set to
-        ///      `True` (default) the types of iterables within the structures have to be
-        ///      same (e.g. `map_structure(func, [1], (1,))` raises a `TypeError`
-        ///     exception). To allow this set this argument to `False`.
-        ///      Note that namedtuples with identical name and fields are always
-        ///      considered to have the same shallow structure.</param>
+        /// <param name="structure">one or many IEnumerable of object</param>
         /// <returns>
         ///    A new structure with the same arity as `structure`, whose values correspond
         ///    to `func(x[0], x[1], ...)` where `x[i]` is a value in the corresponding

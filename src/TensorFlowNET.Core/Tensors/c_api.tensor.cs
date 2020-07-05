@@ -103,8 +103,6 @@ namespace Tensorflow
         /// <param name="num_dims"></param>
         /// <param name="data"></param>
         /// <param name="len">num_bytes, ex: 6 * sizeof(float)</param>
-        /// <param name="deallocator"></param>
-        /// <param name="deallocator_arg"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len)
         {
@@ -118,8 +116,6 @@ namespace Tensorflow
         /// <param name="num_dims"></param>
         /// <param name="data"></param>
         /// <param name="len">num_bytes, ex: 6 * sizeof(float)</param>
-        /// <param name="deallocator"></param>
-        /// <param name="deallocator_arg"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, void* data, ulong len)
         {

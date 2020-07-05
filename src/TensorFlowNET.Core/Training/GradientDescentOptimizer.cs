@@ -21,6 +21,8 @@ namespace Tensorflow.Train
     /// </summary>
     public class GradientDescentOptimizer : Optimizer
     {
+        private bool _useTensor;
+
         /// <summary>
         /// Construct a new gradient descent optimizer.
         /// </summary>
@@ -35,7 +37,6 @@ namespace Tensorflow.Train
         /// for changing these values across different invocations of optimizer
         /// functions.
         /// </remarks>
-        private bool _useTensor;
         public GradientDescentOptimizer(float learning_rate, bool use_locking = false, string name = "GradientDescent") 
             : base(learning_rate, use_locking, name)
         {

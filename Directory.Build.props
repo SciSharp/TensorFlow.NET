@@ -17,9 +17,8 @@
       Suppress warnings for currently-invalid documentation comments.
 
       CS1570: XML comment has badly formed XML
-      CS1572: XML comment has a param tag, but there is no parameter by that name
     -->
-    <NoWarn>$(NoWarn),1570,1572</NoWarn>
+    <NoWarn>$(NoWarn),1570</NoWarn>
   </PropertyGroup>
 
 </Project>

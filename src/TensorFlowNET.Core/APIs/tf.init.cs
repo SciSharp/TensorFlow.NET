@@ -68,7 +68,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="factor"></param>
         /// <param name="mode"></param>
-        /// <param name="distribution"></param>
+        /// <param name="uniform"></param>
         /// <param name="seed"></param>
         /// <param name="dtype"></param>
         /// <returns></returns>

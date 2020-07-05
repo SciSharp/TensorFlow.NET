@@ -23,7 +23,6 @@ namespace Tensorflow
         /// <summary>
         /// Called when the instance is created.
         /// </summary>
-        /// <param name="args"></param>
         void __init__();
 
         void __enter__();

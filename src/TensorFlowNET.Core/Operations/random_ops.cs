@@ -158,7 +158,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="logits"></param>
         /// <param name="num_samples"></param>
-        /// <param name="output_dtype"></param>
+        /// <param name="dtype"></param>
         /// <param name="seed"></param>
         /// <returns></returns>
         private static Tensor multinomial_categorical_impl(Tensor logits, int num_samples, TF_DataType dtype = TF_DataType.DtInvalid,

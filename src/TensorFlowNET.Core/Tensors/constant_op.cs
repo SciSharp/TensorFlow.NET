@@ -35,13 +35,13 @@ namespace Tensorflow
         /// <param name="dtype">The type of the elements of the resulting tensor.</param>
         /// <param name="shape">Optional dimensions of resulting tensor.</param>
         /// <param name="name">Optional name for the tensor.</param>
-        /// <param name="verify_shape">Boolean that enables verification of a shape of values.</param>
         /// <returns></returns>
         public static Tensor constant(object value, TF_DataType dtype = TF_DataType.DtInvalid, int[] shape = null, string name = "Const")
         {
             return _constant_impl(value, dtype, shape, name, verify_shape: false, allow_broadcast: true);
         }
 
+        /// <param name="verify_shape">Boolean that enables verification of a shape of values.</param>
         public static Tensor _constant_impl(object value, 
             TF_DataType dtype, 
             TensorShape shape, 
