@@ -178,7 +178,7 @@ namespace Tensorflow
         /// <summary>
         /// Add an operation in `graph_def` to be returned via the `return_opers` output
         /// parameter of TF_GraphImportGraphDef(). `oper_name` is copied and has no
-        // lifetime requirements.
+        /// lifetime requirements.
         /// </summary>
         /// <param name="opts">TF_ImportGraphDefOptions* opts</param>
         /// <param name="oper_name">const char*</param>

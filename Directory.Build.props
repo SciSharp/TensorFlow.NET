@@ -18,9 +18,8 @@
 
       CS1570: XML comment has badly formed XML
       CS1572: XML comment has a param tag, but there is no parameter by that name
-      CS1587: XML comment is not placed on a valid language element
     -->
-    <NoWarn>$(NoWarn),1570,1572,1587</NoWarn>
+    <NoWarn>$(NoWarn),1570,1572</NoWarn>
   </PropertyGroup>
 
 </Project>
