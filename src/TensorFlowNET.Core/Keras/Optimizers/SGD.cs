@@ -24,7 +24,9 @@ namespace Tensorflow.Keras.Optimizers
 
             _set_hyper("momentum", momentum);
 
+#pragma warning disable CS1717 // Assignment made to same variable
             nesterov = nesterov;
+#pragma warning restore CS1717 // Assignment made to same variable
         }
 
         protected override void _prepare_local(DeviceDType device_dtype, 
