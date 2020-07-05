@@ -66,7 +66,9 @@ namespace Tensorflow.Keras.Layers
         private List<Node> _outbound_nodes;
         public List<Node> outbound_nodes => _outbound_nodes;
 
+#pragma warning disable CS0169 // The field 'Layer._initial_weights' is never used
         float _initial_weights;
+#pragma warning restore CS0169 // The field 'Layer._initial_weights' is never used
 
         public Layer(bool trainable = true, 
             string name = null, 

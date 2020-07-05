@@ -21,7 +21,9 @@ namespace Tensorflow.Keras.Engine
     public class Sequential : Model, ITensorFlowObject
     {
         bool _is_graph_network;
+#pragma warning disable CS0169 // The field 'Sequential.outputs' is never used
         Tensor[] outputs;
+#pragma warning restore CS0169 // The field 'Sequential.outputs' is never used
 
         public Sequential(string name = null) 
             : base(name: name)

@@ -61,8 +61,12 @@ namespace Tensorflow
     {
         private StringOrFunction _device_name_or_function;
         private string display_name;
+#pragma warning disable CS0169 // The field '_UserDeviceSpec.function' is never used
         private FunctionDef function;
+#pragma warning restore CS0169 // The field '_UserDeviceSpec.function' is never used
+#pragma warning disable CS0169 // The field '_UserDeviceSpec.raw_string' is never used
         private string raw_string;
+#pragma warning restore CS0169 // The field '_UserDeviceSpec.raw_string' is never used
 
         public _UserDeviceSpec(StringOrFunction device_name_or_function)
         {

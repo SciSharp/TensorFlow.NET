@@ -10,7 +10,9 @@ namespace Tensorflow.Keras.Optimizers
     {
         protected override string _name => "SGD";
         
+#pragma warning disable CS0169 // The field 'SGD.nesterov' is never used
         bool nesterov;
+#pragma warning restore CS0169 // The field 'SGD.nesterov' is never used
 
         public SGD(float learning_rate, 
             float momentum = 0.0f,
