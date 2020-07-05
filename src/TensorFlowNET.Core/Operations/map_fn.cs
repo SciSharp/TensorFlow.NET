@@ -10,7 +10,9 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
+#pragma warning disable CS0659 // 'Operation' overrides Object.Equals(object o) but does not override Object.GetHashCode()
     public partial class Operation
+#pragma warning restore CS0659 // 'Operation' overrides Object.Equals(object o) but does not override Object.GetHashCode()
     {
         /// <summary>
         /// map on the list of tensors unpacked from `elems` on dimension 0.
