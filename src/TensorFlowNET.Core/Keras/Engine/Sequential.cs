@@ -20,7 +20,9 @@ namespace Tensorflow.Keras.Engine
 {
     public class Sequential : Model, ITensorFlowObject
     {
+#pragma warning disable CS0649 // Field 'Sequential._is_graph_network' is never assigned to, and will always have its default value false
         bool _is_graph_network;
+#pragma warning restore CS0649 // Field 'Sequential._is_graph_network' is never assigned to, and will always have its default value false
 #pragma warning disable CS0169 // The field 'Sequential.outputs' is never used
         Tensor[] outputs;
 #pragma warning restore CS0169 // The field 'Sequential.outputs' is never used

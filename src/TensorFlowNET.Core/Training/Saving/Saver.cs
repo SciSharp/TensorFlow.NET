@@ -42,7 +42,9 @@ namespace Tensorflow
         private bool _is_built;
         private SaverDef.Types.CheckpointFormatVersion _write_version;
         private bool _pad_step_number;
+#pragma warning disable CS0649 // Field 'Saver._filename' is never assigned to, and will always have its default value null
         private string _filename;
+#pragma warning restore CS0649 // Field 'Saver._filename' is never assigned to, and will always have its default value null
         private bool _is_empty;
         private float _next_checkpoint_time;
         private bool _save_relative_paths;
