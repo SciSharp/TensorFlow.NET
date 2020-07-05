@@ -20,7 +20,9 @@ namespace TensorFlowBenchmark
             }
             else
             {
+#pragma warning disable CS0618 // Type or member is obsolete
                 BenchmarkSwitcher.FromAssembly(Assembly.GetExecutingAssembly()).Run(args, ManualConfig.Create(DefaultConfig.Instance).With(ConfigOptions.DisableOptimizationsValidator));
+#pragma warning restore CS0618 // Type or member is obsolete
             }
 
             Console.ReadLine();
