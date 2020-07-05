@@ -30,7 +30,9 @@ namespace Tensorflow
     {
         Tensor _cached_value;
         public string Device => handle.Device;
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         public Graph Graph => handle.graph;
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         public Operation op => handle.op;
         public Tensor is_initialized_op { get; set; }
 

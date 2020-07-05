@@ -5,7 +5,9 @@ namespace Tensorflow.Keras.Engine
     public class Model : Network
     {
         bool _cloning;
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         bool _is_compiled;
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         string loss;
         IOptimizer optimizer;
 

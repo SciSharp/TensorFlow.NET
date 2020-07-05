@@ -666,7 +666,9 @@ namespace Tensorflow.Operations
             return ret;
         }
 
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         public object to_proto()
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         {
             throw new NotImplementedException();
         }

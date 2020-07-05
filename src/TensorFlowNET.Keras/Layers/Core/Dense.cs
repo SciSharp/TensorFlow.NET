@@ -28,7 +28,9 @@ namespace Keras.Layers
         RefVariable W;
         int units;
         TensorShape WShape;
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         string name;
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         IActivation activation;
 
         public Dense(int units, string name = null, IActivation activation = null)
@@ -60,7 +62,9 @@ namespace Keras.Layers
         {
             return WShape;
         }
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         public TensorShape output_shape(TensorShape input_shape)
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         {
             var output_shape = input_shape.dims;
             output_shape[output_shape.Length - 1] = units;

@@ -26,7 +26,9 @@ namespace Tensorflow.Keras.Layers
         private int[] strides;
         private string padding;
         private string data_format;
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         private InputSpec input_spec;
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 
         public Pooling2D(IPoolFunction pool_function,
             int[] pool_size,
