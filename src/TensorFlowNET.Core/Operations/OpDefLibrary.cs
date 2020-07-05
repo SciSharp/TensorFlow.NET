@@ -350,7 +350,9 @@ namespace Tensorflow
             if (attr_def.Type.StartsWith("list("))
             {
                 if (attr_def.HasMinimum)
+#pragma warning disable CS0642 // Possible mistaken empty statement
                     ;
+#pragma warning restore CS0642 // Possible mistaken empty statement
                 attr_value.List = new AttrValue.Types.ListValue();
             }
 

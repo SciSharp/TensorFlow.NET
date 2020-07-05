@@ -241,7 +241,9 @@ namespace Tensorflow
             Console.WriteLine($"Restoring parameters from {save_path}");
 
             if (tf.context.executing_eagerly())
+#pragma warning disable CS0642 // Possible mistaken empty statement
                 ;
+#pragma warning restore CS0642 // Possible mistaken empty statement
             else
                 sess.run(_saver_def.RestoreOpName,
                     new FeedItem(_saver_def.FilenameTensorName, save_path));
