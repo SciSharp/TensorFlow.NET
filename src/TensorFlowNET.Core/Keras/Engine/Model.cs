@@ -4,7 +4,9 @@ namespace Tensorflow.Keras.Engine
 {
     public class Model : Network
     {
+#pragma warning disable CS0169 // The field 'Model._cloning' is never used
         bool _cloning;
+#pragma warning restore CS0169 // The field 'Model._cloning' is never used
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         bool _is_compiled;
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
