@@ -393,7 +393,9 @@ namespace Tensorflow
                 // Aggregate multiple gradients, and convert [] to None.
                 if (out_grad.Count > 0)
                 {
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
                     string used = "";
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
                     if (out_grad.Count < 2)
                     {
                         used = "nop";

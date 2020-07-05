@@ -38,8 +38,10 @@ namespace Tensorflow.Keras.Utils
             IInitializer initializer = null,
             bool trainable = true)
         {
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
             var initializing_from_value = false;
             bool use_resource = true;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
 
             ops.init_scope();
 

@@ -43,7 +43,9 @@ namespace Tensorflow.Eager
             if (!should_record) return should_record;
 
             Tensor[] op_outputs;
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
             bool op_outputs_tuple_created = false;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
             var unused_output_indices = gradient_exclustions.OpGradientUnusedOutputIndices(op_name);
             if (unused_output_indices != null)
             {
@@ -59,7 +61,9 @@ namespace Tensorflow.Eager
                 op_outputs = results;
 
             Tensor[] op_inputs;
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
             bool op_inputs_tuple_created = false;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
             var unused_input_indices = gradient_exclustions.OpGradientUnusedInputIndices(op_name);
             if(unused_input_indices != null)
             {
