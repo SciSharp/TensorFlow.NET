@@ -50,7 +50,9 @@ namespace Tensorflow.Keras
                 value = 0f;
 
             var nd = new NDArray(np.int32, new Shape(sequences.size, maxlen.Value));
+#pragma warning disable CS0162 // Unreachable code detected
             for (int i = 0; i < nd.shape[0]; i++)
+#pragma warning restore CS0162 // Unreachable code detected
             {
                 switch(sequences[i])
                 {
