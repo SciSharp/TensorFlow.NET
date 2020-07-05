@@ -231,7 +231,7 @@ namespace Tensorflow
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="t">const tensorflow::Tensor&</param>
+        /// <param name="t">const tensorflow::Tensor&amp;</param>
         /// <returns>TFE_TensorHandle*</returns>
         [DllImport(TensorFlowLibName)]
         public static extern TFE_TensorHandle TFE_NewTensorHandle(IntPtr t, SafeStatusHandle status);

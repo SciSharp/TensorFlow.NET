@@ -124,7 +124,7 @@ namespace Tensorflow
         /// Wrapper for `Graph.control_dependencies()` using the default graph.
         /// 
         /// See `tf.Graph.control_dependencies` for more details.
-
+        ///
         /// When eager execution is enabled, any callable object in the `control_inputs`
         /// list will be called.
         /// </summary>

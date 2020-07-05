@@ -74,7 +74,7 @@ namespace Tensorflow.Summaries
         /// <summary>
         /// Adds keys to a collection.
         /// </summary>
-        /// <param name="val"The value to add per each key.></param>
+        /// <param name="val">The value to add per each key.</param>
         /// <param name="collections">A collection of keys to add.</param>
         /// <param name="default_collections">Used if collections is None.</param>
         public void collect(ITensorOrOperation val, List<string> collections, List<string> default_collections)

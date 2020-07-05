@@ -54,7 +54,7 @@ namespace Tensorflow
         public static extern SafeStatusHandle TF_NewStatus();
 
         /// <summary>
-        /// Record <code, msg> in *s.  Any previous information is lost.
+        /// Record &lt;code, msg> in *s.  Any previous information is lost.
         /// A common use is to clear a status: TF_SetStatus(s, TF_OK, "");
         /// </summary>
         /// <param name="s"></param>

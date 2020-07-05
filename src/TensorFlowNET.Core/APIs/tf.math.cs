@@ -170,7 +170,7 @@ namespace Tensorflow
             => gen_math_ops.greater_equal(x, y, name);
 
         /// <summary>
-        /// Returns the truth value of (x < y) element-wise.
+        /// Returns the truth value of (x &lt; y) element-wise.
         /// </summary>
         /// <typeparam name="Tx"></typeparam>
         /// <typeparam name="Ty"></typeparam>
@@ -191,7 +191,7 @@ namespace Tensorflow
             => gen_math_ops.lgamma(x, name: name);
 
         /// <summary>
-        /// Returns the truth value of (x <= y) element-wise.
+        /// Returns the truth value of (x &lt;= y) element-wise.
         /// </summary>
         /// <typeparam name="Tx"></typeparam>
         /// <typeparam name="Ty"></typeparam>
@@ -344,7 +344,7 @@ namespace Tensorflow
             => gen_math_ops.maximum(x, y, name: name);
 
         /// <summary>
-        /// Returns the min of x and y (i.e. x < y ? x : y) element-wise.
+        /// Returns the min of x and y (i.e. x &lt; y ? x : y) element-wise.
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
