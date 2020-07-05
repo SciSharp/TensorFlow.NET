@@ -18,10 +18,18 @@ namespace Tensorflow.Operations.Initializers
 {
     public class RandomUniform : IInitializer
     {
+#pragma warning disable CS0649 // Field 'RandomUniform.seed' is never assigned to, and will always have its default value
         private int? seed;
+#pragma warning restore CS0649 // Field 'RandomUniform.seed' is never assigned to, and will always have its default value
+#pragma warning disable CS0649 // Field 'RandomUniform.minval' is never assigned to, and will always have its default value 0
         private float minval;
+#pragma warning restore CS0649 // Field 'RandomUniform.minval' is never assigned to, and will always have its default value 0
+#pragma warning disable CS0649 // Field 'RandomUniform.maxval' is never assigned to, and will always have its default value 0
         private float maxval;
+#pragma warning restore CS0649 // Field 'RandomUniform.maxval' is never assigned to, and will always have its default value 0
+#pragma warning disable CS0649 // Field 'RandomUniform.dtype' is never assigned to, and will always have its default value
         private TF_DataType dtype;
+#pragma warning restore CS0649 // Field 'RandomUniform.dtype' is never assigned to, and will always have its default value
 
         public RandomUniform()
         {

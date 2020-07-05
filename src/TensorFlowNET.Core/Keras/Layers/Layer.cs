@@ -63,7 +63,9 @@ namespace Tensorflow.Keras.Layers
         private List<Node> _inbound_nodes;
         public List<Node> inbound_nodes => _inbound_nodes;
 
+#pragma warning disable CS0649 // Field 'Layer._outbound_nodes' is never assigned to, and will always have its default value null
         private List<Node> _outbound_nodes;
+#pragma warning restore CS0649 // Field 'Layer._outbound_nodes' is never assigned to, and will always have its default value null
         public List<Node> outbound_nodes => _outbound_nodes;
 
 #pragma warning disable CS0169 // The field 'Layer._initial_weights' is never used
