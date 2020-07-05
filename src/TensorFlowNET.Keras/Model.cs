@@ -50,7 +50,9 @@ namespace Tensorflow.Keras
             {
                 return Flow;
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 return null;
             }
