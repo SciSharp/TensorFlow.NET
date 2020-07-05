@@ -548,19 +548,19 @@ namespace Microsoft.VisualStudio.TestTools.UnitTesting
             }
         }
 
-        /// <summary>
-        /// The check parameter not null or empty.
-        /// </summary>
-        /// <param name="param">
-        /// The parameter.
-        /// </param>
-        /// <param name="parameterName">
-        /// The parameter name.
-        /// </param>
-        /// <param name="message">
-        /// The message.
-        /// </param>
-        /// <exception cref="ArgumentException"> Throws ArgumentException when parameter is null. </exception>
+        ///// <summary>
+        ///// The check parameter not null or empty.
+        ///// </summary>
+        ///// <param name="param">
+        ///// The parameter.
+        ///// </param>
+        ///// <param name="parameterName">
+        ///// The parameter name.
+        ///// </param>
+        ///// <param name="message">
+        ///// The message.
+        ///// </param>
+        ///// <exception cref="ArgumentException"> Throws ArgumentException when parameter is null. </exception>
         //internal static void CheckParameterNotNullOrEmpty(string param, string parameterName, string message)
         //{
         //    if (string.IsNullOrEmpty(param))

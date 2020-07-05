@@ -93,6 +93,7 @@ namespace Tensorflow
         }
         
 
+        /*
         /// <summary>
         /// Constructs the `Distribution'     
         /// **This is a private method for subclass use.**
@@ -113,7 +114,6 @@ namespace Tensorflow
         /// <param name = "name"> Name prefixed to Ops created by this class. Default: subclass name.</param>
         /// <returns> Two `Tensor` objects: `mean` and `variance`.</returns>
 
-        /*
         private Distribution (
                 TF_DataType dtype,
                 ReparameterizationType reparameterization_type,

@@ -47,13 +47,13 @@ namespace Tensorflow
                 grad_ys = new Tensor[ys.Length];
 
             // Iterate over the collected ops.
-            /**
+            /*
              * grads: op => list of gradients received on each output endpoint of the
              * op.  The gradients for each endpoint are initially collected as a list.
              * When it is time to call the op's gradient function, for each endpoint we
              * aggregate the list of received gradients into a Add() Operation if there
              * is more than one.
-             **/
+             */
             var grads = new Dictionary<string, List<List<Tensor>>>();
             Operation[] reachable_to_ops = null;
             ControlFlowState loop_state = null;
@@ -70,14 +70,14 @@ namespace Tensorflow
                     xs = ops.internal_convert_n_to_tensor_or_indexed_slices(xs, name: "x", as_ref: true);
                     grad_ys = _DefaultGradYs(grad_ys, ys, colocate_gradients_with_ops, gradient_uid);
 
-                    /** 
+                    /*
                      * The approach we take here is as follows: Create a list of all ops in the
                      * subgraph between the ys and xs.  Visit these ops in reverse order of ids
                      * to ensure that when we visit an op the gradients w.r.t its outputs have
                      * been collected.  Then aggregate these gradients if needed, call the op's
                      * gradient function, and add the generated gradients to the gradients for
                      * its input.
-                     **/
+                     */
 
                     // Initialize the pending count for ops in the connected subgraph from ys
                     // to the xs.
