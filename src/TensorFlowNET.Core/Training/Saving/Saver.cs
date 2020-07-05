@@ -46,7 +46,9 @@ namespace Tensorflow
         private bool _is_empty;
         private float _next_checkpoint_time;
         private bool _save_relative_paths;
+#pragma warning disable CS0414 // The field 'Saver._object_restore_saver' is assigned but its value is never used
         private bool? _object_restore_saver;
+#pragma warning restore CS0414 // The field 'Saver._object_restore_saver' is assigned but its value is never used
         private Dictionary<string, float> _last_checkpoints;
         private Dictionary<string, float> _checkpoints_to_be_deleted;
 

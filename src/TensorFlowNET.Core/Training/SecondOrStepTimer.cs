@@ -11,7 +11,9 @@ namespace Tensorflow.Training
         int _every_secs = 60;
         int _every_steps = 0;
         int _last_triggered_step = 0;
+#pragma warning disable CS0414 // The field 'SecondOrStepTimer._last_triggered_time' is assigned but its value is never used
         int _last_triggered_time = 0;
+#pragma warning restore CS0414 // The field 'SecondOrStepTimer._last_triggered_time' is assigned but its value is never used
 
         public SecondOrStepTimer(int every_secs, int every_steps)
         {

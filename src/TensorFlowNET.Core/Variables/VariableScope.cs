@@ -25,7 +25,9 @@ namespace Tensorflow
     public class VariableScope
     {
         public bool use_resource { get; set; }
+#pragma warning disable CS0414 // The field 'VariableScope._reuse' is assigned but its value is never used
         private _ReuseMode _reuse;
+#pragma warning restore CS0414 // The field 'VariableScope._reuse' is assigned but its value is never used
         public bool resue;
 
         private TF_DataType _dtype;

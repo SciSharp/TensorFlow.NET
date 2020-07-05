@@ -20,7 +20,9 @@ namespace Microsoft.VisualStudio.TestTools.UnitTesting
         // bind everything
         private const BindingFlags BindToEveryThing = BindingFlags.Default | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public;
 
+#pragma warning disable CS0414 // The field 'PrivateObject.constructorFlags' is assigned but its value is never used
         private static BindingFlags constructorFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance | BindingFlags.NonPublic;
+#pragma warning restore CS0414 // The field 'PrivateObject.constructorFlags' is assigned but its value is never used
 
         private object target; // automatically initialized to null
         private Type originalType; // automatically initialized to null

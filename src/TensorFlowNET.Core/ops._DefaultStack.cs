@@ -26,7 +26,9 @@ namespace Tensorflow
         public class _DefaultStack : ITensorFlowObject
         {
             Stack<object> stack;
+#pragma warning disable CS0414 // The field 'ops._DefaultStack._enforce_nesting' is assigned but its value is never used
             bool _enforce_nesting = true;
+#pragma warning restore CS0414 // The field 'ops._DefaultStack._enforce_nesting' is assigned but its value is never used
 
             public _DefaultStack()
             {
