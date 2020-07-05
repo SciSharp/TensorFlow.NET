@@ -116,7 +116,9 @@ namespace Tensorflow
             if (variable_def.SaveSliceInfoDef != null)
                 throw new NotImplementedException("save_slice_info_def");
             else
+#pragma warning disable CS0642 // Possible mistaken empty statement
                 ;// _save_slice_info = null;
+#pragma warning restore CS0642 // Possible mistaken empty statement
 
             //_caching_device = null;
             //_constraint = null;

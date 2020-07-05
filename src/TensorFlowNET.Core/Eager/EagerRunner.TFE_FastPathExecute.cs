@@ -269,16 +269,22 @@ namespace Tensorflow.Eager
             if(attr_value == null)
             {
                 if (is_list != 0)
+#pragma warning disable CS0642 // Possible mistaken empty statement
                     ;
+#pragma warning restore CS0642 // Possible mistaken empty statement
                 //SetOpAttrListDefault
                 else
+#pragma warning disable CS0642 // Possible mistaken empty statement
                     ;
+#pragma warning restore CS0642 // Possible mistaken empty statement
                 //SetOpAttrScalarDefault
             }
             else
             {
                 if (is_list != 0)
+#pragma warning disable CS0642 // Possible mistaken empty statement
                     ;//  SetOpAttrList
+#pragma warning restore CS0642 // Possible mistaken empty statement
                 else
                     SetOpAttrScalar(ctx, op, attr_name, attr_value, type, attr_list_sizes, status);
             }

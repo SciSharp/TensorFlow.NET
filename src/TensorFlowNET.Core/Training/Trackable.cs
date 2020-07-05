@@ -43,7 +43,9 @@ namespace Tensorflow.Train
             IInitializer checkpoint_initializer = null;
 #pragma warning restore CS0219 // Variable is assigned but its value is never used
             if (tf.context.executing_eagerly())
+#pragma warning disable CS0642 // Possible mistaken empty statement
                 ;
+#pragma warning restore CS0642 // Possible mistaken empty statement
             else
                 checkpoint_initializer = null;
 

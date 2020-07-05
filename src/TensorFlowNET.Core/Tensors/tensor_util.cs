@@ -71,9 +71,13 @@ namespace Tensorflow
                 return np.frombuffer(tensor.TensorContent.ToByteArray(), tensor_dtype).reshape(shape);
             }
             else if (tensor.Dtype == DataType.DtHalf || tensor.Dtype == DataType.DtBfloat16)
+#pragma warning disable CS0642 // Possible mistaken empty statement
                 ;
+#pragma warning restore CS0642 // Possible mistaken empty statement
             else if (tensor.Dtype == DataType.DtFloat)
+#pragma warning disable CS0642 // Possible mistaken empty statement
                 ;
+#pragma warning restore CS0642 // Possible mistaken empty statement
             else if (new DataType[] { DataType.DtInt32, DataType.DtUint8 }.Contains(tensor.Dtype))
             {
                 if (tensor.IntVal.Count == 1)
