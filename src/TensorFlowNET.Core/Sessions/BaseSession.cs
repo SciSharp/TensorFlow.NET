@@ -422,7 +422,9 @@ namespace Tensorflow
                         {
                             throw new NotImplementedException();
                             //TODO:! This is not the way to handle string[], it should be done with TF_DecodeString
+#pragma warning disable CS0162 // Unreachable code detected
                             using (var reader = new CodedInputStream(new IntPtr(srcAddress).Stream(8, (long) tensor.bytesize)))
+#pragma warning restore CS0162 // Unreachable code detected
                                 ret = NDArray.FromString(reader.ReadString());
                             break;
                         }

@@ -341,7 +341,9 @@ namespace Tensorflow.Gradients
                 var output_shape_tensor = array_ops.shape(op.outputs[0]);
                 var factor = _safe_shape_div(math_ops.reduce_prod(input_shape_tensor), math_ops.reduce_prod(output_shape_tensor));
                 throw new NotImplementedException("");
+#pragma warning disable CS0162 // Unreachable code detected
                 factor_tensor = null;
+#pragma warning restore CS0162 // Unreachable code detected
             }
 
             result = math_ops.truediv(sum_grad, math_ops.cast(factor_tensor, sum_grad.dtype));
