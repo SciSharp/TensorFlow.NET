@@ -31,7 +31,9 @@ namespace Tensorflow.Summaries
         EventsWriter _ev_writer;
         int _flush_secs;
         Event _sentinel_event;
+#pragma warning disable CS0414 // The field 'EventFileWriter._closed' is assigned but its value is never used
         bool _closed;
+#pragma warning restore CS0414 // The field 'EventFileWriter._closed' is assigned but its value is never used
         EventLoggerThread _worker;
 
         public EventFileWriter(string logdir, int max_queue = 10, int flush_secs= 120,

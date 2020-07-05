@@ -8,7 +8,9 @@ namespace Tensorflow.Keras.Engine
         bool _cloning;
 #pragma warning restore CS0169 // The field 'Model._cloning' is never used
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+#pragma warning disable CS0414 // The field 'Model._is_compiled' is assigned but its value is never used
         bool _is_compiled;
+#pragma warning restore CS0414 // The field 'Model._is_compiled' is assigned but its value is never used
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         string loss;
         IOptimizer optimizer;

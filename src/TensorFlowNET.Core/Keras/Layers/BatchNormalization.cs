@@ -23,14 +23,18 @@ namespace Tensorflow.Keras.Layers
 {
     public class BatchNormalization : Tensorflow.Layers.Layer
     {
+#pragma warning disable CS0414 // The field 'BatchNormalization._USE_V2_BEHAVIOR' is assigned but its value is never used
         private bool _USE_V2_BEHAVIOR = true;
+#pragma warning restore CS0414 // The field 'BatchNormalization._USE_V2_BEHAVIOR' is assigned but its value is never used
         private float momentum;
         private float epsilon;
         private bool center;
         private bool scale;
         private bool renorm;
         private bool fused;
+#pragma warning disable CS0414 // The field 'BatchNormalization._bessels_correction_test_only' is assigned but its value is never used
         private bool _bessels_correction_test_only;
+#pragma warning restore CS0414 // The field 'BatchNormalization._bessels_correction_test_only' is assigned but its value is never used
         private int[] axis;
         private string _data_format;
         private IInitializer beta_initializer;

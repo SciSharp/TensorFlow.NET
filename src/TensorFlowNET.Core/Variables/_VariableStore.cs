@@ -27,7 +27,9 @@ namespace Tensorflow
     {
         private Dictionary<string, object> _vars;
         private Dictionary<string, object> _partitioned_vars;
+#pragma warning disable CS0414 // The field '_VariableStore._store_eager_variables' is assigned but its value is never used
         private bool _store_eager_variables;
+#pragma warning restore CS0414 // The field '_VariableStore._store_eager_variables' is assigned but its value is never used
 
         public _VariableStore()
         {
