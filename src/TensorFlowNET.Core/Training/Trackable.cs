@@ -39,7 +39,9 @@ namespace Tensorflow.Train
             VariableAggregation aggregation = VariableAggregation.None)
         {
             ops.init_scope();
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
             IInitializer checkpoint_initializer = null;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
             if (tf.context.executing_eagerly())
                 ;
             else

@@ -152,7 +152,9 @@ namespace Tensorflow
         {
             var _op = tf._op_def_lib._apply_op_helper("Switch", name, new { data, pred });
             var _inputs_flat = _op.inputs;
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
             var _attrs = ("T", _op.get_attr("T"));
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
             // TODO: missing original code
             //_execute.record_gradient("Switch", _inputs_flat, _attrs, _result, name);
             return new []{_op.outputs[0], _op.outputs[1]};

@@ -83,7 +83,9 @@ namespace Tensorflow
 
             var combined_return_elements = new List<ITensorOrOperation>();
             int outputs_idx = 0;
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
             int opers_idx = 0;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
             foreach(var name in requested_return_elements)
             {
                 if (name.Contains(":"))

@@ -167,7 +167,9 @@ namespace TensorFlowNET.UnitTest
             {
                 using (var sess = tf.Session())
                 {
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
                     Tensor t = null;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
                     for (int i = 0; i < 100; i++)
                     {
                         var v = (int*) Marshal.AllocHGlobal(sizeof(int));

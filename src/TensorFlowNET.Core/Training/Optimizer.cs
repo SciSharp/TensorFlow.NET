@@ -374,7 +374,9 @@ namespace Tensorflow
         {
             // Scale loss if using a "mean" loss reduction and multiple replicas.
             loss = _scale_loss(loss);
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
             int num_towers = 1;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
 
             if(var_list == null)
             {
