@@ -12,13 +12,6 @@
     -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
-
-    <!--
-      Suppress warnings for currently-invalid documentation comments.
-
-      CS1570: XML comment has badly formed XML
-    -->
-    <NoWarn>$(NoWarn),1570</NoWarn>
   </PropertyGroup>
 
 </Project>

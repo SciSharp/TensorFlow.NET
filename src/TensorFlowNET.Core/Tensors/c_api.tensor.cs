@@ -56,7 +56,7 @@ namespace Tensorflow
 
         /// <summary>
         /// Return the length of the tensor in the "dim_index" dimension.
-        /// REQUIRES: 0 <= dim_index < TF_NumDims(tensor)
+        /// REQUIRES: 0 &lt;= dim_index &lt; TF_NumDims(tensor)
         /// </summary>
         /// <param name="tensor"></param>
         /// <param name="dim_index"></param>

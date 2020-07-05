@@ -391,7 +391,7 @@ namespace Tensorflow.Gradients
         }
 
         /// <summary>
-        /// Returns grad*(x > y, x <= y) with type of grad.
+        /// Returns grad*(x > y, x &lt;= y) with type of grad.
         /// </summary>
         /// <param name="op"></param>
         /// <param name="grads"></param>
@@ -403,7 +403,7 @@ namespace Tensorflow.Gradients
         }
 
         /// <summary>
-        /// Returns grad*(x < y, x >= y) with type of grad.
+        /// Returns grad*(x &lt; y, x >= y) with type of grad.
         /// </summary>
         /// <param name="op"></param>
         /// <param name="grads"></param>

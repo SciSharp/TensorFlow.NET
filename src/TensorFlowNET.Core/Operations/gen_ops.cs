@@ -6154,11 +6154,11 @@ namespace Tensorflow.Operations
         ///    in normalized coordinates <c>[y1, x1, y2, x2]</c>. A normalized coordinate value of
         ///    <c>y</c> is mapped to the image coordinate at <c>y * (image_height - 1)</c>, so as the
         ///    <c>[0, 1]</c> interval of normalized image height is mapped to
-        ///    <c>[0, image_height - 1] in image height coordinates. We do allow y1 &amp;gt; y2, in
+        ///    <c>[0, image_height - 1]</c> in image height coordinates. We do allow y1 &amp;gt; y2, in
         ///    which case the sampled crop is an up-down flipped version of the original
         ///    image. The width dimension is treated similarly. Normalized coordinates
-        ///    outside the </c>[0, 1]<c> range are allowed, in which case we use
-        ///    </c>extrapolation_value<c> to extrapolate the input image values.
+        ///    outside the <c>[0, 1]</c> range are allowed, in which case we use
+        ///    <c>extrapolation_value</c> to extrapolate the input image values.
         /// </param>
         /// <param name="box_ind">
         ///    A 1-D tensor of shape <c>[num_boxes]</c> with int32 values in <c>[0, batch)</c>.
@@ -6200,11 +6200,11 @@ namespace Tensorflow.Operations
         ///    in normalized coordinates <c>[y1, x1, y2, x2]</c>. A normalized coordinate value of
         ///    <c>y</c> is mapped to the image coordinate at <c>y * (image_height - 1)</c>, so as the
         ///    <c>[0, 1]</c> interval of normalized image height is mapped to
-        ///    <c>[0, image_height - 1] in image height coordinates. We do allow y1 &amp;gt; y2, in
+        ///    <c>[0, image_height - 1]</c> in image height coordinates. We do allow y1 &amp;gt; y2, in
         ///    which case the sampled crop is an up-down flipped version of the original
         ///    image. The width dimension is treated similarly. Normalized coordinates
-        ///    outside the </c>[0, 1]<c> range are allowed, in which case we use
-        ///    </c>extrapolation_value<c> to extrapolate the input image values.
+        ///    outside the <c>[0, 1]</c> range are allowed, in which case we use
+        ///    <c>extrapolation_value</c> to extrapolate the input image values.
         /// </param>
         /// <param name="box_ind">
         ///    A 1-D tensor of shape <c>[num_boxes]</c> with int32 values in <c>[0, batch)</c>.
@@ -15982,9 +15982,9 @@ namespace Tensorflow.Operations
         ///    everything else padded with zeros. The diagonal is computed as follows:
         ///    
         ///    Assume <c>diagonal</c> has <c>k</c> dimensions <c>[I, J, K, ..., N]</c>, then the output is a
-        ///    tensor of rank <c>k+1</c> with dimensions [I, J, K, ..., N, N]<c> where:
+        ///    tensor of rank <c>k+1</c> with dimensions <c>[I, J, K, ..., N, N]</c> where:
         ///    
-        ///    </c>output[i, j, k, ..., m, n] = 1{m=n} * diagonal[i, j, k, ..., n]<c>.
+        ///    <c>output[i, j, k, ..., m, n] = 1{m=n} * diagonal[i, j, k, ..., n]</c>.
         ///    
         ///    For example:
         ///    
@@ -18540,7 +18540,8 @@ namespace Tensorflow.Operations
         ///    ][
         ///    [0.0, 1.0, 0.0]  // one_hot(1)
         ///    [0.0, 0.0, 0.0]  // one_hot(-1)
-        ///    ]<c></c><c>
+        ///    ]
+        ///   </code>
         /// </remarks>
         public static Tensor one_hot (Tensor indices, Tensor depth, Tensor on_value, Tensor off_value, int? axis = null, string name = "OneHot")
         {
@@ -21850,7 +21851,6 @@ namespace Tensorflow.Operations
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
         /// <remarks>
-        ///   <code>
         /// </remarks>
         public static (Tensor output, Tensor output_min, Tensor output_max) quantized_reshape (Tensor tensor, Tensor shape, Tensor input_min, Tensor input_max, string name = "QuantizedReshape")
         {
@@ -26970,10 +26970,10 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    The values of <c>value</c> are assigned to the positions in the variable
         ///    <c>ref</c> that are selected by the slice parameters. The slice parameters
-        ///    <c>begin, </c>end<c>, </c>strides<c>, etc. work exactly as in </c>StridedSlice<c>.
+        ///    <c>begin</c>, <c>end</c>, <c>strides</c>, etc. work exactly as in <c>StridedSlice</c>.
         ///    
-        ///    NOTE this op currently does not support broadcasting and so </c>value<c>'s
-        ///    shape must be exactly the shape produced by the slice of </c>ref<c>.
+        ///    NOTE this op currently does not support broadcasting and so <c>value</c>'s
+        ///    shape must be exactly the shape produced by the slice of <c>ref</c>.
         /// </remarks>
         public static Operation resource_strided_slice_assign (Tensor referecne, Tensor begin, Tensor end, Tensor strides, Tensor value, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "ResourceStridedSliceAssign")
         {
@@ -28068,7 +28068,7 @@ namespace Tensorflow.Operations
         ///    Tags for the summary.
         /// </param>
         /// <param name="values">
-        ///    Same shape as <c>tags.  Values for the summary.
+        ///    Same shape as <c>tags</c>.  Values for the summary.
         /// </param>
         /// <param name="name">
         /// If specified, the created operation in the graph will be this one, otherwise it will be named 'ScalarSummary'.
@@ -34548,10 +34548,10 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    The values of <c>value</c> are assigned to the positions in the variable
         ///    <c>ref</c> that are selected by the slice parameters. The slice parameters
-        ///    <c>begin, </c>end<c>, </c>strides<c>, etc. work exactly as in </c>StridedSlice<c>.
+        ///    <c>begin</c>, <c>end</c>, <c>strides</c>, etc. work exactly as in <c>StridedSlice</c>.
         ///    
-        ///    NOTE this op currently does not support broadcasting and so </c>value<c>'s
-        ///    shape must be exactly the shape produced by the slice of </c>ref<c>.
+        ///    NOTE this op currently does not support broadcasting and so <c>value</c>'s
+        ///    shape must be exactly the shape produced by the slice of <c>ref</c>.
         /// </remarks>
         public static Tensor strided_slice_assign (Tensor referecne, Tensor begin, Tensor end, Tensor strides, Tensor value, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "StridedSliceAssign")
         {
@@ -36554,21 +36554,21 @@ namespace Tensorflow.Operations
         ///    and that <c>value</c> has shape
         ///    
         ///   <code>
-        ///    (n0 + n1 + ... + n(T-1) x d0 x d1 x ...)<c></c><c>,
+        ///    (n0 + n1 + ... + n(T-1) x d0 x d1 x ...)</code>,
         ///    
         ///    this splits values into a TensorArray with T tensors.
         ///    
         ///    TensorArray index t will be the subtensor of values with starting position
         ///    
-        ///   </code>
+        ///   <code>
         ///    (n0 + n1 + ... + n(t-1), 0, 0, ...)
-        ///    <code>
+        ///    </code>
         ///    
         ///    and having size
         ///    
-        ///   </code>
+        ///   <code>
         ///    nt x d0 x d1 x ...
-        ///    <code>
+        ///    </code>
         /// </remarks>
         public static Tensor tensor_array_split_v3 (Tensor handle, Tensor value, Tensor lengths, Tensor flow_in, string name = "TensorArraySplitV3")
         {
@@ -38107,9 +38107,9 @@ namespace Tensorflow.Operations
         ///    This operation also returns a tensor <c>idx</c> that is the same size as
         ///    the number of the elements in <c>x</c> along the <c>axis</c> dimension. It
         ///    contains the index in the unique output <c>y</c>.
-        ///    In other words, for an <c>1-D</c> tensor <c>x</c> with <c>axis = None:
+        ///    In other words, for an <c>1-D</c> tensor <c>x</c> with <c>axis = None</c>:
         ///    
-        ///    </c>y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]<c>
+        ///    <c>y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]</c>
         ///    
         ///    For example:
         ///    
@@ -38120,7 +38120,7 @@ namespace Tensorflow.Operations
         ///    idx ==&amp;gt; [0, 0, 1, 2, 2, 2, 3, 4, 4]
         ///   </code>
         ///    
-        ///    For an </c>2-D<c> tensor </c>x<c> with </c>axis = 0<c>:
+        ///    For an <c>2-D</c> tensor <c>x</c> with <c>axis = 0</c>:
         ///    
         ///   <code>
         ///    # tensor 'x' is [[1, 0, 0],
@@ -38132,7 +38132,7 @@ namespace Tensorflow.Operations
         ///    idx ==&amp;gt; [0, 0, 1]
         ///   </code>
         ///    
-        ///    For an </c>2-D<c> tensor </c>x<c> with </c>axis = 1<c>:
+        ///    For an <c>2-D</c> tensor <c>x</c> with <c>axis = 1</c>:
         ///    
         ///   <code>
         ///    # tensor 'x' is [[1, 0, 0],
@@ -38241,9 +38241,9 @@ namespace Tensorflow.Operations
         ///    that are the same size as the number of the elements in <c>x</c> along the
         ///    <c>axis</c> dimension. The <c>idx</c> contains the index in the unique output <c>y</c>
         ///    and the <c>count</c> contains the count in the unique output <c>y</c>.
-        ///    In other words, for an <c>1-D</c> tensor <c>x</c> with <c>axis = None:
+        ///    In other words, for an <c>1-D</c> tensor <c>x</c> with <c>axis = None</c>:
         ///    
-        ///    </c>y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]<c>
+        ///    <c>y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]</c>
         ///    
         ///    For example:
         ///    
@@ -38255,7 +38255,7 @@ namespace Tensorflow.Operations
         ///    count ==&amp;gt; [2, 1, 3, 1, 2]
         ///   </code>
         ///    
-        ///    For an </c>2-D<c> tensor </c>x<c> with </c>axis = 0<c>:
+        ///    For an <c>2-D</c> tensor <c>x</c> with <c>axis = 0</c>:
         ///    
         ///   <code>
         ///    # tensor 'x' is [[1, 0, 0],
@@ -38268,7 +38268,7 @@ namespace Tensorflow.Operations
         ///    count ==&amp;gt; [2, 1]
         ///   </code>
         ///    
-        ///    For an </c>2-D<c> tensor </c>x<c> with </c>axis = 1<c>:
+        ///    For an <c>2-D</c> tensor <c>x</c> with <c>axis = 1</c>:
         ///    
         ///   <code>
         ///    # tensor 'x' is [[1, 0, 0],

@@ -406,10 +406,10 @@ namespace Tensorflow
         /// Unless `keepdims` is true, the rank of the tensor is reduced by 1 for each
         /// entry in `axis`. If `keepdims` is true, the reduced dimensions
         /// are retained with length 1.
-
+        ///
         /// If `axis` has no entries, all dimensions are reduced, and a
         /// tensor with a single element is returned.
-
+        ///
         /// This function is more numerically stable than log(sum(exp(input))). It avoids
         /// overflows caused by taking the exp of large inputs and underflows caused by
         /// taking the log of small inputs.

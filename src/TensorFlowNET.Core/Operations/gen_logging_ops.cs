@@ -45,7 +45,7 @@ namespace Tensorflow
         ///    Tags for the summary.
         /// </param>
         /// <param name="values">
-        ///    Same shape as <c>tags.  Values for the summary.
+        ///    Same shape as <c>tags</c>.  Values for the summary.
         /// </param>
         /// <param name="name">
         /// If specified, the created operation in the graph will be this one, otherwise it will be named 'ScalarSummary'.

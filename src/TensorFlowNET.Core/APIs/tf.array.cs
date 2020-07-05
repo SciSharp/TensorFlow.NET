@@ -48,7 +48,7 @@ namespace Tensorflow
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
         /// <param name="tensor">N-D tensor.</param>
-        /// <param name="mask">K-D boolean tensor, K <= N and K must be known statically.</param>
+        /// <param name="mask">K-D boolean tensor, K &lt;= N and K must be known statically.</param>
         /// <param name="name"></param>
         /// <param name="axis">A 0-D int Tensor representing the axis in tensor to mask from. </param>
         /// <returns>(N-K+1)-dimensional tensor populated by entries in tensor corresponding to True values in mask.</returns>
