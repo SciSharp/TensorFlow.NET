@@ -18,7 +18,6 @@
         /// <summary>
         /// Returns a `Variable` object created from `variable_def`.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="proto"></param>
         /// <param name="import_scope"></param>
         /// <returns></returns>

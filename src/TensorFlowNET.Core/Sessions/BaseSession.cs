@@ -144,7 +144,6 @@ namespace Tensorflow
         /// <summary>
         /// Runs a step based on the given fetches and feeds.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="target_list">A list of operations to be run, but not fetched.</param>
         /// <param name="fetch_list"></param>
         /// <param name="feed_dict"></param>
