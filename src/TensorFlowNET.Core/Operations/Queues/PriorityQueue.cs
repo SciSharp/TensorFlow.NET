@@ -65,7 +65,9 @@ namespace Tensorflow.Queues
             });
         }
 
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         public Tensor[] dequeue(string name = null)
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         {
             Tensor[] ret;
             if (name == null)
