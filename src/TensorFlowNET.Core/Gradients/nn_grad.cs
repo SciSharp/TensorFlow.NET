@@ -30,7 +30,7 @@ namespace Tensorflow.Gradients
         /// Return the gradients for the 2 inputs of bias_op.
         /// </summary>
         /// <param name="op"></param>
-        /// <param name="grad"></param>
+        /// <param name="grads"></param>
         /// <returns></returns>
         [RegisterGradient("BiasAdd")]
         public static Tensor[] _BiasAddGrad(Operation op, Tensor[] grads)
@@ -78,8 +78,7 @@ namespace Tensorflow.Gradients
         /// Gradient function for SoftmaxCrossEntropyWithLogits.
         /// </summary>
         /// <param name="op"></param>
-        /// <param name="grad_loss"></param>
-        /// <param name="grad_grad"></param>
+        /// <param name="grads"></param>
         /// <returns></returns>
         [RegisterGradient("SoftmaxCrossEntropyWithLogits")]
         public static Tensor[] _SoftmaxCrossEntropyWithLogitsGrad(Operation op, Tensor[] grads)

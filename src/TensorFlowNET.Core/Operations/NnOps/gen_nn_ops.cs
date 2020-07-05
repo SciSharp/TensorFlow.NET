@@ -161,15 +161,7 @@ namespace Tensorflow.Operations
         /// <summary>
         /// Gradient for batch normalization.
         /// </summary>
-        /// <param name="y_backprop"></param>
-        /// <param name="x"></param>
-        /// <param name="scale"></param>
-        /// <param name="reserve_space_1"></param>
-        /// <param name="reserve_space_2"></param>
-        /// <param name="epsilon"></param>
-        /// <param name="data_format"></param>
-        /// <param name="is_training"></param>
-        /// <param name="name"></param>
+        /// <param name="params"></param>
         /// <returns></returns>
         public static Tensor[] fused_batch_norm_grad(FusedBatchNormParams @params)
         {

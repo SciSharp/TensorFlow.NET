@@ -637,7 +637,7 @@ namespace Tensorflow
         /// <param name="cond"></param>
         /// <param name="body"></param>
         /// <param name="loop_vars"></param>
-        /// <param name="i"></param>
+        /// <param name="shape_invariants"></param>
         public static TItem while_loop<TItem>(Func<TItem, Tensor> cond, Func<TItem, TItem> body, TItem loop_vars,
             TensorShape[] shape_invariants = null,
             int parallel_iterations = 10,

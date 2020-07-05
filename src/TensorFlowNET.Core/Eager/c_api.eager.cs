@@ -18,7 +18,7 @@ namespace Tensorflow
         /// <param name="op_name"></param>
         /// <param name="op_inputs"></param>
         /// <param name="op_outputs"></param>
-        /// <param name="num_attrs"></param>
+        /// <param name="attrs_string"></param>
         /// <param name="output_grads">previous node ouput</param>
         /// <param name="skip_input_indices"></param>
         /// <returns></returns>
@@ -355,7 +355,7 @@ namespace Tensorflow
         /// TFE_ExecutorWaitForAllPendingNodes before calling this API if you want to
         /// make sure all nodes are finished.
         /// </summary>
-        /// <param name="e">TFE_Executor*</param>
+        /// <param name="executor">TFE_Executor*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_DeleteExecutor(IntPtr executor);
 

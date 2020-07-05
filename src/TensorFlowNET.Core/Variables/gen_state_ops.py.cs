@@ -51,7 +51,7 @@ namespace Tensorflow
         /// <summary>
         /// Update 'ref' by assigning 'value' to it
         /// </summary>
-        /// <param name="REF"></param>
+        /// <param name="ref"></param>
         /// <param name="value"></param>
         /// <param name="validate_shape"></param>
         /// <param name="use_locking"></param>
