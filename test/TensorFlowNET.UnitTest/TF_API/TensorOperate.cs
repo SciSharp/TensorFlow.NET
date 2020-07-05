@@ -26,10 +26,18 @@ namespace Tensorflow.UnitTest.TF_API
         [TestMethod]
         public void InitTensorTest()
         {
-            var a = tf.constant(new NDArray(new[, ,] { { { 1 }, { 2 }, { 3 } }, { { 4 }, { 5 }, { 6 } } }));
-            var b = tf.constant(new[, ,] { { { 1 }, { 2 }, { 3 } }, { { 4 }, { 5 }, { 6 } } });
-            //Test Result : a is OK , and b is error .
+            var a = tf.constant(np.array(new[, ,] 
+            { 
+                { { 1 }, { 2 }, { 3 } }, 
+                { { 4 }, { 5 }, { 6 } } 
+            }));
             Assert.IsTrue(Enumerable.SequenceEqual(new[] { 2, 3, 1 }, a.shape));
+
+            var b = tf.constant(new[, ,] 
+            { 
+                { { 1 }, { 2 }, { 3 } }, 
+                { { 4 }, { 5 }, { 6 } } 
+            });
             Assert.IsTrue(Enumerable.SequenceEqual(new[] { 2, 3, 1 }, b.shape));
         }
 
@@ -46,7 +54,7 @@ namespace Tensorflow.UnitTest.TF_API
 
         [TestMethod]
         public void ConcatDoubleTest()
-        {//double type has some error
+        {
             var a = tf.constant(new[,] { { 1.0, 2.0 }, { 3.0, 4.0 } });
             var b = tf.constant(new[,] { { 5.0, 6.0 }, { 7.0, 8.0 } });
             var c = tf.constant(new[,] { { 9.0, 10.0 }, { 11.0, 12.0 } });
