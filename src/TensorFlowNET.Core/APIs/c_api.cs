@@ -72,6 +72,6 @@ namespace Tensorflow
         }
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_Version();
+        internal static extern IntPtr TF_Version();
     }
 }

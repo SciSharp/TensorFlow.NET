@@ -26,6 +26,7 @@ namespace TensorFlowNET.UnitTest.Basics
             contents = tf.io.read_file(imgPath);
         }
 
+        [Ignore]
         [TestMethod]
         public void decode_image()
         {

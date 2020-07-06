@@ -8,46 +8,6 @@ namespace Tensorflow
 {
     public partial class c_api
     {
-        [DllImport(TensorFlowLibName)]
-        public static extern void TFE_RegisterGradientFunction(gradient_function_callback gradientFunctionCallback,
-            delete_backward_function_callback deleteBackwardFunctionCallback);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="op_name"></param>
-        /// <param name="op_inputs"></param>
-        /// <param name="op_outputs"></param>
-        /// <param name="attrs_string"></param>
-        /// <param name="output_grads">previous node ouput</param>
-        /// <param name="skip_input_indices"></param>
-        /// <returns></returns>
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate IntPtr gradient_function_callback(string op_name,
-            IntPtr op_inputs,
-            IntPtr op_outputs,
-            string attrs_string,
-            IntPtr output_grads,
-            IntPtr skip_input_indices);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate void delete_backward_function_callback(string op_name,
-            IntPtr op_inputs,
-            IntPtr op_outputs);
-
-        [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_WrapGradientResult(IntPtr[] gradients, int num_gradients);
-
-        [DllImport(TensorFlowLibName)]
-        public static extern IntPtr VSpace_Handle(VSpace_callback_Ones ones, VSpace_callback_AggregateGrads aggregate_grads);
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate IntPtr VSpace_callback_Ones(long[] shape, int dims, TF_DataType dtype);
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate IntPtr VSpace_callback_AggregateGrads(TF_BindingArray gradients);
-
-        [DllImport(TensorFlowLibName)]
-        public static extern void TFE_RegisterVSpace(IntPtr vspace);
-        
         /// <summary>
         /// Return a new options object.
         /// </summary>
@@ -238,15 +198,6 @@ namespace Tensorflow
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_EagerTensorHandle(IntPtr t);
-
-        [DllImport(TensorFlowLibName)]
-        public static extern int TFE_EagerTensorId(IntPtr t);
-
-        [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_NewEagerTensor();
-
-        [DllImport(TensorFlowLibName)]
-        public static extern void TFE_SetEagerTensorHandle(IntPtr tensor, IntPtr handle);
 
         /// <summary>
         /// Sets the default execution mode (sync/async). Note that this can be

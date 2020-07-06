@@ -19,9 +19,6 @@ using System.Collections.Generic;
 using static Tensorflow.Binding;
 using Tensorflow.Eager;
 using System.Linq;
-#pragma warning disable CS0105 // Using directive appeared previously in this namespace
-using static Tensorflow.Binding;
-#pragma warning restore CS0105 // Using directive appeared previously in this namespace
 
 namespace Tensorflow
 {
