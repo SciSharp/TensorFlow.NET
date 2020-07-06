@@ -160,7 +160,6 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.AreEqual(6.0, (double)c);
         }
 
-        [Ignore]
         [TestMethod]
         public void StringEncode()
         {
@@ -175,7 +174,7 @@ namespace TensorFlowNET.UnitTest.Basics
             string encoded_str = Marshal.PtrToStringUTF8(dst + sizeof(byte));
             Assert.AreEqual(encoded_str, str);
             Assert.AreEqual(str.Length, Marshal.ReadByte(dst));
-            //c_api.TF_StringDecode(dst, (ulong)str.Length, IntPtr.Zero, ref dst_len, status);
+            // c_api.TF_StringDecode(dst, (ulong)str.Length, IntPtr.Zero, ref dst_len, status.Handle);
         }
 
         [TestMethod]

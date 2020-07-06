@@ -21,9 +21,32 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
+        public IoApi io { get; } = new IoApi();
+
+        public class IoApi
+        {
+            io_ops ops;
+            public IoApi()
+            {
+                ops = new io_ops();
+            }
+
+            public Tensor read_file(string filename, string name = null)
+                => ops.read_file(filename, name);
+
+            public Tensor read_file(Tensor filename, string name = null)
+                => ops.read_file(filename, name);
+
+            public Operation save_v2(Tensor prefix, string[] tensor_names,
+                string[] shape_and_slices, Tensor[] tensors, string name = null)
+                => ops.save_v2(prefix, tensor_names, shape_and_slices, tensors, name: name);
+
+            public Tensor[] restore_v2(Tensor prefix, string[] tensor_names,
+                string[] shape_and_slices, TF_DataType[] dtypes, string name = null)
+                => ops.restore_v2(prefix, tensor_names, shape_and_slices, dtypes, name: name);
+        }
+
         public GFile gfile = new GFile();
-        public Tensor read_file(string filename, string name = null) => gen_io_ops.read_file(filename, name);
-        public Tensor read_file(Tensor filename, string name = null) => gen_io_ops.read_file(filename, name);
 
         public ITensorOrOperation[] import_graph_def(GraphDef graph_def,
             Dictionary<string, Tensor> input_map = null,

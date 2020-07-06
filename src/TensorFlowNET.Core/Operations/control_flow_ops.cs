@@ -376,6 +376,16 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "cond", new { pred }), delegate
             {
+                if (tf.context.executing_eagerly())
+                {
+                    if (pred.ToArray<bool>()[0])
+                        return true_fn() as Tensor;
+                    else
+                        return false_fn() as Tensor;
+
+                    return null;
+                }
+
                 // Add the Switch to the graph.
                 var switch_result= @switch(pred, pred);
                 var (p_2, p_1 )= (switch_result[0], switch_result[1]);
@@ -450,6 +460,16 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "cond", new { pred }), delegate
             {
+                if (tf.context.executing_eagerly())
+                {
+                    if (pred.ToArray<bool>()[0])
+                        return true_fn() as Tensor[];
+                    else
+                        return false_fn() as Tensor[];
+
+                    return null;
+                }
+
                 // Add the Switch to the graph.
                 var switch_result = @switch(pred, pred);
                 var p_2 = switch_result[0];

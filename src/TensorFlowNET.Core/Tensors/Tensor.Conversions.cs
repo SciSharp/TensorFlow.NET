@@ -68,9 +68,9 @@ namespace Tensorflow
                             throw new ArgumentException($"{nameof(Tensor)} can only be scalar.");
 
                         IntPtr stringStartAddress = IntPtr.Zero;
-                        UIntPtr dstLen = UIntPtr.Zero;
+                        ulong dstLen = 0;
 
-                        c_api.TF_StringDecode((byte*) this.buffer + 8, (UIntPtr) (this.bytesize), (byte**) &stringStartAddress, &dstLen, tf.status.Handle);
+                        c_api.TF_StringDecode((byte*) this.buffer + 8, this.bytesize, (byte**) &stringStartAddress, ref dstLen, tf.status.Handle);
                         tf.status.Check(true);
 
                         var dstLenInt = checked((int) dstLen);

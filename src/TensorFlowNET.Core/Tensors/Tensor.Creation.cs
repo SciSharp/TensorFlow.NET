@@ -453,7 +453,7 @@ namespace Tensorflow
         {
             var buffer = Encoding.UTF8.GetBytes(str);
             var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
-            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + 8));
+            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + sizeof(ulong)));
             AllocationType = AllocationType.Tensorflow;
 
             IntPtr tensor = c_api.TF_TensorData(handle);

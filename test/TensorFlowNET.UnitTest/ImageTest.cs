@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Tensorflow;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.Basics
@@ -20,11 +22,10 @@ namespace TensorFlowNET.UnitTest.Basics
         [TestInitialize]
         public void Initialize()
         {
-            imgPath = Path.GetFullPath(imgPath);
-            contents = tf.read_file(imgPath);
+            imgPath = TestHelper.GetFullPathFromDataDir(imgPath);
+            contents = tf.io.read_file(imgPath);
         }
 
-        [Ignore("")]
         [TestMethod]
         public void decode_image()
         {

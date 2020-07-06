@@ -6,10 +6,10 @@ using System.Text;
 using Tensorflow;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.math_test
+namespace TensorFlowNET.UnitTest.TF_API
 {
     [TestClass]
-    public class MathOperationTest : TFNetApiTest
+    public class MathApiTest : TFNetApiTest
     {
         // A constant vector of size 6
         Tensor a = tf.constant(new float[] { 1.0f, -0.5f, 3.4f, -2.1f, 0.0f, -6.5f });

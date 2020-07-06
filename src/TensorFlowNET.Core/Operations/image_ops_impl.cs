@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
@@ -63,7 +64,7 @@ namespace Tensorflow
             Func<ITensorOrOperation> _bmp = () =>
             {
                 int bmp_channels = channels;
-                var signature = string_ops.substr(contents, 0, 2);
+                var signature = tf.strings.substr(contents, 0, 2);
                 var is_bmp = math_ops.equal(signature, "BM", name: "is_bmp");
                 string decode_msg = "Unable to decode bytes as JPEG, PNG, GIF, or BMP";
                 var assert_decode = control_flow_ops.Assert(is_bmp, new string[] { decode_msg });
@@ -98,7 +99,7 @@ namespace Tensorflow
 
             return tf_with(ops.name_scope(name, "decode_image"), scope =>
             {
-                substr = string_ops.substr(contents, 0, 3);
+                substr = tf.strings.substr(contents, 0, 3);
                 return control_flow_ops.cond(is_jpeg(contents), _jpeg, check_png, name: "cond_jpeg");
             });
         }
@@ -128,8 +129,11 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "is_jpeg"), scope =>
             {
-                var substr = string_ops.substr(contents, 0, 3);
-                return math_ops.equal(substr, "\xff\xd8\xff", name: name);
+                var substr = tf.strings.substr(contents, 0, 3);
+                var jpg = Encoding.UTF8.GetString(new byte[] { 0xff, 0xd8, 0xff });
+                var jpg_tensor = tf.constant(jpg);
+                var result = math_ops.equal(substr, jpg_tensor, name: name);
+                return result;
             });
         }
 
@@ -137,7 +141,7 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "is_png"), scope =>
             {
-                var substr = string_ops.substr(contents, 0, 3);
+                var substr = tf.strings.substr(contents, 0, 3);
                 return math_ops.equal(substr, @"\211PN", name: name);
             });
         }

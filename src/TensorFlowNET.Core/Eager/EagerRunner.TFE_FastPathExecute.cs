@@ -204,9 +204,6 @@ namespace Tensorflow.Eager
                     input_handle = input.EagerTensorHandle;
                     flattened_inputs.Add(input);
                     break;
-                case EagerTensor[] input_list:
-                    input_handle = input_list[0].EagerTensorHandle;
-                    break;
                 default:
                     var tensor = tf.convert_to_tensor(inputs);
                     input_handle = (tensor as EagerTensor).EagerTensorHandle;
