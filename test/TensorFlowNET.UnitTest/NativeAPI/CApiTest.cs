@@ -82,25 +82,25 @@ namespace TensorFlowNET.UnitTest
         protected ulong TF_TensorByteSize(IntPtr t)
             => c_api.TF_TensorByteSize(t);
 
-        protected void TFE_OpAddInput(IntPtr op, IntPtr h, SafeStatusHandle status)
+        protected void TFE_OpAddInput(SafeOpHandle op, IntPtr h, SafeStatusHandle status)
             => c_api.TFE_OpAddInput(op, h, status);
 
-        protected void TFE_OpSetAttrType(IntPtr op, string attr_name, TF_DataType value)
+        protected void TFE_OpSetAttrType(SafeOpHandle op, string attr_name, TF_DataType value)
             => c_api.TFE_OpSetAttrType(op, attr_name, value);
 
-        protected void TFE_OpSetAttrShape(IntPtr op, string attr_name, long[] dims, int num_dims, SafeStatusHandle out_status)
+        protected void TFE_OpSetAttrShape(SafeOpHandle op, string attr_name, long[] dims, int num_dims, SafeStatusHandle out_status)
             => c_api.TFE_OpSetAttrShape(op, attr_name, dims, num_dims, out_status);
 
-        protected void TFE_OpSetAttrString(IntPtr op, string attr_name, string value, uint length)
+        protected void TFE_OpSetAttrString(SafeOpHandle op, string attr_name, string value, uint length)
             => c_api.TFE_OpSetAttrString(op, attr_name, value, length);
 
-        protected IntPtr TFE_NewOp(SafeContextHandle ctx, string op_or_function_name, SafeStatusHandle status)
+        protected SafeOpHandle TFE_NewOp(SafeContextHandle ctx, string op_or_function_name, SafeStatusHandle status)
             => c_api.TFE_NewOp(ctx, op_or_function_name, status);
 
         protected IntPtr TFE_NewTensorHandle(IntPtr t, SafeStatusHandle status)
             => c_api.TFE_NewTensorHandle(t, status);
 
-        protected void TFE_Execute(IntPtr op, IntPtr[] retvals, ref int num_retvals, SafeStatusHandle status)
+        protected void TFE_Execute(SafeOpHandle op, IntPtr[] retvals, ref int num_retvals, SafeStatusHandle status)
             => c_api.TFE_Execute(op, retvals, ref num_retvals, status);
 
         protected SafeContextOptionsHandle TFE_NewContextOptions()
@@ -109,20 +109,17 @@ namespace TensorFlowNET.UnitTest
         protected SafeContextHandle TFE_NewContext(SafeContextOptionsHandle opts, SafeStatusHandle status)
             => c_api.TFE_NewContext(opts, status);
 
-        protected int TFE_OpGetInputLength(IntPtr op, string input_name, SafeStatusHandle status)
+        protected int TFE_OpGetInputLength(SafeOpHandle op, string input_name, SafeStatusHandle status)
             => c_api.TFE_OpGetInputLength(op, input_name, status);
 
-        protected int TFE_OpAddInputList(IntPtr op, IntPtr[] inputs, int num_inputs, SafeStatusHandle status)
+        protected int TFE_OpAddInputList(SafeOpHandle op, IntPtr[] inputs, int num_inputs, SafeStatusHandle status)
             => c_api.TFE_OpAddInputList(op, inputs, num_inputs, status);
 
-        protected int TFE_OpGetOutputLength(IntPtr op, string input_name, SafeStatusHandle status)
+        protected int TFE_OpGetOutputLength(SafeOpHandle op, string input_name, SafeStatusHandle status)
             => c_api.TFE_OpGetOutputLength(op, input_name, status);
 
         protected void TFE_DeleteTensorHandle(IntPtr h)
             => c_api.TFE_DeleteTensorHandle(h);
-
-        protected void TFE_DeleteOp(IntPtr op)
-            => c_api.TFE_DeleteOp(op);
 
         protected SafeExecutorHandle TFE_ContextGetExecutorForThread(SafeContextHandle ctx)
             => c_api.TFE_ContextGetExecutorForThread(ctx);
@@ -154,7 +151,7 @@ namespace TensorFlowNET.UnitTest
         protected IntPtr TFE_TensorHandleCopyToDevice(IntPtr h, SafeContextHandle ctx, string device_name, SafeStatusHandle status)
             => c_api.TFE_TensorHandleCopyToDevice(h, ctx, device_name, status);
 
-        protected void TFE_OpSetDevice(IntPtr op, string device_name, SafeStatusHandle status)
+        protected void TFE_OpSetDevice(SafeOpHandle op, string device_name, SafeStatusHandle status)
             => c_api.TFE_OpSetDevice(op, device_name, status);
     }
 }

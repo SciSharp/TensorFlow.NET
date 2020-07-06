@@ -145,7 +145,7 @@ namespace Tensorflow.Eager
             return flat_result;
         }
 
-        TFE_Op GetOp(Context ctx, string op_or_function_name, Status status)
+        SafeOpHandle GetOp(Context ctx, string op_or_function_name, Status status)
         {
             if (thread_local_eager_operation_map.find(ctx, out var op))
                 c_api.TFE_OpReset(op, op_or_function_name, ctx.device_name, status.Handle);
@@ -159,7 +159,7 @@ namespace Tensorflow.Eager
             return op;
         }
 
-        static UnorderedMap<Context, TFE_Op> thread_local_eager_operation_map = new UnorderedMap<Context, TFE_Op>();
+        static UnorderedMap<Context, SafeOpHandle> thread_local_eager_operation_map = new UnorderedMap<Context, SafeOpHandle>();
 
         bool HasAccumulator()
         {
@@ -192,7 +192,7 @@ namespace Tensorflow.Eager
             ArgDef input_arg,
             List<object> flattened_attrs,
             List<Tensor> flattened_inputs,
-            IntPtr op,
+            SafeOpHandle op,
             Status status)
         {
             IntPtr input_handle;
@@ -224,7 +224,7 @@ namespace Tensorflow.Eager
             return true;
         }
 
-        public void SetOpAttrs(TFE_Op op, params object[] attrs)
+        public void SetOpAttrs(SafeOpHandle op, params object[] attrs)
         {
             var status = tf.status;
             var len = attrs.Length;
@@ -257,7 +257,7 @@ namespace Tensorflow.Eager
         /// <param name="attr_value"></param>
         /// <param name="attr_list_sizes"></param>
         /// <param name="status"></param>
-        void SetOpAttrWithDefaults(Context ctx, IntPtr op, AttrDef attr, 
+        void SetOpAttrWithDefaults(Context ctx, SafeOpHandle op, AttrDef attr, 
             string attr_name, object attr_value,  
             Dictionary<string, long> attr_list_sizes,
             Status status)
@@ -290,7 +290,7 @@ namespace Tensorflow.Eager
             }
         }
 
-        bool SetOpAttrList(Context ctx, IntPtr op,
+        bool SetOpAttrList(Context ctx, SafeOpHandle op,
             string key, object value, TF_AttrType type,
             Dictionary<string, long> attr_list_sizes,
             Status status)
@@ -298,7 +298,7 @@ namespace Tensorflow.Eager
             return false;
         }
 
-        bool SetOpAttrScalar(Context ctx, IntPtr op, 
+        bool SetOpAttrScalar(Context ctx, SafeOpHandle op, 
             string key, object value, TF_AttrType type,
             Dictionary<string, long> attr_list_sizes,
             Status status)
