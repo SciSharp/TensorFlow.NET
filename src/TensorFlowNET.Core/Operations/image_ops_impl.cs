@@ -16,6 +16,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Index;
+using System.Range;
 using System.Text;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
@@ -28,7 +30,7 @@ namespace Tensorflow
             => control_flow_ops.with_dependencies(
                 _CheckAtLeast3DImage(image, require_static: false), image);
 
-        internal static Array _CheckAtLeast3DImage(Tensor image, bool require_static)
+        internal static Operation[] _CheckAtLeast3DImage(Tensor image, bool require_static)
         {
             try
             {
@@ -54,7 +56,7 @@ namespace Tensorflow
             }
             if ( !image_shape[-3..^0].is_fully_defined() )
             {
-                return new [] {
+                return new Operation[] {
                     check_ops.assert_positive(
                         array_ops.shape(image)[-3..^0],
                         @"inner 3 dims of 'image.shape'
@@ -65,7 +67,7 @@ namespace Tensorflow
                         message: "'image' must be at least three-dimensional.")
                 };
             } else {
-                return new [] {};
+                return new Operation[] {};
             }
         }
 
@@ -84,10 +86,10 @@ namespace Tensorflow
         internal static Tensor _random_flip(Tensor image, int flipindex, int seed,
             string scope_name)
         {
-            using ( scope = ops.name_scope(null, scope_name, image))
+            using ( var scope = ops.name_scope(null, scope_name, image))
             {
                 image = ops.convert_to_tensor(image, name: "image");
-                image = AssertAtLeast3DImage(image);
+                image = _AssertAtLeast3DImage(image);
                 var shape = image.get_shape();
                 if ( shape.NDims == 3 || shape.NDims == null )
                 {
