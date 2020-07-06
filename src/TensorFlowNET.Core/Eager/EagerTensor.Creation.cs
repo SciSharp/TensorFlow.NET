@@ -14,7 +14,7 @@ namespace Tensorflow.Eager
             
         }
 
-        public EagerTensor(IntPtr handle) : base(IntPtr.Zero)
+        public EagerTensor(SafeTensorHandleHandle handle) : base(IntPtr.Zero)
         {
             EagerTensorHandle = handle;
             Resolve();
@@ -58,14 +58,20 @@ namespace Tensorflow.Eager
         }
 
         public override IntPtr ToPointer()
-            => EagerTensorHandle;
+            => EagerTensorHandle?.DangerousGetHandle() ?? IntPtr.Zero;
+
+        protected override void DisposeManagedResources()
+        {
+            base.DisposeManagedResources();
+
+            //print($"deleting DeleteTensorHandle {Id} {EagerTensorHandle.ToString("x16")}");
+            EagerTensorHandle.Dispose();
+        }
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             //print($"deleting DeleteTensorHandle {Id} {_handle.ToString("x16")}");
             c_api.TF_DeleteTensor(_handle);
-            //print($"deleting DeleteTensorHandle {Id} {EagerTensorHandle.ToString("x16")}");
-            c_api.TFE_DeleteTensorHandle(EagerTensorHandle);
         }
     }
 }

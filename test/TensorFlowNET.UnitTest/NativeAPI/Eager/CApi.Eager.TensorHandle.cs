@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         [TestMethod]
         public unsafe void TensorHandle()
         {
-            var h = TestMatrixTensorHandle();
+            using var h = TestMatrixTensorHandle();
             EXPECT_EQ(TF_FLOAT, c_api.TFE_TensorHandleDataType(h));
 
             var status = c_api.TF_NewStatus();
@@ -28,7 +28,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             EXPECT_EQ(3.0f, data[2]);
             EXPECT_EQ(4.0f, data[3]);
             c_api.TF_DeleteTensor(t);
-            c_api.TFE_DeleteTensorHandle(h);
         }
     }
 }

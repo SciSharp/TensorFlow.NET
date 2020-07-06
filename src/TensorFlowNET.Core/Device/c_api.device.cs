@@ -67,7 +67,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>TFE_TensorHandle*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TensorHandleCopyToDevice(IntPtr h, SafeContextHandle ctx, string device_name, SafeStatusHandle status);
+        public static extern SafeTensorHandleHandle TFE_TensorHandleCopyToDevice(SafeTensorHandleHandle h, SafeContextHandle ctx, string device_name, SafeStatusHandle status);
 
         /// <summary>
         /// Retrieves the full name of the device (e.g. /job:worker/replica:0/...)

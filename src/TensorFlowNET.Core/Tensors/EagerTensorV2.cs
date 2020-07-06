@@ -12,7 +12,7 @@ namespace Tensorflow
 {
     public class EagerTensorV2 : DisposableObject, ITensor
     {
-        IntPtr EagerTensorHandle;
+        SafeTensorHandleHandle EagerTensorHandle;
         public string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.status.Handle));
 
         public EagerTensorV2(IntPtr handle)
@@ -64,10 +64,14 @@ namespace Tensorflow
             }
         }*/
 
+        protected override void DisposeManagedResources()
+        {
+            EagerTensorHandle.Dispose();
+        }
+
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             c_api.TF_DeleteTensor(_handle);
-            c_api.TFE_DeleteTensorHandle(EagerTensorHandle);
         }
     }
 }
