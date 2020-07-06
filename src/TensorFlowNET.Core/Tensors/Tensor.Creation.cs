@@ -452,14 +452,14 @@ namespace Tensorflow
         public unsafe Tensor(string str)
         {
             var buffer = Encoding.UTF8.GetBytes(str);
-            var size = c_api.TF_StringEncodedSize((UIntPtr)buffer.Length);
-            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)((ulong)size + sizeof(ulong)));
+            var size = c_api.TF_StringEncodedSize((ulong)buffer.Length);
+            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)(size + sizeof(ulong)));
             AllocationType = AllocationType.Tensorflow;
 
             IntPtr tensor = c_api.TF_TensorData(handle);
             Marshal.WriteInt64(tensor, 0);
             fixed (byte* src = buffer)
-                c_api.TF_StringEncode(src, (UIntPtr)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, tf.status.Handle);
+                c_api.TF_StringEncode(src, (ulong)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, tf.status.Handle);
             _handle = handle;
             tf.status.Check(true);
         }
@@ -474,7 +474,7 @@ namespace Tensorflow
             {
                 if (nd.Unsafe.Storage.Shape.IsContiguous)
                 {
-                    var bytesLength = (UIntPtr) nd.size;
+                    var bytesLength = (ulong)nd.size;
                     var size = c_api.TF_StringEncodedSize(bytesLength);
                     var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
                     AllocationType = AllocationType.Tensorflow;
@@ -482,13 +482,13 @@ namespace Tensorflow
                     IntPtr tensor = c_api.TF_TensorData(handle);
                     Marshal.WriteInt64(tensor, 0);
 
-                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (sbyte*) (tensor + sizeof(Int64)), size, tf.status.Handle);
+                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (sbyte*) (tensor + sizeof(long)), size, tf.status.Handle);
                     tf.status.Check(true);
                     _handle = handle;
                 } else
                 {
                     var buffer = nd.ToArray<byte>();
-                    var size = c_api.TF_StringEncodedSize((UIntPtr) buffer.Length);
+                    var size = c_api.TF_StringEncodedSize((ulong)buffer.Length);
                     var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
                     AllocationType = AllocationType.Tensorflow;
 
@@ -496,7 +496,7 @@ namespace Tensorflow
                     Marshal.WriteInt64(tensor, 0);
 
                     fixed (byte* src = buffer)
-                        c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, tf.status.Handle);
+                        c_api.TF_StringEncode(src, (ulong)buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, tf.status.Handle);
 
                     tf.status.Check(true);
                     _handle = handle;
@@ -538,7 +538,7 @@ namespace Tensorflow
             int size = 0;
             foreach (var b in buffer)
             {
-                size += (int) TF_StringEncodedSize((UIntPtr) b.Length);
+                size += (int)TF_StringEncodedSize((ulong)b.Length);
             }
 
             int totalSize = size + buffer.Length * 8;
@@ -557,7 +557,7 @@ namespace Tensorflow
                 {
                     fixed (byte* src = &buffer[i][0])
                     {
-                        var written = TF_StringEncode(src, (UIntPtr) buffer[i].Length, (sbyte*) dst, (UIntPtr) (dstLimit.ToInt64() - dst.ToInt64()), status.Handle);
+                        var written = TF_StringEncode(src, (ulong)buffer[i].Length, (sbyte*)dst, (ulong)(dstLimit.ToInt64() - dst.ToInt64()), status.Handle);
                         status.Check(true);
                         pOffset += 8;
                         dst += (int) written;
@@ -592,25 +592,27 @@ namespace Tensorflow
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [SuppressMessage("ReSharper", "LocalVariableHidesMember")]
-        protected unsafe IntPtr CreateTensorFromArray(TF_DataType dt, long[] shape, Array data, int element_size)
+        protected IntPtr CreateTensorFromArray(TF_DataType dt, long[] shape, Array data, int element_size)
         {
             if (dt == TF_DataType.TF_STRING && data is byte[] buffer)
-            {
-                var size = c_api.TF_StringEncodedSize((UIntPtr) buffer.Length);
-                var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
-                AllocationType = AllocationType.Tensorflow;
-
-                IntPtr tensor = c_api.TF_TensorData(handle);
-                Marshal.WriteInt64(tensor, 0);
-
-                fixed (byte* src = buffer)
-                    c_api.TF_StringEncode(src, (UIntPtr) buffer.Length, (sbyte*) (tensor + sizeof(long)), size, tf.status.Handle);
-
-                tf.status.Check(true);
-                return handle;
-            }
-
+                return CreateStringTensorFromBytes(buffer, shape);
             return CreateTensorFromArray(dt, shape, data, 0, data.Length, element_size);
+        }
+
+        protected unsafe IntPtr CreateStringTensorFromBytes(byte[] buffer, long[] shape)
+        {
+            var size = c_api.TF_StringEncodedSize((ulong)buffer.Length);
+            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, 0, size + sizeof(long));
+            AllocationType = AllocationType.Tensorflow;
+
+            IntPtr tensor = c_api.TF_TensorData(handle);
+            Marshal.WriteInt64(tensor, 0);
+
+            fixed (byte* src = buffer)
+                c_api.TF_StringEncode(src, (ulong)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, tf.status.Handle);
+
+            tf.status.Check(true);
+            return handle;
         }
 
         /// <summary>

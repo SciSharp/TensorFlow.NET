@@ -25,7 +25,13 @@ namespace Tensorflow.Eager
             EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
             Resolve();
         }
-        
+
+        public EagerTensor(byte[] value, string device_name, TF_DataType dtype) : base(value, dType: dtype)
+        {
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
+            Resolve();
+        }
+
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
             EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
