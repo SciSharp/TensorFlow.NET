@@ -1,50 +1,112 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Util;
+using static Tensorflow.Binding;
+using static Tensorflow.tensorflow;
 
 namespace Tensorflow.Gradients
 {
-    public class Tape : ITape
+    public partial class Tape : ITape
     {
+        int nesting_id;
+        static int tape_nesting_id_counter = 0;
+        bool persistent_;
+        bool watch_accessed_variables;
+        TensorTape tensor_tape_;
+        OpTape<BackwardFunction, TapeTensor> op_tape_;
+
+        /// <summary>
+        /// A deque-backed stack, whose element references are not invalidated by
+        /// pushes and pops at the back.
+        /// </summary>
+        Stack<AccumulatorCallState> call_state_;
+
         public Tape(bool persistent, bool watch_accessed_variables)
         {
+            this.persistent_ = persistent;
+            this.watch_accessed_variables = watch_accessed_variables;
 
+            tensor_tape_ = new TensorTape();
+            op_tape_ = new OpTape<BackwardFunction, TapeTensor>();
+            tensor_usage_ = new UnorderedMap<long, long>();
+
+            nesting_id = ++tape_nesting_id_counter;
+            tf.GetTapeSet().Add(this);
         }
 
-        public Tensor[] ComputeGradient(long[] target_tensor_ids, long[] source_tensor_ids, UnorderedMap<long, TapeTensor> sources_that_are_targets, Tensor[] output_gradients)
+        /// <summary>
+        /// Marks this tensor to be watched by the given tape.
+        /// </summary>
+        /// <param name="x"></param>
+        public void Watch(long tensor_id)
         {
-            throw new NotImplementedException();
-        }
+            if (!CouldBackprop())
+                return;
 
-        public void PopTape(ITape tape)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RecordOperation(string op_type, Tensor[] input_tensors, TapeTensor[] output_tensors, long[] input_tensor_id, TF_DataType[] input_dtypes, Func<tensorflow.BackwardFunction> backward_function_getter)
-        {
-            throw new NotImplementedException();
+            tensor_tape_.emplace(tensor_id, -1);
         }
 
         public bool ShouldRecord(long[] tensor_ids, TF_DataType[] dtypes)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < tensor_ids.Length; ++i)
+            {
+                if (tensor_tape_.find(tensor_ids[i]))
+                    if (IsDtypeTrainable(dtypes[i]))
+                        return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Pops the given tape in the stack.
+        /// </summary>
+        /// <param name="tape"></param>
+        public void PopTape(ITape tape)
+        {
+            tf.GetTapeSet().Remove(tape);
         }
 
         public void VariableAccessed(ResourceVariable variable)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Watch(long tensor_id)
-        {
-            throw new NotImplementedException();
+            Watch(variable.Handle.Id);
         }
 
         public ResourceVariable[] WatchedVariables()
         {
-            throw new NotImplementedException();
+            return null;
         }
+
+        public bool IsDtypeTrainable(TF_DataType dtype)
+        {
+            switch (dtype)
+            {
+                case TF_DataType.TF_HALF:
+                case TF_DataType.TF_BFLOAT16:
+                case TF_DataType.TF_FLOAT:
+                case TF_DataType.TF_DOUBLE:
+                case TF_DataType.TF_COMPLEX64:
+                case TF_DataType.TF_COMPLEX128:
+                case TF_DataType.TF_RESOURCE:
+                case TF_DataType.TF_VARIANT:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        bool CouldForwardprop()
+            => HasAccumulator();
+
+        bool CouldBackprop()
+            => HasGradientTape();
+
+        bool HasAccumulator()
+            //return !GetAccumulatorSet()->empty();
+            => false;
+
+        bool HasGradientTape()
+            => tf.GetTapeSet().Count > 0;
     }
 }
