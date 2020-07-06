@@ -33,7 +33,7 @@ namespace Tensorflow.Eager
             {
                 for (int i = 0; i < inputs.Length; ++i)
                 {
-                    IntPtr tensor_handle;
+                    SafeTensorHandleHandle tensor_handle;
                     switch (inputs[i])
                     {
                         case EagerTensor et:
@@ -50,10 +50,10 @@ namespace Tensorflow.Eager
             if (status.ok() && attrs != null)
                 SetOpAttrs(op, attrs);
 
-            var outputs = new IntPtr[num_outputs];
+            var outputs = new SafeTensorHandleHandle[num_outputs];
             if (status.ok())
             {
-                c_api.TFE_Execute(op, outputs, ref num_outputs, status.Handle);
+                c_api.TFE_Execute(op, outputs, out num_outputs, status.Handle);
                 status.Check(true);
             }
             return outputs.Select(x => new EagerTensor(x)).ToArray();

@@ -154,8 +154,8 @@ namespace Tensorflow.Eager
                 num_retvals += (int)delta;
             }
 
-            var retVals = new IntPtr[num_retvals];
-            c_api.TFE_Execute(op, retVals, ref num_retvals, status.Handle);
+            var retVals = new SafeTensorHandleHandle[num_retvals];
+            c_api.TFE_Execute(op, retVals, out num_retvals, status.Handle);
             status.Check(true);
 
             var flat_result = retVals.Select(x => new EagerTensor(x)).ToArray();
@@ -220,7 +220,7 @@ namespace Tensorflow.Eager
             SafeOpHandle op,
             Status status)
         {
-            IntPtr input_handle;
+            SafeTensorHandleHandle input_handle;
 
             // ConvertToTensor();
             switch (inputs)

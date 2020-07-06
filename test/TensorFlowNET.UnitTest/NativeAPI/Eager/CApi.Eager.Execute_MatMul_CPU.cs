@@ -33,21 +33,25 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             {
                 CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
-                var m = TestMatrixTensorHandle();
-                var retvals = new IntPtr[] { IntPtr.Zero, IntPtr.Zero };
-                using (var matmul = MatMulOp(ctx, m, m))
+                var retvals = new SafeTensorHandleHandle[2];
+                try
                 {
-                    int num_retvals = 2;
-                    c_api.TFE_Execute(matmul, retvals, ref num_retvals, status);
-                    EXPECT_EQ(1, num_retvals);
-                    EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+                    using (var m = TestMatrixTensorHandle())
+                    using (var matmul = MatMulOp(ctx, m, m))
+                    {
+                        int num_retvals;
+                        c_api.TFE_Execute(matmul, retvals, out num_retvals, status);
+                        EXPECT_EQ(1, num_retvals);
+                        EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+                    }
+
+                    t = TFE_TensorHandleResolve(retvals[0], status);
+                    ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
                 }
-
-                TFE_DeleteTensorHandle(m);
-
-                t = TFE_TensorHandleResolve(retvals[0], status);
-                ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-                TFE_DeleteTensorHandle(retvals[0]);
+                finally
+                {
+                    retvals[0]?.Dispose();
+                }
             }
 
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));

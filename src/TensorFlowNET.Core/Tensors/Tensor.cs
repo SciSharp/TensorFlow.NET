@@ -23,6 +23,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Tensorflow.Binding;
+using Tensorflow.Eager;
 using Tensorflow.Framework;
 
 namespace Tensorflow
@@ -94,7 +95,7 @@ namespace Tensorflow
         /// <summary>
         /// TFE_TensorHandle
         /// </summary>
-        public IntPtr EagerTensorHandle { get; set; }
+        public SafeTensorHandleHandle EagerTensorHandle { get; set; }
 
         /// <summary>
         ///     Returns the shape of a tensor.

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using Tensorflow;
 using Tensorflow.Eager;
 
@@ -24,10 +23,9 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             using var ctx = NewContext(status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
-            var condition = TestScalarTensorHandle(true);
-            var t1 = TestMatrixTensorHandle();
-            var t2 = TestAxisTensorHandle();
-            var retvals = new IntPtr[1];
+            using var condition = TestScalarTensorHandle(true);
+            using var t1 = TestMatrixTensorHandle();
+            using var t2 = TestAxisTensorHandle();
             using (var assertOp = TFE_NewOp(ctx, "Assert", status))
             {
                 CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -44,15 +42,13 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 //EXPECT_EQ(attr_found->second.list().type(1), tensorflow::DataType::DT_FLOAT);
                 //EXPECT_EQ(attr_found->second.list().type(2), tensorflow::DataType::DT_INT32);
 
-                int num_retvals = 1;
-                TFE_Execute(assertOp, retvals, ref num_retvals, status);
+                var retvals = new SafeTensorHandleHandle[1];
+                int num_retvals;
+                TFE_Execute(assertOp, retvals, out num_retvals, status);
                 EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            }
 
-            TFE_DeleteTensorHandle(condition);
-            TFE_DeleteTensorHandle(t1);
-            TFE_DeleteTensorHandle(t2);
-            TFE_DeleteTensorHandle(retvals[0]);
+                retvals[0]?.Dispose();
+            }
         }
     }
 }
