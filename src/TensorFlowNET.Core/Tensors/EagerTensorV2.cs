@@ -1,11 +1,8 @@
 ﻿using NumSharp;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
 using Tensorflow.Eager;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -13,7 +10,14 @@ namespace Tensorflow
     public class EagerTensorV2 : DisposableObject, ITensor
     {
         SafeTensorHandleHandle EagerTensorHandle;
-        public string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.status.Handle));
+        public string Device
+        {
+            get
+            {
+                using var _ = EagerTensorHandle.Lease();
+                return c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.status.Handle));
+            }
+        }
 
         public EagerTensorV2(IntPtr handle)
         {
