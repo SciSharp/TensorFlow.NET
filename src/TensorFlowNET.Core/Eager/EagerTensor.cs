@@ -1,15 +1,21 @@
 ﻿using NumSharp;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
     public partial class EagerTensor : Tensor
     {
-        public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.status.Handle));
+        public override string Device
+        {
+            get
+            {
+                using var _ = EagerTensorHandle.Lease();
+                return c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.status.Handle));
+            }
+        }
 
         public override int rank => c_api.TFE_TensorHandleNumDims(EagerTensorHandle, tf.status.Handle);
 
