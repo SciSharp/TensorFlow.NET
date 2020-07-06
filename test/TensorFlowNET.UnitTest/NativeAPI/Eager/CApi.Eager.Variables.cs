@@ -28,15 +28,16 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             var var_handle = CreateVariable(ctx, 12.0f, status);
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
-            var op = TFE_NewOp(ctx, "ReadVariableOp", status);
-            ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TFE_OpSetAttrType(op, "dtype", TF_FLOAT);
-            TFE_OpAddInput(op, var_handle, status);
-            ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             int num_retvals = 1;
             var value_handle = new[] { IntPtr.Zero };
-            TFE_Execute(op, value_handle, ref num_retvals, status);
-            TFE_DeleteOp(op);
+            using (var op = TFE_NewOp(ctx, "ReadVariableOp", status))
+            {
+                ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+                TFE_OpSetAttrType(op, "dtype", TF_FLOAT);
+                TFE_OpAddInput(op, var_handle, status);
+                ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+                TFE_Execute(op, value_handle, ref num_retvals, status);
+            }
 
             ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
             ASSERT_EQ(1, num_retvals);
