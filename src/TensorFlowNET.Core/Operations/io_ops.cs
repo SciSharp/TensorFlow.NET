@@ -14,31 +14,45 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public class gen_io_ops
+    public class io_ops
     {
-        public static Operation save_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, Tensor[] tensors, string name = null)
+        public Operation save_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, Tensor[] tensors, string name = null)
         {
             var _op = tf._op_def_lib._apply_op_helper("SaveV2", name: name, args: new { prefix, tensor_names, shape_and_slices, tensors });
 
             return _op;
         }
 
-        public static Tensor[] restore_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, TF_DataType[] dtypes, string name = null)
+        public Tensor[] restore_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, TF_DataType[] dtypes, string name = null)
         {
             var _op = tf._op_def_lib._apply_op_helper("RestoreV2", name: name, args: new { prefix, tensor_names, shape_and_slices, dtypes });
 
             return _op.outputs;
         }
 
-        public static Tensor read_file<T>(T filename, string name = null)
+        public Tensor read_file<T>(T filename, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                return read_file_eager_fallback(filename, name: name, tf.context);
+            }
+
             var _op = tf._op_def_lib._apply_op_helper("ReadFile", name: name, args: new { filename });
 
             return _op.outputs[0];
+        }
+
+        private Tensor read_file_eager_fallback<T>(T filename, string name = null, Context ctx = null)
+        {
+            var filename_tensor = ops.convert_to_tensor(filename, TF_DataType.TF_STRING);
+            var _inputs_flat = new[] { filename_tensor };
+
+            return tf._execute.execute(ctx, "ReadFile", 1, _inputs_flat, null, name: name)[0];
         }
     }
 }

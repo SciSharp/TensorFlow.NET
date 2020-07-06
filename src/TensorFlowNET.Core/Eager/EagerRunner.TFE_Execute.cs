@@ -44,10 +44,11 @@ namespace Tensorflow.Eager
                             break;
                     }
                     c_api.TFE_OpAddInput(op, tensor_handle, status.Handle);
+                    status.Check(true);
                 }
             }
-            if (status.ok())
-                SetOpAttrs(op, attrs, status.Handle);
+            if (status.ok() && attrs != null)
+                SetOpAttrs(op, attrs);
 
             var outputs = new IntPtr[num_outputs];
             if (status.ok())

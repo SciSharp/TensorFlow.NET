@@ -18,6 +18,7 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Eager;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
 
@@ -668,14 +669,29 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor[] split(Tensor value, int num_or_size_splits, Tensor axis, 
+        public static Tensor[] split<T>(Tensor value, int num_split, T axis, 
             string name = "split")
         {
-            var size_splits = ops.convert_to_tensor(num_or_size_splits);
-            return gen_array_ops.split(axis: axis,
-                num_split: num_or_size_splits,
-                value: value,
-                name: name);
+            var size_splits = ops.convert_to_tensor(num_split);
+
+            if (tf.context.executing_eagerly())
+            {
+                return split_eager_fallback(axis, value, num_split: num_split, name: name, ctx: tf.context);
+            }
+
+            var _op = tf._op_def_lib._apply_op_helper("Split", name, new { split_dim = axis, value, num_split });
+            return _op.outputs;
+        }
+
+        private static Tensor[] split_eager_fallback<Ta, Tv>(Ta axis, Tv value, int num_split, string name, Context ctx = null)
+        {
+            var (_attr_T, input) = tf._execute.args_to_matching_eager(ctx, args: new object[] { value });
+            var axis_tensor = ops.convert_to_tensor(axis, dtype: TF_DataType.TF_INT32);
+            var _inputs_flat = new List<Tensor> { axis_tensor };
+            _inputs_flat.AddRange(input);
+            var _attrs = new object[] { "num_split", num_split, "T", _attr_T };
+
+            return tf._execute.execute(ctx, "Split", num_split, _inputs_flat.ToArray(), _attrs, name: name);
         }
 
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)

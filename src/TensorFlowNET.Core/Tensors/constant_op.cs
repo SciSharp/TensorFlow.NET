@@ -132,9 +132,21 @@ namespace Tensorflow
 
             switch (value)
             {
+                case EagerTensor val:
+                    return val;
                 case NDArray val:
                     return new EagerTensor(val, ctx.device_name);
                 case string val:
+                    return new EagerTensor(val, ctx.device_name);
+                case bool val:
+                    return new EagerTensor(val, ctx.device_name);
+                case byte val:
+                    return new EagerTensor(val, ctx.device_name);
+                case byte[] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case byte[,] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case byte[,,] val:
                     return new EagerTensor(val, ctx.device_name);
                 case int val:
                     return new EagerTensor(val, ctx.device_name);
@@ -142,17 +154,31 @@ namespace Tensorflow
                     return new EagerTensor(val, ctx.device_name);
                 case int[,] val:
                     return new EagerTensor(val, ctx.device_name);
+                case int[,,] val:
+                    return new EagerTensor(val, ctx.device_name);
                 case long val:
+                    return new EagerTensor(val, ctx.device_name);
+                case long[] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case long[,] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case long[,,] val:
                     return new EagerTensor(val, ctx.device_name);
                 case float val:
                     return new EagerTensor(val, ctx.device_name);
+                case float[] val:
+                    return new EagerTensor(val, ctx.device_name);
                 case float[,] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case float[,,] val:
                     return new EagerTensor(val, ctx.device_name);
                 case double val:
                     return new EagerTensor(val, ctx.device_name);
-                case float[] val:
-                    return new EagerTensor(val, ctx.device_name);
                 case double[] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case double[,] val:
+                    return new EagerTensor(val, ctx.device_name);
+                case double[,,] val:
                     return new EagerTensor(val, ctx.device_name);
                 default:
                     throw new NotImplementedException($"convert_to_eager_tensor {value.GetType()}");

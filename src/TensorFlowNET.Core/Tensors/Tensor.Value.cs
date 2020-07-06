@@ -235,13 +235,12 @@ namespace Tensorflow
 
             var buffer = new byte[size][];
             var src = c_api.TF_TensorData(_handle);
-            var srcLen = (IntPtr)(src.ToInt64() + (long)bytesize);
             src += (int)(size * 8);
             for (int i = 0; i < buffer.Length; i++)
             {
                 IntPtr dst = IntPtr.Zero;
-                UIntPtr dstLen = UIntPtr.Zero;
-                var read = c_api.TF_StringDecode((byte*)src, (UIntPtr)(srcLen.ToInt64() - src.ToInt64()), (byte**)&dst, &dstLen, tf.status.Handle);
+                ulong dstLen = 0;
+                var read = c_api.TF_StringDecode((byte*)src, bytesize, (byte**)&dst, ref dstLen, tf.status.Handle);
                 tf.status.Check(true);
                 buffer[i] = new byte[(int)dstLen];
                 Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);
@@ -253,6 +252,36 @@ namespace Tensorflow
                 _str[i] = Encoding.UTF8.GetString(buffer[i]);
 
             return _str;
+        }
+
+        public unsafe byte[][] StringBytes()
+        {
+            if (dtype != TF_DataType.TF_STRING)
+                throw new InvalidOperationException($"Unable to call StringData when dtype != TF_DataType.TF_STRING (dtype is {dtype})");
+
+            //
+            // TF_STRING tensors are encoded with a table of 8-byte offsets followed by TF_StringEncode-encoded bytes.
+            // [offset1, offset2,...,offsetn, s1size, s1bytes, s2size, s2bytes,...,snsize,snbytes]
+            //
+            long size = 1;
+            foreach (var s in TensorShape.dims)
+                size *= s;
+
+            var buffer = new byte[size][];
+            var src = c_api.TF_TensorData(_handle);
+            src += (int)(size * 8);
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                IntPtr dst = IntPtr.Zero;
+                ulong dstLen = 0;
+                var read = c_api.TF_StringDecode((byte*)src, bytesize, (byte**)&dst, ref dstLen, tf.status.Handle);
+                tf.status.Check(true);
+                buffer[i] = new byte[(int)dstLen];
+                Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);
+                src += (int)read;
+            }
+
+            return buffer;
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Tensorflow
 
             if (_write_version == SaverDef.Types.CheckpointFormatVersion.V2)
             {
-                return gen_io_ops.save_v2(filename_tensor, tensor_names.ToArray(), tensor_slices.ToArray(), tensors.ToArray());
+                return tf.io.save_v2(filename_tensor, tensor_names.ToArray(), tensor_slices.ToArray(), tensors.ToArray());
             }
             else
             {
@@ -76,7 +76,7 @@ namespace Tensorflow
                     dtypes.Add(spec.dtype);
                 }
 
-            return gen_io_ops.restore_v2(filename_tensor, names.ToArray(), slices.ToArray(), dtypes.ToArray());
+            return tf.io.restore_v2(filename_tensor, names.ToArray(), slices.ToArray(), dtypes.ToArray());
         }
 
         public virtual SaverDef _build_internal(IVariableV1[] names_to_saveables,

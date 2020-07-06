@@ -64,6 +64,22 @@ namespace Tensorflow.Gradients
             return new Tensor[] { r1, r2 };
         }
 
+        /// <summary>
+        /// Copies the gradient to all inputs.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        [RegisterGradient("AddN")]
+        public static Tensor[] _AddNGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+
+            return Enumerable.Range(0, len(op.inputs))
+                .Select(x => grad)
+                .ToArray();
+        }
+
         [RegisterGradient("Cumsum")]
         public static Tensor[] _CumsumGrad(Operation op, Tensor[] grads)
         {

@@ -277,7 +277,7 @@ namespace Tensorflow
             return ops.control_dependencies(null);
         }
 
-        private static int uid_number = 0;
+        private static int uid_number = -1;
 
         /// <summary>
         /// A unique (within this program execution) integer.

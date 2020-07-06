@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -31,8 +32,30 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="uint"></param>
         /// <returns></returns>
-        public static Tensor substr(Tensor input, int pos, int len,
-                string name = null, string @uint = "BYTE")
-            => gen_string_ops.substr(input, pos, len, name: name, @uint: @uint);
+        public Tensor substr<T>(T input, int pos, int len,
+                string @uint = "BYTE", string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var input_tensor = tf.constant(input);
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Substr", name,
+                    null,
+                    input, pos, len,
+                    "unit", @uint);
+
+                return results[0];
+            }
+
+            var _op = tf._op_def_lib._apply_op_helper("Substr", name: name, args: new
+            {
+                input,
+                pos,
+                len,
+                unit = @uint
+            });
+
+            return _op.output;
+        }
     }
 }

@@ -207,7 +207,7 @@ namespace Tensorflow
         public static extern ulong TF_StringDecode(IntPtr src, ulong src_len, IntPtr dst, ref ulong dst_len, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe UIntPtr TF_StringDecode(byte* src, UIntPtr src_len, byte** dst, UIntPtr* dst_len, SafeStatusHandle status);
+        public static extern unsafe ulong TF_StringDecode(byte* src, ulong src_len, byte** dst, ref ulong dst_len, SafeStatusHandle status);
 
 
         public static c_api.Deallocator EmptyDeallocator = FreeNothingDeallocator;

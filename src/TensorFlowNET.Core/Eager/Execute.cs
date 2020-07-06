@@ -44,27 +44,27 @@ namespace Tensorflow.Eager
             return results;
         }
 
-        public (TF_DataType, EagerTensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)
+        public (TF_DataType, Tensor[]) args_to_matching_eager(Context ctx, TF_DataType default_dtype = TF_DataType.DtInvalid, object[] args = null)
         {
             if (args.Length == 0 && default_dtype != TF_DataType.DtInvalid)
                 return (default_dtype, null);
 
-            if (args.Count(x => x is EagerTensor) == args.Length)
-                return ((args[0] as EagerTensor).dtype, args.Select(x => x as EagerTensor).ToArray());
+            if (args.Count(x => x is Tensor) == args.Length)
+                return ((args[0] as Tensor).dtype, args.Select(x => x as Tensor).ToArray());
 
             var dtype = TF_DataType.DtInvalid;
             foreach (var x in args)
             {
-                if (x is EagerTensor et)
+                if (x is Tensor et)
                     dtype = et.dtype;
             }
 
             if (dtype == TF_DataType.DtInvalid)
             {
-                var ret = new List<EagerTensor>();
+                var ret = new List<Tensor>();
                 foreach (var t in args)
                 {
-                    ret.Add(ops.convert_to_tensor(t, dtype, preferred_dtype: default_dtype, ctx: ctx) as EagerTensor);
+                    ret.Add(ops.convert_to_tensor(t, dtype, preferred_dtype: default_dtype, ctx: ctx) as Tensor);
                     if (dtype == TF_DataType.DtInvalid)
                         dtype = ret.Last().dtype;
                 }

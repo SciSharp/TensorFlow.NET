@@ -21,12 +21,28 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public strings_internal strings = new strings_internal();
-        public class strings_internal
+        public StringsApi strings { get; } = new StringsApi();
+
+        public class StringsApi
         {
+            string_ops ops = new string_ops();
+
+            /// <summary>
+            /// Return substrings from `Tensor` of strings.
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="pos"></param>
+            /// <param name="len"></param>
+            /// <param name="name"></param>
+            /// <param name="uint"></param>
+            /// <returns></returns>
             public Tensor substr(Tensor input, int pos, int len,
                     string name = null, string @uint = "BYTE")
-                => string_ops.substr(input, pos, len, name: name, @uint: @uint);
+                => ops.substr(input, pos, len, @uint: @uint, name: name);
+
+            public Tensor substr(string input, int pos, int len,
+                    string name = null, string @uint = "BYTE")
+                => ops.substr(input, pos, len, @uint: @uint, name: name);
         }
     }
 }
