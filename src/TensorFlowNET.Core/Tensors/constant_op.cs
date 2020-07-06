@@ -130,6 +130,11 @@ namespace Tensorflow
                 }
             }
 
+            if(dtype == TF_DataType.TF_STRING && value is byte[] bytes)
+            {
+                return new EagerTensor(bytes, ctx.device_name, TF_DataType.TF_STRING);
+            }
+
             switch (value)
             {
                 case EagerTensor val:

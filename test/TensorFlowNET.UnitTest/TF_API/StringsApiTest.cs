@@ -10,6 +10,14 @@ namespace Tensorflow.UnitTest.TF_API
     public class StringsApiTest
     {
         [TestMethod]
+        public void StringFromBytes()
+        {
+            var jpg = tf.constant(new byte[] { 0x41, 0xff, 0xd8, 0xff }, tf.@string);
+            var strings = jpg.ToString();
+            Assert.AreEqual(strings, @"tf.Tensor: shape=(), dtype=string, numpy=A\xff\xd8\xff");
+        }
+
+        [TestMethod]
         public void StringEqual()
         {
             var str1 = tf.constant("Hello1");

@@ -1,6 +1,7 @@
 ﻿using NumSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using static Tensorflow.Binding;
 
@@ -49,7 +50,8 @@ namespace Tensorflow.Eager
             switch (dtype)
             {
                 case TF_DataType.TF_STRING:
-                    return $"b'{(string)nd}'";
+                    return string.Join(string.Empty, nd.ToArray<byte>()
+                        .Select(x => x < 32 || x > 127 ? "\\x" + x.ToString("x") : Convert.ToChar(x).ToString()));
                 case TF_DataType.TF_BOOL:
                     return (nd.GetByte(0) > 0).ToString();
                 case TF_DataType.TF_RESOURCE:

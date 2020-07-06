@@ -170,7 +170,7 @@ namespace Tensorflow
         /// <param name="len">size_t</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern UIntPtr TF_StringEncodedSize(UIntPtr len);
+        public static extern ulong TF_StringEncodedSize(ulong len);
 
         /// <summary>
         /// Encode the string `src` (`src_len` bytes long) into `dst` in the format
@@ -185,7 +185,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>On success returns the size in bytes of the encoded string.</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe ulong TF_StringEncode(byte* src, UIntPtr src_len, sbyte* dst, UIntPtr dst_len, SafeStatusHandle status);
+        public static extern unsafe ulong TF_StringEncode(byte* src, ulong src_len, sbyte* dst, ulong dst_len, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern unsafe ulong TF_StringEncode(IntPtr src, ulong src_len, IntPtr dst, ulong dst_len, SafeStatusHandle status);

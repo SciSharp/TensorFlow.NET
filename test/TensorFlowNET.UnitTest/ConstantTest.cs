@@ -165,10 +165,10 @@ namespace TensorFlowNET.UnitTest.Basics
         {
             string str = "Hello, TensorFlow.NET!";
             var handle = Marshal.StringToHGlobalAnsi(str);
-            ulong dst_len = (ulong)c_api.TF_StringEncodedSize((UIntPtr)str.Length);
+            var dst_len = c_api.TF_StringEncodedSize((ulong)str.Length);
             Assert.AreEqual(dst_len, (ulong)23);
             IntPtr dst = Marshal.AllocHGlobal((int)dst_len);
-            ulong encoded_len = c_api.TF_StringEncode(handle, (ulong)str.Length, dst, dst_len, status.Handle);
+            var encoded_len = c_api.TF_StringEncode(handle, (ulong)str.Length, dst, dst_len, status.Handle);
             Assert.AreEqual((ulong)23, encoded_len);
             Assert.AreEqual(status.Code, TF_Code.TF_OK);
             string encoded_str = Marshal.PtrToStringUTF8(dst + sizeof(byte));
