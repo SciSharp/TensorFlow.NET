@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using Tensorflow.Device;
 using Tensorflow.Eager;
-using TFE_Executor = System.IntPtr;
 
 namespace Tensorflow
 {
@@ -299,7 +298,7 @@ namespace Tensorflow
         /// <param name="is_async"></param>
         /// <returns>TFE_Executor*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_Executor TFE_NewExecutor(bool is_async);
+        public static extern SafeExecutorHandle TFE_NewExecutor(bool is_async);
 
         /// <summary>
         /// Deletes the eager Executor without waiting for enqueued nodes. Please call
@@ -322,7 +321,7 @@ namespace Tensorflow
         /// <param name="executor">TFE_Executor*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_ExecutorWaitForAllPendingNodes(TFE_Executor executor, SafeStatusHandle status);
+        public static extern void TFE_ExecutorWaitForAllPendingNodes(SafeExecutorHandle executor, SafeStatusHandle status);
 
         /// <summary>
         /// Sets a custom Executor for current thread. All nodes created by this thread
@@ -331,7 +330,7 @@ namespace Tensorflow
         /// <param name="ctx"></param>
         /// <param name="executor"></param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_ContextSetExecutorForThread(SafeContextHandle ctx, TFE_Executor executor);
+        public static extern void TFE_ContextSetExecutorForThread(SafeContextHandle ctx, SafeExecutorHandle executor);
 
         /// <summary>
         /// Returns the Executor for current thread.
@@ -339,7 +338,7 @@ namespace Tensorflow
         /// <param name="ctx"></param>
         /// <returns>TFE_Executor*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TFE_Executor TFE_ContextGetExecutorForThread(SafeContextHandle ctx);
+        public static extern SafeExecutorHandle TFE_ContextGetExecutorForThread(SafeContextHandle ctx);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TFE_TapeSetNew(bool persistent, bool watch_accessed_variables);
