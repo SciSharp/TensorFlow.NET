@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.functional_ops_test
@@ -9,12 +10,10 @@ namespace TensorFlowNET.UnitTest.functional_ops_test
     /// <summary>
     /// https://www.tensorflow.org/api_docs/python/tf/scan
     /// </summary>
-    [Ignore]
     [TestClass]
-    public class ScanTestCase
+    public class ScanTestCase : GraphModeTestBase
     {
-        [Ignore("TODO")]
-        [TestMethod]
+        [TestMethod, Ignore("need UpdateEdge API")]
         public void ScanForward()
         {
             var fn = new Func<Tensor, Tensor, Tensor>((a, x) => tf.add(a, x));
@@ -26,8 +25,7 @@ namespace TensorFlowNET.UnitTest.functional_ops_test
             sess.run(scan, (input, np.array(1,2,3,4,5,6))).Should().Be(np.array(1,3,6,10,15,21));
         }
 
-        [Ignore("TODO")]
-        [TestMethod]
+        [TestMethod, Ignore("need UpdateEdge API")]
         public void ScanReverse()
         {
             var fn = new Func<Tensor, Tensor, Tensor>((a, x) => tf.add(a, x));

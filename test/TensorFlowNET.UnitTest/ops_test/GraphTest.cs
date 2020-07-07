@@ -10,7 +10,6 @@ namespace TensorFlowNET.UnitTest.ops_test
     [TestClass]
     public class GraphTest : GraphModeTestBase
     {
-
         [TestInitialize]
         public void SetUp()
         {
