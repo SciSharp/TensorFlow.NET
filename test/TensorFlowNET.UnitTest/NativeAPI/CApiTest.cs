@@ -3,11 +3,12 @@ using System;
 using Tensorflow;
 using Tensorflow.Device;
 using Tensorflow.Eager;
+using Tensorflow.UnitTest;
 using Buffer = System.Buffer;
 
 namespace TensorFlowNET.UnitTest
 {
-    public class CApiTest
+    public class CApiTest : GraphModeTestBase
     {
         protected static readonly TF_Code TF_OK = TF_Code.TF_OK;
         protected static readonly TF_DataType TF_FLOAT = TF_DataType.TF_FLOAT;

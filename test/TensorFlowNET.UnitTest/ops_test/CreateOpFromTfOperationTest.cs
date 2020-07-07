@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using Tensorflow.Operations;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.ops_test
@@ -19,7 +20,7 @@ namespace TensorFlowNET.UnitTest.ops_test
     /// </summary>
     [Ignore]
     [TestClass]
-    public class CreateOpFromTfOperationTest : PythonTest
+    public class CreateOpFromTfOperationTest : GraphModeTestBase
     {
 
         [TestMethod]

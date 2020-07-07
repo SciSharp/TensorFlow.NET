@@ -5,6 +5,7 @@ using System.Text;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using NumSharp;
+using Tensorflow.UnitTest;
 
 namespace TensorFlowNET.UnitTest.Keras
 {
@@ -12,9 +13,8 @@ namespace TensorFlowNET.UnitTest.Keras
     /// https://www.tensorflow.org/versions/r1.14/api_docs/python/tf/keras/layers/Embedding
     /// </summary>
     [TestClass]
-    public class EmbeddingTest
+    public class EmbeddingTest : GraphModeTestBase
     {
-        [Ignore]
         [TestMethod]
         public void Embedding()
         {

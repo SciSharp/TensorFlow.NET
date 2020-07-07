@@ -9,7 +9,6 @@ namespace TensorFlowNET.UnitTest.NativeAPI
     /// tensorflow\c\c_api_test.cc
     /// `class CApiColocationTest`
     /// </summary>
-    [Ignore]
     [TestClass]
     public class CApiColocationTest : CApiTest, IDisposable
     {

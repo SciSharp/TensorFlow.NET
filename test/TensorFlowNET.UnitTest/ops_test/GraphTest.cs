@@ -1,14 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
+using Tensorflow.UnitTest;
 
 namespace TensorFlowNET.UnitTest.ops_test
 {
     /// <summary>
     /// excerpt of tensorflow/python/framework/ops_test.py
     /// </summary>
-    [Ignore]
     [TestClass]
-    public class GraphTest : PythonTest
+    public class GraphTest : GraphModeTestBase
     {
 
         [TestInitialize]

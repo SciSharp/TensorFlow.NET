@@ -3,11 +3,12 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.UnitTest;
 
 namespace TensorFlowNET.UnitTest.nn_test
 {
     [TestClass]
-    public class ZeroFractionTest : PythonTest
+    public class ZeroFractionTest : GraphModeTestBase
     {
         protected double _ZeroFraction(NDArray x)
         {

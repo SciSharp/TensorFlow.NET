@@ -11,7 +11,6 @@ using Tensorflow.Framework;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
 {
-    [Ignore]
     [TestClass]
     public class TensorTest : CApiTest
     {
@@ -81,7 +80,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         /// Port from c_api_test.cc
         /// `TEST(CAPI, MaybeMove)`
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void MaybeMove()
         {
             NDArray nd = np.array(2, 3);
@@ -262,13 +261,17 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             }
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void boolean_mask()
         {
             var tensor = new[] { 0, 1, 2, 3 };
             var mask = np.array(new[] { true, false, true, false });
             var masked = tf.boolean_mask(tensor, mask);
-            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 2 }, masked.ToArray<int>()));
+            using (var sess = tf.Session())
+            {
+                var result = sess.run(masked);
+                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 2 }, masked.ToArray<int>()));
+            }
         }
     }
 }

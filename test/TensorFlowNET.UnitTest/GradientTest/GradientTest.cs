@@ -4,13 +4,13 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.Gradient
 {
-    [Ignore]
     [TestClass]
-    public class GradientTest : PythonTest
+    public class GradientTest : GraphModeTestBase
     {
         [TestMethod]
         public void BroadcastToGrad()
@@ -45,7 +45,6 @@ namespace TensorFlowNET.UnitTest.Gradient
             }
         }
 
-        [Ignore("TODO")]
         [TestMethod]
         public void testGradients()
         {

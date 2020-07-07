@@ -14,7 +14,6 @@ using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
 {
-    [Ignore]
     [TestClass]
     public class SessionTest : CApiTest
     {
@@ -22,7 +21,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         /// tensorflow\c\c_api_test.cc
         /// `TEST(CAPI, Session)`
         /// </summary>
-        [TestMethod, Ignore]
+        [TestMethod]
         public void Session()
         {
             lock (Locks.ProcessWide)

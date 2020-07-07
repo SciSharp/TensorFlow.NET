@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.UnitTest;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 
@@ -14,7 +15,7 @@ namespace TensorFlowNET.UnitTest.nest_test
     /// excerpt of tensorflow/python/framework/util/nest_test.py
     /// </summary>
     [TestClass]
-    public class NestTest : PythonTest
+    public class NestTest : GraphModeTestBase
     {
         [TestInitialize]
         public void TestInitialize()
