@@ -119,6 +119,9 @@ namespace Tensorflow
             {
                 switch (dtype)
                 {
+                    case TF_DataType.TF_DOUBLE:
+                        value = Convert.ToDouble(value);
+                        break;
                     case TF_DataType.TF_FLOAT:
                         value = Convert.ToSingle(value);
                         break;

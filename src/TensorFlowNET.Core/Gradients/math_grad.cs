@@ -609,7 +609,7 @@ namespace Tensorflow.Gradients
             return tf_with(ops.control_dependencies(grads), delegate
             {
                 x = math_ops.conj(x);
-                var y = constant_op.constant(2.0f, dtype: x.dtype);
+                var y = constant_op.constant(2.0, dtype: x.dtype);
                 return new Tensor[] { math_ops.multiply(grad, math_ops.multiply(x, y)) };
             });
         }

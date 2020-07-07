@@ -22,10 +22,10 @@ namespace Tensorflow.Gradients
 
         public long GetID() => id;
 
-        public Tensor ZerosLike(int[] shape = null, TF_DataType dtype = TF_DataType.TF_FLOAT)
-            => tf.zeros(shape == null ? new int[0] : shape, dtype: dtype);
+        public Tensor ZerosLike()
+            => tf.zeros(shape: shape, dtype: dtype);
 
-        public Tensor OnesLike(int[] shape = null, TF_DataType dtype = TF_DataType.TF_FLOAT)
-            => tf.ones(shape == null ? new int[0] : shape, dtype: dtype);
+        public Tensor OnesLike()
+            => tf.ones(shape: shape, dtype: dtype);
     }
 }

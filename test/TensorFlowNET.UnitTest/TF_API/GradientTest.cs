@@ -13,7 +13,7 @@ namespace Tensorflow.UnitTest.TF_API
         [TestMethod]
         public void GradientFloatTest()
         {
-            var x = tf.Variable(3.0, dtype: TF_DataType.TF_FLOAT);
+            var x = tf.Variable(3.0, dtype: tf.float32);
             using var tape = tf.GradientTape();
             var y = tf.square(x);
             var y_grad = tape.gradient(y, x);
@@ -22,26 +22,22 @@ namespace Tensorflow.UnitTest.TF_API
 
         [TestMethod]
         public void GradientDefaultTest()
-        {//error 1#: Variable default type 
+        {
             var x = tf.Variable(3.0);
             using var tape = tf.GradientTape();
             var y = tf.square(x);
             var y_grad = tape.gradient(y, x);
             Assert.AreEqual(9.0, (double)y);
         }
+
         [TestMethod]
         public void GradientDoubleTest()
-        {//error 2#: Variable double type
-            var x = tf.Variable(3.0, dtype: TF_DataType.TF_DOUBLE);
+        {
+            var x = tf.Variable(3.0, dtype: tf.float64);
             using var tape = tf.GradientTape();
             var y = tf.square(x);
             var y_grad = tape.gradient(y, x);
             Assert.AreEqual(9.0, (double)y);
         }
-
-
-
-
-
     }
 }
