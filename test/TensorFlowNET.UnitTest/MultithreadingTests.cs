@@ -7,13 +7,13 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
-using Tensorflow.Util;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class MultithreadingTests
+    public class MultithreadingTests : GraphModeTestBase
     {
         [TestMethod]
         public void SessionCreation()
@@ -184,7 +184,6 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
-        [Ignore]
         [TestMethod]
         public void SessionRun()
         {
@@ -208,7 +207,6 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
-        [Ignore]
         [TestMethod]
         public void SessionRun_InsideSession()
         {
@@ -231,7 +229,6 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
-        [Ignore]
         [TestMethod]
         public void SessionRun_Initialization()
         {
@@ -251,7 +248,6 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
-        [Ignore]
         [TestMethod]
         public void SessionRun_Initialization_OutsideSession()
         {
@@ -268,7 +264,6 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
-        [Ignore]
         [TestMethod]
         public void TF_GraphOperationByName()
         {
@@ -309,23 +304,15 @@ namespace TensorFlowNET.UnitTest
                     var inp = inputs.Select(name => sess.graph.OperationByName(name).output).ToArray();
                     var outp = sess.graph.OperationByName("softmax_tensor").output;
 
-                    for (var i = 0; i < 100; i++)
+                    for (var i = 0; i < 8; i++)
                     {
-                        {
-                            var data = new float[96];
-                            FeedItem[] feeds = new FeedItem[2];
+                        var data = new float[96];
+                        FeedItem[] feeds = new FeedItem[2];
 
-                            for (int f = 0; f < 2; f++)
-                                feeds[f] = new FeedItem(inp[f], new NDArray(data));
+                        for (int f = 0; f < 2; f++)
+                            feeds[f] = new FeedItem(inp[f], new NDArray(data));
 
-                            try
-                            {
-                                sess.run(outp, feeds);
-                            } catch (Exception ex)
-                            {
-                                Console.WriteLine(ex);
-                            }
-                        }
+                        sess.run(outp, feeds);
                     }
                 }
             }
