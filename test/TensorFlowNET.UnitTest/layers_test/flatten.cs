@@ -3,13 +3,13 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.layers_test
 {
-    [Ignore]
     [TestClass]
-    public class flatten
+    public class flatten : GraphModeTestBase
     {
         [TestMethod]
         public void Case1()

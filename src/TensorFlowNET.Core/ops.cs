@@ -155,7 +155,7 @@ namespace Tensorflow
         /// </param>
         /// <param name="control_inputs">A list of `Operation`s to set as control dependencies.</param>
         /// <returns>A wrapped TF_Operation*.</returns>
-        public static IntPtr _create_c_op<T>(Graph graph, NodeDef node_def, T[] inputs, Operation[] control_inputs)
+        public static (IntPtr, OperationDescription) _create_c_op<T>(Graph graph, NodeDef node_def, T[] inputs, Operation[] control_inputs)
         {
             lock (Locks.ProcessWide)
             {
@@ -198,7 +198,7 @@ namespace Tensorflow
 
                 status.Check(true);
 
-                return c_op;
+                return (c_op, op_desc);
             }
         }
 
@@ -207,7 +207,7 @@ namespace Tensorflow
             return graph.GetOpDef(type);
         }
 
-        public static NodeDef _NodeDef(string op_type, string name, string device = "", Dictionary<string, AttrValue> attrs = null)
+        public static NodeDef _NodeDef(string op_type, string name, Dictionary<string, AttrValue> attrs = null)
         {
             var node_def = new NodeDef();
             node_def.Op = op_type;

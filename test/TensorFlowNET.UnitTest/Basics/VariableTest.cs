@@ -10,7 +10,6 @@ namespace TensorFlowNET.UnitTest.Basics
     [TestClass]
     public class VariableTest
     {
-        [Ignore]
         [TestMethod]
         public void NewVariable()
         {
@@ -34,7 +33,6 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.AreEqual(4, (int)y.numpy());
         }
 
-        [Ignore]
         [TestMethod]
         public void Assign1()
         {

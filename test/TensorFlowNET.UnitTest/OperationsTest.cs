@@ -7,12 +7,12 @@ using Tensorflow;
 using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
 using static Tensorflow.Binding;
+using Tensorflow.UnitTest;
 
 namespace TensorFlowNET.UnitTest.Basics
 {
-    [Ignore]
     [TestClass]
-    public class OperationsTest
+    public class OperationsTest : GraphModeTestBase
     {
         /// <summary>
         /// Port from tensorflow\c\c_api_test.cc
@@ -726,6 +726,7 @@ namespace TensorFlowNET.UnitTest.Basics
             #endregion
         }
 
+        [Ignore]
         [TestMethod]
         public void divOpTests()
         {

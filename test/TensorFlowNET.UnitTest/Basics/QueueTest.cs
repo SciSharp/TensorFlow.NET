@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.Basics
 {
-    [Ignore]
     [TestClass]
-    public class QueueTest
+    public class QueueTest : GraphModeTestBase
     {
         [TestMethod]
         public void PaddingFIFOQueue()

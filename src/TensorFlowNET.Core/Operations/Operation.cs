@@ -64,7 +64,7 @@ namespace Tensorflow
         public string Device => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 
         bool _is_stateful;
-
+        public OperationDescription OpDesc { get; set; }
 
         public NodeDef node_def
         {
@@ -170,7 +170,7 @@ namespace Tensorflow
                 op_def = g.GetOpDef(node_def.Op);
 
             var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
-            _handle = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
+            (_handle, OpDesc) = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
             _is_stateful = op_def.IsStateful;
 
             // Initialize self._outputs.

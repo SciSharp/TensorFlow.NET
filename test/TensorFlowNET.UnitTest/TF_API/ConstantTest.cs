@@ -3,6 +3,7 @@ using NumSharp;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using Tensorflow;
 using static Tensorflow.Binding;
 
@@ -158,23 +159,6 @@ namespace TensorFlowNET.UnitTest.Basics
             var c = a * b;
 
             Assert.AreEqual(6.0, (double)c);
-        }
-
-        [TestMethod]
-        public void StringEncode()
-        {
-            string str = "Hello, TensorFlow.NET!";
-            var handle = Marshal.StringToHGlobalAnsi(str);
-            var dst_len = c_api.TF_StringEncodedSize((ulong)str.Length);
-            Assert.AreEqual(dst_len, (ulong)23);
-            IntPtr dst = Marshal.AllocHGlobal((int)dst_len);
-            var encoded_len = c_api.TF_StringEncode(handle, (ulong)str.Length, dst, dst_len, status.Handle);
-            Assert.AreEqual((ulong)23, encoded_len);
-            Assert.AreEqual(status.Code, TF_Code.TF_OK);
-            string encoded_str = Marshal.PtrToStringUTF8(dst + sizeof(byte));
-            Assert.AreEqual(encoded_str, str);
-            Assert.AreEqual(str.Length, Marshal.ReadByte(dst));
-            // c_api.TF_StringDecode(dst, (ulong)str.Length, IntPtr.Zero, ref dst_len, status.Handle);
         }
 
         [TestMethod]

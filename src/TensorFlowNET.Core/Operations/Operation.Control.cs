@@ -40,8 +40,8 @@ namespace Tensorflow
 
         public void _add_control_input(Operation op)
         {
-            //c_api.TF_AddControlInput(_operDesc, op);
-            c_api.AddControlInput(graph, _handle, op);
+            c_api.TF_AddControlInput(OpDesc, op);
+            //c_api.AddControlInput(graph, _handle, op);
         }
 
         public void _add_control_inputs(Operation[] ops)

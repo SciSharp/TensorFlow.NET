@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using Tensorflow.Eager;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.ops_test
@@ -10,9 +11,8 @@ namespace TensorFlowNET.UnitTest.ops_test
     /// <summary>
     /// excerpt of tensorflow/python/framework/ops_test.py
     /// </summary>
-    [Ignore]
     [TestClass]
-    public class ControlDependenciesTest : PythonTest
+    public class ControlDependenciesTest : GraphModeTestBase
     {
         [TestMethod]
         public void TestBasic()
@@ -34,72 +34,6 @@ namespace TensorFlowNET.UnitTest.ops_test
             // e should be dominated by c.
             Assert.AreEqual(0, e.op.control_inputs.Length);
         }
-
-        [Ignore("Future is not supported yet")]
-        [TestMethod]
-        public void TestEager()
-        {
-            Tensor a = null, c = null;
-            object b = null;
-            var calls = 0;
-            Func<Tensor> future = () =>
-            {
-                calls += 1;
-                return constant_op.constant(2.0);
-            };
-            using (var opts = new ContextOptions())
-            using (var status = new Status())
-            using (var context = new Context(opts, status))
-            {
-                if (context.executing_eagerly())
-                {
-                    // TODO: make this compile (see original Python code below)
-                    a = constant_op.constant(1.0);
-                    b = future; // <--- {henon} obviously, this doesn't compile, looks like control_dependencies needs to be able to take callables as well. 
-                    tf_with(ops.control_dependencies(new object[] { a, b }), ctrl =>
-                      {
-                          return c = constant_op.constant(3.0);
-                      });
-                    Assert.AreEqual(calls, 1);
-                }
-                else
-                {
-                    var g = tf.Graph().as_default();
-                    a = constant_op.constant(1.0);
-                    var b1 = future();
-                    tf_with(g.control_dependencies(new[] { a, b }), ctrl =>
-                    {
-                        c = constant_op.constant(3.0);
-                    });
-                    Assert.IsTrue(Enumerable.SequenceEqual(c.op.control_inputs, new[] { a.op, b1.op }));
-                    Assert.AreEqual(1, calls);
-                }
-            }
-            /*
-              def testEager(self):
-                def future():
-                  future.calls += 1
-                  return constant_op.constant(2.0)
-                future.calls = 0
-
-                if context.executing_eagerly():
-                  a = constant_op.constant(1.0)
-                  b = future
-                  with ops.control_dependencies([a, b]):
-                    c = constant_op.constant(3.0)
-                  self.assertEqual(future.calls, 1)
-                else:
-                  g = ops.Graph()
-                  with g.as_default():
-                    a = constant_op.constant(1.0)
-                    b = future()
-                    with g.control_dependencies([a, b]):
-                      c = constant_op.constant(3.0)
-                  self.assertEqual(c.op.control_inputs, [a.op, b.op])
-                  self.assertEqual(future.calls, 1)
-            */
-        }
-
 
         [Ignore("How to port the ConvertibleObj?")]
         [TestMethod]

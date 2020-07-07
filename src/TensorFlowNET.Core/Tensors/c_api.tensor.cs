@@ -187,9 +187,6 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern unsafe ulong TF_StringEncode(byte* src, ulong src_len, sbyte* dst, ulong dst_len, SafeStatusHandle status);
 
-        [DllImport(TensorFlowLibName)]
-        public static extern unsafe ulong TF_StringEncode(IntPtr src, ulong src_len, IntPtr dst, ulong dst_len, SafeStatusHandle status);
-
         /// <summary>
         /// Decode a string encoded using TF_StringEncode.
         /// </summary>
@@ -199,9 +196,6 @@ namespace Tensorflow
         /// <param name="dst_len">size_t*</param>
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
-        [DllImport(TensorFlowLibName)]
-        public static extern ulong TF_StringDecode(IntPtr src, ulong src_len, IntPtr dst, ref ulong dst_len, SafeStatusHandle status);
-
         [DllImport(TensorFlowLibName)]
         public static extern unsafe ulong TF_StringDecode(byte* src, ulong src_len, byte** dst, ref ulong dst_len, SafeStatusHandle status);
 

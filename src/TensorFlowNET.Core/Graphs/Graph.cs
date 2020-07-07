@@ -259,7 +259,8 @@ namespace Tensorflow
 
         public Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes,
             TF_DataType[] input_types = null, string name = null,
-            Dictionary<string, AttrValue> attrs = null, OpDef op_def = null)
+            Dictionary<string, AttrValue> attrs = null, OpDef op_def = null,
+            bool compute_device = true)
         {
             if (inputs == null)
                 inputs = new Tensor[0];
@@ -270,7 +271,7 @@ namespace Tensorflow
             // If a names ends with a '/' it is a "name scope" and we use it as-is,
             // after removing the trailing '/'.
             name = name.EndsWith("/") ? ops.name_from_scope_name(name) : unique_name(name);
-            var node_def = ops._NodeDef(op_type, name, device: "", attrs: attrs);
+            var node_def = ops._NodeDef(op_type, name, attrs: attrs);
 
             var input_ops = inputs.Select(x => x.op).ToArray();
             var control_inputs = _control_dependencies_for_inputs(input_ops);
@@ -284,7 +285,7 @@ namespace Tensorflow
                 original_op: null,
                 op_def: op_def);
 
-            _create_op_helper(op, true);
+            _create_op_helper(op, compute_device);
 
             /*Console.Write($"create_op: {op_type} '{node_def.Name}'");
             Console.Write($", inputs: {(inputs.Length == 0 ? "empty" : String.Join(", ", inputs.Select(x => x.name)))}");

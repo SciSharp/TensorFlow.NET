@@ -1,16 +1,16 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.Basics
 {
     [TestClass]
-    public class NameScopeTest
+    public class NameScopeTest : GraphModeTestBase
     {
         string name = "";
 
-        [Ignore]
         [TestMethod]
         public void NestedNameScope()
         {

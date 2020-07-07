@@ -27,7 +27,7 @@ namespace Tensorflow
             // 100K gradient 44M.
             mm.Execute(10, 10 * batchSize, cases.Gradient);
 
-            // 120M
+            // 95M
             Console.WriteLine("Finished.");
             Console.ReadLine();
         }

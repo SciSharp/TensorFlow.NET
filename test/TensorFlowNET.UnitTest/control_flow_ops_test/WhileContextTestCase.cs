@@ -1,24 +1,24 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.control_flow_ops_test
 {
     [TestClass]
-    public class WhileContextTestCase : PythonTest
+    public class WhileContextTestCase : GraphModeTestBase
     {
         /// <summary>
         /// https://www.tensorflow.org/api_docs/python/tf/while_loop
         /// </summary>
-        [Ignore]
         [TestMethod]
         public void SimpleWhileLoop()
         {
             var i = constant_op.constant(0, name: "i");
             var c = new Func<Tensor, Tensor>(x => tf.less(x, 10, name: "c"));
             var b = new Func<Tensor, Tensor>(x => tf.add(x, 1, name: "c"));
-            //var r = control_flow_ops.while_loop(c, b, i);
+            // var r = control_flow_ops.while_loop(c, b, i);
         }
 
         private void _testWhileContextHelper(int maximum_iterations)

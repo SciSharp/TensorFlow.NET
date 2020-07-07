@@ -2,15 +2,14 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.img_test
 {
-    [Ignore]
     [TestClass]
-    public class TestCrop
+    public class TestCrop : GraphModeTestBase
     {
-
         [TestMethod]
         public void TestCropAndResize()
         {
