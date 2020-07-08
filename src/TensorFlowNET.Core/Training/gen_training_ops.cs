@@ -59,7 +59,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Operation resource_apply_gradient_descent(EagerTensor var, EagerTensor alpha, EagerTensor delta, bool use_locking = false, string name = null)
+        public static Operation resource_apply_gradient_descent(Tensor var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
         {
             if (tf.context.executing_eagerly())
             {
@@ -79,7 +79,7 @@ namespace Tensorflow
                 use_locking
             });
 
-            return _op.outputs[0];
+            return _op;
         }
     }
 }

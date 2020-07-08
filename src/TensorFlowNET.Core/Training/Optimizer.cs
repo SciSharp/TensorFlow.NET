@@ -107,7 +107,7 @@ namespace Tensorflow
         /// </returns>
         public Operation minimize(Tensor loss, 
             RefVariable global_step = null,
-            List<RefVariable> var_list=null,
+            List<ResourceVariable> var_list=null,
             GateGradientType gate_gradients = GateGradientType.GATE_OP,
             int? aggregation_method=null,
             bool colocate_gradients_with_ops = false, string name=null, Tensor grad_loss=null)
@@ -142,17 +142,17 @@ namespace Tensorflow
         /// <returns>
         /// An `Operation` that applies the specified gradients. If `global_step`
         /// was not None, that operation also increments `global_step`.</returns>
-        public Operation apply_gradients(Tuple<Tensor, RefVariable>[] grads_and_vars, RefVariable global_step = null, string name = null)
+        public Operation apply_gradients(Tuple<Tensor, ResourceVariable>[] grads_and_vars, RefVariable global_step = null, string name = null)
         {
             // No DistributionStrategy case.
-            var converted_grads_and_vars = new List<(Tensor, RefVariable, _OptimizableVariable)>();
+            var converted_grads_and_vars = new List<(Tensor, ResourceVariable, _OptimizableVariable)>();
             foreach (var (g, v) in grads_and_vars)
             {
                 if(g != null)
                 {
                     // Convert the grad to Tensor or IndexedSlices if necessary.
                     var gR = ops.convert_to_tensor_or_indexed_slices(g);
-                    var p = _get_processor(v);
+                    var p = optimizer._get_processor(v);
                     converted_grads_and_vars.Add((gR, v, p));
                 }
             }
@@ -230,7 +230,7 @@ namespace Tensorflow
         /// silently ignored).
         /// </summary>
         /// <param name="var_list"></param>
-        protected virtual void _create_slots(RefVariable[] var_list)
+        protected virtual void _create_slots(ResourceVariable[] var_list)
         {
             
         }
@@ -276,6 +276,12 @@ namespace Tensorflow
             return control_flow_ops.group(update_ops, name_scope);
         }
 
+        public virtual Operation _apply_dense(Tensor grad, ResourceVariable var)
+        {
+            var alpha = math_ops.cast(LearningRateTensor, var.dtype.as_base_dtype());
+            return gen_training_ops.resource_apply_gradient_descent(var.Handle, alpha, grad, use_locking: _use_locking).op;
+        }
+
         public virtual Operation _apply_dense(Tensor grad, RefVariable var)
         {
             var alpha = math_ops.cast(LearningRateTensor, var.dtype.as_base_dtype());
@@ -289,6 +295,16 @@ namespace Tensorflow
         /// <param name="var"></param>
         /// <returns></returns>
         public virtual Operation _apply_sparse_duplicate_indices(IndexedSlices grad, RefVariable var)
+        {
+            var (summed_values, unique_indices) = _deduplicate_indexed_slices(values: grad.values, indices: grad.indices);
+            var gradient_no_duplicate_indices = new IndexedSlices(
+                indices: unique_indices,
+                values: summed_values,
+                dense_shape: grad.dense_shape);
+            return _apply_sparse(gradient_no_duplicate_indices, var);
+        }
+
+        public virtual Operation _apply_sparse_duplicate_indices(IndexedSlices grad, ResourceVariable var)
         {
             var (summed_values, unique_indices) = _deduplicate_indexed_slices(values: grad.values, indices: grad.indices);
             var gradient_no_duplicate_indices = new IndexedSlices(
@@ -344,18 +360,6 @@ namespace Tensorflow
             return non_slot;
         }
 
-        private _OptimizableVariable _get_processor(RefVariable v)
-        {
-            if(v is RefVariable)
-            {
-                return new _RefVariableProcessor(v);
-            }
-            else
-            {
-                throw new NotImplementedException("_get_processor");
-            }
-        }
-
         /// <summary>
         /// Compute gradients of `loss` for the variables in `var_list`.
         /// </summary>
@@ -365,8 +369,8 @@ namespace Tensorflow
         /// A list of (gradient, variable) pairs. Variable is always present, but
         /// gradient can be `None`.
         /// </returns>
-        public Tuple<Tensor, RefVariable>[] compute_gradients(Tensor loss,
-            List<RefVariable> var_list = null,
+        public Tuple<Tensor, ResourceVariable>[] compute_gradients(Tensor loss,
+            List<ResourceVariable> var_list = null,
             int? aggregation_method = null,
             GateGradientType gate_gradients = GateGradientType.GATE_OP,
             bool colocate_gradients_with_ops = false,
@@ -374,26 +378,28 @@ namespace Tensorflow
         {
             // Scale loss if using a "mean" loss reduction and multiple replicas.
             loss = _scale_loss(loss);
-#pragma warning disable CS0219 // Variable is assigned but its value is never used
-            int num_towers = 1;
-#pragma warning restore CS0219 // Variable is assigned but its value is never used
 
             if(var_list == null)
             {
-                var vars = ops.get_collection<RefVariable>(tf.GraphKeys.TRAINABLE_RESOURCE_VARIABLES);
+                var vars = ops.get_collection<ResourceVariable>(tf.GraphKeys.TRAINABLE_RESOURCE_VARIABLES);
                 var tmp = variables.trainable_variables();
                 switch (tmp)
                 {
-                    case List<RefVariable> values:
+                    case List<ResourceVariable> values:
+                        var_list = values.Concat(vars).ToList();
+                        break;
+                    /*case List<RefVariable> values:
                         var_list = values.Concat(vars).ToList();
                         break;
                     case List<IVariableV1> values:
                         var_list = values.Select(x => x as RefVariable).Concat(vars).ToList();
-                        break;
+                        break;*/
+                    default:
+                        throw new NotImplementedException("");
                 }
             }
 
-            var_list = var_list.Concat(ops.get_collection<RefVariable>(tf.GraphKeys._STREAMING_MODEL_PORTS)).ToList();
+            var_list = var_list.Concat(ops.get_collection<ResourceVariable>(tf.GraphKeys._STREAMING_MODEL_PORTS)).ToList();
             var processors = var_list.Select(v => optimizer._get_processor(v)).ToList();
             var var_refs = processors.Select(x => x.target()).ToArray();
 
@@ -406,7 +412,7 @@ namespace Tensorflow
                 grads = control_flow_ops.tuple(grads);
 
             var grads_and_vars = zip(grads, var_list)
-                .Select(x => new Tuple<Tensor, RefVariable>(x.Item1, x.Item2))
+                .Select(x => new Tuple<Tensor, ResourceVariable>(x.Item1, x.Item2))
                 .ToArray();
 
             return grads_and_vars;

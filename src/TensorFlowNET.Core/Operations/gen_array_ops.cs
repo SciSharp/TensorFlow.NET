@@ -268,6 +268,16 @@ namespace Tensorflow
 
         public static Tensor rank(Tensor input, string name = null)
         {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Rank", name,
+                    null,
+                    input);
+
+                return results[0];
+            }
+
             var _op = tf._op_def_lib._apply_op_helper("Rank", name: name, args: new { input });
 
             return _op.outputs[0];

@@ -567,7 +567,7 @@ namespace Tensorflow
             }
             else
             {
-                if(x is Tensor)
+                if(x.rank > -1)
                     return constant_op.constant(np.arange(x.rank));
 
                 var rank = array_ops.rank(x);
