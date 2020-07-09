@@ -16,9 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Index;
 using System.Linq;
-using System.Range;
 using System.Text;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
@@ -50,16 +48,16 @@ namespace Tensorflow
             {
                 throw new ValueError("\'image\' must be fully defined.");
             }
-            foreach (int x in image_shape[-3..^0])
+            foreach (int x in image_shape[-3..])
             {
                 throw new ValueError("inner 3 dims of \'image.shape\' must be > 0: %s" %
                                     image_shape);
             }
-            if ( !image_shape[-3..^0].is_fully_defined() )
+            if ( !image_shape[-3..].is_fully_defined() )
             {
                 return new Operation[] {
                     check_ops.assert_positive(
-                        array_ops.shape(image)[-3..^0],
+                        array_ops.shape(image)[-3..],
                         @"inner 3 dims of 'image.shape'
                          must be > 0."),
                     check_ops.assert_greater_equal(
