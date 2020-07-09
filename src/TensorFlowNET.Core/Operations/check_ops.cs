@@ -56,6 +56,38 @@ namespace Tensorflow
                 return control_flow_ops.Assert(condition, data);
             });
         }
+       
+        public static Operation assert_greater_equal(Tensor x, Tensorflow y, object[] data = null, string message = null,
+            string name = null)
+        {
+            if (message == null)
+                message = "";
+
+            return tf_with(ops.name_scope(name, "assert_greater_equal", new { x, y, data}), delegate
+            {
+                x = ops.convert_to_tensor(x, name: "x");
+                y = ops.convert_to_tensor(y, name: "y");
+                string x_name = x.name;
+                string y_name = y.name;
+                if (data == null)
+                {
+                    data = new object[]
+                    {
+                        message,
+                        "Condition x >= y did not hold element-wise:",
+                        $"x (%s) = {x_name}",
+                        x,
+                        $"y (%s) = {y_name}",
+                        y
+                    };
+                }
+
+                var condition = math_ops.reduce_all(gen_math_ops.greater_equal(x, y));
+                var x_static = tensor_util.constant_value(x);
+                var y_static = tensor_util.constant_value(y);
+                return control_flow_ops.Assert(condition, data);
+            });
+        }
 
         public static Operation assert_positive(Tensor x, object[] data = null, string message = null, string name = null)
         {
