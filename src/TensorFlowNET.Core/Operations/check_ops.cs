@@ -57,7 +57,7 @@ namespace Tensorflow
             });
         }
        
-        public static Operation assert_greater_equal(Tensor x, Tensorflow y, object[] data = null, string message = null,
+        public static Operation assert_greater_equal(Tensor x, Tensor y, object[] data = null, string message = null,
             string name = null)
         {
             if (message == null)
