@@ -275,6 +275,11 @@ namespace Tensorflow
                     return NodeDef.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
                 }
         }
+        
+        public TensorShape get_shape(Tensor x)
+        {
+            return x.shape;
+        }
 
         /// <summary>
         /// Update the input to this operation at the given index.
