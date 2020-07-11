@@ -18,7 +18,7 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public Tensor assign_add<T>(RefVariable @ref, T value,
+        public Tensor assign_add<T>(IVariableV1 @ref, T value,
             bool use_locking = false, string name = null)
             => state_ops.assign_add(@ref, value, use_locking: use_locking, name: name);
     }

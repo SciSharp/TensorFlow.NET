@@ -106,15 +106,11 @@ namespace Tensorflow
         //  Returns:
         //    Same as "ref".  Returned as a convenience for operations that want
         //    to use the new value after the variable has been updated.
-        public static Tensor assign_add<T>(RefVariable @ref,
+        public static Operation assign_add<T>(IVariableV1 @ref,
             T value,
             bool use_locking = false,
             string name = null)
-        {
-            if (@ref.dtype.is_ref_dtype())
-                return gen_state_ops.assign_add(@ref, value, use_locking: use_locking, name: name);
-            throw new NotImplementedException("assign_add");
-        }
+            => @ref.assign_add(value, use_locking: use_locking, name: name);
 
         public static Tensor scatter_add(RefVariable @ref, Tensor indices, Tensor updates, bool use_locking = false, string name = null)
         {

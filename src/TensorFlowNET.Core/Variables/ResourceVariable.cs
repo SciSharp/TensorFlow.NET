@@ -139,9 +139,8 @@ namespace Tensorflow
                         tf_with(ops.name_scope("Assign"), scope1 =>
                         {
                             string n = scope1;
-                            initializer_op = gen_resource_variable_ops.assign_variable_op(handle, 
-                                variables._try_guard_against_uninitialized_dependencies(name, _initial_value),
-                                name: n);
+                            var _initial_value2 = variables._try_guard_against_uninitialized_dependencies(name, _initial_value);
+                            initializer_op = gen_resource_variable_ops.assign_variable_op(handle, _initial_value2, name: n);
                         });
                     }
 
@@ -149,7 +148,8 @@ namespace Tensorflow
                     // messages.
                     tf_with(ops.name_scope("Read"), delegate
                     {
-                        var value = _read_variable_op();
+                        var value = gen_resource_variable_ops.read_variable_op(handle, _dtype);
+                        // _maybe_set_handle_data(dtype, handle, value);
                         _graph_element = value;
                     });
 
@@ -232,17 +232,6 @@ namespace Tensorflow
 
                 return array_ops.identity(value);
             });
-        }
-
-        public override string ToString()
-        {
-            return $"tf.Variable: '{Name}' shape={string.Join(",", shape)}, dtype={dtype.as_numpy_name()}, numpy={EagerTensor.GetFormattedString(dtype, numpy())}";
-        }
-
-        protected override void DisposeUnmanagedResources(IntPtr handle)
-        {
-            // delete
-            // c_api.TFE_DeleteResourceVariable(handle);
         }
     }
 }

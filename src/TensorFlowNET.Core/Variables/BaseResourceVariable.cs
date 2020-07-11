@@ -122,15 +122,28 @@ namespace Tensorflow
                 return array_ops.identity(value);
             });
 
+        public Operation assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true)
+        {
+            var assign_add_op = gen_resource_variable_ops.assign_add_variable_op(Handle,
+                ops.convert_to_tensor(delta, dtype: dtype), name: name);
+            
+            /*if (read_value)
+                return _lazy_read(assign_add_op);*/
+            return assign_add_op;
+        }
+
         public override string ToString()
-            => $"tf.Variable '{Name}' shape={shape} dtype={dtype.as_numpy_name()}, numpy={numpy()}";
+        {
+            if (tf.context.executing_eagerly())
+                return $"tf.Variable: '{Name}' shape={string.Join(",", shape)}, dtype={dtype.as_numpy_name()}, numpy={EagerTensor.GetFormattedString(dtype, numpy())}";
+            else
+                return $"tf.Variable: '{Name}' shape={string.Join(",", shape)}, dtype={dtype.as_numpy_name()}";
+        }
 
         public NDArray numpy() => read_value().numpy();
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
-            // delete
-            // c_api.TFE_DeleteResourceVariable(handle);
         }
     }
 }

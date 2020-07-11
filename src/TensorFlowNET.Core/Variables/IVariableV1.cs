@@ -37,5 +37,7 @@ namespace Tensorflow
         public Operation Op { get; }
         public Tensor GraphElement { get; }
         public Graph Graph { get; }
+        public TF_DataType dtype { get; }
+        public Operation assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true);
     }
 }

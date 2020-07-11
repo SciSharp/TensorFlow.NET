@@ -106,7 +106,7 @@ namespace Tensorflow
         /// was not `None`, that operation also increments `global_step`.
         /// </returns>
         public Operation minimize(Tensor loss, 
-            RefVariable global_step = null,
+            IVariableV1 global_step = null,
             List<ResourceVariable> var_list=null,
             GateGradientType gate_gradients = GateGradientType.GATE_OP,
             int? aggregation_method=null,
@@ -142,7 +142,7 @@ namespace Tensorflow
         /// <returns>
         /// An `Operation` that applies the specified gradients. If `global_step`
         /// was not None, that operation also increments `global_step`.</returns>
-        public Operation apply_gradients(Tuple<Tensor, ResourceVariable>[] grads_and_vars, RefVariable global_step = null, string name = null)
+        public Operation apply_gradients(Tuple<Tensor, ResourceVariable>[] grads_and_vars, IVariableV1 global_step = null, string name = null)
         {
             // No DistributionStrategy case.
             var converted_grads_and_vars = new List<(Tensor, ResourceVariable, _OptimizableVariable)>();
@@ -192,7 +192,7 @@ namespace Tensorflow
                 {
                     tf_with(ops.control_dependencies(new object[] {_finish(update_ops.ToArray(), "update")}), dep =>
                     {
-                        ops.colocate_with(global_step);
+                        // ops.colocate_with(global_step);
                         // TODO: port this if branch once ResourceVariable has been ported!
                         //if (global_step is ResourceVariable)
                         //{
