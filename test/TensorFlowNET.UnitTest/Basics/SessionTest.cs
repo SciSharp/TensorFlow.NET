@@ -21,7 +21,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         /// tensorflow\c\c_api_test.cc
         /// `TEST(CAPI, Session)`
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void Session()
         {
             lock (Locks.ProcessWide)
