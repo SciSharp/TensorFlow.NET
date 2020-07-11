@@ -1,6 +1,6 @@
 @ECHO OFF
 
-set SRC_DIR=D:/SciSharp/tensorflow
+set SRC_DIR=D:/SciSharp/tensorflow-google
 set DST_DIR=D:/SciSharp/TensorFlow.NET/src/TensorFlowNET.Core/Protobuf
 
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/resource_handle.proto
@@ -39,5 +39,6 @@ protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/struct.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/verifier_config.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/util/event.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/training/checkpoint_state.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/framework/cpp_shape_inference.proto
 
 PAUSE

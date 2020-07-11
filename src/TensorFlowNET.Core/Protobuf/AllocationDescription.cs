@@ -29,10 +29,10 @@ namespace Tensorflow {
             "dGlvbhIXCg9yZXF1ZXN0ZWRfYnl0ZXMYASABKAMSFwoPYWxsb2NhdGVkX2J5",
             "dGVzGAIgASgDEhYKDmFsbG9jYXRvcl9uYW1lGAMgASgJEhUKDWFsbG9jYXRp",
             "b25faWQYBCABKAMSHAoUaGFzX3NpbmdsZV9yZWZlcmVuY2UYBSABKAgSCwoD",
-            "cHRyGAYgASgEQnsKGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0IbQWxsb2Nh",
-            "dGlvbkRlc2NyaXB0aW9uUHJvdG9zUAFaPWdpdGh1Yi5jb20vdGVuc29yZmxv",
-            "dy90ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28vY29yZS9mcmFtZXdvcmv4AQFi",
-            "BnByb3RvMw=="));
+            "cHRyGAYgASgEQpsBChhvcmcudGVuc29yZmxvdy5mcmFtZXdvcmtCG0FsbG9j",
+            "YXRpb25EZXNjcmlwdGlvblByb3Rvc1ABWl1naXRodWIuY29tL3RlbnNvcmZs",
+            "b3cvdGVuc29yZmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvZnJhbWV3b3JrL2Fs",
+            "bG9jYXRpb25fZGVzY3JpcHRpb25fZ29fcHJvdG/4AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {

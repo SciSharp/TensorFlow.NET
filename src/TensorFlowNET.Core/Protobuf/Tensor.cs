@@ -42,9 +42,10 @@ namespace Tensorflow {
             "X3ZhbBgQIAMoDUICEAESFgoKdWludDY0X3ZhbBgRIAMoBEICEAEiZwoWVmFy",
             "aWFudFRlbnNvckRhdGFQcm90bxIRCgl0eXBlX25hbWUYASABKAkSEAoIbWV0",
             "YWRhdGEYAiABKAwSKAoHdGVuc29ycxgDIAMoCzIXLnRlbnNvcmZsb3cuVGVu",
-            "c29yUHJvdG9CbAoYb3JnLnRlbnNvcmZsb3cuZnJhbWV3b3JrQgxUZW5zb3JQ",
-            "cm90b3NQAVo9Z2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVu",
-            "c29yZmxvdy9nby9jb3JlL2ZyYW1ld29ya/gBAWIGcHJvdG8z"));
+            "c29yUHJvdG9CfAoYb3JnLnRlbnNvcmZsb3cuZnJhbWV3b3JrQgxUZW5zb3JQ",
+            "cm90b3NQAVpNZ2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVu",
+            "c29yZmxvdy9nby9jb3JlL2ZyYW1ld29yay90ZW5zb3JfZ29fcHJvdG/4AQFi",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.ResourceHandleReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {

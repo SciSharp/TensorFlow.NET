@@ -25,46 +25,56 @@ namespace Tensorflow {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiV0ZW5zb3JmbG93L2NvcmUvcHJvdG9idWYvc3RydWN0LnByb3RvEgp0ZW5z",
-            "b3JmbG93Gix0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3RlbnNvcl9zaGFw",
-            "ZS5wcm90bxoldGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay90eXBlcy5wcm90",
-            "byLHBAoPU3RydWN0dXJlZFZhbHVlEisKCm5vbmVfdmFsdWUYASABKAsyFS50",
-            "ZW5zb3JmbG93Lk5vbmVWYWx1ZUgAEhcKDWZsb2F0NjRfdmFsdWUYCyABKAFI",
-            "ABIVCgtpbnQ2NF92YWx1ZRgMIAEoEkgAEhYKDHN0cmluZ192YWx1ZRgNIAEo",
-            "CUgAEhQKCmJvb2xfdmFsdWUYDiABKAhIABI6ChJ0ZW5zb3Jfc2hhcGVfdmFs",
-            "dWUYHyABKAsyHC50ZW5zb3JmbG93LlRlbnNvclNoYXBlUHJvdG9IABIyChJ0",
-            "ZW5zb3JfZHR5cGVfdmFsdWUYICABKA4yFC50ZW5zb3JmbG93LkRhdGFUeXBl",
-            "SAASOAoRdGVuc29yX3NwZWNfdmFsdWUYISABKAsyGy50ZW5zb3JmbG93LlRl",
-            "bnNvclNwZWNQcm90b0gAEjQKD3R5cGVfc3BlY192YWx1ZRgiIAEoCzIZLnRl",
-            "bnNvcmZsb3cuVHlwZVNwZWNQcm90b0gAEisKCmxpc3RfdmFsdWUYMyABKAsy",
-            "FS50ZW5zb3JmbG93Lkxpc3RWYWx1ZUgAEi0KC3R1cGxlX3ZhbHVlGDQgASgL",
-            "MhYudGVuc29yZmxvdy5UdXBsZVZhbHVlSAASKwoKZGljdF92YWx1ZRg1IAEo",
-            "CzIVLnRlbnNvcmZsb3cuRGljdFZhbHVlSAASOAoRbmFtZWRfdHVwbGVfdmFs",
-            "dWUYNiABKAsyGy50ZW5zb3JmbG93Lk5hbWVkVHVwbGVWYWx1ZUgAQgYKBGtp",
-            "bmQiCwoJTm9uZVZhbHVlIjgKCUxpc3RWYWx1ZRIrCgZ2YWx1ZXMYASADKAsy",
-            "Gy50ZW5zb3JmbG93LlN0cnVjdHVyZWRWYWx1ZSI5CgpUdXBsZVZhbHVlEisK",
-            "BnZhbHVlcxgBIAMoCzIbLnRlbnNvcmZsb3cuU3RydWN0dXJlZFZhbHVlIooB",
-            "CglEaWN0VmFsdWUSMQoGZmllbGRzGAEgAygLMiEudGVuc29yZmxvdy5EaWN0",
-            "VmFsdWUuRmllbGRzRW50cnkaSgoLRmllbGRzRW50cnkSCwoDa2V5GAEgASgJ",
-            "EioKBXZhbHVlGAIgASgLMhsudGVuc29yZmxvdy5TdHJ1Y3R1cmVkVmFsdWU6",
-            "AjgBIkQKCVBhaXJWYWx1ZRILCgNrZXkYASABKAkSKgoFdmFsdWUYAiABKAsy",
-            "Gy50ZW5zb3JmbG93LlN0cnVjdHVyZWRWYWx1ZSJGCg9OYW1lZFR1cGxlVmFs",
-            "dWUSDAoEbmFtZRgBIAEoCRIlCgZ2YWx1ZXMYAiADKAsyFS50ZW5zb3JmbG93",
-            "LlBhaXJWYWx1ZSJxCg9UZW5zb3JTcGVjUHJvdG8SDAoEbmFtZRgBIAEoCRIr",
-            "CgVzaGFwZRgCIAEoCzIcLnRlbnNvcmZsb3cuVGVuc29yU2hhcGVQcm90bxIj",
-            "CgVkdHlwZRgDIAEoDjIULnRlbnNvcmZsb3cuRGF0YVR5cGUiigMKDVR5cGVT",
-            "cGVjUHJvdG8SQAoPdHlwZV9zcGVjX2NsYXNzGAEgASgOMicudGVuc29yZmxv",
-            "dy5UeXBlU3BlY1Byb3RvLlR5cGVTcGVjQ2xhc3MSLwoKdHlwZV9zdGF0ZRgC",
-            "IAEoCzIbLnRlbnNvcmZsb3cuU3RydWN0dXJlZFZhbHVlEhwKFHR5cGVfc3Bl",
-            "Y19jbGFzc19uYW1lGAMgASgJIucBCg1UeXBlU3BlY0NsYXNzEgsKB1VOS05P",
-            "V04QABIWChJTUEFSU0VfVEVOU09SX1NQRUMQARIXChNJTkRFWEVEX1NMSUNF",
-            "U19TUEVDEAISFgoSUkFHR0VEX1RFTlNPUl9TUEVDEAMSFQoRVEVOU09SX0FS",
-            "UkFZX1NQRUMQBBIVChFEQVRBX0RBVEFTRVRfU1BFQxAFEhYKEkRBVEFfSVRF",
-            "UkFUT1JfU1BFQxAGEhEKDU9QVElPTkFMX1NQRUMQBxIUChBQRVJfUkVQTElD",
-            "QV9TUEVDEAgSEQoNVkFSSUFCTEVfU1BFQxAJYgZwcm90bzM="));
+            "b3JmbG93GiZ0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3RlbnNvci5wcm90",
+            "bxosdGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay90ZW5zb3Jfc2hhcGUucHJv",
+            "dG8aJXRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvdHlwZXMucHJvdG8ikAUK",
+            "D1N0cnVjdHVyZWRWYWx1ZRIrCgpub25lX3ZhbHVlGAEgASgLMhUudGVuc29y",
+            "Zmxvdy5Ob25lVmFsdWVIABIXCg1mbG9hdDY0X3ZhbHVlGAsgASgBSAASFQoL",
+            "aW50NjRfdmFsdWUYDCABKBJIABIWCgxzdHJpbmdfdmFsdWUYDSABKAlIABIU",
+            "Cgpib29sX3ZhbHVlGA4gASgISAASOgoSdGVuc29yX3NoYXBlX3ZhbHVlGB8g",
+            "ASgLMhwudGVuc29yZmxvdy5UZW5zb3JTaGFwZVByb3RvSAASMgoSdGVuc29y",
+            "X2R0eXBlX3ZhbHVlGCAgASgOMhQudGVuc29yZmxvdy5EYXRhVHlwZUgAEjgK",
+            "EXRlbnNvcl9zcGVjX3ZhbHVlGCEgASgLMhsudGVuc29yZmxvdy5UZW5zb3JT",
+            "cGVjUHJvdG9IABI0Cg90eXBlX3NwZWNfdmFsdWUYIiABKAsyGS50ZW5zb3Jm",
+            "bG93LlR5cGVTcGVjUHJvdG9IABJHChlib3VuZGVkX3RlbnNvcl9zcGVjX3Zh",
+            "bHVlGCMgASgLMiIudGVuc29yZmxvdy5Cb3VuZGVkVGVuc29yU3BlY1Byb3Rv",
+            "SAASKwoKbGlzdF92YWx1ZRgzIAEoCzIVLnRlbnNvcmZsb3cuTGlzdFZhbHVl",
+            "SAASLQoLdHVwbGVfdmFsdWUYNCABKAsyFi50ZW5zb3JmbG93LlR1cGxlVmFs",
+            "dWVIABIrCgpkaWN0X3ZhbHVlGDUgASgLMhUudGVuc29yZmxvdy5EaWN0VmFs",
+            "dWVIABI4ChFuYW1lZF90dXBsZV92YWx1ZRg2IAEoCzIbLnRlbnNvcmZsb3cu",
+            "TmFtZWRUdXBsZVZhbHVlSABCBgoEa2luZCILCglOb25lVmFsdWUiOAoJTGlz",
+            "dFZhbHVlEisKBnZhbHVlcxgBIAMoCzIbLnRlbnNvcmZsb3cuU3RydWN0dXJl",
+            "ZFZhbHVlIjkKClR1cGxlVmFsdWUSKwoGdmFsdWVzGAEgAygLMhsudGVuc29y",
+            "Zmxvdy5TdHJ1Y3R1cmVkVmFsdWUiigEKCURpY3RWYWx1ZRIxCgZmaWVsZHMY",
+            "ASADKAsyIS50ZW5zb3JmbG93LkRpY3RWYWx1ZS5GaWVsZHNFbnRyeRpKCgtG",
+            "aWVsZHNFbnRyeRILCgNrZXkYASABKAkSKgoFdmFsdWUYAiABKAsyGy50ZW5z",
+            "b3JmbG93LlN0cnVjdHVyZWRWYWx1ZToCOAEiRAoJUGFpclZhbHVlEgsKA2tl",
+            "eRgBIAEoCRIqCgV2YWx1ZRgCIAEoCzIbLnRlbnNvcmZsb3cuU3RydWN0dXJl",
+            "ZFZhbHVlIkYKD05hbWVkVHVwbGVWYWx1ZRIMCgRuYW1lGAEgASgJEiUKBnZh",
+            "bHVlcxgCIAMoCzIVLnRlbnNvcmZsb3cuUGFpclZhbHVlInEKD1RlbnNvclNw",
+            "ZWNQcm90bxIMCgRuYW1lGAEgASgJEisKBXNoYXBlGAIgASgLMhwudGVuc29y",
+            "Zmxvdy5UZW5zb3JTaGFwZVByb3RvEiMKBWR0eXBlGAMgASgOMhQudGVuc29y",
+            "Zmxvdy5EYXRhVHlwZSLMAQoWQm91bmRlZFRlbnNvclNwZWNQcm90bxIMCgRu",
+            "YW1lGAEgASgJEisKBXNoYXBlGAIgASgLMhwudGVuc29yZmxvdy5UZW5zb3JT",
+            "aGFwZVByb3RvEiMKBWR0eXBlGAMgASgOMhQudGVuc29yZmxvdy5EYXRhVHlw",
+            "ZRIoCgdtaW5pbXVtGAQgASgLMhcudGVuc29yZmxvdy5UZW5zb3JQcm90bxIo",
+            "CgdtYXhpbXVtGAUgASgLMhcudGVuc29yZmxvdy5UZW5zb3JQcm90byKiAwoN",
+            "VHlwZVNwZWNQcm90bxJACg90eXBlX3NwZWNfY2xhc3MYASABKA4yJy50ZW5z",
+            "b3JmbG93LlR5cGVTcGVjUHJvdG8uVHlwZVNwZWNDbGFzcxIvCgp0eXBlX3N0",
+            "YXRlGAIgASgLMhsudGVuc29yZmxvdy5TdHJ1Y3R1cmVkVmFsdWUSHAoUdHlw",
+            "ZV9zcGVjX2NsYXNzX25hbWUYAyABKAki/wEKDVR5cGVTcGVjQ2xhc3MSCwoH",
+            "VU5LTk9XThAAEhYKElNQQVJTRV9URU5TT1JfU1BFQxABEhcKE0lOREVYRURf",
+            "U0xJQ0VTX1NQRUMQAhIWChJSQUdHRURfVEVOU09SX1NQRUMQAxIVChFURU5T",
+            "T1JfQVJSQVlfU1BFQxAEEhUKEURBVEFfREFUQVNFVF9TUEVDEAUSFgoSREFU",
+            "QV9JVEVSQVRPUl9TUEVDEAYSEQoNT1BUSU9OQUxfU1BFQxAHEhQKEFBFUl9S",
+            "RVBMSUNBX1NQRUMQCBIRCg1WQVJJQUJMRV9TUEVDEAkSFgoSUk9XX1BBUlRJ",
+            "VElPTl9TUEVDEApCSlpIZ2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZs",
+            "b3cvdGVuc29yZmxvdy9nby9jb3JlL2NvcmVfcHJvdG9zX2dvX3Byb3RvYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Tensorflow.TensorReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.StructuredValue), global::Tensorflow.StructuredValue.Parser, new[]{ "NoneValue", "Float64Value", "Int64Value", "StringValue", "BoolValue", "TensorShapeValue", "TensorDtypeValue", "TensorSpecValue", "TypeSpecValue", "ListValue", "TupleValue", "DictValue", "NamedTupleValue" }, new[]{ "Kind" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.StructuredValue), global::Tensorflow.StructuredValue.Parser, new[]{ "NoneValue", "Float64Value", "Int64Value", "StringValue", "BoolValue", "TensorShapeValue", "TensorDtypeValue", "TensorSpecValue", "TypeSpecValue", "BoundedTensorSpecValue", "ListValue", "TupleValue", "DictValue", "NamedTupleValue" }, new[]{ "Kind" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NoneValue), global::Tensorflow.NoneValue.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ListValue), global::Tensorflow.ListValue.Parser, new[]{ "Values" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TupleValue), global::Tensorflow.TupleValue.Parser, new[]{ "Values" }, null, null, null, null),
@@ -72,6 +82,7 @@ namespace Tensorflow {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.PairValue), global::Tensorflow.PairValue.Parser, new[]{ "Key", "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.NamedTupleValue), global::Tensorflow.NamedTupleValue.Parser, new[]{ "Name", "Values" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorSpecProto), global::Tensorflow.TensorSpecProto.Parser, new[]{ "Name", "Shape", "Dtype" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.BoundedTensorSpecProto), global::Tensorflow.BoundedTensorSpecProto.Parser, new[]{ "Name", "Shape", "Dtype", "Minimum", "Maximum" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TypeSpecProto), global::Tensorflow.TypeSpecProto.Parser, new[]{ "TypeSpecClass", "TypeState", "TypeSpecClassName" }, null, new[]{ typeof(global::Tensorflow.TypeSpecProto.Types.TypeSpecClass) }, null, null)
           }));
     }
@@ -157,6 +168,9 @@ namespace Tensorflow {
           break;
         case KindOneofCase.TypeSpecValue:
           TypeSpecValue = other.TypeSpecValue.Clone();
+          break;
+        case KindOneofCase.BoundedTensorSpecValue:
+          BoundedTensorSpecValue = other.BoundedTensorSpecValue.Clone();
           break;
         case KindOneofCase.ListValue:
           ListValue = other.ListValue.Clone();
@@ -312,6 +326,20 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "bounded_tensor_spec_value" field.</summary>
+    public const int BoundedTensorSpecValueFieldNumber = 35;
+    /// <summary>
+    /// Represents a value for tf.BoundedTensorSpec.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.BoundedTensorSpecProto BoundedTensorSpecValue {
+      get { return kindCase_ == KindOneofCase.BoundedTensorSpecValue ? (global::Tensorflow.BoundedTensorSpecProto) kind_ : null; }
+      set {
+        kind_ = value;
+        kindCase_ = value == null ? KindOneofCase.None : KindOneofCase.BoundedTensorSpecValue;
+      }
+    }
+
     /// <summary>Field number for the "list_value" field.</summary>
     public const int ListValueFieldNumber = 51;
     /// <summary>
@@ -381,6 +409,7 @@ namespace Tensorflow {
       TensorDtypeValue = 32,
       TensorSpecValue = 33,
       TypeSpecValue = 34,
+      BoundedTensorSpecValue = 35,
       ListValue = 51,
       TupleValue = 52,
       DictValue = 53,
@@ -420,6 +449,7 @@ namespace Tensorflow {
       if (TensorDtypeValue != other.TensorDtypeValue) return false;
       if (!object.Equals(TensorSpecValue, other.TensorSpecValue)) return false;
       if (!object.Equals(TypeSpecValue, other.TypeSpecValue)) return false;
+      if (!object.Equals(BoundedTensorSpecValue, other.BoundedTensorSpecValue)) return false;
       if (!object.Equals(ListValue, other.ListValue)) return false;
       if (!object.Equals(TupleValue, other.TupleValue)) return false;
       if (!object.Equals(DictValue, other.DictValue)) return false;
@@ -440,6 +470,7 @@ namespace Tensorflow {
       if (kindCase_ == KindOneofCase.TensorDtypeValue) hash ^= TensorDtypeValue.GetHashCode();
       if (kindCase_ == KindOneofCase.TensorSpecValue) hash ^= TensorSpecValue.GetHashCode();
       if (kindCase_ == KindOneofCase.TypeSpecValue) hash ^= TypeSpecValue.GetHashCode();
+      if (kindCase_ == KindOneofCase.BoundedTensorSpecValue) hash ^= BoundedTensorSpecValue.GetHashCode();
       if (kindCase_ == KindOneofCase.ListValue) hash ^= ListValue.GetHashCode();
       if (kindCase_ == KindOneofCase.TupleValue) hash ^= TupleValue.GetHashCode();
       if (kindCase_ == KindOneofCase.DictValue) hash ^= DictValue.GetHashCode();
@@ -494,6 +525,10 @@ namespace Tensorflow {
         output.WriteRawTag(146, 2);
         output.WriteMessage(TypeSpecValue);
       }
+      if (kindCase_ == KindOneofCase.BoundedTensorSpecValue) {
+        output.WriteRawTag(154, 2);
+        output.WriteMessage(BoundedTensorSpecValue);
+      }
       if (kindCase_ == KindOneofCase.ListValue) {
         output.WriteRawTag(154, 3);
         output.WriteMessage(ListValue);
@@ -544,6 +579,9 @@ namespace Tensorflow {
       }
       if (kindCase_ == KindOneofCase.TypeSpecValue) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(TypeSpecValue);
+      }
+      if (kindCase_ == KindOneofCase.BoundedTensorSpecValue) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(BoundedTensorSpecValue);
       }
       if (kindCase_ == KindOneofCase.ListValue) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(ListValue);
@@ -607,6 +645,12 @@ namespace Tensorflow {
             TypeSpecValue = new global::Tensorflow.TypeSpecProto();
           }
           TypeSpecValue.MergeFrom(other.TypeSpecValue);
+          break;
+        case KindOneofCase.BoundedTensorSpecValue:
+          if (BoundedTensorSpecValue == null) {
+            BoundedTensorSpecValue = new global::Tensorflow.BoundedTensorSpecProto();
+          }
+          BoundedTensorSpecValue.MergeFrom(other.BoundedTensorSpecValue);
           break;
         case KindOneofCase.ListValue:
           if (ListValue == null) {
@@ -700,6 +744,15 @@ namespace Tensorflow {
             }
             input.ReadMessage(subBuilder);
             TypeSpecValue = subBuilder;
+            break;
+          }
+          case 282: {
+            global::Tensorflow.BoundedTensorSpecProto subBuilder = new global::Tensorflow.BoundedTensorSpecProto();
+            if (kindCase_ == KindOneofCase.BoundedTensorSpecValue) {
+              subBuilder.MergeFrom(BoundedTensorSpecValue);
+            }
+            input.ReadMessage(subBuilder);
+            BoundedTensorSpecValue = subBuilder;
             break;
           }
           case 410: {
@@ -1540,7 +1593,7 @@ namespace Tensorflow {
   }
 
   /// <summary>
-  /// A protobuf to tf.TensorSpec.
+  /// A protobuf to represent tf.TensorSpec.
   /// </summary>
   public sealed partial class TensorSpecProto : pb::IMessage<TensorSpecProto> {
     private static readonly pb::MessageParser<TensorSpecProto> _parser = new pb::MessageParser<TensorSpecProto>(() => new TensorSpecProto());
@@ -1734,6 +1787,268 @@ namespace Tensorflow {
   }
 
   /// <summary>
+  /// A protobuf to represent tf.BoundedTensorSpec.
+  /// </summary>
+  public sealed partial class BoundedTensorSpecProto : pb::IMessage<BoundedTensorSpecProto> {
+    private static readonly pb::MessageParser<BoundedTensorSpecProto> _parser = new pb::MessageParser<BoundedTensorSpecProto>(() => new BoundedTensorSpecProto());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<BoundedTensorSpecProto> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Tensorflow.StructReflection.Descriptor.MessageTypes[8]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BoundedTensorSpecProto() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BoundedTensorSpecProto(BoundedTensorSpecProto other) : this() {
+      name_ = other.name_;
+      shape_ = other.shape_ != null ? other.shape_.Clone() : null;
+      dtype_ = other.dtype_;
+      minimum_ = other.minimum_ != null ? other.minimum_.Clone() : null;
+      maximum_ = other.maximum_ != null ? other.maximum_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BoundedTensorSpecProto Clone() {
+      return new BoundedTensorSpecProto(this);
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 1;
+    private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "shape" field.</summary>
+    public const int ShapeFieldNumber = 2;
+    private global::Tensorflow.TensorShapeProto shape_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.TensorShapeProto Shape {
+      get { return shape_; }
+      set {
+        shape_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dtype" field.</summary>
+    public const int DtypeFieldNumber = 3;
+    private global::Tensorflow.DataType dtype_ = global::Tensorflow.DataType.DtInvalid;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.DataType Dtype {
+      get { return dtype_; }
+      set {
+        dtype_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "minimum" field.</summary>
+    public const int MinimumFieldNumber = 4;
+    private global::Tensorflow.TensorProto minimum_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.TensorProto Minimum {
+      get { return minimum_; }
+      set {
+        minimum_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "maximum" field.</summary>
+    public const int MaximumFieldNumber = 5;
+    private global::Tensorflow.TensorProto maximum_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.TensorProto Maximum {
+      get { return maximum_; }
+      set {
+        maximum_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as BoundedTensorSpecProto);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(BoundedTensorSpecProto other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Name != other.Name) return false;
+      if (!object.Equals(Shape, other.Shape)) return false;
+      if (Dtype != other.Dtype) return false;
+      if (!object.Equals(Minimum, other.Minimum)) return false;
+      if (!object.Equals(Maximum, other.Maximum)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (shape_ != null) hash ^= Shape.GetHashCode();
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) hash ^= Dtype.GetHashCode();
+      if (minimum_ != null) hash ^= Minimum.GetHashCode();
+      if (maximum_ != null) hash ^= Maximum.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Name.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Name);
+      }
+      if (shape_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Shape);
+      }
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) Dtype);
+      }
+      if (minimum_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Minimum);
+      }
+      if (maximum_ != null) {
+        output.WriteRawTag(42);
+        output.WriteMessage(Maximum);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (shape_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Shape);
+      }
+      if (Dtype != global::Tensorflow.DataType.DtInvalid) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Dtype);
+      }
+      if (minimum_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Minimum);
+      }
+      if (maximum_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Maximum);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(BoundedTensorSpecProto other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.shape_ != null) {
+        if (shape_ == null) {
+          Shape = new global::Tensorflow.TensorShapeProto();
+        }
+        Shape.MergeFrom(other.Shape);
+      }
+      if (other.Dtype != global::Tensorflow.DataType.DtInvalid) {
+        Dtype = other.Dtype;
+      }
+      if (other.minimum_ != null) {
+        if (minimum_ == null) {
+          Minimum = new global::Tensorflow.TensorProto();
+        }
+        Minimum.MergeFrom(other.Minimum);
+      }
+      if (other.maximum_ != null) {
+        if (maximum_ == null) {
+          Maximum = new global::Tensorflow.TensorProto();
+        }
+        Maximum.MergeFrom(other.Maximum);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Name = input.ReadString();
+            break;
+          }
+          case 18: {
+            if (shape_ == null) {
+              Shape = new global::Tensorflow.TensorShapeProto();
+            }
+            input.ReadMessage(Shape);
+            break;
+          }
+          case 24: {
+            Dtype = (global::Tensorflow.DataType) input.ReadEnum();
+            break;
+          }
+          case 34: {
+            if (minimum_ == null) {
+              Minimum = new global::Tensorflow.TensorProto();
+            }
+            input.ReadMessage(Minimum);
+            break;
+          }
+          case 42: {
+            if (maximum_ == null) {
+              Maximum = new global::Tensorflow.TensorProto();
+            }
+            input.ReadMessage(Maximum);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
   /// Represents a tf.TypeSpec
   /// </summary>
   public sealed partial class TypeSpecProto : pb::IMessage<TypeSpecProto> {
@@ -1744,7 +2059,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.StructReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Tensorflow.StructReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1976,6 +2291,10 @@ namespace Tensorflow {
         /// tf.VariableSpec
         /// </summary>
         [pbr::OriginalName("VARIABLE_SPEC")] VariableSpec = 9,
+        /// <summary>
+        /// RowPartitionSpec from ragged/row_partition.py
+        /// </summary>
+        [pbr::OriginalName("ROW_PARTITION_SPEC")] RowPartitionSpec = 10,
       }
 
     }

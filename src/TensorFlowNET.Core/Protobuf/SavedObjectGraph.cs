@@ -25,18 +25,18 @@ namespace Tensorflow {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CjF0ZW5zb3JmbG93L2NvcmUvcHJvdG9idWYvc2F2ZWRfb2JqZWN0X2dyYXBo",
-            "LnByb3RvEgp0ZW5zb3JmbG93GjV0ZW5zb3JmbG93L2NvcmUvcHJvdG9idWYv",
-            "dHJhY2thYmxlX29iamVjdF9ncmFwaC5wcm90bxoldGVuc29yZmxvdy9jb3Jl",
-            "L3Byb3RvYnVmL3N0cnVjdC5wcm90bxosdGVuc29yZmxvdy9jb3JlL2ZyYW1l",
-            "d29yay90ZW5zb3Jfc2hhcGUucHJvdG8aJXRlbnNvcmZsb3cvY29yZS9mcmFt",
-            "ZXdvcmsvdHlwZXMucHJvdG8aKHRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsv",
-            "dmVyc2lvbnMucHJvdG8aKHRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvdmFy",
-            "aWFibGUucHJvdG8i6AEKEFNhdmVkT2JqZWN0R3JhcGgSJgoFbm9kZXMYASAD",
+            "LnByb3RvEgp0ZW5zb3JmbG93Gix0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3Jr",
+            "L3RlbnNvcl9zaGFwZS5wcm90bxoldGVuc29yZmxvdy9jb3JlL2ZyYW1ld29y",
+            "ay90eXBlcy5wcm90bxoodGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay92YXJp",
+            "YWJsZS5wcm90bxoodGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay92ZXJzaW9u",
+            "cy5wcm90bxoldGVuc29yZmxvdy9jb3JlL3Byb3RvYnVmL3N0cnVjdC5wcm90",
+            "bxo1dGVuc29yZmxvdy9jb3JlL3Byb3RvYnVmL3RyYWNrYWJsZV9vYmplY3Rf",
+            "Z3JhcGgucHJvdG8i6AEKEFNhdmVkT2JqZWN0R3JhcGgSJgoFbm9kZXMYASAD",
             "KAsyFy50ZW5zb3JmbG93LlNhdmVkT2JqZWN0Ek8KEmNvbmNyZXRlX2Z1bmN0",
             "aW9ucxgCIAMoCzIzLnRlbnNvcmZsb3cuU2F2ZWRPYmplY3RHcmFwaC5Db25j",
             "cmV0ZUZ1bmN0aW9uc0VudHJ5GlsKFkNvbmNyZXRlRnVuY3Rpb25zRW50cnkS",
             "CwoDa2V5GAEgASgJEjAKBXZhbHVlGAIgASgLMiEudGVuc29yZmxvdy5TYXZl",
-            "ZENvbmNyZXRlRnVuY3Rpb246AjgBIr0ECgtTYXZlZE9iamVjdBJSCghjaGls",
+            "ZENvbmNyZXRlRnVuY3Rpb246AjgBItkFCgtTYXZlZE9iamVjdBJSCghjaGls",
             "ZHJlbhgBIAMoCzJALnRlbnNvcmZsb3cuVHJhY2thYmxlT2JqZWN0R3JhcGgu",
             "VHJhY2thYmxlT2JqZWN0Lk9iamVjdFJlZmVyZW5jZRJeCg5zbG90X3Zhcmlh",
             "YmxlcxgDIAMoCzJGLnRlbnNvcmZsb3cuVHJhY2thYmxlT2JqZWN0R3JhcGgu",
@@ -48,35 +48,42 @@ namespace Tensorflow {
             "RwoWYmFyZV9jb25jcmV0ZV9mdW5jdGlvbhgIIAEoCzIlLnRlbnNvcmZsb3cu",
             "U2F2ZWRCYXJlQ29uY3JldGVGdW5jdGlvbkgAEi0KCGNvbnN0YW50GAkgASgL",
             "MhkudGVuc29yZmxvdy5TYXZlZENvbnN0YW50SAASLQoIcmVzb3VyY2UYCiAB",
-            "KAsyGS50ZW5zb3JmbG93LlNhdmVkUmVzb3VyY2VIAEIGCgRraW5kSgQIAhAD",
-            "UgphdHRyaWJ1dGVzImAKD1NhdmVkVXNlck9iamVjdBISCgppZGVudGlmaWVy",
-            "GAEgASgJEicKB3ZlcnNpb24YAiABKAsyFi50ZW5zb3JmbG93LlZlcnNpb25E",
-            "ZWYSEAoIbWV0YWRhdGEYAyABKAkiKgoKU2F2ZWRBc3NldBIcChRhc3NldF9m",
-            "aWxlX2RlZl9pbmRleBgBIAEoBSJcCg1TYXZlZEZ1bmN0aW9uEhoKEmNvbmNy",
-            "ZXRlX2Z1bmN0aW9ucxgBIAMoCRIvCg1mdW5jdGlvbl9zcGVjGAIgASgLMhgu",
-            "dGVuc29yZmxvdy5GdW5jdGlvblNwZWMiqAEKFVNhdmVkQ29uY3JldGVGdW5j",
-            "dGlvbhIUCgxib3VuZF9pbnB1dHMYAiADKAUSQgodY2Fub25pY2FsaXplZF9p",
-            "bnB1dF9zaWduYXR1cmUYAyABKAsyGy50ZW5zb3JmbG93LlN0cnVjdHVyZWRW",
-            "YWx1ZRI1ChBvdXRwdXRfc2lnbmF0dXJlGAQgASgLMhsudGVuc29yZmxvdy5T",
-            "dHJ1Y3R1cmVkVmFsdWUifAoZU2F2ZWRCYXJlQ29uY3JldGVGdW5jdGlvbhIe",
-            "ChZjb25jcmV0ZV9mdW5jdGlvbl9uYW1lGAEgASgJEhkKEWFyZ3VtZW50X2tl",
-            "eXdvcmRzGAIgAygJEiQKHGFsbG93ZWRfcG9zaXRpb25hbF9hcmd1bWVudHMY",
-            "AyABKAMiIgoNU2F2ZWRDb25zdGFudBIRCglvcGVyYXRpb24YASABKAki9gEK",
-            "DVNhdmVkVmFyaWFibGUSIwoFZHR5cGUYASABKA4yFC50ZW5zb3JmbG93LkRh",
-            "dGFUeXBlEisKBXNoYXBlGAIgASgLMhwudGVuc29yZmxvdy5UZW5zb3JTaGFw",
-            "ZVByb3RvEhEKCXRyYWluYWJsZRgDIAEoCBI8Cg9zeW5jaHJvbml6YXRpb24Y",
-            "BCABKA4yIy50ZW5zb3JmbG93LlZhcmlhYmxlU3luY2hyb25pemF0aW9uEjQK",
-            "C2FnZ3JlZ2F0aW9uGAUgASgOMh8udGVuc29yZmxvdy5WYXJpYWJsZUFnZ3Jl",
-            "Z2F0aW9uEgwKBG5hbWUYBiABKAkilQEKDEZ1bmN0aW9uU3BlYxIwCgtmdWxs",
-            "YXJnc3BlYxgBIAEoCzIbLnRlbnNvcmZsb3cuU3RydWN0dXJlZFZhbHVlEhEK",
-            "CWlzX21ldGhvZBgCIAEoCBI0Cg9pbnB1dF9zaWduYXR1cmUYBSABKAsyGy50",
-            "ZW5zb3JmbG93LlN0cnVjdHVyZWRWYWx1ZUoECAMQBEoECAQQBSIfCg1TYXZl",
-            "ZFJlc291cmNlEg4KBmRldmljZRgBIAEoCUID+AEBYgZwcm90bzM="));
+            "KAsyGS50ZW5zb3JmbG93LlNhdmVkUmVzb3VyY2VIABJGChBzYXZlYWJsZV9v",
+            "YmplY3RzGAsgAygLMiwudGVuc29yZmxvdy5TYXZlZE9iamVjdC5TYXZlYWJs",
+            "ZU9iamVjdHNFbnRyeRpSChRTYXZlYWJsZU9iamVjdHNFbnRyeRILCgNrZXkY",
+            "ASABKAkSKQoFdmFsdWUYAiABKAsyGi50ZW5zb3JmbG93LlNhdmVhYmxlT2Jq",
+            "ZWN0OgI4AUIGCgRraW5kSgQIAhADUgphdHRyaWJ1dGVzImAKD1NhdmVkVXNl",
+            "ck9iamVjdBISCgppZGVudGlmaWVyGAEgASgJEicKB3ZlcnNpb24YAiABKAsy",
+            "Fi50ZW5zb3JmbG93LlZlcnNpb25EZWYSEAoIbWV0YWRhdGEYAyABKAkiKgoK",
+            "U2F2ZWRBc3NldBIcChRhc3NldF9maWxlX2RlZl9pbmRleBgBIAEoBSJcCg1T",
+            "YXZlZEZ1bmN0aW9uEhoKEmNvbmNyZXRlX2Z1bmN0aW9ucxgBIAMoCRIvCg1m",
+            "dW5jdGlvbl9zcGVjGAIgASgLMhgudGVuc29yZmxvdy5GdW5jdGlvblNwZWMi",
+            "qAEKFVNhdmVkQ29uY3JldGVGdW5jdGlvbhIUCgxib3VuZF9pbnB1dHMYAiAD",
+            "KAUSQgodY2Fub25pY2FsaXplZF9pbnB1dF9zaWduYXR1cmUYAyABKAsyGy50",
+            "ZW5zb3JmbG93LlN0cnVjdHVyZWRWYWx1ZRI1ChBvdXRwdXRfc2lnbmF0dXJl",
+            "GAQgASgLMhsudGVuc29yZmxvdy5TdHJ1Y3R1cmVkVmFsdWUifAoZU2F2ZWRC",
+            "YXJlQ29uY3JldGVGdW5jdGlvbhIeChZjb25jcmV0ZV9mdW5jdGlvbl9uYW1l",
+            "GAEgASgJEhkKEWFyZ3VtZW50X2tleXdvcmRzGAIgAygJEiQKHGFsbG93ZWRf",
+            "cG9zaXRpb25hbF9hcmd1bWVudHMYAyABKAMiIgoNU2F2ZWRDb25zdGFudBIR",
+            "CglvcGVyYXRpb24YASABKAki9gEKDVNhdmVkVmFyaWFibGUSIwoFZHR5cGUY",
+            "ASABKA4yFC50ZW5zb3JmbG93LkRhdGFUeXBlEisKBXNoYXBlGAIgASgLMhwu",
+            "dGVuc29yZmxvdy5UZW5zb3JTaGFwZVByb3RvEhEKCXRyYWluYWJsZRgDIAEo",
+            "CBI8Cg9zeW5jaHJvbml6YXRpb24YBCABKA4yIy50ZW5zb3JmbG93LlZhcmlh",
+            "YmxlU3luY2hyb25pemF0aW9uEjQKC2FnZ3JlZ2F0aW9uGAUgASgOMh8udGVu",
+            "c29yZmxvdy5WYXJpYWJsZUFnZ3JlZ2F0aW9uEgwKBG5hbWUYBiABKAkilQEK",
+            "DEZ1bmN0aW9uU3BlYxIwCgtmdWxsYXJnc3BlYxgBIAEoCzIbLnRlbnNvcmZs",
+            "b3cuU3RydWN0dXJlZFZhbHVlEhEKCWlzX21ldGhvZBgCIAEoCBI0Cg9pbnB1",
+            "dF9zaWduYXR1cmUYBSABKAsyGy50ZW5zb3JmbG93LlN0cnVjdHVyZWRWYWx1",
+            "ZUoECAMQBEoECAQQBSIfCg1TYXZlZFJlc291cmNlEg4KBmRldmljZRgBIAEo",
+            "CSJBCg5TYXZlYWJsZU9iamVjdBIVCg1zYXZlX2Z1bmN0aW9uGAIgASgFEhgK",
+            "EHJlc3RvcmVfZnVuY3Rpb24YAyABKAVCTVpIZ2l0aHViLmNvbS90ZW5zb3Jm",
+            "bG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL2NvcmVfcHJvdG9z",
+            "X2dvX3Byb3Rv+AEBYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Tensorflow.TrackableObjectGraphReflection.Descriptor, global::Tensorflow.StructReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.VersionsReflection.Descriptor, global::Tensorflow.VariableReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.VariableReflection.Descriptor, global::Tensorflow.VersionsReflection.Descriptor, global::Tensorflow.StructReflection.Descriptor, global::Tensorflow.TrackableObjectGraphReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedObjectGraph), global::Tensorflow.SavedObjectGraph.Parser, new[]{ "Nodes", "ConcreteFunctions" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedObject), global::Tensorflow.SavedObject.Parser, new[]{ "Children", "SlotVariables", "UserObject", "Asset", "Function", "Variable", "BareConcreteFunction", "Constant", "Resource" }, new[]{ "Kind" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedObject), global::Tensorflow.SavedObject.Parser, new[]{ "Children", "SlotVariables", "UserObject", "Asset", "Function", "Variable", "BareConcreteFunction", "Constant", "Resource", "SaveableObjects" }, new[]{ "Kind" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedUserObject), global::Tensorflow.SavedUserObject.Parser, new[]{ "Identifier", "Version", "Metadata" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedAsset), global::Tensorflow.SavedAsset.Parser, new[]{ "AssetFileDefIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedFunction), global::Tensorflow.SavedFunction.Parser, new[]{ "ConcreteFunctions", "FunctionSpec" }, null, null, null, null),
@@ -85,7 +92,8 @@ namespace Tensorflow {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedConstant), global::Tensorflow.SavedConstant.Parser, new[]{ "Operation" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedVariable), global::Tensorflow.SavedVariable.Parser, new[]{ "Dtype", "Shape", "Trainable", "Synchronization", "Aggregation", "Name" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionSpec), global::Tensorflow.FunctionSpec.Parser, new[]{ "Fullargspec", "IsMethod", "InputSignature" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedResource), global::Tensorflow.SavedResource.Parser, new[]{ "Device" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedResource), global::Tensorflow.SavedResource.Parser, new[]{ "Device" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SaveableObject), global::Tensorflow.SaveableObject.Parser, new[]{ "SaveFunction", "RestoreFunction" }, null, null, null, null)
           }));
     }
     #endregion
@@ -270,6 +278,7 @@ namespace Tensorflow {
     public SavedObject(SavedObject other) : this() {
       children_ = other.children_.Clone();
       slotVariables_ = other.slotVariables_.Clone();
+      saveableObjects_ = other.saveableObjects_.Clone();
       switch (other.KindCase) {
         case KindOneofCase.UserObject:
           UserObject = other.UserObject.Clone();
@@ -412,6 +421,16 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "saveable_objects" field.</summary>
+    public const int SaveableObjectsFieldNumber = 11;
+    private static readonly pbc::MapField<string, global::Tensorflow.SaveableObject>.Codec _map_saveableObjects_codec
+        = new pbc::MapField<string, global::Tensorflow.SaveableObject>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::Tensorflow.SaveableObject.Parser), 90);
+    private readonly pbc::MapField<string, global::Tensorflow.SaveableObject> saveableObjects_ = new pbc::MapField<string, global::Tensorflow.SaveableObject>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::MapField<string, global::Tensorflow.SaveableObject> SaveableObjects {
+      get { return saveableObjects_; }
+    }
+
     private object kind_;
     /// <summary>Enum of possible cases for the "kind" oneof.</summary>
     public enum KindOneofCase {
@@ -458,6 +477,7 @@ namespace Tensorflow {
       if (!object.Equals(BareConcreteFunction, other.BareConcreteFunction)) return false;
       if (!object.Equals(Constant, other.Constant)) return false;
       if (!object.Equals(Resource, other.Resource)) return false;
+      if (!SaveableObjects.Equals(other.SaveableObjects)) return false;
       if (KindCase != other.KindCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -474,6 +494,7 @@ namespace Tensorflow {
       if (kindCase_ == KindOneofCase.BareConcreteFunction) hash ^= BareConcreteFunction.GetHashCode();
       if (kindCase_ == KindOneofCase.Constant) hash ^= Constant.GetHashCode();
       if (kindCase_ == KindOneofCase.Resource) hash ^= Resource.GetHashCode();
+      hash ^= SaveableObjects.GetHashCode();
       hash ^= (int) kindCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -518,6 +539,7 @@ namespace Tensorflow {
         output.WriteRawTag(82);
         output.WriteMessage(Resource);
       }
+      saveableObjects_.WriteTo(output, _map_saveableObjects_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -549,6 +571,7 @@ namespace Tensorflow {
       if (kindCase_ == KindOneofCase.Resource) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Resource);
       }
+      size += saveableObjects_.CalculateSize(_map_saveableObjects_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -562,6 +585,7 @@ namespace Tensorflow {
       }
       children_.Add(other.children_);
       slotVariables_.Add(other.slotVariables_);
+      saveableObjects_.Add(other.saveableObjects_);
       switch (other.KindCase) {
         case KindOneofCase.UserObject:
           if (UserObject == null) {
@@ -687,6 +711,10 @@ namespace Tensorflow {
             }
             input.ReadMessage(subBuilder);
             Resource = subBuilder;
+            break;
+          }
+          case 90: {
+            saveableObjects_.AddEntriesFrom(input, _map_saveableObjects_codec);
             break;
           }
         }
@@ -2350,6 +2378,166 @@ namespace Tensorflow {
             break;
           case 10: {
             Device = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class SaveableObject : pb::IMessage<SaveableObject> {
+    private static readonly pb::MessageParser<SaveableObject> _parser = new pb::MessageParser<SaveableObject>(() => new SaveableObject());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<SaveableObject> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[11]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SaveableObject() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SaveableObject(SaveableObject other) : this() {
+      saveFunction_ = other.saveFunction_;
+      restoreFunction_ = other.restoreFunction_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SaveableObject Clone() {
+      return new SaveableObject(this);
+    }
+
+    /// <summary>Field number for the "save_function" field.</summary>
+    public const int SaveFunctionFieldNumber = 2;
+    private int saveFunction_;
+    /// <summary>
+    /// Node ids of concrete functions for saving and loading from a checkpoint.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int SaveFunction {
+      get { return saveFunction_; }
+      set {
+        saveFunction_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "restore_function" field.</summary>
+    public const int RestoreFunctionFieldNumber = 3;
+    private int restoreFunction_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int RestoreFunction {
+      get { return restoreFunction_; }
+      set {
+        restoreFunction_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as SaveableObject);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(SaveableObject other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (SaveFunction != other.SaveFunction) return false;
+      if (RestoreFunction != other.RestoreFunction) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (SaveFunction != 0) hash ^= SaveFunction.GetHashCode();
+      if (RestoreFunction != 0) hash ^= RestoreFunction.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (SaveFunction != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(SaveFunction);
+      }
+      if (RestoreFunction != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(RestoreFunction);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (SaveFunction != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SaveFunction);
+      }
+      if (RestoreFunction != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RestoreFunction);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(SaveableObject other) {
+      if (other == null) {
+        return;
+      }
+      if (other.SaveFunction != 0) {
+        SaveFunction = other.SaveFunction;
+      }
+      if (other.RestoreFunction != 0) {
+        RestoreFunction = other.RestoreFunction;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 16: {
+            SaveFunction = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            RestoreFunction = input.ReadInt32();
             break;
           }
         }

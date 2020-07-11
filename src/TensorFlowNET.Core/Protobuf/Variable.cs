@@ -42,9 +42,10 @@ namespace Tensorflow {
             "ZWdhdGlvbhIdChlWQVJJQUJMRV9BR0dSRUdBVElPTl9OT05FEAASHAoYVkFS",
             "SUFCTEVfQUdHUkVHQVRJT05fU1VNEAESHQoZVkFSSUFCTEVfQUdHUkVHQVRJ",
             "T05fTUVBThACEisKJ1ZBUklBQkxFX0FHR1JFR0FUSU9OX09OTFlfRklSU1Rf",
-            "UkVQTElDQRADQm4KGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0IOVmFyaWFi",
-            "bGVQcm90b3NQAVo9Z2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cv",
-            "dGVuc29yZmxvdy9nby9jb3JlL2ZyYW1ld29ya/gBAWIGcHJvdG8z"));
+            "UkVQTElDQRADQoABChhvcmcudGVuc29yZmxvdy5mcmFtZXdvcmtCDlZhcmlh",
+            "YmxlUHJvdG9zUAFaT2dpdGh1Yi5jb20vdGVuc29yZmxvdy90ZW5zb3JmbG93",
+            "L3RlbnNvcmZsb3cvZ28vY29yZS9mcmFtZXdvcmsvdmFyaWFibGVfZ29fcHJv",
+            "dG/4AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.VariableSynchronization), typeof(global::Tensorflow.VariableAggregation), }, null, new pbr::GeneratedClrTypeInfo[] {

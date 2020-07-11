@@ -27,31 +27,35 @@ namespace Tensorflow {
             "Cip0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL2Nvc3RfZ3JhcGgucHJvdG8S",
             "CnRlbnNvcmZsb3caLHRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvdGVuc29y",
             "X3NoYXBlLnByb3RvGiV0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3R5cGVz",
-            "LnByb3RvIuAFCgxDb3N0R3JhcGhEZWYSKwoEbm9kZRgBIAMoCzIdLnRlbnNv",
-            "cmZsb3cuQ29zdEdyYXBoRGVmLk5vZGUaogUKBE5vZGUSDAoEbmFtZRgBIAEo",
-            "CRIOCgZkZXZpY2UYAiABKAkSCgoCaWQYAyABKAUSOwoKaW5wdXRfaW5mbxgE",
-            "IAMoCzInLnRlbnNvcmZsb3cuQ29zdEdyYXBoRGVmLk5vZGUuSW5wdXRJbmZv",
-            "Ej0KC291dHB1dF9pbmZvGAUgAygLMigudGVuc29yZmxvdy5Db3N0R3JhcGhE",
-            "ZWYuTm9kZS5PdXRwdXRJbmZvEh0KFXRlbXBvcmFyeV9tZW1vcnlfc2l6ZRgG",
-            "IAEoAxIeChZwZXJzaXN0ZW50X21lbW9yeV9zaXplGAwgASgDEiEKFWhvc3Rf",
-            "dGVtcF9tZW1vcnlfc2l6ZRgKIAEoA0ICGAESIwoXZGV2aWNlX3RlbXBfbWVt",
-            "b3J5X3NpemUYCyABKANCAhgBEikKHWRldmljZV9wZXJzaXN0ZW50X21lbW9y",
-            "eV9zaXplGBAgASgDQgIYARIUCgxjb21wdXRlX2Nvc3QYCSABKAMSFAoMY29t",
-            "cHV0ZV90aW1lGA4gASgDEhMKC21lbW9yeV90aW1lGA8gASgDEhAKCGlzX2Zp",
-            "bmFsGAcgASgIEhUKDWNvbnRyb2xfaW5wdXQYCCADKAUSEgoKaW5hY2N1cmF0",
-            "ZRgRIAEoCBo7CglJbnB1dEluZm8SFgoOcHJlY2VkaW5nX25vZGUYASABKAUS",
-            "FgoOcHJlY2VkaW5nX3BvcnQYAiABKAUahgEKCk91dHB1dEluZm8SDAoEc2l6",
-            "ZRgBIAEoAxIYChBhbGlhc19pbnB1dF9wb3J0GAIgASgDEisKBXNoYXBlGAMg",
-            "ASgLMhwudGVuc29yZmxvdy5UZW5zb3JTaGFwZVByb3RvEiMKBWR0eXBlGAQg",
-            "ASgOMhQudGVuc29yZmxvdy5EYXRhVHlwZUJvChhvcmcudGVuc29yZmxvdy5m",
-            "cmFtZXdvcmtCD0Nvc3RHcmFwaFByb3Rvc1ABWj1naXRodWIuY29tL3RlbnNv",
-            "cmZsb3cvdGVuc29yZmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvZnJhbWV3b3Jr",
-            "+AEBYgZwcm90bzM="));
+            "LnByb3RvIsoGCgxDb3N0R3JhcGhEZWYSKwoEbm9kZRgBIAMoCzIdLnRlbnNv",
+            "cmZsb3cuQ29zdEdyYXBoRGVmLk5vZGUSNQoEY29zdBgCIAMoCzInLnRlbnNv",
+            "cmZsb3cuQ29zdEdyYXBoRGVmLkFnZ3JlZ2F0ZWRDb3N0GqIFCgROb2RlEgwK",
+            "BG5hbWUYASABKAkSDgoGZGV2aWNlGAIgASgJEgoKAmlkGAMgASgFEjsKCmlu",
+            "cHV0X2luZm8YBCADKAsyJy50ZW5zb3JmbG93LkNvc3RHcmFwaERlZi5Ob2Rl",
+            "LklucHV0SW5mbxI9CgtvdXRwdXRfaW5mbxgFIAMoCzIoLnRlbnNvcmZsb3cu",
+            "Q29zdEdyYXBoRGVmLk5vZGUuT3V0cHV0SW5mbxIdChV0ZW1wb3JhcnlfbWVt",
+            "b3J5X3NpemUYBiABKAMSHgoWcGVyc2lzdGVudF9tZW1vcnlfc2l6ZRgMIAEo",
+            "AxIhChVob3N0X3RlbXBfbWVtb3J5X3NpemUYCiABKANCAhgBEiMKF2Rldmlj",
+            "ZV90ZW1wX21lbW9yeV9zaXplGAsgASgDQgIYARIpCh1kZXZpY2VfcGVyc2lz",
+            "dGVudF9tZW1vcnlfc2l6ZRgQIAEoA0ICGAESFAoMY29tcHV0ZV9jb3N0GAkg",
+            "ASgDEhQKDGNvbXB1dGVfdGltZRgOIAEoAxITCgttZW1vcnlfdGltZRgPIAEo",
+            "AxIQCghpc19maW5hbBgHIAEoCBIVCg1jb250cm9sX2lucHV0GAggAygFEhIK",
+            "CmluYWNjdXJhdGUYESABKAgaOwoJSW5wdXRJbmZvEhYKDnByZWNlZGluZ19u",
+            "b2RlGAEgASgFEhYKDnByZWNlZGluZ19wb3J0GAIgASgFGoYBCgpPdXRwdXRJ",
+            "bmZvEgwKBHNpemUYASABKAMSGAoQYWxpYXNfaW5wdXRfcG9ydBgCIAEoAxIr",
+            "CgVzaGFwZRgDIAEoCzIcLnRlbnNvcmZsb3cuVGVuc29yU2hhcGVQcm90bxIj",
+            "CgVkdHlwZRgEIAEoDjIULnRlbnNvcmZsb3cuRGF0YVR5cGUaMQoOQWdncmVn",
+            "YXRlZENvc3QSDAoEY29zdBgBIAEoAhIRCglkaW1lbnNpb24YAiABKAlCgwEK",
+            "GG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0IPQ29zdEdyYXBoUHJvdG9zUAFa",
+            "UWdpdGh1Yi5jb20vdGVuc29yZmxvdy90ZW5zb3JmbG93L3RlbnNvcmZsb3cv",
+            "Z28vY29yZS9mcmFtZXdvcmsvY29zdF9ncmFwaF9nb19wcm90b/gBAWIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CostGraphDef), global::Tensorflow.CostGraphDef.Parser, new[]{ "Node" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CostGraphDef.Types.Node), global::Tensorflow.CostGraphDef.Types.Node.Parser, new[]{ "Name", "Device", "Id", "InputInfo", "OutputInfo", "TemporaryMemorySize", "PersistentMemorySize", "HostTempMemorySize", "DeviceTempMemorySize", "DevicePersistentMemorySize", "ComputeCost", "ComputeTime", "MemoryTime", "IsFinal", "ControlInput", "Inaccurate" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CostGraphDef.Types.Node.Types.InputInfo), global::Tensorflow.CostGraphDef.Types.Node.Types.InputInfo.Parser, new[]{ "PrecedingNode", "PrecedingPort" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CostGraphDef.Types.Node.Types.OutputInfo), global::Tensorflow.CostGraphDef.Types.Node.Types.OutputInfo.Parser, new[]{ "Size", "AliasInputPort", "Shape", "Dtype" }, null, null, null, null)})})
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CostGraphDef), global::Tensorflow.CostGraphDef.Parser, new[]{ "Node", "Cost" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CostGraphDef.Types.Node), global::Tensorflow.CostGraphDef.Types.Node.Parser, new[]{ "Name", "Device", "Id", "InputInfo", "OutputInfo", "TemporaryMemorySize", "PersistentMemorySize", "HostTempMemorySize", "DeviceTempMemorySize", "DevicePersistentMemorySize", "ComputeCost", "ComputeTime", "MemoryTime", "IsFinal", "ControlInput", "Inaccurate" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CostGraphDef.Types.Node.Types.InputInfo), global::Tensorflow.CostGraphDef.Types.Node.Types.InputInfo.Parser, new[]{ "PrecedingNode", "PrecedingPort" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CostGraphDef.Types.Node.Types.OutputInfo), global::Tensorflow.CostGraphDef.Types.Node.Types.OutputInfo.Parser, new[]{ "Size", "AliasInputPort", "Shape", "Dtype" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CostGraphDef.Types.AggregatedCost), global::Tensorflow.CostGraphDef.Types.AggregatedCost.Parser, new[]{ "Cost", "Dimension" }, null, null, null, null)})
           }));
     }
     #endregion
@@ -84,6 +88,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CostGraphDef(CostGraphDef other) : this() {
       node_ = other.node_.Clone();
+      cost_ = other.cost_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -102,6 +107,16 @@ namespace Tensorflow {
       get { return node_; }
     }
 
+    /// <summary>Field number for the "cost" field.</summary>
+    public const int CostFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::Tensorflow.CostGraphDef.Types.AggregatedCost> _repeated_cost_codec
+        = pb::FieldCodec.ForMessage(18, global::Tensorflow.CostGraphDef.Types.AggregatedCost.Parser);
+    private readonly pbc::RepeatedField<global::Tensorflow.CostGraphDef.Types.AggregatedCost> cost_ = new pbc::RepeatedField<global::Tensorflow.CostGraphDef.Types.AggregatedCost>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Tensorflow.CostGraphDef.Types.AggregatedCost> Cost {
+      get { return cost_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CostGraphDef);
@@ -116,6 +131,7 @@ namespace Tensorflow {
         return true;
       }
       if(!node_.Equals(other.node_)) return false;
+      if(!cost_.Equals(other.cost_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -123,6 +139,7 @@ namespace Tensorflow {
     public override int GetHashCode() {
       int hash = 1;
       hash ^= node_.GetHashCode();
+      hash ^= cost_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -137,6 +154,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       node_.WriteTo(output, _repeated_node_codec);
+      cost_.WriteTo(output, _repeated_cost_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -146,6 +164,7 @@ namespace Tensorflow {
     public int CalculateSize() {
       int size = 0;
       size += node_.CalculateSize(_repeated_node_codec);
+      size += cost_.CalculateSize(_repeated_cost_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -158,6 +177,7 @@ namespace Tensorflow {
         return;
       }
       node_.Add(other.node_);
+      cost_.Add(other.cost_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -171,6 +191,10 @@ namespace Tensorflow {
             break;
           case 10: {
             node_.AddEntriesFrom(input, _repeated_node_codec);
+            break;
+          }
+          case 18: {
+            cost_.AddEntriesFrom(input, _repeated_cost_codec);
             break;
           }
         }
@@ -1140,6 +1164,172 @@ namespace Tensorflow {
 
         }
         #endregion
+
+      }
+
+      /// <summary>
+      /// Total cost of this graph, typically used for balancing decisions.
+      /// </summary>
+      public sealed partial class AggregatedCost : pb::IMessage<AggregatedCost> {
+        private static readonly pb::MessageParser<AggregatedCost> _parser = new pb::MessageParser<AggregatedCost>(() => new AggregatedCost());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<AggregatedCost> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::Tensorflow.CostGraphDef.Descriptor.NestedTypes[1]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public AggregatedCost() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public AggregatedCost(AggregatedCost other) : this() {
+          cost_ = other.cost_;
+          dimension_ = other.dimension_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public AggregatedCost Clone() {
+          return new AggregatedCost(this);
+        }
+
+        /// <summary>Field number for the "cost" field.</summary>
+        public const int CostFieldNumber = 1;
+        private float cost_;
+        /// <summary>
+        /// Aggregated cost value.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public float Cost {
+          get { return cost_; }
+          set {
+            cost_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "dimension" field.</summary>
+        public const int DimensionFieldNumber = 2;
+        private string dimension_ = "";
+        /// <summary>
+        /// Aggregated cost dimension (e.g. 'memory', 'compute', 'network').
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Dimension {
+          get { return dimension_; }
+          set {
+            dimension_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as AggregatedCost);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(AggregatedCost other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Cost, other.Cost)) return false;
+          if (Dimension != other.Dimension) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Cost != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Cost);
+          if (Dimension.Length != 0) hash ^= Dimension.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+          if (Cost != 0F) {
+            output.WriteRawTag(13);
+            output.WriteFloat(Cost);
+          }
+          if (Dimension.Length != 0) {
+            output.WriteRawTag(18);
+            output.WriteString(Dimension);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (Cost != 0F) {
+            size += 1 + 4;
+          }
+          if (Dimension.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Dimension);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(AggregatedCost other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Cost != 0F) {
+            Cost = other.Cost;
+          }
+          if (other.Dimension.Length != 0) {
+            Dimension = other.Dimension;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 13: {
+                Cost = input.ReadFloat();
+                break;
+              }
+              case 18: {
+                Dimension = input.ReadString();
+                break;
+              }
+            }
+          }
+        }
 
       }
 

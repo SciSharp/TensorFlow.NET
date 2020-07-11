@@ -25,19 +25,19 @@ namespace Tensorflow {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CjJ0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3RlbnNvcl9kZXNjcmlwdGlv",
-            "bi5wcm90bxIKdGVuc29yZmxvdxoldGVuc29yZmxvdy9jb3JlL2ZyYW1ld29y",
-            "ay90eXBlcy5wcm90bxosdGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay90ZW5z",
-            "b3Jfc2hhcGUucHJvdG8aNnRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvYWxs",
-            "b2NhdGlvbl9kZXNjcmlwdGlvbi5wcm90byKoAQoRVGVuc29yRGVzY3JpcHRp",
+            "bi5wcm90bxIKdGVuc29yZmxvdxo2dGVuc29yZmxvdy9jb3JlL2ZyYW1ld29y",
+            "ay9hbGxvY2F0aW9uX2Rlc2NyaXB0aW9uLnByb3RvGix0ZW5zb3JmbG93L2Nv",
+            "cmUvZnJhbWV3b3JrL3RlbnNvcl9zaGFwZS5wcm90bxoldGVuc29yZmxvdy9j",
+            "b3JlL2ZyYW1ld29yay90eXBlcy5wcm90byKoAQoRVGVuc29yRGVzY3JpcHRp",
             "b24SIwoFZHR5cGUYASABKA4yFC50ZW5zb3JmbG93LkRhdGFUeXBlEisKBXNo",
             "YXBlGAIgASgLMhwudGVuc29yZmxvdy5UZW5zb3JTaGFwZVByb3RvEkEKFmFs",
             "bG9jYXRpb25fZGVzY3JpcHRpb24YBCABKAsyIS50ZW5zb3JmbG93LkFsbG9j",
-            "YXRpb25EZXNjcmlwdGlvbkJ3ChhvcmcudGVuc29yZmxvdy5mcmFtZXdvcmtC",
-            "F1RlbnNvckRlc2NyaXB0aW9uUHJvdG9zUAFaPWdpdGh1Yi5jb20vdGVuc29y",
-            "Zmxvdy90ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28vY29yZS9mcmFtZXdvcmv4",
-            "AQFiBnByb3RvMw=="));
+            "YXRpb25EZXNjcmlwdGlvbkKTAQoYb3JnLnRlbnNvcmZsb3cuZnJhbWV3b3Jr",
+            "QhdUZW5zb3JEZXNjcmlwdGlvblByb3Rvc1ABWllnaXRodWIuY29tL3RlbnNv",
+            "cmZsb3cvdGVuc29yZmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvZnJhbWV3b3Jr",
+            "L3RlbnNvcl9kZXNjcmlwdGlvbl9nb19wcm90b/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.AllocationDescriptionReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Tensorflow.AllocationDescriptionReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorDescription), global::Tensorflow.TensorDescription.Parser, new[]{ "Dtype", "Shape", "AllocationDescription" }, null, null, null, null)
           }));

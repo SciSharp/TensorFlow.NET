@@ -41,10 +41,10 @@ namespace Tensorflow {
             "cHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult), global::Tensorflow.CppShapeInferenceResult.Parser, new[]{ "Shape", "HandleData" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult.Types.HandleShapeAndType), global::Tensorflow.CppShapeInferenceResult.Types.HandleShapeAndType.Parser, new[]{ "Shape", "Dtype" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult.Types.HandleData), global::Tensorflow.CppShapeInferenceResult.Types.HandleData.Parser, new[]{ "IsSet", "ShapeAndType" }, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceInputsNeeded), global::Tensorflow.CppShapeInferenceInputsNeeded.Parser, new[]{ "InputTensorsNeeded", "InputTensorsAsShapesNeeded" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult), global::Tensorflow.CppShapeInferenceResult.Parser, new[]{ "Shape", "HandleData" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult.Types.HandleShapeAndType), global::Tensorflow.CppShapeInferenceResult.Types.HandleShapeAndType.Parser, new[]{ "Shape", "Dtype" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult.Types.HandleData), global::Tensorflow.CppShapeInferenceResult.Types.HandleData.Parser, new[]{ "IsSet", "ShapeAndType" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceInputsNeeded), global::Tensorflow.CppShapeInferenceInputsNeeded.Parser, new[]{ "InputTensorsNeeded", "InputTensorsAsShapesNeeded" }, null, null, null, null)
           }));
     }
     #endregion
@@ -179,13 +179,13 @@ namespace Tensorflow {
       }
       if (other.shape_ != null) {
         if (shape_ == null) {
-          shape_ = new global::Tensorflow.TensorShapeProto();
+          Shape = new global::Tensorflow.TensorShapeProto();
         }
         Shape.MergeFrom(other.Shape);
       }
       if (other.handleData_ != null) {
         if (handleData_ == null) {
-          handleData_ = new global::Tensorflow.CppShapeInferenceResult.Types.HandleData();
+          HandleData = new global::Tensorflow.CppShapeInferenceResult.Types.HandleData();
         }
         HandleData.MergeFrom(other.HandleData);
       }
@@ -202,16 +202,16 @@ namespace Tensorflow {
             break;
           case 10: {
             if (shape_ == null) {
-              shape_ = new global::Tensorflow.TensorShapeProto();
+              Shape = new global::Tensorflow.TensorShapeProto();
             }
-            input.ReadMessage(shape_);
+            input.ReadMessage(Shape);
             break;
           }
           case 34: {
             if (handleData_ == null) {
-              handleData_ = new global::Tensorflow.CppShapeInferenceResult.Types.HandleData();
+              HandleData = new global::Tensorflow.CppShapeInferenceResult.Types.HandleData();
             }
-            input.ReadMessage(handleData_);
+            input.ReadMessage(HandleData);
             break;
           }
         }
@@ -270,7 +270,7 @@ namespace Tensorflow {
 
         /// <summary>Field number for the "dtype" field.</summary>
         public const int DtypeFieldNumber = 2;
-        private global::Tensorflow.DataType dtype_ = 0;
+        private global::Tensorflow.DataType dtype_ = global::Tensorflow.DataType.DtInvalid;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public global::Tensorflow.DataType Dtype {
           get { return dtype_; }
@@ -301,7 +301,7 @@ namespace Tensorflow {
         public override int GetHashCode() {
           int hash = 1;
           if (shape_ != null) hash ^= Shape.GetHashCode();
-          if (Dtype != 0) hash ^= Dtype.GetHashCode();
+          if (Dtype != global::Tensorflow.DataType.DtInvalid) hash ^= Dtype.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -319,7 +319,7 @@ namespace Tensorflow {
             output.WriteRawTag(10);
             output.WriteMessage(Shape);
           }
-          if (Dtype != 0) {
+          if (Dtype != global::Tensorflow.DataType.DtInvalid) {
             output.WriteRawTag(16);
             output.WriteEnum((int) Dtype);
           }
@@ -334,7 +334,7 @@ namespace Tensorflow {
           if (shape_ != null) {
             size += 1 + pb::CodedOutputStream.ComputeMessageSize(Shape);
           }
-          if (Dtype != 0) {
+          if (Dtype != global::Tensorflow.DataType.DtInvalid) {
             size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Dtype);
           }
           if (_unknownFields != null) {
@@ -350,11 +350,11 @@ namespace Tensorflow {
           }
           if (other.shape_ != null) {
             if (shape_ == null) {
-              shape_ = new global::Tensorflow.TensorShapeProto();
+              Shape = new global::Tensorflow.TensorShapeProto();
             }
             Shape.MergeFrom(other.Shape);
           }
-          if (other.Dtype != 0) {
+          if (other.Dtype != global::Tensorflow.DataType.DtInvalid) {
             Dtype = other.Dtype;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -370,13 +370,13 @@ namespace Tensorflow {
                 break;
               case 10: {
                 if (shape_ == null) {
-                  shape_ = new global::Tensorflow.TensorShapeProto();
+                  Shape = new global::Tensorflow.TensorShapeProto();
                 }
-                input.ReadMessage(shape_);
+                input.ReadMessage(Shape);
                 break;
               }
               case 16: {
-                dtype_ = (global::Tensorflow.DataType) input.ReadEnum();
+                Dtype = (global::Tensorflow.DataType) input.ReadEnum();
                 break;
               }
             }

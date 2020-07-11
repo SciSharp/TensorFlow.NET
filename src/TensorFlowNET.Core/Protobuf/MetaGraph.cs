@@ -32,7 +32,7 @@ namespace Tensorflow {
             "ZnJhbWV3b3JrL3R5cGVzLnByb3RvGjF0ZW5zb3JmbG93L2NvcmUvcHJvdG9i",
             "dWYvc2F2ZWRfb2JqZWN0X2dyYXBoLnByb3RvGiR0ZW5zb3JmbG93L2NvcmUv",
             "cHJvdG9idWYvc2F2ZXIucHJvdG8aJXRlbnNvcmZsb3cvY29yZS9wcm90b2J1",
-            "Zi9zdHJ1Y3QucHJvdG8imwYKDE1ldGFHcmFwaERlZhI7Cg1tZXRhX2luZm9f",
+            "Zi9zdHJ1Y3QucHJvdG8iqAcKDE1ldGFHcmFwaERlZhI7Cg1tZXRhX2luZm9f",
             "ZGVmGAEgASgLMiQudGVuc29yZmxvdy5NZXRhR3JhcGhEZWYuTWV0YUluZm9E",
             "ZWYSJwoJZ3JhcGhfZGVmGAIgASgLMhQudGVuc29yZmxvdy5HcmFwaERlZhIn",
             "CglzYXZlcl9kZWYYAyABKAsyFC50ZW5zb3JmbG93LlNhdmVyRGVmEkMKDmNv",
@@ -41,52 +41,55 @@ namespace Tensorflow {
             "ZW5zb3JmbG93Lk1ldGFHcmFwaERlZi5TaWduYXR1cmVEZWZFbnRyeRIwCg5h",
             "c3NldF9maWxlX2RlZhgGIAMoCzIYLnRlbnNvcmZsb3cuQXNzZXRGaWxlRGVm",
             "EjYKEG9iamVjdF9ncmFwaF9kZWYYByABKAsyHC50ZW5zb3JmbG93LlNhdmVk",
-            "T2JqZWN0R3JhcGga6QEKC01ldGFJbmZvRGVmEhoKEm1ldGFfZ3JhcGhfdmVy",
+            "T2JqZWN0R3JhcGga9gIKC01ldGFJbmZvRGVmEhoKEm1ldGFfZ3JhcGhfdmVy",
             "c2lvbhgBIAEoCRIsChBzdHJpcHBlZF9vcF9saXN0GAIgASgLMhIudGVuc29y",
             "Zmxvdy5PcExpc3QSJgoIYW55X2luZm8YAyABKAsyFC5nb29nbGUucHJvdG9i",
             "dWYuQW55EgwKBHRhZ3MYBCADKAkSGgoSdGVuc29yZmxvd192ZXJzaW9uGAUg",
             "ASgJEh4KFnRlbnNvcmZsb3dfZ2l0X3ZlcnNpb24YBiABKAkSHgoWc3RyaXBw",
-            "ZWRfZGVmYXVsdF9hdHRycxgHIAEoCBpPChJDb2xsZWN0aW9uRGVmRW50cnkS",
-            "CwoDa2V5GAEgASgJEigKBXZhbHVlGAIgASgLMhkudGVuc29yZmxvdy5Db2xs",
-            "ZWN0aW9uRGVmOgI4ARpNChFTaWduYXR1cmVEZWZFbnRyeRILCgNrZXkYASAB",
-            "KAkSJwoFdmFsdWUYAiABKAsyGC50ZW5zb3JmbG93LlNpZ25hdHVyZURlZjoC",
-            "OAEi3wMKDUNvbGxlY3Rpb25EZWYSNwoJbm9kZV9saXN0GAEgASgLMiIudGVu",
-            "c29yZmxvdy5Db2xsZWN0aW9uRGVmLk5vZGVMaXN0SAASOQoKYnl0ZXNfbGlz",
-            "dBgCIAEoCzIjLnRlbnNvcmZsb3cuQ29sbGVjdGlvbkRlZi5CeXRlc0xpc3RI",
-            "ABI5CgppbnQ2NF9saXN0GAMgASgLMiMudGVuc29yZmxvdy5Db2xsZWN0aW9u",
-            "RGVmLkludDY0TGlzdEgAEjkKCmZsb2F0X2xpc3QYBCABKAsyIy50ZW5zb3Jm",
-            "bG93LkNvbGxlY3Rpb25EZWYuRmxvYXRMaXN0SAASNQoIYW55X2xpc3QYBSAB",
-            "KAsyIS50ZW5zb3JmbG93LkNvbGxlY3Rpb25EZWYuQW55TGlzdEgAGhkKCE5v",
-            "ZGVMaXN0Eg0KBXZhbHVlGAEgAygJGhoKCUJ5dGVzTGlzdBINCgV2YWx1ZRgB",
-            "IAMoDBoeCglJbnQ2NExpc3QSEQoFdmFsdWUYASADKANCAhABGh4KCUZsb2F0",
-            "TGlzdBIRCgV2YWx1ZRgBIAMoAkICEAEaLgoHQW55TGlzdBIjCgV2YWx1ZRgB",
-            "IAMoCzIULmdvb2dsZS5wcm90b2J1Zi5BbnlCBgoEa2luZCLRAwoKVGVuc29y",
-            "SW5mbxIOCgRuYW1lGAEgASgJSAASNgoKY29vX3NwYXJzZRgEIAEoCzIgLnRl",
-            "bnNvcmZsb3cuVGVuc29ySW5mby5Db29TcGFyc2VIABJCChBjb21wb3NpdGVf",
-            "dGVuc29yGAUgASgLMiYudGVuc29yZmxvdy5UZW5zb3JJbmZvLkNvbXBvc2l0",
-            "ZVRlbnNvckgAEiMKBWR0eXBlGAIgASgOMhQudGVuc29yZmxvdy5EYXRhVHlw",
-            "ZRIyCgx0ZW5zb3Jfc2hhcGUYAyABKAsyHC50ZW5zb3JmbG93LlRlbnNvclNo",
-            "YXBlUHJvdG8aZQoJQ29vU3BhcnNlEhoKEnZhbHVlc190ZW5zb3JfbmFtZRgB",
-            "IAEoCRIbChNpbmRpY2VzX3RlbnNvcl9uYW1lGAIgASgJEh8KF2RlbnNlX3No",
-            "YXBlX3RlbnNvcl9uYW1lGAMgASgJGmsKD0NvbXBvc2l0ZVRlbnNvchIsCgl0",
-            "eXBlX3NwZWMYASABKAsyGS50ZW5zb3JmbG93LlR5cGVTcGVjUHJvdG8SKgoK",
-            "Y29tcG9uZW50cxgCIAMoCzIWLnRlbnNvcmZsb3cuVGVuc29ySW5mb0IKCghl",
-            "bmNvZGluZyKgAgoMU2lnbmF0dXJlRGVmEjQKBmlucHV0cxgBIAMoCzIkLnRl",
-            "bnNvcmZsb3cuU2lnbmF0dXJlRGVmLklucHV0c0VudHJ5EjYKB291dHB1dHMY",
-            "AiADKAsyJS50ZW5zb3JmbG93LlNpZ25hdHVyZURlZi5PdXRwdXRzRW50cnkS",
-            "EwoLbWV0aG9kX25hbWUYAyABKAkaRQoLSW5wdXRzRW50cnkSCwoDa2V5GAEg",
-            "ASgJEiUKBXZhbHVlGAIgASgLMhYudGVuc29yZmxvdy5UZW5zb3JJbmZvOgI4",
-            "ARpGCgxPdXRwdXRzRW50cnkSCwoDa2V5GAEgASgJEiUKBXZhbHVlGAIgASgL",
-            "MhYudGVuc29yZmxvdy5UZW5zb3JJbmZvOgI4ASJNCgxBc3NldEZpbGVEZWYS",
-            "KwoLdGVuc29yX2luZm8YASABKAsyFi50ZW5zb3JmbG93LlRlbnNvckluZm8S",
-            "EAoIZmlsZW5hbWUYAiABKAlCbgoYb3JnLnRlbnNvcmZsb3cuZnJhbWV3b3Jr",
-            "Qg9NZXRhR3JhcGhQcm90b3NQAVo8Z2l0aHViLmNvbS90ZW5zb3JmbG93L3Rl",
-            "bnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL3Byb3RvYnVm+AEBYgZwcm90",
-            "bzM="));
+            "ZWRfZGVmYXVsdF9hdHRycxgHIAEoCBJTChBmdW5jdGlvbl9hbGlhc2VzGAgg",
+            "AygLMjkudGVuc29yZmxvdy5NZXRhR3JhcGhEZWYuTWV0YUluZm9EZWYuRnVu",
+            "Y3Rpb25BbGlhc2VzRW50cnkaNgoURnVuY3Rpb25BbGlhc2VzRW50cnkSCwoD",
+            "a2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ARpPChJDb2xsZWN0aW9uRGVm",
+            "RW50cnkSCwoDa2V5GAEgASgJEigKBXZhbHVlGAIgASgLMhkudGVuc29yZmxv",
+            "dy5Db2xsZWN0aW9uRGVmOgI4ARpNChFTaWduYXR1cmVEZWZFbnRyeRILCgNr",
+            "ZXkYASABKAkSJwoFdmFsdWUYAiABKAsyGC50ZW5zb3JmbG93LlNpZ25hdHVy",
+            "ZURlZjoCOAEi3wMKDUNvbGxlY3Rpb25EZWYSNwoJbm9kZV9saXN0GAEgASgL",
+            "MiIudGVuc29yZmxvdy5Db2xsZWN0aW9uRGVmLk5vZGVMaXN0SAASOQoKYnl0",
+            "ZXNfbGlzdBgCIAEoCzIjLnRlbnNvcmZsb3cuQ29sbGVjdGlvbkRlZi5CeXRl",
+            "c0xpc3RIABI5CgppbnQ2NF9saXN0GAMgASgLMiMudGVuc29yZmxvdy5Db2xs",
+            "ZWN0aW9uRGVmLkludDY0TGlzdEgAEjkKCmZsb2F0X2xpc3QYBCABKAsyIy50",
+            "ZW5zb3JmbG93LkNvbGxlY3Rpb25EZWYuRmxvYXRMaXN0SAASNQoIYW55X2xp",
+            "c3QYBSABKAsyIS50ZW5zb3JmbG93LkNvbGxlY3Rpb25EZWYuQW55TGlzdEgA",
+            "GhkKCE5vZGVMaXN0Eg0KBXZhbHVlGAEgAygJGhoKCUJ5dGVzTGlzdBINCgV2",
+            "YWx1ZRgBIAMoDBoeCglJbnQ2NExpc3QSEQoFdmFsdWUYASADKANCAhABGh4K",
+            "CUZsb2F0TGlzdBIRCgV2YWx1ZRgBIAMoAkICEAEaLgoHQW55TGlzdBIjCgV2",
+            "YWx1ZRgBIAMoCzIULmdvb2dsZS5wcm90b2J1Zi5BbnlCBgoEa2luZCLRAwoK",
+            "VGVuc29ySW5mbxIOCgRuYW1lGAEgASgJSAASNgoKY29vX3NwYXJzZRgEIAEo",
+            "CzIgLnRlbnNvcmZsb3cuVGVuc29ySW5mby5Db29TcGFyc2VIABJCChBjb21w",
+            "b3NpdGVfdGVuc29yGAUgASgLMiYudGVuc29yZmxvdy5UZW5zb3JJbmZvLkNv",
+            "bXBvc2l0ZVRlbnNvckgAEiMKBWR0eXBlGAIgASgOMhQudGVuc29yZmxvdy5E",
+            "YXRhVHlwZRIyCgx0ZW5zb3Jfc2hhcGUYAyABKAsyHC50ZW5zb3JmbG93LlRl",
+            "bnNvclNoYXBlUHJvdG8aZQoJQ29vU3BhcnNlEhoKEnZhbHVlc190ZW5zb3Jf",
+            "bmFtZRgBIAEoCRIbChNpbmRpY2VzX3RlbnNvcl9uYW1lGAIgASgJEh8KF2Rl",
+            "bnNlX3NoYXBlX3RlbnNvcl9uYW1lGAMgASgJGmsKD0NvbXBvc2l0ZVRlbnNv",
+            "chIsCgl0eXBlX3NwZWMYASABKAsyGS50ZW5zb3JmbG93LlR5cGVTcGVjUHJv",
+            "dG8SKgoKY29tcG9uZW50cxgCIAMoCzIWLnRlbnNvcmZsb3cuVGVuc29ySW5m",
+            "b0IKCghlbmNvZGluZyKgAgoMU2lnbmF0dXJlRGVmEjQKBmlucHV0cxgBIAMo",
+            "CzIkLnRlbnNvcmZsb3cuU2lnbmF0dXJlRGVmLklucHV0c0VudHJ5EjYKB291",
+            "dHB1dHMYAiADKAsyJS50ZW5zb3JmbG93LlNpZ25hdHVyZURlZi5PdXRwdXRz",
+            "RW50cnkSEwoLbWV0aG9kX25hbWUYAyABKAkaRQoLSW5wdXRzRW50cnkSCwoD",
+            "a2V5GAEgASgJEiUKBXZhbHVlGAIgASgLMhYudGVuc29yZmxvdy5UZW5zb3JJ",
+            "bmZvOgI4ARpGCgxPdXRwdXRzRW50cnkSCwoDa2V5GAEgASgJEiUKBXZhbHVl",
+            "GAIgASgLMhYudGVuc29yZmxvdy5UZW5zb3JJbmZvOgI4ASJNCgxBc3NldEZp",
+            "bGVEZWYSKwoLdGVuc29yX2luZm8YASABKAsyFi50ZW5zb3JmbG93LlRlbnNv",
+            "ckluZm8SEAoIZmlsZW5hbWUYAiABKAlCegoYb3JnLnRlbnNvcmZsb3cuZnJh",
+            "bWV3b3JrQg9NZXRhR3JhcGhQcm90b3NQAVpIZ2l0aHViLmNvbS90ZW5zb3Jm",
+            "bG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL2NvcmVfcHJvdG9z",
+            "X2dvX3Byb3Rv+AEBYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.AnyReflection.Descriptor, global::Tensorflow.GraphReflection.Descriptor, global::Tensorflow.OpDefReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.SavedObjectGraphReflection.Descriptor, global::Tensorflow.SaverReflection.Descriptor, global::Tensorflow.StructReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MetaGraphDef), global::Tensorflow.MetaGraphDef.Parser, new[]{ "MetaInfoDef", "GraphDef", "SaverDef", "CollectionDef", "SignatureDef", "AssetFileDef", "ObjectGraphDef" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MetaGraphDef.Types.MetaInfoDef), global::Tensorflow.MetaGraphDef.Types.MetaInfoDef.Parser, new[]{ "MetaGraphVersion", "StrippedOpList", "AnyInfo", "Tags", "TensorflowVersion", "TensorflowGitVersion", "StrippedDefaultAttrs" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MetaGraphDef), global::Tensorflow.MetaGraphDef.Parser, new[]{ "MetaInfoDef", "GraphDef", "SaverDef", "CollectionDef", "SignatureDef", "AssetFileDef", "ObjectGraphDef" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.MetaGraphDef.Types.MetaInfoDef), global::Tensorflow.MetaGraphDef.Types.MetaInfoDef.Parser, new[]{ "MetaGraphVersion", "StrippedOpList", "AnyInfo", "Tags", "TensorflowVersion", "TensorflowGitVersion", "StrippedDefaultAttrs", "FunctionAliases" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             null, null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CollectionDef), global::Tensorflow.CollectionDef.Parser, new[]{ "NodeList", "BytesList", "Int64List", "FloatList", "AnyList" }, new[]{ "Kind" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CollectionDef.Types.NodeList), global::Tensorflow.CollectionDef.Types.NodeList.Parser, new[]{ "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CollectionDef.Types.BytesList), global::Tensorflow.CollectionDef.Types.BytesList.Parser, new[]{ "Value" }, null, null, null, null),
@@ -474,6 +477,7 @@ namespace Tensorflow {
           tensorflowVersion_ = other.tensorflowVersion_;
           tensorflowGitVersion_ = other.tensorflowGitVersion_;
           strippedDefaultAttrs_ = other.strippedDefaultAttrs_;
+          functionAliases_ = other.functionAliases_.Clone();
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -592,6 +596,19 @@ namespace Tensorflow {
           }
         }
 
+        /// <summary>Field number for the "function_aliases" field.</summary>
+        public const int FunctionAliasesFieldNumber = 8;
+        private static readonly pbc::MapField<string, string>.Codec _map_functionAliases_codec
+            = new pbc::MapField<string, string>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForString(18, ""), 66);
+        private readonly pbc::MapField<string, string> functionAliases_ = new pbc::MapField<string, string>();
+        /// <summary>
+        /// FunctionDef name to aliases mapping.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::MapField<string, string> FunctionAliases {
+          get { return functionAliases_; }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override bool Equals(object other) {
           return Equals(other as MetaInfoDef);
@@ -612,6 +629,7 @@ namespace Tensorflow {
           if (TensorflowVersion != other.TensorflowVersion) return false;
           if (TensorflowGitVersion != other.TensorflowGitVersion) return false;
           if (StrippedDefaultAttrs != other.StrippedDefaultAttrs) return false;
+          if (!FunctionAliases.Equals(other.FunctionAliases)) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -625,6 +643,7 @@ namespace Tensorflow {
           if (TensorflowVersion.Length != 0) hash ^= TensorflowVersion.GetHashCode();
           if (TensorflowGitVersion.Length != 0) hash ^= TensorflowGitVersion.GetHashCode();
           if (StrippedDefaultAttrs != false) hash ^= StrippedDefaultAttrs.GetHashCode();
+          hash ^= FunctionAliases.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -663,6 +682,7 @@ namespace Tensorflow {
             output.WriteRawTag(56);
             output.WriteBool(StrippedDefaultAttrs);
           }
+          functionAliases_.WriteTo(output, _map_functionAliases_codec);
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -690,6 +710,7 @@ namespace Tensorflow {
           if (StrippedDefaultAttrs != false) {
             size += 1 + 1;
           }
+          size += functionAliases_.CalculateSize(_map_functionAliases_codec);
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
           }
@@ -726,6 +747,7 @@ namespace Tensorflow {
           if (other.StrippedDefaultAttrs != false) {
             StrippedDefaultAttrs = other.StrippedDefaultAttrs;
           }
+          functionAliases_.Add(other.functionAliases_);
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 
@@ -769,6 +791,10 @@ namespace Tensorflow {
               }
               case 56: {
                 StrippedDefaultAttrs = input.ReadBool();
+                break;
+              }
+              case 66: {
+                functionAliases_.AddEntriesFrom(input, _map_functionAliases_codec);
                 break;
               }
             }

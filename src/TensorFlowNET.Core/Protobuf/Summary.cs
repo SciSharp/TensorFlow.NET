@@ -30,33 +30,37 @@ namespace Tensorflow {
             "hwEKDkhpc3RvZ3JhbVByb3RvEgsKA21pbhgBIAEoARILCgNtYXgYAiABKAES",
             "CwoDbnVtGAMgASgBEgsKA3N1bRgEIAEoARITCgtzdW1fc3F1YXJlcxgFIAEo",
             "ARIYCgxidWNrZXRfbGltaXQYBiADKAFCAhABEhIKBmJ1Y2tldBgHIAMoAUIC",
-            "EAEitQEKD1N1bW1hcnlNZXRhZGF0YRI7CgtwbHVnaW5fZGF0YRgBIAEoCzIm",
+            "EAEi4AEKD1N1bW1hcnlNZXRhZGF0YRI7CgtwbHVnaW5fZGF0YRgBIAEoCzIm",
             "LnRlbnNvcmZsb3cuU3VtbWFyeU1ldGFkYXRhLlBsdWdpbkRhdGESFAoMZGlz",
-            "cGxheV9uYW1lGAIgASgJEhsKE3N1bW1hcnlfZGVzY3JpcHRpb24YAyABKAka",
-            "MgoKUGx1Z2luRGF0YRITCgtwbHVnaW5fbmFtZRgBIAEoCRIPCgdjb250ZW50",
-            "GAIgASgMIt4ECgdTdW1tYXJ5EigKBXZhbHVlGAEgAygLMhkudGVuc29yZmxv",
-            "dy5TdW1tYXJ5LlZhbHVlGlgKBUltYWdlEg4KBmhlaWdodBgBIAEoBRINCgV3",
-            "aWR0aBgCIAEoBRISCgpjb2xvcnNwYWNlGAMgASgFEhwKFGVuY29kZWRfaW1h",
-            "Z2Vfc3RyaW5nGAQgASgMGn0KBUF1ZGlvEhMKC3NhbXBsZV9yYXRlGAEgASgC",
-            "EhQKDG51bV9jaGFubmVscxgCIAEoAxIVCg1sZW5ndGhfZnJhbWVzGAMgASgD",
-            "EhwKFGVuY29kZWRfYXVkaW9fc3RyaW5nGAQgASgMEhQKDGNvbnRlbnRfdHlw",
-            "ZRgFIAEoCRrPAgoFVmFsdWUSEQoJbm9kZV9uYW1lGAcgASgJEgsKA3RhZxgB",
-            "IAEoCRItCghtZXRhZGF0YRgJIAEoCzIbLnRlbnNvcmZsb3cuU3VtbWFyeU1l",
-            "dGFkYXRhEhYKDHNpbXBsZV92YWx1ZRgCIAEoAkgAEiYKHG9ic29sZXRlX29s",
-            "ZF9zdHlsZV9oaXN0b2dyYW0YAyABKAxIABIqCgVpbWFnZRgEIAEoCzIZLnRl",
-            "bnNvcmZsb3cuU3VtbWFyeS5JbWFnZUgAEisKBWhpc3RvGAUgASgLMhoudGVu",
-            "c29yZmxvdy5IaXN0b2dyYW1Qcm90b0gAEioKBWF1ZGlvGAYgASgLMhkudGVu",
-            "c29yZmxvdy5TdW1tYXJ5LkF1ZGlvSAASKQoGdGVuc29yGAggASgLMhcudGVu",
-            "c29yZmxvdy5UZW5zb3JQcm90b0gAQgcKBXZhbHVlQm0KGG9yZy50ZW5zb3Jm",
-            "bG93LmZyYW1ld29ya0INU3VtbWFyeVByb3Rvc1ABWj1naXRodWIuY29tL3Rl",
-            "bnNvcmZsb3cvdGVuc29yZmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvZnJhbWV3",
-            "b3Jr+AEBYgZwcm90bzM="));
+            "cGxheV9uYW1lGAIgASgJEhsKE3N1bW1hcnlfZGVzY3JpcHRpb24YAyABKAkS",
+            "KQoKZGF0YV9jbGFzcxgEIAEoDjIVLnRlbnNvcmZsb3cuRGF0YUNsYXNzGjIK",
+            "ClBsdWdpbkRhdGESEwoLcGx1Z2luX25hbWUYASABKAkSDwoHY29udGVudBgC",
+            "IAEoDCLeBAoHU3VtbWFyeRIoCgV2YWx1ZRgBIAMoCzIZLnRlbnNvcmZsb3cu",
+            "U3VtbWFyeS5WYWx1ZRpYCgVJbWFnZRIOCgZoZWlnaHQYASABKAUSDQoFd2lk",
+            "dGgYAiABKAUSEgoKY29sb3JzcGFjZRgDIAEoBRIcChRlbmNvZGVkX2ltYWdl",
+            "X3N0cmluZxgEIAEoDBp9CgVBdWRpbxITCgtzYW1wbGVfcmF0ZRgBIAEoAhIU",
+            "CgxudW1fY2hhbm5lbHMYAiABKAMSFQoNbGVuZ3RoX2ZyYW1lcxgDIAEoAxIc",
+            "ChRlbmNvZGVkX2F1ZGlvX3N0cmluZxgEIAEoDBIUCgxjb250ZW50X3R5cGUY",
+            "BSABKAkazwIKBVZhbHVlEhEKCW5vZGVfbmFtZRgHIAEoCRILCgN0YWcYASAB",
+            "KAkSLQoIbWV0YWRhdGEYCSABKAsyGy50ZW5zb3JmbG93LlN1bW1hcnlNZXRh",
+            "ZGF0YRIWCgxzaW1wbGVfdmFsdWUYAiABKAJIABImChxvYnNvbGV0ZV9vbGRf",
+            "c3R5bGVfaGlzdG9ncmFtGAMgASgMSAASKgoFaW1hZ2UYBCABKAsyGS50ZW5z",
+            "b3JmbG93LlN1bW1hcnkuSW1hZ2VIABIrCgVoaXN0bxgFIAEoCzIaLnRlbnNv",
+            "cmZsb3cuSGlzdG9ncmFtUHJvdG9IABIqCgVhdWRpbxgGIAEoCzIZLnRlbnNv",
+            "cmZsb3cuU3VtbWFyeS5BdWRpb0gAEikKBnRlbnNvchgIIAEoCzIXLnRlbnNv",
+            "cmZsb3cuVGVuc29yUHJvdG9IAEIHCgV2YWx1ZSpvCglEYXRhQ2xhc3MSFgoS",
+            "REFUQV9DTEFTU19VTktOT1dOEAASFQoRREFUQV9DTEFTU19TQ0FMQVIQARIV",
+            "ChFEQVRBX0NMQVNTX1RFTlNPUhACEhwKGERBVEFfQ0xBU1NfQkxPQl9TRVFV",
+            "RU5DRRADQn4KGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0INU3VtbWFyeVBy",
+            "b3Rvc1ABWk5naXRodWIuY29tL3RlbnNvcmZsb3cvdGVuc29yZmxvdy90ZW5z",
+            "b3JmbG93L2dvL2NvcmUvZnJhbWV3b3JrL3N1bW1hcnlfZ29fcHJvdG/4AQFi",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TensorReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.DataClass), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryDescription), global::Tensorflow.SummaryDescription.Parser, new[]{ "TypeHint" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.HistogramProto), global::Tensorflow.HistogramProto.Parser, new[]{ "Min", "Max", "Num", "Sum", "SumSquares", "BucketLimit", "Bucket" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryMetadata), global::Tensorflow.SummaryMetadata.Parser, new[]{ "PluginData", "DisplayName", "SummaryDescription" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryMetadata.Types.PluginData), global::Tensorflow.SummaryMetadata.Types.PluginData.Parser, new[]{ "PluginName", "Content" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryMetadata), global::Tensorflow.SummaryMetadata.Parser, new[]{ "PluginData", "DisplayName", "SummaryDescription", "DataClass" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SummaryMetadata.Types.PluginData), global::Tensorflow.SummaryMetadata.Types.PluginData.Parser, new[]{ "PluginName", "Content" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary), global::Tensorflow.Summary.Parser, new[]{ "Value" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary.Types.Image), global::Tensorflow.Summary.Types.Image.Parser, new[]{ "Height", "Width", "Colorspace", "EncodedImageString" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary.Types.Audio), global::Tensorflow.Summary.Types.Audio.Parser, new[]{ "SampleRate", "NumChannels", "LengthFrames", "EncodedAudioString", "ContentType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.Summary.Types.Value), global::Tensorflow.Summary.Types.Value.Parser, new[]{ "NodeName", "Tag", "Metadata", "SimpleValue", "ObsoleteOldStyleHistogram", "Image", "Histo", "Audio", "Tensor" }, new[]{ "Value" }, null, null, null)})
@@ -65,6 +69,35 @@ namespace Tensorflow {
     #endregion
 
   }
+  #region Enums
+  public enum DataClass {
+    /// <summary>
+    /// Unknown data class, used (implicitly) for legacy data. Will not be
+    /// processed by data ingestion pipelines.
+    /// </summary>
+    [pbr::OriginalName("DATA_CLASS_UNKNOWN")] Unknown = 0,
+    /// <summary>
+    /// Scalar time series. Each `Value` for the corresponding tag must have
+    /// `tensor` set to a rank-0 tensor of floating-point dtype, which will be
+    /// converted to float64.
+    /// </summary>
+    [pbr::OriginalName("DATA_CLASS_SCALAR")] Scalar = 1,
+    /// <summary>
+    /// Tensor time series. Each `Value` for the corresponding tag must have
+    /// `tensor` set. The tensor value is arbitrary, but should be small to
+    /// accommodate direct storage in database backends: an upper bound of a few
+    /// kilobytes is a reasonable rule of thumb.
+    /// </summary>
+    [pbr::OriginalName("DATA_CLASS_TENSOR")] Tensor = 2,
+    /// <summary>
+    /// Blob sequence time series. Each `Value` for the corresponding tag must
+    /// have `tensor` set to a rank-1 tensor of bytestring dtype.
+    /// </summary>
+    [pbr::OriginalName("DATA_CLASS_BLOB_SEQUENCE")] BlobSequence = 3,
+  }
+
+  #endregion
+
   #region Messages
   /// <summary>
   /// Metadata associated with a series of Summary data
@@ -528,6 +561,7 @@ namespace Tensorflow {
       pluginData_ = other.pluginData_ != null ? other.pluginData_.Clone() : null;
       displayName_ = other.displayName_;
       summaryDescription_ = other.summaryDescription_;
+      dataClass_ = other.dataClass_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -578,6 +612,23 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "data_class" field.</summary>
+    public const int DataClassFieldNumber = 4;
+    private global::Tensorflow.DataClass dataClass_ = global::Tensorflow.DataClass.Unknown;
+    /// <summary>
+    /// Class of data stored in this time series. Required for compatibility with
+    /// TensorBoard's generic data facilities (`DataProvider`, et al.). This value
+    /// imposes constraints on the dtype and shape of the corresponding tensor
+    /// values. See `DataClass` docs for details.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.DataClass DataClass {
+      get { return dataClass_; }
+      set {
+        dataClass_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SummaryMetadata);
@@ -594,6 +645,7 @@ namespace Tensorflow {
       if (!object.Equals(PluginData, other.PluginData)) return false;
       if (DisplayName != other.DisplayName) return false;
       if (SummaryDescription != other.SummaryDescription) return false;
+      if (DataClass != other.DataClass) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -603,6 +655,7 @@ namespace Tensorflow {
       if (pluginData_ != null) hash ^= PluginData.GetHashCode();
       if (DisplayName.Length != 0) hash ^= DisplayName.GetHashCode();
       if (SummaryDescription.Length != 0) hash ^= SummaryDescription.GetHashCode();
+      if (DataClass != global::Tensorflow.DataClass.Unknown) hash ^= DataClass.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -628,6 +681,10 @@ namespace Tensorflow {
         output.WriteRawTag(26);
         output.WriteString(SummaryDescription);
       }
+      if (DataClass != global::Tensorflow.DataClass.Unknown) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) DataClass);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -644,6 +701,9 @@ namespace Tensorflow {
       }
       if (SummaryDescription.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(SummaryDescription);
+      }
+      if (DataClass != global::Tensorflow.DataClass.Unknown) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) DataClass);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -667,6 +727,9 @@ namespace Tensorflow {
       }
       if (other.SummaryDescription.Length != 0) {
         SummaryDescription = other.SummaryDescription;
+      }
+      if (other.DataClass != global::Tensorflow.DataClass.Unknown) {
+        DataClass = other.DataClass;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -692,6 +755,10 @@ namespace Tensorflow {
           }
           case 26: {
             SummaryDescription = input.ReadString();
+            break;
+          }
+          case 32: {
+            DataClass = (global::Tensorflow.DataClass) input.ReadEnum();
             break;
           }
         }
