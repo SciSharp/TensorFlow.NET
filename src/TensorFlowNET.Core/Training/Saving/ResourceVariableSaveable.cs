@@ -16,7 +16,7 @@
 
 namespace Tensorflow
 {
-    public class ResourceVariableSaveable : SaveableObject
+    public class ResourceVariableSaveable : MySaveableObject
     {
         string _var_device;
         int[] _var_shape;

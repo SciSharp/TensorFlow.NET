@@ -28,10 +28,10 @@ namespace Tensorflow
         /// </summary>
         /// <param name="names_to_saveables"></param>
         /// <returns></returns>
-        public static SaveableObject[] validate_and_slice_inputs(IVariableV1[] names_to_saveables)
+        public static MySaveableObject[] validate_and_slice_inputs(IVariableV1[] names_to_saveables)
         {
             var names_to_saveables_dict = op_list_to_dict(names_to_saveables);
-            var saveables = new List<SaveableObject>();
+            var saveables = new List<MySaveableObject>();
             var seen_ops = new List<Tensor>();
 
             foreach (var (name, op) in enumerate(names_to_saveables_dict))
@@ -42,7 +42,7 @@ namespace Tensorflow
             return saveables.ToArray();
         }
 
-        private static void _add_saveable<T>(List<T> saveables, List<Tensor> seen_ops, T saveable) where T : SaveableObject
+        private static void _add_saveable<T>(List<T> saveables, List<Tensor> seen_ops, T saveable) where T : MySaveableObject
         {
             if (seen_ops.Contains(saveable.op))
                 throw new ValueError($"The same saveable will be restored with two names: {saveable.name}");
@@ -57,7 +57,7 @@ namespace Tensorflow
         /// <param name="op"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static IEnumerable<SaveableObject> saveable_objects_for_op(Tensor op, string name)
+        public static IEnumerable<MySaveableObject> saveable_objects_for_op(Tensor op, string name)
         {
             if (false)
             {

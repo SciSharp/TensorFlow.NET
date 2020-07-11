@@ -37,7 +37,7 @@ namespace Tensorflow
         /// <param name="filename_tensor"></param>
         /// <param name="saveables"></param>
         /// <returns></returns>
-        public virtual Operation save_op(Tensor filename_tensor, SaveableObject[] saveables)
+        public virtual Operation save_op(Tensor filename_tensor, MySaveableObject[] saveables)
         {
             var tensor_names = new List<string>();
             var tensors = new List<Tensor>();
@@ -63,7 +63,7 @@ namespace Tensorflow
             }
         }
 
-        public virtual Tensor[] bulk_restore(Tensor filename_tensor, SaveableObject[] saveables, int preferred_shard, bool restore_sequentially)
+        public virtual Tensor[] bulk_restore(Tensor filename_tensor, MySaveableObject[] saveables, int preferred_shard, bool restore_sequentially)
         {
             var names = new List<string>();
             var slices = new List<string>();
@@ -182,7 +182,7 @@ namespace Tensorflow
             });
         }
 
-        public Tensor _AddSaveOps(Tensor filename_tensor, SaveableObject[] saveables)
+        public Tensor _AddSaveOps(Tensor filename_tensor, MySaveableObject[] saveables)
         {
             var save = save_op(filename_tensor, saveables);
             return control_flow_ops.with_dependencies(new Operation[] { save }, filename_tensor);
@@ -199,7 +199,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns>An Operation that restores the variables.</returns>
         public Operation _AddRestoreOps(Tensor filename_tensor, 
-            SaveableObject[] saveables,
+            MySaveableObject[] saveables,
             bool restore_sequentially,
             bool reshape,
             int preferred_shard = -1,

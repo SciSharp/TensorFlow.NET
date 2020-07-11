@@ -16,7 +16,7 @@
 
 namespace Tensorflow
 {
-    public class ReferenceVariableSaveable : SaveableObject
+    public class ReferenceVariableSaveable : MySaveableObject
     {
         private SaveSpec _spec;
 
