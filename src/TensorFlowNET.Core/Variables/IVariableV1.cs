@@ -38,6 +38,9 @@ namespace Tensorflow
         public Tensor GraphElement { get; }
         public Graph Graph { get; }
         public TF_DataType dtype { get; }
-        public Operation assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true);
+        public TensorShape shape { get; }
+        ITensorOrOperation assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true);
+        ITensorOrOperation assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true);
+        Tensor AsTensor();
     }
 }

@@ -23,7 +23,7 @@ namespace Tensorflow
 {
     public class gen_training_ops
     {
-        public static Tensor apply_adam(RefVariable var, RefVariable m, RefVariable v, Tensor beta1_power, Tensor beta2_power, 
+        public static Tensor apply_adam(IVariableV1 var, IVariableV1 m, IVariableV1 v, Tensor beta1_power, Tensor beta2_power, 
             Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, 
             bool use_locking = false, bool use_nesterov = false, string name = null)
         {

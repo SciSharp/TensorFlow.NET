@@ -14,7 +14,7 @@
 
         public static implicit operator Tensor(RefVariable var)
         {
-            return var._AsTensor();
+            return var.AsTensor();
         }
 
         public static implicit operator RefVariable(Tensor var)

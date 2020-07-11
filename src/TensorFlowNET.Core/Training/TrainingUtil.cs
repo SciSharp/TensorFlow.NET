@@ -7,7 +7,7 @@ namespace Tensorflow.Train
 {
     public class TrainingUtil
     {
-        public static RefVariable create_global_step(Graph graph = null)
+        public static IVariableV1 create_global_step(Graph graph = null)
         {
             graph = graph ?? ops.get_default_graph();
             if (get_global_step(graph) != null)
@@ -16,7 +16,7 @@ namespace Tensorflow.Train
             // Create in proper graph and base name_scope.
             var g = graph.as_default();
             g.name_scope(null);
-            var v = tf.get_variable(tf.GraphKeys.GLOBAL_STEP, new int[0], dtype: dtypes.int64,
+            var v = tf.compat.v1.get_variable(tf.GraphKeys.GLOBAL_STEP, new int[0], dtype: dtypes.int64,
                 initializer: tf.zeros_initializer,
                 trainable: false,
                 aggregation: VariableAggregation.OnlyFirstReplica,

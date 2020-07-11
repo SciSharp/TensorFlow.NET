@@ -70,14 +70,15 @@ namespace Tensorflow
             // handle_deleter
         }
 
-        public BaseResourceVariable assign(object value, bool use_locking = false, string name = null, bool read_value = true)
+        public ITensorOrOperation assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
         {
             var value_tensor = ops.convert_to_tensor(value, dtype: dtype);
             var assign_op = gen_resource_variable_ops.assign_variable_op(
                 handle, value_tensor, name: name);
             if (read_value)
-                return _lazy_read(assign_op, value_tensor);
-            return null;
+                return gen_resource_variable_ops.read_variable_op(handle, dtype);
+                // return _lazy_read(assign_op, value_tensor);
+            return assign_op;
         }
 
         public Tensor value() => _read_variable_op();
@@ -122,13 +123,14 @@ namespace Tensorflow
                 return array_ops.identity(value);
             });
 
-        public Operation assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true)
+        public ITensorOrOperation assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true)
         {
             var assign_add_op = gen_resource_variable_ops.assign_add_variable_op(Handle,
                 ops.convert_to_tensor(delta, dtype: dtype), name: name);
             
-            /*if (read_value)
-                return _lazy_read(assign_add_op);*/
+            if (read_value)
+                return gen_resource_variable_ops.read_variable_op(handle, dtype);
+                // return _lazy_read(assign_add_op);
             return assign_add_op;
         }
 
@@ -145,5 +147,7 @@ namespace Tensorflow
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
         }
+
+        public Tensor AsTensor() => _graph_element;
     }
 }

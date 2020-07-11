@@ -68,11 +68,11 @@ namespace Tensorflow
             return gen_math_ops.add_n(inputs, name: name);
         }
 
-        public static Tensor cast(RefVariable x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
+        public static Tensor cast(IVariableV1 x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
         {
             var base_type = dtype.as_base_dtype();
             if (base_type == x.dtype)
-                return x;
+                return x.AsTensor();
 
             return tf_with(ops.name_scope(name, "Cast", new { x }), scope =>
             {
@@ -81,7 +81,7 @@ namespace Tensorflow
                 if (t_x.dtype.as_base_dtype() != base_type)
                     t_x = gen_math_ops.cast(t_x, base_type, name: name);
 
-                return x;
+                return x.AsTensor();
             });
         }
 

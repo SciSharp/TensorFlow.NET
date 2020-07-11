@@ -47,7 +47,7 @@ namespace Tensorflow
             _dtype = dtype;
         }
 
-        public RefVariable get_variable(_VariableStore var_store, 
+        public IVariableV1 get_variable(_VariableStore var_store, 
             string name, 
             TensorShape shape = null, 
             TF_DataType dtype = TF_DataType.DtInvalid,
@@ -73,7 +73,7 @@ namespace Tensorflow
                     trainable: trainable,
                     collections: collections,
                     synchronization: synchronization,
-                    aggregation: aggregation) as RefVariable;
+                    aggregation: aggregation);
             });
         }
 

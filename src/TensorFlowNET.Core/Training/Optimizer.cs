@@ -43,7 +43,7 @@ namespace Tensorflow
         protected Tensor _lr_t;
         public Tensor LearningRateTensor => _lr_t;
         public bool _use_locking;
-        public Dictionary<string, Dictionary<string, RefVariable>> _slots;
+        public Dictionary<string, Dictionary<string, IVariableV1>> _slots;
         public Dictionary<string, IVariableV1> _non_slot_dict;
         public Dictionary<string, object> _deferred_slot_restorations;
         SlotCreator slot_creator = new SlotCreator();
@@ -57,7 +57,7 @@ namespace Tensorflow
             _use_locking = use_locking;
             _lr = learning_rate;
             // Dictionary of slots.
-            _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
+            _slots = new Dictionary<string, Dictionary<string, IVariableV1>>();
             _non_slot_dict = new Dictionary<string, IVariableV1>();
             _deferred_slot_restorations = new Dictionary<string, object>();
         }
@@ -71,7 +71,7 @@ namespace Tensorflow
             _use_locking = use_locking;
             _lr_t = learning_rate;
             // Dictionary of slots.
-            _slots = new Dictionary<string, Dictionary<string, RefVariable>>();
+            _slots = new Dictionary<string, Dictionary<string, IVariableV1>>();
             _non_slot_dict = new Dictionary<string, IVariableV1>();
             _deferred_slot_restorations = new Dictionary<string, object>();
         }
@@ -207,7 +207,7 @@ namespace Tensorflow
                         {
                             apply_updates = state_ops.assign_add(global_step,
                                 ops.convert_to_tensor(1, dtype: global_step.dtype),
-                                name: name);
+                                name: name) as Operation;
                         }
                     });
                 }
@@ -241,7 +241,7 @@ namespace Tensorflow
         /// <param name="initial_value"></param>
         /// <param name="name"></param>
         /// <param name="colocate_with"></param>
-        protected IVariableV1 _create_non_slot_variable(float initial_value, string name, RefVariable colocate_with)
+        protected IVariableV1 _create_non_slot_variable(float initial_value, string name, IVariableV1 colocate_with)
         {
             // Recommendation: Use OptimizerV2 if your optimizer uses non-slot variables.
             var graph = colocate_with.Graph;
@@ -338,7 +338,7 @@ namespace Tensorflow
         /// <param name="var"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        protected RefVariable get_slot(RefVariable var, string name)
+        protected IVariableV1 get_slot(IVariableV1 var, string name)
         {
             var named_slots = _slots.ContainsKey(name) ? _slots[name] : null;
             if (named_slots == null)
@@ -347,7 +347,7 @@ namespace Tensorflow
             return named_slots.ContainsKey(_var_key(var)) ? named_slots[_var_key(var)] : null;
         }
 
-        private string _var_key(RefVariable var)
+        private string _var_key(IVariableV1 var)
         {
             return $"{var.Op.graph.graph_key}.{var.Op.name}";
         }
@@ -438,7 +438,7 @@ namespace Tensorflow
         /// <param name="slot_name"></param>
         /// <param name="op_name"></param>
         /// <returns></returns>
-        protected RefVariable _zeros_slot(RefVariable var, string slot_name, string op_name)
+        protected IVariableV1 _zeros_slot(IVariableV1 var, string slot_name, string op_name)
         {
             var named_slots = _slot_dict(slot_name);
             if (!named_slots.ContainsKey(_var_key(var)))
@@ -453,18 +453,18 @@ namespace Tensorflow
         /// <summary>
         /// Restore a newly created slot variable's value.
         /// </summary>
-        protected void _restore_slot_variable(string slot_name, RefVariable variable, RefVariable slot_variable)
+        protected void _restore_slot_variable(string slot_name, IVariableV1 variable, IVariableV1 slot_variable)
         {
             var variable_key = _var_key(variable);
             // TODO
         }
 
-        protected Dictionary<string, RefVariable> _slot_dict(string slot_name)
+        protected Dictionary<string, IVariableV1> _slot_dict(string slot_name)
         {
             var named_slots = _slots.ContainsKey(slot_name) ? _slots[slot_name] : null;
             if(named_slots == null)
             {
-                named_slots = new Dictionary<string, RefVariable>();
+                named_slots = new Dictionary<string, IVariableV1>();
                 _slots[slot_name] = named_slots;
             }
 

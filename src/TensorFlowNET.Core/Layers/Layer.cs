@@ -161,7 +161,7 @@ namespace Tensorflow.Layers
                             initializer: initializer,
                             trainable: trainable,
                             getter: (name1, shape1, dtype1, initializer1, trainable1) =>
-                                tf.get_variable(name1,
+                                tf.compat.v1.get_variable(name1,
                                     shape: new TensorShape(shape1),
                                     dtype: dtype1,
                                     initializer: initializer1,

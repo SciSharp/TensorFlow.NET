@@ -79,7 +79,7 @@ namespace Tensorflow.Train
                 use_locking: _use_locking).op;
         }
 
-        private Operation _apply_sparse_shared(Tensor grad, RefVariable var, Tensor indices, Func<RefVariable, Tensor, Tensor, Tensor> scatter_add)
+        private Operation _apply_sparse_shared(Tensor grad, IVariableV1 var, Tensor indices, Func<IVariableV1, Tensor, Tensor, Tensor> scatter_add)
         {
             var (beta1_power_v, beta2_power_v) = _get_beta_accumulators();
             Tensor beta1_power = math_ops.cast(beta1_power_v, var.dtype.as_base_dtype());
@@ -91,7 +91,7 @@ namespace Tensorflow.Train
             var lr = (lr_t * math_ops.sqrt(1 - beta2_power) / (1 - beta1_power));
             var m = get_slot(var, "m");
             var m_scaled_g_values = grad * (1 - beta1_t);
-            var m_t = state_ops.assign(m, m * beta1_t, use_locking: _use_locking);
+            var m_t = state_ops.assign(m.AsTensor(), m.AsTensor() * beta1_t, use_locking: _use_locking);
             tf_with(ops.control_dependencies(new[] { m_t }), delegate
             {
                 m_t = scatter_add(m, indices, m_scaled_g_values);
@@ -99,7 +99,7 @@ namespace Tensorflow.Train
 
             var v = get_slot(var, "v");
             var v_scaled_g_values = (grad * grad) * (1 - beta2_t);
-            var v_t = state_ops.assign(v, v * beta2_t, use_locking: _use_locking);
+            var v_t = state_ops.assign(v.AsTensor(), v.AsTensor() * beta2_t, use_locking: _use_locking);
             tf_with(ops.control_dependencies(new[] { v_t }), delegate
             {
                 v_t = scatter_add(v, indices, v_scaled_g_values);
@@ -132,8 +132,8 @@ namespace Tensorflow.Train
             {
                 var (beta1_power, beta2_power) = _get_beta_accumulators();
                 ops.colocate_with(beta1_power);
-                var update_beta1 = beta1_power.assign(beta1_power * _beta1_t, use_locking: _use_locking);
-                var update_beta2 = beta2_power.assign(beta2_power * _beta2_t, use_locking: _use_locking);
+                var update_beta1 = beta1_power.assign(beta1_power.AsTensor() * _beta1_t, use_locking: _use_locking);
+                var update_beta2 = beta2_power.assign(beta2_power.AsTensor() * _beta2_t, use_locking: _use_locking);
 
                 operations.Add(update_beta1);
                 operations.Add(update_beta2);
@@ -142,12 +142,12 @@ namespace Tensorflow.Train
             return control_flow_ops.group(operations.ToArray(), name: name_scope);
         }
 
-        private (RefVariable, RefVariable) _get_beta_accumulators()
+        private (IVariableV1, IVariableV1) _get_beta_accumulators()
         {
             ops.init_scope();
             var graph = ops.get_default_graph();
-            return (_get_non_slot_variable("beta1_power", graph: graph) as RefVariable,
-                _get_non_slot_variable("beta2_power", graph: graph) as RefVariable);
+            return (_get_non_slot_variable("beta1_power", graph: graph),
+                _get_non_slot_variable("beta2_power", graph: graph));
         }
 
         public override void _prepare()

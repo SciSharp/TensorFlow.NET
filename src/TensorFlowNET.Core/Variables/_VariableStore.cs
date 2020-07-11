@@ -92,7 +92,7 @@ namespace Tensorflow
                 return _get_single_variable(name: name,
                     shape: shape,
                     dtype: dtype,
-                    initializer: tensor,
+                    init_value: tensor,
                     trainable: trainable,
                     validate_shape: validate_shape,
                     synchronization: synchronization,
@@ -116,6 +116,7 @@ namespace Tensorflow
             TensorShape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
+            Tensor init_value = null,
             bool reuse = false,
             bool? trainable = null,
             List<string> collections = null,
@@ -124,9 +125,9 @@ namespace Tensorflow
             VariableSynchronization synchronization = VariableSynchronization.Auto,
             VariableAggregation aggregation = VariableAggregation.None)
         {
-            bool initializing_from_value = false;
+            bool initializing_from_value = init_value != null;
             if (use_resource == null)
-                use_resource = false;
+                use_resource = variable_scope._DEFAULT_USE_RESOURCE;
 
             if (_vars.ContainsKey(name))
             {
@@ -140,7 +141,7 @@ namespace Tensorflow
 
             IVariableV1 v = null;
             // Create the tensor to initialize the variable with default value.
-            if (initializer == null)
+            if (initializer == null && init_value == null)
             {
                 if (dtype.is_floating())
                 {
@@ -154,7 +155,10 @@ namespace Tensorflow
             {
                 if (initializing_from_value)
                 {
-
+                    v = new ResourceVariable(init_value,
+                        name: name,
+                        validate_shape: validate_shape,
+                        trainable: trainable.Value);
                 }
                 else
                 {
@@ -166,50 +170,11 @@ namespace Tensorflow
                         trainable: trainable,
                         collections: collections,
                         dtype: variable_dtype,
+                        use_resource: use_resource,
                         validate_shape: validate_shape,
                         synchronization: synchronization,
                         aggregation: aggregation);
                 }
-            }
-
-            _vars[name] = v;
-
-            return v;
-        }
-
-        private RefVariable _get_single_variable(string name,
-            TensorShape shape = null,
-            TF_DataType dtype = TF_DataType.DtInvalid,
-            Tensor initializer = null,
-            bool reuse = false,
-            bool? trainable = null,
-            bool validate_shape = false,
-            bool? use_resource = null,
-            VariableSynchronization synchronization = VariableSynchronization.Auto,
-            VariableAggregation aggregation = VariableAggregation.None)
-        {
-            if (use_resource == null)
-                use_resource = false;
-
-            if (_vars.ContainsKey(name))
-            {
-                if (!reuse)
-                {
-                    var var = _vars[name];
-
-                }
-                throw new NotImplementedException("_get_single_variable");
-            }
-
-            RefVariable v = null;
-            // Create the variable.
-            ops.init_scope();
-            {
-                var init_val = initializer;
-                v = new RefVariable(init_val,
-                    name: name,
-                    validate_shape: validate_shape,
-                    trainable: trainable.Value);
             }
 
             _vars[name] = v;

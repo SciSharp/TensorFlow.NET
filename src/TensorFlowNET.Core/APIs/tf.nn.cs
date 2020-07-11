@@ -27,13 +27,13 @@ namespace Tensorflow
 
         public class nn_internal
         {
-            public Tensor conv2d(Tensor input, RefVariable filter, int[] strides, string padding, bool use_cudnn_on_gpu = true, 
+            public Tensor conv2d(Tensor input, IVariableV1 filter, int[] strides, string padding, bool use_cudnn_on_gpu = true, 
                 string data_format= "NHWC", int[] dilations= null, string name = null)
             {
                 var parameters = new Conv2dParams
                 {
                     Input = input,
-                    Filter = filter,
+                    Filter = filter.AsTensor(),
                     Strides = strides,
                     Padding = padding,
                     UseCudnnOnGpu = use_cudnn_on_gpu,
@@ -98,7 +98,7 @@ namespace Tensorflow
                     name: name, 
                     keep_dims: keep_dims);
 
-            public Tensor embedding_lookup(RefVariable @params,
+            public Tensor embedding_lookup(IVariableV1 @params,
                 Tensor ids,
                 string partition_strategy = "mod",
                 string name = null) => embedding_ops._embedding_lookup_and_transform(@params,
@@ -150,12 +150,12 @@ namespace Tensorflow
             public Tensor[] top_k(Tensor input, int k = 1, bool sorted = true, string name = null)
                 => gen_nn_ops.top_kv2(input, k: k, sorted: sorted, name: name);
 
-            public Tensor bias_add(Tensor value, RefVariable bias, string data_format = null, string name = null)
+            public Tensor bias_add(Tensor value, IVariableV1 bias, string data_format = null, string name = null)
             {
                 return tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
                 {
                     name = scope;
-                    return gen_nn_ops.bias_add(value, bias, data_format: data_format, name: name);
+                    return gen_nn_ops.bias_add(value, bias.AsTensor(), data_format: data_format, name: name);
                 });
             }
 

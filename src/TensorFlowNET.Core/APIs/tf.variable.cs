@@ -50,30 +50,6 @@ namespace Tensorflow
         public IVariableV1[] trainable_variables(string scope = null)
             => (variables.trainable_variables() as List<IVariableV1>).ToArray();
 
-        public RefVariable get_variable(string name,
-            TensorShape shape = null,
-            TF_DataType dtype = TF_DataType.DtInvalid,
-            object initializer = null, // IInitializer or Tensor
-            bool? trainable = null,
-            List<string> collections = null,
-            bool? use_resource = null,
-            bool validate_shape = true,
-            VariableSynchronization synchronization = VariableSynchronization.Auto,
-            VariableAggregation aggregation = VariableAggregation.None)
-        {
-            var scope = Tensorflow.variable_scope.get_variable_scope();
-            var store = Tensorflow.variable_scope._get_default_variable_store();
-            return scope.get_variable(store,
-                name,
-                shape: shape,
-                dtype: dtype,
-                use_resource: use_resource,
-                validate_shape: validate_shape,
-                initializer: initializer,
-                trainable: trainable,
-                collections: collections);
-        }
-
         public VariableScope get_variable_scope()
             => Tensorflow.variable_scope.get_variable_scope();
     }

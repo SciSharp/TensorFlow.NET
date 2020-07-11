@@ -27,7 +27,7 @@ namespace Tensorflow
     {
         public static string _VARSTORE_KEY = "__variable_store";
         public static string _VARSCOPESTORE_KEY = "__varscope";
-        public static bool _DEFAULT_USE_RESOURCE = false;
+        public static bool _DEFAULT_USE_RESOURCE = true;
 
         private bool _use_resource;
         public bool UseResource => _use_resource;

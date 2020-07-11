@@ -304,6 +304,11 @@ namespace Tensorflow
             _colocate_with_for_gradient(tensor.op, null, ignore_existing);
         }
 
+        public static void colocate_with(IVariableV1 variable, bool ignore_existing = false)
+        {
+            _colocate_with_for_gradient(variable.AsTensor(), null, ignore_existing);
+        }
+
         public static void _colocate_with_for_gradient(Operation op, string gradient_uid, bool ignore_existing = false)
         {
             var default_graph = get_default_graph();

@@ -13,7 +13,7 @@ namespace Tensorflow.Train
         bool _zero_debias;
         string _name;
         public string name => _name;
-        Dictionary<RefVariable, RefVariable> _averages;
+        Dictionary<IVariableV1, IVariableV1> _averages;
 
         public ExponentialMovingAverage(float decay, int? num_updates = null, bool zero_debias = false,
             string name = "ExponentialMovingAverage")
@@ -22,7 +22,7 @@ namespace Tensorflow.Train
             _num_updates = num_updates;
             _zero_debias = zero_debias;
             _name = name;
-            _averages = new Dictionary<RefVariable, RefVariable>();
+            _averages = new Dictionary<IVariableV1, IVariableV1>();
         }
 
         /// <summary>

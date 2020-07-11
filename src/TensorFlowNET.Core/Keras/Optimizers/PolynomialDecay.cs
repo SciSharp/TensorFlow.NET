@@ -34,7 +34,7 @@ namespace Tensorflow.Keras.Optimizers
             this.name = name;
         }
 
-        public Tensor __call__(RefVariable step)
+        public Tensor __call__(IVariableV1 step)
         {
             return tf_with(ops.name_scope(name ?? "PolynomialDecay"), scope =>
             {

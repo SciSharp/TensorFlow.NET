@@ -535,7 +535,7 @@ namespace Tensorflow
         string debugString = string.Empty;
         public override string ToString()
         {
-            return $"{graph_key}, ({_handle})";
+            return $"{graph_key}, 0x{_handle.ToString("x16")}";
             /*if (string.IsNullOrEmpty(debugString))
             {
                 int len = 0;
