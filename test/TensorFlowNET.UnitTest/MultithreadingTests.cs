@@ -145,10 +145,9 @@ namespace TensorFlowNET.UnitTest
                 //tf.Session created an other graph
                 using (var sess = tf.Session())
                 {
-                    Tensor t = null;
                     for (int i = 0; i < 100; i++)
                     {
-                        t = new Tensor(new int[] {1, 2, 3});
+                        var t = new Tensor(new int[] {1, 2, 3});
                     }
                 }
             }
@@ -167,12 +166,9 @@ namespace TensorFlowNET.UnitTest
             {
                 using (var sess = tf.Session())
                 {
-#pragma warning disable CS0219 // Variable is assigned but its value is never used
-                    Tensor t = null;
-#pragma warning restore CS0219 // Variable is assigned but its value is never used
                     for (int i = 0; i < 100; i++)
                     {
-                        var v = (int*) Marshal.AllocHGlobal(sizeof(int));
+                        var v = (int*)Marshal.AllocHGlobal(sizeof(int));
                         c_api.DeallocatorArgs _deallocatorArgs = new c_api.DeallocatorArgs();
                         var handle = c_api.TF_NewTensor(typeof(int).as_dtype(), dims: new long[0], num_dims: 0,
                             data: (IntPtr) v, len: (UIntPtr) sizeof(int),

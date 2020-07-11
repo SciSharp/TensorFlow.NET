@@ -298,6 +298,21 @@ namespace Tensorflow
         public static extern SafeImportGraphDefOptionsHandle TF_NewImportGraphDefOptions();
 
         /// <summary>
+        /// Set the shapes and types of the output's handle.
+        /// </summary>
+        /// <param name="graph">TF_Graph*</param>
+        /// <param name="output">TF_Output</param>
+        /// <param name="num_shapes_and_types">int</param>
+        /// <param name="shapes">const int64_t**</param>
+        /// <param name="ranks">const int*</param>
+        /// <param name="types">const TF_DataType*</param>
+        /// <param name="status">TF_Status*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_GraphSetOutputHandleShapesAndTypes(IntPtr graph, TF_Output output, 
+            int num_shapes_and_types, IntPtr[] shapes, int[] ranks, DataType[] types, 
+            SafeStatusHandle status);
+
+        /// <summary>
         /// Updates 'dst' to consume 'new_src'.
         /// </summary>
         /// <param name="graph">TF_Graph*</param>

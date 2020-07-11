@@ -105,6 +105,9 @@ namespace Tensorflow
 
         public bool building_function;
 
+        string _container = "";
+        public string Container => _container;
+
         int _seed;
         public int seed
         {
@@ -151,6 +154,8 @@ namespace Tensorflow
         {
             if (obj is RefVariable var)
                 return var._as_graph_element();
+            else if (obj is ResourceVariable resVar)
+                return resVar.GraphElement;
 
             return null;
         }
