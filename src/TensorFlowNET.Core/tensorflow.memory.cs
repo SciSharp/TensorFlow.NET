@@ -47,6 +47,8 @@ namespace Tensorflow
         public unsafe void memcpy<T>(IntPtr dst, T[] src, long size)
             where T : unmanaged
         {
+            if (src.Length == 0) return;
+
             fixed (void* p = &src[0])
                 System.Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
         }

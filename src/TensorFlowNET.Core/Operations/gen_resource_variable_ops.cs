@@ -57,7 +57,9 @@ namespace Tensorflow
                 return null;
             }
 
-            return null;
+            var _op = tf._op_def_lib._apply_op_helper("AssignAddVariableOp", name, new { resource, value });
+
+            return _op;
         }
 
         public static Operation assign_variable_op(Tensor resource, Tensor value, string name = null)

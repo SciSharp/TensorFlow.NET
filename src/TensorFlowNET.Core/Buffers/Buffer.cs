@@ -84,7 +84,7 @@ namespace Tensorflow
             unsafe
             {
                 fixed (byte* src = data)
-                    return TF_NewBufferFromString(new IntPtr(src), (ulong) data.LongLength);
+                    return TF_NewBufferFromString(new IntPtr(src), (ulong)data.LongLength);
             }
         }
 
