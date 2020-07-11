@@ -75,11 +75,11 @@ namespace TensorFlowNET.UnitTest.Basics
 
         public void Save2()
         {
-            var v1 = tf.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);
-            var v2 = tf.get_variable("v2", shape: new TensorShape(5), initializer: tf.zeros_initializer);
+            var v1 = tf.compat.v1.get_variable("v1", shape: new TensorShape(3), initializer: tf.zeros_initializer);
+            var v2 = tf.compat.v1.get_variable("v2", shape: new TensorShape(5), initializer: tf.zeros_initializer);
 
-            var inc_v1 = v1.assign(v1 + 1.0f);
-            var dec_v2 = v2.assign(v2 - 1.0f);
+            var inc_v1 = v1.assign(v1.AsTensor() + 1.0f);
+            var dec_v2 = v2.assign(v2.AsTensor() - 1.0f);
 
             // Add an op to initialize the variables.
             var init_op = tf.global_variables_initializer();

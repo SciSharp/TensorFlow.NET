@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using Google.Protobuf.Collections;
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -322,5 +323,7 @@ namespace Tensorflow
         {
             return new TF_Input(op, input_idx);
         }
+
+        public NDArray numpy() => throw new NotImplementedException("");
     }
 }

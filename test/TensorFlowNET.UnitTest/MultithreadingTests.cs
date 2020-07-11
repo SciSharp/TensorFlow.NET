@@ -12,7 +12,7 @@ using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
 {
-    [TestClass]
+    [TestClass, Ignore]
     public class MultithreadingTests : GraphModeTestBase
     {
         [TestMethod]

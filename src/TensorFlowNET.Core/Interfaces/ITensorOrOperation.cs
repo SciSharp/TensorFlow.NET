@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
+
 namespace Tensorflow
 {
     /// <summary>
@@ -27,5 +29,6 @@ namespace Tensorflow
         string name { get; }
         TF_DataType dtype { get; }
         Tensor[] outputs { get; }
+        NDArray numpy();
     }
 }
