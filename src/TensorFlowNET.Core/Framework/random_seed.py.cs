@@ -27,5 +27,22 @@ namespace Tensorflow
             else
                 return (null, null);
         }
+
+        public static (Tensor, Tensor) get_seed_tensor(int? op_seed = null)
+        {
+            var (seed, seed2) = get_seed(op_seed);
+            Tensor _seed, _seed2;
+            if (seed is null)
+                _seed = constant_op.constant(0, dtype: TF_DataType.TF_INT64, name: "seed");
+            else
+                _seed = constant_op.constant(seed.Value, dtype: TF_DataType.TF_INT64, name: "seed");
+
+            if (seed2 is null)
+                _seed2 = constant_op.constant(0, dtype: TF_DataType.TF_INT64, name: "seed2");
+            else
+                _seed2 = constant_op.constant(seed2.Value, dtype: TF_DataType.TF_INT64, name: "seed2");
+
+            return (_seed, _seed2);
+        }
     }
 }

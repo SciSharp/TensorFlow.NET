@@ -48,8 +48,8 @@ namespace Tensorflow.Keras.Optimizers
             }
             var device_dtype = _apply_state.Keys.FirstOrDefault(x => x.Device == var.Device && x.DType == var.dtype.as_base_dtype());
 
-            return gen_training_ops.resource_apply_gradient_descent(var.Handle as EagerTensor, 
-                _apply_state[device_dtype]["lr_t"] as EagerTensor, 
+            return gen_training_ops.resource_apply_gradient_descent(var.Handle, 
+                _apply_state[device_dtype]["lr_t"], 
                 grad,
                 use_locking: _use_locking);
         }

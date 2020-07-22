@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Tensorflow.Framework.Models
+{
+    public class TensorSpec : DenseSpec
+    {
+        public TensorSpec(int[] shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) : 
+            base(shape, dtype, name)
+        {
+
+        }
+
+        public TensorSpec _unbatch()
+        {
+            if (_shape.ndim == 0)
+                throw new ValueError("Unbatching a tensor is only supported for rank >= 1");
+
+            return new TensorSpec(_shape.dims[1..], _dtype);
+        }
+
+        public TensorSpec _batch(int dim = -1)
+        {
+            var shapes = shape.dims.ToList();
+            shapes.Insert(0, dim);
+            return new TensorSpec(shapes.ToArray(), _dtype);
+        }
+    }
+}

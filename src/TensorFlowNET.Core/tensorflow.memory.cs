@@ -49,6 +49,8 @@ namespace Tensorflow
         {
             if (src.Length == 0) return;
 
+            size = size * sizeof(T);
+
             fixed (void* p = &src[0])
                 System.Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
         }

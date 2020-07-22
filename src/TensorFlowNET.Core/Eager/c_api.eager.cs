@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf;
+using System;
 using System.Runtime.InteropServices;
 using Tensorflow.Device;
 using Tensorflow.Eager;
@@ -157,6 +158,9 @@ namespace Tensorflow
         public static extern void TFE_OpSetAttrShape(SafeOpHandle op, string attr_name, long[] dims, int num_dims, SafeStatusHandle out_status);
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TFE_OpSetAttrShapeList(SafeOpHandle op, string attr_name, IntPtr[] dims, int[] num_dims, int num_values, SafeStatusHandle out_status);
+
+        [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrBool(SafeOpHandle op, string attr_name, bool value);
 
         /// <summary>
@@ -168,6 +172,12 @@ namespace Tensorflow
         /// <param name="length">size_t</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrString(SafeOpHandle op, string attr_name, string value, uint length);
+    
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_OpSetAttrTypeList(SafeOpHandle op, string attr_name, TF_DataType[] values, int num_values);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_OpSetAttrValueProto(SafeOpHandle op, string attr_name, IMessage[] proto, int proto_len, SafeStatusHandle status);
 
         /// <summary>
         /// 

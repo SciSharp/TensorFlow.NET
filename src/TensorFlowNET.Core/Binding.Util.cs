@@ -265,6 +265,17 @@ namespace Tensorflow
                 yield return (i, values[i]);
         }
 
+        public static IEnumerable<(int, T)> enumerate<T>(IEnumerable<T> values, int start = 0)
+        {
+            int i = 0;
+            foreach(var val in values)
+            {
+                if (i < start)
+                    continue;
+                yield return (i, val);
+            }
+        }
+
         [DebuggerStepThrough]
         public static Dictionary<string, object> ConvertToDict(object dyn)
         {

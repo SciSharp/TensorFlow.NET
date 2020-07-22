@@ -254,7 +254,15 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            return shape.ToString();
+            switch (rank)
+            {
+                case -1:
+                    return $"<unknown>";
+                case 0:
+                    return $"()";
+                default:
+                    return $"{string.Join(",", shape).Replace("-1", "None")}";
+            }
         }
     }
 }

@@ -201,9 +201,11 @@ namespace Tensorflow
                 TF_DataType.TF_STRING => "string",
                 TF_DataType.TF_UINT8 => "uint8",
                 TF_DataType.TF_INT32 => "int32",
+                TF_DataType.TF_INT64 => "int64",
                 TF_DataType.TF_FLOAT => "float32",
                 TF_DataType.TF_BOOL => "bool",
                 TF_DataType.TF_RESOURCE => "resource",
+                TF_DataType.TF_VARIANT => "variant",
                 _ => type.ToString()
             };
 

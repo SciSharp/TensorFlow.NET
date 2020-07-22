@@ -7,6 +7,7 @@ using Google.Protobuf.WellKnownTypes;
 using System.Threading;
 using Tensorflow.Util;
 using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.InteropServices;
 
 namespace Tensorflow.Eager
 {
@@ -73,10 +74,11 @@ namespace Tensorflow.Eager
             // Add inferred attrs and inputs.
             for (int i = 0; i < op_def.InputArg.Count; i++)
             {
+                var input = args[kFastPathExecuteInputStartIndex + i];
                 var input_arg = op_def.InputArg[i];
                 if (!string.IsNullOrEmpty(input_arg.NumberAttr))
                 {
-                    int len = (args[kFastPathExecuteInputStartIndex + i] as object[]).Length;
+                    int len = (input as object[]).Length;
                     c_api.TFE_OpSetAttrInt(op, input_arg.NumberAttr, len);
                     if (op_exec_info.run_callbacks)
                     {
@@ -102,7 +104,31 @@ namespace Tensorflow.Eager
                 }
                 else if (!string.IsNullOrEmpty(input_arg.TypeListAttr))
                 {
-                    throw new NotImplementedException("");
+                    var attr_name = input_arg.TypeListAttr;
+                    var fast_input_array = input as object[];
+                    var len = fast_input_array.Length;
+                    var attr_values = new TF_DataType[len];
+
+                    for (var j = 0; j < len; j++)
+                    {
+                        var eager_tensor = ops.convert_to_tensor(fast_input_array[j]);
+                        attr_values[j] = eager_tensor.dtype;
+
+                        c_api.TFE_OpAddInput(op, eager_tensor.EagerTensorHandle, status.Handle);
+
+                        if (op_exec_info.run_callbacks)
+                        {
+                            flattened_inputs.Add(eager_tensor);
+                        }
+                    }
+
+                    if (op_exec_info.run_callbacks)
+                    {
+                        flattened_attrs.Add(attr_name);
+                        flattened_attrs.Add(attr_values);
+                    }
+                    c_api.TFE_OpSetAttrTypeList(op, attr_name, attr_values, attr_values.Length);
+                    attr_list_sizes[attr_name] = len;
                 }
                 else
                 {
@@ -206,7 +232,7 @@ namespace Tensorflow.Eager
                     break;
                 default:
                     var tensor = tf.convert_to_tensor(inputs);
-                    input_handle = (tensor as EagerTensor).EagerTensorHandle;
+                    input_handle = tensor.EagerTensorHandle;
                     break;
             }
 
@@ -237,7 +263,7 @@ namespace Tensorflow.Eager
                 var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, status.Handle);
                 if (!status.ok()) return;
                 if (is_list != 0)
-                    SetOpAttrList(tf.context, op, key, value, type, null, status);
+                    SetOpAttrList(tf.context, op, key, value as object[], type, null, status);
                 else
                     SetOpAttrScalar(tf.context, op, key, value, type, null, status);
                 status.Check(true);
@@ -282,20 +308,45 @@ namespace Tensorflow.Eager
             else
             {
                 if (is_list != 0)
-#pragma warning disable CS0642 // Possible mistaken empty statement
-                    ;//  SetOpAttrList
-#pragma warning restore CS0642 // Possible mistaken empty statement
+                    SetOpAttrList(ctx, op, attr_name, attr_value, type, attr_list_sizes, status);
                 else
                     SetOpAttrScalar(ctx, op, attr_name, attr_value, type, attr_list_sizes, status);
             }
         }
 
         bool SetOpAttrList(Context ctx, SafeOpHandle op,
-            string key, object value, TF_AttrType type,
+            string key, object values, TF_AttrType type,
             Dictionary<string, long> attr_list_sizes,
             Status status)
         {
-            return false;
+            if(type == TF_AttrType.TF_ATTR_SHAPE && values is TensorShape[] values1)
+            {
+                // Make one pass through the input counting the total number of
+                // dims across all the input lists.
+                var num_values = values1.Length;
+                attr_list_sizes[key] = num_values;
+                var dims = new IntPtr[num_values];
+                var num_dims = values1.Select(x => x.ndim).ToArray();
+
+                for (int i = 0; i < num_values; ++i)
+                {
+                    dims[i] = Marshal.AllocHGlobal(sizeof(long) * values1[i].ndim);
+                    tf.memcpy(dims[i], values1[i].dims.Select(x => (long)x).ToArray(), values1[i].ndim);
+                }
+
+                c_api.TFE_OpSetAttrShapeList(op, key, dims, num_dims, num_values, status.Handle);
+                Array.ForEach(dims, x => Marshal.FreeHGlobal(x));
+            }
+            else if(type == TF_AttrType.TF_ATTR_TYPE && values is TF_DataType[] values2)
+            {
+                c_api.TFE_OpSetAttrTypeList(op, key, values2, values2.Length);
+            }
+            else
+            {
+                throw new NotImplementedException("");
+            }
+
+            return true;
         }
 
         bool SetOpAttrScalar(Context ctx, SafeOpHandle op, 

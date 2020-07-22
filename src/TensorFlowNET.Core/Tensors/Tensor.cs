@@ -38,8 +38,7 @@ namespace Tensorflow
         _TensorLike, 
         ITensorOrTensorArray, 
         IPackable<Tensor>,
-        ICanBeFlattened,
-        IPointerInputs
+        ICanBeFlattened
     {
         protected long _id;
         private readonly Operation _op;
@@ -93,9 +92,9 @@ namespace Tensorflow
         public object Tag { get; set; }
 
         /// <summary>
-        /// Associated resource variable
+        /// TFE_TensorHandle
         /// </summary>
-        public ResourceVariable ResourceVar { get; set; }
+        public IntPtr EagerTensorHandle { get; set; }
 
         /// <summary>
         ///     Returns the shape of a tensor.

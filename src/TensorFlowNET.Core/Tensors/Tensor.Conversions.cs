@@ -22,6 +22,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using NumSharp.Utilities;
 using static Tensorflow.Binding;
+using Tensorflow.Framework.Models;
 
 namespace Tensorflow
 {
@@ -395,5 +396,8 @@ namespace Tensorflow
                 }
             }
         }
+
+        public TensorSpec ToTensorSpec()
+            => new TensorSpec(shape, dtype, name);
     }
 }
