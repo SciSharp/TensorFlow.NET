@@ -18,10 +18,33 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
+        public LinalgApi linalg { get; } = new LinalgApi();
+
+        public class LinalgApi
+        {
+            linalg_ops ops = new linalg_ops();
+
+            public Tensor eye(int num_rows,
+                int num_columns = -1,
+                TensorShape batch_shape = null,
+                TF_DataType dtype = TF_DataType.TF_FLOAT,
+                string name = null)
+                => ops.eye(num_rows, num_columns: num_columns, batch_shape: batch_shape, dtype: dtype, name: name);
+
+            public Tensor diag(Tensor diagonal, string name = null)
+                => gen_array_ops.diag(diagonal, name: name);
+
+            public Tensor matmul(Tensor a, Tensor b)
+                => math_ops.matmul(a, b);
+
+            public Tensor batch_matmul(Tensor x, Tensor y)
+                => gen_math_ops.batch_mat_mul(x, y);
+        }
+
         public Tensor diag(Tensor diagonal, string name = null)
             => gen_array_ops.diag(diagonal, name: name);
 
-        public Tensor matmul(Tensor a, Tensor b) 
+        public Tensor matmul(Tensor a, Tensor b)
             => math_ops.matmul(a, b);
 
         public Tensor batch_matmul(Tensor x, Tensor y)

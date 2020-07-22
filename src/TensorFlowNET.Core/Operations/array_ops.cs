@@ -599,6 +599,46 @@ namespace Tensorflow
         public static Tensor invert_permutation(Tensor x, string name = null)
             => gen_array_ops.invert_permutation(x, name: name);
 
+        public static Tensor matrix_diag(Tensor diagonal,
+                string name = "diag",
+                int k = 0,
+                int num_rows = -1,
+                int num_cols = -1,
+                float padding_value = 0,
+                string align = "RIGHT_LEFT")
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "MatrixDiagV3", name,
+                    null,
+                    diagonal, k, num_rows, num_cols, padding_value,
+                    "align", align);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        public static Tensor matrix_set_diag(Tensor input,
+            Tensor diagonal,
+            string name = "set_diag",
+            int k = 0,
+            string align = "RIGHT_LEFT")
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "MatrixSetDiagV3", name,
+                    null,
+                    input, diagonal, k,
+                    "align", align);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
         /// <summary>
         /// Computes the shape of a broadcast given symbolic shapes.
         /// When shape_x and shape_y are Tensors representing shapes(i.e.the result of
