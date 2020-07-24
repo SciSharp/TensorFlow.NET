@@ -349,5 +349,34 @@ namespace Tensorflow
         {
             return ops.convert_to_tensor(shape, dtype: TF_DataType.TF_INT32, name: "shape");
         }
+
+        public static string to_numpy_string(Tensor tensor)
+        {
+            var dtype = tensor.dtype;
+
+            if(dtype == TF_DataType.TF_STRING && tensor.NDims > 0)
+            {
+                return $"['{string.Join("', '", tensor.StringData())}']";
+            }
+
+            var nd = tensor.numpy();
+
+            if (nd.size == 0)
+                return "[]";
+
+            switch (dtype)
+            {
+                case TF_DataType.TF_STRING:
+                    return string.Join(string.Empty, nd.ToArray<byte>()
+                        .Select(x => x < 32 || x > 127 ? "\\x" + x.ToString("x") : Convert.ToChar(x).ToString()));
+                case TF_DataType.TF_BOOL:
+                    return (nd.GetByte(0) > 0).ToString();
+                case TF_DataType.TF_VARIANT:
+                case TF_DataType.TF_RESOURCE:
+                    return "<unprintable>";
+                default:
+                    return nd.ToString();
+            }
+        }
     }
 }

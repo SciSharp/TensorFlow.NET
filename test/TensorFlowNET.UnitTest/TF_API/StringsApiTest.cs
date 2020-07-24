@@ -53,7 +53,6 @@ namespace Tensorflow.UnitTest.TF_API
         {
             var strings = new[] { "map_and_batch_fusion", "noop_elimination", "shuffle_and_repeat_fusion" };
             var tensor = tf.constant(strings, dtype: tf.@string, name: "optimizations");
-            tensor.ToString();
             var stringData = tensor.StringData();
 
             Assert.AreEqual(3, tensor.shape[0]);
