@@ -32,6 +32,12 @@ namespace Tensorflow.Eager
             Resolve();
         }
 
+        public EagerTensor(string[] value, string device_name) : base(value)
+        {
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
+            Resolve();
+        }
+
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
             EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);

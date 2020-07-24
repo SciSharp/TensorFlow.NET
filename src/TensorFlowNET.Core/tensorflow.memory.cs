@@ -40,6 +40,10 @@ namespace Tensorflow
         public unsafe void memcpy<T>(IntPtr dst, T[] src, ulong size)
             where T : unmanaged
         {
+            if (src.Length == 0) return;
+
+            size = size * (ulong)sizeof(T);
+
             fixed (void* p = &src[0])
                 System.Buffer.MemoryCopy(p, dst.ToPointer(), size, size);
         }

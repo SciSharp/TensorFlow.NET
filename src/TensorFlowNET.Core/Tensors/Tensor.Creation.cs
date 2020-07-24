@@ -154,7 +154,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(sbyte value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(sbyte));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims: new long[0], num_dims: 0, len: sizeof(sbyte));
             *(sbyte*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -180,7 +180,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(bool value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(bool)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(bool));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(bool)), dims: new long[0], num_dims: 0, len: sizeof(bool));
             *(bool*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -206,7 +206,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(byte value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(byte)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(byte));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(byte)), dims: new long[0], num_dims: 0, len: sizeof(byte));
             *(byte*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -232,7 +232,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(short value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(short)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(short));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(short)), dims: new long[0], num_dims: 0, len: sizeof(short));
             *(short*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -258,7 +258,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(ushort value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(ushort)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(ushort));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(ushort)), dims: new long[0], num_dims: 0, len: sizeof(ushort));
             *(ushort*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -284,7 +284,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(int value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(int)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(int));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(int)), dims: new long[0], num_dims: 0, len: sizeof(int));
             *(int*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -310,7 +310,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(uint value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(uint)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(uint));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(uint)), dims: new long[0], num_dims: 0, len: sizeof(uint));
             *(uint*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -336,7 +336,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(long value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(long)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(long));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(long)), dims: new long[0], num_dims: 0, len: sizeof(long));
             *(long*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -362,7 +362,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(ulong value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(ulong)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(ulong));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(ulong)), dims: new long[0], num_dims: 0, len: sizeof(ulong));
             *(ulong*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -388,7 +388,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(float value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(float)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(float));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(float)), dims: new long[0], num_dims: 0, len: sizeof(float));
             *(float*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -414,7 +414,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(double value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(double)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(double));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(double)), dims: new long[0], num_dims: 0, len: sizeof(double));
             *(double*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -440,7 +440,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(Complex value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(Complex)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(Complex));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(Complex)), dims: new long[0], num_dims: 0, len: (ulong)sizeof(Complex));
             *(Complex*) TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -453,15 +453,51 @@ namespace Tensorflow
         {
             var buffer = Encoding.UTF8.GetBytes(str);
             var size = c_api.TF_StringEncodedSize((ulong)buffer.Length);
-            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr)(size + sizeof(ulong)));
+            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, null, 0, size + sizeof(ulong));
             AllocationType = AllocationType.Tensorflow;
 
             IntPtr tensor = c_api.TF_TensorData(handle);
             Marshal.WriteInt64(tensor, 0);
             fixed (byte* src = buffer)
-                c_api.TF_StringEncode(src, (ulong)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, tf.status.Handle);
+                c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*)(tensor + sizeof(long)), size, tf.status.Handle);
             _handle = handle;
             tf.status.Check(true);
+        }
+
+        public unsafe Tensor(string[] strings)
+        {
+            var num_elements = (ulong)strings.Length;
+            var string_length = new ulong[num_elements];
+            ulong size = 0;
+
+            for (ulong i = 0; i < num_elements; i++)
+            {
+                var buffer = Encoding.UTF8.GetBytes(strings[i]);
+                string_length[i] = c_api.TF_StringEncodedSize((ulong)buffer.Length);
+                size += string_length[i];
+            }
+            
+            size = size + num_elements * sizeof(ulong);
+            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, new long[] { (long)num_elements }, 1, size);
+            AllocationType = AllocationType.Tensorflow;
+
+            IntPtr tensor = c_api.TF_TensorData(handle);
+            tf.memcpy(tensor, string_length, num_elements);
+
+            IntPtr data_start = tensor + sizeof(ulong) * (int)num_elements;
+            for (var i = 0; i < strings.Length; i++)
+            {
+                var buffer = Encoding.UTF8.GetBytes(strings[i]);
+                fixed (byte* src = buffer)
+                {
+                    var encoded_size = c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*)data_start, string_length[i], tf.status.Handle);
+                    data_start += (int)encoded_size;
+                }
+                    
+                tf.status.Check(true);
+            }
+
+            _handle = handle;
         }
 
         public unsafe Tensor(NDArray nd, TF_DataType? tensorDType = null)
@@ -476,27 +512,27 @@ namespace Tensorflow
                 {
                     var bytesLength = (ulong)nd.size;
                     var size = c_api.TF_StringEncodedSize(bytesLength);
-                    var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
+                    var handle = TF_AllocateTensor(TF_DataType.TF_STRING, null, 0, size + 8);
                     AllocationType = AllocationType.Tensorflow;
 
                     IntPtr tensor = c_api.TF_TensorData(handle);
                     Marshal.WriteInt64(tensor, 0);
 
-                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (sbyte*) (tensor + sizeof(long)), size, tf.status.Handle);
+                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (byte*) (tensor + sizeof(long)), size, tf.status.Handle);
                     tf.status.Check(true);
                     _handle = handle;
                 } else
                 {
                     var buffer = nd.ToArray<byte>();
                     var size = c_api.TF_StringEncodedSize((ulong)buffer.Length);
-                    var handle = TF_AllocateTensor(TF_DataType.TF_STRING, IntPtr.Zero, 0, (UIntPtr) ((ulong) size + 8));
+                    var handle = TF_AllocateTensor(TF_DataType.TF_STRING, null, 0, size + 8);
                     AllocationType = AllocationType.Tensorflow;
 
                     IntPtr tensor = c_api.TF_TensorData(handle);
                     Marshal.WriteInt64(tensor, 0);
 
                     fixed (byte* src = buffer)
-                        c_api.TF_StringEncode(src, (ulong)buffer.Length, (sbyte*) (tensor + sizeof(Int64)), size, tf.status.Handle);
+                        c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*) (tensor + sizeof(Int64)), size, tf.status.Handle);
 
                     tf.status.Check(true);
                     _handle = handle;
@@ -543,7 +579,7 @@ namespace Tensorflow
 
             int totalSize = size + buffer.Length * 8;
             ulong offset = 0;
-            IntPtr handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, (UIntPtr) totalSize);
+            IntPtr handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, (ulong)totalSize);
             AllocationType = AllocationType.Tensorflow;
 
             // Clear offset table
@@ -557,7 +593,7 @@ namespace Tensorflow
                 {
                     fixed (byte* src = &buffer[i][0])
                     {
-                        var written = TF_StringEncode(src, (ulong)buffer[i].Length, (sbyte*)dst, (ulong)(dstLimit.ToInt64() - dst.ToInt64()), status.Handle);
+                        var written = TF_StringEncode(src, (ulong)buffer[i].Length, (byte*)dst, (ulong)(dstLimit.ToInt64() - dst.ToInt64()), status.Handle);
                         status.Check(true);
                         pOffset += 8;
                         dst += (int) written;
@@ -609,7 +645,7 @@ namespace Tensorflow
             Marshal.WriteInt64(tensor, 0);
 
             fixed (byte* src = buffer)
-                c_api.TF_StringEncode(src, (ulong)buffer.Length, (sbyte*)(tensor + sizeof(long)), size, tf.status.Handle);
+                c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*)(tensor + sizeof(long)), size, tf.status.Handle);
 
             tf.status.Check(true);
             return handle;
