@@ -466,35 +466,36 @@ namespace Tensorflow
 
         public unsafe Tensor(string[] strings)
         {
-            var num_elements = (ulong)strings.Length;
-            var string_length = new ulong[num_elements];
-            ulong size = 0;
+            // convert string array to byte[][]
+            var buffer = new byte[strings.Length][];
+            for (var i = 0; i < strings.Length; i++)
+                buffer[i] = Encoding.UTF8.GetBytes(strings[i]);
+            long[] shape = new long[] { strings.Length };
 
-            for (ulong i = 0; i < num_elements; i++)
-            {
-                var buffer = Encoding.UTF8.GetBytes(strings[i]);
-                string_length[i] = c_api.TF_StringEncodedSize((ulong)buffer.Length);
-                size += string_length[i];
-            }
-            
-            size = size + num_elements * sizeof(ulong);
-            var handle = TF_AllocateTensor(TF_DataType.TF_STRING, new long[] { (long)num_elements }, 1, size);
+            ulong size = 0;
+            foreach (var b in buffer)
+                size += TF_StringEncodedSize((ulong)b.Length);
+
+            ulong src_size = size + (ulong)buffer.Length * sizeof(ulong);
+            IntPtr handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, src_size);
             AllocationType = AllocationType.Tensorflow;
 
-            IntPtr tensor = c_api.TF_TensorData(handle);
-            tf.memcpy(tensor, string_length, num_elements);
-
-            IntPtr data_start = tensor + sizeof(ulong) * (int)num_elements;
-            for (var i = 0; i < strings.Length; i++)
+            // Clear offset table
+            IntPtr input = TF_TensorData(handle);
+            IntPtr data_start = input + buffer.Length * sizeof(ulong);
+            IntPtr limit = input + (int)src_size;
+            ulong offset = 0;
+            for (int i = 0; i < buffer.Length; i++)
             {
-                var buffer = Encoding.UTF8.GetBytes(strings[i]);
-                fixed (byte* src = buffer)
+                Marshal.WriteInt64(input, i * sizeof(ulong), (long)offset);
+                fixed (byte* src = &buffer[i][0])
                 {
-                    var encoded_size = c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*)data_start, string_length[i], tf.status.Handle);
-                    data_start += (int)encoded_size;
+                    var written = TF_StringEncode(src, (ulong)buffer[i].Length, (byte*)data_start, (ulong)(limit.ToInt64() - data_start.ToInt64()), tf.status.Handle);
+                    tf.status.Check(true);
+                    //input += 8;
+                    data_start += (int)written;
+                    offset += written;
                 }
-                    
-                tf.status.Check(true);
             }
 
             _handle = handle;
@@ -567,42 +568,6 @@ namespace Tensorflow
                 AllocationType = AllocationType.Tensorflow;
 
             return handle;
-        }
-
-        public unsafe Tensor(byte[][] buffer, long[] shape)
-        {
-            int size = 0;
-            foreach (var b in buffer)
-            {
-                size += (int)TF_StringEncodedSize((ulong)b.Length);
-            }
-
-            int totalSize = size + buffer.Length * 8;
-            ulong offset = 0;
-            IntPtr handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, (ulong)totalSize);
-            AllocationType = AllocationType.Tensorflow;
-
-            // Clear offset table
-            IntPtr pOffset = TF_TensorData(handle);
-            IntPtr dst = pOffset + buffer.Length * 8;
-            IntPtr dstLimit = pOffset + totalSize;
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                Marshal.WriteInt64(pOffset, (long) offset);
-                using (var status = new Status())
-                {
-                    fixed (byte* src = &buffer[i][0])
-                    {
-                        var written = TF_StringEncode(src, (ulong)buffer[i].Length, (byte*)dst, (ulong)(dstLimit.ToInt64() - dst.ToInt64()), status.Handle);
-                        status.Check(true);
-                        pOffset += 8;
-                        dst += (int) written;
-                        offset += written;
-                    }
-                }
-            }
-
-            _handle = handle;
         }
 
         public Tensor(Operation op, int value_index, TF_DataType dtype)
