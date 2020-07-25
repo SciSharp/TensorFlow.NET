@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Tensorflow.UnitTest
+namespace TensorFlowNET.UnitTest
 {
     public class TestHelper
     {

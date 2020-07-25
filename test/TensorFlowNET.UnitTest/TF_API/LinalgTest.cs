@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.UnitTest.TF_API
+namespace TensorFlowNET.UnitTest.TF_API
 {
     [TestClass]
     public class LinalgTest

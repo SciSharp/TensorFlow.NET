@@ -5,7 +5,7 @@ using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.UnitTest.TF_API
+namespace TensorFlowNET.UnitTest.TF_API
 {
     [TestClass]
     public class GradientTest
