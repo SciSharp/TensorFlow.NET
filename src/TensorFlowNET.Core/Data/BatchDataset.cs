@@ -28,7 +28,7 @@ namespace Tensorflow
             }
             else
             {
-                _structure = input_dataset.element_spec.Select(x => x._batch(-1)).ToArray();
+                structure = input_dataset.element_spec.Select(x => x._batch(-1)).ToArray();
             }
 
             variant_tensor = ops.batch_dataset_v2(input_dataset.variant_tensor,

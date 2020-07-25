@@ -15,7 +15,7 @@ namespace Tensorflow
         {
             _tensors = new[] { tf.convert_to_tensor(features), tf.convert_to_tensor(labels) };
             var batched_spec = _tensors.Select(x => x.ToTensorSpec()).ToArray();
-            _structure = batched_spec.Select(x => x._unbatch()).ToArray();
+            structure = batched_spec.Select(x => x._unbatch()).ToArray();
             
             variant_tensor = ops.tensor_slice_dataset(_tensors, output_shapes);
         }

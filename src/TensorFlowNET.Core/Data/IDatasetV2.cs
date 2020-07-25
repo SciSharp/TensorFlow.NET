@@ -15,7 +15,7 @@ namespace Tensorflow
 
         TensorSpec[] element_spec { get; }
 
-        TensorSpec[] _structure { get; set; }
+        TensorSpec[] structure { get; set; }
 
         /// <summary>
         /// 
@@ -31,5 +31,15 @@ namespace Tensorflow
         IDatasetV2 prefetch(int buffer_size = -1, int? slack_period = null);
 
         IDatasetV2 take(int count);
+
+        IDatasetV2 optimize(string[] optimizations, string[] optimization_configs);
+
+        IDatasetV2 model(AutotuneAlgorithm algorithm, long cpu_budget);
+
+        /// <summary>
+        /// Apply options, such as optimization configuration, to the dataset.
+        /// </summary>
+        /// <returns></returns>
+        IDatasetV2 apply_options();
     }
 }

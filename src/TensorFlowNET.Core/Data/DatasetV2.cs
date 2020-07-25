@@ -15,13 +15,13 @@ namespace Tensorflow
         protected dataset_ops ops = new dataset_ops();
         public Tensor variant_tensor { get; set; }
 
-        public TensorSpec[] _structure { get; set; }
+        public TensorSpec[] structure { get; set; }
 
-        public TensorShape[] output_shapes => _structure.Select(x => x.shape).ToArray();
+        public TensorShape[] output_shapes => structure.Select(x => x.shape).ToArray();
         
-        public TF_DataType[] output_types => _structure.Select(x => x.dtype).ToArray();
+        public TF_DataType[] output_types => structure.Select(x => x.dtype).ToArray();
         
-        public TensorSpec[] element_spec => _structure;
+        public TensorSpec[] element_spec => structure;
 
         public IDatasetV2 take(int count = -1)
             => new TakeDataset(this, count: count);
@@ -37,13 +37,52 @@ namespace Tensorflow
 
         public IDatasetV2 shuffle(int buffer_size, int? seed = null, bool reshuffle_each_iteration = true)
             => new ShuffleDataset(this, buffer_size, seed: seed, reshuffle_each_iteration: reshuffle_each_iteration);
-        
+
+        public IDatasetV2 optimize(string[] optimizations, string[] optimization_configs)
+            => new OptimizeDataset(this, optimizations, optimization_configs: optimization_configs);
+
+        public IDatasetV2 model(AutotuneAlgorithm algorithm, long cpu_budget)
+            => new ModelDataset(this, algorithm, cpu_budget);
+
+        public IDatasetV2 apply_options()
+        {
+            // (1) Apply threading options
+            var graph_rewrites = new[]
+            {
+                "map_and_batch_fusion",
+                "noop_elimination",
+                "shuffle_and_repeat_fusion"
+            };
+
+            var graph_rewrite_configs = new string[0];
+
+            // (2) Apply graph rewrite options
+            var dataset = optimize(graph_rewrites, graph_rewrite_configs);
+
+            // (3) Apply autotune options
+            var autotune = true;
+            long cpu_budget = 0;
+
+            if (autotune)
+                dataset = dataset.model(AutotuneAlgorithm.HILL_CLIMB, cpu_budget);
+
+            // (4) Apply stats aggregator options
+
+            return dataset;
+        }
+
         public override string ToString()
-            => $"{GetType().Name} shapes: ({_structure[0].shape}, {_structure[1].shape}), types: (tf.{_structure[0].dtype.as_numpy_name()}, tf.{_structure[1].dtype.as_numpy_name()})";
+            => $"{GetType().Name} shapes: ({structure[0].shape}, {structure[1].shape}), types: (tf.{structure[0].dtype.as_numpy_name()}, tf.{structure[1].dtype.as_numpy_name()})";
 
         public IEnumerator<(Tensor, Tensor)> GetEnumerator()
         {
-            throw new NotImplementedException();
+            var ownedIterator = new OwnedIterator(this);
+
+            Tensor[] results = ownedIterator.next();
+            while (results != null)
+            {
+                yield return (results[0], results[1]);
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

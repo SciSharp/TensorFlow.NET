@@ -15,7 +15,7 @@ namespace Tensorflow
         public UnaryDataset(IDatasetV2 input_dataset)
         {
             _input_dataset = input_dataset;
-            _structure = input_dataset._structure;
+            structure = input_dataset.structure;
         }
     }
 }
