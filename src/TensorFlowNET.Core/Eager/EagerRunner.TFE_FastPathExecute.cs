@@ -159,13 +159,9 @@ namespace Tensorflow.Eager
 
             if (op_exec_info.run_callbacks)
             {
-                if (!RunCallbacks(
-                    op_exec_info, 
+                RunCallbacks(op_exec_info,
                     kFastPathExecuteInputStartIndex + op_def.InputArg.Count(),
-                    flattened_inputs.ToArray(), flattened_attrs.ToArray(), flat_result))
-                {
-                    return null;
-                }
+                    flattened_inputs.ToArray(), flattened_attrs.ToArray(), flat_result);
             }
 
             return flat_result;
@@ -319,7 +315,12 @@ namespace Tensorflow.Eager
             Dictionary<string, long> attr_list_sizes,
             Status status)
         {
-            if(type == TF_AttrType.TF_ATTR_SHAPE && values is TensorShape[] values1)
+            if (type == TF_AttrType.TF_ATTR_STRING && values is string[] values3)
+            {
+                c_api.TFE_OpSetAttrStringList(op, key, new IntPtr[0], values3.Select(x => x.Length).ToArray(), values3.Length);
+                attr_list_sizes[key] = values3.Length;
+            }
+            else if (type == TF_AttrType.TF_ATTR_SHAPE && values is TensorShape[] values1)
             {
                 // Make one pass through the input counting the total number of
                 // dims across all the input lists.
@@ -340,6 +341,7 @@ namespace Tensorflow.Eager
             else if(type == TF_AttrType.TF_ATTR_TYPE && values is TF_DataType[] values2)
             {
                 c_api.TFE_OpSetAttrTypeList(op, key, values2, values2.Length);
+                attr_list_sizes[key] = values2.Length;
             }
             else
             {

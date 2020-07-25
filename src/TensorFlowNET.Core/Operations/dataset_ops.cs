@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Framework.Models;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -170,6 +171,158 @@ namespace Tensorflow
                     "output_types", output_types,
                     "output_shapes", output_shapes);
                 return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// Creates a dataset by applying optimizations to `input_dataset`.
+        /// </summary>
+        /// <param name="input_dataset"></param>
+        /// <param name="optimizations"></param>
+        /// <param name="output_types"></param>
+        /// <param name="output_shapes"></param>
+        /// <param name="optimization_configs"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor optimize_dataset(Tensor input_dataset, Tensor optimizations,
+            TF_DataType[] output_types, TensorShape[] output_shapes,
+            string[] optimization_configs = null,
+            string name = null)
+        {
+            if (optimization_configs == null)
+                optimization_configs = new string[0];
+
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "OptimizeDataset", name,
+                    null,
+                    input_dataset, optimizations,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes,
+                    "optimization_configs", optimization_configs);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// Identity transformation that models performance.
+        /// </summary>
+        /// <param name="input_dataset"></param>
+        /// <param name="output_types"></param>
+        /// <param name="output_shapes"></param>
+        /// <param name="algorithm"></param>
+        /// <param name="cpu_budget"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor model_dataset(Tensor input_dataset,
+            TF_DataType[] output_types, TensorShape[] output_shapes,
+            AutotuneAlgorithm algorithm, long cpu_budget,
+            string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "ModelDataset", name,
+                    null,
+                    input_dataset, 
+                    "algorithm", algorithm, 
+                    "cpu_budget", cpu_budget,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// A container for an iterator resource.
+        /// </summary>
+        /// <param name="output_types"></param>
+        /// <param name="output_shapes"></param>
+        /// <param name="name"></param>
+        /// <returns>A tuple of `Tensor` objects (handle, deleter).</returns>
+        public (Tensor, Tensor) anonymous_iterator_v2(TF_DataType[] output_types, TensorShape[] output_shapes, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "AnonymousIteratorV2", name,
+                    null,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes);
+                return (results[0], results[1]);
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// Makes a new iterator from the given `dataset` and stores it in `iterator`.
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <param name="iterator"></param>
+        /// <param name="name"></param>
+        /// <returns>The created Operation.</returns>
+        public ITensorOrOperation make_iterator(Tensor dataset, Tensor iterator, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "MakeIterator", name,
+                    null,
+                    dataset, iterator);
+                return null;
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// A container for an iterator resource.
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="deleter"></param>
+        /// <param name="name"></param>
+        /// <returns>The created Operation.</returns>
+        public ITensorOrOperation delete_iterator(Tensor handle, Tensor deleter, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "DeleteIterator", name,
+                    null,
+                    handle, deleter);
+                return null;
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// Gets the next output from the given iterator .
+        /// </summary>
+        /// <param name="iterator"></param>
+        /// <param name="output_types"></param>
+        /// <param name="output_shapes"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor[] iterator_get_next(Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "IteratorGetNext", name,
+                    null,
+                    iterator,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes);
+                return results;
             }
 
             throw new NotImplementedException("");

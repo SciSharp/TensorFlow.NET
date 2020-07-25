@@ -271,7 +271,10 @@ namespace Tensorflow
             foreach(var val in values)
             {
                 if (i < start)
+                {
+                    i++;
                     continue;
+                }
                 yield return (i, val);
             }
         }
