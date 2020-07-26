@@ -78,9 +78,19 @@ namespace Tensorflow
         {
             var ownedIterator = new OwnedIterator(this);
 
-            Tensor[] results = ownedIterator.next();
-            while (results != null)
+            bool stop = false;
+            Tensor[] results = null;
+            while (!stop)
             {
+                try
+                {
+                    results = ownedIterator.next();
+                }
+                catch (StopIteration)
+                {
+                    stop = true;
+                }
+
                 yield return (results[0], results[1]);
             }
         }

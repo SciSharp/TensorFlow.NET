@@ -270,12 +270,10 @@ namespace Tensorflow
             int i = 0;
             foreach(var val in values)
             {
-                if (i < start)
-                {
-                    i++;
+                if (i++ < start)
                     continue;
-                }
-                yield return (i, val);
+                
+                yield return (i - start, val);
             }
         }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -21,5 +22,8 @@ namespace Tensorflow
 
         public static implicit operator Tensor(IntPtr handle)
             => new Tensor(handle);
+
+        public static implicit operator Tensor(NDArray nd)
+            => tf.convert_to_tensor(nd);
     }
 }

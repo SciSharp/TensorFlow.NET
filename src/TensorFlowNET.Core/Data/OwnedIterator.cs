@@ -35,6 +35,15 @@ namespace Tensorflow
         }
 
         public Tensor[] next()
-            => ops.iterator_get_next(_iterator_resource, _dataset.output_types, _dataset.output_shapes);
+        {
+            try
+            {
+                return ops.iterator_get_next(_iterator_resource, _dataset.output_types, _dataset.output_shapes);
+            }
+            catch (OutOfRangeError ex)
+            {
+                throw new StopIteration(ex.Message);
+            }
+        }
     }
 }

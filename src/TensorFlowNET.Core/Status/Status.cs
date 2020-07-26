@@ -78,9 +78,18 @@ namespace Tensorflow
             if (Code != TF_Code.TF_OK)
             {
                 var message = Message;
-                Console.WriteLine(message);
+
                 if (throwException)
-                    throw new TensorflowException(message);
+                {
+                    switch (Code)
+                    {
+                        case TF_Code.TF_OUT_OF_RANGE:
+                            throw new OutOfRangeError(message);
+                        default:
+                            Console.WriteLine(message);
+                            throw new TensorflowException(message);
+                    }
+                }
             }
         }
 
