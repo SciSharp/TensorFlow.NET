@@ -50,6 +50,9 @@ namespace Tensorflow.Eager
 
             var op_def = tf.get_default_graph().GetOpDef(opName);
 
+            var flattened_attrs = new List<object>(op_def.InputArg.Count);
+            var flattened_inputs = new List<Tensor>(op_def.InputArg.Count);
+
             // Set non-inferred attrs, including setting defaults if the attr is passed in
             // as None.
             for (int i = kFastPathExecuteInputStartIndex + op_def.InputArg.Count; i < args_size; i += 2)
@@ -60,13 +63,13 @@ namespace Tensorflow.Eager
                 var attr = op_def.Attr.FirstOrDefault(x => x.Name == attr_name);
                 if(attr != null)
                 {
+                    flattened_attrs.Add(attr_name);
+                    flattened_attrs.Add(attr_value);
+
                     SetOpAttrWithDefaults(ctx, op, attr, attr_name, attr_value, attr_list_sizes, status);
                     status.Check(true);
                 }
             }
-
-            var flattened_attrs = new List<object>(op_def.InputArg.Count);
-            var flattened_inputs = new List<Tensor>(op_def.InputArg.Count);
 
             c_api.TFE_OpSetDevice(op, device_name, status.Handle);
             status.Check(true);
@@ -229,6 +232,7 @@ namespace Tensorflow.Eager
                 default:
                     var tensor = tf.convert_to_tensor(inputs);
                     input_handle = tensor.EagerTensorHandle;
+                    flattened_inputs.Add(tensor);
                     break;
             }
 
