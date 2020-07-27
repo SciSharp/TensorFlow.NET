@@ -43,7 +43,7 @@ namespace Tensorflow
     /// </summary>
     public partial class c_api
     {
-        public const string TensorFlowLibName = @"D:\SciSharp\tensorflow-google\bazel-bin\tensorflow\tensorflow.dll";
+        public const string TensorFlowLibName = "tensorflow";
 
         public static string StringPiece(IntPtr handle)
         {
