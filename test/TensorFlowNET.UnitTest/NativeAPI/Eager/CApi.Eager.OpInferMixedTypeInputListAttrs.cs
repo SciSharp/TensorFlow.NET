@@ -46,8 +46,9 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 int num_retvals;
                 TFE_Execute(assertOp, retvals, out num_retvals, status);
                 EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
+                EXPECT_EQ(1, num_retvals);
 
-                retvals[0]?.Dispose();
+                retvals[0].Dispose();
             }
         }
     }

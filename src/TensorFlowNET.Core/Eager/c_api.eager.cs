@@ -91,6 +91,18 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_DeleteContext(IntPtr ctx);
 
+        /// <summary>
+        /// Execute the operation defined by <paramref name="op"/> and return handles to computed
+        /// tensors in <paramref name="retvals"/>.
+        /// </summary>
+        /// <remarks>
+        /// Upon successful return, the first <paramref name="num_retvals"/> slots in <paramref name="retvals"/> will
+        /// contain handle instances which the caller is responsible for disposing once they are no longer in use.
+        /// </remarks>
+        /// <param name="op"></param>
+        /// <param name="retvals"></param>
+        /// <param name="num_retvals"></param>
+        /// <param name="status"></param>
         public static void TFE_Execute(SafeOpHandle op, SafeTensorHandleHandle[] retvals, out int num_retvals, SafeStatusHandle status)
         {
             unsafe
@@ -100,6 +112,9 @@ namespace Tensorflow
                 TFE_Execute(op, rawReturns, ref num_retvals, status);
                 for (var i = 0; i < num_retvals; i++)
                 {
+                    // A handle is created for every return, even if rawReturns[i] is null. The resulting handle will be
+                    // non-null but invalid, which is the same behavior P/Invoke gives for non-array SafeHandle return
+                    // values.
                     retvals[i] = new SafeTensorHandleHandle(rawReturns[i]);
                 }
             }

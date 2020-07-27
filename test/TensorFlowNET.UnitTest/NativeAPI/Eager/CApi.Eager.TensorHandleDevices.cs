@@ -49,6 +49,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                         int num_retvals;
                         c_api.TFE_Execute(shape_op, retvals, out num_retvals, status);
                         ASSERT_TRUE(TF_GetCode(status) == TF_OK, TF_Message(status));
+                        ASSERT_EQ(1, num_retvals);
 
                         try
                         {
@@ -64,7 +65,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                         }
                         finally
                         {
-                            retvals[0]?.Dispose();
+                            retvals[0].Dispose();
                         }
                     }
                 }
