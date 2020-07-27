@@ -42,13 +42,11 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 //EXPECT_EQ(attr_found->second.list().type(1), tensorflow::DataType::DT_FLOAT);
                 //EXPECT_EQ(attr_found->second.list().type(2), tensorflow::DataType::DT_INT32);
 
-                var retvals = new SafeTensorHandleHandle[1];
+                var retvals = new SafeTensorHandleHandle[0];
                 int num_retvals;
                 TFE_Execute(assertOp, retvals, out num_retvals, status);
                 EXPECT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-                EXPECT_EQ(1, num_retvals);
-
-                retvals[0].Dispose();
+                EXPECT_EQ(0, num_retvals);
             }
         }
     }
