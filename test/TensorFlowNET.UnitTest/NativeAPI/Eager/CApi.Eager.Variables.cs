@@ -38,6 +38,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                     TFE_OpAddInput(op, var_handle, status);
                     ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
                     TFE_Execute(op, value_handle, out num_retvals, status);
+                    ASSERT_EQ(1, num_retvals);
                 }
 
                 try
@@ -57,7 +58,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 }
                 finally
                 {
-                    value_handle[0]?.Dispose();
+                    value_handle[0].Dispose();
                 }
             }
 

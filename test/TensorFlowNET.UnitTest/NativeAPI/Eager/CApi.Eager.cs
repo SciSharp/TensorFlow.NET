@@ -90,10 +90,9 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 TFE_OpSetAttrString(op, "shared_name", "", 0);
                 if (TF_GetCode(status) != TF_OK) return new SafeTensorHandleHandle(IntPtr.Zero);
                 TFE_Execute(op, var_handle, out num_retvals, status);
+                if (TF_GetCode(status) != TF_OK) return new SafeTensorHandleHandle(IntPtr.Zero);
+                CHECK_EQ(1, num_retvals);
             }
-
-            if (TF_GetCode(status) != TF_OK) return new SafeTensorHandleHandle(IntPtr.Zero);
-            CHECK_EQ(1, num_retvals);
 
             // Assign 'value' to it.
             using (var op = TFE_NewOp(ctx, "AssignVariableOp", status))
@@ -112,12 +111,10 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 TFE_OpAddInput(op, value_handle, status);
                 if (TF_GetCode(status) != TF_OK) return new SafeTensorHandleHandle(IntPtr.Zero);
 
-                num_retvals = 0;
                 c_api.TFE_Execute(op, null, out num_retvals, status);
+                if (TF_GetCode(status) != TF_OK) return new SafeTensorHandleHandle(IntPtr.Zero);
+                CHECK_EQ(0, num_retvals);
             }
-
-            if (TF_GetCode(status) != TF_OK) return new SafeTensorHandleHandle(IntPtr.Zero);
-            CHECK_EQ(0, num_retvals);
 
             return var_handle[0];
         }
