@@ -27,16 +27,7 @@ namespace Tensorflow.Train
         /// Restore-on-create for a variable be saved with this `Checkpointable`.
         /// </summary>
         /// <returns></returns>
-        protected virtual IVariableV1 _add_variable_with_custom_getter(string name,
-            int[] shape,
-            TF_DataType dtype = TF_DataType.TF_FLOAT,
-            IInitializer initializer = null,
-            Func<string, int[], TF_DataType, IInitializer, bool, IVariableV1> getter = null,
-            bool overwrite = false,
-            bool trainable = false,
-            bool use_resource = false,
-            VariableSynchronization synchronization = VariableSynchronization.Auto,
-            VariableAggregation aggregation = VariableAggregation.None)
+        protected virtual IVariableV1 _add_variable_with_custom_getter(VariableArgs args)
         {
             ops.init_scope();
 #pragma warning disable CS0219 // Variable is assigned but its value is never used
@@ -50,15 +41,15 @@ namespace Tensorflow.Train
                 checkpoint_initializer = null;
 
             IVariableV1 new_variable;
-            new_variable = getter(name, shape, dtype, initializer, trainable);
+            new_variable = args.Getter(args);
 
             // If we set an initializer and the variable processed it, tracking will not
             // assign again. It will add this variable to our dependencies, and if there
             // is a non-trivial restoration queued, it will handle that. This also
             // handles slot variables.
-            if (!overwrite || new_variable is RefVariable)
-                return _track_checkpointable(new_variable, name: name,
-                                        overwrite: overwrite);
+            if (!args.Overwrite || new_variable is RefVariable)
+                return _track_checkpointable(new_variable, name: args.Name,
+                                        overwrite: args.Overwrite);
             else
                 return new_variable;
         }

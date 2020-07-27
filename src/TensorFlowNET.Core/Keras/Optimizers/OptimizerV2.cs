@@ -199,8 +199,8 @@ namespace Tensorflow.Keras.Optimizers
             }
         }
 
-        ResourceVariable add_weight(string name, 
-            TensorShape shape, 
+        ResourceVariable add_weight(string name,
+            TensorShape shape,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
             bool trainable = false,
@@ -213,16 +213,19 @@ namespace Tensorflow.Keras.Optimizers
             if (dtype == TF_DataType.DtInvalid)
                 dtype = TF_DataType.TF_FLOAT;
 
-            var variable = _add_variable_with_custom_getter(name: name,
-                shape: shape,
-                getter: base_layer_utils.make_variable,
-                dtype: dtype,
-                overwrite: true,
-                initializer: initializer,
-                trainable: trainable,
-                use_resource: true,
-                synchronization: synchronization,
-                aggregation: aggregation);
+            var variable = _add_variable_with_custom_getter(new VariableArgs
+            {
+                Name = name,
+                Shape = shape,
+                Getter = base_layer_utils.make_variable,
+                DType = dtype,
+                Overwrite = true,
+                Initializer = initializer,
+                Trainable = trainable,
+                UseResource = true,
+                Synchronization = synchronization,
+                Aggregation = aggregation
+            });
 
             return variable as ResourceVariable;
         }

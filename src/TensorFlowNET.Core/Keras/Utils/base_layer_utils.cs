@@ -26,32 +26,26 @@ namespace Tensorflow.Keras.Utils
         /// <summary>
         /// Adds a new variable to the layer.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="shape"></param>
-        /// <param name="dtype"></param>
-        /// <param name="initializer"></param>
-        /// <param name="trainable"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
-        public static IVariableV1 make_variable(string name,
-            int[] shape,
-            TF_DataType dtype = TF_DataType.TF_FLOAT,
-            IInitializer initializer = null,
-            bool trainable = true)
+        public static IVariableV1 make_variable(VariableArgs args)
         {
 #pragma warning disable CS0219 // Variable is assigned but its value is never used
             var initializing_from_value = false;
-            bool use_resource = true;
 #pragma warning restore CS0219 // Variable is assigned but its value is never used
 
             ops.init_scope();
 
-            Func<Tensor> init_val = () => initializer.call(new TensorShape(shape), dtype: dtype);
+            Func<Tensor> init_val = () => args.Initializer.call(args.Shape, dtype: args.DType);
 
-            var variable_dtype = dtype.as_base_dtype();
+            var variable_dtype = args.DType.as_base_dtype();
             var v = tf.Variable(init_val,
-                dtype: dtype,
-                shape: shape,
-                name: name);
+                dtype: args.DType,
+                shape: args.Shape,
+                name: args.Name,
+                trainable: args.Trainable,
+                validate_shape: args.ValidateShape,
+                use_resource: args.UseResource);
 
             return v;
         }

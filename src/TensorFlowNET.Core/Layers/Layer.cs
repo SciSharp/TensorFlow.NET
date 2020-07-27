@@ -167,12 +167,12 @@ namespace Tensorflow.Layers
                             dtype: dtype,
                             initializer: initializer,
                             trainable: trainable,
-                            getter: (name1, shape1, dtype1, initializer1, trainable1) =>
-                                tf.compat.v1.get_variable(name1,
-                                    shape: new TensorShape(shape1),
-                                    dtype: dtype1,
-                                    initializer: initializer1,
-                                    trainable: trainable1)
+                            getter: (args) =>
+                                tf.compat.v1.get_variable(args.Name,
+                                    shape: args.Shape,
+                                    dtype: args.DType,
+                                    initializer: args.Initializer,
+                                    trainable: args.Trainable)
                             );
 
                         //if (init_graph != null)

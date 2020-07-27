@@ -250,7 +250,7 @@ namespace Tensorflow.Keras.Engine
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
             bool? trainable = null,
-            Func<string, int[], TF_DataType, IInitializer, bool, IVariableV1> getter = null)
+            Func<VariableArgs, IVariableV1> getter = null)
         {
             if (dtype == TF_DataType.DtInvalid)
                 dtype = TF_DataType.TF_FLOAT;
@@ -259,7 +259,7 @@ namespace Tensorflow.Keras.Engine
                 trainable = true;
 
             // Initialize variable when no initializer provided
-            if(initializer == null)
+            if (initializer == null)
             {
                 // If dtype is DT_FLOAT, provide a uniform unit scaling initializer
                 if (dtype.is_floating())
@@ -269,13 +269,18 @@ namespace Tensorflow.Keras.Engine
                 else
                     throw new ValueError($"An initializer for variable {name} of type {dtype.as_base_dtype()} is required for layer {this.name}");
             }
-            var variable = _add_variable_with_custom_getter(name,
-                shape,
-                dtype: dtype,
-                getter: (getter == null) ? base_layer_utils.make_variable : getter,
-                overwrite: true,
-                initializer: initializer,
-                trainable: trainable.Value);
+
+            var variable = _add_variable_with_custom_getter(new VariableArgs
+            {
+                Name = name,
+                Shape = shape,
+                DType = dtype,
+                Getter = getter ?? base_layer_utils.make_variable,
+                Overwrite = true,
+                Initializer = initializer,
+                Trainable = trainable.Value
+            });
+
             //backend.track_variable(variable);
             if (trainable == true)
                 _trainable_weights.Add(variable);

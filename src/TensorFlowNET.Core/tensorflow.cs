@@ -62,6 +62,7 @@ namespace Tensorflow
         public ResourceVariable Variable<T>(T data,
             bool trainable = true,
             bool validate_shape = true,
+            bool use_resource = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             int[] shape = null)
