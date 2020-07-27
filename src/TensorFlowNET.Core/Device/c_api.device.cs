@@ -18,6 +18,7 @@ using System;
 using System.Runtime.InteropServices;
 using Tensorflow.Device;
 using Tensorflow.Eager;
+using Tensorflow.Util;
 
 namespace Tensorflow
 {
@@ -70,6 +71,18 @@ namespace Tensorflow
 
         /// <summary>
         /// Retrieves the full name of the device (e.g. /job:worker/replica:0/...)
+        /// </summary>
+        /// <param name="list">TF_DeviceList*</param>
+        /// <param name="index"></param>
+        /// <param name="status">TF_Status*</param>
+        public static string TF_DeviceListName(SafeDeviceListHandle list, int index, SafeStatusHandle status)
+        {
+            using var _ = list.Lease();
+            return StringPiece(TF_DeviceListNameImpl(list, index, status));
+        }
+
+        /// <summary>
+        /// Retrieves the full name of the device (e.g. /job:worker/replica:0/...)
         /// The return value will be a pointer to a null terminated string. The caller
         /// must not modify or delete the string. It will be deallocated upon a call to
         /// TF_DeleteDeviceList.
@@ -77,7 +90,7 @@ namespace Tensorflow
         /// <param name="list">TF_DeviceList*</param>
         /// <param name="index"></param>
         /// <param name="status">TF_Status*</param>
-        [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_DeviceListName(SafeDeviceListHandle list, int index, SafeStatusHandle status);
+        [DllImport(TensorFlowLibName, EntryPoint = "TF_DeviceListName")]
+        private static extern IntPtr TF_DeviceListNameImpl(SafeDeviceListHandle list, int index, SafeStatusHandle status);
     }
 }

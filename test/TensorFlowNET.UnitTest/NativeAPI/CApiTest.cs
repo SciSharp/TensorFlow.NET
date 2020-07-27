@@ -147,7 +147,7 @@ namespace TensorFlowNET.UnitTest
             => c_api.StringPiece(c_api.TF_DeviceListType(list, index, status));
 
         protected string TF_DeviceListName(SafeDeviceListHandle list, int index, SafeStatusHandle status)
-            => c_api.StringPiece(c_api.TF_DeviceListName(list, index, status));
+            => c_api.TF_DeviceListName(list, index, status);
 
         protected IntPtr TFE_TensorHandleCopyToDevice(IntPtr h, SafeContextHandle ctx, string device_name, SafeStatusHandle status)
             => c_api.TFE_TensorHandleCopyToDevice(h, ctx, device_name, status);
