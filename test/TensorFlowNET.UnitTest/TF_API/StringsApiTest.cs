@@ -43,10 +43,10 @@ namespace TensorFlowNET.UnitTest.TF_API
             var contents = tf.io.read_file(imgPath);
 
             var substr = tf.strings.substr(contents, 0, 3);
-            var jpg = Encoding.UTF8.GetString(new byte[] { 0xff, 0xd8, 0xff });
-            var jpg_tensor = tf.constant(jpg);
+            var jpg = tf.constant(new byte[] { 0xff, 0xd8, 0xff }, tf.@string);
 
-            var result = math_ops.equal(substr, jpg_tensor);
+            var result = math_ops.equal(substr, jpg);
+            Assert.IsTrue((bool)result);
         }
 
         [TestMethod]
