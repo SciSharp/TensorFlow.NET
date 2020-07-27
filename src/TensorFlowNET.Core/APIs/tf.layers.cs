@@ -14,9 +14,11 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NumSharp;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
@@ -173,14 +175,19 @@ namespace Tensorflow
                 if (bias_initializer == null)
                     bias_initializer = tf.zeros_initializer;
 
-                var layer = new Dense(units, activation, 
-                    use_bias: use_bias,
-                    bias_initializer: bias_initializer,
-                    kernel_initializer: kernel_initializer, 
-                    trainable: trainable,
-                    name: name);
+                var layer = new Dense(new DenseArgs
+                {
+                    Units = units,
+                    Activation = activation,
+                    UseBias = use_bias,
+                    BiasInitializer = bias_initializer,
+                    KernelInitializer = kernel_initializer,
+                    Trainable = trainable,
+                    Name = name
+                });
 
-                return layer.apply(inputs).Item1;
+                throw new NotImplementedException("");
+                //return layer.apply(inputs).Item1;
             }
 
             /// <summary>

@@ -119,7 +119,7 @@ namespace Tensorflow.Gradients
             return (results[0], results[1]);
         }
 
-        public Tensor[] gradient(Tensor target, ResourceVariable[] sources)
+        public Tensor[] gradient(Tensor target, IEnumerable<IVariableV1> sources)
         {
             if (_recording)
             {

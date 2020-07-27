@@ -17,12 +17,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tensorflow.Keras.Engine;
+using System.Threading;
+using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.Keras.Layers
+namespace Tensorflow.Keras.Engine
 {
     /// <summary>
     /// Base layer class.
@@ -32,8 +34,10 @@ namespace Tensorflow.Keras.Layers
     /// 
     /// tensorflow\python\keras\engine\base_layer.py
     /// </summary>
-    public class Layer : AutoTrackable
+    public class Layer : AutoTrackable, ILayer
     {
+        protected LayerArgs _args;
+
         /// <summary>
         /// Indicates whether `build` needs to be called upon layer call, to create
         /// the layer's weights.
@@ -52,6 +56,7 @@ namespace Tensorflow.Keras.Layers
         protected InputSpec input_spec;
         protected bool supports_masking;
         protected List<IVariableV1> _trainable_weights;
+        public List<IVariableV1> trainable_variables => _trainable_weights;
         protected List<IVariableV1> _non_trainable_weights;
         private string _name;
         public string name => _name;
@@ -72,13 +77,12 @@ namespace Tensorflow.Keras.Layers
         float _initial_weights;
 #pragma warning restore CS0169 // The field 'Layer._initial_weights' is never used
 
-        public Layer(bool trainable = true, 
-            string name = null, 
-            TF_DataType dtype = TF_DataType.DtInvalid,
-            int[] input_shape = null)
+        ThreadLocal<CallContext> _call_context;
+        public CallContext CallContext => _call_context.Value;
+
+        public Layer(LayerArgs args)
         {
-            this.trainable = trainable;
-            this._dtype = dtype;
+            _args = args;
             // A stateful layer is a layer whose updates are run during inference too,
             // for instance stateful RNNs.
             stateful = false;
@@ -94,17 +98,47 @@ namespace Tensorflow.Keras.Layers
             _updates = new List<Operation>();
 
             // Manage input shape information if passed.
-            if(input_shape != null)
-            {
-                var shapes = new List<int> { -1 };
-                shapes.AddRange(input_shape);
-                _batch_input_shape = shapes.ToArray();
-            }
             
-
-            _dtype = dtype;
-
             _inbound_nodes = new List<Node>();
+        }
+
+        /// <summary>
+        /// Wraps `call`, applying pre- and post-processing steps.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="is_training"></param>
+        /// <returns></returns>
+        public Tensor Apply(Tensor input, bool is_training = false)
+        {
+            var input_list = new Tensor[] { input };
+
+            if (_call_context == null)
+                _call_context = new ThreadLocal<CallContext>()
+                {
+                    Value = new CallContext()
+                };
+
+            using var ctxManager = CallContext.enter();
+
+            string name_scope = "";
+            if (tf.context.executing_eagerly())
+            {
+                name_scope = _name;
+            }
+            else
+            {
+                throw new NotImplementedException("");
+            }
+
+            tf_with(ops.name_scope(name_scope), scope =>
+            {
+                if (!built)
+                    _maybe_build(input);
+
+                call(input, is_training: is_training);
+            });
+
+            throw new NotImplementedException("");
         }
 
         public Tensor[] __call__(Tensor[] inputs,
@@ -147,7 +181,7 @@ namespace Tensorflow.Keras.Layers
                     _maybe_build(inputs[0]);
 
                     outputs = call(inputs[0], 
-                        training: training,
+                        // training: training,
                         state: state);
 
                     (input, outputs) = _set_connectivity_metadata_(input, outputs);
@@ -183,7 +217,7 @@ namespace Tensorflow.Keras.Layers
             return null;
         }
 
-        protected virtual Tensor[] call(Tensor inputs, Tensor training = null, Tensor state = null)
+        protected virtual Tensor[] call(Tensor inputs, bool is_training = false, Tensor state = null)
         {
             throw new NotImplementedException("");
         }

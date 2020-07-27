@@ -515,6 +515,9 @@ namespace Tensorflow
         public Tensor sum(Tensor input, int axis, bool keep_dims = false, string name = null)
             => gen_math_ops._sum(input, axis, keep_dims: keep_dims, name: name);
 
+        public Tensor reduce_mean(Tensor input_tensors, int axis, bool keepdims = false, string name = null)
+            => math_ops.reduce_mean(input_tensors, axis: new[] { axis }, keepdims: keepdims, name: name);
+
         public Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);
 

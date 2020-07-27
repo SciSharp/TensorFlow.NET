@@ -16,11 +16,12 @@
 
 using System;
 using System.Collections.Generic;
+using Tensorflow.Keras.ArgsDefinition;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Layers
 {
-    public class Layer : Keras.Layers.Layer
+    public class Layer : Keras.Engine.Layer
     {
         protected Graph _graph;
         
@@ -34,7 +35,13 @@ namespace Tensorflow.Layers
         public Layer(bool trainable = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            bool? _reuse = null) : base(trainable: trainable, name: name, dtype: dtype)
+            bool? _reuse = null) :
+            base(new LayerArgs
+            {
+                Trainable = trainable,
+                Name = name,
+                DType = dtype
+            })
         {
             // For backwards compatibility, legacy layers do not use `ResourceVariable`
             // by default.

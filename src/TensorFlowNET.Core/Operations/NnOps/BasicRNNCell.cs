@@ -67,7 +67,7 @@ namespace Tensorflow
             built = true;
         }
 
-        protected override Tensor[] call(Tensor inputs, Tensor training = null, Tensor state = null)
+        protected override Tensor[] call(Tensor inputs, bool is_training = false, Tensor state = null)
         {
             // Most basic RNN: output = new_state = act(W * input + U * state + B).
             var concat = array_ops.concat(new[] { inputs, state }, 1);

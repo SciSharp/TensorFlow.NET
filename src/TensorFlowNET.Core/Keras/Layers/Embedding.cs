@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
@@ -32,7 +34,12 @@ namespace Tensorflow.Keras.Layers
             bool mask_zero = false,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             int[] input_shape = null,
-            int input_length = -1) : base(dtype: dtype, input_shape: input_shape ?? new[] { input_length })
+            int input_length = -1) :
+            base(new LayerArgs
+            {
+                DType = dtype,
+                InputShape = input_shape ?? new[] { input_length }
+            })
         {
             this.input_dim = input_dim;
             this.output_dim = output_dim;
@@ -50,7 +57,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor[] call(Tensor inputs, Tensor training = null, Tensor state = null)
+        protected override Tensor[] call(Tensor inputs, bool is_training = false, Tensor state = null)
         {
             var dtype = inputs.dtype;
             if (dtype != tf.int32 && dtype != tf.int64)

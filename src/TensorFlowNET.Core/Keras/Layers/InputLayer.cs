@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Engine;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -35,7 +37,11 @@ namespace Tensorflow.Keras.Layers
             TF_DataType dtype = TF_DataType.DtInvalid,
             string name = null,
             bool sparse = false,
-            Tensor input_tensor = null) : base(dtype: dtype, name: name)
+            Tensor input_tensor = null) : 
+            base(new LayerArgs 
+            { 
+                DType = dtype, Name = name
+            })
         {
             built = true;
             this.sparse = sparse;

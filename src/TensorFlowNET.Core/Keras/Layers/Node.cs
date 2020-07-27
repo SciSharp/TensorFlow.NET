@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System.Linq;
+using Tensorflow.Keras.Engine;
 
 namespace Tensorflow.Keras.Layers
 {

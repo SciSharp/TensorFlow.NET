@@ -85,8 +85,9 @@ namespace Tensorflow
                     {
                         case TF_Code.TF_OUT_OF_RANGE:
                             throw new OutOfRangeError(message);
+                        case TF_Code.TF_INVALID_ARGUMENT:
+                            throw new InvalidArgumentError(message);
                         default:
-                            Console.WriteLine(message);
                             throw new TensorflowException(message);
                     }
                 }

@@ -7,7 +7,7 @@ namespace Tensorflow
 {
     public class DatasetManager
     {
-        public IDatasetV2 from_tensor_slices(NDArray features, NDArray labels)
+        public IDatasetV2 from_tensor_slices(Tensor features, Tensor labels)
             => new TensorSliceDataset(features, labels);
     }
 }

@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
 
 namespace Tensorflow.Keras.Engine
@@ -28,10 +29,10 @@ namespace Tensorflow.Keras.Engine
 #pragma warning restore CS0169 // The field 'Sequential.outputs' is never used
 
         public Sequential(string name = null) 
-            : base(name: name)
+            : base(new ModelArgs { Name = name})
         {
             supports_masking = true;
-            _compute_output_and_mask_jointly = true;
+            // _compute_output_and_mask_jointly = true;
         }
 
         public void __enter__()
@@ -47,7 +48,7 @@ namespace Tensorflow.Keras.Engine
         {
             built = false;
             var set_inputs = false;
-            if(_layers.Count == 0)
+            //if(_layers.Count == 0)
             {
                 if(layer is InputLayer)
                 {

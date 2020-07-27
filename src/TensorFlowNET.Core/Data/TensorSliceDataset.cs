@@ -11,9 +11,9 @@ namespace Tensorflow
 {
     public class TensorSliceDataset : DatasetSource
     {
-        public TensorSliceDataset(NDArray features, NDArray labels)
+        public TensorSliceDataset(Tensor features, Tensor labels)
         {
-            _tensors = new[] { tf.convert_to_tensor(features), tf.convert_to_tensor(labels) };
+            _tensors = new[] { features, labels };
             var batched_spec = _tensors.Select(x => x.ToTensorSpec()).ToArray();
             structure = batched_spec.Select(x => x._unbatch()).ToArray();
             

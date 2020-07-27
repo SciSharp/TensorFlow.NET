@@ -1,8 +1,12 @@
-﻿using Tensorflow.Keras.Optimizers;
+﻿using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Optimizers;
 
 namespace Tensorflow.Keras.Engine
 {
-    public class Model : Network
+    /// <summary>
+    /// `Model` groups layers into an object with training and inference features.
+    /// </summary>
+    public class Model : Layer
     {
 #pragma warning disable CS0169 // The field 'Model._cloning' is never used
         bool _cloning;
@@ -15,8 +19,8 @@ namespace Tensorflow.Keras.Engine
         string loss;
         IOptimizer optimizer;
 
-        public Model(string name = null) 
-            : base(name: name)
+        public Model(ModelArgs args) 
+            : base(args)
         {
 
         }

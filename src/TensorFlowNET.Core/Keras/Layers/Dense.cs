@@ -17,35 +17,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
-    public class Dense : Tensorflow.Layers.Layer
+    /// <summary>
+    /// Just your regular densely-connected NN layer.
+    /// </summary>
+    public class Dense : Layer
     {
         protected int units;
         protected IActivation activation;
         protected bool use_bias;
         protected IInitializer kernel_initializer;
         protected IInitializer bias_initializer;
-        protected RefVariable kernel;
-        protected RefVariable bias;
+        protected IVariableV1 kernel;
+        protected IVariableV1 bias;
 
-        public Dense(int units,
-            IActivation activation,
-            string name = null,
-            bool use_bias = true,
-            bool trainable = false,
-            IInitializer kernel_initializer = null,
-            IInitializer bias_initializer = null) : base(trainable: trainable, name: name)
+        public Dense(DenseArgs args) : 
+            base(args)
         {
-            this.units = units;
-            this.activation = activation;
-            this.use_bias = use_bias;
-            this.kernel_initializer = kernel_initializer;
-            this.bias_initializer = bias_initializer;
             this.supports_masking = true;
             this.input_spec = new InputSpec(min_ndim: 2);
         }
@@ -56,14 +50,14 @@ namespace Tensorflow.Keras.Layers
             var axes = new Dictionary<int, int>();
             axes[-1] = last_dim;
             input_spec = new InputSpec(min_ndim: 2, axes: axes);
-            kernel = (RefVariable)add_weight(
+            kernel = add_weight(
                 "kernel",
                 shape: new int[] { last_dim, units },
                 initializer: kernel_initializer,
                 dtype: _dtype,
                 trainable: true);
             if (use_bias)
-                bias = (RefVariable)add_weight(
+                bias = add_weight(
                   "bias",
                   shape: new int[] { units },
                   initializer: bias_initializer,
@@ -73,7 +67,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor[] call(Tensor inputs, Tensor training = null, Tensor state = null)
+        protected override Tensor[] call(Tensor inputs, bool training = false, Tensor state = null)
         {
             Tensor outputs = null;
             var rank = inputs.rank;
@@ -83,7 +77,7 @@ namespace Tensorflow.Keras.Layers
             }
             else
             {
-                outputs = gen_math_ops.mat_mul(inputs, kernel);
+                outputs = gen_math_ops.mat_mul(inputs, kernel.Handle);
             }
 
             if (use_bias)
