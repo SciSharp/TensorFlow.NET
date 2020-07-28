@@ -41,13 +41,13 @@ namespace Tensorflow
         }
 
         [MethodImpl(MethodImplOptions.NoOptimization)]
-        public static Session LoadFromSavedModel(string path)
+        public static Session LoadFromSavedModel(string path,string target="",ConfigProto config=null)
         {
             lock (Locks.ProcessWide)
             {
                 var graph = c_api.TF_NewGraph();
                 var status = new Status();
-                var opt = new SessionOptions();
+                var opt = new SessionOptions(target,config);
 
                 var tags = new string[] {"serve"};
                 var buffer = new TF_Buffer();
