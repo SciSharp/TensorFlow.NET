@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NumSharp;
+using Tensorflow.Keras;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Operations.Activation;
@@ -164,7 +165,7 @@ namespace Tensorflow
             /// <returns></returns>
             public Tensor dense(Tensor inputs,
                 int units,
-                IActivation activation = null,
+                Activation activation = null,
                 bool use_bias = true,
                 IInitializer kernel_initializer = null,
                 IInitializer bias_initializer = null,

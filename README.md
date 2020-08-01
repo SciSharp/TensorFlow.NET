@@ -26,11 +26,11 @@ In comparison to other projects, like for instance TensorFlowSharp which only pr
 
 ### How to use
 
-| TensorFlow  | tf 1.13 | tf 1.14 | tf 1.15 | tf 2.2 |
-| ----------- | ------- | ------- | ------- | ------ |
-| tf.net 0.20 |         |         | x       | x      |
-| tf.net 0.15 |         | x       | x       |        |
-| tf.net 0.14 | x       | x       |         |        |
+| TensorFlow  | tf native1.14 | tf native 1.15 | tf native 2.3 |
+| ----------- | ------------- | -------------- | ------------- |
+| tf.net 0.20 |               | x              | x             |
+| tf.net 0.15 | x             | x              |               |
+| tf.net 0.14 | x             |                |               |
 
 Install TF.NET and TensorFlow binary through NuGet.
 ```sh
@@ -137,6 +137,10 @@ Join our chat on [Gitter](https://gitter.im/sci-sharp/community).
 Scan QR code to join Tencent TIM group:
 
 ![SciSharp STACK](docs/TIM.jpg)
+
+WeChat Sponsor 微信打赏:
+
+![SciSharp STACK](docs/assets/WeChatCollection.jpg)
 
 TensorFlow.NET is a part of [SciSharp STACK](https://scisharp.github.io/SciSharp/)
 <br>

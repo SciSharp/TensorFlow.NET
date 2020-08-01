@@ -71,8 +71,8 @@ namespace Tensorflow
                         IntPtr stringStartAddress = IntPtr.Zero;
                         ulong dstLen = 0;
 
-                        c_api.TF_StringDecode((byte*) this.buffer + 8, this.bytesize, (byte**) &stringStartAddress, ref dstLen, tf.status.Handle);
-                        tf.status.Check(true);
+                        c_api.TF_StringDecode((byte*) this.buffer + 8, this.bytesize, (byte**) &stringStartAddress, ref dstLen, tf.Status.Handle);
+                        tf.Status.Check(true);
 
                         var dstLenInt = checked((int) dstLen);
                         var value = Encoding.UTF8.GetString((byte*) stringStartAddress, dstLenInt);

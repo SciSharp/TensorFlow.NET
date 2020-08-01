@@ -23,7 +23,7 @@ namespace Tensorflow
     {
         public static Operation control_trigger(string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ControlTrigger", name, new
+            var _op = tf.OpDefLib._apply_op_helper("ControlTrigger", name, new
             {
             });
 
@@ -41,7 +41,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor enter(Tensor data, string frame_name = "frame_name", bool is_constant = false, int parallel_iterations = 10, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Enter", name, new
+            var _op = tf.OpDefLib._apply_op_helper("Enter", name, new
             {
                 data,
                 frame_name,
@@ -60,7 +60,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor loop_cond(Tensor input, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("LoopCond", name, new { input });
+            var _op = tf.OpDefLib._apply_op_helper("LoopCond", name, new { input });
 
             return _op.output;
         }
@@ -73,7 +73,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor ref_next_iteration(Tensor data, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("RefNextIteration", name, new { data });
+            var _op = tf.OpDefLib._apply_op_helper("RefNextIteration", name, new { data });
 
             return _op;
         }
@@ -86,7 +86,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor next_iteration(Tensor data, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("NextIteration", name, new { data });
+            var _op = tf.OpDefLib._apply_op_helper("NextIteration", name, new { data });
 
             return _op;
         }
@@ -99,7 +99,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor ref_exit(Tensor data, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("RefExit", name, new { data });
+            var _op = tf.OpDefLib._apply_op_helper("RefExit", name, new { data });
 
             return _op;
         }
@@ -112,21 +112,21 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor _exit(Tensor data, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Exit", name, new { data });
+            var _op = tf.OpDefLib._apply_op_helper("Exit", name, new { data });
 
             return _op;
         }
 
         public static Operation no_op(string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("NoOp", name, null);
+            var _op = tf.OpDefLib._apply_op_helper("NoOp", name, null);
 
             return _op;
         }
 
         public static Tensor[] ref_switch(Tensor data, Tensor pred, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("RefSwitch", name, new { data, pred });
+            var _op = tf.OpDefLib._apply_op_helper("RefSwitch", name, new { data, pred });
             return _op.outputs;
         }
 
@@ -150,7 +150,7 @@ namespace Tensorflow
         /// </returns>
         public static Tensor[] @switch(Tensor data, Tensor pred, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Switch", name, new { data, pred });
+            var _op = tf.OpDefLib._apply_op_helper("Switch", name, new { data, pred });
             var _inputs_flat = _op.inputs;
 #pragma warning disable CS0219 // Variable is assigned but its value is never used
             var _attrs = ("T", _op.get_attr("T"));
@@ -162,14 +162,14 @@ namespace Tensorflow
 
         public static MergeOutput ref_merge(Tensor[] inputs, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("RefMerge", name, new { inputs });
+            var _op = tf.OpDefLib._apply_op_helper("RefMerge", name, new { inputs });
 
             return new MergeOutput(_op.outputs);
         }
 
         public static MergeOutput merge(Tensor[] inputs, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Merge", name, new { inputs });
+            var _op = tf.OpDefLib._apply_op_helper("Merge", name, new { inputs });
 
             return new MergeOutput(_op.outputs);
         }

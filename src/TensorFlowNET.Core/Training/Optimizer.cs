@@ -212,7 +212,7 @@ namespace Tensorflow
                     });
                 }
 
-                if (!tf.context.executing_eagerly())
+                if (!tf.Context.executing_eagerly())
                 {
                     var train_op = ops.get_collection_ref<Operation>(tf.GraphKeys.TRAIN_OP);
                     if (train_op != null && train_op.Contains(apply_updates))

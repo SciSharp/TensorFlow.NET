@@ -33,7 +33,7 @@ namespace Tensorflow.Operations
                 dict["error_msg"] = error_msg;
             if (exit_without_error.HasValue)
                 dict["exit_without_error"] = exit_without_error.Value;
-            var op = tf._op_def_lib._apply_op_helper("Abort", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Abort", name: name, keywords: dict);
             return op;
         }
 
@@ -57,7 +57,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Abs", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Abs", name: name, keywords: dict);
             return op.output;
         }
 
@@ -92,7 +92,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("AccumulateNV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AccumulateNV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -123,7 +123,7 @@ namespace Tensorflow.Operations
             dict["handle"] = handle;
             dict["local_step"] = local_step;
             dict["gradient"] = gradient;
-            var op = tf._op_def_lib._apply_op_helper("AccumulatorApplyGradient", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AccumulatorApplyGradient", name: name, keywords: dict);
             return op;
         }
 
@@ -144,7 +144,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("AccumulatorNumAccumulated", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AccumulatorNumAccumulated", name: name, keywords: dict);
             return op.output;
         }
 
@@ -172,7 +172,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
             dict["new_global_step"] = new_global_step;
-            var op = tf._op_def_lib._apply_op_helper("AccumulatorSetGlobalStep", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AccumulatorSetGlobalStep", name: name, keywords: dict);
             return op;
         }
 
@@ -210,7 +210,7 @@ namespace Tensorflow.Operations
             dict["handle"] = handle;
             dict["num_required"] = num_required;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("AccumulatorTakeGradient", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AccumulatorTakeGradient", name: name, keywords: dict);
             return op.output;
         }
 
@@ -229,7 +229,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Acos", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Acos", name: name, keywords: dict);
             return op.output;
         }
 
@@ -248,7 +248,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Acosh", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Acosh", name: name, keywords: dict);
             return op.output;
         }
 
@@ -274,7 +274,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Add", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Add", name: name, keywords: dict);
             return op.output;
         }
 
@@ -343,7 +343,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("AddManySparseToTensorsMap", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AddManySparseToTensorsMap", name: name, keywords: dict);
             return op.output;
         }
 
@@ -363,7 +363,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
-            var op = tf._op_def_lib._apply_op_helper("AddN", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AddN", name: name, keywords: dict);
             return op.output;
         }
 
@@ -420,7 +420,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("AddSparseToTensorsMap", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AddSparseToTensorsMap", name: name, keywords: dict);
             return op.output;
         }
 
@@ -446,7 +446,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("AddV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AddV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -474,7 +474,7 @@ namespace Tensorflow.Operations
             dict["contrast_factor"] = contrast_factor;
             dict["min_value"] = min_value;
             dict["max_value"] = max_value;
-            var op = tf._op_def_lib._apply_op_helper("AdjustContrast", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AdjustContrast", name: name, keywords: dict);
             return op.output;
         }
 
@@ -510,7 +510,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
             dict["contrast_factor"] = contrast_factor;
-            var op = tf._op_def_lib._apply_op_helper("AdjustContrastv2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AdjustContrastv2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -543,7 +543,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
             dict["delta"] = delta;
-            var op = tf._op_def_lib._apply_op_helper("AdjustHue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AdjustHue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -576,7 +576,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
             dict["scale"] = scale;
-            var op = tf._op_def_lib._apply_op_helper("AdjustSaturation", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AdjustSaturation", name: name, keywords: dict);
             return op.output;
         }
 
@@ -613,7 +613,7 @@ namespace Tensorflow.Operations
             dict["reduction_indices"] = reduction_indices;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("All", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("All", name: name, keywords: dict);
             return op.output;
         }
 
@@ -684,7 +684,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("AllCandidateSampler", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AllCandidateSampler", name: name, keywords: dict);
             int _idx = 0;
             var sampled_candidates = op.outputs[_idx++];
             var true_expected_count = op.outputs[_idx++];
@@ -730,7 +730,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (Tout.HasValue)
                 dict["Tout"] = Tout.Value;
-            var op = tf._op_def_lib._apply_op_helper("Angle", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Angle", name: name, keywords: dict);
             return op.output;
         }
 
@@ -758,7 +758,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("AnonymousIterator", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AnonymousIterator", name: name, keywords: dict);
             return op.output;
         }
 
@@ -795,7 +795,7 @@ namespace Tensorflow.Operations
             dict["reduction_indices"] = reduction_indices;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("Any", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Any", name: name, keywords: dict);
             return op.output;
         }
 
@@ -860,7 +860,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyAdaMax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyAdaMax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -917,7 +917,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyAdadelta", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyAdadelta", name: name, keywords: dict);
             return op.output;
         }
 
@@ -965,7 +965,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (update_slots.HasValue)
                 dict["update_slots"] = update_slots.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyAdagrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyAdagrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1020,7 +1020,7 @@ namespace Tensorflow.Operations
             dict["global_step"] = global_step;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyAdagradDA", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyAdagradDA", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1095,7 +1095,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (use_nesterov.HasValue)
                 dict["use_nesterov"] = use_nesterov.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyAdam", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyAdam", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1152,7 +1152,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyAddSign", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyAddSign", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1231,7 +1231,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyCenteredRMSProp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyCenteredRMSProp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1294,7 +1294,7 @@ namespace Tensorflow.Operations
             dict["lr_power"] = lr_power;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyFtrl", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyFtrl", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1362,7 +1362,7 @@ namespace Tensorflow.Operations
             dict["lr_power"] = lr_power;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyFtrlV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyFtrlV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1397,7 +1397,7 @@ namespace Tensorflow.Operations
             dict["delta"] = delta;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyGradientDescent", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyGradientDescent", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1454,7 +1454,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (use_nesterov.HasValue)
                 dict["use_nesterov"] = use_nesterov.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyMomentum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyMomentum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1511,7 +1511,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyPowerSign", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyPowerSign", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1563,7 +1563,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyProximalAdagrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyProximalAdagrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1610,7 +1610,7 @@ namespace Tensorflow.Operations
             dict["delta"] = delta;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyProximalGradientDescent", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyProximalGradientDescent", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1677,7 +1677,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApplyRMSProp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApplyRMSProp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1703,7 +1703,7 @@ namespace Tensorflow.Operations
             dict["y"] = y;
             if (tolerance.HasValue)
                 dict["tolerance"] = tolerance.Value;
-            var op = tf._op_def_lib._apply_op_helper("ApproximateEqual", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ApproximateEqual", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1735,7 +1735,7 @@ namespace Tensorflow.Operations
             dict["dimension"] = dimension;
             if (output_type.HasValue)
                 dict["output_type"] = output_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("ArgMax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ArgMax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1767,7 +1767,7 @@ namespace Tensorflow.Operations
             dict["dimension"] = dimension;
             if (output_type.HasValue)
                 dict["output_type"] = output_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("ArgMin", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ArgMin", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1819,7 +1819,7 @@ namespace Tensorflow.Operations
                 dict["width"] = width.Value;
             if (fill != null)
                 dict["fill"] = fill;
-            var op = tf._op_def_lib._apply_op_helper("AsString", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AsString", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1838,7 +1838,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Asin", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Asin", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1857,7 +1857,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Asinh", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Asinh", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1890,7 +1890,7 @@ namespace Tensorflow.Operations
             dict["data"] = data;
             if (summarize.HasValue)
                 dict["summarize"] = summarize.Value;
-            var op = tf._op_def_lib._apply_op_helper("Assert", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Assert", name: name, keywords: dict);
             return op;
         }
 
@@ -1933,7 +1933,7 @@ namespace Tensorflow.Operations
                 dict["validate_shape"] = validate_shape.Value;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("Assign", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Assign", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1969,7 +1969,7 @@ namespace Tensorflow.Operations
             dict["value"] = value;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("AssignAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AssignAdd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -1997,7 +1997,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
             dict["value"] = value;
-            var op = tf._op_def_lib._apply_op_helper("AssignAddVariableOp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AssignAddVariableOp", name: name, keywords: dict);
             return op;
         }
 
@@ -2033,7 +2033,7 @@ namespace Tensorflow.Operations
             dict["value"] = value;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("AssignSub", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AssignSub", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2061,7 +2061,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
             dict["value"] = value;
-            var op = tf._op_def_lib._apply_op_helper("AssignSubVariableOp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AssignSubVariableOp", name: name, keywords: dict);
             return op;
         }
 
@@ -2089,7 +2089,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
             dict["value"] = value;
-            var op = tf._op_def_lib._apply_op_helper("AssignVariableOp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AssignVariableOp", name: name, keywords: dict);
             return op;
         }
 
@@ -2108,7 +2108,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Atan", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Atan", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2137,7 +2137,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Atan2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Atan2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2156,7 +2156,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Atanh", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Atanh", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2221,7 +2221,7 @@ namespace Tensorflow.Operations
             dict["stride"] = stride;
             if (magnitude_squared.HasValue)
                 dict["magnitude_squared"] = magnitude_squared.Value;
-            var op = tf._op_def_lib._apply_op_helper("AudioSpectrogram", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AudioSpectrogram", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2269,7 +2269,7 @@ namespace Tensorflow.Operations
             dict["sample_rate"] = sample_rate;
             if (max_outputs.HasValue)
                 dict["max_outputs"] = max_outputs.Value;
-            var op = tf._op_def_lib._apply_op_helper("AudioSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AudioSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2316,7 +2316,7 @@ namespace Tensorflow.Operations
             dict["sample_rate"] = sample_rate;
             if (max_outputs.HasValue)
                 dict["max_outputs"] = max_outputs.Value;
-            var op = tf._op_def_lib._apply_op_helper("AudioSummaryV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AudioSummaryV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2365,7 +2365,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("AvgPool", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AvgPool", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2412,7 +2412,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("AvgPool3D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AvgPool3D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2463,7 +2463,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("AvgPool3DGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AvgPool3DGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2513,7 +2513,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("AvgPoolGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("AvgPoolGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2570,7 +2570,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("Barrier", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Barrier", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2605,7 +2605,7 @@ namespace Tensorflow.Operations
             dict["handle"] = handle;
             if (cancel_pending_enqueues.HasValue)
                 dict["cancel_pending_enqueues"] = cancel_pending_enqueues.Value;
-            var op = tf._op_def_lib._apply_op_helper("BarrierClose", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BarrierClose", name: name, keywords: dict);
             return op;
         }
 
@@ -2627,7 +2627,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("BarrierIncompleteSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BarrierIncompleteSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2667,7 +2667,7 @@ namespace Tensorflow.Operations
             dict["keys"] = keys;
             dict["values"] = values;
             dict["component_index"] = component_index;
-            var op = tf._op_def_lib._apply_op_helper("BarrierInsertMany", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BarrierInsertMany", name: name, keywords: dict);
             return op;
         }
 
@@ -2689,7 +2689,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("BarrierReadySize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BarrierReadySize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2752,7 +2752,7 @@ namespace Tensorflow.Operations
                 dict["wait_for_incomplete"] = wait_for_incomplete.Value;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("BarrierTakeMany", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BarrierTakeMany", name: name, keywords: dict);
             int _idx = 0;
             var indices = op.outputs[_idx++];
             var keys = op.outputs[_idx++];
@@ -2853,7 +2853,7 @@ namespace Tensorflow.Operations
                 dict["shared_name"] = shared_name;
             if (batching_queue != null)
                 dict["batching_queue"] = batching_queue;
-            var op = tf._op_def_lib._apply_op_helper("Batch", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Batch", name: name, keywords: dict);
             int _idx = 0;
             var batched_tensors = Enumerable.Range(0, op.OutputListLength("batched_tensors")).Select(_ => op.outputs[_idx++]).ToArray();
             var batch_index = op.outputs[_idx++];
@@ -2889,7 +2889,7 @@ namespace Tensorflow.Operations
             dict["batch_size"] = batch_size;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("BatchDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BatchDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2925,7 +2925,7 @@ namespace Tensorflow.Operations
             dict["drop_remainder"] = drop_remainder;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("BatchDatasetV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BatchDatasetV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -2980,7 +2980,7 @@ namespace Tensorflow.Operations
                 dict["adj_x"] = adj_x.Value;
             if (adj_y.HasValue)
                 dict["adj_y"] = adj_y.Value;
-            var op = tf._op_def_lib._apply_op_helper("BatchMatMul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BatchMatMul", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3037,7 +3037,7 @@ namespace Tensorflow.Operations
             dict["gamma"] = gamma;
             dict["variance_epsilon"] = variance_epsilon;
             dict["scale_after_normalization"] = scale_after_normalization;
-            var op = tf._op_def_lib._apply_op_helper("BatchNormWithGlobalNormalization", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BatchNormWithGlobalNormalization", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3099,7 +3099,7 @@ namespace Tensorflow.Operations
             dict["backprop"] = backprop;
             dict["variance_epsilon"] = variance_epsilon;
             dict["scale_after_normalization"] = scale_after_normalization;
-            var op = tf._op_def_lib._apply_op_helper("BatchNormWithGlobalNormalizationGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BatchNormWithGlobalNormalizationGrad", name: name, keywords: dict);
             int _idx = 0;
             var dx = op.outputs[_idx++];
             var dm = op.outputs[_idx++];
@@ -3216,7 +3216,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["crops"] = crops;
             dict["block_size"] = block_size;
-            var op = tf._op_def_lib._apply_op_helper("BatchToSpace", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BatchToSpace", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3361,7 +3361,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["block_shape"] = block_shape;
             dict["crops"] = crops;
-            var op = tf._op_def_lib._apply_op_helper("BatchToSpaceND", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BatchToSpaceND", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3386,7 +3386,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("BesselI0e", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BesselI0e", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3411,7 +3411,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("BesselI1e", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BesselI1e", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3451,7 +3451,7 @@ namespace Tensorflow.Operations
             dict["a"] = a;
             dict["b"] = b;
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Betainc", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Betainc", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3491,7 +3491,7 @@ namespace Tensorflow.Operations
             dict["bias"] = bias;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("BiasAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BiasAdd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3528,7 +3528,7 @@ namespace Tensorflow.Operations
             dict["out_backprop"] = out_backprop;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("BiasAddGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BiasAddGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3559,7 +3559,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
             dict["bias"] = bias;
-            var op = tf._op_def_lib._apply_op_helper("BiasAddV1", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BiasAddV1", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3600,7 +3600,7 @@ namespace Tensorflow.Operations
             dict["arr"] = arr;
             dict["size"] = size;
             dict["weights"] = weights;
-            var op = tf._op_def_lib._apply_op_helper("Bincount", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Bincount", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3637,7 +3637,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["type"] = type;
-            var op = tf._op_def_lib._apply_op_helper("Bitcast", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Bitcast", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3663,7 +3663,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("BitwiseAnd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BitwiseAnd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3689,7 +3689,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("BitwiseOr", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BitwiseOr", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3715,7 +3715,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("BitwiseXor", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BitwiseXor", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3776,7 +3776,7 @@ namespace Tensorflow.Operations
             dict["tree_complexity"] = tree_complexity;
             dict["min_node_weight"] = min_node_weight;
             dict["max_splits"] = max_splits;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesCalculateBestGainsPerFeature", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesCalculateBestGainsPerFeature", name: name, keywords: dict);
             int _idx = 0;
             var node_ids_list = Enumerable.Range(0, op.OutputListLength("node_ids_list")).Select(_ => op.outputs[_idx++]).ToArray();
             var gains_list = Enumerable.Range(0, op.OutputListLength("gains_list")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -3819,7 +3819,7 @@ namespace Tensorflow.Operations
             dict["mean_hessians"] = mean_hessians;
             dict["l1"] = l1;
             dict["l2"] = l2;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesCenterBias", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesCenterBias", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3847,7 +3847,7 @@ namespace Tensorflow.Operations
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
             dict["stamp_token"] = stamp_token;
             dict["tree_ensemble_serialized"] = tree_ensemble_serialized;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesCreateEnsemble", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesCreateEnsemble", name: name, keywords: dict);
             return op;
         }
 
@@ -3878,7 +3878,7 @@ namespace Tensorflow.Operations
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
             dict["stamp_token"] = stamp_token;
             dict["tree_ensemble_serialized"] = tree_ensemble_serialized;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesDeserializeEnsemble", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesDeserializeEnsemble", name: name, keywords: dict);
             return op;
         }
 
@@ -3902,7 +3902,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesEnsembleResourceHandleOp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesEnsembleResourceHandleOp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3938,7 +3938,7 @@ namespace Tensorflow.Operations
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
             dict["bucketized_features"] = bucketized_features;
             dict["logits_dimension"] = logits_dimension;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesExampleDebugOutputs", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesExampleDebugOutputs", name: name, keywords: dict);
             return op.output;
         }
 
@@ -3965,7 +3965,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesGetEnsembleStates", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesGetEnsembleStates", name: name, keywords: dict);
             int _idx = 0;
             var stamp_token = op.outputs[_idx++];
             var num_trees = op.outputs[_idx++];
@@ -4017,7 +4017,7 @@ namespace Tensorflow.Operations
             dict["bucketized_features_list"] = bucketized_features_list;
             dict["max_splits"] = max_splits;
             dict["num_buckets"] = num_buckets;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesMakeStatsSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesMakeStatsSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4052,7 +4052,7 @@ namespace Tensorflow.Operations
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
             dict["bucketized_features"] = bucketized_features;
             dict["logits_dimension"] = logits_dimension;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesPredict", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesPredict", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4075,7 +4075,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesSerializeEnsemble", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesSerializeEnsemble", name: name, keywords: dict);
             int _idx = 0;
             var stamp_token = op.outputs[_idx++];
             var tree_ensemble_serialized = op.outputs[_idx++];
@@ -4128,7 +4128,7 @@ namespace Tensorflow.Operations
             dict["cached_node_ids"] = cached_node_ids;
             dict["bucketized_features"] = bucketized_features;
             dict["logits_dimension"] = logits_dimension;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesTrainingPredict", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesTrainingPredict", name: name, keywords: dict);
             int _idx = 0;
             var partial_logits = op.outputs[_idx++];
             var tree_ids = op.outputs[_idx++];
@@ -4200,7 +4200,7 @@ namespace Tensorflow.Operations
             dict["max_depth"] = max_depth;
             dict["learning_rate"] = learning_rate;
             dict["pruning_mode"] = pruning_mode;
-            var op = tf._op_def_lib._apply_op_helper("BoostedTreesUpdateEnsemble", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BoostedTreesUpdateEnsemble", name: name, keywords: dict);
             return op;
         }
 
@@ -4226,7 +4226,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["s0"] = s0;
             dict["s1"] = s1;
-            var op = tf._op_def_lib._apply_op_helper("BroadcastArgs", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BroadcastArgs", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4254,7 +4254,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["s0"] = s0;
             dict["s1"] = s1;
-            var op = tf._op_def_lib._apply_op_helper("BroadcastGradientArgs", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BroadcastGradientArgs", name: name, keywords: dict);
             int _idx = 0;
             var r0 = op.outputs[_idx++];
             var r1 = op.outputs[_idx++];
@@ -4301,7 +4301,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("BroadcastTo", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BroadcastTo", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4343,7 +4343,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["boundaries"] = boundaries;
-            var op = tf._op_def_lib._apply_op_helper("Bucketize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Bucketize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4373,7 +4373,7 @@ namespace Tensorflow.Operations
             dict["tag"] = tag;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("BytesProducedStatsDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("BytesProducedStatsDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4431,7 +4431,7 @@ namespace Tensorflow.Operations
             dict["top_paths"] = top_paths;
             if (merge_repeated.HasValue)
                 dict["merge_repeated"] = merge_repeated.Value;
-            var op = tf._op_def_lib._apply_op_helper("CTCBeamSearchDecoder", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CTCBeamSearchDecoder", name: name, keywords: dict);
             int _idx = 0;
             var decoded_indices = Enumerable.Range(0, op.OutputListLength("decoded_indices")).Select(_ => op.outputs[_idx++]).ToArray();
             var decoded_values = Enumerable.Range(0, op.OutputListLength("decoded_values")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -4485,7 +4485,7 @@ namespace Tensorflow.Operations
             dict["sequence_length"] = sequence_length;
             if (merge_repeated.HasValue)
                 dict["merge_repeated"] = merge_repeated.Value;
-            var op = tf._op_def_lib._apply_op_helper("CTCGreedyDecoder", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CTCGreedyDecoder", name: name, keywords: dict);
             int _idx = 0;
             var decoded_indices = op.outputs[_idx++];
             var decoded_values = op.outputs[_idx++];
@@ -4552,7 +4552,7 @@ namespace Tensorflow.Operations
                 dict["ctc_merge_repeated"] = ctc_merge_repeated.Value;
             if (ignore_longer_outputs_than_inputs.HasValue)
                 dict["ignore_longer_outputs_than_inputs"] = ignore_longer_outputs_than_inputs.Value;
-            var op = tf._op_def_lib._apply_op_helper("CTCLoss", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CTCLoss", name: name, keywords: dict);
             int _idx = 0;
             var loss = op.outputs[_idx++];
             var gradient = op.outputs[_idx++];
@@ -4593,7 +4593,7 @@ namespace Tensorflow.Operations
             dict["filename"] = filename;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("CacheDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CacheDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4620,7 +4620,7 @@ namespace Tensorflow.Operations
             dict["DstT"] = DstT;
             if (Truncate.HasValue)
                 dict["Truncate"] = Truncate.Value;
-            var op = tf._op_def_lib._apply_op_helper("Cast", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Cast", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4639,7 +4639,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Ceil", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Ceil", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4667,7 +4667,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
             dict["message"] = message;
-            var op = tf._op_def_lib._apply_op_helper("CheckNumerics", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CheckNumerics", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4703,7 +4703,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("Cholesky", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Cholesky", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4736,7 +4736,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["l"] = l;
             dict["grad"] = grad;
-            var op = tf._op_def_lib._apply_op_helper("CholeskyGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CholeskyGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4773,7 +4773,7 @@ namespace Tensorflow.Operations
             dict["t"] = t;
             dict["clip_value_min"] = clip_value_min;
             dict["clip_value_max"] = clip_value_max;
-            var op = tf._op_def_lib._apply_op_helper("ClipByValue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ClipByValue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4809,7 +4809,7 @@ namespace Tensorflow.Operations
             dict["group_key"] = group_key;
             dict["instance_key"] = instance_key;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("CollectiveBcastRecv", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CollectiveBcastRecv", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4844,7 +4844,7 @@ namespace Tensorflow.Operations
             dict["group_key"] = group_key;
             dict["instance_key"] = instance_key;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("CollectiveBcastSend", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CollectiveBcastSend", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4887,7 +4887,7 @@ namespace Tensorflow.Operations
             dict["merge_op"] = merge_op;
             dict["final_op"] = final_op;
             dict["subdiv_offsets"] = subdiv_offsets;
-            var op = tf._op_def_lib._apply_op_helper("CollectiveReduce", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CollectiveReduce", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4937,7 +4937,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["threshold"] = threshold;
-            var op = tf._op_def_lib._apply_op_helper("CompareAndBitpack", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CompareAndBitpack", name: name, keywords: dict);
             return op.output;
         }
 
@@ -4979,7 +4979,7 @@ namespace Tensorflow.Operations
             dict["imag"] = imag;
             if (Tout.HasValue)
                 dict["Tout"] = Tout.Value;
-            var op = tf._op_def_lib._apply_op_helper("Complex", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Complex", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5008,7 +5008,7 @@ namespace Tensorflow.Operations
             dict["x"] = x;
             if (Tout.HasValue)
                 dict["Tout"] = Tout.Value;
-            var op = tf._op_def_lib._apply_op_helper("ComplexAbs", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ComplexAbs", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5061,7 +5061,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("ComputeAccidentalHits", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ComputeAccidentalHits", name: name, keywords: dict);
             int _idx = 0;
             var indices = op.outputs[_idx++];
             var ids = op.outputs[_idx++];
@@ -5094,7 +5094,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["concat_dim"] = concat_dim;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("Concat", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Concat", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5132,7 +5132,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["concat_dim"] = concat_dim;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("ConcatOffset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ConcatOffset", name: name, keywords: dict);
             int _idx = 0;
             var offset = Enumerable.Range(0, op.OutputListLength("offset")).Select(_ => op.outputs[_idx++]).ToArray();
             return (offset);
@@ -5163,7 +5163,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["values"] = values;
             dict["axis"] = axis;
-            var op = tf._op_def_lib._apply_op_helper("ConcatV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ConcatV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5193,7 +5193,7 @@ namespace Tensorflow.Operations
             dict["another_dataset"] = another_dataset;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("ConcatenateDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ConcatenateDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5240,7 +5240,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("ConditionalAccumulator", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ConditionalAccumulator", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5277,7 +5277,7 @@ namespace Tensorflow.Operations
                 dict["tpu_embedding_config"] = tpu_embedding_config;
             if (is_global_init.HasValue)
                 dict["is_global_init"] = is_global_init.Value;
-            var op = tf._op_def_lib._apply_op_helper("ConfigureDistributedTPU", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ConfigureDistributedTPU", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5311,7 +5311,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("Conj", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Conj", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5338,7 +5338,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["perm"] = perm;
-            var op = tf._op_def_lib._apply_op_helper("ConjugateTranspose", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ConjugateTranspose", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5363,7 +5363,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("Const", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Const", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5392,7 +5392,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["mutex_lock"] = mutex_lock;
-            var op = tf._op_def_lib._apply_op_helper("ConsumeMutexLock", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ConsumeMutexLock", name: name, keywords: dict);
             return op;
         }
 
@@ -5411,7 +5411,7 @@ namespace Tensorflow.Operations
         public static Operation control_trigger (string name = "ControlTrigger")
         {
             var dict = new Dictionary<string, object>();
-            var op = tf._op_def_lib._apply_op_helper("ControlTrigger", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ControlTrigger", name: name, keywords: dict);
             return op;
         }
 
@@ -5496,7 +5496,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("Conv2D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Conv2D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5564,7 +5564,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("Conv2DBackpropFilter", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Conv2DBackpropFilter", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5631,7 +5631,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("Conv2DBackpropInput", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Conv2DBackpropInput", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5692,7 +5692,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("Conv3D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Conv3D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5737,7 +5737,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("Conv3DBackpropFilter", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Conv3DBackpropFilter", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5798,7 +5798,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("Conv3DBackpropFilterV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Conv3DBackpropFilterV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5843,7 +5843,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("Conv3DBackpropInput", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Conv3DBackpropInput", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5904,7 +5904,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("Conv3DBackpropInputV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Conv3DBackpropInputV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5949,7 +5949,7 @@ namespace Tensorflow.Operations
                 dict["tensor_name"] = tensor_name;
             if (debug_ops_spec != null)
                 dict["debug_ops_spec"] = debug_ops_spec;
-            var op = tf._op_def_lib._apply_op_helper("Copy", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Copy", name: name, keywords: dict);
             return op.output;
         }
 
@@ -5992,7 +5992,7 @@ namespace Tensorflow.Operations
                 dict["tensor_name"] = tensor_name;
             if (debug_ops_spec != null)
                 dict["debug_ops_spec"] = debug_ops_spec;
-            var op = tf._op_def_lib._apply_op_helper("CopyHost", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CopyHost", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6011,7 +6011,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Cos", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Cos", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6030,7 +6030,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Cosh", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Cosh", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6058,7 +6058,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
             dict["limit"] = limit;
-            var op = tf._op_def_lib._apply_op_helper("CountUpTo", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CountUpTo", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6134,7 +6134,7 @@ namespace Tensorflow.Operations
                 dict["method"] = method;
             if (extrapolation_value.HasValue)
                 dict["extrapolation_value"] = extrapolation_value.Value;
-            var op = tf._op_def_lib._apply_op_helper("CropAndResize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CropAndResize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6184,7 +6184,7 @@ namespace Tensorflow.Operations
             dict["box_ind"] = box_ind;
             if (method != null)
                 dict["method"] = method;
-            var op = tf._op_def_lib._apply_op_helper("CropAndResizeGradBoxes", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CropAndResizeGradBoxes", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6239,7 +6239,7 @@ namespace Tensorflow.Operations
             dict["T"] = T;
             if (method != null)
                 dict["method"] = method;
-            var op = tf._op_def_lib._apply_op_helper("CropAndResizeGradImage", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CropAndResizeGradImage", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6269,7 +6269,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
             dict["b"] = b;
-            var op = tf._op_def_lib._apply_op_helper("Cross", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Cross", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6306,7 +6306,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["group_assignment"] = group_assignment;
-            var op = tf._op_def_lib._apply_op_helper("CrossReplicaSum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CrossReplicaSum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6399,7 +6399,7 @@ namespace Tensorflow.Operations
                 dict["seed2"] = seed2.Value;
             if (is_training.HasValue)
                 dict["is_training"] = is_training.Value;
-            var op = tf._op_def_lib._apply_op_helper("CudnnRNN", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CudnnRNN", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var output_h = op.outputs[_idx++];
@@ -6523,7 +6523,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("CudnnRNNBackprop", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CudnnRNNBackprop", name: name, keywords: dict);
             int _idx = 0;
             var input_backprop = op.outputs[_idx++];
             var input_h_backprop = op.outputs[_idx++];
@@ -6653,7 +6653,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("CudnnRNNBackpropV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CudnnRNNBackpropV2", name: name, keywords: dict);
             int _idx = 0;
             var input_backprop = op.outputs[_idx++];
             var input_h_backprop = op.outputs[_idx++];
@@ -6744,7 +6744,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("CudnnRNNCanonicalToParams", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CudnnRNNCanonicalToParams", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6824,7 +6824,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("CudnnRNNParamsSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CudnnRNNParamsSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -6914,7 +6914,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("CudnnRNNParamsToCanonical", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CudnnRNNParamsToCanonical", name: name, keywords: dict);
             int _idx = 0;
             var weights = Enumerable.Range(0, op.OutputListLength("weights")).Select(_ => op.outputs[_idx++]).ToArray();
             var biases = Enumerable.Range(0, op.OutputListLength("biases")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -7014,7 +7014,7 @@ namespace Tensorflow.Operations
                 dict["seed2"] = seed2.Value;
             if (is_training.HasValue)
                 dict["is_training"] = is_training.Value;
-            var op = tf._op_def_lib._apply_op_helper("CudnnRNNV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("CudnnRNNV2", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var output_h = op.outputs[_idx++];
@@ -7087,7 +7087,7 @@ namespace Tensorflow.Operations
                 dict["exclusive"] = exclusive.Value;
             if (reverse.HasValue)
                 dict["reverse"] = reverse.Value;
-            var op = tf._op_def_lib._apply_op_helper("Cumprod", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Cumprod", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7154,7 +7154,7 @@ namespace Tensorflow.Operations
                 dict["exclusive"] = exclusive.Value;
             if (reverse.HasValue)
                 dict["reverse"] = reverse.Value;
-            var op = tf._op_def_lib._apply_op_helper("Cumsum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Cumsum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7189,7 +7189,7 @@ namespace Tensorflow.Operations
                 dict["src_format"] = src_format;
             if (dst_format != null)
                 dict["dst_format"] = dst_format;
-            var op = tf._op_def_lib._apply_op_helper("DataFormatDimMap", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DataFormatDimMap", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7223,7 +7223,7 @@ namespace Tensorflow.Operations
                 dict["src_format"] = src_format;
             if (dst_format != null)
                 dict["dst_format"] = dst_format;
-            var op = tf._op_def_lib._apply_op_helper("DataFormatVecPermute", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DataFormatVecPermute", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7247,7 +7247,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
-            var op = tf._op_def_lib._apply_op_helper("DatasetToGraph", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DatasetToGraph", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7276,7 +7276,7 @@ namespace Tensorflow.Operations
             dict["dataset"] = dataset;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("DatasetToSingleElement", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DatasetToSingleElement", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -7307,7 +7307,7 @@ namespace Tensorflow.Operations
             dict["input_dataset"] = input_dataset;
             dict["filename"] = filename;
             dict["compression_type"] = compression_type;
-            var op = tf._op_def_lib._apply_op_helper("DatasetToTFRecord", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DatasetToTFRecord", name: name, keywords: dict);
             return op;
         }
 
@@ -7331,7 +7331,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("DebugGradientIdentity", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DebugGradientIdentity", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7355,7 +7355,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("DebugGradientRefIdentity", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DebugGradientRefIdentity", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7404,7 +7404,7 @@ namespace Tensorflow.Operations
                 dict["debug_urls"] = debug_urls;
             if (gated_grpc.HasValue)
                 dict["gated_grpc"] = gated_grpc.Value;
-            var op = tf._op_def_lib._apply_op_helper("DebugIdentity", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DebugIdentity", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7453,7 +7453,7 @@ namespace Tensorflow.Operations
                 dict["debug_urls"] = debug_urls;
             if (gated_grpc.HasValue)
                 dict["gated_grpc"] = gated_grpc.Value;
-            var op = tf._op_def_lib._apply_op_helper("DebugNanCount", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DebugNanCount", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7547,7 +7547,7 @@ namespace Tensorflow.Operations
                 dict["mute_if_healthy"] = mute_if_healthy.Value;
             if (gated_grpc.HasValue)
                 dict["gated_grpc"] = gated_grpc.Value;
-            var op = tf._op_def_lib._apply_op_helper("DebugNumericSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DebugNumericSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7630,7 +7630,7 @@ namespace Tensorflow.Operations
                 dict["acceptable_fraction"] = acceptable_fraction.Value;
             if (dct_method != null)
                 dict["dct_method"] = dct_method;
-            var op = tf._op_def_lib._apply_op_helper("DecodeAndCropJpeg", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeAndCropJpeg", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7655,7 +7655,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("DecodeBase64", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeBase64", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7690,7 +7690,7 @@ namespace Tensorflow.Operations
             dict["contents"] = contents;
             if (channels.HasValue)
                 dict["channels"] = channels.Value;
-            var op = tf._op_def_lib._apply_op_helper("DecodeBmp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeBmp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7744,7 +7744,7 @@ namespace Tensorflow.Operations
                 dict["na_value"] = na_value;
             if (select_cols != null)
                 dict["select_cols"] = select_cols;
-            var op = tf._op_def_lib._apply_op_helper("DecodeCSV", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeCSV", name: name, keywords: dict);
             int _idx = 0;
             var output = Enumerable.Range(0, op.OutputListLength("output")).Select(_ => op.outputs[_idx++]).ToArray();
             return (output);
@@ -7782,7 +7782,7 @@ namespace Tensorflow.Operations
             dict["bytes"] = bytes;
             if (compression_type != null)
                 dict["compression_type"] = compression_type;
-            var op = tf._op_def_lib._apply_op_helper("DecodeCompressed", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeCompressed", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7812,7 +7812,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["contents"] = contents;
-            var op = tf._op_def_lib._apply_op_helper("DecodeGif", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeGif", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7843,7 +7843,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["json_examples"] = json_examples;
-            var op = tf._op_def_lib._apply_op_helper("DecodeJSONExample", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeJSONExample", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7922,7 +7922,7 @@ namespace Tensorflow.Operations
                 dict["acceptable_fraction"] = acceptable_fraction.Value;
             if (dct_method != null)
                 dict["dct_method"] = dct_method;
-            var op = tf._op_def_lib._apply_op_helper("DecodeJpeg", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeJpeg", name: name, keywords: dict);
             return op.output;
         }
 
@@ -7969,7 +7969,7 @@ namespace Tensorflow.Operations
                 dict["channels"] = channels.Value;
             if (dtype.HasValue)
                 dict["dtype"] = dtype.Value;
-            var op = tf._op_def_lib._apply_op_helper("DecodePng", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodePng", name: name, keywords: dict);
             return op.output;
         }
 
@@ -8078,7 +8078,7 @@ namespace Tensorflow.Operations
                 dict["message_format"] = message_format;
             if (sanitize.HasValue)
                 dict["sanitize"] = sanitize.Value;
-            var op = tf._op_def_lib._apply_op_helper("DecodeProtoV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeProtoV2", name: name, keywords: dict);
             int _idx = 0;
             var sizes = op.outputs[_idx++];
             var values = Enumerable.Range(0, op.OutputListLength("values")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -8115,7 +8115,7 @@ namespace Tensorflow.Operations
             dict["out_type"] = out_type;
             if (little_endian.HasValue)
                 dict["little_endian"] = little_endian.Value;
-            var op = tf._op_def_lib._apply_op_helper("DecodeRaw", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeRaw", name: name, keywords: dict);
             return op.output;
         }
 
@@ -8164,7 +8164,7 @@ namespace Tensorflow.Operations
                 dict["desired_channels"] = desired_channels.Value;
             if (desired_samples.HasValue)
                 dict["desired_samples"] = desired_samples.Value;
-            var op = tf._op_def_lib._apply_op_helper("DecodeWav", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DecodeWav", name: name, keywords: dict);
             int _idx = 0;
             var audio = op.outputs[_idx++];
             var sample_rate = op.outputs[_idx++];
@@ -8189,7 +8189,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("DeepCopy", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DeepCopy", name: name, keywords: dict);
             return op.output;
         }
 
@@ -8209,7 +8209,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("DeleteSessionTensor", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DeleteSessionTensor", name: name, keywords: dict);
             return op;
         }
 
@@ -8258,7 +8258,7 @@ namespace Tensorflow.Operations
             dict["set_operation"] = set_operation;
             if (validate_indices.HasValue)
                 dict["validate_indices"] = validate_indices.Value;
-            var op = tf._op_def_lib._apply_op_helper("DenseToDenseSetOperation", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DenseToDenseSetOperation", name: name, keywords: dict);
             int _idx = 0;
             var result_indices = op.outputs[_idx++];
             var result_values = op.outputs[_idx++];
@@ -8301,7 +8301,7 @@ namespace Tensorflow.Operations
             dict["row_shape"] = row_shape;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("DenseToSparseBatchDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DenseToSparseBatchDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -8369,7 +8369,7 @@ namespace Tensorflow.Operations
             dict["set_operation"] = set_operation;
             if (validate_indices.HasValue)
                 dict["validate_indices"] = validate_indices.Value;
-            var op = tf._op_def_lib._apply_op_helper("DenseToSparseSetOperation", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DenseToSparseSetOperation", name: name, keywords: dict);
             int _idx = 0;
             var result_indices = op.outputs[_idx++];
             var result_values = op.outputs[_idx++];
@@ -8492,7 +8492,7 @@ namespace Tensorflow.Operations
             dict["block_size"] = block_size;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("DepthToSpace", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DepthToSpace", name: name, keywords: dict);
             return op.output;
         }
 
@@ -8563,7 +8563,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("DepthwiseConv2dNative", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DepthwiseConv2dNative", name: name, keywords: dict);
             return op.output;
         }
 
@@ -8630,7 +8630,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("DepthwiseConv2dNativeBackpropFilter", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DepthwiseConv2dNativeBackpropFilter", name: name, keywords: dict);
             return op.output;
         }
 
@@ -8697,7 +8697,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("DepthwiseConv2dNativeBackpropInput", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DepthwiseConv2dNativeBackpropInput", name: name, keywords: dict);
             return op.output;
         }
 
@@ -8803,7 +8803,7 @@ namespace Tensorflow.Operations
             dict["max_range"] = max_range;
             if (mode != null)
                 dict["mode"] = mode;
-            var op = tf._op_def_lib._apply_op_helper("Dequantize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Dequantize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -8828,7 +8828,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["resource_handle"] = resource_handle;
             dict["serialized"] = serialized;
-            var op = tf._op_def_lib._apply_op_helper("DeserializeIterator", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DeserializeIterator", name: name, keywords: dict);
             return op;
         }
 
@@ -8901,7 +8901,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["serialized_sparse"] = serialized_sparse;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("DeserializeManySparse", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DeserializeManySparse", name: name, keywords: dict);
             int _idx = 0;
             var sparse_indices = op.outputs[_idx++];
             var sparse_values = op.outputs[_idx++];
@@ -8978,7 +8978,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["serialized_sparse"] = serialized_sparse;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("DeserializeSparse", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DeserializeSparse", name: name, keywords: dict);
             int _idx = 0;
             var sparse_indices = op.outputs[_idx++];
             var sparse_values = op.outputs[_idx++];
@@ -9012,7 +9012,7 @@ namespace Tensorflow.Operations
             dict["resource"] = resource;
             if (ignore_lookup_error.HasValue)
                 dict["ignore_lookup_error"] = ignore_lookup_error.Value;
-            var op = tf._op_def_lib._apply_op_helper("DestroyResourceOp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DestroyResourceOp", name: name, keywords: dict);
             return op;
         }
 
@@ -9047,7 +9047,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
             dict["var_name"] = var_name;
-            var op = tf._op_def_lib._apply_op_helper("DestroyTemporaryVariable", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DestroyTemporaryVariable", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9086,7 +9086,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["diagonal"] = diagonal;
-            var op = tf._op_def_lib._apply_op_helper("Diag", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Diag", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9127,7 +9127,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("DiagPart", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DiagPart", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9149,7 +9149,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Digamma", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Digamma", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9216,7 +9216,7 @@ namespace Tensorflow.Operations
             dict["strides"] = strides;
             dict["rates"] = rates;
             dict["padding"] = padding;
-            var op = tf._op_def_lib._apply_op_helper("Dilation2D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Dilation2D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9262,7 +9262,7 @@ namespace Tensorflow.Operations
             dict["strides"] = strides;
             dict["rates"] = rates;
             dict["padding"] = padding;
-            var op = tf._op_def_lib._apply_op_helper("Dilation2DBackpropFilter", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Dilation2DBackpropFilter", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9308,7 +9308,7 @@ namespace Tensorflow.Operations
             dict["strides"] = strides;
             dict["rates"] = rates;
             dict["padding"] = padding;
-            var op = tf._op_def_lib._apply_op_helper("Dilation2DBackpropInput", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Dilation2DBackpropInput", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9334,7 +9334,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Div", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Div", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9361,7 +9361,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("DivNoNan", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DivNoNan", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9401,7 +9401,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
             dict["boxes"] = boxes;
-            var op = tf._op_def_lib._apply_op_helper("DrawBoundingBoxes", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DrawBoundingBoxes", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9468,7 +9468,7 @@ namespace Tensorflow.Operations
             dict["data"] = data;
             dict["partitions"] = partitions;
             dict["num_partitions"] = num_partitions;
-            var op = tf._op_def_lib._apply_op_helper("DynamicPartition", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DynamicPartition", name: name, keywords: dict);
             int _idx = 0;
             var outputs = Enumerable.Range(0, op.OutputListLength("outputs")).Select(_ => op.outputs[_idx++]).ToArray();
             return (outputs);
@@ -9556,7 +9556,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
             dict["data"] = data;
-            var op = tf._op_def_lib._apply_op_helper("DynamicStitch", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("DynamicStitch", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9646,7 +9646,7 @@ namespace Tensorflow.Operations
             dict["truth_shape"] = truth_shape;
             if (normalize.HasValue)
                 dict["normalize"] = normalize.Value;
-            var op = tf._op_def_lib._apply_op_helper("EditDistance", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("EditDistance", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9669,7 +9669,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("Elu", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Elu", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9695,7 +9695,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
             dict["outputs"] = outputs;
-            var op = tf._op_def_lib._apply_op_helper("EluGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("EluGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9727,7 +9727,7 @@ namespace Tensorflow.Operations
             dict["dtype"] = dtype;
             if (init.HasValue)
                 dict["init"] = init.Value;
-            var op = tf._op_def_lib._apply_op_helper("Empty", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Empty", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9758,7 +9758,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["element_shape"] = element_shape;
             dict["element_dtype"] = element_dtype;
-            var op = tf._op_def_lib._apply_op_helper("EmptyTensorList", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("EmptyTensorList", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9792,7 +9792,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (pad.HasValue)
                 dict["pad"] = pad.Value;
-            var op = tf._op_def_lib._apply_op_helper("EncodeBase64", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("EncodeBase64", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9877,7 +9877,7 @@ namespace Tensorflow.Operations
                 dict["y_density"] = y_density.Value;
             if (xmp_metadata != null)
                 dict["xmp_metadata"] = xmp_metadata;
-            var op = tf._op_def_lib._apply_op_helper("EncodeJpeg", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("EncodeJpeg", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9916,7 +9916,7 @@ namespace Tensorflow.Operations
             dict["image"] = image;
             if (compression.HasValue)
                 dict["compression"] = compression.Value;
-            var op = tf._op_def_lib._apply_op_helper("EncodePng", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("EncodePng", name: name, keywords: dict);
             return op.output;
         }
 
@@ -9994,7 +9994,7 @@ namespace Tensorflow.Operations
             dict["message_type"] = message_type;
             if (descriptor_source != null)
                 dict["descriptor_source"] = descriptor_source;
-            var op = tf._op_def_lib._apply_op_helper("EncodeProto", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("EncodeProto", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10028,7 +10028,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["audio"] = audio;
             dict["sample_rate"] = sample_rate;
-            var op = tf._op_def_lib._apply_op_helper("EncodeWav", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("EncodeWav", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10058,7 +10058,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("EnsureShape", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("EnsureShape", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10101,7 +10101,7 @@ namespace Tensorflow.Operations
                 dict["is_constant"] = is_constant.Value;
             if (parallel_iterations.HasValue)
                 dict["parallel_iterations"] = parallel_iterations.Value;
-            var op = tf._op_def_lib._apply_op_helper("Enter", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Enter", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10127,7 +10127,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Equal", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Equal", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10146,7 +10146,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Erf", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Erf", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10165,7 +10165,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Erfc", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Erfc", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10189,7 +10189,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
-            var op = tf._op_def_lib._apply_op_helper("Exit", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Exit", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10208,7 +10208,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Exp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Exp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10267,7 +10267,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["dim"] = dim;
-            var op = tf._op_def_lib._apply_op_helper("ExpandDims", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ExpandDims", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10289,7 +10289,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Expm1", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Expm1", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10364,7 +10364,7 @@ namespace Tensorflow.Operations
                 dict["normalized"] = normalized.Value;
             if (uniform_noise.HasValue)
                 dict["uniform_noise"] = uniform_noise.Value;
-            var op = tf._op_def_lib._apply_op_helper("ExtractGlimpse", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ExtractGlimpse", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10422,7 +10422,7 @@ namespace Tensorflow.Operations
             dict["strides"] = strides;
             dict["rates"] = rates;
             dict["padding"] = padding;
-            var op = tf._op_def_lib._apply_op_helper("ExtractImagePatches", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ExtractImagePatches", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10452,7 +10452,7 @@ namespace Tensorflow.Operations
             dict["contents"] = contents;
             if (output_type.HasValue)
                 dict["output_type"] = output_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("ExtractJpegShape", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ExtractJpegShape", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10482,7 +10482,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("FFT", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FFT", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10512,7 +10512,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("FFT2D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FFT2D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10542,7 +10542,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("FFT3D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FFT3D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10590,7 +10590,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("FIFOQueue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FIFOQueue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10638,7 +10638,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("FIFOQueueV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FIFOQueueV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10669,7 +10669,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("FakeParam", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FakeParam", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10713,7 +10713,7 @@ namespace Tensorflow.Operations
                 dict["num_bits"] = num_bits.Value;
             if (narrow_range.HasValue)
                 dict["narrow_range"] = narrow_range.Value;
-            var op = tf._op_def_lib._apply_op_helper("FakeQuantWithMinMaxArgs", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FakeQuantWithMinMaxArgs", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10755,7 +10755,7 @@ namespace Tensorflow.Operations
                 dict["num_bits"] = num_bits.Value;
             if (narrow_range.HasValue)
                 dict["narrow_range"] = narrow_range.Value;
-            var op = tf._op_def_lib._apply_op_helper("FakeQuantWithMinMaxArgsGradient", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FakeQuantWithMinMaxArgsGradient", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10800,7 +10800,7 @@ namespace Tensorflow.Operations
                 dict["num_bits"] = num_bits.Value;
             if (narrow_range.HasValue)
                 dict["narrow_range"] = narrow_range.Value;
-            var op = tf._op_def_lib._apply_op_helper("FakeQuantWithMinMaxVars", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FakeQuantWithMinMaxVars", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10848,7 +10848,7 @@ namespace Tensorflow.Operations
                 dict["num_bits"] = num_bits.Value;
             if (narrow_range.HasValue)
                 dict["narrow_range"] = narrow_range.Value;
-            var op = tf._op_def_lib._apply_op_helper("FakeQuantWithMinMaxVarsGradient", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FakeQuantWithMinMaxVarsGradient", name: name, keywords: dict);
             int _idx = 0;
             var backprops_wrt_input = op.outputs[_idx++];
             var backprop_wrt_min = op.outputs[_idx++];
@@ -10898,7 +10898,7 @@ namespace Tensorflow.Operations
                 dict["num_bits"] = num_bits.Value;
             if (narrow_range.HasValue)
                 dict["narrow_range"] = narrow_range.Value;
-            var op = tf._op_def_lib._apply_op_helper("FakeQuantWithMinMaxVarsPerChannel", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FakeQuantWithMinMaxVarsPerChannel", name: name, keywords: dict);
             return op.output;
         }
 
@@ -10949,7 +10949,7 @@ namespace Tensorflow.Operations
                 dict["num_bits"] = num_bits.Value;
             if (narrow_range.HasValue)
                 dict["narrow_range"] = narrow_range.Value;
-            var op = tf._op_def_lib._apply_op_helper("FakeQuantWithMinMaxVarsPerChannelGradient", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FakeQuantWithMinMaxVarsPerChannelGradient", name: name, keywords: dict);
             int _idx = 0;
             var backprops_wrt_input = op.outputs[_idx++];
             var backprop_wrt_min = op.outputs[_idx++];
@@ -10972,7 +10972,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
-            var op = tf._op_def_lib._apply_op_helper("FakeQueue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FakeQueue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11021,7 +11021,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["dims"] = dims;
             dict["value"] = value;
-            var op = tf._op_def_lib._apply_op_helper("Fill", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Fill", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11048,7 +11048,7 @@ namespace Tensorflow.Operations
             dict["input_dataset"] = input_dataset;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("FilterByLastComponentDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FilterByLastComponentDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11087,7 +11087,7 @@ namespace Tensorflow.Operations
             dict["record_bytes"] = record_bytes;
             dict["footer_bytes"] = footer_bytes;
             dict["buffer_size"] = buffer_size;
-            var op = tf._op_def_lib._apply_op_helper("FixedLengthRecordDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FixedLengthRecordDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11137,7 +11137,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("FixedLengthRecordReader", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FixedLengthRecordReader", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11193,7 +11193,7 @@ namespace Tensorflow.Operations
                 dict["shared_name"] = shared_name;
             if (encoding != null)
                 dict["encoding"] = encoding;
-            var op = tf._op_def_lib._apply_op_helper("FixedLengthRecordReaderV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FixedLengthRecordReaderV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11321,7 +11321,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("FixedUnigramCandidateSampler", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FixedUnigramCandidateSampler", name: name, keywords: dict);
             int _idx = 0;
             var sampled_candidates = op.outputs[_idx++];
             var true_expected_count = op.outputs[_idx++];
@@ -11344,7 +11344,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Floor", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Floor", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11370,7 +11370,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("FloorDiv", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FloorDiv", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11399,7 +11399,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("FloorMod", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FloorMod", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11479,7 +11479,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("FractionalAvgPool", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FractionalAvgPool", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var row_pooling_sequence = op.outputs[_idx++];
@@ -11539,7 +11539,7 @@ namespace Tensorflow.Operations
             dict["col_pooling_sequence"] = col_pooling_sequence;
             if (overlapping.HasValue)
                 dict["overlapping"] = overlapping.Value;
-            var op = tf._op_def_lib._apply_op_helper("FractionalAvgPoolGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FractionalAvgPoolGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11643,7 +11643,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("FractionalMaxPool", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FractionalMaxPool", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var row_pooling_sequence = op.outputs[_idx++];
@@ -11700,7 +11700,7 @@ namespace Tensorflow.Operations
             dict["col_pooling_sequence"] = col_pooling_sequence;
             if (overlapping.HasValue)
                 dict["overlapping"] = overlapping.Value;
-            var op = tf._op_def_lib._apply_op_helper("FractionalMaxPoolGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FractionalMaxPoolGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -11768,7 +11768,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (is_training.HasValue)
                 dict["is_training"] = is_training.Value;
-            var op = tf._op_def_lib._apply_op_helper("FusedBatchNorm", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FusedBatchNorm", name: name, keywords: dict);
             int _idx = 0;
             var y = op.outputs[_idx++];
             var batch_mean = op.outputs[_idx++];
@@ -11845,7 +11845,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (is_training.HasValue)
                 dict["is_training"] = is_training.Value;
-            var op = tf._op_def_lib._apply_op_helper("FusedBatchNormGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FusedBatchNormGrad", name: name, keywords: dict);
             int _idx = 0;
             var x_backprop = op.outputs[_idx++];
             var scale_backprop = op.outputs[_idx++];
@@ -11922,7 +11922,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (is_training.HasValue)
                 dict["is_training"] = is_training.Value;
-            var op = tf._op_def_lib._apply_op_helper("FusedBatchNormGradV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FusedBatchNormGradV2", name: name, keywords: dict);
             int _idx = 0;
             var x_backprop = op.outputs[_idx++];
             var scale_backprop = op.outputs[_idx++];
@@ -11996,7 +11996,7 @@ namespace Tensorflow.Operations
                 dict["data_format"] = data_format;
             if (is_training.HasValue)
                 dict["is_training"] = is_training.Value;
-            var op = tf._op_def_lib._apply_op_helper("FusedBatchNormV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FusedBatchNormV2", name: name, keywords: dict);
             int _idx = 0;
             var y = op.outputs[_idx++];
             var batch_mean = op.outputs[_idx++];
@@ -12060,7 +12060,7 @@ namespace Tensorflow.Operations
             dict["mode"] = mode;
             dict["strides"] = strides;
             dict["padding"] = padding;
-            var op = tf._op_def_lib._apply_op_helper("FusedPadConv2D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FusedPadConv2D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12128,7 +12128,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (resize_align_corners.HasValue)
                 dict["resize_align_corners"] = resize_align_corners.Value;
-            var op = tf._op_def_lib._apply_op_helper("FusedResizeAndPadConv2D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("FusedResizeAndPadConv2D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12181,7 +12181,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (validate_indices.HasValue)
                 dict["validate_indices"] = validate_indices.Value;
-            var op = tf._op_def_lib._apply_op_helper("Gather", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Gather", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12313,7 +12313,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["params"] = parameters;
             dict["indices"] = indices;
-            var op = tf._op_def_lib._apply_op_helper("GatherNd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("GatherNd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12374,7 +12374,7 @@ namespace Tensorflow.Operations
             dict["params"] = parameters;
             dict["indices"] = indices;
             dict["axis"] = axis;
-            var op = tf._op_def_lib._apply_op_helper("GatherV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("GatherV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12449,7 +12449,7 @@ namespace Tensorflow.Operations
             dict["num_new_vocab"] = num_new_vocab;
             if (old_vocab_size.HasValue)
                 dict["old_vocab_size"] = old_vocab_size.Value;
-            var op = tf._op_def_lib._apply_op_helper("GenerateVocabRemapping", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("GenerateVocabRemapping", name: name, keywords: dict);
             int _idx = 0;
             var remapping = op.outputs[_idx++];
             var num_present = op.outputs[_idx++];
@@ -12474,7 +12474,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
-            var op = tf._op_def_lib._apply_op_helper("GetSessionHandle", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("GetSessionHandle", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12496,7 +12496,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
-            var op = tf._op_def_lib._apply_op_helper("GetSessionHandleV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("GetSessionHandleV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12522,7 +12522,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("GetSessionTensor", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("GetSessionTensor", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12548,7 +12548,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Greater", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Greater", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12574,7 +12574,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("GreaterEqual", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("GreaterEqual", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12601,7 +12601,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("GuaranteeConst", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("GuaranteeConst", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12629,7 +12629,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
-            var op = tf._op_def_lib._apply_op_helper("HSVToRGB", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("HSVToRGB", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12679,7 +12679,7 @@ namespace Tensorflow.Operations
                 dict["shared_name"] = shared_name;
             if (use_node_name_sharing.HasValue)
                 dict["use_node_name_sharing"] = use_node_name_sharing.Value;
-            var op = tf._op_def_lib._apply_op_helper("HashTable", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("HashTable", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12729,7 +12729,7 @@ namespace Tensorflow.Operations
                 dict["shared_name"] = shared_name;
             if (use_node_name_sharing.HasValue)
                 dict["use_node_name_sharing"] = use_node_name_sharing.Value;
-            var op = tf._op_def_lib._apply_op_helper("HashTableV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("HashTableV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12781,7 +12781,7 @@ namespace Tensorflow.Operations
             dict["nbins"] = nbins;
             if (dtype.HasValue)
                 dict["dtype"] = dtype.Value;
-            var op = tf._op_def_lib._apply_op_helper("HistogramFixedWidth", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("HistogramFixedWidth", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12813,7 +12813,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["tag"] = tag;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("HistogramSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("HistogramSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12838,7 +12838,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("HostConst", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("HostConst", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12868,7 +12868,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("IFFT", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IFFT", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12898,7 +12898,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("IFFT2D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IFFT2D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12928,7 +12928,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("IFFT3D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IFFT3D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -12974,7 +12974,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["fft_length"] = fft_length;
-            var op = tf._op_def_lib._apply_op_helper("IRFFT", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IRFFT", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13021,7 +13021,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["fft_length"] = fft_length;
-            var op = tf._op_def_lib._apply_op_helper("IRFFT2D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IRFFT2D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13068,7 +13068,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["fft_length"] = fft_length;
-            var op = tf._op_def_lib._apply_op_helper("IRFFT3D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IRFFT3D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13087,7 +13087,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("Identity", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Identity", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13123,7 +13123,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("IdentityN", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IdentityN", name: name, keywords: dict);
             int _idx = 0;
             var output = Enumerable.Range(0, op.OutputListLength("output")).Select(_ => op.outputs[_idx++]).ToArray();
             return (output);
@@ -13158,7 +13158,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("IdentityReader", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IdentityReader", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13191,7 +13191,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("IdentityReaderV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IdentityReaderV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13228,7 +13228,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Igamma", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Igamma", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13250,7 +13250,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("IgammaGradA", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IgammaGradA", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13286,7 +13286,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Igammac", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Igammac", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13322,7 +13322,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (Tout.HasValue)
                 dict["Tout"] = Tout.Value;
-            var op = tf._op_def_lib._apply_op_helper("Imag", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Imag", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13393,7 +13393,7 @@ namespace Tensorflow.Operations
                 dict["max_images"] = max_images.Value;
             if (bad_color != null)
                 dict["bad_color"] = bad_color;
-            var op = tf._op_def_lib._apply_op_helper("ImageSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ImageSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13428,7 +13428,7 @@ namespace Tensorflow.Operations
             dict["dtype"] = dtype;
             dict["shape"] = shape;
             dict["memory_region_name"] = memory_region_name;
-            var op = tf._op_def_lib._apply_op_helper("ImmutableConst", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ImmutableConst", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13474,7 +13474,7 @@ namespace Tensorflow.Operations
             dict["predictions"] = predictions;
             dict["targets"] = targets;
             dict["k"] = k;
-            var op = tf._op_def_lib._apply_op_helper("InTopK", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InTopK", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13519,7 +13519,7 @@ namespace Tensorflow.Operations
             dict["predictions"] = predictions;
             dict["targets"] = targets;
             dict["k"] = k;
-            var op = tf._op_def_lib._apply_op_helper("InTopKV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InTopKV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13546,7 +13546,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("InfeedDequeue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InfeedDequeue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13576,7 +13576,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
             dict["shapes"] = shapes;
-            var op = tf._op_def_lib._apply_op_helper("InfeedDequeueTuple", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InfeedDequeueTuple", name: name, keywords: dict);
             int _idx = 0;
             var outputs = Enumerable.Range(0, op.OutputListLength("outputs")).Select(_ => op.outputs[_idx++]).ToArray();
             return (outputs);
@@ -13610,7 +13610,7 @@ namespace Tensorflow.Operations
                 dict["shape"] = shape;
             if (device_ordinal.HasValue)
                 dict["device_ordinal"] = device_ordinal.Value;
-            var op = tf._op_def_lib._apply_op_helper("InfeedEnqueue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InfeedEnqueue", name: name, keywords: dict);
             return op;
         }
 
@@ -13642,7 +13642,7 @@ namespace Tensorflow.Operations
             dict["shapes"] = shapes;
             if (device_ordinal.HasValue)
                 dict["device_ordinal"] = device_ordinal.Value;
-            var op = tf._op_def_lib._apply_op_helper("InfeedEnqueueTuple", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InfeedEnqueueTuple", name: name, keywords: dict);
             return op;
         }
 
@@ -13670,7 +13670,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["keys"] = keys;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("InitializeTable", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InitializeTable", name: name, keywords: dict);
             return op;
         }
 
@@ -13727,7 +13727,7 @@ namespace Tensorflow.Operations
                 dict["vocab_size"] = vocab_size.Value;
             if (delimiter != null)
                 dict["delimiter"] = delimiter;
-            var op = tf._op_def_lib._apply_op_helper("InitializeTableFromTextFile", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InitializeTableFromTextFile", name: name, keywords: dict);
             return op;
         }
 
@@ -13784,7 +13784,7 @@ namespace Tensorflow.Operations
                 dict["vocab_size"] = vocab_size.Value;
             if (delimiter != null)
                 dict["delimiter"] = delimiter;
-            var op = tf._op_def_lib._apply_op_helper("InitializeTableFromTextFileV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InitializeTableFromTextFileV2", name: name, keywords: dict);
             return op;
         }
 
@@ -13812,7 +13812,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["keys"] = keys;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("InitializeTableV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InitializeTableV2", name: name, keywords: dict);
             return op;
         }
 
@@ -13843,7 +13843,7 @@ namespace Tensorflow.Operations
             dict["x"] = x;
             dict["i"] = i;
             dict["v"] = v;
-            var op = tf._op_def_lib._apply_op_helper("InplaceAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InplaceAdd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13874,7 +13874,7 @@ namespace Tensorflow.Operations
             dict["x"] = x;
             dict["i"] = i;
             dict["v"] = v;
-            var op = tf._op_def_lib._apply_op_helper("InplaceSub", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InplaceSub", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13905,7 +13905,7 @@ namespace Tensorflow.Operations
             dict["x"] = x;
             dict["i"] = i;
             dict["v"] = v;
-            var op = tf._op_def_lib._apply_op_helper("InplaceUpdate", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InplaceUpdate", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13927,7 +13927,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Inv", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Inv", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13953,7 +13953,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
             dict["dy"] = dy;
-            var op = tf._op_def_lib._apply_op_helper("InvGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InvGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -13976,7 +13976,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Invert", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Invert", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14014,7 +14014,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("InvertPermutation", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("InvertPermutation", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14035,7 +14035,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
-            var op = tf._op_def_lib._apply_op_helper("IsBoostedTreesEnsembleInitialized", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IsBoostedTreesEnsembleInitialized", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14059,7 +14059,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("IsFinite", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IsFinite", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14083,7 +14083,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("IsInf", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IsInf", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14107,7 +14107,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("IsNan", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IsNan", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14130,7 +14130,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
-            var op = tf._op_def_lib._apply_op_helper("IsVariableInitialized", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IsVariableInitialized", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14164,7 +14164,7 @@ namespace Tensorflow.Operations
             dict["container"] = container;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("Iterator", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Iterator", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14197,7 +14197,7 @@ namespace Tensorflow.Operations
                 dict["output_types"] = output_types;
             if (output_shapes != null)
                 dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("IteratorFromStringHandle", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IteratorFromStringHandle", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14224,7 +14224,7 @@ namespace Tensorflow.Operations
             dict["iterator"] = iterator;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("IteratorGetNext", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IteratorGetNext", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -14253,7 +14253,7 @@ namespace Tensorflow.Operations
             dict["iterator"] = iterator;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("IteratorGetNextAsOptional", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IteratorGetNextAsOptional", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14286,7 +14286,7 @@ namespace Tensorflow.Operations
             dict["iterator"] = iterator;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("IteratorGetNextSync", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IteratorGetNextSync", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -14309,7 +14309,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["resource_handle"] = resource_handle;
-            var op = tf._op_def_lib._apply_op_helper("IteratorToStringHandle", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("IteratorToStringHandle", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14335,7 +14335,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["t"] = t;
-            var op = tf._op_def_lib._apply_op_helper("L2Loss", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("L2Loss", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14364,7 +14364,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("LMDBReader", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LMDBReader", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14417,7 +14417,7 @@ namespace Tensorflow.Operations
                 dict["alpha"] = alpha.Value;
             if (beta.HasValue)
                 dict["beta"] = beta.Value;
-            var op = tf._op_def_lib._apply_op_helper("LRN", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LRN", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14466,7 +14466,7 @@ namespace Tensorflow.Operations
                 dict["alpha"] = alpha.Value;
             if (beta.HasValue)
                 dict["beta"] = beta.Value;
-            var op = tf._op_def_lib._apply_op_helper("LRNGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LRNGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14496,7 +14496,7 @@ namespace Tensorflow.Operations
             dict["tag"] = tag;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("LatencyStatsDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LatencyStatsDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14572,7 +14572,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("LearnedUnigramCandidateSampler", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LearnedUnigramCandidateSampler", name: name, keywords: dict);
             int _idx = 0;
             var sampled_candidates = op.outputs[_idx++];
             var true_expected_count = op.outputs[_idx++];
@@ -14602,7 +14602,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("LeftShift", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LeftShift", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14628,7 +14628,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Less", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Less", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14654,7 +14654,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("LessEqual", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LessEqual", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14673,7 +14673,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Lgamma", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Lgamma", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14713,7 +14713,7 @@ namespace Tensorflow.Operations
             dict["start"] = start;
             dict["stop"] = stop;
             dict["num"] = num;
-            var op = tf._op_def_lib._apply_op_helper("LinSpace", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LinSpace", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14767,7 +14767,7 @@ namespace Tensorflow.Operations
             dict["y"] = y;
             if (out_idx.HasValue)
                 dict["out_idx"] = out_idx.Value;
-            var op = tf._op_def_lib._apply_op_helper("ListDiff", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ListDiff", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var idx = op.outputs[_idx++];
@@ -14869,7 +14869,7 @@ namespace Tensorflow.Operations
             dict["num_cols"] = num_cols;
             if (max_rows_in_memory.HasValue)
                 dict["max_rows_in_memory"] = max_rows_in_memory.Value;
-            var op = tf._op_def_lib._apply_op_helper("LoadAndRemapMatrix", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LoadAndRemapMatrix", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14891,7 +14891,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Log", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Log", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14913,7 +14913,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Log1p", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Log1p", name: name, keywords: dict);
             return op.output;
         }
 
@@ -14948,7 +14948,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("LogMatrixDeterminant", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LogMatrixDeterminant", name: name, keywords: dict);
             int _idx = 0;
             var sign = op.outputs[_idx++];
             var log_abs_determinant = op.outputs[_idx++];
@@ -14977,7 +14977,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["logits"] = logits;
-            var op = tf._op_def_lib._apply_op_helper("LogSoftmax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LogSoftmax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15053,7 +15053,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("LogUniformCandidateSampler", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LogUniformCandidateSampler", name: name, keywords: dict);
             int _idx = 0;
             var sampled_candidates = op.outputs[_idx++];
             var true_expected_count = op.outputs[_idx++];
@@ -15083,7 +15083,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("LogicalAnd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LogicalAnd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15102,7 +15102,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("LogicalNot", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LogicalNot", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15128,7 +15128,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("LogicalOr", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LogicalOr", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15159,7 +15159,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["Tkeys"] = Tkeys;
             dict["Tvalues"] = Tvalues;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableExport", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableExport", name: name, keywords: dict);
             int _idx = 0;
             var keys = op.outputs[_idx++];
             var values = op.outputs[_idx++];
@@ -15193,7 +15193,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["Tkeys"] = Tkeys;
             dict["Tvalues"] = Tvalues;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableExportV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableExportV2", name: name, keywords: dict);
             int _idx = 0;
             var keys = op.outputs[_idx++];
             var values = op.outputs[_idx++];
@@ -15232,7 +15232,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["keys"] = keys;
             dict["default_value"] = default_value;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableFind", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableFind", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15268,7 +15268,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["keys"] = keys;
             dict["default_value"] = default_value;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableFindV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableFindV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15300,7 +15300,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["keys"] = keys;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableImport", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableImport", name: name, keywords: dict);
             return op;
         }
 
@@ -15332,7 +15332,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["keys"] = keys;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableImportV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableImportV2", name: name, keywords: dict);
             return op;
         }
 
@@ -15364,7 +15364,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["keys"] = keys;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableInsert", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableInsert", name: name, keywords: dict);
             return op;
         }
 
@@ -15396,7 +15396,7 @@ namespace Tensorflow.Operations
             dict["table_handle"] = table_handle;
             dict["keys"] = keys;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableInsertV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableInsertV2", name: name, keywords: dict);
             return op;
         }
 
@@ -15417,7 +15417,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15438,7 +15438,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
-            var op = tf._op_def_lib._apply_op_helper("LookupTableSizeV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LookupTableSizeV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15463,7 +15463,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("LoopCond", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("LoopCond", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15489,7 +15489,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["dataset"] = dataset;
             dict["iterator"] = iterator;
-            var op = tf._op_def_lib._apply_op_helper("MakeIterator", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MakeIterator", name: name, keywords: dict);
             return op;
         }
 
@@ -15525,7 +15525,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("MapClear", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MapClear", name: name, keywords: dict);
             return op;
         }
 
@@ -15561,7 +15561,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("MapIncompleteSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MapIncompleteSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15607,7 +15607,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("MapPeek", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MapPeek", name: name, keywords: dict);
             int _idx = 0;
             var values = Enumerable.Range(0, op.OutputListLength("values")).Select(_ => op.outputs[_idx++]).ToArray();
             return (values);
@@ -15645,7 +15645,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("MapSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MapSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15698,7 +15698,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("MapStage", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MapStage", name: name, keywords: dict);
             return op;
         }
 
@@ -15744,7 +15744,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("MapUnstage", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MapUnstage", name: name, keywords: dict);
             int _idx = 0;
             var values = Enumerable.Range(0, op.OutputListLength("values")).Select(_ => op.outputs[_idx++]).ToArray();
             return (values);
@@ -15792,7 +15792,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("MapUnstageNoKey", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MapUnstageNoKey", name: name, keywords: dict);
             int _idx = 0;
             var key = op.outputs[_idx++];
             var values = Enumerable.Range(0, op.OutputListLength("values")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -15836,7 +15836,7 @@ namespace Tensorflow.Operations
                 dict["transpose_a"] = transpose_a.Value;
             if (transpose_b.HasValue)
                 dict["transpose_b"] = transpose_b.Value;
-            var op = tf._op_def_lib._apply_op_helper("MatMul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatMul", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15862,7 +15862,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["pattern"] = pattern;
-            var op = tf._op_def_lib._apply_op_helper("MatchingFiles", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatchingFiles", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15934,7 +15934,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["num_lower"] = num_lower;
             dict["num_upper"] = num_upper;
-            var op = tf._op_def_lib._apply_op_helper("MatrixBandPart", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixBandPart", name: name, keywords: dict);
             return op.output;
         }
 
@@ -15960,7 +15960,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("MatrixDeterminant", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixDeterminant", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16009,7 +16009,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["diagonal"] = diagonal;
-            var op = tf._op_def_lib._apply_op_helper("MatrixDiag", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixDiag", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16061,7 +16061,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("MatrixDiagPart", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixDiagPart", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16080,7 +16080,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("MatrixExponential", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixExponential", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16122,7 +16122,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (adjoint.HasValue)
                 dict["adjoint"] = adjoint.Value;
-            var op = tf._op_def_lib._apply_op_helper("MatrixInverse", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixInverse", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16164,7 +16164,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("MatrixLogarithm", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixLogarithm", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16203,7 +16203,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["diagonal"] = diagonal;
-            var op = tf._op_def_lib._apply_op_helper("MatrixSetDiag", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixSetDiag", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16242,7 +16242,7 @@ namespace Tensorflow.Operations
             dict["rhs"] = rhs;
             if (adjoint.HasValue)
                 dict["adjoint"] = adjoint.Value;
-            var op = tf._op_def_lib._apply_op_helper("MatrixSolve", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixSolve", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16315,7 +16315,7 @@ namespace Tensorflow.Operations
             dict["l2_regularizer"] = l2_regularizer;
             if (fast.HasValue)
                 dict["fast"] = fast.Value;
-            var op = tf._op_def_lib._apply_op_helper("MatrixSolveLs", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixSolveLs", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16373,7 +16373,7 @@ namespace Tensorflow.Operations
                 dict["lower"] = lower.Value;
             if (adjoint.HasValue)
                 dict["adjoint"] = adjoint.Value;
-            var op = tf._op_def_lib._apply_op_helper("MatrixTriangularSolve", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MatrixTriangularSolve", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16410,7 +16410,7 @@ namespace Tensorflow.Operations
             dict["reduction_indices"] = reduction_indices;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("Max", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Max", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16456,7 +16456,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("MaxPool", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPool", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16503,7 +16503,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("MaxPool3D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPool3D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16557,7 +16557,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("MaxPool3DGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPool3DGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16612,7 +16612,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("MaxPool3DGradGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPool3DGradGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16666,7 +16666,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("MaxPoolGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPoolGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16720,7 +16720,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("MaxPoolGradGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPoolGradGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16772,7 +16772,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("MaxPoolGradGradV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPoolGradGradV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16818,7 +16818,7 @@ namespace Tensorflow.Operations
             dict["ksize"] = ksize;
             dict["strides"] = strides;
             dict["padding"] = padding;
-            var op = tf._op_def_lib._apply_op_helper("MaxPoolGradGradWithArgmax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPoolGradGradWithArgmax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16870,7 +16870,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("MaxPoolGradV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPoolGradV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16916,7 +16916,7 @@ namespace Tensorflow.Operations
             dict["ksize"] = ksize;
             dict["strides"] = strides;
             dict["padding"] = padding;
-            var op = tf._op_def_lib._apply_op_helper("MaxPoolGradWithArgmax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPoolGradWithArgmax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -16960,7 +16960,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("MaxPoolV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPoolV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17013,7 +17013,7 @@ namespace Tensorflow.Operations
             dict["padding"] = padding;
             if (Targmax.HasValue)
                 dict["Targmax"] = Targmax.Value;
-            var op = tf._op_def_lib._apply_op_helper("MaxPoolWithArgmax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MaxPoolWithArgmax", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var argmax = op.outputs[_idx++];
@@ -17042,7 +17042,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Maximum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Maximum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17079,7 +17079,7 @@ namespace Tensorflow.Operations
             dict["reduction_indices"] = reduction_indices;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("Mean", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Mean", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17109,7 +17109,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
-            var op = tf._op_def_lib._apply_op_helper("Merge", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Merge", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var value_index = op.outputs[_idx++];
@@ -17143,7 +17143,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
-            var op = tf._op_def_lib._apply_op_helper("MergeSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MergeSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17183,7 +17183,7 @@ namespace Tensorflow.Operations
             dict["destination_prefix"] = destination_prefix;
             if (delete_old_dirs.HasValue)
                 dict["delete_old_dirs"] = delete_old_dirs.Value;
-            var op = tf._op_def_lib._apply_op_helper("MergeV2Checkpoints", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MergeV2Checkpoints", name: name, keywords: dict);
             return op;
         }
 
@@ -17238,7 +17238,7 @@ namespace Tensorflow.Operations
                 dict["filterbank_channel_count"] = filterbank_channel_count.Value;
             if (dct_coefficient_count.HasValue)
                 dict["dct_coefficient_count"] = dct_coefficient_count.Value;
-            var op = tf._op_def_lib._apply_op_helper("Mfcc", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Mfcc", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17275,7 +17275,7 @@ namespace Tensorflow.Operations
             dict["reduction_indices"] = reduction_indices;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("Min", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Min", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17301,7 +17301,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Minimum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Minimum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17363,7 +17363,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["paddings"] = paddings;
             dict["mode"] = mode;
-            var op = tf._op_def_lib._apply_op_helper("MirrorPad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MirrorPad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17414,7 +17414,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["paddings"] = paddings;
             dict["mode"] = mode;
-            var op = tf._op_def_lib._apply_op_helper("MirrorPadGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MirrorPadGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17443,7 +17443,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Mod", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Mod", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17469,7 +17469,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Mul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Mul", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17511,7 +17511,7 @@ namespace Tensorflow.Operations
                 dict["seed2"] = seed2.Value;
             if (output_dtype.HasValue)
                 dict["output_dtype"] = output_dtype.Value;
-            var op = tf._op_def_lib._apply_op_helper("Multinomial", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Multinomial", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17579,7 +17579,7 @@ namespace Tensorflow.Operations
                 dict["initial_num_buckets"] = initial_num_buckets.Value;
             if (max_load_factor.HasValue)
                 dict["max_load_factor"] = max_load_factor.Value;
-            var op = tf._op_def_lib._apply_op_helper("MutableDenseHashTable", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MutableDenseHashTable", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17647,7 +17647,7 @@ namespace Tensorflow.Operations
                 dict["initial_num_buckets"] = initial_num_buckets.Value;
             if (max_load_factor.HasValue)
                 dict["max_load_factor"] = max_load_factor.Value;
-            var op = tf._op_def_lib._apply_op_helper("MutableDenseHashTableV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MutableDenseHashTableV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17697,7 +17697,7 @@ namespace Tensorflow.Operations
                 dict["shared_name"] = shared_name;
             if (use_node_name_sharing.HasValue)
                 dict["use_node_name_sharing"] = use_node_name_sharing.Value;
-            var op = tf._op_def_lib._apply_op_helper("MutableHashTable", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MutableHashTable", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17749,7 +17749,7 @@ namespace Tensorflow.Operations
                 dict["use_node_name_sharing"] = use_node_name_sharing.Value;
             if (value_shape != null)
                 dict["value_shape"] = value_shape;
-            var op = tf._op_def_lib._apply_op_helper("MutableHashTableOfTensors", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MutableHashTableOfTensors", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17801,7 +17801,7 @@ namespace Tensorflow.Operations
                 dict["use_node_name_sharing"] = use_node_name_sharing.Value;
             if (value_shape != null)
                 dict["value_shape"] = value_shape;
-            var op = tf._op_def_lib._apply_op_helper("MutableHashTableOfTensorsV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MutableHashTableOfTensorsV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17851,7 +17851,7 @@ namespace Tensorflow.Operations
                 dict["shared_name"] = shared_name;
             if (use_node_name_sharing.HasValue)
                 dict["use_node_name_sharing"] = use_node_name_sharing.Value;
-            var op = tf._op_def_lib._apply_op_helper("MutableHashTableV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MutableHashTableV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17914,7 +17914,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["mutex"] = mutex;
-            var op = tf._op_def_lib._apply_op_helper("MutexLock", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MutexLock", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17943,7 +17943,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("MutexV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MutexV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -17965,7 +17965,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Neg", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Neg", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18010,7 +18010,7 @@ namespace Tensorflow.Operations
             dict["lr"] = lr;
             dict["vocab_count"] = vocab_count;
             dict["num_negative_samples"] = num_negative_samples;
-            var op = tf._op_def_lib._apply_op_helper("NegTrain", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NegTrain", name: name, keywords: dict);
             return op;
         }
 
@@ -18031,7 +18031,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
-            var op = tf._op_def_lib._apply_op_helper("NextIteration", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NextIteration", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18047,7 +18047,7 @@ namespace Tensorflow.Operations
         public static Operation no_op (string name = "NoOp")
         {
             var dict = new Dictionary<string, object>();
-            var op = tf._op_def_lib._apply_op_helper("NoOp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NoOp", name: name, keywords: dict);
             return op;
         }
 
@@ -18103,7 +18103,7 @@ namespace Tensorflow.Operations
             dict["max_output_size"] = max_output_size;
             if (iou_threshold.HasValue)
                 dict["iou_threshold"] = iou_threshold.Value;
-            var op = tf._op_def_lib._apply_op_helper("NonMaxSuppression", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NonMaxSuppression", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18160,7 +18160,7 @@ namespace Tensorflow.Operations
             dict["scores"] = scores;
             dict["max_output_size"] = max_output_size;
             dict["iou_threshold"] = iou_threshold;
-            var op = tf._op_def_lib._apply_op_helper("NonMaxSuppressionV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NonMaxSuppressionV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18221,7 +18221,7 @@ namespace Tensorflow.Operations
             dict["max_output_size"] = max_output_size;
             dict["iou_threshold"] = iou_threshold;
             dict["score_threshold"] = score_threshold;
-            var op = tf._op_def_lib._apply_op_helper("NonMaxSuppressionV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NonMaxSuppressionV3", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18291,7 +18291,7 @@ namespace Tensorflow.Operations
             dict["score_threshold"] = score_threshold;
             if (pad_to_max_output_size.HasValue)
                 dict["pad_to_max_output_size"] = pad_to_max_output_size.Value;
-            var op = tf._op_def_lib._apply_op_helper("NonMaxSuppressionV4", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NonMaxSuppressionV4", name: name, keywords: dict);
             int _idx = 0;
             var selected_indices = op.outputs[_idx++];
             var valid_outputs = op.outputs[_idx++];
@@ -18353,7 +18353,7 @@ namespace Tensorflow.Operations
             dict["max_output_size"] = max_output_size;
             dict["overlap_threshold"] = overlap_threshold;
             dict["score_threshold"] = score_threshold;
-            var op = tf._op_def_lib._apply_op_helper("NonMaxSuppressionWithOverlaps", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NonMaxSuppressionWithOverlaps", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18379,7 +18379,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("NotEqual", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NotEqual", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18420,7 +18420,7 @@ namespace Tensorflow.Operations
             dict["n"] = n;
             if (reverse.HasValue)
                 dict["reverse"] = reverse.Value;
-            var op = tf._op_def_lib._apply_op_helper("NthElement", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("NthElement", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18552,7 +18552,7 @@ namespace Tensorflow.Operations
             dict["off_value"] = off_value;
             if (axis.HasValue)
                 dict["axis"] = axis.Value;
-            var op = tf._op_def_lib._apply_op_helper("OneHot", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OneHot", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18573,7 +18573,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("OnesLike", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OnesLike", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18608,7 +18608,7 @@ namespace Tensorflow.Operations
             dict["optimizations"] = optimizations;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("OptimizeDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OptimizeDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18627,7 +18627,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["components"] = components;
-            var op = tf._op_def_lib._apply_op_helper("OptionalFromValue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OptionalFromValue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18654,7 +18654,7 @@ namespace Tensorflow.Operations
             dict["optional"] = optional;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("OptionalGetValue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OptionalGetValue", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -18675,7 +18675,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["optional"] = optional;
-            var op = tf._op_def_lib._apply_op_helper("OptionalHasValue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OptionalHasValue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18691,7 +18691,7 @@ namespace Tensorflow.Operations
         public static Tensor optional_none (string name = "OptionalNone")
         {
             var dict = new Dictionary<string, object>();
-            var op = tf._op_def_lib._apply_op_helper("OptionalNone", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OptionalNone", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18727,7 +18727,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("OrderedMapClear", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OrderedMapClear", name: name, keywords: dict);
             return op;
         }
 
@@ -18763,7 +18763,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("OrderedMapIncompleteSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OrderedMapIncompleteSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18810,7 +18810,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("OrderedMapPeek", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OrderedMapPeek", name: name, keywords: dict);
             int _idx = 0;
             var values = Enumerable.Range(0, op.OutputListLength("values")).Select(_ => op.outputs[_idx++]).ToArray();
             return (values);
@@ -18848,7 +18848,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("OrderedMapSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OrderedMapSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -18904,7 +18904,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("OrderedMapStage", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OrderedMapStage", name: name, keywords: dict);
             return op;
         }
 
@@ -18950,7 +18950,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("OrderedMapUnstage", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OrderedMapUnstage", name: name, keywords: dict);
             int _idx = 0;
             var values = Enumerable.Range(0, op.OutputListLength("values")).Select(_ => op.outputs[_idx++]).ToArray();
             return (values);
@@ -18998,7 +18998,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("OrderedMapUnstageNoKey", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OrderedMapUnstageNoKey", name: name, keywords: dict);
             int _idx = 0;
             var key = op.outputs[_idx++];
             var values = Enumerable.Range(0, op.OutputListLength("values")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -19038,7 +19038,7 @@ namespace Tensorflow.Operations
             dict["shape"] = shape;
             if (device_ordinal.HasValue)
                 dict["device_ordinal"] = device_ordinal.Value;
-            var op = tf._op_def_lib._apply_op_helper("OutfeedDequeue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OutfeedDequeue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19076,7 +19076,7 @@ namespace Tensorflow.Operations
             dict["shapes"] = shapes;
             if (device_ordinal.HasValue)
                 dict["device_ordinal"] = device_ordinal.Value;
-            var op = tf._op_def_lib._apply_op_helper("OutfeedDequeueTuple", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OutfeedDequeueTuple", name: name, keywords: dict);
             int _idx = 0;
             var outputs = Enumerable.Range(0, op.OutputListLength("outputs")).Select(_ => op.outputs[_idx++]).ToArray();
             return (outputs);
@@ -19098,7 +19098,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("OutfeedEnqueue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OutfeedEnqueue", name: name, keywords: dict);
             return op;
         }
 
@@ -19119,7 +19119,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
-            var op = tf._op_def_lib._apply_op_helper("OutfeedEnqueueTuple", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("OutfeedEnqueueTuple", name: name, keywords: dict);
             return op;
         }
 
@@ -19167,7 +19167,7 @@ namespace Tensorflow.Operations
             dict["values"] = values;
             if (axis.HasValue)
                 dict["axis"] = axis.Value;
-            var op = tf._op_def_lib._apply_op_helper("Pack", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Pack", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19214,7 +19214,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["paddings"] = paddings;
-            var op = tf._op_def_lib._apply_op_helper("Pad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Pad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19265,7 +19265,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["paddings"] = paddings;
             dict["constant_values"] = constant_values;
-            var op = tf._op_def_lib._apply_op_helper("PadV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PadV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19305,7 +19305,7 @@ namespace Tensorflow.Operations
             dict["padded_shapes"] = padded_shapes;
             dict["padding_values"] = padding_values;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("PaddedBatchDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PaddedBatchDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19350,7 +19350,7 @@ namespace Tensorflow.Operations
             dict["padding_values"] = padding_values;
             dict["drop_remainder"] = drop_remainder;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("PaddedBatchDatasetV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PaddedBatchDatasetV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19407,7 +19407,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("PaddingFIFOQueue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PaddingFIFOQueue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19464,7 +19464,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("PaddingFIFOQueueV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PaddingFIFOQueueV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19510,7 +19510,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["values"] = values;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("ParallelConcat", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ParallelConcat", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19595,7 +19595,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
             dict["data"] = data;
-            var op = tf._op_def_lib._apply_op_helper("ParallelDynamicStitch", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ParallelDynamicStitch", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19650,7 +19650,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("ParameterizedTruncatedNormal", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ParameterizedTruncatedNormal", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19733,7 +19733,7 @@ namespace Tensorflow.Operations
             dict["dense_defaults"] = dense_defaults;
             dict["sparse_types"] = sparse_types;
             dict["dense_shapes"] = dense_shapes;
-            var op = tf._op_def_lib._apply_op_helper("ParseExample", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ParseExample", name: name, keywords: dict);
             int _idx = 0;
             var sparse_indices = Enumerable.Range(0, op.OutputListLength("sparse_indices")).Select(_ => op.outputs[_idx++]).ToArray();
             var sparse_values = Enumerable.Range(0, op.OutputListLength("sparse_values")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -19807,7 +19807,7 @@ namespace Tensorflow.Operations
             dict["dense_shapes"] = dense_shapes;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("ParseExampleDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ParseExampleDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -19946,7 +19946,7 @@ namespace Tensorflow.Operations
                 dict["feature_list_sparse_types"] = feature_list_sparse_types;
             if (feature_list_dense_shapes != null)
                 dict["feature_list_dense_shapes"] = feature_list_dense_shapes;
-            var op = tf._op_def_lib._apply_op_helper("ParseSequenceExample", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ParseSequenceExample", name: name, keywords: dict);
             int _idx = 0;
             var context_sparse_indices = Enumerable.Range(0, op.OutputListLength("context_sparse_indices")).Select(_ => op.outputs[_idx++]).ToArray();
             var context_sparse_values = Enumerable.Range(0, op.OutputListLength("context_sparse_values")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -20033,7 +20033,7 @@ namespace Tensorflow.Operations
             dict["dense_keys"] = dense_keys;
             dict["sparse_types"] = sparse_types;
             dict["dense_shapes"] = dense_shapes;
-            var op = tf._op_def_lib._apply_op_helper("ParseSingleExample", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ParseSingleExample", name: name, keywords: dict);
             int _idx = 0;
             var sparse_indices = Enumerable.Range(0, op.OutputListLength("sparse_indices")).Select(_ => op.outputs[_idx++]).ToArray();
             var sparse_values = Enumerable.Range(0, op.OutputListLength("sparse_values")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -20155,7 +20155,7 @@ namespace Tensorflow.Operations
                 dict["feature_list_sparse_types"] = feature_list_sparse_types;
             if (feature_list_dense_shapes != null)
                 dict["feature_list_dense_shapes"] = feature_list_dense_shapes;
-            var op = tf._op_def_lib._apply_op_helper("ParseSingleSequenceExample", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ParseSingleSequenceExample", name: name, keywords: dict);
             int _idx = 0;
             var context_sparse_indices = Enumerable.Range(0, op.OutputListLength("context_sparse_indices")).Select(_ => op.outputs[_idx++]).ToArray();
             var context_sparse_values = Enumerable.Range(0, op.OutputListLength("context_sparse_values")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -20191,7 +20191,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
             dict["out_type"] = out_type;
-            var op = tf._op_def_lib._apply_op_helper("ParseTensor", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ParseTensor", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20224,7 +20224,7 @@ namespace Tensorflow.Operations
             dict["dtype"] = dtype;
             if (shape != null)
                 dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("Placeholder", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Placeholder", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20257,7 +20257,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("PlaceholderV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PlaceholderV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20283,7 +20283,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("PlaceholderWithDefault", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PlaceholderWithDefault", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20313,7 +20313,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Polygamma", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Polygamma", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20340,7 +20340,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("PopulationCount", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PopulationCount", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20372,7 +20372,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Pow", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Pow", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20404,7 +20404,7 @@ namespace Tensorflow.Operations
             dict["buffer_size"] = buffer_size;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("PrefetchDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PrefetchDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20440,7 +20440,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (message != null)
                 dict["message"] = message;
-            var op = tf._op_def_lib._apply_op_helper("PreventGradient", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PreventGradient", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20483,7 +20483,7 @@ namespace Tensorflow.Operations
                 dict["first_n"] = first_n.Value;
             if (summarize.HasValue)
                 dict["summarize"] = summarize.Value;
-            var op = tf._op_def_lib._apply_op_helper("Print", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Print", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20538,7 +20538,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("PriorityQueue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PriorityQueue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20593,7 +20593,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("PriorityQueueV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("PriorityQueueV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20630,7 +20630,7 @@ namespace Tensorflow.Operations
             dict["reduction_indices"] = reduction_indices;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("Prod", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Prod", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20675,7 +20675,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (full_matrices.HasValue)
                 dict["full_matrices"] = full_matrices.Value;
-            var op = tf._op_def_lib._apply_op_helper("Qr", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Qr", name: name, keywords: dict);
             int _idx = 0;
             var q = op.outputs[_idx++];
             var r = op.outputs[_idx++];
@@ -20717,7 +20717,7 @@ namespace Tensorflow.Operations
                 dict["input_min"] = input_min.Value;
             if (input_max.HasValue)
                 dict["input_max"] = input_max.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizeAndDequantize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizeAndDequantize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20817,7 +20817,7 @@ namespace Tensorflow.Operations
                 dict["num_bits"] = num_bits.Value;
             if (range_given.HasValue)
                 dict["range_given"] = range_given.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizeAndDequantizeV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizeAndDequantizeV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20857,7 +20857,7 @@ namespace Tensorflow.Operations
                 dict["signed_input"] = signed_input.Value;
             if (range_given.HasValue)
                 dict["range_given"] = range_given.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizeAndDequantizeV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizeAndDequantizeV3", name: name, keywords: dict);
             return op.output;
         }
 
@@ -20917,7 +20917,7 @@ namespace Tensorflow.Operations
             dict["input_min"] = input_min;
             dict["input_max"] = input_max;
             dict["out_type"] = out_type;
-            var op = tf._op_def_lib._apply_op_helper("QuantizeDownAndShrinkRange", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizeDownAndShrinkRange", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var output_min = op.outputs[_idx++];
@@ -21064,7 +21064,7 @@ namespace Tensorflow.Operations
                 dict["mode"] = mode;
             if (round_mode != null)
                 dict["round_mode"] = round_mode;
-            var op = tf._op_def_lib._apply_op_helper("QuantizeV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizeV2", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var output_min = op.outputs[_idx++];
@@ -21117,7 +21117,7 @@ namespace Tensorflow.Operations
             dict["max_y"] = max_y;
             if (Toutput.HasValue)
                 dict["Toutput"] = Toutput.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedAdd", name: name, keywords: dict);
             int _idx = 0;
             var z = op.outputs[_idx++];
             var min_z = op.outputs[_idx++];
@@ -21170,7 +21170,7 @@ namespace Tensorflow.Operations
             dict["ksize"] = ksize;
             dict["strides"] = strides;
             dict["padding"] = padding;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedAvgPool", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedAvgPool", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var min_output = op.outputs[_idx++];
@@ -21280,7 +21280,7 @@ namespace Tensorflow.Operations
             dict["out_type"] = out_type;
             dict["variance_epsilon"] = variance_epsilon;
             dict["scale_after_normalization"] = scale_after_normalization;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedBatchNormWithGlobalNormalization", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedBatchNormWithGlobalNormalization", name: name, keywords: dict);
             int _idx = 0;
             var result = op.outputs[_idx++];
             var result_min = op.outputs[_idx++];
@@ -21334,7 +21334,7 @@ namespace Tensorflow.Operations
             dict["min_bias"] = min_bias;
             dict["max_bias"] = max_bias;
             dict["out_type"] = out_type;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedBiasAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedBiasAdd", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var min_out = op.outputs[_idx++];
@@ -21378,7 +21378,7 @@ namespace Tensorflow.Operations
             dict["values"] = values;
             dict["input_mins"] = input_mins;
             dict["input_maxes"] = input_maxes;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedConcat", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedConcat", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var output_min = op.outputs[_idx++];
@@ -21455,7 +21455,7 @@ namespace Tensorflow.Operations
                 dict["out_type"] = out_type.Value;
             if (dilations != null)
                 dict["dilations"] = dilations;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedConv2D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedConv2D", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var min_output = op.outputs[_idx++];
@@ -21518,7 +21518,7 @@ namespace Tensorflow.Operations
                 dict["variance_epsilon"] = variance_epsilon.Value;
             if (min_separation.HasValue)
                 dict["min_separation"] = min_separation.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedInstanceNorm", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedInstanceNorm", name: name, keywords: dict);
             int _idx = 0;
             var y = op.outputs[_idx++];
             var y_min = op.outputs[_idx++];
@@ -21592,7 +21592,7 @@ namespace Tensorflow.Operations
                 dict["transpose_b"] = transpose_b.Value;
             if (Tactivation.HasValue)
                 dict["Tactivation"] = Tactivation.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedMatMul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedMatMul", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var min_out = op.outputs[_idx++];
@@ -21645,7 +21645,7 @@ namespace Tensorflow.Operations
             dict["ksize"] = ksize;
             dict["strides"] = strides;
             dict["padding"] = padding;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedMaxPool", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedMaxPool", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var min_output = op.outputs[_idx++];
@@ -21698,7 +21698,7 @@ namespace Tensorflow.Operations
             dict["max_y"] = max_y;
             if (Toutput.HasValue)
                 dict["Toutput"] = Toutput.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedMul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedMul", name: name, keywords: dict);
             int _idx = 0;
             var z = op.outputs[_idx++];
             var min_z = op.outputs[_idx++];
@@ -21737,7 +21737,7 @@ namespace Tensorflow.Operations
             dict["max_features"] = max_features;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedRelu", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedRelu", name: name, keywords: dict);
             int _idx = 0;
             var activations = op.outputs[_idx++];
             var min_activations = op.outputs[_idx++];
@@ -21776,7 +21776,7 @@ namespace Tensorflow.Operations
             dict["max_features"] = max_features;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedRelu6", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedRelu6", name: name, keywords: dict);
             int _idx = 0;
             var activations = op.outputs[_idx++];
             var min_activations = op.outputs[_idx++];
@@ -21818,7 +21818,7 @@ namespace Tensorflow.Operations
             dict["max_features"] = max_features;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedReluX", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedReluX", name: name, keywords: dict);
             int _idx = 0;
             var activations = op.outputs[_idx++];
             var min_activations = op.outputs[_idx++];
@@ -21859,7 +21859,7 @@ namespace Tensorflow.Operations
             dict["shape"] = shape;
             dict["input_min"] = input_min;
             dict["input_max"] = input_max;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedReshape", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedReshape", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var output_min = op.outputs[_idx++];
@@ -21908,7 +21908,7 @@ namespace Tensorflow.Operations
             dict["max"] = max;
             if (align_corners.HasValue)
                 dict["align_corners"] = align_corners.Value;
-            var op = tf._op_def_lib._apply_op_helper("QuantizedResizeBilinear", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QuantizedResizeBilinear", name: name, keywords: dict);
             int _idx = 0;
             var resized_images = op.outputs[_idx++];
             var out_min = op.outputs[_idx++];
@@ -21945,7 +21945,7 @@ namespace Tensorflow.Operations
             dict["handle"] = handle;
             if (cancel_pending_enqueues.HasValue)
                 dict["cancel_pending_enqueues"] = cancel_pending_enqueues.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueClose", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueClose", name: name, keywords: dict);
             return op;
         }
 
@@ -21978,7 +21978,7 @@ namespace Tensorflow.Operations
             dict["handle"] = handle;
             if (cancel_pending_enqueues.HasValue)
                 dict["cancel_pending_enqueues"] = cancel_pending_enqueues.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueCloseV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueCloseV2", name: name, keywords: dict);
             return op;
         }
 
@@ -22019,7 +22019,7 @@ namespace Tensorflow.Operations
             dict["component_types"] = component_types;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueDequeue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueDequeue", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -22073,7 +22073,7 @@ namespace Tensorflow.Operations
             dict["component_types"] = component_types;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueDequeueMany", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueDequeueMany", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -22127,7 +22127,7 @@ namespace Tensorflow.Operations
             dict["component_types"] = component_types;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueDequeueManyV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueDequeueManyV2", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -22185,7 +22185,7 @@ namespace Tensorflow.Operations
             dict["component_types"] = component_types;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueDequeueUpTo", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueDequeueUpTo", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -22243,7 +22243,7 @@ namespace Tensorflow.Operations
             dict["component_types"] = component_types;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueDequeueUpToV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueDequeueUpToV2", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -22286,7 +22286,7 @@ namespace Tensorflow.Operations
             dict["component_types"] = component_types;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueDequeueV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueDequeueV2", name: name, keywords: dict);
             int _idx = 0;
             var components = Enumerable.Range(0, op.OutputListLength("components")).Select(_ => op.outputs[_idx++]).ToArray();
             return (components);
@@ -22326,7 +22326,7 @@ namespace Tensorflow.Operations
             dict["components"] = components;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueEnqueue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueEnqueue", name: name, keywords: dict);
             return op;
         }
 
@@ -22369,7 +22369,7 @@ namespace Tensorflow.Operations
             dict["components"] = components;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueEnqueueMany", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueEnqueueMany", name: name, keywords: dict);
             return op;
         }
 
@@ -22412,7 +22412,7 @@ namespace Tensorflow.Operations
             dict["components"] = components;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueEnqueueManyV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueEnqueueManyV2", name: name, keywords: dict);
             return op;
         }
 
@@ -22450,7 +22450,7 @@ namespace Tensorflow.Operations
             dict["components"] = components;
             if (timeout_ms.HasValue)
                 dict["timeout_ms"] = timeout_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("QueueEnqueueV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueEnqueueV2", name: name, keywords: dict);
             return op;
         }
 
@@ -22474,7 +22474,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("QueueIsClosed", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueIsClosed", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22498,7 +22498,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("QueueIsClosedV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueIsClosedV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22519,7 +22519,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("QueueSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22540,7 +22540,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("QueueSizeV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("QueueSizeV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22583,7 +22583,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["fft_length"] = fft_length;
-            var op = tf._op_def_lib._apply_op_helper("RFFT", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RFFT", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22628,7 +22628,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["fft_length"] = fft_length;
-            var op = tf._op_def_lib._apply_op_helper("RFFT2D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RFFT2D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22673,7 +22673,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["fft_length"] = fft_length;
-            var op = tf._op_def_lib._apply_op_helper("RFFT3D", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RFFT3D", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22703,7 +22703,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
-            var op = tf._op_def_lib._apply_op_helper("RGBToHSV", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RGBToHSV", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22748,7 +22748,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("RandomCrop", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomCrop", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22782,7 +22782,7 @@ namespace Tensorflow.Operations
             dict["seed2"] = seed2;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("RandomDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22828,7 +22828,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("RandomGamma", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomGamma", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22850,7 +22850,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["alpha"] = alpha;
             dict["sample"] = sample;
-            var op = tf._op_def_lib._apply_op_helper("RandomGammaGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomGammaGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22880,7 +22880,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("RandomPoisson", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomPoisson", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22936,7 +22936,7 @@ namespace Tensorflow.Operations
                 dict["seed2"] = seed2.Value;
             if (dtype.HasValue)
                 dict["dtype"] = dtype.Value;
-            var op = tf._op_def_lib._apply_op_helper("RandomPoissonV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomPoissonV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -22981,7 +22981,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("RandomShuffle", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomShuffle", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23047,7 +23047,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("RandomShuffleQueue", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomShuffleQueue", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23113,7 +23113,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("RandomShuffleQueueV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomShuffleQueueV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23154,7 +23154,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("RandomStandardNormal", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomStandardNormal", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23196,7 +23196,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("RandomUniform", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomUniform", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23246,7 +23246,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("RandomUniformInt", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RandomUniformInt", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23288,7 +23288,7 @@ namespace Tensorflow.Operations
             dict["start"] = start;
             dict["limit"] = limit;
             dict["delta"] = delta;
-            var op = tf._op_def_lib._apply_op_helper("Range", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Range", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23324,7 +23324,7 @@ namespace Tensorflow.Operations
             dict["step"] = step;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("RangeDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RangeDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23358,7 +23358,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("Rank", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Rank", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23377,7 +23377,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["filename"] = filename;
-            var op = tf._op_def_lib._apply_op_helper("ReadFile", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReadFile", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23410,7 +23410,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("ReadVariableOp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReadVariableOp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23434,7 +23434,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderNumRecordsProduced", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderNumRecordsProduced", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23458,7 +23458,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderNumRecordsProducedV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderNumRecordsProducedV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23478,7 +23478,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderNumWorkUnitsCompleted", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderNumWorkUnitsCompleted", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23498,7 +23498,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderNumWorkUnitsCompletedV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderNumWorkUnitsCompletedV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23530,7 +23530,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
             dict["queue_handle"] = queue_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderRead", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderRead", name: name, keywords: dict);
             int _idx = 0;
             var key = op.outputs[_idx++];
             var value = op.outputs[_idx++];
@@ -23570,7 +23570,7 @@ namespace Tensorflow.Operations
             dict["reader_handle"] = reader_handle;
             dict["queue_handle"] = queue_handle;
             dict["num_records"] = num_records;
-            var op = tf._op_def_lib._apply_op_helper("ReaderReadUpTo", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderReadUpTo", name: name, keywords: dict);
             int _idx = 0;
             var keys = op.outputs[_idx++];
             var values = op.outputs[_idx++];
@@ -23610,7 +23610,7 @@ namespace Tensorflow.Operations
             dict["reader_handle"] = reader_handle;
             dict["queue_handle"] = queue_handle;
             dict["num_records"] = num_records;
-            var op = tf._op_def_lib._apply_op_helper("ReaderReadUpToV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderReadUpToV2", name: name, keywords: dict);
             int _idx = 0;
             var keys = op.outputs[_idx++];
             var values = op.outputs[_idx++];
@@ -23645,7 +23645,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
             dict["queue_handle"] = queue_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderReadV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderReadV2", name: name, keywords: dict);
             int _idx = 0;
             var key = op.outputs[_idx++];
             var value = op.outputs[_idx++];
@@ -23668,7 +23668,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderReset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderReset", name: name, keywords: dict);
             return op;
         }
 
@@ -23688,7 +23688,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderResetV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderResetV2", name: name, keywords: dict);
             return op;
         }
 
@@ -23717,7 +23717,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
             dict["state"] = state;
-            var op = tf._op_def_lib._apply_op_helper("ReaderRestoreState", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderRestoreState", name: name, keywords: dict);
             return op;
         }
 
@@ -23746,7 +23746,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
             dict["state"] = state;
-            var op = tf._op_def_lib._apply_op_helper("ReaderRestoreStateV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderRestoreStateV2", name: name, keywords: dict);
             return op;
         }
 
@@ -23770,7 +23770,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderSerializeState", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderSerializeState", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23794,7 +23794,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
-            var op = tf._op_def_lib._apply_op_helper("ReaderSerializeStateV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReaderSerializeStateV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23830,7 +23830,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (Tout.HasValue)
                 dict["Tout"] = Tout.Value;
-            var op = tf._op_def_lib._apply_op_helper("Real", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Real", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23858,7 +23858,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("RealDiv", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RealDiv", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23880,7 +23880,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Reciprocal", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Reciprocal", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23906,7 +23906,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
             dict["dy"] = dy;
-            var op = tf._op_def_lib._apply_op_helper("ReciprocalGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReciprocalGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -23960,7 +23960,7 @@ namespace Tensorflow.Operations
                 dict["batch_size"] = batch_size.Value;
             if (compression_type != null)
                 dict["compression_type"] = compression_type;
-            var op = tf._op_def_lib._apply_op_helper("RecordInput", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RecordInput", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24023,7 +24023,7 @@ namespace Tensorflow.Operations
                 dict["keep_dims"] = keep_dims.Value;
             if (separator != null)
                 dict["separator"] = separator;
-            var op = tf._op_def_lib._apply_op_helper("ReduceJoin", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReduceJoin", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24065,7 +24065,7 @@ namespace Tensorflow.Operations
                 dict["is_constant"] = is_constant.Value;
             if (parallel_iterations.HasValue)
                 dict["parallel_iterations"] = parallel_iterations.Value;
-            var op = tf._op_def_lib._apply_op_helper("RefEnter", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RefEnter", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24089,7 +24089,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
-            var op = tf._op_def_lib._apply_op_helper("RefExit", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RefExit", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24108,7 +24108,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("RefIdentity", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RefIdentity", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24138,7 +24138,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
-            var op = tf._op_def_lib._apply_op_helper("RefMerge", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RefMerge", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var value_index = op.outputs[_idx++];
@@ -24162,7 +24162,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
-            var op = tf._op_def_lib._apply_op_helper("RefNextIteration", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RefNextIteration", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24187,7 +24187,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["index"] = index;
             dict["inputs"] = inputs;
-            var op = tf._op_def_lib._apply_op_helper("RefSelect", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RefSelect", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24220,7 +24220,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
             dict["pred"] = pred;
-            var op = tf._op_def_lib._apply_op_helper("RefSwitch", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RefSwitch", name: name, keywords: dict);
             int _idx = 0;
             var output_false = op.outputs[_idx++];
             var output_true = op.outputs[_idx++];
@@ -24256,7 +24256,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["pattern"] = pattern;
-            var op = tf._op_def_lib._apply_op_helper("RegexFullMatch", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RegexFullMatch", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24294,7 +24294,7 @@ namespace Tensorflow.Operations
             dict["rewrite"] = rewrite;
             if (replace_global.HasValue)
                 dict["replace_global"] = replace_global.Value;
-            var op = tf._op_def_lib._apply_op_helper("RegexReplace", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RegexReplace", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24313,7 +24313,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("Relu", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Relu", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24332,7 +24332,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("Relu6", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Relu6", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24359,7 +24359,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("Relu6Grad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Relu6Grad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24385,7 +24385,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("ReluGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReluGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24425,7 +24425,7 @@ namespace Tensorflow.Operations
             dict["inputs"] = inputs;
             dict["Toutputs"] = Toutputs;
             dict["serialized_remote_fused_graph_execute_info"] = serialized_remote_fused_graph_execute_info;
-            var op = tf._op_def_lib._apply_op_helper("RemoteFusedGraphExecute", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RemoteFusedGraphExecute", name: name, keywords: dict);
             int _idx = 0;
             var outputs = Enumerable.Range(0, op.OutputListLength("outputs")).Select(_ => op.outputs[_idx++]).ToArray();
             return (outputs);
@@ -24459,7 +24459,7 @@ namespace Tensorflow.Operations
             dict["count"] = count;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("RepeatDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RepeatDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24494,7 +24494,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["input_min"] = input_min;
             dict["input_max"] = input_max;
-            var op = tf._op_def_lib._apply_op_helper("RequantizationRange", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RequantizationRange", name: name, keywords: dict);
             int _idx = 0;
             var output_min = op.outputs[_idx++];
             var output_max = op.outputs[_idx++];
@@ -24549,7 +24549,7 @@ namespace Tensorflow.Operations
             dict["requested_output_min"] = requested_output_min;
             dict["requested_output_max"] = requested_output_max;
             dict["out_type"] = out_type;
-            var op = tf._op_def_lib._apply_op_helper("Requantize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Requantize", name: name, keywords: dict);
             int _idx = 0;
             var output = op.outputs[_idx++];
             var output_min = op.outputs[_idx++];
@@ -24634,7 +24634,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("Reshape", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Reshape", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24680,7 +24680,7 @@ namespace Tensorflow.Operations
             dict["size"] = size;
             if (align_corners.HasValue)
                 dict["align_corners"] = align_corners.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResizeArea", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResizeArea", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24716,7 +24716,7 @@ namespace Tensorflow.Operations
             dict["size"] = size;
             if (align_corners.HasValue)
                 dict["align_corners"] = align_corners.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResizeBicubic", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResizeBicubic", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24750,7 +24750,7 @@ namespace Tensorflow.Operations
             dict["original_image"] = original_image;
             if (align_corners.HasValue)
                 dict["align_corners"] = align_corners.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResizeBicubicGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResizeBicubicGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24786,7 +24786,7 @@ namespace Tensorflow.Operations
             dict["size"] = size;
             if (align_corners.HasValue)
                 dict["align_corners"] = align_corners.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResizeBilinear", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResizeBilinear", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24820,7 +24820,7 @@ namespace Tensorflow.Operations
             dict["original_image"] = original_image;
             if (align_corners.HasValue)
                 dict["align_corners"] = align_corners.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResizeBilinearGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResizeBilinearGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24853,7 +24853,7 @@ namespace Tensorflow.Operations
             dict["size"] = size;
             if (align_corners.HasValue)
                 dict["align_corners"] = align_corners.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResizeNearestNeighbor", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResizeNearestNeighbor", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24886,7 +24886,7 @@ namespace Tensorflow.Operations
             dict["size"] = size;
             if (align_corners.HasValue)
                 dict["align_corners"] = align_corners.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResizeNearestNeighborGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResizeNearestNeighborGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -24950,7 +24950,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyAdaMax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyAdaMax", name: name, keywords: dict);
             return op;
         }
 
@@ -25006,7 +25006,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyAdadelta", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyAdadelta", name: name, keywords: dict);
             return op;
         }
 
@@ -25053,7 +25053,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (update_slots.HasValue)
                 dict["update_slots"] = update_slots.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyAdagrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyAdagrad", name: name, keywords: dict);
             return op;
         }
 
@@ -25107,7 +25107,7 @@ namespace Tensorflow.Operations
             dict["global_step"] = global_step;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyAdagradDA", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyAdagradDA", name: name, keywords: dict);
             return op;
         }
 
@@ -25181,7 +25181,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (use_nesterov.HasValue)
                 dict["use_nesterov"] = use_nesterov.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyAdam", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyAdam", name: name, keywords: dict);
             return op;
         }
 
@@ -25237,7 +25237,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyAddSign", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyAddSign", name: name, keywords: dict);
             return op;
         }
 
@@ -25315,7 +25315,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyCenteredRMSProp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyCenteredRMSProp", name: name, keywords: dict);
             return op;
         }
 
@@ -25377,7 +25377,7 @@ namespace Tensorflow.Operations
             dict["lr_power"] = lr_power;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyFtrl", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyFtrl", name: name, keywords: dict);
             return op;
         }
 
@@ -25444,7 +25444,7 @@ namespace Tensorflow.Operations
             dict["lr_power"] = lr_power;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyFtrlV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyFtrlV2", name: name, keywords: dict);
             return op;
         }
 
@@ -25478,7 +25478,7 @@ namespace Tensorflow.Operations
             dict["delta"] = delta;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyGradientDescent", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyGradientDescent", name: name, keywords: dict);
             return op;
         }
 
@@ -25534,7 +25534,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (use_nesterov.HasValue)
                 dict["use_nesterov"] = use_nesterov.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyMomentum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyMomentum", name: name, keywords: dict);
             return op;
         }
 
@@ -25590,7 +25590,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyPowerSign", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyPowerSign", name: name, keywords: dict);
             return op;
         }
 
@@ -25641,7 +25641,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyProximalAdagrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyProximalAdagrad", name: name, keywords: dict);
             return op;
         }
 
@@ -25687,7 +25687,7 @@ namespace Tensorflow.Operations
             dict["delta"] = delta;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyProximalGradientDescent", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyProximalGradientDescent", name: name, keywords: dict);
             return op;
         }
 
@@ -25753,7 +25753,7 @@ namespace Tensorflow.Operations
             dict["grad"] = grad;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceApplyRMSProp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceApplyRMSProp", name: name, keywords: dict);
             return op;
         }
 
@@ -25785,7 +25785,7 @@ namespace Tensorflow.Operations
             dict["resource"] = resource;
             dict["limit"] = limit;
             dict["T"] = T;
-            var op = tf._op_def_lib._apply_op_helper("ResourceCountUpTo", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceCountUpTo", name: name, keywords: dict);
             return op.output;
         }
 
@@ -25830,7 +25830,7 @@ namespace Tensorflow.Operations
             dict["dtype"] = dtype;
             if (validate_indices.HasValue)
                 dict["validate_indices"] = validate_indices.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceGather", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceGather", name: name, keywords: dict);
             return op.output;
         }
 
@@ -25879,7 +25879,7 @@ namespace Tensorflow.Operations
             dict["resource"] = resource;
             dict["indices"] = indices;
             dict["updates"] = updates;
-            var op = tf._op_def_lib._apply_op_helper("ResourceScatterAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceScatterAdd", name: name, keywords: dict);
             return op;
         }
 
@@ -25928,7 +25928,7 @@ namespace Tensorflow.Operations
             dict["resource"] = resource;
             dict["indices"] = indices;
             dict["updates"] = updates;
-            var op = tf._op_def_lib._apply_op_helper("ResourceScatterDiv", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceScatterDiv", name: name, keywords: dict);
             return op;
         }
 
@@ -25977,7 +25977,7 @@ namespace Tensorflow.Operations
             dict["resource"] = resource;
             dict["indices"] = indices;
             dict["updates"] = updates;
-            var op = tf._op_def_lib._apply_op_helper("ResourceScatterMax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceScatterMax", name: name, keywords: dict);
             return op;
         }
 
@@ -26026,7 +26026,7 @@ namespace Tensorflow.Operations
             dict["resource"] = resource;
             dict["indices"] = indices;
             dict["updates"] = updates;
-            var op = tf._op_def_lib._apply_op_helper("ResourceScatterMin", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceScatterMin", name: name, keywords: dict);
             return op;
         }
 
@@ -26075,7 +26075,7 @@ namespace Tensorflow.Operations
             dict["resource"] = resource;
             dict["indices"] = indices;
             dict["updates"] = updates;
-            var op = tf._op_def_lib._apply_op_helper("ResourceScatterMul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceScatterMul", name: name, keywords: dict);
             return op;
         }
 
@@ -26149,7 +26149,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceScatterNdAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceScatterNdAdd", name: name, keywords: dict);
             return op;
         }
 
@@ -26223,7 +26223,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceScatterNdUpdate", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceScatterNdUpdate", name: name, keywords: dict);
             return op;
         }
 
@@ -26272,7 +26272,7 @@ namespace Tensorflow.Operations
             dict["resource"] = resource;
             dict["indices"] = indices;
             dict["updates"] = updates;
-            var op = tf._op_def_lib._apply_op_helper("ResourceScatterSub", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceScatterSub", name: name, keywords: dict);
             return op;
         }
 
@@ -26312,7 +26312,7 @@ namespace Tensorflow.Operations
             dict["resource"] = resource;
             dict["indices"] = indices;
             dict["updates"] = updates;
-            var op = tf._op_def_lib._apply_op_helper("ResourceScatterUpdate", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceScatterUpdate", name: name, keywords: dict);
             return op;
         }
 
@@ -26365,7 +26365,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyAdadelta", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyAdadelta", name: name, keywords: dict);
             return op;
         }
 
@@ -26417,7 +26417,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (update_slots.HasValue)
                 dict["update_slots"] = update_slots.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyAdagrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyAdagrad", name: name, keywords: dict);
             return op;
         }
 
@@ -26475,7 +26475,7 @@ namespace Tensorflow.Operations
             dict["global_step"] = global_step;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyAdagradDA", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyAdagradDA", name: name, keywords: dict);
             return op;
         }
 
@@ -26555,7 +26555,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyCenteredRMSProp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyCenteredRMSProp", name: name, keywords: dict);
             return op;
         }
 
@@ -26622,7 +26622,7 @@ namespace Tensorflow.Operations
             dict["lr_power"] = lr_power;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyFtrl", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyFtrl", name: name, keywords: dict);
             return op;
         }
 
@@ -26694,7 +26694,7 @@ namespace Tensorflow.Operations
             dict["lr_power"] = lr_power;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyFtrlV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyFtrlV2", name: name, keywords: dict);
             return op;
         }
 
@@ -26756,7 +26756,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (use_nesterov.HasValue)
                 dict["use_nesterov"] = use_nesterov.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyMomentum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyMomentum", name: name, keywords: dict);
             return op;
         }
 
@@ -26813,7 +26813,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyProximalAdagrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyProximalAdagrad", name: name, keywords: dict);
             return op;
         }
 
@@ -26864,7 +26864,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyProximalGradientDescent", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyProximalGradientDescent", name: name, keywords: dict);
             return op;
         }
 
@@ -26934,7 +26934,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceSparseApplyRMSProp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceSparseApplyRMSProp", name: name, keywords: dict);
             return op;
         }
 
@@ -26993,7 +26993,7 @@ namespace Tensorflow.Operations
                 dict["new_axis_mask"] = new_axis_mask.Value;
             if (shrink_axis_mask.HasValue)
                 dict["shrink_axis_mask"] = shrink_axis_mask.Value;
-            var op = tf._op_def_lib._apply_op_helper("ResourceStridedSliceAssign", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ResourceStridedSliceAssign", name: name, keywords: dict);
             return op;
         }
 
@@ -27049,7 +27049,7 @@ namespace Tensorflow.Operations
             dict["dt"] = dt;
             if (preferred_shard.HasValue)
                 dict["preferred_shard"] = preferred_shard.Value;
-            var op = tf._op_def_lib._apply_op_helper("Restore", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Restore", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27100,7 +27100,7 @@ namespace Tensorflow.Operations
             dict["dt"] = dt;
             if (preferred_shard.HasValue)
                 dict["preferred_shard"] = preferred_shard.Value;
-            var op = tf._op_def_lib._apply_op_helper("RestoreSlice", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RestoreSlice", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27152,7 +27152,7 @@ namespace Tensorflow.Operations
             dict["tensor_names"] = tensor_names;
             dict["shape_and_slices"] = shape_and_slices;
             dict["dtypes"] = dtypes;
-            var op = tf._op_def_lib._apply_op_helper("RestoreV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RestoreV2", name: name, keywords: dict);
             int _idx = 0;
             var tensors = Enumerable.Range(0, op.OutputListLength("tensors")).Select(_ => op.outputs[_idx++]).ToArray();
             return (tensors);
@@ -27225,7 +27225,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
             dict["dims"] = dims;
-            var op = tf._op_def_lib._apply_op_helper("Reverse", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Reverse", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27317,7 +27317,7 @@ namespace Tensorflow.Operations
             dict["seq_dim"] = seq_dim;
             if (batch_dim.HasValue)
                 dict["batch_dim"] = batch_dim.Value;
-            var op = tf._op_def_lib._apply_op_helper("ReverseSequence", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReverseSequence", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27391,7 +27391,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
             dict["axis"] = axis;
-            var op = tf._op_def_lib._apply_op_helper("ReverseV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ReverseV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27420,7 +27420,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("RightShift", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RightShift", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27450,7 +27450,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Rint", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Rint", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27508,7 +27508,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["shift"] = shift;
             dict["axis"] = axis;
-            var op = tf._op_def_lib._apply_op_helper("Roll", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Roll", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27531,7 +27531,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Round", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Round", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27635,7 +27635,7 @@ namespace Tensorflow.Operations
                 dict["fail_fast"] = fail_fast.Value;
             if (timeout_in_ms.HasValue)
                 dict["timeout_in_ms"] = timeout_in_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("Rpc", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Rpc", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27657,7 +27657,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Rsqrt", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Rsqrt", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27683,7 +27683,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
             dict["dy"] = dy;
-            var op = tf._op_def_lib._apply_op_helper("RsqrtGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("RsqrtGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -27801,7 +27801,7 @@ namespace Tensorflow.Operations
                 dict["max_attempts"] = max_attempts.Value;
             if (use_image_if_no_bounding_boxes.HasValue)
                 dict["use_image_if_no_bounding_boxes"] = use_image_if_no_bounding_boxes.Value;
-            var op = tf._op_def_lib._apply_op_helper("SampleDistortedBoundingBox", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SampleDistortedBoundingBox", name: name, keywords: dict);
             int _idx = 0;
             var begin = op.outputs[_idx++];
             var size = op.outputs[_idx++];
@@ -27922,7 +27922,7 @@ namespace Tensorflow.Operations
                 dict["max_attempts"] = max_attempts.Value;
             if (use_image_if_no_bounding_boxes.HasValue)
                 dict["use_image_if_no_bounding_boxes"] = use_image_if_no_bounding_boxes.Value;
-            var op = tf._op_def_lib._apply_op_helper("SampleDistortedBoundingBoxV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SampleDistortedBoundingBoxV2", name: name, keywords: dict);
             int _idx = 0;
             var begin = op.outputs[_idx++];
             var size = op.outputs[_idx++];
@@ -27961,7 +27961,7 @@ namespace Tensorflow.Operations
             dict["filename"] = filename;
             dict["tensor_names"] = tensor_names;
             dict["data"] = data;
-            var op = tf._op_def_lib._apply_op_helper("Save", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Save", name: name, keywords: dict);
             return op;
         }
 
@@ -28018,7 +28018,7 @@ namespace Tensorflow.Operations
             dict["tensor_names"] = tensor_names;
             dict["shapes_and_slices"] = shapes_and_slices;
             dict["data"] = data;
-            var op = tf._op_def_lib._apply_op_helper("SaveSlices", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SaveSlices", name: name, keywords: dict);
             return op;
         }
 
@@ -28057,7 +28057,7 @@ namespace Tensorflow.Operations
             dict["tensor_names"] = tensor_names;
             dict["shape_and_slices"] = shape_and_slices;
             dict["tensors"] = tensors;
-            var op = tf._op_def_lib._apply_op_helper("SaveV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SaveV2", name: name, keywords: dict);
             return op;
         }
 
@@ -28086,7 +28086,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["tags"] = tags;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("ScalarSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScalarSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28146,7 +28146,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterAdd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28204,7 +28204,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterDiv", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterDiv", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28264,7 +28264,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterMax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterMax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28324,7 +28324,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterMin", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterMin", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28382,7 +28382,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterMul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterMul", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28492,7 +28492,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             dict["updates"] = updates;
             dict["shape"] = shape;
-            var op = tf._op_def_lib._apply_op_helper("ScatterNd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterNd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28564,7 +28564,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterNdAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterNdAdd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28631,7 +28631,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["indices"] = indices;
             dict["updates"] = updates;
-            var op = tf._op_def_lib._apply_op_helper("ScatterNdNonAliasingAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterNdNonAliasingAdd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28703,7 +28703,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterNdSub", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterNdSub", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28779,7 +28779,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterNdUpdate", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterNdUpdate", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28839,7 +28839,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterSub", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterSub", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28904,7 +28904,7 @@ namespace Tensorflow.Operations
             dict["updates"] = updates;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("ScatterUpdate", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScatterUpdate", name: name, keywords: dict);
             return op.output;
         }
 
@@ -28926,7 +28926,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("SdcaFprint", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SdcaFprint", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29046,7 +29046,7 @@ namespace Tensorflow.Operations
             dict["num_inner_iterations"] = num_inner_iterations;
             if (adaptative.HasValue)
                 dict["adaptative"] = adaptative.Value;
-            var op = tf._op_def_lib._apply_op_helper("SdcaOptimizer", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SdcaOptimizer", name: name, keywords: dict);
             int _idx = 0;
             var out_example_state_data = op.outputs[_idx++];
             var out_delta_sparse_weights = Enumerable.Range(0, op.OutputListLength("out_delta_sparse_weights")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -29081,7 +29081,7 @@ namespace Tensorflow.Operations
             dict["weights"] = weights;
             dict["l1"] = l1;
             dict["l2"] = l2;
-            var op = tf._op_def_lib._apply_op_helper("SdcaShrinkL1", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SdcaShrinkL1", name: name, keywords: dict);
             return op;
         }
 
@@ -29122,7 +29122,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
             dict["segment_ids"] = segment_ids;
-            var op = tf._op_def_lib._apply_op_helper("SegmentMax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SegmentMax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29164,7 +29164,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
             dict["segment_ids"] = segment_ids;
-            var op = tf._op_def_lib._apply_op_helper("SegmentMean", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SegmentMean", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29205,7 +29205,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
             dict["segment_ids"] = segment_ids;
-            var op = tf._op_def_lib._apply_op_helper("SegmentMin", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SegmentMin", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29246,7 +29246,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
             dict["segment_ids"] = segment_ids;
-            var op = tf._op_def_lib._apply_op_helper("SegmentProd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SegmentProd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29287,7 +29287,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
             dict["segment_ids"] = segment_ids;
-            var op = tf._op_def_lib._apply_op_helper("SegmentSum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SegmentSum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29357,7 +29357,7 @@ namespace Tensorflow.Operations
             dict["condition"] = condition;
             dict["t"] = t;
             dict["e"] = e;
-            var op = tf._op_def_lib._apply_op_helper("Select", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Select", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29387,7 +29387,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("SelfAdjointEig", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SelfAdjointEig", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29429,7 +29429,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (compute_v.HasValue)
                 dict["compute_v"] = compute_v.Value;
-            var op = tf._op_def_lib._apply_op_helper("SelfAdjointEigV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SelfAdjointEigV2", name: name, keywords: dict);
             int _idx = 0;
             var e = op.outputs[_idx++];
             var v = op.outputs[_idx++];
@@ -29460,7 +29460,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("Selu", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Selu", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29486,7 +29486,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
             dict["outputs"] = outputs;
-            var op = tf._op_def_lib._apply_op_helper("SeluGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SeluGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29508,7 +29508,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["resource_handle"] = resource_handle;
-            var op = tf._op_def_lib._apply_op_helper("SerializeIterator", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SerializeIterator", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29551,7 +29551,7 @@ namespace Tensorflow.Operations
             dict["sparse_shape"] = sparse_shape;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("SerializeManySparse", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SerializeManySparse", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29585,7 +29585,7 @@ namespace Tensorflow.Operations
             dict["sparse_shape"] = sparse_shape;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("SerializeSparse", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SerializeSparse", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29606,7 +29606,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
-            var op = tf._op_def_lib._apply_op_helper("SerializeTensor", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SerializeTensor", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29649,7 +29649,7 @@ namespace Tensorflow.Operations
             dict["set_shape"] = set_shape;
             if (validate_indices.HasValue)
                 dict["validate_indices"] = validate_indices.Value;
-            var op = tf._op_def_lib._apply_op_helper("SetSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SetSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29682,7 +29682,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("Shape", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Shape", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29708,7 +29708,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("ShapeN", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ShapeN", name: name, keywords: dict);
             int _idx = 0;
             var output = Enumerable.Range(0, op.OutputListLength("output")).Select(_ => op.outputs[_idx++]).ToArray();
             return (output);
@@ -29738,7 +29738,7 @@ namespace Tensorflow.Operations
             dict["basename"] = basename;
             dict["shard"] = shard;
             dict["num_shards"] = num_shards;
-            var op = tf._op_def_lib._apply_op_helper("ShardedFilename", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ShardedFilename", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29760,7 +29760,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["basename"] = basename;
             dict["num_shards"] = num_shards;
-            var op = tf._op_def_lib._apply_op_helper("ShardedFilespec", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ShardedFilespec", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29811,7 +29811,7 @@ namespace Tensorflow.Operations
             dict["count"] = count;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("ShuffleAndRepeatDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ShuffleAndRepeatDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29863,7 +29863,7 @@ namespace Tensorflow.Operations
             dict["output_shapes"] = output_shapes;
             if (reshuffle_each_iteration.HasValue)
                 dict["reshuffle_each_iteration"] = reshuffle_each_iteration.Value;
-            var op = tf._op_def_lib._apply_op_helper("ShuffleDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ShuffleDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29882,7 +29882,7 @@ namespace Tensorflow.Operations
         public static Operation shutdown_distributed_t_p_u (string name = "ShutdownDistributedTPU")
         {
             var dict = new Dictionary<string, object>();
-            var op = tf._op_def_lib._apply_op_helper("ShutdownDistributedTPU", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ShutdownDistributedTPU", name: name, keywords: dict);
             return op;
         }
 
@@ -29904,7 +29904,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Sigmoid", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Sigmoid", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29930,7 +29930,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
             dict["dy"] = dy;
-            var op = tf._op_def_lib._apply_op_helper("SigmoidGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SigmoidGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29954,7 +29954,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Sign", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Sign", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29973,7 +29973,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Sin", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Sin", name: name, keywords: dict);
             return op.output;
         }
 
@@ -29992,7 +29992,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Sinh", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Sinh", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30015,7 +30015,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
-            var op = tf._op_def_lib._apply_op_helper("SinkDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SinkDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30049,7 +30049,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("Size", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Size", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30081,7 +30081,7 @@ namespace Tensorflow.Operations
             dict["count"] = count;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("SkipDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SkipDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30132,7 +30132,7 @@ namespace Tensorflow.Operations
                 dict["min_count"] = min_count.Value;
             if (subsample.HasValue)
                 dict["subsample"] = subsample.Value;
-            var op = tf._op_def_lib._apply_op_helper("Skipgram", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Skipgram", name: name, keywords: dict);
             int _idx = 0;
             var vocab_word = op.outputs[_idx++];
             var vocab_freq = op.outputs[_idx++];
@@ -30179,7 +30179,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["begin"] = begin;
             dict["size"] = size;
-            var op = tf._op_def_lib._apply_op_helper("Slice", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Slice", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30221,7 +30221,7 @@ namespace Tensorflow.Operations
             dict["window_stride"] = window_stride;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("SlideDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SlideDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30240,7 +30240,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("Snapshot", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Snapshot", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30266,7 +30266,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["logits"] = logits;
-            var op = tf._op_def_lib._apply_op_helper("Softmax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Softmax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30298,7 +30298,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
             dict["labels"] = labels;
-            var op = tf._op_def_lib._apply_op_helper("SoftmaxCrossEntropyWithLogits", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SoftmaxCrossEntropyWithLogits", name: name, keywords: dict);
             int _idx = 0;
             var loss = op.outputs[_idx++];
             var backprop = op.outputs[_idx++];
@@ -30320,7 +30320,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("Softplus", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Softplus", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30345,7 +30345,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("SoftplusGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SoftplusGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30364,7 +30364,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("Softsign", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Softsign", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30389,7 +30389,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
             dict["features"] = features;
-            var op = tf._op_def_lib._apply_op_helper("SoftsignGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SoftsignGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30510,7 +30510,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["paddings"] = paddings;
             dict["block_size"] = block_size;
-            var op = tf._op_def_lib._apply_op_helper("SpaceToBatch", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SpaceToBatch", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30656,7 +30656,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["block_shape"] = block_shape;
             dict["paddings"] = paddings;
-            var op = tf._op_def_lib._apply_op_helper("SpaceToBatchND", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SpaceToBatchND", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30769,7 +30769,7 @@ namespace Tensorflow.Operations
             dict["block_size"] = block_size;
             if (data_format != null)
                 dict["data_format"] = data_format;
-            var op = tf._op_def_lib._apply_op_helper("SpaceToDepth", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SpaceToDepth", name: name, keywords: dict);
             return op.output;
         }
 
@@ -30818,7 +30818,7 @@ namespace Tensorflow.Operations
             dict["gradient_values"] = gradient_values;
             dict["gradient_shape"] = gradient_shape;
             dict["has_known_shape"] = has_known_shape;
-            var op = tf._op_def_lib._apply_op_helper("SparseAccumulatorApplyGradient", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseAccumulatorApplyGradient", name: name, keywords: dict);
             return op;
         }
 
@@ -30860,7 +30860,7 @@ namespace Tensorflow.Operations
             dict["handle"] = handle;
             dict["num_required"] = num_required;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("SparseAccumulatorTakeGradient", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseAccumulatorTakeGradient", name: name, keywords: dict);
             int _idx = 0;
             var indices = op.outputs[_idx++];
             var values = op.outputs[_idx++];
@@ -30928,7 +30928,7 @@ namespace Tensorflow.Operations
             dict["b_values"] = b_values;
             dict["b_shape"] = b_shape;
             dict["thresh"] = thresh;
-            var op = tf._op_def_lib._apply_op_helper("SparseAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseAdd", name: name, keywords: dict);
             int _idx = 0;
             var sum_indices = op.outputs[_idx++];
             var sum_values = op.outputs[_idx++];
@@ -30977,7 +30977,7 @@ namespace Tensorflow.Operations
             dict["a_indices"] = a_indices;
             dict["b_indices"] = b_indices;
             dict["sum_indices"] = sum_indices;
-            var op = tf._op_def_lib._apply_op_helper("SparseAddGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseAddGrad", name: name, keywords: dict);
             int _idx = 0;
             var a_val_grad = op.outputs[_idx++];
             var b_val_grad = op.outputs[_idx++];
@@ -31034,7 +31034,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyAdadelta", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyAdadelta", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31087,7 +31087,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (update_slots.HasValue)
                 dict["update_slots"] = update_slots.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyAdagrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyAdagrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31146,7 +31146,7 @@ namespace Tensorflow.Operations
             dict["global_step"] = global_step;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyAdagradDA", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyAdagradDA", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31227,7 +31227,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyCenteredRMSProp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyCenteredRMSProp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31295,7 +31295,7 @@ namespace Tensorflow.Operations
             dict["lr_power"] = lr_power;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyFtrl", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyFtrl", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31368,7 +31368,7 @@ namespace Tensorflow.Operations
             dict["lr_power"] = lr_power;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyFtrlV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyFtrlV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31431,7 +31431,7 @@ namespace Tensorflow.Operations
                 dict["use_locking"] = use_locking.Value;
             if (use_nesterov.HasValue)
                 dict["use_nesterov"] = use_nesterov.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyMomentum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyMomentum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31489,7 +31489,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyProximalAdagrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyProximalAdagrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31541,7 +31541,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyProximalGradientDescent", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyProximalGradientDescent", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31612,7 +31612,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             if (use_locking.HasValue)
                 dict["use_locking"] = use_locking.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseApplyRMSProp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseApplyRMSProp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31693,7 +31693,7 @@ namespace Tensorflow.Operations
             dict["values"] = values;
             dict["shapes"] = shapes;
             dict["concat_dim"] = concat_dim;
-            var op = tf._op_def_lib._apply_op_helper("SparseConcat", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseConcat", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_values = op.outputs[_idx++];
@@ -31744,7 +31744,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("SparseConditionalAccumulator", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseConditionalAccumulator", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31845,7 +31845,7 @@ namespace Tensorflow.Operations
             dict["hash_key"] = hash_key;
             dict["out_type"] = out_type;
             dict["internal_type"] = internal_type;
-            var op = tf._op_def_lib._apply_op_helper("SparseCross", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseCross", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_values = op.outputs[_idx++];
@@ -31893,7 +31893,7 @@ namespace Tensorflow.Operations
             dict["sp_values"] = sp_values;
             dict["sp_shape"] = sp_shape;
             dict["dense"] = dense;
-            var op = tf._op_def_lib._apply_op_helper("SparseDenseCwiseAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseDenseCwiseAdd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31931,7 +31931,7 @@ namespace Tensorflow.Operations
             dict["sp_values"] = sp_values;
             dict["sp_shape"] = sp_shape;
             dict["dense"] = dense;
-            var op = tf._op_def_lib._apply_op_helper("SparseDenseCwiseDiv", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseDenseCwiseDiv", name: name, keywords: dict);
             return op.output;
         }
 
@@ -31973,7 +31973,7 @@ namespace Tensorflow.Operations
             dict["sp_values"] = sp_values;
             dict["sp_shape"] = sp_shape;
             dict["dense"] = dense;
-            var op = tf._op_def_lib._apply_op_helper("SparseDenseCwiseMul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseDenseCwiseMul", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32051,7 +32051,7 @@ namespace Tensorflow.Operations
             dict["values"] = values;
             dict["dense_shape"] = dense_shape;
             dict["default_value"] = default_value;
-            var op = tf._op_def_lib._apply_op_helper("SparseFillEmptyRows", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseFillEmptyRows", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_values = op.outputs[_idx++];
@@ -32093,7 +32093,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["reverse_index_map"] = reverse_index_map;
             dict["grad_values"] = grad_values;
-            var op = tf._op_def_lib._apply_op_helper("SparseFillEmptyRowsGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseFillEmptyRowsGrad", name: name, keywords: dict);
             int _idx = 0;
             var d_values = op.outputs[_idx++];
             var d_default_value = op.outputs[_idx++];
@@ -32145,7 +32145,7 @@ namespace Tensorflow.Operations
                 dict["a_is_sparse"] = a_is_sparse.Value;
             if (b_is_sparse.HasValue)
                 dict["b_is_sparse"] = b_is_sparse.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseMatMul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseMatMul", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32198,7 +32198,7 @@ namespace Tensorflow.Operations
             dict["reduction_axes"] = reduction_axes;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseReduceMax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseReduceMax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32254,7 +32254,7 @@ namespace Tensorflow.Operations
             dict["reduction_axes"] = reduction_axes;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseReduceMaxSparse", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseReduceMaxSparse", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_values = op.outputs[_idx++];
@@ -32311,7 +32311,7 @@ namespace Tensorflow.Operations
             dict["reduction_axes"] = reduction_axes;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseReduceSum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseReduceSum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32367,7 +32367,7 @@ namespace Tensorflow.Operations
             dict["reduction_axes"] = reduction_axes;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseReduceSumSparse", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseReduceSumSparse", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_values = op.outputs[_idx++];
@@ -32414,7 +32414,7 @@ namespace Tensorflow.Operations
             dict["input_indices"] = input_indices;
             dict["input_values"] = input_values;
             dict["input_shape"] = input_shape;
-            var op = tf._op_def_lib._apply_op_helper("SparseReorder", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseReorder", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_values = op.outputs[_idx++];
@@ -32469,7 +32469,7 @@ namespace Tensorflow.Operations
             dict["input_indices"] = input_indices;
             dict["input_shape"] = input_shape;
             dict["new_shape"] = new_shape;
-            var op = tf._op_def_lib._apply_op_helper("SparseReshape", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseReshape", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_shape = op.outputs[_idx++];
@@ -32509,7 +32509,7 @@ namespace Tensorflow.Operations
             dict["data"] = data;
             dict["indices"] = indices;
             dict["segment_ids"] = segment_ids;
-            var op = tf._op_def_lib._apply_op_helper("SparseSegmentMean", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSegmentMean", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32545,7 +32545,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             dict["segment_ids"] = segment_ids;
             dict["output_dim0"] = output_dim0;
-            var op = tf._op_def_lib._apply_op_helper("SparseSegmentMeanGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSegmentMeanGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32586,7 +32586,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             dict["segment_ids"] = segment_ids;
             dict["num_segments"] = num_segments;
-            var op = tf._op_def_lib._apply_op_helper("SparseSegmentMeanWithNumSegments", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSegmentMeanWithNumSegments", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32622,7 +32622,7 @@ namespace Tensorflow.Operations
             dict["data"] = data;
             dict["indices"] = indices;
             dict["segment_ids"] = segment_ids;
-            var op = tf._op_def_lib._apply_op_helper("SparseSegmentSqrtN", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSegmentSqrtN", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32658,7 +32658,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             dict["segment_ids"] = segment_ids;
             dict["output_dim0"] = output_dim0;
-            var op = tf._op_def_lib._apply_op_helper("SparseSegmentSqrtNGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSegmentSqrtNGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32701,7 +32701,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             dict["segment_ids"] = segment_ids;
             dict["num_segments"] = num_segments;
-            var op = tf._op_def_lib._apply_op_helper("SparseSegmentSqrtNWithNumSegments", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSegmentSqrtNWithNumSegments", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32761,7 +32761,7 @@ namespace Tensorflow.Operations
             dict["data"] = data;
             dict["indices"] = indices;
             dict["segment_ids"] = segment_ids;
-            var op = tf._op_def_lib._apply_op_helper("SparseSegmentSum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSegmentSum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32823,7 +32823,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             dict["segment_ids"] = segment_ids;
             dict["num_segments"] = num_segments;
-            var op = tf._op_def_lib._apply_op_helper("SparseSegmentSumWithNumSegments", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSegmentSumWithNumSegments", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32884,7 +32884,7 @@ namespace Tensorflow.Operations
             dict["shape"] = shape;
             dict["start"] = start;
             dict["size"] = size;
-            var op = tf._op_def_lib._apply_op_helper("SparseSlice", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSlice", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_values = op.outputs[_idx++];
@@ -32927,7 +32927,7 @@ namespace Tensorflow.Operations
             dict["input_indices"] = input_indices;
             dict["input_start"] = input_start;
             dict["output_indices"] = output_indices;
-            var op = tf._op_def_lib._apply_op_helper("SparseSliceGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSliceGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -32974,7 +32974,7 @@ namespace Tensorflow.Operations
             dict["sp_indices"] = sp_indices;
             dict["sp_values"] = sp_values;
             dict["sp_shape"] = sp_shape;
-            var op = tf._op_def_lib._apply_op_helper("SparseSoftmax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSoftmax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33010,7 +33010,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
             dict["labels"] = labels;
-            var op = tf._op_def_lib._apply_op_helper("SparseSoftmaxCrossEntropyWithLogits", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSoftmaxCrossEntropyWithLogits", name: name, keywords: dict);
             int _idx = 0;
             var loss = op.outputs[_idx++];
             var backprop = op.outputs[_idx++];
@@ -33060,7 +33060,7 @@ namespace Tensorflow.Operations
             dict["b_indices"] = b_indices;
             dict["b_values"] = b_values;
             dict["b_shape"] = b_shape;
-            var op = tf._op_def_lib._apply_op_helper("SparseSparseMaximum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSparseMaximum", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_values = op.outputs[_idx++];
@@ -33110,7 +33110,7 @@ namespace Tensorflow.Operations
             dict["b_indices"] = b_indices;
             dict["b_values"] = b_values;
             dict["b_shape"] = b_shape;
-            var op = tf._op_def_lib._apply_op_helper("SparseSparseMinimum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSparseMinimum", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = op.outputs[_idx++];
             var output_values = op.outputs[_idx++];
@@ -33178,7 +33178,7 @@ namespace Tensorflow.Operations
             dict["values"] = values;
             dict["shape"] = shape;
             dict["num_split"] = num_split;
-            var op = tf._op_def_lib._apply_op_helper("SparseSplit", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseSplit", name: name, keywords: dict);
             int _idx = 0;
             var output_indices = Enumerable.Range(0, op.OutputListLength("output_indices")).Select(_ => op.outputs[_idx++]).ToArray();
             var output_values = Enumerable.Range(0, op.OutputListLength("output_values")).Select(_ => op.outputs[_idx++]).ToArray();
@@ -33217,7 +33217,7 @@ namespace Tensorflow.Operations
             dict["a_values"] = a_values;
             dict["a_shape"] = a_shape;
             dict["b"] = b;
-            var op = tf._op_def_lib._apply_op_helper("SparseTensorDenseAdd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseTensorDenseAdd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33272,7 +33272,7 @@ namespace Tensorflow.Operations
                 dict["adjoint_a"] = adjoint_a.Value;
             if (adjoint_b.HasValue)
                 dict["adjoint_b"] = adjoint_b.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseTensorDenseMatMul", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseTensorDenseMatMul", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33297,7 +33297,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             dict["values"] = values;
             dict["dense_shape"] = dense_shape;
-            var op = tf._op_def_lib._apply_op_helper("SparseTensorSliceDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseTensorSliceDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33360,7 +33360,7 @@ namespace Tensorflow.Operations
             dict["default_value"] = default_value;
             if (validate_indices.HasValue)
                 dict["validate_indices"] = validate_indices.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseToDense", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseToDense", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33447,7 +33447,7 @@ namespace Tensorflow.Operations
             dict["set_operation"] = set_operation;
             if (validate_indices.HasValue)
                 dict["validate_indices"] = validate_indices.Value;
-            var op = tf._op_def_lib._apply_op_helper("SparseToSparseSetOperation", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SparseToSparseSetOperation", name: name, keywords: dict);
             int _idx = 0;
             var result_indices = op.outputs[_idx++];
             var result_values = op.outputs[_idx++];
@@ -33485,7 +33485,7 @@ namespace Tensorflow.Operations
             dict["split_dim"] = split_dim;
             dict["value"] = value;
             dict["num_split"] = num_split;
-            var op = tf._op_def_lib._apply_op_helper("Split", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Split", name: name, keywords: dict);
             int _idx = 0;
             var output = Enumerable.Range(0, op.OutputListLength("output")).Select(_ => op.outputs[_idx++]).ToArray();
             return (output);
@@ -33525,7 +33525,7 @@ namespace Tensorflow.Operations
             dict["size_splits"] = size_splits;
             dict["split_dim"] = split_dim;
             dict["num_split"] = num_split;
-            var op = tf._op_def_lib._apply_op_helper("SplitV", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SplitV", name: name, keywords: dict);
             int _idx = 0;
             var output = Enumerable.Range(0, op.OutputListLength("output")).Select(_ => op.outputs[_idx++]).ToArray();
             return (output);
@@ -33563,7 +33563,7 @@ namespace Tensorflow.Operations
             dict["query"] = query;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("SqlDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SqlDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33585,7 +33585,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Sqrt", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Sqrt", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33611,7 +33611,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
             dict["dy"] = dy;
-            var op = tf._op_def_lib._apply_op_helper("SqrtGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SqrtGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33633,7 +33633,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Square", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Square", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33659,7 +33659,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("SquaredDifference", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("SquaredDifference", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33708,7 +33708,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (squeeze_dims != null)
                 dict["squeeze_dims"] = squeeze_dims;
-            var op = tf._op_def_lib._apply_op_helper("Squeeze", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Squeeze", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33732,7 +33732,7 @@ namespace Tensorflow.Operations
             dict["elem_type"] = elem_type;
             if (stack_name != null)
                 dict["stack_name"] = stack_name;
-            var op = tf._op_def_lib._apply_op_helper("Stack", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Stack", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33751,7 +33751,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("StackClose", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StackClose", name: name, keywords: dict);
             return op;
         }
 
@@ -33771,7 +33771,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("StackCloseV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StackCloseV2", name: name, keywords: dict);
             return op;
         }
 
@@ -33794,7 +33794,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
             dict["elem_type"] = elem_type;
-            var op = tf._op_def_lib._apply_op_helper("StackPop", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StackPop", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33820,7 +33820,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
             dict["elem_type"] = elem_type;
-            var op = tf._op_def_lib._apply_op_helper("StackPopV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StackPopV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33846,7 +33846,7 @@ namespace Tensorflow.Operations
             dict["elem"] = elem;
             if (swap_memory.HasValue)
                 dict["swap_memory"] = swap_memory.Value;
-            var op = tf._op_def_lib._apply_op_helper("StackPush", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StackPush", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33876,7 +33876,7 @@ namespace Tensorflow.Operations
             dict["elem"] = elem;
             if (swap_memory.HasValue)
                 dict["swap_memory"] = swap_memory.Value;
-            var op = tf._op_def_lib._apply_op_helper("StackPushV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StackPushV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33909,7 +33909,7 @@ namespace Tensorflow.Operations
             dict["elem_type"] = elem_type;
             if (stack_name != null)
                 dict["stack_name"] = stack_name;
-            var op = tf._op_def_lib._apply_op_helper("StackV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StackV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -33957,7 +33957,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("Stage", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Stage", name: name, keywords: dict);
             return op;
         }
 
@@ -33993,7 +33993,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("StageClear", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StageClear", name: name, keywords: dict);
             return op;
         }
 
@@ -34037,7 +34037,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("StagePeek", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StagePeek", name: name, keywords: dict);
             int _idx = 0;
             var values = Enumerable.Range(0, op.OutputListLength("values")).Select(_ => op.outputs[_idx++]).ToArray();
             return (values);
@@ -34075,7 +34075,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("StageSize", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StageSize", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34110,7 +34110,7 @@ namespace Tensorflow.Operations
             dict["seed"] = seed;
             if (output_dtype.HasValue)
                 dict["output_dtype"] = output_dtype.Value;
-            var op = tf._op_def_lib._apply_op_helper("StatelessMultinomial", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StatelessMultinomial", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34145,7 +34145,7 @@ namespace Tensorflow.Operations
             dict["seed"] = seed;
             if (dtype.HasValue)
                 dict["dtype"] = dtype.Value;
-            var op = tf._op_def_lib._apply_op_helper("StatelessRandomNormal", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StatelessRandomNormal", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34181,7 +34181,7 @@ namespace Tensorflow.Operations
             dict["seed"] = seed;
             if (dtype.HasValue)
                 dict["dtype"] = dtype.Value;
-            var op = tf._op_def_lib._apply_op_helper("StatelessRandomUniform", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StatelessRandomUniform", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34218,7 +34218,7 @@ namespace Tensorflow.Operations
             dict["seed"] = seed;
             if (dtype.HasValue)
                 dict["dtype"] = dtype.Value;
-            var op = tf._op_def_lib._apply_op_helper("StatelessTruncatedNormal", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StatelessTruncatedNormal", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34258,7 +34258,7 @@ namespace Tensorflow.Operations
             dict["rewrite"] = rewrite;
             if (replace_global.HasValue)
                 dict["replace_global"] = replace_global.Value;
-            var op = tf._op_def_lib._apply_op_helper("StaticRegexReplace", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StaticRegexReplace", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34282,7 +34282,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("StatsAggregatorHandle", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StatsAggregatorHandle", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34301,7 +34301,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["iterator"] = iterator;
-            var op = tf._op_def_lib._apply_op_helper("StatsAggregatorSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StatsAggregatorSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34341,7 +34341,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("StopGradient", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StopGradient", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34512,7 +34512,7 @@ namespace Tensorflow.Operations
                 dict["new_axis_mask"] = new_axis_mask.Value;
             if (shrink_axis_mask.HasValue)
                 dict["shrink_axis_mask"] = shrink_axis_mask.Value;
-            var op = tf._op_def_lib._apply_op_helper("StridedSlice", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StridedSlice", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34571,7 +34571,7 @@ namespace Tensorflow.Operations
                 dict["new_axis_mask"] = new_axis_mask.Value;
             if (shrink_axis_mask.HasValue)
                 dict["shrink_axis_mask"] = shrink_axis_mask.Value;
-            var op = tf._op_def_lib._apply_op_helper("StridedSliceAssign", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StridedSliceAssign", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34632,7 +34632,7 @@ namespace Tensorflow.Operations
                 dict["new_axis_mask"] = new_axis_mask.Value;
             if (shrink_axis_mask.HasValue)
                 dict["shrink_axis_mask"] = shrink_axis_mask.Value;
-            var op = tf._op_def_lib._apply_op_helper("StridedSliceGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StridedSliceGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34662,7 +34662,7 @@ namespace Tensorflow.Operations
             dict["inputs"] = inputs;
             if (separator != null)
                 dict["separator"] = separator;
-            var op = tf._op_def_lib._apply_op_helper("StringJoin", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StringJoin", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34719,7 +34719,7 @@ namespace Tensorflow.Operations
             dict["delimiter"] = delimiter;
             if (skip_empty.HasValue)
                 dict["skip_empty"] = skip_empty.Value;
-            var op = tf._op_def_lib._apply_op_helper("StringSplit", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StringSplit", name: name, keywords: dict);
             int _idx = 0;
             var indices = op.outputs[_idx++];
             var values = op.outputs[_idx++];
@@ -34782,7 +34782,7 @@ namespace Tensorflow.Operations
             dict["sep"] = sep;
             if (maxsplit.HasValue)
                 dict["maxsplit"] = maxsplit.Value;
-            var op = tf._op_def_lib._apply_op_helper("StringSplitV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StringSplitV2", name: name, keywords: dict);
             int _idx = 0;
             var indices = op.outputs[_idx++];
             var values = op.outputs[_idx++];
@@ -34807,7 +34807,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("StringStrip", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StringStrip", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34840,7 +34840,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["string_tensor"] = string_tensor;
             dict["num_buckets"] = num_buckets;
-            var op = tf._op_def_lib._apply_op_helper("StringToHashBucket", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StringToHashBucket", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34874,7 +34874,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["num_buckets"] = num_buckets;
-            var op = tf._op_def_lib._apply_op_helper("StringToHashBucketFast", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StringToHashBucketFast", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34918,7 +34918,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["num_buckets"] = num_buckets;
             dict["key"] = key;
-            var op = tf._op_def_lib._apply_op_helper("StringToHashBucketStrong", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StringToHashBucketStrong", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34947,7 +34947,7 @@ namespace Tensorflow.Operations
             dict["string_tensor"] = string_tensor;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("StringToNumber", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("StringToNumber", name: name, keywords: dict);
             return op.output;
         }
 
@@ -34973,7 +34973,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("Sub", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Sub", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35079,7 +35079,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["pos"] = pos;
             dict["len"] = len;
-            var op = tf._op_def_lib._apply_op_helper("Substr", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Substr", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35116,7 +35116,7 @@ namespace Tensorflow.Operations
             dict["reduction_indices"] = reduction_indices;
             if (keep_dims.HasValue)
                 dict["keep_dims"] = keep_dims.Value;
-            var op = tf._op_def_lib._apply_op_helper("Sum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Sum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35172,7 +35172,7 @@ namespace Tensorflow.Operations
                 dict["compute_uv"] = compute_uv.Value;
             if (full_matrices.HasValue)
                 dict["full_matrices"] = full_matrices.Value;
-            var op = tf._op_def_lib._apply_op_helper("Svd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Svd", name: name, keywords: dict);
             int _idx = 0;
             var s = op.outputs[_idx++];
             var u = op.outputs[_idx++];
@@ -35209,7 +35209,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
             dict["pred"] = pred;
-            var op = tf._op_def_lib._apply_op_helper("Switch", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Switch", name: name, keywords: dict);
             int _idx = 0;
             var output_false = op.outputs[_idx++];
             var output_true = op.outputs[_idx++];
@@ -35243,7 +35243,7 @@ namespace Tensorflow.Operations
             dict["filenames"] = filenames;
             dict["compression_type"] = compression_type;
             dict["buffer_size"] = buffer_size;
-            var op = tf._op_def_lib._apply_op_helper("TFRecordDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TFRecordDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35276,7 +35276,7 @@ namespace Tensorflow.Operations
                 dict["shared_name"] = shared_name;
             if (compression_type != null)
                 dict["compression_type"] = compression_type;
-            var op = tf._op_def_lib._apply_op_helper("TFRecordReader", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TFRecordReader", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35309,7 +35309,7 @@ namespace Tensorflow.Operations
                 dict["shared_name"] = shared_name;
             if (compression_type != null)
                 dict["compression_type"] = compression_type;
-            var op = tf._op_def_lib._apply_op_helper("TFRecordReaderV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TFRecordReaderV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35352,7 +35352,7 @@ namespace Tensorflow.Operations
             dict["sliced_activations"] = sliced_activations;
             dict["table_id"] = table_id;
             dict["lookup_id"] = lookup_id;
-            var op = tf._op_def_lib._apply_op_helper("TPUEmbeddingActivations", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUEmbeddingActivations", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35407,7 +35407,7 @@ namespace Tensorflow.Operations
             dict["aggregation_weights"] = aggregation_weights;
             if (device_ordinal.HasValue)
                 dict["device_ordinal"] = device_ordinal.Value;
-            var op = tf._op_def_lib._apply_op_helper("TPUEmbeddingEnqueueSparseBatch", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUEmbeddingEnqueueSparseBatch", name: name, keywords: dict);
             return op;
         }
 
@@ -35458,7 +35458,7 @@ namespace Tensorflow.Operations
             dict["table_id"] = table_id;
             dict["num_hosts"] = num_hosts;
             dict["host_id"] = host_id;
-            var op = tf._op_def_lib._apply_op_helper("TPUEmbeddingLoadAdagradParameters", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUEmbeddingLoadAdagradParameters", name: name, keywords: dict);
             return op;
         }
 
@@ -35504,7 +35504,7 @@ namespace Tensorflow.Operations
             dict["table_id"] = table_id;
             dict["num_hosts"] = num_hosts;
             dict["host_id"] = host_id;
-            var op = tf._op_def_lib._apply_op_helper("TPUEmbeddingLoadGradientDescentParameters", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUEmbeddingLoadGradientDescentParameters", name: name, keywords: dict);
             return op;
         }
 
@@ -35541,7 +35541,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["num_tables"] = num_tables;
             dict["tpu_embedding_config"] = tpu_embedding_config;
-            var op = tf._op_def_lib._apply_op_helper("TPUEmbeddingReceiveActivations", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUEmbeddingReceiveActivations", name: name, keywords: dict);
             int _idx = 0;
             var outputs = Enumerable.Range(0, op.OutputListLength("outputs")).Select(_ => op.outputs[_idx++]).ToArray();
             return (outputs);
@@ -35587,7 +35587,7 @@ namespace Tensorflow.Operations
             dict["table_id"] = table_id;
             dict["num_hosts"] = num_hosts;
             dict["host_id"] = host_id;
-            var op = tf._op_def_lib._apply_op_helper("TPUEmbeddingRetrieveAdagradParameters", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUEmbeddingRetrieveAdagradParameters", name: name, keywords: dict);
             int _idx = 0;
             var parameters = op.outputs[_idx++];
             var accumulators = op.outputs[_idx++];
@@ -35631,7 +35631,7 @@ namespace Tensorflow.Operations
             dict["table_id"] = table_id;
             dict["num_hosts"] = num_hosts;
             dict["host_id"] = host_id;
-            var op = tf._op_def_lib._apply_op_helper("TPUEmbeddingRetrieveGradientDescentParameters", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUEmbeddingRetrieveGradientDescentParameters", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35663,7 +35663,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
             dict["tpu_embedding_config"] = tpu_embedding_config;
-            var op = tf._op_def_lib._apply_op_helper("TPUEmbeddingSendGradients", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUEmbeddingSendGradients", name: name, keywords: dict);
             return op;
         }
 
@@ -35682,7 +35682,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
-            var op = tf._op_def_lib._apply_op_helper("TPUReplicatedInput", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUReplicatedInput", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35705,7 +35705,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["num_replicas"] = num_replicas;
-            var op = tf._op_def_lib._apply_op_helper("TPUReplicatedOutput", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TPUReplicatedOutput", name: name, keywords: dict);
             int _idx = 0;
             var outputs = Enumerable.Range(0, op.OutputListLength("outputs")).Select(_ => op.outputs[_idx++]).ToArray();
             return (outputs);
@@ -35740,7 +35740,7 @@ namespace Tensorflow.Operations
             dict["count"] = count;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("TakeDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TakeDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35833,7 +35833,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("TakeManySparseFromTensorsMap", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TakeManySparseFromTensorsMap", name: name, keywords: dict);
             int _idx = 0;
             var sparse_indices = op.outputs[_idx++];
             var sparse_values = op.outputs[_idx++];
@@ -35856,7 +35856,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Tan", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Tan", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35875,7 +35875,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("Tanh", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Tanh", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35901,7 +35901,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
             dict["dy"] = dy;
-            var op = tf._op_def_lib._apply_op_helper("TanhGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TanhGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35950,7 +35950,7 @@ namespace Tensorflow.Operations
             dict["dtype"] = dtype;
             if (var_name != null)
                 dict["var_name"] = var_name;
-            var op = tf._op_def_lib._apply_op_helper("TemporaryVariable", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TemporaryVariable", name: name, keywords: dict);
             return op.output;
         }
 
@@ -35969,7 +35969,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayCloseV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayCloseV2", name: name, keywords: dict);
             return op;
         }
 
@@ -35993,7 +35993,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayCloseV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayCloseV3", name: name, keywords: dict);
             return op;
         }
 
@@ -36026,7 +36026,7 @@ namespace Tensorflow.Operations
             dict["dtype"] = dtype;
             if (element_shape_except0 != null)
                 dict["element_shape_except0"] = element_shape_except0;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayConcatV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayConcatV2", name: name, keywords: dict);
             int _idx = 0;
             var value = op.outputs[_idx++];
             var lengths = op.outputs[_idx++];
@@ -36087,7 +36087,7 @@ namespace Tensorflow.Operations
             dict["dtype"] = dtype;
             if (element_shape_except0 != null)
                 dict["element_shape_except0"] = element_shape_except0;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayConcatV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayConcatV3", name: name, keywords: dict);
             int _idx = 0;
             var value = op.outputs[_idx++];
             var lengths = op.outputs[_idx++];
@@ -36123,7 +36123,7 @@ namespace Tensorflow.Operations
             dict["dtype"] = dtype;
             if (element_shape != null)
                 dict["element_shape"] = element_shape;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayGatherV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayGatherV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36168,7 +36168,7 @@ namespace Tensorflow.Operations
             dict["dtype"] = dtype;
             if (element_shape != null)
                 dict["element_shape"] = element_shape;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayGatherV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayGatherV3", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36194,7 +36194,7 @@ namespace Tensorflow.Operations
             dict["handle"] = handle;
             dict["flow_in"] = flow_in;
             dict["source"] = source;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayGradV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayGradV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36265,7 +36265,7 @@ namespace Tensorflow.Operations
             dict["handle"] = handle;
             dict["flow_in"] = flow_in;
             dict["source"] = source;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayGradV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayGradV3", name: name, keywords: dict);
             int _idx = 0;
             var grad_handle = op.outputs[_idx++];
             var flow_out = op.outputs[_idx++];
@@ -36313,7 +36313,7 @@ namespace Tensorflow.Operations
             dict["flow_in"] = flow_in;
             dict["shape_to_prepend"] = shape_to_prepend;
             dict["source"] = source;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayGradWithShape", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayGradWithShape", name: name, keywords: dict);
             int _idx = 0;
             var grad_handle = op.outputs[_idx++];
             var flow_out = op.outputs[_idx++];
@@ -36345,7 +36345,7 @@ namespace Tensorflow.Operations
             dict["index"] = index;
             dict["flow_in"] = flow_in;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayReadV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayReadV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36378,7 +36378,7 @@ namespace Tensorflow.Operations
             dict["index"] = index;
             dict["flow_in"] = flow_in;
             dict["dtype"] = dtype;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayReadV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayReadV3", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36406,7 +36406,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             dict["value"] = value;
             dict["flow_in"] = flow_in;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayScatterV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayScatterV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36442,7 +36442,7 @@ namespace Tensorflow.Operations
             dict["indices"] = indices;
             dict["value"] = value;
             dict["flow_in"] = flow_in;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayScatterV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayScatterV3", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36464,7 +36464,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
             dict["flow_in"] = flow_in;
-            var op = tf._op_def_lib._apply_op_helper("TensorArraySizeV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArraySizeV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36489,7 +36489,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
             dict["flow_in"] = flow_in;
-            var op = tf._op_def_lib._apply_op_helper("TensorArraySizeV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArraySizeV3", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36517,7 +36517,7 @@ namespace Tensorflow.Operations
             dict["value"] = value;
             dict["lengths"] = lengths;
             dict["flow_in"] = flow_in;
-            var op = tf._op_def_lib._apply_op_helper("TensorArraySplitV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArraySplitV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36577,7 +36577,7 @@ namespace Tensorflow.Operations
             dict["value"] = value;
             dict["lengths"] = lengths;
             dict["flow_in"] = flow_in;
-            var op = tf._op_def_lib._apply_op_helper("TensorArraySplitV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArraySplitV3", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36616,7 +36616,7 @@ namespace Tensorflow.Operations
                 dict["clear_after_read"] = clear_after_read.Value;
             if (tensor_array_name != null)
                 dict["tensor_array_name"] = tensor_array_name;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36684,7 +36684,7 @@ namespace Tensorflow.Operations
                 dict["identical_element_shapes"] = identical_element_shapes.Value;
             if (tensor_array_name != null)
                 dict["tensor_array_name"] = tensor_array_name;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayV3", name: name, keywords: dict);
             int _idx = 0;
             var handle = op.outputs[_idx++];
             var flow = op.outputs[_idx++];
@@ -36715,7 +36715,7 @@ namespace Tensorflow.Operations
             dict["index"] = index;
             dict["value"] = value;
             dict["flow_in"] = flow_in;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayWriteV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayWriteV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36748,7 +36748,7 @@ namespace Tensorflow.Operations
             dict["index"] = index;
             dict["value"] = value;
             dict["flow_in"] = flow_in;
-            var op = tf._op_def_lib._apply_op_helper("TensorArrayWriteV3", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorArrayWriteV3", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36771,7 +36771,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["components"] = components;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("TensorDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36798,7 +36798,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
             dict["shape_type"] = shape_type;
-            var op = tf._op_def_lib._apply_op_helper("TensorListElementShape", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListElementShape", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36826,7 +36826,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
             dict["element_shape"] = element_shape;
-            var op = tf._op_def_lib._apply_op_helper("TensorListFromTensor", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListFromTensor", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36860,7 +36860,7 @@ namespace Tensorflow.Operations
             dict["input_handle"] = input_handle;
             dict["indices"] = indices;
             dict["element_dtype"] = element_dtype;
-            var op = tf._op_def_lib._apply_op_helper("TensorListGather", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListGather", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36893,7 +36893,7 @@ namespace Tensorflow.Operations
             dict["input_handle"] = input_handle;
             dict["index"] = index;
             dict["element_dtype"] = element_dtype;
-            var op = tf._op_def_lib._apply_op_helper("TensorListGetItem", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListGetItem", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36916,7 +36916,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
-            var op = tf._op_def_lib._apply_op_helper("TensorListLength", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListLength", name: name, keywords: dict);
             return op.output;
         }
 
@@ -36950,7 +36950,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
             dict["element_dtype"] = element_dtype;
-            var op = tf._op_def_lib._apply_op_helper("TensorListPopBack", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListPopBack", name: name, keywords: dict);
             int _idx = 0;
             var output_handle = op.outputs[_idx++];
             var tensor = op.outputs[_idx++];
@@ -36982,7 +36982,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
             dict["tensor"] = tensor;
-            var op = tf._op_def_lib._apply_op_helper("TensorListPushBack", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListPushBack", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37014,7 +37014,7 @@ namespace Tensorflow.Operations
             dict["element_shape"] = element_shape;
             dict["num_elements"] = num_elements;
             dict["element_dtype"] = element_dtype;
-            var op = tf._op_def_lib._apply_op_helper("TensorListReserve", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListReserve", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37049,7 +37049,7 @@ namespace Tensorflow.Operations
             dict["tensor"] = tensor;
             dict["indices"] = indices;
             dict["element_shape"] = element_shape;
-            var op = tf._op_def_lib._apply_op_helper("TensorListScatter", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListScatter", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37081,7 +37081,7 @@ namespace Tensorflow.Operations
             dict["input_handle"] = input_handle;
             dict["index"] = index;
             dict["item"] = item;
-            var op = tf._op_def_lib._apply_op_helper("TensorListSetItem", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListSetItem", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37116,7 +37116,7 @@ namespace Tensorflow.Operations
             dict["element_dtype"] = element_dtype;
             if (num_elements.HasValue)
                 dict["num_elements"] = num_elements.Value;
-            var op = tf._op_def_lib._apply_op_helper("TensorListStack", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorListStack", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37139,7 +37139,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["components"] = components;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("TensorSliceDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorSliceDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37179,7 +37179,7 @@ namespace Tensorflow.Operations
                 dict["labels"] = labels;
             if (display_name != null)
                 dict["display_name"] = display_name;
-            var op = tf._op_def_lib._apply_op_helper("TensorSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37208,7 +37208,7 @@ namespace Tensorflow.Operations
             dict["tag"] = tag;
             dict["tensor"] = tensor;
             dict["serialized_summary_metadata"] = serialized_summary_metadata;
-            var op = tf._op_def_lib._apply_op_helper("TensorSummaryV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TensorSummaryV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37238,7 +37238,7 @@ namespace Tensorflow.Operations
             dict["filenames"] = filenames;
             dict["compression_type"] = compression_type;
             dict["buffer_size"] = buffer_size;
-            var op = tf._op_def_lib._apply_op_helper("TextLineDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TextLineDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37272,7 +37272,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("TextLineReader", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TextLineReader", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37306,7 +37306,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("TextLineReaderV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TextLineReaderV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37382,7 +37382,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("ThreadUnsafeUnigramCandidateSampler", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ThreadUnsafeUnigramCandidateSampler", name: name, keywords: dict);
             int _idx = 0;
             var sampled_candidates = op.outputs[_idx++];
             var true_expected_count = op.outputs[_idx++];
@@ -37417,7 +37417,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["multiples"] = multiples;
-            var op = tf._op_def_lib._apply_op_helper("Tile", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Tile", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37444,7 +37444,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["multiples"] = multiples;
-            var op = tf._op_def_lib._apply_op_helper("TileGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TileGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37466,7 +37466,7 @@ namespace Tensorflow.Operations
         public static Tensor timestamp (string name = "Timestamp")
         {
             var dict = new Dictionary<string, object>();
-            var op = tf._op_def_lib._apply_op_helper("Timestamp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Timestamp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37515,7 +37515,7 @@ namespace Tensorflow.Operations
             dict["k"] = k;
             if (sorted.HasValue)
                 dict["sorted"] = sorted.Value;
-            var op = tf._op_def_lib._apply_op_helper("TopK", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TopK", name: name, keywords: dict);
             int _idx = 0;
             var values = op.outputs[_idx++];
             var indices = op.outputs[_idx++];
@@ -37564,7 +37564,7 @@ namespace Tensorflow.Operations
             dict["k"] = k;
             if (sorted.HasValue)
                 dict["sorted"] = sorted.Value;
-            var op = tf._op_def_lib._apply_op_helper("TopKV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TopKV2", name: name, keywords: dict);
             int _idx = 0;
             var values = op.outputs[_idx++];
             var indices = op.outputs[_idx++];
@@ -37593,7 +37593,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["perm"] = perm;
-            var op = tf._op_def_lib._apply_op_helper("Transpose", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Transpose", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37624,7 +37624,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("TruncateDiv", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TruncateDiv", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37653,7 +37653,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["y"] = y;
-            var op = tf._op_def_lib._apply_op_helper("TruncateMod", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TruncateMod", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37697,7 +37697,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("TruncatedNormal", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TruncatedNormal", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37807,7 +37807,7 @@ namespace Tensorflow.Operations
                 dict["fail_fast"] = fail_fast.Value;
             if (timeout_in_ms.HasValue)
                 dict["timeout_in_ms"] = timeout_in_ms.Value;
-            var op = tf._op_def_lib._apply_op_helper("TryRpc", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("TryRpc", name: name, keywords: dict);
             int _idx = 0;
             var response = op.outputs[_idx++];
             var status_code = op.outputs[_idx++];
@@ -37868,7 +37868,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("Unbatch", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Unbatch", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37895,7 +37895,7 @@ namespace Tensorflow.Operations
             dict["input_dataset"] = input_dataset;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("UnbatchDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UnbatchDataset", name: name, keywords: dict);
             return op.output;
         }
 
@@ -37947,7 +37947,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("UnbatchGrad", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UnbatchGrad", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38023,7 +38023,7 @@ namespace Tensorflow.Operations
                 dict["seed"] = seed.Value;
             if (seed2.HasValue)
                 dict["seed2"] = seed2.Value;
-            var op = tf._op_def_lib._apply_op_helper("UniformCandidateSampler", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UniformCandidateSampler", name: name, keywords: dict);
             int _idx = 0;
             var sampled_candidates = op.outputs[_idx++];
             var true_expected_count = op.outputs[_idx++];
@@ -38071,7 +38071,7 @@ namespace Tensorflow.Operations
             dict["x"] = x;
             if (out_idx.HasValue)
                 dict["out_idx"] = out_idx.Value;
-            var op = tf._op_def_lib._apply_op_helper("Unique", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Unique", name: name, keywords: dict);
             int _idx = 0;
             var y = op.outputs[_idx++];
             var idx = op.outputs[_idx++];
@@ -38152,7 +38152,7 @@ namespace Tensorflow.Operations
             dict["axis"] = axis;
             if (out_idx.HasValue)
                 dict["out_idx"] = out_idx.Value;
-            var op = tf._op_def_lib._apply_op_helper("UniqueV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UniqueV2", name: name, keywords: dict);
             int _idx = 0;
             var y = op.outputs[_idx++];
             var idx = op.outputs[_idx++];
@@ -38202,7 +38202,7 @@ namespace Tensorflow.Operations
             dict["x"] = x;
             if (out_idx.HasValue)
                 dict["out_idx"] = out_idx.Value;
-            var op = tf._op_def_lib._apply_op_helper("UniqueWithCounts", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UniqueWithCounts", name: name, keywords: dict);
             int _idx = 0;
             var y = op.outputs[_idx++];
             var idx = op.outputs[_idx++];
@@ -38289,7 +38289,7 @@ namespace Tensorflow.Operations
             dict["axis"] = axis;
             if (out_idx.HasValue)
                 dict["out_idx"] = out_idx.Value;
-            var op = tf._op_def_lib._apply_op_helper("UniqueWithCountsV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UniqueWithCountsV2", name: name, keywords: dict);
             int _idx = 0;
             var y = op.outputs[_idx++];
             var idx = op.outputs[_idx++];
@@ -38338,7 +38338,7 @@ namespace Tensorflow.Operations
             dict["num"] = num;
             if (axis.HasValue)
                 dict["axis"] = axis.Value;
-            var op = tf._op_def_lib._apply_op_helper("Unpack", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Unpack", name: name, keywords: dict);
             int _idx = 0;
             var output = Enumerable.Range(0, op.OutputListLength("output")).Select(_ => op.outputs[_idx++]).ToArray();
             return (output);
@@ -38375,7 +38375,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
             dict["dims"] = dims;
-            var op = tf._op_def_lib._apply_op_helper("UnravelIndex", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UnravelIndex", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38431,7 +38431,7 @@ namespace Tensorflow.Operations
             dict["data"] = data;
             dict["segment_ids"] = segment_ids;
             dict["num_segments"] = num_segments;
-            var op = tf._op_def_lib._apply_op_helper("UnsortedSegmentMax", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UnsortedSegmentMax", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38479,7 +38479,7 @@ namespace Tensorflow.Operations
             dict["data"] = data;
             dict["segment_ids"] = segment_ids;
             dict["num_segments"] = num_segments;
-            var op = tf._op_def_lib._apply_op_helper("UnsortedSegmentMin", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UnsortedSegmentMin", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38526,7 +38526,7 @@ namespace Tensorflow.Operations
             dict["data"] = data;
             dict["segment_ids"] = segment_ids;
             dict["num_segments"] = num_segments;
-            var op = tf._op_def_lib._apply_op_helper("UnsortedSegmentProd", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UnsortedSegmentProd", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38576,7 +38576,7 @@ namespace Tensorflow.Operations
             dict["data"] = data;
             dict["segment_ids"] = segment_ids;
             dict["num_segments"] = num_segments;
-            var op = tf._op_def_lib._apply_op_helper("UnsortedSegmentSum", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("UnsortedSegmentSum", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38616,7 +38616,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("Unstage", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Unstage", name: name, keywords: dict);
             int _idx = 0;
             var values = Enumerable.Range(0, op.OutputListLength("values")).Select(_ => op.outputs[_idx++]).ToArray();
             return (values);
@@ -38655,7 +38655,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("VarHandleOp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("VarHandleOp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38677,7 +38677,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
-            var op = tf._op_def_lib._apply_op_helper("VarIsInitializedOp", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("VarIsInitializedOp", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38709,7 +38709,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("Variable", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Variable", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38742,7 +38742,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             if (out_type.HasValue)
                 dict["out_type"] = out_type.Value;
-            var op = tf._op_def_lib._apply_op_helper("VariableShape", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("VariableShape", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38786,7 +38786,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("VariableV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("VariableV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38866,7 +38866,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
-            var op = tf._op_def_lib._apply_op_helper("Where", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Where", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38899,7 +38899,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("WholeFileReader", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("WholeFileReader", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38932,7 +38932,7 @@ namespace Tensorflow.Operations
                 dict["container"] = container;
             if (shared_name != null)
                 dict["shared_name"] = shared_name;
-            var op = tf._op_def_lib._apply_op_helper("WholeFileReaderV2", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("WholeFileReaderV2", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38957,7 +38957,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["request"] = request;
-            var op = tf._op_def_lib._apply_op_helper("WorkerHeartbeat", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("WorkerHeartbeat", name: name, keywords: dict);
             return op.output;
         }
 
@@ -38984,7 +38984,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["filename"] = filename;
             dict["contents"] = contents;
-            var op = tf._op_def_lib._apply_op_helper("WriteFile", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("WriteFile", name: name, keywords: dict);
             return op;
         }
 
@@ -39005,7 +39005,7 @@ namespace Tensorflow.Operations
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
-            var op = tf._op_def_lib._apply_op_helper("ZerosLike", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ZerosLike", name: name, keywords: dict);
             return op.output;
         }
 
@@ -39033,7 +39033,7 @@ namespace Tensorflow.Operations
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
             dict["q"] = q;
-            var op = tf._op_def_lib._apply_op_helper("Zeta", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("Zeta", name: name, keywords: dict);
             return op.output;
         }
 
@@ -39060,7 +39060,7 @@ namespace Tensorflow.Operations
             dict["input_datasets"] = input_datasets;
             dict["output_types"] = output_types;
             dict["output_shapes"] = output_shapes;
-            var op = tf._op_def_lib._apply_op_helper("ZipDataset", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ZipDataset", name: name, keywords: dict);
             return op.output;
         }
     }

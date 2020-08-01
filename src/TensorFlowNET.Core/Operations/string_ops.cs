@@ -35,10 +35,10 @@ namespace Tensorflow
         public Tensor substr<T>(T input, int pos, int len,
                 string @uint = "BYTE", string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
                 var input_tensor = tf.constant(input);
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Substr", name,
                     null,
                     input, pos, len,
@@ -47,7 +47,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Substr", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("Substr", name: name, args: new
             {
                 input,
                 pos,

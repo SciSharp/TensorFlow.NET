@@ -53,7 +53,7 @@ namespace Tensorflow.Eager
         {
             object value = null;
             byte isList = 0;
-            var attrType = c_api.TFE_OpNameGetAttrType(tf.context.Handle, Name, attr_name, ref isList, tf.status.Handle);
+            var attrType = c_api.TFE_OpNameGetAttrType(tf.Context.Handle, Name, attr_name, ref isList, tf.Status.Handle);
             switch (attrType)
             {
                 case TF_AttrType.TF_ATTR_BOOL:

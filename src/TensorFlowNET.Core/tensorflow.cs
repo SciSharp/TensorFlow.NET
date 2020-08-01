@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Tensorflow.Contexts;
 using Tensorflow.Eager;
 using Tensorflow.Gradients;
 
@@ -41,18 +42,23 @@ namespace Tensorflow
 
         public delegate Tensor[] BackwardFunction(Tensor[] grads, long[] unneeded_gradients);
 
-        public Status status = new Status();
-        public OpDefLibrary _op_def_lib = new OpDefLibrary();
-        public Context context = new Context(new ContextOptions(), new Status());
-        public Execute _execute = new Execute();
-        public IEagerRunner Runner = new EagerRunner();
+        public Status Status;
+        public OpDefLibrary OpDefLib;
+        public Context Context;
+        public IEagerRunner Runner;
         
         public tensorflow()
         {
+            Status = new Status();
+            Context = new Context(new ContextOptions(), Status);
             enable_eager_execution();
-            _constructThreadingObjects();
+            OpDefLib = new OpDefLibrary();
+            ConstructThreadingObjects();
             InitGradientEnvironment();
+            Runner = new EagerRunner();
         }
+
+        public string VERSION => c_api.StringPiece(c_api.TF_Version());
 
         private void InitGradientEnvironment()
         {
@@ -74,15 +80,10 @@ namespace Tensorflow
                     shape: shape);
 
         public Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
-            => gen_array_ops.placeholder(dtype, shape, name);
+            => array_ops.placeholder(dtype, shape, name);
 
         public void enable_eager_execution()
-        {
-            // contex = new Context();
-            context.default_execution_mode = Context.EAGER_MODE;
-        }
-
-        public string VERSION => c_api.StringPiece(c_api.TF_Version());
+            => Context.eager_mode();
 
         public Session get_default_session()
             => ops.get_default_session();

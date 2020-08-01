@@ -136,7 +136,7 @@ namespace Tensorflow
 
         public override string ToString()
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
                 return $"tf.Variable: '{Name}' shape={string.Join(",", shape)}, dtype={dtype.as_numpy_name()}, numpy={tensor_util.to_numpy_string(read_value())}";
             else
                 return $"tf.Variable: '{Name}' shape={string.Join(",", shape)}, dtype={dtype.as_numpy_name()}";

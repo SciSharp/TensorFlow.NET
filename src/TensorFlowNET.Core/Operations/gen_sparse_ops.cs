@@ -38,7 +38,7 @@ namespace Tensorflow
             bool validate_indices = true,
             string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("SparseToDense", name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("SparseToDense", name, args: new
             {
                 sparse_indices,
                 output_shape,
@@ -57,7 +57,7 @@ namespace Tensorflow
             bool validate_indices = true,
             string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("SparseToDense", name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("SparseToDense", name, args: new
             {
                 sparse_indices,
                 output_shape,

@@ -42,7 +42,7 @@ namespace Tensorflow
                 dtype: dtype)
         {
             // Inputs must be 2-dimensional.
-            input_spec = new InputSpec(ndim: 2);
+            inputSpec = new InputSpec(ndim: 2);
 
             _num_units = num_units;
             if (activation == null)
@@ -67,10 +67,10 @@ namespace Tensorflow
             built = true;
         }
 
-        protected override Tensor[] call(Tensor inputs, bool is_training = false, Tensor state = null)
+        protected override Tensor[] call(Tensor[] inputs, bool is_training = false, Tensor state = null)
         {
             // Most basic RNN: output = new_state = act(W * input + U * state + B).
-            var concat = array_ops.concat(new[] { inputs, state }, 1);
+            var concat = array_ops.concat(new[] { inputs[0], state }, 1);
             var gate_inputs = math_ops.matmul(concat, _kernel as RefVariable);
             gate_inputs = nn_ops.bias_add(gate_inputs, _bias as RefVariable);
             var output = _activation(gate_inputs, null);

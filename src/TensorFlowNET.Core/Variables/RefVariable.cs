@@ -419,7 +419,7 @@ namespace Tensorflow
         public ITensorOrOperation assign_add<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
         {
             var variable = this;
-            var _op = tf._op_def_lib._apply_op_helper("AssignAdd", name: name, args: new { variable, value, use_locking });
+            var _op = tf.OpDefLib._apply_op_helper("AssignAdd", name: name, args: new { variable, value, use_locking });
             return _op;
         }
     }

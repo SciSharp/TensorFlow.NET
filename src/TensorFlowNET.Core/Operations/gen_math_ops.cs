@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Tensorflow.Contexts;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
@@ -26,7 +27,7 @@ namespace Tensorflow
     {
         public static Tensor _all(Tensor input, Tensor axis, bool keep_dims = false, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("All", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
+            var _op = tf.OpDefLib._apply_op_helper("All", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
 
             return _op.outputs[0];
         }
@@ -39,16 +40,16 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor add_n(Tensor[] inputs, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "AddN", name,
                     null,
                     new[] { inputs });
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("AddN", name, args: new { inputs });
+            var _op = tf.OpDefLib._apply_op_helper("AddN", name, args: new { inputs });
 
             return _op.outputs[0];
         }
@@ -63,9 +64,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ArgMax", name,
                     null,
                     input, dimension,
@@ -74,7 +75,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            return tf._op_def_lib._apply_op_helper("ArgMax", name, args: new { input, dimension, output_type }).output;
+            return tf.OpDefLib._apply_op_helper("ArgMax", name, args: new { input, dimension, output_type }).output;
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type= TF_DataType.TF_INT64, string name= null)
-            => tf._op_def_lib._apply_op_helper("ArgMin", name, args: new { input, dimension, output_type }).outputs[0];
+            => tf.OpDefLib._apply_op_helper("ArgMin", name, args: new { input, dimension, output_type }).outputs[0];
 
         /// <summary>
         /// Computes Psi, the derivative of Lgamma (the log of the absolute value of
@@ -96,7 +97,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor digamma(Tensor x, string name = null)
-            => tf._op_def_lib._apply_op_helper("Digamma", name, args: new { x }).output;
+            => tf.OpDefLib._apply_op_helper("Digamma", name, args: new { x }).output;
 
         /// <summary>
         ///    Returns 0 if the denominator is zero.
@@ -118,7 +119,7 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor div_no_nan(Tensor x, Tensor y, string name = null)
         {
-            var op = tf._op_def_lib._apply_op_helper("DivNoNan", name: name, args: new { x, y });
+            var op = tf.OpDefLib._apply_op_helper("DivNoNan", name: name, args: new { x, y });
             return op.output;
         }
 
@@ -137,9 +138,9 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor mean<T1, T2>(T1 input, T2 axis, bool keep_dims= false, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Mean", name,
                     null,
                     input, axis,
@@ -148,40 +149,40 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
+            var _op = tf.OpDefLib._apply_op_helper("Mean", name, args: new { input, reduction_indices = axis, keep_dims = keep_dims });
 
             return _op.output;
         }
 
         public static Tensor mean(Tensor[] inputs, Tensor axis, bool keep_dims = false, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                return mean_eager_fallback(inputs, axis, keep_dims: keep_dims, name: name, ctx: tf.context);
+                return mean_eager_fallback(inputs, axis, keep_dims: keep_dims, name: name, ctx: tf.Context);
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Mean", name, args: new { inputs, reduction_indices = axis, keep_dims = keep_dims });
+            var _op = tf.OpDefLib._apply_op_helper("Mean", name, args: new { inputs, reduction_indices = axis, keep_dims = keep_dims });
 
             return _op.output;
         }
 
         private static Tensor mean_eager_fallback(Tensor[] inputs, Tensor axis, bool keep_dims = false, string name = null, Context ctx = null)
         {
-            var (_attr_T, input) = tf._execute.args_to_matching_eager(ctx, args: new[] { inputs });
-            var (_attr_Tidx, axis1) = tf._execute.args_to_matching_eager(ctx, default_dtype: tf.int32, args: new[] { axis });
+            var (_attr_T, input) = tf.Runner.ArgsToMatchingEager(ctx, args: new[] { inputs });
+            var (_attr_Tidx, axis1) = tf.Runner.ArgsToMatchingEager(ctx, default_dtype: tf.int32, args: new[] { axis });
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return tf._execute.execute(ctx, "Mean", 1, _inputs_flat, _attrs, name: name)[0];
+            return tf.Runner.Execute(ctx, "Mean", 1, _inputs_flat, _attrs, name: name)[0];
         }
 
         public static Tensor prod<T1, T2>(T1 input, T2 axis, bool keep_dims = false, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
                 try
                 {
-                    var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                         "Prod", name, 
                         null,
                         input, axis,
@@ -191,58 +192,58 @@ namespace Tensorflow
                 }
                 catch (Exception)
                 {
-                    return prod_eager_fallback(input as Tensor, axis as int[], keep_dims, name, tf.context);
+                    return prod_eager_fallback(input as Tensor, axis as int[], keep_dims, name, tf.Context);
                 }
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Prod", name, args: new { input, reduction_indices = axis, keep_dims });
+            var _op = tf.OpDefLib._apply_op_helper("Prod", name, args: new { input, reduction_indices = axis, keep_dims });
             return _op.output;
         }
 
         private static Tensor prod_eager_fallback(Tensor input_t, int[] axis, bool keep_dims, string name, Context ctx = null)
         {
-            var (_attr_T, input) = tf._execute.args_to_matching_eager(ctx, args: new[] { input_t });
-            var (_attr_Tidx, axis1) = tf._execute.args_to_matching_eager(ctx, default_dtype: tf.int32, args: new[] { axis });
+            var (_attr_T, input) = tf.Runner.ArgsToMatchingEager(ctx, args: new[] { input_t });
+            var (_attr_Tidx, axis1) = tf.Runner.ArgsToMatchingEager(ctx, default_dtype: tf.int32, args: new[] { axis });
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return tf._execute.execute(ctx, "Prod", 1, _inputs_flat, _attrs, name: name)[0];
+            return tf.Runner.Execute(ctx, "Prod", 1, _inputs_flat, _attrs, name: name)[0];
         }
 
         public static Tensor acos(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Acos", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Acos", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor asin(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Asin", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Asin", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor add(Tensor x, Tensor y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Add", name, null, 
                     x, y);
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Add", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Add", name, args: new { x, y });
 
             return _op.output;
         }
 
         public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Add", name, 
                     null,
                     x, y);
@@ -250,7 +251,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Add", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Add", name, args: new { x, y });
 
             return _op.output;
         }
@@ -258,39 +259,39 @@ namespace Tensorflow
         public static Tensor add_v2<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             // forward_compatible(2019, 6, 25):
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "AddV2", name, 
                     null,
                     x, y);
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("AddV2", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("AddV2", name, args: new { x, y });
 
             return _op.output;
         }
 
         public static Tensor atan(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Atan", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Atan", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor ceil(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Ceil", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Ceil", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor sin(Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Sin", name, 
                     null,
                     x);
@@ -298,7 +299,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Sin", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Sin", name, args: new { x });
 
             return _op.outputs[0];
         }
@@ -319,9 +320,9 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor sigmoid(Tensor x, string name = "Sigmoid")
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Sigmoid", name, 
                     null,
                     x);
@@ -329,7 +330,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var op = tf._op_def_lib._apply_op_helper("Sigmoid", name: name, new { x });
+            var op = tf.OpDefLib._apply_op_helper("Sigmoid", name: name, new { x });
 
             return op.output;
         }
@@ -353,42 +354,42 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor sigmoid_grad(Tensor y, Tensor dy, string name = "SigmoidGrad")
         {
-            var op = tf._op_def_lib._apply_op_helper("SigmoidGrad", name: name, args: new { y, dy });
+            var op = tf.OpDefLib._apply_op_helper("SigmoidGrad", name: name, args: new { y, dy });
 
             return op.outputs[0];
         }
 
         public static Tensor sign<T>(T x, string name = "Sign")
         {
-            var op = tf._op_def_lib._apply_op_helper("Sign", name: name, args: new {x});
+            var op = tf.OpDefLib._apply_op_helper("Sign", name: name, args: new {x});
 
             return op.outputs[0];
         }
 
         public static Tensor sinh(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Sinh", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Sinh", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor cos(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Cos", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Cos", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor cosh(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Cosh", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Cosh", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor cumsum<T>(Tensor x, T axis, bool exclusive = false, bool reverse = false, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Cumsum", name, args: new { x, axis, exclusive, reverse });
+            var _op = tf.OpDefLib._apply_op_helper("Cumsum", name, args: new { x, axis, exclusive, reverse });
 
             return _op.outputs[0];
         }
@@ -403,15 +404,15 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor unsorted_segment_sum(Tensor data, Tensor segment_ids, Tensor num_segments, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("UnsortedSegmentSum", name, new { data, segment_ids, num_segments });
+            var _op = tf.OpDefLib._apply_op_helper("UnsortedSegmentSum", name, new { data, segment_ids, num_segments });
             return _op.outputs[0];
         }
 
         public static Tensor tan(Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Tan", name, 
                     null,
                     x);
@@ -419,16 +420,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Tan", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Tan", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor tanh(Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Tanh", name,
                     null,
                     x);
@@ -436,7 +437,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Tanh", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Tanh", name, args: new { x });
 
             return _op.outputs[0];
         }
@@ -450,9 +451,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor tanh_grad(Tensor y, Tensor dy, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "TanhGrad", name, 
                     null,
                     y, dy);
@@ -460,29 +461,29 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("TanhGrad", name: name, args: new { y, dy }).output;
+            var _op = tf.OpDefLib._apply_op_helper("TanhGrad", name: name, args: new { y, dy }).output;
             return _op.outputs[0];
         }
 
         public static Tensor floor(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Floor", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Floor", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ClipByValue", name, args: new { t, clip_value_min, clip_value_max });
+            var _op = tf.OpDefLib._apply_op_helper("ClipByValue", name, args: new { t, clip_value_min, clip_value_max });
 
             return _op.outputs[0];
         }
 
         public static Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Greater", name,
                     null,
                     x, y);
@@ -490,7 +491,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Greater", name: name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Greater", name: name, args: new { x, y });
 
             return _op.outputs[0];
         }
@@ -508,16 +509,16 @@ namespace Tensorflow
         /// </returns>
         public static Tensor lgamma(Tensor x, string name = null)
         {
-            var op = tf._op_def_lib._apply_op_helper("Lgamma", name: name, args: new { x });
+            var op = tf.OpDefLib._apply_op_helper("Lgamma", name: name, args: new { x });
 
             return op.output;
         }
 
         public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "GreaterEqual", name, 
                     null,
                     x, y);
@@ -525,16 +526,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("GreaterEqual", name: name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("GreaterEqual", name: name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Less", name,
                     null,
                     x, y);
@@ -542,16 +543,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Less", name: name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Less", name: name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor less_equal<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "LessEqual", name,
                     null,
                     x, y);
@@ -559,35 +560,35 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("LessEqual", name: name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("LessEqual", name: name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor log1p(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Log1p", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Log1p", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor logical_and(Tensor x, Tensor y, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("LogicalAnd", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("LogicalAnd", name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor logical_not(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("LogicalNot", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("LogicalNot", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor logical_or(Tensor x, Tensor y, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("LogicalOr", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("LogicalOr", name, args: new { x, y });
 
             return _op.outputs[0];
         }
@@ -602,7 +603,7 @@ namespace Tensorflow
 
         public static Tensor squared_difference(Tensor x, Tensor y, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("SquaredDifference", name, args: new { x, y, name });
+            var _op = tf.OpDefLib._apply_op_helper("SquaredDifference", name, args: new { x, y, name });
 
             return _op.outputs[0];
         }
@@ -615,9 +616,9 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `x`.</returns>
         public static Tensor square(Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Square", name, 
                     null,
                     x);
@@ -625,7 +626,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Square", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Square", name, args: new { x });
 
             return _op.outputs[0];
         }
@@ -638,14 +639,14 @@ namespace Tensorflow
         /// <returns> A `Tensor` of type `bool`.</returns>
         public static Tensor is_finite(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("IsFinite", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("IsFinite", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor is_nan(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("IsNan", name: name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("IsNan", name: name, args: new { x });
 
             return _op.outputs[0];
         }
@@ -658,7 +659,7 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `x`.</returns>
         public static Tensor exp(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Exp", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Exp", name, args: new { x });
 
             return _op.outputs[0];
         }
@@ -671,9 +672,9 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `x`.</returns>
         public static Tensor log(Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Log", name, 
                     null,
                     x);
@@ -681,16 +682,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Log", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Log", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate= false, string name= null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Cast", name,
                     null,
                     x,
@@ -699,16 +700,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate });
+            var _op = tf.OpDefLib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate });
 
             return _op.outputs[0];
         }
 
         public static Tensor neg(Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Neg", name, 
                     null,
                     x);
@@ -716,16 +717,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Neg", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Neg", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor sqrt(Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Sqrt", name, 
                     null,
                     x);
@@ -733,32 +734,32 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Sqrt", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Sqrt", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor sub(Tensor x, Tensor y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Sub", name, 
                     null,
                     x, y);
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Sub", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Sub", name, args: new { x, y });
 
             return _op.output;
         }
 
         public static Tensor sub<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Sub", name, 
                     null,
                     x, y);
@@ -766,7 +767,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Sub", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Sub", name, args: new { x, y });
 
             return _op.outputs[0];
         }
@@ -780,9 +781,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Equal", name, 
                     null,
                     x, y);
@@ -790,7 +791,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Equal", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Equal", name, args: new { x, y });
             return _op.output;
         }
 
@@ -805,9 +806,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor not_equal<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "NotEqual", name, 
                     null,
                     x, y);
@@ -815,16 +816,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("NotEqual", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("NotEqual", name, args: new { x, y });
             return _op.output;
         }
 
 
         public static Tensor atan2(Tensor y, Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Atan2", name, 
                     null,
                     y, x);
@@ -832,31 +833,31 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Atan2", name, args: new { y, x });
+            var _op = tf.OpDefLib._apply_op_helper("Atan2", name, args: new { y, x });
             return _op.output;
         }
 
         public static Tensor mul(Tensor x, Tensor y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Mul", name, 
                     null,
                     x, y);
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Mul", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Mul", name, args: new { x, y });
 
             return _op.output;
         }
 
         public static Tensor mul<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Mul", name, 
                     null,
                     x, y);
@@ -864,39 +865,39 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Mul", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Mul", name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor mul_no_nan<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("MulNoNan", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("MulNoNan", name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor real_div(Tensor x, Tensor y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "RealDiv", name, 
                     null,
                     x, y);
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("RealDiv", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("RealDiv", name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor reciprocal(Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Reciprocal", name,
                     null,
                     x);
@@ -904,16 +905,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Reciprocal", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Reciprocal", name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor floor_mod(Tensor x, Tensor y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "FloorMod", name, 
                     null,
                     x, y);
@@ -921,16 +922,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("FloorMod", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("FloorMod", name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor floor_div(Tensor x, Tensor y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "FloorDiv", name, 
                     null,
                     x, y);
@@ -938,7 +939,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("FloorDiv", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("FloorDiv", name, args: new { x, y });
 
             return _op.outputs[0];
         }
@@ -954,9 +955,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor mat_mul(Tensor a, Tensor b, bool transpose_a = false, bool transpose_b = false, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "MatMul", name,
                     null,
                     a, b,
@@ -964,7 +965,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("MatMul", name, args: new { a, b, transpose_a, transpose_b });
+            var _op = tf.OpDefLib._apply_op_helper("MatMul", name, args: new { a, b, transpose_a, transpose_b });
 
             return _op.output;
         }
@@ -996,7 +997,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor batch_mat_mul(Tensor x, Tensor y, bool adj_x = false, bool adj_y = false, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper(
+            var _op = tf.OpDefLib._apply_op_helper(
                 "BatchMatMul",
                 name,
                 args: new { x, y, adj_x, adj_y });
@@ -1013,9 +1014,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor maximum<T1, T2>(T1 x, T2 y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Maximum", name,
                     null,
                     x, y);
@@ -1023,16 +1024,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Maximum", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Maximum", name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Minimum", name,
                     null,
                     x, y);
@@ -1040,44 +1041,44 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Minimum", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Minimum", name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor _abs(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Abs", name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Abs", name, args: new { x });
 
             return _op.output;
         }
 
         public static Tensor _any<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Any", name, new { input, reduction_indices = axis, keep_dims });
+            var _op = tf.OpDefLib._apply_op_helper("Any", name, new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
 
         public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims=false, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims });
+            var _op = tf.OpDefLib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
 
         public static Tensor _min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Min", name, new { input, reduction_indices = axis, keep_dims });
+            var _op = tf.OpDefLib._apply_op_helper("Min", name, new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
 
         public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Pow", name, 
                     null,
                     x, y);
@@ -1085,16 +1086,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Pow", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper("Pow", name, args: new { x, y });
 
             return _op.outputs[0];
         }
 
         public static Tensor _sum<Tx, Ty>(Tx input, Ty axis = default, bool keep_dims = false, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Sum", name,
                     null,
                     input, axis,
@@ -1103,32 +1104,32 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
+            var _op = tf.OpDefLib._apply_op_helper("Sum", name, args: new { input, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
 
         public static Tensor _sum(Tensor[] inputs, Tensor axis = default, bool keep_dims = false, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
                 return _sum_eager_fallback(inputs, axis,
-                        keep_dims: keep_dims, name: name, ctx: tf.context);
+                        keep_dims: keep_dims, name: name, ctx: tf.Context);
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Sum", name, args: new { inputs, reduction_indices = axis, keep_dims });
+            var _op = tf.OpDefLib._apply_op_helper("Sum", name, args: new { inputs, reduction_indices = axis, keep_dims });
 
             return _op.outputs[0];
         }
 
         private static Tensor _sum_eager_fallback(Tensor[] inputs, Tensor axis, bool keep_dims = false, string name = null, Context ctx = null)
         {
-            var (_attr_T, input) = tf._execute.args_to_matching_eager(ctx, args: new[] { inputs });
-            var (_attr_Tidx, axis1) = tf._execute.args_to_matching_eager(ctx, tf.int32, new[] { axis });
+            var (_attr_T, input) = tf.Runner.ArgsToMatchingEager(ctx, args: new[] { inputs });
+            var (_attr_Tidx, axis1) = tf.Runner.ArgsToMatchingEager(ctx, tf.int32, new[] { axis });
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "keep_dims", keep_dims, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return tf._execute.execute(ctx, "Sum", 1, _inputs_flat, _attrs, name: name)[0];
+            return tf.Runner.Execute(ctx, "Sum", 1, _inputs_flat, _attrs, name: name)[0];
         }
 
         /// <summary>
@@ -1141,16 +1142,16 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor range(Tensor start, Tensor limit, Tensor delta, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Range", name, 
                     null,
                     start, limit, delta);
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Range", name, new { start, limit, delta });
+            var _op = tf.OpDefLib._apply_op_helper("Range", name, new { start, limit, delta });
 
             return _op.outputs[0];
         }
@@ -1172,7 +1173,7 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor round(Tensor x, string name = "Round")
         {
-            var op = tf._op_def_lib._apply_op_helper("Round", name: name, new { x });
+            var op = tf.OpDefLib._apply_op_helper("Round", name: name, new { x });
 
             return op.output;
         }
@@ -1185,7 +1186,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor rsqrt(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Rsqrt", name, new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Rsqrt", name, new { x });
 
             return _op.outputs[0];
         }
@@ -1198,7 +1199,7 @@ namespace Tensorflow
         /// <returns>The fraction of zeros in value, with type float32.</returns>
         public static Tensor zero_fraction(Tensor value, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("zero_fraction", name, new { value, name });
+            var _op = tf.OpDefLib._apply_op_helper("zero_fraction", name, new { value, name });
 
             return _op.outputs[0];
         }

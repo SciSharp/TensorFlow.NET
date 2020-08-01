@@ -47,7 +47,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
     <PackageReference Include="NumSharp.Lite" Version="0.1.7" />
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.2.0.2" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>

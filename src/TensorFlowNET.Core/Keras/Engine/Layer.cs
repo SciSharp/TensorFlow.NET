@@ -31,20 +31,22 @@ namespace Tensorflow.Keras.Engine
     /// A layer is a class implementing common neural networks operations, such
     /// as convolution, batch norm, etc. These operations require managing weights,
     /// losses, updates, and inter-layer connectivity.
-    /// 
-    /// tensorflow\python\keras\engine\base_layer.py
     /// </summary>
-    public class Layer : AutoTrackable, ILayer
+    public abstract class Layer : AutoTrackable
     {
-        protected LayerArgs _args;
+        /// <summary>
+        /// Arguments initialize layer.
+        /// </summary>
+        LayerArgs args;
 
         /// <summary>
         /// Indicates whether `build` needs to be called upon layer call, to create
         /// the layer's weights.
         /// </summary>
         protected bool built;
-        protected bool trainable;
-        public TF_DataType _dtype;
+        public bool Trainable => args.Trainable;
+        public TF_DataType DType => args.DType;
+
         /// <summary>
         /// A stateful layer is a layer whose updates are run during inference too,
         /// for instance stateful RNNs.
@@ -53,53 +55,53 @@ namespace Tensorflow.Keras.Engine
         /// <summary>
         /// Provides information about which inputs are compatible with the layer.
         /// </summary>
-        protected InputSpec input_spec;
-        protected bool supports_masking;
-        protected List<IVariableV1> _trainable_weights;
-        public List<IVariableV1> trainable_variables => _trainable_weights;
-        protected List<IVariableV1> _non_trainable_weights;
-        private string _name;
-        public string name => _name;
-        protected string _base_name;
-        protected bool _compute_previous_mask;
-        protected List<Operation> _updates;
-        public int[] _batch_input_shape;
+        protected InputSpec inputSpec;
+        public bool SupportsMasking { get; set; }
+        protected List<IVariableV1> trainableWeights;
+        public List<IVariableV1> TrainableVariables => trainableWeights;
+        protected List<IVariableV1> nonTrainableWeights;
 
-        private List<Node> _inbound_nodes;
-        public List<Node> inbound_nodes => _inbound_nodes;
+        string name;
+        public string Name => name;
 
-#pragma warning disable CS0649 // Field 'Layer._outbound_nodes' is never assigned to, and will always have its default value null
-        private List<Node> _outbound_nodes;
-#pragma warning restore CS0649 // Field 'Layer._outbound_nodes' is never assigned to, and will always have its default value null
-        public List<Node> outbound_nodes => _outbound_nodes;
+        protected string baseName;
+        protected bool computePreviousMask;
+        protected List<Operation> updates;
+        public TensorShape BatchInputShape => args.BatchInputShape;
 
-#pragma warning disable CS0169 // The field 'Layer._initial_weights' is never used
-        float _initial_weights;
-#pragma warning restore CS0169 // The field 'Layer._initial_weights' is never used
+        List<Node> inboundNodes;
+        public List<Node> InboundNodes => inboundNodes;
 
-        ThreadLocal<CallContext> _call_context;
-        public CallContext CallContext => _call_context.Value;
+        List<Node> outboundNodes;
+        public List<Node> OutboundNodes => outboundNodes;
+
+        ThreadLocal<CallContext> callContext;
+        public CallContext CallContext => callContext.Value;
 
         public Layer(LayerArgs args)
         {
-            _args = args;
+            this.args = args;
             // A stateful layer is a layer whose updates are run during inference too,
             // for instance stateful RNNs.
             stateful = false;
             // Indicates whether `build` needs to be called upon layer call, to create
             // the layer's weights.
             built = false;
-            this.supports_masking = false;
+            this.SupportsMasking = false;
 
             _init_set_name(name);
-            _trainable_weights = new List<IVariableV1>();
-            _non_trainable_weights = new List<IVariableV1>();
-            _compute_previous_mask = false;
-            _updates = new List<Operation>();
+            trainableWeights = new List<IVariableV1>();
+            nonTrainableWeights = new List<IVariableV1>();
+            computePreviousMask = false;
+            updates = new List<Operation>();
+
+            inboundNodes = new List<Node>();
 
             // Manage input shape information if passed.
-            
-            _inbound_nodes = new List<Node>();
+            if(args.BatchInputShape == null && args.InputShape != null)
+            {
+                args.BatchInputShape = new int[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray();
+            }
         }
 
         /// <summary>
@@ -108,39 +110,37 @@ namespace Tensorflow.Keras.Engine
         /// <param name="input"></param>
         /// <param name="is_training"></param>
         /// <returns></returns>
-        public Tensor Apply(Tensor input, bool is_training = false)
+        public Tensor Apply(Tensor[] inputs, bool is_training = false)
         {
-            var input_list = new Tensor[] { input };
-
-            if (_call_context == null)
-                _call_context = new ThreadLocal<CallContext>()
-                {
-                    Value = new CallContext()
-                };
+            callContext = callContext ?? new ThreadLocal<CallContext>()
+            {
+                Value = new CallContext()
+            };
 
             using var ctxManager = CallContext.enter();
 
-            string name_scope = "";
-            if (tf.context.executing_eagerly())
+            string nameScope = "";
+            if (tf.Context.executing_eagerly())
             {
-                name_scope = _name;
+                nameScope = name;
             }
             else
             {
                 throw new NotImplementedException("");
             }
 
-            tf_with(ops.name_scope(name_scope), scope =>
+            tf_with(ops.name_scope(nameScope), scope =>
             {
                 if (!built)
-                    _maybe_build(input);
+                    MaybeBuild(inputs);
 
-                call(input, is_training: is_training);
+                call(inputs, is_training: is_training);
             });
 
             throw new NotImplementedException("");
         }
 
+        [Obsolete("User Apply()")]
         public Tensor[] __call__(Tensor[] inputs,
             Tensor training = null,
             Tensor state = null,
@@ -173,14 +173,14 @@ namespace Tensorflow.Keras.Engine
             {
                 // Symbolic execution on symbolic tensors. We will attempt to build
                 // the corresponding TF subgraph inside `backend.get_graph()`
-                var graph = backend.get_graph().as_default();
+                var graph = tf.keras.backend.get_graph().as_default();
                 tf_with(ops.name_scope(_name_scope()), delegate
                 {
                     // Build layer if applicable (if the `build` method has been
                     // overridden).
-                    _maybe_build(inputs[0]);
+                    MaybeBuild(inputs);
 
-                    outputs = call(inputs[0], 
+                    outputs = call(inputs, 
                         // training: training,
                         state: state);
 
@@ -217,25 +217,25 @@ namespace Tensorflow.Keras.Engine
             return null;
         }
 
-        protected virtual Tensor[] call(Tensor inputs, bool is_training = false, Tensor state = null)
+        protected virtual Tensor[] call(Tensor[] inputs, bool is_training = false, Tensor state = null)
         {
             throw new NotImplementedException("");
         }
 
         protected virtual string _name_scope()
         {
-            return name;
+            return Name;
         }
 
-        protected void _maybe_build(Tensor input)
+        protected void MaybeBuild(Tensor[] inputs)
         {
             // Check input assumptions set before layer building, e.g. input rank.
             if (built)
                 return;
-            if (_dtype == TF_DataType.DtInvalid)
-                _dtype = input.dtype;
+            if (DType == TF_DataType.DtInvalid)
+                args.DType = inputs[0].dtype;
 
-            var input_shapes = input.TensorShape;
+            var input_shapes = inputs[0].TensorShape;
             build(input_shapes);
             built = true;
         }
@@ -246,7 +246,7 @@ namespace Tensorflow.Keras.Engine
         }
 
         protected virtual IVariableV1 add_weight(string name,
-            int[] shape,
+            TensorShape shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
             bool? trainable = null,
@@ -267,10 +267,10 @@ namespace Tensorflow.Keras.Engine
                 else if (dtype.is_integer())
                     initializer = tf.zeros_initializer;
                 else
-                    throw new ValueError($"An initializer for variable {name} of type {dtype.as_base_dtype()} is required for layer {this.name}");
+                    throw new ValueError($"An initializer for variable {name} of type {dtype.as_base_dtype()} is required for layer {this.Name}");
             }
 
-            var variable = _add_variable_with_custom_getter(new VariableArgs
+            var args = new VariableArgs
             {
                 Name = name,
                 Shape = shape,
@@ -279,13 +279,14 @@ namespace Tensorflow.Keras.Engine
                 Overwrite = true,
                 Initializer = initializer,
                 Trainable = trainable.Value
-            });
+            };
+            var variable = _add_variable_with_custom_getter(args);
 
             //backend.track_variable(variable);
             if (trainable == true)
-                _trainable_weights.Add(variable);
+                trainableWeights.Add(variable);
             else
-                _non_trainable_weights.Add(variable);
+                nonTrainableWeights.Add(variable);
 
             return variable;
         }
@@ -293,17 +294,16 @@ namespace Tensorflow.Keras.Engine
         protected virtual void add_update(Tensor[] updates, bool inputs = false)
         {
             var updates_op = updates.Select(x => x.op).ToArray();
-            _updates.AddRange(updates_op);
+            this.updates.AddRange(updates_op);
         }
 
         // Determine layer name (non-unique).
         protected virtual void _init_set_name(string name, bool zero_based = true)
         {
             var base_name = name;
-            _name = name;
+            this.name = name;
             if (name == null)
-                (_name, base_name) = _make_unique_name();
-            _base_name = base_name;
+                (this.name, baseName) = _make_unique_name();
         }
 
         protected virtual (string, string) _make_unique_name()

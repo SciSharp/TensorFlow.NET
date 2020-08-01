@@ -24,6 +24,7 @@ using NumSharp;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 using Tensorflow.Eager;
+using Tensorflow.Contexts;
 
 namespace Tensorflow
 {
@@ -176,7 +177,7 @@ namespace Tensorflow
                         throw new NotImplementedException("_create_c_op");
                 }
 
-                var status = tf.status;
+                var status = tf.Status;
                 
                 // Add control inputs
                 foreach (var control_input in control_inputs)
@@ -240,7 +241,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static void init_scope()
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
                 return;
 
             // Retrieve the active name scope: entering an `init_scope` preserves

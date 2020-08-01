@@ -25,9 +25,9 @@ namespace Tensorflow
     {
         public static Operation assign_sub_variable_op(Tensor resource, Tensor value, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "AssignSubVariableOp", name,
                     null,
                     resource, value);
@@ -47,9 +47,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Operation assign_add_variable_op(Tensor resource, Tensor value, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "AssignAddVariableOp", name,
                     null,
                     resource, value);
@@ -57,16 +57,16 @@ namespace Tensorflow
                 return null;
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("AssignAddVariableOp", name, new { resource, value });
+            var _op = tf.OpDefLib._apply_op_helper("AssignAddVariableOp", name, new { resource, value });
 
             return _op;
         }
 
         public static Operation assign_variable_op(Tensor resource, Tensor value, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "AssignVariableOp", name,
                     null,
                     resource, value);
@@ -74,16 +74,16 @@ namespace Tensorflow
                 return null;
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("AssignVariableOp", name, new { resource, value });
+            var _op = tf.OpDefLib._apply_op_helper("AssignVariableOp", name, new { resource, value });
 
             return _op;
         }
 
         public static Tensor var_is_initialized_op(Tensor resource, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "VarIsInitializedOp", name, 
                     null,
                     resource);
@@ -91,7 +91,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("VarIsInitializedOp", name, new { resource });
+            var _op = tf.OpDefLib._apply_op_helper("VarIsInitializedOp", name, new { resource });
 
             return _op.output;
         }
@@ -108,9 +108,9 @@ namespace Tensorflow
         public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape, 
             string container ="", string shared_name = "", string name = null)
         {
-            if(tf.context.executing_eagerly())
+            if(tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "VarHandleOp", name, 
                     null, 
                     "container", container,
@@ -121,7 +121,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("VarHandleOp", name, new {
+            var _op = tf.OpDefLib._apply_op_helper("VarHandleOp", name, new {
                 dtype,
                 shape,
                 container,
@@ -140,9 +140,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor read_variable_op(Tensor resource, TF_DataType dtype, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ReadVariableOp", name, 
                     null,
                     resource,
@@ -151,7 +151,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("ReadVariableOp", name, new
+            var _op = tf.OpDefLib._apply_op_helper("ReadVariableOp", name, new
             {
                 resource,
                 dtype
@@ -163,7 +163,7 @@ namespace Tensorflow
         public static Tensor resource_gather(Tensor resource, Tensor indices, TF_DataType dtype, 
             int batch_dims = 0, bool validate_indices = true, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ResourceGather", name, new
+            var _op = tf.OpDefLib._apply_op_helper("ResourceGather", name, new
             {
                 resource,
                 indices,

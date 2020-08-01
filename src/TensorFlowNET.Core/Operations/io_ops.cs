@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Contexts;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
@@ -23,26 +24,26 @@ namespace Tensorflow
     {
         public Operation save_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, Tensor[] tensors, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("SaveV2", name: name, args: new { prefix, tensor_names, shape_and_slices, tensors });
+            var _op = tf.OpDefLib._apply_op_helper("SaveV2", name: name, args: new { prefix, tensor_names, shape_and_slices, tensors });
 
             return _op;
         }
 
         public Tensor[] restore_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, TF_DataType[] dtypes, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("RestoreV2", name: name, args: new { prefix, tensor_names, shape_and_slices, dtypes });
+            var _op = tf.OpDefLib._apply_op_helper("RestoreV2", name: name, args: new { prefix, tensor_names, shape_and_slices, dtypes });
 
             return _op.outputs;
         }
 
         public Tensor read_file<T>(T filename, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                return read_file_eager_fallback(filename, name: name, tf.context);
+                return read_file_eager_fallback(filename, name: name, tf.Context);
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("ReadFile", name: name, args: new { filename });
+            var _op = tf.OpDefLib._apply_op_helper("ReadFile", name: name, args: new { filename });
 
             return _op.outputs[0];
         }
@@ -52,7 +53,7 @@ namespace Tensorflow
             var filename_tensor = ops.convert_to_tensor(filename, TF_DataType.TF_STRING);
             var _inputs_flat = new[] { filename_tensor };
 
-            return tf._execute.execute(ctx, "ReadFile", 1, _inputs_flat, null, name: name)[0];
+            return tf.Runner.Execute(ctx, "ReadFile", 1, _inputs_flat, null, name: name)[0];
         }
     }
 }

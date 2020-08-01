@@ -7,7 +7,7 @@ namespace Tensorflow.Framework.Models
 {
     public class TensorSpec : DenseSpec
     {
-        public TensorSpec(int[] shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) : 
+        public TensorSpec(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) : 
             base(shape, dtype, name)
         {
 

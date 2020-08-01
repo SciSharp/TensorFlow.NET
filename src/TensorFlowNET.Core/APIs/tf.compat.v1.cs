@@ -16,7 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using Tensorflow.Eager;
+using Tensorflow.Contexts;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -24,9 +24,7 @@ namespace Tensorflow
     public class CompatV1Api
     {
         public void disable_eager_execution()
-        {
-            tf.context.default_execution_mode = Context.GRAPH_MODE;
-        }
+            => tf.Context.graph_mode();
 
         public IVariableV1 get_variable(string name,
             TensorShape shape = null,

@@ -10,7 +10,7 @@ namespace Tensorflow
     {
         public void WarmUp()
         {
-            print(tf.VERSION);
+            print($"tensorflow native version: v{tf.VERSION}");
         }
 
         public void Execute(int epoch, int iterate, Action<int> process)

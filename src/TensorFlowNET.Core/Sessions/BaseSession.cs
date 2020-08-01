@@ -235,7 +235,7 @@ namespace Tensorflow
             // Ensure any changes to the graph are reflected in the runtime.
             _extend_graph();
 
-            var status = tf.status;
+            var status = tf.Status;
 
             var output_values = fetch_list.Select(x => IntPtr.Zero).ToArray();
 

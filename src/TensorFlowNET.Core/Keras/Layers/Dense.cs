@@ -29,19 +29,16 @@ namespace Tensorflow.Keras.Layers
     /// </summary>
     public class Dense : Layer
     {
-        protected int units;
-        protected IActivation activation;
-        protected bool use_bias;
-        protected IInitializer kernel_initializer;
-        protected IInitializer bias_initializer;
+        DenseArgs args;
         protected IVariableV1 kernel;
         protected IVariableV1 bias;
 
         public Dense(DenseArgs args) : 
             base(args)
         {
-            this.supports_masking = true;
-            this.input_spec = new InputSpec(min_ndim: 2);
+            this.args = args;
+            this.SupportsMasking = true;
+            this.inputSpec = new InputSpec(min_ndim: 2);
         }
 
         protected override void build(TensorShape input_shape)
@@ -49,41 +46,41 @@ namespace Tensorflow.Keras.Layers
             var last_dim = input_shape.dims.Last();
             var axes = new Dictionary<int, int>();
             axes[-1] = last_dim;
-            input_spec = new InputSpec(min_ndim: 2, axes: axes);
+            inputSpec = new InputSpec(min_ndim: 2, axes: axes);
             kernel = add_weight(
                 "kernel",
-                shape: new int[] { last_dim, units },
-                initializer: kernel_initializer,
-                dtype: _dtype,
+                shape: new TensorShape(last_dim, args.Units),
+                initializer: args.KernelInitializer,
+                dtype: DType,
                 trainable: true);
-            if (use_bias)
+            if (args.UseBias)
                 bias = add_weight(
                   "bias",
-                  shape: new int[] { units },
-                  initializer: bias_initializer,
-                  dtype: _dtype,
+                  shape: new TensorShape(args.Units),
+                  initializer: args.BiasInitializer,
+                  dtype: DType,
                   trainable: true);
 
             built = true;
         }
 
-        protected override Tensor[] call(Tensor inputs, bool training = false, Tensor state = null)
+        protected override Tensor[] call(Tensor[] inputs, bool training = false, Tensor state = null)
         {
             Tensor outputs = null;
-            var rank = inputs.rank;
+            var rank = inputs[0].rank;
             if(rank > 2)
             {
                 throw new NotImplementedException("call rank > 2");
             }
             else
             {
-                outputs = gen_math_ops.mat_mul(inputs, kernel.Handle);
+                outputs = gen_math_ops.mat_mul(inputs[0], kernel.Handle);
             }
 
-            if (use_bias)
+            if (args.UseBias)
                 outputs = tf.nn.bias_add(outputs, bias);
-            if (activation != null)
-                outputs = activation.Activate(outputs);
+            //if (args.Activation != null)
+                //outputs = args.Activation.Activate(outputs);
 
             return new[] { outputs, outputs };
         }

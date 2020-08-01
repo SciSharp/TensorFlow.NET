@@ -376,7 +376,7 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "cond", new { pred }), delegate
             {
-                if (tf.context.executing_eagerly())
+                if (tf.Context.executing_eagerly())
                 {
                     if (pred.ToArray<bool>()[0])
                         return true_fn() as Tensor;
@@ -460,7 +460,7 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "cond", new { pred }), delegate
             {
-                if (tf.context.executing_eagerly())
+                if (tf.Context.executing_eagerly())
                 {
                     if (pred.ToArray<bool>()[0])
                         return true_fn() as Tensor[];

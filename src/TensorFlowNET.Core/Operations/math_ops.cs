@@ -348,7 +348,7 @@ namespace Tensorflow
         /// <returns>A 1-D Tensor, the output shape as if keepdims were set to True.</returns>
         public static Tensor reduced_shape(Tensor input_shape, Tensor axes)
         {
-            if(tf.context.executing_eagerly())
+            if(tf.Context.executing_eagerly())
             {
                 var input_shape_val = input_shape.numpy();
                 var axes_val = (int)axes.numpy();

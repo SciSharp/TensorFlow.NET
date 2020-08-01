@@ -40,7 +40,7 @@ namespace Tensorflow.Keras.Utils
 
             var variable_dtype = args.DType.as_base_dtype();
             var v = tf.Variable(init_val,
-                dtype: args.DType,
+                dtype: variable_dtype,
                 shape: args.Shape,
                 name: args.Name,
                 trainable: args.Trainable,
@@ -94,14 +94,14 @@ namespace Tensorflow.Keras.Utils
         {
             var graph = ops.get_default_graph();
             Dictionary<(string, string), int> name_uid_map = null;
-            if (backend.PER_GRAPH_LAYER_NAME_UIDS.ContainsKey(graph))
+            if (tf.keras.backend.PER_GRAPH_LAYER_NAME_UIDS.ContainsKey(graph))
             {
-                name_uid_map = backend.PER_GRAPH_LAYER_NAME_UIDS[graph];
+                name_uid_map = tf.keras.backend.PER_GRAPH_LAYER_NAME_UIDS[graph];
             }
             else
             {
                 name_uid_map = new Dictionary<(string, string), int>();
-                backend.PER_GRAPH_LAYER_NAME_UIDS[graph] = name_uid_map;
+                tf.keras.backend.PER_GRAPH_LAYER_NAME_UIDS[graph] = name_uid_map;
             }
 
             return name_uid_map;

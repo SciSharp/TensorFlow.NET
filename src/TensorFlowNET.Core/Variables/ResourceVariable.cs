@@ -88,7 +88,7 @@ namespace Tensorflow
                 collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
 
             ops.init_scope();
-            _in_graph_mode = !tf.context.executing_eagerly();
+            _in_graph_mode = !tf.Context.executing_eagerly();
             tf_with(ops.name_scope(name, "Variable"), scope =>
             {
                 name = scope;
@@ -104,7 +104,7 @@ namespace Tensorflow
                 else
                 {
                     unique_id = $"{handle_name}_{ops.uid()}";
-                    shared_name = tf.context.shared_name();
+                    shared_name = tf.Context.shared_name();
                 }
 
                 var attr = new AttrValue();

@@ -155,7 +155,7 @@ namespace Tensorflow
 
         private void _check_saver_def()
         {
-            if (!tf.context.executing_eagerly())
+            if (!tf.Context.executing_eagerly())
             {
                 if (string.IsNullOrEmpty(_saver_def.SaveTensorName))
                     throw new ValueError($"saver_def must specify the save_tensor_name: {_saver_def}");
@@ -244,7 +244,7 @@ namespace Tensorflow
 
             Console.WriteLine($"Restoring parameters from {save_path}");
 
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
 #pragma warning disable CS0642 // Possible mistaken empty statement
                 ;
 #pragma warning restore CS0642 // Possible mistaken empty statement

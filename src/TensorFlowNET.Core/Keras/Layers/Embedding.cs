@@ -45,7 +45,7 @@ namespace Tensorflow.Keras.Layers
             this.output_dim = output_dim;
             this.embeddings_initializer = embeddings_initializer == null ? tf.uniform_initializer : embeddings_initializer;
             this.mask_zero = mask_zero;
-            supports_masking = mask_zero;
+            SupportsMasking = mask_zero;
             this.input_length = input_length;
         }
 
@@ -57,13 +57,13 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor[] call(Tensor inputs, bool is_training = false, Tensor state = null)
+        protected override Tensor[] call(Tensor[] inputs, bool is_training = false, Tensor state = null)
         {
-            var dtype = inputs.dtype;
+            var dtype = inputs[0].dtype;
             if (dtype != tf.int32 && dtype != tf.int64)
-                inputs = math_ops.cast(inputs, tf.int32);
+                inputs[0] = math_ops.cast(inputs[0], tf.int32);
 
-            var @out = embedding_ops.embedding_lookup(embeddings, inputs);
+            var @out = embedding_ops.embedding_lookup(embeddings, inputs[0]);
             return new[] { @out, @out };
         }
     }

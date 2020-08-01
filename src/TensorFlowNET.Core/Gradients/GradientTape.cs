@@ -37,14 +37,14 @@ namespace Tensorflow.Gradients
         {
             _persistent = persistent;
             _watch_accessed_variables = watch_accessed_variables;
-            _created_eagerly = tf.context.executing_eagerly();
+            _created_eagerly = tf.Context.executing_eagerly();
             _recording = false;
-            _created_eagerly = tf.context.executing_eagerly();
+            _created_eagerly = tf.Context.executing_eagerly();
             // Enters a context inside which operations are recorded on this tape.
             if (_created_eagerly)
             {
-                tf.context.ensure_initialized();
-                tf.context.start_step();
+                tf.Context.ensure_initialized();
+                tf.Context.start_step();
             }
             _push_tape();
         }
@@ -156,7 +156,7 @@ namespace Tensorflow.Gradients
                 _pop_tape();
 
             if (_created_eagerly)
-                tf.context.end_step();
+                tf.Context.end_step();
         }
     }
 }

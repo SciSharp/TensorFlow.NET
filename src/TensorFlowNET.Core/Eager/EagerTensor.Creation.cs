@@ -22,25 +22,25 @@ namespace Tensorflow.Eager
 
         public EagerTensor(string value, string device_name) : base(value)
         {
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
             Resolve();
         }
 
         public EagerTensor(byte[] value, string device_name, TF_DataType dtype) : base(value, dType: dtype)
         {
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
             Resolve();
         }
 
         public EagerTensor(string[] value, string device_name) : base(value)
         {
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
             Resolve();
         }
 
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
             Resolve();
         }
 
@@ -49,7 +49,7 @@ namespace Tensorflow.Eager
             _id = ops.uid();
 
             if (_handle == IntPtr.Zero)
-                _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.status.Handle);
+                _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.Status.Handle);
 
             //print($"new Tensor {Id} {_handle.ToString("x16")}");
             //print($"new TensorHandle {Id} {EagerTensorHandle.ToString("x16")}");

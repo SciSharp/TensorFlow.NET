@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using static Tensorflow.Binding;
 using Tensorflow.Eager;
 using System.Linq;
+using Tensorflow.Contexts;
 
 namespace Tensorflow
 {
@@ -26,14 +27,14 @@ namespace Tensorflow
     {
         public static Tensor batch_to_space_nd<T>(T input, int[] block_shape, int[,] crops, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("BatchToSpaceND", name: name, args: new { input, block_shape, crops });
+            var _op = tf.OpDefLib._apply_op_helper("BatchToSpaceND", name: name, args: new { input, block_shape, crops });
 
             return _op.output;
         }
         
         public static Tensor check_numerics(Tensor tensor, string message, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("CheckNumerics", name: name, args: new { tensor, message });
+            var _op = tf.OpDefLib._apply_op_helper("CheckNumerics", name: name, args: new { tensor, message });
 
             return _op.output;
         }
@@ -47,9 +48,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor concat_v2<T, Ta>(T[] values, Ta axis, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ConcatV2", name, 
                     null,
                     values, axis);
@@ -57,35 +58,35 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
+            var _op = tf.OpDefLib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
             return _op.output;
         }
 
         public static Tensor concat_v2(Tensor[] values, Tensor axis, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                return concat_v2_eager_fallback(values, axis, name, tf.context);
+                return concat_v2_eager_fallback(values, axis, name, tf.Context);
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
+            var _op = tf.OpDefLib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
             return _op.output;
         }
 
         private static Tensor concat_v2_eager_fallback<T1, T2>(T1[] values, T2 axis, string name, Context ctx)
         {
             var _attr_N = len(values);
-            var (_attr_T, input) = tf._execute.args_to_matching_eager(ctx, args: values.Select(x => (object)x).ToArray());
-            var (_attr_Tidx, axis1) = tf._execute.args_to_matching_eager(ctx, default_dtype: tf.int32, args: new object[] { axis });
+            var (_attr_T, input) = tf.Runner.ArgsToMatchingEager(ctx, args: values.Select(x => (object)x).ToArray());
+            var (_attr_Tidx, axis1) = tf.Runner.ArgsToMatchingEager(ctx, default_dtype: tf.int32, args: new object[] { axis });
             var _inputs_flat = input.concat(axis1);
             var _attrs = new object[] { "N", _attr_N, "T", _attr_T, "Tidx", _attr_Tidx };
 
-            return tf._execute.execute(ctx, "ConcatV2", 1, _inputs_flat, _attrs, name: name)[0];
+            return tf.Runner.Execute(ctx, "ConcatV2", 1, _inputs_flat, _attrs, name: name)[0];
         }
 
         public static Tensor[] concat_offset(Tensor concat_dim, Tensor[] shape, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ConcatOffset", name: name, args: new { concat_dim, shape });
+            var _op = tf.OpDefLib._apply_op_helper("ConcatOffset", name: name, args: new { concat_dim, shape });
 
             return _op.outputs;
         }
@@ -123,9 +124,9 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor diag(Tensor diagonal, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Diag", name,
                     null,
                     diagonal);
@@ -133,16 +134,16 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var op = tf._op_def_lib._apply_op_helper("Diag", name: name, args: new { diagonal });
+            var op = tf.OpDefLib._apply_op_helper("Diag", name: name, args: new { diagonal });
 
             return op.output;
         }
 
         public static Tensor expand_dims(Tensor input, int axis, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ExpandDims", name,
                     null,
                     input, tf.convert_to_tensor(axis));
@@ -150,30 +151,30 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("ExpandDims", name: name, args: new { input, dim = axis });
+            var _op = tf.OpDefLib._apply_op_helper("ExpandDims", name: name, args: new { input, dim = axis });
 
             return _op.outputs[0];
         }
 
         public static Tensor gather_v2<T1, T2>(T1 @params, T2 indices, int axis, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("GatherV2", name: name, new { @params, indices, axis });
+            var _op = tf.OpDefLib._apply_op_helper("GatherV2", name: name, new { @params, indices, axis });
 
             return _op.outputs[0];
         }
 
         public static Tensor pad(Tensor input, Tensor paddings, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Pad", name: name, args: new { input, paddings });
+            var _op = tf.OpDefLib._apply_op_helper("Pad", name: name, args: new { input, paddings });
 
             return _op.output;
         }
 
         public static Tensor pack(Tensor[] values, int axis = 0, string name = null)
         {
-            if(tf.context.executing_eagerly())
+            if(tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name, 
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName, 
                     "Pack", name,
                     null,
                     values,
@@ -181,21 +182,8 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Pack", name: name, args: new { values, axis });
+            var _op = tf.OpDefLib._apply_op_helper("Pack", name: name, args: new { values, axis });
             return _op.output;
-        }
-
-        public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
-        {
-            var _op = tf._op_def_lib._apply_op_helper("Placeholder", name: name, args: new { dtype, shape });
-            var _result = _op.outputs;
-            var _inputs_flat = _op.inputs;
-
-            var _attrs = new Dictionary<string, object>();
-            _attrs["dtype"] = _op.get_attr("dtype");
-            _attrs["shape"] = _op.get_attr("shape");
-
-            return new Tensor(_op, 0, dtype);
         }
 
         /// <summary>
@@ -226,7 +214,7 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor prevent_gradient(Tensor input, string message = "", string name = null)
         {
-            var op = tf._op_def_lib._apply_op_helper("PreventGradient", name: name, args: new { input, message });
+            var op = tf.OpDefLib._apply_op_helper("PreventGradient", name: name, args: new { input, message });
             return op.output;
         }
 
@@ -237,9 +225,9 @@ namespace Tensorflow
         /// <param name="name"></param>
         public static Tensor identity(Tensor input, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Identity", name,
                     null,
                     input);
@@ -247,30 +235,30 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Identity", name, new { input });
+            var _op = tf.OpDefLib._apply_op_helper("Identity", name, new { input });
 
             return _op.output;
         }
 
         public static Tensor invert_permutation(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("InvertPermutation", name, new { x });
+            var _op = tf.OpDefLib._apply_op_helper("InvertPermutation", name, new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor log(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Log", name: name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Log", name: name, args: new { x });
 
             return _op.outputs[0];
         }
 
         public static Tensor rank(Tensor input, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Rank", name,
                     null,
                     input);
@@ -278,7 +266,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Rank", name: name, args: new { input });
+            var _op = tf.OpDefLib._apply_op_helper("Rank", name: name, args: new { input });
 
             return _op.outputs[0];
         }
@@ -292,9 +280,9 @@ namespace Tensorflow
         /// <returns>A `Tensor`. Has the same type as `value`.</returns>
         public static Tensor fill<T>(Tensor dims, T value, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Fill", name,
                     null,
                     dims, value);
@@ -302,7 +290,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Fill", name, new { dims, value });
+            var _op = tf.OpDefLib._apply_op_helper("Fill", name, new { dims, value });
             return _op.output;
         }
 
@@ -315,9 +303,9 @@ namespace Tensorflow
         /// <returns>A tuple of `Tensor` objects (r0, r1).</returns>
         public static (Tensor, Tensor) broadcast_gradient_args(Tensor s0, Tensor s1, string name = "")
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "BroadcastGradientArgs", name, 
                     null,
                     s0,s1);
@@ -325,22 +313,22 @@ namespace Tensorflow
                 return (results[0], results[1]);
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("BroadcastGradientArgs", name, new { s0, s1 });
+            var _op = tf.OpDefLib._apply_op_helper("BroadcastGradientArgs", name, new { s0, s1 });
 
             return (_op.outputs[0], _op.outputs[1]);
         }
 
         public static Tensor reverse<T>(Tensor tensor, T axis, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ReverseV2", name, new { tensor, axis });
+            var _op = tf.OpDefLib._apply_op_helper("ReverseV2", name, new { tensor, axis });
             return _op.output;
         }
 
         public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Reshape", name, 
                     null,
                     tensor, shape);
@@ -348,13 +336,13 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
+            var _op = tf.OpDefLib._apply_op_helper("Reshape", name, new { tensor, shape });
             return _op.output;
         }
 
         public static Tensor reshape(Tensor tensor, int[] shape, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Reshape", name, new { tensor, shape });
+            var _op = tf.OpDefLib._apply_op_helper("Reshape", name, new { tensor, shape });
             return _op.outputs[0];
         }
 
@@ -367,7 +355,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static (Tensor, Tensor) unique(Tensor x, TF_DataType out_idx = TF_DataType.TF_INT32, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Unique", name, new { x, out_idx });
+            var _op = tf.OpDefLib._apply_op_helper("Unique", name, new { x, out_idx });
             // TODO
             //var _result = _UniqueOutput._make(_op.outputs);
             return (_op.outputs[0], _op.outputs[1]);
@@ -375,13 +363,13 @@ namespace Tensorflow
 
         public static Tensor[] unpack(Tensor value, int num, int axis = 0, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Unpack", name, new { value, num, axis });
+            var _op = tf.OpDefLib._apply_op_helper("Unpack", name, new { value, num, axis });
             return _op.outputs;
         }
 
         public static Tensor where(Tensor condition, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Where", name, new { input = condition });
+            var _op = tf.OpDefLib._apply_op_helper("Where", name, new { input = condition });
             return _op.output;
         }
 
@@ -392,9 +380,9 @@ namespace Tensorflow
             int axis = -1,
             string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "OneHot", name,
                     null,
                     indices, depth, on_value, off_value,
@@ -403,7 +391,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("OneHot", name, new { indices, depth, on_value, off_value, axis });
+            var _op = tf.OpDefLib._apply_op_helper("OneHot", name, new { indices, depth, on_value, off_value, axis });
             return _op.outputs[0];
         }
 
@@ -416,15 +404,15 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("PlaceholderWithDefault", name, new { input, shape, name });
+            var _op = tf.OpDefLib._apply_op_helper("PlaceholderWithDefault", name, new { input, shape, name });
             return _op.outputs[0];
         }
 
         public static Tensor select<Tx, Ty>(Tensor condition, Tx t, Ty e, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "SelectV2", name,
                     null,
                     condition, t, e);
@@ -432,21 +420,21 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Select", name, new { condition, t, e });
+            var _op = tf.OpDefLib._apply_op_helper("Select", name, new { condition, t, e });
             return _op.outputs[0];
         }
 
         public static Tensor scatter_nd(Tensor indices, Tensor updates, Tensor[] shape, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ScatterNd", name, new { indices, updates, shape });
+            var _op = tf.OpDefLib._apply_op_helper("ScatterNd", name, new { indices, updates, shape });
             return _op.outputs[0];
         }
 
         public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Shape", name, 
                     null,
                     input,
@@ -455,7 +443,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Shape", name, new { input, out_type });
+            var _op = tf.OpDefLib._apply_op_helper("Shape", name, new { input, out_type });
             return _op.outputs[0];
         }
 
@@ -468,13 +456,13 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor[] shape_n(Tensor[] input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ShapeN", name, new { input, out_type });
+            var _op = tf.OpDefLib._apply_op_helper("ShapeN", name, new { input, out_type });
             return _op.outputs;
         }
 
         public static Tensor size(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Size", name, new { input, out_type });
+            var _op = tf.OpDefLib._apply_op_helper("Size", name, new { input, out_type });
             return _op.outputs[0];
         }
 
@@ -488,15 +476,15 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor slice(Tensor input, Tensor begin, Tensor size, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Slice", name, new { input, begin, size });
+            var _op = tf.OpDefLib._apply_op_helper("Slice", name, new { input, begin, size });
             return _op.outputs[0];
         }
 
         public static Tensor tile<T>(Tensor input, T multiples, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Tile", name, 
                     null,
                     input, multiples);
@@ -504,34 +492,34 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Tile", name, new { input, multiples });
+            var _op = tf.OpDefLib._apply_op_helper("Tile", name, new { input, multiples });
             return _op.outputs[0];
         }
 
         public static Tensor transpose<T1, T2>(T1 x, T2 perm, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Transpose", name,
                     null,
                     x, perm);
 
                 return results[0];
             }
-            var _op = tf._op_def_lib._apply_op_helper("Transpose", name, new { x, perm });
+            var _op = tf.OpDefLib._apply_op_helper("Transpose", name, new { x, perm });
             return _op.outputs[0];
         }
 
         public static Tensor zeros_like(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ZerosLike", name, new { x });
+            var _op = tf.OpDefLib._apply_op_helper("ZerosLike", name, new { x });
             return _op.outputs[0];
         }
 
         public static Tensor stop_gradient(Tensor x, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("StopGradient", name, args: new { input = x, name });
+            var _op = tf.OpDefLib._apply_op_helper("StopGradient", name, args: new { input = x, name });
 
             return _op.output;
         }
@@ -544,9 +532,9 @@ namespace Tensorflow
             int shrink_axis_mask = 0,
             string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "StridedSlice", name, 
                     null,
                     input, begin, end, strides,
@@ -559,7 +547,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("StridedSlice", name, new
+            var _op = tf.OpDefLib._apply_op_helper("StridedSlice", name, new
             {
                 input,
                 begin,
@@ -583,7 +571,7 @@ namespace Tensorflow
             int shrink_axis_mask = 0,
             string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("StridedSlice", name, new
+            var _op = tf.OpDefLib._apply_op_helper("StridedSlice", name, new
             {
                 input,
                 begin,
@@ -623,7 +611,7 @@ namespace Tensorflow
             int begin_mask = 0, int end_mask = 0, int ellipsis_mask = 0, int new_axis_mask = 0,
             int shrink_axis_mask = 0, string name = null)
         {
-            var op = tf._op_def_lib._apply_op_helper("StridedSliceGrad", name: name, args: new
+            var op = tf.OpDefLib._apply_op_helper("StridedSliceGrad", name: name, args: new
             {
                 shape,
                 begin,
@@ -642,7 +630,7 @@ namespace Tensorflow
 
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Slice", name, new { input, begin, size });
+            var _op = tf.OpDefLib._apply_op_helper("Slice", name, new { input, begin, size });
             return _op.outputs[0];
         }
 
@@ -659,9 +647,9 @@ namespace Tensorflow
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Squeeze", name, 
                     null,
                     input,
@@ -671,7 +659,7 @@ namespace Tensorflow
             }
 
             if (axis == null) axis = new int[0];
-            var _op = tf._op_def_lib._apply_op_helper("Squeeze", name, args: new { input, squeeze_dims = axis });
+            var _op = tf.OpDefLib._apply_op_helper("Squeeze", name, args: new { input, squeeze_dims = axis });
 
             return _op.outputs[0];
         }
@@ -687,7 +675,7 @@ namespace Tensorflow
         /// <returns> `Tensor`. Has the same type as `s0`.</returns>
         public static Tensor broadcast_args(Tensor s0, Tensor s1, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("BroadcastArgs", name, args: new { s0, s1, name });
+            var _op = tf.OpDefLib._apply_op_helper("BroadcastArgs", name, args: new { s0, s1, name });
 
             return _op.outputs[0];
         }
@@ -701,9 +689,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor broadcast_to<T>(Tensor input, T shape, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "BroadcastTo", name,
                     null,
                     input, shape);
@@ -711,7 +699,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("BroadcastTo", name, args: new { input, shape, name });
+            var _op = tf.OpDefLib._apply_op_helper("BroadcastTo", name, args: new { input, shape, name });
 
             return _op.outputs[0];
         }

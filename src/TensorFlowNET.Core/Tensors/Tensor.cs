@@ -109,7 +109,7 @@ namespace Tensorflow
 
                 if (_handle == IntPtr.Zero)
                 {
-                    c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, tf.status.Handle);
+                    c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, tf.Status.Handle);
                 }
                 else
                 {
@@ -123,11 +123,11 @@ namespace Tensorflow
             set
             {
                 if (value == null)
-                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.status.Handle);
+                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.Status.Handle);
                 else
-                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, tf.status.Handle);
+                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, tf.Status.Handle);
 
-                tf.status.Check(true);
+                tf.Status.Check(true);
             }
         }
 
@@ -172,7 +172,7 @@ namespace Tensorflow
                 if (_handle == IntPtr.Zero)
                 {
                     var output = _as_tf_output();
-                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, tf.status.Handle);
+                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, tf.Status.Handle);
                     return ndim;
                 }
 
@@ -232,11 +232,11 @@ namespace Tensorflow
             switch (rank)
             {
                 case -1:
-                    return $"tf.Tensor '{name}' shape=<unknown> dtype={dtype}";
+                    return $"tf.Tensor '{name}' shape={TensorShape} dtype={dtype.as_numpy_name()}";
                 case 0:
-                    return $"tf.Tensor '{name}' shape=() dtype={dtype}";
+                    return $"tf.Tensor '{name}' shape={TensorShape} dtype={dtype.as_numpy_name()}";
                 default:
-                    return $"tf.Tensor '{name}' shape=({string.Join(",", shape)}) dtype={dtype}";
+                    return $"tf.Tensor '{name}' shape={TensorShape} dtype={dtype.as_numpy_name()}";
             }
         }
 

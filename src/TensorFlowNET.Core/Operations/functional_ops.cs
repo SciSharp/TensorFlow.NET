@@ -60,7 +60,7 @@ namespace Tensorflow
 
             var elems_flat = input_flatten(elems);
 
-            bool in_graph_mode = tf.context.executing_eagerly();
+            bool in_graph_mode = tf.Context.executing_eagerly();
 
             return tf_with(ops.name_scope(name, "scan", new { elems_flat }), scope =>
             {

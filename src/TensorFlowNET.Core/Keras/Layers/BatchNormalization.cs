@@ -80,7 +80,7 @@ namespace Tensorflow.Keras.Layers
             this.moving_variance_initializer = moving_variance_initializer;
             this.renorm = renorm;
             this.fused = true;
-            this.supports_masking = true;
+            this.SupportsMasking = true;
             this._bessels_correction_test_only = true;
         }
 
@@ -95,7 +95,7 @@ namespace Tensorflow.Keras.Layers
                 if (Enumerable.SequenceEqual(axis, new int[] { 3 }))
                     _data_format = "NHWC";
 
-            var param_dtype = _dtype == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : _dtype;
+            var param_dtype = DType == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : DType;
             var param_shape = new int[] { input_shape.dims[axis[0]] };
 
             if (scale)
@@ -143,14 +143,14 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor[] call(Tensor inputs, bool is_training = false, Tensor state = null)
+        protected override Tensor[] call(Tensor[] inputs, bool is_training = false, Tensor state = null)
         {
             Tensor outputs = null;
 
             if (fused)
             {
                 Tensor training = tf.convert_to_tensor(is_training);
-                outputs = _fused_batch_norm(inputs, training: training);
+                outputs = _fused_batch_norm(inputs[0], training: training);
                 return new[] { outputs, outputs };
             }
 

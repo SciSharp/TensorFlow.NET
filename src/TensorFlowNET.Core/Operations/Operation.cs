@@ -237,8 +237,8 @@ namespace Tensorflow
             lock (Locks.ProcessWide)
             {
                 using var buf = new Buffer();
-                c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.status.Handle);
-                tf.status.Check(true);
+                c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
+                tf.Status.Check(true);
 
                 x = AttrValue.Parser.ParseFrom(buf.DangerousMemoryBlock.Stream());
             }
@@ -297,9 +297,9 @@ namespace Tensorflow
             // the updated inputs are reloaded from the c_api
             lock (Locks.ProcessWide)
             {
-                c_api.UpdateEdge(_graph, output, input, tf.status.Handle);
+                c_api.UpdateEdge(_graph, output, input, tf.Status.Handle);
                 //var updated_inputs = inputs;
-                tf.status.Check();
+                tf.Status.Check();
             }
         }
 

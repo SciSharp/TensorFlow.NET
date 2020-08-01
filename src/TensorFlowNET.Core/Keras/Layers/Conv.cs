@@ -65,7 +65,7 @@ namespace Tensorflow.Keras.Layers
             this.use_bias = use_bias;
             this.kernel_initializer = kernel_initializer;
             this.bias_initializer = bias_initializer;
-            input_spec = new InputSpec(ndim: rank + 2);
+            inputSpec = new InputSpec(ndim: rank + 2);
         }
 
         protected override void build(TensorShape input_shape)
@@ -79,17 +79,17 @@ namespace Tensorflow.Keras.Layers
                 shape: kernel_shape,
                 initializer: kernel_initializer,
                 trainable: true,
-                dtype: _dtype);
+                dtype: DType);
             if (use_bias)
                 bias = (RefVariable)add_weight(name: "bias",
                     shape: new int[] { filters },
                     initializer: bias_initializer,
                     trainable: true,
-                    dtype: _dtype);
+                    dtype: DType);
 
             var axes = new Dictionary<int, int>();
             axes.Add(-1, input_dim);
-            input_spec = new InputSpec(ndim: rank + 2, axes: axes);
+            inputSpec = new InputSpec(ndim: rank + 2, axes: axes);
 
             string op_padding;
             if (padding == "causal")
@@ -108,9 +108,9 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor[] call(Tensor inputs, bool training = false, Tensor state = null)
+        protected override Tensor[] call(Tensor[] inputs, bool training = false, Tensor state = null)
         {
-            var outputs = _convolution_op.__call__(inputs, kernel);
+            var outputs = _convolution_op.__call__(inputs[0], kernel);
             if (use_bias)
             {
                 if (data_format == "channels_first")

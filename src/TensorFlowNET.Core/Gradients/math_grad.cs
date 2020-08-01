@@ -515,7 +515,7 @@ namespace Tensorflow.Gradients
                     var rank = input_0_shape.Length;
                     if (Enumerable.SequenceEqual(Enumerable.Range(0, rank), axes.Data<int>()))
                     {
-                        if (tf.context.executing_eagerly())
+                        if (tf.Context.executing_eagerly())
                         {
                             // should add ones_rank_cache
                             var new_shape = constant_op.constant(range(0, rank).Select(x => 1).ToArray(), dtype: TF_DataType.TF_INT32);
@@ -534,7 +534,7 @@ namespace Tensorflow.Gradients
                             input_shape = array_ops.shape(op.inputs[0]);
                         return new Tensor[] { gen_array_ops.tile(grad, input_shape), null };
                     }
-                    else if (!input_0_shape.Contains(-1) && !tf.context.executing_eagerly())
+                    else if (!input_0_shape.Contains(-1) && !tf.Context.executing_eagerly())
                     {
                         throw new NotImplementedException("");
                     }

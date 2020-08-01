@@ -14,15 +14,24 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Keras;
-using Tensorflow.Keras.Engine;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Tensorflow
+namespace Tensorflow.Contexts
 {
-    public static partial class keras
+    public class ContextSwitch
     {
-        public static Preprocessing preprocessing => new Preprocessing();
-        public static Sequence sequence = new Sequence();
-        public static Sequential Sequential() => new Sequential();
+        /// <summary>
+        /// Whether the context is building a function.
+        /// </summary>
+        public bool IsBuildingFunction { get; set; }
+
+        /// <summary>
+        /// A callable that executes the context switch.
+        /// </summary>
+        public Action EnterContextFn { get; set; }
+
+        public string DeviceStack { get; set; }
     }
 }

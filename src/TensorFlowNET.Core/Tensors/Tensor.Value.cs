@@ -240,8 +240,8 @@ namespace Tensorflow
             {
                 IntPtr dst = IntPtr.Zero;
                 ulong dstLen = 0;
-                var read = c_api.TF_StringDecode((byte*)src, bytesize, (byte**)&dst, ref dstLen, tf.status.Handle);
-                tf.status.Check(true);
+                var read = c_api.TF_StringDecode((byte*)src, bytesize, (byte**)&dst, ref dstLen, tf.Status.Handle);
+                tf.Status.Check(true);
                 buffer[i] = new byte[(int)dstLen];
                 Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);
                 src += (int)read;
@@ -274,8 +274,8 @@ namespace Tensorflow
             {
                 IntPtr dst = IntPtr.Zero;
                 ulong dstLen = 0;
-                var read = c_api.TF_StringDecode((byte*)src, bytesize, (byte**)&dst, ref dstLen, tf.status.Handle);
-                tf.status.Check(true);
+                var read = c_api.TF_StringDecode((byte*)src, bytesize, (byte**)&dst, ref dstLen, tf.Status.Handle);
+                tf.Status.Check(true);
                 buffer[i] = new byte[(int)dstLen];
                 Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);
                 src += (int)read;

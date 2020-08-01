@@ -459,9 +459,9 @@ namespace Tensorflow
             IntPtr tensor = c_api.TF_TensorData(handle);
             Marshal.WriteInt64(tensor, 0);
             fixed (byte* src = buffer)
-                c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*)(tensor + sizeof(long)), size, tf.status.Handle);
+                c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*)(tensor + sizeof(long)), size, tf.Status.Handle);
             _handle = handle;
-            tf.status.Check(true);
+            tf.Status.Check(true);
         }
 
         public unsafe Tensor(string[] strings)
@@ -490,8 +490,8 @@ namespace Tensorflow
                 Marshal.WriteInt64(input, i * sizeof(ulong), (long)offset);
                 fixed (byte* src = &buffer[i][0])
                 {
-                    var written = TF_StringEncode(src, (ulong)buffer[i].Length, (byte*)data_start, (ulong)(limit.ToInt64() - data_start.ToInt64()), tf.status.Handle);
-                    tf.status.Check(true);
+                    var written = TF_StringEncode(src, (ulong)buffer[i].Length, (byte*)data_start, (ulong)(limit.ToInt64() - data_start.ToInt64()), tf.Status.Handle);
+                    tf.Status.Check(true);
                     //input += 8;
                     data_start += (int)written;
                     offset += written;
@@ -519,8 +519,8 @@ namespace Tensorflow
                     IntPtr tensor = c_api.TF_TensorData(handle);
                     Marshal.WriteInt64(tensor, 0);
 
-                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (byte*) (tensor + sizeof(long)), size, tf.status.Handle);
-                    tf.status.Check(true);
+                    c_api.TF_StringEncode((byte*) nd.Unsafe.Address, bytesLength, (byte*) (tensor + sizeof(long)), size, tf.Status.Handle);
+                    tf.Status.Check(true);
                     _handle = handle;
                 } else
                 {
@@ -533,9 +533,9 @@ namespace Tensorflow
                     Marshal.WriteInt64(tensor, 0);
 
                     fixed (byte* src = buffer)
-                        c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*) (tensor + sizeof(Int64)), size, tf.status.Handle);
+                        c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*) (tensor + sizeof(Int64)), size, tf.Status.Handle);
 
-                    tf.status.Check(true);
+                    tf.Status.Check(true);
                     _handle = handle;
                 }
 
@@ -610,9 +610,9 @@ namespace Tensorflow
             Marshal.WriteInt64(tensor, 0);
 
             fixed (byte* src = buffer)
-                c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*)(tensor + sizeof(long)), size, tf.status.Handle);
+                c_api.TF_StringEncode(src, (ulong)buffer.Length, (byte*)(tensor + sizeof(long)), size, tf.Status.Handle);
 
-            tf.status.Check(true);
+            tf.Status.Check(true);
             return handle;
         }
 

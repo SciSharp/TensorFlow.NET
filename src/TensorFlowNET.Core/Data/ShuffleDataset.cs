@@ -25,7 +25,7 @@ namespace Tensorflow
             (_seed, _seed2) = random_seed.get_seed_tensor(seed);
             _reshuffle_each_iteration = reshuffle_each_iteration;
             var seed_generator = ops.dummy_seed_generator();
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
                 variant_tensor = ops.shuffle_dataset_v3(input_dataset.variant_tensor, _buffer_size,
                     _seed, _seed2, seed_generator,
                     output_types, output_shapes,

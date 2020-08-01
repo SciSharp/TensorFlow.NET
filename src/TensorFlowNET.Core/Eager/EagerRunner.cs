@@ -11,6 +11,6 @@ namespace Tensorflow.Eager
     /// </summary>
     public partial class EagerRunner : IEagerRunner
     {
-        
+
     }
 }

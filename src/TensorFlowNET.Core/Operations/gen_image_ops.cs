@@ -65,13 +65,13 @@ namespace Tensorflow
             string name = null)
         {
             // Add nodes to the TensorFlow graph.
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
                 throw new NotImplementedException("decode_jpeg");
             }
             else
             {
-                var _op = tf._op_def_lib._apply_op_helper("DecodeJpeg", name: name, args: new
+                var _op = tf.OpDefLib._apply_op_helper("DecodeJpeg", name: name, args: new
                 {
                     contents,
                     channels,
@@ -90,13 +90,13 @@ namespace Tensorflow
             string name = null)
         {
             // Add nodes to the TensorFlow graph.
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
                 throw new NotImplementedException("decode_gif");
             }
             else
             {
-                var _op = tf._op_def_lib._apply_op_helper("DecodeGif", name: name, args: new
+                var _op = tf.OpDefLib._apply_op_helper("DecodeGif", name: name, args: new
                 {
                     contents
                 });
@@ -111,13 +111,13 @@ namespace Tensorflow
             string name = null)
         {
             // Add nodes to the TensorFlow graph.
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
                 throw new NotImplementedException("decode_png");
             }
             else
             {
-                var _op = tf._op_def_lib._apply_op_helper("DecodePng", name: name, args: new
+                var _op = tf.OpDefLib._apply_op_helper("DecodePng", name: name, args: new
                 {
                     contents,
                     channels,
@@ -133,13 +133,13 @@ namespace Tensorflow
             string name = null)
         {
             // Add nodes to the TensorFlow graph.
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
                 throw new NotImplementedException("decode_bmp");
             }
             else
             {
-                var _op = tf._op_def_lib._apply_op_helper("DecodeBmp", name: name, args: new
+                var _op = tf.OpDefLib._apply_op_helper("DecodeBmp", name: name, args: new
                 {
                     contents,
                     channels
@@ -151,13 +151,13 @@ namespace Tensorflow
 
         public static Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
                 throw new NotImplementedException("resize_bilinear");
             }
             else
             {
-                var _op = tf._op_def_lib._apply_op_helper("ResizeBilinear", name: name, args: new
+                var _op = tf.OpDefLib._apply_op_helper("ResizeBilinear", name: name, args: new
                 {
                     images,
                     size,
@@ -171,7 +171,7 @@ namespace Tensorflow
         public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false, 
             bool half_pixel_centers = false, string name = null)
         {
-            var op = tf._op_def_lib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new
+            var op = tf.OpDefLib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new
             {
                 images,
                 size,
@@ -185,7 +185,7 @@ namespace Tensorflow
         public static Tensor resize_nearest_neighbor_grad<Tsize>(Tensor grads, Tsize size, bool align_corners = false,
             bool half_pixel_centers = false, string name = null)
         {
-            var op = tf._op_def_lib._apply_op_helper("ResizeNearestNeighborGrad", name: name, args: new
+            var op = tf.OpDefLib._apply_op_helper("ResizeNearestNeighborGrad", name: name, args: new
             {
                 grads,
                 size,

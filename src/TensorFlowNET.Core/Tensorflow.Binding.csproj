@@ -21,7 +21,11 @@ Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.20.0.0</AssemblyVersion>
     <PackageReleaseNotes>tf.net 0.20.x and above are based on tensorflow native 2.x.
-Eager Mode is added finally.
+
+* Eager Mode is added finally.
+* tf.keras is partially working. 
+* tf.data is added.
+
 It's not stable at this moment and missing many APIs, tf.net 0.15.x is more stable for production.
 Please be patient, we're working hard on missing functions, providing full tensorflow binding is our mission.</PackageReleaseNotes>
     <FileVersion>0.20.0.0</FileVersion>

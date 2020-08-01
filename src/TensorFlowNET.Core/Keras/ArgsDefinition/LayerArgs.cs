@@ -17,7 +17,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// <summary>
         /// Only applicable to input layers.
         /// </summary>
-        public TF_DataType DType { get; set; }
+        public TF_DataType DType { get; set; } = TF_DataType.TF_FLOAT;
 
         /// <summary>
         /// Whether the `call` method can be used to build a TF graph without issues.
@@ -35,6 +35,8 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// Only applicable to input layers.
         /// </summary>
         public TensorShape BatchInputShape { get; set; }
+
+        public int BatchSize { get; set; } = -1;
 
         /// <summary>
         /// Initial weight values.

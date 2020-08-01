@@ -16,6 +16,7 @@
 
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -28,11 +29,21 @@ namespace Tensorflow.Keras.Engine
         Tensor[] outputs;
 #pragma warning restore CS0169 // The field 'Sequential.outputs' is never used
 
-        public Sequential(string name = null) 
+        bool computeOutputAndMaskJointly;
+        bool autoTrackSubLayers;
+        TensorShape inferredInputShape;
+        bool hasExplicitInputShape;
+        TF_DataType inputDType;
+        Layer[] layers;
+
+        public Sequential(Layer[] layers = null, string name = null) 
             : base(new ModelArgs { Name = name})
         {
-            supports_masking = true;
-            // _compute_output_and_mask_jointly = true;
+            this.layers = layers ?? new Layer[0];
+            SupportsMasking = true;
+            computeOutputAndMaskJointly = true;
+            autoTrackSubLayers = false;
+            hasExplicitInputShape = false;
         }
 
         public void __enter__()
@@ -48,27 +59,26 @@ namespace Tensorflow.Keras.Engine
         {
             built = false;
             var set_inputs = false;
-            //if(_layers.Count == 0)
+            if(layers.Length == 0)
             {
                 if(layer is InputLayer)
                 {
-
+                    set_inputs = true;
                 }
                 else
                 {
-                    var (batch_shape, dtype) = (layer._batch_input_shape, layer._dtype);
-                    if (batch_shape != null)
+                    if (layer.BatchInputShape != null)
                     {
                         // Instantiate an input layer.
-                        var x = keras.layers.Input(
-                              batch_shape: batch_shape,
-                              dtype: dtype,
-                              name: layer.name + "_input");
+                        var x = tf.keras.Input(
+                              batch_shape: layer.BatchInputShape,
+                              dtype: layer.DType,
+                              name: layer.Name + "_input");
 
                         // This will build the current layer
                         // and create the node connecting the current layer
                         // to the input layer we just created.
-                        layer.__call__(x);
+                        layer.Apply(x);
                         set_inputs = true;
                     }
                 }

@@ -11,7 +11,7 @@ namespace Tensorflow
     {
         public static Tensor mul(IntPtr x, IntPtr y, string name = null)
         {
-            var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+            var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                 "Mul", name,
                 null,
                 x, y);

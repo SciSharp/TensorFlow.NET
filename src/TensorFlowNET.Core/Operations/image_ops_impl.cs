@@ -112,7 +112,7 @@ namespace Tensorflow
         
         public static Tensor crop_and_resize(Tensor image, Tensor boxes, Tensor box_ind, Tensor crop_size, string method, float extrapolation_value, string name)
         {
-            var _op = tf._op_def_lib._apply_op_helper("CropAndResize", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("CropAndResize", name: name, args: new
             {
                 image,
                 boxes,

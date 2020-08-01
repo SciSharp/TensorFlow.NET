@@ -17,8 +17,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -27,82 +29,68 @@ namespace Tensorflow.Keras.Layers
     /// </summary>
     public class InputLayer : Layer
     {
-        public bool sparse;
-        public int? batch_size;
-        public bool is_placeholder;
+        InputLayerArgs args;
+        bool isPlaceholder;
+        TensorSpec typeSpec;
 
-        public InputLayer(int[] input_shape = null,
-            int[] batch_input_shape = null,
-            int? batch_size = null,
-            TF_DataType dtype = TF_DataType.DtInvalid,
-            string name = null,
-            bool sparse = false,
-            Tensor input_tensor = null) : 
-            base(new LayerArgs 
-            { 
-                DType = dtype, Name = name
-            })
+        public InputLayer(InputLayerArgs args) : 
+            base(args)
         {
+            this.args = args;
             built = true;
-            this.sparse = sparse;
-            this.batch_size = batch_size;
-            this.supports_masking = true;
+            this.SupportsMasking = true;
 
-            if(batch_input_shape != null)
+            if(BatchInputShape != null)
             {
-                batch_size = batch_input_shape[0];
-                input_shape = batch_input_shape.Skip(1).ToArray();
+                args.BatchSize = BatchInputShape.dims[0];
+                args.InputShape = BatchInputShape.dims[1..];
             }
 
             // moved to base class
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(Name))
             {
                 var prefix = "input";
-                name = prefix + '_' + backend.get_uid(prefix);
+                args.Name = prefix + '_' + tf.keras.backend.get_uid(prefix);
             }
-
-            if (input_tensor == null)
+            
+            if (args.InputTensor == null)
             {
-                if(input_shape != null)
+                if(args.InputShape != null)
                 {
-                    var dims = new List<int> { batch_size.HasValue ? batch_size.Value : -1 };
-                    dims.AddRange(input_shape);
-                    batch_input_shape = dims.ToArray();
+                    args.BatchInputShape = new int[] { args.BatchSize }
+                        .Concat(args.InputShape.dims)
+                        .ToArray();
                 }
                 else
                 {
-                    batch_input_shape = null;
+                    args.BatchInputShape = null;
                 }
-
-                var graph = backend.get_graph().as_default();
 
                 // In graph mode, create a graph placeholder to call the layer on.
-                if (sparse)
-                {
-                    throw new NotImplementedException("InputLayer sparse is true");
-                }
-                else
-                {
-                    input_tensor = backend.placeholder(
-                          shape: batch_input_shape,
-                          dtype: dtype,
-                          name: name);
-                }
+                tf.Context.graph_mode();
+                args.InputTensor = tf.keras.backend.placeholder(
+                        shape: BatchInputShape,
+                        dtype: DType,
+                        name: Name,
+                        sparse: args.Sparse);
+                tf.Context.eager_mode();
 
-                is_placeholder = true;
-                _batch_input_shape = batch_input_shape;
+                isPlaceholder = true;
             }
 
             // Create an input node to add to self.outbound_node
             // and set output_tensors' _keras_history.
             // input_tensor._keras_history = base_layer.KerasHistory(self, 0, 0)
             // input_tensor._keras_mask = None
-            new Node(this,
-                inbound_layers: new Layer[0],
-                node_indices: new int[0],
-                tensor_indices: new int[0],
-                input_tensors: new Tensor[] { input_tensor },
-                output_tensors: new Tensor[] { input_tensor });
+            new Node(this, new NodeArgs
+            {
+                InputTensors = new Tensor[] { args.InputTensor },
+                Outputs = new Tensor[] { args.InputTensor }
+            });
+
+            typeSpec = new TensorSpec(args.InputTensor.TensorShape,
+                dtype: args.InputTensor.dtype,
+                name: Name);
         }
     }
 }

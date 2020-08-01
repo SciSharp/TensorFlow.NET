@@ -14,25 +14,21 @@
    limitations under the License.
 ******************************************************************************/
 
-using static Tensorflow.Binding;
+using System;
+using Tensorflow.Eager;
 
-namespace Tensorflow
+namespace Tensorflow.Contexts
 {
-    public class gen_ctc_ops
+    public sealed class ContextOptions : IDisposable
     {
-        public static Tensor[] ctc_greedy_decoder(Tensor inputs, Tensor sequence_length, bool merge_repeated = true, string name = "CTCGreedyDecoder")
+        public SafeContextOptionsHandle Handle { get; }
+
+        public ContextOptions()
         {
-            var op = tf.OpDefLib._apply_op_helper("CTCGreedyDecoder", name: name, args: new
-            {
-                inputs,
-                sequence_length,
-                merge_repeated
-            });
-            /*var decoded_indices = op.outputs[0];
-            var decoded_values = op.outputs[1];
-            var decoded_shape = op.outputs[2];
-            var log_probability = op.outputs[3];*/
-            return op.outputs;
+            Handle = c_api.TFE_NewContextOptions();
         }
+
+        public void Dispose()
+            => Handle.Dispose();
     }
 }

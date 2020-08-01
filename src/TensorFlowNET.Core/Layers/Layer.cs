@@ -49,8 +49,8 @@ namespace Tensorflow.Layers
             this._reuse = _reuse;
 
             // Avoid an incorrect lint error
-            _trainable_weights = new List<IVariableV1>();
-            _non_trainable_weights = new List<IVariableV1>();
+            trainableWeights = new List<IVariableV1>();
+            nonTrainableWeights = new List<IVariableV1>();
             this.built = false;
             _keras_style = false;
         }
@@ -95,7 +95,7 @@ namespace Tensorflow.Layers
 
 
             // Update global default collections.
-            _add_elements_to_collection(_updates.ToArray(), new string[] { tf.GraphKeys.UPDATE_OPS });
+            _add_elements_to_collection(updates.ToArray(), new string[] { tf.GraphKeys.UPDATE_OPS });
 
             return outputs;
         }
@@ -202,7 +202,7 @@ namespace Tensorflow.Layers
                 }
                 else
                 {
-                    tf_with(tf.variable_scope(scope, default_name: _base_name), captured_scope =>
+                    tf_with(tf.variable_scope(scope, default_name: baseName), captured_scope =>
                     {
                         // convert variable_scope to VariableScope
                         _scope = captured_scope;

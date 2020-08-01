@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2020 The TensorFlow.NET Authors. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,19 +15,26 @@
 ******************************************************************************/
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Tensorflow.Eager
+namespace Tensorflow.Contexts
 {
-    public sealed class ContextOptions : IDisposable
+    /// <summary>
+    /// Match the semantics of DefaultGraphStack
+    /// </summary>
+    public class ContextSwitchStack
     {
-        public SafeContextOptionsHandle Handle { get; }
+        Stack<ContextSwitch> stack;
 
-        public ContextOptions()
+        public ContextSwitchStack(bool isEager)
         {
-            Handle = c_api.TFE_NewContextOptions();
+            stack = new Stack<ContextSwitch>();
+            if (isEager)
+                stack.Push(new ContextSwitch
+                {
+                    IsBuildingFunction = false
+                });
         }
-
-        public void Dispose()
-            => Handle.Dispose();
     }
 }

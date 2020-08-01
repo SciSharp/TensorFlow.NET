@@ -17,9 +17,9 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor tensor_slice_dataset(Tensor[] components, TensorShape[] output_shapes, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "TensorSliceDataset", name,
                     null,
                     new object[] 
@@ -35,9 +35,9 @@ namespace Tensorflow
 
         public Tensor repeat_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "RepeatDataset", name,
                     null,
                     input_dataset, count,
@@ -55,9 +55,9 @@ namespace Tensorflow
             bool reshuffle_each_iteration = true,
             string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ShuffleDatasetV3", name,
                     null,
                     input_dataset, buffer_size,
@@ -73,9 +73,9 @@ namespace Tensorflow
 
         public Tensor dummy_seed_generator(string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "DummySeedGenerator", name,
                     null);
                 return results[0];
@@ -101,9 +101,9 @@ namespace Tensorflow
             bool parallel_copy = false,
             string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "BatchDatasetV2", name,
                     null,
                     input_dataset, buffer_size, drop_remainder,
@@ -133,9 +133,9 @@ namespace Tensorflow
             bool legacy_autotune = true,
             string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "PrefetchDataset", name,
                     null,
                     input_dataset, buffer_size, 
@@ -162,9 +162,9 @@ namespace Tensorflow
             TF_DataType[] output_types, TensorShape[] output_shapes,
             string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "TakeDataset", name,
                     null,
                     input_dataset, count,
@@ -194,9 +194,9 @@ namespace Tensorflow
             if (optimization_configs == null)
                 optimization_configs = new string[0];
 
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "OptimizeDataset", name,
                     null,
                     input_dataset, optimizations,
@@ -224,9 +224,9 @@ namespace Tensorflow
             AutotuneAlgorithm algorithm, long cpu_budget,
             string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ModelDataset", name,
                     null,
                     input_dataset, 
@@ -249,9 +249,9 @@ namespace Tensorflow
         /// <returns>A tuple of `Tensor` objects (handle, deleter).</returns>
         public (Tensor, Tensor) anonymous_iterator_v2(TF_DataType[] output_types, TensorShape[] output_shapes, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "AnonymousIteratorV2", name,
                     null,
                     "output_types", output_types,
@@ -271,9 +271,9 @@ namespace Tensorflow
         /// <returns>The created Operation.</returns>
         public ITensorOrOperation make_iterator(Tensor dataset, Tensor iterator, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "MakeIterator", name,
                     null,
                     dataset, iterator);
@@ -292,9 +292,9 @@ namespace Tensorflow
         /// <returns>The created Operation.</returns>
         public ITensorOrOperation delete_iterator(Tensor handle, Tensor deleter, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "DeleteIterator", name,
                     null,
                     handle, deleter);
@@ -314,9 +314,9 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor[] iterator_get_next(Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "IteratorGetNext", name,
                     null,
                     iterator,

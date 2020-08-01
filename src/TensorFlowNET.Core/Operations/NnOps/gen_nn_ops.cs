@@ -42,7 +42,7 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static Tensor conv2d(Conv2dParams parameters)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Conv2D", name: parameters.Name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("Conv2D", name: parameters.Name, args: new
             {
                 input = parameters.Input,
                 filter = parameters.Filter,
@@ -64,7 +64,7 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static Tensor conv2d_backprop_filter(Conv2dParams parameters)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Conv2DBackpropFilter", name: parameters.Name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropFilter", name: parameters.Name, args: new
             {
                 input = parameters.Input,
                 filter_sizes = parameters.FilterSizes,
@@ -87,7 +87,7 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static Tensor conv2d_backprop_input(Conv2dParams parameters)
         {
-            var _op = tf._op_def_lib._apply_op_helper("Conv2DBackpropInput", name: parameters.Name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropInput", name: parameters.Name, args: new
             {
                 input_sizes = parameters.InputSizes,
                 filter = parameters.Filter,
@@ -111,7 +111,7 @@ namespace Tensorflow.Operations
             if (data_format == null)
                 data_format = "NHWC";
 
-            var _op = tf._op_def_lib._apply_op_helper("BiasAdd", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("BiasAdd", name: name, args: new
             {
                 value,
                 bias,
@@ -128,7 +128,7 @@ namespace Tensorflow.Operations
             if (data_format == null)
                 data_format = "NHWC";
 
-            var _op = tf._op_def_lib._apply_op_helper("BiasAddGrad", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("BiasAddGrad", name: name, args: new
             {
                 out_backprop,
                 data_format
@@ -154,7 +154,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor elu(Tensor features, string name = "Elu")
         {
-            var op = tf._op_def_lib._apply_op_helper("Elu", name: name, args: new { features });
+            var op = tf.OpDefLib._apply_op_helper("Elu", name: name, args: new { features });
             return op.output;
         }
 
@@ -165,7 +165,7 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static Tensor[] fused_batch_norm_grad(FusedBatchNormParams @params)
         {
-            var op = tf._op_def_lib._apply_op_helper("FusedBatchNormGrad", name: @params.Name, args: new
+            var op = tf.OpDefLib._apply_op_helper("FusedBatchNormGrad", name: @params.Name, args: new
             {
                 y_backprop = @params.YBackprop,
                 x = @params.X,
@@ -181,7 +181,7 @@ namespace Tensorflow.Operations
 
         public static Tensor[] fused_batch_norm_grad_v3(FusedBatchNormParams @params)
         {
-            var op = tf._op_def_lib._apply_op_helper("FusedBatchNormGradV3", name: @params.Name, args: new
+            var op = tf.OpDefLib._apply_op_helper("FusedBatchNormGradV3", name: @params.Name, args: new
             {
                 y_backprop = @params.YBackprop,
                 x = @params.X,
@@ -206,7 +206,7 @@ namespace Tensorflow.Operations
                 bool is_training = true,
                 string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("FusedBatchNorm", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("FusedBatchNorm", name: name, args: new
             {
                 x,
                 scale,
@@ -231,7 +231,7 @@ namespace Tensorflow.Operations
         bool is_training = true,
         string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("FusedBatchNormV3", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("FusedBatchNormV3", name: name, args: new
             {
                 x,
                 scale,
@@ -259,7 +259,7 @@ namespace Tensorflow.Operations
         public static Tensor local_response_normalization(Tensor input, int depth_radius = 5, int bias = 1,
             int alpha = 1, float beta = 0.5f, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("LRN", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("LRN", name: name, args: new
             {
                 input,
                 depth_radius,
@@ -273,7 +273,7 @@ namespace Tensorflow.Operations
 
         public static Tensor log_softmax(Tensor logits, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("LogSoftmax", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("LogSoftmax", name: name, args: new
             {
                 logits
             });
@@ -291,7 +291,7 @@ namespace Tensorflow.Operations
         /// <returns>A `Tensor` of type `bool`.</returns>
         public static Tensor in_top_kv2(Tensor predictions, Tensor targets, int k, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("InTopKV2", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("InTopKV2", name: name, args: new
             {
                 predictions,
                 targets,
@@ -303,7 +303,7 @@ namespace Tensorflow.Operations
 
         public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("LeakyRelu", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("LeakyRelu", name: name, args: new
             {
                 features,
                 alpha
@@ -319,7 +319,7 @@ namespace Tensorflow.Operations
             string data_format = "NHWC",
             string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("MaxPool", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("MaxPool", name: name, args: new
             {
                 input,
                 ksize,
@@ -334,7 +334,7 @@ namespace Tensorflow.Operations
         public static Tensor max_pool_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, 
             string data_format= "NHWC", string name= null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("MaxPoolGrad", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("MaxPoolGrad", name: name, args: new
             {
                 orig_input,
                 orig_output,
@@ -350,7 +350,7 @@ namespace Tensorflow.Operations
 
         public static Tensor[] top_kv2(Tensor input, int k, bool sorted = true, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("TopKV2", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("TopKV2", name: name, args: new
             {
                 input,
                 k,
@@ -362,9 +362,9 @@ namespace Tensorflow.Operations
 
         public static Tensor relu_grad(Tensor gradients, Tensor features, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ReluGrad", name,
                     null,
                     gradients, features);
@@ -372,7 +372,7 @@ namespace Tensorflow.Operations
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("ReluGrad", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("ReluGrad", name: name, args: new
             {
                 gradients,
                 features
@@ -383,7 +383,7 @@ namespace Tensorflow.Operations
 
         public static Tensor leaky_relu_grad(Tensor gradients, Tensor features, float alpha = 0.2f, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("LeakyReluGrad", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("LeakyReluGrad", name: name, args: new
             {
                 gradients,
                 features,
@@ -395,9 +395,9 @@ namespace Tensorflow.Operations
 
         public static Tensor softmax(Tensor logits, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Softmax", name,
                     null,
                     logits);
@@ -405,7 +405,7 @@ namespace Tensorflow.Operations
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Softmax", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("Softmax", name: name, args: new
             {
                 logits
             });
@@ -422,7 +422,7 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static (Tensor, Tensor) softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("SoftmaxCrossEntropyWithLogits", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("SoftmaxCrossEntropyWithLogits", name: name, args: new
             {
                 features,
                 labels
@@ -460,7 +460,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static (Tensor loss, Tensor backprop) sparse_softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = "SparseSoftmaxCrossEntropyWithLogits")
         {
-            var op = tf._op_def_lib._apply_op_helper("SparseSoftmaxCrossEntropyWithLogits", name: name, args: new { features, labels });
+            var op = tf.OpDefLib._apply_op_helper("SparseSoftmaxCrossEntropyWithLogits", name: name, args: new { features, labels });
             int _idx = 0;
             var loss = op.outputs[_idx++];
             var backprop = op.outputs[_idx++];
@@ -475,9 +475,9 @@ namespace Tensorflow.Operations
         /// <returns>A `Tensor`. Has the same type as `features`.</returns>
         public static Tensor relu(Tensor features, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Relu", name, 
                     null,
                     features);
@@ -485,15 +485,15 @@ namespace Tensorflow.Operations
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Relu", name: name, args: new { features });
+            var _op = tf.OpDefLib._apply_op_helper("Relu", name: name, args: new { features });
             return _op.outputs[0];
         }
 
         public static Tensor tanh(Tensor x, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Tanh", name, 
                     null,
                     x);
@@ -501,7 +501,7 @@ namespace Tensorflow.Operations
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Tanh", name: name, args: new { x });
+            var _op = tf.OpDefLib._apply_op_helper("Tanh", name: name, args: new { x });
             return _op.outputs[0];
         }
     }

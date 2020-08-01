@@ -3,11 +3,9 @@ using System.Linq;
 using System;
 using static Tensorflow.OpDef.Types;
 using static Tensorflow.Binding;
-using Google.Protobuf.WellKnownTypes;
-using System.Threading;
 using Tensorflow.Util;
-using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;
+using Tensorflow.Contexts;
 
 namespace Tensorflow.Eager
 {
@@ -17,6 +15,7 @@ namespace Tensorflow.Eager
     public partial class EagerRunner
     {
         int kFastPathExecuteInputStartIndex = 0;
+        UnorderedMap<Context, SafeOpHandle> thread_local_eager_operation_map = new UnorderedMap<Context, SafeOpHandle>();
 
         public Tensor[] TFE_FastPathExecute(Context ctx,
             string device_name,
@@ -45,7 +44,7 @@ namespace Tensorflow.Eager
             op_exec_info.run_post_exec_callbacks = callbacks != null;
             op_exec_info.run_callbacks = op_exec_info.run_gradient_callback || op_exec_info.run_post_exec_callbacks;
 
-            var status = tf.status;
+            var status = tf.Status;
             var op = GetOp(ctx, opName, status);
 
             var op_def = tf.get_default_graph().GetOpDef(opName);
@@ -173,7 +172,7 @@ namespace Tensorflow.Eager
         SafeOpHandle GetOp(Context ctx, string op_or_function_name, Status status)
         {
             if (thread_local_eager_operation_map.find(ctx, out var op))
-                c_api.TFE_OpReset(op, op_or_function_name, ctx.device_name, status.Handle);
+                c_api.TFE_OpReset(op, op_or_function_name, ctx.DeviceName, status.Handle);
             else
             {
                 op = c_api.TFE_NewOp(ctx.Handle, op_or_function_name, status.Handle);
@@ -183,8 +182,6 @@ namespace Tensorflow.Eager
             status.Check(true);
             return op;
         }
-
-        static UnorderedMap<Context, SafeOpHandle> thread_local_eager_operation_map = new UnorderedMap<Context, SafeOpHandle>();
 
         bool HasAccumulator()
         {
@@ -252,7 +249,7 @@ namespace Tensorflow.Eager
 
         public void SetOpAttrs(SafeOpHandle op, params object[] attrs)
         {
-            var status = tf.status;
+            var status = tf.Status;
             var len = attrs.Length;
             for (int i = 0; i < len; i += 2)
             {
@@ -263,9 +260,9 @@ namespace Tensorflow.Eager
                 var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, status.Handle);
                 if (!status.ok()) return;
                 if (is_list != 0)
-                    SetOpAttrList(tf.context, op, key, value as object[], type, null, status);
+                    SetOpAttrList(tf.Context, op, key, value as object[], type, null, status);
                 else
-                    SetOpAttrScalar(tf.context, op, key, value, type, null, status);
+                    SetOpAttrScalar(tf.Context, op, key, value, type, null, status);
                 status.Check(true);
             }
         }

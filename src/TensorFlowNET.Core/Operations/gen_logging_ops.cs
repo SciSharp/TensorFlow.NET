@@ -26,7 +26,7 @@ namespace Tensorflow
             if (!summarize.HasValue)
                 summarize = 3;
 
-            var _op = tf._op_def_lib._apply_op_helper("Assert", name, args: new { condition, data, summarize });
+            var _op = tf.OpDefLib._apply_op_helper("Assert", name, args: new { condition, data, summarize });
 
             return _op;
         }
@@ -34,7 +34,7 @@ namespace Tensorflow
         public static Tensor histogram_summary(string tag, Tensor values, string name = null)
         {
             var dict = new Dictionary<string, object>();
-            var op = tf._op_def_lib._apply_op_helper("HistogramSummary", name: name, args: new { tag, values });
+            var op = tf.OpDefLib._apply_op_helper("HistogramSummary", name: name, args: new { tag, values });
             return op.output;
         }
 
@@ -63,7 +63,7 @@ namespace Tensorflow
             var dict = new Dictionary<string, object>();
             dict["tags"] = tags;
             dict["values"] = values;
-            var op = tf._op_def_lib._apply_op_helper("ScalarSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("ScalarSummary", name: name, keywords: dict);
             return op.output;
         }
 
@@ -94,7 +94,7 @@ namespace Tensorflow
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
-            var op = tf._op_def_lib._apply_op_helper("MergeSummary", name: name, keywords: dict);
+            var op = tf.OpDefLib._apply_op_helper("MergeSummary", name: name, keywords: dict);
             return op.output;
         }
     }

@@ -45,7 +45,7 @@ namespace Tensorflow.Keras.Layers
             this.input_spec = new InputSpec(ndim: 4);
         }
 
-        protected override Tensor[] call(Tensor inputs, bool is_training = false, Tensor state = null)
+        protected override Tensor[] call(Tensor[] inputs, bool is_training = false, Tensor state = null)
         {
             int[] pool_shape;
             if (data_format == "channels_last")
@@ -60,7 +60,7 @@ namespace Tensorflow.Keras.Layers
             }
 
             var outputs = pool_function.Apply(
-                inputs,
+                inputs[0],
                 ksize: pool_shape,
                 strides: strides,
                 padding: padding.ToUpper(),

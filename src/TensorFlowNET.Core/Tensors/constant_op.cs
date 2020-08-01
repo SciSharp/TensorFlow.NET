@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 using System.Linq;
+using Tensorflow.Contexts;
 
 namespace Tensorflow
 {
@@ -49,9 +50,9 @@ namespace Tensorflow
             bool verify_shape, 
             bool allow_broadcast)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var t = convert_to_eager_tensor(value, tf.context, dtype: dtype);
+                var t = convert_to_eager_tensor(value, tf.Context, dtype: dtype);
                 if (shape == null)
                     return t;
 
@@ -69,7 +70,7 @@ namespace Tensorflow
                     if (t.dtype == dtypes.@bool)
                         throw new NotImplementedException("");
                     else
-                        return _eager_fill(shape, t, tf.context);
+                        return _eager_fill(shape, t, tf.Context);
                 }
             }
 
@@ -105,7 +106,7 @@ namespace Tensorflow
             var dims_t = convert_to_eager_tensor(dims, ctx, dtypes.int32);
             var inputs_flat = new[] { dims_t, value };
             var attrs = new object[] { "T", attr_t, "index_type", TF_DataType.TF_INT32 };
-            var result = tf._execute.execute(ctx, "Fill", 1, inputs_flat, attrs);
+            var result = tf.Runner.Execute(ctx, "Fill", 1, inputs_flat, attrs);
             return result[0];
         }
 
@@ -135,7 +136,7 @@ namespace Tensorflow
 
             if(dtype == TF_DataType.TF_STRING && value is byte[] bytes)
             {
-                return new EagerTensor(bytes, ctx.device_name, TF_DataType.TF_STRING);
+                return new EagerTensor(bytes, ctx.DeviceName, TF_DataType.TF_STRING);
             }
 
             switch (value)
@@ -143,53 +144,53 @@ namespace Tensorflow
                 case EagerTensor val:
                     return val;
                 case NDArray val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case string val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case string[] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case bool val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case byte val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case byte[] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case byte[,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case byte[,,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case int val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case int[] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case int[,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case int[,,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case long val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case long[] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case long[,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case long[,,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case float val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case float[] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case float[,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case float[,,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case double val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case double[] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case double[,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 case double[,,] val:
-                    return new EagerTensor(val, ctx.device_name);
+                    return new EagerTensor(val, ctx.DeviceName);
                 default:
                     throw new NotImplementedException($"convert_to_eager_tensor {value.GetType()}");
             }

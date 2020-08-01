@@ -18,6 +18,8 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Tensorflow.Contexts;
 using Tensorflow.Eager;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
@@ -459,7 +461,7 @@ namespace Tensorflow
             {
                 name = scope;
 
-                if (!tf.context.executing_eagerly())
+                if (!tf.Context.executing_eagerly())
                 {
                     var input_tensor = ops.convert_to_tensor(input);
                     var input_shape = input_tensor.TensorShape;
@@ -607,9 +609,9 @@ namespace Tensorflow
                 float padding_value = 0,
                 string align = "RIGHT_LEFT")
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "MatrixDiagV3", name,
                     null,
                     diagonal, k, num_rows, num_cols, padding_value,
@@ -626,9 +628,9 @@ namespace Tensorflow
             int k = 0,
             string align = "RIGHT_LEFT")
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "MatrixSetDiagV3", name,
                     null,
                     input, diagonal, k,
@@ -714,24 +716,24 @@ namespace Tensorflow
         {
             var size_splits = ops.convert_to_tensor(num_split);
 
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                return split_eager_fallback(axis, value, num_split: num_split, name: name, ctx: tf.context);
+                return split_eager_fallback(axis, value, num_split: num_split, name: name, ctx: tf.Context);
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("Split", name, new { split_dim = axis, value, num_split });
+            var _op = tf.OpDefLib._apply_op_helper("Split", name, new { split_dim = axis, value, num_split });
             return _op.outputs;
         }
 
         private static Tensor[] split_eager_fallback<Ta, Tv>(Ta axis, Tv value, int num_split, string name, Context ctx = null)
         {
-            var (_attr_T, input) = tf._execute.args_to_matching_eager(ctx, args: new object[] { value });
+            var (_attr_T, input) = tf.Runner.ArgsToMatchingEager(ctx, args: new object[] { value });
             var axis_tensor = ops.convert_to_tensor(axis, dtype: TF_DataType.TF_INT32);
             var _inputs_flat = new List<Tensor> { axis_tensor };
             _inputs_flat.AddRange(input);
             var _attrs = new object[] { "num_split", num_split, "T", _attr_T };
 
-            return tf._execute.execute(ctx, "Split", num_split, _inputs_flat.ToArray(), _attrs, name: name);
+            return tf.Runner.Execute(ctx, "Split", num_split, _inputs_flat.ToArray(), _attrs, name: name);
         }
 
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
@@ -780,9 +782,13 @@ namespace Tensorflow
             return result;
         }
 
-        public static Tensor placeholder(TF_DataType dtype)
+        public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
         {
-            throw new NotImplementedException("array_ops.placeholder");
+            if (tf.Context.executing_eagerly())
+                throw new RuntimeError("tf.placeholder() is not compatible with eager execution.");
+
+            var _op = tf.OpDefLib._apply_op_helper("Placeholder", name: name, args: new { dtype, shape });
+            return _op.output;
         }
     }
 }

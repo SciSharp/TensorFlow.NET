@@ -38,9 +38,9 @@ namespace Tensorflow
             if (!seed2.HasValue)
                 seed2 = 0;
 
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "RandomStandardNormal", name,
                     null,
                     shape,
@@ -51,7 +51,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("RandomStandardNormal", 
+            var _op = tf.OpDefLib._apply_op_helper("RandomStandardNormal", 
                 name: name,
                 args: new { shape, dtype, seed, seed2 });
 
@@ -75,7 +75,7 @@ namespace Tensorflow
             if (!seed2.HasValue)
                 seed2 = 0;
 
-            var _op = tf._op_def_lib._apply_op_helper("RandomUniformInt",
+            var _op = tf.OpDefLib._apply_op_helper("RandomUniformInt",
                 name: name,
                 args: new { shape, minval, maxval, seed, seed2 });
 
@@ -98,7 +98,7 @@ namespace Tensorflow
             if (!seed2.HasValue)
                 seed2 = 0;
 
-            var _op = tf._op_def_lib._apply_op_helper("RandomUniform",
+            var _op = tf.OpDefLib._apply_op_helper("RandomUniform",
                 name: name,
                 args: new { shape, dtype, seed, seed2});
 
@@ -116,7 +116,7 @@ namespace Tensorflow
         public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0, 
             string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("RandomShuffle",
+            var _op = tf.OpDefLib._apply_op_helper("RandomShuffle",
                 name: name,
                 args: new { value, seed, seed2 });
 
@@ -140,9 +140,9 @@ namespace Tensorflow
             if (!seed2.HasValue)
                 seed2 = 0;
 
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "TruncatedNormal", name,
                     null,
                     shape,
@@ -153,7 +153,7 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("TruncatedNormal",
+            var _op = tf.OpDefLib._apply_op_helper("TruncatedNormal",
                 name: name,
                 args: new { shape, dtype, seed, seed2 });
 
@@ -170,7 +170,7 @@ namespace Tensorflow
             if (output_dtype == TF_DataType.DtInvalid)
                 output_dtype = TF_DataType.TF_INT64;
 
-            var _op = tf._op_def_lib._apply_op_helper("Multinomial",
+            var _op = tf.OpDefLib._apply_op_helper("Multinomial",
                 name: name,
                 args: new { logits, num_samples, seed, seed2, output_dtype });
 

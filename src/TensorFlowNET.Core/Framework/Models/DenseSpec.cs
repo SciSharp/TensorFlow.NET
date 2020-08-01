@@ -18,9 +18,9 @@ namespace Tensorflow.Framework.Models
         protected string _name;
         public string name => _name;
 
-        public DenseSpec(int[] shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        public DenseSpec(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
-            _shape = new TensorShape(shape);
+            _shape = shape;
             _dtype = dtype;
             _name = name;
         }

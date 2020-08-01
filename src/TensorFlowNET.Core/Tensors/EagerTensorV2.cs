@@ -15,14 +15,14 @@ namespace Tensorflow
             get
             {
                 using var _ = EagerTensorHandle.Lease();
-                return c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.status.Handle));
+                return c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.Status.Handle));
             }
         }
 
         public EagerTensorV2(IntPtr handle)
         {
             EagerTensorHandle = c_api.TFE_EagerTensorHandle(handle);
-            _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.status.Handle);
+            _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.Status.Handle);
         }
 
         public unsafe EagerTensorV2(NDArray nd, string device_name = "")
@@ -42,7 +42,7 @@ namespace Tensorflow
 
                     }, IntPtr.Zero);
 
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.status.Handle);
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
         }
 
         /*public unsafe EagerTensorV2(float[,] value)

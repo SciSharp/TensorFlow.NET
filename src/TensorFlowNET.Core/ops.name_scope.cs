@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using Tensorflow.Contexts;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
@@ -48,9 +49,9 @@ namespace Tensorflow
             public void __enter__()
             {
                 _name = _name ?? _default_name;
-                if (tf.context.executing_eagerly())
+                if (tf.Context.executing_eagerly())
                 {
-                    (scope_name, old_scope_name) = enter_eager_name_scope(tf.context, _name);
+                    (scope_name, old_scope_name) = enter_eager_name_scope(tf.Context, _name);
                 }
                 else
                 {
@@ -75,7 +76,7 @@ namespace Tensorflow
                     name = "";
 
                 var scope_name = name;
-                var old_name = ctx.scope_name;
+                var old_name = ctx.ScopeName;
                 // A trailing slash breaks out of nested name scopes, indicating a
                 // fully specified scope name, for compatibility with Graph.name_scope.
                 if (!name.EndsWith("/"))
@@ -85,14 +86,14 @@ namespace Tensorflow
                         scope_name = old_name + scope_name;
                 }
 
-                ctx.scope_name = scope_name;
+                ctx.ScopeName = scope_name;
                 return (scope_name, old_name);
             }
 
             public void Dispose()
             {
-                if (tf.context.executing_eagerly())
-                    tf.context.scope_name = old_scope_name;
+                if (tf.Context.executing_eagerly())
+                    tf.Context.ScopeName = old_scope_name;
                 else
                     get_default_graph()._name_stack = old_scope_name;
             }

@@ -26,5 +26,8 @@ namespace Tensorflow
         {
             public CompatV1Api v1 { get; } = new CompatV1Api();
         }
+
+        public bool executing_eagerly()
+            => Context.executing_eagerly();
     }
 }

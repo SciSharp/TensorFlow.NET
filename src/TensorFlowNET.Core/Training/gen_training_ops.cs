@@ -27,7 +27,7 @@ namespace Tensorflow
             Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, 
             bool use_locking = false, bool use_nesterov = false, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ApplyAdam", name, new
+            var _op = tf.OpDefLib._apply_op_helper("ApplyAdam", name, new
             {
                 var,
                 m,
@@ -48,7 +48,7 @@ namespace Tensorflow
 
         public static Tensor apply_gradient_descent(RefVariable var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
         {
-            var _op = tf._op_def_lib._apply_op_helper("ApplyGradientDescent", name, new
+            var _op = tf.OpDefLib._apply_op_helper("ApplyGradientDescent", name, new
             {
                 var,
                 alpha,
@@ -61,9 +61,9 @@ namespace Tensorflow
 
         public static Operation resource_apply_gradient_descent(Tensor var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
         {
-            if (tf.context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var result = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                var result = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ResourceApplyGradientDescent", name, 
                     null,
                     var, alpha, delta,
@@ -71,7 +71,7 @@ namespace Tensorflow
                 return null;
             }
 
-            var _op = tf._op_def_lib._apply_op_helper("ResourceApplyGradientDescent", name, new
+            var _op = tf.OpDefLib._apply_op_helper("ResourceApplyGradientDescent", name, new
             {
                 var,
                 alpha,
