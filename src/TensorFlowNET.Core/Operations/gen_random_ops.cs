@@ -38,7 +38,7 @@ namespace Tensorflow
             if (!seed2.HasValue)
                 seed2 = 0;
 
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "RandomStandardNormal", name,
@@ -97,6 +97,19 @@ namespace Tensorflow
                 seed = 0;
             if (!seed2.HasValue)
                 seed2 = 0;
+
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "RandomUniform", name,
+                    null,
+                    shape,
+                    "seed", seed,
+                    "seed2", seed2,
+                    "dtype", dtype);
+
+                return results[0];
+            }
 
             var _op = tf.OpDefLib._apply_op_helper("RandomUniform",
                 name: name,

@@ -18,9 +18,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Tensorflow.Contexts;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Utils;
+using Tensorflow.Operations.Activation;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
 
@@ -46,7 +48,7 @@ namespace Tensorflow.Keras.Engine
         protected bool built;
         public bool Trainable => args.Trainable;
         public TF_DataType DType => args.DType;
-
+        
         /// <summary>
         /// A stateful layer is a layer whose updates are run during inference too,
         /// for instance stateful RNNs.
@@ -110,8 +112,11 @@ namespace Tensorflow.Keras.Engine
         /// <param name="input"></param>
         /// <param name="is_training"></param>
         /// <returns></returns>
-        public Tensor Apply(Tensor[] inputs, bool is_training = false)
+        public Tensor[] Apply(Tensor[] inputs, bool is_training = false)
         {
+            var input = inputs[0];
+            Tensor[] outputs = null;
+
             callContext = callContext ?? new ThreadLocal<CallContext>()
             {
                 Value = new CallContext()
@@ -120,7 +125,7 @@ namespace Tensorflow.Keras.Engine
             using var ctxManager = CallContext.enter();
 
             string nameScope = "";
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 nameScope = name;
             }
@@ -129,15 +134,21 @@ namespace Tensorflow.Keras.Engine
                 throw new NotImplementedException("");
             }
 
+            using var graph = tf.keras.backend.get_graph().as_default();
+            
             tf_with(ops.name_scope(nameScope), scope =>
             {
                 if (!built)
                     MaybeBuild(inputs);
 
-                call(inputs, is_training: is_training);
+                outputs = call(inputs, is_training: is_training);
+
+                (input, outputs) = _set_connectivity_metadata_(input, outputs);
+                _handle_activity_regularization(inputs[0], outputs);
+                _set_mask_metadata(inputs[0], outputs, null);
             });
 
-            throw new NotImplementedException("");
+            return outputs;
         }
 
         [Obsolete("User Apply()")]

@@ -53,10 +53,13 @@ namespace Tensorflow.Operations.Initializers
             _uniform = uniform;
         }
 
-        public Tensor call(TensorShape shape, TF_DataType dtype, bool? verify_shape = null)
+        public Tensor Apply(InitializerArgs args)
         {
+            if (args.DType == TF_DataType.DtInvalid)
+                args.DType = this._dtype;
+
             float n = 0;
-            var (fan_in, fan_out) = _compute_fans(shape);
+            var (fan_in, fan_out) = _compute_fans(args.Shape);
             if (_mode == "FAN_IN")
                 n = fan_in;
             else if (_mode == "FAN_OUT")
@@ -67,13 +70,12 @@ namespace Tensorflow.Operations.Initializers
             if(_uniform)
             {
                 var limit = Convert.ToSingle(Math.Sqrt(3.0f * _scale / n));
-                return random_ops.random_uniform(shape, -limit, limit,
-                                                 dtype, seed: _seed);
+                return random_ops.random_uniform(args.Shape, -limit, limit, args.DType);
             }
             else
             {
                 var trunc_stddev = Convert.ToSingle(Math.Sqrt(1.3f * _scale / n));
-                return random_ops.truncated_normal(shape, 0.0f, trunc_stddev, dtype,
+                return random_ops.truncated_normal(args.Shape, 0.0f, trunc_stddev, args.DType,
                                                    seed: _seed);
             }
         }
@@ -97,19 +99,6 @@ namespace Tensorflow.Operations.Initializers
                 var fan_out = shape[shape.Length - 1] * receptive_field_size;
                 return (fan_in, fan_out);
             }
-        }
-
-        public virtual object get_config()
-        {
-            return new
-            {
-                scale = _scale,
-                mode = _mode,
-                distribution = _distribution,
-                seed = _seed,
-                uniform = _uniform,
-                dtype = _dtype
-            };
         }
     }
 }

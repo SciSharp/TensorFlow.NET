@@ -38,22 +38,11 @@ namespace Tensorflow.Operations.Initializers
             this.dtype = dtype;
         }
 
-        public Tensor call(TensorShape shape, TF_DataType dtype = TF_DataType.DtInvalid, bool? verify_shape = null)
+        public Tensor Apply(InitializerArgs args)
         {
-            if (dtype == TF_DataType.DtInvalid)
-                dtype = this.dtype;
-            return random_ops.random_normal(shape, mean, stddev, dtype, seed: seed);
-        }
-
-        public object get_config()
-        {
-            return new
-            {
-                mean,
-                stddev,
-                seed,
-                dtype
-            };
+            if (args.DType == TF_DataType.DtInvalid)
+                args.DType = this.dtype;
+            return random_ops.random_normal(args.Shape, mean, stddev, dtype, seed: seed);
         }
     }
 }

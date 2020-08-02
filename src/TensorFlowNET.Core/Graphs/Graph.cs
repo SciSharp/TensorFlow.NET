@@ -147,6 +147,7 @@ namespace Tensorflow
         /// <returns></returns>
         public Graph as_default()
         {
+            tf.Context.graph_mode();
             return ops.set_default_graph(this);
         }
 
@@ -490,6 +491,7 @@ namespace Tensorflow
 
         protected override void DisposeManagedResources()
         {
+            tf.Context.eager_mode();
             ops.default_graph_stack.remove(this);
         }
 

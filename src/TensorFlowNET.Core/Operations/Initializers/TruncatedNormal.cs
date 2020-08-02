@@ -34,20 +34,11 @@ namespace Tensorflow.Operations.Initializers
             this.dtype = dtype;
         }
 
-        public Tensor call(TensorShape shape, TF_DataType dtype, bool? verify_shape = null)
+        public Tensor Apply(InitializerArgs args)
         {
-            return random_ops.truncated_normal(shape, mean, stddev, dtype : dtype, seed: seed);
-        }
-
-        public object get_config()
-        {
-            return new
-            {
-                mean = mean,
-                stddev = stddev,
-                seed = seed,
-                dtype = dtype.name()
-            };
+            if (args.DType == TF_DataType.DtInvalid)
+                args.DType = this.dtype;
+            return random_ops.truncated_normal(args.Shape, mean, stddev, dtype : dtype, seed: seed);
         }
     }
 }

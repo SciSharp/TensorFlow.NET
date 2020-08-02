@@ -27,32 +27,23 @@ namespace Tensorflow.Operations.Initializers
 #pragma warning disable CS0649 // Field 'RandomUniform.maxval' is never assigned to, and will always have its default value 0
         private float maxval;
 #pragma warning restore CS0649 // Field 'RandomUniform.maxval' is never assigned to, and will always have its default value 0
-#pragma warning disable CS0649 // Field 'RandomUniform.dtype' is never assigned to, and will always have its default value
         private TF_DataType dtype;
-#pragma warning restore CS0649 // Field 'RandomUniform.dtype' is never assigned to, and will always have its default value
 
-        public RandomUniform()
+        public RandomUniform(TF_DataType dtype = TF_DataType.DtInvalid)
         {
-
+            this.dtype = dtype;
         }
 
-        public Tensor call(TensorShape shape, TF_DataType dtype = TF_DataType.DtInvalid, bool? verify_shape = null)
+        public Tensor Apply(InitializerArgs args)
         {
-            return random_ops.random_uniform(shape, 
+            if (args.DType == TF_DataType.DtInvalid)
+                args.DType = this.dtype;
+
+            return random_ops.random_uniform(args.Shape, 
                 minval: minval, 
                 maxval: maxval, 
                 dtype: dtype, 
                 seed: seed);
-        }
-
-        public object get_config()
-        {
-            return new {
-                minval,
-                maxval,
-                seed,
-                dtype
-            };
         }
     }
 }

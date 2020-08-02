@@ -11,10 +11,10 @@ using static Tensorflow.Binding;
 namespace TensorFlowNET.UnitTest.Keras
 {
     /// <summary>
-    /// https://www.tensorflow.org/versions/r1.14/api_docs/python/tf/keras/layers/Embedding
+    /// https://www.tensorflow.org/versions/r2.3/api_docs/python/tf/keras/layers
     /// </summary>
-    [TestClass, Ignore]
-    public class EmbeddingTest : GraphModeTestBase
+    [TestClass]
+    public class LayersTest : GraphModeTestBase
     {
         [TestMethod]
         public void Embedding()

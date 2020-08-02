@@ -162,7 +162,11 @@ namespace Tensorflow
                 }
                 else
                 {
-                    Func<Tensor> init_val = () => initializer.call(shape, dtype);
+                    Func<Tensor> init_val = () => initializer.Apply(new InitializerArgs
+                    {
+                        Shape = shape,
+                        DType = dtype
+                    });
                     var variable_dtype = dtype.as_base_dtype();
 
                     v = variable_scope.default_variable_creator(init_val,

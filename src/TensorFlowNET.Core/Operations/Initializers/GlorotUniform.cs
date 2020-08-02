@@ -30,18 +30,5 @@ namespace Tensorflow.Operations.Initializers
         {
 
         }
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-        public object get_config()
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
-        {
-            return new
-            {
-                scale = _scale,
-                mode = _mode,
-                seed = _seed,
-                dtype = _dtype
-            };
-        }
     }
 }

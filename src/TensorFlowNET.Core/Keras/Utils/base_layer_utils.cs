@@ -36,7 +36,11 @@ namespace Tensorflow.Keras.Utils
 
             ops.init_scope();
 
-            Func<Tensor> init_val = () => args.Initializer.call(args.Shape, dtype: args.DType);
+            Func<Tensor> init_val = () => args.Initializer.Apply(new InitializerArgs
+            {
+                Shape = args.Shape,
+                DType = args.DType
+            });
 
             var variable_dtype = args.DType.as_base_dtype();
             var v = tf.Variable(init_val,

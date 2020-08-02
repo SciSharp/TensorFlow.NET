@@ -29,27 +29,18 @@ namespace Tensorflow.Operations.Initializers
             _verify_shape = verify_shape;
         }
 
-        public Tensor call(TensorShape shape, TF_DataType dtype = TF_DataType.DtInvalid, bool? verify_shape = null)
+        public Tensor Apply(InitializerArgs args)
         {
-            if (dtype == TF_DataType.DtInvalid)
-                dtype = this.dtype;
+            if (args.DType == TF_DataType.DtInvalid)
+                args.DType = this.dtype;
 
-            if (!verify_shape.HasValue)
-                verify_shape = _verify_shape;
+            if (!args.VerifyShape.HasValue)
+                args.VerifyShape = _verify_shape;
 
-            return constant_op._constant_impl(value, dtype, shape,
+            return constant_op._constant_impl(value, args.DType, args.Shape,
                 name: "Const",
-                verify_shape: verify_shape.Value,
+                verify_shape: args.VerifyShape.Value,
                 allow_broadcast: false);
-        }
-
-        public object get_config()
-        {
-            return new
-            {
-                value,
-                dtype = dtype.name()
-            };
         }
     }
 }

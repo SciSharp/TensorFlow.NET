@@ -30,8 +30,9 @@ namespace Tensorflow.Keras.Layers
     public class Dense : Layer
     {
         DenseArgs args;
-        protected IVariableV1 kernel;
-        protected IVariableV1 bias;
+        IVariableV1 kernel;
+        IVariableV1 bias;
+        Activation activation => args.Activation;
 
         public Dense(DenseArgs args) : 
             base(args)
@@ -74,15 +75,15 @@ namespace Tensorflow.Keras.Layers
             }
             else
             {
-                outputs = gen_math_ops.mat_mul(inputs[0], kernel.Handle);
+                outputs = gen_math_ops.mat_mul(inputs[0], kernel.AsTensor());
             }
 
             if (args.UseBias)
                 outputs = tf.nn.bias_add(outputs, bias);
-            //if (args.Activation != null)
-                //outputs = args.Activation.Activate(outputs);
+            if (args.Activation != null)
+                outputs = activation(outputs);
 
-            return new[] { outputs, outputs };
+            return new[] { outputs };
         }
     }
 }

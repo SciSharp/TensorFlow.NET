@@ -18,7 +18,6 @@ namespace Tensorflow
 {
     public interface IInitializer
     {
-        Tensor call(TensorShape shape, TF_DataType dtype = TF_DataType.DtInvalid, bool? verify_shape = null);
-        object get_config();
+        Tensor Apply(InitializerArgs args);
     }
 }

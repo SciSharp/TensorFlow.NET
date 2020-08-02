@@ -25,17 +25,12 @@ namespace Tensorflow.Operations.Initializers
             this.dtype = dtype;
         }
 
-        public Tensor call(TensorShape shape, TF_DataType dtype = TF_DataType.DtInvalid, bool? verify_shape = null)
+        public Tensor Apply(InitializerArgs args)
         {
-            if (dtype == TF_DataType.DtInvalid)
-                dtype = this.dtype;
+            if (args.DType == TF_DataType.DtInvalid)
+                args.DType = this.dtype;
 
-            return array_ops.ones(shape.dims, dtype);
-        }
-
-        public object get_config()
-        {
-            return new { dtype = dtype.name() };
+            return array_ops.ones(args.Shape, dtype);
         }
     }
 }

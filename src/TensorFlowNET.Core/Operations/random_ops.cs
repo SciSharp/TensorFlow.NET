@@ -72,10 +72,11 @@ namespace Tensorflow
             return tf_with(ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
             {
                 name = scope;
+                var (seed1, seed2) = random_seed.get_seed(seed);
                 var tensorShape = tensor_util.shape_tensor(shape);
                 var minTensor = ops.convert_to_tensor(minval, dtype: dtype, name: "min");
                 var maxTensor = ops.convert_to_tensor(maxval, dtype: dtype, name: "max");
-                var rnd = gen_random_ops.random_uniform(tensorShape, dtype);
+                var rnd = gen_random_ops.random_uniform(tensorShape, dtype, seed: seed1, seed2: seed2);
                 return math_ops.add(rnd * (maxTensor - minTensor), minTensor, name: name);
             });
         }
