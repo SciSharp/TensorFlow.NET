@@ -13,7 +13,7 @@ namespace TensorFlowNET.UnitTest.Keras
     /// <summary>
     /// https://www.tensorflow.org/versions/r2.3/api_docs/python/tf/keras/layers
     /// </summary>
-    [TestClass]
+    [TestClass, Ignore]
     public class LayersTest : GraphModeTestBase
     {
         [TestMethod]
