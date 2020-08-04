@@ -216,6 +216,204 @@ namespace Tensorflow
             return tensor_proto;
         }
 
+       public static TensorShape constant_value_as_shape(Tensor tensor)
+        {
+            bool hasattr(Graph property, string attr)
+            {
+                var t = property.GetType().GetProperties();
+                foreach (System.Reflection.PropertyInfo pi in t)
+                {
+                    if (pi.Name == attr)
+                        return true;
+                }
+                return false;
+            }
+
+            if (tensor.GetType() == typeof(EagerTensor))
+            {
+                int[] dims = {};
+                foreach (int dim in tensor.numpy())
+                    if (dim != 1)
+                    {
+                        dims[dims.Length] = dim;
+                    } else
+                    {
+                        // -1 == Unknown
+                        dims[dims.Length] = -1;
+                    }
+                return new TensorShape(dims);
+            }
+
+            if (tensor.TensorShape.ndim == 0)
+            {
+                var value_ = constant_value(tensor);
+                if (value_ == null)
+                    throw new ValueError(
+                        @"Received a scalar with unknown value as shape; require a statically
+known scalar with value '-1' to describe an unknown shape.");
+                if (value_ != -1)
+                    throw new ValueError(
+                        String.Format(@"Received a scalar value {0} as shape; require a statically known
+scalar with value '-1' to describe an unknown shape.", value_));
+                return tensor.TensorShape.unknown_shape(-1);
+            }
+
+            var shape = tensor.TensorShape.with_rank(1);
+            if (shape == new TensorShape(new int[] {1}))
+            {
+                return new TensorShape(new int[] {});
+            } else if (tensor.op.type == "Cast")
+            {
+                var pre_cast = constant_value_as_shape(tensor.op.inputs[0]);
+                if (pre_cast.dims == null)
+                    return pre_cast;
+                var cast_dtype = dtypes.as_dtype((Type)tensor.op.get_attr("DstT"));
+                if (!Array.Exists(new [] {dtypes.int32, dtypes.int64}, cast_dtype_ => cast_dtype_ == cast_dtype))
+                    return tensor.TensorShape.unknown_shape(shape.dims[0]);
+                
+                int[] x_ = {};
+                foreach (var x in pre_cast.as_list())
+                    if (x != -1)
+                        x_[x_.Length] = x;
+                    else
+                        x_[x_.Length] = -1;
+                var dest_dtype_shape_array = np.array(x_).astype(cast_dtype.as_numpy_dtype());
+                
+                int[] y_ = {};
+                foreach(int y in dest_dtype_shape_array)
+                    if (y >= 0)
+                        y_[y_.Length] = y;
+                    else
+                        y_[y_.Length] = -1;
+                return new TensorShape(y_);
+            } else if (tensor.op.type == "Shape")
+            {
+                return tensor.op.inputs[0].shape;
+            } else if (tensor.op.type == "Pack")
+            {
+                var ret_ = new TensorShape(new int[] {});
+                if ((int)tensor.op.get_attr("axis") != 0)
+                    throw new ValueError(String.Format(
+                        @"Since rank 1 inputs are expected, Pack's axis: {0} must be 0, otherwise it
+would not be rank 1.", tensor.op.get_attr("axis")));
+                foreach (Tensor pack_input in tensor.op.inputs)
+                {
+                    var pack_input_val = constant_value(pack_input);
+                    Dimension new_dim;
+                    if (pack_input_val < 0)
+                    {
+                        new_dim = new Dimension(-1);
+                    } else if (pack_input_val == null)
+                    {
+                        new_dim = new Dimension(-1);
+                    } else 
+                    {
+                        new_dim = new Dimension(pack_input_val);
+                    }
+                    ret_ = ret_.concatenate(new int[] {new_dim});
+                }
+                return ret_;
+            } else if (tensor.op.type == "Concat")
+            {
+                var ret_ = new TensorShape(new int[] {});
+
+                var inputlist_ = new ArraySegment<Tensor>(tensor.op.inputs, 1, 
+                                                        tensor.op.inputs.Length - 1);
+                foreach (var concat_input in inputlist_)
+                {
+                    ret_ = ret_.concatenate(constant_value_as_shape(concat_input));
+                }
+                return ret_;
+            } else if (tensor.op.type == "StridedSlice")
+            {
+                try
+                {
+                    var begin = constant_value(tensor.op.inputs[1]);
+                    var end = constant_value(tensor.op.inputs[2]);
+                    var strides = constant_value(tensor.op.inputs[3]);
+                    if (new [] {begin, end, strides}.All(x => x == null))
+                    {   
+                        begin = begin[0];
+                        end = end[0];
+                        strides = strides[0];
+                        var begin_mask = tensor.op.get_attr("begin_mask");
+                        if ((int)begin_mask == 1)
+                        {
+                            begin = null;
+                        }
+                        var end_mask = tensor.op.get_attr("end_mask");
+                        if ((int)end_mask == 1)
+                        {
+                            end = null;
+                        }
+
+                        var ellipsis_mask = tensor.op.get_attr("ellipsis_mask");
+                        var new_axis_mask = tensor.op.get_attr("new_axis_mask");
+                        var shrink_axis_mask = tensor.op.get_attr("shrink_axis_mask");
+                        
+                        bool valid_attributes;
+                        if (!(bool)ellipsis_mask && !(bool)new_axis_mask &&
+                            !(bool)shrink_axis_mask && !((bool)begin_mask || (int)begin_mask == 1) &&
+                            !((bool)end_mask || (int)end_mask == 1))
+                        {
+                            valid_attributes = true;
+                        } else {valid_attributes = false;}
+                        if (valid_attributes)
+                        {
+                            // sorry for the mess here, but this hacky solution was the best way
+                            // i could come up with to implement the things done in python in c#
+                            var prev_ = constant_value_as_shape(tensor.op.inputs[0]).dims;
+                            var prev = prev_.Skip(begin).Take(end - begin).ToArray();
+                            // 100 being the comparison doesn't really matter here; it's going to break anyway
+                            for (int iter = 0; iter != 100; iter = iter + strides)
+                            {
+                                prev[prev.Length] = prev_[iter];
+                                if ((iter + strides) > prev_.Length)
+                                    break;
+                            }
+                            var ret_ = new TensorShape(prev);
+                            return ret_;
+                        }
+                    }
+                } catch (Exception ex)
+                {  
+                    if (ex is ValueError || ex is TypeError) {}
+                }
+            } else if (tensor.op.type == "Placeholder" &&
+                    tensor.op.graph.building_function &&
+                    hasattr(tensor.op.graph, "internal_captures"))
+            {
+                int i = 0;
+                foreach (Tensor capture in tensor.op.graph.internal_captures())
+                {
+                    if (capture.GetType() == typeof(Tensor))
+                    {
+                        var external_capture = tensor.op.graph.external_captures()[i];
+                        return constant_value_as_shape(external_capture);
+                    }
+
+                    i++;
+                }
+            }
+
+            var ret = tensor.TensorShape.unknown_shape(shape.dims[0]);
+            var value = constant_value(tensor);
+            if (value != null)
+            {
+                int[] d_ = {};
+                foreach (int d in value)
+                {
+                    if (d >= 0)
+                        d_[d_.Length] = d;
+                    else
+                        d_[d_.Length] = -1; // None
+                }
+                ret = ret.merge_with(new TensorShape(d_));
+
+            }
+            return ret;
+        }
+       
         public static NDArray convert_to_numpy_ndarray(object values)
         {
             NDArray nd;
