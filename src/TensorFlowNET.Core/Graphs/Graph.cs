@@ -560,5 +560,23 @@ namespace Tensorflow
         {
             return graph._handle;
         }
+        
+        public OrderedDictionary _captures => new OrderedDictionary();
+
+        public Tensor[] external_captures()
+        {
+            Tensor[] captures = new Tensor[this._captures.Count];
+            ICollection inner = this._captures.Keys; // c[0]
+            inner.CopyTo(captures, 0);
+            return captures;
+        }
+        
+        public Tensor[] internal_captures()
+        {
+            Tensor[] captures = new Tensor[this._captures.Count];
+            ICollection inner = this._captures.Values; // c[1]
+            inner.CopyTo(captures, 0);
+            return captures;
+        }
     }
 }
