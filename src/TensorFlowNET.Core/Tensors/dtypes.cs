@@ -278,5 +278,16 @@ namespace Tensorflow
         {
             return self.as_datatype_enum() == other.as_datatype_enum();
         }
+       
+        public static TF_DataType real_dtype(this TF_DataType self)
+        {
+            TF_DataType base_ = self.as_base_dtype();
+            if (base_ == complex64)
+                return float32;
+            else if (base_ == complex128)
+                return float64;
+            else
+                return self;
+        }
     }
 }

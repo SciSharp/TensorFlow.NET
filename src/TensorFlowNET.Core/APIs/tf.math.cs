@@ -422,6 +422,9 @@ namespace Tensorflow
         public Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
             => math_ops.range(start, limit: limit, delta: delta, dtype: dtype, name: name);
 
+        public Tensor real(Tensor input, string name = null)
+            => math_ops.real(input, name);
+       
         /// <summary>
         /// Computes the "logical or" of elements across dimensions of a tensor.
         /// </summary>
@@ -509,6 +512,12 @@ namespace Tensorflow
         public Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_min(input_tensor, axis, keepdims, name);
 
+        public Tensor reduce_std(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_std(input_tensor, axis, keepdims, name);
+
+        public Tensor reduce_variance(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+            => math_ops.reduce_variance(input_tensor, axis, keepdims, name);
+       
         public Tensor sigmoid<T>(T x, string name = null)
             => math_ops.sigmoid(x, name: name);
 
