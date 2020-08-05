@@ -40,5 +40,15 @@ namespace Tensorflow
                 message: message, 
                 name: name);
 
+        public Tensor assert_greater_equal<T1, T2>(Tensor x,
+            Tensor y,
+            object[] data = null,
+            string message = null,
+            string name = null)
+            => check_ops.assert_greater_equal(x,
+                y,
+                data: data,
+                message: message,
+                name: name);
     }
 }
