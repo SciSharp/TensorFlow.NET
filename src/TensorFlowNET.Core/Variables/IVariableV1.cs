@@ -33,6 +33,7 @@ namespace Tensorflow
     {
         public string Name { get; }
         public Tensor Handle { get; }
+        public string Device { get; }
         public Operation Initializer { get; }
         public Operation Op { get; }
         public Tensor GraphElement { get; }

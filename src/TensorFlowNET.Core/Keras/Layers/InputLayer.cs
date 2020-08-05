@@ -84,8 +84,8 @@ namespace Tensorflow.Keras.Layers
             // input_tensor._keras_mask = None
             new Node(this, new NodeArgs
             {
-                InputTensors = new Tensor[] { args.InputTensor },
-                Outputs = new Tensor[] { args.InputTensor }
+                InputTensors = args.InputTensor,
+                Outputs = args.InputTensor
             });
 
             typeSpec = new TensorSpec(args.InputTensor.TensorShape,

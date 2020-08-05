@@ -107,19 +107,19 @@ namespace Tensorflow.Gradients
 
         public Tensor gradient(Tensor target, ResourceVariable source)
         {
-            var results = gradient(target, new[] { source });
+            var results = gradient(target, new List<IVariableV1> { source });
 
             return results[0];
         }
 
         public (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources)
         {
-            var results = gradient(target, new[] { sources.Item1, sources.Item2 });
+            var results = gradient(target, new List<IVariableV1> { sources.Item1, sources.Item2 });
 
             return (results[0], results[1]);
         }
 
-        public Tensor[] gradient(Tensor target, IEnumerable<IVariableV1> sources)
+        public Tensor[] gradient(Tensor target, List<IVariableV1> sources)
         {
             if (_recording)
             {

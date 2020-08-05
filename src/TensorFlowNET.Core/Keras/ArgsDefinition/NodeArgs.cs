@@ -11,7 +11,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         public Layer[] InboundLayers { get; set; }
         public int[] NodeIndices { get; set; }
         public int[] TensorIndices { get; set; }
-        public Tensor[] InputTensors { get; set; }
-        public Tensor[] Outputs { get; set; }
+        public Tensor InputTensors { get; set; }
+        public Tensor Outputs { get; set; }
     }
 }

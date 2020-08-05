@@ -54,7 +54,16 @@ namespace Tensorflow.Gradients
                     var id = trace.output_tensor_info[i].GetID();
                     if (!gradients.find(id, out var grad_it))
                     {
-                        throw new NotImplementedException("FunctionsAcceptingNoneForIndicesMap");
+                        if (FunctionsAcceptingNoneForIndicesMap().find(trace.op_type, out var func_name_it) &&
+                            func_name_it.find(i))
+                        {
+                            out_gradients.Add(null);
+                        }
+                        else
+                        {
+                            out_gradients.Add(null);
+                            zero_indices.Add(i);
+                        }
                     }
                     else
                     {
@@ -182,6 +191,15 @@ namespace Tensorflow.Gradients
             }*/
 
             return result.ToArray();
+        }
+
+        UnorderedMap<string, UnorderedSet<int>> FunctionsAcceptingNoneForIndicesMap()
+        {
+            var m = new UnorderedMap<string, UnorderedSet<int>>();
+            m.Add("SoftmaxCrossEntropyWithLogits", new UnorderedSet<int>(new[] { 1 }));
+            m.Add("SparseSoftmaxCrossEntropyWithLogits", new UnorderedSet<int>(new[] { 1 }));
+            m.Add("FusedBatchNorm", new UnorderedSet<int>(new[] { 1, 2, 3, 4 }));
+            return m;
         }
 
         UnorderedMapEnumerable<long, List<Tensor>> InitialGradients(long[] target_tensor_ids,

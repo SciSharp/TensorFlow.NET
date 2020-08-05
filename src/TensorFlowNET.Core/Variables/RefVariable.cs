@@ -48,6 +48,7 @@ namespace Tensorflow
         
         public TF_DataType dtype => _variable.dtype;
         public TensorShape shape => tensor_util.to_shape(_variable.shape);
+        public string Device => "";
 
         public string Name => _variable.name;
 

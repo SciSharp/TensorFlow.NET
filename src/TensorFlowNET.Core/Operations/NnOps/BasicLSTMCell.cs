@@ -74,7 +74,7 @@ namespace Tensorflow
         /// <param name="training"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        protected override Tensor[] call(Tensor[] inputs, bool is_training = false, Tensor state = null)
+        protected override Tensor call(Tensor inputs, bool is_training = false, Tensor state = null)
         {
             var one = constant_op.constant(1, dtype: dtypes.int32);
             // Parameters of gates are concatenated into one multiply for efficiency.
@@ -87,7 +87,7 @@ namespace Tensorflow
                 // array_ops.split(value: state, num_or_size_splits: 2, axis: one);
                 throw new NotImplementedException("BasicLstmCell call");
             }
-            var gate_inputs = math_ops.matmul(array_ops.concat(new[] { inputs[0], h }, 1), _kernel as RefVariable);
+            var gate_inputs = math_ops.matmul(array_ops.concat(new[] { inputs, h }, 1), _kernel as RefVariable);
             gate_inputs = nn_ops.bias_add(gate_inputs, _bias as RefVariable);
 
             // i = input_gate, j = new_input, f = forget_gate, o = output_gate
@@ -105,9 +105,9 @@ namespace Tensorflow
 
 
             if (_state_is_tuple)
-                return new[] { new_c, new_h };
+                return new_c;
             else
-                return new[] { array_ops.concat(new[] { new_c, new_h }, 1) };
+                return array_ops.concat(new[] { new_c, new_h }, 1);
         }
 
         public override object get_initial_state(Tensor inputs = null, Tensor batch_size = null, TF_DataType dtype = TF_DataType.DtInvalid)

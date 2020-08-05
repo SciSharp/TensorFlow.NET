@@ -31,8 +31,47 @@ namespace Tensorflow
         public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null) 
             => gen_array_ops.placeholder_with_default(input, shape, name);
 
+        /// <summary>
+        ///    An identity op that triggers an error if a gradient is requested.
+        /// </summary>
+        /// <param name="input">
+        ///    any tensor.
+        /// </param>
+        /// <param name="name">
+        /// If specified, the created operation in the graph will be this one, otherwise it will be named 'PreventGradient'.
+        /// </param>
+        /// <param name="message">
+        ///    Will be printed in the error when anyone tries to differentiate
+        ///    this operation.
+        /// </param>
+        /// <returns>
+        ///    the same input tensor.
+        ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
+        /// </returns>
+        /// <remarks>
+        ///    When executed in a graph, this op outputs its input tensor as-is.
+        ///    
+        ///    When building ops to compute gradients, the TensorFlow gradient system
+        ///    will return an error when trying to lookup the gradient of this op,
+        ///    because no gradient must ever be registered for this function.  This
+        ///    op exists to prevent subtle bugs from silently returning unimplemented
+        ///    gradients in some corner cases.
+        /// </remarks>
         public static Tensor prevent_gradient(Tensor input, string message = "", string name = null)
-            => gen_array_ops.prevent_gradient(input, message: message, name: name);
+        {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "PreventGradient", name,
+                    null,
+                    input, 
+                    "message", message);
+                return results[0];
+            }
+
+            var op = tf.OpDefLib._apply_op_helper("PreventGradient", name: name, args: new { input, message });
+            return op.output;
+        }
 
         internal static Tensor constant(object value,
             TF_DataType dtype = TF_DataType.DtInvalid,

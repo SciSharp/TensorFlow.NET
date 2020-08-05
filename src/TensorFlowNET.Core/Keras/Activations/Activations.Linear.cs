@@ -5,13 +5,11 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras
 {
-    public delegate Tensor Activation(Tensor x);
-
-    public class Activations
+    public partial class Activations
     {
         /// <summary>
         /// Linear activation function (pass-through).
         /// </summary>
-        public Activation Linear = x => x;
+        public Activation Linear = (features, name) => features;
     }
 }

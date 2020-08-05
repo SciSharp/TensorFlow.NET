@@ -39,7 +39,7 @@ namespace Tensorflow.Keras.Optimizers
         public void apply_gradients((Tensor, ResourceVariable) grads_and_vars,
             string name = null,
             bool experimental_aggregate_gradients = true)
-            => apply_gradients(new (Tensor, ResourceVariable)[] { grads_and_vars },
+            => apply_gradients(grads_and_vars,
                 name: name,
                 experimental_aggregate_gradients: experimental_aggregate_gradients);
 
@@ -77,7 +77,7 @@ namespace Tensorflow.Keras.Optimizers
             _resource_apply_dense(var, grad, apply_state);
         }
 
-        protected virtual Operation _resource_apply_dense(ResourceVariable var, 
+        protected virtual Operation _resource_apply_dense(IVariableV1 var, 
             EagerTensor grad, 
             Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
         {
@@ -107,7 +107,7 @@ namespace Tensorflow.Keras.Optimizers
             return grads_and_vars.Select(x => x.Item1).ToArray();
         }
 
-        Dictionary<DeviceDType, Dictionary<string, Tensor>> _prepare(ResourceVariable[] var_list)
+        Dictionary<DeviceDType, Dictionary<string, Tensor>> _prepare(IVariableV1[] var_list)
         {
             var _apply_state = new Dictionary<DeviceDType, Dictionary<string, Tensor>>();
             var keys = var_list.Select(x => new DeviceDType
@@ -151,7 +151,7 @@ namespace Tensorflow.Keras.Optimizers
             return math_ops.cast(value, dtype);
         }
 
-        void _create_all_weights(ResourceVariable[] var_list)
+        void _create_all_weights(IVariableV1[] var_list)
         {
             if(_iterations == null)
             {
@@ -190,7 +190,7 @@ namespace Tensorflow.Keras.Optimizers
             _hypers_created = true;
         }
 
-        void _create_slots(ResourceVariable[] var_list)
+        void _create_slots(IVariableV1[] var_list)
         {
             if(_momentum)
             {

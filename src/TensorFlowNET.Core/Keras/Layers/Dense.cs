@@ -65,17 +65,17 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor[] call(Tensor[] inputs, bool training = false, Tensor state = null)
+        protected override Tensor call(Tensor inputs, bool training = false, Tensor state = null)
         {
             Tensor outputs = null;
-            var rank = inputs[0].rank;
+            var rank = inputs.rank;
             if(rank > 2)
             {
                 throw new NotImplementedException("call rank > 2");
             }
             else
             {
-                outputs = gen_math_ops.mat_mul(inputs[0], kernel.AsTensor());
+                outputs = gen_math_ops.mat_mul(inputs, kernel.AsTensor());
             }
 
             if (args.UseBias)
@@ -83,7 +83,7 @@ namespace Tensorflow.Keras.Layers
             if (args.Activation != null)
                 outputs = activation(outputs);
 
-            return new[] { outputs };
+            return outputs;
         }
     }
 }

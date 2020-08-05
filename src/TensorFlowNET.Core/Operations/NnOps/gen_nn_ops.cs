@@ -108,6 +108,17 @@ namespace Tensorflow.Operations
             string data_format = null,
             string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "BiasAdd", name,
+                    null,
+                    value, bias,
+                    "data_format", data_format);
+
+                return results[0];
+            }
+
             if (data_format == null)
                 data_format = "NHWC";
 
@@ -125,6 +136,17 @@ namespace Tensorflow.Operations
             string data_format = "NHWC",
             string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "BiasAddGrad", name,
+                    null,
+                    out_backprop,
+                    "data_format", data_format);
+
+                return results[0];
+            }
+
             if (data_format == null)
                 data_format = "NHWC";
 
@@ -460,6 +482,16 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static (Tensor loss, Tensor backprop) sparse_softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = "SparseSoftmaxCrossEntropyWithLogits")
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "SparseSoftmaxCrossEntropyWithLogits", name,
+                    null,
+                    features, labels);
+
+                return (results[0], results[1]);
+            }
+
             var op = tf.OpDefLib._apply_op_helper("SparseSoftmaxCrossEntropyWithLogits", name: name, args: new { features, labels });
             int _idx = 0;
             var loss = op.outputs[_idx++];
@@ -475,7 +507,7 @@ namespace Tensorflow.Operations
         /// <returns>A `Tensor`. Has the same type as `features`.</returns>
         public static Tensor relu(Tensor features, string name = null)
         {
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Relu", name, 

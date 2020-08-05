@@ -45,6 +45,7 @@ namespace Tensorflow
         public Operation Initializer => initializer_op;
         public Operation Op => handle.op;
         public Graph Graph => handle.graph;
+        public string Device => "";
 
         public BaseResourceVariable()
         {
@@ -148,6 +149,6 @@ namespace Tensorflow
         {
         }
 
-        public Tensor AsTensor() => _graph_element;
+        public Tensor AsTensor() => read_value();
     }
 }

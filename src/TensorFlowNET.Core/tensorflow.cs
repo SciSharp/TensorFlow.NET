@@ -51,7 +51,6 @@ namespace Tensorflow
         {
             Status = new Status();
             Context = new Context(new ContextOptions(), Status);
-            enable_eager_execution();
             OpDefLib = new OpDefLibrary();
             ConstructThreadingObjects();
             InitGradientEnvironment();

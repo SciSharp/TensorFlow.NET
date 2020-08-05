@@ -25,9 +25,7 @@ namespace Tensorflow.Keras.Engine
 #pragma warning disable CS0649 // Field 'Sequential._is_graph_network' is never assigned to, and will always have its default value false
         bool _is_graph_network;
 #pragma warning restore CS0649 // Field 'Sequential._is_graph_network' is never assigned to, and will always have its default value false
-#pragma warning disable CS0169 // The field 'Sequential.outputs' is never used
-        Tensor[] outputs;
-#pragma warning restore CS0169 // The field 'Sequential.outputs' is never used
+        Tensor outputs;
 
         bool computeOutputAndMaskJointly;
         bool autoTrackSubLayers;
@@ -51,6 +49,11 @@ namespace Tensorflow.Keras.Engine
             
         }
 
+        public void add(Tensor layer)
+        {
+
+        }
+
         /// <summary>
         /// Adds a layer instance on top of the layer stack.
         /// </summary>
@@ -71,7 +74,7 @@ namespace Tensorflow.Keras.Engine
                     {
                         // Instantiate an input layer.
                         var x = tf.keras.Input(
-                              batch_shape: layer.BatchInputShape,
+                              shape: layer.BatchInputShape,
                               dtype: layer.DType,
                               name: layer.Name + "_input");
 
@@ -86,7 +89,7 @@ namespace Tensorflow.Keras.Engine
                 if (set_inputs)
                 {
                     // If an input layer (placeholder) is available.
-                    // outputs = layer.inbound_nodes;
+                    outputs = layer.InboundNodes[^1].Outputs;
                 }
 
             }

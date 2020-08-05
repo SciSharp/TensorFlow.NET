@@ -17,6 +17,13 @@ namespace TensorFlowNET.UnitTest.Keras
     public class LayersTest : GraphModeTestBase
     {
         [TestMethod]
+        public void Sequential()
+        {
+            var model = tf.keras.models.Sequential();
+            model.add(tf.keras.Input(shape: 16));
+        }
+
+        [TestMethod]
         public void Embedding()
         {
             var model = new Sequential();

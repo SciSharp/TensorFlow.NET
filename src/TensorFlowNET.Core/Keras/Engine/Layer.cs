@@ -18,11 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Tensorflow.Contexts;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Utils;
-using Tensorflow.Operations.Activation;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
 
@@ -34,7 +32,7 @@ namespace Tensorflow.Keras.Engine
     /// as convolution, batch norm, etc. These operations require managing weights,
     /// losses, updates, and inter-layer connectivity.
     /// </summary>
-    public abstract class Layer : AutoTrackable
+    public abstract partial class Layer : AutoTrackable
     {
         /// <summary>
         /// Arguments initialize layer.
@@ -60,8 +58,19 @@ namespace Tensorflow.Keras.Engine
         protected InputSpec inputSpec;
         public bool SupportsMasking { get; set; }
         protected List<IVariableV1> trainableWeights;
-        public List<IVariableV1> TrainableVariables => trainableWeights;
+        public List<IVariableV1> trainable_variables
+        { 
+            get 
+            {
+                if(trainableWeights.Count == 0)
+                    _layers.ForEach(x => trainableWeights.AddRange(x.trainableWeights));
+
+                return trainableWeights;
+            } 
+        } 
+
         protected List<IVariableV1> nonTrainableWeights;
+        public List<IVariableV1> non_trainable_variables => nonTrainableWeights;
 
         string name;
         public string Name => name;
@@ -112,20 +121,20 @@ namespace Tensorflow.Keras.Engine
         /// <param name="input"></param>
         /// <param name="is_training"></param>
         /// <returns></returns>
-        public Tensor[] Apply(Tensor[] inputs, bool is_training = false)
+        public Tensor Apply(Tensor inputs, bool is_training = false)
         {
-            var input = inputs[0];
-            Tensor[] outputs = null;
+            Tensor outputs = null;
 
             callContext = callContext ?? new ThreadLocal<CallContext>()
             {
                 Value = new CallContext()
             };
 
+            var eager = tf.executing_eagerly();
             using var ctxManager = CallContext.enter();
 
             string nameScope = "";
-            if (tf.executing_eagerly())
+            if (eager)
             {
                 nameScope = name;
             }
@@ -134,7 +143,7 @@ namespace Tensorflow.Keras.Engine
                 throw new NotImplementedException("");
             }
 
-            using var graph = tf.keras.backend.get_graph().as_default();
+            // using var graph = tf.keras.backend.get_graph().as_default();
             
             tf_with(ops.name_scope(nameScope), scope =>
             {
@@ -143,74 +152,36 @@ namespace Tensorflow.Keras.Engine
 
                 outputs = call(inputs, is_training: is_training);
 
-                (input, outputs) = _set_connectivity_metadata_(input, outputs);
-                _handle_activity_regularization(inputs[0], outputs);
-                _set_mask_metadata(inputs[0], outputs, null);
+                outputs = _set_connectivity_metadata_(inputs, outputs);
+                _handle_activity_regularization(inputs, outputs);
+                _set_mask_metadata(inputs, outputs, null);
             });
 
             return outputs;
         }
 
-        [Obsolete("User Apply()")]
-        public Tensor[] __call__(Tensor[] inputs,
-            Tensor training = null,
-            Tensor state = null,
-            VariableScope scope = null)
+        private Tensor _set_connectivity_metadata_(Tensor inputs, Tensor outputs)
         {
-            var input_list = inputs;
-            var input = inputs[0];
-            Tensor[] outputs = null;
-
-            // We will attempt to build a TF graph if & only if all inputs are symbolic.
-            // This is always the case in graph mode. It can also be the case in eager
-            // mode when all inputs can be traced back to `keras.Input()` (when building
-            // models using the functional API).
-            bool build_graph = tf_utils.are_all_symbolic_tensors(input_list);
-
-            if (build_graph)
+            /*var returnOutputs = new List<Tensor>();
+            foreach(var x in outputs)
             {
-                // Only create Keras history if at least one tensor originates from a
-                // `keras.Input`. Otherwise this Layer may be being used outside the Keras
-                // framework.
-                // base_layer_utils.create_keras_history(inputs)
-            }
-
-            // with base_layer_utils.call_context(self):
-
-            // Handle Keras mask propagation from previous layer to current layer.
-            // with base_layer_utils.call_context(self):
-            // Check input assumptions set after layer building, e.g. input shape.
-            if (build_graph)
-            {
-                // Symbolic execution on symbolic tensors. We will attempt to build
-                // the corresponding TF subgraph inside `backend.get_graph()`
-                var graph = tf.keras.backend.get_graph().as_default();
-                tf_with(ops.name_scope(_name_scope()), delegate
+                if (inputs.Contains(x))
                 {
-                    // Build layer if applicable (if the `build` method has been
-                    // overridden).
-                    MaybeBuild(inputs);
 
-                    outputs = call(inputs, 
-                        // training: training,
-                        state: state);
+                }
+                returnOutputs.Add(x);
+            }*/
 
-                    (input, outputs) = _set_connectivity_metadata_(input, outputs);
-                    _handle_activity_regularization(inputs[0], outputs);
-                    _set_mask_metadata(inputs[0], outputs, null);
-                });
-            }
+            new Node(this, new NodeArgs
+            {
+                Outputs = outputs
+            });
 
+            //_add_inbound_node(input_tensors: inputs, output_tensors: outputs);
             return outputs;
         }
 
-        private (Tensor, Tensor[]) _set_connectivity_metadata_(Tensor inputs, Tensor[] outputs)
-        {
-            //_add_inbound_node(input_tensors: inputs, output_tensors: outputs);
-            return (inputs, outputs);
-        }
-
-        private void _handle_activity_regularization(Tensor inputs, Tensor[] outputs)
+        private void _handle_activity_regularization(Tensor inputs, Tensor outputs)
         {
             //if(_activity_regularizer != null)
             {
@@ -218,7 +189,7 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        private void _set_mask_metadata(Tensor inputs, Tensor[] outputs, Tensor previous_mask)
+        private void _set_mask_metadata(Tensor inputs, Tensor outputs, Tensor previous_mask)
         {
 
         }
@@ -228,7 +199,7 @@ namespace Tensorflow.Keras.Engine
             return null;
         }
 
-        protected virtual Tensor[] call(Tensor[] inputs, bool is_training = false, Tensor state = null)
+        protected virtual Tensor call(Tensor inputs, bool is_training = false, Tensor state = null)
         {
             throw new NotImplementedException("");
         }
@@ -238,15 +209,15 @@ namespace Tensorflow.Keras.Engine
             return Name;
         }
 
-        protected void MaybeBuild(Tensor[] inputs)
+        protected void MaybeBuild(Tensor inputs)
         {
             // Check input assumptions set before layer building, e.g. input rank.
             if (built)
                 return;
             if (DType == TF_DataType.DtInvalid)
-                args.DType = inputs[0].dtype;
+                args.DType = inputs.dtype;
 
-            var input_shapes = inputs[0].TensorShape;
+            var input_shapes = inputs.TensorShape;
             build(input_shapes);
             built = true;
         }

@@ -35,13 +35,13 @@ namespace Tensorflow.Keras.Engine
 
         public int[] node_indices;
         public int[] tensor_indices;
-        public Tensor[] input_tensors;
-        public Tensor[] Outputs => args.Outputs;
+        public Tensor input_tensors;
+        public Tensor Outputs => args.Outputs;
         public TensorShape[] input_shapes;
         public TensorShape[] output_shapes;
         List<Layer> kerasInputs;
 
-        public Node(InputLayer layer, NodeArgs args)
+        public Node(Layer layer, NodeArgs args)
         {
             this.args = args;
 

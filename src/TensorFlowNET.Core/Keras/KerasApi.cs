@@ -14,15 +14,35 @@ namespace Tensorflow
     {
         public KerasDataset datasets { get; } = new KerasDataset();
         public Initializers initializers { get; } = new Initializers();
-        public Layers layers { get; } = new Layers();
+        public LayersApi layers { get; } = new LayersApi();
         public Activations activations { get; } = new Activations();
 
         public BackendImpl backend { get; } = new BackendImpl();
 
+        public Models models { get; } = new Models();
+
         public Sequential Sequential() 
             => new Sequential();
 
-        public Tensor[] Input(int[] batch_shape = null,
+        /// <summary>
+        /// Instantiate a Keras tensor.
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="batch_size"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <param name="sparse">
+        /// A boolean specifying whether the placeholder to be created is sparse.
+        /// </param>
+        /// <param name="ragged">
+        /// A boolean specifying whether the placeholder to be created is ragged.
+        /// </param>
+        /// <param name="tensor">
+        /// Optional existing tensor to wrap into the `Input` layer.
+        /// If set, the layer will not create a placeholder tensor.
+        /// </param>
+        /// <returns></returns>
+        public Tensor Input(TensorShape shape = null,
                 int batch_size = -1,
                 TF_DataType dtype = TF_DataType.DtInvalid,
                 string name = null,
@@ -33,7 +53,7 @@ namespace Tensorflow
             var args = new InputLayerArgs
             {
                 Name = name,
-                BatchInputShape = batch_shape,
+                InputShape = shape,
                 BatchSize = batch_size,
                 DType = dtype,
                 Sparse = sparse,
@@ -43,7 +63,7 @@ namespace Tensorflow
 
             var layer = new InputLayer(args);
 
-            return layer.InboundNodes[0].Outputs;
+            return layer.InboundNodes[0].Outputs[0];
         }
 
         public static Embedding Embedding(int input_dim,
@@ -55,7 +75,7 @@ namespace Tensorflow
                 embeddings_initializer,
                 mask_zero);
 
-        public class Layers
+        public class LayersApi
         {
             public Layer Dense(int units,
                 Activation activation = null,
