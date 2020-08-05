@@ -232,18 +232,19 @@ namespace Tensorflow
        
         public static Tensor real(Tensor input, string name = null)
         {
-            using (var name_ = ops.name_scope(name, "Real", new [] {input}))
+            return tf_with(ops.name_scope(name, "Real", new [] {input}), scope =>
             {
+                // name = scope;
                 input = ops.convert_to_tensor(input, name: "input");
                 if (input.dtype.is_complex())
                 {
                     var real_dtype = input.dtype.real_dtype();
-                    return real(input, name: name);
+                    return real(input, name: scope);
                 } else
                 {
                     return input;
                 }
-            }
+            });
         }
 
         /// <summary>
@@ -317,11 +318,11 @@ namespace Tensorflow
                 name = "reduce_std";
             // else {name = name;}
 
-            using (ops.name_scope(name))
+            return tf_with(ops.name_scope(name, "reduce_std", new [] {input_tensor}), scope =>
             {
                 var variance = reduce_variance(input_tensor, axis: axis, keepdims: keepdims);
                 return gen_math_ops.sqrt(variance);
-            }
+            });
         }
        
         public static Tensor reduce_variance(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
@@ -330,7 +331,7 @@ namespace Tensorflow
                 name = "reduce_variance";
             // else {name = name;}
 
-            using (ops.name_scope(name))
+            return tf_with(ops.name_scope(name, "reduce_variance", new [] {input_tensor}), scope =>
             {
                 var means = reduce_mean(input_tensor, axis: axis, keepdims: true);
                 if (means.dtype.is_integer())
@@ -348,7 +349,7 @@ namespace Tensorflow
                     squared_deviations = gen_math_ops.square(diff);
                 }
                 return reduce_mean(squared_deviations, axis: axis, keepdims: keepdims);
-            }
+            });
         }
 
         public static Tensor sigmoid<T>(T x, string name = null)
