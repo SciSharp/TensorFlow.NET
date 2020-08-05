@@ -229,6 +229,22 @@ namespace Tensorflow
 
         public static Tensor mul_no_nan<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul_no_nan(x, y, name: name);
+       
+        public static Tensor real(Tensor input, string name = null)
+        {
+            using (var name_ = ops.name_scope(name, "Real", new [] {input}))
+            {
+                input = ops.convert_to_tensor(input, name: "input");
+                if (input.dtype.is_complex())
+                {
+                    var real_dtype = input.dtype.real_dtype();
+                    return real(input, name: name);
+                } else
+                {
+                    return input;
+                }
+            }
+        }
 
         /// <summary>
         /// Computes the mean of elements across dimensions of a tensor.
@@ -292,6 +308,46 @@ namespace Tensorflow
             {
                 var m = gen_math_ops.prod(input_tensor, axis, keepdims, name);
                 return _may_reduce_to_scalar(keepdims, axis, m);
+            }
+        }
+
+        public static Tensor reduce_std(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        {
+            if (name == null)
+                name = "reduce_std";
+            // else {name = name;}
+
+            using (ops.name_scope(name))
+            {
+                var variance = reduce_variance(input_tensor, axis: axis, keepdims: keepdims);
+                return gen_math_ops.sqrt(variance);
+            }
+        }
+       
+        public static Tensor reduce_variance(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        {
+            if (name == null)
+                name = "reduce_variance";
+            // else {name = name;}
+
+            using (ops.name_scope(name))
+            {
+                var means = reduce_mean(input_tensor, axis: axis, keepdims: true);
+                if (means.dtype.is_integer())
+                    throw new TypeError("Input must be either real or complex");
+                var diff = input_tensor - means;
+                
+                Tensor squared_deviations;
+                if (diff.dtype.is_complex())
+                {
+                    var real_dtype = diff.dtype.real_dtype();
+                    squared_deviations = real(
+                        gen_math_ops.mul(conj(diff), diff));
+                } else
+                {
+                    squared_deviations = gen_math_ops.square(diff);
+                }
+                return reduce_mean(squared_deviations, axis: axis, keepdims: keepdims);
             }
         }
 
