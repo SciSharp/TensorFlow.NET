@@ -28,7 +28,7 @@ namespace Tensorflow.Operations.Initializers
         private TF_DataType dtype;
 
         public RandomNormal(float mean = 0.0f,
-            float stddev = 1.0f,
+            float stddev = 0.05f,
             int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT)
         {

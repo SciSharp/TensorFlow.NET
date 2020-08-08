@@ -88,7 +88,7 @@ namespace Tensorflow
         public class InitializersImpl
         {
             public IInitializer random_normal_initializer(float mean = 0.0f,
-                float stddev = 1.0f,
+                float stddev = 0.05f,
                 int? seed = null,
                 TF_DataType dtype = TF_DataType.TF_FLOAT) => new RandomNormal(mean: mean,
                     stddev: stddev,
