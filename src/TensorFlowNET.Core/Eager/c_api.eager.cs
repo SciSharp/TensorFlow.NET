@@ -210,6 +210,9 @@ namespace Tensorflow
         public static extern void TFE_OpSetAttrTypeList(SafeOpHandle op, string attr_name, TF_DataType[] values, int num_values);
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TFE_OpSetAttrIntList(SafeOpHandle op, string attr_name, long[] values, int num_values);
+
+        [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrValueProto(SafeOpHandle op, string attr_name, IMessage[] proto, int proto_len, SafeStatusHandle status);
 
         /// <summary>

@@ -51,28 +51,14 @@ namespace Tensorflow.Eager
 
         public override object get_attr(string attr_name)
         {
-            object value = null;
-            byte isList = 0;
-            var attrType = c_api.TFE_OpNameGetAttrType(tf.Context.Handle, Name, attr_name, ref isList, tf.Status.Handle);
-            switch (attrType)
+            // var attrType = c_api.TFE_OpNameGetAttrType(tf.Context.Handle, Name, attr_name, ref isList, tf.Status.Handle);
+            for (int i = 0; i < Attrs.Length; i = i + 2)
             {
-                case TF_AttrType.TF_ATTR_BOOL:
-                    value = get_attr_bool(attr_name);
-                    break;
-                default:
-                    break;
+                if (Attrs[i].Equals(attr_name))
+                    return Attrs[i + 1];
             }
 
-            return value;
-        }
-
-        public bool get_attr_bool(string attr_name)
-        {
-            for (int i = 0; i < Attrs.Length; i = i + 2)
-                if (Attrs[i].Equals(attr_name))
-                    return Attrs[i + 1].Equals("1");
-
-            throw new ValueError($"Can't find attr: {attr_name}");
+            return null;
         }
 
         public override string ToString()

@@ -40,7 +40,7 @@ namespace Tensorflow.Keras.Optimizers
                 _get_hyper("momentum", device_dtype.DType));
         }
 
-        protected override Operation _resource_apply_dense(IVariableV1 var, EagerTensor grad, Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
+        protected override Operation _resource_apply_dense(IVariableV1 var, Tensor grad, Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
         {
             if (_momentum)
             {

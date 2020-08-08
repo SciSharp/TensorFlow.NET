@@ -18,7 +18,7 @@ namespace Tensorflow
         protected string handle_name => _handle_name;
 
         protected string _unique_id;
-        public string unique_id => _unique_id;
+        public string UniqueId => _unique_id;
 
         protected bool _in_graph_mode;
 

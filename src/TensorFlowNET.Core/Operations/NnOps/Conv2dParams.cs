@@ -71,7 +71,7 @@ namespace Tensorflow.Operations
 
         public bool UseCudnnOnGpu { get; set; } = true;
 
-        public int[] Dilations { get; set; } = new [] { 1, 1, 1, 1 };
+        public int[] Dilations { get; set; } = new int[] { 1, 1, 1, 1 };
 
         public Conv2dParams()
         {

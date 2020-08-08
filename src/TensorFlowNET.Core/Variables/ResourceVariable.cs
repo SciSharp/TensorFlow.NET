@@ -67,8 +67,6 @@ namespace Tensorflow
                     dtype: dtype,
                     shape: shape);
             }
-
-            // handle.ResourceVar = this;
         }
 
         private void _init_from_args(object initial_value = null,
@@ -79,7 +77,8 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             TensorShape shape = null)
         {
-            var init_from_fn = initial_value.GetType().Name == "Func`1";
+            var init_from_fn = initial_value.GetType().Name == "Func`1" ||
+                initial_value.GetType().GetInterface("IInitializer") != null;
             if(collections == null)
                 collections = new List<string>() { tf.GraphKeys.GLOBAL_VARIABLES };
             _trainable = trainable;
@@ -112,9 +111,12 @@ namespace Tensorflow
                 attr.List.S.Add(ByteString.CopyFromUtf8($"loc:@{handle_name}"));
                 tf_with(ops.name_scope("Initializer"), delegate
                 {
-                    initial_value = ops.convert_to_tensor(init_from_fn ? (initial_value as Func<Tensor>)() : initial_value,
-                        name: "initial_value",
-                        dtype: dtype);
+                    if (initial_value.GetType().GetInterface("IInitializer") != null)
+                        initial_value = ops.convert_to_tensor((initial_value as IInitializer).Apply(new InitializerArgs(shape, dtype: dtype)));
+                    else
+                        initial_value = ops.convert_to_tensor(init_from_fn ? (initial_value as Func<Tensor>)() : initial_value,
+                            name: "initial_value",
+                            dtype: dtype);
                 });
                 _shape = shape ?? (initial_value as Tensor).TensorShape;
                 _initial_value = initial_value as Tensor;

@@ -681,7 +681,19 @@ namespace Tensorflow
                 var x_tensor = ops.convert_to_tensor(x, name: "x");
                 var y_tensor = ops.convert_to_tensor(y, name: "y", dtype: x_tensor.dtype.as_base_dtype());
 
-                return gen_math_ops.pow(x_tensor, y_tensor, name: name);
+                if (tf.executing_eagerly())
+                {
+                    var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                        "Pow", name,
+                        null,
+                        x_tensor, y_tensor);
+
+                    return results[0];
+                }
+
+                var _op = tf.OpDefLib._apply_op_helper("Pow", name, args: new { x_tensor, y_tensor });
+
+                return _op.output;
             }); 
 
         public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
@@ -753,9 +765,6 @@ namespace Tensorflow
                     throw new ValueError("Only one of transpose_a and adjoint_a can be True.");
                 if (transpose_b && adjoint_b)
                     throw new ValueError("Only one of transpose_b and adjoint_b can be True.");
-
-                a = ops.convert_to_tensor(a, name: "a");
-                b = ops.convert_to_tensor(b, name: "b");
 
                 result = gen_math_ops.mat_mul(a, b, transpose_a, transpose_b, name);
             });

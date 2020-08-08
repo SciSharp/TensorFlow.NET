@@ -227,7 +227,7 @@ namespace Tensorflow
             return grouped_inputs.ToArray();
         }
 
-        public T get_attr<T>(string name)
+        public virtual T get_attr<T>(string name)
             => (T)get_attr(name);
 
         public virtual object get_attr(string name)

@@ -18,22 +18,25 @@ namespace Tensorflow.Keras.Optimizers
         protected bool _hypers_created;
         protected virtual string _name { get; }
 
-        ResourceVariable _iterations;
-        List<ResourceVariable> _weight;
+        IVariableV1 _iterations;
+        protected ResourceVariable iterations => _iterations as ResourceVariable;
+        List<IVariableV1> _weights;
         Dictionary<string, float> _hyper;
-        Dictionary<string, ResourceVariable> _hyper_variables;
+        Dictionary<string, IVariableV1> _hyper_variables;
         protected bool _momentum;
         protected float _initial_decay = 0.0f;
         protected bool _use_locking = true;
 
-        Dictionary<DeviceDType, Dictionary<string, Tensor>> apply_state;
+        Dictionary<string, Dictionary<string, IVariableV1>> _slots;
+        List<string> _slot_names;
 
         public OptimizerV2() : base()
         {
-            _weight = new List<ResourceVariable>();
+            _weights = new List<IVariableV1>();
             _hyper = new Dictionary<string, float>();
-            _hyper_variables = new Dictionary<string, ResourceVariable>();
-            apply_state = new Dictionary<DeviceDType, Dictionary<string, Tensor>>();
+            _hyper_variables = new Dictionary<string, IVariableV1>();
+            _slots = new Dictionary<string, Dictionary<string, IVariableV1>>();
+            _slot_names = new List<string>();
         }
 
         public void apply_gradients((Tensor, ResourceVariable) grads_and_vars,
@@ -61,7 +64,7 @@ namespace Tensorflow.Keras.Optimizers
                 if (grads_and_vars == null || grads_and_vars.Count() == 0)
                     return control_flow_ops.no_op();
 
-                apply_state = _prepare(var_list);
+                var apply_state = _prepare(var_list);
                 if(experimental_aggregate_gradients)
                 {
                     // var reduced_grads = _aggregate_gradients(grads_and_vars);
@@ -72,13 +75,13 @@ namespace Tensorflow.Keras.Optimizers
             });
         }
 
-        void apply_grad_to_update_var(ResourceVariable var, EagerTensor grad)
+        void apply_grad_to_update_var(ResourceVariable var, Tensor grad, Dictionary<DeviceDType, Dictionary<string, Tensor>> apply_state)
         {
             _resource_apply_dense(var, grad, apply_state);
         }
 
         protected virtual Operation _resource_apply_dense(IVariableV1 var, 
-            EagerTensor grad, 
+            Tensor grad, 
             Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
         {
             throw new NotImplementedException("_resource_apply_dense");
@@ -94,7 +97,7 @@ namespace Tensorflow.Keras.Optimizers
                 {
                     tf_with(ops.name_scope("update"), delegate
                     {
-                        apply_grad_to_update_var(var, grad as EagerTensor);
+                        apply_grad_to_update_var(var, grad, _apply_state);
                     });
                 }
 
@@ -105,6 +108,12 @@ namespace Tensorflow.Keras.Optimizers
         Tensor[] _aggregate_gradients(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars)
         {
             return grads_and_vars.Select(x => x.Item1).ToArray();
+        }
+
+        protected IVariableV1 get_slot(IVariableV1 var, string slot_name)
+        {
+            var slot_dict = _slots[var.UniqueId];
+            return slot_dict[slot_name];
         }
 
         Dictionary<DeviceDType, Dictionary<string, Tensor>> _prepare(IVariableV1[] var_list)
@@ -123,6 +132,11 @@ namespace Tensorflow.Keras.Optimizers
             }
 
             return _apply_state;
+        }
+
+        protected Dictionary<string, Tensor> _fallback_apply_state(string var_device, TF_DataType var_dtype)
+        {
+            throw new NotImplementedException("");
         }
 
         protected virtual void _prepare_local(DeviceDType device_dtype, 
@@ -145,7 +159,7 @@ namespace Tensorflow.Keras.Optimizers
             return lr_t;
         }
 
-        protected ResourceVariable _get_hyper(string name, TF_DataType dtype = TF_DataType.DtInvalid)
+        protected Tensor _get_hyper(string name, TF_DataType dtype = TF_DataType.DtInvalid)
         {
             var value = _hyper_variables[name];
             return math_ops.cast(value, dtype);
@@ -160,7 +174,7 @@ namespace Tensorflow.Keras.Optimizers
                     dtype: TF_DataType.TF_INT64, 
                     trainable: false, 
                     aggregation: VariableAggregation.OnlyFirstReplica);
-                _weight.Add(_iterations);
+                _weights.Add(_iterations);
             }
 
             _create_hypers();
@@ -190,12 +204,41 @@ namespace Tensorflow.Keras.Optimizers
             _hypers_created = true;
         }
 
-        void _create_slots(IVariableV1[] var_list)
+        protected virtual void _create_slots(IVariableV1[] var_list)
         {
             if(_momentum)
             {
                 /*for var in var_list:
                     self.add_slot(var, "momentum")*/
+            }
+        }
+
+        protected IVariableV1 add_slot(IVariableV1 var, string slot_name, IInitializer initializer = null)
+        {
+            if (initializer == null)
+                initializer = tf.zeros_initializer;
+
+            if (!_slot_names.Contains(slot_name))
+                _slot_names.append(slot_name);
+
+            if (!_slots.ContainsKey(var.UniqueId))
+                _slots[var.UniqueId] = new Dictionary<string, IVariableV1>();
+            var slot_dict = _slots[var.UniqueId];
+            if (!slot_dict.ContainsKey(slot_name))
+            {
+                var weight = tf.Variable(initializer,
+                    dtype: var.dtype,
+                    trainable: false,
+                    shape: var.shape,
+                    name: $"{var.Name}/{slot_name}");
+
+                slot_dict[slot_name] = weight;
+                _weights.append(weight);
+                return weight;
+            }
+            else
+            {
+                return slot_dict[slot_name];
             }
         }
 

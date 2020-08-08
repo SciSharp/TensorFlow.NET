@@ -30,7 +30,7 @@ namespace Tensorflow
         /// <param name="seed"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor random_normal(int[] shape, 
+        public static Tensor random_normal(TensorShape shape, 
             float mean = 0.0f, 
             float stddev = 1.0f, 
             TF_DataType dtype = TF_DataType.TF_FLOAT, 

@@ -320,7 +320,7 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor sigmoid(Tensor x, string name = "Sigmoid")
         {
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Sigmoid", name, 
@@ -1070,23 +1070,6 @@ namespace Tensorflow
         public static Tensor _min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("Min", name, new { input, reduction_indices = axis, keep_dims });
-
-            return _op.outputs[0];
-        }
-
-        public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Pow", name, 
-                    null,
-                    x, y);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Pow", name, args: new { x, y });
 
             return _op.outputs[0];
         }

@@ -344,6 +344,11 @@ namespace Tensorflow.Eager
                 c_api.TFE_OpSetAttrTypeList(op, key, values2, values2.Length);
                 attr_list_sizes[key] = values2.Length;
             }
+            else if (type == TF_AttrType.TF_ATTR_INT && values is int[] values4)
+            {
+                c_api.TFE_OpSetAttrIntList(op, key, values4.Select(x => Convert.ToInt64(x)).ToArray(), values4.Length);
+                attr_list_sizes[key] = values4.Length;
+            }
             else
             {
                 throw new NotImplementedException("");

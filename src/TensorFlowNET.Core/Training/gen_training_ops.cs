@@ -23,6 +23,24 @@ namespace Tensorflow
 {
     public class gen_training_ops
     {
+        public static Operation resource_apply_adam(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power,
+            Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad,
+            bool use_locking = false, bool use_nesterov = false, string name = null)
+        {
+            if (tf.executing_eagerly())
+            {
+                var result = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ResourceApplyAdam", name,
+                    null,
+                    var, m, v, beta1_power, beta2_power, lr, beta1, beta2, epsilon, grad,
+                    "use_locking", use_locking,
+                    "use_nesterov", use_nesterov);
+                return null;
+            }
+
+            throw new NotImplementedException("");
+        }
+
         public static Tensor apply_adam(IVariableV1 var, IVariableV1 m, IVariableV1 v, Tensor beta1_power, Tensor beta2_power, 
             Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, 
             bool use_locking = false, bool use_nesterov = false, string name = null)
@@ -56,12 +74,12 @@ namespace Tensorflow
                 use_locking
             });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         public static Operation resource_apply_gradient_descent(Tensor var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
         {
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var result = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ResourceApplyGradientDescent", name, 

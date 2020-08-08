@@ -128,12 +128,12 @@ namespace Tensorflow.Gradients
         [RegisterGradient("Conv2D")]
         public static Tensor[] _Conv2DGrad(Operation op, Tensor[] grads)
         {
-            var dilations = (op.get_attr("dilations") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray();
-            var strides = (op.get_attr("strides") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray();
-            var padding = op.get_attr("padding");
-            var explicit_paddings = (op.get_attr("explicit_paddings") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray();
-            var use_cudnn_on_gpu = op.get_attr("use_cudnn_on_gpu");
-            var data_format = op.get_attr("data_format");
+            var dilations = op.get_attr<int[]>("dilations");
+            var strides = op.get_attr<int[]>("strides");
+            var padding = op.get_attr<string>("padding");
+            var explicit_paddings = op.get_attr<int[]>("explicit_paddings");
+            var use_cudnn_on_gpu = op.get_attr<bool>("use_cudnn_on_gpu");
+            var data_format = op.get_attr<string>("data_format");
             var shape = gen_array_ops.shape_n(new Tensor[] { op.inputs[0], op.inputs[1] });
             
             return new Tensor[]
@@ -287,8 +287,8 @@ namespace Tensorflow.Gradients
                   op.inputs[0],
                   op.outputs[0],
                   grad,
-                  (op.get_attr("ksize") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray(),
-                  (op.get_attr("strides") as AttrValue.Types.ListValue).I.Select(x => Convert.ToInt32(x)).ToArray(),
+                  op.get_attr("ksize") as int[],
+                  op.get_attr("strides") as int[],
                   padding: op.get_attr("padding").ToString(),
                   data_format: op.get_attr("data_format").ToString())
             };

@@ -20,6 +20,8 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
+        public InitializersImpl initializers { get; } = new InitializersImpl();
+
         public IInitializer constant_initializer<T>(T value, TF_DataType dtype = TF_DataType.TF_FLOAT, bool verify_shape = false) 
             => new Constant<T>(value, dtype: dtype, verify_shape: verify_shape);
         public IInitializer zeros_initializer => new Zeros();
@@ -82,5 +84,20 @@ namespace Tensorflow
                 uniform: uniform,
                 seed: seed,
                 dtype: dtype);
+
+        public class InitializersImpl
+        {
+            public IInitializer random_normal_initializer(float mean = 0.0f,
+                float stddev = 1.0f,
+                int? seed = null,
+                TF_DataType dtype = TF_DataType.TF_FLOAT) => new RandomNormal(mean: mean,
+                    stddev: stddev,
+                    seed: seed,
+                    dtype: dtype);
+
+            public IInitializer zeros_initializer(TensorShape shape = null,
+                TF_DataType dtype = TF_DataType.TF_FLOAT) => new Zeros(shape: shape, 
+                    dtype: dtype);
+        }
     }
 }

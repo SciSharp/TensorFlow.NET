@@ -42,6 +42,22 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static Tensor conv2d(Conv2dParams parameters)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Conv2D", parameters.Name,
+                    null,
+                    parameters.Input, parameters.Filter,
+                    "strides", parameters.Strides,
+                    "use_cudnn_on_gpu", parameters.UseCudnnOnGpu, 
+                    "padding", parameters.Padding,
+                    "explicit_paddings", parameters.ExplicitPaddings, 
+                    "data_format", parameters.DataFormat,
+                    "dilations", parameters.Dilations);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("Conv2D", name: parameters.Name, args: new
             {
                 input = parameters.Input,
@@ -64,6 +80,22 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static Tensor conv2d_backprop_filter(Conv2dParams parameters)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Conv2DBackpropFilter", parameters.Name,
+                    null,
+                    parameters.Input, parameters.FilterSizes, parameters.OutBackProp,
+                    "strides", parameters.Strides,
+                    "use_cudnn_on_gpu", parameters.UseCudnnOnGpu,
+                    "padding", parameters.Padding,
+                    "explicit_paddings", parameters.ExplicitPaddings,
+                    "data_format", parameters.DataFormat,
+                    "dilations", parameters.Dilations);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropFilter", name: parameters.Name, args: new
             {
                 input = parameters.Input,
@@ -87,6 +119,22 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static Tensor conv2d_backprop_input(Conv2dParams parameters)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Conv2DBackpropInput", parameters.Name,
+                    null,
+                    parameters.InputSizes, parameters.Filter, parameters.OutBackProp,
+                    "strides", parameters.Strides, 
+                    "use_cudnn_on_gpu", parameters.UseCudnnOnGpu, 
+                    "padding", parameters.Padding,
+                    "explicit_paddings", parameters.ExplicitPaddings, 
+                    "data_format", parameters.DataFormat,
+                    "dilations", parameters.Dilations);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropInput", name: parameters.Name, args: new
             {
                 input_sizes = parameters.InputSizes,
@@ -341,6 +389,20 @@ namespace Tensorflow.Operations
             string data_format = "NHWC",
             string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "MaxPool", name,
+                    null,
+                    input,
+                    "ksize", ksize, 
+                    "strides", strides,
+                    "padding", padding, 
+                    "data_format", data_format);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("MaxPool", name: name, args: new
             {
                 input,
@@ -356,6 +418,20 @@ namespace Tensorflow.Operations
         public static Tensor max_pool_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, 
             string data_format= "NHWC", string name= null)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "MaxPoolGrad", name,
+                    null,
+                    orig_input, orig_output, grad,
+                    "ksize", ksize,
+                    "strides", strides, 
+                    "padding", padding, 
+                    "data_format", data_format);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("MaxPoolGrad", name: name, args: new
             {
                 orig_input,
@@ -384,7 +460,7 @@ namespace Tensorflow.Operations
 
         public static Tensor relu_grad(Tensor gradients, Tensor features, string name = null)
         {
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ReluGrad", name,

@@ -25,6 +25,7 @@ namespace Tensorflow
     public partial class RefVariable : IVariableV1, IProtoBuf<VariableDef, RefVariable>
     {
         protected string _name;
+        public string UniqueId => _name;
         public Tensor GraphElement { get; }
         public Tensor _variable;
         public Tensor Handle => _variable;

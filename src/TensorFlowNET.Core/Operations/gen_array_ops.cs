@@ -424,6 +424,17 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor[] shape_n(Tensor[] input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ShapeN", name,
+                    null,
+                    input,
+                    "out_type", out_type);
+
+                return results;
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("ShapeN", name, new { input, out_type });
             return _op.outputs;
         }
@@ -450,7 +461,7 @@ namespace Tensorflow
 
         public static Tensor tile<T>(Tensor input, T multiples, string name = null)
         {
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Tile", name, 

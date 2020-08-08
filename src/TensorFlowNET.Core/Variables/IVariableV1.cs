@@ -31,6 +31,7 @@ namespace Tensorflow
     /// </summary>
     public interface IVariableV1
     {
+        public string UniqueId { get; }
         public string Name { get; }
         public Tensor Handle { get; }
         public string Device { get; }
