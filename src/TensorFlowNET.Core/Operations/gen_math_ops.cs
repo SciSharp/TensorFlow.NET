@@ -354,9 +354,19 @@ namespace Tensorflow
         /// </remarks>
         public static Tensor sigmoid_grad(Tensor y, Tensor dy, string name = "SigmoidGrad")
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "SigmoidGrad", name,
+                    null,
+                    y, dy);
+
+                return results[0];
+            }
+
             var op = tf.OpDefLib._apply_op_helper("SigmoidGrad", name: name, args: new { y, dy });
 
-            return op.outputs[0];
+            return op.output;
         }
 
         public static Tensor sign<T>(T x, string name = "Sign")
@@ -410,7 +420,7 @@ namespace Tensorflow
 
         public static Tensor tan(Tensor x, string name = null)
         {
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Tan", name, 
@@ -422,12 +432,12 @@ namespace Tensorflow
 
             var _op = tf.OpDefLib._apply_op_helper("Tan", name, args: new { x });
 
-            return _op.outputs[0];
+            return _op.output;
         }
 
         public static Tensor tanh(Tensor x, string name = null)
         {
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Tanh", name,
