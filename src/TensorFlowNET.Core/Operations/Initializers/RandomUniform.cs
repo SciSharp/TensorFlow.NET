@@ -29,7 +29,7 @@ namespace Tensorflow.Operations.Initializers
 #pragma warning restore CS0649 // Field 'RandomUniform.maxval' is never assigned to, and will always have its default value 0
         private TF_DataType dtype;
 
-        public RandomUniform(TF_DataType dtype = TF_DataType.DtInvalid)
+        public RandomUniform(TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
             this.dtype = dtype;
         }
@@ -37,7 +37,7 @@ namespace Tensorflow.Operations.Initializers
         public Tensor Apply(InitializerArgs args)
         {
             if (args.DType == TF_DataType.DtInvalid)
-                args.DType = this.dtype;
+                args.DType = dtype;
 
             return random_ops.random_uniform(args.Shape, 
                 minval: minval, 

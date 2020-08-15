@@ -144,7 +144,9 @@ namespace Tensorflow.Keras.Engine
             }
 
             // using var graph = tf.keras.backend.get_graph().as_default();
-            
+            if (!inputs.IsEagerTensor)
+                tf.Context.graph_mode();
+
             tf_with(ops.name_scope(nameScope), scope =>
             {
                 if (!built)
@@ -156,6 +158,8 @@ namespace Tensorflow.Keras.Engine
                 _handle_activity_regularization(inputs, outputs);
                 _set_mask_metadata(inputs, outputs, null);
             });
+
+            tf.Context.eager_mode();
 
             return outputs;
         }

@@ -17,7 +17,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.Layers;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -56,6 +56,8 @@ namespace Tensorflow.Keras.Engine
             }
 
             // Set metadata on outputs.
+            var node_index = layer.InboundNodes.Count - 1;
+            args.Outputs.KerasHistory.Add(layer);
         }
     }
 }

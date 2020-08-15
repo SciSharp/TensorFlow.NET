@@ -140,7 +140,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor read_variable_op(Tensor resource, TF_DataType dtype, string name = null)
         {
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ReadVariableOp", name, 

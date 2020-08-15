@@ -193,7 +193,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         public static Tensor identity(Tensor input, string name = null)
         {
-            if (tf.Context.executing_eagerly())
+            if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Identity", name,

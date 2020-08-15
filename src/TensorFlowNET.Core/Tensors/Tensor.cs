@@ -25,6 +25,7 @@ using System.Text;
 using static Tensorflow.Binding;
 using Tensorflow.Eager;
 using Tensorflow.Framework;
+using Tensorflow.Keras.Engine;
 
 namespace Tensorflow
 {
@@ -97,6 +98,8 @@ namespace Tensorflow
         /// </summary>
         public SafeTensorHandleHandle EagerTensorHandle { get; set; }
 
+        public bool IsEagerTensor => this is EagerTensor;
+
         /// <summary>
         ///     Returns the shape of a tensor.
         /// </summary>
@@ -137,6 +140,11 @@ namespace Tensorflow
         }
 
         public TensorShape TensorShape => rank < 0 ? new TensorShape() : tensor_util.to_shape(shape);
+
+        /// <summary>
+        /// Keras History: (Layer, (node_index, tensor_index))
+        /// </summary>
+        public List<Layer> KerasHistory = new List<Layer>();
 
         /// <summary>
         ///     Updates the shape of this tensor.

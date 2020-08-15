@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
+using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
@@ -96,6 +97,47 @@ namespace Tensorflow.Keras.Engine
         protected Layer Flatten()
         {
             var layer = new Flatten(new FlattenArgs());
+
+            _layers.Add(layer);
+            return layer;
+        }
+
+        protected Layer LSTM(int units,
+            Activation activation = null,
+            Activation recurrent_activation = null,
+            bool use_bias = true,
+            IInitializer kernel_initializer = null,
+            IInitializer recurrent_initializer = null,
+            IInitializer bias_initializer = null,
+            bool unit_forget_bias = true,
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            int implementation = 2,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool time_major = false,
+            bool unroll = false)
+        {
+            var layer = new LSTM(new LSTMArgs
+            {
+                Units = units,
+                Activation = activation ?? tf.keras.activations.Tanh,
+                RecurrentActivation = recurrent_activation ?? tf.keras.activations.Sigmoid,
+                KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
+                RecurrentInitializer = recurrent_initializer ?? tf.orthogonal_initializer,
+                BiasInitializer = bias_initializer ?? tf.zeros_initializer,
+                Dropout = dropout,
+                RecurrentDropout = recurrent_dropout,
+                Implementation = implementation,
+                ReturnSequences = return_sequences,
+                ReturnState = return_state,
+                GoBackwards = go_backwards,
+                Stateful = stateful,
+                TimeMajor = time_major,
+                Unroll = unroll
+            });
 
             _layers.Add(layer);
             return layer;

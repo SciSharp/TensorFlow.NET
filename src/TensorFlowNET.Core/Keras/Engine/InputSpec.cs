@@ -26,17 +26,22 @@ namespace Tensorflow.Keras.Engine
         public int? ndim;
         public int? min_ndim;
         Dictionary<int, int> axes;
+        TensorShape shape;
 
         public InputSpec(TF_DataType dtype = TF_DataType.DtInvalid,
             int? ndim = null,
             int? min_ndim = null,
-            Dictionary<int, int> axes = null)
+            Dictionary<int, int> axes = null,
+            TensorShape shape = null)
         {
             this.ndim = ndim;
             if (axes == null)
                 axes = new Dictionary<int, int>();
             this.axes = axes;
             this.min_ndim = min_ndim;
+            this.shape = shape;
+            if (ndim == null && shape != null)
+                this.ndim = shape.ndim;
         }
     }
 }

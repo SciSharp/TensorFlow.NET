@@ -53,6 +53,11 @@ namespace Tensorflow.Keras.Layers
                 args.Name = prefix + '_' + tf.keras.backend.get_uid(prefix);
             }
             
+            if(args.DType == TF_DataType.DtInvalid)
+            {
+                args.DType = args.InputTensor == null ? tf.float32 : args.InputTensor.dtype;
+            }
+
             if (args.InputTensor == null)
             {
                 if(args.InputShape != null)
@@ -72,7 +77,8 @@ namespace Tensorflow.Keras.Layers
                         shape: BatchInputShape,
                         dtype: DType,
                         name: Name,
-                        sparse: args.Sparse);
+                        sparse: args.Sparse,
+                        ragged: args.Ragged);
                 tf.Context.eager_mode();
 
                 isPlaceholder = true;

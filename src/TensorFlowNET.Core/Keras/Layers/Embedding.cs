@@ -20,40 +20,37 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
+    /// <summary>
+    /// Turns positive integers (indexes) into dense vectors of fixed size.
+    /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding
+    /// </summary>
     public class Embedding : Layer
     {
-        private int input_dim;
-        private int output_dim;
-        private bool mask_zero;
-        public IVariableV1 embeddings;
-        public IInitializer embeddings_initializer;
-        int input_length;
+        EmbeddingArgs args;
+        int input_dim => args.InputDim;
+        int output_dim => args.OutputDim;
+        bool mask_zero => args.MaskZero;
+        IVariableV1 embeddings;
+        IInitializer embeddings_initializer;
 
-        public Embedding(int input_dim, int output_dim,
-            IInitializer embeddings_initializer = null,
-            bool mask_zero = false,
-            TF_DataType dtype = TF_DataType.TF_FLOAT,
-            int[] input_shape = null,
-            int input_length = -1) :
-            base(new LayerArgs
-            {
-                DType = dtype,
-                InputShape = input_shape ?? new[] { input_length }
-            })
+        public Embedding(EmbeddingArgs args)
+            : base(args)
         {
-            this.input_dim = input_dim;
-            this.output_dim = output_dim;
-            this.embeddings_initializer = embeddings_initializer == null ? tf.uniform_initializer : embeddings_initializer;
-            this.mask_zero = mask_zero;
+            this.args = args;
+            if(args.InputShape == null)
+                args.InputShape = args.InputLength;
+
+            embeddings_initializer = embeddings_initializer ?? tf.random_uniform_initializer;
             SupportsMasking = mask_zero;
-            this.input_length = input_length;
         }
 
         protected override void build(TensorShape input_shape)
         {
-            embeddings = add_weight(shape: new int[] { input_dim, output_dim },
+            tf.Context.eager_mode();
+            embeddings = add_weight(shape: (input_dim, output_dim),
                 initializer: embeddings_initializer,
                 name: "embeddings");
+            tf.Context.graph_mode();
             built = true;
         }
 
@@ -63,7 +60,7 @@ namespace Tensorflow.Keras.Layers
             if (dtype != tf.int32 && dtype != tf.int64)
                 inputs = math_ops.cast(inputs, tf.int32);
 
-            var outputs = embedding_ops.embedding_lookup(embeddings, inputs[0]);
+            var outputs = embedding_ops.embedding_lookup(embeddings, inputs);
             return outputs;
         }
     }

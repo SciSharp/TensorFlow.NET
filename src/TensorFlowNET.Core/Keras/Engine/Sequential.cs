@@ -14,17 +14,22 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
+using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
 {
-    public class Sequential : Model, ITensorFlowObject
+    /// <summary>
+    /// `Sequential` groups a linear stack of layers into a `tf.keras.Model`.
+    /// `Sequential` provides training and inference features on this model.
+    /// </summary>
+    public class Sequential
     {
-#pragma warning disable CS0649 // Field 'Sequential._is_graph_network' is never assigned to, and will always have its default value false
         bool _is_graph_network;
-#pragma warning restore CS0649 // Field 'Sequential._is_graph_network' is never assigned to, and will always have its default value false
+        Tensor inputs;
         Tensor outputs;
 
         bool computeOutputAndMaskJointly;
@@ -32,26 +37,24 @@ namespace Tensorflow.Keras.Engine
         TensorShape inferredInputShape;
         bool hasExplicitInputShape;
         TF_DataType inputDType;
-        Layer[] layers;
+        List<Layer> layers;
+        public TensorShape output_shape => outputs.TensorShape;
+        bool built = false;
 
         public Sequential(Layer[] layers = null, string name = null) 
-            : base(new ModelArgs { Name = name})
         {
-            this.layers = layers ?? new Layer[0];
-            SupportsMasking = true;
+            this.layers = layers == null ? new List<Layer>() : layers.ToList();
+            // SupportsMasking = true;
             computeOutputAndMaskJointly = true;
             autoTrackSubLayers = false;
             hasExplicitInputShape = false;
+            _is_graph_network = false;
         }
 
-        public void __enter__()
+        public void add(Tensor tensor)
         {
-            
-        }
-
-        public void add(Tensor layer)
-        {
-
+            var layer = tensor.KerasHistory[0];
+            add(layer);
         }
 
         /// <summary>
@@ -62,9 +65,9 @@ namespace Tensorflow.Keras.Engine
         {
             built = false;
             var set_inputs = false;
-            if(layers.Length == 0)
+            if (layers.Count == 0)
             {
-                if(layer is InputLayer)
+                if (layer is InputLayer)
                 {
                     set_inputs = true;
                 }
@@ -93,31 +96,33 @@ namespace Tensorflow.Keras.Engine
                 }
 
             }
+            else if (outputs != null)
+            {
+                outputs = layer.Apply(outputs);
+            }
 
             if (set_inputs || _is_graph_network)
+            {
+                _init_graph_network(inputs, outputs);
+            }
+            else
             {
 
             }
         }
 
-        public void __exit__()
+        void _init_graph_network(Tensor inputs, Tensor outputs)
         {
-            
+            _is_graph_network = true;
+            this.inputs = inputs;
+            this.outputs = outputs;
+            built = true;
+            _map_graph_network(inputs, outputs);
         }
 
-        public void Dispose()
+        void _map_graph_network(Tensor inputs, Tensor outputs)
         {
-
-        }
-
-        public void __init__()
-        {
-            
-        }
-
-        public void __del__()
-        {
-            
+            layers.add(outputs.KerasHistory[0]);
         }
     }
 }

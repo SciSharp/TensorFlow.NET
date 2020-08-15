@@ -27,7 +27,8 @@ namespace Tensorflow
         public IInitializer zeros_initializer => new Zeros();
         public IInitializer ones_initializer => new Ones();
         public IInitializer glorot_uniform_initializer => new GlorotUniform();
-        public IInitializer uniform_initializer => new RandomUniform();
+        public IInitializer random_uniform_initializer => new RandomUniform();
+        public IInitializer orthogonal_initializer => new Orthogonal();
 
         public variable_scope variable_scope(string name,
                string default_name = null,

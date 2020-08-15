@@ -63,17 +63,8 @@ namespace Tensorflow
 
             var layer = new InputLayer(args);
 
-            return layer.InboundNodes[0].Outputs[0];
+            return layer.InboundNodes[0].Outputs;
         }
-
-        public static Embedding Embedding(int input_dim,
-            int output_dim,
-            IInitializer embeddings_initializer = null,
-            bool mask_zero = false)
-            => new Embedding(input_dim,
-                output_dim,
-                embeddings_initializer,
-                mask_zero);
 
         public class LayersApi
         {
@@ -85,6 +76,30 @@ namespace Tensorflow
                     Units = units,
                     Activation = activation ?? tf.keras.activations.Linear,
                     InputShape = input_shape
+                });
+
+            /// <summary>
+            /// Turns positive integers (indexes) into dense vectors of fixed size.
+            /// </summary>
+            /// <param name="input_dim"></param>
+            /// <param name="output_dim"></param>
+            /// <param name="embeddings_initializer"></param>
+            /// <param name="mask_zero"></param>
+            /// <returns></returns>
+            public Embedding Embedding(int input_dim,
+                int output_dim,
+                IInitializer embeddings_initializer = null,
+                bool mask_zero = false,
+                TensorShape input_shape = null,
+                int input_length = -1)
+                => new Embedding(new EmbeddingArgs
+                {
+                    InputDim = input_dim,
+                    OutputDim = output_dim,
+                    MaskZero = mask_zero,
+                    InputShape = input_shape ?? input_length,
+                    InputLength = input_length,
+                    EmbeddingsInitializer = embeddings_initializer
                 });
         }
     }
