@@ -47,5 +47,16 @@ namespace Tensorflow.Keras.Utils
                 false_fn: false_fn,
                 name: name);
         }
+
+        public static Tensor smart_cond(bool pred,
+            Func<Tensor> true_fn = null,
+            Func<Tensor> false_fn = null,
+            string name = null)
+        {
+            return smart_module.smart_cond(pred,
+                true_fn: true_fn,
+                false_fn: false_fn,
+                name: name);
+        }
     }
 }

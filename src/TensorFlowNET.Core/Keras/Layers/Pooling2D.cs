@@ -14,57 +14,49 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Layers
 {
-    public class Pooling2D : Tensorflow.Layers.Layer
+    public class Pooling2D : Layer
     {
-        private IPoolFunction pool_function;
-        private int[] pool_size;
-        private int[] strides;
-        private string padding;
-        private string data_format;
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-        private InputSpec input_spec;
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+        Pooling2DArgs args;
+        InputSpec input_spec;
 
-        public Pooling2D(IPoolFunction pool_function,
-            int[] pool_size,
-            int[] strides,
-            string padding = "valid",
-            string data_format = null,
-            string name = null) : base(name: name)
+        public Pooling2D(Pooling2DArgs args) 
+            : base(args)
         {
-            this.pool_function = pool_function;
-            this.pool_size = conv_utils.normalize_tuple(pool_size, 2, "pool_size");
-            this.strides = conv_utils.normalize_tuple(strides, 2, "strides");
-            this.padding = conv_utils.normalize_padding(padding);
-            this.data_format = conv_utils.normalize_data_format(data_format);
-            this.input_spec = new InputSpec(ndim: 4);
+            this.args = args;
+            args.PoolSize = conv_utils.normalize_tuple(args.PoolSize, 2, "pool_size");
+            args.Strides = conv_utils.normalize_tuple(args.Strides, 2, "strides");
+            args.Padding = conv_utils.normalize_padding(args.Padding);
+            args.DataFormat = conv_utils.normalize_data_format(args.DataFormat);
+            input_spec = new InputSpec(ndim: 4);
         }
 
         protected override Tensor call(Tensor inputs, bool is_training = false, Tensor state = null)
         {
             int[] pool_shape;
-            if (data_format == "channels_last")
+            int[] strides;
+            if (args.DataFormat == "channels_last")
             {
-                pool_shape = new int[] { 1, pool_size[0], pool_size[1], 1 };
-                strides = new int[] { 1, strides[0], strides[1], 1 };
+                pool_shape = new int[] { 1, args.PoolSize.dims[0], args.PoolSize.dims[1], 1 };
+                strides = new int[] { 1, args.Strides.dims[0], args.Strides.dims[1], 1 };
             }
             else
             {
-                pool_shape = new int[] { 1, 1, pool_size[0], pool_size[1] };
-                strides = new int[] { 1, 1, strides[0], strides[1] };
+                pool_shape = new int[] { 1, 1, args.PoolSize.dims[0], args.PoolSize.dims[1] };
+                strides = new int[] { 1, 1, args.Strides.dims[0], args.Strides.dims[1] };
             }
 
-            var outputs = pool_function.Apply(
+            var outputs = args.PoolFunction.Apply(
                 inputs,
                 ksize: pool_shape,
                 strides: strides,
-                padding: padding.ToUpper(),
-                data_format: conv_utils.convert_data_format(data_format, 4));
+                padding: args.Padding.ToUpper(),
+                data_format: conv_utils.convert_data_format(args.DataFormat, 4));
 
             return outputs;
         }

@@ -68,7 +68,7 @@ namespace Tensorflow.Operations
             }
         }
 
-        public Tensor __call__(Tensor inp, RefVariable filter)
+        public Tensor __call__(Tensor inp, IVariableV1 filter)
         {
             return call.__call__(inp, filter);
         }

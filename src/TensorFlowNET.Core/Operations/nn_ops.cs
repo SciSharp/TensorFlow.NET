@@ -68,7 +68,7 @@ namespace Tensorflow
         /// <param name="seed"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor dropout_v2(Tensor x, Tensor rate, Tensor noise_shape = null, int? seed = null, string name = null)
+        public static Tensor dropout_v2(Tensor x, float rate, Tensor noise_shape = null, int? seed = null, string name = null)
         {
             return tf_with(ops.name_scope(name, "dropout", x), scope =>
             {
@@ -78,11 +78,10 @@ namespace Tensorflow
                     throw new NotImplementedException($"x has to be a floating point tensor since it's going to" +
                         $" be scaled. Got a {x.dtype} tensor instead.");
 
-                rate = ops.convert_to_tensor(rate, dtype: x.dtype, name: "rate");
-                // Do nothing if we know rate == 0
-                var val = tensor_util.constant_value(rate);
-                if (!(val is null) && val.Data<float>()[0] == 0)
-                    return x;
+                var keep_prob = 1 - rate;
+                var scale = 1 / keep_prob;
+                var scale_tensor = ops.convert_to_tensor(scale, dtype: x.dtype);
+                var ret = gen_math_ops.mul(x, scale_tensor);
 
                 noise_shape = _get_noise_shape(x, noise_shape);
 
@@ -92,13 +91,12 @@ namespace Tensorflow
                 // NOTE: Random uniform actually can only generate 2^23 floats on [1.0, 2.0)
                 // and subtract 1.0.
                 var random_tensor = random_ops.random_uniform(noise_shape, seed: seed, dtype: x.dtype);
-                var keep_prob = 1.0f - rate;
-                var scale = 1.0f / keep_prob;
                 // NOTE: if (1.0 + rate) - 1 is equal to rate, then we want to consider that
                 // float to be selected, hence we use a >= comparison.
                 var keep_mask = random_tensor >= rate;
-                var ret = x * scale * math_ops.cast(keep_mask, x.dtype);
-                ret.set_shape(x.TensorShape);
+                ret = x * scale * math_ops.cast(keep_mask, x.dtype);
+                if (!tf.executing_eagerly())
+                    ret.set_shape(x.TensorShape);
                 return ret;
             });
         }

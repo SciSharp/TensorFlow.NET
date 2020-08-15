@@ -67,12 +67,12 @@ namespace Tensorflow.Operations
             }
         }
 
-        public Tensor __call__(Tensor inp, RefVariable filter)
+        public Tensor __call__(Tensor inp, IVariableV1 filter)
         {
             return conv_op(new Conv2dParams
             {
                 Input = inp,
-                Filter = filter,
+                Filter = filter.AsTensor(),
                 Strides = strides,
                 Padding = padding,
                 DataFormat = data_format,

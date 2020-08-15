@@ -40,7 +40,7 @@ namespace Tensorflow
                 string data_format= "channels_last",
                 int[] dilation_rate = null,
                 bool use_bias = true,
-                IActivation activation = null,
+                Activation activation = null,
                 IInitializer kernel_initializer = null,
                 IInitializer bias_initializer = null,
                 bool trainable = true,
@@ -53,20 +53,23 @@ namespace Tensorflow
                 if (bias_initializer == null)
                     bias_initializer = tf.zeros_initializer;
 
-                var layer = new Conv2D(filters,
-                    kernel_size: kernel_size,
-                    strides: strides,
-                    padding: padding,
-                    data_format: data_format,
-                    dilation_rate: dilation_rate,
-                    activation: activation,
-                    use_bias: use_bias,
-                    kernel_initializer: kernel_initializer,
-                    bias_initializer: bias_initializer,
-                    trainable: trainable,
-                    name: name);
+                var layer = new Conv2D(new Conv2DArgs
+                {
+                    Filters = filters,
+                    KernelSize = kernel_size,
+                    Strides = strides,
+                    Padding = padding,
+                    DataFormat = data_format,
+                    DilationRate = dilation_rate,
+                    Activation = activation,
+                    UseBias = use_bias,
+                    KernelInitializer = kernel_initializer,
+                    BiasInitializer = bias_initializer,
+                    Trainable = trainable,
+                    Name = name
+                });
 
-                return layer.apply(inputs).Item1;
+                return layer.Apply(inputs);
             }
 
             /// <summary>
@@ -140,13 +143,16 @@ namespace Tensorflow
                 string data_format = "channels_last",
                 string name = null)
             {
-                var layer = new MaxPooling2D(pool_size: pool_size,
-                    strides: strides,
-                    padding: padding,
-                    data_format: data_format,
-                    name: name);
+                var layer = new MaxPooling2D(new MaxPooling2DArgs
+                {
+                    PoolSize = pool_size,
+                    Strides = strides,
+                    Padding = padding,
+                    DataFormat = data_format,
+                    Name = name
+                });
 
-                return layer.apply(inputs).Item1;
+                return layer.Apply(inputs);
             }
 
             /// <summary>

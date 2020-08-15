@@ -41,6 +41,14 @@ namespace Tensorflow.Framework
                     name: name);
         }
 
+        public static Tensor smart_cond(bool pred,
+            Func<Tensor> true_fn = null,
+            Func<Tensor> false_fn = null,
+            string name = null)
+        {
+            return pred ? true_fn() : false_fn();
+        }
+
         public static bool? smart_constant_value(Tensor pred)
         {
             var pred_value = tensor_util.constant_value(pred);

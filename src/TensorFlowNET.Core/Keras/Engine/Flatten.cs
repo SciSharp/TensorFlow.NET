@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Utils;
+using static Tensorflow.Binding;
+
+namespace Tensorflow.Keras.Engine
+{
+    public class Flatten : Layer
+    {
+        FlattenArgs args;
+        InputSpec input_spec;
+        bool _channels_first;
+
+        public Flatten(FlattenArgs args)
+            : base(args)
+        {
+            args.DataFormat = conv_utils.normalize_data_format(args.DataFormat);
+            input_spec = new InputSpec(min_ndim: 1);
+            _channels_first = args.DataFormat == "channels_first";
+        }
+
+        protected override Tensor call(Tensor inputs, bool is_training = false, Tensor state = null)
+        {
+            if (_channels_first)
+            {
+                throw new NotImplementedException("");
+            }
+
+            if (tf.executing_eagerly())
+            {
+                return array_ops.reshape(inputs, new[] { inputs.shape[0], -1 });
+            }
+
+            throw new NotImplementedException("");
+        }
+    }
+}

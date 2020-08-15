@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Operations;
@@ -23,87 +24,73 @@ using Tensorflow.Operations.Activation;
 
 namespace Tensorflow.Keras.Layers
 {
-    public class Conv : Tensorflow.Layers.Layer
+    public class Conv : Layer
     {
-        protected int rank;
-        protected int filters;
-        protected int[] kernel_size;
-        protected int[] strides;
-        protected string padding;
-        protected string data_format;
-        protected int[] dilation_rate;
-        protected IActivation activation;
-        protected bool use_bias;
-        protected IInitializer kernel_initializer;
-        protected IInitializer bias_initializer;
-        protected RefVariable kernel;
-        protected RefVariable bias;
+        ConvArgs args;
+        protected int rank => args.Rank;
+        protected int filters => args.Filters;
+        protected TensorShape kernel_size => args.KernelSize;
+        protected TensorShape strides => args.Strides;
+        protected string padding => args.Padding;
+        protected string data_format => args.DataFormat;
+        protected TensorShape dilation_rate => args.DilationRate;
+        protected Activation activation => args.Activation;
+        protected bool use_bias => args.UseBias;
+        protected IInitializer kernel_initializer => args.KernelInitializer;
+        protected IInitializer bias_initializer => args.BiasInitializer;
+        protected IVariableV1 kernel;
+        protected IVariableV1 bias;
         protected Convolution _convolution_op;
+        string _tf_data_format;
 
-        public Conv(int rank, 
-            int filters,
-            int[] kernel_size,
-            int[] strides = null,
-            string padding = "valid",
-            string data_format = null,
-            int[] dilation_rate = null,
-            IActivation activation = null,
-            bool use_bias = true,
-            IInitializer kernel_initializer = null,
-            IInitializer bias_initializer = null,
-            bool trainable = true, 
-            string name = null) : base(trainable: trainable, name: name)
+        public Conv(ConvArgs args) : base(args)
         {
-            this.rank = rank;
-            this.filters = filters;
-            this.kernel_size = kernel_size;
-            this.strides = strides;
-            this.padding = padding;
-            this.data_format = data_format;
-            this.dilation_rate = dilation_rate;
-            this.activation = activation;
-            this.use_bias = use_bias;
-            this.kernel_initializer = kernel_initializer;
-            this.bias_initializer = bias_initializer;
+            this.args = args;
+            args.KernelSize = conv_utils.normalize_tuple(args.KernelSize.dims, args.Rank, "kernel_size");
+            args.Strides = conv_utils.normalize_tuple(args.Strides.dims, args.Rank, "strides");
+            args.Padding = conv_utils.normalize_padding(args.Padding);
+            args.DataFormat = conv_utils.normalize_data_format(args.DataFormat);
+            args.DilationRate = conv_utils.normalize_tuple(args.DilationRate.dims, args.Rank, "dilation_rate");
             inputSpec = new InputSpec(ndim: rank + 2);
+            _tf_data_format = conv_utils.convert_data_format(data_format, rank + 2);
         }
 
         protected override void build(TensorShape input_shape)
         {
             int channel_axis = data_format == "channels_first" ? 1 : -1;
-            int input_dim = channel_axis < 0 ? 
+            int input_channel = channel_axis < 0 ? 
                 input_shape.dims[input_shape.ndim + channel_axis] : 
                 input_shape.dims[channel_axis];
-            var kernel_shape = new int[] { kernel_size[0], kernel_size[1], input_dim, filters };
-            kernel = (RefVariable)add_weight(name: "kernel",
+            TensorShape kernel_shape = kernel_size.dims.concat(new int[] { input_channel / args.Groups, filters });
+            kernel = add_weight(name: "kernel",
                 shape: kernel_shape,
                 initializer: kernel_initializer,
                 trainable: true,
                 dtype: DType);
             if (use_bias)
-                bias = (RefVariable)add_weight(name: "bias",
+                bias = add_weight(name: "bias",
                     shape: new int[] { filters },
                     initializer: bias_initializer,
                     trainable: true,
                     dtype: DType);
 
             var axes = new Dictionary<int, int>();
-            axes.Add(-1, input_dim);
+            axes.Add(-1, input_channel);
             inputSpec = new InputSpec(ndim: rank + 2, axes: axes);
 
-            string op_padding;
+            string tf_padding;
             if (padding == "causal")
-                op_padding = "valid";
+                tf_padding = "VALID";
             else
-                op_padding = padding;
+                tf_padding = padding.ToUpper();
 
-            var df = conv_utils.convert_data_format(data_format, rank + 2);
+            
             _convolution_op = nn_ops.Convolution(input_shape,
                 kernel.shape,
-                op_padding.ToUpper(),
+                tf_padding,
                 strides,
                 dilation_rate,
-                data_format: df);
+                data_format: _tf_data_format);
 
             built = true;
         }
@@ -119,12 +106,12 @@ namespace Tensorflow.Keras.Layers
                 }
                 else
                 {                    
-                    outputs = nn_ops.bias_add(outputs, bias, data_format: "NHWC");
+                    outputs = nn_ops.bias_add(outputs, bias.AsTensor(), data_format: "NHWC");
                 }
             }
 
             if (activation != null)
-                outputs = activation.Activate(outputs);
+                outputs = activation(outputs);
 
             return outputs;
         }

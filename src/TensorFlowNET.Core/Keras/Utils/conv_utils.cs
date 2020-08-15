@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Linq;
+
 namespace Tensorflow.Keras.Utils
 {
     public class conv_utils
@@ -44,7 +46,10 @@ namespace Tensorflow.Keras.Utils
 
         public static int[] normalize_tuple(int[] value, int n, string name)
         {
-            return value;
+            if (value.Length == 1)
+                return Enumerable.Range(0, n).Select(x => value[0]).ToArray();
+            else
+                return value;
         }
 
         public static string normalize_padding(string value)
@@ -54,6 +59,8 @@ namespace Tensorflow.Keras.Utils
 
         public static string normalize_data_format(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return ImageDataFormat.channels_last.ToString();
             return value.ToLower();
         }
     }
