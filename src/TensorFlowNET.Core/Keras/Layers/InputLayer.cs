@@ -38,7 +38,7 @@ namespace Tensorflow.Keras.Layers
         {
             this.args = args;
             built = true;
-            this.SupportsMasking = true;
+            SupportsMasking = true;
 
             if(BatchInputShape != null)
             {
@@ -58,6 +58,9 @@ namespace Tensorflow.Keras.Layers
                 args.DType = args.InputTensor == null ? tf.float32 : args.InputTensor.dtype;
             }
 
+            // In graph mode, create a graph placeholder to call the layer on.
+            tf.Context.graph_mode();
+
             if (args.InputTensor == null)
             {
                 if(args.InputShape != null)
@@ -71,15 +74,13 @@ namespace Tensorflow.Keras.Layers
                     args.BatchInputShape = null;
                 }
 
-                // In graph mode, create a graph placeholder to call the layer on.
-                tf.Context.graph_mode();
                 args.InputTensor = tf.keras.backend.placeholder(
-                        shape: BatchInputShape,
-                        dtype: DType,
-                        name: Name,
-                        sparse: args.Sparse,
-                        ragged: args.Ragged);
-                tf.Context.eager_mode();
+                    shape: BatchInputShape,
+                    dtype: DType,
+                    name: Name,
+                    sparse: args.Sparse,
+                    ragged: args.Ragged);
+                
 
                 isPlaceholder = true;
             }
@@ -97,6 +98,8 @@ namespace Tensorflow.Keras.Layers
             typeSpec = new TensorSpec(args.InputTensor.TensorShape,
                 dtype: args.InputTensor.dtype,
                 name: Name);
+
+            tf.Context.restore_mode();
         }
     }
 }

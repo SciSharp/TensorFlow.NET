@@ -34,10 +34,14 @@ namespace Tensorflow.Keras.Layers
         IInitializer embeddings_initializer;
 
         public Embedding(EmbeddingArgs args)
-            : base(args)
+            : base(new LayerArgs // copy args
+            {
+                DType = args.DType,
+                Name = args.Name
+            })
         {
             this.args = args;
-            if(args.InputShape == null)
+            if (args.InputShape == null)
                 args.InputShape = args.InputLength;
 
             embeddings_initializer = embeddings_initializer ?? tf.random_uniform_initializer;

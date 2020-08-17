@@ -30,11 +30,25 @@ namespace Tensorflow.Contexts
         public ContextSwitchStack(bool isEager)
         {
             stack = new Stack<ContextSwitch>();
-            if (isEager)
-                stack.Push(new ContextSwitch
-                {
-                    IsBuildingFunction = false
-                });
+            Push(isEager);
+        }
+
+        public void Push(bool isEager)
+        {
+            stack.Push(new ContextSwitch
+            {
+                EagerMode = isEager
+            });
+        }
+
+        public void Pop()
+        {
+            stack.Pop();
+        }
+
+        public ContextSwitch Current()
+        {
+            return stack.Peek();
         }
     }
 }

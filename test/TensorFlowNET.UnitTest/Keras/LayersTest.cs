@@ -14,7 +14,7 @@ namespace TensorFlowNET.UnitTest.Keras
     /// https://www.tensorflow.org/versions/r2.3/api_docs/python/tf/keras/layers
     /// </summary>
     [TestClass]
-    public class LayersTest : GraphModeTestBase
+    public class LayersTest : EagerModeTestBase
     {
         [TestMethod]
         public void Sequential()
@@ -26,7 +26,7 @@ namespace TensorFlowNET.UnitTest.Keras
         /// <summary>
         /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding
         /// </summary>
-        [TestMethod, Ignore]
+        [TestMethod]
         public void Embedding()
         {
             var model = new Sequential();

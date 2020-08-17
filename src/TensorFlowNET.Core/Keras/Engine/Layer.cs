@@ -159,7 +159,8 @@ namespace Tensorflow.Keras.Engine
                 _set_mask_metadata(inputs, outputs, null);
             });
 
-            tf.Context.eager_mode();
+            if (!inputs.IsEagerTensor)
+                tf.Context.restore_mode();
 
             return outputs;
         }

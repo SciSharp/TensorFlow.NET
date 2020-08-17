@@ -12,7 +12,8 @@ namespace Tensorflow.UnitTest
         [TestInitialize]
         public void TestInit()
         {
-            tf.enable_eager_execution();
+            if (!tf.executing_eagerly())
+                tf.enable_eager_execution();
         }
 
         [TestCleanup]

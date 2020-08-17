@@ -31,8 +31,7 @@ namespace Tensorflow.Contexts
         public string DeviceName { get; set; } = "";
         public string ScopeName { get; set; } = "";
         bool initialized = false;
-        bool isEager;
-        ContextSwitchStack contextSwitches;
+        ContextSwitchStack context_switches;
 
         public SafeContextHandle Handle { get; }
 
@@ -40,8 +39,7 @@ namespace Tensorflow.Contexts
         {
             Handle = c_api.TFE_NewContext(opts.Handle, status.Handle);
             status.Check(true);
-            isEager = defaultExecutionMode == EAGER_MODE;
-            contextSwitches = new ContextSwitchStack(isEager);
+            context_switches = new ContextSwitchStack(defaultExecutionMode == EAGER_MODE);
             initialized = true;
         }
 
@@ -66,7 +64,7 @@ namespace Tensorflow.Contexts
         /// </summary>
         /// <returns></returns>
         public bool executing_eagerly()
-            => isEager;
+            => context_switches.Current().EagerMode;
 
         public string shared_name(string name = null)
             => !string.IsNullOrEmpty(name) || !executing_eagerly() ? 
@@ -79,9 +77,14 @@ namespace Tensorflow.Contexts
         public void eager_mode()
             => mode(true);
 
-        void mode(bool mode)
+        void mode(bool isEager)
         {
-            isEager = mode;
+            context_switches.Push(isEager);
+        }
+
+        public void restore_mode()
+        {
+            context_switches.Pop();
         }
 
         public void Dispose()

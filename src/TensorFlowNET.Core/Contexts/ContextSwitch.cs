@@ -22,6 +22,8 @@ namespace Tensorflow.Contexts
 {
     public class ContextSwitch
     {
+        public bool EagerMode { get; set; }
+
         /// <summary>
         /// Whether the context is building a function.
         /// </summary>
