@@ -379,19 +379,6 @@ namespace Tensorflow
                 return reduce_mean(squared_deviations, axis: axis, keepdims: keepdims);
             });
         }
-       
-        public static Tensor reduce_std(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
-        {
-            if (name == null)
-                name = "reduce_std";
-            // else {name = name;}
-
-            return tf_with(ops.name_scope(name, "reduce_std", new [] {input_tensor}), scope =>
-            {
-                var variance = reduce_variance(input_tensor, axis: axis, keepdims: keepdims);
-                return gen_math_ops.sqrt(variance);
-            });
-        }
 
         public static Tensor sigmoid<T>(T x, string name = null)
             => tf_with(ops.name_scope(name, "Sigmoid", x), scope =>
