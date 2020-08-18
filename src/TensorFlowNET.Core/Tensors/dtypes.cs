@@ -228,6 +228,11 @@ namespace Tensorflow
         {
             return (int)type < 100 ? (TF_DataType)((int)type + 100) : type;
         }
+       
+        public static long min(this TF_DataType type)
+        {
+            throw new NotImplementedException($"min {type.name()}");
+        }
 
         public static long max(this TF_DataType type)
         {

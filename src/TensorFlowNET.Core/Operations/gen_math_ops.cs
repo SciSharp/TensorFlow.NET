@@ -1083,6 +1083,23 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+       
+        public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
+        {
+            if (tf.context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.context, tf.context.device_name,
+                    "Pow", name, 
+                    null,
+                    x, y);
+
+                return results[0];
+            }
+
+            var _op = tf._op_def_lib._apply_op_helper("Pow", name, args: new { x, y });
+
+            return _op.outputs[0];
+        }
 
         public static Tensor _sum<Tx, Ty>(Tx input, Ty axis = default, bool keep_dims = false, string name = null)
         {
