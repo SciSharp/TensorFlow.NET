@@ -183,7 +183,7 @@ namespace Tensorflow
                 image_ops_impl.crop_and_resize(image, boxes, box_ind, crop_size, method, extrapolation_value, name);
 
             public Tensor extract_glimpse(Tensor input, Tensor size, Tensor offsets, bool centered = true, bool normalized = true,
-                bool uniform_noise, string name = null)
+                bool uniform_noise = true, string name = null)
                 => image_ops_impl.extract_glimpse(input, size, offsets, centered, normalized, uniform_noise, name);
 
             public (Tensor, Tensor, Tensor, Tensor) combined_non_max_suppression(Tensor boxes, Tensor scores, Tensor max_output_size_per_class,
