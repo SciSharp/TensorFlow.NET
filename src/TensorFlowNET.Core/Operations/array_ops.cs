@@ -534,6 +534,11 @@ namespace Tensorflow
                 return gen_array_ops.size(input, name: name, out_type: out_type);
             });
         }
+       
+        public static Tensor tile(Tensor input, Tensor multiples, string name = null)
+        {
+            throw new NotImplementedException("tile");
+        }
 
         public static Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
         {
