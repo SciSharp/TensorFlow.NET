@@ -145,6 +145,12 @@ namespace Tensorflow
         {
             throw new NotImplementedException("TensorShape is_compatible_with");
         }
+        
+        public void assert_has_rank(int rank)
+        {
+            if (rank != ndim)
+                throw new ValueError(String.Format("Shape {0} must have rank {1}", ndim, rank));
+        }
 
         [SuppressMessage("ReSharper", "ParameterHidesMember")]
         public TensorShape with_rank_at_least(int rank)
