@@ -269,6 +269,7 @@ namespace Tensorflow
                                 new [] {math_ops.equal(k, 2), _rot180()},
                                 new [] {math_ops.equal(k, 3), _rot270()}};
             
+            // ! control_flow_ops doesn't have an implementation for case yet !
             // var result = control_flow_ops.case(cases, default: () => image, exclusive: true, name: name_scope);
             // result.set_shape(new [] {null, null, image.shape.dims[2]})
             // return result
@@ -336,7 +337,7 @@ or rank = 4. Had rank = {0}", rank));
                 object hd, bbox_h_start;
                 if ((bool)h[1])
                 {
-                    hd = math_ops.cast(h[0] as RefVariable, dtypes.float64);
+                    hd = math_ops.cast(h[0], dtypes.float64);
                     bbox_h_start = math_ops.cast(((int)hd - (int)hd * central_fraction) / 2, dtypes.int32);
                 } else
                 {
@@ -347,7 +348,7 @@ or rank = 4. Had rank = {0}", rank));
                 object wd, bbox_w_start;
                 if ((bool)w[1])
                 {
-                    wd = math_ops.cast(w[0] as RefVariable, dtypes.float64);
+                    wd = math_ops.cast((RefVariable)w[0], dtypes.float64);
                     bbox_w_start = math_ops.cast(((int)wd - (int)wd * central_fraction) / 2, dtypes.int32);
                 } else
                 {
