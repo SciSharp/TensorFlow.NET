@@ -21,6 +21,12 @@ namespace Tensorflow
 {
     public class gen_image_ops
     {
+        public static (Tensor, Tensor, Tensor, Tensor) combined_non_max_suppression(Tensor boxes, Tensor scores, Tensor max_output_size_per_class, Tensor max_total_size,
+            Tensor iou_threshold, Tensor score_threshold, bool pad_per_class, bool clip_boxes)
+        {
+            throw new NotImplementedException("combined_non_max_suppression");
+        }
+
         public static Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name= null)
         {
             if (dtype == image.dtype)
