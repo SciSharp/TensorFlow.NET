@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using static Tensorflow.Binding;
 
@@ -9879,6 +9880,11 @@ namespace Tensorflow.Operations
                 dict["xmp_metadata"] = xmp_metadata;
             var op = tf.OpDefLib._apply_op_helper("EncodeJpeg", name: name, keywords: dict);
             return op.output;
+        }
+
+        public static Tensor encode_jpeg_variable_quality(Tensor image, Tensor quality)
+        {
+            throw new NotImplementedException("");
         }
 
         /// <summary>
@@ -28059,6 +28065,11 @@ namespace Tensorflow.Operations
             dict["tensors"] = tensors;
             var op = tf.OpDefLib._apply_op_helper("SaveV2", name: name, keywords: dict);
             return op;
+        }
+
+        public static Tensor scale_and_translate (Tensor images_t, Tensor new_size, Tensor[] scale, Tensor zeroes, string kernel_type, bool antialias)
+        {
+            throw new NotImplementedException("scale_and_translate");
         }
 
         /// <summary>

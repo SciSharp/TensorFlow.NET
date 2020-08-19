@@ -337,7 +337,7 @@ or rank = 4. Had rank = {0}", rank));
                 object hd, bbox_h_start;
                 if ((bool)h[1])
                 {
-                    hd = math_ops.cast(h[0], dtypes.float64);
+                    hd = math_ops.cast((IVariableV1)h[0], dtypes.float64);
                     bbox_h_start = math_ops.cast(((int)hd - (int)hd * central_fraction) / 2, dtypes.int32);
                 } else
                 {
@@ -348,7 +348,7 @@ or rank = 4. Had rank = {0}", rank));
                 object wd, bbox_w_start;
                 if ((bool)w[1])
                 {
-                    wd = math_ops.cast((RefVariable)w[0], dtypes.float64);
+                    wd = math_ops.cast((IVariableV1)w[0], dtypes.float64);
                     bbox_w_start = math_ops.cast(((int)wd - (int)wd * central_fraction) / 2, dtypes.int32);
                 } else
                 {
@@ -1743,7 +1743,7 @@ new_height, new_width");
         
         public static Tensor crop_and_resize(Tensor image, Tensor boxes, Tensor box_ind, Tensor crop_size, string method, float extrapolation_value, string name)
         {
-            var _op = tf._op_def_lib._apply_op_helper("CropAndResize", name: name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("CropAndResize", name: name, args: new
             {
                 image,
                 boxes,
@@ -1780,8 +1780,8 @@ new_height, new_width");
                 Tensor score_threshold_tensor = ops.convert_to_tensor(
                     score_threshold, dtype: dtypes.float32, name: "score_threshold");
                 return gen_image_ops.combined_non_max_suppression(
-                    boxes, scores, max_output_size_per_class, max_total_size, iou_threshold, 
-                    score_threshold, pad_per_class, clip_boxes);
+                    boxes, scores, max_output_size_per_class, max_total_size, iou_threshold_tensor, 
+                    score_threshold_tensor, pad_per_class, clip_boxes);
             });
         }
 
