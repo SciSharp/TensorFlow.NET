@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
    Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -225,6 +225,47 @@ namespace Tensorflow
                 return tpl.ToArray();
             });
         }
+
+        internal static Tensor _case_helper(Func<Tensor, Tensor> cond_fn, Tensor[] pred_fn_pairs, Func<Tensor[]> callable_default, bool exclusive, string name,
+            bool allow_python_preds = false)
+        {
+            /*
+            (Tensor[] predicates, Tensor[] actions) = _case_verify_and_canonicalize_args(
+                pred_fn_pairs, exclusive, name, allow_python_preds);
+            return tf_with(ops.name_scope(name, "case", new [] {predicates}), delegate
+            {
+                if (callable_default == null)
+                {
+                    (callable_default, predicates, actions) = _case_create_default_action(
+                        predicates, actions);
+                }
+                var fn = callable_default;
+            });
+            */
+
+            throw new NotImplementedException("_case_helper");
+        }
+
+        internal static (Func<Tensor[]>, Tensor[], Tensor[]) _case_create_default_action(Tensor[] predicates, Tensor[] actions)
+        {
+            throw new NotImplementedException("_case_create_default_action");
+        }
+
+        internal static (Tensor[], Tensor[]) _case_verify_and_canonicalize_args(Tensor[] pred_fn_pairs, bool exclusive, string name, bool allow_python_preds)
+        {
+            throw new NotImplementedException("_case_verify_and_canonicalize_args");
+        }
+
+        public static Tensor case_v2(Tensor[] pred_fn_pairs, Func<Tensor[]> callable_default = null, bool exclusive = false, bool strict = false, string name = "case")
+            => _case_helper(
+                cond_fn: (Tensor x) => cond(x),
+                pred_fn_pairs,
+                default,
+                exclusive,
+                name,
+                allow_python_preds: false//,
+                //strict: strict
+            );
 
         /// <summary>
         /// Produces the content of `output_tensor` only after `dependencies`.
