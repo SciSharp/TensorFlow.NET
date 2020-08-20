@@ -265,15 +265,13 @@ namespace Tensorflow
                 return gen_array_ops.reverse(array_ops.transpose(image, new [] {1, 0, 2}), new [] {1});
             };
 
-            var cases = new [] {new [] {math_ops.equal(k, 1), _rot90()},
-                                new [] {math_ops.equal(k, 2), _rot180()},
-                                new [] {math_ops.equal(k, 3), _rot270()}};
+            var cases = new [] {math_ops.equal(k, 1), _rot90(),
+                                math_ops.equal(k, 2), _rot180(),
+                                math_ops.equal(k, 3), _rot270()};
             
-            // ! control_flow_ops doesn't have an implementation for case yet !
-            // var result = control_flow_ops.case(cases, default: () => image, exclusive: true, name: name_scope);
-            // result.set_shape(new [] {null, null, image.shape.dims[2]})
-            // return result
-            throw new NotImplementedException();
+            var result = control_flow_ops.case_v2(cases, callable_default: () => new Tensor[] {image}, exclusive: true, name: name_scope);
+            result.set_shape(new [] {-1, -1, image.TensorShape.dims[2]});
+            return result;
         }
 
         public static Tensor transpose(Tensor image, string name = null)
