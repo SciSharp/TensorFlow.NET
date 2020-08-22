@@ -1,7 +1,7 @@
-﻿using NumSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Data;
 
 namespace Tensorflow
 {
@@ -9,5 +9,8 @@ namespace Tensorflow
     {
         public IDatasetV2 from_tensor_slices(Tensor features, Tensor labels)
             => new TensorSliceDataset(features, labels);
+
+        public IDatasetV2 range(int count, TF_DataType output_type = TF_DataType.TF_INT64)
+            => new RangeDataset(count, output_type: output_type);
     }
 }

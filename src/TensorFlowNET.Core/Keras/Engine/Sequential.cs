@@ -26,8 +26,9 @@ namespace Tensorflow.Keras.Engine
     /// `Sequential` groups a linear stack of layers into a `tf.keras.Model`.
     /// `Sequential` provides training and inference features on this model.
     /// </summary>
-    public class Sequential
+    public class Sequential : Model
     {
+        SequentialArgs args;
         bool _is_graph_network;
         Tensor inputs;
         Tensor outputs;
@@ -37,13 +38,19 @@ namespace Tensorflow.Keras.Engine
         TensorShape inferredInputShape;
         bool hasExplicitInputShape;
         TF_DataType inputDType;
-        List<Layer> layers;
+        List<Layer> layers => args.Layers;
         public TensorShape output_shape => outputs.TensorShape;
         bool built = false;
 
-        public Sequential(Layer[] layers = null, string name = null) 
+        public Sequential(SequentialArgs args) 
+            : base(new ModelArgs 
+            { 
+                Name = args.Name
+            })
         {
-            this.layers = layers == null ? new List<Layer>() : layers.ToList();
+            this.args = args;
+            if (args.Layers == null)
+                args.Layers = new List<Layer>();
             // SupportsMasking = true;
             computeOutputAndMaskJointly = true;
             autoTrackSubLayers = false;

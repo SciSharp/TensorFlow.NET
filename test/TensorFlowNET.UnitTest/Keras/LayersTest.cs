@@ -19,7 +19,7 @@ namespace TensorFlowNET.UnitTest.Keras
         [TestMethod]
         public void Sequential()
         {
-            var model = tf.keras.models.Sequential();
+            var model = tf.keras.Sequential();
             model.add(tf.keras.Input(shape: 16));
         }
 
@@ -29,7 +29,7 @@ namespace TensorFlowNET.UnitTest.Keras
         [TestMethod]
         public void Embedding()
         {
-            var model = new Sequential();
+            var model = tf.keras.Sequential();
             var layer = tf.keras.layers.Embedding(1000, 64, input_length: 10);
             model.add(layer);
             // the model will take as input an integer matrix of size (batch,
@@ -39,8 +39,8 @@ namespace TensorFlowNET.UnitTest.Keras
             // now model.output_shape == (None, 10, 64), where None is the batch
             // dimension.
             var input_array = np.random.randint(1000, size: (32, 10));
-            // model.compile("rmsprop", "mse");
-            // output_array = model.predict(input_array)
+            model.compile("rmsprop", "mse");
+            var output_array = model.predict(input_array);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Tensorflow.Keras;
@@ -19,10 +20,13 @@ namespace Tensorflow
 
         public BackendImpl backend { get; } = new BackendImpl();
 
-        public Models models { get; } = new Models();
-
-        public Sequential Sequential() 
-            => new Sequential();
+        public Sequential Sequential(List<Layer> layers = null,
+                string name = null)
+            => new Sequential(new SequentialArgs
+            {
+                Layers = layers,
+                Name = name
+            });
 
         /// <summary>
         /// Instantiate a Keras tensor.

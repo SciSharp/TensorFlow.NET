@@ -7,7 +7,7 @@ using System.Text;
 using Tensorflow.Framework.Models;
 using static Tensorflow.Binding;
 
-namespace Tensorflow
+namespace Tensorflow.Data
 {
     public class TensorSliceDataset : DatasetSource
     {

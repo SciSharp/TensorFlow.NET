@@ -33,6 +33,22 @@ namespace Tensorflow
             throw new NotImplementedException("");
         }
 
+        public Tensor range_dataset(Tensor start, Tensor stop, Tensor step, TF_DataType[] output_types, TensorShape[] output_shapes, string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "RangeDataset", name,
+                    null,
+                    start, stop, step,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
         public Tensor repeat_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = null)
         {
             if (tf.Context.executing_eagerly())

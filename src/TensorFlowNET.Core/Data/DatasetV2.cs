@@ -78,9 +78,8 @@ namespace Tensorflow
         {
             var ownedIterator = new OwnedIterator(this);
 
-            bool stop = false;
             Tensor[] results = null;
-            while (!stop)
+            while (true)
             {
                 try
                 {
@@ -88,10 +87,10 @@ namespace Tensorflow
                 }
                 catch (StopIteration)
                 {
-                    stop = true;
+                    break;
                 }
 
-                yield return (results[0], results[1]);
+                yield return (results[0], results.Length == 1 ? null : results[1]);
             }
         }
 

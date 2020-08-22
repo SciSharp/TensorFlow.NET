@@ -265,15 +265,17 @@ namespace Tensorflow
                 yield return (i, values[i]);
         }
 
-        public static IEnumerable<(int, T)> enumerate<T>(IEnumerable<T> values, int start = 0)
+        public static IEnumerable<(int, T)> enumerate<T>(IEnumerable<T> values, int start = 0, int step = 1)
         {
             int i = 0;
-            foreach(var val in values)
+            foreach (var val in values)
             {
-                if (i++ < start)
+                i += step;
+
+                if (i < start)
                     continue;
-                
-                yield return (i - start, val);
+
+                yield return (i - step - start, val);
             }
         }
 
