@@ -65,6 +65,25 @@ namespace Tensorflow
             throw new NotImplementedException("");
         }
 
+        public Tensor shard_dataset(Tensor input_dataset, Tensor num_shards, Tensor index,
+            TF_DataType[] output_types, TensorShape[] output_shapes, 
+            bool require_non_empty = false, string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ShardDataset", name,
+                    null,
+                    input_dataset, num_shards, index,
+                    "require_non_empty", require_non_empty,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
         public Tensor shuffle_dataset_v3(Tensor input_dataset, Tensor buffer_size, 
             Tensor seed, Tensor seed2, Tensor seed_generator,
             TF_DataType[] output_types, TensorShape[] output_shapes, 

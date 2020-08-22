@@ -61,5 +61,28 @@ namespace TensorFlowNET.UnitTest.Dataset
             }
             Assert.AreEqual(5, n);
         }
+
+        [TestMethod]
+        public void Shard()
+        {
+            long value = 0;
+
+            var dataset1 = tf.data.Dataset.range(10);
+            var dataset2 = dataset1.shard(num_shards: 3, index: 0);
+
+            foreach (var item in dataset2)
+            {
+                Assert.AreEqual(value, (long)item.Item1);
+                value += 3;
+            }
+
+            value = 1;
+            var dataset3 = dataset1.shard(num_shards: 3, index: 1);
+            foreach (var item in dataset3)
+            {
+                Assert.AreEqual(value, (long)item.Item1);
+                value += 3;
+            }
+        }
     }
 }

@@ -35,6 +35,9 @@ namespace Tensorflow
         public IDatasetV2 repeat(int count = -1)
             => new RepeatDataset(this, count: count);
 
+        public IDatasetV2 shard(int num_shards, int index)
+            => new ShardDataset(this, num_shards, index);
+
         public IDatasetV2 shuffle(int buffer_size, int? seed = null, bool reshuffle_each_iteration = true)
             => new ShuffleDataset(this, buffer_size, seed: seed, reshuffle_each_iteration: reshuffle_each_iteration);
 

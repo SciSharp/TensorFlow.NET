@@ -24,6 +24,14 @@ namespace Tensorflow
         /// <returns></returns>
         IDatasetV2 repeat(int count = -1);
 
+        /// <summary>
+        /// Creates a `Dataset` that includes only 1/`num_shards` of this dataset.
+        /// </summary>
+        /// <param name="num_shards">The number of shards operating in parallel</param>
+        /// <param name="index">The worker index</param>
+        /// <returns></returns>
+        IDatasetV2 shard(int num_shards, int index);
+
         IDatasetV2 shuffle(int buffer_size, int? seed = null, bool reshuffle_each_iteration = true);
 
         IDatasetV2 batch(int batch_size, bool drop_remainder = false);
