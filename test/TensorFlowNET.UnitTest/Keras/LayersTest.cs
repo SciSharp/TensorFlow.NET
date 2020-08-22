@@ -26,7 +26,7 @@ namespace TensorFlowNET.UnitTest.Keras
         /// <summary>
         /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void Embedding()
         {
             var model = tf.keras.Sequential();

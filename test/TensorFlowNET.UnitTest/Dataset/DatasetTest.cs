@@ -26,5 +26,24 @@ namespace TensorFlowNET.UnitTest.Dataset
                 value++;
             }
         }
+
+        [TestMethod]
+        public void Prefetch()
+        {
+            int iStep = 0;
+            long value = 1;
+
+            var dataset = tf.data.Dataset.range(1, 5, 2);
+            dataset = dataset.prefetch(2);
+
+            foreach (var (step, item) in enumerate(dataset))
+            {
+                Assert.AreEqual(iStep, step);
+                iStep++;
+
+                Assert.AreEqual(value, (long)item.Item1);
+                value += 2;
+            }
+        }
     }
 }
