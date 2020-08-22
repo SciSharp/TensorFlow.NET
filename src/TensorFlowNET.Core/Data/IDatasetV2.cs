@@ -34,6 +34,13 @@ namespace Tensorflow
 
         IDatasetV2 shuffle(int buffer_size, int? seed = null, bool reshuffle_each_iteration = true);
 
+        /// <summary>
+        /// Creates a `Dataset` that skips `count` elements from this dataset.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        IDatasetV2 skip(int count);
+
         IDatasetV2 batch(int batch_size, bool drop_remainder = false);
 
         IDatasetV2 prefetch(int buffer_size = -1, int? slack_period = null);

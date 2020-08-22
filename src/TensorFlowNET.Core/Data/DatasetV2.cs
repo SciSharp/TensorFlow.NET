@@ -41,6 +41,9 @@ namespace Tensorflow
         public IDatasetV2 shuffle(int buffer_size, int? seed = null, bool reshuffle_each_iteration = true)
             => new ShuffleDataset(this, buffer_size, seed: seed, reshuffle_each_iteration: reshuffle_each_iteration);
 
+        public IDatasetV2 skip(int count)
+            => new SkipDataset(this, count);
+
         public IDatasetV2 optimize(string[] optimizations, string[] optimization_configs)
             => new OptimizeDataset(this, optimizations, optimization_configs: optimization_configs);
 

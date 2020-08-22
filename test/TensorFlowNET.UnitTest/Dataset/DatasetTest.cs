@@ -84,5 +84,20 @@ namespace TensorFlowNET.UnitTest.Dataset
                 value += 3;
             }
         }
+
+        [TestMethod]
+        public void Skip()
+        {
+            long value = 7;
+
+            var dataset = tf.data.Dataset.range(10);
+            dataset = dataset.skip(7);
+
+            foreach (var item in dataset)
+            {
+                Assert.AreEqual(value, (long)item.Item1);
+                value ++;
+            }
+        }
     }
 }

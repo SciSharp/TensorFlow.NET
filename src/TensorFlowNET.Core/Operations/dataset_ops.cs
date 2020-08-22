@@ -106,6 +106,24 @@ namespace Tensorflow
             throw new NotImplementedException("");
         }
 
+        public Tensor skip_dataset(Tensor input_dataset, Tensor count,
+            TF_DataType[] output_types, TensorShape[] output_shapes,
+            string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "SkipDataset", name,
+                    null,
+                    input_dataset, count,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
         public Tensor dummy_seed_generator(string name = null)
         {
             if (tf.Context.executing_eagerly())
