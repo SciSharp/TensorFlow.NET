@@ -8,6 +8,24 @@ namespace Tensorflow
 {
     public class dataset_ops
     {
+        public Tensor tensor_dataset(Tensor[] components, TensorShape[] output_shapes, string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "TensorDataset", name,
+                    null,
+                    new object[]
+                    {
+                        components,
+                        "output_shapes", output_shapes
+                    });
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
         /// <summary>
         /// Creates a dataset that emits each dim-0 slice of `components` once.
         /// </summary>

@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Tensorflow.Keras;
 using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
@@ -60,6 +62,21 @@ namespace TensorFlowNET.UnitTest.Dataset
                 n += 1;
             }
             Assert.AreEqual(5, n);
+        }
+
+        [TestMethod]
+        public void FromTensor()
+        {
+            var X = new[] { 2013, 2014, 2015, 2016, 2017 };
+
+            var dataset = tf.data.Dataset.from_tensor(X);
+            int n = 0;
+            foreach (var x in dataset)
+            {
+                Assert.IsTrue(X.SequenceEqual(x.Item1.ToArray<int>()));
+                n += 1;
+            }
+            Assert.AreEqual(1, n);
         }
 
         [TestMethod]
