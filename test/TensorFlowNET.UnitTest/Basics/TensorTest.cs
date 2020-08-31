@@ -273,5 +273,43 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 2 }, masked.ToArray<int>()));
             }
         }
+
+        /// <summary>
+        /// Creates a tensor from an image of 256x256x3 and resizes it to 100x100x3
+        /// </summary>
+        [TestMethod]
+        public unsafe void tensor_resize()
+        {
+            var imageArray = new float[256 * 256 * 3];
+
+            using var newSize = tf.convert_to_tensor(new int[] { 100, 100 });
+
+            using (var t = new Tensor(imageArray, new long[] { 1, 256, 256, 3 }, tf.float32))
+            {
+                Assert.IsFalse(t.IsDisposed);
+                Assert.AreEqual(256 * 256 * 3 * sizeof(float), (int)t.bytesize);
+
+                using var resized = tf.image.resize_bilinear(t, newSize);
+                EXPECT_EQ((int)resized.shape[0], 1);
+                EXPECT_EQ((int)resized.shape[1], 100);
+                EXPECT_EQ((int)resized.shape[2], 100);
+                EXPECT_EQ((int)resized.shape[3], 3);
+            }
+
+            fixed (float* ptr = &imageArray[0])
+            {
+                using (var t = new Tensor((IntPtr)ptr, new long[] { imageArray.Length }, tf.float32, 4 * imageArray.Length))
+                {
+                    Assert.IsFalse(t.IsDisposed);
+                    Assert.AreEqual(256 * 256 * 3 * sizeof(float), (int)t.bytesize);
+
+                    using var resized = tf.image.resize_bilinear(t, newSize);
+                    EXPECT_EQ((int)resized.shape[0], 1);
+                    EXPECT_EQ((int)resized.shape[1], 100);
+                    EXPECT_EQ((int)resized.shape[2], 100);
+                    EXPECT_EQ((int)resized.shape[3], 3);
+                }
+            }
+        }
     }
 }
