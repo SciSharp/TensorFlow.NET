@@ -23,6 +23,9 @@ namespace Tensorflow
         
         public TensorSpec[] element_spec => structure;
 
+        public IDatasetV2 cache(string filename = "")
+            => new CacheDataset(this, filename: filename);
+
         public IDatasetV2 take(int count = -1)
             => new TakeDataset(this, count: count);
 
@@ -46,6 +49,16 @@ namespace Tensorflow
 
         public IDatasetV2 optimize(string[] optimizations, string[] optimization_configs)
             => new OptimizeDataset(this, optimizations, optimization_configs: optimization_configs);
+
+        public IDatasetV2 map(Func<Tensor, Tensor> map_func,
+            bool use_inter_op_parallelism = true,
+            bool preserve_cardinality = false,
+            bool use_legacy_function = false)
+            => new MapDataset(this, 
+                map_func,
+                use_inter_op_parallelism: use_inter_op_parallelism,
+                preserve_cardinality: preserve_cardinality,
+                use_legacy_function: use_legacy_function);
 
         public IDatasetV2 model(AutotuneAlgorithm algorithm, long cpu_budget)
             => new ModelDataset(this, algorithm, cpu_budget);

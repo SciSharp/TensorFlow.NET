@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using Tensorflow.Framework.Models;
 
@@ -16,6 +17,13 @@ namespace Tensorflow
         TensorSpec[] element_spec { get; }
 
         TensorSpec[] structure { get; set; }
+
+        /// <summary>
+        /// Caches the elements in this dataset.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        IDatasetV2 cache(string filename="");
 
         /// <summary>
         /// 
@@ -48,6 +56,11 @@ namespace Tensorflow
         IDatasetV2 take(int count);
 
         IDatasetV2 optimize(string[] optimizations, string[] optimization_configs);
+
+        IDatasetV2 map(Func<Tensor, Tensor> map_func, 
+            bool use_inter_op_parallelism = true,
+            bool preserve_cardinality = false,
+            bool use_legacy_function = false);
 
         IDatasetV2 model(AutotuneAlgorithm algorithm, long cpu_budget);
 

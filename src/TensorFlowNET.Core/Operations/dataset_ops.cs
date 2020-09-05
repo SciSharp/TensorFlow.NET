@@ -155,6 +155,24 @@ namespace Tensorflow
             throw new NotImplementedException("");
         }
 
+        public Tensor cache_dataset_v2(Tensor input_dataset, Tensor filename, Tensor cache,
+            TF_DataType[] output_types, TensorShape[] output_shapes,
+            string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "CacheDatasetV2", name,
+                    null,
+                    input_dataset, filename, cache,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
         /// <summary>
         /// Creates a dataset that batches `batch_size` elements from `input_dataset`.
         /// </summary>
@@ -181,6 +199,24 @@ namespace Tensorflow
                     "parallel_copy", parallel_copy,
                     "output_types", output_types,
                     "output_shapes", output_shapes);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor dummy_memory_cache(string name = "")
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "DummyMemoryCache", name,
+                    null);
                 return results[0];
             }
 
@@ -349,6 +385,33 @@ namespace Tensorflow
                     null,
                     dataset, iterator);
                 return null;
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <param name="iterator"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor map_dataset(Tensor dataset, TF_DataType[] output_types, TensorShape[] output_shapes, 
+            bool use_inter_op_parallelism = true, bool preserve_cardinality = false, string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "MapDataset", name,
+                    null,
+                    dataset, new Tensor[0],
+                    "f", "MapDataset",
+                    "output_types", output_types, 
+                    "output_shapes", output_shapes,
+                    "use_inter_op_parallelism", use_inter_op_parallelism,
+                    "preserve_cardinality", preserve_cardinality);
+                return results[0];
             }
 
             throw new NotImplementedException("");

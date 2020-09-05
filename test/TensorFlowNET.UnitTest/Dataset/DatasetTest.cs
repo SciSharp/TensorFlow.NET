@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow;
 using Tensorflow.Keras;
 using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
@@ -114,6 +115,36 @@ namespace TensorFlowNET.UnitTest.Dataset
             {
                 Assert.AreEqual(value, (long)item.Item1);
                 value ++;
+            }
+        }
+
+        [TestMethod, Ignore]
+        public void Map()
+        {
+            long value = 0;
+
+            var dataset = tf.data.Dataset.range(3);
+            var dataset1 = dataset.map(x => x);
+
+            foreach (var item in dataset)
+            {
+                Assert.AreEqual(value, (long)item.Item1);
+                value++;
+            }
+        }
+
+        [TestMethod]
+        public void Cache()
+        {
+            long value = 0;
+
+            var dataset = tf.data.Dataset.range(5);
+            dataset = dataset.cache();
+
+            foreach (var item in dataset)
+            {
+                Assert.AreEqual(value, (long)item.Item1);
+                value++;
             }
         }
     }

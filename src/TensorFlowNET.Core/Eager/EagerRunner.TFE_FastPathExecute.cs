@@ -381,6 +381,9 @@ namespace Tensorflow.Eager
                     c_api.TFE_OpSetAttrShape(op, key, dims, dims.Length, status.Handle);
                     status.Check(true);
                     break;
+                case TF_AttrType.TF_ATTR_FUNC:
+                    c_api.TFE_OpSetAttrFunctionName(op, key, value.ToString(), value.ToString().Length);
+                    break;
                 default:
                     throw new NotImplementedException($"SetOpAttrScalar for {type}");
             }
