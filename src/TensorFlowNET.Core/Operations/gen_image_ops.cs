@@ -155,11 +155,21 @@ namespace Tensorflow
             }
         }
 
-        public static Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
+        public static Tensor resize_bilinear(Tensor images,
+            Tensor size,
+            bool align_corners = false,
+            bool half_pixel_centers = false,
+            string name = null)
         {
             if (tf.Context.executing_eagerly())
             {
-                throw new NotImplementedException("resize_bilinear");
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ResizeBilinear", name,
+                    null,
+                    images, size,
+                    "align_corners", align_corners,
+                    "half_pixel_centers", half_pixel_centers);
+                return results[0];
             }
             else
             {

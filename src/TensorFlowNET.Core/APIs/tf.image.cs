@@ -203,8 +203,8 @@ namespace Tensorflow
                 => image_ops_impl.non_max_suppression_padded(boxes, scores, max_output_size, iou_threshold, score_threshold, pad_to_max_output_size,
                     name, sorted_input, canonicalized_coordinates, tile_size);
 
-            public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, string name = null)
-                => gen_image_ops.resize_bilinear(images, size, align_corners: align_corners, name: name);
+            public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, bool half_pixel_centers = false, string name = null)
+                => gen_image_ops.resize_bilinear(images, size, align_corners: align_corners, half_pixel_centers: half_pixel_centers, name: name);
 
             public Tensor resize_images(Tensor images, Tensor size, string method = ResizeMethod.BILINEAR,
                     bool preserve_aspect_ratio = false, string name = null)

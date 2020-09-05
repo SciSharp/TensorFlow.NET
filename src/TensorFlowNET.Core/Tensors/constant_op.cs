@@ -64,8 +64,8 @@ namespace Tensorflow
 
                 var num_t = t.TensorShape.num_elements();
                 if (num_t == shape.num_elements())
-                    throw new NotImplementedException("");
-                if(num_t == 1)
+                    return _eager_reshape(t, shape, tf.Context);
+                if (num_t == 1)
                 {
                     if (t.dtype == dtypes.@bool)
                         throw new NotImplementedException("");
@@ -98,6 +98,16 @@ namespace Tensorflow
                 name: name);
 
             return op.outputs[0];
+        }
+
+        private static Tensor _eager_reshape(EagerTensor tensor, int[] shape, Context ctx)
+        {
+            var attr_t = tensor.dtype.as_datatype_enum();
+            var dims_t = convert_to_eager_tensor(shape, ctx, dtypes.int32);
+            var inputs_flat = new[] { tensor, dims_t };
+            var attrs = new object[] { "T", attr_t, "Tshape", TF_DataType.TF_INT32 };
+            var result = tf.Runner.Execute(ctx, "Reshape", 1, inputs_flat, attrs);
+            return result[0];
         }
 
         private static Tensor _eager_fill(int[] dims, EagerTensor value, Context ctx)
