@@ -8,7 +8,7 @@ namespace Tensorflow
     /// <summary>
     /// An iterator producing tf.Tensor objects from a tf.data.Dataset.
     /// </summary>
-    public class OwnedIterator : IteratorBase
+    public class OwnedIterator : IteratorBase, IDisposable
     {
         IDatasetV2 _dataset;
         TensorSpec[] _element_spec;
@@ -44,6 +44,11 @@ namespace Tensorflow
             {
                 throw new StopIteration(ex.Message);
             }
+        }
+
+        public void Dispose()
+        {
+            _resource_deleter.Dispose();
         }
     }
 }

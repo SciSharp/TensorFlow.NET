@@ -95,7 +95,7 @@ namespace Tensorflow
 
         public IEnumerator<(Tensor, Tensor)> GetEnumerator()
         {
-            var ownedIterator = new OwnedIterator(this);
+            using var ownedIterator = new OwnedIterator(this);
 
             Tensor[] results = null;
             while (true)

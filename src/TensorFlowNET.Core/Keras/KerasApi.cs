@@ -17,7 +17,7 @@ namespace Tensorflow
         public Initializers initializers { get; } = new Initializers();
         public LayersApi layers { get; } = new LayersApi();
         public Activations activations { get; } = new Activations();
-
+        public Preprocessing preprocessing { get; } = new Preprocessing();
         public BackendImpl backend { get; } = new BackendImpl();
 
         public Sequential Sequential(List<Layer> layers = null,
