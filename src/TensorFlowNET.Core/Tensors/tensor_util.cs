@@ -231,17 +231,7 @@ namespace Tensorflow
 
             if (tensor.GetType() == typeof(EagerTensor))
             {
-                int[] dims = {};
-                foreach (int dim in tensor.numpy())
-                    if (dim != 1)
-                    {
-                        dims[dims.Length] = dim;
-                    } else
-                    {
-                        // -1 == Unknown
-                        dims[dims.Length] = -1;
-                    }
-                return new TensorShape(dims);
+                return new TensorShape(tensor.numpy().ToArray<int>());
             }
 
             if (tensor.TensorShape.ndim == 0)

@@ -686,18 +686,20 @@ or rank = 4. Had rank = {0}", rank));
                 } else if (images.TensorShape.ndim != 4)
                     throw new ValueError("\'images\' must have either 3 or 4 dimensions.");
 
-                var _hw_ = images.TensorShape.as_list();
+                var (height, width) = (images.dims[1], images.dims[2]);
 
                 try
                 {
                     size = ops.convert_to_tensor(size, dtypes.int32, name: "size");
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     if (ex is TypeError || ex is ValueError)
                         throw new ValueError("\'size\' must be a 1-D int32 Tensor");
                     else
                         throw;
                 }
+
                 if (!size.TensorShape.is_compatible_with(new [] {2}))
                     throw new ValueError(@"\'size\' must be a 1-D Tensor of 2 elements:
 new_height, new_width");
@@ -736,9 +738,9 @@ new_height, new_width");
                 bool x_null = true;
                 if (skip_resize_if_same)
                 {
-                    foreach (int x in new [] {new_width_const, _hw_[2], new_height_const, _hw_[1]})
+                    foreach (int x in new [] {new_width_const, width, new_height_const, height})
                     {
-                        if (_hw_[2] != new_width_const && _hw_[1] == new_height_const)
+                        if (width != new_width_const && height == new_height_const)
                         {
                             break;
                         }
@@ -753,8 +755,8 @@ new_height, new_width");
                 }
                 
                 images = resizer_fn(images, size);
-                
-                images.set_shape(new TensorShape(new int[] {0, new_height_const, new_width_const, 0}));
+
+                // images.set_shape(new TensorShape(new int[] { -1, new_height_const, new_width_const, -1 }));
             
                 if (!is_batch)
                     images = array_ops.squeeze(images, axis: new int[] {0});
@@ -792,17 +794,20 @@ new_height, new_width");
                     if (antialias)
                         return resize_with_scale_and_translate("triangle");
                     else
-                        return gen_image_ops.resize_bilinear(
-                            images_t, new_size, true);
+                        return gen_image_ops.resize_bilinear(images_t, 
+                            new_size, 
+                            half_pixel_centers: true);
                 else if (method == ResizeMethod.NEAREST_NEIGHBOR)
-                    return gen_image_ops.resize_nearest_neighbor(
-                        images_t, new_size, true);
+                    return gen_image_ops.resize_nearest_neighbor(images_t, 
+                        new_size, 
+                        half_pixel_centers: true);
                 else if (method == ResizeMethod.BICUBIC)
                     if (antialias)
                         return resize_with_scale_and_translate("keyscubic");
                     else
-                        return gen_ops.resize_bicubic(
-                            images_t, new_size, true);
+                        return gen_image_ops.resize_bicubic(images_t, 
+                            new_size, 
+                            half_pixel_centers: true);
                 else if (method == ResizeMethod.AREA)
                     return gen_ops.resize_area(images_t, new_size);
                 else if (Array.Exists(scale_and_translate_methods, method => method == method))
@@ -2078,9 +2083,8 @@ new_height, new_width");
             return tf_with(ops.name_scope(name, "is_jpeg"), scope =>
             {
                 var substr = tf.strings.substr(contents, 0, 3);
-                var jpg = Encoding.UTF8.GetString(new byte[] { 0xff, 0xd8, 0xff });
-                var jpg_tensor = tf.constant(jpg);
-                var result = math_ops.equal(substr, jpg_tensor, name: name);
+                var jpg = tf.constant(new byte[] { 0xff, 0xd8, 0xff }, TF_DataType.TF_STRING);
+                var result = math_ops.equal(substr, jpg, name: name);
                 return result;
             });
         }

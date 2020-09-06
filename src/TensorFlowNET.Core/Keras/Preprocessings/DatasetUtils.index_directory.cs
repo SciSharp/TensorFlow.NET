@@ -1,5 +1,8 @@
-﻿using System;
+﻿using NumSharp;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow.Keras.Preprocessings
@@ -20,14 +23,45 @@ namespace Tensorflow.Keras.Preprocessings
         /// file_paths, labels, class_names
         /// </returns>
         public (string[], int[], string[]) index_directory(string directory,
-            string labels,
-            string[] formats,
-            string class_names = null,
+            string[] formats = null,
+            string[] class_names = null,
             bool shuffle = true,
             int? seed = null,
             bool follow_links = false)
         {
-            throw new NotImplementedException("");
+            var labels = new List<int>();
+            var file_paths = new List<string>();
+
+            var class_dirs = Directory.GetDirectories(directory);
+            class_names = class_dirs.Select(x => x.Split(Path.DirectorySeparatorChar)[^1]).ToArray();
+
+            for (var label = 0; label < class_dirs.Length; label++)
+            {
+                var files = Directory.GetFiles(class_dirs[label]);
+                file_paths.AddRange(files);
+                labels.AddRange(Enumerable.Range(0, files.Length).Select(x => label));
+            }
+
+            var return_labels = new int[labels.Count];
+            var return_file_paths = new string[file_paths.Count];
+
+            if (shuffle)
+            {
+                if (!seed.HasValue)
+                    seed = np.random.randint((long)1e6);
+                var random_index = np.arange(labels.Count);
+                var rng = np.random.RandomState(seed.Value);
+                rng.shuffle(random_index);
+                var index = random_index.ToArray<int>();
+
+                for (int i = 0; i< labels.Count; i++)
+                {
+                    return_labels[i] = labels[index[i]];
+                    return_file_paths[i] = file_paths[index[i]];
+                }
+            }
+
+            return (return_file_paths, return_labels, class_names);
         }
     }
 }

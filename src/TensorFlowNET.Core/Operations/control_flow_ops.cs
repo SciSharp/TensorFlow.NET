@@ -86,7 +86,7 @@ namespace Tensorflow
 
                 var guarded_assert = cond(condition, false_assert, true_assert, name: "AssertGuard");
 
-                return guarded_assert[0].op;
+                return guarded_assert == null ? null : guarded_assert[0].op;
             });
         }
 
@@ -423,8 +423,6 @@ namespace Tensorflow
                         return true_fn() as Tensor;
                     else
                         return false_fn() as Tensor;
-
-                    return null;
                 }
 
                 // Add the Switch to the graph.
@@ -507,8 +505,6 @@ namespace Tensorflow
                         return true_fn() as Tensor[];
                     else
                         return false_fn() as Tensor[];
-
-                    return null;
                 }
 
                 // Add the Switch to the graph.

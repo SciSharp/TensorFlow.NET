@@ -28,7 +28,7 @@ namespace Tensorflow.Keras
         public Tensor image_dataset_from_directory(string directory,
             string labels = "inferred",
             string label_mode = "int",
-            string class_names = null,
+            string[] class_names = null,
             string color_mode = "rgb",
             int batch_size = 32,
             TensorShape image_size = null,
@@ -44,13 +44,15 @@ namespace Tensorflow.Keras
                 num_channels = 3;
             // C:/Users/haipi/.keras/datasets/flower_photos
             var (image_paths, label_list, class_name_list) = tf.keras.preprocessing.dataset_utils.index_directory(directory,
-                labels,
-                WHITELIST_FORMATS,
+                formats: WHITELIST_FORMATS,
                 class_names: class_names,
                 shuffle: shuffle,
                 seed: seed,
                 follow_links: follow_links);
 
+            (image_paths, label_list) = tf.keras.preprocessing.dataset_utils.get_training_or_validation_split(image_paths, label_list, validation_split, subset);
+
+            paths_and_labels_to_dataset(image_paths, image_size, num_channels, label_list, label_mode, class_name_list.Length, interpolation);
             throw new NotImplementedException("");
         }
     }

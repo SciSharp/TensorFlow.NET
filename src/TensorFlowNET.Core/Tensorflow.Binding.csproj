@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
-    <Version>0.20.0-preview4</Version>
+    <Version>0.20.0-preview5</Version>
     <LangVersion>8.0</LangVersion>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
@@ -79,7 +79,7 @@ Please be patient, we're working hard on missing functions, providing full tenso
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.11.4" />
-    <PackageReference Include="NumSharp.Lite" Version="0.1.7" />
+    <PackageReference Include="NumSharp.Lite" Version="0.1.8" />
     <PackageReference Include="Protobuf.Text" Version="0.4.0" />
   </ItemGroup>
 

@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using Tensorflow.IO;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -58,6 +59,10 @@ namespace Tensorflow
             public Tensor resize_images(Tensor images, Tensor size, string method = ResizeMethod.BILINEAR, bool preserve_aspect_ratio  = false, bool antialias = false,
                 string name = null)
                 => image_ops_impl.resize_images(images, size, method, preserve_aspect_ratio, antialias, name);
+
+            public Tensor resize_images_v2(Tensor images, TensorShape size, string method = ResizeMethod.BILINEAR, bool preserve_aspect_ratio = false, bool antialias = false,
+                string name = null)
+                => image_ops_impl.resize_images(images, tf.constant(size.dims), method, preserve_aspect_ratio, antialias, name);
 
             public Tensor resize_images_with_pad(Tensor image, int target_height, int target_width, string method, bool antialias)
                 => image_ops_impl.resize_images_with_pad(image, target_height, target_width, method, antialias);
@@ -160,7 +165,7 @@ namespace Tensorflow
                         int ratio = 1,
                         bool fancy_upscaling = true,
                         bool try_recover_truncated = false,
-                        float acceptable_fraction = 1,
+                        int acceptable_fraction = 1,
                         string dct_method = "",
                         string name = null)
                 => gen_image_ops.decode_jpeg(contents, channels: channels, ratio: ratio,

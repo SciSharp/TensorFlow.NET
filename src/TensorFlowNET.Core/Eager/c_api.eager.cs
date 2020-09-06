@@ -176,6 +176,9 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrInt(SafeOpHandle op, string attr_name, long value);
 
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_OpSetAttrFloat(SafeOpHandle op, string attr_name, float value);
+
         /// <summary>
         /// 
         /// </summary>

@@ -66,14 +66,24 @@ namespace Tensorflow
             int ratio = 1,
             bool fancy_upscaling = true,
             bool try_recover_truncated = false,
-            float acceptable_fraction = 1,
+            int acceptable_fraction = 1,
             string dct_method = "",
             string name = null)
         {
             // Add nodes to the TensorFlow graph.
             if (tf.Context.executing_eagerly())
             {
-                throw new NotImplementedException("decode_jpeg");
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "DecodeJpeg", name,
+                    null,
+                    contents,
+                    "channels", channels,
+                    "ratio", ratio,
+                    "fancy_upscaling", fancy_upscaling,
+                    "try_recover_truncated", try_recover_truncated, 
+                    "acceptable_fraction", acceptable_fraction,
+                    "dct_method", dct_method);
+                return results[0];
             }
             else
             {
@@ -171,17 +181,42 @@ namespace Tensorflow
                     "half_pixel_centers", half_pixel_centers);
                 return results[0];
             }
-            else
-            {
-                var _op = tf.OpDefLib._apply_op_helper("ResizeBilinear", name: name, args: new
-                {
-                    images,
-                    size,
-                    align_corners
-                });
 
-                return _op.outputs[0];
+            var _op = tf.OpDefLib._apply_op_helper("ResizeBilinear", name: name, args: new
+            {
+                images,
+                size,
+                align_corners
+            });
+
+            return _op.outputs[0];
+        }
+
+        public static Tensor resize_bicubic(Tensor images,
+            Tensor size,
+            bool align_corners = false,
+            bool half_pixel_centers = false,
+            string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ResizeBicubic", name,
+                    null,
+                    images, size,
+                    "align_corners", align_corners,
+                    "half_pixel_centers", half_pixel_centers);
+                return results[0];
             }
+
+            var _op = tf.OpDefLib._apply_op_helper("ResizeBicubic", name: name, args: new
+            {
+                images,
+                size,
+                align_corners
+            });
+
+            return _op.outputs[0];
         }
 
         public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false, 

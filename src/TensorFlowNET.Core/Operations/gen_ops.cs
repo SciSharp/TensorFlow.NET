@@ -24715,13 +24715,12 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Input images can be of different types but output images are always float.
         /// </remarks>
-        public static Tensor resize_bicubic (Tensor images, Tensor size, bool? align_corners = null, string name = "ResizeBicubic")
+        public static Tensor resize_bicubic (Tensor images, Tensor size, bool align_corners = false, bool half_pixel_centers = false, string name = "ResizeBicubic")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
             dict["size"] = size;
-            if (align_corners.HasValue)
-                dict["align_corners"] = align_corners.Value;
+            dict["align_corners"] = align_corners;
             var op = tf.OpDefLib._apply_op_helper("ResizeBicubic", name: name, keywords: dict);
             return op.output;
         }

@@ -143,7 +143,13 @@ namespace Tensorflow
 
         public bool is_compatible_with(TensorShape shape2)
         {
-            throw new NotImplementedException("TensorShape is_compatible_with");
+            if(dims != null && shape2.dims != null)
+            {
+                if (dims.Length != shape2.dims.Length)
+                    return false;
+            }
+
+            return true;
         }
         
         public void assert_has_rank(int rank)

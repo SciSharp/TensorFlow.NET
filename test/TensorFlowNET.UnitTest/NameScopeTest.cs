@@ -45,6 +45,19 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.AreEqual("", g._name_stack);
         }
 
+        [TestMethod]
+        public void NameScopeInEagerMode()
+        {
+            tf.enable_eager_execution();
+
+            tf_with(new ops.NameScope("scope"), scope =>
+            {
+                string name = scope;
+            });
+
+            tf.compat.v1.disable_eager_execution();
+        }
+
         [TestMethod, Ignore("Unimplemented Usage")]
         public void NestedNameScope_Using()
         {

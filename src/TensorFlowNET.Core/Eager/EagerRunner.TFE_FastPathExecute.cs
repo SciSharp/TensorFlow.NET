@@ -376,6 +376,9 @@ namespace Tensorflow.Eager
                 case TF_AttrType.TF_ATTR_INT:
                     c_api.TFE_OpSetAttrInt(op, key, Convert.ToInt64(value));
                     break;
+                case TF_AttrType.TF_ATTR_FLOAT:
+                    c_api.TFE_OpSetAttrFloat(op, key, Convert.ToSingle(value));
+                    break;
                 case TF_AttrType.TF_ATTR_SHAPE:
                     var dims = (value as int[]).Select(x => (long)x).ToArray();
                     c_api.TFE_OpSetAttrShape(op, key, dims, dims.Length, status.Handle);
