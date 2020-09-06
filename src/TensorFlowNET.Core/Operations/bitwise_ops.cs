@@ -21,6 +21,10 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {
+    /// <summary>
+    /// Operations for bitwise manipulation of integers.
+    /// https://www.tensorflow.org/api_docs/python/tf/bitwise
+    /// </summary>
     public class bitwise_ops
     {
         /// <summary>
@@ -31,20 +35,107 @@ namespace Tensorflow.Operations
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor left_shift(Tensor x, Tensor y, string name = null)
+        public Tensor left_shift(Tensor x, Tensor y, string name = null) => binary_op(x, y, "LeftShift", name);
+
+        /// <summary>
+        /// Elementwise computes the bitwise right-shift of `x` and `y`.
+        /// https://www.tensorflow.org/api_docs/python/tf/bitwise/right_shift
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor right_shift(Tensor x, Tensor y, string name = null) => binary_op(x, y, "RightShift", name);
+
+        /// <summary>
+        /// Elementwise computes the bitwise inversion of `x`.
+        /// https://www.tensorflow.org/api_docs/python/tf/bitwise/invert
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor invert(Tensor x, string name = null) => unary_op(x, "Invert", name);
+
+        /// <summary>
+        /// Elementwise computes the bitwise AND of `x` and `y`.
+        /// https://www.tensorflow.org/api_docs/python/tf/bitwise/bitwise_and
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor bitwise_and(Tensor x, Tensor y, string name = null) => binary_op(x, y, "BitwiseAnd", name);
+
+        /// <summary>
+        /// Elementwise computes the bitwise OR of `x` and `y`.
+        /// https://www.tensorflow.org/api_docs/python/tf/bitwise/bitwise_or
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor bitwise_or(Tensor x, Tensor y, string name = null) => binary_op(x, y, "BitwiseOr", name);
+
+        /// <summary>
+        /// Elementwise computes the bitwise XOR of `x` and `y`.
+        /// https://www.tensorflow.org/api_docs/python/tf/bitwise/bitwise_xor
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor bitwise_xor(Tensor x, Tensor y, string name = null) => binary_op(x, y, "BitwiseXor", name);
+
+
+        #region Private helper methods
+
+        /// <summary>
+        /// Helper method to invoke unary operator with specified name.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="opName"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        Tensor unary_op(Tensor x, string opName, string name)
         {
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "LeftShift", name,
+                    opName, name,
+                    null,
+                    x);
+
+                return results[0];
+            }
+
+            var _op = tf.OpDefLib._apply_op_helper(opName, name, args: new { x });
+            return _op.output;
+        }
+
+        /// <summary>
+        /// Helper method to invoke binary operator with specified name.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="opName"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        Tensor binary_op(Tensor x, Tensor y, string opName, string name)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    opName, name,
                     null,
                     x, y);
 
                 return results[0];
             }
 
-            var _op = tf.OpDefLib._apply_op_helper("LeftShift", name, args: new { x, y });
+            var _op = tf.OpDefLib._apply_op_helper(opName, name, args: new { x, y });
             return _op.output;
         }
+
+        #endregion
     }
 }
