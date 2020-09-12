@@ -652,7 +652,7 @@ namespace Tensorflow
             }
             else
             {
-                if(x.rank > -1)
+                if (x.rank > -1 && tf.executing_eagerly())
                     return constant_op.constant(np.arange(x.rank));
 
                 var rank = array_ops.rank(x);

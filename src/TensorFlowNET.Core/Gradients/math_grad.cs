@@ -542,15 +542,28 @@ namespace Tensorflow.Gradients
             }
 
             input_shape = array_ops.shape(op.inputs[0]);
-            if (!op.get_attr<bool>("keep_dims"))
+
+            if (tf.executing_eagerly())
+            {
+                if (!op.get_attr<bool>("keep_dims"))
+                {
+                    ops.colocate_with(input_shape);
+                    var output_shape_kept_dims = math_ops.reduced_shape(input_shape, op.inputs[1]);
+                    // var tile_scaling = _safe_shape_div(input_shape, output_shape_kept_dims);
+                    grad = gen_array_ops.reshape(grad, output_shape_kept_dims);
+                }
+
+                return new Tensor[] { gen_array_ops.broadcast_to(grad, input_shape), null };
+            }
+            else
             {
                 ops.colocate_with(input_shape);
                 var output_shape_kept_dims = math_ops.reduced_shape(input_shape, op.inputs[1]);
-                // var tile_scaling = _safe_shape_div(input_shape, output_shape_kept_dims);
+                var tile_scaling = _safe_shape_div(input_shape, output_shape_kept_dims);
                 grad = gen_array_ops.reshape(grad, output_shape_kept_dims);
-            }
 
-            return new Tensor[] { gen_array_ops.broadcast_to(grad, input_shape), null };
+                return new Tensor[] { gen_array_ops.tile(grad, tile_scaling), null };
+            }
         }
 
         [RegisterGradient("RealDiv")]

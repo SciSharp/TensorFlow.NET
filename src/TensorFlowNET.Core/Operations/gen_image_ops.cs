@@ -66,7 +66,7 @@ namespace Tensorflow
             int ratio = 1,
             bool fancy_upscaling = true,
             bool try_recover_truncated = false,
-            int acceptable_fraction = 1,
+            float acceptable_fraction = 1,
             string dct_method = "",
             string name = null)
         {

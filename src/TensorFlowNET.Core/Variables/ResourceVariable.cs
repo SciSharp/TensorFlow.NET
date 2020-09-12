@@ -155,7 +155,7 @@ namespace Tensorflow
                         _graph_element = value;
                     });
 
-                    ops.add_to_collections(collections, this);
+                    ops.add_to_collections<IVariableV1>(collections, this);
                 }
                 else
                 {
@@ -184,6 +184,8 @@ namespace Tensorflow
             var g = ops.get_default_graph();
             var prepend_name_scope = ops.prepend_name_scope(variable_def.VariableName, import_scope: import_scope);
             handle = g.as_graph_element(prepend_name_scope) as Tensor;
+            _handle_name = handle.name;
+            _name = handle.name;
             _shape = new TensorShape(handle.op.get_attr("shape") as TensorShapeProto);
             
             prepend_name_scope = ops.prepend_name_scope(variable_def.InitializerName, import_scope: import_scope);

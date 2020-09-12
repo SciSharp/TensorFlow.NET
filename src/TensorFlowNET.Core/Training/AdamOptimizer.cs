@@ -109,7 +109,7 @@ namespace Tensorflow.Train
             return control_flow_ops.group(new[] { var_update, m_t, v_t });
         }
 
-        protected override void _create_slots(ResourceVariable[] var_list)
+        protected override void _create_slots(IVariableV1[] var_list)
         {
             var first_var = var_list.OrderBy(x => x.Name).First();
             _create_non_slot_variable(initial_value: _beta1, name: "beta1_power", colocate_with: first_var);
