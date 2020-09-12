@@ -53,6 +53,7 @@ namespace TensorFlowNET.UnitTest.Basics
             tf_with(new ops.NameScope("scope"), scope =>
             {
                 string name = scope;
+                var const1 = tf.constant(1.0);
             });
 
             tf.compat.v1.disable_eager_execution();

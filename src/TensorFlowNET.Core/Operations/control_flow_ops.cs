@@ -67,6 +67,14 @@ namespace Tensorflow
 
         public static Operation Assert(Tensor condition, object[] data, int? summarize = null, string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                if (condition == null)
+                    throw new InvalidArgumentError("");
+                
+                return null;
+            }
+
             return tf_with(ops.name_scope(name, "Assert", new { condition, data }), scope =>
             {
                 name = scope;
@@ -86,7 +94,7 @@ namespace Tensorflow
 
                 var guarded_assert = cond(condition, false_assert, true_assert, name: "AssertGuard");
 
-                return guarded_assert == null ? null : guarded_assert[0].op;
+                return guarded_assert[0].op;
             });
         }
 

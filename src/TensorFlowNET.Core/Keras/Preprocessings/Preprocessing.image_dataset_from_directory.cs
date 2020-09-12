@@ -25,7 +25,7 @@ namespace Tensorflow.Keras
         /// <param name="interpolation"></param>
         /// <param name="follow_links"></param>
         /// <returns></returns>
-        public Tensor image_dataset_from_directory(string directory,
+        public IDatasetV2 image_dataset_from_directory(string directory,
             string labels = "inferred",
             string label_mode = "int",
             string[] class_names = null,
@@ -52,8 +52,11 @@ namespace Tensorflow.Keras
 
             (image_paths, label_list) = tf.keras.preprocessing.dataset_utils.get_training_or_validation_split(image_paths, label_list, validation_split, subset);
 
-            paths_and_labels_to_dataset(image_paths, image_size, num_channels, label_list, label_mode, class_name_list.Length, interpolation);
-            throw new NotImplementedException("");
+            var dataset = paths_and_labels_to_dataset(image_paths, image_size, num_channels, label_list, label_mode, class_name_list.Length, interpolation);
+            if (shuffle)
+                dataset = dataset.shuffle(batch_size * 8, seed: seed);
+            dataset = dataset.batch(batch_size);
+            return dataset;
         }
     }
 }

@@ -1,12 +1,14 @@
-﻿using System;
+﻿using NumSharp;
+using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras
 {
     public partial class Preprocessing
     {
-        public Tensor paths_and_labels_to_dataset(string[] image_paths,
+        public IDatasetV2 paths_and_labels_to_dataset(string[] image_paths,
             TensorShape image_size,
             int num_channels,
             int[] labels,
@@ -14,10 +16,29 @@ namespace Tensorflow.Keras
             int num_classes,
             string interpolation)
         {
-            foreach (var image_path in image_paths)
-                path_to_image(image_path, image_size, num_channels, interpolation);
+            Shape shape = (image_paths.Length, image_size.dims[0], image_size.dims[1], num_channels);
+            Console.WriteLine($"Allocating memory for shape{shape}, {NPTypeCode.Float}");
+            var data = np.zeros(shape, NPTypeCode.Float);
 
-            throw new NotImplementedException("");
+            for (var i = 0; i < image_paths.Length; i++)
+            {
+                var image = path_to_image(image_paths[i], image_size, num_channels, interpolation);
+                data[i] = image.numpy();
+                if (i % 100 == 0)
+                    Console.WriteLine($"Filled {i}/{image_paths.Length} data into memory.");
+            }
+
+            var img_ds = tf.data.Dataset.from_tensor_slices(data);
+
+            if (label_mode == "int")
+            {
+                var label_ds = tf.keras.preprocessing.dataset_utils.labels_to_dataset(labels, label_mode, num_classes);
+                img_ds = tf.data.Dataset.zip(img_ds, label_ds);
+            }
+            else
+                throw new NotImplementedException("");
+
+            return img_ds;
         }
 
         Tensor path_to_image(string path, TensorShape image_size, int num_channels, string interpolation)

@@ -72,7 +72,17 @@ namespace Tensorflow
 
         public class LayersApi
         {
-            public Layer Dense(int units,
+            public Rescaling Rescaling(float scale,
+                float offset = 0,
+                TensorShape input_shape = null)
+                => new Rescaling(new RescalingArgs
+                {
+                    Scale = scale,
+                    Offset = offset,
+                    InputShape = input_shape
+                });
+
+            public Dense Dense(int units,
                 Activation activation = null,
                 TensorShape input_shape = null)
                 => new Dense(new DenseArgs

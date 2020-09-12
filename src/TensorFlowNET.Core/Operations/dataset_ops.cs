@@ -102,6 +102,28 @@ namespace Tensorflow
             throw new NotImplementedException("");
         }
 
+        public Tensor zip_dataset(Tensor[] input_datasets,
+            TF_DataType[] output_types, 
+            TensorShape[] output_shapes, 
+            string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ZipDataset", name,
+                    null,
+                    new object[]
+                    {
+                        input_datasets,
+                        "output_types", output_types,
+                        "output_shapes", output_shapes
+                    });
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
         public Tensor shuffle_dataset_v3(Tensor input_dataset, Tensor buffer_size, 
             Tensor seed, Tensor seed2, Tensor seed_generator,
             TF_DataType[] output_types, TensorShape[] output_shapes, 

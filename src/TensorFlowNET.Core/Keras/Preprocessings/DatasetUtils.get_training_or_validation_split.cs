@@ -31,8 +31,8 @@ namespace Tensorflow.Keras.Preprocessings
             else if (subset == "validation")
             {
                 Console.WriteLine($"Using {num_val_samples} files for validation.");
-                samples = samples[samples.Length..];
-                labels = labels[samples.Length..];
+                samples = samples[(samples.Length - num_val_samples)..];
+                labels = labels[(labels.Length - num_val_samples)..];
             }
             else
                 throw new NotImplementedException("");
