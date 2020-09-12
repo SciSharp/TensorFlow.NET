@@ -138,10 +138,6 @@ namespace Tensorflow.Keras.Engine
             {
                 nameScope = name;
             }
-            else
-            {
-                throw new NotImplementedException("");
-            }
 
             // using var graph = tf.keras.backend.get_graph().as_default();
             if (!inputs.IsEagerTensor)

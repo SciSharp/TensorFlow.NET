@@ -83,20 +83,19 @@ namespace Tensorflow.Layers
                     auxiliary_name_scope: false);
             }
 
-            Tensor[] outputs = null;
+            Tensor outputs = null;
             tf_with(scope_context_manager, scope2 =>
             {
                 _current_scope = scope2;
                 // Actually call layer
-                /*outputs = base.Apply(new Tensor[] { inputs }, 
-                    is_training: training);*/
+                outputs = base.Apply(inputs);
             });
 
 
             // Update global default collections.
             _add_elements_to_collection(updates.ToArray(), new string[] { tf.GraphKeys.UPDATE_OPS });
 
-            return outputs;
+            return new Tensor[] { outputs };
         }
 
         protected virtual void _add_elements_to_collection(Operation[] elements, string[] collection_list)

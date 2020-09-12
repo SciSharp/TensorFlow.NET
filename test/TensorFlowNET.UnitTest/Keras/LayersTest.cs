@@ -52,7 +52,7 @@ namespace TensorFlowNET.UnitTest.Keras
             // Create a `Sequential` model and add a Dense layer as the first layer.
             var model = tf.keras.Sequential();
             model.add(tf.keras.Input(shape: 16));
-            model.add(tf.keras.layers.Dense(32, activation: tf.keras.activations.Relu));
+            model.add(tf.keras.layers.Dense(32, activation: "relu"));
             // Now the model will take as input arrays of shape (None, 16)
             // and output arrays of shape (None, 32).
             // Note that after the first layer, you don't need to specify
