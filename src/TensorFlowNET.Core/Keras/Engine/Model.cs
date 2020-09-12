@@ -1,6 +1,7 @@
 ﻿using NumSharp;
 using System;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
 
 namespace Tensorflow.Keras.Engine
@@ -40,6 +41,11 @@ namespace Tensorflow.Keras.Engine
             _is_compiled = true;
 
             // Prepare list of loss functions, same size of model outputs.
+        }
+
+        public void compile(string optimizerName, ILossFunc lossName)
+        {
+            throw new NotImplementedException("");
         }
 
         /// <summary>

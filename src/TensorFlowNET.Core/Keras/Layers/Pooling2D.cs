@@ -30,7 +30,7 @@ namespace Tensorflow.Keras.Layers
         {
             this.args = args;
             args.PoolSize = conv_utils.normalize_tuple(args.PoolSize, 2, "pool_size");
-            args.Strides = conv_utils.normalize_tuple(args.Strides, 2, "strides");
+            args.Strides = conv_utils.normalize_tuple(args.Strides ?? args.PoolSize, 2, "strides");
             args.Padding = conv_utils.normalize_padding(args.Padding);
             args.DataFormat = conv_utils.normalize_data_format(args.DataFormat);
             input_spec = new InputSpec(ndim: 4);

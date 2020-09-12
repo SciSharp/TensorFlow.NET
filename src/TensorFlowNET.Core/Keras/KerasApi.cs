@@ -7,6 +7,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Datasets;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
+using Tensorflow.Keras.Losses;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -16,6 +17,7 @@ namespace Tensorflow
         public KerasDataset datasets { get; } = new KerasDataset();
         public Initializers initializers { get; } = new Initializers();
         public LayersApi layers { get; } = new LayersApi();
+        public LossesApi losses { get; } = new LossesApi();
         public Activations activations { get; } = new Activations();
         public Preprocessing preprocessing { get; } = new Preprocessing();
         public BackendImpl backend { get; } = new BackendImpl();
@@ -68,53 +70,6 @@ namespace Tensorflow
             var layer = new InputLayer(args);
 
             return layer.InboundNodes[0].Outputs;
-        }
-
-        public class LayersApi
-        {
-            public Rescaling Rescaling(float scale,
-                float offset = 0,
-                TensorShape input_shape = null)
-                => new Rescaling(new RescalingArgs
-                {
-                    Scale = scale,
-                    Offset = offset,
-                    InputShape = input_shape
-                });
-
-            public Dense Dense(int units,
-                Activation activation = null,
-                TensorShape input_shape = null)
-                => new Dense(new DenseArgs
-                {
-                    Units = units,
-                    Activation = activation ?? tf.keras.activations.Linear,
-                    InputShape = input_shape
-                });
-
-            /// <summary>
-            /// Turns positive integers (indexes) into dense vectors of fixed size.
-            /// </summary>
-            /// <param name="input_dim"></param>
-            /// <param name="output_dim"></param>
-            /// <param name="embeddings_initializer"></param>
-            /// <param name="mask_zero"></param>
-            /// <returns></returns>
-            public Embedding Embedding(int input_dim,
-                int output_dim,
-                IInitializer embeddings_initializer = null,
-                bool mask_zero = false,
-                TensorShape input_shape = null,
-                int input_length = -1)
-                => new Embedding(new EmbeddingArgs
-                {
-                    InputDim = input_dim,
-                    OutputDim = output_dim,
-                    MaskZero = mask_zero,
-                    InputShape = input_shape ?? input_length,
-                    InputLength = input_length,
-                    EmbeddingsInitializer = embeddings_initializer
-                });
         }
     }
 }

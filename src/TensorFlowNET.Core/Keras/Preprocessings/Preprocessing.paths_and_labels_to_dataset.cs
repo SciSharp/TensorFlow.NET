@@ -25,7 +25,7 @@ namespace Tensorflow.Keras
                 var image = path_to_image(image_paths[i], image_size, num_channels, interpolation);
                 data[i] = image.numpy();
                 if (i % 100 == 0)
-                    Console.WriteLine($"Filled {i}/{image_paths.Length} data into memory.");
+                    Console.WriteLine($"Filled {i}/{image_paths.Length} data into ndarray.");
             }
 
             var img_ds = tf.data.Dataset.from_tensor_slices(data);

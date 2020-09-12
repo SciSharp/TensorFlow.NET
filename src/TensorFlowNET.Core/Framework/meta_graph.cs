@@ -150,7 +150,7 @@ namespace Tensorflow
             var variables = graph.get_collection<IVariableV1>(tf.GraphKeys.GLOBAL_VARIABLES,
                                      scope: scope_to_prepend_to_names);
             var var_list = new Dictionary<string, IVariableV1>();
-            variables.ForEach(v => var_list[ops.strip_name_scope(v.Name, scope_to_prepend_to_names)] = v);
+            // variables.ForEach(v => var_list[ops.strip_name_scope(v.Name, scope_to_prepend_to_names)] = v);
 
             return (var_list, imported_return_elements);
         }
