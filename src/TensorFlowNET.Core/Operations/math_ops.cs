@@ -706,11 +706,12 @@ namespace Tensorflow
             => tf_with(ops.name_scope(name, "Pow", new { x, y }), scope =>
             {
                 name = scope;
-                var x_tensor = ops.convert_to_tensor(x, name: "x");
-                var y_tensor = ops.convert_to_tensor(y, name: "y", dtype: x_tensor.dtype.as_base_dtype());
 
                 if (tf.executing_eagerly())
                 {
+                    var x_tensor = ops.convert_to_tensor(x, name: "x");
+                    var y_tensor = ops.convert_to_tensor(y, name: "y", dtype: x_tensor.dtype.as_base_dtype());
+
                     var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                         "Pow", name,
                         null,
@@ -719,7 +720,7 @@ namespace Tensorflow
                     return results[0];
                 }
 
-                var _op = tf.OpDefLib._apply_op_helper("Pow", name, args: new { x_tensor, y_tensor });
+                var _op = tf.OpDefLib._apply_op_helper("Pow", name, args: new { x, y });
 
                 return _op.output;
             }); 

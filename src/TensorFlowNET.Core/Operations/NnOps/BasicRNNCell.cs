@@ -71,8 +71,8 @@ namespace Tensorflow
         {
             // Most basic RNN: output = new_state = act(W * input + U * state + B).
             var concat = array_ops.concat(new[] { inputs, state }, 1);
-            var gate_inputs = math_ops.matmul(concat, _kernel as RefVariable);
-            gate_inputs = nn_ops.bias_add(gate_inputs, _bias as RefVariable);
+            var gate_inputs = math_ops.matmul(concat, _kernel.AsTensor());
+            gate_inputs = nn_ops.bias_add(gate_inputs, _bias.AsTensor());
             var output = _activation(gate_inputs, null);
             return output;
         }

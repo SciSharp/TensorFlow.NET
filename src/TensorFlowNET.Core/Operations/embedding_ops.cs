@@ -74,7 +74,7 @@ namespace Tensorflow
                 ids = ops.convert_to_tensor(ids, name: "ids");
                 if (np == 1)
                 {
-                    var gather = array_ops.gather(@params, ids, name: name);
+                    var gather = array_ops.gather(@params.AsTensor(), ids, name: name);
                     var result = _clip(gather, ids, max_norm);
 
                     return array_ops.identity(result);

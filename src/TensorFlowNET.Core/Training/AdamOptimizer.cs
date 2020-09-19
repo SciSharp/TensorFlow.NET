@@ -52,6 +52,14 @@ namespace Tensorflow.Train
             _dtype = dtype;
         }
 
+        public override Operation _apply_sparse(IndexedSlices grad, ResourceVariable var)
+        {
+            return _apply_sparse_shared(grad.values, var, grad.indices, (x, i, v) =>
+            {
+                return state_ops.scatter_add(x, i, v, use_locking: _use_locking);
+            });
+        }
+
         public override Operation _apply_sparse(IndexedSlices grad, RefVariable var)
         {
             return _apply_sparse_shared(grad.values, var, grad.indices, (x, i, v) =>
@@ -91,7 +99,7 @@ namespace Tensorflow.Train
             var lr = (lr_t * math_ops.sqrt(1 - beta2_power) / (1 - beta1_power));
             var m = get_slot(var, "m");
             var m_scaled_g_values = grad * (1 - beta1_t);
-            var m_t = state_ops.assign(m.AsTensor(), m.AsTensor() * beta1_t, use_locking: _use_locking);
+            var m_t = state_ops.assign(m, m.AsTensor() * beta1_t, use_locking: _use_locking);
             tf_with(ops.control_dependencies(new[] { m_t }), delegate
             {
                 m_t = scatter_add(m, indices, m_scaled_g_values);
@@ -99,7 +107,7 @@ namespace Tensorflow.Train
 
             var v = get_slot(var, "v");
             var v_scaled_g_values = (grad * grad) * (1 - beta2_t);
-            var v_t = state_ops.assign(v.AsTensor(), v.AsTensor() * beta2_t, use_locking: _use_locking);
+            var v_t = state_ops.assign(v, v.AsTensor() * beta2_t, use_locking: _use_locking);
             tf_with(ops.control_dependencies(new[] { v_t }), delegate
             {
                 v_t = scatter_add(v, indices, v_scaled_g_values);

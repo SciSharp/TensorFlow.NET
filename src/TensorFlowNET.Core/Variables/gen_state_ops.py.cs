@@ -56,7 +56,7 @@ namespace Tensorflow
         /// <param name="validate_shape"></param>
         /// <param name="use_locking"></param>
         /// <param name="name"></param>
-        public static Tensor assign(Tensor @ref, object value, 
+        public static Tensor assign<T>(T @ref, object value, 
             bool validate_shape = true, 
             bool use_locking = true,
             string name = null)
@@ -74,40 +74,10 @@ namespace Tensorflow
             return _result[0];
         }
 
-        public static Tensor assign(RefVariable @ref, object value,
-            bool validate_shape = true,
-            bool use_locking = true,
-            string name = null)
+        public static Tensor assign_add<T>(IVariableV1 @ref, T value, bool use_locking = false, string name = null)
         {
-            var _op = tf.OpDefLib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
-
-            var _result = _op.outputs;
-            var _inputs_flat = _op.inputs;
-
-            var _attrs = new Dictionary<string, object>();
-            _attrs["T"] = _op.get_attr("T");
-            _attrs["validate_shape"] = _op.get_attr("validate_shape");
-            _attrs["use_locking"] = _op.get_attr("use_locking");
-
-            return _result[0];
-        }
-
-        public static Tensor assign(ResourceVariable @ref, object value,
-            bool validate_shape = true,
-            bool use_locking = true,
-            string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
-
-            var _result = _op.outputs;
-            var _inputs_flat = _op.inputs;
-
-            var _attrs = new Dictionary<string, object>();
-            _attrs["T"] = _op.get_attr("T");
-            _attrs["validate_shape"] = _op.get_attr("validate_shape");
-            _attrs["use_locking"] = _op.get_attr("use_locking");
-
-            return _result[0];
+            var _op = tf.OpDefLib._apply_op_helper("AssignAdd", name: name, args: new { @ref, value, use_locking });
+            return _op.outputs[0];
         }
 
         public static Tensor assign_sub(IVariableV1 @ref,

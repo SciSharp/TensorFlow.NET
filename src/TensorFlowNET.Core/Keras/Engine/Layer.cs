@@ -121,7 +121,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="input"></param>
         /// <param name="is_training"></param>
         /// <returns></returns>
-        public Tensor Apply(Tensor inputs, bool is_training = false)
+        public Tensor Apply(Tensor inputs, bool is_training = false, Tensor state = null)
         {
             Tensor outputs = null;
 
@@ -135,9 +135,9 @@ namespace Tensorflow.Keras.Engine
 
             string nameScope = "";
             if (eager)
-            {
                 nameScope = name;
-            }
+            else
+                nameScope = _name_scope();
 
             // using var graph = tf.keras.backend.get_graph().as_default();
             if (!inputs.IsEagerTensor)
@@ -148,7 +148,7 @@ namespace Tensorflow.Keras.Engine
                 if (!built)
                     MaybeBuild(inputs);
 
-                outputs = call(inputs, is_training: is_training);
+                outputs = call(inputs, is_training: is_training, state: state);
 
                 outputs = _set_connectivity_metadata_(inputs, outputs);
                 _handle_activity_regularization(inputs, outputs);

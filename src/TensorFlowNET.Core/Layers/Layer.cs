@@ -88,7 +88,9 @@ namespace Tensorflow.Layers
             {
                 _current_scope = scope2;
                 // Actually call layer
-                outputs = base.Apply(inputs);
+                outputs = base.Apply(inputs, 
+                    is_training: training == null ? false : false,
+                    state: state);
             });
 
 

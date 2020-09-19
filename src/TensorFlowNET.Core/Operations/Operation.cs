@@ -326,7 +326,7 @@ namespace Tensorflow
             // the updated inputs are reloaded from the c_api
             lock (Locks.ProcessWide)
             {
-                c_api.UpdateEdge(_graph, output, input, tf.Status.Handle);
+                // c_api.UpdateEdge(_graph, output, input, tf.Status.Handle);
                 //var updated_inputs = inputs;
                 tf.Status.Check();
             }

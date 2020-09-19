@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -54,19 +55,7 @@ namespace Tensorflow
             return @ref.assign((Tensor)value, name: name);
         }
 
-        public static Tensor assign(RefVariable @ref, object value,
-            bool validate_shape = true,
-            bool use_locking = true,
-            string name = null)
-        {
-            return gen_state_ops.assign(@ref,
-                value,
-                validate_shape: validate_shape,
-                use_locking: use_locking,
-                name: name);
-        }
-
-        public static Tensor assign(ResourceVariable @ref, object value,
+        public static Tensor assign<T>(T @ref, object value,
             bool validate_shape = true,
             bool use_locking = true,
             string name = null)
@@ -110,7 +99,12 @@ namespace Tensorflow
             T value,
             bool use_locking = false,
             string name = null)
-            => @ref.assign_add(value, use_locking: use_locking, name: name);
+        {
+            if(tf.executing_eagerly())
+                return @ref.assign_add(value, use_locking: use_locking, name: name);
+            else
+                return gen_state_ops.assign_add(@ref, value, use_locking: use_locking, name: name);
+        }
 
         public static Tensor scatter_add(IVariableV1 @ref, Tensor indices, Tensor updates, bool use_locking = false, string name = null)
         {
