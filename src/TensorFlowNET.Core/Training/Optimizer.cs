@@ -278,8 +278,16 @@ namespace Tensorflow
 
         public virtual Operation _apply_dense(Tensor grad, ResourceVariable var)
         {
-            var alpha = math_ops.cast(LearningRateTensor, var.dtype.as_base_dtype());
-            return gen_training_ops.resource_apply_gradient_descent(var.Handle, alpha, grad, use_locking: _use_locking).op;
+            if (tf.executing_eagerly())
+            {
+                var alpha = math_ops.cast(LearningRateTensor, var.dtype.as_base_dtype());
+                return gen_training_ops.resource_apply_gradient_descent(var, alpha, grad, use_locking: _use_locking).op;
+            }
+            else
+            {
+                var alpha = math_ops.cast(LearningRateTensor, var.dtype.as_base_dtype());
+                return gen_training_ops.apply_gradient_descent(var, alpha, grad, use_locking: _use_locking).op;
+            }
         }
 
         public virtual Operation _apply_dense(Tensor grad, RefVariable var)
@@ -312,6 +320,11 @@ namespace Tensorflow
                 values: summed_values,
                 dense_shape: grad.dense_shape);
             return _apply_sparse(gradient_no_duplicate_indices, var);
+        }
+
+        public virtual Operation _apply_sparse(IndexedSlices grad, ResourceVariable var)
+        {
+            throw new NotImplementedException("_apply_sparse");
         }
 
         public virtual Operation _apply_sparse(IndexedSlices grad, RefVariable var)

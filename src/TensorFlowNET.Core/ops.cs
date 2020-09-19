@@ -467,7 +467,7 @@ namespace Tensorflow
                 case RefVariable varVal:
                     return varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref);
                 case ResourceVariable varVal:
-                    return varVal.value();
+                    return varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref);
                 case TensorShape ts:
                     return constant_op.constant(ts.dims, dtype: dtype, name: name);
                 case int[] dims:

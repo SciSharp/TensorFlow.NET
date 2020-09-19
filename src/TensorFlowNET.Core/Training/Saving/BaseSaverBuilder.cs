@@ -224,7 +224,7 @@ namespace Tensorflow
                 var saveable_tensors = all_tensors.Skip(idx).Take(saveable.specs.Length);
                 idx += saveable.specs.Length;
                 var restored = saveable.restore(saveable_tensors.ToArray(), shapes == null ? null : shapes.ToArray());
-                assign_ops.Add(restored as ITensorOrOperation);
+                assign_ops.Add(restored);
             }
 
             return control_flow_ops.group(assign_ops.ToArray(), name: name);

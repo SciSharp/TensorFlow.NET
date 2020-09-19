@@ -1,6 +1,7 @@
-﻿using NumSharp;
+﻿using static Tensorflow.Binding;
 using System;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Engine.DataAdapters;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
 
@@ -21,6 +22,7 @@ namespace Tensorflow.Keras.Engine
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         string loss;
         IOptimizer optimizer;
+        IVariableV1 _steps_per_execution;
 
         public Model(ModelArgs args) 
             : base(args)
@@ -37,10 +39,25 @@ namespace Tensorflow.Keras.Engine
                     break;
             }
 
+            int experimental_steps_per_execution = 1;
+            _configure_steps_per_execution(experimental_steps_per_execution);
+
+            _reset_compile_cache();
+
             loss = lossName;
             _is_compiled = true;
+        }
 
-            // Prepare list of loss functions, same size of model outputs.
+        void _configure_steps_per_execution(int steps_per_execution)
+        {
+            _steps_per_execution = tf.Variable(steps_per_execution,
+                dtype: TF_DataType.TF_INT64,
+                aggregation: VariableAggregation.OnlyFirstReplica);
+        }
+
+        void _reset_compile_cache()
+        {
+
         }
 
         public void compile(string optimizerName, ILossFunc lossName)
@@ -70,6 +87,20 @@ namespace Tensorflow.Keras.Engine
             int workers = 1,
             bool use_multiprocessing = false)
         {
+            var data_handler = new DataHandler(new DataHandlerArgs
+            {
+                X = x,
+                BatchSize = batch_size,
+                StepsPerEpoch = steps,
+                InitialEpoch = 0,
+                Epochs = 1,
+                MaxQueueSize = max_queue_size,
+                Workers = workers,
+                UseMultiprocessing = use_multiprocessing,
+                Model = this,
+                StepsPerExecution = _steps_per_execution
+            });
+
             throw new NotImplementedException("");
         }
     }

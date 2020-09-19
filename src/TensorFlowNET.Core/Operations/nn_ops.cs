@@ -68,7 +68,7 @@ namespace Tensorflow
         /// <param name="seed"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor dropout_v2(Tensor x, float rate, Tensor noise_shape = null, int? seed = null, string name = null)
+        public static Tensor dropout_v2(Tensor x, Tensor rate, Tensor noise_shape = null, int? seed = null, string name = null)
         {
             return tf_with(ops.name_scope(name, "dropout", x), scope =>
             {

@@ -70,12 +70,14 @@ namespace Tensorflow
             bool use_resource = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
+            VariableAggregation aggregation = VariableAggregation.None,
             int[] shape = null)
             => new ResourceVariable(data,
                     trainable: trainable,
                     validate_shape: validate_shape,
                     name: name,
                     dtype: dtype,
+                    aggregation: aggregation,
                     shape: shape);
 
         public Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)

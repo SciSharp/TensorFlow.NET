@@ -327,8 +327,9 @@ namespace Tensorflow.Gradients
             var output_shape = op.outputs[0]._shape_tuple();
 
             Tensor result, factor_tensor;
-            if(input_shape != null &&
-                output_shape != null)
+            if(tf.executing_eagerly() 
+                && input_shape != null 
+                && output_shape != null)
             {
                 var input_size = np.prod(input_shape);
                 var output_size = np.prod(output_shape);
@@ -339,11 +340,7 @@ namespace Tensorflow.Gradients
             {
                 var input_shape_tensor = array_ops.shape(op.inputs[0]);
                 var output_shape_tensor = array_ops.shape(op.outputs[0]);
-                var factor = _safe_shape_div(math_ops.reduce_prod(input_shape_tensor), math_ops.reduce_prod(output_shape_tensor));
-                throw new NotImplementedException("");
-#pragma warning disable CS0162 // Unreachable code detected
-                factor_tensor = null;
-#pragma warning restore CS0162 // Unreachable code detected
+                factor_tensor = _safe_shape_div(math_ops.reduce_prod(input_shape_tensor), math_ops.reduce_prod(output_shape_tensor));
             }
 
             result = math_ops.truediv(sum_grad, math_ops.cast(factor_tensor, sum_grad.dtype));

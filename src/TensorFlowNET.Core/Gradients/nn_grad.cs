@@ -128,10 +128,10 @@ namespace Tensorflow.Gradients
         [RegisterGradient("Conv2D")]
         public static Tensor[] _Conv2DGrad(Operation op, Tensor[] grads)
         {
-            var dilations = op.get_attr<int[]>("dilations");
-            var strides = op.get_attr<int[]>("strides");
+            var dilations = op.get_attr_list<int>("dilations");
+            var strides = op.get_attr_list<int>("strides");
             var padding = op.get_attr<string>("padding");
-            var explicit_paddings = op.get_attr<int[]>("explicit_paddings");
+            var explicit_paddings = op.get_attr_list<int>("explicit_paddings");
             var use_cudnn_on_gpu = op.get_attr<bool>("use_cudnn_on_gpu");
             var data_format = op.get_attr<string>("data_format");
             var shape = gen_array_ops.shape_n(new Tensor[] { op.inputs[0], op.inputs[1] });
@@ -287,8 +287,8 @@ namespace Tensorflow.Gradients
                   op.inputs[0],
                   op.outputs[0],
                   grad,
-                  op.get_attr("ksize") as int[],
-                  op.get_attr("strides") as int[],
+                  op.get_attr_list<int>("ksize"),
+                  op.get_attr_list<int>("strides"),
                   padding: op.get_attr("padding").ToString(),
                   data_format: op.get_attr("data_format").ToString())
             };

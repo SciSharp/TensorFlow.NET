@@ -60,17 +60,17 @@ namespace Tensorflow.Train
             });
         }
 
-        public override Operation _apply_dense(Tensor grad, RefVariable var)
+        public override Operation _apply_dense(Tensor grad, ResourceVariable var)
         {
             var m = get_slot(var, "m");
             var v = get_slot(var, "v");
             var (beta1_power, beta2_power) = _get_beta_accumulators();
             return gen_training_ops.apply_adam(
-                var,
-                m,
-                v,
-                math_ops.cast(beta1_power, var.dtype.as_base_dtype()),
-                math_ops.cast(beta2_power, var.dtype.as_base_dtype()),
+                var.Handle,
+                m.Handle,
+                v.Handle,
+                math_ops.cast(beta1_power.Handle, var.dtype.as_base_dtype()),
+                math_ops.cast(beta2_power.Handle, var.dtype.as_base_dtype()),
                 math_ops.cast(_lr_t, var.dtype.as_base_dtype()),
                 math_ops.cast(_beta1_t, var.dtype.as_base_dtype()),
                 math_ops.cast(_beta2_t, var.dtype.as_base_dtype()),

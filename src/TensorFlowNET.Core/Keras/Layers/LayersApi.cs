@@ -34,10 +34,13 @@ namespace Tensorflow.Keras.Layers
 
         /// <summary>
         /// Turns positive integers (indexes) into dense vectors of fixed size.
+        /// This layer can only be used as the first layer in a model.
+        /// e.g. [[4], [20]] -> [[0.25, 0.1], [0.6, -0.2]]
+        /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding
         /// </summary>
-        /// <param name="input_dim"></param>
-        /// <param name="output_dim"></param>
-        /// <param name="embeddings_initializer"></param>
+        /// <param name="input_dim">Size of the vocabulary, i.e. maximum integer index + 1.</param>
+        /// <param name="output_dim">Dimension of the dense embedding.</param>
+        /// <param name="embeddings_initializer">Initializer for the embeddings matrix (see keras.initializers).</param>
         /// <param name="mask_zero"></param>
         /// <returns></returns>
         public Embedding Embedding(int input_dim,

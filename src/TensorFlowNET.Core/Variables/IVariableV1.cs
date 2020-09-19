@@ -33,10 +33,16 @@ namespace Tensorflow
     {
         public string UniqueId { get; }
         public string Name { get; }
+        /// <summary>
+        /// Handle is ref type
+        /// </summary>
         public Tensor Handle { get; }
         public string Device { get; }
         public Operation Initializer { get; }
         public Operation Op { get; }
+        /// <summary>
+        /// GraphElement is a copy of Handle
+        /// </summary>
         public Tensor GraphElement { get; }
         public Graph Graph { get; }
         public TF_DataType dtype { get; }

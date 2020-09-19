@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
@@ -43,6 +44,9 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
             if (args.InputShape == null)
                 args.InputShape = args.InputLength;
+
+            if (args.BatchInputShape == null)
+                args.BatchInputShape = new int[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray();
 
             embeddings_initializer = embeddings_initializer ?? tf.random_uniform_initializer;
             SupportsMasking = mask_zero;

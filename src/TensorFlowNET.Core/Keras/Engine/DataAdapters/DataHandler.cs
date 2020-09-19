@@ -27,7 +27,9 @@ namespace Tensorflow.Keras.Engine.DataAdapters
 
         public DataHandler(DataHandlerArgs args)
         {
+            this.args = args;
 
+            var adapter_cls = new TensorLikeDataAdapter(new TensorLikeDataAdapterArgs { });
         }
     }
 }

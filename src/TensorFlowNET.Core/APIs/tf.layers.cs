@@ -193,8 +193,7 @@ namespace Tensorflow
                     Name = name
                 });
 
-                throw new NotImplementedException("");
-                //return layer.apply(inputs).Item1;
+                return layer.Apply(inputs);
             }
 
             /// <summary>

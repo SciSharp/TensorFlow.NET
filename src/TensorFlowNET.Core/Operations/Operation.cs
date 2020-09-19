@@ -230,6 +230,35 @@ namespace Tensorflow
         public virtual T get_attr<T>(string name)
             => (T)get_attr(name);
 
+        public virtual T[] get_attr_list<T>(string name)
+        {
+            if (tf.executing_eagerly())
+                return (T[])get_attr(name);
+
+            AttrValue x = null;
+
+            lock (Locks.ProcessWide)
+            {
+                using var buf = new Buffer();
+                c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
+                tf.Status.Check(true);
+
+                x = AttrValue.Parser.ParseFrom(buf.DangerousMemoryBlock.Stream());
+            }
+
+            string oneof_value = x.ValueCase.ToString();
+            if (string.IsNullOrEmpty(oneof_value))
+                return null;
+
+            switch (typeof(T).Name)
+            {
+                case nameof(Int32):
+                    return x.List.I.Select(x => (T)Convert.ChangeType(x, typeof(T))).ToArray();
+                default:
+                    return null;
+            }
+        }
+
         public virtual object get_attr(string name)
         {
             AttrValue x = null;
@@ -250,7 +279,7 @@ namespace Tensorflow
             if (oneof_value == "list")
                 throw new NotImplementedException($"Unsupported field type in {x.ToString()}");
 
-            if (oneof_value == "type")
+            if (string.Equals("type", oneof_value, StringComparison.OrdinalIgnoreCase))
                 return x.Type;
 
             object result = x.GetType().GetProperty(oneof_value).GetValue(x);

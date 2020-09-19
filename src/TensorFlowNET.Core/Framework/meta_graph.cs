@@ -150,7 +150,7 @@ namespace Tensorflow
             var variables = graph.get_collection<IVariableV1>(tf.GraphKeys.GLOBAL_VARIABLES,
                                      scope: scope_to_prepend_to_names);
             var var_list = new Dictionary<string, IVariableV1>();
-            // variables.ForEach(v => var_list[ops.strip_name_scope(v.Name, scope_to_prepend_to_names)] = v);
+            variables.ForEach(v => var_list[ops.strip_name_scope(v.Name, scope_to_prepend_to_names)] = v);
 
             return (var_list, imported_return_elements);
         }
@@ -275,6 +275,11 @@ namespace Tensorflow
                         if(x is RefVariable x_ref_var)
                         {
                             var proto = x_ref_var.to_proto(export_scope);
+                            col_def.BytesList.Value.Add(proto.ToByteString());
+                        }
+                        else if(x is ResourceVariable x_res_var)
+                        {
+                            var proto = x_res_var.to_proto(export_scope);
                             col_def.BytesList.Value.Add(proto.ToByteString());
                         }
                     }

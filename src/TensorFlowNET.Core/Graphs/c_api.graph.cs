@@ -139,7 +139,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_GraphToGraphDef(IntPtr graph, SafeBufferHandle output_graph_def, SafeStatusHandle status);
-        
+
         /// <summary>
         /// Returns the number of dimensions of the Tensor referenced by `output`
         /// in `graph`.

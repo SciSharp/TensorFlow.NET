@@ -41,7 +41,7 @@ namespace Tensorflow
             throw new NotImplementedException("");
         }
 
-        public static Tensor apply_adam(IVariableV1 var, IVariableV1 m, IVariableV1 v, Tensor beta1_power, Tensor beta2_power, 
+        public static Tensor apply_adam(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power, 
             Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, 
             bool use_locking = false, bool use_nesterov = false, string name = null)
         {
@@ -64,7 +64,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor apply_gradient_descent(RefVariable var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
+        public static Tensor apply_gradient_descent(IVariableV1 var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("ApplyGradientDescent", name, new
             {
@@ -82,7 +82,7 @@ namespace Tensorflow
             if (tf.executing_eagerly())
             {
                 var result = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ResourceApplyGradientDescent", name, 
+                    "ResourceApplyGradientDescent", name,
                     null,
                     var, alpha, delta,
                     "use_locking", use_locking);

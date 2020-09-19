@@ -1,5 +1,6 @@
 ﻿using System;
 using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -21,11 +22,6 @@ namespace Tensorflow
         public static implicit operator EagerTensor(ResourceVariable var)
             => var._dense_var_to_tensor() as EagerTensor;
 
-        public static implicit operator RefVariable(ResourceVariable var)
-        {
-            return null;
-        }
-
         public static implicit operator IntPtr(ResourceVariable var)
             => var._handle;
 
@@ -34,6 +30,14 @@ namespace Tensorflow
             bool as_ref = false)
         {
             return value();
+        }
+
+        public Tensor _TensorConversionFunction(TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
+        {
+            if (as_ref)
+                return handle;
+            else
+                return tf.executing_eagerly() ? AsTensor() : value();
         }
     }
 }

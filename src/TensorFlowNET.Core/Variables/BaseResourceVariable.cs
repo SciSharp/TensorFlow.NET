@@ -28,6 +28,8 @@ namespace Tensorflow
         protected Tensor _initial_value;
         public Tensor initial_value => _initial_value;
 
+        public Operation initializer => initializer_op;
+
         protected Tensor _parent_op;
         public Tensor parent_op => _parent_op;
 
@@ -73,6 +75,14 @@ namespace Tensorflow
 
         public ITensorOrOperation assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
         {
+            if(value.GetType() == typeof(Tensor))
+            {
+                var assign = gen_state_ops.assign(handle, value, use_locking: use_locking, name: name);
+                if (read_value)
+                    return assign;
+                return assign.op;
+            }
+
             var value_tensor = ops.convert_to_tensor(value, dtype: dtype);
             var assign_op = gen_resource_variable_ops.assign_variable_op(
                 handle, value_tensor, name: name);
@@ -82,7 +92,7 @@ namespace Tensorflow
             return assign_op;
         }
 
-        public Tensor value() => _read_variable_op();
+        public Tensor value() => tf.executing_eagerly() ? _read_variable_op() : GraphElement;
 
         protected Tensor _read_variable_op()
         {
@@ -149,6 +159,7 @@ namespace Tensorflow
         {
         }
 
-        public Tensor AsTensor() => read_value();
+        public Tensor AsTensor() 
+            => tf.executing_eagerly() ? read_value() : GraphElement;
     }
 }

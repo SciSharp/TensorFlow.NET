@@ -67,9 +67,7 @@ namespace Tensorflow
             {
                 ops.init_scope();
                 var variable = ops.internal_convert_to_tensor(op, as_ref: true);
-                if (variable.op.type == "Variable" ||
-                    variable.op.type == "VariableV2" ||
-                    variable.op.type == "AutoReloadVariable")
+                if (variable.dtype.is_ref_dtype())
                     yield return new ReferenceVariableSaveable(variable, "", name);
                 else
                     yield return new ResourceVariableSaveable(variable, "", name);
@@ -102,7 +100,7 @@ namespace Tensorflow
 
                         if (convert_variable_to_tensor)
                         {
-                            if (var is ResourceVariable)
+                            if (!var.dtype.is_ref_dtype())
                                 tensor = var.GraphElement;
                             else
                                 tensor = ops.internal_convert_to_tensor(var, as_ref: true);

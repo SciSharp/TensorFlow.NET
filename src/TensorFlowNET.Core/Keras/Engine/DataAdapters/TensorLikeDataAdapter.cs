@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Keras.ArgsDefinition;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine.DataAdapters
@@ -10,7 +11,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
     /// </summary>
     public class TensorLikeDataAdapter : IDataAdapter
     {
-        public TensorLikeDataAdapter()
+        public TensorLikeDataAdapter(TensorLikeDataAdapterArgs args)
         {
             tf.data.Dataset.range(5);
         }

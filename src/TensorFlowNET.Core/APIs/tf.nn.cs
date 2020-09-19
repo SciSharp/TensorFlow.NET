@@ -66,8 +66,8 @@ namespace Tensorflow
                 Tensor keep = null;
                 if (keep_prob != null)
                     keep = 1.0f - keep_prob;
-
-                return nn_ops.dropout_v2(x, rate: rate.Value, noise_shape: noise_shape, seed: seed, name: name);
+                var rate_tensor = rate.HasValue ? tf.constant(rate.Value) : keep;
+                return nn_ops.dropout_v2(x, rate: rate_tensor, noise_shape: noise_shape, seed: seed, name: name);
             }
 
             /// <summary>
