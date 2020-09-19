@@ -207,7 +207,7 @@ namespace Tensorflow
                         {
                             apply_updates = state_ops.assign_add(global_step,
                                 ops.convert_to_tensor(1, dtype: global_step.dtype),
-                                name: name) as Operation;
+                                name: name);
                         }
                     });
                 }

@@ -44,6 +44,9 @@ namespace Tensorflow
             public Optimizer AdamOptimizer(float learning_rate, TF_DataType dtype, string name = "Adam")
                 => new AdamOptimizer(learning_rate, name: name, dtype: dtype);
 
+            public Optimizer AdamOptimizer(IVariableV1 learning_rate, string name = "Adam")
+                => new AdamOptimizer(learning_rate.AsTensor(), name: name);
+
             public Optimizer AdamOptimizer(Tensor learning_rate, string name = "Adam")
                 => new AdamOptimizer(learning_rate, name: name);
 
