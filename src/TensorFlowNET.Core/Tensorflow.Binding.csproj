@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
-    <Version>0.20.0-preview5</Version>
+    <Version>0.20.0</Version>
     <LangVersion>8.0</LangVersion>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
@@ -24,10 +24,7 @@ https://tensorflownet.readthedocs.io</Description>
 
 * Eager Mode is added finally.
 * tf.keras is partially working. 
-* tf.data is added.
-
-It's not stable at this moment and missing many APIs, tf.net 0.15.x is more stable for production.
-Please be patient, we're working hard on missing functions, providing full tensorflow binding is our mission.</PackageReleaseNotes>
+* tf.data is added.</PackageReleaseNotes>
     <FileVersion>0.20.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
