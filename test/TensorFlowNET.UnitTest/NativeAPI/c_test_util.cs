@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Tensorflow;
 using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
@@ -58,6 +59,16 @@ namespace TensorFlowNET.UnitTest
                     return GraphDef.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
                 }
             }
+        }
+
+        public static FunctionDef GetFunctionDef(IntPtr func)
+        {
+            using var s = new Status();
+            using var buffer = new Buffer();
+            c_api.TF_FunctionToFunctionDef(func, buffer.Handle, s.Handle);
+            s.Check(true);
+            var func_def = FunctionDef.Parser.ParseFrom(buffer.ToArray());
+            return func_def;
         }
 
         public static bool IsAddN(NodeDef node_def, int n)

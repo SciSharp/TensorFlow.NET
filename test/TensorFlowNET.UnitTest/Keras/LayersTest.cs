@@ -30,7 +30,7 @@ namespace TensorFlowNET.UnitTest.Keras
         public void Embedding()
         {
             var model = tf.keras.Sequential();
-            var layer = tf.keras.layers.Embedding(1000, 64, input_length: 10);
+            var layer = tf.keras.layers.Embedding(7, 2, input_length: 4);
             model.add(layer);
             // the model will take as input an integer matrix of size (batch,
             // input_length).
@@ -38,9 +38,15 @@ namespace TensorFlowNET.UnitTest.Keras
             // than 999 (vocabulary size).
             // now model.output_shape == (None, 10, 64), where None is the batch
             // dimension.
-            var input_array = np.random.randint(1000, size: (32, 10));
+            var input_array = np.array(new int[,]
+            {
+                { 1, 2, 3, 4 },
+                { 2, 3, 4, 5 },
+                { 3, 4, 5, 6 }
+            });
             model.compile("rmsprop", "mse");
             var output_array = model.predict(input_array);
+            Assert.AreEqual((32, 10, 64), output_array.TensorShape);
         }
 
         /// <summary>

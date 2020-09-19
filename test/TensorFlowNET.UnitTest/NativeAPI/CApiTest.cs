@@ -35,6 +35,9 @@ namespace TensorFlowNET.UnitTest
         protected void ASSERT_EQ(object expected, object actual, string msg = "")
             => Assert.AreEqual(expected, actual, msg);
 
+        protected void ASSERT_NE(object expected, object actual, string msg = "")
+            => Assert.AreNotEqual(expected, actual, msg);
+
         protected void ASSERT_TRUE(bool condition, string msg = "")
             => Assert.IsTrue(condition, msg);
 

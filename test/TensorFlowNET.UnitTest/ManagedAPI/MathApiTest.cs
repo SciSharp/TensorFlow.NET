@@ -6,7 +6,7 @@ using System.Text;
 using Tensorflow;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.TF_API
+namespace TensorFlowNET.UnitTest.ManagedAPI
 {
     [TestClass]
     public class MathApiTest : TFNetApiTest

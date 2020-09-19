@@ -41,6 +41,17 @@ namespace TensorFlowNET.UnitTest
             }
         }
 
+        public void SetInputs(KeyValuePair<Operation, Tensor>[] inputs)
+        {
+            DeleteInputValues();
+            inputs_.Clear();
+            foreach (var input in inputs)
+            {
+                inputs_.Add(new TF_Output(input.Key, 0));
+                input_values_.Add(input.Value);
+            }
+        }
+
         private void DeleteInputValues()
         {
             //clearing is enough as they will be disposed by the GC unless they are referenced else-where.
