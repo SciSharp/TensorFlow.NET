@@ -95,7 +95,7 @@ namespace Tensorflow
         //  Returns:
         //    Same as "ref".  Returned as a convenience for operations that want
         //    to use the new value after the variable has been updated.
-        public static ITensorOrOperation assign_add<T>(IVariableV1 @ref,
+        public static Tensor assign_add<T>(IVariableV1 @ref,
             T value,
             bool use_locking = false,
             string name = null)

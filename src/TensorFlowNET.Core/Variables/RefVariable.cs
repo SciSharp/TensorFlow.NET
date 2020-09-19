@@ -335,7 +335,7 @@ namespace Tensorflow
         /// A `Tensor` that will hold the new value of this variable after
         /// the assignment has completed.
         /// </returns>
-        public ITensorOrOperation assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
+        public Tensor assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
         {
             var assign = gen_state_ops.assign(_variable, value, use_locking: use_locking, name: name);
             if (read_value)
@@ -418,7 +418,7 @@ namespace Tensorflow
         //      name: A name for the operation(optional).
         //  Returns:
         //    A mutable `Tensor`. Has the same type as `ref`.
-        public ITensorOrOperation assign_add<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
+        public Tensor assign_add<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
         {
             var variable = this;
             var _op = tf.OpDefLib._apply_op_helper("AssignAdd", name: name, args: new { variable, value, use_locking });

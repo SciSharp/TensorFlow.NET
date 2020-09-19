@@ -73,7 +73,7 @@ namespace Tensorflow
             // handle_deleter
         }
 
-        public ITensorOrOperation assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
+        public Tensor assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
         {
             if(value.GetType() == typeof(Tensor))
             {
@@ -134,7 +134,7 @@ namespace Tensorflow
                 return array_ops.identity(value);
             });
 
-        public ITensorOrOperation assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true)
+        public Tensor assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true)
         {
             var assign_add_op = gen_resource_variable_ops.assign_add_variable_op(Handle,
                 ops.convert_to_tensor(delta, dtype: dtype), name: name);
