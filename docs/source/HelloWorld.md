@@ -10,7 +10,7 @@ Let's run a classic HelloWorld program first and see if TensorFlow is running on
 
 ### Install the TensorFlow.NET SDK
 
-TensorFlow.NET uses the .NET Standard 2.0 standard, so your new project Target Framework can be .NET Framework or .NET Core.  All the examples in this book are using .NET Core 2.2 and Microsoft Visual Studio Community 2017. To start building TensorFlow program you just need to download and install the .NET SDK (Software Development Kit). You have to download the latest .NET Core SDK from offical website: https://dotnet.microsoft.com/download.
+TensorFlow.NET uses the .NET Standard 2.0 standard, so your new project Target Framework can be .NET Framework or .NET Core/ .NET 5.  All the examples in this book are using .NET Core 3.1 and Microsoft Visual Studio Community 2019. To start building TensorFlow program you just need to download and install the .NET SDK (Software Development Kit). You have to download the latest .NET Core SDK from offical website: https://dotnet.microsoft.com/download.
 
 
 
@@ -38,9 +38,9 @@ PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 
 ### Start coding Hello World
 
-After installing the TensorFlow.NET package, you can use the `using Tensorflow` to introduce the TensorFlow library.
+After installing the TensorFlow.NET package, you can use the `using static Tensorflow.Binding` to introduce the TensorFlow .NET library.
 
-
+TensorFlow 2.x enabled `Eager Mode` by default. About what eager mode is, I will introduce it in detail in the following chapters.
 
 ```csharp
 using System;
@@ -51,33 +51,26 @@ namespace TensorFlowNET.Examples
     /// <summary>
     /// Simple hello world using TensorFlow
     /// </summary>
-    public class HelloWorld : IExample
+    class Program
     {
-        public void Run()
+        static void Main(string[] args)
         {
-            /* Create a Constant op
-               The op is added as a node to the default graph.
-            
-               The value returned by the constructor represents the output
-               of the Constant op. */
             var hello = tf.constant("Hello, TensorFlow!");
-
-            // Start tf session
-            using (var sess = tf.Session())
-            {
-                // Run the op
-                var result = sess.run(hello);
-                Console.WriteLine(result);
-            }
+            Console.WriteLine(hello);
         }
     }
 }
 ```
 After CTRL + F5 run, you will get the output.
 ```cmd
-2019-01-05 10:53:42.145931: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
-Hello, TensorFlow!
-Press any key to continue . . .
+9/20/2020 2:15:09 AM Starting Hello World
+tf.Tensor: shape=(), dtype=string, numpy=Hello, TensorFlow.NET!
+9/20/2020 2:15:09 AM Completed Hello World
+Example: Hello World in 0.1273463s is OK!
+TensorFlow.NET v0.20.1.0
+TensorFlow Binary v2.3.0
+1 of 21 example(s) are completed.
+Press [Enter] to continue...
 ```
 
 This sample code can be found at [here](https://github.com/SciSharp/SciSharp-Stack-Examples/blob/master/src/TensorFlowNET.Examples/HelloWorld.cs).
