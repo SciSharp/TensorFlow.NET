@@ -62,7 +62,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor call(Tensor inputs, bool is_training = false, Tensor state = null)
+        protected override Tensor call(Tensor inputs, bool is_training = false)
         {
             var dtype = inputs.dtype;
             if (dtype != tf.int32 && dtype != tf.int64)

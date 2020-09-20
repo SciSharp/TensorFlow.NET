@@ -88,80 +88,83 @@ namespace Tensorflow
 
             if (trainable && !collections.Contains(tf.GraphKeys.TRAINABLE_VARIABLES))
                 collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
-
-            ops.init_scope();
+            
             _in_graph_mode = !tf.Context.executing_eagerly();
-            tf_with(ops.name_scope(name, "Variable"), scope =>
+            tf_with(ops.init_scope2(), delegate
             {
-                name = scope;
-                var handle_name = ops.name_from_scope_name(name);
-                string unique_id = "";
-                string shared_name = "";
+                var values = init_from_fn ? new object[0] : new object[] { initial_value };
+                tf_with(ops.name_scope(name, "Variable", values), scope =>
+                {
+                    name = scope;
+                    var handle_name = ops.name_from_scope_name(name);
+                    string unique_id = "";
+                    string shared_name = "";
 
-                if (_in_graph_mode)
-                {
-                    shared_name = handle_name;
-                    unique_id = shared_name;
-                }
-                else
-                {
-                    unique_id = $"{handle_name}_{ops.uid()}";
-                    shared_name = tf.Context.shared_name();
-                }
-
-                var attr = new AttrValue();
-                attr.List = new AttrValue.Types.ListValue();
-                attr.List.S.Add(ByteString.CopyFromUtf8($"loc:@{handle_name}"));
-                tf_with(ops.name_scope("Initializer"), delegate
-                {
-                    if (initial_value.GetType().GetInterface("IInitializer") != null)
-                        initial_value = ops.convert_to_tensor((initial_value as IInitializer).Apply(new InitializerArgs(shape, dtype: dtype)));
+                    if (_in_graph_mode)
+                    {
+                        shared_name = handle_name;
+                        unique_id = shared_name;
+                    }
                     else
                     {
-                        var value = init_from_fn ? (initial_value as Func<Tensor>)() : initial_value;
-                        initial_value = ops.convert_to_tensor(value,
-                            name: "initial_value",
-                            dtype: dtype);
+                        unique_id = $"{handle_name}_{ops.uid()}";
+                        shared_name = tf.Context.shared_name();
                     }
+
+                    var attr = new AttrValue();
+                    attr.List = new AttrValue.Types.ListValue();
+                    attr.List.S.Add(ByteString.CopyFromUtf8($"loc:@{handle_name}"));
+                    tf_with(ops.name_scope("Initializer"), delegate
+                    {
+                        if (initial_value.GetType().GetInterface("IInitializer") != null)
+                            initial_value = ops.convert_to_tensor((initial_value as IInitializer).Apply(new InitializerArgs(shape, dtype: dtype)));
+                        else
+                        {
+                            var value = init_from_fn ? (initial_value as Func<Tensor>)() : initial_value;
+                            initial_value = ops.convert_to_tensor(value,
+                                name: "initial_value",
+                                dtype: dtype);
+                        }
+                    });
+                    _shape = shape ?? (initial_value as Tensor).TensorShape;
+                    _initial_value = initial_value as Tensor;
+
+
+
+                    if (_in_graph_mode)
+                    {
+                        handle = state_ops.variable_op_v2(_initial_value.shape, _initial_value.dtype.as_base_dtype(), name: name);
+                        initializer_op = gen_state_ops.assign(handle, _initial_value, true).op;
+
+                        ops.colocate_with(initializer_op);
+
+                        _graph_element = gen_array_ops.identity(handle, name = "read");
+                        ops.add_to_collections<IVariableV1>(collections, this);
+                        _dtype = handle.dtype;
+                    }
+                    else
+                    {
+                        handle = resource_variable_ops.eager_safe_variable_handle(
+                          initial_value: _initial_value,
+                          shape: _shape,
+                          shared_name: shared_name,
+                          name: name,
+                          graph_mode: _in_graph_mode);
+
+                        gen_resource_variable_ops.assign_variable_op(handle, _initial_value);
+                        is_initialized_op = null;
+                        initializer_op = null;
+                        _graph_element = null;
+                        _dtype = _initial_value.dtype.as_base_dtype();
+                        initial_value = _in_graph_mode ? initial_value : null;
+                    }
+
+                    base.__init__(trainable: trainable,
+                        handle: handle,
+                        name: name,
+                        unique_id: unique_id,
+                        handle_name: handle_name);
                 });
-                _shape = shape ?? (initial_value as Tensor).TensorShape;
-                _initial_value = initial_value as Tensor;
-
-                
-
-                if (_in_graph_mode)
-                {
-                    handle = state_ops.variable_op_v2(_initial_value.shape, _initial_value.dtype.as_base_dtype(), name: name);
-                    initializer_op = gen_state_ops.assign(handle, _initial_value, true).op;
-
-                    ops.colocate_with(initializer_op);
-
-                    _graph_element = gen_array_ops.identity(handle, name = "read");
-                    ops.add_to_collections<IVariableV1>(collections, this);
-                    _dtype = handle.dtype;
-                }
-                else
-                {
-                    handle = resource_variable_ops.eager_safe_variable_handle(
-                      initial_value: _initial_value,
-                      shape: _shape,
-                      shared_name: shared_name,
-                      name: name,
-                      graph_mode: _in_graph_mode);
-
-                    gen_resource_variable_ops.assign_variable_op(handle, _initial_value);
-                    is_initialized_op = null;
-                    initializer_op = null;
-                    _graph_element = null;
-                    _dtype = _initial_value.dtype.as_base_dtype();
-                    initial_value = _in_graph_mode ? initial_value : null;
-                }
-
-                base.__init__(trainable: trainable,
-                    handle: handle,
-                    name: name,
-                    unique_id: unique_id,
-                    handle_name: handle_name);
             });
         }
 

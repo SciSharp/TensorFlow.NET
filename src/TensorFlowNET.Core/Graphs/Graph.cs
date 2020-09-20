@@ -278,7 +278,11 @@ namespace Tensorflow
             // after removing the trailing '/'.
             name = name.EndsWith("/") ? ops.name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, attrs: attrs);
+            if (name == "rnn/while/basic_rnn_cell/MatMul" 
+                || name == "rnn/while/basic_rnn_cell/MatMul/Enter")
+            {
 
+            }
             var input_ops = inputs.Select(x => x.op).ToArray();
             var control_inputs = _control_dependencies_for_inputs(input_ops);
 

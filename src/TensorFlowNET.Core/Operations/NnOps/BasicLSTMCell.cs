@@ -61,7 +61,7 @@ namespace Tensorflow
             built = true;
         }
 
-        public Tensor[] __call__(Tensor inputs, LSTMStateTuple state)
+        public Tensor __call__(Tensor inputs, LSTMStateTuple state)
         {
             _state = state;
             return base.__call__(inputs);
@@ -74,7 +74,7 @@ namespace Tensorflow
         /// <param name="training"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        protected override Tensor call(Tensor inputs, bool is_training = false, Tensor state = null)
+        protected override Tensor call(Tensor inputs, bool is_training = false)
         {
             var one = constant_op.constant(1, dtype: dtypes.int32);
             // Parameters of gates are concatenated into one multiply for efficiency.

@@ -61,9 +61,8 @@ namespace Tensorflow.Layers
             return (results[0], results[1]);
         }
 
-        public Tensor[] __call__(Tensor inputs,
+        public Tensor __call__(Tensor inputs,
             Tensor training = null,
-            Tensor state = null,
             VariableScope scope = null)
         {
             _set_scope(scope);
@@ -88,16 +87,54 @@ namespace Tensorflow.Layers
             {
                 _current_scope = scope2;
                 // Actually call layer
-                outputs = base.Apply(inputs, 
-                    is_training: training == null ? false : false,
-                    state: state);
+                outputs = base.Apply(inputs[0], 
+                    is_training: training == null ? false : false);
             });
 
 
             // Update global default collections.
             _add_elements_to_collection(updates.ToArray(), new string[] { tf.GraphKeys.UPDATE_OPS });
 
-            return new Tensor[] { outputs };
+            return outputs;
+        }
+
+        public Tensor[] __call__(Tensor[] inputs,
+            Tensor state = null,
+            Tensor training = null,
+            VariableScope scope = null)
+        {
+            _set_scope(scope);
+            _graph = ops._get_graph_from_inputs(inputs, graph: _graph);
+
+            variable_scope scope_context_manager = null;
+            if (built)
+            {
+                scope_context_manager = tf.variable_scope(_scope,
+                    reuse: true,
+                    auxiliary_name_scope: false);
+            }
+            else
+            {
+                scope_context_manager = tf.variable_scope(_scope,
+                    reuse: _reuse,
+                    auxiliary_name_scope: false);
+            }
+
+            Tensor[] outputs = null;
+            tf_with(scope_context_manager, scope2 =>
+            {
+                _current_scope = scope2;
+                // Actually call layer
+                outputs = base.Apply(inputs,
+                    state,
+                    is_training: training == null ? false : false);
+            });
+
+
+            // Update global default collections.
+            _add_elements_to_collection(updates.ToArray(), new string[] { tf.GraphKeys.UPDATE_OPS });
+
+            return outputs;
         }
 
         protected virtual void _add_elements_to_collection(Operation[] elements, string[] collection_list)

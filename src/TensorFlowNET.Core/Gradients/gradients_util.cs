@@ -311,6 +311,7 @@ namespace Tensorflow
             while (queue.Count > 0)
             {
                 var op = queue.Dequeue();
+
                 if (reached_ops.Contains(op))
                 {
                     between_ops.Add(op);
