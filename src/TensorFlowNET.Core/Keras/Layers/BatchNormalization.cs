@@ -143,7 +143,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor call(Tensor inputs, bool is_training = false, Tensor state = null)
+        protected override Tensor call(Tensor inputs, bool is_training = false)
         {
             Tensor outputs = null;
 

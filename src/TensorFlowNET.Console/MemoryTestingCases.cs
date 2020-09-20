@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NumSharp;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -18,6 +19,22 @@ namespace Tensorflow
                     var tensor = tf.constant(3112.0f);
                 }
             };
+
+        public Action<int> Constant2x3
+            => (iterate) =>
+            {
+                var nd = np.array(new byte[,]
+                {
+                    {1, 2, 3},
+                    {4, 5, 6}
+                });
+                for (int i = 0; i < iterate; i++)
+                {
+                    var tensor = tf.constant(nd);
+                    var data = tensor.numpy();
+                }
+            };
+
         public Action<int> Variable
             => (iterate) =>
             {

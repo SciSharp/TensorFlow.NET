@@ -326,7 +326,7 @@ namespace Tensorflow.Operations
 
         protected override void _AddOpInternal(Operation op)
         {
-            if (op.name == "gradients/rnn/while/basic_rnn_cell/Tanh_grad/TanhGrad")
+            if (op.name == "rnn/basic_rnn_cell/kernel/Initializer/random_uniform/shape")
             {
 
             }

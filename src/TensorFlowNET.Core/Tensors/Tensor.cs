@@ -261,7 +261,6 @@ namespace Tensorflow
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             c_api.TF_DeleteTensor(handle);
-
             if (AllocationHandle == null) 
                 return;
 

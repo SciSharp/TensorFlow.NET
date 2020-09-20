@@ -15,6 +15,9 @@ namespace Tensorflow
 
             int batchSize = 1000;
 
+            // explaination of constant
+            mm.Execute(10, 100 * batchSize, cases.Constant2x3);
+
             // 1 million float tensor 68M.
             mm.Execute(10, 100 * batchSize, cases.Constant);
 

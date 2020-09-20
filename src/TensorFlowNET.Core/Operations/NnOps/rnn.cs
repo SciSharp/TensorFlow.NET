@@ -364,7 +364,7 @@ namespace Tensorflow.Operations
                 if (sequence_length != null)
                     throw new NotImplementedException("sequence_length != null");
                 else
-                    outputs = cell.__call__(input_t_t, state: state1);
+                    outputs = cell.__call__(new[] { input_t_t }, state: state1);
 
                 var (output, new_state) = (outputs[0], outputs[1]);
                 // Keras cells always wrap state as list, even if it's a single tensor.

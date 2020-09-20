@@ -50,6 +50,8 @@ namespace Tensorflow
         /// </summary>
         public AllocationType AllocationType { get; protected set; }
 
+        public IntPtr TensorDataPointer => TF_TensorData(_handle);
+
         /// <summary>
         ///     Create a Tensor object from an existing TF handle
         /// </summary>

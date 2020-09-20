@@ -70,8 +70,8 @@ namespace Tensorflow.Eager
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
+            base.DisposeUnmanagedResources(handle);
             //print($"deleting DeleteTensorHandle {Id} {_handle.ToString("x16")}");
-            c_api.TF_DeleteTensor(_handle);
         }
     }
 }

@@ -121,7 +121,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="input"></param>
         /// <param name="is_training"></param>
         /// <returns></returns>
-        public Tensor Apply(Tensor inputs, bool is_training = false, Tensor state = null)
+        public Tensor Apply(Tensor inputs, bool is_training = false)
         {
             Tensor outputs = null;
 
@@ -148,7 +148,7 @@ namespace Tensorflow.Keras.Engine
                 if (!built)
                     MaybeBuild(inputs);
 
-                outputs = call(inputs, is_training: is_training, state: state);
+                outputs = call(inputs, is_training: is_training);
 
                 outputs = _set_connectivity_metadata_(inputs, outputs);
                 _handle_activity_regularization(inputs, outputs);
@@ -157,6 +157,35 @@ namespace Tensorflow.Keras.Engine
 
             if (!inputs.IsEagerTensor)
                 tf.Context.restore_mode();
+
+            return outputs;
+        }
+
+        public Tensor[] Apply(Tensor[] inputs, Tensor state, bool is_training = false)
+        {
+            Tensor[] outputs = null;
+
+            callContext = callContext ?? new ThreadLocal<CallContext>()
+            {
+                Value = new CallContext()
+            };
+
+            var eager = tf.executing_eagerly();
+            using var ctxManager = CallContext.enter();
+
+            string nameScope = "";
+            if (eager)
+                nameScope = name;
+            else
+                nameScope = _name_scope();
+
+            tf_with(ops.name_scope(nameScope), scope =>
+            {
+                if (!built)
+                    MaybeBuild(inputs[0]);
+
+                outputs = call(inputs, is_training: is_training, state: state);
+            });
 
             return outputs;
         }
@@ -200,7 +229,12 @@ namespace Tensorflow.Keras.Engine
             return null;
         }
 
-        protected virtual Tensor call(Tensor inputs, bool is_training = false, Tensor state = null)
+        protected virtual Tensor call(Tensor inputs, bool is_training = false)
+        {
+            throw new NotImplementedException("");
+        }
+
+        protected virtual Tensor[] call(Tensor[] inputs, Tensor state, bool is_training = false)
         {
             throw new NotImplementedException("");
         }

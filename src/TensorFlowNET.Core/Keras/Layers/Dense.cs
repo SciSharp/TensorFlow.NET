@@ -65,7 +65,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor call(Tensor inputs, bool training = false, Tensor state = null)
+        protected override Tensor call(Tensor inputs, bool training = false)
         {
             Tensor outputs = null;
             var rank = inputs.rank;
