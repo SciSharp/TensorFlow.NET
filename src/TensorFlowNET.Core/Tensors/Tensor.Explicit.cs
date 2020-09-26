@@ -11,7 +11,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_BOOL);
-                return *(bool*) tensor.buffer;
+                return *(bool*)tensor.buffer;
             }
         }
 

@@ -78,6 +78,37 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern SafeContextHandle TFE_NewContext(SafeContextOptionsHandle opts, SafeStatusHandle status);
 
+        /// <summary>
+        /// Adds a function (created from TF_GraphToFunction or
+        /// TF_FunctionImportFunctionDef) to the context, allowing it to be executed with
+        /// TFE_Execute by creating an op with the same name as the function.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="function"></param>
+        /// <param name="status"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ContextAddFunction(SafeContextHandle ctx, IntPtr function, SafeStatusHandle status);
+
+        /// <summary>
+        /// Removes a function from the context. Once removed, you can no longer
+        /// TFE_Execute it or TFE_Execute any TFE_Op which has it as an attribute or any
+        /// other function which calls it as an attribute.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="name"></param>
+        /// <param name="status"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ContextRemoveFunction(SafeContextHandle ctx, string name, SafeStatusHandle status);
+
+        /// <summary>
+        /// Checks whether a function is registered under `name`.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern bool TFE_ContextHasFunction(SafeContextHandle ctx, string name);
+
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_ContextStartStep(SafeContextHandle ctx);
 

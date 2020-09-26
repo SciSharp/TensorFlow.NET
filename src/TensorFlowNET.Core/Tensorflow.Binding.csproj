@@ -28,7 +28,7 @@ https://tensorflownet.readthedocs.io</Description>
     <FileVersion>0.20.1.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
@@ -82,5 +82,11 @@ https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <Folder Include="Keras\Initializers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="FodyWeavers.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
