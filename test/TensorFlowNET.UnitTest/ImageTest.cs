@@ -14,7 +14,7 @@ namespace TensorFlowNET.UnitTest.Basics
     /// Find more examples in https://www.programcreek.com/python/example/90444/tensorflow.read_file
     /// </summary>
     [TestClass]
-    public class ImageTest
+    public class ImageTest : GraphModeTestBase
     {
         string imgPath = "shasta-daisy.jpg";
         Tensor contents;

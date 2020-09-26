@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Tensorflow;
 using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
@@ -229,6 +230,11 @@ namespace TensorFlowNET.UnitTest
         public static Operation ScalarConst(int v, Graph graph, Status s, string name = "scalar")
         {
             return Const(new Tensor(v), graph, s, name);
+        }
+
+        public static Tensor Int32Tensor(int v)
+        {
+            return new Tensor(v);
         }
     }
 }

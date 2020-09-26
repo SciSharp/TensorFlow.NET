@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TensorFlowNET.UnitTest;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.UnitTest
+namespace TensorFlowNET.UnitTest
 {
     public class EagerModeTestBase : PythonTest
     {
