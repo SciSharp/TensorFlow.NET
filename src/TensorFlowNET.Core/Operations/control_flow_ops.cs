@@ -22,6 +22,7 @@ using Tensorflow.Operations.ControlFlows;
 using util = Tensorflow.control_flow_util;
 using static Tensorflow.Binding;
 using Tensorflow.Util;
+using System.Data;
 
 namespace Tensorflow
 {
@@ -420,14 +421,13 @@ namespace Tensorflow
         public static Tensor cond(Tensor pred,
             Func<ITensorOrOperation> true_fn = null,
             Func<ITensorOrOperation> false_fn = null,
-            bool strict = false,
             string name = null)
         {
             return tf_with(ops.name_scope(name, "cond", new { pred }), delegate
             {
                 if (tf.Context.executing_eagerly())
                 {
-                    if (pred.ToArray<bool>()[0])
+                    if ((bool)pred)
                         return true_fn() as Tensor;
                     else
                         return false_fn() as Tensor;
@@ -674,6 +674,29 @@ namespace Tensorflow
                     return array_ops.zeros_like(val, optimize: false);
                 }
             }
+        }
+
+        public static Tensor[] while_loop(Func<Tensor[], Tensor> cond,
+            Func<Tensor[], Tensor[]> body,
+            Tensor[] loop_vars,
+            int parallel_iterations = 10,
+            string name = null)
+        {
+            var executing_eagerly = tf.Context.executing_eagerly();
+            if (!executing_eagerly)
+            {
+                throw new NotImplementedException("");
+            }
+
+            return tf_with(ops.name_scope("name", "while"), delegate
+            {
+                while ((bool)cond(loop_vars))
+                {
+                    loop_vars = body(loop_vars);
+                }
+
+                return loop_vars;
+            });
         }
 
         /// <summary>

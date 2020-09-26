@@ -39,7 +39,7 @@ namespace Tensorflow
             int num_opers, IntPtr[] opers,
             int ninputs, TF_Output[] inputs,
             int noutputs, TF_Output[] outputs,
-            IntPtr output_names,
+            string[] output_names,
             IntPtr opts,
             string description,
             SafeStatusHandle status);
