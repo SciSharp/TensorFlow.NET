@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Tensorflow.Functions;
+using Tensorflow.Graphs;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -15,12 +19,10 @@ namespace Tensorflow
             bool preserve_cardinality = false,
             bool use_legacy_function = false) : base(input_dataset)
         {
-            foreach(var input in input_dataset)
-            {
-                var data = map_func(input.Item1);
-            }
+            var func = new ConcreteFunction(map_func, input_dataset.element_spec[0].dtype);
 
             variant_tensor = ops.map_dataset(input_dataset.variant_tensor,
+                func,
                 output_types,
                 output_shapes);
         }

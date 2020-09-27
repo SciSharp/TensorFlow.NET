@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using Tensorflow.Functions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Graphs
