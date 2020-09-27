@@ -118,17 +118,17 @@ namespace TensorFlowNET.UnitTest.Dataset
             }
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void Map()
         {
             long value = 0;
 
-            var dataset = tf.data.Dataset.range(3);
-            var dataset1 = dataset.map(x => x);
+            var dataset = tf.data.Dataset.range(0, 2);
+            dataset = dataset.map(x => x + 10);
 
             foreach (var item in dataset)
             {
-                Assert.AreEqual(value, (long)item.Item1);
+                Assert.AreEqual(value + 10, (long)item.Item1);
                 value++;
             }
         }

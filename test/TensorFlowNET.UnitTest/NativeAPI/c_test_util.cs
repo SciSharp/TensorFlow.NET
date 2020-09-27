@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Tensorflow;
+using Tensorflow.Functions;
 using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
 
