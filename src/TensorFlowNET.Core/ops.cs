@@ -470,6 +470,8 @@ namespace Tensorflow
                     return varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref);
                 case TensorShape ts:
                     return constant_op.constant(ts.dims, dtype: dtype, name: name);
+                case string str:
+                    return constant_op.constant(value, dtype: tf.@string, name: name);
                 case int[] dims:
                     return constant_op.constant(dims, dtype: dtype, name: name);
                 case object[] objects:

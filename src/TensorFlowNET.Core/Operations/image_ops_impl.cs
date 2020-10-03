@@ -1668,8 +1668,6 @@ new_height, new_width");
         public static Tensor decode_image(Tensor contents, int channels = 0, TF_DataType dtype = TF_DataType.TF_UINT8,
             string name = null, bool expand_animations = true)
         {
-            Tensor substr = null;
-
             Func<ITensorOrOperation> _jpeg = () =>
             {
                 int jpeg_channels = channels;
@@ -1695,8 +1693,7 @@ new_height, new_width");
                 {
                     var result = convert_image_dtype(gen_image_ops.decode_gif(contents), dtype);
                     if (!expand_animations)
-                        // result = array_ops.gather(result, 0);
-                        throw new NotImplementedException("");
+                        result = array_ops.gather(result, 0);
                     return result;
                 });
             };
@@ -1728,18 +1725,16 @@ new_height, new_width");
 
             Func<ITensorOrOperation> check_gif = () =>
             {
-                var is_gif = math_ops.equal(substr, "\x47\x49\x46", name: "is_gif");
-                return control_flow_ops.cond(is_gif, _gif, _bmp, name: "cond_gif");
+                return control_flow_ops.cond(is_gif(contents), _gif, _bmp, name: "cond_gif");
             };
 
             Func<ITensorOrOperation> check_png = () =>
             {
-                return control_flow_ops.cond(_is_png(contents), _png, check_gif, name: "cond_png");
+                return control_flow_ops.cond(is_png(contents), _png, check_gif, name: "cond_png");
             };
 
             return tf_with(ops.name_scope(name, "decode_image"), scope =>
             {
-                substr = tf.strings.substr(contents, 0, 3);
                 return control_flow_ops.cond(is_jpeg(contents), _jpeg, check_png, name: "cond_jpeg");
             });
         }
@@ -2089,12 +2084,23 @@ new_height, new_width");
             });
         }
 
-        public static Tensor _is_png(Tensor contents, string name = null)
+        static Tensor is_png(Tensor contents, string name = null)
         {
             return tf_with(ops.name_scope(name, "is_png"), scope =>
             {
                 var substr = tf.strings.substr(contents, 0, 3);
                 return math_ops.equal(substr, @"\211PN", name: name);
+            });
+        }
+
+        static Tensor is_gif(Tensor contents, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "is_gif"), scope =>
+            {
+                var substr = tf.strings.substr(contents, 0, 3);
+                var gif = tf.constant(new byte[] { 0x47, 0x49, 0x46 }, TF_DataType.TF_STRING);
+                var result = math_ops.equal(substr, gif, name: name);
+                return result;
             });
         }
 

@@ -148,9 +148,18 @@ namespace Tensorflow
             // If shape is not given, get the shape from the numpy array.
             if (shape == null)
             {
-                shape = nparray.shape;
-                is_same_size = true;
-                shape_size = nparray.size;
+                if(numpy_dtype == TF_DataType.TF_STRING)
+                {
+                    // scalar string
+                    shape = new int[0];
+                    shape_size = 0;
+                }
+                else
+                {
+                    shape = nparray.shape;
+                    is_same_size = true;
+                    shape_size = nparray.size;
+                }
             }
             else
             {
