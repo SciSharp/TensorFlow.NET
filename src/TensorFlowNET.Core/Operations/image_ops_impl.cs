@@ -672,10 +672,8 @@ or rank = 4. Had rank = {0}", rank));
         internal static Tensor _resize_images_common(Tensor images, Func<Tensor, Tensor, Tensor> resizer_fn,
             Tensor size, bool preserve_aspect_ratio, string name, bool skip_resize_if_same)
         {
-            using (ops.name_scope(name, "resize", new [] {images, size}))
-            return tf_with(ops.name_scope(name, "resize", new [] {images, size}), delegate
+            return tf_with(ops.name_scope(name, "resize", new[] {images, size}), delegate
             {
-                images = ops.convert_to_tensor(images, name: "images");
                 if (images.TensorShape.ndim == Unknown)
                     throw new ValueError("\'images\' contains no shape.");
                 bool is_batch = true;
@@ -687,18 +685,6 @@ or rank = 4. Had rank = {0}", rank));
                     throw new ValueError("\'images\' must have either 3 or 4 dimensions.");
 
                 var (height, width) = (images.dims[1], images.dims[2]);
-
-                try
-                {
-                    size = ops.convert_to_tensor(size, dtypes.int32, name: "size");
-                }
-                catch (Exception ex)
-                {
-                    if (ex is TypeError || ex is ValueError)
-                        throw new ValueError("\'size\' must be a 1-D int32 Tensor");
-                    else
-                        throw;
-                }
 
                 if (!size.TensorShape.is_compatible_with(new [] {2}))
                     throw new ValueError(@"\'size\' must be a 1-D Tensor of 2 elements:
@@ -756,7 +742,7 @@ new_height, new_width");
                 
                 images = resizer_fn(images, size);
 
-                // images.set_shape(new TensorShape(new int[] { -1, new_height_const, new_width_const, -1 }));
+                images.set_shape(new TensorShape(new int[] { Unknown, new_height_const, new_width_const, Unknown }));
             
                 if (!is_batch)
                     images = array_ops.squeeze(images, axis: new int[] {0});
@@ -2161,6 +2147,33 @@ new_height, new_width");
                     }
                 }
             });
+        }
+
+        /// <summary>
+        /// Resize `images` to `size` using the specified `method`.
+        /// </summary>
+        /// <param name="images"></param>
+        /// <param name="size"></param>
+        /// <param name="method"></param>
+        /// <param name="preserve_aspect_ratio"></param>
+        /// <param name="antialias"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor resize_images_v2(Tensor images, TensorShape size, string method = ResizeMethod.BILINEAR,
+            bool preserve_aspect_ratio = false,
+            bool antialias = false,
+            string name = null)
+        {
+            Func<Tensor, Tensor, Tensor> resize_fn = (images, size) =>
+            {
+                if (method == ResizeMethod.BILINEAR)
+                    return gen_image_ops.resize_bilinear(images, size, half_pixel_centers: true);
+                throw new NotImplementedException("");
+            };
+            return _resize_images_common(images, resize_fn, ops.convert_to_tensor(size),
+                preserve_aspect_ratio: preserve_aspect_ratio,
+                skip_resize_if_same: false,
+                name: name);
         }
 
         /// <summary>
