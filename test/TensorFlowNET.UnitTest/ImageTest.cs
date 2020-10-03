@@ -4,6 +4,7 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using Tensorflow;
@@ -35,9 +36,10 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.AreEqual(img.name, "decode_image/cond_jpeg/Merge:0");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void resize_image()
         {
+            tf.enable_eager_execution();
             var image = tf.constant(new int[5, 5]
             {
                 {1, 0, 0, 0, 0 },
@@ -46,10 +48,16 @@ namespace TensorFlowNET.UnitTest.Basics
                 {0, 0, 0, 1, 0 },
                 {0, 0, 0, 0, 1 }
             });
-            //image = image[tf.newaxis, ..., tf.newaxis];
-
-            var img = tf.image.resize(contents, (3, 5));
-            Assert.AreEqual(img.name, "decode_image/cond_jpeg/Merge:0");
+            image = image[tf.newaxis, tf.ellipsis, tf.newaxis];
+            image = tf.image.resize(image, (3, 5));
+            image = image[0, tf.ellipsis, 0];
+            Assert.IsTrue(Enumerable.SequenceEqual(new float[] { 0.6666667f, 0.3333333f, 0, 0, 0 }, 
+                image[0].ToArray<float>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new float[] { 0, 0, 1, 0, 0 }, 
+                image[1].ToArray<float>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new float[] { 0, 0, 0, 0.3333335f, 0.6666665f }, 
+                image[2].ToArray<float>()));
+            tf.compat.v1.disable_eager_execution();
         }
 
         [TestMethod]

@@ -209,7 +209,7 @@ namespace Tensorflow
                     name, sorted_input, canonicalized_coordinates, tile_size);
 
             public Tensor resize(Tensor image, TensorShape size)
-                => image_ops_impl.resize_images(image, tf.constant(size));
+                => image_ops_impl.resize_images_v2(image, size);
 
             public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, bool half_pixel_centers = false, string name = null)
                 => gen_image_ops.resize_bilinear(images, size, align_corners: align_corners, half_pixel_centers: half_pixel_centers, name: name);

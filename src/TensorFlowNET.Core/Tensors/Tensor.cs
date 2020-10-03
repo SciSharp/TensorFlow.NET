@@ -149,7 +149,7 @@ namespace Tensorflow
         /// <summary>
         ///     Updates the shape of this tensor.
         /// </summary>
-        public void set_shape(TensorShape shape) 
+        public virtual void set_shape(TensorShape shape) 
         {
             this.shape = shape.rank >= 0 ? shape.dims : null;
         }
