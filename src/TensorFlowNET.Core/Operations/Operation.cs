@@ -322,11 +322,13 @@ namespace Tensorflow
 
             // Reset cached inputs.
             _inputs_val = null;
+            _node_def = null;
             // after the c_api call next time _inputs is accessed 
             // the updated inputs are reloaded from the c_api
             lock (Locks.ProcessWide)
             {
-                c_api.TF_UpdateEdge(_graph, output, input, tf.Status.Handle);
+                // disable
+                // c_api.TF_UpdateEdge(_graph, output, input, tf.Status.Handle);
                 //var updated_inputs = inputs;
                 tf.Status.Check();
             }
