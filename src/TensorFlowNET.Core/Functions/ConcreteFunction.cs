@@ -33,8 +33,6 @@ namespace Tensorflow.Functions
                     new Operation[] { input },
                     new Operation[] { output },
                     null);
-
-                c_api.TFE_ContextAddFunction(tf.Context.Handle, _handle, tf.Status.Handle);
             }
 
             tf.enable_eager_execution();
@@ -54,6 +52,7 @@ namespace Tensorflow.Functions
         public void Dispose()
         {
             c_api.TFE_ContextRemoveFunction(tf.Context.Handle, Name, tf.Status.Handle);
+            c_api.TF_DeleteFunction(_handle);
         }
     }
 }

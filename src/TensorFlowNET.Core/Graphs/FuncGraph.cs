@@ -47,8 +47,13 @@ namespace Tensorflow.Graphs
                 IntPtr.Zero, 
                 null, 
                 status.Handle);
+            status.Check(true);
 
             c_api.TF_GraphCopyFunction(outer_graph, func_handle, IntPtr.Zero, status.Handle);
+            status.Check(true);
+
+            c_api.TFE_ContextAddFunction(tf.Context.Handle, func_handle, status.Handle);
+            status.Check(true);
 
             return func_handle;
         }

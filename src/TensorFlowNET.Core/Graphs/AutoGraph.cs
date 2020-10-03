@@ -26,8 +26,6 @@ namespace Tensorflow.Graphs
                     new Operation[] { input1, input2 },
                     new Operation[] { output },
                     null);
-
-                c_api.TFE_ContextAddFunction(tf.Context.Handle, func_handle, tf.Status.Handle);
             }
 
             tf.enable_eager_execution();

@@ -16,7 +16,10 @@ namespace Tensorflow.Keras
             int num_classes,
             string interpolation)
         {
-            Shape shape = (image_paths.Length, image_size.dims[0], image_size.dims[1], num_channels);
+            var path_ds = tf.data.Dataset.from_tensor_slices(image_paths);
+            var img_ds = path_ds.map(x => path_to_image(x, image_size, num_channels, interpolation));
+
+            /*Shape shape = (image_paths.Length, image_size.dims[0], image_size.dims[1], num_channels);
             Console.WriteLine($"Allocating memory for shape{shape}, {NPTypeCode.Float}");
             var data = np.zeros(shape, NPTypeCode.Float);
 
@@ -35,13 +38,13 @@ namespace Tensorflow.Keras
                 var label_ds = tf.keras.preprocessing.dataset_utils.labels_to_dataset(labels, label_mode, num_classes);
                 img_ds = tf.data.Dataset.zip(img_ds, label_ds);
             }
-            else
+            else*/
                 throw new NotImplementedException("");
 
             return img_ds;
         }
 
-        Tensor path_to_image(string path, TensorShape image_size, int num_channels, string interpolation)
+        Tensor path_to_image(Tensor path, TensorShape image_size, int num_channels, string interpolation)
         {
             var img = tf.io.read_file(path);
             img = tf.image.decode_image(
