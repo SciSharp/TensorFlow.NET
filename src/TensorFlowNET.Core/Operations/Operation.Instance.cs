@@ -40,7 +40,7 @@ namespace Tensorflow
                 }
             }
 
-            return null;
+            return new Operation(handle);
         }
     }
 }
