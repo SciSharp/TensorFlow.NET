@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
-    <Version>0.20.1</Version>
+    <Version>0.21.0</Version>
     <LangVersion>8.0</LangVersion>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
@@ -19,13 +19,14 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.20.1.0</AssemblyVersion>
+    <AssemblyVersion>0.21.0.0</AssemblyVersion>
     <PackageReleaseNotes>tf.net 0.20.x and above are based on tensorflow native 2.x.
 
 * Eager Mode is added finally.
 * tf.keras is partially working. 
-* tf.data is added.</PackageReleaseNotes>
-    <FileVersion>0.20.1.0</FileVersion>
+* tf.data is added.
+* autograph works partially.</PackageReleaseNotes>
+    <FileVersion>0.21.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>false</SignAssembly>
@@ -76,6 +77,7 @@ https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.11.4" />
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.138" />
     <PackageReference Include="NumSharp.Lite" Version="0.1.8" />
     <PackageReference Include="Protobuf.Text" Version="0.4.0" />
   </ItemGroup>
