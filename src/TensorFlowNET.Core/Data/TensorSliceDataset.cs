@@ -11,6 +11,16 @@ namespace Tensorflow.Data
 {
     public class TensorSliceDataset : DatasetSource
     {
+        public TensorSliceDataset(string[] array)
+        {
+            var element = tf.constant(array);
+            _tensors = new[] { element };
+            var batched_spec = new[] { element.ToTensorSpec() };
+            structure = batched_spec.Select(x => x._unbatch()).ToArray();
+
+            variant_tensor = ops.tensor_slice_dataset(_tensors, output_shapes);
+        }
+
         public TensorSliceDataset(NDArray array)
         {
             var element = tf.constant(array);

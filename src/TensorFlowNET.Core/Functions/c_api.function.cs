@@ -21,6 +21,9 @@ namespace Tensorflow
 {
     public partial class c_api
     {
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_DeleteFunction(IntPtr handle);
+
         /// <summary>
         /// Write out a serialized representation of `func` (as a FunctionDef protocol
         /// message) to `output_func_def` (allocated by TF_NewBuffer()).
@@ -39,7 +42,7 @@ namespace Tensorflow
             int num_opers, IntPtr[] opers,
             int ninputs, TF_Output[] inputs,
             int noutputs, TF_Output[] outputs,
-            IntPtr output_names,
+            string[] output_names,
             IntPtr opts,
             string description,
             SafeStatusHandle status);

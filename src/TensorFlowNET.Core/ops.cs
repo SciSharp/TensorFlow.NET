@@ -76,10 +76,10 @@ namespace Tensorflow
             return get_default_graph().get_collection_ref<T>(key);
         }
 
-        public static Graph _get_graph_from_inputs(params Tensor[] op_input_list)
+        public static Graph _get_graph_from_inputs(Tensors op_input_list)
             => _get_graph_from_inputs(op_input_list: op_input_list, graph: null);
 
-        public static Graph _get_graph_from_inputs(Tensor[] op_input_list, Graph graph = null)
+        public static Graph _get_graph_from_inputs(Tensors op_input_list, Graph graph = null)
         {
             foreach(var op_input in op_input_list)
             {
@@ -470,6 +470,8 @@ namespace Tensorflow
                     return varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref);
                 case TensorShape ts:
                     return constant_op.constant(ts.dims, dtype: dtype, name: name);
+                case string str:
+                    return constant_op.constant(value, dtype: tf.@string, name: name);
                 case int[] dims:
                     return constant_op.constant(dims, dtype: dtype, name: name);
                 case object[] objects:

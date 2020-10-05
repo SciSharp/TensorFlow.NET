@@ -90,7 +90,8 @@ namespace TensorFlowNET.UnitTest
 
             s.Check();
 
-            output_values_[0] = output_values_ptr[0];
+            for (var i = 0; i < outputs_.Count; i++)
+                output_values_[i] = output_values_ptr[i];
         }
 
         public IntPtr output_tensor(int i)

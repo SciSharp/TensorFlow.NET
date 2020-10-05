@@ -119,11 +119,12 @@ namespace Tensorflow.Keras.Engine
         /// Wraps `call`, applying pre- and post-processing steps.
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="state"></param>
         /// <param name="is_training"></param>
         /// <returns></returns>
-        public Tensor Apply(Tensor inputs, bool is_training = false)
+        public Tensors Apply(Tensors inputs, Tensor state = null, bool is_training = false)
         {
-            Tensor outputs = null;
+            Tensors outputs = null;
 
             callContext = callContext ?? new ThreadLocal<CallContext>()
             {
@@ -148,7 +149,7 @@ namespace Tensorflow.Keras.Engine
                 if (!built)
                     MaybeBuild(inputs);
 
-                outputs = call(inputs, is_training: is_training);
+                outputs = call(inputs, state: state, is_training: is_training);
 
                 outputs = _set_connectivity_metadata_(inputs, outputs);
                 _handle_activity_regularization(inputs, outputs);
@@ -161,36 +162,7 @@ namespace Tensorflow.Keras.Engine
             return outputs;
         }
 
-        public Tensor[] Apply(Tensor[] inputs, Tensor state, bool is_training = false)
-        {
-            Tensor[] outputs = null;
-
-            callContext = callContext ?? new ThreadLocal<CallContext>()
-            {
-                Value = new CallContext()
-            };
-
-            var eager = tf.executing_eagerly();
-            using var ctxManager = CallContext.enter();
-
-            string nameScope = "";
-            if (eager)
-                nameScope = name;
-            else
-                nameScope = _name_scope();
-
-            tf_with(ops.name_scope(nameScope), scope =>
-            {
-                if (!built)
-                    MaybeBuild(inputs[0]);
-
-                outputs = call(inputs, is_training: is_training, state: state);
-            });
-
-            return outputs;
-        }
-
-        private Tensor _set_connectivity_metadata_(Tensor inputs, Tensor outputs)
+        private Tensors _set_connectivity_metadata_(Tensors inputs, Tensors outputs)
         {
             /*var returnOutputs = new List<Tensor>();
             foreach(var x in outputs)
@@ -211,7 +183,7 @@ namespace Tensorflow.Keras.Engine
             return outputs;
         }
 
-        private void _handle_activity_regularization(Tensor inputs, Tensor outputs)
+        private void _handle_activity_regularization(Tensors inputs, Tensors outputs)
         {
             //if(_activity_regularizer != null)
             {
@@ -219,7 +191,7 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        private void _set_mask_metadata(Tensor inputs, Tensor outputs, Tensor previous_mask)
+        private void _set_mask_metadata(Tensors inputs, Tensors outputs, Tensors previous_mask)
         {
 
         }
@@ -229,12 +201,7 @@ namespace Tensorflow.Keras.Engine
             return null;
         }
 
-        protected virtual Tensor call(Tensor inputs, bool is_training = false)
-        {
-            throw new NotImplementedException("");
-        }
-
-        protected virtual Tensor[] call(Tensor[] inputs, Tensor state, bool is_training = false)
+        protected virtual Tensors call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             throw new NotImplementedException("");
         }
@@ -244,7 +211,7 @@ namespace Tensorflow.Keras.Engine
             return Name;
         }
 
-        protected void MaybeBuild(Tensor inputs)
+        protected void MaybeBuild(Tensors inputs)
         {
             // Check input assumptions set before layer building, e.g. input rank.
             if (built)
@@ -252,7 +219,7 @@ namespace Tensorflow.Keras.Engine
             if (DType == TF_DataType.DtInvalid)
                 args.DType = inputs.dtype;
 
-            var input_shapes = inputs.TensorShape;
+            var input_shapes = inputs.shape;
             build(input_shapes);
             built = true;
         }

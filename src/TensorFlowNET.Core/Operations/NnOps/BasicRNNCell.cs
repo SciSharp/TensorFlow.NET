@@ -67,14 +67,14 @@ namespace Tensorflow
             built = true;
         }
 
-        protected override Tensor[] call(Tensor[] inputs, Tensor state, bool is_training = false)
+        protected override Tensors call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             // Most basic RNN: output = new_state = act(W * input + U * state + B).
-            var concat = array_ops.concat(new[] { inputs[0], state }, 1);
+            var concat = array_ops.concat(new Tensor[] { inputs, state }, 1);
             var gate_inputs = math_ops.matmul(concat, _kernel.AsTensor());
             gate_inputs = nn_ops.bias_add(gate_inputs, _bias.AsTensor());
             var output = _activation(gate_inputs, null);
-            return new[] { output, output };
+            return new Tensors(output, output);
         }
     }
 }

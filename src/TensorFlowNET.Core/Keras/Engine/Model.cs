@@ -27,7 +27,11 @@ namespace Tensorflow.Keras.Engine
         public Model(ModelArgs args) 
             : base(args)
         {
-
+            // Build _output_layers
+            /*foreach(var x in args.Outputs)
+            {
+                var layer = x.KerasHistory;
+            }*/
         }
 
         public void compile(string optimizerName, string lossName)

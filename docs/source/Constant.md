@@ -44,7 +44,7 @@ Let's continue using the last examples, we're going to initialize a tensor in an
 
 ##### NDArray
 
-The first thing we need to know is about `ndarray`'s memory model. The ndarray memory model is a very important data structure, and almost all underlying computation are inseparable from this datb a structure. One fundamental aspect of the ndarray is that an array is seen as a "chunk" of memory starting at some location. The interpretation of this memory depends on the stride information.
+The first thing we need to know is about `ndarray`'s memory model. The ndarray memory model is a very important data structure, and almost all underlying computation are inseparable from this datb a structure. One fundamental aspect of the ndarray is that an array is seen as a "chunk" of memory starting at some location. The interpretation of this memory depends on the stride information. A segment of memory is inherently 1-dimensional, and there are many different schemes for arranging the items of an N-dimensional array in a 1-dimensional block. `ndarray` objects can accommodate any strided indexing scheme. In a strided scheme, the N-dimensional index <img src="_static\constant\n-index-formula.svg"/> corresponds to the offset (in bytes) : <img src="_static\constant\n-index-formula-offset.svg" />.
 
 <img src="_static\contiguous-block-of-memory.png"  />
 
@@ -60,11 +60,21 @@ Through the above diagram, we know how the data is stored in memory, and then we
 
 If you don't understand very well what `Tensor` is, you can go back to the chapter `Tensor` there is pretty much explanation if you skipped that chapter. Tensor is actually an NDArray that is with more than 2 dimensions.
 
-TensorFlow will decide whether to copy the data or use the same pointer. Normally speaking, it's more safe whenever you copy data for the following process, especially in interoperating between .NET runtime and C++ runtime that they all have their own garbage collection (GC) mechanism, application will crash if someone access a block of destroyed memory.
+TensorFlow will decide whether to copy the data or use the same pointer. Normally speaking, it's more safe whenever you copy data for the following process, especially in interoperating between .NET runtime and C++ runtime that they all have their own garbage collection (GC) mechanism, application will crash if someone access a block of destroyed memory. `TF_STRING` and `TF_RESOURCE` tensors have a different representation in `TF_Tensor` than they do in `tensorflow::Tensor`. Other types have the same representation, so copy only if it is safe to do so.
 
 <img src="_static\tensor-constant-ndarray.png" />
 
+Before tensorflow is creating the `TF_Tensor`, it checks the shape and data size. If the size doesn't match, it will return `nullptr` pointer.
 
+##### Get the data of Tensor
+
+For `eager` mode, it's pretty simple to view the actual value in a `tensor`.
+
+```csharp
+var data = tensor.numpy()
+```
+
+The `data` will be a `ndarray` variable.
 
 ##### Other functions to create a Constant
 

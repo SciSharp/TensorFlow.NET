@@ -292,7 +292,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
+        public static Tensor reshape<T>(Tensor tensor, T shape, string name = null)
         {
             if (tf.Context.executing_eagerly())
             {

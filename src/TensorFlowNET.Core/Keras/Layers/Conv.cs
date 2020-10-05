@@ -95,7 +95,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensor call(Tensor inputs, bool training = false)
+        protected override Tensors call(Tensors inputs, Tensor state = null, bool training = false)
         {
             var outputs = _convolution_op.__call__(inputs, kernel);
             if (use_bias)

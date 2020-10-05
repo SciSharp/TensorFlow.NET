@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2020 Haiping Chen. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Graphs;
+using Tensorflow.Operations;
+
 namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public Tensor reshape(Tensor tensor,
-            TensorShape shape,
-            string name = null) => gen_array_ops.reshape(tensor, shape, name);
-
-        public Tensor reshape(Tensor tensor,
-                Tensor shape,
-                string name = null) => gen_array_ops.reshape(tensor, shape, name);
+        public AutoGraph autograph = new AutoGraph();
     }
 }

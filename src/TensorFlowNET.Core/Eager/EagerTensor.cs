@@ -19,6 +19,12 @@ namespace Tensorflow.Eager
 
         public override int rank => c_api.TFE_TensorHandleNumDims(EagerTensorHandle, tf.Status.Handle);
 
+        public override void set_shape(TensorShape shape)
+        {
+            if (!shape.is_compatible_with(this.shape))
+                throw new ValueError($"Tensor's shape is not compatible.");
+        }
+
         public static int GetRank(IntPtr handle)
         {
             var tfe_tensor_handle = c_api.TFE_EagerTensorHandle(handle);

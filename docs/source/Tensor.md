@@ -6,13 +6,13 @@
 
 ##### What is Tensor?
 
-Tensor holds a multi-dimensional array of elements of a single data type which is very similar with numpy's ndarray. When the dimension is zero, it can be called a scalar. When the dimension is 2, it can be called a matrix. When the dimension is greater than 2, it is usually called a tensor. If you are very familiar with numpy, then understanding Tensor will be quite easy.
+Tensor holds a multi-dimensional array of elements of a single data type which is very similar with `NumPy`'s `ndarray`. When the dimension is zero, it can be called a scalar. When the dimension is 2, it can be called a matrix. When the dimension is greater than 2, it is usually called a tensor. If you are very familiar with `NumPy`, then understanding Tensor will be quite easy.
 
 <img src="_static\tensor-naming.png">
 
 ##### How to create a Tensor?
 
-There are many ways to initialize a Tensor object in TF.NET. It can be initialized from a scalar, string, matrix or tensor. But the best way to create a Tensor is using high level APIs like `tf.constant`, `tf.zeros` and `tf.ones`. We'll talk about constant more in next chapter.
+There are many ways to initialize a Tensor object in TF.NET. It can be initialized from a scalar, string, matrix or tensor. But the best way to create a Tensor is using high level APIs like `tf.constant`, `tf.zeros` and `tf.ones`. We'll talk about constant more detail in next chapter.
 
 ```csharp
 // Create a tensor holds a scalar value
@@ -45,3 +45,8 @@ var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape(2, 3);
 ![column-major order](_static/column-major-order.png)
 
 ![row-major order](_static/row-major-order.png)
+
+##### Index/ Slice of Tensor
+
+Tensor element can be accessed by `index` and `slice` related operations. Through some high level APIs, we can easily access specific dimension's data.
+

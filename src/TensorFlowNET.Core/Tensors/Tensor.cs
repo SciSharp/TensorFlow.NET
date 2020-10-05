@@ -144,12 +144,12 @@ namespace Tensorflow
         /// <summary>
         /// Keras History: (Layer, (node_index, tensor_index))
         /// </summary>
-        public List<Layer> KerasHistory = new List<Layer>();
+        public KerasHistory KerasHistory { get; set; }
 
         /// <summary>
         ///     Updates the shape of this tensor.
         /// </summary>
-        public void set_shape(TensorShape shape) 
+        public virtual void set_shape(TensorShape shape) 
         {
             this.shape = shape.rank >= 0 ? shape.dims : null;
         }

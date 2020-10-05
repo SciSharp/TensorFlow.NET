@@ -157,7 +157,7 @@ namespace Tensorflow
                     leading_size,
                     shape(tensor_tensor)[$"{axis + ndims_mask}:"]
                 }, 0);
-                tensor_tensor = reshape(tensor, shape1);
+                tensor_tensor = reshape(tensor_tensor, shape1);
                 var first_dim = shape_tensor.dims.Skip(axis).Take(ndims_mask).First();
                 var s1 = tensor_shape.as_shape(shape_tensor.dims.Take(axis).ToArray());
                 var s2 = s1.concatenate(new[] { first_dim }).concatenate(shape_tensor.dims.Skip(axis + ndims_mask).ToArray());
@@ -353,7 +353,7 @@ namespace Tensorflow
         public static Tensor ones_like<T>(T tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
             => ones_like_impl(tensor, dtype, name, optimize);
 
-        public static Tensor reshape<T1, T2>(T1 tensor, T2 shape, string name = null)
+        public static Tensor reshape<T2>(Tensor tensor, T2 shape, string name = null)
             => gen_array_ops.reshape(tensor, shape, null);
 
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)

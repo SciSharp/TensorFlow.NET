@@ -29,6 +29,10 @@ namespace Tensorflow
         /// A convenient alias for None, useful for indexing arrays.
         /// </summary>
         public Slice newaxis = Slice.NewAxis;
+        /// <summary>
+        /// A convenient alias for ...
+        /// </summary>
+        public Slice ellipsis = Slice.Ellipsis;
 
         /// <summary>
         /// BatchToSpace for N-D tensors of type T.

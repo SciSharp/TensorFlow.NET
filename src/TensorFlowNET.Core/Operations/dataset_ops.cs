@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Framework.Models;
+using Tensorflow.Functions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -419,7 +420,7 @@ namespace Tensorflow
         /// <param name="iterator"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor map_dataset(Tensor dataset, TF_DataType[] output_types, TensorShape[] output_shapes, 
+        public Tensor map_dataset(Tensor dataset, ConcreteFunction f, TF_DataType[] output_types, TensorShape[] output_shapes, 
             bool use_inter_op_parallelism = true, bool preserve_cardinality = false, string name = null)
         {
             if (tf.Context.executing_eagerly())
@@ -428,7 +429,7 @@ namespace Tensorflow
                     "MapDataset", name,
                     null,
                     dataset, new Tensor[0],
-                    "f", "MapDataset",
+                    "f", f,
                     "output_types", output_types, 
                     "output_shapes", output_shapes,
                     "use_inter_op_parallelism", use_inter_op_parallelism,

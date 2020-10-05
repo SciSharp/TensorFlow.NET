@@ -6,6 +6,7 @@ using static Tensorflow.Binding;
 using Tensorflow.Util;
 using System.Runtime.InteropServices;
 using Tensorflow.Contexts;
+using Tensorflow.Functions;
 
 namespace Tensorflow.Eager
 {
@@ -385,7 +386,10 @@ namespace Tensorflow.Eager
                     status.Check(true);
                     break;
                 case TF_AttrType.TF_ATTR_FUNC:
-                    c_api.TFE_OpSetAttrFunctionName(op, key, value.ToString(), value.ToString().Length);
+                    if (value is ConcreteFunction func)
+                        c_api.TFE_OpSetAttrFunctionName(op, key, func.Name, func.Name.Length);
+                    else
+                        throw new NotImplementedException("TF_AttrType.TF_ATTR_FUNC"); 
                     break;
                 default:
                     throw new NotImplementedException($"SetOpAttrScalar for {type}");
