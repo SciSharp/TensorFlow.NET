@@ -121,7 +121,7 @@ namespace Tensorflow
 
             foreach(var input in input_map)
             {
-                throw new NotImplementedException("_PopulateTFImportGraphDefOptions");
+                c_api.TF_ImportGraphDefOptionsAddInputMapping(options.Handle, input.Key, 0, input.Value._as_tf_output());
             }
 
             if (return_elements == null)
