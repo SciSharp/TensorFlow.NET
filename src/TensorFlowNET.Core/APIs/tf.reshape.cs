@@ -18,7 +18,7 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public Tensor reshape<T>(T tensor,
+        public Tensor reshape(Tensor tensor,
             TensorShape shape,
             string name = null) => gen_array_ops.reshape(tensor, shape, name);
 

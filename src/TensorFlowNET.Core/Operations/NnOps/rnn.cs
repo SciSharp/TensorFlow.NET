@@ -127,7 +127,7 @@ namespace Tensorflow.Operations
                         {
                             input_shape = flat_input.TensorShape.with_rank_at_least(2);
                             batch_size = tensor_shape.dimension_at_index(input_shape, 0);
-                            var input_size = input_shape[1];
+                            var input_size = input_shape[new Slice(1)];
                             fixed_batch_size.merge_with(batch_size);
                             foreach (var (i, size) in enumerate(input_size.dims))
                             {
@@ -364,7 +364,7 @@ namespace Tensorflow.Operations
                 if (sequence_length != null)
                     throw new NotImplementedException("sequence_length != null");
                 else
-                    outputs = cell.__call__(new[] { input_t_t }, state: state1);
+                    outputs = cell.__call__(input_t_t, state: state1);
 
                 var (output, new_state) = (outputs[0], outputs[1]);
                 // Keras cells always wrap state as list, even if it's a single tensor.

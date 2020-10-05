@@ -60,7 +60,7 @@ namespace Tensorflow.Keras.Engine
 
         public void add(Tensor tensor)
         {
-            var layer = tensor.KerasHistory[0];
+            Layer layer = tensor.KerasHistory;
             add(layer);
         }
 
@@ -129,7 +129,7 @@ namespace Tensorflow.Keras.Engine
 
         void _map_graph_network(Tensor inputs, Tensor outputs)
         {
-            layers.add(outputs.KerasHistory[0]);
+            layers.add(outputs.KerasHistory);
         }
     }
 }

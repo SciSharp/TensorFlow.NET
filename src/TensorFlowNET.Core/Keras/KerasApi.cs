@@ -31,6 +31,19 @@ namespace Tensorflow
             });
 
         /// <summary>
+        /// `Model` groups layers into an object with training and inference features.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        /// <returns></returns>
+        public Model Model(Tensor input, Tensor output)
+            => new Model(new ModelArgs
+            {
+                Inputs = new[] { input },
+                Outputs = new[] { output }
+            });
+
+        /// <summary>
         /// Instantiate a Keras tensor.
         /// </summary>
         /// <param name="shape"></param>

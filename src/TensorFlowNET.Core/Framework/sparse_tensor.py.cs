@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp;
+using System;
 using System.Linq;
 using static Tensorflow.Binding;
 
@@ -42,8 +43,8 @@ namespace Tensorflow.Framework
             var values_shape = values.TensorShape.with_rank(1);
             var dense_shape_shape = dense_shape.TensorShape.with_rank(1);
 
-            indices_shape[0].merge_with(values_shape.dims[0]);
-            indices_shape[1].merge_with(dense_shape_shape.dims[0]);
+            indices_shape["0"].merge_with(values_shape[0]);
+            indices_shape["1"].merge_with(dense_shape_shape[0]);
 
             _shape = new TensorShape(_dense_shape.Select(x => Convert.ToInt32(x)).ToArray());
         }

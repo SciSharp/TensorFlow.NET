@@ -35,8 +35,8 @@ namespace Tensorflow.Keras.Engine
 
         public int[] node_indices;
         public int[] tensor_indices;
-        public Tensor input_tensors;
-        public Tensor Outputs => args.Outputs;
+        public Tensors input_tensors;
+        public Tensors Outputs => args.Outputs;
         public TensorShape[] input_shapes;
         public TensorShape[] output_shapes;
         List<Layer> kerasInputs;
@@ -57,7 +57,8 @@ namespace Tensorflow.Keras.Engine
 
             // Set metadata on outputs.
             var node_index = layer.InboundNodes.Count - 1;
-            args.Outputs.KerasHistory.Add(layer);
+            foreach (var (i, tensor) in enumerate(Outputs))
+                tensor.KerasHistory = new KerasHistory(layer, node_index, i);
         }
     }
 }

@@ -132,6 +132,8 @@ namespace Tensorflow
             }
         }
 
+        public int this[int index] => dims[index];
+
         /// <summary>
         ///     Returns True iff `self` is fully defined in every dimension.
         /// </summary>
