@@ -121,7 +121,8 @@ namespace Tensorflow
 
             foreach(var input in input_map)
             {
-                c_api.TF_ImportGraphDefOptionsAddInputMapping(options.Handle, input.Key, 0, input.Value._as_tf_output());
+                var (src_name, src_index) = _ParseTensorName(input.Key);
+                c_api.TF_ImportGraphDefOptionsAddInputMapping(options.Handle, src_name, src_index, input.Value._as_tf_output());
             }
 
             if (return_elements == null)
