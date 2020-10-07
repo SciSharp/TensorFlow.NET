@@ -239,11 +239,8 @@ namespace Tensorflow
         /// A context manager that lifts ops out of control-flow scopes and function-building graphs.
         /// </summary>
         /// <returns></returns>
-        public static void init_scope()
+        public static NameScope init_scope()
         {
-            if (tf.Context.executing_eagerly())
-                return;
-
             // Retrieve the active name scope: entering an `init_scope` preserves
             // the name scope of the current context.
             var default_graph = get_default_graph();
@@ -257,25 +254,11 @@ namespace Tensorflow
 
             tf_with(ops.control_dependencies(null), delegate
             {
-                var outer_graph = get_default_graph();
+                // var outer_graph = get_default_graph();
                 // outer_device_stack = None
             });
-        }
 
-        public static ITensorFlowObject init_scope2()
-        {
-            // Retrieve the active name scope: entering an `init_scope` preserves
-            // the name scope of the current context.
-            var default_graph = get_default_graph();
-            var scope = default_graph.get_name_scope();
-            if (!String.IsNullOrEmpty(scope) && !scope.EndsWith("/"))
-                // Names that end with trailing slashes are treated by `name_scope` as
-                // absolute.
-                scope += "/";
-            // inner_device_stack = default_graph._device_function_stack
-            // var outer_context = default_graph.as_default;
-
-            return ops.control_dependencies(null);
+            return ops.name_scope(scope);
         }
 
         private static int uid_number = -1;
@@ -460,6 +443,8 @@ namespace Tensorflow
             {
                 case NDArray nd:
                     return constant_op.constant(nd, dtype: dtype, name: name);
+                case EagerTensor tensor:
+                    return tf.executing_eagerly() ? tensor : tensor.AsPlaceholder(name: name);
                 case Tensor tensor:
                     return tensor;
                 case Tensor[] tensors:

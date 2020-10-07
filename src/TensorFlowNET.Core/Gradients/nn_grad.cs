@@ -138,30 +138,16 @@ namespace Tensorflow.Gradients
             
             return new Tensor[]
             {
-                gen_nn_ops.conv2d_backprop_input(new Conv2dParams
-                {
-                    InputSizes = shape[0],
-                    Filter = op.inputs[1],
-                    OutBackProp = grads[0],
-                    Dilations = dilations,
-                    Strides = strides,
-                    Padding = padding.ToString(),
-                    ExplicitPaddings = explicit_paddings,
-                    UseCudnnOnGpu = (bool)use_cudnn_on_gpu,
-                    DataFormat = data_format.ToString(),
-                }),
-                gen_nn_ops.conv2d_backprop_filter(new Conv2dParams
-                {
-                    Input = op.inputs[0],
-                    FilterSizes = shape[1],
-                    OutBackProp = grads[0],
-                    Dilations = dilations,
-                    Strides = strides,
-                    Padding = padding.ToString(),
-                    ExplicitPaddings = explicit_paddings,
-                    UseCudnnOnGpu = (bool)use_cudnn_on_gpu,
-                    DataFormat = data_format.ToString()
-                })
+                gen_nn_ops.conv2d_backprop_input(shape[0], op.inputs[1], grads[0],
+                    strides, padding, use_cudnn_on_gpu, explicit_paddings, 
+                    dilations: dilations,
+                    data_format: data_format),
+                gen_nn_ops.conv2d_backprop_filter(op.inputs[0], shape[1], grads[0],
+                    strides, padding,
+                    dilations: dilations,
+                    explicit_paddings: explicit_paddings,
+                    use_cudnn_on_gpu: use_cudnn_on_gpu,
+                    data_format: data_format)
             };
         }
 

@@ -23,15 +23,14 @@ namespace Tensorflow.Keras.Engine
         string loss;
         IOptimizer optimizer;
         IVariableV1 _steps_per_execution;
+        protected bool _is_graph_network;
+        protected Tensors inputs;
+        protected Tensors outputs;
 
         public Model(ModelArgs args) 
             : base(args)
         {
-            // Build _output_layers
-            /*foreach(var x in args.Outputs)
-            {
-                var layer = x.KerasHistory;
-            }*/
+            
         }
 
         public void compile(string optimizerName, string lossName)

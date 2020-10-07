@@ -57,6 +57,26 @@ namespace Tensorflow.Eager
             return this;
         }
 
+        /// <summary>
+        /// _create_substitute_placeholder
+        /// </summary>
+        /// <returns></returns>
+        public Tensor AsPlaceholder(string name = null)
+        {
+            Tensor placeholder = null;
+            tf_with(ops.control_dependencies(null), delegate
+            {
+                placeholder = tf.placeholder(dtype, shape: shape, name: name ?? this.name);
+            });
+            // custom_gradient.copy_handle_data(value, placeholder)
+            return placeholder;
+        }
+
+        void copy_handle_data()
+        {
+
+        }
+
         public override IntPtr ToPointer()
             => EagerTensorHandle?.DangerousGetHandle() ?? IntPtr.Zero;
 

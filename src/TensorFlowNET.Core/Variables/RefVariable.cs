@@ -152,7 +152,7 @@ namespace Tensorflow
             if (trainable && !collections.Contains(tf.GraphKeys.TRAINABLE_VARIABLES))
                 collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
 
-            tf_with(ops.init_scope2(), delegate
+            tf_with(ops.init_scope(), init_scope =>
             {
                 var values = init_from_fn ? new object[0] : new object[] { initial_value };
                 tf_with(ops.name_scope(name, "Variable", values), scope =>
@@ -222,7 +222,7 @@ namespace Tensorflow
 
         public Tensor value() => _snapshot;
 
-        public Tensor AsTensor() => _snapshot;
+        public Tensor AsTensor(bool as_ref = true) => _snapshot;
 
         public Tensor _as_graph_element() => _variable;
 

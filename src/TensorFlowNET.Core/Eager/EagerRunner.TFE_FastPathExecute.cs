@@ -227,6 +227,11 @@ namespace Tensorflow.Eager
                     input_handle = input.EagerTensorHandle;
                     flattened_inputs.Add(input);
                     break;
+                case ResourceVariable variable:
+                    var var_tensor = variable.AsTensor();
+                    input_handle = var_tensor.EagerTensorHandle;
+                    flattened_inputs.Add(var_tensor);
+                    break;
                 default:
                     var tensor = tf.convert_to_tensor(inputs);
                     input_handle = tensor.EagerTensorHandle;

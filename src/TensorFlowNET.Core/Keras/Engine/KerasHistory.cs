@@ -20,10 +20,14 @@ namespace Tensorflow.Keras.Engine
             this.tensor_index = tensor_index;
         }
 
+        public void Deconstruct(out Layer layer, out int node_index, out int tensor_index)
+        {
+            layer = this.layer;
+            node_index = this.node_index;
+            tensor_index = this.tensor_index;
+        }
+
         public static implicit operator Layer(KerasHistory history)
             => history.layer;
-
-        public static implicit operator (Layer, int, int)(KerasHistory history)
-            => (history.layer, history.node_index, history.tensor_index);
     }
 }

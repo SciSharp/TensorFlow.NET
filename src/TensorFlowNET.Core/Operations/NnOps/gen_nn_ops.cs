@@ -78,35 +78,45 @@ namespace Tensorflow.Operations
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static Tensor conv2d_backprop_filter(Conv2dParams parameters)
+        public static Tensor conv2d_backprop_filter(Tensor input, Tensor filter_sizes, Tensor out_backprop,
+            int[] strides, string padding, bool use_cudnn_on_gpu = true,
+            int[] explicit_paddings = null,
+            string data_format = "NHWC",
+            int[] dilations = null,
+            string name = null)
         {
+            if (explicit_paddings == null)
+                explicit_paddings = new int[0];
+            if (dilations == null)
+                dilations = new int[] { 1, 1, 1, 1 };
+
             if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Conv2DBackpropFilter", parameters.Name,
+                    "Conv2DBackpropFilter", name,
                     null,
-                    parameters.Input, parameters.FilterSizes, parameters.OutBackProp,
-                    "strides", parameters.Strides,
-                    "use_cudnn_on_gpu", parameters.UseCudnnOnGpu,
-                    "padding", parameters.Padding,
-                    "explicit_paddings", parameters.ExplicitPaddings,
-                    "data_format", parameters.DataFormat,
-                    "dilations", parameters.Dilations);
+                    input, filter_sizes, out_backprop,
+                    "strides", strides,
+                    "use_cudnn_on_gpu", use_cudnn_on_gpu,
+                    "padding", padding,
+                    "explicit_paddings", explicit_paddings,
+                    "data_format", data_format,
+                    "dilations", dilations);
 
                 return results[0];
             }
 
-            var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropFilter", name: parameters.Name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropFilter", name: name, args: new
             {
-                input = parameters.Input,
-                filter_sizes = parameters.FilterSizes,
-                out_backprop = parameters.OutBackProp,
-                strides = parameters.Strides,
-                padding = parameters.Padding,
-                use_cudnn_on_gpu = parameters.UseCudnnOnGpu,
-                explicit_paddings = parameters.ExplicitPaddings,
-                data_format = parameters.DataFormat,
-                dilations = parameters.Dilations
+                input,
+                filter_sizes,
+                out_backprop,
+                strides,
+                padding,
+                use_cudnn_on_gpu,
+                explicit_paddings,
+                data_format,
+                dilations
             });
 
             return _op.outputs[0];
@@ -117,35 +127,45 @@ namespace Tensorflow.Operations
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static Tensor conv2d_backprop_input(Conv2dParams parameters)
+        public static Tensor conv2d_backprop_input(Tensor input_sizes, Tensor filter, Tensor out_backprop, 
+            int[] strides, string padding, bool use_cudnn_on_gpu = true, 
+            int[] explicit_paddings = null, 
+            string data_format= "NHWC", 
+            int[] dilations = null,
+            string name = null)
         {
+            if (explicit_paddings == null)
+                explicit_paddings = new int[0];
+            if (dilations == null)
+                dilations = new int[] { 1, 1, 1, 1 };
+
             if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Conv2DBackpropInput", parameters.Name,
+                    "Conv2DBackpropInput", name,
                     null,
-                    parameters.InputSizes, parameters.Filter, parameters.OutBackProp,
-                    "strides", parameters.Strides, 
-                    "use_cudnn_on_gpu", parameters.UseCudnnOnGpu, 
-                    "padding", parameters.Padding,
-                    "explicit_paddings", parameters.ExplicitPaddings, 
-                    "data_format", parameters.DataFormat,
-                    "dilations", parameters.Dilations);
+                    input_sizes, filter, out_backprop,
+                    "strides", strides, 
+                    "use_cudnn_on_gpu", use_cudnn_on_gpu, 
+                    "padding", padding,
+                    "explicit_paddings", explicit_paddings, 
+                    "data_format", data_format,
+                    "dilations", dilations);
 
                 return results[0];
             }
 
-            var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropInput", name: parameters.Name, args: new
+            var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropInput", name: name, args: new
             {
-                input_sizes = parameters.InputSizes,
-                filter = parameters.Filter,
-                out_backprop = parameters.OutBackProp,
-                strides = parameters.Strides,
-                padding = parameters.Padding,
-                use_cudnn_on_gpu = parameters.UseCudnnOnGpu,
-                explicit_paddings = parameters.ExplicitPaddings,
-                data_format = parameters.DataFormat,
-                dilations = parameters.Dilations
+                input_sizes,
+                filter,
+                out_backprop,
+                strides,
+                padding,
+                use_cudnn_on_gpu,
+                explicit_paddings,
+                data_format,
+                dilations
             });
 
             return _op.outputs[0];

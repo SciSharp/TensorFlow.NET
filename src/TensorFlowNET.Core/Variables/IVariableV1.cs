@@ -49,6 +49,6 @@ namespace Tensorflow
         public TensorShape shape { get; }
         Tensor assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true);
         Tensor assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true);
-        Tensor AsTensor();
+        Tensor AsTensor(bool as_ref = true);
     }
 }

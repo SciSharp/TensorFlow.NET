@@ -64,7 +64,7 @@ namespace Tensorflow
         /// The string name of this tensor.<br/>
         /// Tensor.name is meaningless when eager execution is enabled.
         /// </summary>
-        public string name => $"{(op == null ? "<unnamed>" : $"{op.name}:{_value_index}")}";
+        public virtual string name => $"{(op == null ? "<unnamed>" : $"{op.name}:{_value_index}")}";
 
         /// <summary>
         ///     The index of this tensor in the outputs of its Operation.

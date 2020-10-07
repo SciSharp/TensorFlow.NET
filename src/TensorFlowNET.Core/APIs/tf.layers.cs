@@ -92,7 +92,7 @@ namespace Tensorflow
             /// <param name="renorm"></param>
             /// <param name="renorm_momentum"></param>
             /// <returns></returns>
-            public Tensor batch_normalization(Tensor inputs,
+            public Tensors batch_normalization(Tensor inputs,
                 int axis = -1,
                 float momentum = 0.99f,
                 float epsilon = 0.001f,
@@ -108,22 +108,24 @@ namespace Tensorflow
                 bool renorm = false,
                 float renorm_momentum = 0.99f)
             {
-                var layer = new BatchNormalization(
-                    axis: axis,
-                    momentum: momentum,
-                    epsilon: epsilon,
-                    center: center,
-                    scale: scale,
-                    beta_initializer: beta_initializer,
-                    gamma_initializer: gamma_initializer,
-                    moving_mean_initializer: moving_mean_initializer,
-                    moving_variance_initializer: moving_variance_initializer,
-                    renorm: renorm,
-                    renorm_momentum: renorm_momentum,
-                    trainable: trainable,
-                    name: name);
+                var layer = new BatchNormalization(new BatchNormalizationArgs
+                {
+                    Axis = axis,
+                    Momentum = momentum,
+                    Epsilon = epsilon,
+                    Center = center,
+                    Scale = scale,
+                    BetaInitializer = beta_initializer,
+                    GammaInitializer = gamma_initializer,
+                    MovingMeanInitializer = moving_mean_initializer,
+                    MovingVarianceInitializer = moving_variance_initializer,
+                    Renorm = renorm,
+                    RenormMomentum = renorm_momentum,
+                    Trainable = trainable,
+                    Name = name
+                });
 
-                return layer.apply(inputs, training: training).Item1;
+                return layer.Apply(inputs);
             }
 
             /// <summary>

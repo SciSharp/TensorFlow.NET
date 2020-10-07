@@ -72,10 +72,10 @@ namespace Tensorflow.Keras.Engine
         protected List<IVariableV1> nonTrainableWeights;
         public List<IVariableV1> non_trainable_variables => nonTrainableWeights;
 
-        string name;
+        protected string name;
+        protected string base_name;
         public string Name => name;
-
-        protected string baseName;
+        
         protected bool computePreviousMask;
         protected List<Operation> updates;
         public TensorShape BatchInputShape => args.BatchInputShape;
@@ -98,9 +98,9 @@ namespace Tensorflow.Keras.Engine
             // Indicates whether `build` needs to be called upon layer call, to create
             // the layer's weights.
             built = false;
-            this.SupportsMasking = false;
+            SupportsMasking = false;
 
-            _init_set_name(name);
+            _init_set_name(args.Name);
             trainableWeights = new List<IVariableV1>();
             nonTrainableWeights = new List<IVariableV1>();
             computePreviousMask = false;
@@ -124,23 +124,25 @@ namespace Tensorflow.Keras.Engine
         /// <returns></returns>
         public Tensors Apply(Tensors inputs, Tensor state = null, bool is_training = false)
         {
-            Tensors outputs = null;
-
             callContext = callContext ?? new ThreadLocal<CallContext>()
             {
                 Value = new CallContext()
             };
+
+            if (_in_functional_construction_mode(inputs))
+                return _functional_construction_call(inputs);
+
+            Tensors outputs = null;
 
             var eager = tf.executing_eagerly();
             using var ctxManager = CallContext.enter();
 
             string nameScope = "";
             if (eager)
-                nameScope = name;
+                nameScope = Name;
             else
                 nameScope = _name_scope();
 
-            // using var graph = tf.keras.backend.get_graph().as_default();
             if (!inputs.IsEagerTensor)
                 tf.Context.graph_mode();
 
@@ -150,6 +152,46 @@ namespace Tensorflow.Keras.Engine
                     MaybeBuild(inputs);
 
                 outputs = call(inputs, state: state, is_training: is_training);
+
+                outputs = _set_connectivity_metadata_(inputs, outputs);
+                _handle_activity_regularization(inputs, outputs);
+                _set_mask_metadata(inputs, outputs, null);
+            });
+
+            if (!inputs.IsEagerTensor)
+                tf.Context.restore_mode();
+
+            return outputs;
+        }
+
+        bool _in_functional_construction_mode(Tensors inputs)
+        {
+            return inputs.Count(x => !x.IsEagerTensor) == inputs.Count();
+        }
+
+        Tensors _functional_construction_call(Tensors inputs)
+        {
+            bool mask_arg_passed_by_framework = false;
+            bool training_arg_passed_by_framework = false;
+            Tensor training_value = null;
+            if(training_value == null)
+            {
+                training_arg_passed_by_framework = true;
+            }
+
+            Tensors outputs = null;
+            using var ctxManager = CallContext.enter();
+
+            // using var graph = tf.keras.backend.get_graph().as_default();
+
+            if (!inputs.IsEagerTensor)
+                tf.Context.graph_mode();
+
+            tf_with(ops.name_scope(_name_scope()), scope =>
+            {
+                MaybeBuild(inputs);
+
+                outputs = call(inputs);
 
                 outputs = _set_connectivity_metadata_(inputs, outputs);
                 _handle_activity_regularization(inputs, outputs);
@@ -219,8 +261,12 @@ namespace Tensorflow.Keras.Engine
             if (DType == TF_DataType.DtInvalid)
                 args.DType = inputs.dtype;
 
-            var input_shapes = inputs.shape;
-            build(input_shapes);
+            tf.init_scope();
+
+            //tf.Context.eager_mode();
+            build(inputs.shape);
+            //tf.Context.restore_mode();
+            
             built = true;
         }
 
@@ -229,10 +275,16 @@ namespace Tensorflow.Keras.Engine
             built = true;
         }
 
+        protected virtual void add_loss(Func<Tensor> losses)
+        {
+            
+        }
+
         protected virtual IVariableV1 add_weight(string name,
             TensorShape shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
+            IRegularizer regularizer = null,
             bool? trainable = null,
             Func<VariableArgs, IVariableV1> getter = null)
         {
@@ -251,7 +303,7 @@ namespace Tensorflow.Keras.Engine
                 else if (dtype.is_integer())
                     initializer = tf.zeros_initializer;
                 else
-                    throw new ValueError($"An initializer for variable {name} of type {dtype.as_base_dtype()} is required for layer {this.Name}");
+                    throw new ValueError($"An initializer for variable {name} of type {dtype.as_base_dtype()} is required for layer {name}");
             }
 
             var args = new VariableArgs
@@ -266,6 +318,12 @@ namespace Tensorflow.Keras.Engine
             };
             var variable = _add_variable_with_custom_getter(args);
 
+            if(regularizer != null)
+            {
+                var name_in_scope = variable.Name.Split(':')[0];
+                _handle_weight_regularization(name_in_scope, variable, regularizer);
+            }
+
             //backend.track_variable(variable);
             if (trainable == true)
                 trainableWeights.Add(variable);
@@ -273,6 +331,20 @@ namespace Tensorflow.Keras.Engine
                 nonTrainableWeights.Add(variable);
 
             return variable;
+        }
+
+        /// <summary>
+        /// Create lambdas which compute regularization losses.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="variable"></param>
+        /// <param name="regularizer"></param>
+        void _handle_weight_regularization(string name, IVariableV1 variable, IRegularizer regularizer)
+        {
+            add_loss(() => regularizer.Apply(new RegularizerArgs
+            {
+                
+            }));
         }
 
         protected virtual void add_update(Tensor[] updates, bool inputs = false)
@@ -284,17 +356,13 @@ namespace Tensorflow.Keras.Engine
         // Determine layer name (non-unique).
         protected virtual void _init_set_name(string name, bool zero_based = true)
         {
-            var base_name = name;
+            base_name = name;
             this.name = name;
             if (name == null)
-                (this.name, baseName) = _make_unique_name();
-        }
-
-        protected virtual (string, string) _make_unique_name()
-        {
-            string base_name = generic_utils.to_snake_case(this.GetType().Name);
-            string name = base_layer_utils.unique_layer_name(base_name);
-            return (name, base_name);
+            {
+                base_name = generic_utils.to_snake_case(this.GetType().Name);
+                this.name = base_layer_utils.unique_layer_name(base_name, zero_based: zero_based);
+            }
         }
     }
 }

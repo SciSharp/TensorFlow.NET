@@ -8,7 +8,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public class BaseResourceVariable : DisposableObject, IVariableV1
+    public class BaseResourceVariable : DisposableObject
     {
         protected string _name;
         public virtual string Name => _handle_name;
@@ -92,7 +92,8 @@ namespace Tensorflow
             return assign_op;
         }
 
-        public Tensor value() => tf.executing_eagerly() ? _read_variable_op() : GraphElement;
+        public Tensor value() 
+            => GraphElement ?? _read_variable_op();
 
         protected Tensor _read_variable_op()
         {
@@ -159,7 +160,15 @@ namespace Tensorflow
         {
         }
 
-        public Tensor AsTensor() 
-            => tf.executing_eagerly() ? read_value() : GraphElement;
+        public Tensor AsTensor(bool as_ref = true)
+        {
+            if (!as_ref && GraphElement != null)
+                return GraphElement;
+
+            if (as_ref)
+                return tf.executing_eagerly() ? read_value() : GraphElement;
+            else
+                return _read_variable_op();
+        }
     }
 }

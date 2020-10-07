@@ -8,6 +8,11 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
     [TestClass]
     public class BitwiseApiTest : TFNetApiTest
     {
+        [TestInitialize]
+        public void Init()
+        {
+            tf.enable_eager_execution();
+        }
 
         [TestMethod]
         public void BitwiseAnd()

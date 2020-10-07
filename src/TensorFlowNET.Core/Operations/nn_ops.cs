@@ -16,6 +16,7 @@
 
 using System;
 using System.Linq;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
@@ -23,19 +24,18 @@ namespace Tensorflow
 {
     public class nn_ops
     {
-        public static Convolution Convolution(TensorShape input_shape,
-            TensorShape filter_shape,
-            string padding,
+        internal static ConvolutionInternal convolution_internal(string padding,
             int[] strides,
             int[] dilation_rate,
             string name = null,
-            string data_format = null) => new Convolution(input_shape,
-                filter_shape,
-                padding,
-                strides,
-                dilation_rate,
-                name: name,
-                data_format: data_format);
+            string data_format = null) => new ConvolutionInternal(new ConvolutionalArgs
+            {
+                Padding = padding,
+                Strides = strides,
+                DilationRate = dilation_rate,
+                DataFormat = data_format,
+                Name = name
+            });
 
         /// <summary>
         /// Adds `bias` to `value`.

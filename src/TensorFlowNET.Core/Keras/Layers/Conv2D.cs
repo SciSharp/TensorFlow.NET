@@ -19,12 +19,11 @@ using Tensorflow.Operations.Activation;
 
 namespace Tensorflow.Keras.Layers
 {
-    public class Conv2D : Conv
+    public class Conv2D : Convolutional
     {
-        public Conv2D(Conv2DArgs args) 
-            : base(args)
+        public Conv2D(Conv2DArgs args) : base(args)
         {
-
+            
         }
     }
 }

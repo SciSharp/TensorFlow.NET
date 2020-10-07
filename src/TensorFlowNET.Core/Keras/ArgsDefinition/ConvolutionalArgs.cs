@@ -5,10 +5,11 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class ConvArgs : LayerArgs
+    public class ConvolutionalArgs : LayerArgs
     {
         public int Rank { get; set; } = 2;
         public int Filters { get; set; }
+        public int NumSpatialDims { get; set; } = Unknown;
         public TensorShape KernelSize { get; set; } = 5;
 
         /// <summary>
@@ -24,8 +25,8 @@ namespace Tensorflow.Keras.ArgsDefinition
         public bool UseBias { get; set; }
         public IInitializer KernelInitializer { get; set; } = tf.glorot_uniform_initializer;
         public IInitializer BiasInitializer { get; set; } = tf.zeros_initializer;
-        public IInitializer KernelRegularizer { get; set; }
-        public IInitializer BiasRegularizer { get; set; }
+        public IRegularizer KernelRegularizer { get; set; }
+        public IRegularizer BiasRegularizer { get; set; }
         public Action KernelConstraint { get; set; }
         public Action BiasConstraint { get; set; }
     }

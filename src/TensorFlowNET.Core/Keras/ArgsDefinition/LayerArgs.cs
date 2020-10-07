@@ -46,7 +46,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// <summary>
         /// Regularizer function applied to the output of the layer(its "activation").
         /// </summary>
-        public IInitializer ActivityRegularizer { get; set; }
+        public IRegularizer ActivityRegularizer { get; set; }
 
         public bool Autocast { get; set; }
     }

@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -27,6 +28,7 @@ namespace Tensorflow.Keras.Engine
         public int? min_ndim;
         Dictionary<int, int> axes;
         TensorShape shape;
+        public int[] AllAxisDim;
 
         public InputSpec(TF_DataType dtype = TF_DataType.DtInvalid,
             int? ndim = null,
@@ -42,6 +44,12 @@ namespace Tensorflow.Keras.Engine
             this.shape = shape;
             if (ndim == null && shape != null)
                 this.ndim = shape.ndim;
+
+            if(axes != null)
+                AllAxisDim = axes.Select(x => x.Value).ToArray();
         }
+
+        public override string ToString()
+            => $"min_ndim={min_ndim}, , axes={axes.Count}";
     }
 }

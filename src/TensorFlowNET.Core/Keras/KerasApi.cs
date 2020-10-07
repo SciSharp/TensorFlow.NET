@@ -16,6 +16,7 @@ namespace Tensorflow
     {
         public KerasDataset datasets { get; } = new KerasDataset();
         public Initializers initializers { get; } = new Initializers();
+        public Regularizers regularizers { get; } = new Regularizers();
         public LayersApi layers { get; } = new LayersApi();
         public LossesApi losses { get; } = new LossesApi();
         public Activations activations { get; } = new Activations();
@@ -36,12 +37,8 @@ namespace Tensorflow
         /// <param name="input"></param>
         /// <param name="output"></param>
         /// <returns></returns>
-        public Model Model(Tensor input, Tensor output)
-            => new Model(new ModelArgs
-            {
-                Inputs = new[] { input },
-                Outputs = new[] { output }
-            });
+        public Functional Model(Tensors inputs, Tensors outputs)
+            => new Functional(inputs, outputs);
 
         /// <summary>
         /// Instantiate a Keras tensor.

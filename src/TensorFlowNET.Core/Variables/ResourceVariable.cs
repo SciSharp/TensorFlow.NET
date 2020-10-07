@@ -26,7 +26,7 @@ namespace Tensorflow
     /// <summary>
     /// Variable based on resource handles.
     /// </summary>
-    public partial class ResourceVariable : BaseResourceVariable
+    public partial class ResourceVariable : BaseResourceVariable, IVariableV1
     {
         Tensor _cached_value;
         public string Device => handle.Device;
@@ -90,7 +90,7 @@ namespace Tensorflow
                 collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
             
             _in_graph_mode = !tf.Context.executing_eagerly();
-            tf_with(ops.init_scope2(), delegate
+            tf_with(ops.init_scope(), init_scope => 
             {
                 var values = init_from_fn ? new object[0] : new object[] { initial_value };
                 tf_with(ops.name_scope(name, "Variable", values), scope =>

@@ -33,11 +33,6 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor random_standard_normal(Tensor shape, TF_DataType dtype = TF_DataType.DtInvalid, int? seed = null, int? seed2 = null, string name = null)
         {
-            if (!seed.HasValue)
-                seed = 0;
-            if (!seed2.HasValue)
-                seed2 = 0;
-
             if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
@@ -50,6 +45,11 @@ namespace Tensorflow
 
                 return results[0];
             }
+
+            if (!seed.HasValue)
+                seed = 0;
+            if (!seed2.HasValue)
+                seed2 = 0;
 
             var _op = tf.OpDefLib._apply_op_helper("RandomStandardNormal", 
                 name: name,

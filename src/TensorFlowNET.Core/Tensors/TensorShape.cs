@@ -132,7 +132,7 @@ namespace Tensorflow
             }
         }
 
-        public int this[int index] => dims[index];
+        public int this[int index] => index < 0 ? dims[ndim + index] : dims[index];
 
         /// <summary>
         ///     Returns True iff `self` is fully defined in every dimension.

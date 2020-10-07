@@ -90,6 +90,7 @@ namespace Tensorflow
                 return (scope_name, old_name);
             }
 
+            [DebuggerHidden]
             public void Dispose()
             {
                 if (tf.Context.executing_eagerly())

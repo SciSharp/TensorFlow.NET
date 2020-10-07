@@ -41,8 +41,8 @@ namespace Tensorflow.Operations.Initializers
         public Tensor Apply(InitializerArgs args)
         {
             if (args.DType == TF_DataType.DtInvalid)
-                args.DType = this.dtype;
-            return random_ops.random_normal(args.Shape, mean, stddev, dtype, seed: seed);
+                args.DType = dtype;
+            return random_ops.random_normal(args.Shape, mean, stddev, args.DType, seed: seed);
         }
     }
 }

@@ -47,10 +47,10 @@ namespace Tensorflow.Keras.Layers
             }
 
             // moved to base class
-            if (string.IsNullOrEmpty(Name))
+            if (string.IsNullOrEmpty(args.Name))
             {
                 var prefix = "input";
-                args.Name = prefix + '_' + tf.keras.backend.get_uid(prefix);
+                name = prefix + '_' + tf.keras.backend.get_uid(prefix);
             }
             
             if(args.DType == TF_DataType.DtInvalid)
@@ -91,7 +91,6 @@ namespace Tensorflow.Keras.Layers
             // input_tensor._keras_mask = None
             new Node(this, new NodeArgs
             {
-                InputTensors = args.InputTensor,
                 Outputs = args.InputTensor
             });
 

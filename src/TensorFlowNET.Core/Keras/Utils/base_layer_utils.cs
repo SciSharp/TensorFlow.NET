@@ -55,8 +55,8 @@ namespace Tensorflow.Keras.Utils
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static string unique_layer_name(string name, Dictionary<(string, string), int> name_uid_map = null,
-            string[] avoid_names = null, string @namespace = "", bool zero_based = false)
+        public static string unique_layer_name(string name, Dictionary<string, int> name_uid_map = null,
+            string[] avoid_names = null, bool zero_based = false)
         {
             if (name_uid_map == null)
                 name_uid_map = get_default_graph_uid_map();
@@ -66,41 +66,40 @@ namespace Tensorflow.Keras.Utils
             string proposed_name = null;
             while (proposed_name == null || avoid_names.Contains(proposed_name))
             {
-                var name_key = (@namespace, name);
-                if (!name_uid_map.ContainsKey(name_key))
-                    name_uid_map[name_key] = 0;
+                if (!name_uid_map.ContainsKey(name))
+                    name_uid_map[name] = 0;
 
                 if (zero_based)
                 {
-                    int number = name_uid_map[name_key];
+                    int number = name_uid_map[name];
                     if (number > 0)
                         proposed_name = $"{name}_{number}";
                     else
                         proposed_name = name;
 
-                    name_uid_map[name_key] += 1;
+                    name_uid_map[name] += 1;
                 }
                 else
                 {
-                    name_uid_map[name_key] += 1;
-                    proposed_name = $"{name}_{name_uid_map[name_key]}";
+                    name_uid_map[name] += 1;
+                    proposed_name = $"{name}_{name_uid_map[name]}";
                 }
             }
 
             return proposed_name;
         }
 
-        public static Dictionary<(string, string), int> get_default_graph_uid_map()
+        public static Dictionary<string, int> get_default_graph_uid_map()
         {
             var graph = ops.get_default_graph();
-            Dictionary<(string, string), int> name_uid_map = null;
+            Dictionary<string, int> name_uid_map = null;
             if (tf.keras.backend.PER_GRAPH_LAYER_NAME_UIDS.ContainsKey(graph))
             {
                 name_uid_map = tf.keras.backend.PER_GRAPH_LAYER_NAME_UIDS[graph];
             }
             else
             {
-                name_uid_map = new Dictionary<(string, string), int>();
+                name_uid_map = new Dictionary<string, int>();
                 tf.keras.backend.PER_GRAPH_LAYER_NAME_UIDS[graph] = name_uid_map;
             }
 

@@ -20,13 +20,13 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Operations;
-using Tensorflow.Operations.Activation;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
-    public class Conv : Layer
+    public class Convolutional : Layer
     {
-        ConvArgs args;
+        ConvolutionalArgs args;
         protected int rank => args.Rank;
         protected int filters => args.Filters;
         protected TensorShape kernel_size => args.KernelSize;
@@ -37,13 +37,14 @@ namespace Tensorflow.Keras.Layers
         protected Activation activation => args.Activation;
         protected bool use_bias => args.UseBias;
         protected IInitializer kernel_initializer => args.KernelInitializer;
+        protected IRegularizer kernel_regularizer => args.KernelRegularizer;
         protected IInitializer bias_initializer => args.BiasInitializer;
         protected IVariableV1 kernel;
         protected IVariableV1 bias;
-        protected Convolution _convolution_op;
-        string _tf_data_format;
+        ConvolutionInternal _convolution_op;
+        protected string _tf_data_format;
 
-        public Conv(ConvArgs args) : base(args)
+        public Convolutional(ConvolutionalArgs args) : base(args)
         {
             this.args = args;
             args.KernelSize = conv_utils.normalize_tuple(args.KernelSize.dims, args.Rank, "kernel_size");
@@ -65,6 +66,7 @@ namespace Tensorflow.Keras.Layers
             kernel = add_weight(name: "kernel",
                 shape: kernel_shape,
                 initializer: kernel_initializer,
+                regularizer: kernel_regularizer,
                 trainable: true,
                 dtype: DType);
             if (use_bias)
@@ -76,7 +78,7 @@ namespace Tensorflow.Keras.Layers
 
             var axes = new Dictionary<int, int>();
             axes.Add(-1, input_channel);
-            inputSpec = new InputSpec(ndim: rank + 2, axes: axes);
+            inputSpec = new InputSpec(min_ndim: rank + 2, axes: axes);
 
             string tf_padding;
             if (padding == "causal")
@@ -84,20 +86,21 @@ namespace Tensorflow.Keras.Layers
             else
                 tf_padding = padding.ToUpper();
 
-            
-            _convolution_op = nn_ops.Convolution(input_shape,
-                kernel.shape,
-                tf_padding,
+            string tf_op_name = GetType().Name;
+
+
+            _convolution_op = nn_ops.convolution_internal(tf_padding,
                 strides,
                 dilation_rate,
-                data_format: _tf_data_format);
+                data_format: _tf_data_format,
+                name: tf_op_name);
 
             built = true;
         }
 
         protected override Tensors call(Tensors inputs, Tensor state = null, bool training = false)
         {
-            var outputs = _convolution_op.__call__(inputs, kernel);
+            var outputs = _convolution_op.Apply(inputs, kernel);
             if (use_bias)
             {
                 if (data_format == "channels_first")

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class Conv2DArgs : ConvArgs
+    public class Conv2DArgs : ConvolutionalArgs
     {
         
     }

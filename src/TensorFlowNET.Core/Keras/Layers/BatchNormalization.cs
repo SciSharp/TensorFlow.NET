@@ -15,73 +15,41 @@
 ******************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
-    public class BatchNormalization : Tensorflow.Layers.Layer
+    public class BatchNormalization : Layer
     {
-#pragma warning disable CS0414 // The field 'BatchNormalization._USE_V2_BEHAVIOR' is assigned but its value is never used
-        private bool _USE_V2_BEHAVIOR = true;
-#pragma warning restore CS0414 // The field 'BatchNormalization._USE_V2_BEHAVIOR' is assigned but its value is never used
-        private float momentum;
-        private float epsilon;
-        private bool center;
-        private bool scale;
-        private bool renorm;
-        private bool fused;
-#pragma warning disable CS0414 // The field 'BatchNormalization._bessels_correction_test_only' is assigned but its value is never used
-        private bool _bessels_correction_test_only;
-#pragma warning restore CS0414 // The field 'BatchNormalization._bessels_correction_test_only' is assigned but its value is never used
-        private int[] axis;
-        private string _data_format;
-        private IInitializer beta_initializer;
-        private IInitializer gamma_initializer;
-        private IInitializer moving_mean_initializer;
-        private IInitializer moving_variance_initializer;
-        private IVariableV1 gamma;
-        private IVariableV1 beta;
-        private RefVariable moving_mean;
-        private RefVariable moving_variance;
+        BatchNormalizationArgs args;
 
-        public BatchNormalization(int axis = -1,
-            float momentum = 0.99f,
-            float epsilon = 0.001f,
-            bool center = true,
-            bool scale = true,
-            IInitializer beta_initializer = null,
-            IInitializer gamma_initializer = null,
-            IInitializer moving_mean_initializer = null,
-            IInitializer moving_variance_initializer = null,
-            bool renorm = false,
-            float renorm_momentum = 0.99f,
-            bool trainable = true,
-            string name = null) : base(trainable: trainable, 
-                name: name)
+        float momentum => args.Momentum;
+        float epsilon => args.Epsilon;
+        bool center => args.Center;
+        bool scale => args.Scale;
+        bool renorm => args.Renorm;
+        bool fused;
+        int[] axis;
+        string _data_format;
+        IInitializer beta_initializer => args.BetaInitializer;
+        IInitializer gamma_initializer => args.GammaInitializer;
+        IInitializer moving_mean_initializer;
+        IInitializer moving_variance_initializer;
+        IRegularizer gamma_regularizer => args.GammaRegularizer;
+        IVariableV1 gamma;
+        IVariableV1 beta;
+        IVariableV1 moving_mean;
+        IVariableV1 moving_variance;
+
+        public BatchNormalization(BatchNormalizationArgs args) : base(args)
         {
-            this.axis = new int[] { axis };
-            this.momentum = momentum;
-            this.epsilon = epsilon;
-            this.center = center;
-            this.scale = scale;
-            if (beta_initializer == null)
-                beta_initializer = tf.zeros_initializer;
-            if (gamma_initializer == null)
-                gamma_initializer = tf.ones_initializer;
-            if (moving_mean_initializer == null)
-                moving_mean_initializer = tf.zeros_initializer;
-            if (moving_variance_initializer == null)
-                moving_variance_initializer = tf.ones_initializer;
-            this.beta_initializer = beta_initializer;
-            this.gamma_initializer = gamma_initializer;
-            this.moving_mean_initializer = moving_mean_initializer;
-            this.moving_variance_initializer = moving_variance_initializer;
-            this.renorm = renorm;
-            this.fused = true;
-            this.SupportsMasking = true;
-            this._bessels_correction_test_only = true;
+            this.args = args;
+            axis = args.Axis.dims;
         }
 
         protected override void build(TensorShape input_shape)
@@ -91,12 +59,25 @@ namespace Tensorflow.Keras.Layers
                 if (x < 0)
                     axis[idx] = ndims + x;
 
-            if (fused)
-                if (Enumerable.SequenceEqual(axis, new int[] { 3 }))
-                    _data_format = "NHWC";
+            fused = ndims == 4;
 
+            if (fused)
+            {
+                if (Enumerable.SequenceEqual(axis, new int[] { 1 }))
+                    _data_format = "NCHW";
+                else if (Enumerable.SequenceEqual(axis, new int[] { 3 }))
+                    _data_format = "NHWC";
+                else
+                    throw new ValueError($"Unsupported axis, fused batch norm only supports axis == [1] or axis == [3]");
+            }
+
+            var axis_to_dim = new Dictionary<int, int>();
+            foreach(var x in axis)
+                axis_to_dim[x] = input_shape[x];
+
+            inputSpec = new InputSpec(ndim: ndims, axes: axis_to_dim);
             var param_dtype = DType == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : DType;
-            var param_shape = new int[] { input_shape.dims[axis[0]] };
+            var param_shape = inputSpec.AllAxisDim;
 
             if (scale)
                 gamma = add_weight("gamma",
@@ -116,26 +97,17 @@ namespace Tensorflow.Keras.Layers
             else
                 throw new NotImplementedException("add_weight beta");
 
-            if(_scope != null)
-            {
-                
-            }
-
-            moving_mean = (RefVariable)add_weight("moving_mean",
+            moving_mean = add_weight("moving_mean",
                 param_shape,
                 dtype: param_dtype,
                 initializer: moving_mean_initializer,
-                synchronization: VariableSynchronization.OnRead,
-                trainable: false,
-                aggregation: VariableAggregation.Mean);
+                trainable: false);
 
-            moving_variance = (RefVariable)add_weight("moving_variance",
+            moving_variance = add_weight("moving_variance",
               shape: param_shape,
               dtype: param_dtype,
               initializer: moving_variance_initializer,
-              synchronization: VariableSynchronization.OnRead,
-              trainable: false,
-              aggregation: VariableAggregation.Mean);
+              trainable: false);
 
             if (renorm)
                 throw new NotImplementedException("build when renorm is true");
@@ -178,8 +150,8 @@ namespace Tensorflow.Keras.Layers
                   inputs,
                   gamma,
                   beta,
-                  mean: moving_mean,
-                  variance: moving_variance,
+                  mean: moving_mean.AsTensor(),
+                  variance: moving_variance.AsTensor(),
                   epsilon: epsilon,
                   is_training: false,
                   data_format: _data_format);
@@ -202,8 +174,8 @@ namespace Tensorflow.Keras.Layers
                 
             if(training_value == null)
             {
-                var mean_update = _assign_moving_average(moving_mean, mean, momentum_tensor);
-                var variance_update = _assign_moving_average(moving_variance, variance, momentum_tensor);
+                var mean_update = _assign_moving_average(moving_mean.AsTensor(), mean, momentum_tensor);
+                var variance_update = _assign_moving_average(moving_variance.AsTensor(), variance, momentum_tensor);
                 add_update(new Tensor[] { mean_update }, inputs: true);
                 add_update(new Tensor[] { variance_update }, inputs: true);
             }

@@ -28,7 +28,8 @@ namespace TensorFlowNET.UnitTest.Keras
 
             // Create a simple model.
             var inputs = keras.Input(shape: 32);
-            var outputs = keras.layers.Dense(1).Apply(inputs);
+            var dense_layer = keras.layers.Dense(1);
+            var outputs = dense_layer.Apply(inputs);
             var model = keras.Model(inputs, outputs);
             model.compile("adam", "mean_squared_error");
             return model;

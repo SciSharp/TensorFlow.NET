@@ -11,15 +11,35 @@ namespace Tensorflow.Keras.Layers
     {
         public Conv2D Conv2D(int filters,
             TensorShape kernel_size = null,
+            TensorShape strides = null,
             string padding = "valid",
-            string activation = "relu")
-            => new Conv2D(new Conv2DArgs
-            {
-                Filters = filters,
-                KernelSize = kernel_size,
-                Padding = padding,
-                Activation = GetActivationByName(activation)
-            });
+            string data_format = null,
+            TensorShape dilation_rate = null,
+            int groups = 1,
+            string activation = null,
+            bool use_bias = true,
+            IInitializer kernel_initializer = null,
+            IInitializer bias_initializer = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            IRegularizer activity_regularizer = null)
+                => new Conv2D(new Conv2DArgs
+                {
+                    Rank = 2,
+                    Filters = filters,
+                    KernelSize = kernel_size,
+                    Strides = strides == null ? (1, 1) : strides,
+                    Padding = padding,
+                    DataFormat = data_format,
+                    DilationRate = dilation_rate == null ? (1, 1) : dilation_rate,
+                    Groups = groups,
+                    KernelRegularizer = kernel_regularizer,
+                    KernelInitializer = kernel_initializer == null ? tf.glorot_uniform_initializer : kernel_initializer,
+                    BiasInitializer = bias_initializer == null ? tf.zeros_initializer : bias_initializer,
+                    BiasRegularizer = bias_regularizer,
+                    ActivityRegularizer = activity_regularizer,
+                    Activation = GetActivationByName(activation)
+                });
 
 
         public Dense Dense(int units,
@@ -64,6 +84,30 @@ namespace Tensorflow.Keras.Layers
             {
                 DataFormat = data_format
             });
+
+        /// <summary>
+        /// `Input()` is used to instantiate a Keras tensor.
+        /// </summary>
+        /// <param name="shape">A shape tuple not including the batch size.</param>
+        /// <param name="name"></param>
+        /// <param name="sparse"></param>
+        /// <param name="ragged"></param>
+        /// <returns></returns>
+        public Tensors Input(TensorShape shape,
+            string name = null,
+            bool sparse = false,
+            bool ragged = false)
+        {
+            var input_layer = new InputLayer(new InputLayerArgs
+            {
+                InputShape = shape,
+                Name = name,
+                Sparse = sparse,
+                Ragged = ragged
+            });
+
+            return input_layer.InboundNodes[0].Outputs;
+        }
 
         public MaxPooling2D MaxPooling2D(TensorShape pool_size = null,
             TensorShape strides = null,

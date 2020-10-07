@@ -183,8 +183,6 @@ namespace Tensorflow.Layers
                 });
         }
 
-
-
         protected override string _name_scope()
         {
             return _current_scope.original_name_scope;
@@ -202,7 +200,7 @@ namespace Tensorflow.Layers
                 }
                 else
                 {
-                    tf_with(tf.variable_scope(scope, default_name: baseName), captured_scope =>
+                    tf_with(tf.variable_scope(scope, default_name: base_name), captured_scope =>
                     {
                         // convert variable_scope to VariableScope
                         _scope = captured_scope;
