@@ -56,6 +56,7 @@ namespace Tensorflow.Keras.Engine
         /// Provides information about which inputs are compatible with the layer.
         /// </summary>
         protected InputSpec inputSpec;
+        bool dynamic = true;
         public bool SupportsMasking { get; set; }
         protected List<IVariableV1> trainableWeights;
         public List<IVariableV1> trainable_variables
@@ -88,6 +89,7 @@ namespace Tensorflow.Keras.Engine
 
         ThreadLocal<CallContext> callContext;
         public CallContext CallContext => callContext.Value;
+        public static List<KerasHistory> KerasHistories = new List<KerasHistory>();
 
         public Layer(LayerArgs args)
         {
@@ -129,6 +131,11 @@ namespace Tensorflow.Keras.Engine
                 Value = new CallContext()
             };
 
+            var history = inputs.Where(x => x.KerasHistory != null 
+                    && !KerasHistories.Contains(x.KerasHistory))
+                .Select(x => x.KerasHistory);
+            KerasHistories.AddRange(history);
+
             if (_in_functional_construction_mode(inputs))
                 return _functional_construction_call(inputs);
 
@@ -166,7 +173,8 @@ namespace Tensorflow.Keras.Engine
 
         bool _in_functional_construction_mode(Tensors inputs)
         {
-            return inputs.Count(x => !x.IsEagerTensor) == inputs.Count();
+            return tf.Context.executing_eagerly() 
+                && inputs.Count(x => !x.IsEagerTensor) == inputs.Count();
         }
 
         Tensors _functional_construction_call(Tensors inputs)
@@ -190,6 +198,15 @@ namespace Tensorflow.Keras.Engine
             tf_with(ops.name_scope(_name_scope()), scope =>
             {
                 MaybeBuild(inputs);
+
+                // Wrapping `call` function in autograph to allow for dynamic control
+                // flow and control dependencies in call. We are limiting this to
+                // subclassed layers as autograph is strictly needed only for
+                // subclassed layers and models.
+                // tf_convert will respect the value of autograph setting in the
+                // enclosing tf.function, if any.
+                if (!dynamic)
+                    throw new NotImplementedException("");
 
                 outputs = call(inputs);
 
@@ -243,6 +260,13 @@ namespace Tensorflow.Keras.Engine
             return null;
         }
 
+        /// <summary>
+        /// Subclass has to override this method.
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="state"></param>
+        /// <param name="is_training"></param>
+        /// <returns></returns>
         protected virtual Tensors call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             throw new NotImplementedException("");
@@ -263,9 +287,9 @@ namespace Tensorflow.Keras.Engine
 
             tf.init_scope();
 
-            //tf.Context.eager_mode();
+            tf.Context.eager_mode();
             build(inputs.shape);
-            //tf.Context.restore_mode();
+            tf.Context.restore_mode();
             
             built = true;
         }
@@ -282,18 +306,14 @@ namespace Tensorflow.Keras.Engine
 
         protected virtual IVariableV1 add_weight(string name,
             TensorShape shape,
-            TF_DataType dtype = TF_DataType.DtInvalid,
+            TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
             IRegularizer regularizer = null,
-            bool? trainable = null,
+            VariableSynchronization synchronization = VariableSynchronization.Auto,
+            VariableAggregation aggregation = VariableAggregation.None,
+            bool trainable = true,
             Func<VariableArgs, IVariableV1> getter = null)
         {
-            if (dtype == TF_DataType.DtInvalid)
-                dtype = TF_DataType.TF_FLOAT;
-
-            if (trainable == null)
-                trainable = true;
-
             // Initialize variable when no initializer provided
             if (initializer == null)
             {
@@ -306,6 +326,9 @@ namespace Tensorflow.Keras.Engine
                     throw new ValueError($"An initializer for variable {name} of type {dtype.as_base_dtype()} is required for layer {name}");
             }
 
+            if (synchronization == VariableSynchronization.OnRead)
+                trainable = false;
+
             var args = new VariableArgs
             {
                 Name = name,
@@ -314,7 +337,9 @@ namespace Tensorflow.Keras.Engine
                 Getter = getter ?? base_layer_utils.make_variable,
                 Overwrite = true,
                 Initializer = initializer,
-                Trainable = trainable.Value
+                Synchronization = synchronization,
+                Aggregation = aggregation,
+                Trainable = trainable
             };
             var variable = _add_variable_with_custom_getter(args);
 

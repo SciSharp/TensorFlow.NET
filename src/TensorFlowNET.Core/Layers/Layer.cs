@@ -127,7 +127,7 @@ namespace Tensorflow.Layers
             int[] shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
-            bool? trainable = null,
+            bool trainable = true,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
             VariableAggregation aggregation = VariableAggregation.None)
         {
@@ -137,8 +137,6 @@ namespace Tensorflow.Layers
 
             if (synchronization == VariableSynchronization.OnRead)
                 trainable = false;
-            else if (!trainable.HasValue)
-                trainable = true;
 
             if (default_graph.building_function)
             {

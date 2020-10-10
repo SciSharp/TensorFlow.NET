@@ -263,7 +263,7 @@ namespace Tensorflow
             List<TF_DataType> types,
             List<TF_DataType> base_types,
             List<TF_DataType> input_types,
-            dynamic values)
+            object values)
         {
             var input_name = input_arg.Name;
 

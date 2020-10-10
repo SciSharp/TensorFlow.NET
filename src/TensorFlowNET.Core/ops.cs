@@ -225,14 +225,12 @@ namespace Tensorflow
 
         public static string name_from_scope_name(string name)
         {
-            if (name.EndsWith("/"))
-            {
+            if (name == null)
+                return null;
+            else if (name.EndsWith("/"))
                 return name.Substring(0, name.Length - 1);
-            }
             else
-            {
                 return name;
-            }
         }
 
         /// <summary>
@@ -444,7 +442,12 @@ namespace Tensorflow
                 case NDArray nd:
                     return constant_op.constant(nd, dtype: dtype, name: name);
                 case EagerTensor tensor:
-                    return tf.executing_eagerly() ? tensor : tensor.AsPlaceholder(name: name);
+                    if (tf.executing_eagerly())
+                        return tensor;
+                    else
+                        return tensor.dtype == TF_DataType.TF_RESOURCE 
+                            ? tensor.AsPlaceholder(name: name) 
+                            : tensor.AsContatnt(name: name);
                 case Tensor tensor:
                     return tensor;
                 case Tensor[] tensors:

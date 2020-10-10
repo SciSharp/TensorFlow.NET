@@ -48,13 +48,13 @@ namespace Tensorflow
 
             public void __enter__()
             {
-                _name = _name ?? _default_name;
                 if (tf.Context.executing_eagerly())
                 {
                     (scope_name, old_scope_name) = enter_eager_name_scope(tf.Context, _name);
                 }
                 else
                 {
+                    _name = _name ?? _default_name;
                     Graph g = null;
 
                     if (_values is List<Tensor> vList)
@@ -72,7 +72,8 @@ namespace Tensorflow
 
             private (string, string) enter_eager_name_scope(Context ctx, string name)
             {
-                if (name == null)
+                return (null, null);
+                /*if (name == null)
                     name = "";
 
                 var scope_name = name;
@@ -87,7 +88,7 @@ namespace Tensorflow
                 }
 
                 ctx.ScopeName = scope_name;
-                return (scope_name, old_name);
+                return (scope_name, old_name);*/
             }
 
             [DebuggerHidden]

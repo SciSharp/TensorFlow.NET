@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Linq;
 using Tensorflow.Eager;
 
 namespace Tensorflow.Contexts
@@ -85,6 +86,29 @@ namespace Tensorflow.Contexts
         public void restore_mode()
         {
             context_switches.Pop();
+        }
+
+        public Tensor RunInAutoMode(Func<Tensor> graphAction, Func<Tensor> eagerAction, params Tensor[] tensors)
+        {
+            var shouldRunInEager = executing_eagerly()
+                && tensors.Count(x => x.IsEagerTensor) == tensors.Length;
+
+            if (shouldRunInEager)
+                return eagerAction();
+            else
+            {
+                if (executing_eagerly())
+                {
+                    graph_mode();
+                    var result = graphAction();
+                    restore_mode();
+                    return result;
+                }
+                else
+                {
+                    return graphAction();
+                }
+            }
         }
 
         public void Dispose()

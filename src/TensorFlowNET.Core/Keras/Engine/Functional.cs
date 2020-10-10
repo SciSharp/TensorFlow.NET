@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 
@@ -47,12 +49,15 @@ namespace Tensorflow.Keras.Engine
             // A graph network does not autocast inputs, as its layers will cast them instead.
             _autocast = false;
 
+            if (outputs.Any(x => x.KerasHistory == null))
+                BaseLayerUtils.CreateKerasHistoryHelper(outputs);
+
             // Build self._output_layers:
-            foreach(var x in outputs)
+            foreach (var x in outputs)
             {
                 var (layer, node_index, tensor_index) = x.KerasHistory;
                 _output_layers.append(layer);
-                _output_coordinates.append(new KerasHistory(layer, node_index, tensor_index));
+                _output_coordinates.append(new KerasHistory(layer, node_index, tensor_index, x));
             }
 
             // Build self._input_layers:
@@ -60,8 +65,9 @@ namespace Tensorflow.Keras.Engine
             {
                 var (layer, node_index, tensor_index) = x.KerasHistory;
                 _input_layers.append(layer);
-                _input_coordinates.append(new KerasHistory(layer, node_index, tensor_index));
+                _input_coordinates.append(new KerasHistory(layer, node_index, tensor_index, x));
             }
         }
+       
     }
 }

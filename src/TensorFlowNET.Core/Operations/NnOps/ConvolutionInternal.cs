@@ -56,20 +56,24 @@ namespace Tensorflow.Operations
             var strides = _get_sequence(args.Strides, num_spatial_dims, channel_index);
 
             Tensor result = null;
-            tf_with(ops.name_scope(name, default_name: null, (input, filters)), scope =>
+            tf_with(ops.name_scope(name, default_name: null), scope =>
             {
                 name = scope;
                 if (num_spatial_dims == 2)
+                {
+                    var filters_tensor = filters.AsTensor();
+
                     result = gen_nn_ops.conv2d(new Conv2dParams
                     {
                         Input = input,
-                        Filter = filters.AsTensor(),
+                        Filter = filters_tensor,
                         Strides = strides,
                         Padding = padding,
                         DataFormat = data_format,
                         Dilations = dilations,
                         Name = name
                     });
+                }
                 else
                     throw new NotImplementedException("");
             });

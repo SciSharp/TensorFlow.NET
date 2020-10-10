@@ -319,21 +319,13 @@ namespace Tensorflow
         ///    Specifically, <c>y = 1 / (1 + exp(-x))</c>.
         /// </remarks>
         public static Tensor sigmoid(Tensor x, string name = "Sigmoid")
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Sigmoid", name, 
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Sigmoid", name: name, new { x }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Sigmoid", name,
                     null,
-                    x);
-
-                return results[0];
-            }
-
-            var op = tf.OpDefLib._apply_op_helper("Sigmoid", name: name, new { x });
-
-            return op.output;
-        }
+                    x).FirstOrDefault(),
+                x);
 
         /// <summary>
         ///    Computes the gradient of the sigmoid of <c>x</c> wrt its input.
@@ -668,11 +660,13 @@ namespace Tensorflow
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> A `Tensor`. Has the same type as `x`.</returns>
         public static Tensor exp(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Exp", name, args: new { x });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Exp", name, args: new { x }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Exp", name,
+                    null,
+                    x).FirstOrDefault(),
+                x);
 
         /// <summary>
         /// Computes natural logarithm of x element-wise.
@@ -698,22 +692,14 @@ namespace Tensorflow
         }
 
         public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate= false, string name= null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Cast", name,
                     null,
                     x,
-                    "DstT", DstT, "Truncate", Truncate);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate });
-
-            return _op.outputs[0];
-        }
+                    "DstT", DstT, "Truncate", Truncate).FirstOrDefault(),
+                x);
 
         public static Tensor neg(Tensor x, string name = null)
         {
@@ -1151,20 +1137,13 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor range(Tensor start, Tensor limit, Tensor delta, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Range", name, 
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Range", name, new { start, limit, delta }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Range", name,
                     null,
-                    start, limit, delta);
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Range", name, new { start, limit, delta });
-
-            return _op.outputs[0];
-        }
+                    start, limit, delta).FirstOrDefault(),
+                start, limit, delta);
 
         /// <summary>
         ///    Rounds the values of a tensor to the nearest integer, element-wise.

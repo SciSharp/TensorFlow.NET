@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
@@ -33,6 +34,7 @@ namespace Tensorflow.Keras.Layers
                     DataFormat = data_format,
                     DilationRate = dilation_rate == null ? (1, 1) : dilation_rate,
                     Groups = groups,
+                    UseBias = use_bias,
                     KernelRegularizer = kernel_regularizer,
                     KernelInitializer = kernel_initializer == null ? tf.glorot_uniform_initializer : kernel_initializer,
                     BiasInitializer = bias_initializer == null ? tf.zeros_initializer : bias_initializer,
@@ -127,6 +129,17 @@ namespace Tensorflow.Keras.Layers
                 Scale = scale,
                 Offset = offset,
                 InputShape = input_shape
+            });
+
+        /// <summary>
+        /// Zero-padding layer for 2D input (e.g. picture).
+        /// </summary>
+        /// <param name="padding"></param>
+        /// <returns></returns>
+        public ZeroPadding2D ZeroPadding2D(NDArray padding)
+            => new ZeroPadding2D(new ZeroPadding2DArgs
+            {
+                Padding = padding
             });
 
         Activation GetActivationByName(string name)

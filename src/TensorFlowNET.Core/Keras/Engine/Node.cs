@@ -58,7 +58,7 @@ namespace Tensorflow.Keras.Engine
             // Set metadata on outputs.
             var node_index = layer.InboundNodes.Count - 1;
             foreach (var (i, tensor) in enumerate(Outputs))
-                tensor.KerasHistory = new KerasHistory(layer, node_index, i);
+                tensor.KerasHistory = new KerasHistory(layer, node_index, i, tensor);
         }
     }
 }

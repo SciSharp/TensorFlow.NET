@@ -38,8 +38,8 @@ namespace Tensorflow.Keras.Layers
         string _data_format;
         IInitializer beta_initializer => args.BetaInitializer;
         IInitializer gamma_initializer => args.GammaInitializer;
-        IInitializer moving_mean_initializer;
-        IInitializer moving_variance_initializer;
+        IInitializer moving_mean_initializer => args.MovingMeanInitializer;
+        IInitializer moving_variance_initializer => args.MovingVarianceInitializer;
         IRegularizer gamma_regularizer => args.GammaRegularizer;
         IVariableV1 gamma;
         IVariableV1 beta;
@@ -101,13 +101,17 @@ namespace Tensorflow.Keras.Layers
                 param_shape,
                 dtype: param_dtype,
                 initializer: moving_mean_initializer,
+                synchronization: VariableSynchronization.OnRead,
+                aggregation: VariableAggregation.Mean,
                 trainable: false);
 
             moving_variance = add_weight("moving_variance",
-              shape: param_shape,
-              dtype: param_dtype,
-              initializer: moving_variance_initializer,
-              trainable: false);
+                shape: param_shape,
+                dtype: param_dtype,
+                initializer: moving_variance_initializer,
+                synchronization: VariableSynchronization.OnRead,
+                aggregation: VariableAggregation.Mean,
+                trainable: false);
 
             if (renorm)
                 throw new NotImplementedException("build when renorm is true");
@@ -131,6 +135,12 @@ namespace Tensorflow.Keras.Layers
 
         private Tensor _fused_batch_norm(Tensor inputs, Tensor training)
         {
+            TensorShape input_batch_size = null;
+            var use_fused_avg_updates = true;
+            float exponential_avg_factor = 0;
+            if (use_fused_avg_updates)
+                exponential_avg_factor = 1.0f - momentum;
+
             var beta = this.beta;
             var gamma = this.gamma;
 
@@ -146,16 +156,21 @@ namespace Tensorflow.Keras.Layers
 
             Func<Tensor[]> _fused_batch_norm_inference = () =>
             {
+                var moving_mean_tensor = moving_mean.AsTensor();
+                var moving_variance_tensor = moving_variance.AsTensor();
                 return tf.nn.fused_batch_norm(
                   inputs,
                   gamma,
                   beta,
-                  mean: moving_mean.AsTensor(),
-                  variance: moving_variance.AsTensor(),
+                  mean: moving_mean_tensor,
+                  variance: moving_variance_tensor,
                   epsilon: epsilon,
                   is_training: false,
                   data_format: _data_format);
             };
+
+            if (use_fused_avg_updates && input_batch_size != null)
+                throw new NotImplementedException("");
 
             var results = tf_utils.smart_cond(training, _fused_batch_norm_training, _fused_batch_norm_inference);
             var (output, mean, variance) = (results[0], results[1], results[2]);

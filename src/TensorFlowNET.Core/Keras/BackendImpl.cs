@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using static Tensorflow.Binding;
@@ -121,6 +122,38 @@ namespace Tensorflow.Keras
             _GRAPH_LEARNING_PHASES[tf.get_default_graph()] = (GraphLearningPhase)((value) ? 1 : 0);
         }
 
+        /// <summary>
+        /// Pads the 2nd and 3rd dimensions of a 4D tensor.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="padding"></param>
+        /// <param name="data_format"></param>
+        /// <returns></returns>
+        public Tensor spatial_2d_padding(Tensor x, NDArray padding = null, string data_format = null)
+        {
+            if (padding == null)
+                padding = new[,] { { 1, 1 }, { 1, 1 } };
+
+            NDArray pattern;
+
+            if (data_format == "channels_first")
+                pattern = new int[,]
+                {
+                    { 0, 0 },
+                    { 0, 0 },
+                    { padding[0][0], padding[0][1] },
+                    { padding[1][0], padding[1][1] }
+                };
+            else
+                pattern = new int[,]
+                {
+                    { 0, 0 },
+                    { padding[0][0], padding[0][1] },
+                    { padding[1][0], padding[1][1] },
+                    { 0, 0 }
+                };
+            return array_ops.pad(x, pattern);
+        }
 
         public class _DummyEagerGraph
         { }

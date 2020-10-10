@@ -73,6 +73,16 @@ namespace Tensorflow
             return _op.output;
         }
 
+        public static Tensor concat_v2(Tensor[] values, int axis, string name = null)
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("ConcatV2", name: name, 
+                    args: new { values, axis }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ConcatV2", name,
+                    null,
+                    values, axis).FirstOrDefault(),
+                values);
+
         private static Tensor concat_v2_eager_fallback<T1, T2>(T1[] values, T2 axis, string name, Context ctx)
         {
             var _attr_N = len(values);
@@ -293,20 +303,13 @@ namespace Tensorflow
         }
 
         public static Tensor reshape<T>(Tensor tensor, T shape, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Reshape", name, 
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Reshape", name, new { tensor, shape }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Reshape", name,
                     null,
-                    tensor, shape);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Reshape", name, new { tensor, shape });
-            return _op.output;
-        }
+                    tensor, shape).FirstOrDefault(),
+                tensor);
 
         public static Tensor reshape(Tensor tensor, int[] shape, string name = null)
         {
@@ -399,21 +402,15 @@ namespace Tensorflow
         }
 
         public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Shape", name, 
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Shape", name, 
+                    new { input, out_type }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Shape", name,
                     null,
                     input,
-                    "out_type", out_type);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Shape", name, new { input, out_type });
-            return _op.outputs[0];
-        }
+                    "out_type", out_type).FirstOrDefault(),
+                input);
 
         /// <summary>
         /// Returns shape of tensors.
@@ -460,20 +457,13 @@ namespace Tensorflow
         }
 
         public static Tensor tile<T>(Tensor input, T multiples, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Tile", name, 
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Tile", name, new { input, multiples }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Tile", name,
                     null,
-                    input, multiples);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Tile", name, new { input, multiples });
-            return _op.outputs[0];
-        }
+                    input, multiples).FirstOrDefault(),
+                input);
 
         public static Tensor transpose<T1, T2>(T1 x, T2 perm, string name = null)
         {
@@ -510,37 +500,29 @@ namespace Tensorflow
             int new_axis_mask = 0,
             int shrink_axis_mask = 0,
             string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "StridedSlice", name, 
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("StridedSlice", name, new
+                {
+                    input,
+                    begin,
+                    end,
+                    strides,
+                    begin_mask,
+                    end_mask,
+                    ellipsis_mask,
+                    new_axis_mask,
+                    shrink_axis_mask
+                }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "StridedSlice", name,
                     null,
                     input, begin, end, strides,
                     "begin_mask", begin_mask,
                     "end_mask", end_mask,
                     "ellipsis_mask", ellipsis_mask,
                     "new_axis_mask", new_axis_mask,
-                    "shrink_axis_mask", shrink_axis_mask);
-                
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("StridedSlice", name, new
-            {
-                input,
-                begin,
-                end,
-                strides,
-                begin_mask,
-                end_mask,
-                ellipsis_mask,
-                new_axis_mask,
-                shrink_axis_mask
-            });
-
-            return _op.outputs[0];
-        }
+                    "shrink_axis_mask", shrink_axis_mask).FirstOrDefault(),
+                input, begin, end, strides);
 
         public static Tensor strided_slice<T>(Tensor input, T[] begin, T[] end, T[] strides,
             int begin_mask = 0,
