@@ -15,6 +15,8 @@
 ******************************************************************************/
 
 using System;
+using System.Linq;
+using Tensorflow.Contexts;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -221,17 +223,21 @@ namespace Tensorflow
 
         public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false, 
             bool half_pixel_centers = false, string name = null)
-        {
-            var op = tf.OpDefLib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new
-            {
-                images,
-                size,
-                align_corners,
-                half_pixel_centers
-            });
-
-            return op.output;
-        }
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new
+                {
+                    images,
+                    size,
+                    align_corners,
+                    half_pixel_centers
+                }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ResizeNearestNeighbor", name,
+                    null,
+                    images, size,
+                    "align_corners", align_corners,
+                    "half_pixel_centers", half_pixel_centers).FirstOrDefault(),
+                images);
 
         public static Tensor resize_nearest_neighbor_grad<Tsize>(Tensor grads, Tsize size, bool align_corners = false,
             bool half_pixel_centers = false, string name = null)

@@ -2168,7 +2168,10 @@ new_height, new_width");
             {
                 if (method == ResizeMethod.BILINEAR)
                     return gen_image_ops.resize_bilinear(images, size, half_pixel_centers: true);
-                throw new NotImplementedException("");
+                else if (method == ResizeMethod.NEAREST_NEIGHBOR)
+                    return gen_image_ops.resize_nearest_neighbor(images, size, half_pixel_centers: true);
+
+                throw new NotImplementedException("resize_images_v2");
             };
             return _resize_images_common(images, resize_fn, ops.convert_to_tensor(size),
                 preserve_aspect_ratio: preserve_aspect_ratio,

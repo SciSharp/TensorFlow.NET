@@ -23,6 +23,10 @@ namespace Tensorflow
             string name = null) => gen_array_ops.reshape(tensor, shape, name);
 
         public Tensor reshape(Tensor tensor,
+            Tensor[] shape,
+            string name = null) => gen_array_ops.reshape(tensor, shape, name);
+
+        public Tensor reshape(Tensor tensor,
                 Tensor shape,
                 string name = null) => gen_array_ops.reshape(tensor, shape, name);
     }
