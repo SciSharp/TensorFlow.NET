@@ -253,6 +253,13 @@ namespace Tensorflow
             return (int[]) dims.Clone();
         }
 
+        public long[] as_list_long()
+        {
+            if (shape.IsEmpty)
+                throw new ValueError("as_list() is not defined on an unknown TensorShape.");
+            return dims.Select(x => Convert.ToInt64(x)).ToArray();
+        }
+
         public int num_elements()
         {
             if(is_fully_defined())

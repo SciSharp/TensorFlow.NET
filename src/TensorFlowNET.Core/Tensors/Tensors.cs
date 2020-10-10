@@ -56,6 +56,9 @@ namespace Tensorflow
         public static implicit operator Tensors(Tensor[] tensors)
             => new Tensors(tensors);
 
+        public static implicit operator Tensors(List<Tensor> tensors)
+            => new Tensors(tensors.ToArray());
+
         public static implicit operator Tensor(Tensors tensors)
             => tensors.FirstOrDefault();
 

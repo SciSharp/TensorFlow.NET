@@ -37,7 +37,7 @@ namespace Tensorflow
             if (as_ref)
                 return handle;
             else
-                return tf.executing_eagerly() ? AsTensor() : value();
+                return AsTensor();
         }
     }
 }

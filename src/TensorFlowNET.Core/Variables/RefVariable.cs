@@ -222,7 +222,7 @@ namespace Tensorflow
 
         public Tensor value() => _snapshot;
 
-        public Tensor AsTensor(bool as_ref = true) => _snapshot;
+        public Tensor AsTensor(TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false) => _snapshot;
 
         public Tensor _as_graph_element() => _variable;
 

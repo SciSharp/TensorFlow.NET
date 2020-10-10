@@ -100,6 +100,18 @@ namespace Tensorflow
             variable_accessed(this);
             var result = gen_resource_variable_ops.read_variable_op(handle, _dtype);
             // _maybe_set_handle_data(_dtype, _handle, result);
+
+            // have to set shape when converting to substituent placeholder
+            if (result.TensorShape.ndim == -1)
+            {
+                c_api.TF_GraphSetTensorShape(result.graph,
+                    result._as_tf_output(),
+                    shape.as_list_long(),
+                    shape.ndim,
+                    tf.Status.Handle);
+                tf.Status.Check(true);
+            }
+
             return result;
         }
 
@@ -160,15 +172,12 @@ namespace Tensorflow
         {
         }
 
-        public Tensor AsTensor(bool as_ref = true)
+        public Tensor AsTensor(TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
         {
-            if (!as_ref && GraphElement != null)
-                return GraphElement;
-
             if (as_ref)
-                return tf.executing_eagerly() ? read_value() : GraphElement;
+                return read_value().op.inputs[0];
             else
-                return _read_variable_op();
+                return value();
         }
     }
 }
