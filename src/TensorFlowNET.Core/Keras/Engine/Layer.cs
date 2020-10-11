@@ -109,66 +109,13 @@ namespace Tensorflow.Keras.Engine
             updates = new List<Operation>();
 
             inboundNodes = new List<Node>();
+            outboundNodes = new List<Node>();
 
             // Manage input shape information if passed.
-            if(args.BatchInputShape == null && args.InputShape != null)
+            if (args.BatchInputShape == null && args.InputShape != null)
             {
                 args.BatchInputShape = new int[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray();
             }
-        }
-
-        /// <summary>
-        /// Wraps `call`, applying pre- and post-processing steps.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="state"></param>
-        /// <param name="is_training"></param>
-        /// <returns></returns>
-        public Tensors Apply(Tensors inputs, Tensor state = null, bool is_training = false)
-        {
-            callContext = callContext ?? new ThreadLocal<CallContext>()
-            {
-                Value = new CallContext()
-            };
-
-            var history = inputs.Where(x => x.KerasHistory != null 
-                    && !KerasHistories.Contains(x.KerasHistory))
-                .Select(x => x.KerasHistory);
-            KerasHistories.AddRange(history);
-
-            if (_in_functional_construction_mode(inputs))
-                return _functional_construction_call(inputs);
-
-            Tensors outputs = null;
-
-            var eager = tf.executing_eagerly();
-            using var ctxManager = CallContext.enter();
-
-            string nameScope = "";
-            if (eager)
-                nameScope = Name;
-            else
-                nameScope = _name_scope();
-
-            if (!inputs.IsEagerTensor)
-                tf.Context.graph_mode();
-
-            tf_with(ops.name_scope(nameScope), scope =>
-            {
-                if (!built)
-                    MaybeBuild(inputs);
-
-                outputs = call(inputs, state: state, is_training: is_training);
-
-                outputs = _set_connectivity_metadata_(inputs, outputs);
-                _handle_activity_regularization(inputs, outputs);
-                _set_mask_metadata(inputs, outputs, null);
-            });
-
-            if (!inputs.IsEagerTensor)
-                tf.Context.restore_mode();
-
-            return outputs;
         }
 
         bool _in_functional_construction_mode(Tensors inputs)
@@ -177,48 +124,9 @@ namespace Tensorflow.Keras.Engine
                 && inputs.Count(x => !x.IsEagerTensor) == inputs.Count();
         }
 
-        Tensors _functional_construction_call(Tensors inputs)
+        public void SetConnectivityMetadata(Tensors inputs, Tensors outputs)
         {
-            bool mask_arg_passed_by_framework = false;
-            bool training_arg_passed_by_framework = false;
-            Tensor training_value = null;
-            if(training_value == null)
-            {
-                training_arg_passed_by_framework = true;
-            }
 
-            Tensors outputs = null;
-            using var ctxManager = CallContext.enter();
-
-            // using var graph = tf.keras.backend.get_graph().as_default();
-
-            if (!inputs.IsEagerTensor)
-                tf.Context.graph_mode();
-
-            tf_with(ops.name_scope(_name_scope()), scope =>
-            {
-                MaybeBuild(inputs);
-
-                // Wrapping `call` function in autograph to allow for dynamic control
-                // flow and control dependencies in call. We are limiting this to
-                // subclassed layers as autograph is strictly needed only for
-                // subclassed layers and models.
-                // tf_convert will respect the value of autograph setting in the
-                // enclosing tf.function, if any.
-                if (!dynamic)
-                    throw new NotImplementedException("");
-
-                outputs = call(inputs);
-
-                outputs = _set_connectivity_metadata_(inputs, outputs);
-                _handle_activity_regularization(inputs, outputs);
-                _set_mask_metadata(inputs, outputs, null);
-            });
-
-            if (!inputs.IsEagerTensor)
-                tf.Context.restore_mode();
-
-            return outputs;
         }
 
         private Tensors _set_connectivity_metadata_(Tensors inputs, Tensors outputs)
@@ -235,6 +143,7 @@ namespace Tensorflow.Keras.Engine
 
             new Node(this, new NodeArgs
             {
+                InputTensors = inputs,
                 Outputs = outputs
             });
 
@@ -302,60 +211,6 @@ namespace Tensorflow.Keras.Engine
         protected virtual void add_loss(Func<Tensor> losses)
         {
             
-        }
-
-        protected virtual IVariableV1 add_weight(string name,
-            TensorShape shape,
-            TF_DataType dtype = TF_DataType.TF_FLOAT,
-            IInitializer initializer = null,
-            IRegularizer regularizer = null,
-            VariableSynchronization synchronization = VariableSynchronization.Auto,
-            VariableAggregation aggregation = VariableAggregation.None,
-            bool trainable = true,
-            Func<VariableArgs, IVariableV1> getter = null)
-        {
-            // Initialize variable when no initializer provided
-            if (initializer == null)
-            {
-                // If dtype is DT_FLOAT, provide a uniform unit scaling initializer
-                if (dtype.is_floating())
-                    initializer = tf.glorot_uniform_initializer;
-                else if (dtype.is_integer())
-                    initializer = tf.zeros_initializer;
-                else
-                    throw new ValueError($"An initializer for variable {name} of type {dtype.as_base_dtype()} is required for layer {name}");
-            }
-
-            if (synchronization == VariableSynchronization.OnRead)
-                trainable = false;
-
-            var args = new VariableArgs
-            {
-                Name = name,
-                Shape = shape,
-                DType = dtype,
-                Getter = getter ?? base_layer_utils.make_variable,
-                Overwrite = true,
-                Initializer = initializer,
-                Synchronization = synchronization,
-                Aggregation = aggregation,
-                Trainable = trainable
-            };
-            var variable = _add_variable_with_custom_getter(args);
-
-            if(regularizer != null)
-            {
-                var name_in_scope = variable.Name.Split(':')[0];
-                _handle_weight_regularization(name_in_scope, variable, regularizer);
-            }
-
-            //backend.track_variable(variable);
-            if (trainable == true)
-                trainableWeights.Add(variable);
-            else
-                nonTrainableWeights.Add(variable);
-
-            return variable;
         }
 
         /// <summary>

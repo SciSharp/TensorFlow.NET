@@ -9,7 +9,7 @@ namespace Tensorflow.Keras.Engine
     /// </summary>
     public class KerasHistory
     {
-        Layer layer;
+        public Layer layer;
         int node_index;
         int tensor_index;
         public Tensor tensor;
@@ -20,6 +20,7 @@ namespace Tensorflow.Keras.Engine
             this.node_index = node_index;
             this.tensor_index = tensor_index;
             this.tensor = tensor;
+            Layer.KerasHistories.Add(this);
             Console.WriteLine(tensor.name);
         }
 

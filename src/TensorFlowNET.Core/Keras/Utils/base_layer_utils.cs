@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Utils
@@ -104,6 +106,62 @@ namespace Tensorflow.Keras.Utils
             }
 
             return name_uid_map;
+        }
+
+        public static bool needs_keras_history(Tensors inputs)
+        {
+            if (inputs.Any(x => x.KerasHistory == null))
+                return true;
+
+            return false;
+        }
+
+        public static Layer[] create_keras_history(Tensors inputs)
+        {
+            var processed_ops = new List<Operation>();
+            var created_layers = new List<Layer>();
+            CreateKerasHistoryHelper(inputs, processed_ops, created_layers);
+            return created_layers.ToArray();
+        }
+
+        public static void CreateKerasHistoryHelper(Tensors tensors, List<Operation> processed_ops, List<Layer> created_layers)
+        {
+            foreach (var tensor in tensors)
+            {
+                if (tensor.KerasHistory != null)
+                    continue;
+
+                var op = tensor.op;
+                if (!processed_ops.Contains(op))
+                {
+                    var layer_inputs = new List<Tensor>();
+
+                    foreach (var (i, op_input) in enumerate(op.inputs._inputs))
+                    {
+                        if (uses_keras_history(op_input))
+                            layer_inputs.Add(op_input);
+                        else
+                        {
+
+                        }
+
+                        // recursively
+                        CreateKerasHistoryHelper(layer_inputs, processed_ops, created_layers);
+                        var op_layer = new TensorFlowOpLayer(new TensorFlowOpLayerArgs
+                        {
+                            NodeDef = op.node_def,
+                            Name = op.name
+                        });
+                        created_layers.Add(op_layer);
+                        op_layer.SetConnectivityMetadata(layer_inputs, op.outputs);
+                    }
+                }
+            }
+        }
+
+        static bool uses_keras_history(Tensor op_input)
+        {
+            return Layer.KerasHistories.Any(x => x.tensor.name == op_input.name);
         }
     }
 }

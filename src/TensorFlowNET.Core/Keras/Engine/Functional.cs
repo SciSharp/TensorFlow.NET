@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -50,7 +51,7 @@ namespace Tensorflow.Keras.Engine
             _autocast = false;
 
             if (outputs.Any(x => x.KerasHistory == null))
-                BaseLayerUtils.CreateKerasHistoryHelper(outputs);
+                base_layer_utils.create_keras_history(outputs);
 
             // Build self._output_layers:
             foreach (var x in outputs)

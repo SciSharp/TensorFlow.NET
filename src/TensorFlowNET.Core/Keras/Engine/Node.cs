@@ -39,20 +39,22 @@ namespace Tensorflow.Keras.Engine
         public Tensors Outputs => args.Outputs;
         public TensorShape[] input_shapes;
         public TensorShape[] output_shapes;
-        List<Layer> kerasInputs;
+        List<Tensor> kerasInputs = new List<Tensor>();
 
         public Node(Layer layer, NodeArgs args)
         {
             this.args = args;
 
-            kerasInputs = new List<Layer>();
+            if (args.InputTensors != null)
+                kerasInputs.AddRange(args.InputTensors);
 
             // Wire up Node to Layers.
             layer.InboundNodes.Add(this);
-            foreach (var input in kerasInputs)
+            foreach (var kt in kerasInputs)
             {
-                if (input != null)
-                    input.OutboundNodes.Add(this);
+                var inbound_layer = kt.KerasHistory.layer;
+                if (inbound_layer != null)
+                    inbound_layer.OutboundNodes.Add(this);
             }
 
             // Set metadata on outputs.
