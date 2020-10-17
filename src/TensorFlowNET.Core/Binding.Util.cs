@@ -32,8 +32,19 @@ namespace Tensorflow
     {
         public static T2 get<T1, T2>(this Dictionary<T1, T2> dict, T1 key)
             => key == null ? 
-                default(T2) : 
-            (dict.ContainsKey(key) ? dict[key] : default(T2));
+                default : 
+            (dict.ContainsKey(key) ? dict[key] : default);
+
+        public static void Update<T>(this IList<T> list, T element)
+        {
+            var index = list.IndexOf(element);
+            if (index < 0)
+                list.Add(element);
+            else
+            {
+                list[index] = element;
+            }
+        }
 
         public static void add<T>(this IList<T> list, T element)
             => list.Add(element);

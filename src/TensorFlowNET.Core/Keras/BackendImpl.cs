@@ -155,6 +155,16 @@ namespace Tensorflow.Keras
             return array_ops.pad(x, pattern);
         }
 
+        /// <summary>
+        /// Method to evaluate a tensor in eager or in a tf.function.
+        /// </summary>
+        /// <param name="outputs"></param>
+        /// <returns></returns>
+        public Tensor eval_in_eager_or_function(Tensor outputs)
+        {
+            throw new NotImplementedException("");
+        }
+
         public class _DummyEagerGraph
         { }
     }

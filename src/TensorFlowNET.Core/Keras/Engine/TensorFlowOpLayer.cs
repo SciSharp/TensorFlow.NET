@@ -8,12 +8,12 @@ namespace Tensorflow.Keras.Engine
     public class TensorFlowOpLayer : Layer
     {
         TensorFlowOpLayerArgs args;
-        string _TF_OP_LAYER_NAME_PREFIX = "";
+        static string TF_OP_LAYER_NAME_PREFIX = "tf_op_layer_";
 
         public TensorFlowOpLayer(TensorFlowOpLayerArgs args) 
             : base(new LayerArgs 
                 { 
-                    Name = "tf_op_layer_" + args.Name,
+                    Name = TF_OP_LAYER_NAME_PREFIX + args.Name,
                     Trainable = args.Trainable,
                     DType = args.DType,
                     Autocast = false

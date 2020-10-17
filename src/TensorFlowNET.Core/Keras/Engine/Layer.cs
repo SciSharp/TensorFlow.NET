@@ -89,7 +89,6 @@ namespace Tensorflow.Keras.Engine
 
         ThreadLocal<CallContext> callContext;
         public CallContext CallContext => callContext.Value;
-        public static List<KerasHistory> KerasHistories = new List<KerasHistory>();
 
         public Layer(LayerArgs args)
         {
@@ -125,29 +124,16 @@ namespace Tensorflow.Keras.Engine
         }
 
         public void SetConnectivityMetadata(Tensors inputs, Tensors outputs)
-        {
-
-        }
+            => _set_connectivity_metadata_(inputs, outputs);
 
         private Tensors _set_connectivity_metadata_(Tensors inputs, Tensors outputs)
         {
-            /*var returnOutputs = new List<Tensor>();
-            foreach(var x in outputs)
-            {
-                if (inputs.Contains(x))
-                {
-
-                }
-                returnOutputs.Add(x);
-            }*/
-
             new Node(this, new NodeArgs
             {
                 InputTensors = inputs,
                 Outputs = outputs
             });
 
-            //_add_inbound_node(input_tensors: inputs, output_tensors: outputs);
             return outputs;
         }
 

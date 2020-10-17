@@ -20,8 +20,6 @@ namespace Tensorflow.Keras.Engine
             this.node_index = node_index;
             this.tensor_index = tensor_index;
             this.tensor = tensor;
-            Layer.KerasHistories.Add(this);
-            Console.WriteLine(tensor.name);
         }
 
         public void Deconstruct(out Layer layer, out int node_index, out int tensor_index)

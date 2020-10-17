@@ -29,7 +29,7 @@ https://tensorflownet.readthedocs.io</Description>
     <FileVersion>0.21.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>

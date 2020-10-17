@@ -142,26 +142,39 @@ namespace Tensorflow.Keras.Utils
                             layer_inputs.Add(op_input);
                         else
                         {
+                            tf_with(ops.init_scope(), delegate
+                            {
 
+
+                            });
                         }
-
-                        // recursively
-                        CreateKerasHistoryHelper(layer_inputs, processed_ops, created_layers);
-                        var op_layer = new TensorFlowOpLayer(new TensorFlowOpLayerArgs
-                        {
-                            NodeDef = op.node_def,
-                            Name = op.name
-                        });
-                        created_layers.Add(op_layer);
-                        op_layer.SetConnectivityMetadata(layer_inputs, op.outputs);
                     }
+
+                    // recursively
+                    CreateKerasHistoryHelper(layer_inputs, processed_ops, created_layers);
+                    var op_layer = new TensorFlowOpLayer(new TensorFlowOpLayerArgs
+                    {
+                        NodeDef = op.node_def,
+                        Name = op.name
+                    });
+                    created_layers.Add(op_layer);
+                    op_layer.SetConnectivityMetadata(layer_inputs, op.outputs);
+                    processed_ops.Add(op);
                 }
             }
         }
 
+        // recusive
         static bool uses_keras_history(Tensor op_input)
         {
-            return Layer.KerasHistories.Any(x => x.tensor.name == op_input.name);
+            if (op_input.KerasHistory != null)
+                return true;
+
+            foreach (var input in op_input.op.inputs._inputs)
+                if (uses_keras_history(input))
+                    return true;
+
+            return false;
         }
     }
 }

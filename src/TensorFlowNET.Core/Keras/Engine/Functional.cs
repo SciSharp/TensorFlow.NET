@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Utils;
@@ -69,6 +68,11 @@ namespace Tensorflow.Keras.Engine
                 _input_coordinates.append(new KerasHistory(layer, node_index, tensor_index, x));
             }
         }
-       
+
+        protected override Tensors call(Tensors inputs, Tensor state = null, bool is_training = false)
+        {
+            return base.call(inputs, state, is_training);
+        }
+
     }
 }

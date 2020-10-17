@@ -8,6 +8,7 @@ using Tensorflow.Keras.Datasets;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Losses;
+using Tensorflow.Keras.Optimizers;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -22,6 +23,7 @@ namespace Tensorflow
         public Activations activations { get; } = new Activations();
         public Preprocessing preprocessing { get; } = new Preprocessing();
         public BackendImpl backend { get; } = new BackendImpl();
+        public OptimizerApi optimizers { get; } = new OptimizerApi();
 
         public Sequential Sequential(List<Layer> layers = null,
                 string name = null)
