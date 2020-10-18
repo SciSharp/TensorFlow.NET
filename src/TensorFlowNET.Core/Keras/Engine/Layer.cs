@@ -162,7 +162,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="state"></param>
         /// <param name="is_training"></param>
         /// <returns></returns>
-        protected virtual Tensors call(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected virtual Tensors call_fn(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             throw new NotImplementedException("");
         }

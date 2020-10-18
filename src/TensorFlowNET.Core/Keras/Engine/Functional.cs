@@ -69,10 +69,14 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        protected override Tensors call(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors call_fn(Tensors inputs, Tensor state = null, bool is_training = false)
         {
-            return base.call(inputs, state, is_training);
+            return run_internal_graph(inputs, state, is_training);
         }
 
+        Tensors run_internal_graph(Tensors inputs, Tensor state = null, bool is_training = false)
+        {
+            throw new NotImplementedException("");
+        }
     }
 }

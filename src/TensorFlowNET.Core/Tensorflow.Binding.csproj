@@ -72,6 +72,8 @@ https://tensorflownet.readthedocs.io</Description>
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="FodyWeavers.xml" />
+    <None Remove="FodyWeavers.xsd" />
     <None Remove="Protobuf\README.md" />
   </ItemGroup>
 
@@ -83,11 +85,5 @@ https://tensorflownet.readthedocs.io</Description>
 
   <ItemGroup>
     <Folder Include="Keras\Initializers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="FodyWeavers.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

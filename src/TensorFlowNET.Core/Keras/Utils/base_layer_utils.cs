@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -135,7 +136,7 @@ namespace Tensorflow.Keras.Utils
                 if (!processed_ops.Contains(op))
                 {
                     var layer_inputs = new List<Tensor>();
-
+                    var constants = new Dictionary<int, NDArray>();
                     foreach (var (i, op_input) in enumerate(op.inputs._inputs))
                     {
                         if (uses_keras_history(op_input))
@@ -144,8 +145,7 @@ namespace Tensorflow.Keras.Utils
                         {
                             tf_with(ops.init_scope(), delegate
                             {
-
-
+                                constants[i] = tf.keras.backend.eval_in_eager_or_function(op_input);
                             });
                         }
                     }
@@ -155,6 +155,7 @@ namespace Tensorflow.Keras.Utils
                     var op_layer = new TensorFlowOpLayer(new TensorFlowOpLayerArgs
                     {
                         NodeDef = op.node_def,
+                        Constants = constants,
                         Name = op.name
                     });
                     created_layers.Add(op_layer);

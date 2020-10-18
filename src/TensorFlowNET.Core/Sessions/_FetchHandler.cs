@@ -124,6 +124,9 @@ namespace Tensorflow
                             case NPTypeCode.Double:
                                 full_values.Add(value.GetValue<double>(0));
                                 break;
+                            case NPTypeCode.Boolean:
+                                full_values.Add(value.GetValue<bool>(0));
+                                break;
                             /*case "String":
                                 full_values.Add(value.Data<byte>()[0]);
                                 break;*/

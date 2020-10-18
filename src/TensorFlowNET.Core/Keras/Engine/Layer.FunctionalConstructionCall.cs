@@ -42,7 +42,7 @@ namespace Tensorflow.Keras.Engine
                 if (!dynamic)
                     throw new NotImplementedException("");
 
-                outputs = call(inputs);
+                outputs = call_fn(inputs);
 
                 outputs = _set_connectivity_metadata_(inputs, outputs);
                 _handle_activity_regularization(inputs, outputs);

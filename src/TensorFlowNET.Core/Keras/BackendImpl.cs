@@ -160,9 +160,9 @@ namespace Tensorflow.Keras
         /// </summary>
         /// <param name="outputs"></param>
         /// <returns></returns>
-        public Tensor eval_in_eager_or_function(Tensor outputs)
+        public NDArray eval_in_eager_or_function(Tensor outputs)
         {
-            throw new NotImplementedException("");
+            return outputs.eval();
         }
 
         public class _DummyEagerGraph

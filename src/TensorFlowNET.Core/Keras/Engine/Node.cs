@@ -52,8 +52,6 @@ namespace Tensorflow.Keras.Engine
             layer.InboundNodes.Add(this);
             foreach (var kt in kerasInputs)
             {
-                if (kt.KerasHistory == null)
-                    continue;
                 var inbound_layer = kt.KerasHistory.layer;
                 if (inbound_layer != null)
                     inbound_layer.OutboundNodes.Add(this);
