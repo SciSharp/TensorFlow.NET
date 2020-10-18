@@ -39,20 +39,42 @@ namespace Tensorflow.Keras.Engine
         public Tensors Outputs => args.Outputs;
         public TensorShape[] input_shapes;
         public TensorShape[] output_shapes;
-        List<Tensor> kerasInputs = new List<Tensor>();
+        public List<Tensor> KerasInputs = new List<Tensor>();
+        public Layer Layer { get; set; }
+        public bool IsInput => args.InputTensors == null;
+        public int[] FlatInputIds { get; set; }
+        public int[] FlatOutputIds { get; set; }
+
+        public Node[] ParentNodes
+        {
+            get
+            {
+                var node_deps = new List<Node>();
+                foreach(var kt in KerasInputs)
+                {
+                    var (layer, node_index, _) = kt.KerasHistory;
+                    if (layer != null)
+                        node_deps.append(layer.InboundNodes[node_index]);
+                }
+                return node_deps.ToArray();
+            }
+        } 
 
         public Node(Layer layer, NodeArgs args)
         {
             this.args = args;
+            this.Layer = layer;
 
             if (args.InputTensors != null)
-                kerasInputs.AddRange(args.InputTensors);
+                KerasInputs.AddRange(args.InputTensors);
 
             // Wire up Node to Layers.
             layer.InboundNodes.Add(this);
-            foreach (var kt in kerasInputs)
+            foreach (var kt in KerasInputs)
             {
-                var inbound_layer = kt.KerasHistory.layer;
+                if (kt.KerasHistory == null)
+                    continue;
+                var (inbound_layer, _, _) = kt.KerasHistory;
                 if (inbound_layer != null)
                     inbound_layer.OutboundNodes.Add(this);
             }
@@ -61,6 +83,10 @@ namespace Tensorflow.Keras.Engine
             var node_index = layer.InboundNodes.Count - 1;
             foreach (var (i, tensor) in enumerate(Outputs))
                 tensor.KerasHistory = new KerasHistory(layer, node_index, i, tensor);
+
+            // Cached for performance.
+            FlatInputIds = KerasInputs.Select(x => x.GetHashCode()).ToArray();
+            FlatOutputIds = Outputs.Select(x => x.GetHashCode()).ToArray();
         }
     }
 }

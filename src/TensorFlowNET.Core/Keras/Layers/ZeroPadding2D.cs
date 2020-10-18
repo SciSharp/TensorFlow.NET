@@ -29,7 +29,7 @@ namespace Tensorflow.Keras.Layers
             this.input_spec = new InputSpec(ndim: 4);
         }
 
-        protected override Tensors call_fn(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors CallFn(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             return tf.keras.backend.spatial_2d_padding(inputs,
                 padding: padding,

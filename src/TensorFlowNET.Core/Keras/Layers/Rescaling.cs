@@ -20,7 +20,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        protected override Tensors call_fn(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors CallFn(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             scale = math_ops.cast(args.Scale, args.DType);
             offset = math_ops.cast(args.Offset, args.DType);

@@ -22,6 +22,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using NumSharp.Utilities;
+using System.Runtime.CompilerServices;
 
 namespace Tensorflow
 {
@@ -50,7 +51,7 @@ namespace Tensorflow
             => list.Add(element);
 
         public static void append<T>(this IList<T> list, T element)
-            => list.Add(element);
+            => list.Insert(list.Count, element);
 
         public static T[] concat<T>(this IList<T> list1, IList<T> list2)
         {
@@ -406,6 +407,38 @@ namespace Tensorflow
                 if (isinstance(Item1, (Type) t))
                     return true;
             return false;
+        }
+
+        public static bool issubset<T>(this IEnumerable<T> subset, IEnumerable<T> src)
+        {
+            bool issubset = true;
+            foreach (var element in subset)
+            {
+                if (!src.Contains(element))
+                {
+                    issubset = false;
+                    continue;
+                }
+            }
+
+            return true;
+        }
+
+        public static TValue SetDefault<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue value)
+        {
+            if (dic.ContainsKey(key))
+                return dic[key];
+
+            dic[key] = value;
+            return value;
+        }
+
+        public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue value)
+        {
+            if (dic.ContainsKey(key))
+                return dic[key];
+
+            return value;
         }
     }
 }

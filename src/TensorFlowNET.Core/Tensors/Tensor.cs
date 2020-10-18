@@ -145,6 +145,7 @@ namespace Tensorflow
         /// Keras History: (Layer, (node_index, tensor_index))
         /// </summary>
         public KerasHistory KerasHistory { get; set; }
+        public Tensor KerasMask { get; set; }
 
         /// <summary>
         ///     Updates the shape of this tensor.

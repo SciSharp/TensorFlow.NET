@@ -9,10 +9,10 @@ namespace Tensorflow.Keras.Engine
     /// </summary>
     public class KerasHistory
     {
-        public Layer layer;
+        Layer layer;
         int node_index;
         int tensor_index;
-        public Tensor tensor;
+        Tensor tensor;
 
         public KerasHistory(Layer layer, int node_index, int tensor_index, Tensor tensor)
         {

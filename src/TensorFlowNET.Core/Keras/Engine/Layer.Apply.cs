@@ -46,7 +46,7 @@ namespace Tensorflow.Keras.Engine
                 if (!built)
                     MaybeBuild(inputs);
 
-                outputs = call_fn(inputs, state: state, is_training: is_training);
+                outputs = CallFn(inputs, state: state, is_training: is_training);
 
                 outputs = _set_connectivity_metadata_(inputs, outputs);
                 _handle_activity_regularization(inputs, outputs);
