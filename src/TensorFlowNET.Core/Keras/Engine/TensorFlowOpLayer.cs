@@ -23,9 +23,9 @@ namespace Tensorflow.Keras.Engine
             built = true;
         }
 
-        protected override Tensors CallFn(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
-            return base.CallFn(inputs, state, is_training);
+            return base.Call(inputs, state, is_training);
         }
     }
 }

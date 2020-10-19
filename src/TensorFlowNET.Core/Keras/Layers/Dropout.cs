@@ -18,7 +18,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        protected override Tensors CallFn(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             var output = tf_utils.smart_cond(is_training,
                 () => tf.nn.dropout(inputs,

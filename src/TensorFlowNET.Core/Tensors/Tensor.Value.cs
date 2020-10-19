@@ -158,6 +158,9 @@ namespace Tensorflow
             UnmanagedStorage storage;
             switch (dtype)
             {
+                case TF_DataType.TF_BOOL:
+                    storage = new UnmanagedStorage(NPTypeCode.Boolean);
+                    break;
                 case TF_DataType.TF_STRING:
                     return np.array(StringBytes()[0]);
                 case TF_DataType.TF_INT32:

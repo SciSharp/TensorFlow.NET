@@ -321,6 +321,23 @@ namespace Tensorflow.Operations
         bool is_training = true,
         string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "FusedBatchNormV3", name,
+                    null,
+                    x,
+                    scale,
+                    offset,
+                    mean,
+                    variance,
+                    "epsilon", epsilon,
+                    "data_format", data_format,
+                    "is_training", is_training);
+
+                return results;
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("FusedBatchNormV3", name: name, args: new
             {
                 x,

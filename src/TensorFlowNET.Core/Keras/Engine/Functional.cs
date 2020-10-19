@@ -268,7 +268,7 @@ namespace Tensorflow.Keras.Engine
             nodes_in_decreasing_depth.Insert(nodes_in_decreasing_depth.Count, node);
         }
 
-        protected override Tensors CallFn(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             return run_internal_graph(inputs, is_training);
         }
@@ -305,6 +305,7 @@ namespace Tensorflow.Keras.Engine
                     tensor_dict[node.FlatInputIds[0]] = new Tensor[0];
 
                     var outputs = node.Layer.Apply(layer_inputs, is_training: training);
+                    
                     // Update tensor_dict.
                     foreach (var (x_id, y) in zip(node.FlatOutputIds, outputs))
                         tensor_dict[x_id] = Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y).ToArray();

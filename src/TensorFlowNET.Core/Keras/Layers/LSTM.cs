@@ -29,9 +29,9 @@ namespace Tensorflow.Keras.Layers
                 .ToArray();
         }
 
-        protected override Tensors CallFn(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
-            return base.CallFn(inputs, state: state, is_training: is_training);
+            return base.Call(inputs, state: state, is_training: is_training);
         }
     }
 }

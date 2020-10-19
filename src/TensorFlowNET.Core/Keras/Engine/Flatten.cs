@@ -21,7 +21,7 @@ namespace Tensorflow.Keras.Engine
             _channels_first = args.DataFormat == "channels_first";
         }
 
-        protected override Tensors CallFn(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             if (_channels_first)
             {

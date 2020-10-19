@@ -20,6 +20,7 @@ namespace Tensorflow.Gradients
         public static int[] OpGradientUnusedOutputIndices(string op_name)
             => op_name switch
             {
+                "FusedBatchNormV3" => new[] { 0, 1, 2 },
                 "ReadVariableOp" => new int[0],
                 "SoftmaxCrossEntropyWithLogits" => new[] { 0 },
                 "TensorArrayConcat" => new[] { 0 },
