@@ -175,6 +175,15 @@ namespace Tensorflow
 
         public static Tensor pad(Tensor input, Tensor paddings, string name = null)
         {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Pad", name,
+                    null,
+                    input, paddings);
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("Pad", name: name, args: new { input, paddings });
 
             return _op.output;

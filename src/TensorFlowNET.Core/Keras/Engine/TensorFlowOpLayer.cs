@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -25,7 +26,13 @@ namespace Tensorflow.Keras.Engine
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
-            return base.Call(inputs, state, is_training);
+            return MakOp(inputs);
         }
+
+        // [AutoGraph]
+        Tensors MakOp(Tensors inputs)
+        {
+            return inputs;
+        } 
     }
 }

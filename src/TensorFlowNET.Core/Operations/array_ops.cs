@@ -835,22 +835,24 @@ namespace Tensorflow
             }
 
             // Restore shape information where possible.
-            var paddings_constant = tensor_util.constant_value(
-                result.op.inputs[1], partial: true);
-            var input_shape = result.op.inputs[0].TensorShape;
-            if (input_shape.ndim > -1 &&
-                !result.TensorShape.is_fully_defined() &&
-                !(paddings_constant is null))
+            if (!tf.Context.executing_eagerly())
             {
-                var new_shape = new List<int>();
-                foreach((NDArray padding, int dim) in zip(paddings_constant.GetNDArrays(), np.array(input_shape.dims).GetNDArrays()))
+                var paddings_constant = tensor_util.constant_value(result.op.inputs[1], partial: true);
+                var input_shape = result.op.inputs[0].TensorShape;
+                if (input_shape.ndim > -1 &&
+                    !result.TensorShape.is_fully_defined() &&
+                    !(paddings_constant is null))
                 {
-                    if (padding is null || dim == -1 || padding.GetData<int>().Contains(-1))
-                        new_shape.Add(-1);
-                    else
-                        new_shape.Add(np.sum(padding) + dim);
+                    var new_shape = new List<int>();
+                    foreach ((NDArray padding, int dim) in zip(paddings_constant.GetNDArrays(), np.array(input_shape.dims).GetNDArrays()))
+                    {
+                        if (padding is null || dim == -1 || padding.GetData<int>().Contains(-1))
+                            new_shape.Add(-1);
+                        else
+                            new_shape.Add(np.sum(padding) + dim);
+                    }
+                    result.set_shape(new_shape.ToArray());
                 }
-                result.set_shape(new_shape.ToArray());
             }
 
             return result;

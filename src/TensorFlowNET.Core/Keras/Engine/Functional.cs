@@ -88,7 +88,7 @@ namespace Tensorflow.Keras.Engine
         void ComputeTensorUsageCount()
         {
             var available_tensors = inputs.Select(x => x.GetHashCode()).ToList();
-            var depth_keys = NodesByDepth.Keys.Reverse().Skip(1).ToArray();
+            var depth_keys = NodesByDepth.Keys.OrderBy(x => x).Reverse().Skip(1).ToArray();
             foreach(var depth in depth_keys)
             {
                 foreach(var node in NodesByDepth[depth])
@@ -190,7 +190,7 @@ namespace Tensorflow.Keras.Engine
             }
 
             // Get sorted list of layer depths.
-            var depth_keys = layers_by_depth.Keys.Reverse();
+            var depth_keys = layers_by_depth.Keys.OrderBy(x => x).Reverse();
 
             // Set self.layers ordered by depth.
             var layers = new List<Layer>();
@@ -200,12 +200,12 @@ namespace Tensorflow.Keras.Engine
 
                 // Network.layers needs to have a deterministic order:
                 // here we order them by traversal order.
-                layers_for_depth.Reverse();
+                layers_for_depth = layers_for_depth.OrderBy(x => layer_indices[x]).ToList();
                 layers.AddRange(layers_for_depth);
             }
 
             // Get sorted list of node depths.
-            depth_keys = nodes_by_depth.Keys.Reverse();
+            depth_keys = nodes_by_depth.Keys.OrderBy(x => x).Reverse();
 
             return (network_nodes, nodes_by_depth, layers, layers_by_depth);
         }
@@ -290,7 +290,7 @@ namespace Tensorflow.Keras.Engine
                 tensor_dict[x_id] = Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y1).ToArray();
             }
 
-            var depth_keys = NodesByDepth.Keys.Reverse().ToArray();
+            var depth_keys = NodesByDepth.Keys.OrderBy(x => x).Reverse().ToArray();
 
             foreach(var depth in depth_keys)
             {
