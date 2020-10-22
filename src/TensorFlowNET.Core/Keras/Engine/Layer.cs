@@ -58,20 +58,13 @@ namespace Tensorflow.Keras.Engine
         protected InputSpec inputSpec;
         bool dynamic = true;
         public bool SupportsMasking { get; set; }
-        protected List<IVariableV1> trainableWeights;
-        public List<IVariableV1> trainable_variables
-        { 
-            get 
-            {
-                if(trainableWeights.Count == 0)
-                    _layers.ForEach(x => trainableWeights.AddRange(x.trainableWeights));
+        protected List<IVariableV1> trainable_weights;
 
-                return trainableWeights;
-            } 
-        } 
+        public virtual List<IVariableV1> trainable_variables => trainable_weights;
+         
 
-        protected List<IVariableV1> nonTrainableWeights;
-        public List<IVariableV1> non_trainable_variables => nonTrainableWeights;
+        protected List<IVariableV1> non_trainable_weights;
+        public List<IVariableV1> non_trainable_variables => non_trainable_weights;
 
         protected string name;
         protected string base_name;
@@ -103,8 +96,8 @@ namespace Tensorflow.Keras.Engine
             SupportsMasking = false;
 
             _init_set_name(args.Name);
-            trainableWeights = new List<IVariableV1>();
-            nonTrainableWeights = new List<IVariableV1>();
+            trainable_weights = new List<IVariableV1>();
+            non_trainable_weights = new List<IVariableV1>();
             computePreviousMask = false;
             updates = new List<Operation>();
 

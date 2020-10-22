@@ -37,8 +37,6 @@ namespace Tensorflow.Keras.Utils
             var initializing_from_value = false;
 #pragma warning restore CS0219 // Variable is assigned but its value is never used
 
-            ops.init_scope();
-
             Func<Tensor> init_val = () => args.Initializer.Apply(new InitializerArgs(args.Shape, dtype: args.DType));
 
             var variable_dtype = args.DType.as_base_dtype();

@@ -1,6 +1,7 @@
 ﻿using NumSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Graphs;
 using Tensorflow.Keras.ArgsDefinition;
@@ -37,18 +38,21 @@ namespace Tensorflow.Keras.Engine
         }
 
         [AutoGraph]
-        Tensor _defun_call(Tensor inputs) 
+        Tensors _defun_call(Tensors inputs) 
             => MakOp(inputs);
 
-        Tensor MakOp(Tensor inputs)
+        Tensors MakOp(Tensors inputs)
         {
             foreach (var (index, constant) in enumerate(constants))
             {
-
+                var value = constant_op.constant(constant, name: node_def.Input[index]);
+                var new_inputs = inputs.ToList();
+                new_inputs.Insert(index, value);
+                inputs = new Tensors(new_inputs.ToArray());
             }
 
             var graph = inputs.graph;
-            var (c_op, c_op_desc) = ops._create_c_op(graph, node_def, new[] { inputs }, new Operation[0]);
+            var (c_op, _) = ops._create_c_op(graph, node_def, inputs.ToArray(), new Operation[0]);
             var op = graph._create_op_from_tf_operation(c_op);
             op._control_flow_post_processing();
 

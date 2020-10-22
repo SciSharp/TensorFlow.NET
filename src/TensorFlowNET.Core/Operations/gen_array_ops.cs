@@ -490,10 +490,13 @@ namespace Tensorflow
         }
 
         public static Tensor zeros_like(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("ZerosLike", name, new { x });
-            return _op.outputs[0];
-        }
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("ZerosLike", name, new { x }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ZerosLike", name,
+                    null,
+                    x).FirstOrDefault(),
+                x);
 
         public static Tensor stop_gradient(Tensor x, string name = null)
         {

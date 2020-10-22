@@ -49,8 +49,8 @@ namespace Tensorflow.Layers
             this._reuse = _reuse;
 
             // Avoid an incorrect lint error
-            trainableWeights = new List<IVariableV1>();
-            nonTrainableWeights = new List<IVariableV1>();
+            trainable_weights = new List<IVariableV1>();
+            non_trainable_weights = new List<IVariableV1>();
             this.built = false;
             _keras_style = false;
         }

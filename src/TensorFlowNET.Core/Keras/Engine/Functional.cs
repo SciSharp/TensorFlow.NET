@@ -24,9 +24,24 @@ namespace Tensorflow.Keras.Engine
         List<KerasHistory> _output_coordinates;
         public string[] NetworkNodes { get; set; }
         public Dictionary<int, List<Node>> NodesByDepth { get; set; }
-        public List<Layer> Layers { get; set; }
+        public List<Layer> Layers => _layers;
+
         Dictionary<int, int> tensor_usage_count;
         public Dictionary<int, int> TensorUsageCount => tensor_usage_count;
+
+        public override List<IVariableV1> trainable_variables
+        {
+            get
+            {
+                var variables = new List<IVariableV1>();
+                foreach(var layer in _layers)
+                {
+                    if (layer.Trainable)
+                        variables.AddRange(layer.trainable_variables);
+                }
+                return variables;
+            }
+        }
 
         public Functional(Tensors inputs, Tensors outputs) 
             : base(new ModelArgs
@@ -80,7 +95,7 @@ namespace Tensorflow.Keras.Engine
 
             NetworkNodes = nodes;
             NodesByDepth = nodes_by_depth;
-            Layers = layers;
+            _layers = layers;
 
             ComputeTensorUsageCount();
         }
@@ -316,11 +331,15 @@ namespace Tensorflow.Keras.Engine
                 }
             }
 
-            foreach(var x in outputs)
-            {
+            var output_tensors = new List<Tensor>();
 
+            foreach (var x in outputs)
+            {
+                var x_id = x.GetHashCode();
+                output_tensors.append(tensor_dict[x_id].Dequeue());
             }
-            throw new NotImplementedException("");
+
+            return output_tensors;
         }
 
         Tensor conform_to_reference_input(Tensor tensor, Tensor ref_input)

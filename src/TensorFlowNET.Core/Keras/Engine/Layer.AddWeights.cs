@@ -55,9 +55,9 @@ namespace Tensorflow.Keras.Engine
 
             //backend.track_variable(variable);
             if (trainable == true)
-                trainableWeights.Add(variable);
+                trainable_weights.Add(variable);
             else
-                nonTrainableWeights.Add(variable);
+                non_trainable_weights.Add(variable);
 
             return variable;
         }

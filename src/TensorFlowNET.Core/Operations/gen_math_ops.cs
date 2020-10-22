@@ -568,11 +568,13 @@ namespace Tensorflow
         }
 
         public static Tensor log1p(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Log1p", name, args: new { x });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Log1p", name: name, new { x }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Log1p", name,
+                    null,
+                    x).FirstOrDefault(),
+                x);
 
         public static Tensor logical_and(Tensor x, Tensor y, string name = null)
         {
@@ -1056,12 +1058,15 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims=false, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims });
-
-            return _op.outputs[0];
-        }
+        public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Max", name,
+                    null,
+                    input, axis,
+                    "keep_dims", keep_dims).FirstOrDefault(),
+                input as Tensor);
 
         public static Tensor _min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
         {

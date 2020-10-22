@@ -93,7 +93,7 @@ namespace Tensorflow
             tf_with(ops.init_scope(), init_scope => 
             {
                 var values = init_from_fn ? new object[0] : new object[] { initial_value };
-                tf_with(ops.name_scope(name, "Variable", values), scope =>
+                tf_with(ops.name_scope(name, "Variable", values, skip_on_eager: false), scope =>
                 {
                     name = scope;
                     var handle_name = ops.name_from_scope_name(name);

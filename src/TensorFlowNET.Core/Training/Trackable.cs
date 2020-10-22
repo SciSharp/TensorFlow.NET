@@ -29,19 +29,20 @@ namespace Tensorflow.Train
         /// <returns></returns>
         protected virtual IVariableV1 _add_variable_with_custom_getter(VariableArgs args)
         {
-            ops.init_scope();
+            tf_with(ops.init_scope(), delegate
+            {
 #pragma warning disable CS0219 // Variable is assigned but its value is never used
-            IInitializer checkpoint_initializer = null;
+                IInitializer checkpoint_initializer = null;
 #pragma warning restore CS0219 // Variable is assigned but its value is never used
-            if (tf.Context.executing_eagerly())
+                if (tf.Context.executing_eagerly())
 #pragma warning disable CS0642 // Possible mistaken empty statement
-                ;
+                    ;
 #pragma warning restore CS0642 // Possible mistaken empty statement
-            else
-                checkpoint_initializer = null;
+                else
+                    checkpoint_initializer = null;
+            });
 
-            IVariableV1 new_variable;
-            new_variable = args.Getter(args);
+            var new_variable = args.Getter(args);
 
             // If we set an initializer and the variable processed it, tracking will not
             // assign again. It will add this variable to our dependencies, and if there

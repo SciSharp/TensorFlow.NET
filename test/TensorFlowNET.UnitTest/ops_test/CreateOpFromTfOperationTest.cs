@@ -105,7 +105,7 @@ namespace TensorFlowNET.UnitTest.ops_test
             x = constant_op.constant(42);
             var body = new Func<int, int>(i =>
             {
-                ops._create_c_op(ops.get_default_graph(), ops._NodeDef("Identity", "myloop/myop"), new[] {x},
+                ops._create_c_op(ops.get_default_graph(), ops._NodeDef("Identity", "myloop/myop"), new[] { x.output },
                     new Operation[0]);
                 var new_ops = graph._add_new_tf_operations();
                 self.assertEqual(len(new_ops), 1);

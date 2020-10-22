@@ -25,6 +25,7 @@ using Tensorflow.Util;
 using static Tensorflow.Binding;
 using Tensorflow.Eager;
 using Tensorflow.Contexts;
+using Google.Protobuf.Collections;
 
 namespace Tensorflow
 {
@@ -156,8 +157,14 @@ namespace Tensorflow
         /// </param>
         /// <param name="control_inputs">A list of `Operation`s to set as control dependencies.</param>
         /// <returns>A wrapped TF_Operation*.</returns>
-        public static (IntPtr, OperationDescription) _create_c_op<T>(Graph graph, NodeDef node_def, T[] inputs, Operation[] control_inputs)
+        public static (IntPtr, OperationDescription) _create_c_op(Graph graph, NodeDef node_def, Tensor[] inputs, Operation[] control_inputs,
+            OpDef op_def = null)
         {
+            if (op_def == null)
+                op_def = graph.GetOpDef(node_def.Op);
+            
+            var input_tensors = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
+
             lock (Locks.ProcessWide)
             {
                 var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
@@ -166,15 +173,12 @@ namespace Tensorflow
                     c_api.TF_SetDevice(op_desc, node_def.Device);
 
                 // Add inputs
-                foreach (var op_input in inputs)
+                foreach (var op_input in input_tensors)
                 {
-                    if (op_input is Tensor[] op_inputs)
-                        c_api.TF_AddInputList(op_desc, op_inputs.Select(x => x._as_tf_output()).ToArray(), op_inputs.Length);
-                    else if (op_input is Tensor op_input1)
-                    {
-                        c_api.TF_AddInput(op_desc, op_input1._as_tf_output());
-                    } else
-                        throw new NotImplementedException("_create_c_op");
+                    if (op_input.IsList)
+                        c_api.TF_AddInputList(op_desc, op_input.Select(x => x._as_tf_output()).ToArray(), op_input.Count());
+                    else if (op_input.Count() == 1)
+                        c_api.TF_AddInput(op_desc, op_input[0]._as_tf_output());
                 }
 
                 var status = tf.Status;
@@ -201,6 +205,42 @@ namespace Tensorflow
 
                 return (c_op, op_desc);
             }
+        }
+
+        public static Tensors[] _reconstruct_sequence_inputs(OpDef op_def, Tensor[] inputs, MapField<string, AttrValue> attrs)
+        {
+            var grouped_inputs = new List<Tensors>();
+            int i = 0;
+
+            foreach (var input_arg in op_def.InputArg)
+            {
+                int input_len = 1;
+                bool is_sequence = false;
+
+                if (!string.IsNullOrEmpty(input_arg.NumberAttr))
+                {
+                    input_len = (int)attrs[input_arg.NumberAttr].I;
+                    is_sequence = true;
+                }
+                else if (!string.IsNullOrEmpty(input_arg.TypeListAttr))
+                {
+                    input_len = attrs[input_arg.TypeListAttr].List.Type.Count;
+                    is_sequence = true;
+                }
+
+                if (is_sequence)
+                {
+                    var input_tensors = new Tensors(inputs.Skip(i).Take(input_len).ToArray());
+                    input_tensors.IsList = true;
+                    grouped_inputs.Add(input_tensors);
+                }
+                else
+                    grouped_inputs.Add(inputs[i]);
+
+                i += input_len;
+            }
+
+            return grouped_inputs.ToArray();
         }
 
         public static OpDef _get_op_def(Graph graph, string type)

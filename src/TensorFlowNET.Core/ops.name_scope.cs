@@ -26,7 +26,8 @@ namespace Tensorflow
     {
         public static NameScope name_scope(string name,
             string default_name = "",
-            object values = null) => new NameScope(name, default_name, values);
+            object values = null,
+            bool skip_on_eager = true) => new NameScope(name, default_name, values: values, skip_on_eager: skip_on_eager);
 
         /// <summary>
         /// Returns a context manager that creates hierarchical names for operations.
@@ -38,15 +39,17 @@ namespace Tensorflow
             public object _values;
             public string scope_name;
             public string old_scope_name = "";
-            
-            public NameScope(string name, string default_name = "", object values = null)
+            bool _skip_on_eager = false;
+
+            public NameScope(string name, string default_name = "", object values = null, bool skip_on_eager = true)
             {
                 _name = name;
                 _default_name = default_name;
                 _values = values;
+                _skip_on_eager = skip_on_eager;
             }
 
-            [DebuggerStepThrough]
+            // [DebuggerStepThrough]
             public void __enter__()
             {
                 if (tf.Context.executing_eagerly())
@@ -73,8 +76,10 @@ namespace Tensorflow
 
             private (string, string) enter_eager_name_scope(Context ctx, string name)
             {
-                return (null, null);
-                /*if (name == null)
+                if (_skip_on_eager)
+                    return (null, null);
+
+                if (name == null)
                     name = "";
 
                 var scope_name = name;
@@ -89,7 +94,7 @@ namespace Tensorflow
                 }
 
                 ctx.ScopeName = scope_name;
-                return (scope_name, old_name);*/
+                return (scope_name, old_name);
             }
 
             [DebuggerHidden]

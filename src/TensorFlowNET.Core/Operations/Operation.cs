@@ -170,8 +170,7 @@ namespace Tensorflow
             if (op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
 
-            var grouped_inputs = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
-            (_handle, OpDesc) = ops._create_c_op(g, node_def, grouped_inputs, control_input_ops.ToArray());
+            (_handle, OpDesc) = ops._create_c_op(g, node_def, inputs, control_input_ops.ToArray());
             _is_stateful = op_def.IsStateful;
 
             // Initialize self._outputs.
@@ -192,39 +191,6 @@ namespace Tensorflow
         public void run(FeedItem[] feed_dict = null, Session session = null)
         {
             ops._run_using_default_session(this, feed_dict, graph, session);
-        }
-
-        private object[] _reconstruct_sequence_inputs(OpDef op_def, Tensor[] inputs, MapField<string, AttrValue> attrs)
-        {
-            var grouped_inputs = new List<object>();
-            int i = 0;
-            int input_len = 0;
-            bool is_sequence = false;
-            foreach (var input_arg in op_def.InputArg)
-            {
-                if (!string.IsNullOrEmpty(input_arg.NumberAttr))
-                {
-                    input_len = (int) attrs[input_arg.NumberAttr].I;
-                    is_sequence = true;
-                } else if (!string.IsNullOrEmpty(input_arg.TypeListAttr))
-                {
-                    input_len = attrs[input_arg.TypeListAttr].List.Type.Count;
-                    is_sequence = true;
-                } else
-                {
-                    input_len = 1;
-                    is_sequence = false;
-                }
-
-                if (is_sequence)
-                    grouped_inputs.Add(inputs.Skip(i).Take(input_len).ToArray());
-                else
-                    grouped_inputs.Add(inputs[i]);
-
-                i += input_len;
-            }
-
-            return grouped_inputs.ToArray();
         }
 
         public virtual T get_attr<T>(string name)

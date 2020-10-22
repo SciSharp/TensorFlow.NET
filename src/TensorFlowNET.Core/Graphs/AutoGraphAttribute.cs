@@ -13,20 +13,20 @@ namespace Tensorflow.Graphs
     public sealed class AutoGraphAttribute : OnMethodBoundaryAspect
     {
         FuncGraph graph;
-        Tensor[] originalInputs;
+        Tensors originalInputs;
         string func_name;
-        static Dictionary<string, Func<Tensor[], Tensor>> functions = new Dictionary<string, Func<Tensor[], Tensor>>();
+        static Dictionary<string, Func<Tensors, Tensors>> functions = new Dictionary<string, Func<Tensors, Tensors>>();
 
         public override void OnEntry(MethodExecutionArgs args)
         {
-            if (args.Instance is TensorFlowOpLayer op)
-                func_name = $"autograph_{op.OpType}.{args.Method.Name}";
-            else
-                func_name = $"autograph_{args.Instance}.{args.Method.Name}";
+            func_name = $"autograph_{args.Instance.GetHashCode()}.{args.Method.Name}";
 
             if (functions.ContainsKey(func_name))
             {
-                args.ReturnValue = functions[func_name](args.Arguments.Select(x => x as Tensor).ToArray());
+                if(args.Arguments[0] is Tensors tensor_inputs)
+                    args.ReturnValue = functions[func_name](tensor_inputs.ToArray());
+                else
+                    args.ReturnValue = functions[func_name](args.Arguments.Select(x => x as Tensor).ToArray());
                 args.FlowBehavior = FlowBehavior.Return;
                 return;
             }   
@@ -34,32 +34,60 @@ namespace Tensorflow.Graphs
             // make function as an Operation by autograph
             graph = new FuncGraph(func_name);
 
-            originalInputs = new Tensor[args.Arguments.Length];
-            // convert args to placeholder
-            for (var i = 0; i < args.Arguments.Length; i++)
+            // convert to Tensors
+            if(args.Arguments[0] is Tensors inputs)
             {
-                if (args.Arguments[i] is EagerTensor tensor)
+                originalInputs = inputs;
+                var new_inputs = inputs.Select(x => tf.placeholder(x.dtype, shape: x.TensorShape)).ToArray();
+                args.Arguments[0] = new Tensors(new_inputs);
+            }
+            else
+            {
+                originalInputs = new Tensors(args.Arguments.Length);
+                // convert args to placeholder
+                for (var i = 0; i < args.Arguments.Length; i++)
                 {
-                    originalInputs[i] = tensor;
-                    args.Arguments[i] = tf.placeholder(tensor.dtype, shape: tensor.TensorShape);
+                    if (args.Arguments[i] is EagerTensor tensor)
+                    {
+                        originalInputs[i] = tensor;
+                        args.Arguments[i] = tf.placeholder(tensor.dtype, shape: tensor.TensorShape);
+                    }
                 }
             }
         }
 
         public override void OnExit(MethodExecutionArgs args)
         {
-            var output = (Tensor)args.ReturnValue;
-            var inputs = args.Arguments.Select(x => x as Tensor).ToArray();
             var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
 
-            graph.ToGraph(opers,
-                inputs.Select(x => x.op).ToArray(),
-                new Operation[] { output.op },
-                null);
+            if (args.ReturnValue is Tensors outputs)
+            {
+                if(args.Arguments[0] is Tensors inputs)
+                {
+                    graph.ToGraph(opers,
+                        inputs.Select(x => x.op).ToArray(),
+                        outputs.Select(x => x.op).ToArray(),
+                        null);
+                }
+                else
+                {
+                    graph.ToGraph(opers,
+                        args.Arguments.Select(x => (x as Tensor).op).ToArray(),
+                        outputs.Select(x => x.op).ToArray(),
+                        null);
+                }
+            }
+            else
+            {
+                graph.ToGraph(opers,
+                    args.Arguments.Select(x => (x as Tensor).op).ToArray(),
+                    new Operation[] { (args.ReturnValue as Tensor).op },
+                    null);
+            }
 
             graph.Dispose();
 
-            Func<Tensor[], Tensor> function = (x) =>
+            Func<Tensors, Tensors> function = (x) =>
             {
                 var result = tf.Runner.TFE_Execute(tf.Context,
                     tf.Context.DeviceName,

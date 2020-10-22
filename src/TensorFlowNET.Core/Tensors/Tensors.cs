@@ -24,8 +24,20 @@ namespace Tensorflow
         public int rank => items.First().rank;
         public Graph graph => items.First().graph;
         public bool IsEagerTensor => items.First().IsEagerTensor;
+        public bool IsList { get; set; }
 
-        public Tensor this[int index] => items[index];
+        public Tensor this[int index]
+        {
+            get
+            {
+                return items[index];
+            }
+
+            set
+            {
+                items[index] = value;
+            }
+        }
 
         public Tensors(params Tensor[] tensors)
         {
@@ -35,6 +47,11 @@ namespace Tensorflow
         public Tensors(NDArray nd)
         {
             items = new[] { ops.convert_to_tensor(nd) };
+        }
+
+        public Tensors(int count)
+        {
+            items = new Tensor[count];
         }
 
         public IEnumerator<Tensor> GetEnumerator()
