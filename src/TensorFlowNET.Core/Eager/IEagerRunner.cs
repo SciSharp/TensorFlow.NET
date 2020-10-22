@@ -35,5 +35,10 @@ namespace Tensorflow.Eager
             Tensor[] target,
             Tensor[] sources,
             Tensor[] output_gradients);
+
+        bool RecordGradient(string op_name,
+            Tensor[] inputs,
+            object[] attrs,
+            Tensor[] results);
     }
 }

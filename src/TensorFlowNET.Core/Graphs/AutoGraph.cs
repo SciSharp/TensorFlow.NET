@@ -9,14 +9,42 @@ namespace Tensorflow.Graphs
 {
     public class AutoGraph
     {
+        public Func<Tensor, Tensor> to_graph(Func<Tensor, Tensor> func)
+        {
+            string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
+
+            // IntPtr func_handle;
+            using (var graph = new FuncGraph(func_name))
+            {
+                var input = tf.placeholder(tf.int32);
+                var output = func(input);
+
+                var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+                var func_handle = graph.ToGraph(opers,
+                    new Operation[] { input },
+                    new Operation[] { output },
+                    null);
+            }
+
+            return (Tensor input) =>
+            {
+                var result = tf.Runner.TFE_Execute(tf.Context,
+                    tf.Context.DeviceName,
+                    func_name,
+                    new[] { input },
+                    null,
+                    1);
+                return result[0];
+            };
+        }
+
         public Func<Tensor, Tensor, Tensor> to_graph(Func<Tensor, Tensor, Tensor> func)
         {
             string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
-            tf.compat.v1.disable_eager_execution();
+
             // IntPtr func_handle;
             using(var graph = new FuncGraph(func_name))
             {
-                graph.as_default();
                 var input1 = tf.placeholder(tf.int32);
                 var input2 = tf.placeholder(tf.int32);
                 var output = func(input1, input2);
@@ -27,8 +55,6 @@ namespace Tensorflow.Graphs
                     new Operation[] { output },
                     null);
             }
-
-            tf.enable_eager_execution();
 
             return (Tensor a, Tensor b) =>
             {

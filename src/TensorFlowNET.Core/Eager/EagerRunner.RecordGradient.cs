@@ -10,7 +10,7 @@ namespace Tensorflow.Eager
 {
     public partial class EagerRunner
     {
-        bool RecordGradient(string op_name,
+        public bool RecordGradient(string op_name,
             Tensor[] inputs,
             object[] attrs,
             Tensor[] results)

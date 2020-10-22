@@ -18,7 +18,7 @@ namespace Tensorflow.Graphs
         Graph outer_graph;
         string func_name;
         IntPtr func_handle;
-        public string FuncName => c_api.StringPiece(c_api.TF_FunctionName(func_handle));
+        public string FuncName => func_name;
 
         /// <summary>
         /// Construct a new FuncGraph.
@@ -27,6 +27,9 @@ namespace Tensorflow.Graphs
         {
             outer_graph = ops.get_default_graph();
             func_name = name;
+
+            tf.Context.graph_mode();
+            as_default();
         }
 
         public IntPtr ToGraph(Operation[] opers,
@@ -55,7 +58,15 @@ namespace Tensorflow.Graphs
             c_api.TFE_ContextAddFunction(tf.Context.Handle, func_handle, status.Handle);
             status.Check(true);
 
+            func_name = c_api.StringPiece(c_api.TF_FunctionName(func_handle));
+
             return func_handle;
+        }
+
+        protected override void DisposeManagedResources()
+        {
+            base.DisposeManagedResources();
+            tf.Context.restore_mode();
         }
     }
 }

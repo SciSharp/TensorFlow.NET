@@ -46,6 +46,7 @@ namespace Tensorflow
                 _values = values;
             }
 
+            [DebuggerStepThrough]
             public void __enter__()
             {
                 if (tf.Context.executing_eagerly())

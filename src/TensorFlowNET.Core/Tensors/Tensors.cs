@@ -22,6 +22,7 @@ namespace Tensorflow
         public TF_DataType dtype => items.First().dtype;
         public TensorShape shape => items.First().TensorShape;
         public int rank => items.First().rank;
+        public Graph graph => items.First().graph;
         public bool IsEagerTensor => items.First().IsEagerTensor;
 
         public Tensor this[int index] => items[index];

@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Eager;
 
@@ -88,6 +89,7 @@ namespace Tensorflow.Contexts
             context_switches.Pop();
         }
 
+        [DebuggerStepThrough]
         public Tensor RunInAutoMode(Func<Tensor> graphAction, Func<Tensor> eagerAction, params Tensor[] tensors)
         {
             var shouldRunInEager = executing_eagerly()

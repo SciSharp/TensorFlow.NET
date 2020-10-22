@@ -89,6 +89,7 @@ namespace Tensorflow.Keras.Engine
 
         ThreadLocal<CallContext> callContext;
         public CallContext CallContext => callContext.Value;
+        public Tensor[] input => inboundNodes[0].input_tensors;
 
         public Layer(LayerArgs args)
         {

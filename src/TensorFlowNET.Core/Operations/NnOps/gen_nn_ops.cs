@@ -409,15 +409,18 @@ namespace Tensorflow.Operations
         }
 
         public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("LeakyRelu", name: name, args: new
-            {
-                features,
-                alpha
-            });
-
-            return _op.output;
-        }
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("LeakyRelu", name: name,
+                    args: new {
+                        features,
+                        alpha
+                    }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "LeakyRelu", name,
+                    null,
+                    features,
+                    "alpha", alpha).FirstOrDefault(),
+                features);
 
         public static Tensor max_pool(Tensor input,
             int[] ksize,

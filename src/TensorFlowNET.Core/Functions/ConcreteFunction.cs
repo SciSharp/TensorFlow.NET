@@ -19,12 +19,9 @@ namespace Tensorflow.Functions
         {
             string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
 
-            tf.compat.v1.disable_eager_execution();
-
             // IntPtr func_handle;
             using (var graph = new FuncGraph(func_name))
             {
-                graph.as_default();
                 var input = tf.placeholder(dtype);
                 var output = func(input);
 
@@ -34,8 +31,6 @@ namespace Tensorflow.Functions
                     new Operation[] { output },
                     null);
             }
-
-            tf.enable_eager_execution();
         }
 
         public Tensor Execute(Tensor arg)

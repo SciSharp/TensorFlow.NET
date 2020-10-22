@@ -174,19 +174,19 @@ namespace Tensorflow.Keras.Engine
 
             // Build a dict {depth: list of nodes with this depth}
             var nodes_by_depth = new Dictionary<int, List<Node>>();
-            foreach (var node in nodes_depths)
+            foreach (var (node, depth) in enumerate(nodes_depths))
             {
-                if (!nodes_by_depth.ContainsKey(node.Value))
-                    nodes_by_depth[node.Value] = new List<Node>();
-                nodes_by_depth[node.Value].append(node.Key);
+                if (!nodes_by_depth.ContainsKey(depth))
+                    nodes_by_depth[depth] = new List<Node>();
+                nodes_by_depth[depth].append(node);
             }
 
             var layers_by_depth = new Dictionary<int, List<Layer>>();
-            foreach (var layer in layers_depths)
+            foreach (var (layer, depth) in enumerate(layers_depths))
             {
-                if (!layers_by_depth.ContainsKey(layer.Value))
-                    layers_by_depth[layer.Value] = new List<Layer>();
-                layers_by_depth[layer.Value].append(layer.Key);
+                if (!layers_by_depth.ContainsKey(depth))
+                    layers_by_depth[depth] = new List<Layer>();
+                layers_by_depth[depth].append(layer);
             }
 
             // Get sorted list of layer depths.
@@ -256,16 +256,21 @@ namespace Tensorflow.Keras.Engine
 
             // Propagate to all previous tensors connected to this node.
             nodes_in_progress.Add(node);
-            foreach (var k_tensor in node.KerasInputs)
-                BuildMapHelper(k_tensor,
-                    finished_nodes,
-                    nodes_in_progress,
-                    nodes_in_decreasing_depth,
-                    layer_indices);
+            if (!node.IsInput)
+            {
+                foreach (var k_tensor in node.KerasInputs)
+                {
+                    BuildMapHelper(k_tensor,
+                        finished_nodes,
+                        nodes_in_progress,
+                        nodes_in_decreasing_depth,
+                        layer_indices);
+                }
+            }
 
             finished_nodes.Add(node);
             nodes_in_progress.Remove(node);
-            nodes_in_decreasing_depth.Insert(nodes_in_decreasing_depth.Count, node);
+            nodes_in_decreasing_depth.append(node);
         }
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
@@ -282,12 +287,12 @@ namespace Tensorflow.Keras.Engine
                     input_t.KerasMask = masks[i];
             }
 
-            var tensor_dict = new Dictionary<int, Tensor[]>();
+            var tensor_dict = new Dictionary<int, Queue<Tensor>>();
             foreach (var (x, y) in zip(this.inputs, inputs))
             {
                 var y1 = conform_to_reference_input(y, x);
                 var x_id = x.GetHashCode();
-                tensor_dict[x_id] = Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y1).ToArray();
+                tensor_dict[x_id] = new Queue<Tensor>(Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y1));
             }
 
             var depth_keys = NodesByDepth.Keys.OrderBy(x => x).Reverse().ToArray();
@@ -301,14 +306,13 @@ namespace Tensorflow.Keras.Engine
                     if (node.IsInput)
                         continue;
 
-                    var layer_inputs = new Tensors(tensor_dict[node.FlatInputIds[0]]);
-                    tensor_dict[node.FlatInputIds[0]] = new Tensor[0];
+                    var layer_inputs = node.MapArguments(tensor_dict);
 
                     var outputs = node.Layer.Apply(layer_inputs, is_training: training);
                     
-                    // Update tensor_dict.
+                    // Update tensor_dict for next input
                     foreach (var (x_id, y) in zip(node.FlatOutputIds, outputs))
-                        tensor_dict[x_id] = Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y).ToArray();
+                        tensor_dict[x_id] = new Queue<Tensor>(Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y));
                 }
             }
 

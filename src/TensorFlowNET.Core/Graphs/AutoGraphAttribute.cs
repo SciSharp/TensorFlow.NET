@@ -1,9 +1,10 @@
-﻿/*using MethodBoundaryAspect.Fody.Attributes;
+﻿using MethodBoundaryAspect.Fody.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
+using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Graphs
@@ -18,7 +19,10 @@ namespace Tensorflow.Graphs
 
         public override void OnEntry(MethodExecutionArgs args)
         {
-            func_name = $"autograph_{args.Instance}.{args.Method.Name}";
+            if (args.Instance is TensorFlowOpLayer op)
+                func_name = $"autograph_{op.OpType}.{args.Method.Name}";
+            else
+                func_name = $"autograph_{args.Instance}.{args.Method.Name}";
 
             if (functions.ContainsKey(func_name))
             {
@@ -27,11 +31,8 @@ namespace Tensorflow.Graphs
                 return;
             }   
             
-            tf.compat.v1.disable_eager_execution();
-
             // make function as an Operation by autograph
             graph = new FuncGraph(func_name);
-            graph.as_default();
 
             originalInputs = new Tensor[args.Arguments.Length];
             // convert args to placeholder
@@ -57,7 +58,6 @@ namespace Tensorflow.Graphs
                 null);
 
             graph.Dispose();
-            tf.enable_eager_execution();
 
             Func<Tensor[], Tensor> function = (x) =>
             {
@@ -77,4 +77,4 @@ namespace Tensorflow.Graphs
             args.ReturnValue = function(originalInputs);
         }
     }
-}*/
+}
