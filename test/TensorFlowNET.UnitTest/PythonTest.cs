@@ -16,10 +16,7 @@ namespace TensorFlowNET.UnitTest
     {
         #region python compatibility layer
         protected PythonTest self { get => this; }
-        protected object None
-        {
-            get { return null; }
-        }
+        protected int None => -1;
         #endregion
 
         #region pytest assertions
@@ -150,7 +147,7 @@ namespace TensorFlowNET.UnitTest
 
         protected object _eval_tensor(object tensor)
         {
-            if (tensor == None)
+            if (tensor == null)
                 return None;
             //else if (callable(tensor))
             //     return self._eval_helper(tensor())

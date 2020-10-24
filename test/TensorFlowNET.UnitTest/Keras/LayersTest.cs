@@ -16,11 +16,28 @@ namespace TensorFlowNET.UnitTest.Keras
     [TestClass]
     public class LayersTest : EagerModeTestBase
     {
+        
         [TestMethod]
         public void Sequential()
         {
             var model = tf.keras.Sequential();
             model.add(tf.keras.Input(shape: 16));
+        }
+
+        [TestMethod]
+        public void Functional()
+        {
+            var inputs = keras.Input(shape: 784);
+            Assert.AreEqual((None, 784), inputs.TensorShape);
+
+            var dense = layers.Dense(64, activation: "relu");
+            var x = dense.Apply(inputs);
+
+            x = layers.Dense(64, activation: "relu").Apply(x);
+            var outputs = layers.Dense(10).Apply(x);
+
+            var model = keras.Model(inputs, outputs, name: "mnist_model");
+            model.summary();
         }
 
         /// <summary>
