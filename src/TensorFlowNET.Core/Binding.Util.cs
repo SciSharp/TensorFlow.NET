@@ -424,6 +424,9 @@ namespace Tensorflow
             return true;
         }
 
+        public static bool empty<T>(this Queue<T> queue)
+            => queue.Count == 0;
+
         public static TValue SetDefault<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue value)
         {
             if (dic.ContainsKey(key))

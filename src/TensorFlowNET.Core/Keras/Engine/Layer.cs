@@ -61,7 +61,6 @@ namespace Tensorflow.Keras.Engine
         protected List<IVariableV1> trainable_weights;
 
         public virtual List<IVariableV1> trainable_variables => trainable_weights;
-         
 
         protected List<IVariableV1> non_trainable_weights;
         public List<IVariableV1> non_trainable_variables => non_trainable_weights;
@@ -83,7 +82,8 @@ namespace Tensorflow.Keras.Engine
         ThreadLocal<CallContext> callContext;
         public CallContext CallContext => callContext.Value;
         public Tensor[] input => inboundNodes[0].input_tensors;
-
+        public Dictionary<int, List<Node>> NodesByDepth { get; set; }
+        public TensorShape output_shape => inboundNodes[0].Outputs.shape;
         public Layer(LayerArgs args)
         {
             this.args = args;
@@ -222,6 +222,24 @@ namespace Tensorflow.Keras.Engine
             {
                 base_name = generic_utils.to_snake_case(this.GetType().Name);
                 this.name = base_layer_utils.unique_layer_name(base_name, zero_based: zero_based);
+            }
+        }
+
+        public int count_params()
+        {
+            if (Trainable)
+                return layer_utils.count_params(this, weights);
+            return 0;
+        }
+
+        public List<IVariableV1> weights
+        {
+            get
+            {
+                var weights = new List<IVariableV1>();
+                weights.AddRange(trainable_weights);
+                weights.AddRange(non_trainable_weights);
+                return weights;
             }
         }
     }

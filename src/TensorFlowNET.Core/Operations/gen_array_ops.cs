@@ -388,19 +388,19 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor select<Tx, Ty>(Tensor condition, Tx t, Ty e, string name = null)
+        public static Tensor select<Tx, Ty>(Tensor condition, Tx x, Ty y, string name = null)
         {
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "SelectV2", name,
+                    "Select", name,
                     null,
-                    condition, t, e);
+                    condition, x, y);
 
                 return results[0];
             }
 
-            var _op = tf.OpDefLib._apply_op_helper("Select", name, new { condition, t, e });
+            var _op = tf.OpDefLib._apply_op_helper("Select", name, new { condition, t = x, e = y });
             return _op.outputs[0];
         }
 
@@ -580,26 +580,33 @@ namespace Tensorflow
         /// <param name="shrink_axis_mask">An optional `int`. Defaults to `0`.</param>
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `dy`.</returns>
-        public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy, 
+        public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy,
             int begin_mask = 0, int end_mask = 0, int ellipsis_mask = 0, int new_axis_mask = 0,
             int shrink_axis_mask = 0, string name = null)
-        {
-            var op = tf.OpDefLib._apply_op_helper("StridedSliceGrad", name: name, args: new
-            {
-                shape,
-                begin,
-                end,
-                strides,
-                dy,
-                begin_mask,
-                end_mask,
-                ellipsis_mask,
-                new_axis_mask,
-                shrink_axis_mask
-            });
-
-            return op.output;
-        }
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("StridedSliceGrad", name, new
+                {
+                    shape,
+                    begin,
+                    end,
+                    strides,
+                    dy,
+                    begin_mask,
+                    end_mask,
+                    ellipsis_mask,
+                    new_axis_mask,
+                    shrink_axis_mask
+                }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "StridedSliceGrad", name,
+                    null,
+                    shape, begin, end, strides, dy,
+                    "begin_mask", begin_mask,
+                    "end_mask", end_mask,
+                    "ellipsis_mask", ellipsis_mask,
+                    "new_axis_mask", new_axis_mask,
+                    "shrink_axis_mask", shrink_axis_mask).FirstOrDefault(),
+                shape, begin, end, strides, dy);
 
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
         {
