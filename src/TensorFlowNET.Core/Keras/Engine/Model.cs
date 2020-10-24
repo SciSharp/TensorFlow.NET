@@ -10,7 +10,7 @@ namespace Tensorflow.Keras.Engine
     /// <summary>
     /// `Model` groups layers into an object with training and inference features.
     /// </summary>
-    public class Model : Layer
+    public partial class Model : Layer
     {
 #pragma warning disable CS0169 // The field 'Model._cloning' is never used
         bool _cloning;
@@ -33,12 +33,20 @@ namespace Tensorflow.Keras.Engine
             
         }
 
+        public void compile(ILossFunc loss, OptimizerV2 optimizer, string[] metrics)
+        {
+
+        }
+
         public void compile(string optimizerName, string lossName)
         {
             switch (optimizerName)
             {
                 case "rmsprop":
-                    optimizer = new RMSprop();
+                    optimizer = new RMSprop(new RMSpropArgs
+                    {
+
+                    });
                     break;
             }
 

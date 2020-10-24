@@ -23,8 +23,6 @@ namespace Tensorflow.Keras.Engine
         List<KerasHistory> _input_coordinates;
         List<KerasHistory> _output_coordinates;
         public string[] NetworkNodes { get; set; }
-        public Dictionary<int, List<Node>> NodesByDepth { get; set; }
-        public List<Layer> Layers => _layers;
 
         Dictionary<int, int> tensor_usage_count;
         public Dictionary<int, int> TensorUsageCount => tensor_usage_count;
@@ -43,9 +41,10 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        public Functional(Tensors inputs, Tensors outputs) 
+        public Functional(Tensors inputs, Tensors outputs, string name = null) 
             : base(new ModelArgs
             {
+                Name = name,
                 Inputs = inputs,
                 Outputs = outputs
             })

@@ -91,6 +91,9 @@ namespace Tensorflow.Eager
                      Tensor[] op_outputs)
             => (output_grads, unneeded_gradients) =>
             {
+                if (ops.gradientFunctions[op_name] == null)
+                    return new Tensor[op_inputs.Length];
+
                 var gradients = ops.gradientFunctions[op_name](new EagerOperation
                 {
                     Name = op_name,

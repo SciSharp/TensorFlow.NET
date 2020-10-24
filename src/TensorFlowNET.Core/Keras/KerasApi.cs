@@ -39,8 +39,8 @@ namespace Tensorflow
         /// <param name="input"></param>
         /// <param name="output"></param>
         /// <returns></returns>
-        public Functional Model(Tensors inputs, Tensors outputs)
-            => new Functional(inputs, outputs);
+        public Functional Model(Tensors inputs, Tensors outputs, string name = null)
+            => new Functional(inputs, outputs, name: name);
 
         /// <summary>
         /// Instantiate a Keras tensor.

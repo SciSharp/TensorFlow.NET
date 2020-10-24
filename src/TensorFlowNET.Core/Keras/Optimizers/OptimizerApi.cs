@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Keras.ArgsDefinition;
 
 namespace Tensorflow.Keras.Optimizers
 {
@@ -29,5 +30,31 @@ namespace Tensorflow.Keras.Optimizers
                 epsilon: epsilon,
                 amsgrad: amsgrad,
                 name: name);
+
+        /// <summary>
+        /// Construct a new RMSprop optimizer.
+        /// </summary>
+        /// <param name="learning_rate"></param>
+        /// <param name="rho"></param>
+        /// <param name="momentum"></param>
+        /// <param name="epsilon"></param>
+        /// <param name="centered"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public OptimizerV2 RMSprop(float learning_rate = 0.001f,
+                float rho = 0.9f,
+                float momentum = 0.0f,
+                float epsilon = 1e-7f,
+                bool centered = false,
+                string name = "RMSprop")
+            => new RMSprop(new RMSpropArgs
+            {
+                LearningRate = learning_rate,
+                RHO = rho,
+                Momentum = momentum,
+                Epsilon = epsilon,
+                Centered = centered,
+                Name = name
+            });
     }
 }

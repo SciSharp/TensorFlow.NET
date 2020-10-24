@@ -30,7 +30,7 @@ namespace Tensorflow.Keras.Engine
     /// Each time the output of a layer is used by another layer,
     /// a node is added to `layer._outbound_nodes`.
     /// </summary>
-    public class Node
+    public partial class Node
     {
         NodeArgs args;
 

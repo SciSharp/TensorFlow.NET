@@ -29,12 +29,13 @@ namespace Tensorflow.Gradients
                 tensor_tape_,
                 state.op_tape);
 
-            while (op_stack.Count > 0)
+            while (!op_stack.empty())
             {
                 var op = op_stack.Dequeue();
                 if (!state.op_tape.find(op, out var trace))
                     continue;
 
+                Console.WriteLine($"ComputeGradient: {state.op_tape[op].op_type}");
                 state.op_tape.erase(op);
 
                 var out_gradients = new List<Tensor>(trace.output_tensor_info.Length);
@@ -103,7 +104,7 @@ namespace Tensorflow.Gradients
                 }
                 else
                 {
-                    throw new NotImplementedException("");
+                    in_gradients = new Tensor[trace.input_tensor_id.Length];
                 }
 
                 for (int i = 0; i < in_gradients.Length; ++i)
@@ -113,17 +114,18 @@ namespace Tensorflow.Gradients
                     {
                         var unaggregated_grads = gradients[id];
                         unaggregated_grads.Add(in_gradients[i]);
-                        if(unaggregated_grads.Count > kMinAggregateCount)
+                        if (unaggregated_grads.Count > kMinAggregateCount)
                         {
-                            if(!gradients_size.ContainsKey(id))
+                            if (!gradients_size.find(id, out var size))
                             {
-                            }
-                            else
-                            {
-
+                                size = (long)unaggregated_grads[0].size;
+                                gradients_size.emplace(id, size);
                             }
 
-                            throw new NotImplementedException("");
+                            if (unaggregated_grads.Count * size * 4 > kMinAggregateBytes)
+                            {
+                                throw new NotImplementedException("");
+                            }
                         }
                     }
 
