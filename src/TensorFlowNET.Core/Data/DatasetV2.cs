@@ -60,6 +60,9 @@ namespace Tensorflow
                 preserve_cardinality: preserve_cardinality,
                 use_legacy_function: use_legacy_function);
 
+        public IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func)
+            => new FlatMapDataset(this, map_func);
+
         public IDatasetV2 model(AutotuneAlgorithm algorithm, long cpu_budget)
             => new ModelDataset(this, algorithm, cpu_budget);
 

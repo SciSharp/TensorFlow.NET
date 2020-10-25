@@ -49,7 +49,11 @@ namespace Tensorflow
                 return results[0];
             }
 
-            throw new NotImplementedException("");
+            var _op = tf.OpDefLib._apply_op_helper("TensorSliceDataset",
+                name: name,
+                args: new { components, output_shapes });
+
+            return _op.outputs[0];
         }
 
         public Tensor range_dataset(Tensor start, Tensor stop, Tensor step, TF_DataType[] output_types, TensorShape[] output_shapes, string name = null)
@@ -434,6 +438,33 @@ namespace Tensorflow
                     "output_shapes", output_shapes,
                     "use_inter_op_parallelism", use_inter_op_parallelism,
                     "preserve_cardinality", preserve_cardinality);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
+        /// Creates a dataset that applies `f` to the outputs of `input_dataset`.
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <param name="f"></param>
+        /// <param name="output_types"></param>
+        /// <param name="output_shapes"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor flat_map_dataset(Tensor dataset, ConcreteFunction f, TF_DataType[] output_types, TensorShape[] output_shapes,
+            string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "FlatMapDataset", name,
+                    null,
+                    dataset, new Tensor[0],
+                    "f", f,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes);
                 return results[0];
             }
 

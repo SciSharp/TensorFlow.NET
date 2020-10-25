@@ -31,6 +31,15 @@ namespace Tensorflow.Data
             variant_tensor = ops.tensor_slice_dataset(_tensors, output_shapes);
         }
 
+        public TensorSliceDataset(Tensor tensor)
+        {
+            _tensors = new[] { tensor };
+            var batched_spec = new[] { tensor.ToTensorSpec() };
+            structure = batched_spec.Select(x => x._unbatch()).ToArray();
+
+            variant_tensor = ops.tensor_slice_dataset(_tensors, output_shapes);
+        }
+
         public TensorSliceDataset(Tensor features, Tensor labels)
         {
             _tensors = new[] { features, labels };

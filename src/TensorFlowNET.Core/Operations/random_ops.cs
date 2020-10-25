@@ -116,7 +116,7 @@ namespace Tensorflow
         public static Tensor random_shuffle(Tensor value, int? seed = null, string name = null)
         {
             var (seed1, seed2) = random_seed.get_seed(seed);
-            return gen_random_ops.random_shuffle(value, seed: seed1.Value, seed2: seed2.Value, name: name);
+            return gen_random_ops.random_shuffle(value, seed: seed1 ?? 0, seed2: seed2 ?? 0, name: name);
         }
 
         public static Tensor truncated_normal(int[] shape,

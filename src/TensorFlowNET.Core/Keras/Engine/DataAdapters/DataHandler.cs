@@ -11,25 +11,30 @@ namespace Tensorflow.Keras.Engine.DataAdapters
     public class DataHandler
     {
         DataHandlerArgs args;
-
-        Tensor x => args.X;
-        Tensor y => args.Y;
-        int batch_size => args.BatchSize;
-        int steps_per_epoch => args.StepsPerEpoch;
-        int initial_epoch => args.InitialEpoch;
-        int epochs => args.Epochs;
-        bool shuffle => args.Shuffle;
-        int max_queue_size => args.MaxQueueSize;
-        int workers => args.Workers;
-        bool use_multiprocessing => args.UseMultiprocessing;
-        Model model => args.Model;
-        IVariableV1 steps_per_execution => args.StepsPerExecution;
+        IDataAdapter _adapter;
 
         public DataHandler(DataHandlerArgs args)
         {
             this.args = args;
 
-            var adapter_cls = new TensorLikeDataAdapter(new TensorLikeDataAdapterArgs { });
+            _adapter = new TensorLikeDataAdapter(new TensorLikeDataAdapterArgs
+            {
+                X = args.X,
+                Y = args.Y,
+                BatchSize = args.BatchSize,
+                Steps = args.StepsPerEpoch,
+                Epochs = args.Epochs - args.InitialEpoch,
+                Shuffle = args.Shuffle,
+                MaxQueueSize = args.MaxQueueSize,
+                Worker = args.Workers,
+                UseMultiprocessing = args.UseMultiprocessing,
+                Model = args.Model
+            });
+        }
+
+        Tensor _infer_steps(IDatasetV2 dataset)
+        {
+            throw new NotImplementedException("");
         }
     }
 }

@@ -19,11 +19,17 @@ namespace Tensorflow
         public IDatasetV2 from_tensor(NDArray tensors)
             => new TensorDataset(tensors);
 
+        public IDatasetV2 from_tensor(Tensor features, Tensor labels)
+            => new TensorDataset(features, labels);
+
         public IDatasetV2 from_tensor(Tensor tensors)
             => new TensorDataset(tensors);
 
         public IDatasetV2 from_tensor_slices(Tensor features, Tensor labels)
             => new TensorSliceDataset(features, labels);
+
+        public IDatasetV2 from_tensor_slices(Tensor tensor)
+            => new TensorSliceDataset(tensor);
 
         public IDatasetV2 from_tensor_slices(string[] array)
             => new TensorSliceDataset(array);

@@ -84,14 +84,37 @@ namespace Tensorflow.Keras.Engine
         /// <param name="verbose"></param>
         /// <param name="validation_split"></param>
         /// <param name="shuffle"></param>
-        public void fit(NDArray x, NDArray y, 
+        public void fit(NDArray x, NDArray y,
             int batch_size = -1,
             int epochs = 1,
             int verbose = 1,
             float validation_split = 0f,
-            bool shuffle = true)
+            bool shuffle = true,
+            int initial_epoch = 0,
+            int max_queue_size = 10,
+            int workers = 1,
+            bool use_multiprocessing = false)
         {
+            int train_count = Convert.ToInt32(x.shape[0] * (1 - validation_split));
+            var train_x = x[new Slice(0, train_count)];
+            var train_y = y[new Slice(0, train_count)];
+            var val_x = x[new Slice(train_count)];
+            var val_y = y[new Slice(train_count)];
 
+            var data_handler = new DataHandler(new DataHandlerArgs
+            {
+                X = train_x,
+                Y = train_y,
+                BatchSize = batch_size,
+                InitialEpoch = initial_epoch,
+                Epochs = epochs,
+                Shuffle = shuffle,
+                MaxQueueSize = max_queue_size,
+                Workers = workers,
+                UseMultiprocessing = use_multiprocessing,
+                Model = this,
+                StepsPerExecution = _steps_per_execution
+            });
         }
 
         void _configure_steps_per_execution(int steps_per_execution)

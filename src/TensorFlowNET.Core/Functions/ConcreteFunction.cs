@@ -33,6 +33,24 @@ namespace Tensorflow.Functions
             }
         }
 
+        public ConcreteFunction(Func<Tensor, IDatasetV2> func, TF_DataType dtype)
+        {
+            string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
+
+            // IntPtr func_handle;
+            using (var graph = new FuncGraph(func_name))
+            {
+                var input = tf.placeholder(dtype);
+                var output = func(input);
+
+                var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+                _handle = graph.ToGraph(opers,
+                    new Operation[] { input },
+                    new Operation[] { },
+                    null);
+            }
+        }
+
         public Tensor Execute(Tensor arg)
         {
             var result = tf.Runner.TFE_Execute(tf.Context,

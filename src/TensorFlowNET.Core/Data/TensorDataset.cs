@@ -12,6 +12,15 @@ namespace Tensorflow
     /// </summary>
     public class TensorDataset : DatasetSource
     {
+        public TensorDataset(Tensor feature, Tensor label)
+        {
+            _tensors = new[] { feature, label };
+            var batched_spec = _tensors.Select(x => x.ToTensorSpec()).ToArray();
+            structure = batched_spec.Select(x => x._unbatch()).ToArray();
+
+            variant_tensor = ops.tensor_dataset(_tensors, output_shapes);
+
+        }
         public TensorDataset(Tensor element)
         {
             _tensors = new[] { element };
