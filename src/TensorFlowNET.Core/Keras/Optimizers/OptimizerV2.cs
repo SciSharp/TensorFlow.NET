@@ -7,6 +7,7 @@ using Tensorflow.Train;
 using static Tensorflow.Binding;
 using Tensorflow;
 using Tensorflow.Eager;
+using Tensorflow.Keras.ArgsDefinition;
 
 namespace Tensorflow.Keras.Optimizers
 {
@@ -15,6 +16,7 @@ namespace Tensorflow.Keras.Optimizers
     /// </summary>
     public class OptimizerV2 : Trackable, IOptimizer
     {
+        OptimizerV2Args args;
         protected bool _hypers_created;
         protected virtual string _name { get; }
 
@@ -30,13 +32,17 @@ namespace Tensorflow.Keras.Optimizers
         Dictionary<string, Dictionary<string, IVariableV1>> _slots;
         List<string> _slot_names;
 
-        public OptimizerV2() : base()
+        public OptimizerV2(OptimizerV2Args args) : base()
         {
+            this.args = args;
             _weights = new List<IVariableV1>();
             _hyper = new Dictionary<string, float>();
             _hyper_variables = new Dictionary<string, IVariableV1>();
             _slots = new Dictionary<string, Dictionary<string, IVariableV1>>();
             _slot_names = new List<string>();
+
+            _set_hyper("learning_rate", args.LearningRate);
+            _set_hyper("decay", args.InitialDecay);
         }
 
         public void apply_gradients((Tensor, ResourceVariable) grads_and_vars,

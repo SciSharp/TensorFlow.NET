@@ -47,7 +47,7 @@ namespace Tensorflow
                 else
                 {
                     loss = math_ops.reduce_sum(weighted_losses);
-                    if (reduction == Reduction.MEAN)
+                    if (reduction == Reduction.WEIGHTED_MEAN)
                         loss = _safe_mean(
                             loss, math_ops.reduce_sum(array_ops.ones_like(losses) * weights));
                     else if (reduction == Reduction.SUM_BY_NONZERO_WEIGHTS ||

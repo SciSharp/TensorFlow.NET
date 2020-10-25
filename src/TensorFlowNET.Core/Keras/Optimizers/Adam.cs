@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
+using Tensorflow.Keras.ArgsDefinition;
 
 namespace Tensorflow.Keras.Optimizers
 {
@@ -22,7 +23,7 @@ namespace Tensorflow.Keras.Optimizers
                 float beta_2 = 0.999f,
                 float epsilon = 1e-7f,
                 bool amsgrad = false,
-                string name = "Adam")
+                string name = "Adam") : base(new OptimizerV2Args { })
         {
             _set_hyper("learning_rate", learning_rate);
             // _set_hyper("decay", _initial_decay);

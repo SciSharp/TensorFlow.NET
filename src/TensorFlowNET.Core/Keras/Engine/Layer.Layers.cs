@@ -12,7 +12,7 @@ namespace Tensorflow.Keras.Engine
     {
         protected List<Layer> _layers = new List<Layer>();
         public List<Layer> Layers => _layers;
-
+        
         protected Layer Dense(int units,
             Activation activation = null,
             TensorShape input_shape = null)

@@ -424,24 +424,30 @@ namespace Tensorflow
             return true;
         }
 
+        public static void extendleft<T>(this Queue<T> queue, IEnumerable<T> elements)
+        {
+            foreach (var element in elements.Reverse())
+                queue.Enqueue(element);
+        }
+
         public static bool empty<T>(this Queue<T> queue)
             => queue.Count == 0;
 
-        public static TValue SetDefault<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue value)
+        public static TValue SetDefault<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue defaultValue)
         {
             if (dic.ContainsKey(key))
                 return dic[key];
 
-            dic[key] = value;
-            return value;
+            dic[key] = defaultValue;
+            return defaultValue;
         }
 
-        public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue value)
+        public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue defaultValue)
         {
             if (dic.ContainsKey(key))
                 return dic[key];
 
-            return value;
+            return defaultValue;
         }
     }
 }

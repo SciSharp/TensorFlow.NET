@@ -12,9 +12,11 @@ namespace Tensorflow.Keras.Optimizers
     {
         RMSpropArgs args;
 
-        public RMSprop(RMSpropArgs args)
+        public RMSprop(RMSpropArgs args) : base(args)
         {
             this.args = args;
+            _set_hyper("rho", args.RHO);
+            _set_hyper("momentum", args.Momentum);
         }
     }
 }

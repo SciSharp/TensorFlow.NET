@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
+using Tensorflow.Keras.ArgsDefinition;
 
 namespace Tensorflow.Keras.Optimizers
 {
@@ -17,7 +18,7 @@ namespace Tensorflow.Keras.Optimizers
         public SGD(float learning_rate, 
             float momentum = 0.0f,
             bool nesterov = false,
-            float decay = 0.0f) : base()
+            float decay = 0.0f) : base(new OptimizerV2Args { })
         {
             _set_hyper("learning_rate", learning_rate);
             _set_hyper("decay", decay);

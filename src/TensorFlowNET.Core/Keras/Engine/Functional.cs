@@ -96,7 +96,35 @@ namespace Tensorflow.Keras.Engine
             NodesByDepth = nodes_by_depth;
             _layers = layers;
 
+            // Build self.input_names and self.output_names.
+            _set_output_names();
+
             ComputeTensorUsageCount();
+        }
+
+        /// <summary>
+        /// Assigns unique names to the Network's outputs.
+        /// </summary>
+        void _set_output_names()
+        {
+            var uniquified = new List<string>();
+            var output_names = new List<string>();
+            var prefix_count = new Dictionary<string, int>();
+
+            foreach (var layer in _output_layers)
+            {
+                var proposal = layer.Name;
+                while (output_names.Contains(proposal))
+                {
+                    var existing_count = prefix_count.Get(layer.Name, 1);
+                    proposal = $"{layer.Name}_{existing_count}";
+                    prefix_count[layer.Name] = existing_count + 1;
+                }
+                output_names.add(proposal);
+                uniquified.append(proposal);
+            }
+
+            this.output_names = uniquified.ToArray();
         }
 
         void ComputeTensorUsageCount()
