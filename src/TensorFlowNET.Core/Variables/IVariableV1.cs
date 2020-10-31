@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections.Generic;
 
@@ -31,24 +32,25 @@ namespace Tensorflow
     /// </summary>
     public interface IVariableV1
     {
-        public string UniqueId { get; }
-        public string Name { get; }
+        string UniqueId { get; }
+        string Name { get; }
         /// <summary>
         /// Handle is ref type
         /// </summary>
-        public Tensor Handle { get; }
-        public string Device { get; }
-        public Operation Initializer { get; }
-        public Operation Op { get; }
+        Tensor Handle { get; }
+        string Device { get; }
+        Operation Initializer { get; }
+        Operation Op { get; }
         /// <summary>
         /// GraphElement is a copy of Handle
         /// </summary>
-        public Tensor GraphElement { get; }
-        public Graph Graph { get; }
-        public TF_DataType dtype { get; }
-        public TensorShape shape { get; }
+        Tensor GraphElement { get; }
+        Graph Graph { get; }
+        TF_DataType dtype { get; }
+        TensorShape shape { get; }
         Tensor assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true);
         Tensor assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true);
         Tensor AsTensor(TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false);
+        NDArray numpy();
     }
 }

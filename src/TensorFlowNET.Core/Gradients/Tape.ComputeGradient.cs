@@ -35,7 +35,7 @@ namespace Tensorflow.Gradients
                 if (!state.op_tape.find(op, out var trace))
                     continue;
 
-                Console.WriteLine($"ComputeGradient: {state.op_tape[op].op_type}");
+                // Console.WriteLine($"ComputeGradient: {state.op_tape[op].op_type}");
                 state.op_tape.erase(op);
 
                 var out_gradients = new List<Tensor>(trace.output_tensor_info.Length);

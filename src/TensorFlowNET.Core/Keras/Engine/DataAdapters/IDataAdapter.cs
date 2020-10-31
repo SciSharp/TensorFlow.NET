@@ -18,5 +18,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         /// <param name="y">target labels</param>
         /// <returns></returns>
         bool CanHandle(Tensor x, Tensor y = null);
+        IDatasetV2 GetDataset();
+        int GetSize();
     }
 }

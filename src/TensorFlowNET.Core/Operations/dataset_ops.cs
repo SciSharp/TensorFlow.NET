@@ -472,6 +472,42 @@ namespace Tensorflow
         }
 
         /// <summary>
+        /// Creates a dataset that applies `f` to the outputs of `input_dataset`.
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <param name="num_parallel_calls"></param>
+        /// <param name="f"></param>
+        /// <param name="output_types"></param>
+        /// <param name="output_shapes"></param>
+        /// <param name="use_inter_op_parallelism"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor parallel_map_dataset_v2(Tensor dataset, Tensor num_parallel_calls, ConcreteFunction f, 
+            TF_DataType[] output_types, TensorShape[] output_shapes, 
+            bool use_inter_op_parallelism = true,
+            string deterministic = "default",
+            bool preserve_cardinality = false,
+            string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ParallelMapDatasetV2", name,
+                    null,
+                    dataset, new Tensor[0], num_parallel_calls,
+                    "f", f,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes,
+                    "use_inter_op_parallelism", use_inter_op_parallelism,
+                    "deterministic", deterministic,
+                    "preserve_cardinality", preserve_cardinality);
+                return results[0];
+            }
+
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
         /// A container for an iterator resource.
         /// </summary>
         /// <param name="handle"></param>

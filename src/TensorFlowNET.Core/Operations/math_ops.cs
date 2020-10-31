@@ -739,9 +739,9 @@ namespace Tensorflow
             return tf_with(ops.name_scope(name, "Range", new { start, limit, delta }), scope =>
             {
                 name = scope;
-                var start1 = ops.convert_to_tensor(start, name: "start");
-                var limit1 = ops.convert_to_tensor(limit, name: "limit");
-                var delta1 = ops.convert_to_tensor(delta, name: "delta");
+                var start1 = ops.convert_to_tensor(start, name: "start", dtype: dtype);
+                var limit1 = ops.convert_to_tensor(limit, name: "limit", dtype: dtype);
+                var delta1 = ops.convert_to_tensor(delta, name: "delta", dtype: dtype);
 
                 return gen_math_ops.range(start1, limit1, delta1, name);
             });

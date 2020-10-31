@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using Google.Protobuf;
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -424,5 +425,8 @@ namespace Tensorflow
             var _op = tf.OpDefLib._apply_op_helper("AssignAdd", name: name, args: new { variable, value, use_locking });
             return _op;
         }
+
+        public NDArray numpy()
+            => throw new RuntimeError("Graph mode can't use numpy().");
     }
 }

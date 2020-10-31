@@ -33,11 +33,12 @@ namespace Tensorflow.Keras.Engine
         IVariableV1 _test_counter;
         IVariableV1 _predict_counter;
         bool _base_model_initialized;
+        bool stop_training;
 
         public Model(ModelArgs args) 
             : base(args)
         {
-            
+            _init_batch_counters();
         }
 
         void _configure_steps_per_execution(int steps_per_execution)

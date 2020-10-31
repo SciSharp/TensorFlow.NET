@@ -64,6 +64,7 @@ namespace Tensorflow
                 var inferred_from = new Dictionary<string, object>();
                 var base_types = new List<TF_DataType>();
                 var types = new List<TF_DataType>();
+                string _scope_name = scope;
 
                 // Perform input type inference
                 foreach (var input_arg in op_def.InputArg)
@@ -241,7 +242,7 @@ namespace Tensorflow
                 var op = g.create_op(op_type_name, 
                     inputs.ToArray(), 
                     output_types.ToArray(),
-                    name: scope,
+                    name: _scope_name,
                     input_types: input_types.ToArray(),
                     attrs: attr_protos,
                     op_def: op_def);

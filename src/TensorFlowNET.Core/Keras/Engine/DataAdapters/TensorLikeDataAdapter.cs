@@ -16,6 +16,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         int _batch_size;
         int num_samples;
         int num_full_batches;
+        IDatasetV2 _dataset;
 
         public TensorLikeDataAdapter(TensorLikeDataAdapterArgs args)
         {
@@ -32,6 +33,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             indices_dataset = indices_dataset.repeat();
             indices_dataset = indices_dataset.map(permutation).prefetch(1);
             indices_dataset = indices_dataset.flat_map(slice_batch_indices);
+            _dataset = slice_inputs(indices_dataset, args.X, args.Y);
         }
 
         Tensor permutation(Tensor tensor)
@@ -53,13 +55,24 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             var first_k_indices = array_ops.slice(indices, new int[] { 0 }, new int[] { num_in_full_batch });
             first_k_indices = array_ops.reshape(first_k_indices, new int[] { num_full_batches, _batch_size });
             var flat_dataset = tf.data.Dataset.from_tensor_slices(first_k_indices);
-
             return flat_dataset;
         }
 
-        void slice_inputs(IDatasetV2 indices_dataset, Tensor x, Tensor y)
+        IDatasetV2 slice_inputs(IDatasetV2 indices_dataset, Tensor x, Tensor y)
         {
-            var dataset = tf.data.Dataset.from_tensor(x, y);
+            var dataset2 = tf.data.Dataset.from_tensor(x, y).repeat();
+            var dataset = tf.data.Dataset.zip(indices_dataset, dataset2);
+
+            dataset = dataset.map((batch, data) =>
+            {
+                var x = gen_array_ops.gather_v2(data.Item1, batch, 0);
+                var y = gen_array_ops.gather_v2(data.Item2, batch, 0);
+                return (x, y);
+            });
+
+            dataset = dataset.with_options(new DatasetOptions { });
+
+            return dataset;
         }
 
         public bool CanHandle(Tensor x, Tensor y = null)
@@ -70,5 +83,11 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         void _process_tensorlike()
         {
         }
+
+        public IDatasetV2 GetDataset()
+            => _dataset;
+
+        public int GetSize()
+            => _size;
     }
 }

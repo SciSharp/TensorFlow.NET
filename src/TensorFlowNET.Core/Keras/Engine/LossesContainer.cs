@@ -21,5 +21,20 @@ namespace Tensorflow.Keras.Engine
             _loss_metric = new Mean(name: "loss");
             _built = false;
         }
+
+        /// <summary>
+        /// Computes the overall loss.
+        /// </summary>
+        /// <param name="y_true"></param>
+        /// <param name="y_pred"></param>
+        public void Apply(Tensor y_true, Tensor y_pred)
+        {
+
+        }
+
+        public void Build()
+        {
+
+        }
     }
 }
