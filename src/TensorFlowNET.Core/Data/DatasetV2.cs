@@ -60,11 +60,17 @@ namespace Tensorflow
                 preserve_cardinality: preserve_cardinality,
                 use_legacy_function: use_legacy_function);
 
+        public IDatasetV2 map(Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> map_func, int num_parallel_calls = -1)
+            => new ParallelMapDataset(this, map_func, num_parallel_calls: num_parallel_calls);
+
         public IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func)
             => new FlatMapDataset(this, map_func);
 
         public IDatasetV2 model(AutotuneAlgorithm algorithm, long cpu_budget)
             => new ModelDataset(this, algorithm, cpu_budget);
+
+        public IDatasetV2 with_options(DatasetOptions options)
+            => new OptionsDataset(this, options);
 
         public IDatasetV2 apply_options()
         {
@@ -94,7 +100,7 @@ namespace Tensorflow
         }
 
         public override string ToString()
-            => $"{GetType().Name} shapes: ({structure[0].shape}, {structure[1].shape}), types: (tf.{structure[0].dtype.as_numpy_name()}, tf.{structure[1].dtype.as_numpy_name()})";
+            => $"{GetType().Name} shapes: {string.Join(", ", structure.Select(x => x.shape))}, types: {string.Join(", ", structure.Select(x => "tf." + x.dtype.as_numpy_name()))}";
 
         public IEnumerator<(Tensor, Tensor)> GetEnumerator()
         {
