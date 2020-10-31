@@ -27,20 +27,6 @@ namespace Tensorflow.Keras.Engine
         Dictionary<int, int> tensor_usage_count;
         public Dictionary<int, int> TensorUsageCount => tensor_usage_count;
 
-        public override List<IVariableV1> trainable_variables
-        {
-            get
-            {
-                var variables = new List<IVariableV1>();
-                foreach(var layer in _layers)
-                {
-                    if (layer.Trainable)
-                        variables.AddRange(layer.trainable_variables);
-                }
-                return variables;
-            }
-        }
-
         public Functional(Tensors inputs, Tensors outputs, string name = null) 
             : base(new ModelArgs
             {

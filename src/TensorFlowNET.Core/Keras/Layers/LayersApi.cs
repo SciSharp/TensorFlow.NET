@@ -10,6 +10,24 @@ namespace Tensorflow.Keras.Layers
 {
     public class LayersApi
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <param name="kernel_size"></param>
+        /// <param name="strides"></param>
+        /// <param name="padding"></param>
+        /// <param name="data_format"></param>
+        /// <param name="dilation_rate"></param>
+        /// <param name="groups"></param>
+        /// <param name="activation">tf.keras.activations</param>
+        /// <param name="use_bias"></param>
+        /// <param name="kernel_initializer"></param>
+        /// <param name="bias_initializer"></param>
+        /// <param name="kernel_regularizer"></param>
+        /// <param name="bias_regularizer"></param>
+        /// <param name="activity_regularizer"></param>
+        /// <returns></returns>
         public Conv2D Conv2D(int filters,
             TensorShape kernel_size = null,
             TensorShape strides = null,
@@ -17,7 +35,7 @@ namespace Tensorflow.Keras.Layers
             string data_format = null,
             TensorShape dilation_rate = null,
             int groups = 1,
-            string activation = null,
+            Activation activation = null,
             bool use_bias = true,
             IInitializer kernel_initializer = null,
             IInitializer bias_initializer = null,
@@ -40,18 +58,25 @@ namespace Tensorflow.Keras.Layers
                     BiasInitializer = bias_initializer == null ? tf.zeros_initializer : bias_initializer,
                     BiasRegularizer = bias_regularizer,
                     ActivityRegularizer = activity_regularizer,
-                    Activation = GetActivationByName(activation)
+                    Activation = activation ?? tf.keras.activations.Linear
                 });
 
-
         public Dense Dense(int units,
-            string activation = "linear",
+            Activation activation = null,
             TensorShape input_shape = null)
             => new Dense(new DenseArgs
             {
                 Units = units,
-                Activation = GetActivationByName(activation),
+                Activation = activation ?? tf.keras.activations.Linear,
                 InputShape = input_shape
+            });
+
+        public Dropout Dropout(float rate, TensorShape noise_shape = null, int? seed = null)
+            => new Dropout(new DropoutArgs
+            {
+                Rate = rate,
+                NoiseShape = noise_shape,
+                Seed = seed
             });
 
         /// <summary>
@@ -120,6 +145,42 @@ namespace Tensorflow.Keras.Layers
                 Strides = strides,
                 Padding = padding
             });
+
+        public Layer LSTM(int units,
+            Activation activation = null,
+            Activation recurrent_activation = null,
+            bool use_bias = true,
+            IInitializer kernel_initializer = null,
+            IInitializer recurrent_initializer = null,
+            IInitializer bias_initializer = null,
+            bool unit_forget_bias = true,
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            int implementation = 2,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool time_major = false,
+            bool unroll = false)
+                => new LSTM(new LSTMArgs
+                {
+                    Units = units,
+                    Activation = activation ?? tf.keras.activations.Tanh,
+                    RecurrentActivation = recurrent_activation ?? tf.keras.activations.Sigmoid,
+                    KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
+                    RecurrentInitializer = recurrent_initializer ?? tf.orthogonal_initializer,
+                    BiasInitializer = bias_initializer ?? tf.zeros_initializer,
+                    Dropout = dropout,
+                    RecurrentDropout = recurrent_dropout,
+                    Implementation = implementation,
+                    ReturnSequences = return_sequences,
+                    ReturnState = return_state,
+                    GoBackwards = go_backwards,
+                    Stateful = stateful,
+                    TimeMajor = time_major,
+                    Unroll = unroll
+                });
 
         public Rescaling Rescaling(float scale,
             float offset = 0,
