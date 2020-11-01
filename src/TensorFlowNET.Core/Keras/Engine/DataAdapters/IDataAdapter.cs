@@ -20,5 +20,6 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         bool CanHandle(Tensor x, Tensor y = null);
         IDatasetV2 GetDataset();
         int GetSize();
+        (Tensor, Tensor) Expand1d(Tensor x, Tensor y);
     }
 }

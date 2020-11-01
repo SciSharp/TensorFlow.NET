@@ -24,6 +24,9 @@ namespace Tensorflow
         public Tensor compute_weighted_loss(Tensor losses, Tensor weights = null, string scope = null,
             string loss_collection = "losses", string reduction = Reduction.SUM_BY_NONZERO_WEIGHTS)
         {
+            if (weights == null)
+                weights = tf.constant(1.0f);
+
             return tf_with(ops.name_scope(scope, default_name: "weighted_loss", (losses, weights)), delegate
             {
                 // Save the `reduction` argument for loss normalization when distributing

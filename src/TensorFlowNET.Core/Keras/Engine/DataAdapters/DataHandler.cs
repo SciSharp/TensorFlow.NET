@@ -13,6 +13,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
     {
         DataHandlerArgs args;
         IDataAdapter _adapter;
+        public IDataAdapter DataAdapter => _adapter;
         IDatasetV2 _dataset;
         int _inferred_steps;
         int _current_step;

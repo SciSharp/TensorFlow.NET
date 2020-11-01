@@ -521,6 +521,9 @@ namespace Tensorflow
         public static Tensor shape(Tensor input, string name = null, TF_DataType out_type = TF_DataType.TF_INT32)
             => shape_internal(input, name, optimize: true, out_type: out_type);
 
+        public static Tensor shape_v2(Tensor input, string name = null, TF_DataType out_type = TF_DataType.TF_INT32)
+            => shape_internal(input, name, optimize: true, out_type: out_type);
+
         public static Tensor size(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
             => size_internal(input, name, optimize: optimize, out_type: out_type);
 

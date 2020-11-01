@@ -37,7 +37,7 @@ namespace Tensorflow.Keras.Engine
             var val_x = x[new Slice(train_count)];
             var val_y = y[new Slice(train_count)];
 
-            var data_handler = new DataHandler(new DataHandlerArgs
+            data_handler = new DataHandler(new DataHandlerArgs
             {
                 X = train_x,
                 Y = train_y,

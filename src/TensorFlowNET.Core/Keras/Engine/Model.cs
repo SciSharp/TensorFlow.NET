@@ -6,6 +6,7 @@ using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
 using NumSharp;
 using System.Collections.Generic;
+using System.Data.Common;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -23,7 +24,7 @@ namespace Tensorflow.Keras.Engine
 #pragma warning restore CS0414 // The field 'Model._is_compiled' is assigned but its value is never used
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         ILossFunc loss;
-        IOptimizer optimizer;
+        OptimizerV2 optimizer;
         IVariableV1 _steps_per_execution;
         protected bool _is_graph_network;
         protected Tensors inputs;
@@ -34,6 +35,7 @@ namespace Tensorflow.Keras.Engine
         IVariableV1 _predict_counter;
         bool _base_model_initialized;
         bool stop_training;
+        DataHandler data_handler;
 
         public Model(ModelArgs args) 
             : base(args)

@@ -10,6 +10,8 @@ namespace Tensorflow.Keras.Engine
 {
     public partial class Model
     {
+        LossesContainer compiled_loss;
+        MetricsContainer compiled_metrics;
         public void compile(string optimizerName, ILossFunc lossName)
         {
             throw new NotImplementedException("");
@@ -18,8 +20,8 @@ namespace Tensorflow.Keras.Engine
         public void compile(ILossFunc loss, OptimizerV2 optimizer, string[] metrics)
         {
             this.optimizer = optimizer;
-            var compiled_loss = new LossesContainer(loss, output_names: output_names);
-            var compiled_metrics = new MetricsContainer(metrics, output_names: output_names);
+            compiled_loss = new LossesContainer(loss, output_names: output_names);
+            compiled_metrics = new MetricsContainer(metrics, output_names: output_names);
 
             int experimental_steps_per_execution = 1;
             _configure_steps_per_execution(experimental_steps_per_execution);

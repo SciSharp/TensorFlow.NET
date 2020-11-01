@@ -111,9 +111,14 @@ namespace Tensorflow.Keras.Optimizers
             });
         }
 
-        Tensor[] _aggregate_gradients(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars)
+        public Tensor[] _aggregate_gradients(IEnumerable<(Tensor, IVariableV1)> grads_and_vars)
         {
             return grads_and_vars.Select(x => x.Item1).ToArray();
+        }
+
+        public Tensor[] _clip_gradients(Tensor[] grads)
+        {
+            return grads;
         }
 
         protected IVariableV1 get_slot(IVariableV1 var, string slot_name)

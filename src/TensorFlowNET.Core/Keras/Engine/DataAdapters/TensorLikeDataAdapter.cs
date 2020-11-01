@@ -89,5 +89,12 @@ namespace Tensorflow.Keras.Engine.DataAdapters
 
         public int GetSize()
             => _size;
+
+        public (Tensor, Tensor) Expand1d(Tensor x, Tensor y)
+        {
+            if (y.TensorShape.ndim == 1)
+                y = array_ops.expand_dims(y, axis: -1);
+            return (x, y);
+        }
     }
 }

@@ -118,10 +118,13 @@ namespace Tensorflow
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
         public static Tensor div_no_nan(Tensor x, Tensor y, string name = null)
-        {
-            var op = tf.OpDefLib._apply_op_helper("DivNoNan", name: name, args: new { x, y });
-            return op.output;
-        }
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("DivNoNan", name: name, new { x, y }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "DivNoNan", name,
+                    null,
+                    x, y).FirstOrDefault(),
+                x, y);
 
         /// <summary>
         /// Computes the mean of elements across dimensions of a tensor.
