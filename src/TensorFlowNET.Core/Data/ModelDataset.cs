@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Framework.Models;
+﻿using Tensorflow.Framework.Models;
 
 namespace Tensorflow
 {
@@ -10,8 +7,8 @@ namespace Tensorflow
     /// </summary>
     public class ModelDataset : UnaryUnchangedStructureDataset
     {
-        public ModelDataset(IDatasetV2 input_dataset, 
-            AutotuneAlgorithm algorithm, 
+        public ModelDataset(IDatasetV2 input_dataset,
+            AutotuneAlgorithm algorithm,
             long cpu_budget) :
             base(input_dataset)
         {

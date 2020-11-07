@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
@@ -27,7 +26,7 @@ namespace Tensorflow.Keras.Engine
         Dictionary<int, int> tensor_usage_count;
         public Dictionary<int, int> TensorUsageCount => tensor_usage_count;
 
-        public Functional(Tensors inputs, Tensors outputs, string name = null) 
+        public Functional(Tensors inputs, Tensors outputs, string name = null)
             : base(new ModelArgs
             {
                 Name = name,
@@ -68,7 +67,7 @@ namespace Tensorflow.Keras.Engine
             }
 
             // Build self._input_layers:
-            foreach(var x in inputs)
+            foreach (var x in inputs)
             {
                 var (layer, node_index, tensor_index) = x.KerasHistory;
                 _input_layers.append(layer);
@@ -117,9 +116,9 @@ namespace Tensorflow.Keras.Engine
         {
             var available_tensors = inputs.Select(x => x.GetHashCode()).ToList();
             var depth_keys = NodesByDepth.Keys.OrderBy(x => x).Reverse().Skip(1).ToArray();
-            foreach(var depth in depth_keys)
+            foreach (var depth in depth_keys)
             {
-                foreach(var node in NodesByDepth[depth])
+                foreach (var node in NodesByDepth[depth])
                 {
                     var input_tensors = node.KerasInputs.Select(x => x.GetHashCode()).ToArray();
                     if (input_tensors.issubset(available_tensors))
@@ -178,7 +177,7 @@ namespace Tensorflow.Keras.Engine
                 // Update the depth of inbound nodes.
                 // The "depth" of a node is the max of the depths
                 // of all nodes it is connected to + 1.
-                foreach(var node_dep in node.ParentNodes)
+                foreach (var node_dep in node.ParentNodes)
                 {
                     previous_depth = nodes_depths.Get(node_dep, 0);
                     nodes_depths[node_dep] = Math.Max(depth + 1, previous_depth);
@@ -188,7 +187,7 @@ namespace Tensorflow.Keras.Engine
             // Handle inputs that are not connected to outputs.
             // We do not error out here because the inputs may be used to compute losses
             // and metrics.
-            foreach(var input_t in inputs)
+            foreach (var input_t in inputs)
             {
                 var (input_layer, _, _) = input_t.KerasHistory;
                 if (!layers_depths.ContainsKey(input_layer))
@@ -222,7 +221,7 @@ namespace Tensorflow.Keras.Engine
 
             // Set self.layers ordered by depth.
             var layers = new List<Layer>();
-            foreach(var depth in depth_keys)
+            foreach (var depth in depth_keys)
             {
                 var layers_for_depth = layers_by_depth[depth];
 
@@ -252,17 +251,17 @@ namespace Tensorflow.Keras.Engine
             var nodes_in_decreasing_depth = new List<Node>();
             var layer_indices = new Dictionary<Layer, int>();
             foreach (var output in outputs)
-                BuildMapHelper(output, 
-                    finished_nodes, 
-                    nodes_in_progress, 
-                    nodes_in_decreasing_depth, 
+                BuildMapHelper(output,
+                    finished_nodes,
+                    nodes_in_progress,
+                    nodes_in_decreasing_depth,
                     layer_indices);
 
             return (nodes_in_decreasing_depth, layer_indices);
         }
 
-        void BuildMapHelper(Tensor tensor, 
-            List<Node> finished_nodes, 
+        void BuildMapHelper(Tensor tensor,
+            List<Node> finished_nodes,
             List<Node> nodes_in_progress,
             List<Node> nodes_in_decreasing_depth,
             Dictionary<Layer, int> layer_indices)
@@ -325,10 +324,10 @@ namespace Tensorflow.Keras.Engine
 
             var depth_keys = NodesByDepth.Keys.OrderBy(x => x).Reverse().ToArray();
 
-            foreach(var depth in depth_keys)
+            foreach (var depth in depth_keys)
             {
                 var nodes = NodesByDepth[depth];
-                foreach(var node in nodes)
+                foreach (var node in nodes)
                 {
                     // Input tensors already exist.
                     if (node.IsInput)
@@ -337,7 +336,7 @@ namespace Tensorflow.Keras.Engine
                     var layer_inputs = node.MapArguments(tensor_dict);
 
                     var outputs = node.Layer.Apply(layer_inputs, is_training: training);
-                    
+
                     // Update tensor_dict for next input
                     foreach (var (x_id, y) in zip(node.FlatOutputIds, outputs))
                         tensor_dict[x_id] = new Queue<Tensor>(Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y));

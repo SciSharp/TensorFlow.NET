@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using static Tensorflow.Binding;
 
@@ -56,8 +55,8 @@ namespace Tensorflow
         /// <param name="validate_shape"></param>
         /// <param name="use_locking"></param>
         /// <param name="name"></param>
-        public static Tensor assign<T>(T @ref, object value, 
-            bool validate_shape = true, 
+        public static Tensor assign<T>(T @ref, object value,
+            bool validate_shape = true,
             bool use_locking = true,
             string name = null)
         {

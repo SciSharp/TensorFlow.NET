@@ -45,7 +45,7 @@ namespace Tensorflow.Keras.Engine
             if (ndim == null && shape != null)
                 this.ndim = shape.ndim;
 
-            if(axes != null)
+            if (axes != null)
                 AllAxisDim = axes.Select(x => x.Value).ToArray();
         }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Contrib.Train
+﻿namespace Tensorflow.Contrib.Train
 {
     /// <summary>
     /// Class to hold a set of hyperparameters as name-value pairs.

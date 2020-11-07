@@ -63,8 +63,8 @@ namespace Tensorflow
 
             static unsafe DeallocatorArgs()
             {
-                Empty = new IntPtr(EmptyPtr = (DeallocatorArgs*) Marshal.AllocHGlobal(Marshal.SizeOf<DeallocatorArgs>()));
-                *EmptyPtr = new DeallocatorArgs() {gc_handle = IntPtr.Zero, deallocator_called = false};
+                Empty = new IntPtr(EmptyPtr = (DeallocatorArgs*)Marshal.AllocHGlobal(Marshal.SizeOf<DeallocatorArgs>()));
+                *EmptyPtr = new DeallocatorArgs() { gc_handle = IntPtr.Zero, deallocator_called = false };
             }
 
             public bool deallocator_called;

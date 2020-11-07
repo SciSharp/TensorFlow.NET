@@ -18,8 +18,8 @@ using Google.Protobuf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Tensorflow.OpDef.Types;
 using static Tensorflow.Binding;
+using static Tensorflow.OpDef.Types;
 
 namespace Tensorflow
 {
@@ -74,8 +74,8 @@ namespace Tensorflow
                 return _GatherReturnElements(return_elements, graph, results);
         }
 
-        private static ITensorOrOperation[] _GatherReturnElements(string[] requested_return_elements, 
-            Graph graph, 
+        private static ITensorOrOperation[] _GatherReturnElements(string[] requested_return_elements,
+            Graph graph,
             TF_ImportGraphDefResults results)
         {
             var return_outputs = results.return_tensors;
@@ -86,7 +86,7 @@ namespace Tensorflow
 #pragma warning disable CS0219 // Variable is assigned but its value is never used
             int opers_idx = 0;
 #pragma warning restore CS0219 // Variable is assigned but its value is never used
-            foreach(var name in requested_return_elements)
+            foreach (var name in requested_return_elements)
             {
                 if (name.Contains(":"))
                 {
@@ -105,21 +105,21 @@ namespace Tensorflow
 
         private static void _ProcessNewOps(Graph graph)
         {
-            foreach(var new_op in graph._add_new_tf_operations())
+            foreach (var new_op in graph._add_new_tf_operations())
             {
                 var original_device = new_op.Device;
             }
         }
 
-        public static void _PopulateTFImportGraphDefOptions(ImportGraphDefOptions options, 
-            string prefix, 
+        public static void _PopulateTFImportGraphDefOptions(ImportGraphDefOptions options,
+            string prefix,
             Dictionary<string, Tensor> input_map,
             string[] return_elements)
         {
             c_api.TF_ImportGraphDefOptionsSetPrefix(options.Handle, prefix);
             c_api.TF_ImportGraphDefOptionsSetUniquifyNames(options.Handle, (char)1);
 
-            foreach(var input in input_map)
+            foreach (var input in input_map)
             {
                 var (src_name, src_index) = _ParseTensorName(input.Key);
                 c_api.TF_ImportGraphDefOptionsAddInputMapping(options.Handle, src_name, src_index, input.Value._as_tf_output());
@@ -130,7 +130,7 @@ namespace Tensorflow
 
             foreach (var name in return_elements)
             {
-                if(name.Contains(":"))
+                if (name.Contains(":"))
                 {
                     var (op_name, index) = _ParseTensorName(name);
                     c_api.TF_ImportGraphDefOptionsAddReturnOutput(options.Handle, op_name, index);
@@ -162,7 +162,7 @@ namespace Tensorflow
 
         public static GraphDef _ProcessGraphDefParam(GraphDef graph_def, Dictionary<string, OpDef> op_dict)
         {
-            foreach(var node in graph_def.Node)
+            foreach (var node in graph_def.Node)
             {
                 if (!op_dict.ContainsKey(node.Op))
                     continue;
@@ -176,10 +176,10 @@ namespace Tensorflow
 
         private static void _SetDefaultAttrValues(NodeDef node_def, OpDef op_def)
         {
-            foreach(var attr_def in op_def.Attr)
+            foreach (var attr_def in op_def.Attr)
             {
                 var key = attr_def.Name;
-                if(attr_def.DefaultValue != null)
+                if (attr_def.DefaultValue != null)
                 {
                     if (node_def.Attr.ContainsKey(key))
                     {
@@ -220,16 +220,16 @@ namespace Tensorflow
                 return op;
             }).ToArray();
 
-            foreach(var node in graph_def.Node)
+            foreach (var node in graph_def.Node)
             {
                 // Remove any default attr values that aren't in op_def.
                 if (producer_op_dict.ContainsKey(node.Op))
                 {
                     var op_def = op_dict[node.Op];
                     var producer_op_def = producer_op_dict[node.Op];
-                    foreach(var key in node.Attr)
+                    foreach (var key in node.Attr)
                     {
-                        if(_FindAttrInOpDef(key.Key, op_def) == null)
+                        if (_FindAttrInOpDef(key.Key, op_def) == null)
                         {
                             var attr_def = _FindAttrInOpDef(key.Key, producer_op_def);
                             if (attr_def != null && attr_def.DefaultValue != null &&

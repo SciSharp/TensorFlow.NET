@@ -34,13 +34,13 @@ namespace Tensorflow
     /// </summary>
     public class Distribution : _BaseDistribution
     {
-        public TF_DataType _dtype {get;set;}
+        public TF_DataType _dtype { get; set; }
         //public ReparameterizationType _reparameterization_type {get;set;}
-        public bool _validate_args {get;set;}
-        public bool _allow_nan_stats {get;set;}
-        public Dictionary<string, object> _parameters  {get;set;}
-        public List<Tensor> _graph_parents  {get;set;}
-        public string _name  {get;set;}
+        public bool _validate_args { get; set; }
+        public bool _allow_nan_stats { get; set; }
+        public Dictionary<string, object> _parameters { get; set; }
+        public List<Tensor> _graph_parents { get; set; }
+        public string _name { get; set; }
 
 
         /// <summary>
@@ -50,13 +50,13 @@ namespace Tensorflow
         /// <param name="name"> Python `str` prepended to names of ops created by this function.</param>
         /// <returns>log_prob: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with values of type `self.dtype`.</returns>
 
-        
+
         public Tensor log_prob(Tensor value, string name = "log_prob")
         {
             return _call_log_prob(value, name);
         }
 
-        private Tensor _call_log_prob (Tensor value, string name)
+        private Tensor _call_log_prob(Tensor value, string name)
         {
             return tf_with(ops.name_scope(name, "moments", new { value }), scope =>
             {
@@ -72,7 +72,8 @@ namespace Tensorflow
                     {
                         return math_ops.log(_prob(value));
 #pragma warning disable CS0168 // Variable is declared but never used
-                    } catch (Exception e2)
+                    }
+                    catch (Exception e2)
 #pragma warning restore CS0168 // Variable is declared but never used
                     {
                         throw new NotImplementedException();
@@ -95,7 +96,7 @@ namespace Tensorflow
         {
             return this._dtype;
         }
-        
+
 
         /*
         /// <summary>
@@ -165,10 +166,10 @@ namespace Tensorflow
 
         public void repr()
         {
-            Console.WriteLine($"<Reparameteriation Type: {this._rep_type}>" );
+            Console.WriteLine($"<Reparameteriation Type: {this._rep_type}>");
         }
 
-        public bool eq (ReparameterizationType other)
+        public bool eq(ReparameterizationType other)
         {
             return this.Equals(other);
         }

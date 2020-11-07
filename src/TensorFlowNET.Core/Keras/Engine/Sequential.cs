@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using System.Collections.Generic;
-using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
 using static Tensorflow.Binding;
@@ -42,9 +41,9 @@ namespace Tensorflow.Keras.Engine
         public TensorShape output_shape => outputs.TensorShape;
         bool built = false;
 
-        public Sequential(SequentialArgs args) 
-            : base(new ModelArgs 
-            { 
+        public Sequential(SequentialArgs args)
+            : base(new ModelArgs
+            {
                 Name = args.Name
             })
         {

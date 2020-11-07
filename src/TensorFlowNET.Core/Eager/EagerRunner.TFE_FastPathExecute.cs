@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System;
-using static Tensorflow.OpDef.Types;
-using static Tensorflow.Binding;
-using Tensorflow.Util;
 using System.Runtime.InteropServices;
 using Tensorflow.Contexts;
 using Tensorflow.Functions;
+using Tensorflow.Util;
+using static Tensorflow.Binding;
+using static Tensorflow.OpDef.Types;
 
 namespace Tensorflow.Eager
 {
@@ -61,7 +61,7 @@ namespace Tensorflow.Eager
                 var attr_value = args[i + 1];
 
                 var attr = op_def.Attr.FirstOrDefault(x => x.Name == attr_name);
-                if(attr != null)
+                if (attr != null)
                 {
                     flattened_attrs.Add(attr_name);
                     flattened_attrs.Add(attr_value);
@@ -89,7 +89,7 @@ namespace Tensorflow.Eager
                         flattened_attrs.Add(len);
                     }
                     attr_list_sizes[input_arg.NumberAttr] = len;
-                    
+
                     if (len > 0)
                     {
                         var fast_input_array = (object[])args[i];
@@ -179,7 +179,7 @@ namespace Tensorflow.Eager
                 op = c_api.TFE_NewOp(ctx.Handle, op_or_function_name, status.Handle);
                 thread_local_eager_operation_map[ctx] = op;
             }
-                
+
             status.Check(true);
             return op;
         }
@@ -189,7 +189,7 @@ namespace Tensorflow.Eager
             //return !GetAccumulatorSet()->empty();
             return false;
         }
-        
+
         bool HasGradientTape()
         {
             return tf.GetTapeSet().Count > 0;
@@ -262,7 +262,7 @@ namespace Tensorflow.Eager
                 var key = attrs[i].ToString();
                 var value = attrs[i + 1];
 
-                byte is_list = 0; 
+                byte is_list = 0;
                 var type = c_api.TFE_OpGetAttrType(op, key, ref is_list, status.Handle);
                 if (!status.ok()) return;
                 if (is_list != 0)
@@ -286,8 +286,8 @@ namespace Tensorflow.Eager
         /// <param name="attr_value"></param>
         /// <param name="attr_list_sizes"></param>
         /// <param name="status"></param>
-        void SetOpAttrWithDefaults(Context ctx, SafeOpHandle op, AttrDef attr, 
-            string attr_name, object attr_value,  
+        void SetOpAttrWithDefaults(Context ctx, SafeOpHandle op, AttrDef attr,
+            string attr_name, object attr_value,
             Dictionary<string, long> attr_list_sizes,
             Status status)
         {
@@ -295,7 +295,7 @@ namespace Tensorflow.Eager
             var type = c_api.TFE_OpGetAttrType(op, attr_name, ref is_list, status.Handle);
             if (status.Code != TF_Code.TF_OK) return;
 
-            if(attr_value == null)
+            if (attr_value == null)
             {
                 if (is_list != 0)
 #pragma warning disable CS0642 // Possible mistaken empty statement
@@ -345,7 +345,7 @@ namespace Tensorflow.Eager
                 c_api.TFE_OpSetAttrShapeList(op, key, dims, num_dims, num_values, status.Handle);
                 Array.ForEach(dims, x => Marshal.FreeHGlobal(x));
             }
-            else if(type == TF_AttrType.TF_ATTR_TYPE && values is TF_DataType[] values2)
+            else if (type == TF_AttrType.TF_ATTR_TYPE && values is TF_DataType[] values2)
             {
                 c_api.TFE_OpSetAttrTypeList(op, key, values2, values2.Length);
                 attr_list_sizes[key] = values2.Length;
@@ -363,12 +363,12 @@ namespace Tensorflow.Eager
             return true;
         }
 
-        bool SetOpAttrScalar(Context ctx, SafeOpHandle op, 
+        bool SetOpAttrScalar(Context ctx, SafeOpHandle op,
             string key, object value, TF_AttrType type,
             Dictionary<string, long> attr_list_sizes,
             Status status)
         {
-            switch(type)
+            switch (type)
             {
                 case TF_AttrType.TF_ATTR_STRING:
                     c_api.TFE_OpSetAttrString(op, key, value.ToString(), (uint)value.ToString().Length);
@@ -394,7 +394,7 @@ namespace Tensorflow.Eager
                     if (value is ConcreteFunction func)
                         c_api.TFE_OpSetAttrFunctionName(op, key, func.Name, func.Name.Length);
                     else
-                        throw new NotImplementedException("TF_AttrType.TF_ATTR_FUNC"); 
+                        throw new NotImplementedException("TF_AttrType.TF_ATTR_FUNC");
                     break;
                 default:
                     throw new NotImplementedException($"SetOpAttrScalar for {type}");

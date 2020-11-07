@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
@@ -27,8 +26,8 @@ namespace Tensorflow
 
         public class nn_internal
         {
-            public Tensor conv2d(Tensor input, IVariableV1 filter, int[] strides, string padding, bool use_cudnn_on_gpu = true, 
-                string data_format= "NHWC", int[] dilations= null, string name = null)
+            public Tensor conv2d(Tensor input, IVariableV1 filter, int[] strides, string padding, bool use_cudnn_on_gpu = true,
+                string data_format = "NHWC", int[] dilations = null, string name = null)
             {
                 var parameters = new Conv2dParams
                 {
@@ -92,9 +91,9 @@ namespace Tensorflow
             public (Tensor, Tensor) moments(Tensor x,
                 int[] axes,
                 string name = null,
-                bool keep_dims = false) => nn_impl.moments(x, 
-                    axes, 
-                    name: name, 
+                bool keep_dims = false) => nn_impl.moments(x,
+                    axes,
+                    name: name,
                     keep_dims: keep_dims);
 
             public Tensor embedding_lookup(IVariableV1 @params,
@@ -121,7 +120,7 @@ namespace Tensorflow
             public Tensor tanh(Tensor x, string name = null)
                 => gen_nn_ops.tanh(x, name);
 
-            public Tensor relu(Tensor features, string name = null) 
+            public Tensor relu(Tensor features, string name = null)
                 => gen_nn_ops.relu(features, name);
 
             public Tensor[] fused_batch_norm(Tensor x,
@@ -140,7 +139,7 @@ namespace Tensorflow
 
             public IPoolFunction max_pool_fn => new MaxPoolFunction();
 
-            public Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null) 
+            public Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null)
                 => nn_ops.max_pool(value, ksize, strides, padding, data_format: data_format, name: name);
 
             public Tensor in_top_k(Tensor predictions, Tensor targets, int k, string name = "InTopK")
@@ -183,7 +182,7 @@ namespace Tensorflow
 
             public Tensor softmax(Tensor logits, int axis = -1, string name = null)
                 => gen_nn_ops.softmax(logits, name);
-                
+
 
             /// <summary>
             /// Computes sparse softmax cross entropy between `logits` and `labels`.

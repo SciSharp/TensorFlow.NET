@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Tensorflow.Gradients;
 using static Tensorflow.Binding;
 using static Tensorflow.tensorflow;
@@ -21,7 +18,7 @@ namespace Tensorflow.Eager
             bool should_record = false;
             foreach (var tape in tf.GetTapeSet())
             {
-                if(tape.ShouldRecord(input_ids, input_dtypes))
+                if (tape.ShouldRecord(input_ids, input_dtypes))
                 {
                     should_record = true;
                     break;
@@ -66,7 +63,7 @@ namespace Tensorflow.Eager
             bool op_inputs_tuple_created = false;
 #pragma warning restore CS0219 // Variable is assigned but its value is never used
             var unused_input_indices = gradient_exclustions.OpGradientUnusedInputIndices(op_name);
-            if(unused_input_indices != null)
+            if (unused_input_indices != null)
             {
                 if (unused_input_indices.Length == 0)
                     op_inputs = new Tensor[0];
@@ -79,7 +76,7 @@ namespace Tensorflow.Eager
             else
                 op_inputs = inputs;
 
-            TapeSetRecordOperation(op_name, inputs, results, input_ids, input_dtypes, 
+            TapeSetRecordOperation(op_name, inputs, results, input_ids, input_dtypes,
                 () => GetGradientFunction(op_name, inputs, attrs, results));
 
 

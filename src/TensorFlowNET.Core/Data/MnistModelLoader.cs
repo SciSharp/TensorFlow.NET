@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Text;
+﻿using NumSharp;
+using System;
 using System.IO;
-using NumSharp;
+using System.Threading.Tasks;
 
 namespace Tensorflow
 {
@@ -90,7 +88,7 @@ namespace Tensorflow
 
             var validationImages = trainImages[np.arange(validationSize)];
             var validationLabels = trainLabels[np.arange(validationSize)];
-            
+
             trainImages = trainImages[np.arange(validationSize, end)];
             trainLabels = trainLabels[np.arange(validationSize, end)];
 
@@ -114,8 +112,8 @@ namespace Tensorflow
                 var magic = Read32(bytestream);
                 if (magic != 2051)
                     throw new Exception($"Invalid magic number {magic} in MNIST image file: {file}");
-                
-                var num_images =  Read32(bytestream);
+
+                var num_images = Read32(bytestream);
                 num_images = limit == null ? num_images : Math.Min(num_images, (int)limit);
 
                 var rows = Read32(bytestream);
@@ -136,25 +134,25 @@ namespace Tensorflow
         {
             if (!Path.IsPathRooted(file))
                 file = Path.Combine(AppContext.BaseDirectory, file);
-                
+
             using (var bytestream = new FileStream(file, FileMode.Open))
             {
                 var magic = Read32(bytestream);
                 if (magic != 2049)
                     throw new Exception($"Invalid magic number {magic} in MNIST label file: {file}");
-                
+
                 var num_items = Read32(bytestream);
                 num_items = limit == null ? num_items : Math.Min(num_items, (int)limit);
-                
+
                 var buf = new byte[num_items];
 
                 bytestream.Read(buf, 0, buf.Length);
-                
+
                 var labels = np.frombuffer(buf, np.uint8);
 
                 if (one_hot)
                     return DenseToOneHot(labels, num_classes);
-                
+
                 return labels;
             }
         }

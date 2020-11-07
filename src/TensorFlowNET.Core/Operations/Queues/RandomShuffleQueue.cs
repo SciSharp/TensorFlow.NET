@@ -14,10 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Tensorflow.Queues
 {
@@ -36,7 +33,7 @@ namespace Tensorflow.Queues
             string name = "random_shuffle_queue")
             : base(dtypes: dtypes, shapes: shapes, names: names)
         {
-            var(seed1, seed2) = random_seed.get_seed(seed);
+            var (seed1, seed2) = random_seed.get_seed(seed);
             if (!seed1.HasValue && !seed2.HasValue)
                 (seed1, seed2) = (0, 0);
 

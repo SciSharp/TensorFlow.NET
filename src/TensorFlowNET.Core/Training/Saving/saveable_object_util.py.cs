@@ -79,7 +79,7 @@ namespace Tensorflow
             op_list = op_list.OrderBy(x => x.Name).ToArray();
             var names_to_saveables = new Dictionary<string, Tensor>();
 
-            foreach(var var in op_list)
+            foreach (var var in op_list)
             {
                 bool resource_or_ref_variable = var is RefVariable || var is ResourceVariable;
                 if (false)

@@ -14,18 +14,18 @@
    limitations under the License.
 ******************************************************************************/
 
+using Google.Protobuf;
+using Google.Protobuf.Collections;
+using NumSharp;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Google.Protobuf;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
-using NumSharp;
+using Tensorflow.Contexts;
+using Tensorflow.Eager;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
-using Tensorflow.Eager;
-using Tensorflow.Contexts;
-using Google.Protobuf.Collections;
 
 namespace Tensorflow
 {
@@ -82,7 +82,7 @@ namespace Tensorflow
 
         public static Graph _get_graph_from_inputs(Tensors op_input_list, Graph graph = null)
         {
-            foreach(var op_input in op_input_list)
+            foreach (var op_input in op_input_list)
             {
                 // Determine if this is a valid graph_element.
                 var graph_element = op_input;
@@ -98,9 +98,9 @@ namespace Tensorflow
         /// <param name="dtype"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor convert_to_tensor(object value, 
-            TF_DataType dtype = TF_DataType.DtInvalid, 
-            string name = null, 
+        public static Tensor convert_to_tensor(object value,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            string name = null,
             TF_DataType preferred_dtype = TF_DataType.DtInvalid,
             Context ctx = null)
         {
@@ -162,7 +162,7 @@ namespace Tensorflow
         {
             if (op_def == null)
                 op_def = graph.GetOpDef(node_def.Op);
-            
+
             var input_tensors = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
 
             lock (Locks.ProcessWide)
@@ -182,7 +182,7 @@ namespace Tensorflow
                 }
 
                 var status = tf.Status;
-                
+
                 // Add control inputs
                 foreach (var control_input in control_inputs)
                     c_api.TF_AddControlInput(op_desc, control_input);
@@ -438,7 +438,7 @@ namespace Tensorflow
         {
             var ret = new List<Tensor>();
 
-            foreach(var (i, value) in enumerate(values))
+            foreach (var (i, value) in enumerate(values))
             {
                 if (value == null)
                 {
@@ -454,13 +454,13 @@ namespace Tensorflow
             return ret.ToArray();
         }
 
-        public static Tensor[] internal_convert_n_to_tensor(object values, TF_DataType dtype = TF_DataType.DtInvalid, 
-            string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid, 
+        public static Tensor[] internal_convert_n_to_tensor(object values, TF_DataType dtype = TF_DataType.DtInvalid,
+            string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid,
             bool as_ref = false)
         {
             var ret = new List<Tensor>();
 
-            foreach((int i, object value) in enumerate(values as object[]))
+            foreach ((int i, object value) in enumerate(values as object[]))
             {
                 string n = string.IsNullOrEmpty(name) ? "" : $"{name}_{i}";
                 ret.Add(internal_convert_to_tensor(value, dtype: dtype, name: n, as_ref: as_ref, preferred_dtype: preferred_dtype));
@@ -485,8 +485,8 @@ namespace Tensorflow
                     if (tf.executing_eagerly())
                         return tensor;
                     else
-                        return tensor.dtype == TF_DataType.TF_RESOURCE 
-                            ? tensor.AsPlaceholder(name: name) 
+                        return tensor.dtype == TF_DataType.TF_RESOURCE
+                            ? tensor.AsPlaceholder(name: name)
                             : tensor.AsContatnt(name: name);
                 case Tensor tensor:
                     return tensor;

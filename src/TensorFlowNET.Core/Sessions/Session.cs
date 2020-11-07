@@ -18,7 +18,6 @@ using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Tensorflow.Util;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -49,7 +48,7 @@ namespace Tensorflow
                 using var status = new Status();
                 var opt = new SessionOptions();
 
-                var tags = new string[] {"serve"};
+                var tags = new string[] { "serve" };
                 var buffer = new TF_Buffer();
 
                 IntPtr sess;
@@ -64,7 +63,8 @@ namespace Tensorflow
                         ref buffer,
                         status.Handle);
                     status.Check(true);
-                } catch (TensorflowException ex) when (ex.Message.Contains("Could not find SavedModel"))
+                }
+                catch (TensorflowException ex) when (ex.Message.Contains("Could not find SavedModel"))
                 {
                     sess = c_api.TF_LoadSessionFromSavedModel(opt.Handle,
                         IntPtr.Zero,
@@ -101,12 +101,12 @@ namespace Tensorflow
 
         public void __init__()
         {
-            
+
         }
 
         public void __del__()
         {
-            
+
         }
     }
 }

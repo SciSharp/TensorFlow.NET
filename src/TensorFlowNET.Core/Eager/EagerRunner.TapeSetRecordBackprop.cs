@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Gradients;
 using static Tensorflow.Binding;
 using static Tensorflow.tensorflow;
@@ -21,7 +19,7 @@ namespace Tensorflow.Eager
                 return;
             }
 
-            foreach(var tape in tf.GetTapeSet())
+            foreach (var tape in tf.GetTapeSet())
             {
                 tape.RecordOperation(op_type, input_tensors, output_tensors,
                     input_ids, input_dtypes,

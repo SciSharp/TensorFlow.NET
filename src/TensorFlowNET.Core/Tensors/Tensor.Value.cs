@@ -3,9 +3,9 @@ using NumSharp.Backends;
 using NumSharp.Backends.Unmanaged;
 using NumSharp.Utilities;
 using System;
-using static Tensorflow.Binding;
 using System.Runtime.InteropServices;
 using System.Text;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

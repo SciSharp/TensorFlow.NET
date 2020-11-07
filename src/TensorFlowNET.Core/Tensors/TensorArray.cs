@@ -14,9 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Operations;
 
 namespace Tensorflow
@@ -43,7 +40,7 @@ namespace Tensorflow
             bool infer_shape = true, TensorShape element_shape = null,
             bool colocate_with_first_write_call = true, string name = null)
         {
-            _implementation = new _GraphTensorArray(dtype, 
+            _implementation = new _GraphTensorArray(dtype,
                 size: size,
                 dynamic_size: dynamic_size,
                 clear_after_read: clear_after_read,

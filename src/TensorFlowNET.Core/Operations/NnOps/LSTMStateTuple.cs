@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Operations
+﻿namespace Tensorflow.Operations
 {
     /// <summary>
     /// Tuple used by LSTM Cells for `state_size`, `zero_state`, and output state.

@@ -1,8 +1,5 @@
 ﻿using NumSharp;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
@@ -11,7 +8,7 @@ namespace Tensorflow.Eager
     {
         public EagerTensor() : base(IntPtr.Zero)
         {
-            
+
         }
 
         public EagerTensor(SafeTensorHandleHandle handle) : base(IntPtr.Zero)
@@ -84,7 +81,7 @@ namespace Tensorflow.Eager
 
         void copy_handle_data(Tensor target_t)
         {
-            if(target_t.dtype == TF_DataType.TF_RESOURCE ||
+            if (target_t.dtype == TF_DataType.TF_RESOURCE ||
                 target_t.dtype == TF_DataType.TF_VARIANT)
             {
                 // need to export

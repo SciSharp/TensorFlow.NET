@@ -15,10 +15,8 @@
 ******************************************************************************/
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using util = Tensorflow.control_flow_util;
-using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations.ControlFlows
 {
@@ -78,11 +76,11 @@ namespace Tensorflow.Operations.ControlFlows
         public Tensor[] ProcessUnusedLoopExits(Dictionary<string, int> pending_count, List<Operation> to_ops_set)
         {
             var loop_exits = new List<Tensor>();
-            foreach(var grad_state in _map.Values)
+            foreach (var grad_state in _map.Values)
             {
-                foreach(var y in grad_state.forward_loop_exits)
+                foreach (var y in grad_state.forward_loop_exits)
                 {
-                    if(!pending_count.ContainsKey(y.op.name))
+                    if (!pending_count.ContainsKey(y.op.name))
                     {
                         grad_state.pending_exits_count -= 1;
                         if (!to_ops_set.Contains(y.op))
@@ -92,7 +90,7 @@ namespace Tensorflow.Operations.ControlFlows
                     }
                 }
 
-                foreach(var y in grad_state.forward_context.loop_enters)
+                foreach (var y in grad_state.forward_context.loop_enters)
                 {
                     if (!pending_count.ContainsKey(y.op.name))
                         pending_count[y.op.name] = 1;
@@ -146,7 +144,7 @@ namespace Tensorflow.Operations.ControlFlows
         {
             var forward_ctxt = op.GetWhileContext();
             var grad_state = _map.ContainsKey(forward_ctxt) ? _map[forward_ctxt] : null;
-            if(grad_state == null)
+            if (grad_state == null)
             {
                 GradLoopState outer_grad_state = null;
                 var outer_forward_ctxt = forward_ctxt.outer_context;
@@ -160,7 +158,7 @@ namespace Tensorflow.Operations.ControlFlows
                 // We need to include all exits of a loop for backprop.
                 foreach (var loop_exit in grad_state.forward_loop_exits)
                 {
-                    if(!between_ops.Contains(loop_exit.op))
+                    if (!between_ops.Contains(loop_exit.op))
                     {
                         between_ops.add(loop_exit.op);
                         between_op_list.append(loop_exit.op);
@@ -290,11 +288,11 @@ namespace Tensorflow.Operations.ControlFlows
 
         public void PostProcessing()
         {
-            foreach(var grad_state in _map.Values)
+            foreach (var grad_state in _map.Values)
             {
-                foreach(var b_merge in grad_state.switch_map.Values)
+                foreach (var b_merge in grad_state.switch_map.Values)
                 {
-                    if(b_merge.op.inputs[0] == b_merge.op.inputs[1])
+                    if (b_merge.op.inputs[0] == b_merge.op.inputs[1])
                     {
                         Tensor next_grad_val = null;
                         // The value of this loop variable at iteration i+1 doesn't

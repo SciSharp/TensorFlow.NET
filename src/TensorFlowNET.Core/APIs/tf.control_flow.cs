@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using System;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -42,19 +41,19 @@ namespace Tensorflow
         public Operation group<T>(T[] inputs, string name = null) where T : ITensorOrOperation
             => control_flow_ops.group(inputs, name: name);
 
-        public Tensor while_loop(Func<Tensor, Tensor> cond, 
-            Func<Tensor, Tensor> body, 
+        public Tensor while_loop(Func<Tensor, Tensor> cond,
+            Func<Tensor, Tensor> body,
             Tensor loop_vars,
             int parallel_iterations = 10)
         {
-            Func<Tensor[], Tensor> cond1 = x 
+            Func<Tensor[], Tensor> cond1 = x
                 => cond(x[0]);
 
-            Func<Tensor[], Tensor[]> body1 = x 
+            Func<Tensor[], Tensor[]> body1 = x
                 => new[] { body(x[0]) };
 
-            var results = control_flow_ops.while_loop(cond1, 
-                body1, 
+            var results = control_flow_ops.while_loop(cond1,
+                body1,
                 new[] { loop_vars });
             return results[0];
         }
@@ -68,7 +67,7 @@ namespace Tensorflow
                 parallel_iterations: parallel_iterations,
                 name: name);
 
-        public _ControlDependenciesController control_dependencies(ITensorOrOperation[] control_inputs) 
+        public _ControlDependenciesController control_dependencies(ITensorOrOperation[] control_inputs)
             => ops.control_dependencies(control_inputs);
     }
 }

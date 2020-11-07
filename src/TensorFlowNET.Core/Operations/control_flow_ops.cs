@@ -19,10 +19,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Operations;
 using Tensorflow.Operations.ControlFlows;
-using util = Tensorflow.control_flow_util;
-using static Tensorflow.Binding;
 using Tensorflow.Util;
-using System.Data;
+using static Tensorflow.Binding;
+using util = Tensorflow.control_flow_util;
 
 namespace Tensorflow
 {
@@ -72,7 +71,7 @@ namespace Tensorflow
             {
                 if (condition == null)
                     throw new InvalidArgumentError("");
-                
+
                 return null;
             }
 
@@ -164,7 +163,7 @@ namespace Tensorflow
             ControlFlowState loop_state = null;
 
             int pos = 0;
-            while(pos < between_op_list.Count)
+            while (pos < between_op_list.Count)
             {
                 var op = between_op_list[pos];
                 if (IsLoopExit(op))
@@ -188,7 +187,7 @@ namespace Tensorflow
 
         public static bool IsLoopSwitch(Operation op)
         {
-            if(IsSwitch(op))
+            if (IsSwitch(op))
             {
                 var ctxt = op._get_control_flow_context();
                 return ctxt != null && ctxt.IsWhileContext() && !IsCondSwitch(op);
@@ -211,7 +210,7 @@ namespace Tensorflow
                 name = scope;
                 var gating_ops = tensors.Where(x => x != null).Select(x => x.op).ToList();
 
-                if(control_inputs != null)
+                if (control_inputs != null)
                 {
                     foreach (var c in control_inputs)
                         gating_ops.Add(c);
@@ -223,7 +222,7 @@ namespace Tensorflow
                 var gate = group(gating_ops.ToArray());
 
                 var tpl = new List<Tensor>();
-                foreach(var t in tensors)
+                foreach (var t in tensors)
                 {
                     if (t != null)
                         tpl.Add(with_dependencies(new Operation[] { gate }, t));
@@ -273,7 +272,7 @@ namespace Tensorflow
                 exclusive,
                 name,
                 allow_python_preds: false//,
-                //strict: strict
+                                         //strict: strict
             );
 
         /// <summary>
@@ -373,7 +372,7 @@ namespace Tensorflow
                         return gen_control_flow_ops.ref_switch(data, pred, name: name);
                 }
                 return @switch(data, pred, name: name);
-            }            
+            }
         }
 
         /// <summary>
@@ -434,8 +433,8 @@ namespace Tensorflow
                 }
 
                 // Add the Switch to the graph.
-                var switch_result= @switch(pred, pred);
-                var (p_2, p_1 )= (switch_result[0], switch_result[1]);
+                var switch_result = @switch(pred, pred);
+                var (p_2, p_1) = (switch_result[0], switch_result[1]);
                 var pivot_1 = array_ops.identity(p_1, name: "switch_t");
                 var pivot_2 = array_ops.identity(p_2, name: "switch_f");
                 pred = array_ops.identity(pred, name: "pred_id");
@@ -489,7 +488,7 @@ namespace Tensorflow
 
                 }
 
-                if(context_t.outer_context == null)
+                if (context_t.outer_context == null)
                 {
                     ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_t);
                     ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_f);
@@ -545,7 +544,7 @@ namespace Tensorflow
                 var res_f_flat = res_f;
 
                 var merges = zip(res_f_flat, res_t_flat)
-                    .Select(pair => merge(new [] { pair.Item1, pair.Item2 })[0])
+                    .Select(pair => merge(new[] { pair.Item1, pair.Item2 })[0])
                     .ToArray();
 
                 if (orig_res_t is Tensor[] orig_res_tensor)
@@ -561,7 +560,7 @@ namespace Tensorflow
 
                 }
 
-                if(context_t.outer_context == null)
+                if (context_t.outer_context == null)
                 {
                     ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_t);
                     ops.add_to_collection(tf.GraphKeys.COND_CONTEXT, context_f);
@@ -621,9 +620,9 @@ namespace Tensorflow
         /// <param name="pred"></param>
         /// <param name="dtype"></param>
         /// <param name="name"></param>
-        public static Tensor[] @switch(Tensor data, 
-            Tensor pred, 
-            TF_DataType dtype = TF_DataType.DtInvalid, 
+        public static Tensor[] @switch(Tensor data,
+            Tensor pred,
+            TF_DataType dtype = TF_DataType.DtInvalid,
             string name = null)
         {
             return tf_with(ops.name_scope(name, "Switch", new { data, pred }), scope =>
@@ -652,7 +651,7 @@ namespace Tensorflow
             else
             {
                 var op_ctxt = op._get_control_flow_context();
-                if(op_ctxt != null)
+                if (op_ctxt != null)
                 {
                     // We are in a cond context. Use a switch to create zeros only when needed.
                     var pred = op_ctxt.pred;
@@ -771,9 +770,9 @@ namespace Tensorflow
                                     return_same_structure);
 
                 //if (maximum_iterations != null)
-                    return results.Item;
+                return results.Item;
                 //else
-                    //return results;
+                //return results;
             });
         }
 

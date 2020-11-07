@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Graphs
@@ -43,7 +40,7 @@ namespace Tensorflow.Graphs
             string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
 
             // IntPtr func_handle;
-            using(var graph = new FuncGraph(func_name))
+            using (var graph = new FuncGraph(func_name))
             {
                 var input1 = tf.placeholder(tf.int32);
                 var input2 = tf.placeholder(tf.int32);

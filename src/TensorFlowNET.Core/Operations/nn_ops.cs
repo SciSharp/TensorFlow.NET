@@ -45,9 +45,9 @@ namespace Tensorflow
         /// <param name="data_format"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor bias_add(Tensor value, 
-            Tensor bias, 
-            string data_format = null, 
+        public static Tensor bias_add(Tensor value,
+            Tensor bias,
+            string data_format = null,
             string name = null)
         {
             return tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
@@ -210,7 +210,7 @@ namespace Tensorflow
                         logits.get_shape()[:-1].is_fully_defined());*/
 
                 // Check if no reshapes are required.
-                if(logits.TensorShape.ndim == 2)
+                if (logits.TensorShape.ndim == 2)
                 {
                     var (cost, _) = gen_nn_ops.sparse_softmax_cross_entropy_with_logits(
                         precise_logits, labels, name: name);
@@ -254,7 +254,7 @@ namespace Tensorflow
                 var (cost, unused_backprop) = gen_nn_ops.softmax_cross_entropy_with_logits(precise_logits, labels, name: name);
 
                 // The output cost shape should be the input minus axis.
-                var output_shape = array_ops.slice(input_shape, 
+                var output_shape = array_ops.slice(input_shape,
                     new int[] { 0 },
                     new Tensor[] { math_ops.subtract(input_rank, 1) });
 
@@ -282,13 +282,13 @@ namespace Tensorflow
             // Set output shape if known.
             // if not context.executing_eagerly():
             var shape = logits.TensorShape;
-            if(shape != null && shape.ndim > 0)
+            if (shape != null && shape.ndim > 0)
             {
                 var product = 1;
                 var product_valid = true;
-                foreach(var d in shape.dims.Take(shape.ndim - 1))
+                foreach (var d in shape.dims.Take(shape.ndim - 1))
                 {
-                    if(d == -1)
+                    if (d == -1)
                     {
                         product_valid = false;
                         break;

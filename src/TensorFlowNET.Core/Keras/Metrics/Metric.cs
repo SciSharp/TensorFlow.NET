@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
@@ -23,14 +21,14 @@ namespace Tensorflow.Keras.Metrics
             built = true;
         }
 
-        protected override IVariableV1 add_weight(string name, 
-            TensorShape shape = null, 
-            TF_DataType dtype = TF_DataType.TF_FLOAT, 
-            IInitializer initializer = null, 
-            IRegularizer regularizer = null, 
-            VariableSynchronization synchronization = VariableSynchronization.OnRead, 
-            VariableAggregation aggregation = VariableAggregation.Sum, 
-            bool trainable = true, 
+        protected override IVariableV1 add_weight(string name,
+            TensorShape shape = null,
+            TF_DataType dtype = TF_DataType.TF_FLOAT,
+            IInitializer initializer = null,
+            IRegularizer regularizer = null,
+            VariableSynchronization synchronization = VariableSynchronization.OnRead,
+            VariableAggregation aggregation = VariableAggregation.Sum,
+            bool trainable = true,
             Func<VariableArgs, IVariableV1> getter = null)
         {
             if (shape == null)

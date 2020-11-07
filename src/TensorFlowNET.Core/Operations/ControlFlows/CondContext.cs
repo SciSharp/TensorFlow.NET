@@ -109,7 +109,7 @@ namespace Tensorflow.Operations
                     _values.Add(result.name);
                     _external_values[result.name] = result;
                 }
-                
+
                 tf_with(ops.control_dependencies(null), ctrl =>
                 {
                     var results = control_flow_ops._SwitchRefOrTensor(result, _pred);

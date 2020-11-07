@@ -63,7 +63,7 @@ namespace Tensorflow
             var handle = Marshal.AllocHGlobal(Marshal.SizeOf<TF_Input>());
             int num = c_api.TF_OperationOutputConsumers(new TF_Output(_handle, index), handle, max_consumers);
             var consumers = new TF_Input[num];
-            var inputptr = (TF_Input*) handle;
+            var inputptr = (TF_Input*)handle;
             for (int i = 0; i < num; i++)
                 consumers[i] = *(inputptr + i);
 

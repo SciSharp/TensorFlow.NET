@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Tensorflow.Util;
 using static Tensorflow.tensorflow;
 
@@ -24,7 +21,7 @@ namespace Tensorflow.Gradients
                 if (!tensor_tape.find(tensor_id, out var op_id))
                     continue;
 
-                if (op_id == -1 || 
+                if (op_id == -1 ||
                     !op_tape.find(op_id, out var op_it) ||
                     result.op_tape.find(op_id, out var result_op_it))
                     continue;
@@ -33,7 +30,7 @@ namespace Tensorflow.Gradients
 
                 foreach (var it in op_it.input_tensor_id)
                 {
-                    if(result.tensor_usage_counts.find(it))
+                    if (result.tensor_usage_counts.find(it))
                         result.tensor_usage_counts[it]++;
                     else
                     {

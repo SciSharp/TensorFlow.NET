@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using System;
-using System.Linq;
 using Tensorflow.Keras.Losses;
 using static Tensorflow.Binding;
 

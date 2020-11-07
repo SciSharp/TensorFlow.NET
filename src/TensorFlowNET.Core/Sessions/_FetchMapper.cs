@@ -15,9 +15,7 @@
 ******************************************************************************/
 
 using NumSharp;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Tensorflow
 {
@@ -29,7 +27,7 @@ namespace Tensorflow
         {
             var fetches = fetch.GetType().IsArray ? (object[])fetch : new object[] { fetch };
 
-            if(fetch is List<string> fetches1)
+            if (fetch is List<string> fetches1)
                 return new _ListFetchMapper(fetches1.ToArray());
             if (fetch.GetType().IsArray)
                 return new _ListFetchMapper(fetches);

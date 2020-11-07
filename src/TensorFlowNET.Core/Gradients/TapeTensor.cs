@@ -1,9 +1,4 @@
-﻿using NumSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Eager;
-using static Tensorflow.Binding;
+﻿using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
 {

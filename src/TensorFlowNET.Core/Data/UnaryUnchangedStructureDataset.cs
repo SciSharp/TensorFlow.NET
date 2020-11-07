@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     /// <summary>
     /// Represents a unary dataset with the same input and output structure.
@@ -12,7 +8,7 @@ namespace Tensorflow
         public UnaryUnchangedStructureDataset(IDatasetV2 input_dataset) :
             base(input_dataset)
         {
-            
+
         }
     }
 }

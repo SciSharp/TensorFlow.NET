@@ -53,7 +53,7 @@ namespace Tensorflow.Gradients
             var grad = grads[0];
             var x = op.inputs[0];
             var alpha = (float)op.get_attr("alpha");
-            return new Tensor[] { gen_nn_ops.leaky_relu_grad(grad, x, alpha: alpha)};
+            return new Tensor[] { gen_nn_ops.leaky_relu_grad(grad, x, alpha: alpha) };
         }
 
         /// <summary>
@@ -89,12 +89,12 @@ namespace Tensorflow.Gradients
             var grad = _BroadcastMul(grad_loss, softmax_grad);
 
             var logits = op.inputs[0];
-            if(grad_grad != null && !IsZero(grad_grad))
+            if (grad_grad != null && !IsZero(grad_grad))
             {
                 throw new NotImplementedException("_SoftmaxCrossEntropyWithLogitsGrad");
             }
 
-            return new Tensor[] 
+            return new Tensor[]
             {
                 grad,
                 _BroadcastMul(grad_loss, -nn_ops.log_softmax(logits))
@@ -135,11 +135,11 @@ namespace Tensorflow.Gradients
             var use_cudnn_on_gpu = op.get_attr<bool>("use_cudnn_on_gpu");
             var data_format = op.get_attr<string>("data_format");
             var shape = gen_array_ops.shape_n(new Tensor[] { op.inputs[0], op.inputs[1] });
-            
+
             return new Tensor[]
             {
                 gen_nn_ops.conv2d_backprop_input(shape[0], op.inputs[1], grads[0],
-                    strides, padding, use_cudnn_on_gpu, explicit_paddings, 
+                    strides, padding, use_cudnn_on_gpu, explicit_paddings,
                     dilations: dilations,
                     data_format: data_format),
                 gen_nn_ops.conv2d_backprop_filter(op.inputs[0], shape[1], grads[0],
@@ -234,10 +234,10 @@ namespace Tensorflow.Gradients
 
                 return new Tensor[]
                 {
-                    dx, 
-                    dscale, 
-                    doffset, 
-                    null, 
+                    dx,
+                    dscale,
+                    doffset,
+                    null,
                     null
                 };
             }
@@ -304,7 +304,7 @@ namespace Tensorflow.Gradients
             var stack = array_ops.stack(new object[] { -1L, ind_lastdim });
             var ind_2d = array_ops.reshape(op.outputs[1], stack);
 
-            var in_lastdim = array_ops.gather(math_ops.cast(in_shape, TF_DataType.TF_INT64), 
+            var in_lastdim = array_ops.gather(math_ops.cast(in_shape, TF_DataType.TF_INT64),
                 array_ops.size(in_shape) - 1);
             var outerdim = array_ops.shape(ind_2d).slice(0);
 

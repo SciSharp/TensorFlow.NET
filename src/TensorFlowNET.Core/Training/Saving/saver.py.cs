@@ -51,16 +51,16 @@ namespace Tensorflow
         /// <param name="import_scope"></param>
         /// <param name="imported_vars"></param>
         /// <returns></returns>
-        public static Saver _create_saver_from_imported_meta_graph(MetaGraphDef meta_graph_def, 
-            string import_scope, 
+        public static Saver _create_saver_from_imported_meta_graph(MetaGraphDef meta_graph_def,
+            string import_scope,
             Dictionary<string, IVariableV1> imported_vars)
         {
-            if(meta_graph_def.SaverDef != null)
+            if (meta_graph_def.SaverDef != null)
             {
                 // Infer the scope that is prepended by `import_scoped_meta_graph`.
                 string scope = import_scope;
                 var var_names = imported_vars.Keys.ToArray();
-                if(var_names.Length > 0)
+                if (var_names.Length > 0)
                 {
                     var sample_key = var_names[0];
                     var sample_var = imported_vars[sample_key];
@@ -70,7 +70,7 @@ namespace Tensorflow
             }
             else
             {
-                if(variables._all_saveable_objects(scope: import_scope).Length > 0)
+                if (variables._all_saveable_objects(scope: import_scope).Length > 0)
                 {
                     // Return the default saver instance for all graph variables.
                     return new Saver();
@@ -85,7 +85,7 @@ namespace Tensorflow
             }
         }
 
-        public static string freeze_graph(string checkpoint_dir, 
+        public static string freeze_graph(string checkpoint_dir,
             string output_pb_name,
             string[] output_node_names)
         {
@@ -112,7 +112,7 @@ namespace Tensorflow
         {
             var bytes = File.ReadAllBytes(freeze_graph_pb);
             var graph = tf.Graph().as_default();
-            importer.import_graph_def(GraphDef.Parser.ParseFrom(bytes), 
+            importer.import_graph_def(GraphDef.Parser.ParseFrom(bytes),
                 name: name);
             return graph;
         }

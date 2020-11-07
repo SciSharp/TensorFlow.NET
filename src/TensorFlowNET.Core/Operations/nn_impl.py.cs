@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
@@ -30,7 +29,7 @@ namespace Tensorflow
         /// <param name="epsilon"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor l2_normalize(Tensor x, 
+        public static Tensor l2_normalize(Tensor x,
             int axis = 0,
             float epsilon = 1e-12f,
             string name = null)
@@ -53,7 +52,7 @@ namespace Tensorflow
         /// <param name="name"> Name used to scope the operations that compute the moments.</param>
         /// <param name="keep_dims"> Produce moments with the same dimensionality as the input.</param>
         /// <returns> Two `Tensor` objects: `mean` and `variance`.</returns>
-        public static (Tensor, Tensor) moments(Tensor x, 
+        public static (Tensor, Tensor) moments(Tensor x,
             int[] axes,
             string name = null,
             bool keep_dims = false)
@@ -112,7 +111,7 @@ namespace Tensorflow
             var offset_tensor = ops.convert_to_tensor(offset, name: "offset");
             if (mean == null)
                 mean = constant_op.constant(new float[0]);
-            if(variance == null)
+            if (variance == null)
                 variance = constant_op.constant(new float[0]);
             var min_epsilon = 1.001e-5f;
             epsilon = epsilon > min_epsilon ? epsilon : min_epsilon;

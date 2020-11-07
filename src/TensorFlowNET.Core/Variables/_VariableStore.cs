@@ -52,9 +52,9 @@ namespace Tensorflow
             dtype = dtype.as_base_dtype();
             trainable = variable_scope._get_trainable_value(synchronization, trainable);
 
-            return _true_getter(name, 
-                shape: shape, 
-                dtype: dtype, 
+            return _true_getter(name,
+                shape: shape,
+                dtype: dtype,
                 initializer: initializer,
                 trainable: trainable,
                 collections: collections,

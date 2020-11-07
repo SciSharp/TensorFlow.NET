@@ -1,8 +1,6 @@
 ﻿using NumSharp;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Graphs;
 using Tensorflow.Keras.ArgsDefinition;
 using static Tensorflow.Binding;
@@ -17,14 +15,14 @@ namespace Tensorflow.Keras.Engine
         static string TF_OP_LAYER_NAME_PREFIX = "tf_op_layer_";
         public string OpType => node_def.Op;
 
-        public TensorFlowOpLayer(TensorFlowOpLayerArgs args) 
-            : base(new LayerArgs 
-                { 
-                    Name = TF_OP_LAYER_NAME_PREFIX + args.Name,
-                    Trainable = args.Trainable,
-                    DType = args.DType,
-                    Autocast = false
-                })
+        public TensorFlowOpLayer(TensorFlowOpLayerArgs args)
+            : base(new LayerArgs
+            {
+                Name = TF_OP_LAYER_NAME_PREFIX + args.Name,
+                Trainable = args.Trainable,
+                DType = args.DType,
+                Autocast = false
+            })
         {
             this.args = args;
             built = true;
@@ -38,7 +36,7 @@ namespace Tensorflow.Keras.Engine
         }
 
         [AutoGraph]
-        Tensors _defun_call(Tensors inputs) 
+        Tensors _defun_call(Tensors inputs)
             => MakOp(inputs);
 
         Tensors MakOp(Tensors inputs)

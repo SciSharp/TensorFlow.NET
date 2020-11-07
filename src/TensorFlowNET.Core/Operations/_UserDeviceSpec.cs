@@ -48,7 +48,7 @@ namespace Tensorflow
             if (variable == null)
                 return "";
 
-            if(!IsFunction)
+            if (!IsFunction)
             {
                 return variable.ToString();
             }
@@ -70,7 +70,7 @@ namespace Tensorflow
 
         public _UserDeviceSpec(StringOrFunction device_name_or_function)
         {
-            
+
             _device_name_or_function = device_name_or_function;
             display_name = device_name_or_function.ToString();
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using static Tensorflow.Binding;
+﻿using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras
 {

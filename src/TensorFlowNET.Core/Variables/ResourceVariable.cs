@@ -15,10 +15,8 @@
 ******************************************************************************/
 
 using Google.Protobuf;
-using NumSharp;
 using System;
 using System.Collections.Generic;
-using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -60,11 +58,11 @@ namespace Tensorflow
             }
             else
             {
-                _init_from_args(initial_value: initial_value, 
-                    trainable: trainable, 
-                    collections: collections, 
-                    caching_device: caching_device, 
-                    name: name, 
+                _init_from_args(initial_value: initial_value,
+                    trainable: trainable,
+                    collections: collections,
+                    caching_device: caching_device,
+                    name: name,
                     dtype: dtype,
                     aggregation: aggregation,
                     shape: shape);
@@ -82,15 +80,15 @@ namespace Tensorflow
         {
             var init_from_fn = initial_value.GetType().Name == "Func`1" ||
                 initial_value.GetType().GetInterface("IInitializer") != null;
-            if(collections == null)
+            if (collections == null)
                 collections = new List<string>() { tf.GraphKeys.GLOBAL_VARIABLES };
             _trainable = trainable;
 
             if (trainable && !collections.Contains(tf.GraphKeys.TRAINABLE_VARIABLES))
                 collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
-            
+
             _in_graph_mode = !tf.Context.executing_eagerly();
-            tf_with(ops.init_scope(), init_scope => 
+            tf_with(ops.init_scope(), init_scope =>
             {
                 var values = init_from_fn ? new object[0] : new object[] { initial_value };
                 tf_with(ops.name_scope(name, "Variable", values, skip_on_eager: false), scope =>
@@ -181,7 +179,7 @@ namespace Tensorflow
             _handle_name = handle.name;
             _name = handle.name;
             _shape = new TensorShape(handle.op.get_attr("shape") as TensorShapeProto);
-            
+
             prepend_name_scope = ops.prepend_name_scope(variable_def.InitializerName, import_scope: import_scope);
             initializer_op = g.as_graph_element(prepend_name_scope) as Operation;
             if (!string.IsNullOrEmpty(variable_def.InitialValueName))

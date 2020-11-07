@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Util;
 using static Tensorflow.tensorflow;
 
@@ -38,7 +37,7 @@ namespace Tensorflow.Gradients
                 tensor_usage_[o.GetID()] = 1;
                 tensors.Add(o);
             }
-            
+
             op_tape_[op_id] = new OpTapeEntry<BackwardFunction, TapeTensor>
             {
                 op_type = op_type,

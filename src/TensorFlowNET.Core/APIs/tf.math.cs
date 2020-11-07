@@ -14,9 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Eager;
-using Tensorflow.Operations;
-
 namespace Tensorflow
 {
     public partial class tensorflow
@@ -52,7 +49,7 @@ namespace Tensorflow
         public Tensor add(Tensor a, Tensor b, string name = null)
             => gen_math_ops.add(a, b, name: name);
 
-        public Tensor add<Tx, Ty>(Tx a, Ty b, string name = null) 
+        public Tensor add<Tx, Ty>(Tx a, Ty b, string name = null)
             => gen_math_ops.add(a, b, name: name);
 
         /// <summary>
@@ -233,7 +230,7 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
             => gen_math_ops._clip_by_value(t, clip_value_min, clip_value_max);
-        
+
         /// <summary>
         ///    Clips tensor values to a specified min and max.
         /// </summary>
@@ -261,16 +258,16 @@ namespace Tensorflow
         ///    Any values less than <c>clip_value_min</c> are set to <c>clip_value_min</c>. Any values
         ///    greater than <c>clip_value_max</c> are set to <c>clip_value_max</c>.
         /// </remarks>
-        public Tensor clip_by_value<T1, T2>(Tensor t, T1 clip_value_min, T2 clip_value_max, string name = "ClipByValue") 
+        public Tensor clip_by_value<T1, T2>(Tensor t, T1 clip_value_min, T2 clip_value_max, string name = "ClipByValue")
             => clip_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
-        
+
         public Tensor sub<Tx, Ty>(Tx a, Ty b, string name = null)
             => gen_math_ops.sub(a, b, name: name);
 
         public Tensor divide(Tensor a, Tensor b)
             => a / b;
 
-        public Tensor sqrt(Tensor a, string name = null) 
+        public Tensor sqrt(Tensor a, string name = null)
             => gen_math_ops.sqrt(a, name);
 
         public Tensor sign(Tensor a, string name = null)
@@ -367,7 +364,7 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null) 
+        public Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
 
         public Tensor negative(Tensor x, string name = null)
@@ -424,7 +421,7 @@ namespace Tensorflow
 
         public Tensor real(Tensor input, string name = null)
             => math_ops.real(input, name);
-       
+
         /// <summary>
         /// Computes the "logical or" of elements across dimensions of a tensor.
         /// </summary>
@@ -478,7 +475,7 @@ namespace Tensorflow
         /// <param name="input"></param>
         /// <param name="axis"></param>
         /// <returns></returns>
-        public Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null, 
+        public Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null,
             bool keepdims = false, string name = null)
         {
             if (!axis.HasValue && reduction_indices.HasValue && !keepdims)
@@ -491,7 +488,7 @@ namespace Tensorflow
                 return math_ops.reduce_sum(input, keepdims: keepdims, name: name);
         }
 
-        public Tensor reduce_sum(Tensor input, TensorShape axis, int? reduction_indices = null, 
+        public Tensor reduce_sum(Tensor input, TensorShape axis, int? reduction_indices = null,
             bool keepdims = false, string name = null)
             => math_ops.reduce_sum(input, axis, keepdims: keepdims, name: name);
 
@@ -517,7 +514,7 @@ namespace Tensorflow
 
         public Tensor reduce_variance(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_variance(input_tensor, axis, keepdims, name);
-       
+
         public Tensor sigmoid<T>(T x, string name = null)
             => math_ops.sigmoid(x, name: name);
 
@@ -536,7 +533,7 @@ namespace Tensorflow
         public Tensor round(Tensor x, string name = null)
             => gen_math_ops.round(x, name: name);
 
-        public Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null) 
+        public Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
             => math_ops.cast(x, dtype, name);
 
         public Tensor cumsum(Tensor x, int axis = 0, bool exclusive = false, bool reverse = false, string name = null)

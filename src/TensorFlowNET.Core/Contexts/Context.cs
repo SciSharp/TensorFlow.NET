@@ -70,8 +70,8 @@ namespace Tensorflow.Contexts
             => context_switches.Current().EagerMode;
 
         public string shared_name(string name = null)
-            => !string.IsNullOrEmpty(name) || !executing_eagerly() ? 
-                name : 
+            => !string.IsNullOrEmpty(name) || !executing_eagerly() ?
+                name :
                 "cd2c89b7-88b7-44c8-ad83-06c2a9158347";
 
         public void graph_mode()

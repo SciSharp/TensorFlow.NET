@@ -14,8 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Keras;
-using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Optimizers;
 
 namespace Tensorflow

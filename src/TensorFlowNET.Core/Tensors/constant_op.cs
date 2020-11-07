@@ -17,10 +17,10 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
-using Tensorflow.Eager;
-using static Tensorflow.Binding;
 using System.Linq;
 using Tensorflow.Contexts;
+using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -43,11 +43,11 @@ namespace Tensorflow
         }
 
         /// <param name="verify_shape">Boolean that enables verification of a shape of values.</param>
-        public static Tensor _constant_impl(object value, 
-            TF_DataType dtype, 
-            TensorShape shape, 
-            string name, 
-            bool verify_shape, 
+        public static Tensor _constant_impl(object value,
+            TF_DataType dtype,
+            TensorShape shape,
+            string name,
+            bool verify_shape,
             bool allow_broadcast)
         {
             if (tf.Context.executing_eagerly())
@@ -76,10 +76,10 @@ namespace Tensorflow
 
             Graph g = ops.get_default_graph();
             var tensor_value = new AttrValue();
-            tensor_value.Tensor = tensor_util.make_tensor_proto(value, 
+            tensor_value.Tensor = tensor_util.make_tensor_proto(value,
                 dtype: dtype,
                 shape: shape,
-                verify_shape: verify_shape, 
+                verify_shape: verify_shape,
                 allow_broadcast: allow_broadcast);
 
             var dtype_value = new AttrValue
@@ -144,7 +144,7 @@ namespace Tensorflow
                 }
             }
 
-            if(dtype == TF_DataType.TF_STRING && value is byte[] bytes)
+            if (dtype == TF_DataType.TF_STRING && value is byte[] bytes)
             {
                 return new EagerTensor(bytes, ctx.DeviceName, TF_DataType.TF_STRING);
             }
@@ -156,7 +156,7 @@ namespace Tensorflow
                 case NDArray val:
                     return new EagerTensor(val, ctx.DeviceName);
                 //case TensorShape val:
-                    //return new EagerTensor(val.dims, ctx.DeviceName);
+                //return new EagerTensor(val.dims, ctx.DeviceName);
                 case string val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case string[] val:
@@ -216,14 +216,14 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="as_ref"></param>
         /// <returns></returns>
-        public static Tensor _tensor_shape_tensor_conversion_function(TensorShape s, 
-            TF_DataType dtype = TF_DataType.DtInvalid, 
-            string name = null, 
+        public static Tensor _tensor_shape_tensor_conversion_function(TensorShape s,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            string name = null,
             bool as_ref = false)
         {
             var s_list = s.dims;
             var int64_value = 0;
-            foreach(var dim in s_list)
+            foreach (var dim in s_list)
             {
                 if (dim > Math.Pow(2, 31))
                 {

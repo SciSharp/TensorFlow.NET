@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Operations;
+﻿using Tensorflow.Operations;
 
 namespace Tensorflow
 {

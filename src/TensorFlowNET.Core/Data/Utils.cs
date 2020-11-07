@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Tensorflow.Framework.Models;
 
 namespace Tensorflow
 {
@@ -42,9 +39,9 @@ namespace Tensorflow
 
                 return;
             }
-            
+
             Directory.CreateDirectory(dirSaveTo);
-                
+
             using (var wc = new WebClient())
             {
                 await wc.DownloadFileTaskAsync(url, fileSaveTo).ConfigureAwait(false);
@@ -73,7 +70,7 @@ namespace Tensorflow
             {
                 if (showProgressInConsole)
                     Console.WriteLine($"The file {destFileName} already exists");
-            }            
+            }
 
             using (GZipStream unzipStream = new GZipStream(File.OpenRead(zipFile), CompressionMode.Decompress))
             {
@@ -86,7 +83,7 @@ namespace Tensorflow
 
                 unzipStream.Close();
             }
-        }        
+        }
 
         public static async Task ShowProgressInConsole(this Task task, bool enable)
         {
@@ -101,12 +98,12 @@ namespace Tensorflow
             var showProgressTask = ShowProgressInConsole(cts);
 
             try
-            {                
+            {
                 await task;
             }
             finally
             {
-                cts.Cancel();                
+                cts.Cancel();
             }
 
             await showProgressTask;

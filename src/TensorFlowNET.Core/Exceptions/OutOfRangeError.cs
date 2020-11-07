@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     public class OutOfRangeError : TensorflowException
     {

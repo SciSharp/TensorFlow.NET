@@ -14,10 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Queues
@@ -54,7 +52,7 @@ namespace Tensorflow.Queues
         {
             return tf_with(ops.name_scope(name, $"{_name}_EnqueueMany", vals), scope =>
             {
-                var vals_tensor1 = _check_enqueue_dtypes(indexes); 
+                var vals_tensor1 = _check_enqueue_dtypes(indexes);
                 var vals_tensor2 = _check_enqueue_dtypes(vals);
 
                 var tensors = new List<Tensor>();

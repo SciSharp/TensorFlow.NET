@@ -1,7 +1,4 @@
-﻿using NumSharp;
-using System;
-using System.Globalization;
-using System.Threading.Tasks;
+﻿using System;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras
@@ -39,7 +36,7 @@ namespace Tensorflow.Keras
                 img_ds = tf.data.Dataset.zip(img_ds, label_ds);
             }
             else*/
-                throw new NotImplementedException("");
+            throw new NotImplementedException("");
 
             return img_ds;
         }

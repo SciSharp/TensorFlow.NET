@@ -51,7 +51,7 @@ namespace Tensorflow.Summaries
             {
                 while (true)
                 {
-                    if(_queue.Count == 0)
+                    if (_queue.Count == 0)
                     {
                         Thread.Sleep(_flush_secs * 1000);
                         continue;

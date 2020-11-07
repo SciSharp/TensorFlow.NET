@@ -15,14 +15,13 @@
 ******************************************************************************/
 
 using NumSharp;
+using NumSharp.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using NumSharp.Utilities;
-using System.Runtime.CompilerServices;
 
 namespace Tensorflow
 {
@@ -32,8 +31,8 @@ namespace Tensorflow
     public static partial class Binding
     {
         public static T2 get<T1, T2>(this Dictionary<T1, T2> dict, T1 key)
-            => key == null ? 
-                default : 
+            => key == null ?
+                default :
             (dict.ContainsKey(key) ? dict[key] : default);
 
         public static void Update<T>(this IList<T> list, T element)
@@ -71,7 +70,7 @@ namespace Tensorflow
                 case NDArray nd:
                     return nd.ToString(false);
                 case Array arr:
-                    if (arr.Rank!=1 || arr.GetType().GetElementType()?.IsArray == true)
+                    if (arr.Rank != 1 || arr.GetType().GetElementType()?.IsArray == true)
                         arr = Arrays.Flatten(arr);
                     var objs = toObjectArray(arr);
                     return $"[{string.Join(", ", objs.Select(_tostring))}]";
@@ -105,7 +104,7 @@ namespace Tensorflow
                 return;
             }
 
-            foreach(var obj in objects)
+            foreach (var obj in objects)
             {
 
             }
@@ -239,13 +238,13 @@ namespace Tensorflow
                 yield return (t1[i], t2[i], t3[i]);
         }
 
-        public static IEnumerable<(T1, T2)> zip<T1, T2>(NDArray t1, NDArray t2) 
-            where T1: unmanaged
-            where T2: unmanaged
+        public static IEnumerable<(T1, T2)> zip<T1, T2>(NDArray t1, NDArray t2)
+            where T1 : unmanaged
+            where T2 : unmanaged
         {
             var a = t1.AsIterator<T1>();
             var b = t2.AsIterator<T2>();
-            while(a.HasNext() && b.HasNext())
+            while (a.HasNext() && b.HasNext())
                 yield return (a.MoveNext(), b.MoveNext());
         }
 
@@ -390,7 +389,8 @@ namespace Tensorflow
                 {
                     yield return flds[i].GetValue(tuple);
                 }
-            } else
+            }
+            else
             {
                 throw new System.Exception("Expected Tuple.");
             }
@@ -404,7 +404,7 @@ namespace Tensorflow
         public static bool isinstance(object Item1, object tuple)
         {
             foreach (var t in TupleToEnumerable(tuple))
-                if (isinstance(Item1, (Type) t))
+                if (isinstance(Item1, (Type)t))
                     return true;
             return false;
         }

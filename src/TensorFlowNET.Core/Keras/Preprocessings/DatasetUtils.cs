@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Preprocessings
@@ -12,7 +10,7 @@ namespace Tensorflow.Keras.Preprocessings
             var label_ds = tf.data.Dataset.from_tensor_slices(labels);
             if (label_mode == "binary")
                 throw new NotImplementedException("");
-            else if(label_mode == "categorical")
+            else if (label_mode == "categorical")
                 throw new NotImplementedException("");
             return label_ds;
         }

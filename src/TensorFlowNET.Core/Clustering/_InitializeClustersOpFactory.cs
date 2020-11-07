@@ -89,7 +89,7 @@ namespace Tensorflow.Clustering
         public Tensor op()
         {
             var x = control_flow_ops.cond(gen_math_ops.equal(_num_remaining, 0),
-                () => 
+                () =>
                 {
                     return check_ops.assert_equal(_cluster_centers_initialized, true);
                 },

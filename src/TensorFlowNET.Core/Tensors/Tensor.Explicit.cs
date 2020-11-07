@@ -21,7 +21,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_INT8);
-                return *(sbyte*) tensor.buffer;
+                return *(sbyte*)tensor.buffer;
             }
         }
 
@@ -31,7 +31,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_UINT8);
-                return *(byte*) tensor.buffer;
+                return *(byte*)tensor.buffer;
             }
         }
 
@@ -41,7 +41,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_UINT16);
-                return *(ushort*) tensor.buffer;
+                return *(ushort*)tensor.buffer;
             }
         }
 
@@ -51,7 +51,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_INT16);
-                return *(short*) tensor.buffer;
+                return *(short*)tensor.buffer;
             }
         }
 
@@ -61,7 +61,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_INT32);
-                return *(int*) tensor.buffer;
+                return *(int*)tensor.buffer;
             }
         }
 
@@ -71,7 +71,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_UINT32);
-                return *(uint*) tensor.buffer;
+                return *(uint*)tensor.buffer;
             }
         }
 
@@ -81,7 +81,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_INT64);
-                return *(long*) tensor.buffer;
+                return *(long*)tensor.buffer;
             }
         }
 
@@ -91,7 +91,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_UINT64);
-                return *(ulong*) tensor.buffer;
+                return *(ulong*)tensor.buffer;
             }
         }
 
@@ -101,7 +101,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_FLOAT);
-                return *(float*) tensor.buffer;
+                return *(float*)tensor.buffer;
             }
         }
 
@@ -111,7 +111,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_DOUBLE);
-                return *(double*) tensor.buffer;
+                return *(double*)tensor.buffer;
             }
         }
 
@@ -121,7 +121,7 @@ namespace Tensorflow
             {
                 EnsureScalar(tensor);
                 EnsureDType(tensor, TF_DataType.TF_STRING);
-                return new string((char*) tensor.buffer, 0, (int) tensor.size);
+                return new string((char*)tensor.buffer, 0, (int)tensor.size);
             }
         }
 

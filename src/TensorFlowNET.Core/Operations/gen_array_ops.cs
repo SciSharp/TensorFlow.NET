@@ -14,12 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using static Tensorflow.Binding;
-using Tensorflow.Eager;
 using System.Linq;
 using Tensorflow.Contexts;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -31,7 +28,7 @@ namespace Tensorflow
 
             return _op.output;
         }
-        
+
         public static Tensor check_numerics(Tensor tensor, string message, string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("CheckNumerics", name: name, args: new { tensor, message });
@@ -51,7 +48,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ConcatV2", name, 
+                    "ConcatV2", name,
                     null,
                     values, axis);
 
@@ -75,7 +72,7 @@ namespace Tensorflow
 
         public static Tensor concat_v2(Tensor[] values, int axis, string name = null)
             => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("ConcatV2", name: name, 
+                => tf.OpDefLib._apply_op_helper("ConcatV2", name: name,
                     args: new { values, axis }).output, ()
                 => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ConcatV2", name,
@@ -191,9 +188,9 @@ namespace Tensorflow
 
         public static Tensor pack(Tensor[] values, int axis = 0, string name = null)
         {
-            if(tf.Context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName, 
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Pack", name,
                     null,
                     values,
@@ -293,10 +290,10 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "BroadcastGradientArgs", name, 
+                    "BroadcastGradientArgs", name,
                     null,
-                    s0,s1);
-                
+                    s0, s1);
+
                 return (results[0], results[1]);
             }
 
@@ -356,7 +353,7 @@ namespace Tensorflow
         public static Tensor one_hot(Tensor indices, Tensor depth,
             Tensor on_value = null,
             Tensor off_value = null,
-            TF_DataType dtype = TF_DataType.DtInvalid, 
+            TF_DataType dtype = TF_DataType.DtInvalid,
             int axis = -1,
             string name = null)
         {
@@ -412,7 +409,7 @@ namespace Tensorflow
 
         public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
             => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("Shape", name, 
+                => tf.OpDefLib._apply_op_helper("Shape", name,
                     new { input, out_type }).output, ()
                 => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Shape", name,
@@ -630,7 +627,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Squeeze", name, 
+                    "Squeeze", name,
                     null,
                     input,
                     "squeeze_dims", axis);

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using Tensorflow.Functions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Graphs
@@ -37,18 +34,18 @@ namespace Tensorflow.Graphs
             string[] output_names)
         {
             using var status = new Status();
-            func_handle = c_api.TF_GraphToFunction(_handle, 
-                func_name, 
+            func_handle = c_api.TF_GraphToFunction(_handle,
+                func_name,
                 false,
                 opers.Length,
                 opers.Select(x => (IntPtr)x).ToArray(),
-                inputs.Length, 
+                inputs.Length,
                 inputs.Select(x => new TF_Output(x, 0)).ToArray(),
-                outputs.Length, 
+                outputs.Length,
                 outputs.Select(x => new TF_Output(x, 0)).ToArray(),
                 output_names == null || output_names.Length == 0 ? null : output_names,
-                IntPtr.Zero, 
-                null, 
+                IntPtr.Zero,
+                null,
                 status.Handle);
             status.Check(true);
 

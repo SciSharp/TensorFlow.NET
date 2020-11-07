@@ -17,7 +17,6 @@
 using NumSharp.Backends.Unmanaged;
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Tensorflow.Util;
 using static Tensorflow.c_api;
 

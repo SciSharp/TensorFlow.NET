@@ -14,10 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
-using System;
-using static Tensorflow.Binding;
-
 namespace Tensorflow
 {
     public partial class ResourceVariable

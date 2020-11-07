@@ -17,7 +17,6 @@
 using System;
 using System.Linq;
 using Tensorflow.Operations;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -78,14 +77,14 @@ namespace Tensorflow
             // cond switch or not. A switch is a cond switch iff all its consumers are in
             // cond contexts.
             var is_cond_switch = true;
-            foreach(var o in op.outputs)
+            foreach (var o in op.outputs)
             {
-                foreach(var c in o.consumers())
+                foreach (var c in o.consumers())
                 {
                     var ctxt = c._get_control_flow_context();
                     if (IsLoopEnter(c))
                         ctxt = ctxt.outer_context;
-                    is_cond_switch = is_cond_switch &&(ctxt != null && ctxt.IsCondContext());
+                    is_cond_switch = is_cond_switch && (ctxt != null && ctxt.IsCondContext());
                 }
             }
 
@@ -178,7 +177,7 @@ namespace Tensorflow
 
         public static bool IsContainingContext(WhileContext ctxt, WhileContext maybe_containing_ctxt)
         {
-            while(ctxt != maybe_containing_ctxt)
+            while (ctxt != maybe_containing_ctxt)
             {
                 if (ctxt == null)
                     return false;

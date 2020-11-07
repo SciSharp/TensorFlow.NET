@@ -14,12 +14,11 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NumSharp;
-using Tensorflow.Operations;
 
 namespace Tensorflow.Util
 {
@@ -206,7 +205,7 @@ namespace Tensorflow.Util
         }
 
         //# See the swig file (util.i) for documentation.
-        public static bool is_sequence(object arg) 
+        public static bool is_sequence(object arg)
             => arg is IEnumerable && !(arg is string) && !(arg is NDArray) &&
                     !(arg.GetType().IsGenericType && arg.GetType().GetGenericTypeDefinition() == typeof(HashSet<>));
 
@@ -230,7 +229,7 @@ namespace Tensorflow.Util
 
         private static void _flatten_recursive<T>(T obj, List<T> list)
         {
-            switch(obj)
+            switch (obj)
             {
                 case IDictionary dict:
                     foreach (var key in _sorted(dict))
@@ -433,9 +432,9 @@ namespace Tensorflow.Util
             List<object> flat = null;
             if (flat_sequence is List<object>)
                 flat = flat_sequence as List<object>;
-            else 
-                flat=new List<object>(flat_sequence);
-            if (flat_sequence==null)
+            else
+                flat = new List<object>(flat_sequence);
+            if (flat_sequence == null)
                 throw new ArgumentException("flat_sequence must not be null");
             //  if not is_sequence(flat_sequence):
             //    raise TypeError("flat_sequence must be a sequence")
@@ -500,10 +499,10 @@ namespace Tensorflow.Util
             //  for other in structure[1:]:
             //    assert_same_structure(structure[0], other, check_types=check_types)
 
-            if (structure.Length==1)
+            if (structure.Length == 1)
             {
                 // we don't need to zip if we have only one structure
-                return map_structure(a => func(new object[]{a}), structure[0]);
+                return map_structure(a => func(new object[] { a }), structure[0]);
             }
             var flat_structures = structure.Select(flatten).ToArray(); // ToArray is important here!
             var entries = zip_many(flat_structures);

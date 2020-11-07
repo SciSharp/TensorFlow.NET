@@ -30,11 +30,11 @@ namespace Tensorflow
         /// <param name="seed"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor random_normal(TensorShape shape, 
-            float mean = 0.0f, 
-            float stddev = 1.0f, 
-            TF_DataType dtype = TF_DataType.TF_FLOAT, 
-            int? seed = null, 
+        public static Tensor random_normal(TensorShape shape,
+            float mean = 0.0f,
+            float stddev = 1.0f,
+            TF_DataType dtype = TF_DataType.TF_FLOAT,
+            int? seed = null,
             string name = null)
         {
             return tf_with(ops.name_scope(name, "random_normal", new { shape, mean, stddev }), scope =>
@@ -62,11 +62,11 @@ namespace Tensorflow
         /// <param name="seed">Used to create a random seed for the distribution.</param>
         /// <param name="name">A name for the operation</param>
         /// <returns>A tensor of the specified shape filled with random uniform values.</returns>
-        public static Tensor random_uniform(int[] shape, 
+        public static Tensor random_uniform(int[] shape,
             float minval = 0,
             float maxval = 1,
-            TF_DataType dtype = TF_DataType.TF_FLOAT, 
-            int? seed = null, 
+            TF_DataType dtype = TF_DataType.TF_FLOAT,
+            int? seed = null,
             string name = null)
         {
             return tf_with(ops.name_scope(name, "random_uniform", new { shape, minval, maxval }), scope =>
@@ -167,10 +167,10 @@ namespace Tensorflow
         {
             logits = ops.convert_to_tensor(logits, name: "logits");
             var (seed1, seed2) = random_seed.get_seed(seed);
-            return gen_random_ops.multinomial(logits, 
-                num_samples, 
-                seed: seed1, 
-                seed2: seed2, 
+            return gen_random_ops.multinomial(logits,
+                num_samples,
+                seed: seed1,
+                seed2: seed2,
                 output_dtype: dtype);
         }
     }

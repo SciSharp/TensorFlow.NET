@@ -17,7 +17,6 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
-using NumSharp.Backends;
 
 namespace Tensorflow
 {
@@ -35,7 +34,7 @@ namespace Tensorflow
         public _FetchHandler(Graph graph, object fetches, Dictionary<object, object> feeds = null, Action feed_handles = null)
         {
             _fetch_mapper = _FetchMapper.for_fetch(fetches, graph: graph);
-            foreach(var fetch in _fetch_mapper.unique_fetches())
+            foreach (var fetch in _fetch_mapper.unique_fetches())
             {
                 switch (fetch)
                 {
@@ -66,11 +65,11 @@ namespace Tensorflow
 
             int i = 0;
             int j = 0;
-            foreach(var is_op in _ops)
+            foreach (var is_op in _ops)
             {
                 if (is_op)
                 {
-                    if(tensor_values.Length > 0)
+                    if (tensor_values.Length > 0)
                     {
                         switch (tensor_values[0].typecode)
                         {

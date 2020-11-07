@@ -47,7 +47,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_OperationGetAttrString(IntPtr oper, string attr_name, IntPtr value, uint max_length, SafeStatusHandle status);
-        
+
         /// <summary>
         /// Sets `output_attr_value` to the binary-serialized AttrValue proto
         /// representation of the value of the `attr_name` attr of `oper`.

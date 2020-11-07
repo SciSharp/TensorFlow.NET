@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NumSharp;
 using Tensorflow.Framework;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
@@ -39,7 +38,7 @@ namespace Tensorflow
         {
             bool input_is_sequence = nest.is_sequence(elems);
 
-            Tensor[] input_flatten(Tensor x) => input_is_sequence ? nest.flatten(x).ToArray() : new [] {x};
+            Tensor[] input_flatten(Tensor x) => input_is_sequence ? nest.flatten(x).ToArray() : new[] { x };
             Tensor input_pack(Tensor[] x) => input_is_sequence ? (Tensor)nest.pack_sequence_as(elems, x) : x[0];
 
             bool output_is_sequence;
@@ -54,7 +53,7 @@ namespace Tensorflow
             else
             {
                 output_is_sequence = nest.is_sequence(initializer);
-                output_flatten = (x) => output_is_sequence ? nest.flatten(x).ToArray() : new [] {x};
+                output_flatten = (x) => output_is_sequence ? nest.flatten(x).ToArray() : new[] { x };
                 output_pack = (x) => output_is_sequence ? (Tensor)nest.pack_sequence_as(initializer, x) : x[0];
             }
 
@@ -171,7 +170,7 @@ namespace Tensorflow
                 var results_flat = bodyItem.Accs_ta.Select(r => r.stack()).ToArray();
 
                 var n_static = new Dimension(tensor_shape.dimension_value(elems_flat[0].TensorShape.with_rank_at_least(1).dims[0]));
-                
+
                 foreach (var elem in elems_flat.Skip(1))
                 {
                     n_static.merge_with(new Dimension(tensor_shape.dimension_value(elem.TensorShape.with_rank_at_least(1).dims[0])));
@@ -211,25 +210,25 @@ namespace Tensorflow
             public object[] Flatten()
             {
                 var elements = new List<object> { I };
-                    elements.AddRange(A_Flat);
-                    elements.AddRange(Accs_ta);
+                elements.AddRange(A_Flat);
+                elements.AddRange(Accs_ta);
                 return elements.ToArray();
             }
 
             public BodyItem Pack(object[] sequences)
             {
                 I = sequences[0] as Tensor;
-                A_Flat = new [] { sequences[1] as Tensor };
-                Accs_ta = new [] { sequences[2] as TensorArray };
-                
+                A_Flat = new[] { sequences[1] as Tensor };
+                Accs_ta = new[] { sequences[2] as TensorArray };
+
                 return new BodyItem(I, A_Flat, Accs_ta);
             }
 
             public BodyItem FromMergeVars(ITensorOrTensorArray[] merge_vars)
             {
                 I = (Tensor)merge_vars[1];
-                A_Flat = new [] {(Tensor) merge_vars[2]};
-                Accs_ta = new [] {(TensorArray) merge_vars[3]};
+                A_Flat = new[] { (Tensor)merge_vars[2] };
+                Accs_ta = new[] { (TensorArray)merge_vars[3] };
                 return this;
             }
         }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Tensorflow.Keras.Preprocessings
 {
@@ -17,8 +13,8 @@ namespace Tensorflow.Keras.Preprocessings
         /// <param name="subset"></param>
         /// <returns></returns>
         public (T1[], T2[]) get_training_or_validation_split<T1, T2>(T1[] samples,
-            T2[] labels, 
-            float validation_split, 
+            T2[] labels,
+            float validation_split,
             string subset)
         {
             var num_val_samples = Convert.ToInt32(samples.Length * validation_split);

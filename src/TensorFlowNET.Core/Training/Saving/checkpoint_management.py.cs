@@ -14,13 +14,13 @@
    limitations under the License.
 ******************************************************************************/
 
+using Protobuf.Text;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static Tensorflow.SaverDef.Types;
 using static Tensorflow.Binding;
-using Protobuf.Text;
+using static Tensorflow.SaverDef.Types;
 
 namespace Tensorflow
 {
@@ -45,7 +45,7 @@ namespace Tensorflow
             float? last_preserved_timestamp = null
             )
         {
-            CheckpointState ckpt = null; 
+            CheckpointState ckpt = null;
             // Writes the "checkpoint" file for the coordinator for later restoration.
             string coord_checkpoint_filename = _GetCheckpointFilename(save_dir, latest_filename);
             if (save_relative_paths)
@@ -112,7 +112,7 @@ namespace Tensorflow
                     .Select(x => x.Substring(save_dir.Length + 1))
                     .ToList();
             }
-                
+
 
             var coord_checkpoint_proto = new CheckpointState()
             {
@@ -135,7 +135,7 @@ namespace Tensorflow
         /// <param name="checkpoint_filename"></param>
         /// <param name="meta_graph_suffix"></param>
         /// <returns></returns>
-        public static string meta_graph_filename(string checkpoint_filename, string meta_graph_suffix= "meta")
+        public static string meta_graph_filename(string checkpoint_filename, string meta_graph_suffix = "meta")
         {
             string basename = checkpoint_filename;
             string suffixed_filename = basename + "." + meta_graph_suffix;
@@ -170,7 +170,7 @@ namespace Tensorflow
         {
             // Pick the latest checkpoint based on checkpoint state.
             var ckpt = get_checkpoint_state(checkpoint_dir, latest_filename);
-            if(ckpt != null && !string.IsNullOrEmpty(ckpt.ModelCheckpointPath))
+            if (ckpt != null && !string.IsNullOrEmpty(ckpt.ModelCheckpointPath))
             {
                 // Look for either a V2 path or a V1 path, with priority for V2.
                 var v2_path = _prefix_to_checkpoint_path(ckpt.ModelCheckpointPath, CheckpointFormatVersion.V2);
@@ -197,7 +197,7 @@ namespace Tensorflow
                 // prepend checkpoint_dir.
                 if (!Path.IsPathRooted(ckpt.ModelCheckpointPath))
                     ckpt.ModelCheckpointPath = Path.Combine(checkpoint_dir, ckpt.ModelCheckpointPath);
-                foreach(var i in range(len(ckpt.AllModelCheckpointPaths)))
+                foreach (var i in range(len(ckpt.AllModelCheckpointPaths)))
                 {
                     var p = ckpt.AllModelCheckpointPaths[i];
                     if (!Path.IsPathRooted(p))

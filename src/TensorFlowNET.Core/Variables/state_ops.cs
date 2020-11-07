@@ -115,7 +115,7 @@ namespace Tensorflow
             bool use_locking = false,
             string name = null)
         {
-            if(tf.executing_eagerly())
+            if (tf.executing_eagerly())
                 return @ref.assign_add(value, use_locking: use_locking, name: name);
             else
                 return gen_state_ops.assign_add(@ref, value, use_locking: use_locking, name: name);

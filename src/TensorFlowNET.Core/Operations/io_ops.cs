@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using Tensorflow.Contexts;
-using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow

@@ -14,9 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System.Collections.Generic;
-using Tensorflow.IO;
-
 namespace Tensorflow
 {
     public partial class tensorflow

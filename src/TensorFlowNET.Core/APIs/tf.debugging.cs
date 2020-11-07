@@ -34,10 +34,10 @@ namespace Tensorflow
             object[] data = null,
             string message = null,
             string name = null)
-            => check_ops.assert_equal(t1, 
-                t2, 
-                data: data, 
-                message: message, 
+            => check_ops.assert_equal(t1,
+                t2,
+                data: data,
+                message: message,
                 name: name);
 
         public Tensor assert_greater_equal<T1, T2>(Tensor x,

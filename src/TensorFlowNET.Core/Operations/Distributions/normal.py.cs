@@ -42,7 +42,7 @@ namespace Tensorflow
         /// <param name="validate_args"></param>
         /// <param name="allow_nan_stats"></param>
         /// <param name="name"></param>
-        public Normal (Tensor loc, Tensor scale, bool validate_args=false, bool allow_nan_stats=true, string name="Normal") 
+        public Normal(Tensor loc, Tensor scale, bool validate_args = false, bool allow_nan_stats = true, string name = "Normal")
         {
             parameters.Add("name", name);
             parameters.Add("loc", loc);
@@ -50,23 +50,23 @@ namespace Tensorflow
             parameters.Add("validate_args", validate_args);
             parameters.Add("allow_nan_stats", allow_nan_stats);
 
-            tf_with(ops.name_scope(name, "", new { loc, scale }), scope => 
+            tf_with(ops.name_scope(name, "", new { loc, scale }), scope =>
             {
-                tf_with(ops.control_dependencies(validate_args ? new Operation[] { scale.op} : new Operation[] { }), cd =>
-                {
-                    this._loc = array_ops.identity(loc, name);
-                    this._scale = array_ops.identity(scale, name);
-                    base._dtype = this._scale.dtype;
+                tf_with(ops.control_dependencies(validate_args ? new Operation[] { scale.op } : new Operation[] { }), cd =>
+                 {
+                     this._loc = array_ops.identity(loc, name);
+                     this._scale = array_ops.identity(scale, name);
+                     base._dtype = this._scale.dtype;
                     // base._reparameterization_type = new ReparameterizationType("FULLY_REPARAMETERIZED");
                     base._validate_args = validate_args;
-                    base._allow_nan_stats = allow_nan_stats;
-                    base._parameters = parameters;
-                    base._graph_parents = new List<Tensor>(new Tensor[] { this._loc, this._scale });
-                    base._name = name;
-                });
+                     base._allow_nan_stats = allow_nan_stats;
+                     base._parameters = parameters;
+                     base._graph_parents = new List<Tensor>(new Tensor[] { this._loc, this._scale });
+                     base._name = name;
+                 });
 
             });
-                
+
         }
         /// <summary>
         /// Distribution parameter for the mean.
@@ -102,7 +102,7 @@ namespace Tensorflow
             return tf.sub(log_prob, log_norm);
         }
 
-        private Tensor _log_unnormalized_prob (Tensor x)
+        private Tensor _log_unnormalized_prob(Tensor x)
         {
             return -0.5 * math_ops.square(_z(x));
         }
@@ -111,7 +111,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        private Tensor _z (Tensor x)
+        private Tensor _z(Tensor x)
         {
             return tf.divide(tf.sub(x, this._loc), this._scale);
         }
@@ -120,7 +120,7 @@ namespace Tensorflow
         {
             Tensor t1 = ops.convert_to_tensor(Math.Log(2.0 * Math.PI), TF_DataType.TF_FLOAT);
             Tensor t2 = tf.multiply(ops.convert_to_tensor(0.5, TF_DataType.TF_FLOAT), t1);
-            return  tf.add(t2, math_ops.log(this._scale));
+            return tf.add(t2, math_ops.log(this._scale));
         }
     }
 }

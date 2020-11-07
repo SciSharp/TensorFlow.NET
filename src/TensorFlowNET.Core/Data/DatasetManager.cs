@@ -1,7 +1,5 @@
 ﻿using NumSharp;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Data;
 
 namespace Tensorflow

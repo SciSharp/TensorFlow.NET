@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Operations
+﻿namespace Tensorflow.Operations
 {
     public class MergeOutput
     {
@@ -18,7 +14,7 @@ namespace Tensorflow.Operations
         {
             get
             {
-                switch(idx)
+                switch (idx)
                 {
                     case 0:
                         return output;

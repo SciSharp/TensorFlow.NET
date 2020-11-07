@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Keras.Engine
+﻿namespace Tensorflow.Keras.Engine
 {
     /// <summary>
     /// Tracks the Layer call that created a Tensor, for Keras Graph Networks.

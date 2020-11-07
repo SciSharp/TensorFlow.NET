@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using System.Linq;
 using static Tensorflow.Binding;
 
@@ -49,9 +48,9 @@ namespace Tensorflow.Operations
                     null,
                     parameters.Input, parameters.Filter,
                     "strides", parameters.Strides,
-                    "use_cudnn_on_gpu", parameters.UseCudnnOnGpu, 
+                    "use_cudnn_on_gpu", parameters.UseCudnnOnGpu,
                     "padding", parameters.Padding,
-                    "explicit_paddings", parameters.ExplicitPaddings, 
+                    "explicit_paddings", parameters.ExplicitPaddings,
                     "data_format", parameters.DataFormat,
                     "dilations", parameters.Dilations);
 
@@ -127,10 +126,10 @@ namespace Tensorflow.Operations
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static Tensor conv2d_backprop_input(Tensor input_sizes, Tensor filter, Tensor out_backprop, 
-            int[] strides, string padding, bool use_cudnn_on_gpu = true, 
-            int[] explicit_paddings = null, 
-            string data_format= "NHWC", 
+        public static Tensor conv2d_backprop_input(Tensor input_sizes, Tensor filter, Tensor out_backprop,
+            int[] strides, string padding, bool use_cudnn_on_gpu = true,
+            int[] explicit_paddings = null,
+            string data_format = "NHWC",
             int[] dilations = null,
             string name = null)
         {
@@ -145,10 +144,10 @@ namespace Tensorflow.Operations
                     "Conv2DBackpropInput", name,
                     null,
                     input_sizes, filter, out_backprop,
-                    "strides", strides, 
-                    "use_cudnn_on_gpu", use_cudnn_on_gpu, 
+                    "strides", strides,
+                    "use_cudnn_on_gpu", use_cudnn_on_gpu,
                     "padding", padding,
-                    "explicit_paddings", explicit_paddings, 
+                    "explicit_paddings", explicit_paddings,
                     "data_format", data_format,
                     "dilations", dilations);
 
@@ -411,7 +410,8 @@ namespace Tensorflow.Operations
         public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
             => tf.Context.RunInAutoMode(()
                 => tf.OpDefLib._apply_op_helper("LeakyRelu", name: name,
-                    args: new {
+                    args: new
+                    {
                         features,
                         alpha
                     }).output, ()
@@ -435,9 +435,9 @@ namespace Tensorflow.Operations
                     "MaxPool", name,
                     null,
                     input,
-                    "ksize", ksize, 
+                    "ksize", ksize,
                     "strides", strides,
-                    "padding", padding, 
+                    "padding", padding,
                     "data_format", data_format);
 
                 return results[0];
@@ -455,8 +455,8 @@ namespace Tensorflow.Operations
             return _op.outputs[0];
         }
 
-        public static Tensor max_pool_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, 
-            string data_format= "NHWC", string name= null)
+        public static Tensor max_pool_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding,
+            string data_format = "NHWC", string name = null)
         {
             if (tf.executing_eagerly())
             {
@@ -465,8 +465,8 @@ namespace Tensorflow.Operations
                     null,
                     orig_input, orig_output, grad,
                     "ksize", ksize,
-                    "strides", strides, 
-                    "padding", padding, 
+                    "strides", strides,
+                    "padding", padding,
                     "data_format", data_format);
 
                 return results[0];
@@ -626,7 +626,7 @@ namespace Tensorflow.Operations
             if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Relu", name, 
+                    "Relu", name,
                     null,
                     features);
 
@@ -642,7 +642,7 @@ namespace Tensorflow.Operations
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Tanh", name, 
+                    "Tanh", name,
                     null,
                     x);
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     public class InitializerArgs
     {
@@ -11,7 +7,7 @@ namespace Tensorflow
         public TF_DataType DType { get; set; }
         public bool? VerifyShape { get; set; } = null;
 
-        public InitializerArgs(TensorShape shape, 
+        public InitializerArgs(TensorShape shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool? verify_shape = null,
             string name = null)

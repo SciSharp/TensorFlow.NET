@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 
 namespace Tensorflow.Keras.Optimizers
@@ -56,7 +55,7 @@ namespace Tensorflow.Keras.Optimizers
                     break;
                 }
             }
-            
+
             var rms = get_slot(var, "rms");
             if (_momentum)
             {

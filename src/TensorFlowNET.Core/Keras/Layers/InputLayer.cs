@@ -14,8 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
@@ -33,14 +31,14 @@ namespace Tensorflow.Keras.Layers
         bool isPlaceholder;
         TensorSpec typeSpec;
 
-        public InputLayer(InputLayerArgs args) : 
+        public InputLayer(InputLayerArgs args) :
             base(args)
         {
             this.args = args;
             built = true;
             SupportsMasking = true;
 
-            if(BatchInputShape != null)
+            if (BatchInputShape != null)
             {
                 args.BatchSize = BatchInputShape.dims[0];
                 args.InputShape = BatchInputShape.dims[1..];
@@ -52,8 +50,8 @@ namespace Tensorflow.Keras.Layers
                 var prefix = "input";
                 name = prefix + '_' + tf.keras.backend.get_uid(prefix);
             }
-            
-            if(args.DType == TF_DataType.DtInvalid)
+
+            if (args.DType == TF_DataType.DtInvalid)
             {
                 args.DType = args.InputTensor == null ? tf.float32 : args.InputTensor.dtype;
             }
@@ -63,7 +61,7 @@ namespace Tensorflow.Keras.Layers
 
             if (args.InputTensor == null)
             {
-                if(args.InputShape != null)
+                if (args.InputShape != null)
                 {
                     args.BatchInputShape = new int[] { args.BatchSize }
                         .Concat(args.InputShape.dims)
@@ -80,7 +78,7 @@ namespace Tensorflow.Keras.Layers
                     name: Name,
                     sparse: args.Sparse,
                     ragged: args.Ragged);
-                
+
 
                 isPlaceholder = true;
             }

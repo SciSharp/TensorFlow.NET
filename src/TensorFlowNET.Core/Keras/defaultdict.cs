@@ -23,7 +23,7 @@ namespace System.Collections.Generic
             get
             {
                 TValue val;
-                if(!TryGetValue(key, out val))
+                if (!TryGetValue(key, out val))
                 {
                     val = default(TValue);
                     Add(key, val);

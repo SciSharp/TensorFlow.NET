@@ -18,7 +18,6 @@ using NumSharp;
 using System;
 using System.Linq;
 using Tensorflow.Eager;
-using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
@@ -48,7 +47,7 @@ namespace Tensorflow.Gradients
             var x = op.inputs[0];
             var y = op.inputs[1];
             var grad = grads[0];
-            if (grad is Tensor && 
+            if (grad is Tensor &&
                 _ShapesFullySpecifiedAndEqual(x, y, grad))
                 return new Tensor[] { grad, grad };
 
@@ -127,7 +126,8 @@ namespace Tensorflow.Gradients
         {
             var grad = grads[0];
             var y = op.outputs[0];  // y = e^x
-            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp => {
+            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp =>
+            {
                 y = math_ops.conj(y);
                 // forward_compatible(2019, 9, 14)
                 // return new Tensor[] { math_ops.mul_no_nan(y, grad) };
@@ -152,7 +152,8 @@ namespace Tensorflow.Gradients
         {
             var grad = grads[0];
             var x = op.inputs[0];
-            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp => {
+            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp =>
+            {
                 x = math_ops.conj(x);
                 return new Tensor[] { grad * math_ops.digamma(x) };
             });
@@ -163,7 +164,8 @@ namespace Tensorflow.Gradients
         {
             var grad = grads[0];
             var x = op.inputs[0];
-            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp => {
+            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp =>
+            {
                 x = math_ops.conj(x);
                 return new Tensor[] { grad * math_ops.reciprocal(x) };
             });
@@ -174,7 +176,8 @@ namespace Tensorflow.Gradients
         {
             var grad = grads[0];
             var x = op.inputs[0];
-            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp => {
+            return tf_with(ops.control_dependencies(new Operation[] { grad }), dp =>
+            {
                 x = math_ops.conj(x);
                 return new Tensor[] { grad * math_ops.reciprocal(1 + x) };
             });
@@ -260,7 +263,7 @@ namespace Tensorflow.Gradients
             var t_b = (bool)op.get_attr("transpose_b");
             var a = math_ops.conj(op.inputs[0]);
             var b = math_ops.conj(op.inputs[1]);
-            if(!t_a && !t_b)
+            if (!t_a && !t_b)
             {
                 grad_a = gen_math_ops.mat_mul(grad, b, transpose_b: true);
                 grad_b = gen_math_ops.mat_mul(a, grad, transpose_a: true);
@@ -327,8 +330,8 @@ namespace Tensorflow.Gradients
             var output_shape = op.outputs[0]._shape_tuple();
 
             Tensor result, factor_tensor;
-            if(tf.executing_eagerly() 
-                && input_shape != null 
+            if (tf.executing_eagerly()
+                && input_shape != null
                 && output_shape != null)
             {
                 var input_size = np.prod(input_shape);
@@ -472,7 +475,7 @@ namespace Tensorflow.Gradients
             var grad = grads[0];
             var x = op.inputs[0];
             var y = op.inputs[1];
-            if (grad is Tensor && 
+            if (grad is Tensor &&
                 _ShapesFullySpecifiedAndEqual(x, y, grad))
                 return new Tensor[] { grad, -grad };
 
@@ -490,7 +493,7 @@ namespace Tensorflow.Gradients
             var x_shape = x._shape_tuple();
             var y_shape = y._shape_tuple();
             var grad_shape = grad._shape_tuple();
-            return x_shape != null && 
+            return x_shape != null &&
                 y_shape != null &&
                 Enumerable.SequenceEqual(x_shape, y_shape) &&
                 Enumerable.SequenceEqual(y_shape, grad_shape) &&
@@ -507,7 +510,7 @@ namespace Tensorflow.Gradients
             if (input_0_shape != null)
             {
                 var axes = tensor_util.constant_value(op.inputs[1]);
-                if(!(axes is null))
+                if (!(axes is null))
                 {
                     var rank = input_0_shape.Length;
                     if (Enumerable.SequenceEqual(Enumerable.Range(0, rank), axes.Data<int>()))
@@ -535,7 +538,7 @@ namespace Tensorflow.Gradients
                     {
                         throw new NotImplementedException("");
                     }
-                 }
+                }
             }
 
             input_shape = array_ops.shape(op.inputs[0]);
@@ -578,7 +581,7 @@ namespace Tensorflow.Gradients
 
             var reshape1 = array_ops.reshape(
                 math_ops.reduce_sum(
-                    math_ops.realdiv(grad, y), rx), 
+                    math_ops.realdiv(grad, y), rx),
                 sx);
             var reshape2 = array_ops.reshape(
                 math_ops.reduce_sum(
@@ -607,7 +610,7 @@ namespace Tensorflow.Gradients
             var x = op.inputs[0];
             var zero = constant_op.constant(0.0f, x.dtype, x.shape);
 
-            return new Tensor[] {zero};
+            return new Tensor[] { zero };
         }
 
         [RegisterGradient("Square")]
@@ -710,7 +713,7 @@ namespace Tensorflow.Gradients
             var x = op.inputs[0];
             var y = op.inputs[1];
 
-            if (op is EagerOperation op_eager && 
+            if (op is EagerOperation op_eager &&
                 op_eager.SkipInputIndices.Contains(1) &&
                 y.NDims == 0)
             {

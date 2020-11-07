@@ -16,16 +16,14 @@
 
 using NumSharp;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using static Tensorflow.Binding;
 using Tensorflow.Eager;
 using Tensorflow.Framework;
 using Tensorflow.Keras.Engine;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -36,9 +34,9 @@ namespace Tensorflow
     [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
     public partial class Tensor : DisposableObject,
         ITensor,
-        ITensorOrOperation, 
-        _TensorLike, 
-        ITensorOrTensorArray, 
+        ITensorOrOperation,
+        _TensorLike,
+        ITensorOrTensorArray,
         IPackable<Tensor>,
         ICanBeFlattened
     {
@@ -120,7 +118,7 @@ namespace Tensorflow
                         dims[i] = c_api.TF_Dim(_handle, i);
                 }
 
-                return dims.Select(x => ((IConvertible) x).ToInt32(CultureInfo.InvariantCulture)).ToArray();
+                return dims.Select(x => ((IConvertible)x).ToInt32(CultureInfo.InvariantCulture)).ToArray();
             }
 
             set
@@ -150,7 +148,7 @@ namespace Tensorflow
         /// <summary>
         ///     Updates the shape of this tensor.
         /// </summary>
-        public virtual void set_shape(TensorShape shape) 
+        public virtual void set_shape(TensorShape shape)
         {
             this.shape = shape.rank >= 0 ? shape.dims : null;
         }
@@ -262,20 +260,22 @@ namespace Tensorflow
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             c_api.TF_DeleteTensor(handle);
-            if (AllocationHandle == null) 
+            if (AllocationHandle == null)
                 return;
 
             if (AllocationType == AllocationType.GCHandle)
             {
-                ((GCHandle) AllocationHandle).Free();
+                ((GCHandle)AllocationHandle).Free();
                 AllocationHandle = null;
                 AllocationType = AllocationType.None;
-            } else if (AllocationType == AllocationType.Marshal)
+            }
+            else if (AllocationType == AllocationType.Marshal)
             {
-                Marshal.FreeHGlobal((IntPtr) AllocationHandle);
+                Marshal.FreeHGlobal((IntPtr)AllocationHandle);
                 AllocationHandle = null;
                 AllocationType = AllocationType.None;
-            } else
+            }
+            else
                 throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
         }
 

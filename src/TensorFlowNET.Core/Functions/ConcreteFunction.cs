@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Framework.Models;
 using Tensorflow.Graphs;
 using static Tensorflow.Binding;
@@ -56,7 +54,7 @@ namespace Tensorflow.Functions
             }
         }
 
-        public ConcreteFunction(Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> func, 
+        public ConcreteFunction(Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> func,
             TF_DataType[] dtypes, TensorShape[] shapes)
         {
             string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";

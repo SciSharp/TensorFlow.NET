@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static Tensorflow.Binding;
+﻿using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -13,7 +10,7 @@ namespace Tensorflow
         Tensor _buffer_size;
 
         public PrefetchDataset(IDatasetV2 input_dataset,
-            long buffer_size = -1, 
+            long buffer_size = -1,
             int? slack_period = null) :
             base(input_dataset)
         {

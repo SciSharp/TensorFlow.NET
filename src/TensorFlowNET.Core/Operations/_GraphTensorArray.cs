@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
@@ -47,8 +46,8 @@ namespace Tensorflow.Operations
         internal Tensor _flow;
 
         public _GraphTensorArray(TF_DataType dtype, Tensor size, bool? dynamic_size = null,
-            bool? clear_after_read = null, string tensor_array_name = null, Tensor handle = null, Tensor flow = null, 
-            bool infer_shape = true, TensorShape element_shape = null, 
+            bool? clear_after_read = null, string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
+            bool infer_shape = true, TensorShape element_shape = null,
             bool colocate_with_first_write_call = true, string name = null)
         {
             clear_after_read = clear_after_read ?? true;
@@ -64,7 +63,7 @@ namespace Tensorflow.Operations
             // shape is defined either by `element_shape` or the shape of the tensor
             // of the first write. If `infer_shape` is true, all writes checks for
             // shape equality.
-            if(element_shape == null)
+            if (element_shape == null)
             {
                 _infer_shape = infer_shape;
                 _element_shape = new List<TensorShape> { };
@@ -77,7 +76,7 @@ namespace Tensorflow.Operations
 
             tf_with(ops.name_scope(name, "TensorArray", new { handle, size, flow }), scope =>
             {
-                if(handle != null)
+                if (handle != null)
                 {
                     _handle = handle;
                     _flow = flow;
@@ -138,13 +137,13 @@ namespace Tensorflow.Operations
                     name: name);
 
                 var ta = new TensorArray(_dtype,
-                    infer_shape:_infer_shape,
+                    infer_shape: _infer_shape,
                     element_shape: _element_shape[0],
                     dynamic_size: _dynamic_size,
                     handle: _handle,
                     flow: flow_out,
                     colocate_with_first_write_call: _colocate_with_first_write_call);
-                
+
 
                 return ta;
             });
@@ -222,7 +221,7 @@ namespace Tensorflow.Operations
                 element_shape: element_shape);
 
             //if (element_shape != null)
-                //value.set_shape(-1, element_shape.dims);
+            //value.set_shape(-1, element_shape.dims);
 
             return value;
         }

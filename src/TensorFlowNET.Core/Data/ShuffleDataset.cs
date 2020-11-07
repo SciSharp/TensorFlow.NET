@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -15,9 +13,9 @@ namespace Tensorflow
         Tensor _seed2;
         bool _reshuffle_each_iteration;
 
-        public ShuffleDataset(IDatasetV2 input_dataset, 
-            long buffer_size, 
-            int? seed = null, 
+        public ShuffleDataset(IDatasetV2 input_dataset,
+            long buffer_size,
+            int? seed = null,
             bool reshuffle_each_iteration = true) :
             base(input_dataset)
         {

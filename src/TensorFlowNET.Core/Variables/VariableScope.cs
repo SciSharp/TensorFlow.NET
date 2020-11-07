@@ -36,8 +36,8 @@ namespace Tensorflow
         public string _name_scope { get; set; }
         public string original_name_scope => _name_scope;
 
-        public VariableScope(bool reuse, 
-            string name = "", 
+        public VariableScope(bool reuse,
+            string name = "",
             string name_scope = "",
             TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
@@ -47,9 +47,9 @@ namespace Tensorflow
             _dtype = dtype;
         }
 
-        public IVariableV1 get_variable(_VariableStore var_store, 
-            string name, 
-            TensorShape shape = null, 
+        public IVariableV1 get_variable(_VariableStore var_store,
+            string name,
+            TensorShape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             object initializer = null, // IInitializer or Tensor
             bool? trainable = null,
@@ -57,7 +57,7 @@ namespace Tensorflow
             bool? use_resource = null,
             bool validate_shape = true,
             VariableSynchronization synchronization = VariableSynchronization.Auto,
-            VariableAggregation aggregation= VariableAggregation.None)
+            VariableAggregation aggregation = VariableAggregation.None)
         {
             string full_name = !string.IsNullOrEmpty(this.name) ? this.name + "/" + name : name;
             return tf_with(ops.name_scope(null), scope =>
@@ -65,8 +65,8 @@ namespace Tensorflow
                 if (dtype == TF_DataType.DtInvalid)
                     dtype = _dtype;
 
-                return var_store.get_variable(full_name, 
-                    shape: shape, 
+                return var_store.get_variable(full_name,
+                    shape: shape,
                     dtype: dtype,
                     initializer: initializer,
                     reuse: resue,

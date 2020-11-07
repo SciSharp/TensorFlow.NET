@@ -17,7 +17,6 @@
 using NumSharp;
 using System;
 using System.Linq;
-using NumSharp.Utilities;
 using System.Text;
 using Tensorflow.Eager;
 
@@ -64,7 +63,7 @@ namespace Tensorflow
         {
             var shape = tensor.TensorShape.Dim.Select(x => (int)x.Size).ToArray();
             int num_elements = np.prod(shape);
-            var tensor_dtype =  tensor.Dtype.as_numpy_dtype();
+            var tensor_dtype = tensor.Dtype.as_numpy_dtype();
 
             if (tensor.TensorContent.Length > 0)
             {
@@ -148,7 +147,7 @@ namespace Tensorflow
             // If shape is not given, get the shape from the numpy array.
             if (shape == null)
             {
-                if(numpy_dtype == TF_DataType.TF_STRING)
+                if (numpy_dtype == TF_DataType.TF_STRING)
                 {
                     // scalar string
                     shape = new int[0];
@@ -189,9 +188,9 @@ namespace Tensorflow
                 }
                 else if (values is string[] str_values)
                     tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
-                else if(values is byte[] byte_values)
+                else if (values is byte[] byte_values)
                     tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(byte_values);
-                
+
                 return tensor_proto;
             }
 
@@ -225,7 +224,7 @@ namespace Tensorflow
             return tensor_proto;
         }
 
-       public static TensorShape constant_value_as_shape(Tensor tensor)
+        public static TensorShape constant_value_as_shape(Tensor tensor)
         {
             bool hasattr(Graph property, string attr)
             {
@@ -258,39 +257,42 @@ scalar with value '-1' to describe an unknown shape.", value_));
             }
 
             var shape = tensor.TensorShape.with_rank(1);
-            if (shape == new TensorShape(new int[] {1}))
+            if (shape == new TensorShape(new int[] { 1 }))
             {
-                return new TensorShape(new int[] {});
-            } else if (tensor.op.type == "Cast")
+                return new TensorShape(new int[] { });
+            }
+            else if (tensor.op.type == "Cast")
             {
                 var pre_cast = constant_value_as_shape(tensor.op.inputs[0]);
                 if (pre_cast.dims == null)
                     return pre_cast;
                 var cast_dtype = dtypes.as_dtype((Type)tensor.op.get_attr("DstT"));
-                if (!Array.Exists(new [] {dtypes.int32, dtypes.int64}, cast_dtype_ => cast_dtype_ == cast_dtype))
+                if (!Array.Exists(new[] { dtypes.int32, dtypes.int64 }, cast_dtype_ => cast_dtype_ == cast_dtype))
                     return tensor.TensorShape.unknown_shape(shape.dims[0]);
-                
-                int[] x_ = {};
+
+                int[] x_ = { };
                 foreach (var x in pre_cast.as_list())
                     if (x != -1)
                         x_[x_.Length] = x;
                     else
                         x_[x_.Length] = -1;
                 var dest_dtype_shape_array = np.array(x_).astype(cast_dtype.as_numpy_dtype());
-                
-                int[] y_ = {};
-                foreach(int y in dest_dtype_shape_array)
+
+                int[] y_ = { };
+                foreach (int y in dest_dtype_shape_array)
                     if (y >= 0)
                         y_[y_.Length] = y;
                     else
                         y_[y_.Length] = -1;
                 return new TensorShape(y_);
-            } else if (tensor.op.type == "Shape")
+            }
+            else if (tensor.op.type == "Shape")
             {
                 return tensor.op.inputs[0].shape;
-            } else if (tensor.op.type == "Pack")
+            }
+            else if (tensor.op.type == "Pack")
             {
-                var ret_ = new TensorShape(new int[] {});
+                var ret_ = new TensorShape(new int[] { });
                 if ((int)tensor.op.get_attr("axis") != 0)
                     throw new ValueError(String.Format(
                         @"Since rank 1 inputs are expected, Pack's axis: {0} must be 0, otherwise it
@@ -302,36 +304,40 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                     if (pack_input_val < 0)
                     {
                         new_dim = new Dimension(-1);
-                    } else if (pack_input_val == null)
+                    }
+                    else if (pack_input_val == null)
                     {
                         new_dim = new Dimension(-1);
-                    } else 
+                    }
+                    else
                     {
                         new_dim = new Dimension(pack_input_val);
                     }
-                    ret_ = ret_.concatenate(new int[] {new_dim});
+                    ret_ = ret_.concatenate(new int[] { new_dim });
                 }
                 return ret_;
-            } else if (tensor.op.type == "Concat")
+            }
+            else if (tensor.op.type == "Concat")
             {
-                var ret_ = new TensorShape(new int[] {});
+                var ret_ = new TensorShape(new int[] { });
 
-                var inputlist_ = new ArraySegment<Tensor>(tensor.op.inputs, 1, 
+                var inputlist_ = new ArraySegment<Tensor>(tensor.op.inputs, 1,
                                                         tensor.op.inputs.Length - 1);
                 foreach (var concat_input in inputlist_)
                 {
                     ret_ = ret_.concatenate(constant_value_as_shape(concat_input));
                 }
                 return ret_;
-            } else if (tensor.op.type == "StridedSlice")
+            }
+            else if (tensor.op.type == "StridedSlice")
             {
                 try
                 {
                     var begin = constant_value(tensor.op.inputs[1]);
                     var end = constant_value(tensor.op.inputs[2]);
                     var strides = constant_value(tensor.op.inputs[3]);
-                    if (new [] {begin, end, strides}.All(x => x == null))
-                    {   
+                    if (new[] { begin, end, strides }.All(x => x == null))
+                    {
                         begin = begin[0];
                         end = end[0];
                         strides = strides[0];
@@ -349,14 +355,15 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                         var ellipsis_mask = tensor.op.get_attr("ellipsis_mask");
                         var new_axis_mask = tensor.op.get_attr("new_axis_mask");
                         var shrink_axis_mask = tensor.op.get_attr("shrink_axis_mask");
-                        
+
                         bool valid_attributes;
                         if (!(bool)ellipsis_mask && !(bool)new_axis_mask &&
                             !(bool)shrink_axis_mask && !((bool)begin_mask || (int)begin_mask == 1) &&
                             !((bool)end_mask || (int)end_mask == 1))
                         {
                             valid_attributes = true;
-                        } else {valid_attributes = false;}
+                        }
+                        else { valid_attributes = false; }
                         if (valid_attributes)
                         {
                             // sorry for the mess here, but this hacky solution was the best way
@@ -374,13 +381,15 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                             return ret_;
                         }
                     }
-                } catch (Exception ex)
-                {  
-                    if (ex is ValueError || ex is TypeError) {}
                 }
-            } else if (tensor.op.type == "Placeholder" &&
-                    tensor.op.graph.building_function &&
-                    hasattr(tensor.op.graph, "internal_captures"))
+                catch (Exception ex)
+                {
+                    if (ex is ValueError || ex is TypeError) { }
+                }
+            }
+            else if (tensor.op.type == "Placeholder" &&
+                  tensor.op.graph.building_function &&
+                  hasattr(tensor.op.graph, "internal_captures"))
             {
                 int i = 0;
                 foreach (Tensor capture in tensor.op.graph.internal_captures())
@@ -399,7 +408,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             var value = constant_value(tensor);
             if (value != null)
             {
-                int[] d_ = {};
+                int[] d_ = { };
                 foreach (int d in value)
                 {
                     if (d >= 0)
@@ -412,7 +421,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             }
             return ret;
         }
-       
+
         public static NDArray convert_to_numpy_ndarray(object values)
         {
             NDArray nd;
@@ -487,7 +496,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             for (int i = 0; i < dims.Length; i++)
             {
                 var dim = new TensorShapeProto.Types.Dim();
-                switch(dims[i])
+                switch (dims[i])
                 {
                     case int n:
                         dim.Size = n;
@@ -551,7 +560,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
         {
             var dtype = tensor.dtype;
 
-            if(dtype == TF_DataType.TF_STRING && tensor.NDims > 0)
+            if (dtype == TF_DataType.TF_STRING && tensor.NDims > 0)
             {
                 return $"['{string.Join("', '", tensor.StringData())}']";
             }

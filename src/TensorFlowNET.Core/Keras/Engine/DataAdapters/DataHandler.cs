@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using static Tensorflow.Binding;
 
@@ -27,7 +26,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         public DataHandler(DataHandlerArgs args)
         {
             this.args = args;
-            if(args.StepsPerExecution == null)
+            if (args.StepsPerExecution == null)
             {
                 _steps_per_execution = tf.Variable(1);
                 _steps_per_execution_value = 1;
@@ -54,7 +53,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             _dataset = _adapter.GetDataset();
             _inferred_steps = _infer_steps(args.StepsPerEpoch, _dataset);
             _current_step = 0;
-            _step_increment = args.StepsPerExecution.numpy()  - 1;
+            _step_increment = args.StepsPerExecution.numpy() - 1;
             _insufficient_data = false;
         }
 
@@ -84,7 +83,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         public IEnumerable<int> steps()
         {
             _current_step = 0;
-            while(_current_step < _inferred_steps)
+            while (_current_step < _inferred_steps)
             {
                 if (_insufficient_data)
                     break;

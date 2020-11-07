@@ -1,8 +1,4 @@
-﻿using NumSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Eager;
+﻿using System;
 
 namespace Tensorflow.Eager
 {

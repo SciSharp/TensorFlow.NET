@@ -25,7 +25,7 @@ namespace Tensorflow.Keras.Layers
         Pooling2DArgs args;
         InputSpec input_spec;
 
-        public Pooling2D(Pooling2DArgs args) 
+        public Pooling2D(Pooling2DArgs args)
             : base(args)
         {
             this.args = args;

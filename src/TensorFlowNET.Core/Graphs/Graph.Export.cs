@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using Google.Protobuf;
-using System.IO;
 using Tensorflow.Util;
 
 namespace Tensorflow

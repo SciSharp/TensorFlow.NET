@@ -34,7 +34,7 @@ namespace Tensorflow.Keras
         /// <param name="truncating">String, 'pre' or 'post'</param>
         /// <param name="value">Float or String, padding value.</param>
         /// <returns></returns>
-        public NDArray pad_sequences(NDArray sequences, 
+        public NDArray pad_sequences(NDArray sequences,
             int? maxlen = null,
             string dtype = "int32",
             string padding = "pre",
@@ -54,7 +54,7 @@ namespace Tensorflow.Keras
             for (int i = 0; i < nd.shape[0]; i++)
 #pragma warning restore CS0162 // Unreachable code detected
             {
-                switch(sequences[i])
+                switch (sequences[i])
                 {
                     default:
                         throw new NotImplementedException("pad_sequences");

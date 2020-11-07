@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Tensorflow.Keras.ArgsDefinition;
+﻿using System.Collections.Generic;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Metrics;
-using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -18,7 +13,7 @@ namespace Tensorflow.Keras.Engine
         Tensor[] _per_output_metrics;
         List<Tensor> loss_metric_values;
 
-        public LossesContainer(ILossFunc losses, string[] output_names = null) 
+        public LossesContainer(ILossFunc losses, string[] output_names = null)
             : base(output_names)
         {
             _user_losses = losses;
@@ -49,7 +44,7 @@ namespace Tensorflow.Keras.Engine
             loss_values.append(loss_value);
             loss_metric_values.append(loss_metric_value);
 
-            if(loss_values.Count > 0)
+            if (loss_values.Count > 0)
             {
                 var total_loss_metric_value = math_ops.add_n(loss_metric_values.ToArray());
                 _loss_metric.update_state(total_loss_metric_value, batch_dim);

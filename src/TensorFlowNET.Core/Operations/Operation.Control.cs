@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using Tensorflow.Operations;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -31,7 +30,7 @@ namespace Tensorflow
         /// </summary>
         public void _control_flow_post_processing()
         {
-            foreach(Tensor input_tensor in inputs)
+            foreach (Tensor input_tensor in inputs)
                 control_flow_util.CheckInputFromValidContext(this, input_tensor.op);
 
             if (_control_flow_context != null)

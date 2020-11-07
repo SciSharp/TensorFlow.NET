@@ -23,11 +23,11 @@ namespace Tensorflow.Summaries
     {
         EventFileWriter event_writer;
 
-        public FileWriter(string logdir, Graph graph, 
-            int max_queue = 10, int flush_secs = 120, string filename_suffix = null, 
+        public FileWriter(string logdir, Graph graph,
+            int max_queue = 10, int flush_secs = 120, string filename_suffix = null,
             Session session = null)
         {
-            if(session == null)
+            if (session == null)
             {
                 event_writer = new EventFileWriter(logdir, max_queue, flush_secs, filename_suffix);
             }

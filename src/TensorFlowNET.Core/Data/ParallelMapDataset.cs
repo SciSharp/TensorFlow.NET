@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Functions;
 using static Tensorflow.Binding;
 
@@ -10,14 +8,14 @@ namespace Tensorflow
     //A `Dataset` that maps a function over elements in its input in parallel.
     public class ParallelMapDataset : UnaryDataset
     {
-        public ParallelMapDataset(IDatasetV2 input_dataset, 
+        public ParallelMapDataset(IDatasetV2 input_dataset,
             Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> map_func,
             int num_parallel_calls = -1,
             bool use_inter_op_parallelism = true,
             bool preserve_cardinality = false,
             bool use_legacy_function = false) : base(input_dataset)
         {
-            var func = new ConcreteFunction(map_func, 
+            var func = new ConcreteFunction(map_func,
                 input_dataset.element_spec.Select(x => x.dtype).ToArray(),
                 input_dataset.element_spec.Select(x => x.shape).ToArray());
 

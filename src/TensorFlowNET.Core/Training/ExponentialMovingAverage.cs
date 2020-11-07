@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
@@ -35,7 +33,7 @@ namespace Tensorflow.Train
             if (var_list == null)
                 var_list = variables.trainable_variables() as RefVariable[];
 
-            foreach(var var in var_list)
+            foreach (var var in var_list)
             {
                 if (!_averages.ContainsKey(var))
                 {

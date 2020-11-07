@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Framework.Models;
 using Tensorflow.Functions;
 using static Tensorflow.Binding;
@@ -41,8 +39,8 @@ namespace Tensorflow
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "TensorSliceDataset", name,
                     null,
-                    new object[] 
-                    { 
+                    new object[]
+                    {
                         components,
                         "output_shapes", output_shapes
                     });
@@ -89,7 +87,7 @@ namespace Tensorflow
         }
 
         public Tensor shard_dataset(Tensor input_dataset, Tensor num_shards, Tensor index,
-            TF_DataType[] output_types, TensorShape[] output_shapes, 
+            TF_DataType[] output_types, TensorShape[] output_shapes,
             bool require_non_empty = false, string name = null)
         {
             if (tf.Context.executing_eagerly())
@@ -108,8 +106,8 @@ namespace Tensorflow
         }
 
         public Tensor zip_dataset(Tensor[] input_datasets,
-            TF_DataType[] output_types, 
-            TensorShape[] output_shapes, 
+            TF_DataType[] output_types,
+            TensorShape[] output_shapes,
             string name = null)
         {
             if (tf.Context.executing_eagerly())
@@ -129,9 +127,9 @@ namespace Tensorflow
             throw new NotImplementedException("");
         }
 
-        public Tensor shuffle_dataset_v3(Tensor input_dataset, Tensor buffer_size, 
+        public Tensor shuffle_dataset_v3(Tensor input_dataset, Tensor buffer_size,
             Tensor seed, Tensor seed2, Tensor seed_generator,
-            TF_DataType[] output_types, TensorShape[] output_shapes, 
+            TF_DataType[] output_types, TensorShape[] output_shapes,
             bool reshuffle_each_iteration = true,
             string name = null)
         {
@@ -272,10 +270,10 @@ namespace Tensorflow
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "PrefetchDataset", name,
                     null,
-                    input_dataset, buffer_size, 
+                    input_dataset, buffer_size,
                     "output_types", output_types,
                     "output_shapes", output_shapes,
-                    "slack_period", slack_period, 
+                    "slack_period", slack_period,
                     "legacy_autotune", legacy_autotune);
                 return results[0];
             }
@@ -363,8 +361,8 @@ namespace Tensorflow
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "ModelDataset", name,
                     null,
-                    input_dataset, 
-                    "algorithm", algorithm, 
+                    input_dataset,
+                    "algorithm", algorithm,
                     "cpu_budget", cpu_budget,
                     "output_types", output_types,
                     "output_shapes", output_shapes);
@@ -424,7 +422,7 @@ namespace Tensorflow
         /// <param name="iterator"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor map_dataset(Tensor dataset, ConcreteFunction f, TF_DataType[] output_types, TensorShape[] output_shapes, 
+        public Tensor map_dataset(Tensor dataset, ConcreteFunction f, TF_DataType[] output_types, TensorShape[] output_shapes,
             bool use_inter_op_parallelism = true, bool preserve_cardinality = false, string name = null)
         {
             if (tf.Context.executing_eagerly())
@@ -434,7 +432,7 @@ namespace Tensorflow
                     null,
                     dataset, new Tensor[0],
                     "f", f,
-                    "output_types", output_types, 
+                    "output_types", output_types,
                     "output_shapes", output_shapes,
                     "use_inter_op_parallelism", use_inter_op_parallelism,
                     "preserve_cardinality", preserve_cardinality);
@@ -482,8 +480,8 @@ namespace Tensorflow
         /// <param name="use_inter_op_parallelism"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor parallel_map_dataset_v2(Tensor dataset, Tensor num_parallel_calls, ConcreteFunction f, 
-            TF_DataType[] output_types, TensorShape[] output_shapes, 
+        public Tensor parallel_map_dataset_v2(Tensor dataset, Tensor num_parallel_calls, ConcreteFunction f,
+            TF_DataType[] output_types, TensorShape[] output_shapes,
             bool use_inter_op_parallelism = true,
             string deterministic = "default",
             bool preserve_cardinality = false,

@@ -14,14 +14,11 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using NumSharp;
 using Tensorflow.Keras;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
-using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -37,7 +34,7 @@ namespace Tensorflow
                 int[] kernel_size,
                 int[] strides = null,
                 string padding = "valid",
-                string data_format= "channels_last",
+                string data_format = "channels_last",
                 int[] dilation_rate = null,
                 bool use_bias = true,
                 Activation activation = null,
@@ -219,7 +216,7 @@ namespace Tensorflow
                 if (inputs.shape.Length == 0)
                     throw new ValueError($"Input 0 of layer flatten is incompatible with the layer: : expected min_ndim={1}, found ndim={0}. Full shape received: ()");
 
-                var premutation = new List<int>() {0};
+                var premutation = new List<int>() { 0 };
                 if (data_format == "channels_first" && inputs.NDims > 1)
                 {
                     premutation.AddRange(Binding.range(2, inputs.NDims));
@@ -234,16 +231,17 @@ namespace Tensorflow
                 int[] compute_output_shape(int[] inputshape)
                 {
                     if (inputshape == null || inputshape.Length == 0)
-                        inputshape = new int[] {1};
+                        inputshape = new int[] { 1 };
 
                     if (inputshape.Skip(1).All(d => d > 0))
                     {
                         int[] output_shape = new int[2];
                         output_shape[0] = inputshape[0];
-                        output_shape[1] = inputshape.Skip(1).Aggregate(1, (acc, rhs) => acc*rhs); //calculate size of all the rest dimensions
+                        output_shape[1] = inputshape.Skip(1).Aggregate(1, (acc, rhs) => acc * rhs); //calculate size of all the rest dimensions
                         return output_shape;
-                    } else
-                        return new int[] {inputshape[0], -1}; //-1 == Binding.None
+                    }
+                    else
+                        return new int[] { inputshape[0], -1 }; //-1 == Binding.None
                 }
             }
         }

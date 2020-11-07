@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static Tensorflow.Binding;
+﻿using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -12,9 +9,9 @@ namespace Tensorflow
     {
         Tensor _optimizations;
 
-        public OptimizeDataset(IDatasetV2 dataset, 
-            string[] optimizations = null, 
-            string[] optimization_configs = null) : 
+        public OptimizeDataset(IDatasetV2 dataset,
+            string[] optimizations = null,
+            string[] optimization_configs = null) :
             base(dataset)
         {
             if (optimizations == null)
@@ -26,7 +23,7 @@ namespace Tensorflow
             variant_tensor = ops.optimize_dataset(
                 _input_dataset.variant_tensor,
                 _optimizations,
-                output_types, 
+                output_types,
                 output_shapes,
                 optimization_configs: optimization_configs);
         }

@@ -24,7 +24,7 @@ namespace Tensorflow
         public static Tensor operator +(RefVariable x, int y) => op_helper("add", x, y);
         public static Tensor operator +(RefVariable x, float y) => op_helper("add", x, y);
         public static Tensor operator +(RefVariable x, double y) => op_helper("add", x, y);
-        
+
         public static Tensor operator -(RefVariable x, int y) => op_helper("sub", x, y);
         public static Tensor operator -(RefVariable x, float y) => op_helper("sub", x, y);
         public static Tensor operator -(RefVariable x, double y) => op_helper("sub", x, y);
@@ -37,7 +37,8 @@ namespace Tensorflow
         private static Tensor op_helper<T>(string default_name, RefVariable x, T y)
         {
             var xVal = x.value();
-            return tf_with(ops.name_scope(null, default_name, new { xVal, y }), scope => {
+            return tf_with(ops.name_scope(null, default_name, new { xVal, y }), scope =>
+            {
                 string name = scope;
                 var yTensor = ops.convert_to_tensor(y, xVal.dtype.as_base_dtype(), "y");
                 Tensor result = null;

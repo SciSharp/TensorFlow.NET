@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -45,7 +44,7 @@ namespace Tensorflow
 
             foreach (var saveable in saveables)
             {
-                foreach(var spec in saveable.specs)
+                foreach (var spec in saveable.specs)
                 {
                     tensor_names.Add(spec.name);
                     tensors.Add(spec.tensor);
@@ -166,7 +165,7 @@ namespace Tensorflow
                         default:
                             throw new NotImplementedException("_build_internal.check_collection_list");
                     }*/
-                    
+
                 }
 
                 return new SaverDef()
@@ -198,7 +197,7 @@ namespace Tensorflow
         /// <param name="preferred_shard"></param>
         /// <param name="name"></param>
         /// <returns>An Operation that restores the variables.</returns>
-        public Operation _AddRestoreOps(Tensor filename_tensor, 
+        public Operation _AddRestoreOps(Tensor filename_tensor,
             MySaveableObject[] saveables,
             bool restore_sequentially,
             bool reshape,

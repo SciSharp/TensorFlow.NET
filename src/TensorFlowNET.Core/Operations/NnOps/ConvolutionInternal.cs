@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using Tensorflow.Keras.ArgsDefinition;
 using static Tensorflow.Binding;
 
@@ -26,7 +25,7 @@ namespace Tensorflow.Operations
     internal class ConvolutionInternal
     {
         ConvolutionalArgs args;
-        
+
         string data_format => args.DataFormat;
         string name;
         string padding => args.Padding;

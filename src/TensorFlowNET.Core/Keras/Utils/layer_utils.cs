@@ -1,11 +1,9 @@
-﻿using System;
+﻿using NumSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using static Tensorflow.Binding;
 using Tensorflow.Keras.Engine;
-using NumSharp;
-using System.Security.Cryptography;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Utils
 {
@@ -38,12 +36,12 @@ namespace Tensorflow.Keras.Utils
                 if (sequential_like)
                 {
                     // search for shared layers
-                    foreach(var layer in model.Layers)
+                    foreach (var layer in model.Layers)
                     {
                         var flag = false;
-                        foreach(var node in layer.InboundNodes)
+                        foreach (var node in layer.InboundNodes)
                         {
-                            if(nodes.Contains(node))
+                            if (nodes.Contains(node))
                             {
                                 if (flag)
                                 {
@@ -86,20 +84,20 @@ namespace Tensorflow.Keras.Utils
                 foreach (var v in model.NodesByDepth)
                     relevant_nodes.AddRange(v.Value);
             }
-            
+
             int[] positions_int = positions.Select(x => Convert.ToInt32(x)).ToArray();
             print($"Model: {model.Name}");
             print(string.Join("", range(line_length).Select(x => "_")));
             print_row(to_display, positions_int);
             print(string.Join("", range(line_length).Select(x => "=")));
 
-            foreach(var (i, layer) in enumerate(model.Layers))
+            foreach (var (i, layer) in enumerate(model.Layers))
             {
                 if (sequential_like)
                     print_layer_summary(layer, positions_int);
                 else
                     print_layer_summary_with_connections(layer, positions_int, relevant_nodes);
-                if(i == model.Layers.Count - 1)
+                if (i == model.Layers.Count - 1)
                     print(string.Join("", range(line_length).Select(x => "=")));
                 else
                     print(string.Join("", range(line_length).Select(x => "_")));
@@ -117,7 +115,7 @@ namespace Tensorflow.Keras.Utils
         static void print_row(string[] fields, int[] positions)
         {
             var line = "";
-            foreach(var i in range(fields.Length))
+            foreach (var i in range(fields.Length))
             {
                 if (i > 0)
                     line = line[0..^1] + " ";
@@ -136,7 +134,7 @@ namespace Tensorflow.Keras.Utils
         {
             var name = layer.Name;
 
-            var fields = new string[] 
+            var fields = new string[]
             {
                 $"{name} ({layer.GetType().Name})",
                 $"{layer.output_shape}",
@@ -173,9 +171,9 @@ namespace Tensorflow.Keras.Utils
 
             print_row(fields, positions);
 
-            if(connections.Count > 1)
+            if (connections.Count > 1)
             {
-                foreach(var i in range(1, connections.Count))
+                foreach (var i in range(1, connections.Count))
                 {
                     fields = new string[] { "", "", "", connections[i] };
                     print_row(fields, positions);

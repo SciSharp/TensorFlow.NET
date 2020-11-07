@@ -1,9 +1,4 @@
-﻿using NumSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     public partial class Tensor
     {

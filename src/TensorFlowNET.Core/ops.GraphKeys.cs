@@ -74,7 +74,7 @@ namespace Tensorflow
             /// <summary>
             /// List of all collections that keep track of variables.
             /// </summary>
-            public string[] _VARIABLE_COLLECTIONS_ = new string[] 
+            public string[] _VARIABLE_COLLECTIONS_ = new string[]
             {
                 GLOBAL_VARIABLES_,
                 LOCAL_VARIABLES_,
@@ -84,7 +84,7 @@ namespace Tensorflow
                 MOVING_AVERAGE_VARIABLES_,
                 CONCATENATED_VARIABLES_,
                 TRAINABLE_RESOURCE_VARIABLES_
-            }; 
+            };
 
             /// <summary>
             /// Key to collect BaseSaverBuilder.SaveableObject instances for checkpointing.

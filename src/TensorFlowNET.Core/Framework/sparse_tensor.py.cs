@@ -1,5 +1,4 @@
-﻿using NumSharp;
-using System;
+﻿using System;
 using System.Linq;
 using static Tensorflow.Binding;
 

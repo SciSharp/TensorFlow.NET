@@ -1,12 +1,9 @@
-﻿using static Tensorflow.Binding;
-using System;
+﻿using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
-using NumSharp;
-using System.Collections.Generic;
-using System.Data.Common;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -37,7 +34,7 @@ namespace Tensorflow.Keras.Engine
         bool stop_training;
         DataHandler data_handler;
 
-        public Model(ModelArgs args) 
+        public Model(ModelArgs args)
             : base(args)
         {
             _init_batch_counters();
@@ -58,8 +55,8 @@ namespace Tensorflow.Keras.Engine
 
         void _init_batch_counters()
         {
-            _train_counter = tf.Variable(0, 
-                dtype: TF_DataType.TF_INT64, 
+            _train_counter = tf.Variable(0,
+                dtype: TF_DataType.TF_INT64,
                 aggregation: VariableAggregation.OnlyFirstReplica);
 
             _test_counter = tf.Variable(0,

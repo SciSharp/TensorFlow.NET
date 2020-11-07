@@ -18,7 +18,7 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid) 
+        public Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid)
             => ops.convert_to_tensor(value, dtype, name, preferred_dtype);
 
         public Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides = null,
@@ -66,7 +66,7 @@ namespace Tensorflow
         /// <param name="name">A name for the operation (optional)</param>
         /// <returns>if num_or_size_splits is a scalar returns num_or_size_splits Tensor objects;
         /// if num_or_size_splits is a 1-D Tensor returns num_or_size_splits.get_shape[0] Tensor objects resulting from splitting value.</returns>
-        public Tensor[] split(Tensor value, int num_split, Tensor axis, string name = null) 
+        public Tensor[] split(Tensor value, int num_split, Tensor axis, string name = null)
             => array_ops.split(
                 value: value,
                 num_split: num_split,

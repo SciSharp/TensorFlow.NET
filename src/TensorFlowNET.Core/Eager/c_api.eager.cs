@@ -242,7 +242,7 @@ namespace Tensorflow
         /// <param name="length">size_t</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrString(SafeOpHandle op, string attr_name, string value, uint length);
-    
+
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrTypeList(SafeOpHandle op, string attr_name, TF_DataType[] values, int num_values);
 
@@ -442,8 +442,8 @@ namespace Tensorflow
         public static extern IntPtr ResourceVariable_Handle(IntPtr variable);
 
         [DllImport(TensorFlowLibName)]
-        public static extern SafeStatusHandle TFE_TapeGradient(IntPtr tape, 
-            IntPtr[] target, int target_size, 
+        public static extern SafeStatusHandle TFE_TapeGradient(IntPtr tape,
+            IntPtr[] target, int target_size,
             IntPtr[] sources, int source_size,
             IntPtr[] outputs, int output_size);
     }

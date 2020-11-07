@@ -100,11 +100,11 @@ namespace Tensorflow
             });
         }
 
-        public Tensor sparse_softmax_cross_entropy(Tensor labels, 
+        public Tensor sparse_softmax_cross_entropy(Tensor labels,
             Tensor logits,
             float weights = 1.0f,
             string scope = null,
-            string loss_collection= "losses",
+            string loss_collection = "losses",
             string reduction = Reduction.SUM_BY_NONZERO_WEIGHTS)
         {
             return tf_with(ops.name_scope(scope,
@@ -132,7 +132,7 @@ namespace Tensorflow
             (labels, predictions) = confusion_matrix.remove_squeezable_dimensions(
                 labels, predictions, expected_rank_diff: expected_rank_diff);
 
-            if(weights > 0)
+            if (weights > 0)
             {
                 var weights_tensor = ops.convert_to_tensor(weights);
                 var labels_rank = labels.TensorShape.ndim;

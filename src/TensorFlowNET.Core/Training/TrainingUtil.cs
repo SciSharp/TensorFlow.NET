@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
@@ -44,7 +42,7 @@ namespace Tensorflow.Train
                     return null;
                 }
             }
-                
+
             return global_step_tensor;
         }
 

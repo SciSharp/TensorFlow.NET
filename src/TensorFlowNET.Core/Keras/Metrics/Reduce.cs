@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.Losses;
+﻿using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
 
@@ -34,7 +30,7 @@ namespace Tensorflow.Keras.Metrics
 
         public Tensor update_state(Tensor values, Tensor sample_weight = null)
         {
-            if(sample_weight != null)
+            if (sample_weight != null)
             {
                 (values, sample_weight) = losses_utils.squeeze_or_expand_dimensions(
                     values, sample_weight: sample_weight);
@@ -59,7 +55,7 @@ namespace Tensorflow.Keras.Metrics
                     num_values = math_ops.reduce_sum(sample_weight);
             }
 
-            return tf_with(ops.control_dependencies(new[] { update_total_op }), ctl 
+            return tf_with(ops.control_dependencies(new[] { update_total_op }), ctl
                 => count.assign_add(num_values));
         }
     }

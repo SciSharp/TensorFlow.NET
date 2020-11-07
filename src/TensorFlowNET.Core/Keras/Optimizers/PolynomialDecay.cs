@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Optimizers
@@ -47,7 +43,7 @@ namespace Tensorflow.Keras.Optimizers
                 var global_step_recomp = math_ops.cast(step, dtype);
                 var decay_steps_recomp = math_ops.cast(decay_steps, dtype);
 
-                if(cycle)
+                if (cycle)
                 {
                     throw new NotImplementedException("PolynomialDecay cycle");
                 }

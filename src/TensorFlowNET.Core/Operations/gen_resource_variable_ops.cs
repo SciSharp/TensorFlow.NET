@@ -14,9 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Linq;
-using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -84,7 +81,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "VarIsInitializedOp", name, 
+                    "VarIsInitializedOp", name,
                     null,
                     resource);
 
@@ -105,14 +102,14 @@ namespace Tensorflow
         /// <param name="shared_name"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape, 
-            string container ="", string shared_name = "", string name = null)
+        public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape,
+            string container = "", string shared_name = "", string name = null)
         {
-            if(tf.Context.executing_eagerly())
+            if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "VarHandleOp", name, 
-                    null, 
+                    "VarHandleOp", name,
+                    null,
                     "container", container,
                     "shared_name", shared_name,
                     "dtype", dtype,
@@ -121,7 +118,8 @@ namespace Tensorflow
                 return results[0];
             }
 
-            var _op = tf.OpDefLib._apply_op_helper("VarHandleOp", name, new {
+            var _op = tf.OpDefLib._apply_op_helper("VarHandleOp", name, new
+            {
                 dtype,
                 shape,
                 container,
@@ -143,7 +141,7 @@ namespace Tensorflow
             if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ReadVariableOp", name, 
+                    "ReadVariableOp", name,
                     null,
                     resource,
                     "dtype", dtype);
@@ -160,7 +158,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor resource_gather(Tensor resource, Tensor indices, TF_DataType dtype, 
+        public static Tensor resource_gather(Tensor resource, Tensor indices, TF_DataType dtype,
             int batch_dims = 0, bool validate_indices = true, string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("ResourceGather", name, new

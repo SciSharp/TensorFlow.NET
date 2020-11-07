@@ -29,7 +29,7 @@ namespace Tensorflow.Operations
         /// <summary>
         /// Creates a bidirectional recurrent neural network.
         /// </summary>
-        public static (Tensor[], LSTMStateTuple, LSTMStateTuple) static_bidirectional_rnn(BasicLstmCell cell_fw, 
+        public static (Tensor[], LSTMStateTuple, LSTMStateTuple) static_bidirectional_rnn(BasicLstmCell cell_fw,
             BasicLstmCell cell_bw,
             Tensor[] inputs,
             Tensor initial_state_fw = null,
@@ -173,7 +173,7 @@ namespace Tensorflow.Operations
         }
 
         public static (Tensor, Tensor) dynamic_rnn(RnnCell cell, Tensor inputs_tensor,
-            Tensor sequence_length = null, Tensor initial_state = null, 
+            Tensor sequence_length = null, Tensor initial_state = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             int? parallel_iterations = null, bool swap_memory = false, bool time_major = false)
         {
@@ -248,7 +248,7 @@ namespace Tensorflow.Operations
             var dims = inputs_got_shape[0].dims.Take(2).ToArray();
             var (const_time_steps, const_batch_size) = (dims[0], dims[1]);
 
-            foreach(var shape in inputs_got_shape)
+            foreach (var shape in inputs_got_shape)
             {
                 if (shape.dims[2] == -1)
                     throw new ValueError("Input size (depth of inputs) must be accessible via shape inference," +
@@ -374,7 +374,7 @@ namespace Tensorflow.Operations
 
                 output_ta_t = zip(output_ta_t, outputs).Select(x =>
                 {
-                    var(ta, @out) = (x.Item1, x.Item2);
+                    var (ta, @out) = (x.Item1, x.Item2);
                     return ta.write(item.time, @out);
                 }).ToArray();
 
@@ -453,7 +453,7 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         private static Tensor _best_effort_input_batch_size(List<Tensor> flat_input)
         {
-            foreach(var input_ in flat_input)
+            foreach (var input_ in flat_input)
             {
                 var shape = input_.TensorShape;
                 if (shape.ndim < 0)
@@ -464,7 +464,7 @@ namespace Tensorflow.Operations
                 var batch_size = shape.dims[1];
                 if (batch_size > -1)
                     throw new ValueError("_best_effort_input_batch_size batch_size > -1");
-                    //return batch_size;
+                //return batch_size;
             }
 
             return array_ops.shape(flat_input[0]).slice(1);

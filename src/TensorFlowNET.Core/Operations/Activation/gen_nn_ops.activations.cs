@@ -39,7 +39,8 @@ namespace Tensorflow.Operations.Activation
     {
         private readonly float _alpha;
 
-        public leakyrelu(float alpha = 0.3f) {
+        public leakyrelu(float alpha = 0.3f)
+        {
             _alpha = alpha;
         }
 
@@ -156,7 +157,8 @@ namespace Tensorflow.Operations.Activation
             if (Math.Abs(_threshold) > 0.000001f)
             {
                 negative_part = gen_ops.relu(-x + _threshold);
-            } else
+            }
+            else
             {
                 negative_part = gen_ops.relu(-x + _threshold);
             }
@@ -164,10 +166,12 @@ namespace Tensorflow.Operations.Activation
             if (Math.Abs(_threshold) > 0.000001f)
             {
                 x = x * math_ops.cast(tf.greater(x, _threshold), TF_DataType.TF_FLOAT);
-            } else if (Math.Abs(_maxValue.Value - 6f) < 0.0001f)
+            }
+            else if (Math.Abs(_maxValue.Value - 6f) < 0.0001f)
             {
                 x = gen_ops.relu6(x);
-            } else
+            }
+            else
             {
                 x = gen_ops.relu(x);
             }

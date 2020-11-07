@@ -24,10 +24,10 @@ namespace Tensorflow.Layers
     public class Layer : Keras.Engine.Layer
     {
         protected Graph _graph;
-        
+
         protected VariableScope _scope;
         protected VariableScope _current_scope;
-        
+
         protected bool? _reuse;
         protected bool _use_resource_variables;
         protected bool _keras_style;
@@ -102,7 +102,7 @@ namespace Tensorflow.Layers
 
         protected virtual void _add_elements_to_collection(Operation[] elements, string[] collection_list)
         {
-            foreach(var name in collection_list)
+            foreach (var name in collection_list)
             {
                 var collection = ops.get_collection_ref<Operation>(name);
 
@@ -148,7 +148,7 @@ namespace Tensorflow.Layers
                 existing_variables = variables.global_variables().ToArray();
             }
 
-            if(dtype == TF_DataType.DtInvalid)
+            if (dtype == TF_DataType.DtInvalid)
                 dtype = TF_DataType.TF_FLOAT;
 
             _set_scope();
@@ -174,8 +174,8 @@ namespace Tensorflow.Layers
                             );
 
                         //if (init_graph != null)
-                            //var trainable_variables = variables.trainable_variables();
-                        
+                        //var trainable_variables = variables.trainable_variables();
+
                         return variable;
                     });
                 });
@@ -190,7 +190,7 @@ namespace Tensorflow.Layers
         {
             if (_scope == null)
             {
-                if(_reuse.HasValue && _reuse.Value)
+                if (_reuse.HasValue && _reuse.Value)
                 {
                     throw new NotImplementedException("_set_scope _reuse.HasValue");
                     /*with(tf.variable_scope(scope == null ? _base_name : scope),

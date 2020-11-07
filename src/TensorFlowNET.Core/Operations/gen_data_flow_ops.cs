@@ -27,11 +27,11 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor[] dynamic_partition(Tensor data, Tensor partitions, int num_partitions, 
+        public static Tensor[] dynamic_partition(Tensor data, Tensor partitions, int num_partitions,
             string name = null)
         {
-            var _op = tf.OpDefLib._apply_op_helper("DynamicPartition", name, new 
-            { 
+            var _op = tf.OpDefLib._apply_op_helper("DynamicPartition", name, new
+            {
                 data,
                 partitions,
                 num_partitions
@@ -40,8 +40,8 @@ namespace Tensorflow
             return _op.outputs;
         }
 
-        public static (Tensor, Tensor) tensor_array_v3<T>(T size, TF_DataType dtype = TF_DataType.DtInvalid, 
-            TensorShape element_shape = null, bool dynamic_size = false, bool clear_after_read = true, 
+        public static (Tensor, Tensor) tensor_array_v3<T>(T size, TF_DataType dtype = TF_DataType.DtInvalid,
+            TensorShape element_shape = null, bool dynamic_size = false, bool clear_after_read = true,
             bool identical_element_shapes = false, string tensor_array_name = "", string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("TensorArrayV3", name, new
@@ -58,7 +58,7 @@ namespace Tensorflow
             return (_op.outputs[0], _op.outputs[1]);
         }
 
-        public static Tensor tensor_array_scatter_v3(Tensor handle, Tensor indices, Tensor value, 
+        public static Tensor tensor_array_scatter_v3(Tensor handle, Tensor indices, Tensor value,
             Tensor flow_in, string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("TensorArrayScatterV3", name, new
@@ -72,8 +72,8 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor padding_fifo_queue_v2(TF_DataType[] component_types, TensorShape[] shapes, 
-            int capacity = -1, string container = "", string shared_name = "", 
+        public static Tensor padding_fifo_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+            int capacity = -1, string container = "", string shared_name = "",
             string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("PaddingFIFOQueueV2", name, new
@@ -258,7 +258,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor tensor_array_gather_v3(Tensor handle, Tensor indices, Tensor flow_in, 
+        public static Tensor tensor_array_gather_v3(Tensor handle, Tensor indices, Tensor flow_in,
             TF_DataType dtype, TensorShape element_shape = null, string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("TensorArrayGatherV3", name, new
@@ -273,7 +273,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor stack_v2(Tensor max_size, TF_DataType elem_type, string stack_name = "", 
+        public static Tensor stack_v2(Tensor max_size, TF_DataType elem_type, string stack_name = "",
             string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("StackV2", name, new
@@ -286,7 +286,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor stack_push_v2(Tensor handle, Tensor elem, bool swap_memory = false, 
+        public static Tensor stack_push_v2(Tensor handle, Tensor elem, bool swap_memory = false,
             string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("StackPushV2", name, new

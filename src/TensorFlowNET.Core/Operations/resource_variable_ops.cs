@@ -18,9 +18,6 @@ using System;
 using System.Linq;
 using Tensorflow.Framework;
 using static Tensorflow.CppShapeInferenceResult.Types;
-using static Tensorflow.Binding;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace Tensorflow
 {
@@ -88,7 +85,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="graph_mode"></param>
         /// <returns></returns>
-        public static Tensor eager_safe_variable_handle(Tensor initial_value, TensorShape shape, 
+        public static Tensor eager_safe_variable_handle(Tensor initial_value, TensorShape shape,
             string shared_name, string name, bool graph_mode)
         {
             var dtype = initial_value.dtype.as_base_dtype();
@@ -106,7 +103,7 @@ namespace Tensorflow
         /// <param name="graph_mode"></param>
         /// <param name="initial_value"></param>
         /// <returns></returns>
-        public static Tensor variable_handle_from_shape_and_dtype(TensorShape shape, TF_DataType dtype, 
+        public static Tensor variable_handle_from_shape_and_dtype(TensorShape shape, TF_DataType dtype,
             string shared_name, string name, bool graph_mode, Tensor initial_value = null)
         {
             var container = ops.get_default_graph().Container;
@@ -194,7 +191,7 @@ namespace Tensorflow
 
         private static HandleData get_eager_safe_handle_data(Tensor handle)
         {
-            if(handle == IntPtr.Zero)
+            if (handle == IntPtr.Zero)
             {
                 var data = new HandleData();
                 data.ShapeAndType.Add(new HandleShapeAndType

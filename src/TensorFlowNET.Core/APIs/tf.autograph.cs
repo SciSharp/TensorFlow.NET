@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using Tensorflow.Graphs;
-using Tensorflow.Operations;
 
 namespace Tensorflow
 {

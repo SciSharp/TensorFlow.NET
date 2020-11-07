@@ -14,12 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Tensorflow.Framework;
-using static Tensorflow.Binding;
 
 namespace Tensorflow.Queues
 {
@@ -28,9 +23,9 @@ namespace Tensorflow.Queues
     /// </summary>
     public class PaddingFIFOQueue : QueueBase
     {
-        public PaddingFIFOQueue(int capacity, 
-            TF_DataType[] dtypes, 
-            TensorShape[] shapes, 
+        public PaddingFIFOQueue(int capacity,
+            TF_DataType[] dtypes,
+            TensorShape[] shapes,
             string[] names = null,
             string shared_name = null,
             string name = "padding_fifo_queue")

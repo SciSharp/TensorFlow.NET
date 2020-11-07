@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Operations.Activation;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -23,7 +22,7 @@ namespace Tensorflow.Keras.Layers
     {
         public Conv2D(Conv2DArgs args) : base(args)
         {
-            
+
         }
     }
 }

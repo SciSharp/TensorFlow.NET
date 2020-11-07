@@ -36,7 +36,7 @@ namespace Tensorflow.Summaries
 #pragma warning restore CS0414 // The field 'EventFileWriter._closed' is assigned but its value is never used
         EventLoggerThread _worker;
 
-        public EventFileWriter(string logdir, int max_queue = 10, int flush_secs= 120,
+        public EventFileWriter(string logdir, int max_queue = 10, int flush_secs = 120,
                string filename_suffix = null)
         {
             _logdir = logdir;

@@ -68,19 +68,19 @@ namespace Tensorflow.Gradients
                         var zero_grad = grads[1 - op_ctxt.branch];
                         // At this point, we have created zero_grad guarded by the right switch.
                         // Unfortunately, we may still get None here for not trainable data types.
-                        if(zero_grad == null)
+                        if (zero_grad == null)
                         {
                             throw new NotImplementedException("_SwitchGrad CondContext zero_grad");
                         }
 
-                        return new Tensor[] 
+                        return new Tensor[]
                         {
                             merge(grads, name: "cond_grad")[0],
-                            null 
+                            null
                         };
                     }
                 default:
-                        throw new NotImplementedException("_SwitchGrad WhileContext");
+                    throw new NotImplementedException("_SwitchGrad WhileContext");
             }
             throw new NotImplementedException("_SwitchGrad");
         }

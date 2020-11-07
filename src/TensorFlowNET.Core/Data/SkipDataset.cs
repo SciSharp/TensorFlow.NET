@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static Tensorflow.Binding;
+﻿using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -16,7 +13,7 @@ namespace Tensorflow
             int count) : base(input_dataset)
         {
             _count = tf.convert_to_tensor(count, dtype: dtypes.int64, name: "count");
-            variant_tensor = ops.skip_dataset(input_dataset.variant_tensor, 
+            variant_tensor = ops.skip_dataset(input_dataset.variant_tensor,
                     _count,
                     output_types, output_shapes);
         }

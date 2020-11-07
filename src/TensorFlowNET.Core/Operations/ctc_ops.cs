@@ -14,11 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.Linq;
-using Tensorflow.Operations;
-using static Tensorflow.Binding;
-
 namespace Tensorflow
 {
     public class ctc_ops

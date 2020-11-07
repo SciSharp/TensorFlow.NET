@@ -18,7 +18,6 @@ using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -114,7 +113,7 @@ namespace Tensorflow
             }
         }
 
-        public Tensor this[params string[] slices] 
+        public Tensor this[params string[] slices]
             => this[slices.Select(x => new Slice(x)).ToArray()];
 
 

@@ -157,7 +157,7 @@ namespace Tensorflow
 #pragma warning restore CS0219 // Variable is assigned but its value is never used
             // TODO: missing original code
             //_execute.record_gradient("Switch", _inputs_flat, _attrs, _result, name);
-            return new []{_op.outputs[0], _op.outputs[1]};
+            return new[] { _op.outputs[0], _op.outputs[1] };
         }
 
         public static MergeOutput ref_merge(Tensor[] inputs, string name = null)

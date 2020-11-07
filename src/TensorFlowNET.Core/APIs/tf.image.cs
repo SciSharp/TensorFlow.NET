@@ -14,8 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System.Collections.Generic;
-using Tensorflow.IO;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -34,7 +32,7 @@ namespace Tensorflow
 
             public Tensor flip_left_right(Tensor image)
                 => image_ops_impl.flip_left_right(image);
-            
+
             public Tensor flip_up_down(Tensor image)
                 => image_ops_impl.flip_up_down(image);
 
@@ -56,7 +54,7 @@ namespace Tensorflow
             public Tensor resize_image_with_crop_or_pad(Tensor image, object target_height, object target_width)
                 => image_ops_impl.resize_image_with_crop_or_pad(image, target_height, target_width);
 
-            public Tensor resize_images(Tensor images, Tensor size, string method = ResizeMethod.BILINEAR, bool preserve_aspect_ratio  = false, bool antialias = false,
+            public Tensor resize_images(Tensor images, Tensor size, string method = ResizeMethod.BILINEAR, bool preserve_aspect_ratio = false, bool antialias = false,
                 string name = null)
                 => image_ops_impl.resize_images(images, size, method, preserve_aspect_ratio, antialias, name);
 
@@ -93,7 +91,7 @@ namespace Tensorflow
 
             public Tensor random_hue(Tensor image, float max_delta, int seed = 0)
                 => image_ops_impl.random_hue(image, max_delta, seed);
-            
+
             public Tensor adjust_hue(Tensor image, Tensor delta, string name = null)
                 => image_ops_impl.adjust_hue(image, delta, name);
 
@@ -169,7 +167,7 @@ namespace Tensorflow
                         string dct_method = "",
                         string name = null)
                 => gen_image_ops.decode_jpeg(contents, channels: channels, ratio: ratio,
-                    fancy_upscaling: fancy_upscaling, try_recover_truncated: try_recover_truncated, 
+                    fancy_upscaling: fancy_upscaling, try_recover_truncated: try_recover_truncated,
                     acceptable_fraction: acceptable_fraction, dct_method: dct_method);
 
             /// <summary>
@@ -197,12 +195,12 @@ namespace Tensorflow
                 => image_ops_impl.combined_non_max_suppression(boxes, scores, max_output_size_per_class, max_total_size, iou_threshold, score_threshold,
                     pad_per_class, clip_boxes, name);
 
-            public (Tensor, Tensor) non_max_suppression_padded(Tensor boxes, Tensor scores, Tensor  max_output_size,
+            public (Tensor, Tensor) non_max_suppression_padded(Tensor boxes, Tensor scores, Tensor max_output_size,
                 float iou_threshold = 0.5f,
                 float score_threshold = -1f / 0f,
                 bool pad_to_max_output_size = false,
                 string name = null,
-                bool sorted_input =  false,
+                bool sorted_input = false,
                 bool canonicalized_coordinates = false,
                 int tile_size = 512)
                 => image_ops_impl.non_max_suppression_padded(boxes, scores, max_output_size, iou_threshold, score_threshold, pad_to_max_output_size,

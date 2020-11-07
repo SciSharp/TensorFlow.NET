@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Gradients;
 using static Tensorflow.tensorflow;
 

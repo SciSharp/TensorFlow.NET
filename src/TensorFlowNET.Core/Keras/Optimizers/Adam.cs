@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Tensorflow.Eager;
 using Tensorflow.Keras.ArgsDefinition;
 
 namespace Tensorflow.Keras.Optimizers
@@ -35,7 +33,7 @@ namespace Tensorflow.Keras.Optimizers
 
         protected override void _create_slots(IVariableV1[] var_list)
         {
-            foreach(var var in var_list)
+            foreach (var var in var_list)
                 add_slot(var, "m");
             foreach (var var in var_list)
                 add_slot(var, "v");

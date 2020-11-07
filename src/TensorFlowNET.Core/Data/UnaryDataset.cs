@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Framework.Models;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     /// <summary>
     /// Abstract class representing a dataset with one input.

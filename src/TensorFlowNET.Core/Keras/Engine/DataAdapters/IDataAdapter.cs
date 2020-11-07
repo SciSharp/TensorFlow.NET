@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Keras.Engine.DataAdapters
+﻿namespace Tensorflow.Keras.Engine.DataAdapters
 {
     /// <summary>
     /// In TF 2.0, tf.data is the preferred API for user to feed in data. In order

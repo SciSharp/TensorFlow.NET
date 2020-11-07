@@ -33,8 +33,8 @@ namespace Tensorflow
         private VariableScope _cached_variable_scope_object;
         VariableScope _last_variable_scope_object;
         Dictionary<string, int> _old_subscopes;
-        public PureVariableScope(string name, 
-            string old_name_scope = null, 
+        public PureVariableScope(string name,
+            string old_name_scope = null,
             TF_DataType dtype = TF_DataType.DtInvalid)
         {
             _name = name;
@@ -64,7 +64,7 @@ namespace Tensorflow
         public void __enter__()
         {
             _old = _var_scope_store.current_scope;
-            if(_scope != null)
+            if (_scope != null)
             {
                 _var_scope_store.open_variable_scope(_new_name);
                 _old_subscopes = _var_scope_store.variable_scopes_count.ToDictionary(kv => kv.Key, kv => kv.Value);
@@ -88,7 +88,7 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            
+
         }
 
         public void __exit__()
@@ -103,12 +103,12 @@ namespace Tensorflow
 
         public void __init__()
         {
-            
+
         }
 
         public void __del__()
         {
-            
+
         }
 
         public static implicit operator VariableScope(PureVariableScope scope)

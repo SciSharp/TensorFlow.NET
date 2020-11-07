@@ -20,7 +20,6 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Operations;
-using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -59,8 +58,8 @@ namespace Tensorflow.Keras.Layers
         protected override void build(TensorShape input_shape)
         {
             int channel_axis = data_format == "channels_first" ? 1 : -1;
-            int input_channel = channel_axis < 0 ? 
-                input_shape.dims[input_shape.ndim + channel_axis] : 
+            int input_channel = channel_axis < 0 ?
+                input_shape.dims[input_shape.ndim + channel_axis] :
                 input_shape.dims[channel_axis];
             TensorShape kernel_shape = kernel_size.dims.concat(new int[] { input_channel / args.Groups, filters });
             kernel = add_weight(name: "kernel",
@@ -108,7 +107,7 @@ namespace Tensorflow.Keras.Layers
                     throw new NotImplementedException("call channels_first");
                 }
                 else
-                {                    
+                {
                     outputs = nn_ops.bias_add(outputs, bias.AsTensor(), data_format: "NHWC");
                 }
             }

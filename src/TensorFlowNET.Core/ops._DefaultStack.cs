@@ -37,12 +37,12 @@ namespace Tensorflow
 
             public void __enter__()
             {
-                
+
             }
 
             public void __exit__()
             {
-                
+
             }
 
             public void Dispose()
@@ -52,12 +52,12 @@ namespace Tensorflow
 
             public void __init__()
             {
-                
+
             }
 
             public void __del__()
             {
-                
+
             }
         }
     }

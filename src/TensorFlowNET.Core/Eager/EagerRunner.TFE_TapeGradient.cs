@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System;
-using static Tensorflow.OpDef.Types;
+﻿using System;
 using Tensorflow.Gradients;
 using Tensorflow.Util;
 
@@ -31,7 +28,7 @@ namespace Tensorflow.Eager
                 source_tensors_that_are_targets.Add(target_id, TapeTensorFromTensor(tensor));
             }
 
-            if(output_gradients != null)
+            if (output_gradients != null)
             {
                 throw new NotImplementedException("");
             }

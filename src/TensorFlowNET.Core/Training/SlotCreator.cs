@@ -70,7 +70,7 @@ namespace Tensorflow.Train
         /// Creates a slot initialized using an `Initializer`.
         /// </summary>
         /// <returns></returns>
-        public IVariableV1 create_slot_with_initializer(IVariableV1 primary, IInitializer initializer, TensorShape shape, 
+        public IVariableV1 create_slot_with_initializer(IVariableV1 primary, IInitializer initializer, TensorShape shape,
             TF_DataType dtype, string name, bool colocate_with_primary = true)
         {
             var validate_shape = shape.is_fully_defined();
@@ -91,7 +91,7 @@ namespace Tensorflow.Train
         /// <param name="shape"></param>
         /// <param name="dtype"></param>
         /// <returns></returns>
-        private IVariableV1 _create_slot_var(IVariableV1 primary, object val, string scope, bool validate_shape, 
+        private IVariableV1 _create_slot_var(IVariableV1 primary, object val, string scope, bool validate_shape,
             TensorShape shape, TF_DataType dtype)
         {
             bool use_resource = primary is ResourceVariable;

@@ -21,7 +21,7 @@ namespace Tensorflow
     public class gradients_impl
     {
         public static Tensor[] gradients(Tensor[] ys,
-            Tensor[] xs, 
+            Tensor[] xs,
             Tensor[] grad_ys = null,
             string name = "gradients",
             bool colocate_gradients_with_ops = false,

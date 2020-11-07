@@ -20,9 +20,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Tensorflow.Operations;
+using static Tensorflow.Binding;
 using static Tensorflow.CollectionDef;
 using static Tensorflow.MetaGraphDef.Types;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -272,12 +272,12 @@ namespace Tensorflow
                     col_def.BytesList = new Types.BytesList();
                     foreach (var x in collection_list)
                     {
-                        if(x is RefVariable x_ref_var)
+                        if (x is RefVariable x_ref_var)
                         {
                             var proto = x_ref_var.to_proto(export_scope);
                             col_def.BytesList.Value.Add(proto.ToByteString());
                         }
-                        else if(x is ResourceVariable x_res_var)
+                        else if (x is ResourceVariable x_res_var)
                         {
                             var proto = x_res_var.to_proto(export_scope);
                             col_def.BytesList.Value.Add(proto.ToByteString());

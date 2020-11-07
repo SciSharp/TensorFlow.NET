@@ -1,11 +1,4 @@
-﻿using NumSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using static Tensorflow.Binding;
-
-namespace Tensorflow.Eager
+﻿namespace Tensorflow.Eager
 {
     public partial class EagerTensor
     {

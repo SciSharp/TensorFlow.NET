@@ -15,8 +15,6 @@
 ******************************************************************************/
 
 using System;
-using System.Linq;
-using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -41,8 +39,8 @@ namespace Tensorflow
             throw new NotImplementedException("");
         }
 
-        public static Tensor apply_adam(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power, 
-            Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, 
+        public static Tensor apply_adam(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power,
+            Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad,
             bool use_locking = false, bool use_nesterov = false, string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("ApplyAdam", name, new

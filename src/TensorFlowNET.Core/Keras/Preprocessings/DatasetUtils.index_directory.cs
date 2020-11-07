@@ -1,9 +1,7 @@
 ﻿using NumSharp;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Tensorflow.Keras.Preprocessings
 {
@@ -54,7 +52,7 @@ namespace Tensorflow.Keras.Preprocessings
                 rng.shuffle(random_index);
                 var index = random_index.ToArray<int>();
 
-                for (int i = 0; i< labels.Count; i++)
+                for (int i = 0; i < labels.Count; i++)
                 {
                     return_labels[i] = labels[index[i]];
                     return_file_paths[i] = file_paths[index[i]];

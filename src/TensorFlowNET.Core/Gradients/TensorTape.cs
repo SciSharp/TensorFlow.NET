@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using Tensorflow.Util;
+﻿using Tensorflow.Util;
 
 namespace Tensorflow.Gradients
 {
@@ -14,6 +9,6 @@ namespace Tensorflow.Gradients
     /// </summary>
     public class TensorTape : UnorderedMap<long, long>
     {
-        
+
     }
 }

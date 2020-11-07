@@ -40,11 +40,11 @@ namespace Tensorflow
             int? aggregation_method = null,
             Tensor[] stop_gradients = null)
         {
-            return gradients_util._GradientsHelper(ys, 
-                xs, 
-                grad_ys, 
-                name, 
-                colocate_gradients_with_ops, 
+            return gradients_util._GradientsHelper(ys,
+                xs,
+                grad_ys,
+                name,
+                colocate_gradients_with_ops,
                 gate_gradients,
                 stop_gradients: stop_gradients);
         }

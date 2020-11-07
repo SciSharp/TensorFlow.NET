@@ -14,10 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using System;
 using System.Numerics;
-using NumSharp;
-using NumSharp.Backends;
 
 namespace Tensorflow
 {
@@ -72,7 +71,7 @@ namespace Tensorflow
                     return typeof(double);
                 case TF_DataType.TF_STRING:
                     return typeof(string);
-                case TF_DataType.TF_COMPLEX128: 
+                case TF_DataType.TF_COMPLEX128:
                 case TF_DataType.TF_COMPLEX64: //64 is also TF_COMPLEX
                     return typeof(Complex);
                 default:
@@ -112,7 +111,7 @@ namespace Tensorflow
                     return NPTypeCode.Double;
                 case TF_DataType.TF_STRING:
                     return NPTypeCode.String;
-                case TF_DataType.TF_COMPLEX128: 
+                case TF_DataType.TF_COMPLEX128:
                 case TF_DataType.TF_COMPLEX64: //64 is also TF_COMPLEX
                     return NPTypeCode.Complex;
                 default:
@@ -132,7 +131,7 @@ namespace Tensorflow
             switch (type.Name)
             {
                 case "Char":
-                    dtype =  dtype ?? TF_DataType.TF_UINT8;
+                    dtype = dtype ?? TF_DataType.TF_UINT8;
                     break;
                 case "SByte":
                     dtype = TF_DataType.TF_INT8;
@@ -228,7 +227,7 @@ namespace Tensorflow
         {
             return (int)type < 100 ? (TF_DataType)((int)type + 100) : type;
         }
-       
+
         public static long min(this TF_DataType type)
         {
             throw new NotImplementedException($"min {type.name()}");
@@ -283,7 +282,7 @@ namespace Tensorflow
         {
             return self.as_datatype_enum() == other.as_datatype_enum();
         }
-       
+
         public static TF_DataType real_dtype(this TF_DataType self)
         {
             TF_DataType base_ = self.as_base_dtype();

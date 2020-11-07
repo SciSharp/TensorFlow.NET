@@ -1,6 +1,5 @@
 ﻿using System;
 using Tensorflow.Eager;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -25,8 +24,8 @@ namespace Tensorflow
         public static implicit operator IntPtr(ResourceVariable var)
             => var._handle;
 
-        Tensor _dense_var_to_tensor(TF_DataType dtype = TF_DataType.DtInvalid, 
-            string name = null, 
+        Tensor _dense_var_to_tensor(TF_DataType dtype = TF_DataType.DtInvalid,
+            string name = null,
             bool as_ref = false)
         {
             return value();

@@ -105,17 +105,17 @@ namespace Tensorflow
         /// An Operation that updates the variables in `var_list`.  If `global_step`
         /// was not `None`, that operation also increments `global_step`.
         /// </returns>
-        public Operation minimize(Tensor loss, 
+        public Operation minimize(Tensor loss,
             IVariableV1 global_step = null,
-            List<IVariableV1> var_list=null,
+            List<IVariableV1> var_list = null,
             GateGradientType gate_gradients = GateGradientType.GATE_OP,
-            int? aggregation_method=null,
-            bool colocate_gradients_with_ops = false, string name=null, Tensor grad_loss=null)
+            int? aggregation_method = null,
+            bool colocate_gradients_with_ops = false, string name = null, Tensor grad_loss = null)
         {
             // TODO: strongly type aggregation_method
-            var grads_and_vars = compute_gradients(loss, var_list:var_list,
-                gate_gradients: gate_gradients, 
-                aggregation_method:aggregation_method,
+            var grads_and_vars = compute_gradients(loss, var_list: var_list,
+                gate_gradients: gate_gradients,
+                aggregation_method: aggregation_method,
                 colocate_gradients_with_ops: colocate_gradients_with_ops,
                 grad_loss: grad_loss);
 
@@ -124,7 +124,7 @@ namespace Tensorflow
                 throw new ValueError($"No gradients provided for any variable, check your graph for ops" +
                     $" that do not support gradients, between variables {string.Join(",", vars_with_grad.Select(x => x.Name))} and loss {loss}.");
 
-            return apply_gradients(grads_and_vars, global_step:global_step, name:name);
+            return apply_gradients(grads_and_vars, global_step: global_step, name: name);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Tensorflow
             var converted_grads_and_vars = new List<(Tensor, IVariableV1, _OptimizableVariable)>();
             foreach (var (g, v) in grads_and_vars)
             {
-                if(g != null)
+                if (g != null)
                 {
                     // Convert the grad to Tensor or IndexedSlices if necessary.
                     var gR = ops.convert_to_tensor_or_indexed_slices(g);
@@ -170,7 +170,7 @@ namespace Tensorflow
                 name = scope;
                 _prepare();
 
-                foreach(var (grad, var, processor) in converted_grads_and_vars)
+                foreach (var (grad, var, processor) in converted_grads_and_vars)
                 {
                     if (grad == null)
                         continue;
@@ -190,8 +190,8 @@ namespace Tensorflow
                 }
                 else
                 {
-                    tf_with(ops.control_dependencies(new object[] {_finish(update_ops.ToArray(), "update")}), dep =>
-                    {
+                    tf_with(ops.control_dependencies(new object[] { _finish(update_ops.ToArray(), "update") }), dep =>
+                      {
                         // ops.colocate_with(global_step);
                         // TODO: port this if branch once ResourceVariable has been ported!
                         //if (global_step is ResourceVariable)
@@ -205,11 +205,11 @@ namespace Tensorflow
                         //}
                         //else
                         {
-                            apply_updates = state_ops.assign_add(global_step,
-                                ops.convert_to_tensor(1, dtype: global_step.dtype),
-                                name: name);
-                        }
-                    });
+                              apply_updates = state_ops.assign_add(global_step,
+                                  ops.convert_to_tensor(1, dtype: global_step.dtype),
+                                  name: name);
+                          }
+                      });
                 }
 
                 if (!tf.Context.executing_eagerly())
@@ -232,7 +232,7 @@ namespace Tensorflow
         /// <param name="var_list"></param>
         protected virtual void _create_slots(IVariableV1[] var_list)
         {
-            
+
         }
 
         /// <summary>
@@ -247,12 +247,12 @@ namespace Tensorflow
             var graph = colocate_with.Graph;
             var key = $"{name}.{graph.graph_key}";
             var v = _non_slot_dict.ContainsKey(key) ? _non_slot_dict[key] : null;
-            if(v == null)
+            if (v == null)
             {
                 _maybe_initialize_trackable();
                 v = variable_scope.default_variable_creator(
-                    initial_value, 
-                    name: name, 
+                    initial_value,
+                    name: name,
                     dtype: colocate_with.dtype.as_base_dtype(),
                     trainable: false,
                     use_resource: resource_variable_ops.is_resource_variable(
@@ -392,7 +392,7 @@ namespace Tensorflow
             // Scale loss if using a "mean" loss reduction and multiple replicas.
             loss = _scale_loss(loss);
 
-            if(var_list == null)
+            if (var_list == null)
             {
                 var vars = ops.get_collection<IVariableV1>(tf.GraphKeys.TRAINABLE_RESOURCE_VARIABLES);
                 var tmp = variables.trainable_variables();
@@ -462,7 +462,7 @@ namespace Tensorflow
         protected Dictionary<string, IVariableV1> _slot_dict(string slot_name)
         {
             var named_slots = _slots.ContainsKey(slot_name) ? _slots[slot_name] : null;
-            if(named_slots == null)
+            if (named_slots == null)
             {
                 named_slots = new Dictionary<string, IVariableV1>();
                 _slots[slot_name] = named_slots;

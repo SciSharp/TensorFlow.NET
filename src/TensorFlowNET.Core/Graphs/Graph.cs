@@ -19,7 +19,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Runtime.InteropServices;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -553,7 +552,7 @@ namespace Tensorflow
         {
             return graph._handle;
         }
-        
+
         public OrderedDictionary _captures => new OrderedDictionary();
 
         public Tensor[] external_captures()
@@ -563,7 +562,7 @@ namespace Tensorflow
             inner.CopyTo(captures, 0);
             return captures;
         }
-        
+
         public Tensor[] internal_captures()
         {
             Tensor[] captures = new Tensor[this._captures.Count];

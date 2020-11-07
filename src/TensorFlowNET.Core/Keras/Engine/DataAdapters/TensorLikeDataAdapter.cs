@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using static Tensorflow.Binding;
 

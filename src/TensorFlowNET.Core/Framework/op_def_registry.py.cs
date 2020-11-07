@@ -14,9 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using Tensorflow.Util;
 
 namespace Tensorflow
@@ -27,12 +25,12 @@ namespace Tensorflow
 
         public static Dictionary<string, OpDef> get_registered_ops()
         {
-            if(_registered_ops.Count == 0)
+            if (_registered_ops.Count == 0)
             {
                 lock (_registered_ops)
                 {
                     // double validation to avoid multi-thread executing
-                    if (_registered_ops.Count > 0) 
+                    if (_registered_ops.Count > 0)
                         return _registered_ops;
 
                     using var buffer = new Buffer(c_api.TF_GetAllOpList());

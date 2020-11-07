@@ -86,7 +86,7 @@ namespace Tensorflow
         {
             var op = tensor.op;
             Operation new_op = op_cache.ContainsKey(op.name) ? op_cache[op.name] : null;
-            if(new_op == null)
+            if (new_op == null)
             {
                 new_op = _safe_initial_value_from_op(name, op, op_cache);
                 op_cache[op.name] = new_op;
@@ -110,7 +110,7 @@ namespace Tensorflow
                 op_type == "ReadVariableOp")
                 return op;
 
-            if(op_type == "Variable" ||
+            if (op_type == "Variable" ||
                 op_type == "VariableV2" ||
                 op_type == "VarHandleOp")
             {
@@ -120,7 +120,7 @@ namespace Tensorflow
             // Recursively build initializer expressions for inputs.
             bool modified = false;
             var new_op_inputs = new List<Tensor>();
-            foreach(Tensor op_input in op.inputs)
+            foreach (Tensor op_input in op.inputs)
             {
                 var new_op_input = _safe_initial_value_from_tensor(name, op_input, op_cache);
                 new_op_inputs.Add(new_op_input);
@@ -128,7 +128,7 @@ namespace Tensorflow
             }
 
             // If at least one input was modified, replace the op.
-            if(modified)
+            if (modified)
             {
                 var new_op_type = op_type;
                 if (new_op_type == "RefSwitch")
@@ -143,10 +143,10 @@ namespace Tensorflow
                     attr_protos[attr_def.Key] = attr_def.Value;
 
                 return op.graph.create_op(
-                    new_op_type, 
+                    new_op_type,
                     new_op_inputs.ToArray(),
                     _output_types,
-                    name: new_op_name, 
+                    name: new_op_name,
                     attrs: attr_protos);
             }
 

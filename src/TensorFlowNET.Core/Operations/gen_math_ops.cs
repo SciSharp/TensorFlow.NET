@@ -16,9 +16,7 @@
 
 using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Tensorflow.Contexts;
-using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -86,7 +84,7 @@ namespace Tensorflow
         /// <param name="output_type"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type= TF_DataType.TF_INT64, string name= null)
+        public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
             => tf.OpDefLib._apply_op_helper("ArgMin", name, args: new { input, dimension, output_type }).outputs[0];
 
         /// <summary>
@@ -139,7 +137,7 @@ namespace Tensorflow
         /// <param name="keep_dims"> An optional `bool`. Defaults to `False`. If true, retain reduced dimensions with length 1.</param>
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
-        public static Tensor mean<T1, T2>(T1 input, T2 axis, bool keep_dims= false, string name = null)
+        public static Tensor mean<T1, T2>(T1 input, T2 axis, bool keep_dims = false, string name = null)
         {
             if (tf.Context.executing_eagerly())
             {
@@ -186,7 +184,7 @@ namespace Tensorflow
                 try
                 {
                     var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                        "Prod", name, 
+                        "Prod", name,
                         null,
                         input, axis,
                         "keep_dims", keep_dims);
@@ -232,7 +230,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Add", name, null, 
+                    "Add", name, null,
                     x, y);
                 return results[0];
             }
@@ -247,7 +245,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Add", name, 
+                    "Add", name,
                     null,
                     x, y);
 
@@ -265,7 +263,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "AddV2", name, 
+                    "AddV2", name,
                     null,
                     x, y);
                 return results[0];
@@ -295,7 +293,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Sin", name, 
+                    "Sin", name,
                     null,
                     x);
 
@@ -366,7 +364,7 @@ namespace Tensorflow
 
         public static Tensor sign<T>(T x, string name = "Sign")
         {
-            var op = tf.OpDefLib._apply_op_helper("Sign", name: name, args: new {x});
+            var op = tf.OpDefLib._apply_op_helper("Sign", name: name, args: new { x });
 
             return op.outputs[0];
         }
@@ -418,7 +416,7 @@ namespace Tensorflow
             if (tf.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Tan", name, 
+                    "Tan", name,
                     null,
                     x);
 
@@ -459,7 +457,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "TanhGrad", name, 
+                    "TanhGrad", name,
                     null,
                     y, dy);
 
@@ -492,7 +490,7 @@ namespace Tensorflow
                     "Greater", name,
                     null,
                     x, y);
-                
+
                 return results[0];
             }
 
@@ -524,7 +522,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "GreaterEqual", name, 
+                    "GreaterEqual", name,
                     null,
                     x, y);
 
@@ -544,7 +542,7 @@ namespace Tensorflow
                     "Less", name,
                     null,
                     x, y);
-                
+
                 return results[0];
             }
 
@@ -561,7 +559,7 @@ namespace Tensorflow
                     "LessEqual", name,
                     null,
                     x, y);
-                
+
                 return results[0];
             }
 
@@ -626,7 +624,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Square", name, 
+                    "Square", name,
                     null,
                     x);
 
@@ -684,7 +682,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Log", name, 
+                    "Log", name,
                     null,
                     x);
 
@@ -696,7 +694,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate= false, string name= null)
+        public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate = false, string name = null)
             => tf.Context.RunInAutoMode(()
                 => tf.OpDefLib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate }).output, ()
                 => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
@@ -711,7 +709,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Neg", name, 
+                    "Neg", name,
                     null,
                     x);
 
@@ -728,7 +726,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Sqrt", name, 
+                    "Sqrt", name,
                     null,
                     x);
 
@@ -745,7 +743,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Sub", name, 
+                    "Sub", name,
                     null,
                     x, y);
                 return results[0];
@@ -761,7 +759,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Sub", name, 
+                    "Sub", name,
                     null,
                     x, y);
 
@@ -785,7 +783,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Equal", name, 
+                    "Equal", name,
                     null,
                     x, y);
 
@@ -810,7 +808,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "NotEqual", name, 
+                    "NotEqual", name,
                     null,
                     x, y);
 
@@ -827,7 +825,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Atan2", name, 
+                    "Atan2", name,
                     null,
                     y, x);
 
@@ -843,7 +841,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Mul", name, 
+                    "Mul", name,
                     null,
                     x, y);
                 return results[0];
@@ -859,7 +857,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Mul", name, 
+                    "Mul", name,
                     null,
                     x, y);
 
@@ -883,7 +881,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "RealDiv", name, 
+                    "RealDiv", name,
                     null,
                     x, y);
                 return results[0];
@@ -916,7 +914,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "FloorMod", name, 
+                    "FloorMod", name,
                     null,
                     x, y);
 
@@ -933,7 +931,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "FloorDiv", name, 
+                    "FloorDiv", name,
                     null,
                     x, y);
 
@@ -1077,13 +1075,13 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
-       
+
         public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Pow", name, 
+                    "Pow", name,
                     null,
                     x, y);
 

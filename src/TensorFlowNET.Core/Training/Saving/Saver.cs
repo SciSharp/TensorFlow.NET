@@ -86,7 +86,7 @@ namespace Tensorflow
 
             if (!defer_build)
                 build();
-            if(_saver_def != null)
+            if (_saver_def != null)
             {
                 _check_saver_def();
                 _write_version = _saver_def.Version;
@@ -214,7 +214,7 @@ namespace Tensorflow
             return _is_empty ? string.Empty : UTF8Encoding.UTF8.GetString((byte[])model_checkpoint_path[0]);
         }
 
-        public (Saver, object) import_meta_graph(string meta_graph_or_file, 
+        public (Saver, object) import_meta_graph(string meta_graph_or_file,
             bool clear_devices = false,
             string import_scope = "")
         {
@@ -263,7 +263,7 @@ namespace Tensorflow
         /// <param name="clear_devices"></param>
         /// <param name="clear_extraneous_savers"></param>
         /// <param name="strip_default_attrs"></param>
-        public MetaGraphDef export_meta_graph(string filename= "",
+        public MetaGraphDef export_meta_graph(string filename = "",
                         string[] collection_list = null,
                         string export_scope = "",
                         bool as_text = false,
@@ -290,9 +290,9 @@ namespace Tensorflow
             SaverDef saver_def = null,
             string[] collection_list = null,
             bool as_text = false,
-            bool clear_devices= false,
-            bool clear_extraneous_savers= false,
-            bool strip_default_attrs= false,
+            bool clear_devices = false,
+            bool clear_extraneous_savers = false,
+            bool strip_default_attrs = false,
             string export_scope = "")
         {
             var meta_graph_def = meta_graph.export_scoped_meta_graph(

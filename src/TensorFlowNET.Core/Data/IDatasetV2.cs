@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
 using Tensorflow.Framework.Models;
 
 namespace Tensorflow
@@ -23,7 +21,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        IDatasetV2 cache(string filename="");
+        IDatasetV2 cache(string filename = "");
 
         /// <summary>
         /// 
@@ -57,12 +55,12 @@ namespace Tensorflow
 
         IDatasetV2 optimize(string[] optimizations, string[] optimization_configs);
 
-        IDatasetV2 map(Func<Tensor, Tensor> map_func, 
+        IDatasetV2 map(Func<Tensor, Tensor> map_func,
             bool use_inter_op_parallelism = true,
             bool preserve_cardinality = false,
             bool use_legacy_function = false);
 
-        IDatasetV2 map(Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> map_func, 
+        IDatasetV2 map(Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> map_func,
             int num_parallel_calls = -1);
 
         IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func);

@@ -37,9 +37,9 @@ namespace Tensorflow.Keras.Utils
             return true;
         }
 
-        public static Tensor[] smart_cond<T>(Tensor pred, 
+        public static Tensor[] smart_cond<T>(Tensor pred,
             Func<T[]> true_fn = null,
-            Func<T[]> false_fn = null, 
+            Func<T[]> false_fn = null,
             string name = null)
         {
             return smart_module.smart_cond(pred,

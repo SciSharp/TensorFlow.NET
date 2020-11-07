@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     public class sparse_ops
     {
@@ -17,14 +13,14 @@ namespace Tensorflow
         /// <param name="validate_indices"></param>
         /// <param name="name"></param>
         /// <returns>Dense `Tensor` of shape `output_shape`.  Has the same type as `sparse_values`.</returns>
-        public Tensor sparse_to_dense<T>(Tensor sparse_indices, 
-            int[] output_shape, 
+        public Tensor sparse_to_dense<T>(Tensor sparse_indices,
+            int[] output_shape,
             T sparse_values,
             T default_value = default,
             bool validate_indices = true,
             string name = null)
-            => gen_sparse_ops.sparse_to_dense(sparse_indices, 
-                output_shape, 
+            => gen_sparse_ops.sparse_to_dense(sparse_indices,
+                output_shape,
                 sparse_values,
                 default_value: default_value,
                 validate_indices: validate_indices,

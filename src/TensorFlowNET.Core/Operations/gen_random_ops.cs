@@ -13,9 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ******************************************************************************/
-using System;
-using System.Linq;
-using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -51,7 +48,7 @@ namespace Tensorflow
             if (!seed2.HasValue)
                 seed2 = 0;
 
-            var _op = tf.OpDefLib._apply_op_helper("RandomStandardNormal", 
+            var _op = tf.OpDefLib._apply_op_helper("RandomStandardNormal",
                 name: name,
                 args: new { shape, dtype, seed, seed2 });
 
@@ -113,7 +110,7 @@ namespace Tensorflow
 
             var _op = tf.OpDefLib._apply_op_helper("RandomUniform",
                 name: name,
-                args: new { shape, dtype, seed, seed2});
+                args: new { shape, dtype, seed, seed2 });
 
             return _op.outputs[0];
         }
@@ -126,7 +123,7 @@ namespace Tensorflow
         /// <param name="seed2"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0, 
+        public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0,
             string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("RandomShuffle",
@@ -145,7 +142,7 @@ namespace Tensorflow
         /// <param name="seed2"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor truncated_normal(Tensor shape, TF_DataType dtype, int? seed = 0, 
+        public static Tensor truncated_normal(Tensor shape, TF_DataType dtype, int? seed = 0,
             int? seed2 = 0, string name = null)
         {
             if (!seed.HasValue)
@@ -162,7 +159,7 @@ namespace Tensorflow
                     "seed", seed,
                     "seed2", seed2,
                     "dtype", dtype);
- 
+
                 return results[0];
             }
 
@@ -173,7 +170,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor multinomial(Tensor logits, int num_samples, int? seed = 0, 
+        public static Tensor multinomial(Tensor logits, int num_samples, int? seed = 0,
             int? seed2 = 0, TF_DataType output_dtype = TF_DataType.TF_INT64, string name = null)
         {
             if (!seed.HasValue)

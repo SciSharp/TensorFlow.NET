@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Tensorflow.Binding;
@@ -31,7 +30,7 @@ namespace Tensorflow
         public void set_controller(Graph @default)
         {
             if (!_stack.Exists(x => x.Graph == @default))
-                _stack.Add(new StackModel {Graph = @default, IsDefault = true});
+                _stack.Add(new StackModel { Graph = @default, IsDefault = true });
 
             foreach (var s in _stack)
                 s.IsDefault = s.Graph == @default;
@@ -40,7 +39,7 @@ namespace Tensorflow
         public Graph get_controller()
         {
             if (_stack.Count == 0 || _stack.Count(x => x.IsDefault) == 0)
-                _stack.Add(new StackModel {Graph = tf.Graph(), IsDefault = true});
+                _stack.Add(new StackModel { Graph = tf.Graph(), IsDefault = true });
             for (var i = _stack.Count - 1; i >= 0; i--)
             {
                 var x = _stack[i];

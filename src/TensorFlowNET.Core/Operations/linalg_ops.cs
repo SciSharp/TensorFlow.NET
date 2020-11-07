@@ -1,15 +1,12 @@
-﻿using NumSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public class linalg_ops
     {
-        public Tensor eye(int num_rows, 
-            int num_columns = -1, 
+        public Tensor eye(int num_rows,
+            int num_columns = -1,
             TensorShape batch_shape = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             string name = null)

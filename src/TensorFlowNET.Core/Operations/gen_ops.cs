@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
@@ -27,7 +27,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Returns nothing but an exception.
         /// </remarks>
-        public static Operation abort (string error_msg = null, bool? exit_without_error = null, string name = "Abort")
+        public static Operation abort(string error_msg = null, bool? exit_without_error = null, string name = "Abort")
         {
             var dict = new Dictionary<string, object>();
             if (error_msg != null)
@@ -54,7 +54,7 @@ namespace Tensorflow.Operations
         ///    value of each element in <c>x</c>. For example, if x is an input element and y is
         ///    an output element, this operation computes \\(y = |x|\\).
         /// </remarks>
-        public static Tensor abs (Tensor x, string name = "Abs")
+        public static Tensor abs(Tensor x, string name = "Abs")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -88,7 +88,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Returns a <c>Tensor</c> of same shape and type as the elements of <c>inputs</c>.
         /// </remarks>
-        public static Tensor accumulate_n_v2 (Tensor[] inputs, TensorShape shape, string name = "AccumulateNV2")
+        public static Tensor accumulate_n_v2(Tensor[] inputs, TensorShape shape, string name = "AccumulateNV2")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -118,7 +118,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Does not add if local_step is lesser than the accumulator's global_step.
         /// </remarks>
-        public static Operation accumulator_apply_gradient (Tensor handle, Tensor local_step, Tensor gradient, string name = "AccumulatorApplyGradient")
+        public static Operation accumulator_apply_gradient(Tensor handle, Tensor local_step, Tensor gradient, string name = "AccumulatorApplyGradient")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -141,7 +141,7 @@ namespace Tensorflow.Operations
         ///    The number of gradients aggregated in the given accumulator.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor accumulator_num_accumulated (Tensor handle, string name = "AccumulatorNumAccumulated")
+        public static Tensor accumulator_num_accumulated(Tensor handle, string name = "AccumulatorNumAccumulated")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -168,7 +168,7 @@ namespace Tensorflow.Operations
         ///    Logs warning if the accumulator's value is already higher than
         ///    new_global_step.
         /// </remarks>
-        public static Operation accumulator_set_global_step (Tensor handle, Tensor new_global_step, string name = "AccumulatorSetGlobalStep")
+        public static Operation accumulator_set_global_step(Tensor handle, Tensor new_global_step, string name = "AccumulatorSetGlobalStep")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -205,7 +205,7 @@ namespace Tensorflow.Operations
         ///    the accumulated gradients.  Also automatically increments the recorded
         ///    global_step in the accumulator by 1, and resets the aggregate to 0.
         /// </remarks>
-        public static Tensor accumulator_take_gradient (Tensor handle, Tensor num_required, TF_DataType dtype, string name = "AccumulatorTakeGradient")
+        public static Tensor accumulator_take_gradient(Tensor handle, Tensor num_required, TF_DataType dtype, string name = "AccumulatorTakeGradient")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -226,7 +226,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor acos (Tensor x, string name = "Acos")
+        public static Tensor acos(Tensor x, string name = "Acos")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -245,7 +245,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor acosh (Tensor x, string name = "Acosh")
+        public static Tensor acosh(Tensor x, string name = "Acosh")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -270,7 +270,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Add</c> supports broadcasting. <c>AddN</c> does not. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor add (Tensor x, Tensor y, string name = "Add")
+        public static Tensor add(Tensor x, Tensor y, string name = "Add")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -334,7 +334,7 @@ namespace Tensorflow.Operations
         ///    <c>AddManySparseToTensorsMap</c> as the <c>shared_name</c> passed to
         ///    <c>TakeManySparseFromTensorsMap</c>.  Ensure the Operations are colocated.
         /// </remarks>
-        public static Tensor add_many_sparse_to_tensors_map (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape, string container = null, string shared_name = null, string name = "AddManySparseToTensorsMap")
+        public static Tensor add_many_sparse_to_tensors_map(Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape, string container = null, string shared_name = null, string name = "AddManySparseToTensorsMap")
         {
             var dict = new Dictionary<string, object>();
             dict["sparse_indices"] = sparse_indices;
@@ -360,7 +360,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor add_n (Tensor[] inputs, string name = "AddN")
+        public static Tensor add_n(Tensor[] inputs, string name = "AddN")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -411,7 +411,7 @@ namespace Tensorflow.Operations
         ///    <c>AddSparseToTensorsMap</c> as the <c>shared_name</c> passed to
         ///    <c>TakeManySparseFromTensorsMap</c>.  Ensure the Operations are colocated.
         /// </remarks>
-        public static Tensor add_sparse_to_tensors_map (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape, string container = null, string shared_name = null, string name = "AddSparseToTensorsMap")
+        public static Tensor add_sparse_to_tensors_map(Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape, string container = null, string shared_name = null, string name = "AddSparseToTensorsMap")
         {
             var dict = new Dictionary<string, object>();
             dict["sparse_indices"] = sparse_indices;
@@ -442,7 +442,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Add</c> supports broadcasting. <c>AddN</c> does not. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor add_v2 (Tensor x, Tensor y, string name = "AddV2")
+        public static Tensor add_v2(Tensor x, Tensor y, string name = "AddV2")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -468,7 +468,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor adjust_contrast (Tensor images, Tensor contrast_factor, Tensor min_value, Tensor max_value, string name = "AdjustContrast")
+        public static Tensor adjust_contrast(Tensor images, Tensor contrast_factor, Tensor min_value, Tensor max_value, string name = "AdjustContrast")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -506,7 +506,7 @@ namespace Tensorflow.Operations
         ///    channel and then adjusts each component of each pixel to
         ///    <c>(x - mean) * contrast_factor + mean</c>.
         /// </remarks>
-        public static Tensor adjust_contrastv2 (Tensor images, Tensor contrast_factor, string name = "AdjustContrastv2")
+        public static Tensor adjust_contrastv2(Tensor images, Tensor contrast_factor, string name = "AdjustContrastv2")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -539,7 +539,7 @@ namespace Tensorflow.Operations
         ///    colors are first mapped into HSV. A delta is then applied all the hue values,
         ///    and then remapped back to RGB colorspace.
         /// </remarks>
-        public static Tensor adjust_hue (Tensor images, Tensor delta, string name = "AdjustHue")
+        public static Tensor adjust_hue(Tensor images, Tensor delta, string name = "AdjustHue")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -572,7 +572,7 @@ namespace Tensorflow.Operations
         ///    colors are first mapped into HSV. A scale is then applied all the saturation
         ///    values, and then remapped back to RGB colorspace.
         /// </remarks>
-        public static Tensor adjust_saturation (Tensor images, Tensor scale, string name = "AdjustSaturation")
+        public static Tensor adjust_saturation(Tensor images, Tensor scale, string name = "AdjustSaturation")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -607,7 +607,7 @@ namespace Tensorflow.Operations
         ///    <c>axis</c>. If <c>keep_dims</c> is true, the reduced dimensions are
         ///    retained with length 1.
         /// </remarks>
-        public static Tensor all (Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "All")
+        public static Tensor all(Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "All")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -674,7 +674,7 @@ namespace Tensorflow.Operations
         ///    the sampled candidates must be chosen independently of the context and of the
         ///    true labels.
         /// </remarks>
-        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) all_candidate_sampler (Tensor true_classes, int num_true, int num_sampled, bool unique, int? seed = null, int? seed2 = null, string name = "AllCandidateSampler")
+        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) all_candidate_sampler(Tensor true_classes, int num_true, int num_sampled, bool unique, int? seed = null, int? seed2 = null, string name = "AllCandidateSampler")
         {
             var dict = new Dictionary<string, object>();
             dict["true_classes"] = true_classes;
@@ -725,7 +725,7 @@ namespace Tensorflow.Operations
         ///    Equivalent to np.angle.
         ///    @end_compatibility
         /// </remarks>
-        public static Tensor angle (Tensor input, TF_DataType? Tout = null, string name = "Angle")
+        public static Tensor angle(Tensor input, TF_DataType? Tout = null, string name = "Angle")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -754,7 +754,7 @@ namespace Tensorflow.Operations
         ///    container.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor anonymous_iterator (TF_DataType[] output_types, TensorShape[] output_shapes, string name = "AnonymousIterator")
+        public static Tensor anonymous_iterator(TF_DataType[] output_types, TensorShape[] output_shapes, string name = "AnonymousIterator")
         {
             var dict = new Dictionary<string, object>();
             dict["output_types"] = output_types;
@@ -789,7 +789,7 @@ namespace Tensorflow.Operations
         ///    <c>axis</c>. If <c>keep_dims</c> is true, the reduced dimensions are
         ///    retained with length 1.
         /// </remarks>
-        public static Tensor any (Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Any")
+        public static Tensor any(Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Any")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -847,7 +847,7 @@ namespace Tensorflow.Operations
         ///    v_t &amp;lt;- max(beta2 * v_{t-1}, abs(g))
         ///    variable &amp;lt;- variable - learning_rate / (1 - beta1^t) * m_t / (v_t + epsilon)
         /// </remarks>
-        public static Tensor apply_ada_max (Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ApplyAdaMax")
+        public static Tensor apply_ada_max(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ApplyAdaMax")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -906,7 +906,7 @@ namespace Tensorflow.Operations
         ///    update_accum = rho() * update_accum + (1 - rho()) * update.square();
         ///    var -= update;
         /// </remarks>
-        public static Tensor apply_adadelta (Tensor var, Tensor accum, Tensor accum_update, Tensor lr, Tensor rho, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ApplyAdadelta")
+        public static Tensor apply_adadelta(Tensor var, Tensor accum, Tensor accum_update, Tensor lr, Tensor rho, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ApplyAdadelta")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -955,7 +955,7 @@ namespace Tensorflow.Operations
         ///    accum += grad * grad
         ///    var -= lr * grad * (1 / sqrt(accum))
         /// </remarks>
-        public static Tensor apply_adagrad (Tensor var, Tensor accum, Tensor lr, Tensor grad, bool? use_locking = null, bool? update_slots = null, string name = "ApplyAdagrad")
+        public static Tensor apply_adagrad(Tensor var, Tensor accum, Tensor lr, Tensor grad, bool? use_locking = null, bool? update_slots = null, string name = "ApplyAdagrad")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1008,7 +1008,7 @@ namespace Tensorflow.Operations
         ///    Same as "var".
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor apply_adagrad_d_a (Tensor var, Tensor gradient_accumulator, Tensor gradient_squared_accumulator, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor global_step, bool? use_locking = null, string name = "ApplyAdagradDA")
+        public static Tensor apply_adagrad_d_a(Tensor var, Tensor gradient_accumulator, Tensor gradient_squared_accumulator, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor global_step, bool? use_locking = null, string name = "ApplyAdagradDA")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1079,7 +1079,7 @@ namespace Tensorflow.Operations
         ///    $$v_t := beta_2 * v_{t-1} + (1 - beta_2) * g * g$$
         ///    $$variable := variable - lr_t * m_t / (\sqrt{v_t} + \epsilon)$$
         /// </remarks>
-        public static Tensor apply_adam (Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power, Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, bool? use_locking = null, bool? use_nesterov = null, string name = "ApplyAdam")
+        public static Tensor apply_adam(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power, Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, bool? use_locking = null, bool? use_nesterov = null, string name = "ApplyAdam")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1141,7 +1141,7 @@ namespace Tensorflow.Operations
         ///    update &amp;lt;- (alpha + sign_decay * sign(g) *sign(m)) * g
         ///    variable &amp;lt;- variable - lr_t * update
         /// </remarks>
-        public static Tensor apply_add_sign (Tensor var, Tensor m, Tensor lr, Tensor alpha, Tensor sign_decay, Tensor beta, Tensor grad, bool? use_locking = null, string name = "ApplyAddSign")
+        public static Tensor apply_add_sign(Tensor var, Tensor m, Tensor lr, Tensor alpha, Tensor sign_decay, Tensor beta, Tensor grad, bool? use_locking = null, string name = "ApplyAddSign")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1218,7 +1218,7 @@ namespace Tensorflow.Operations
         ///    mom &amp;lt;- momentum * mom_{t-1} + lr * grad / sqrt(ms - mg * mg + epsilon)
         ///    var &amp;lt;- var - mom
         /// </remarks>
-        public static Tensor apply_centered_r_m_s_prop (Tensor var, Tensor mg, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ApplyCenteredRMSProp")
+        public static Tensor apply_centered_r_m_s_prop(Tensor var, Tensor mg, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ApplyCenteredRMSProp")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1282,7 +1282,7 @@ namespace Tensorflow.Operations
         ///    var = (sign(linear) * l1 - linear) / quadratic if |linear| &amp;gt; l1 else 0.0
         ///    accum = accum_new
         /// </remarks>
-        public static Tensor apply_ftrl (Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor lr_power, bool? use_locking = null, string name = "ApplyFtrl")
+        public static Tensor apply_ftrl(Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor lr_power, bool? use_locking = null, string name = "ApplyFtrl")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1349,7 +1349,7 @@ namespace Tensorflow.Operations
         ///    var = (sign(linear) * l1 - linear) / quadratic if |linear| &amp;gt; l1 else 0.0
         ///    accum = accum_new
         /// </remarks>
-        public static Tensor apply_ftrl_v2 (Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor l2_shrinkage, Tensor lr_power, bool? use_locking = null, string name = "ApplyFtrlV2")
+        public static Tensor apply_ftrl_v2(Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor l2_shrinkage, Tensor lr_power, bool? use_locking = null, string name = "ApplyFtrlV2")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1390,7 +1390,7 @@ namespace Tensorflow.Operations
         ///    Same as "var".
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor apply_gradient_descent (Tensor var, Tensor alpha, Tensor delta, bool? use_locking = null, string name = "ApplyGradientDescent")
+        public static Tensor apply_gradient_descent(Tensor var, Tensor alpha, Tensor delta, bool? use_locking = null, string name = "ApplyGradientDescent")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1443,7 +1443,7 @@ namespace Tensorflow.Operations
         ///    accum = accum * momentum + grad
         ///    var -= lr * accum
         /// </remarks>
-        public static Tensor apply_momentum (Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor momentum, bool? use_locking = null, bool? use_nesterov = null, string name = "ApplyMomentum")
+        public static Tensor apply_momentum(Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor momentum, bool? use_locking = null, bool? use_nesterov = null, string name = "ApplyMomentum")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1500,7 +1500,7 @@ namespace Tensorflow.Operations
         ///    update &amp;lt;- exp(logbase * sign_decay * sign(g) * sign(m_t)) * g
         ///    variable &amp;lt;- variable - lr_t * update
         /// </remarks>
-        public static Tensor apply_power_sign (Tensor var, Tensor m, Tensor lr, Tensor logbase, Tensor sign_decay, Tensor beta, Tensor grad, bool? use_locking = null, string name = "ApplyPowerSign")
+        public static Tensor apply_power_sign(Tensor var, Tensor m, Tensor lr, Tensor logbase, Tensor sign_decay, Tensor beta, Tensor grad, bool? use_locking = null, string name = "ApplyPowerSign")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1553,7 +1553,7 @@ namespace Tensorflow.Operations
         ///    prox_v = var - lr * grad * (1 / sqrt(accum))
         ///    var = sign(prox_v)/(1+lr*l2) * max{|prox_v|-lr*l1,0}
         /// </remarks>
-        public static Tensor apply_proximal_adagrad (Tensor var, Tensor accum, Tensor lr, Tensor l1, Tensor l2, Tensor grad, bool? use_locking = null, string name = "ApplyProximalAdagrad")
+        public static Tensor apply_proximal_adagrad(Tensor var, Tensor accum, Tensor lr, Tensor l1, Tensor l2, Tensor grad, bool? use_locking = null, string name = "ApplyProximalAdagrad")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1601,7 +1601,7 @@ namespace Tensorflow.Operations
         ///    prox_v = var - alpha * delta
         ///    var = sign(prox_v)/(1+alpha*l2) * max{|prox_v|-alpha*l1,0}
         /// </remarks>
-        public static Tensor apply_proximal_gradient_descent (Tensor var, Tensor alpha, Tensor l1, Tensor l2, Tensor delta, bool? use_locking = null, string name = "ApplyProximalGradientDescent")
+        public static Tensor apply_proximal_gradient_descent(Tensor var, Tensor alpha, Tensor l1, Tensor l2, Tensor delta, bool? use_locking = null, string name = "ApplyProximalGradientDescent")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1665,7 +1665,7 @@ namespace Tensorflow.Operations
         ///    mom &amp;lt;- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)
         ///    var &amp;lt;- var - mom
         /// </remarks>
-        public static Tensor apply_r_m_s_prop (Tensor var, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ApplyRMSProp")
+        public static Tensor apply_r_m_s_prop(Tensor var, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ApplyRMSProp")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -1697,7 +1697,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor approximate_equal (Tensor x, Tensor y, float? tolerance = null, string name = "ApproximateEqual")
+        public static Tensor approximate_equal(Tensor x, Tensor y, float? tolerance = null, string name = "ApproximateEqual")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -1729,7 +1729,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Note that in case of ties the identity of the return value is not guaranteed.
         /// </remarks>
-        public static Tensor arg_max (Tensor input, Tensor dimension, TF_DataType? output_type = null, string name = "ArgMax")
+        public static Tensor arg_max(Tensor input, Tensor dimension, TF_DataType? output_type = null, string name = "ArgMax")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -1761,7 +1761,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Note that in case of ties the identity of the return value is not guaranteed.
         /// </remarks>
-        public static Tensor arg_min (Tensor input, Tensor dimension, TF_DataType? output_type = null, string name = "ArgMin")
+        public static Tensor arg_min(Tensor input, Tensor dimension, TF_DataType? output_type = null, string name = "ArgMin")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -1806,7 +1806,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    types and boolean.
         /// </remarks>
-        public static Tensor as_string (Tensor input, int? precision = null, bool? scientific = null, bool? shortest = null, int? width = null, string fill = null, string name = "AsString")
+        public static Tensor as_string(Tensor input, int? precision = null, bool? scientific = null, bool? shortest = null, int? width = null, string fill = null, string name = "AsString")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -1835,7 +1835,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor asin (Tensor x, string name = "Asin")
+        public static Tensor asin(Tensor x, string name = "Asin")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -1854,7 +1854,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor asinh (Tensor x, string name = "Asinh")
+        public static Tensor asinh(Tensor x, string name = "Asinh")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -1884,7 +1884,7 @@ namespace Tensorflow.Operations
         ///    If <c>condition</c> evaluates to false, print the list of tensors in <c>data</c>.
         ///    <c>summarize</c> determines how many entries of the tensors to print.
         /// </remarks>
-        public static Operation assert (Tensor condition, Tensor[] data, int? summarize = null, string name = "Assert")
+        public static Operation assert(Tensor condition, Tensor[] data, int? summarize = null, string name = "Assert")
         {
             var dict = new Dictionary<string, object>();
             dict["condition"] = condition;
@@ -1925,7 +1925,7 @@ namespace Tensorflow.Operations
         ///    This operation outputs "ref" after the assignment is done.
         ///    This makes it easier to chain operations that need to use the reset value.
         /// </remarks>
-        public static Tensor assign (Tensor referecne, Tensor value, bool? validate_shape = null, bool? use_locking = null, string name = "Assign")
+        public static Tensor assign(Tensor referecne, Tensor value, bool? validate_shape = null, bool? use_locking = null, string name = "Assign")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -1963,7 +1963,7 @@ namespace Tensorflow.Operations
         ///    This operation outputs "ref" after the update is done.
         ///    This makes it easier to chain operations that need to use the reset value.
         /// </remarks>
-        public static Tensor assign_add (Tensor referecne, Tensor value, bool? use_locking = null, string name = "AssignAdd")
+        public static Tensor assign_add(Tensor referecne, Tensor value, bool? use_locking = null, string name = "AssignAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -1993,7 +1993,7 @@ namespace Tensorflow.Operations
         ///    Any ReadVariableOp with a control dependency on this op is guaranteed to
         ///    see the incremented value or a subsequent newer one.
         /// </remarks>
-        public static Operation assign_add_variable_op (Tensor resource, Tensor value, string name = "AssignAddVariableOp")
+        public static Operation assign_add_variable_op(Tensor resource, Tensor value, string name = "AssignAddVariableOp")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -2027,7 +2027,7 @@ namespace Tensorflow.Operations
         ///    This operation outputs "ref" after the update is done.
         ///    This makes it easier to chain operations that need to use the reset value.
         /// </remarks>
-        public static Tensor assign_sub (Tensor referecne, Tensor value, bool? use_locking = null, string name = "AssignSub")
+        public static Tensor assign_sub(Tensor referecne, Tensor value, bool? use_locking = null, string name = "AssignSub")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -2057,7 +2057,7 @@ namespace Tensorflow.Operations
         ///    Any ReadVariableOp with a control dependency on this op is guaranteed to
         ///    see the decremented value or a subsequent newer one.
         /// </remarks>
-        public static Operation assign_sub_variable_op (Tensor resource, Tensor value, string name = "AssignSubVariableOp")
+        public static Operation assign_sub_variable_op(Tensor resource, Tensor value, string name = "AssignSubVariableOp")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -2085,7 +2085,7 @@ namespace Tensorflow.Operations
         ///    Any ReadVariableOp with a control dependency on this op is guaranteed to return
         ///    this value or a subsequent newer value of the variable.
         /// </remarks>
-        public static Operation assign_variable_op (Tensor resource, Tensor value, string name = "AssignVariableOp")
+        public static Operation assign_variable_op(Tensor resource, Tensor value, string name = "AssignVariableOp")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -2105,7 +2105,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor atan (Tensor x, string name = "Atan")
+        public static Tensor atan(Tensor x, string name = "Atan")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -2133,7 +2133,7 @@ namespace Tensorflow.Operations
         ///    \[ y = r \sin(\theta) \]
         ///    where \(r = \sqrt(x^2 + y^2) \).
         /// </remarks>
-        public static Tensor atan2 (Tensor y, Tensor x, string name = "Atan2")
+        public static Tensor atan2(Tensor y, Tensor x, string name = "Atan2")
         {
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
@@ -2153,7 +2153,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor atanh (Tensor x, string name = "Atanh")
+        public static Tensor atanh(Tensor x, string name = "Atanh")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -2214,7 +2214,7 @@ namespace Tensorflow.Operations
         ///    tensorflow/examples/wav_to_spectrogram to read in an audio file and save out the
         ///    resulting spectrogram as a PNG image.
         /// </remarks>
-        public static Tensor audio_spectrogram (Tensor input, int window_size, int stride, bool? magnitude_squared = null, string name = "AudioSpectrogram")
+        public static Tensor audio_spectrogram(Tensor input, int window_size, int stride, bool? magnitude_squared = null, string name = "AudioSpectrogram")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -2262,7 +2262,7 @@ namespace Tensorflow.Operations
         ///    *  If <c>max_outputs</c> is greater than 1, the summary value tags are
         ///    generated sequentially as '*tag*/audio/0', '*tag*/audio/1', etc.
         /// </remarks>
-        public static Tensor audio_summary (Tensor tag, Tensor tensor, float sample_rate, int? max_outputs = null, string name = "AudioSummary")
+        public static Tensor audio_summary(Tensor tag, Tensor tensor, float sample_rate, int? max_outputs = null, string name = "AudioSummary")
         {
             var dict = new Dictionary<string, object>();
             dict["tag"] = tag;
@@ -2309,7 +2309,7 @@ namespace Tensorflow.Operations
         ///    *  If <c>max_outputs</c> is greater than 1, the summary value tags are
         ///    generated sequentially as '*tag*/audio/0', '*tag*/audio/1', etc.
         /// </remarks>
-        public static Tensor audio_summary_v2 (Tensor tag, Tensor tensor, Tensor sample_rate, int? max_outputs = null, string name = "AudioSummaryV2")
+        public static Tensor audio_summary_v2(Tensor tag, Tensor tensor, Tensor sample_rate, int? max_outputs = null, string name = "AudioSummaryV2")
         {
             var dict = new Dictionary<string, object>();
             dict["tag"] = tag;
@@ -2357,7 +2357,7 @@ namespace Tensorflow.Operations
         ///    Each entry in <c>output</c> is the mean of the corresponding size <c>ksize</c>
         ///    window in <c>value</c>.
         /// </remarks>
-        public static Tensor avg_pool (Tensor value, int[] ksize, int[] strides, string padding, string data_format = null, string name = "AvgPool")
+        public static Tensor avg_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = null, string name = "AvgPool")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -2404,7 +2404,7 @@ namespace Tensorflow.Operations
         ///    The average pooled output tensor.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor avg_pool3d (Tensor input, int[] ksize, int[] strides, string padding, string data_format = null, string name = "AvgPool3D")
+        public static Tensor avg_pool3d(Tensor input, int[] ksize, int[] strides, string padding, string data_format = null, string name = "AvgPool3D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -2454,7 +2454,7 @@ namespace Tensorflow.Operations
         ///    The backprop for input.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor avg_pool3d_grad (Tensor orig_input_shape, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "AvgPool3DGrad")
+        public static Tensor avg_pool3d_grad(Tensor orig_input_shape, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "AvgPool3DGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input_shape"] = orig_input_shape;
@@ -2504,7 +2504,7 @@ namespace Tensorflow.Operations
         ///    4-D.  Gradients w.r.t. the input of <c>avg_pool</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor avg_pool_grad (Tensor orig_input_shape, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "AvgPoolGrad")
+        public static Tensor avg_pool_grad(Tensor orig_input_shape, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "AvgPoolGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input_shape"] = orig_input_shape;
@@ -2559,7 +2559,7 @@ namespace Tensorflow.Operations
         ///    incomplete element has some undefined components in its value tuple,
         ///    and may be updated using BarrierInsertMany.
         /// </remarks>
-        public static Tensor barrier (TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "Barrier")
+        public static Tensor barrier(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "Barrier")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -2600,7 +2600,7 @@ namespace Tensorflow.Operations
         ///    continue to succeed if sufficient completed elements remain in the barrier.
         ///    Subsequent TakeMany operations that would block will fail immediately.
         /// </remarks>
-        public static Operation barrier_close (Tensor handle, bool? cancel_pending_enqueues = null, string name = "BarrierClose")
+        public static Operation barrier_close(Tensor handle, bool? cancel_pending_enqueues = null, string name = "BarrierClose")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -2624,7 +2624,7 @@ namespace Tensorflow.Operations
         ///    components not set) in the barrier.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor barrier_incomplete_size (Tensor handle, string name = "BarrierIncompleteSize")
+        public static Tensor barrier_incomplete_size(Tensor handle, string name = "BarrierIncompleteSize")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -2661,7 +2661,7 @@ namespace Tensorflow.Operations
         ///    already has a value at component_index, this operation will fail with
         ///    INVALID_ARGUMENT, and leave the barrier in an undefined state.
         /// </remarks>
-        public static Operation barrier_insert_many (Tensor handle, Tensor keys, Tensor values, int component_index, string name = "BarrierInsertMany")
+        public static Operation barrier_insert_many(Tensor handle, Tensor keys, Tensor values, int component_index, string name = "BarrierInsertMany")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -2686,7 +2686,7 @@ namespace Tensorflow.Operations
         ///    components set) in the barrier.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor barrier_ready_size (Tensor handle, string name = "BarrierReadySize")
+        public static Tensor barrier_ready_size(Tensor handle, string name = "BarrierReadySize")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -2741,7 +2741,7 @@ namespace Tensorflow.Operations
         ///    information about the batch in which each element was originally inserted
         ///    into the barrier.
         /// </remarks>
-        public static (Tensor indices, Tensor keys, Tensor[] values) barrier_take_many (Tensor handle, Tensor num_elements, TF_DataType[] component_types, bool? allow_small_batch = null, bool? wait_for_incomplete = null, int? timeout_ms = null, string name = "BarrierTakeMany")
+        public static (Tensor indices, Tensor keys, Tensor[] values) barrier_take_many(Tensor handle, Tensor num_elements, TF_DataType[] component_types, bool? allow_small_batch = null, bool? wait_for_incomplete = null, int? timeout_ms = null, string name = "BarrierTakeMany")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -2836,7 +2836,7 @@ namespace Tensorflow.Operations
         ///    empty, the op name will be used as the shared name.
         ///    T: the types of tensors to be batched.
         /// </remarks>
-        public static (Tensor[] batched_tensors, Tensor batch_index, Tensor id) batch (Tensor[] in_tensors, int num_batch_threads, int max_batch_size, int batch_timeout_micros, int grad_timeout_micros, int? max_enqueued_batches = null, int[] allowed_batch_sizes = null, string container = null, string shared_name = null, string batching_queue = null, string name = "Batch")
+        public static (Tensor[] batched_tensors, Tensor batch_index, Tensor id) batch(Tensor[] in_tensors, int num_batch_threads, int max_batch_size, int batch_timeout_micros, int grad_timeout_micros, int? max_enqueued_batches = null, int[] allowed_batch_sizes = null, string container = null, string shared_name = null, string batching_queue = null, string name = "Batch")
         {
             var dict = new Dictionary<string, object>();
             dict["in_tensors"] = in_tensors;
@@ -2883,7 +2883,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor batch_dataset (Tensor input_dataset, Tensor batch_size, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "BatchDataset")
+        public static Tensor batch_dataset(Tensor input_dataset, Tensor batch_size, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "BatchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -2918,7 +2918,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor batch_dataset_v2 (Tensor input_dataset, Tensor batch_size, Tensor drop_remainder, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "BatchDatasetV2")
+        public static Tensor batch_dataset_v2(Tensor input_dataset, Tensor batch_size, Tensor drop_remainder, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "BatchDatasetV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -2972,7 +2972,7 @@ namespace Tensorflow.Operations
         ///    
         ///    output[..., :, :] = matrix(x[..., :, :]) * matrix(y[..., :, :])
         /// </remarks>
-        public static Tensor batch_mat_mul (Tensor x, Tensor y, bool? adj_x = null, bool? adj_y = null, string name = "BatchMatMul")
+        public static Tensor batch_mat_mul(Tensor x, Tensor y, bool? adj_x = null, bool? adj_y = null, string name = "BatchMatMul")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -3028,7 +3028,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    This op is deprecated. Prefer <c>tf.nn.batch_normalization</c>.
         /// </remarks>
-        public static Tensor batch_norm_with_global_normalization (Tensor t, Tensor m, Tensor v, Tensor beta, Tensor gamma, float variance_epsilon, bool scale_after_normalization, string name = "BatchNormWithGlobalNormalization")
+        public static Tensor batch_norm_with_global_normalization(Tensor t, Tensor m, Tensor v, Tensor beta, Tensor gamma, float variance_epsilon, bool scale_after_normalization, string name = "BatchNormWithGlobalNormalization")
         {
             var dict = new Dictionary<string, object>();
             dict["t"] = t;
@@ -3090,7 +3090,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    This op is deprecated. See <c>tf.nn.batch_normalization</c>.
         /// </remarks>
-        public static (Tensor dx, Tensor dm, Tensor dv, Tensor db, Tensor dg) batch_norm_with_global_normalization_grad (Tensor t, Tensor m, Tensor v, Tensor gamma, Tensor backprop, float variance_epsilon, bool scale_after_normalization, string name = "BatchNormWithGlobalNormalizationGrad")
+        public static (Tensor dx, Tensor dm, Tensor dv, Tensor db, Tensor dg) batch_norm_with_global_normalization_grad(Tensor t, Tensor m, Tensor v, Tensor gamma, Tensor backprop, float variance_epsilon, bool scale_after_normalization, string name = "BatchNormWithGlobalNormalizationGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["t"] = t;
@@ -3211,7 +3211,7 @@ namespace Tensorflow.Operations
         ///    dimension are moved in spatial blocks to the <c>height</c> and <c>width</c> dimensions,
         ///    followed by cropping along the <c>height</c> and <c>width</c> dimensions.
         /// </remarks>
-        public static Tensor batch_to_space (Tensor input, Tensor crops, int block_size, string name = "BatchToSpace")
+        public static Tensor batch_to_space(Tensor input, Tensor crops, int block_size, string name = "BatchToSpace")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -3356,7 +3356,7 @@ namespace Tensorflow.Operations
         ///    optionally cropped according to <c>crops</c> to produce the output.  This is the
         ///    reverse of SpaceToBatch.  See below for a precise description.
         /// </remarks>
-        public static Tensor batch_to_space_n_d (Tensor input, Tensor block_shape, Tensor crops, string name = "BatchToSpaceND")
+        public static Tensor batch_to_space_n_d(Tensor input, Tensor block_shape, Tensor crops, string name = "BatchToSpaceND")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -3383,7 +3383,7 @@ namespace Tensorflow.Operations
         ///    
         ///    This function is faster and numerically stabler than <c>bessel_i0(x)</c>.
         /// </remarks>
-        public static Tensor bessel_i0e (Tensor x, string name = "BesselI0e")
+        public static Tensor bessel_i0e(Tensor x, string name = "BesselI0e")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -3408,7 +3408,7 @@ namespace Tensorflow.Operations
         ///    
         ///    This function is faster and numerically stabler than <c>bessel_i1(x)</c>.
         /// </remarks>
-        public static Tensor bessel_i1e (Tensor x, string name = "BesselI1e")
+        public static Tensor bessel_i1e(Tensor x, string name = "BesselI1e")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -3446,7 +3446,7 @@ namespace Tensorflow.Operations
         ///    is the incomplete beta function and \\(B(a, b)\\) is the *complete*
         ///    beta function.
         /// </remarks>
-        public static Tensor betainc (Tensor a, Tensor b, Tensor x, string name = "Betainc")
+        public static Tensor betainc(Tensor a, Tensor b, Tensor x, string name = "Betainc")
         {
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
@@ -3485,7 +3485,7 @@ namespace Tensorflow.Operations
         ///    This is a special case of <c>tf.add</c> where <c>bias</c> is restricted to be 1-D.
         ///    Broadcasting is supported, so <c>value</c> may have any number of dimensions.
         /// </remarks>
-        public static Tensor bias_add (Tensor value, Tensor bias, string data_format = null, string name = "BiasAdd")
+        public static Tensor bias_add(Tensor value, Tensor bias, string data_format = null, string name = "BiasAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -3523,7 +3523,7 @@ namespace Tensorflow.Operations
         ///    For NHWC data format, the feature dimension is the last. For NCHW data format,
         ///    the feature dimension is the third-to-last.
         /// </remarks>
-        public static Tensor bias_add_grad (Tensor out_backprop, string data_format = null, string name = "BiasAddGrad")
+        public static Tensor bias_add_grad(Tensor out_backprop, string data_format = null, string name = "BiasAddGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["out_backprop"] = out_backprop;
@@ -3555,7 +3555,7 @@ namespace Tensorflow.Operations
         ///    This is a special case of <c>tf.add</c> where <c>bias</c> is restricted to be 1-D.
         ///    Broadcasting is supported, so <c>value</c> may have any number of dimensions.
         /// </remarks>
-        public static Tensor bias_add_v1 (Tensor value, Tensor bias, string name = "BiasAddV1")
+        public static Tensor bias_add_v1(Tensor value, Tensor bias, string name = "BiasAddV1")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -3595,7 +3595,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Values in <c>arr</c> outside of the range [0, size) are ignored.
         /// </remarks>
-        public static Tensor bincount (Tensor arr, Tensor size, Tensor weights, string name = "Bincount")
+        public static Tensor bincount(Tensor arr, Tensor size, Tensor weights, string name = "Bincount")
         {
             var dict = new Dictionary<string, object>();
             dict["arr"] = arr;
@@ -3633,7 +3633,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: Bitcast is implemented as a low-level cast, so machines with different
         ///    endian orderings will give different results.
         /// </remarks>
-        public static Tensor bitcast (Tensor input, TF_DataType type, string name = "Bitcast")
+        public static Tensor bitcast(Tensor input, TF_DataType type, string name = "Bitcast")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -3659,7 +3659,7 @@ namespace Tensorflow.Operations
         ///    The result will have those bits set, that are set in both <c>x</c> and <c>y</c>. The
         ///    computation is performed on the underlying representations of <c>x</c> and <c>y</c>.
         /// </remarks>
-        public static Tensor bitwise_and (Tensor x, Tensor y, string name = "BitwiseAnd")
+        public static Tensor bitwise_and(Tensor x, Tensor y, string name = "BitwiseAnd")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -3685,7 +3685,7 @@ namespace Tensorflow.Operations
         ///    The result will have those bits set, that are set in <c>x</c>, <c>y</c> or both. The
         ///    computation is performed on the underlying representations of <c>x</c> and <c>y</c>.
         /// </remarks>
-        public static Tensor bitwise_or (Tensor x, Tensor y, string name = "BitwiseOr")
+        public static Tensor bitwise_or(Tensor x, Tensor y, string name = "BitwiseOr")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -3711,7 +3711,7 @@ namespace Tensorflow.Operations
         ///    The result will have those bits set, that are different in <c>x</c> and <c>y</c>. The
         ///    computation is performed on the underlying representations of <c>x</c> and <c>y</c>.
         /// </remarks>
-        public static Tensor bitwise_xor (Tensor x, Tensor y, string name = "BitwiseXor")
+        public static Tensor bitwise_xor(Tensor x, Tensor y, string name = "BitwiseXor")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -3767,7 +3767,7 @@ namespace Tensorflow.Operations
         ///    The length of output lists are all of the same length, <c>num_features</c>.
         ///    The output shapes are compatible in a way that the first dimension of all tensors of all lists are the same and equal to the number of possible split nodes for each feature.
         /// </remarks>
-        public static (Tensor[] node_ids_list, Tensor[] gains_list, Tensor[] thresholds_list, Tensor[] left_node_contribs_list, Tensor[] right_node_contribs_list) boosted_trees_calculate_best_gains_per_feature (Tensor node_id_range, Tensor[] stats_summary_list, Tensor l1, Tensor l2, Tensor tree_complexity, Tensor min_node_weight, int max_splits, string name = "BoostedTreesCalculateBestGainsPerFeature")
+        public static (Tensor[] node_ids_list, Tensor[] gains_list, Tensor[] thresholds_list, Tensor[] left_node_contribs_list, Tensor[] right_node_contribs_list) boosted_trees_calculate_best_gains_per_feature(Tensor node_id_range, Tensor[] stats_summary_list, Tensor l1, Tensor l2, Tensor tree_complexity, Tensor min_node_weight, int max_splits, string name = "BoostedTreesCalculateBestGainsPerFeature")
         {
             var dict = new Dictionary<string, object>();
             dict["node_id_range"] = node_id_range;
@@ -3812,7 +3812,7 @@ namespace Tensorflow.Operations
         ///    Bool, whether to continue bias centering.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor boosted_trees_center_bias (Tensor tree_ensemble_handle, Tensor mean_gradients, Tensor mean_hessians, Tensor l1, Tensor l2, string name = "BoostedTreesCenterBias")
+        public static Tensor boosted_trees_center_bias(Tensor tree_ensemble_handle, Tensor mean_gradients, Tensor mean_hessians, Tensor l1, Tensor l2, string name = "BoostedTreesCenterBias")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -3842,7 +3842,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation boosted_trees_create_ensemble (Tensor tree_ensemble_handle, Tensor stamp_token, Tensor tree_ensemble_serialized, string name = "BoostedTreesCreateEnsemble")
+        public static Operation boosted_trees_create_ensemble(Tensor tree_ensemble_handle, Tensor stamp_token, Tensor tree_ensemble_serialized, string name = "BoostedTreesCreateEnsemble")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -3873,7 +3873,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    ensemble.
         /// </remarks>
-        public static Operation boosted_trees_deserialize_ensemble (Tensor tree_ensemble_handle, Tensor stamp_token, Tensor tree_ensemble_serialized, string name = "BoostedTreesDeserializeEnsemble")
+        public static Operation boosted_trees_deserialize_ensemble(Tensor tree_ensemble_handle, Tensor stamp_token, Tensor tree_ensemble_serialized, string name = "BoostedTreesDeserializeEnsemble")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -3896,7 +3896,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor boosted_trees_ensemble_resource_handle_op (string container = null, string shared_name = null, string name = "BoostedTreesEnsembleResourceHandleOp")
+        public static Tensor boosted_trees_ensemble_resource_handle_op(string container = null, string shared_name = null, string name = "BoostedTreesEnsembleResourceHandleOp")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -3933,7 +3933,7 @@ namespace Tensorflow.Operations
         ///    such as getting split feature ids and logits after each split along the decision
         ///    path used to compute directional feature contributions.
         /// </remarks>
-        public static Tensor boosted_trees_example_debug_outputs (Tensor tree_ensemble_handle, Tensor[] bucketized_features, int logits_dimension, string name = "BoostedTreesExampleDebugOutputs")
+        public static Tensor boosted_trees_example_debug_outputs(Tensor tree_ensemble_handle, Tensor[] bucketized_features, int logits_dimension, string name = "BoostedTreesExampleDebugOutputs")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -3962,7 +3962,7 @@ namespace Tensorflow.Operations
         ///    layer.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor stamp_token, Tensor num_trees, Tensor num_finalized_trees, Tensor num_attempted_layers, Tensor last_layer_nodes_range) boosted_trees_get_ensemble_states (Tensor tree_ensemble_handle, string name = "BoostedTreesGetEnsembleStates")
+        public static (Tensor stamp_token, Tensor num_trees, Tensor num_finalized_trees, Tensor num_attempted_layers, Tensor last_layer_nodes_range) boosted_trees_get_ensemble_states(Tensor tree_ensemble_handle, string name = "BoostedTreesGetEnsembleStates")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -4009,7 +4009,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    The summary stats contains gradients and hessians accumulated into the corresponding node and bucket for each example.
         /// </remarks>
-        public static Tensor boosted_trees_make_stats_summary (Tensor node_ids, Tensor gradients, Tensor hessians, Tensor[] bucketized_features_list, int max_splits, int num_buckets, string name = "BoostedTreesMakeStatsSummary")
+        public static Tensor boosted_trees_make_stats_summary(Tensor node_ids, Tensor gradients, Tensor hessians, Tensor[] bucketized_features_list, int max_splits, int num_buckets, string name = "BoostedTreesMakeStatsSummary")
         {
             var dict = new Dictionary<string, object>();
             dict["node_ids"] = node_ids;
@@ -4047,7 +4047,7 @@ namespace Tensorflow.Operations
         ///    computes the logits. It is designed to be used during prediction.
         ///    It traverses all the trees and calculates the final score for each instance.
         /// </remarks>
-        public static Tensor boosted_trees_predict (Tensor tree_ensemble_handle, Tensor[] bucketized_features, int logits_dimension, string name = "BoostedTreesPredict")
+        public static Tensor boosted_trees_predict(Tensor tree_ensemble_handle, Tensor[] bucketized_features, int logits_dimension, string name = "BoostedTreesPredict")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -4072,7 +4072,7 @@ namespace Tensorflow.Operations
         ///    tree_ensemble_serialized : Serialized proto of the ensemble.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor stamp_token, Tensor tree_ensemble_serialized) boosted_trees_serialize_ensemble (Tensor tree_ensemble_handle, string name = "BoostedTreesSerializeEnsemble")
+        public static (Tensor stamp_token, Tensor tree_ensemble_serialized) boosted_trees_serialize_ensemble(Tensor tree_ensemble_handle, string name = "BoostedTreesSerializeEnsemble")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -4121,7 +4121,7 @@ namespace Tensorflow.Operations
         ///    It traverses the trees starting from cached tree id and cached node id and
         ///    calculates the updates to be pushed to the cache.
         /// </remarks>
-        public static (Tensor partial_logits, Tensor tree_ids, Tensor node_ids) boosted_trees_training_predict (Tensor tree_ensemble_handle, Tensor cached_tree_ids, Tensor cached_node_ids, Tensor[] bucketized_features, int logits_dimension, string name = "BoostedTreesTrainingPredict")
+        public static (Tensor partial_logits, Tensor tree_ids, Tensor node_ids) boosted_trees_training_predict(Tensor tree_ensemble_handle, Tensor cached_tree_ids, Tensor cached_node_ids, Tensor[] bucketized_features, int logits_dimension, string name = "BoostedTreesTrainingPredict")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -4188,7 +4188,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    or by starting a new tree.
         /// </remarks>
-        public static Operation boosted_trees_update_ensemble (Tensor tree_ensemble_handle, Tensor feature_ids, Tensor[] node_ids, Tensor[] gains, Tensor[] thresholds, Tensor[] left_node_contribs, Tensor[] right_node_contribs, Tensor max_depth, Tensor learning_rate, int pruning_mode, string name = "BoostedTreesUpdateEnsemble")
+        public static Operation boosted_trees_update_ensemble(Tensor tree_ensemble_handle, Tensor feature_ids, Tensor[] node_ids, Tensor[] gains, Tensor[] thresholds, Tensor[] left_node_contribs, Tensor[] right_node_contribs, Tensor max_depth, Tensor learning_rate, int pruning_mode, string name = "BoostedTreesUpdateEnsemble")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -4222,7 +4222,7 @@ namespace Tensorflow.Operations
         ///    Given <c>s0</c> and <c>s1</c>, tensors that represent shapes, compute <c>r0</c>, the
         ///    broadcasted shape. <c>s0</c>, <c>s1</c> and <c>r0</c> are all integer vectors.
         /// </remarks>
-        public static Tensor broadcast_args (Tensor s0, Tensor s1, string name = "BroadcastArgs")
+        public static Tensor broadcast_args(Tensor s0, Tensor s1, string name = "BroadcastArgs")
         {
             var dict = new Dictionary<string, object>();
             dict["s0"] = s0;
@@ -4250,7 +4250,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    This is typically used by gradient computations for a broadcasting operation.
         /// </remarks>
-        public static (Tensor r0, Tensor r1) broadcast_gradient_args (Tensor s0, Tensor s1, string name = "BroadcastGradientArgs")
+        public static (Tensor r0, Tensor r1) broadcast_gradient_args(Tensor s0, Tensor s1, string name = "BroadcastGradientArgs")
         {
             var dict = new Dictionary<string, object>();
             dict["s0"] = s0;
@@ -4297,7 +4297,7 @@ namespace Tensorflow.Operations
         ///    In the above example, the input Tensor with the shape of <c>[1, 3]</c>
         ///    is broadcasted to output Tensor with shape of <c>[3, 3]</c>.
         /// </remarks>
-        public static Tensor broadcast_to (Tensor input, Tensor shape, string name = "BroadcastTo")
+        public static Tensor broadcast_to(Tensor input, Tensor shape, string name = "BroadcastTo")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -4339,7 +4339,7 @@ namespace Tensorflow.Operations
         ///    [3, 2]
         ///    [1, 3]]
         /// </remarks>
-        public static Tensor bucketize (Tensor input, float[] boundaries, string name = "Bucketize")
+        public static Tensor bucketize(Tensor input, float[] boundaries, string name = "Bucketize")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -4367,7 +4367,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor bytes_produced_stats_dataset (Tensor input_dataset, Tensor tag, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "BytesProducedStatsDataset")
+        public static Tensor bytes_produced_stats_dataset(Tensor input_dataset, Tensor tag, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "BytesProducedStatsDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -4423,7 +4423,7 @@ namespace Tensorflow.Operations
         ///    "A B" is returned if merge_repeated = True but "A B B B B" is
         ///    returned if merge_repeated = False.
         /// </remarks>
-        public static (Tensor[] decoded_indices, Tensor[] decoded_values, Tensor[] decoded_shape, Tensor log_probability) c_t_c_beam_search_decoder (Tensor inputs, Tensor sequence_length, int beam_width, int top_paths, bool? merge_repeated = null, string name = "CTCBeamSearchDecoder")
+        public static (Tensor[] decoded_indices, Tensor[] decoded_values, Tensor[] decoded_shape, Tensor log_probability) c_t_c_beam_search_decoder(Tensor inputs, Tensor sequence_length, int beam_width, int top_paths, bool? merge_repeated = null, string name = "CTCBeamSearchDecoder")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -4479,7 +4479,7 @@ namespace Tensorflow.Operations
         ///    time and batch corresponds to the blank, index <c>(num_classes - 1)</c>, no new
         ///    element is emitted.
         /// </remarks>
-        public static (Tensor decoded_indices, Tensor decoded_values, Tensor decoded_shape, Tensor log_probability) c_t_c_greedy_decoder (Tensor inputs, Tensor sequence_length, bool? merge_repeated = null, string name = "CTCGreedyDecoder")
+        public static (Tensor decoded_indices, Tensor decoded_values, Tensor decoded_shape, Tensor log_probability) c_t_c_greedy_decoder(Tensor inputs, Tensor sequence_length, bool? merge_repeated = null, string name = "CTCGreedyDecoder")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -4540,7 +4540,7 @@ namespace Tensorflow.Operations
         ///    the gradient.  This class performs the softmax operation for you, so inputs
         ///    should be e.g. linear projections of outputs by an LSTM.
         /// </remarks>
-        public static (Tensor loss, Tensor gradient) c_t_c_loss (Tensor inputs, Tensor labels_indices, Tensor labels_values, Tensor sequence_length, bool? preprocess_collapse_repeated = null, bool? ctc_merge_repeated = null, bool? ignore_longer_outputs_than_inputs = null, string name = "CTCLoss")
+        public static (Tensor loss, Tensor gradient) c_t_c_loss(Tensor inputs, Tensor labels_indices, Tensor labels_values, Tensor sequence_length, bool? preprocess_collapse_repeated = null, bool? ctc_merge_repeated = null, bool? ignore_longer_outputs_than_inputs = null, string name = "CTCLoss")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -4587,7 +4587,7 @@ namespace Tensorflow.Operations
         ///    (e.g. cannot be opened, contains tensors of the wrong shape / size), an error
         ///    will the returned when used.
         /// </remarks>
-        public static Tensor cache_dataset (Tensor input_dataset, Tensor filename, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "CacheDataset")
+        public static Tensor cache_dataset(Tensor input_dataset, Tensor filename, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "CacheDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -4614,7 +4614,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor cast (Tensor x, TF_DataType DstT, bool? Truncate = null, string name = "Cast")
+        public static Tensor cast(Tensor x, TF_DataType DstT, bool? Truncate = null, string name = "Cast")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -4636,7 +4636,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor ceil (Tensor x, string name = "Ceil")
+        public static Tensor ceil(Tensor x, string name = "Ceil")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -4663,7 +4663,7 @@ namespace Tensorflow.Operations
         ///    When run, reports an <c>InvalidArgument</c> error if <c>tensor</c> has any values
         ///    that are not a number (NaN) or infinity (Inf). Otherwise, passes <c>tensor</c> as-is.
         /// </remarks>
-        public static Tensor check_numerics (Tensor tensor, string message, string name = "CheckNumerics")
+        public static Tensor check_numerics(Tensor tensor, string message, string name = "CheckNumerics")
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
@@ -4700,7 +4700,7 @@ namespace Tensorflow.Operations
         ///    not for large batch dimensions when the submatrices are small. In this
         ///    case it might be faster to use the CPU.
         /// </remarks>
-        public static Tensor cholesky (Tensor input, string name = "Cholesky")
+        public static Tensor cholesky(Tensor input, string name = "Cholesky")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -4732,7 +4732,7 @@ namespace Tensorflow.Operations
         ///    For an explanation see "Differentiation of the Cholesky algorithm" by
         ///    Iain Murray http://arxiv.org/abs/1602.07527.
         /// </remarks>
-        public static Tensor cholesky_grad (Tensor l, Tensor grad, string name = "CholeskyGrad")
+        public static Tensor cholesky_grad(Tensor l, Tensor grad, string name = "CholeskyGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["l"] = l;
@@ -4768,7 +4768,7 @@ namespace Tensorflow.Operations
         ///    Any values less than <c>clip_value_min</c> are set to <c>clip_value_min</c>. Any values
         ///    greater than <c>clip_value_max</c> are set to <c>clip_value_max</c>.
         /// </remarks>
-        public static Tensor clip_by_value (Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = "ClipByValue")
+        public static Tensor clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = "ClipByValue")
         {
             var dict = new Dictionary<string, object>();
             dict["t"] = t;
@@ -4802,7 +4802,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor collective_bcast_recv (TF_DataType T, int group_size, int group_key, int instance_key, TensorShape shape, string name = "CollectiveBcastRecv")
+        public static Tensor collective_bcast_recv(TF_DataType T, int group_size, int group_key, int instance_key, TensorShape shape, string name = "CollectiveBcastRecv")
         {
             var dict = new Dictionary<string, object>();
             dict["T"] = T;
@@ -4837,7 +4837,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor collective_bcast_send (Tensor input, int group_size, int group_key, int instance_key, TensorShape shape, string name = "CollectiveBcastSend")
+        public static Tensor collective_bcast_send(Tensor input, int group_size, int group_key, int instance_key, TensorShape shape, string name = "CollectiveBcastSend")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -4878,7 +4878,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor collective_reduce (Tensor input, int group_size, int group_key, int instance_key, string merge_op, string final_op, int[] subdiv_offsets, string name = "CollectiveReduce")
+        public static Tensor collective_reduce(Tensor input, int group_size, int group_key, int instance_key, string merge_op, string final_op, int[] subdiv_offsets, string name = "CollectiveReduce")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -4933,7 +4933,7 @@ namespace Tensorflow.Operations
         ///    Given an <c>input</c> shaped <c>[s0, s1, ..., s_n]</c>, the output is
         ///    a <c>uint8</c> tensor shaped <c>[s0, s1, ..., s_n / 8]</c>.
         /// </remarks>
-        public static Tensor compare_and_bitpack (Tensor input, Tensor threshold, string name = "CompareAndBitpack")
+        public static Tensor compare_and_bitpack(Tensor input, Tensor threshold, string name = "CompareAndBitpack")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -4973,7 +4973,7 @@ namespace Tensorflow.Operations
         ///    tf.complex(real, imag) ==&amp;gt; [[2.25 + 4.75j], [3.25 + 5.75j]]
         ///   </code>
         /// </remarks>
-        public static Tensor complex (Tensor real, Tensor imag, TF_DataType? Tout = null, string name = "Complex")
+        public static Tensor complex(Tensor real, Tensor imag, TF_DataType? Tout = null, string name = "Complex")
         {
             var dict = new Dictionary<string, object>();
             dict["real"] = real;
@@ -5003,7 +5003,7 @@ namespace Tensorflow.Operations
         ///    elements in <c>x</c> must be complex numbers of the form \\(a + bj\\). The absolute
         ///    value is computed as \\( \sqrt{a^2 + b^2}\\).
         /// </remarks>
-        public static Tensor complex_abs (Tensor x, TF_DataType? Tout = null, string name = "ComplexAbs")
+        public static Tensor complex_abs(Tensor x, TF_DataType? Tout = null, string name = "ComplexAbs")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -5052,7 +5052,7 @@ namespace Tensorflow.Operations
         ///    the effect of 'removing' the sampled labels that match the true labels by
         ///    making the classifier sure that they are sampled labels.
         /// </remarks>
-        public static (Tensor indices, Tensor ids, Tensor weights) compute_accidental_hits (Tensor true_classes, Tensor sampled_candidates, int num_true, int? seed = null, int? seed2 = null, string name = "ComputeAccidentalHits")
+        public static (Tensor indices, Tensor ids, Tensor weights) compute_accidental_hits(Tensor true_classes, Tensor sampled_candidates, int num_true, int? seed = null, int? seed2 = null, string name = "ComputeAccidentalHits")
         {
             var dict = new Dictionary<string, object>();
             dict["true_classes"] = true_classes;
@@ -5090,7 +5090,7 @@ namespace Tensorflow.Operations
         ///    in <c>concat_dim</c> where it has the sum of the sizes.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor concat (Tensor concat_dim, Tensor[] values, string name = "Concat")
+        public static Tensor concat(Tensor concat_dim, Tensor[] values, string name = "Concat")
         {
             var dict = new Dictionary<string, object>();
             dict["concat_dim"] = concat_dim;
@@ -5128,7 +5128,7 @@ namespace Tensorflow.Operations
         ///    
         ///    This is typically used by gradient computations for a concat operation.
         /// </remarks>
-        public static Tensor[] concat_offset (Tensor concat_dim, Tensor[] shape, string name = "ConcatOffset")
+        public static Tensor[] concat_offset(Tensor concat_dim, Tensor[] shape, string name = "ConcatOffset")
         {
             var dict = new Dictionary<string, object>();
             dict["concat_dim"] = concat_dim;
@@ -5159,7 +5159,7 @@ namespace Tensorflow.Operations
         ///    in <c>concat_dim</c> where it has the sum of the sizes.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor concat_v2 (Tensor[] values, Tensor axis, string name = "ConcatV2")
+        public static Tensor concat_v2(Tensor[] values, Tensor axis, string name = "ConcatV2")
         {
             var dict = new Dictionary<string, object>();
             dict["values"] = values;
@@ -5187,7 +5187,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor concatenate_dataset (Tensor input_dataset, Tensor another_dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ConcatenateDataset")
+        public static Tensor concatenate_dataset(Tensor input_dataset, Tensor another_dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ConcatenateDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -5232,7 +5232,7 @@ namespace Tensorflow.Operations
         ///    resets the aggregate to 0, and increments the global_step recorded by
         ///    the accumulator.
         /// </remarks>
-        public static Tensor conditional_accumulator (TF_DataType dtype, TensorShape shape, string container = null, string shared_name = null, string name = "ConditionalAccumulator")
+        public static Tensor conditional_accumulator(TF_DataType dtype, TensorShape shape, string container = null, string shared_name = null, string name = "ConditionalAccumulator")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -5269,7 +5269,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    system.
         /// </remarks>
-        public static Tensor configure_distributed_t_p_u (string embedding_config = null, string tpu_embedding_config = null, bool? is_global_init = null, string name = "ConfigureDistributedTPU")
+        public static Tensor configure_distributed_t_p_u(string embedding_config = null, string tpu_embedding_config = null, bool? is_global_init = null, string name = "ConfigureDistributedTPU")
         {
             var dict = new Dictionary<string, object>();
             if (embedding_config != null)
@@ -5308,7 +5308,7 @@ namespace Tensorflow.Operations
         ///    tf.conj(input) ==&amp;gt; [-2.25 - 4.75j, 3.25 - 5.75j]
         ///   </code>
         /// </remarks>
-        public static Tensor conj (Tensor input, string name = "Conj")
+        public static Tensor conj(Tensor input, string name = "Conj")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -5334,7 +5334,7 @@ namespace Tensorflow.Operations
         ///    <c>y.shape[i] == x.shape[perm[i]] for i in [0, 1, ..., rank(x) - 1]</c>
         ///    <c>y[i,j,k,...,s,t,u] == conj(x[perm[i], perm[j], perm[k],...,perm[s], perm[t], perm[u]])</c>
         /// </remarks>
-        public static Tensor conjugate_transpose (Tensor x, Tensor perm, string name = "ConjugateTranspose")
+        public static Tensor conjugate_transpose(Tensor x, Tensor perm, string name = "ConjugateTranspose")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -5359,7 +5359,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor constant (Tensor value, TF_DataType dtype, string name = "Const")
+        public static Tensor constant(Tensor value, TF_DataType dtype, string name = "Const")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -5389,7 +5389,7 @@ namespace Tensorflow.Operations
         ///    **NOTE**: This operation must run on the same device as its input.  This may
         ///    be enforced via the <c>colocate_with</c> mechanism.
         /// </remarks>
-        public static Operation consume_mutex_lock (Tensor mutex_lock, string name = "ConsumeMutexLock")
+        public static Operation consume_mutex_lock(Tensor mutex_lock, string name = "ConsumeMutexLock")
         {
             var dict = new Dictionary<string, object>();
             dict["mutex_lock"] = mutex_lock;
@@ -5409,7 +5409,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Only useful as a placeholder for control edges.
         /// </remarks>
-        public static Operation control_trigger (string name = "ControlTrigger")
+        public static Operation control_trigger(string name = "ControlTrigger")
         {
             var dict = new Dictionary<string, object>();
             var op = tf.OpDefLib._apply_op_helper("ControlTrigger", name: name, keywords: dict);
@@ -5484,7 +5484,7 @@ namespace Tensorflow.Operations
         ///    Must have <c>strides[0] = strides[3] = 1</c>.  For the most common case of the same
         ///    horizontal and vertices strides, <c>strides = [1, stride, stride, 1]</c>.
         /// </remarks>
-        public static Tensor conv2d (Tensor input, Tensor filter, int[] strides, string padding, bool? use_cudnn_on_gpu = null, string data_format = null, int[] dilations = null, string name = "Conv2D")
+        public static Tensor conv2d(Tensor input, Tensor filter, int[] strides, string padding, bool? use_cudnn_on_gpu = null, string data_format = null, int[] dilations = null, string name = "Conv2D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -5551,7 +5551,7 @@ namespace Tensorflow.Operations
         ///    the <c>filter</c> input of the convolution.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor conv2d_backprop_filter (Tensor input, Tensor filter_sizes, Tensor out_backprop, int[] strides, string padding, bool? use_cudnn_on_gpu = null, string data_format = null, int[] dilations = null, string name = "Conv2DBackpropFilter")
+        public static Tensor conv2d_backprop_filter(Tensor input, Tensor filter_sizes, Tensor out_backprop, int[] strides, string padding, bool? use_cudnn_on_gpu = null, string data_format = null, int[] dilations = null, string name = "Conv2DBackpropFilter")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -5618,7 +5618,7 @@ namespace Tensorflow.Operations
         ///    w.r.t. the input of the convolution.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor conv2d_backprop_input (Tensor input_sizes, Tensor filter, Tensor out_backprop, int[] strides, string padding, bool? use_cudnn_on_gpu = null, string data_format = null, int[] dilations = null, string name = "Conv2DBackpropInput")
+        public static Tensor conv2d_backprop_input(Tensor input_sizes, Tensor filter, Tensor out_backprop, int[] strides, string padding, bool? use_cudnn_on_gpu = null, string data_format = null, int[] dilations = null, string name = "Conv2DBackpropInput")
         {
             var dict = new Dictionary<string, object>();
             dict["input_sizes"] = input_sizes;
@@ -5682,7 +5682,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Our Conv3D implements a form of cross-correlation.
         /// </remarks>
-        public static Tensor conv3d (Tensor input, Tensor filter, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "Conv3D")
+        public static Tensor conv3d(Tensor input, Tensor filter, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "Conv3D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -5728,7 +5728,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor conv3d_backprop_filter (Tensor input, Tensor filter, Tensor out_backprop, int[] strides, string padding, int[] dilations = null, string name = "Conv3DBackpropFilter")
+        public static Tensor conv3d_backprop_filter(Tensor input, Tensor filter, Tensor out_backprop, int[] strides, string padding, int[] dilations = null, string name = "Conv3DBackpropFilter")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -5787,7 +5787,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor conv3d_backprop_filter_v2 (Tensor input, Tensor filter_sizes, Tensor out_backprop, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "Conv3DBackpropFilterV2")
+        public static Tensor conv3d_backprop_filter_v2(Tensor input, Tensor filter_sizes, Tensor out_backprop, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "Conv3DBackpropFilterV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -5834,7 +5834,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor conv3d_backprop_input (Tensor input, Tensor filter, Tensor out_backprop, int[] strides, string padding, int[] dilations = null, string name = "Conv3DBackpropInput")
+        public static Tensor conv3d_backprop_input(Tensor input, Tensor filter, Tensor out_backprop, int[] strides, string padding, int[] dilations = null, string name = "Conv3DBackpropInput")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -5893,7 +5893,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor conv3d_backprop_input_v2 (Tensor input_sizes, Tensor filter, Tensor out_backprop, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "Conv3DBackpropInputV2")
+        public static Tensor conv3d_backprop_input_v2(Tensor input_sizes, Tensor filter, Tensor out_backprop, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "Conv3DBackpropInputV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input_sizes"] = input_sizes;
@@ -5942,7 +5942,7 @@ namespace Tensorflow.Operations
         ///    Unlike the CopyHost Op, this op does not have HostMemory constraint on its
         ///    input or output.
         /// </remarks>
-        public static Tensor copy (Tensor input, string tensor_name = null, string[] debug_ops_spec = null, string name = "Copy")
+        public static Tensor copy(Tensor input, string tensor_name = null, string[] debug_ops_spec = null, string name = "Copy")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -5985,7 +5985,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Unlike the Copy Op, this op has HostMemory constraint on its input or output.
         /// </remarks>
-        public static Tensor copy_host (Tensor input, string tensor_name = null, string[] debug_ops_spec = null, string name = "CopyHost")
+        public static Tensor copy_host(Tensor input, string tensor_name = null, string[] debug_ops_spec = null, string name = "CopyHost")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -6008,7 +6008,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor cos (Tensor x, string name = "Cos")
+        public static Tensor cos(Tensor x, string name = "Cos")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -6027,7 +6027,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor cosh (Tensor x, string name = "Cosh")
+        public static Tensor cosh(Tensor x, string name = "Cosh")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -6054,7 +6054,7 @@ namespace Tensorflow.Operations
         ///    input, the values produced will all be distinct.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor count_up_to (Tensor referecne, int limit, string name = "CountUpTo")
+        public static Tensor count_up_to(Tensor referecne, int limit, string name = "CountUpTo")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -6124,7 +6124,7 @@ namespace Tensorflow.Operations
         ///    <c>tf.image.resize_nearest_neighbor()</c>(depends on the <c>method</c> argument) with
         ///    <c>align_corners=True</c>.
         /// </remarks>
-        public static Tensor crop_and_resize (Tensor image, Tensor boxes, Tensor box_ind, Tensor crop_size, string method = null, float? extrapolation_value = null, string name = "CropAndResize")
+        public static Tensor crop_and_resize(Tensor image, Tensor boxes, Tensor box_ind, Tensor crop_size, string method = null, float? extrapolation_value = null, string name = "CropAndResize")
         {
             var dict = new Dictionary<string, object>();
             dict["image"] = image;
@@ -6176,7 +6176,7 @@ namespace Tensorflow.Operations
         ///    A 2-D tensor of shape <c>[num_boxes, 4]</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor crop_and_resize_grad_boxes (Tensor grads, Tensor image, Tensor boxes, Tensor box_ind, string method = null, string name = "CropAndResizeGradBoxes")
+        public static Tensor crop_and_resize_grad_boxes(Tensor grads, Tensor image, Tensor boxes, Tensor box_ind, string method = null, string name = "CropAndResizeGradBoxes")
         {
             var dict = new Dictionary<string, object>();
             dict["grads"] = grads;
@@ -6230,7 +6230,7 @@ namespace Tensorflow.Operations
         ///    A 4-D tensor of shape <c>[batch, image_height, image_width, depth]</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor crop_and_resize_grad_image (Tensor grads, Tensor boxes, Tensor box_ind, Tensor image_size, TF_DataType T, string method = null, string name = "CropAndResizeGradImage")
+        public static Tensor crop_and_resize_grad_image(Tensor grads, Tensor boxes, Tensor box_ind, Tensor image_size, TF_DataType T, string method = null, string name = "CropAndResizeGradImage")
         {
             var dict = new Dictionary<string, object>();
             dict["grads"] = grads;
@@ -6265,7 +6265,7 @@ namespace Tensorflow.Operations
         ///    or any shape where the innermost dimension is 3. In the latter case, each pair
         ///    of corresponding 3-element vectors is cross-multiplied independently.
         /// </remarks>
-        public static Tensor cross (Tensor a, Tensor b, string name = "Cross")
+        public static Tensor cross(Tensor a, Tensor b, string name = "Cross")
         {
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
@@ -6302,7 +6302,7 @@ namespace Tensorflow.Operations
         ///    and <c>B, D, F, H</c> as group 1. Thus we get the outputs:
         ///    <c>[A+C+E+G, B+D+F+H, A+C+E+G, B+D+F+H, A+C+E+G, B+D+F+H, A+C+E+G, B+D+F+H]</c>.
         /// </remarks>
-        public static Tensor cross_replica_sum (Tensor input, Tensor group_assignment, string name = "CrossReplicaSum")
+        public static Tensor cross_replica_sum(Tensor input, Tensor group_assignment, string name = "CrossReplicaSum")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -6379,7 +6379,7 @@ namespace Tensorflow.Operations
         ///    reserve_space: An opaque tensor that can be used in backprop calculation. It
         ///    is only produced if is_training is false.
         /// </remarks>
-        public static (Tensor output, Tensor output_h, Tensor output_c, Tensor reserve_space) cudnn_r_n_n (Tensor input, Tensor input_h, Tensor input_c, Tensor parameters, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, bool? is_training = null, string name = "CudnnRNN")
+        public static (Tensor output, Tensor output_h, Tensor output_c, Tensor reserve_space) cudnn_r_n_n(Tensor input, Tensor input_h, Tensor input_c, Tensor parameters, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, bool? is_training = null, string name = "CudnnRNN")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -6498,7 +6498,7 @@ namespace Tensorflow.Operations
         ///    params_backprop: The backprop to the params buffer in the forward pass. Has the
         ///    same shape as params.
         /// </remarks>
-        public static (Tensor input_backprop, Tensor input_h_backprop, Tensor input_c_backprop, Tensor params_backprop) cudnn_r_n_n_backprop (Tensor input, Tensor input_h, Tensor input_c, Tensor parameters, Tensor output, Tensor output_h, Tensor output_c, Tensor output_backprop, Tensor output_h_backprop, Tensor output_c_backprop, Tensor reserve_space, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNBackprop")
+        public static (Tensor input_backprop, Tensor input_h_backprop, Tensor input_c_backprop, Tensor params_backprop) cudnn_r_n_n_backprop(Tensor input, Tensor input_h, Tensor input_c, Tensor parameters, Tensor output, Tensor output_h, Tensor output_c, Tensor output_backprop, Tensor output_h_backprop, Tensor output_c_backprop, Tensor reserve_space, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNBackprop")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -6627,7 +6627,7 @@ namespace Tensorflow.Operations
         ///    params_backprop: The backprop to the params buffer in the forward pass. Has the
         ///    same shape as params.
         /// </remarks>
-        public static (Tensor input_backprop, Tensor input_h_backprop, Tensor input_c_backprop, Tensor params_backprop) cudnn_r_n_n_backprop_v2 (Tensor input, Tensor input_h, Tensor input_c, Tensor parameters, Tensor output, Tensor output_h, Tensor output_c, Tensor output_backprop, Tensor output_h_backprop, Tensor output_c_backprop, Tensor reserve_space, Tensor host_reserved, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNBackpropV2")
+        public static (Tensor input_backprop, Tensor input_h_backprop, Tensor input_c_backprop, Tensor params_backprop) cudnn_r_n_n_backprop_v2(Tensor input, Tensor input_h, Tensor input_c, Tensor parameters, Tensor output, Tensor output_h, Tensor output_c, Tensor output_backprop, Tensor output_h_backprop, Tensor output_c_backprop, Tensor reserve_space, Tensor host_reserved, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNBackpropV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -6725,7 +6725,7 @@ namespace Tensorflow.Operations
         ///    seed: the 1st part of a seed to initialize dropout.
         ///    seed2: the 2nd part of a seed to initialize dropout.
         /// </remarks>
-        public static Tensor cudnn_r_n_n_canonical_to_params (Tensor num_layers, Tensor num_units, Tensor input_size, Tensor[] weights, Tensor[] biases, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNCanonicalToParams")
+        public static Tensor cudnn_r_n_n_canonical_to_params(Tensor num_layers, Tensor num_units, Tensor input_size, Tensor[] weights, Tensor[] biases, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNCanonicalToParams")
         {
             var dict = new Dictionary<string, object>();
             dict["num_layers"] = num_layers;
@@ -6805,7 +6805,7 @@ namespace Tensorflow.Operations
         ///    CudnnRNNParamsBiases to save and restore them in a way that is compatible
         ///    across different runs.
         /// </remarks>
-        public static Tensor cudnn_r_n_n_params_size (Tensor num_layers, Tensor num_units, Tensor input_size, TF_DataType T, TF_DataType S, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNParamsSize")
+        public static Tensor cudnn_r_n_n_params_size(Tensor num_layers, Tensor num_units, Tensor input_size, TF_DataType T, TF_DataType S, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNParamsSize")
         {
             var dict = new Dictionary<string, object>();
             dict["num_layers"] = num_layers;
@@ -6895,7 +6895,7 @@ namespace Tensorflow.Operations
         ///    seed: the 1st part of a seed to initialize dropout.
         ///    seed2: the 2nd part of a seed to initialize dropout.
         /// </remarks>
-        public static (Tensor[] weights, Tensor[] biases) cudnn_r_n_n_params_to_canonical (Tensor num_layers, Tensor num_units, Tensor input_size, Tensor parameters, int num_params, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNParamsToCanonical")
+        public static (Tensor[] weights, Tensor[] biases) cudnn_r_n_n_params_to_canonical(Tensor num_layers, Tensor num_units, Tensor input_size, Tensor parameters, int num_params, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, string name = "CudnnRNNParamsToCanonical")
         {
             var dict = new Dictionary<string, object>();
             dict["num_layers"] = num_layers;
@@ -6994,7 +6994,7 @@ namespace Tensorflow.Operations
         ///    only produced if is_training is true. It is output on host memory rather than
         ///    device memory.
         /// </remarks>
-        public static (Tensor output, Tensor output_h, Tensor output_c, Tensor reserve_space, Tensor host_reserved) cudnn_r_n_n_v2 (Tensor input, Tensor input_h, Tensor input_c, Tensor parameters, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, bool? is_training = null, string name = "CudnnRNNV2")
+        public static (Tensor output, Tensor output_h, Tensor output_c, Tensor reserve_space, Tensor host_reserved) cudnn_r_n_n_v2(Tensor input, Tensor input_h, Tensor input_c, Tensor parameters, string rnn_mode = null, string input_mode = null, string direction = null, float? dropout = null, int? seed = null, int? seed2 = null, bool? is_training = null, string name = "CudnnRNNV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -7079,7 +7079,7 @@ namespace Tensorflow.Operations
         ///    tf.cumprod([a, b, c], exclusive=True, reverse=True)  # =&amp;gt; [b * c, c, 1]
         ///   </code>
         /// </remarks>
-        public static Tensor cumprod (Tensor x, Tensor axis, bool? exclusive = null, bool? reverse = null, string name = "Cumprod")
+        public static Tensor cumprod(Tensor x, Tensor axis, bool? exclusive = null, bool? reverse = null, string name = "Cumprod")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -7146,7 +7146,7 @@ namespace Tensorflow.Operations
         ///    tf.cumsum([a, b, c], exclusive=True, reverse=True)  # =&amp;gt; [b + c, c, 0]
         ///   </code>
         /// </remarks>
-        public static Tensor cumsum (Tensor x, Tensor axis, bool? exclusive = null, bool? reverse = null, string name = "Cumsum")
+        public static Tensor cumsum(Tensor x, Tensor axis, bool? exclusive = null, bool? reverse = null, string name = "Cumsum")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -7182,7 +7182,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    the source data format.
         /// </remarks>
-        public static Tensor data_format_dim_map (Tensor x, string src_format = null, string dst_format = null, string name = "DataFormatDimMap")
+        public static Tensor data_format_dim_map(Tensor x, string src_format = null, string dst_format = null, string name = "DataFormatDimMap")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -7216,7 +7216,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    one in the source data format.
         /// </remarks>
-        public static Tensor data_format_vec_permute (Tensor x, string src_format = null, string dst_format = null, string name = "DataFormatVecPermute")
+        public static Tensor data_format_vec_permute(Tensor x, string src_format = null, string dst_format = null, string name = "DataFormatVecPermute")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -7244,7 +7244,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Returns a graph representation for <c>input_dataset</c>.
         /// </remarks>
-        public static Tensor dataset_to_graph (Tensor input_dataset, string name = "DatasetToGraph")
+        public static Tensor dataset_to_graph(Tensor input_dataset, string name = "DatasetToGraph")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -7271,7 +7271,7 @@ namespace Tensorflow.Operations
         ///    The components of the single element of <c>input</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor[] dataset_to_single_element (Tensor dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "DatasetToSingleElement")
+        public static Tensor[] dataset_to_single_element(Tensor dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "DatasetToSingleElement")
         {
             var dict = new Dictionary<string, object>();
             dict["dataset"] = dataset;
@@ -7302,7 +7302,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation dataset_to_t_f_record (Tensor input_dataset, Tensor filename, Tensor compression_type, string name = "DatasetToTFRecord")
+        public static Operation dataset_to_t_f_record(Tensor input_dataset, Tensor filename, Tensor compression_type, string name = "DatasetToTFRecord")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -7328,7 +7328,7 @@ namespace Tensorflow.Operations
         ///    register gradient tensors for gradient debugging.
         ///    This op operates on non-reference-type tensors.
         /// </remarks>
-        public static Tensor debug_gradient_identity (Tensor input, string name = "DebugGradientIdentity")
+        public static Tensor debug_gradient_identity(Tensor input, string name = "DebugGradientIdentity")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -7352,7 +7352,7 @@ namespace Tensorflow.Operations
         ///    register gradient tensors for gradient debugging.
         ///    This op operates on reference-type tensors.
         /// </remarks>
-        public static Tensor debug_gradient_ref_identity (Tensor input, string name = "DebugGradientRefIdentity")
+        public static Tensor debug_gradient_ref_identity(Tensor input, string name = "DebugGradientRefIdentity")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -7393,7 +7393,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Provides an identity mapping of the non-Ref type input tensor for debugging.
         /// </remarks>
-        public static Tensor debug_identity (Tensor input, string device_name = null, string tensor_name = null, string[] debug_urls = null, bool? gated_grpc = null, string name = "DebugIdentity")
+        public static Tensor debug_identity(Tensor input, string device_name = null, string tensor_name = null, string[] debug_urls = null, bool? gated_grpc = null, string name = "DebugIdentity")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -7442,7 +7442,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Counts number of NaNs in the input tensor, for debugging.
         /// </remarks>
-        public static Tensor debug_nan_count (Tensor input, string device_name = null, string tensor_name = null, string[] debug_urls = null, bool? gated_grpc = null, string name = "DebugNanCount")
+        public static Tensor debug_nan_count(Tensor input, string device_name = null, string tensor_name = null, string[] debug_urls = null, bool? gated_grpc = null, string name = "DebugNanCount")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -7530,7 +7530,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Provide a basic summary of numeric value types, range and distribution.
         /// </remarks>
-        public static Tensor debug_numeric_summary (Tensor input, string device_name = null, string tensor_name = null, string[] debug_urls = null, float? lower_bound = null, float? upper_bound = null, bool? mute_if_healthy = null, bool? gated_grpc = null, string name = "DebugNumericSummary")
+        public static Tensor debug_numeric_summary(Tensor input, string device_name = null, string tensor_name = null, string[] debug_urls = null, float? lower_bound = null, float? upper_bound = null, bool? mute_if_healthy = null, bool? gated_grpc = null, string name = "DebugNumericSummary")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -7614,7 +7614,7 @@ namespace Tensorflow.Operations
         ///    It is equivalent to a combination of decode and crop, but much faster by only
         ///    decoding partial jpeg image.
         /// </remarks>
-        public static Tensor decode_and_crop_jpeg (Tensor contents, Tensor crop_window, int? channels = null, int? ratio = null, bool? fancy_upscaling = null, bool? try_recover_truncated = null, float? acceptable_fraction = null, string dct_method = null, string name = "DecodeAndCropJpeg")
+        public static Tensor decode_and_crop_jpeg(Tensor contents, Tensor crop_window, int? channels = null, int? ratio = null, bool? fancy_upscaling = null, bool? try_recover_truncated = null, float? acceptable_fraction = null, string dct_method = null, string name = "DecodeAndCropJpeg")
         {
             var dict = new Dictionary<string, object>();
             dict["contents"] = contents;
@@ -7652,7 +7652,7 @@ namespace Tensorflow.Operations
         ///    Input may or may not have padding at the end. See EncodeBase64 for padding.
         ///    Web-safe means that input must use - and _ instead of + and /.
         /// </remarks>
-        public static Tensor decode_base64 (Tensor input, string name = "DecodeBase64")
+        public static Tensor decode_base64(Tensor input, string name = "DecodeBase64")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -7685,7 +7685,7 @@ namespace Tensorflow.Operations
         ///    *   3: output an RGB image.
         ///    *   4: output an RGBA image.
         /// </remarks>
-        public static Tensor decode_bmp (Tensor contents, int? channels = null, string name = "DecodeBmp")
+        public static Tensor decode_bmp(Tensor contents, int? channels = null, string name = "DecodeBmp")
         {
             var dict = new Dictionary<string, object>();
             dict["contents"] = contents;
@@ -7732,7 +7732,7 @@ namespace Tensorflow.Operations
         ///    (https://tools.ietensorflow.org/html/rfc4180)
         ///    Note that we allow leading and trailing spaces with int or float field.
         /// </remarks>
-        public static Tensor[] decode_c_s_v (Tensor records, Tensor[] record_defaults, string field_delim = null, bool? use_quote_delim = null, string na_value = null, int[] select_cols = null, string name = "DecodeCSV")
+        public static Tensor[] decode_c_s_v(Tensor records, Tensor[] record_defaults, string field_delim = null, bool? use_quote_delim = null, string na_value = null, int[] select_cols = null, string name = "DecodeCSV")
         {
             var dict = new Dictionary<string, object>();
             dict["records"] = records;
@@ -7777,7 +7777,7 @@ namespace Tensorflow.Operations
         ///    each element containing the decompressed data from the corresponding
         ///    element in <c>bytes</c>.
         /// </remarks>
-        public static Tensor decode_compressed (Tensor bytes, string compression_type = null, string name = "DecodeCompressed")
+        public static Tensor decode_compressed(Tensor bytes, string compression_type = null, string name = "DecodeCompressed")
         {
             var dict = new Dictionary<string, object>();
             dict["bytes"] = bytes;
@@ -7809,7 +7809,7 @@ namespace Tensorflow.Operations
         ///    This op also supports decoding JPEGs and PNGs, though it is cleaner to use
         ///    <c>tf.image.decode_image</c>.
         /// </remarks>
-        public static Tensor decode_gif (Tensor contents, string name = "DecodeGif")
+        public static Tensor decode_gif(Tensor contents, string name = "DecodeGif")
         {
             var dict = new Dictionary<string, object>();
             dict["contents"] = contents;
@@ -7840,7 +7840,7 @@ namespace Tensorflow.Operations
         ///    buffers. The resulting tensor can then be fed to any of the other
         ///    Example-parsing ops.
         /// </remarks>
-        public static Tensor decode_j_s_o_n_example (Tensor json_examples, string name = "DecodeJSONExample")
+        public static Tensor decode_j_s_o_n_example(Tensor json_examples, string name = "DecodeJSONExample")
         {
             var dict = new Dictionary<string, object>();
             dict["json_examples"] = json_examples;
@@ -7907,7 +7907,7 @@ namespace Tensorflow.Operations
         ///    This op also supports decoding PNGs and non-animated GIFs since the interface is
         ///    the same, though it is cleaner to use <c>tf.image.decode_image</c>.
         /// </remarks>
-        public static Tensor decode_jpeg (Tensor contents, int? channels = null, int? ratio = null, bool? fancy_upscaling = null, bool? try_recover_truncated = null, float? acceptable_fraction = null, string dct_method = null, string name = "DecodeJpeg")
+        public static Tensor decode_jpeg(Tensor contents, int? channels = null, int? ratio = null, bool? fancy_upscaling = null, bool? try_recover_truncated = null, float? acceptable_fraction = null, string dct_method = null, string name = "DecodeJpeg")
         {
             var dict = new Dictionary<string, object>();
             dict["contents"] = contents;
@@ -7962,7 +7962,7 @@ namespace Tensorflow.Operations
         ///    This op also supports decoding JPEGs and non-animated GIFs since the interface
         ///    is the same, though it is cleaner to use <c>tf.image.decode_image</c>.
         /// </remarks>
-        public static Tensor decode_png (Tensor contents, int? channels = null, TF_DataType? dtype = null, string name = "DecodePng")
+        public static Tensor decode_png(Tensor contents, int? channels = null, TF_DataType? dtype = null, string name = "DecodePng")
         {
             var dict = new Dictionary<string, object>();
             dict["contents"] = contents;
@@ -8066,7 +8066,7 @@ namespace Tensorflow.Operations
         ///    Both binary and text proto serializations are supported, and can be
         ///    chosen using the <c>format</c> attribute.
         /// </remarks>
-        public static (Tensor sizes, Tensor[] values) decode_proto_v2 (Tensor bytes, string message_type, string[] field_names, TF_DataType[] output_types, string descriptor_source = null, string message_format = null, bool? sanitize = null, string name = "DecodeProtoV2")
+        public static (Tensor sizes, Tensor[] values) decode_proto_v2(Tensor bytes, string message_type, string[] field_names, TF_DataType[] output_types, string descriptor_source = null, string message_format = null, bool? sanitize = null, string name = "DecodeProtoV2")
         {
             var dict = new Dictionary<string, object>();
             dict["bytes"] = bytes;
@@ -8109,7 +8109,7 @@ namespace Tensorflow.Operations
         ///    of <c>bytes</c> divided by the number of bytes to represent <c>out_type</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor decode_raw (Tensor bytes, TF_DataType out_type, bool? little_endian = null, string name = "DecodeRaw")
+        public static Tensor decode_raw(Tensor bytes, TF_DataType out_type, bool? little_endian = null, string name = "DecodeRaw")
         {
             var dict = new Dictionary<string, object>();
             dict["bytes"] = bytes;
@@ -8157,7 +8157,7 @@ namespace Tensorflow.Operations
         ///    number of samples. For example, a ten-sample-long stereo WAV file should give an
         ///    output shape of [10, 2].
         /// </remarks>
-        public static (Tensor audio, Tensor sample_rate) decode_wav (Tensor contents, int? desired_channels = null, int? desired_samples = null, string name = "DecodeWav")
+        public static (Tensor audio, Tensor sample_rate) decode_wav(Tensor contents, int? desired_channels = null, int? desired_samples = null, string name = "DecodeWav")
         {
             var dict = new Dictionary<string, object>();
             dict["contents"] = contents;
@@ -8186,7 +8186,7 @@ namespace Tensorflow.Operations
         ///    is not an alias of <c>x</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor deep_copy (Tensor x, string name = "DeepCopy")
+        public static Tensor deep_copy(Tensor x, string name = "DeepCopy")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -8206,7 +8206,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation delete_session_tensor (Tensor handle, string name = "DeleteSessionTensor")
+        public static Operation delete_session_tensor(Tensor handle, string name = "DeleteSessionTensor")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -8251,7 +8251,7 @@ namespace Tensorflow.Operations
         ///    dimension contains the result of <c>set_operation</c> applied to the corresponding
         ///    <c>[0...n-1]</c> dimension of <c>set</c>.
         /// </remarks>
-        public static (Tensor result_indices, Tensor result_values, Tensor result_shape) dense_to_dense_set_operation (Tensor set1, Tensor set2, string set_operation, bool? validate_indices = null, string name = "DenseToDenseSetOperation")
+        public static (Tensor result_indices, Tensor result_values, Tensor result_shape) dense_to_dense_set_operation(Tensor set1, Tensor set2, string set_operation, bool? validate_indices = null, string name = "DenseToDenseSetOperation")
         {
             var dict = new Dictionary<string, object>();
             dict["set1"] = set1;
@@ -8294,7 +8294,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor dense_to_sparse_batch_dataset (Tensor input_dataset, Tensor batch_size, Tensor row_shape, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "DenseToSparseBatchDataset")
+        public static Tensor dense_to_sparse_batch_dataset(Tensor input_dataset, Tensor batch_size, Tensor row_shape, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "DenseToSparseBatchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -8360,7 +8360,7 @@ namespace Tensorflow.Operations
         ///    dimension contains the result of <c>set_operation</c> applied to the corresponding
         ///    <c>[0...n-1]</c> dimension of <c>set</c>.
         /// </remarks>
-        public static (Tensor result_indices, Tensor result_values, Tensor result_shape) dense_to_sparse_set_operation (Tensor set1, Tensor set2_indices, Tensor set2_values, Tensor set2_shape, string set_operation, bool? validate_indices = null, string name = "DenseToSparseSetOperation")
+        public static (Tensor result_indices, Tensor result_values, Tensor result_shape) dense_to_sparse_set_operation(Tensor set1, Tensor set2_indices, Tensor set2_values, Tensor set2_shape, string set_operation, bool? validate_indices = null, string name = "DenseToSparseSetOperation")
         {
             var dict = new Dictionary<string, object>();
             dict["set1"] = set1;
@@ -8486,7 +8486,7 @@ namespace Tensorflow.Operations
         ///    
         ///   </code>
         /// </remarks>
-        public static Tensor depth_to_space (Tensor input, int block_size, string data_format = null, string name = "DepthToSpace")
+        public static Tensor depth_to_space(Tensor input, int block_size, string data_format = null, string name = "DepthToSpace")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -8553,7 +8553,7 @@ namespace Tensorflow.Operations
         ///    Must have <c>strides[0] = strides[3] = 1</c>.  For the most common case of the same
         ///    horizontal and vertices strides, <c>strides = [1, stride, stride, 1]</c>.
         /// </remarks>
-        public static Tensor depthwise_conv2d_native (Tensor input, Tensor filter, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "DepthwiseConv2dNative")
+        public static Tensor depthwise_conv2d_native(Tensor input, Tensor filter, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "DepthwiseConv2dNative")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -8619,7 +8619,7 @@ namespace Tensorflow.Operations
         ///    the <c>filter</c> input of the convolution.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor depthwise_conv2d_native_backprop_filter (Tensor input, Tensor filter_sizes, Tensor out_backprop, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "DepthwiseConv2dNativeBackpropFilter")
+        public static Tensor depthwise_conv2d_native_backprop_filter(Tensor input, Tensor filter_sizes, Tensor out_backprop, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "DepthwiseConv2dNativeBackpropFilter")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -8686,7 +8686,7 @@ namespace Tensorflow.Operations
         ///    convolution.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor depthwise_conv2d_native_backprop_input (Tensor input_sizes, Tensor filter, Tensor out_backprop, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "DepthwiseConv2dNativeBackpropInput")
+        public static Tensor depthwise_conv2d_native_backprop_input(Tensor input_sizes, Tensor filter, Tensor out_backprop, int[] strides, string padding, string data_format = null, int[] dilations = null, string name = "DepthwiseConv2dNativeBackpropInput")
         {
             var dict = new Dictionary<string, object>();
             dict["input_sizes"] = input_sizes;
@@ -8796,7 +8796,7 @@ namespace Tensorflow.Operations
         ///    result = input * s
         ///   </code>
         /// </remarks>
-        public static Tensor dequantize (Tensor input, Tensor min_range, Tensor max_range, string mode = null, string name = "Dequantize")
+        public static Tensor dequantize(Tensor input, Tensor min_range, Tensor max_range, string mode = null, string name = "Dequantize")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -8824,7 +8824,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation deserialize_iterator (Tensor resource_handle, Tensor serialized, string name = "DeserializeIterator")
+        public static Operation deserialize_iterator(Tensor resource_handle, Tensor serialized, string name = "DeserializeIterator")
         {
             var dict = new Dictionary<string, object>();
             dict["resource_handle"] = resource_handle;
@@ -8897,7 +8897,7 @@ namespace Tensorflow.Operations
         ///    values = [1, 2, 3, 4, 5]
         ///    shape = [2 50]
         /// </remarks>
-        public static (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape) deserialize_many_sparse (Tensor serialized_sparse, TF_DataType dtype, string name = "DeserializeManySparse")
+        public static (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape) deserialize_many_sparse(Tensor serialized_sparse, TF_DataType dtype, string name = "DeserializeManySparse")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized_sparse"] = serialized_sparse;
@@ -8974,7 +8974,7 @@ namespace Tensorflow.Operations
         ///    values = [1, 2, 3, 4, 5]
         ///    shape = [2 50]
         /// </remarks>
-        public static (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape) deserialize_sparse (Tensor serialized_sparse, TF_DataType dtype, string name = "DeserializeSparse")
+        public static (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape) deserialize_sparse(Tensor serialized_sparse, TF_DataType dtype, string name = "DeserializeSparse")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized_sparse"] = serialized_sparse;
@@ -9007,7 +9007,7 @@ namespace Tensorflow.Operations
         ///    All subsequent operations using the resource will result in a NotFound
         ///    error status.
         /// </remarks>
-        public static Operation destroy_resource_op (Tensor resource, bool? ignore_lookup_error = null, string name = "DestroyResourceOp")
+        public static Operation destroy_resource_op(Tensor resource, bool? ignore_lookup_error = null, string name = "DestroyResourceOp")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -9043,7 +9043,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Outputs the final value of the tensor pointed to by 'ref'.
         /// </remarks>
-        public static Tensor destroy_temporary_variable (Tensor referecne, string var_name, string name = "DestroyTemporaryVariable")
+        public static Tensor destroy_temporary_variable(Tensor referecne, string var_name, string name = "DestroyTemporaryVariable")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -9083,7 +9083,7 @@ namespace Tensorflow.Operations
         ///    [0, 0, 0, 4]]
         ///   </code>
         /// </remarks>
-        public static Tensor diag (Tensor diagonal, string name = "Diag")
+        public static Tensor diag(Tensor diagonal, string name = "Diag")
         {
             var dict = new Dictionary<string, object>();
             dict["diagonal"] = diagonal;
@@ -9124,7 +9124,7 @@ namespace Tensorflow.Operations
         ///    tf.diag_part(input) ==&amp;gt; [1, 2, 3, 4]
         ///   </code>
         /// </remarks>
-        public static Tensor diag_part (Tensor input, string name = "DiagPart")
+        public static Tensor diag_part(Tensor input, string name = "DiagPart")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -9146,7 +9146,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    <c>Gamma(x)</c>), element-wise.
         /// </remarks>
-        public static Tensor digamma (Tensor x, string name = "Digamma")
+        public static Tensor digamma(Tensor x, string name = "Digamma")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -9209,7 +9209,7 @@ namespace Tensorflow.Operations
         ///    Note on duality: The dilation of <c>input</c> by the <c>filter</c> is equal to the
         ///    negation of the erosion of <c>-input</c> by the reflected <c>filter</c>.
         /// </remarks>
-        public static Tensor dilation2d (Tensor input, Tensor filter, int[] strides, int[] rates, string padding, string name = "Dilation2D")
+        public static Tensor dilation2d(Tensor input, Tensor filter, int[] strides, int[] rates, string padding, string name = "Dilation2D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -9254,7 +9254,7 @@ namespace Tensorflow.Operations
         ///    3-D with shape <c>[filter_height, filter_width, depth]</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor dilation2d_backprop_filter (Tensor input, Tensor filter, Tensor out_backprop, int[] strides, int[] rates, string padding, string name = "Dilation2DBackpropFilter")
+        public static Tensor dilation2d_backprop_filter(Tensor input, Tensor filter, Tensor out_backprop, int[] strides, int[] rates, string padding, string name = "Dilation2DBackpropFilter")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -9300,7 +9300,7 @@ namespace Tensorflow.Operations
         ///    4-D with shape <c>[batch, in_height, in_width, depth]</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor dilation2d_backprop_input (Tensor input, Tensor filter, Tensor out_backprop, int[] strides, int[] rates, string padding, string name = "Dilation2DBackpropInput")
+        public static Tensor dilation2d_backprop_input(Tensor input, Tensor filter, Tensor out_backprop, int[] strides, int[] rates, string padding, string name = "Dilation2DBackpropInput")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -9330,7 +9330,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Div</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor div (Tensor x, Tensor y, string name = "Div")
+        public static Tensor div(Tensor x, Tensor y, string name = "Div")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -9357,7 +9357,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>DivNoNan</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor div_no_nan (Tensor x, Tensor y, string name = "DivNoNan")
+        public static Tensor div_no_nan(Tensor x, Tensor y, string name = "DivNoNan")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -9397,7 +9397,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Parts of the bounding box may fall outside the image.
         /// </remarks>
-        public static Tensor draw_bounding_boxes (Tensor images, Tensor boxes, string name = "DrawBoundingBoxes")
+        public static Tensor draw_bounding_boxes(Tensor images, Tensor boxes, string name = "DrawBoundingBoxes")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -9463,7 +9463,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/DynamicPartition.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor[] dynamic_partition (Tensor data, Tensor partitions, int num_partitions, string name = "DynamicPartition")
+        public static Tensor[] dynamic_partition(Tensor data, Tensor partitions, int num_partitions, string name = "DynamicPartition")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -9552,7 +9552,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/DynamicStitch.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor dynamic_stitch (Tensor[] indices, Tensor[] data, string name = "DynamicStitch")
+        public static Tensor dynamic_stitch(Tensor[] indices, Tensor[] data, string name = "DynamicStitch")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -9636,7 +9636,7 @@ namespace Tensorflow.Operations
         ///    
         ///    The inputs are:
         /// </remarks>
-        public static Tensor edit_distance (Tensor hypothesis_indices, Tensor hypothesis_values, Tensor hypothesis_shape, Tensor truth_indices, Tensor truth_values, Tensor truth_shape, bool? normalize = null, string name = "EditDistance")
+        public static Tensor edit_distance(Tensor hypothesis_indices, Tensor hypothesis_values, Tensor hypothesis_shape, Tensor truth_indices, Tensor truth_values, Tensor truth_shape, bool? normalize = null, string name = "EditDistance")
         {
             var dict = new Dictionary<string, object>();
             dict["hypothesis_indices"] = hypothesis_indices;
@@ -9666,7 +9666,7 @@ namespace Tensorflow.Operations
         ///    See [Fast and Accurate Deep Network Learning by Exponential Linear Units (ELUs)
         ///    ](http://arxiv.org/abs/1511.07289)
         /// </remarks>
-        public static Tensor elu (Tensor features, string name = "Elu")
+        public static Tensor elu(Tensor features, string name = "Elu")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -9691,7 +9691,7 @@ namespace Tensorflow.Operations
         ///    <c>gradients</c> otherwise.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor elu_grad (Tensor gradients, Tensor outputs, string name = "EluGrad")
+        public static Tensor elu_grad(Tensor gradients, Tensor outputs, string name = "EluGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -9721,7 +9721,7 @@ namespace Tensorflow.Operations
         ///    A <c>Tensor</c> of type <c>T</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor empty (Tensor shape, TF_DataType dtype, bool? init = null, string name = "Empty")
+        public static Tensor empty(Tensor shape, TF_DataType dtype, bool? init = null, string name = "Empty")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -9754,7 +9754,7 @@ namespace Tensorflow.Operations
         ///    element_dtype: the type of elements in the list.
         ///    element_shape: a shape compatible with that of elements in the list.
         /// </remarks>
-        public static Tensor empty_tensor_list (Tensor element_shape, TF_DataType element_dtype, string name = "EmptyTensorList")
+        public static Tensor empty_tensor_list(Tensor element_shape, TF_DataType element_dtype, string name = "EmptyTensorList")
         {
             var dict = new Dictionary<string, object>();
             dict["element_shape"] = element_shape;
@@ -9787,7 +9787,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Web-safe means that the encoder uses - and _ instead of + and /.
         /// </remarks>
-        public static Tensor encode_base64 (Tensor input, bool? pad = null, string name = "EncodeBase64")
+        public static Tensor encode_base64(Tensor input, bool? pad = null, string name = "EncodeBase64")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -9856,7 +9856,7 @@ namespace Tensorflow.Operations
         ///    *   1: Output a grayscale image.
         ///    *   3: Output an RGB image.
         /// </remarks>
-        public static Tensor encode_jpeg (Tensor image, string format = null, int? quality = null, bool? progressive = null, bool? optimize_size = null, bool? chroma_downsampling = null, string density_unit = null, int? x_density = null, int? y_density = null, string xmp_metadata = null, string name = "EncodeJpeg")
+        public static Tensor encode_jpeg(Tensor image, string format = null, int? quality = null, bool? progressive = null, bool? optimize_size = null, bool? chroma_downsampling = null, string density_unit = null, int? x_density = null, int? y_density = null, string xmp_metadata = null, string name = "EncodeJpeg")
         {
             var dict = new Dictionary<string, object>();
             dict["image"] = image;
@@ -9916,7 +9916,7 @@ namespace Tensorflow.Operations
         ///    default or a value from 0 to 9.  9 is the highest compression level, generating
         ///    the smallest output, but is slower.
         /// </remarks>
-        public static Tensor encode_png (Tensor image, int? compression = null, string name = "EncodePng")
+        public static Tensor encode_png(Tensor image, int? compression = null, string name = "EncodePng")
         {
             var dict = new Dictionary<string, object>();
             dict["image"] = image;
@@ -9991,7 +9991,7 @@ namespace Tensorflow.Operations
         ///    Unsigned int32 values can be represented exactly with <c>tf.int64</c>, or
         ///    with sign wrapping if the input is of type <c>tf.int32</c>.
         /// </remarks>
-        public static Tensor encode_proto (Tensor sizes, Tensor[] values, string[] field_names, string message_type, string descriptor_source = null, string name = "EncodeProto")
+        public static Tensor encode_proto(Tensor sizes, Tensor[] values, string[] field_names, string message_type, string descriptor_source = null, string name = "EncodeProto")
         {
             var dict = new Dictionary<string, object>();
             dict["sizes"] = sizes;
@@ -10029,7 +10029,7 @@ namespace Tensorflow.Operations
         ///    <c>audio</c> is a 2-D float Tensor of shape <c>[length, channels]</c>.
         ///    <c>sample_rate</c> is a scalar Tensor holding the rate to use (e.g. 44100).
         /// </remarks>
-        public static Tensor encode_wav (Tensor audio, Tensor sample_rate, string name = "EncodeWav")
+        public static Tensor encode_wav(Tensor audio, Tensor sample_rate, string name = "EncodeWav")
         {
             var dict = new Dictionary<string, object>();
             dict["audio"] = audio;
@@ -10059,7 +10059,7 @@ namespace Tensorflow.Operations
         ///    Raises an error if the input tensor's shape does not match the specified shape.
         ///    Returns the input tensor otherwise.
         /// </remarks>
-        public static Tensor ensure_shape (Tensor input, TensorShape shape, string name = "EnsureShape")
+        public static Tensor ensure_shape(Tensor input, TensorShape shape, string name = "EnsureShape")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -10098,7 +10098,7 @@ namespace Tensorflow.Operations
         ///    it may be changed in the child frame. At most <c>parallel_iterations</c> iterations
         ///    are run in parallel in the child frame.
         /// </remarks>
-        public static Tensor enter (Tensor data, string frame_name, bool? is_constant = null, int? parallel_iterations = null, string name = "Enter")
+        public static Tensor enter(Tensor data, string frame_name, bool? is_constant = null, int? parallel_iterations = null, string name = "Enter")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -10128,7 +10128,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Equal</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor equal (Tensor x, Tensor y, string name = "Equal")
+        public static Tensor equal(Tensor x, Tensor y, string name = "Equal")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -10148,7 +10148,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor erf (Tensor x, string name = "Erf")
+        public static Tensor erf(Tensor x, string name = "Erf")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -10167,7 +10167,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor erfc (Tensor x, string name = "Erfc")
+        public static Tensor erfc(Tensor x, string name = "Erfc")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -10191,7 +10191,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Exit makes its input <c>data</c> available to the parent frame.
         /// </remarks>
-        public static Tensor exit (Tensor data, string name = "Exit")
+        public static Tensor exit(Tensor data, string name = "Exit")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -10210,7 +10210,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor exp (Tensor x, string name = "Exp")
+        public static Tensor exp(Tensor x, string name = "Exp")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -10268,7 +10268,7 @@ namespace Tensorflow.Operations
         ///    This operation is related to <c>squeeze()</c>, which removes dimensions of
         ///    size 1.
         /// </remarks>
-        public static Tensor expand_dims (Tensor input, Tensor dim, string name = "ExpandDims")
+        public static Tensor expand_dims(Tensor input, Tensor dim, string name = "ExpandDims")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -10291,7 +10291,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    I.e., \\(y = (\exp x) - 1\\).
         /// </remarks>
-        public static Tensor expm1 (Tensor x, string name = "Expm1")
+        public static Tensor expm1(Tensor x, string name = "Expm1")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -10358,7 +10358,7 @@ namespace Tensorflow.Operations
         ///    * If the coordinates are not normalized they are interpreted as
         ///    numbers of pixels.
         /// </remarks>
-        public static Tensor extract_glimpse (Tensor input, Tensor size, Tensor offsets, bool? centered = null, bool? normalized = null, bool? uniform_noise = null, string name = "ExtractGlimpse")
+        public static Tensor extract_glimpse(Tensor input, Tensor size, Tensor offsets, bool? centered = null, bool? normalized = null, bool? uniform_noise = null, string name = "ExtractGlimpse")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -10420,7 +10420,7 @@ namespace Tensorflow.Operations
         ///    <c>out_rows</c> and <c>out_cols</c> are the dimensions of the output patches.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor extract_image_patches (Tensor images, int[] ksizes, int[] strides, int[] rates, string padding, string name = "ExtractImagePatches")
+        public static Tensor extract_image_patches(Tensor images, int[] ksizes, int[] strides, int[] rates, string padding, string name = "ExtractImagePatches")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -10452,7 +10452,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    This op only parses the image header, so it is much faster than DecodeJpeg.
         /// </remarks>
-        public static Tensor extract_jpeg_shape (Tensor contents, TF_DataType? output_type = null, string name = "ExtractJpegShape")
+        public static Tensor extract_jpeg_shape(Tensor contents, TF_DataType? output_type = null, string name = "ExtractJpegShape")
         {
             var dict = new Dictionary<string, object>();
             dict["contents"] = contents;
@@ -10484,7 +10484,7 @@ namespace Tensorflow.Operations
         ///    Computes the 1-dimensional discrete Fourier transform over the inner-most
         ///    dimension of <c>input</c>.
         /// </remarks>
-        public static Tensor f_f_t (Tensor input, string name = "FFT")
+        public static Tensor f_f_t(Tensor input, string name = "FFT")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -10514,7 +10514,7 @@ namespace Tensorflow.Operations
         ///    Computes the 2-dimensional discrete Fourier transform over the inner-most
         ///    2 dimensions of <c>input</c>.
         /// </remarks>
-        public static Tensor f_f_t2d (Tensor input, string name = "FFT2D")
+        public static Tensor f_f_t2d(Tensor input, string name = "FFT2D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -10544,7 +10544,7 @@ namespace Tensorflow.Operations
         ///    Computes the 3-dimensional discrete Fourier transform over the inner-most 3
         ///    dimensions of <c>input</c>.
         /// </remarks>
-        public static Tensor f_f_t3d (Tensor input, string name = "FFT3D")
+        public static Tensor f_f_t3d(Tensor input, string name = "FFT3D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -10584,7 +10584,7 @@ namespace Tensorflow.Operations
         ///    The handle to the queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor f_i_f_o_queue (TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "FIFOQueue")
+        public static Tensor f_i_f_o_queue(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "FIFOQueue")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -10632,7 +10632,7 @@ namespace Tensorflow.Operations
         ///    The handle to the queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor f_i_f_o_queue_v2 (TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "FIFOQueueV2")
+        public static Tensor f_i_f_o_queue_v2(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "FIFOQueueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -10670,7 +10670,7 @@ namespace Tensorflow.Operations
         ///    \"Fake\" output value. This should not be consumed by another op.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor fake_param (TF_DataType dtype, TensorShape shape, string name = "FakeParam")
+        public static Tensor fake_param(TF_DataType dtype, TensorShape shape, string name = "FakeParam")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -10707,7 +10707,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Quantization is called fake since the output is still in floating point.
         /// </remarks>
-        public static Tensor fake_quant_with_min_max_args (Tensor inputs, float? min = null, float? max = null, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxArgs")
+        public static Tensor fake_quant_with_min_max_args(Tensor inputs, float? min = null, float? max = null, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxArgs")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -10748,7 +10748,7 @@ namespace Tensorflow.Operations
         ///    <c>gradients * (inputs &amp;gt;= min &amp;&amp; inputs &amp;lt;= max)</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor fake_quant_with_min_max_args_gradient (Tensor gradients, Tensor inputs, float? min = null, float? max = null, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxArgsGradient")
+        public static Tensor fake_quant_with_min_max_args_gradient(Tensor gradients, Tensor inputs, float? min = null, float? max = null, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxArgsGradient")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -10796,7 +10796,7 @@ namespace Tensorflow.Operations
         ///    This operation has a gradient and thus allows for training <c>min</c> and <c>max</c>
         ///    values.
         /// </remarks>
-        public static Tensor fake_quant_with_min_max_vars (Tensor inputs, Tensor min, Tensor max, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxVars")
+        public static Tensor fake_quant_with_min_max_vars(Tensor inputs, Tensor min, Tensor max, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxVars")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -10843,7 +10843,7 @@ namespace Tensorflow.Operations
         ///    <c>sum(gradients * (inputs &amp;gt; max))</c>.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor backprops_wrt_input, Tensor backprop_wrt_min, Tensor backprop_wrt_max) fake_quant_with_min_max_vars_gradient (Tensor gradients, Tensor inputs, Tensor min, Tensor max, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxVarsGradient")
+        public static (Tensor backprops_wrt_input, Tensor backprop_wrt_min, Tensor backprop_wrt_max) fake_quant_with_min_max_vars_gradient(Tensor gradients, Tensor inputs, Tensor min, Tensor max, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxVarsGradient")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -10894,7 +10894,7 @@ namespace Tensorflow.Operations
         ///    This operation has a gradient and thus allows for training <c>min</c> and <c>max</c>
         ///    values.
         /// </remarks>
-        public static Tensor fake_quant_with_min_max_vars_per_channel (Tensor inputs, Tensor min, Tensor max, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxVarsPerChannel")
+        public static Tensor fake_quant_with_min_max_vars_per_channel(Tensor inputs, Tensor min, Tensor max, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxVarsPerChannel")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -10944,7 +10944,7 @@ namespace Tensorflow.Operations
         ///    <c>sum_per_d(gradients * (inputs &amp;gt; max))</c>.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor backprops_wrt_input, Tensor backprop_wrt_min, Tensor backprop_wrt_max) fake_quant_with_min_max_vars_per_channel_gradient (Tensor gradients, Tensor inputs, Tensor min, Tensor max, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxVarsPerChannelGradient")
+        public static (Tensor backprops_wrt_input, Tensor backprop_wrt_min, Tensor backprop_wrt_max) fake_quant_with_min_max_vars_per_channel_gradient(Tensor gradients, Tensor inputs, Tensor min, Tensor max, int? num_bits = null, bool? narrow_range = null, string name = "FakeQuantWithMinMaxVarsPerChannelGradient")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -10974,7 +10974,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor fake_queue (Tensor resource, string name = "FakeQueue")
+        public static Tensor fake_queue(Tensor resource, string name = "FakeQueue")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -11022,7 +11022,7 @@ namespace Tensorflow.Operations
         ///    *   Because <c>tf.fill</c> evaluates at graph runtime, it supports dynamic shapes
         ///    based on other runtime Tensors, unlike <c>tf.constant</c>.
         /// </remarks>
-        public static Tensor fill (Tensor dims, Tensor value, string name = "Fill")
+        public static Tensor fill(Tensor dims, Tensor value, string name = "Fill")
         {
             var dict = new Dictionary<string, object>();
             dict["dims"] = dims;
@@ -11048,7 +11048,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor filter_by_last_component_dataset (Tensor input_dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "FilterByLastComponentDataset")
+        public static Tensor filter_by_last_component_dataset(Tensor input_dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "FilterByLastComponentDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -11085,7 +11085,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor fixed_length_record_dataset (Tensor filenames, Tensor header_bytes, Tensor record_bytes, Tensor footer_bytes, Tensor buffer_size, string name = "FixedLengthRecordDataset")
+        public static Tensor fixed_length_record_dataset(Tensor filenames, Tensor header_bytes, Tensor record_bytes, Tensor footer_bytes, Tensor buffer_size, string name = "FixedLengthRecordDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["filenames"] = filenames;
@@ -11129,7 +11129,7 @@ namespace Tensorflow.Operations
         ///    The handle to reference the Reader.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor fixed_length_record_reader (int record_bytes, int? header_bytes = null, int? footer_bytes = null, int? hop_bytes = null, string container = null, string shared_name = null, string name = "FixedLengthRecordReader")
+        public static Tensor fixed_length_record_reader(int record_bytes, int? header_bytes = null, int? footer_bytes = null, int? hop_bytes = null, string container = null, string shared_name = null, string name = "FixedLengthRecordReader")
         {
             var dict = new Dictionary<string, object>();
             dict["record_bytes"] = record_bytes;
@@ -11183,7 +11183,7 @@ namespace Tensorflow.Operations
         ///    The handle to reference the Reader.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor fixed_length_record_reader_v2 (int record_bytes, int? header_bytes = null, int? footer_bytes = null, int? hop_bytes = null, string container = null, string shared_name = null, string encoding = null, string name = "FixedLengthRecordReaderV2")
+        public static Tensor fixed_length_record_reader_v2(int record_bytes, int? header_bytes = null, int? footer_bytes = null, int? hop_bytes = null, string container = null, string shared_name = null, string encoding = null, string name = "FixedLengthRecordReaderV2")
         {
             var dict = new Dictionary<string, object>();
             dict["record_bytes"] = record_bytes;
@@ -11303,7 +11303,7 @@ namespace Tensorflow.Operations
         ///    the sampled candidates must be chosen independently of the context and of the
         ///    true labels.
         /// </remarks>
-        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) fixed_unigram_candidate_sampler (Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, string vocab_file = null, float? distortion = null, int? num_reserved_ids = null, int? num_shards = null, int? shard = null, float[] unigrams = null, int? seed = null, int? seed2 = null, string name = "FixedUnigramCandidateSampler")
+        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) fixed_unigram_candidate_sampler(Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, string vocab_file = null, float? distortion = null, int? num_reserved_ids = null, int? num_shards = null, int? shard = null, float[] unigrams = null, int? seed = null, int? seed2 = null, string name = "FixedUnigramCandidateSampler")
         {
             var dict = new Dictionary<string, object>();
             dict["true_classes"] = true_classes;
@@ -11346,7 +11346,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor floor (Tensor x, string name = "Floor")
+        public static Tensor floor(Tensor x, string name = "Floor")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -11371,7 +11371,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>FloorDiv</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor floor_div (Tensor x, Tensor y, string name = "FloorDiv")
+        public static Tensor floor_div(Tensor x, Tensor y, string name = "FloorDiv")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -11400,7 +11400,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>FloorMod</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor floor_mod (Tensor x, Tensor y, string name = "FloorMod")
+        public static Tensor floor_mod(Tensor x, Tensor y, string name = "FloorMod")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -11470,7 +11470,7 @@ namespace Tensorflow.Operations
         ///    generated, a mean operation is performed instead of a max operation in each
         ///    pooling region.
         /// </remarks>
-        public static (Tensor output, Tensor row_pooling_sequence, Tensor col_pooling_sequence) fractional_avg_pool (Tensor value, float[] pooling_ratio, bool? pseudo_random = null, bool? overlapping = null, bool? deterministic = null, int? seed = null, int? seed2 = null, string name = "FractionalAvgPool")
+        public static (Tensor output, Tensor row_pooling_sequence, Tensor col_pooling_sequence) fractional_avg_pool(Tensor value, float[] pooling_ratio, bool? pseudo_random = null, bool? overlapping = null, bool? deterministic = null, int? seed = null, int? seed2 = null, string name = "FractionalAvgPool")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -11536,7 +11536,7 @@ namespace Tensorflow.Operations
         ///    just need to know the shape of original input tensor, instead of the whole
         ///    tensor.
         /// </remarks>
-        public static Tensor fractional_avg_pool_grad (Tensor orig_input_tensor_shape, Tensor out_backprop, Tensor row_pooling_sequence, Tensor col_pooling_sequence, bool? overlapping = null, string name = "FractionalAvgPoolGrad")
+        public static Tensor fractional_avg_pool_grad(Tensor orig_input_tensor_shape, Tensor out_backprop, Tensor row_pooling_sequence, Tensor col_pooling_sequence, bool? overlapping = null, string name = "FractionalAvgPoolGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input_tensor_shape"] = orig_input_tensor_shape;
@@ -11634,7 +11634,7 @@ namespace Tensorflow.Operations
         ///    For more details on fractional max pooling, see this paper:
         ///    [Benjamin Graham, Fractional Max-Pooling](http://arxiv.org/abs/1412.6071)
         /// </remarks>
-        public static (Tensor output, Tensor row_pooling_sequence, Tensor col_pooling_sequence) fractional_max_pool (Tensor value, float[] pooling_ratio, bool? pseudo_random = null, bool? overlapping = null, bool? deterministic = null, int? seed = null, int? seed2 = null, string name = "FractionalMaxPool")
+        public static (Tensor output, Tensor row_pooling_sequence, Tensor col_pooling_sequence) fractional_max_pool(Tensor value, float[] pooling_ratio, bool? pseudo_random = null, bool? overlapping = null, bool? deterministic = null, int? seed = null, int? seed2 = null, string name = "FractionalMaxPool")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -11696,7 +11696,7 @@ namespace Tensorflow.Operations
         ///    4-D.  Gradients w.r.t. the input of <c>fractional_max_pool</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor fractional_max_pool_grad (Tensor orig_input, Tensor orig_output, Tensor out_backprop, Tensor row_pooling_sequence, Tensor col_pooling_sequence, bool? overlapping = null, string name = "FractionalMaxPoolGrad")
+        public static Tensor fractional_max_pool_grad(Tensor orig_input, Tensor orig_output, Tensor out_backprop, Tensor row_pooling_sequence, Tensor col_pooling_sequence, bool? overlapping = null, string name = "FractionalMaxPoolGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input"] = orig_input;
@@ -11760,7 +11760,7 @@ namespace Tensorflow.Operations
         ///    Note that the size of 4D Tensors are defined by either "NHWC" or "NCHW".
         ///    The size of 1D Tensors matches the dimension C of the 4D Tensors.
         /// </remarks>
-        public static (Tensor y, Tensor batch_mean, Tensor batch_variance, Tensor reserve_space_1, Tensor reserve_space_2) fused_batch_norm (Tensor x, Tensor scale, Tensor offset, Tensor mean, Tensor variance, float? epsilon = null, string data_format = null, bool? is_training = null, string name = "FusedBatchNorm")
+        public static (Tensor y, Tensor batch_mean, Tensor batch_variance, Tensor reserve_space_1, Tensor reserve_space_2) fused_batch_norm(Tensor x, Tensor scale, Tensor offset, Tensor mean, Tensor variance, float? epsilon = null, string data_format = null, bool? is_training = null, string name = "FusedBatchNorm")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -11837,7 +11837,7 @@ namespace Tensorflow.Operations
         ///    Note that the size of 4D Tensors are defined by either "NHWC" or "NCHW".
         ///    The size of 1D Tensors matches the dimension C of the 4D Tensors.
         /// </remarks>
-        public static (Tensor x_backprop, Tensor scale_backprop, Tensor offset_backprop, Tensor reserve_space_3, Tensor reserve_space_4) fused_batch_norm_grad (Tensor y_backprop, Tensor x, Tensor scale, Tensor reserve_space_1, Tensor reserve_space_2, float? epsilon = null, string data_format = null, bool? is_training = null, string name = "FusedBatchNormGrad")
+        public static (Tensor x_backprop, Tensor scale_backprop, Tensor offset_backprop, Tensor reserve_space_3, Tensor reserve_space_4) fused_batch_norm_grad(Tensor y_backprop, Tensor x, Tensor scale, Tensor reserve_space_1, Tensor reserve_space_2, float? epsilon = null, string data_format = null, bool? is_training = null, string name = "FusedBatchNormGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["y_backprop"] = y_backprop;
@@ -11914,7 +11914,7 @@ namespace Tensorflow.Operations
         ///    Note that the size of 4D Tensors are defined by either "NHWC" or "NCHW".
         ///    The size of 1D Tensors matches the dimension C of the 4D Tensors.
         /// </remarks>
-        public static (Tensor x_backprop, Tensor scale_backprop, Tensor offset_backprop, Tensor reserve_space_3, Tensor reserve_space_4) fused_batch_norm_grad_v2 (Tensor y_backprop, Tensor x, Tensor scale, Tensor reserve_space_1, Tensor reserve_space_2, float? epsilon = null, string data_format = null, bool? is_training = null, string name = "FusedBatchNormGradV2")
+        public static (Tensor x_backprop, Tensor scale_backprop, Tensor offset_backprop, Tensor reserve_space_3, Tensor reserve_space_4) fused_batch_norm_grad_v2(Tensor y_backprop, Tensor x, Tensor scale, Tensor reserve_space_1, Tensor reserve_space_2, float? epsilon = null, string data_format = null, bool? is_training = null, string name = "FusedBatchNormGradV2")
         {
             var dict = new Dictionary<string, object>();
             dict["y_backprop"] = y_backprop;
@@ -11988,7 +11988,7 @@ namespace Tensorflow.Operations
         ///    Note that the size of 4D Tensors are defined by either "NHWC" or "NCHW".
         ///    The size of 1D Tensors matches the dimension C of the 4D Tensors.
         /// </remarks>
-        public static (Tensor y, Tensor batch_mean, Tensor batch_variance, Tensor reserve_space_1, Tensor reserve_space_2) fused_batch_norm_v2 (Tensor x, Tensor scale, Tensor offset, Tensor mean, Tensor variance, float? epsilon = null, string data_format = null, bool? is_training = null, string name = "FusedBatchNormV2")
+        public static (Tensor y, Tensor batch_mean, Tensor batch_variance, Tensor reserve_space_1, Tensor reserve_space_2) fused_batch_norm_v2(Tensor x, Tensor scale, Tensor offset, Tensor mean, Tensor variance, float? epsilon = null, string data_format = null, bool? is_training = null, string name = "FusedBatchNormV2")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -12057,7 +12057,7 @@ namespace Tensorflow.Operations
         ///    will block if multiple versions are being run in parallel. This is because this
         ///    operator is primarily an optimization to minimize memory usage.
         /// </remarks>
-        public static Tensor fused_pad_conv2d (Tensor input, Tensor paddings, Tensor filter, string mode, int[] strides, string padding, string name = "FusedPadConv2D")
+        public static Tensor fused_pad_conv2d(Tensor input, Tensor paddings, Tensor filter, string mode, int[] strides, string padding, string name = "FusedPadConv2D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -12122,7 +12122,7 @@ namespace Tensorflow.Operations
         ///    will block if multiple versions are being run in parallel. This is because this
         ///    operator is primarily an optimization to minimize memory usage.
         /// </remarks>
-        public static Tensor fused_resize_and_pad_conv2d (Tensor input, Tensor size, Tensor paddings, Tensor filter, string mode, int[] strides, string padding, bool? resize_align_corners = null, string name = "FusedResizeAndPadConv2D")
+        public static Tensor fused_resize_and_pad_conv2d(Tensor input, Tensor size, Tensor paddings, Tensor filter, string mode, int[] strides, string padding, bool? resize_align_corners = null, string name = "FusedResizeAndPadConv2D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -12180,7 +12180,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/Gather.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor gather (Tensor parameters, Tensor indices, bool? validate_indices = null, string name = "Gather")
+        public static Tensor gather(Tensor parameters, Tensor indices, bool? validate_indices = null, string name = "Gather")
         {
             var dict = new Dictionary<string, object>();
             dict["params"] = parameters;
@@ -12314,7 +12314,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See also <c>tf.gather</c> and <c>tf.batch_gather</c>.
         /// </remarks>
-        public static Tensor gather_nd (Tensor parameters, Tensor indices, string name = "GatherNd")
+        public static Tensor gather_nd(Tensor parameters, Tensor indices, string name = "GatherNd")
         {
             var dict = new Dictionary<string, object>();
             dict["params"] = parameters;
@@ -12374,7 +12374,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See also <c>tf.batch_gather</c> and <c>tf.gather_nd</c>.
         /// </remarks>
-        public static Tensor gather_v2 (Tensor parameters, Tensor indices, Tensor axis, string name = "GatherV2")
+        public static Tensor gather_v2(Tensor parameters, Tensor indices, Tensor axis, string name = "GatherV2")
         {
             var dict = new Dictionary<string, object>();
             dict["params"] = parameters;
@@ -12446,7 +12446,7 @@ namespace Tensorflow.Operations
         ///    use the corresponding index_table_from_file() as the FeatureColumn framework
         ///    does (as opposed to tf.feature_to_id(), which uses a CuckooTable).
         /// </remarks>
-        public static (Tensor remapping, Tensor num_present) generate_vocab_remapping (Tensor new_vocab_file, Tensor old_vocab_file, int new_vocab_offset, int num_new_vocab, int? old_vocab_size = null, string name = "GenerateVocabRemapping")
+        public static (Tensor remapping, Tensor num_present) generate_vocab_remapping(Tensor new_vocab_file, Tensor old_vocab_file, int new_vocab_offset, int num_new_vocab, int? old_vocab_size = null, string name = "GenerateVocabRemapping")
         {
             var dict = new Dictionary<string, object>();
             dict["new_vocab_file"] = new_vocab_file;
@@ -12476,7 +12476,7 @@ namespace Tensorflow.Operations
         ///    as a string.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor get_session_handle (Tensor value, string name = "GetSessionHandle")
+        public static Tensor get_session_handle(Tensor value, string name = "GetSessionHandle")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -12498,7 +12498,7 @@ namespace Tensorflow.Operations
         ///    as a ResourceHandle object.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor get_session_handle_v2 (Tensor value, string name = "GetSessionHandleV2")
+        public static Tensor get_session_handle_v2(Tensor value, string name = "GetSessionHandleV2")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -12523,7 +12523,7 @@ namespace Tensorflow.Operations
         ///    The tensor for the given handle.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor get_session_tensor (Tensor handle, TF_DataType dtype, string name = "GetSessionTensor")
+        public static Tensor get_session_tensor(Tensor handle, TF_DataType dtype, string name = "GetSessionTensor")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -12549,7 +12549,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Greater</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor greater (Tensor x, Tensor y, string name = "Greater")
+        public static Tensor greater(Tensor x, Tensor y, string name = "Greater")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -12575,7 +12575,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>GreaterEqual</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor greater_equal (Tensor x, Tensor y, string name = "GreaterEqual")
+        public static Tensor greater_equal(Tensor x, Tensor y, string name = "GreaterEqual")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -12603,7 +12603,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Returns the input tensor without modification.
         /// </remarks>
-        public static Tensor guarantee_const (Tensor input, string name = "GuaranteeConst")
+        public static Tensor guarantee_const(Tensor input, string name = "GuaranteeConst")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -12631,7 +12631,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See <c>rgb_to_hsv</c> for a description of the HSV encoding.
         /// </remarks>
-        public static Tensor h_s_v_to_r_g_b (Tensor images, string name = "HSVToRGB")
+        public static Tensor h_s_v_to_r_g_b(Tensor images, string name = "HSVToRGB")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -12674,7 +12674,7 @@ namespace Tensorflow.Operations
         ///    Before using the table you will have to initialize it.  After initialization the
         ///    table will be immutable.
         /// </remarks>
-        public static Tensor hash_table (TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, string name = "HashTable")
+        public static Tensor hash_table(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, string name = "HashTable")
         {
             var dict = new Dictionary<string, object>();
             dict["key_dtype"] = key_dtype;
@@ -12724,7 +12724,7 @@ namespace Tensorflow.Operations
         ///    Before using the table you will have to initialize it.  After initialization the
         ///    table will be immutable.
         /// </remarks>
-        public static Tensor hash_table_v2 (TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, string name = "HashTableV2")
+        public static Tensor hash_table_v2(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, string name = "HashTableV2")
         {
             var dict = new Dictionary<string, object>();
             dict["key_dtype"] = key_dtype;
@@ -12779,7 +12779,7 @@ namespace Tensorflow.Operations
         ///    sess.run(hist) =&amp;gt; [2, 1, 1, 0, 2]
         ///   </code>
         /// </remarks>
-        public static Tensor histogram_fixed_width (Tensor values, Tensor value_range, Tensor nbins, TF_DataType? dtype = null, string name = "HistogramFixedWidth")
+        public static Tensor histogram_fixed_width(Tensor values, Tensor value_range, Tensor nbins, TF_DataType? dtype = null, string name = "HistogramFixedWidth")
         {
             var dict = new Dictionary<string, object>();
             dict["values"] = values;
@@ -12814,7 +12814,7 @@ namespace Tensorflow.Operations
         ///    
         ///    This op reports an <c>InvalidArgument</c> error if any value is not finite.
         /// </remarks>
-        public static Tensor histogram_summary (Tensor tag, Tensor values, string name = "HistogramSummary")
+        public static Tensor histogram_summary(Tensor tag, Tensor values, string name = "HistogramSummary")
         {
             var dict = new Dictionary<string, object>();
             dict["tag"] = tag;
@@ -12839,7 +12839,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor host_const (Tensor value, TF_DataType dtype, string name = "HostConst")
+        public static Tensor host_const(Tensor value, TF_DataType dtype, string name = "HostConst")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -12870,7 +12870,7 @@ namespace Tensorflow.Operations
         ///    Computes the inverse 1-dimensional discrete Fourier transform over the
         ///    inner-most dimension of <c>input</c>.
         /// </remarks>
-        public static Tensor i_f_f_t (Tensor input, string name = "IFFT")
+        public static Tensor i_f_f_t(Tensor input, string name = "IFFT")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -12900,7 +12900,7 @@ namespace Tensorflow.Operations
         ///    Computes the inverse 2-dimensional discrete Fourier transform over the
         ///    inner-most 2 dimensions of <c>input</c>.
         /// </remarks>
-        public static Tensor i_f_f_t2d (Tensor input, string name = "IFFT2D")
+        public static Tensor i_f_f_t2d(Tensor input, string name = "IFFT2D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -12930,7 +12930,7 @@ namespace Tensorflow.Operations
         ///    Computes the inverse 3-dimensional discrete Fourier transform over the
         ///    inner-most 3 dimensions of <c>input</c>.
         /// </remarks>
-        public static Tensor i_f_f_t3d (Tensor input, string name = "IFFT3D")
+        public static Tensor i_f_f_t3d(Tensor input, string name = "IFFT3D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -12975,7 +12975,7 @@ namespace Tensorflow.Operations
         ///    than the corresponding dimension of <c>input</c>, the dimension is cropped. If it is
         ///    larger, the dimension is padded with zeros.
         /// </remarks>
-        public static Tensor i_r_f_f_t (Tensor input, Tensor fft_length, string name = "IRFFT")
+        public static Tensor i_r_f_f_t(Tensor input, Tensor fft_length, string name = "IRFFT")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -13022,7 +13022,7 @@ namespace Tensorflow.Operations
         ///    corresponding dimension of <c>input</c>, the dimension is cropped. If it is larger,
         ///    the dimension is padded with zeros.
         /// </remarks>
-        public static Tensor i_r_f_f_t2d (Tensor input, Tensor fft_length, string name = "IRFFT2D")
+        public static Tensor i_r_f_f_t2d(Tensor input, Tensor fft_length, string name = "IRFFT2D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -13069,7 +13069,7 @@ namespace Tensorflow.Operations
         ///    corresponding dimension of <c>input</c>, the dimension is cropped. If it is larger,
         ///    the dimension is padded with zeros.
         /// </remarks>
-        public static Tensor i_r_f_f_t3d (Tensor input, Tensor fft_length, string name = "IRFFT3D")
+        public static Tensor i_r_f_f_t3d(Tensor input, Tensor fft_length, string name = "IRFFT3D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -13089,7 +13089,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor identity (Tensor input, string name = "Identity")
+        public static Tensor identity(Tensor input, string name = "Identity")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -13125,7 +13125,7 @@ namespace Tensorflow.Operations
         ///    return [None, g(dy)]  # Do not backprop to f(x).
         ///   </code>
         /// </remarks>
-        public static Tensor[] identity_n (Tensor[] input, string name = "IdentityN")
+        public static Tensor[] identity_n(Tensor[] input, string name = "IdentityN")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -13157,7 +13157,7 @@ namespace Tensorflow.Operations
         ///    To use, enqueue strings in a Queue.  ReaderRead will take the front
         ///    work string and output (work, work).
         /// </remarks>
-        public static Tensor identity_reader (string container = null, string shared_name = null, string name = "IdentityReader")
+        public static Tensor identity_reader(string container = null, string shared_name = null, string name = "IdentityReader")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -13190,7 +13190,7 @@ namespace Tensorflow.Operations
         ///    To use, enqueue strings in a Queue.  ReaderRead will take the front
         ///    work string and output (work, work).
         /// </remarks>
-        public static Tensor identity_reader_v2 (string container = null, string shared_name = null, string name = "IdentityReaderV2")
+        public static Tensor identity_reader_v2(string container = null, string shared_name = null, string name = "IdentityReaderV2")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -13229,7 +13229,7 @@ namespace Tensorflow.Operations
         ///    Note, above <c>Q(a, x)</c> (<c>Igammac</c>) is the upper regularized complete
         ///    Gamma function.
         /// </remarks>
-        public static Tensor igamma (Tensor a, Tensor x, string name = "Igamma")
+        public static Tensor igamma(Tensor a, Tensor x, string name = "Igamma")
         {
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
@@ -13251,7 +13251,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor igamma_grad_a (Tensor a, Tensor x, string name = "IgammaGradA")
+        public static Tensor igamma_grad_a(Tensor a, Tensor x, string name = "IgammaGradA")
         {
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
@@ -13287,7 +13287,7 @@ namespace Tensorflow.Operations
         ///    Note, above <c>P(a, x)</c> (<c>Igamma</c>) is the lower regularized complete
         ///    Gamma function.
         /// </remarks>
-        public static Tensor igammac (Tensor a, Tensor x, string name = "Igammac")
+        public static Tensor igammac(Tensor a, Tensor x, string name = "Igammac")
         {
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
@@ -13322,7 +13322,7 @@ namespace Tensorflow.Operations
         ///    tf.imag(input) ==&amp;gt; [4.75, 5.75]
         ///   </code>
         /// </remarks>
-        public static Tensor imag (Tensor input, TF_DataType? Tout = null, string name = "Imag")
+        public static Tensor imag(Tensor input, TF_DataType? Tout = null, string name = "Imag")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -13390,7 +13390,7 @@ namespace Tensorflow.Operations
         ///    replaced by this tensor in the output image.  The default value is the color
         ///    red.
         /// </remarks>
-        public static Tensor image_summary (Tensor tag, Tensor tensor, int? max_images = null, Tensor bad_color = null, string name = "ImageSummary")
+        public static Tensor image_summary(Tensor tag, Tensor tensor, int? max_images = null, Tensor bad_color = null, string name = "ImageSummary")
         {
             var dict = new Dictionary<string, object>();
             dict["tag"] = tag;
@@ -13428,7 +13428,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    The current implementation memmaps the tensor from a file.
         /// </remarks>
-        public static Tensor immutable_const (TF_DataType dtype, TensorShape shape, string memory_region_name, string name = "ImmutableConst")
+        public static Tensor immutable_const(TF_DataType dtype, TensorShape shape, string memory_region_name, string name = "ImmutableConst")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -13474,7 +13474,7 @@ namespace Tensorflow.Operations
         ///    
         ///    $$out_i = predictions_{i, targets_i} \in TopKIncludingTies(predictions_i)$$
         /// </remarks>
-        public static Tensor in_top_k (Tensor predictions, Tensor targets, int k, string name = "InTopK")
+        public static Tensor in_top_k(Tensor predictions, Tensor targets, int k, string name = "InTopK")
         {
             var dict = new Dictionary<string, object>();
             dict["predictions"] = predictions;
@@ -13519,7 +13519,7 @@ namespace Tensorflow.Operations
         ///    
         ///    $$out_i = predictions_{i, targets_i} \in TopKIncludingTies(predictions_i)$$
         /// </remarks>
-        public static Tensor in_top_k_v2 (Tensor predictions, Tensor targets, Tensor k, string name = "InTopKV2")
+        public static Tensor in_top_k_v2(Tensor predictions, Tensor targets, Tensor k, string name = "InTopKV2")
         {
             var dict = new Dictionary<string, object>();
             dict["predictions"] = predictions;
@@ -13547,7 +13547,7 @@ namespace Tensorflow.Operations
         ///    A tensor that will be provided using the infeed mechanism.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor infeed_dequeue (TF_DataType dtype, TensorShape shape, string name = "InfeedDequeue")
+        public static Tensor infeed_dequeue(TF_DataType dtype, TensorShape shape, string name = "InfeedDequeue")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -13577,7 +13577,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    simultaneously as an XLA tuple.
         /// </remarks>
-        public static Tensor[] infeed_dequeue_tuple (TF_DataType[] dtypes, TensorShape[] shapes, string name = "InfeedDequeueTuple")
+        public static Tensor[] infeed_dequeue_tuple(TF_DataType[] dtypes, TensorShape[] shapes, string name = "InfeedDequeueTuple")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -13608,7 +13608,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation infeed_enqueue (Tensor input, TensorShape shape = null, int? device_ordinal = null, string name = "InfeedEnqueue")
+        public static Operation infeed_enqueue(Tensor input, TensorShape shape = null, int? device_ordinal = null, string name = "InfeedEnqueue")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -13641,7 +13641,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation infeed_enqueue_tuple (Tensor[] inputs, TensorShape[] shapes, int? device_ordinal = null, string name = "InfeedEnqueueTuple")
+        public static Operation infeed_enqueue_tuple(Tensor[] inputs, TensorShape[] shapes, int? device_ordinal = null, string name = "InfeedEnqueueTuple")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -13670,7 +13670,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation initialize_table (Tensor table_handle, Tensor keys, Tensor values, string name = "InitializeTable")
+        public static Operation initialize_table(Tensor table_handle, Tensor keys, Tensor values, string name = "InitializeTable")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -13722,7 +13722,7 @@ namespace Tensorflow.Operations
         ///    - A value &amp;gt;= 0 means use the index (starting at zero) of the split line based
         ///    on <c>delimiter</c>.
         /// </remarks>
-        public static Operation initialize_table_from_text_file (Tensor table_handle, Tensor filename, int key_index, int value_index, int? vocab_size = null, string delimiter = null, string name = "InitializeTableFromTextFile")
+        public static Operation initialize_table_from_text_file(Tensor table_handle, Tensor filename, int key_index, int value_index, int? vocab_size = null, string delimiter = null, string name = "InitializeTableFromTextFile")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -13779,7 +13779,7 @@ namespace Tensorflow.Operations
         ///    - A value &amp;gt;= 0 means use the index (starting at zero) of the split line based
         ///    on <c>delimiter</c>.
         /// </remarks>
-        public static Operation initialize_table_from_text_file_v2 (Tensor table_handle, Tensor filename, int key_index, int value_index, int? vocab_size = null, string delimiter = null, string name = "InitializeTableFromTextFileV2")
+        public static Operation initialize_table_from_text_file_v2(Tensor table_handle, Tensor filename, int key_index, int value_index, int? vocab_size = null, string delimiter = null, string name = "InitializeTableFromTextFileV2")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -13812,7 +13812,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation initialize_table_v2 (Tensor table_handle, Tensor keys, Tensor values, string name = "InitializeTableV2")
+        public static Operation initialize_table_v2(Tensor table_handle, Tensor keys, Tensor values, string name = "InitializeTableV2")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -13843,7 +13843,7 @@ namespace Tensorflow.Operations
         ///    A <c>Tensor</c> of type T. An alias of <c>x</c>. The content of <c>y</c> is undefined if there are duplicates in <c>i</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor inplace_add (Tensor x, Tensor i, Tensor v, string name = "InplaceAdd")
+        public static Tensor inplace_add(Tensor x, Tensor i, Tensor v, string name = "InplaceAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -13874,7 +13874,7 @@ namespace Tensorflow.Operations
         ///    A <c>Tensor</c> of type T. An alias of <c>x</c>. The content of <c>y</c> is undefined if there are duplicates in <c>i</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor inplace_sub (Tensor x, Tensor i, Tensor v, string name = "InplaceSub")
+        public static Tensor inplace_sub(Tensor x, Tensor i, Tensor v, string name = "InplaceSub")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -13905,7 +13905,7 @@ namespace Tensorflow.Operations
         ///    A <c>Tensor</c> of type T. An alias of <c>x</c>. The content of <c>y</c> is undefined if there are duplicates in <c>i</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor inplace_update (Tensor x, Tensor i, Tensor v, string name = "InplaceUpdate")
+        public static Tensor inplace_update(Tensor x, Tensor i, Tensor v, string name = "InplaceUpdate")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -13929,7 +13929,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    I.e., \\(y = 1 / x\\).
         /// </remarks>
-        public static Tensor inv (Tensor x, string name = "Inv")
+        public static Tensor inv(Tensor x, string name = "Inv")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -13954,7 +13954,7 @@ namespace Tensorflow.Operations
         ///    Specifically, <c>grad = -dy * y*y</c>, where <c>y = 1/x</c>, and <c>dy</c>
         ///    is the corresponding input gradient.
         /// </remarks>
-        public static Tensor inv_grad (Tensor y, Tensor dy, string name = "InvGrad")
+        public static Tensor inv_grad(Tensor y, Tensor dy, string name = "InvGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
@@ -13978,7 +13978,7 @@ namespace Tensorflow.Operations
         ///    The result will have exactly those bits set, that are not set in <c>x</c>. The
         ///    computation is performed on the underlying representation of x.
         /// </remarks>
-        public static Tensor invert (Tensor x, string name = "Invert")
+        public static Tensor invert(Tensor x, string name = "Invert")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14016,7 +14016,7 @@ namespace Tensorflow.Operations
         ///    invert_permutation(x) ==&amp;gt; [2, 4, 3, 0, 1]
         ///   </code>
         /// </remarks>
-        public static Tensor invert_permutation (Tensor x, string name = "InvertPermutation")
+        public static Tensor invert_permutation(Tensor x, string name = "InvertPermutation")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14037,7 +14037,7 @@ namespace Tensorflow.Operations
         ///    output boolean on whether it is initialized or not.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor is_boosted_trees_ensemble_initialized (Tensor tree_ensemble_handle, string name = "IsBoostedTreesEnsembleInitialized")
+        public static Tensor is_boosted_trees_ensemble_initialized(Tensor tree_ensemble_handle, string name = "IsBoostedTreesEnsembleInitialized")
         {
             var dict = new Dictionary<string, object>();
             dict["tree_ensemble_handle"] = tree_ensemble_handle;
@@ -14061,7 +14061,7 @@ namespace Tensorflow.Operations
         ///    Equivalent to np.isfinite
         ///    @end_compatibility
         /// </remarks>
-        public static Tensor is_finite (Tensor x, string name = "IsFinite")
+        public static Tensor is_finite(Tensor x, string name = "IsFinite")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14085,7 +14085,7 @@ namespace Tensorflow.Operations
         ///    Equivalent to np.isinf
         ///    @end_compatibility
         /// </remarks>
-        public static Tensor is_inf (Tensor x, string name = "IsInf")
+        public static Tensor is_inf(Tensor x, string name = "IsInf")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14109,7 +14109,7 @@ namespace Tensorflow.Operations
         ///    Equivalent to np.isnan
         ///    @end_compatibility
         /// </remarks>
-        public static Tensor is_nan (Tensor x, string name = "IsNan")
+        public static Tensor is_nan(Tensor x, string name = "IsNan")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14132,7 +14132,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Outputs boolean scalar indicating whether the tensor has been initialized.
         /// </remarks>
-        public static Tensor is_variable_initialized (Tensor referecne, string name = "IsVariableInitialized")
+        public static Tensor is_variable_initialized(Tensor referecne, string name = "IsVariableInitialized")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -14163,7 +14163,7 @@ namespace Tensorflow.Operations
         ///    or "IteratorGetNext" op.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor iterator (string shared_name, string container, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "Iterator")
+        public static Tensor iterator(string shared_name, string container, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "Iterator")
         {
             var dict = new Dictionary<string, object>();
             dict["shared_name"] = shared_name;
@@ -14195,7 +14195,7 @@ namespace Tensorflow.Operations
         ///    A handle to an iterator resource.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor iterator_from_string_handle (Tensor string_handle, TF_DataType[] output_types = null, TensorShape[] output_shapes = null, string name = "IteratorFromStringHandle")
+        public static Tensor iterator_from_string_handle(Tensor string_handle, TF_DataType[] output_types = null, TensorShape[] output_shapes = null, string name = "IteratorFromStringHandle")
         {
             var dict = new Dictionary<string, object>();
             dict["string_handle"] = string_handle;
@@ -14224,7 +14224,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor[] iterator_get_next (Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "IteratorGetNext")
+        public static Tensor[] iterator_get_next(Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "IteratorGetNext")
         {
             var dict = new Dictionary<string, object>();
             dict["iterator"] = iterator;
@@ -14253,7 +14253,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor iterator_get_next_as_optional (Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "IteratorGetNextAsOptional")
+        public static Tensor iterator_get_next_as_optional(Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "IteratorGetNextAsOptional")
         {
             var dict = new Dictionary<string, object>();
             dict["iterator"] = iterator;
@@ -14286,7 +14286,7 @@ namespace Tensorflow.Operations
         ///    the calling thread is not a member of the thread pool used to execute parallel
         ///    operations (e.g. in eager mode).
         /// </remarks>
-        public static Tensor[] iterator_get_next_sync (Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "IteratorGetNextSync")
+        public static Tensor[] iterator_get_next_sync(Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "IteratorGetNextSync")
         {
             var dict = new Dictionary<string, object>();
             dict["iterator"] = iterator;
@@ -14311,7 +14311,7 @@ namespace Tensorflow.Operations
         ///    A string representation of the given handle.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor iterator_to_string_handle (Tensor resource_handle, string name = "IteratorToStringHandle")
+        public static Tensor iterator_to_string_handle(Tensor resource_handle, string name = "IteratorToStringHandle")
         {
             var dict = new Dictionary<string, object>();
             dict["resource_handle"] = resource_handle;
@@ -14337,7 +14337,7 @@ namespace Tensorflow.Operations
         ///    
         ///    output = sum(t ** 2) / 2
         /// </remarks>
-        public static Tensor l2loss (Tensor t, string name = "L2Loss")
+        public static Tensor l2loss(Tensor t, string name = "L2Loss")
         {
             var dict = new Dictionary<string, object>();
             dict["t"] = t;
@@ -14363,7 +14363,7 @@ namespace Tensorflow.Operations
         ///    The handle to reference the Reader.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor l_m_d_b_reader (string container = null, string shared_name = null, string name = "LMDBReader")
+        public static Tensor l_m_d_b_reader(string container = null, string shared_name = null, string name = "LMDBReader")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -14411,7 +14411,7 @@ namespace Tensorflow.Operations
         ///    For details, see [Krizhevsky et al., ImageNet classification with deep
         ///    convolutional neural networks (NIPS 2012)](http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks).
         /// </remarks>
-        public static Tensor l_r_n (Tensor input, int? depth_radius = null, float? bias = null, float? alpha = null, float? beta = null, string name = "LRN")
+        public static Tensor l_r_n(Tensor input, int? depth_radius = null, float? bias = null, float? alpha = null, float? beta = null, string name = "LRN")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -14458,7 +14458,7 @@ namespace Tensorflow.Operations
         ///    The gradients for LRN.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor l_r_n_grad (Tensor input_grads, Tensor input_image, Tensor output_image, int? depth_radius = null, float? bias = null, float? alpha = null, float? beta = null, string name = "LRNGrad")
+        public static Tensor l_r_n_grad(Tensor input_grads, Tensor input_image, Tensor output_image, int? depth_radius = null, float? bias = null, float? alpha = null, float? beta = null, string name = "LRNGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["input_grads"] = input_grads;
@@ -14495,7 +14495,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor latency_stats_dataset (Tensor input_dataset, Tensor tag, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "LatencyStatsDataset")
+        public static Tensor latency_stats_dataset(Tensor input_dataset, Tensor tag, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "LatencyStatsDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -14566,7 +14566,7 @@ namespace Tensorflow.Operations
         ///    the sampled candidates must be chosen independently of the context and of the
         ///    true labels.
         /// </remarks>
-        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) learned_unigram_candidate_sampler (Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, int? seed = null, int? seed2 = null, string name = "LearnedUnigramCandidateSampler")
+        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) learned_unigram_candidate_sampler(Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, int? seed = null, int? seed2 = null, string name = "LearnedUnigramCandidateSampler")
         {
             var dict = new Dictionary<string, object>();
             dict["true_classes"] = true_classes;
@@ -14603,7 +14603,7 @@ namespace Tensorflow.Operations
         ///    If <c>y</c> is negative, or greater than or equal to the width of <c>x</c> in bits the
         ///    result is implementation defined.
         /// </remarks>
-        public static Tensor left_shift (Tensor x, Tensor y, string name = "LeftShift")
+        public static Tensor left_shift(Tensor x, Tensor y, string name = "LeftShift")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14629,7 +14629,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Less</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor less (Tensor x, Tensor y, string name = "Less")
+        public static Tensor less(Tensor x, Tensor y, string name = "Less")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14655,7 +14655,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>LessEqual</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor less_equal (Tensor x, Tensor y, string name = "LessEqual")
+        public static Tensor less_equal(Tensor x, Tensor y, string name = "LessEqual")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14675,7 +14675,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor lgamma (Tensor x, string name = "Lgamma")
+        public static Tensor lgamma(Tensor x, string name = "Lgamma")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14713,7 +14713,7 @@ namespace Tensorflow.Operations
         ///    tf.linspace(10.0, 12.0, 3, name="linspace") =&amp;gt; [ 10.0  11.0  12.0]
         ///   </code>
         /// </remarks>
-        public static Tensor lin_space (Tensor start, Tensor stop, Tensor num, string name = "LinSpace")
+        public static Tensor lin_space(Tensor start, Tensor stop, Tensor num, string name = "LinSpace")
         {
             var dict = new Dictionary<string, object>();
             dict["start"] = start;
@@ -14766,7 +14766,7 @@ namespace Tensorflow.Operations
         ///    idx ==&amp;gt; [1, 3, 5]
         ///   </code>
         /// </remarks>
-        public static (Tensor output, Tensor idx) list_diff (Tensor x, Tensor y, TF_DataType? out_idx = null, string name = "ListDiff")
+        public static (Tensor output, Tensor idx) list_diff(Tensor x, Tensor y, TF_DataType? out_idx = null, string name = "ListDiff")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14863,7 +14863,7 @@ namespace Tensorflow.Operations
         ///    [w(0, 0),  w(0, 2), -0.5],
         ///    [0.25,    -0.25,      42]]
         /// </remarks>
-        public static Tensor load_and_remap_matrix (Tensor ckpt_path, Tensor old_tensor_name, Tensor row_remapping, Tensor col_remapping, Tensor initializing_values, int num_rows, int num_cols, int? max_rows_in_memory = null, string name = "LoadAndRemapMatrix")
+        public static Tensor load_and_remap_matrix(Tensor ckpt_path, Tensor old_tensor_name, Tensor row_remapping, Tensor col_remapping, Tensor initializing_values, int num_rows, int num_cols, int? max_rows_in_memory = null, string name = "LoadAndRemapMatrix")
         {
             var dict = new Dictionary<string, object>();
             dict["ckpt_path"] = ckpt_path;
@@ -14893,7 +14893,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    I.e., \\(y = \log_e x\\).
         /// </remarks>
-        public static Tensor log (Tensor x, string name = "Log")
+        public static Tensor log(Tensor x, string name = "Log")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14915,7 +14915,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    I.e., \\(y = \log_e (1 + x)\\).
         /// </remarks>
-        public static Tensor log1p (Tensor x, string name = "Log1p")
+        public static Tensor log1p(Tensor x, string name = "Log1p")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -14950,7 +14950,7 @@ namespace Tensorflow.Operations
         ///    is the LU decomposition of the input and P is the corresponding
         ///    permutation matrix.
         /// </remarks>
-        public static (Tensor sign, Tensor log_abs_determinant) log_matrix_determinant (Tensor input, string name = "LogMatrixDeterminant")
+        public static (Tensor sign, Tensor log_abs_determinant) log_matrix_determinant(Tensor input, string name = "LogMatrixDeterminant")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -14979,7 +14979,7 @@ namespace Tensorflow.Operations
         ///    
         ///    logsoftmax[i, j] = logits[i, j] - log(sum(exp(logits[i])))
         /// </remarks>
-        public static Tensor log_softmax (Tensor logits, string name = "LogSoftmax")
+        public static Tensor log_softmax(Tensor logits, string name = "LogSoftmax")
         {
             var dict = new Dictionary<string, object>();
             dict["logits"] = logits;
@@ -15047,7 +15047,7 @@ namespace Tensorflow.Operations
         ///    the sampled candidates must be chosen independently of the context and of the
         ///    true labels.
         /// </remarks>
-        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) log_uniform_candidate_sampler (Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, int? seed = null, int? seed2 = null, string name = "LogUniformCandidateSampler")
+        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) log_uniform_candidate_sampler(Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, int? seed = null, int? seed2 = null, string name = "LogUniformCandidateSampler")
         {
             var dict = new Dictionary<string, object>();
             dict["true_classes"] = true_classes;
@@ -15084,7 +15084,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>LogicalAnd</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor logical_and (Tensor x, Tensor y, string name = "LogicalAnd")
+        public static Tensor logical_and(Tensor x, Tensor y, string name = "LogicalAnd")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -15104,7 +15104,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor logical_not (Tensor x, string name = "LogicalNot")
+        public static Tensor logical_not(Tensor x, string name = "LogicalNot")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -15129,7 +15129,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>LogicalOr</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor logical_or (Tensor x, Tensor y, string name = "LogicalOr")
+        public static Tensor logical_or(Tensor x, Tensor y, string name = "LogicalOr")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -15159,7 +15159,7 @@ namespace Tensorflow.Operations
         ///    values : Tensor of all values in the table. Indexed in parallel with <c>keys</c>.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor keys, Tensor values) lookup_table_export (Tensor table_handle, TF_DataType Tkeys, TF_DataType Tvalues, string name = "LookupTableExport")
+        public static (Tensor keys, Tensor values) lookup_table_export(Tensor table_handle, TF_DataType Tkeys, TF_DataType Tvalues, string name = "LookupTableExport")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15193,7 +15193,7 @@ namespace Tensorflow.Operations
         ///    values : Tensor of all values in the table. Indexed in parallel with <c>keys</c>.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor keys, Tensor values) lookup_table_export_v2 (Tensor table_handle, TF_DataType Tkeys, TF_DataType Tvalues, string name = "LookupTableExportV2")
+        public static (Tensor keys, Tensor values) lookup_table_export_v2(Tensor table_handle, TF_DataType Tkeys, TF_DataType Tvalues, string name = "LookupTableExportV2")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15232,7 +15232,7 @@ namespace Tensorflow.Operations
         ///    The scalar <c>default_value</c> is the value output for keys not present in the
         ///    table. It must also be of the same type as the table values.
         /// </remarks>
-        public static Tensor lookup_table_find (Tensor table_handle, Tensor keys, Tensor default_value, string name = "LookupTableFind")
+        public static Tensor lookup_table_find(Tensor table_handle, Tensor keys, Tensor default_value, string name = "LookupTableFind")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15268,7 +15268,7 @@ namespace Tensorflow.Operations
         ///    The scalar <c>default_value</c> is the value output for keys not present in the
         ///    table. It must also be of the same type as the table values.
         /// </remarks>
-        public static Tensor lookup_table_find_v2 (Tensor table_handle, Tensor keys, Tensor default_value, string name = "LookupTableFindV2")
+        public static Tensor lookup_table_find_v2(Tensor table_handle, Tensor keys, Tensor default_value, string name = "LookupTableFindV2")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15300,7 +15300,7 @@ namespace Tensorflow.Operations
         ///    The tensor <c>keys</c> must be of the same type as the keys of the table.
         ///    The tensor <c>values</c> must be of the type of the table values.
         /// </remarks>
-        public static Operation lookup_table_import (Tensor table_handle, Tensor keys, Tensor values, string name = "LookupTableImport")
+        public static Operation lookup_table_import(Tensor table_handle, Tensor keys, Tensor values, string name = "LookupTableImport")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15332,7 +15332,7 @@ namespace Tensorflow.Operations
         ///    The tensor <c>keys</c> must be of the same type as the keys of the table.
         ///    The tensor <c>values</c> must be of the type of the table values.
         /// </remarks>
-        public static Operation lookup_table_import_v2 (Tensor table_handle, Tensor keys, Tensor values, string name = "LookupTableImportV2")
+        public static Operation lookup_table_import_v2(Tensor table_handle, Tensor keys, Tensor values, string name = "LookupTableImportV2")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15364,7 +15364,7 @@ namespace Tensorflow.Operations
         ///    The tensor <c>keys</c> must be of the same type as the keys of the table.
         ///    The tensor <c>values</c> must be of the type of the table values.
         /// </remarks>
-        public static Operation lookup_table_insert (Tensor table_handle, Tensor keys, Tensor values, string name = "LookupTableInsert")
+        public static Operation lookup_table_insert(Tensor table_handle, Tensor keys, Tensor values, string name = "LookupTableInsert")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15396,7 +15396,7 @@ namespace Tensorflow.Operations
         ///    The tensor <c>keys</c> must be of the same type as the keys of the table.
         ///    The tensor <c>values</c> must be of the type of the table values.
         /// </remarks>
-        public static Operation lookup_table_insert_v2 (Tensor table_handle, Tensor keys, Tensor values, string name = "LookupTableInsertV2")
+        public static Operation lookup_table_insert_v2(Tensor table_handle, Tensor keys, Tensor values, string name = "LookupTableInsertV2")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15419,7 +15419,7 @@ namespace Tensorflow.Operations
         ///    Scalar that contains number of elements in the table.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor lookup_table_size (Tensor table_handle, string name = "LookupTableSize")
+        public static Tensor lookup_table_size(Tensor table_handle, string name = "LookupTableSize")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15440,7 +15440,7 @@ namespace Tensorflow.Operations
         ///    Scalar that contains number of elements in the table.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor lookup_table_size_v2 (Tensor table_handle, string name = "LookupTableSizeV2")
+        public static Tensor lookup_table_size_v2(Tensor table_handle, string name = "LookupTableSizeV2")
         {
             var dict = new Dictionary<string, object>();
             dict["table_handle"] = table_handle;
@@ -15465,7 +15465,7 @@ namespace Tensorflow.Operations
         ///    This operator represents the loop termination condition used by the
         ///    "pivot" switches of a loop.
         /// </remarks>
-        public static Tensor loop_cond (Tensor input, string name = "LoopCond")
+        public static Tensor loop_cond(Tensor input, string name = "LoopCond")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -15490,7 +15490,7 @@ namespace Tensorflow.Operations
         ///    This operation may be executed multiple times. Each execution will reset the
         ///    iterator in <c>iterator</c> to the first element of <c>dataset</c>.
         /// </remarks>
-        public static Operation make_iterator (Tensor dataset, Tensor iterator, string name = "MakeIterator")
+        public static Operation make_iterator(Tensor dataset, Tensor iterator, string name = "MakeIterator")
         {
             var dict = new Dictionary<string, object>();
             dict["dataset"] = dataset;
@@ -15519,7 +15519,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation map_clear (TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapClear")
+        public static Operation map_clear(TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapClear")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -15555,7 +15555,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor map_incomplete_size (TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapIncompleteSize")
+        public static Tensor map_incomplete_size(TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapIncompleteSize")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -15599,7 +15599,7 @@ namespace Tensorflow.Operations
         ///    underlying container does not contain this key
         ///    this op will block until it does.
         /// </remarks>
-        public static Tensor[] map_peek (Tensor key, Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapPeek")
+        public static Tensor[] map_peek(Tensor key, Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapPeek")
         {
             var dict = new Dictionary<string, object>();
             dict["key"] = key;
@@ -15639,7 +15639,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor map_size (TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapSize")
+        public static Tensor map_size(TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapSize")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -15689,7 +15689,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation map_stage (Tensor key, Tensor indices, Tensor[] values, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapStage")
+        public static Operation map_stage(Tensor key, Tensor indices, Tensor[] values, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapStage")
         {
             var dict = new Dictionary<string, object>();
             dict["key"] = key;
@@ -15736,7 +15736,7 @@ namespace Tensorflow.Operations
         ///    from the underlying container.   If the underlying container
         ///    does not contain this key, the op will block until it does.
         /// </remarks>
-        public static Tensor[] map_unstage (Tensor key, Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapUnstage")
+        public static Tensor[] map_unstage(Tensor key, Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapUnstage")
         {
             var dict = new Dictionary<string, object>();
             dict["key"] = key;
@@ -15785,7 +15785,7 @@ namespace Tensorflow.Operations
         ///    from the underlying container.   If the underlying container
         ///    does not contain elements, the op will block until it does.
         /// </remarks>
-        public static (Tensor key, Tensor[] values) map_unstage_no_key (Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapUnstageNoKey")
+        public static (Tensor key, Tensor[] values) map_unstage_no_key(Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "MapUnstageNoKey")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -15833,7 +15833,7 @@ namespace Tensorflow.Operations
         ///    *Note*: The default kernel implementation for MatMul on GPUs uses
         ///    cublas.
         /// </remarks>
-        public static Tensor mat_mul (Tensor a, Tensor b, bool? transpose_a = null, bool? transpose_b = null, string name = "MatMul")
+        public static Tensor mat_mul(Tensor a, Tensor b, bool? transpose_a = null, bool? transpose_b = null, string name = "MatMul")
         {
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
@@ -15864,7 +15864,7 @@ namespace Tensorflow.Operations
         ///    basename portion of the pattern, not in the directory portion.
         ///    Note also that the order of filenames returned can be non-deterministic.
         /// </remarks>
-        public static Tensor matching_files (Tensor pattern, string name = "MatchingFiles")
+        public static Tensor matching_files(Tensor pattern, string name = "MatchingFiles")
         {
             var dict = new Dictionary<string, object>();
             dict["pattern"] = pattern;
@@ -15934,7 +15934,7 @@ namespace Tensorflow.Operations
         ///    tf.matrix_band_part(input, 0, 0) ==&amp;gt; Diagonal.
         ///   </code>
         /// </remarks>
-        public static Tensor matrix_band_part (Tensor input, Tensor num_lower, Tensor num_upper, string name = "MatrixBandPart")
+        public static Tensor matrix_band_part(Tensor input, Tensor num_lower, Tensor num_upper, string name = "MatrixBandPart")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -15962,7 +15962,7 @@ namespace Tensorflow.Operations
         ///    form square matrices. The output is a tensor containing the determinants
         ///    for all input submatrices <c>[..., :, :]</c>.
         /// </remarks>
-        public static Tensor matrix_determinant (Tensor input, string name = "MatrixDeterminant")
+        public static Tensor matrix_determinant(Tensor input, string name = "MatrixDeterminant")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16011,7 +16011,7 @@ namespace Tensorflow.Operations
         ///    which has shape (2, 4, 4)
         ///   </code>
         /// </remarks>
-        public static Tensor matrix_diag (Tensor diagonal, string name = "MatrixDiag")
+        public static Tensor matrix_diag(Tensor diagonal, string name = "MatrixDiag")
         {
             var dict = new Dictionary<string, object>();
             dict["diagonal"] = diagonal;
@@ -16063,7 +16063,7 @@ namespace Tensorflow.Operations
         ///    which has shape (2, 4)
         ///   </code>
         /// </remarks>
-        public static Tensor matrix_diag_part (Tensor input, string name = "MatrixDiagPart")
+        public static Tensor matrix_diag_part(Tensor input, string name = "MatrixDiagPart")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16082,7 +16082,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor matrix_exponential (Tensor input, string name = "MatrixExponential")
+        public static Tensor matrix_exponential(Tensor input, string name = "MatrixExponential")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16122,7 +16122,7 @@ namespace Tensorflow.Operations
         ///    may detect the condition and raise an exception or it may simply return a
         ///    garbage result.
         /// </remarks>
-        public static Tensor matrix_inverse (Tensor input, bool? adjoint = null, string name = "MatrixInverse")
+        public static Tensor matrix_inverse(Tensor input, bool? adjoint = null, string name = "MatrixInverse")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16166,7 +16166,7 @@ namespace Tensorflow.Operations
         ///    form square matrices. The output is a tensor of the same shape as the input
         ///    containing the exponential for all input submatrices <c>[..., :, :]</c>.
         /// </remarks>
-        public static Tensor matrix_logarithm (Tensor input, string name = "MatrixLogarithm")
+        public static Tensor matrix_logarithm(Tensor input, string name = "MatrixLogarithm")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16204,7 +16204,7 @@ namespace Tensorflow.Operations
         ///    * <c>output[i, j, k, ..., m, n] = diagonal[i, j, k, ..., n]</c> for <c>m == n</c>.
         ///    * <c>output[i, j, k, ..., m, n] = input[i, j, k, ..., m, n]</c> for <c>m != n</c>.
         /// </remarks>
-        public static Tensor matrix_set_diag (Tensor input, Tensor diagonal, string name = "MatrixSetDiag")
+        public static Tensor matrix_set_diag(Tensor input, Tensor diagonal, string name = "MatrixSetDiag")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16241,7 +16241,7 @@ namespace Tensorflow.Operations
         ///    If <c>adjoint</c> is <c>True</c> then each output matrix satisfies
         ///    <c>adjoint(matrix[..., :, :]) * output[..., :, :] = rhs[..., :, :]</c>.
         /// </remarks>
-        public static Tensor matrix_solve (Tensor matrix, Tensor rhs, bool? adjoint = null, string name = "MatrixSolve")
+        public static Tensor matrix_solve(Tensor matrix, Tensor rhs, bool? adjoint = null, string name = "MatrixSolve")
         {
             var dict = new Dictionary<string, object>();
             dict["matrix"] = matrix;
@@ -16313,7 +16313,7 @@ namespace Tensorflow.Operations
         ///    typically 6-7 times slower than the fast path. If <c>fast</c> is <c>False</c> then
         ///    <c>l2_regularizer</c> is ignored.
         /// </remarks>
-        public static Tensor matrix_solve_ls (Tensor matrix, Tensor rhs, Tensor l2_regularizer, bool? fast = null, string name = "MatrixSolveLs")
+        public static Tensor matrix_solve_ls(Tensor matrix, Tensor rhs, Tensor l2_regularizer, bool? fast = null, string name = "MatrixSolveLs")
         {
             var dict = new Dictionary<string, object>();
             dict["matrix"] = matrix;
@@ -16370,7 +16370,7 @@ namespace Tensorflow.Operations
         ///    <c>output</c> satisfy matrix equations
         ///    <c>adjoint(matrix[..., i, k]) * output[..., k, j] = rhs[..., i, j]</c>.
         /// </remarks>
-        public static Tensor matrix_triangular_solve (Tensor matrix, Tensor rhs, bool? lower = null, bool? adjoint = null, string name = "MatrixTriangularSolve")
+        public static Tensor matrix_triangular_solve(Tensor matrix, Tensor rhs, bool? lower = null, bool? adjoint = null, string name = "MatrixTriangularSolve")
         {
             var dict = new Dictionary<string, object>();
             dict["matrix"] = matrix;
@@ -16409,7 +16409,7 @@ namespace Tensorflow.Operations
         ///    <c>axis</c>. If <c>keep_dims</c> is true, the reduced dimensions are
         ///    retained with length 1.
         /// </remarks>
-        public static Tensor max (Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Max")
+        public static Tensor max(Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Max")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16453,7 +16453,7 @@ namespace Tensorflow.Operations
         ///    The max pooled output tensor.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool (Tensor input, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPool")
+        public static Tensor max_pool(Tensor input, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPool")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16500,7 +16500,7 @@ namespace Tensorflow.Operations
         ///    The max pooled output tensor.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool3d (Tensor input, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPool3D")
+        public static Tensor max_pool3d(Tensor input, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPool3D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16552,7 +16552,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool3d_grad (Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPool3DGrad")
+        public static Tensor max_pool3d_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPool3DGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input"] = orig_input;
@@ -16607,7 +16607,7 @@ namespace Tensorflow.Operations
         ///    Gradients of gradients w.r.t. the input to <c>max_pool</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool3d_grad_grad (Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPool3DGradGrad")
+        public static Tensor max_pool3d_grad_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPool3DGradGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input"] = orig_input;
@@ -16661,7 +16661,7 @@ namespace Tensorflow.Operations
         ///    Gradients w.r.t. the input to <c>max_pool</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool_grad (Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPoolGrad")
+        public static Tensor max_pool_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPoolGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input"] = orig_input;
@@ -16715,7 +16715,7 @@ namespace Tensorflow.Operations
         ///    Gradients of gradients w.r.t. the input to <c>max_pool</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool_grad_grad (Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPoolGradGrad")
+        public static Tensor max_pool_grad_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding, string data_format = null, string name = "MaxPoolGradGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input"] = orig_input;
@@ -16767,7 +16767,7 @@ namespace Tensorflow.Operations
         ///    Gradients of gradients w.r.t. the input to <c>max_pool</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool_grad_grad_v2 (Tensor orig_input, Tensor orig_output, Tensor grad, Tensor ksize, Tensor strides, string padding, string data_format = null, string name = "MaxPoolGradGradV2")
+        public static Tensor max_pool_grad_grad_v2(Tensor orig_input, Tensor orig_output, Tensor grad, Tensor ksize, Tensor strides, string padding, string data_format = null, string name = "MaxPoolGradGradV2")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input"] = orig_input;
@@ -16815,7 +16815,7 @@ namespace Tensorflow.Operations
         ///    Gradients of gradients w.r.t. the input of <c>max_pool</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool_grad_grad_with_argmax (Tensor input, Tensor grad, Tensor argmax, int[] ksize, int[] strides, string padding, string name = "MaxPoolGradGradWithArgmax")
+        public static Tensor max_pool_grad_grad_with_argmax(Tensor input, Tensor grad, Tensor argmax, int[] ksize, int[] strides, string padding, string name = "MaxPoolGradGradWithArgmax")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16865,7 +16865,7 @@ namespace Tensorflow.Operations
         ///    Gradients w.r.t. the input to <c>max_pool</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool_grad_v2 (Tensor orig_input, Tensor orig_output, Tensor grad, Tensor ksize, Tensor strides, string padding, string data_format = null, string name = "MaxPoolGradV2")
+        public static Tensor max_pool_grad_v2(Tensor orig_input, Tensor orig_output, Tensor grad, Tensor ksize, Tensor strides, string padding, string data_format = null, string name = "MaxPoolGradV2")
         {
             var dict = new Dictionary<string, object>();
             dict["orig_input"] = orig_input;
@@ -16913,7 +16913,7 @@ namespace Tensorflow.Operations
         ///    Gradients w.r.t. the input of <c>max_pool</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool_grad_with_argmax (Tensor input, Tensor grad, Tensor argmax, int[] ksize, int[] strides, string padding, string name = "MaxPoolGradWithArgmax")
+        public static Tensor max_pool_grad_with_argmax(Tensor input, Tensor grad, Tensor argmax, int[] ksize, int[] strides, string padding, string name = "MaxPoolGradWithArgmax")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -16957,7 +16957,7 @@ namespace Tensorflow.Operations
         ///    The max pooled output tensor.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor max_pool_v2 (Tensor input, Tensor ksize, Tensor strides, string padding, string data_format = null, string name = "MaxPoolV2")
+        public static Tensor max_pool_v2(Tensor input, Tensor ksize, Tensor strides, string padding, string data_format = null, string name = "MaxPoolV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -17010,7 +17010,7 @@ namespace Tensorflow.Operations
         ///    (either negative or too large).  This is a bug, but fixing it is difficult to do
         ///    in a safe backwards compatible way, especially due to flattening.
         /// </remarks>
-        public static (Tensor output, Tensor argmax) max_pool_with_argmax (Tensor input, int[] ksize, int[] strides, string padding, TF_DataType? Targmax = null, string name = "MaxPoolWithArgmax")
+        public static (Tensor output, Tensor argmax) max_pool_with_argmax(Tensor input, int[] ksize, int[] strides, string padding, TF_DataType? Targmax = null, string name = "MaxPoolWithArgmax")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -17043,7 +17043,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Maximum</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor maximum (Tensor x, Tensor y, string name = "Maximum")
+        public static Tensor maximum(Tensor x, Tensor y, string name = "Maximum")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -17078,7 +17078,7 @@ namespace Tensorflow.Operations
         ///    <c>axis</c>. If <c>keep_dims</c> is true, the reduced dimensions are
         ///    retained with length 1.
         /// </remarks>
-        public static Tensor mean (Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Mean")
+        public static Tensor mean(Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Mean")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -17111,7 +17111,7 @@ namespace Tensorflow.Operations
         ///    <c>Merge</c> forwards the first tensor to become available to <c>output</c>, and sets
         ///    <c>value_index</c> to its index in <c>inputs</c>.
         /// </remarks>
-        public static (Tensor output, Tensor value_index) merge (Tensor[] inputs, string name = "Merge")
+        public static (Tensor output, Tensor value_index) merge(Tensor[] inputs, string name = "Merge")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -17145,7 +17145,7 @@ namespace Tensorflow.Operations
         ///    When the Op is run, it reports an <c>InvalidArgument</c> error if multiple values
         ///    in the summaries to merge use the same tag.
         /// </remarks>
-        public static Tensor merge_summary (Tensor[] inputs, string name = "MergeSummary")
+        public static Tensor merge_summary(Tensor[] inputs, string name = "MergeSummary")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -17182,7 +17182,7 @@ namespace Tensorflow.Operations
         ///    path in the input checkpoint_prefixes.  This is useful when those paths are non
         ///    user-facing temporary locations.
         /// </remarks>
-        public static Operation merge_v2checkpoints (Tensor checkpoint_prefixes, Tensor destination_prefix, bool? delete_old_dirs = null, string name = "MergeV2Checkpoints")
+        public static Operation merge_v2checkpoints(Tensor checkpoint_prefixes, Tensor destination_prefix, bool? delete_old_dirs = null, string name = "MergeV2Checkpoints")
         {
             var dict = new Dictionary<string, object>();
             dict["checkpoint_prefixes"] = checkpoint_prefixes;
@@ -17231,7 +17231,7 @@ namespace Tensorflow.Operations
         ///    history in the speech recognition world, and https://en.wikipedia.org/wiki/Mel-frequency_cepstrum
         ///    is a good resource to learn more.
         /// </remarks>
-        public static Tensor mfcc (Tensor spectrogram, Tensor sample_rate, float? upper_frequency_limit = null, float? lower_frequency_limit = null, int? filterbank_channel_count = null, int? dct_coefficient_count = null, string name = "Mfcc")
+        public static Tensor mfcc(Tensor spectrogram, Tensor sample_rate, float? upper_frequency_limit = null, float? lower_frequency_limit = null, int? filterbank_channel_count = null, int? dct_coefficient_count = null, string name = "Mfcc")
         {
             var dict = new Dictionary<string, object>();
             dict["spectrogram"] = spectrogram;
@@ -17274,7 +17274,7 @@ namespace Tensorflow.Operations
         ///    <c>axis</c>. If <c>keep_dims</c> is true, the reduced dimensions are
         ///    retained with length 1.
         /// </remarks>
-        public static Tensor min (Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Min")
+        public static Tensor min(Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Min")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -17302,7 +17302,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Minimum</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor minimum (Tensor x, Tensor y, string name = "Minimum")
+        public static Tensor minimum(Tensor x, Tensor y, string name = "Minimum")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -17363,7 +17363,7 @@ namespace Tensorflow.Operations
         ///    [5, 4, 4, 5, 6, 6, 5]]
         ///   </code>
         /// </remarks>
-        public static Tensor mirror_pad (Tensor input, Tensor paddings, string mode, string name = "MirrorPad")
+        public static Tensor mirror_pad(Tensor input, Tensor paddings, string mode, string name = "MirrorPad")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -17414,7 +17414,7 @@ namespace Tensorflow.Operations
         ///    [11, 28]]
         ///   </code>
         /// </remarks>
-        public static Tensor mirror_pad_grad (Tensor input, Tensor paddings, string mode, string name = "MirrorPadGrad")
+        public static Tensor mirror_pad_grad(Tensor input, Tensor paddings, string mode, string name = "MirrorPadGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -17444,7 +17444,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Mod</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor mod (Tensor x, Tensor y, string name = "Mod")
+        public static Tensor mod(Tensor x, Tensor y, string name = "Mod")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -17470,7 +17470,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Multiply</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor mul (Tensor x, Tensor y, string name = "Mul")
+        public static Tensor mul(Tensor x, Tensor y, string name = "Mul")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -17506,7 +17506,7 @@ namespace Tensorflow.Operations
         ///    contains the drawn class labels with range <c>[0, num_classes)</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor multinomial (Tensor logits, Tensor num_samples, int? seed = null, int? seed2 = null, TF_DataType? output_dtype = null, string name = "Multinomial")
+        public static Tensor multinomial(Tensor logits, Tensor num_samples, int? seed = null, int? seed2 = null, TF_DataType? output_dtype = null, string name = "Multinomial")
         {
             var dict = new Dictionary<string, object>();
             dict["logits"] = logits;
@@ -17568,7 +17568,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a scalar. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_dense_hash_table (Tensor empty_key, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, int? initial_num_buckets = null, float? max_load_factor = null, string name = "MutableDenseHashTable")
+        public static Tensor mutable_dense_hash_table(Tensor empty_key, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, int? initial_num_buckets = null, float? max_load_factor = null, string name = "MutableDenseHashTable")
         {
             var dict = new Dictionary<string, object>();
             dict["empty_key"] = empty_key;
@@ -17636,7 +17636,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a scalar. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_dense_hash_table_v2 (Tensor empty_key, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, int? initial_num_buckets = null, float? max_load_factor = null, string name = "MutableDenseHashTableV2")
+        public static Tensor mutable_dense_hash_table_v2(Tensor empty_key, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, int? initial_num_buckets = null, float? max_load_factor = null, string name = "MutableDenseHashTableV2")
         {
             var dict = new Dictionary<string, object>();
             dict["empty_key"] = empty_key;
@@ -17692,7 +17692,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a scalar. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_hash_table (TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, string name = "MutableHashTable")
+        public static Tensor mutable_hash_table(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, string name = "MutableHashTable")
         {
             var dict = new Dictionary<string, object>();
             dict["key_dtype"] = key_dtype;
@@ -17742,7 +17742,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a vector. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_hash_table_of_tensors (TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, string name = "MutableHashTableOfTensors")
+        public static Tensor mutable_hash_table_of_tensors(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, string name = "MutableHashTableOfTensors")
         {
             var dict = new Dictionary<string, object>();
             dict["key_dtype"] = key_dtype;
@@ -17794,7 +17794,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a vector. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_hash_table_of_tensors_v2 (TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, string name = "MutableHashTableOfTensorsV2")
+        public static Tensor mutable_hash_table_of_tensors_v2(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, string name = "MutableHashTableOfTensorsV2")
         {
             var dict = new Dictionary<string, object>();
             dict["key_dtype"] = key_dtype;
@@ -17846,7 +17846,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a scalar. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_hash_table_v2 (TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, string name = "MutableHashTableV2")
+        public static Tensor mutable_hash_table_v2(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, string name = "MutableHashTableV2")
         {
             var dict = new Dictionary<string, object>();
             dict["key_dtype"] = key_dtype;
@@ -17916,7 +17916,7 @@ namespace Tensorflow.Operations
         ///    It is also useful if two separate functions must share a resource, but we
         ///    wish to ensure the usage is exclusive.
         /// </remarks>
-        public static Tensor mutex_lock (Tensor mutex, string name = "MutexLock")
+        public static Tensor mutex_lock(Tensor mutex, string name = "MutexLock")
         {
             var dict = new Dictionary<string, object>();
             dict["mutex"] = mutex;
@@ -17942,7 +17942,7 @@ namespace Tensorflow.Operations
         ///    The mutex resource.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor mutex_v2 (string container = null, string shared_name = null, string name = "MutexV2")
+        public static Tensor mutex_v2(string container = null, string shared_name = null, string name = "MutexV2")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -17967,7 +17967,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    I.e., \\(y = -x\\).
         /// </remarks>
-        public static Tensor neg (Tensor x, string name = "Neg")
+        public static Tensor neg(Tensor x, string name = "Neg")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -18006,7 +18006,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation neg_train (Tensor w_in, Tensor w_out, Tensor examples, Tensor labels, Tensor lr, int[] vocab_count, int num_negative_samples, string name = "NegTrain")
+        public static Operation neg_train(Tensor w_in, Tensor w_out, Tensor examples, Tensor labels, Tensor lr, int[] vocab_count, int num_negative_samples, string name = "NegTrain")
         {
             var dict = new Dictionary<string, object>();
             dict["w_in"] = w_in;
@@ -18033,7 +18033,7 @@ namespace Tensorflow.Operations
         ///    The same tensor as <c>data</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor next_iteration (Tensor data, string name = "NextIteration")
+        public static Tensor next_iteration(Tensor data, string name = "NextIteration")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -18050,7 +18050,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation no_op (string name = "NoOp")
+        public static Operation no_op(string name = "NoOp")
         {
             var dict = new Dictionary<string, object>();
             var op = tf.OpDefLib._apply_op_helper("NoOp", name: name, keywords: dict);
@@ -18101,7 +18101,7 @@ namespace Tensorflow.Operations
         ///    boxes, scores, max_output_size, iou_threshold)
         ///    selected_boxes = tf.gather(boxes, selected_indices)
         /// </remarks>
-        public static Tensor non_max_suppression (Tensor boxes, Tensor scores, Tensor max_output_size, float? iou_threshold = null, string name = "NonMaxSuppression")
+        public static Tensor non_max_suppression(Tensor boxes, Tensor scores, Tensor max_output_size, float? iou_threshold = null, string name = "NonMaxSuppression")
         {
             var dict = new Dictionary<string, object>();
             dict["boxes"] = boxes;
@@ -18159,7 +18159,7 @@ namespace Tensorflow.Operations
         ///    boxes, scores, max_output_size, iou_threshold)
         ///    selected_boxes = tf.gather(boxes, selected_indices)
         /// </remarks>
-        public static Tensor non_max_suppression_v2 (Tensor boxes, Tensor scores, Tensor max_output_size, Tensor iou_threshold, string name = "NonMaxSuppressionV2")
+        public static Tensor non_max_suppression_v2(Tensor boxes, Tensor scores, Tensor max_output_size, Tensor iou_threshold, string name = "NonMaxSuppressionV2")
         {
             var dict = new Dictionary<string, object>();
             dict["boxes"] = boxes;
@@ -18219,7 +18219,7 @@ namespace Tensorflow.Operations
         ///    boxes, scores, max_output_size, iou_threshold, score_threshold)
         ///    selected_boxes = tf.gather(boxes, selected_indices)
         /// </remarks>
-        public static Tensor non_max_suppression_v3 (Tensor boxes, Tensor scores, Tensor max_output_size, Tensor iou_threshold, Tensor score_threshold, string name = "NonMaxSuppressionV3")
+        public static Tensor non_max_suppression_v3(Tensor boxes, Tensor scores, Tensor max_output_size, Tensor iou_threshold, Tensor score_threshold, string name = "NonMaxSuppressionV3")
         {
             var dict = new Dictionary<string, object>();
             dict["boxes"] = boxes;
@@ -18287,7 +18287,7 @@ namespace Tensorflow.Operations
         ///    boxes, scores, max_output_size, iou_threshold, score_threshold)
         ///    selected_boxes = tf.gather(boxes, selected_indices)
         /// </remarks>
-        public static (Tensor selected_indices, Tensor valid_outputs) non_max_suppression_v4 (Tensor boxes, Tensor scores, Tensor max_output_size, Tensor iou_threshold, Tensor score_threshold, bool? pad_to_max_output_size = null, string name = "NonMaxSuppressionV4")
+        public static (Tensor selected_indices, Tensor valid_outputs) non_max_suppression_v4(Tensor boxes, Tensor scores, Tensor max_output_size, Tensor iou_threshold, Tensor score_threshold, bool? pad_to_max_output_size = null, string name = "NonMaxSuppressionV4")
         {
             var dict = new Dictionary<string, object>();
             dict["boxes"] = boxes;
@@ -18351,7 +18351,7 @@ namespace Tensorflow.Operations
         ///    overlaps, scores, max_output_size, overlap_threshold, score_threshold)
         ///    selected_boxes = tf.gather(boxes, selected_indices)
         /// </remarks>
-        public static Tensor non_max_suppression_with_overlaps (Tensor overlaps, Tensor scores, Tensor max_output_size, Tensor overlap_threshold, Tensor score_threshold, string name = "NonMaxSuppressionWithOverlaps")
+        public static Tensor non_max_suppression_with_overlaps(Tensor overlaps, Tensor scores, Tensor max_output_size, Tensor overlap_threshold, Tensor score_threshold, string name = "NonMaxSuppressionWithOverlaps")
         {
             var dict = new Dictionary<string, object>();
             dict["overlaps"] = overlaps;
@@ -18380,7 +18380,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>NotEqual</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor not_equal (Tensor x, Tensor y, string name = "NotEqual")
+        public static Tensor not_equal(Tensor x, Tensor y, string name = "NotEqual")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -18419,7 +18419,7 @@ namespace Tensorflow.Operations
         ///    
         ///    values.shape = input.shape[:-1]
         /// </remarks>
-        public static Tensor nth_element (Tensor input, Tensor n, bool? reverse = null, string name = "NthElement")
+        public static Tensor nth_element(Tensor input, Tensor n, bool? reverse = null, string name = "NthElement")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -18549,7 +18549,7 @@ namespace Tensorflow.Operations
         ///    ]
         ///   </code>
         /// </remarks>
-        public static Tensor one_hot (Tensor indices, Tensor depth, Tensor on_value, Tensor off_value, int? axis = null, string name = "OneHot")
+        public static Tensor one_hot(Tensor indices, Tensor depth, Tensor on_value, Tensor off_value, int? axis = null, string name = "OneHot")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -18575,7 +18575,7 @@ namespace Tensorflow.Operations
         ///    a tensor of the same shape and type as x but filled with ones.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor ones_like (Tensor x, string name = "OnesLike")
+        public static Tensor ones_like(Tensor x, string name = "OnesLike")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -18607,7 +18607,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Creates a dataset by applying optimizations to <c>input_dataset</c>.
         /// </remarks>
-        public static Tensor optimize_dataset (Tensor input_dataset, Tensor optimizations, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "OptimizeDataset")
+        public static Tensor optimize_dataset(Tensor input_dataset, Tensor optimizations, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "OptimizeDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -18629,7 +18629,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor optional_from_value (Tensor[] components, string name = "OptionalFromValue")
+        public static Tensor optional_from_value(Tensor[] components, string name = "OptionalFromValue")
         {
             var dict = new Dictionary<string, object>();
             dict["components"] = components;
@@ -18654,7 +18654,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor[] optional_get_value (Tensor optional, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "OptionalGetValue")
+        public static Tensor[] optional_get_value(Tensor optional, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "OptionalGetValue")
         {
             var dict = new Dictionary<string, object>();
             dict["optional"] = optional;
@@ -18677,7 +18677,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor optional_has_value (Tensor optional, string name = "OptionalHasValue")
+        public static Tensor optional_has_value(Tensor optional, string name = "OptionalHasValue")
         {
             var dict = new Dictionary<string, object>();
             dict["optional"] = optional;
@@ -18694,7 +18694,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor optional_none (string name = "OptionalNone")
+        public static Tensor optional_none(string name = "OptionalNone")
         {
             var dict = new Dictionary<string, object>();
             var op = tf.OpDefLib._apply_op_helper("OptionalNone", name: name, keywords: dict);
@@ -18721,7 +18721,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation ordered_map_clear (TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapClear")
+        public static Operation ordered_map_clear(TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapClear")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -18757,7 +18757,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor ordered_map_incomplete_size (TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapIncompleteSize")
+        public static Tensor ordered_map_incomplete_size(TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapIncompleteSize")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -18802,7 +18802,7 @@ namespace Tensorflow.Operations
         ///    this op will block until it does.   This Op is optimized for
         ///    performance.
         /// </remarks>
-        public static Tensor[] ordered_map_peek (Tensor key, Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapPeek")
+        public static Tensor[] ordered_map_peek(Tensor key, Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapPeek")
         {
             var dict = new Dictionary<string, object>();
             dict["key"] = key;
@@ -18842,7 +18842,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor ordered_map_size (TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapSize")
+        public static Tensor ordered_map_size(TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapSize")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -18895,7 +18895,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    associative container.   Elements are ordered by key.
         /// </remarks>
-        public static Operation ordered_map_stage (Tensor key, Tensor indices, Tensor[] values, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapStage")
+        public static Operation ordered_map_stage(Tensor key, Tensor indices, Tensor[] values, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapStage")
         {
             var dict = new Dictionary<string, object>();
             dict["key"] = key;
@@ -18942,7 +18942,7 @@ namespace Tensorflow.Operations
         ///    from the underlying container.   If the underlying container
         ///    does not contain this key, the op will block until it does.
         /// </remarks>
-        public static Tensor[] ordered_map_unstage (Tensor key, Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapUnstage")
+        public static Tensor[] ordered_map_unstage(Tensor key, Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapUnstage")
         {
             var dict = new Dictionary<string, object>();
             dict["key"] = key;
@@ -18991,7 +18991,7 @@ namespace Tensorflow.Operations
         ///    key from the underlying container.   If the underlying container
         ///    does not contain elements, the op will block until it does.
         /// </remarks>
-        public static (Tensor key, Tensor[] values) ordered_map_unstage_no_key (Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapUnstageNoKey")
+        public static (Tensor key, Tensor[] values) ordered_map_unstage_no_key(Tensor indices, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "OrderedMapUnstageNoKey")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -19037,7 +19037,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    block indefinitely until data is available.
         /// </remarks>
-        public static Tensor outfeed_dequeue (TF_DataType dtype, TensorShape shape, int? device_ordinal = null, string name = "OutfeedDequeue")
+        public static Tensor outfeed_dequeue(TF_DataType dtype, TensorShape shape, int? device_ordinal = null, string name = "OutfeedDequeue")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -19075,7 +19075,7 @@ namespace Tensorflow.Operations
         ///    tuple.  This operations will block indefinitely until data is available.
         ///    Output <c>i</c> corresponds to XLA tuple element <c>i</c>.
         /// </remarks>
-        public static Tensor[] outfeed_dequeue_tuple (TF_DataType[] dtypes, TensorShape[] shapes, int? device_ordinal = null, string name = "OutfeedDequeueTuple")
+        public static Tensor[] outfeed_dequeue_tuple(TF_DataType[] dtypes, TensorShape[] shapes, int? device_ordinal = null, string name = "OutfeedDequeueTuple")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -19100,7 +19100,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation outfeed_enqueue (Tensor input, string name = "OutfeedEnqueue")
+        public static Operation outfeed_enqueue(Tensor input, string name = "OutfeedEnqueue")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -19121,7 +19121,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation outfeed_enqueue_tuple (Tensor[] inputs, string name = "OutfeedEnqueueTuple")
+        public static Operation outfeed_enqueue_tuple(Tensor[] inputs, string name = "OutfeedEnqueueTuple")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -19167,7 +19167,7 @@ namespace Tensorflow.Operations
         ///    
         ///    This is the opposite of <c>unpack</c>.
         /// </remarks>
-        public static Tensor pack (Tensor[] values, int? axis = null, string name = "Pack")
+        public static Tensor pack(Tensor[] values, int? axis = null, string name = "Pack")
         {
             var dict = new Dictionary<string, object>();
             dict["values"] = values;
@@ -19215,7 +19215,7 @@ namespace Tensorflow.Operations
         ///   </code>
         ///    
         /// </remarks>
-        public static Tensor pad (Tensor input, Tensor paddings, string name = "Pad")
+        public static Tensor pad(Tensor input, Tensor paddings, string name = "Pad")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -19265,7 +19265,7 @@ namespace Tensorflow.Operations
         ///    [0, 0, 0, 0, 0, 0]]
         ///   </code>
         /// </remarks>
-        public static Tensor pad_v2 (Tensor input, Tensor paddings, Tensor constant_values, string name = "PadV2")
+        public static Tensor pad_v2(Tensor input, Tensor paddings, Tensor constant_values, string name = "PadV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -19303,7 +19303,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor padded_batch_dataset (Tensor input_dataset, Tensor batch_size, Tensor[] padded_shapes, Tensor[] padding_values, TensorShape[] output_shapes, string name = "PaddedBatchDataset")
+        public static Tensor padded_batch_dataset(Tensor input_dataset, Tensor batch_size, Tensor[] padded_shapes, Tensor[] padding_values, TensorShape[] output_shapes, string name = "PaddedBatchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -19347,7 +19347,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor padded_batch_dataset_v2 (Tensor input_dataset, Tensor batch_size, Tensor[] padded_shapes, Tensor[] padding_values, Tensor drop_remainder, TensorShape[] output_shapes, string name = "PaddedBatchDatasetV2")
+        public static Tensor padded_batch_dataset_v2(Tensor input_dataset, Tensor batch_size, Tensor[] padded_shapes, Tensor[] padding_values, Tensor drop_remainder, TensorShape[] output_shapes, string name = "PaddedBatchDatasetV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -19401,7 +19401,7 @@ namespace Tensorflow.Operations
         ///    to 0 in the shape attr.  In this case DequeueMany will pad up to the maximum
         ///    size of any given element in the minibatch.  See below for details.
         /// </remarks>
-        public static Tensor padding_f_i_f_o_queue (TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "PaddingFIFOQueue")
+        public static Tensor padding_f_i_f_o_queue(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "PaddingFIFOQueue")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -19458,7 +19458,7 @@ namespace Tensorflow.Operations
         ///    to 0 in the shape attr.  In this case DequeueMany will pad up to the maximum
         ///    size of any given element in the minibatch.  See below for details.
         /// </remarks>
-        public static Tensor padding_f_i_f_o_queue_v2 (TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "PaddingFIFOQueueV2")
+        public static Tensor padding_f_i_f_o_queue_v2(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "PaddingFIFOQueueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -19511,7 +19511,7 @@ namespace Tensorflow.Operations
         ///    will copy pieces of the input into the output as they become available, in
         ///    some situations this can provide a performance benefit.
         /// </remarks>
-        public static Tensor parallel_concat (Tensor[] values, TensorShape shape, string name = "ParallelConcat")
+        public static Tensor parallel_concat(Tensor[] values, TensorShape shape, string name = "ParallelConcat")
         {
             var dict = new Dictionary<string, object>();
             dict["values"] = values;
@@ -19596,7 +19596,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/DynamicStitch.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor parallel_dynamic_stitch (Tensor[] indices, Tensor[] data, string name = "ParallelDynamicStitch")
+        public static Tensor parallel_dynamic_stitch(Tensor[] indices, Tensor[] data, string name = "ParallelDynamicStitch")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -19644,7 +19644,7 @@ namespace Tensorflow.Operations
         ///    scalar which applies to the entire output, or a vector of length shape[0] which
         ///    stores the parameters for each batch.
         /// </remarks>
-        public static Tensor parameterized_truncated_normal (Tensor shape, Tensor means, Tensor stdevs, Tensor minvals, Tensor maxvals, int? seed = null, int? seed2 = null, string name = "ParameterizedTruncatedNormal")
+        public static Tensor parameterized_truncated_normal(Tensor shape, Tensor means, Tensor stdevs, Tensor minvals, Tensor maxvals, int? seed = null, int? seed2 = null, string name = "ParameterizedTruncatedNormal")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -19729,7 +19729,7 @@ namespace Tensorflow.Operations
         ///    dense_values :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor[] sparse_indices, Tensor[] sparse_values, Tensor[] sparse_shapes, Tensor[] dense_values) parse_example (Tensor serialized, Tensor names, Tensor[] sparse_keys, Tensor[] dense_keys, Tensor[] dense_defaults, TF_DataType[] sparse_types, TensorShape[] dense_shapes, string name = "ParseExample")
+        public static (Tensor[] sparse_indices, Tensor[] sparse_values, Tensor[] sparse_shapes, Tensor[] dense_values) parse_example(Tensor serialized, Tensor names, Tensor[] sparse_keys, Tensor[] dense_keys, Tensor[] dense_defaults, TF_DataType[] sparse_types, TensorShape[] dense_shapes, string name = "ParseExample")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
@@ -19801,7 +19801,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor parse_example_dataset (Tensor input_dataset, Tensor num_parallel_calls, Tensor[] dense_defaults, string[] sparse_keys, string[] dense_keys, TF_DataType[] sparse_types, TensorShape[] dense_shapes, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ParseExampleDataset")
+        public static Tensor parse_example_dataset(Tensor input_dataset, Tensor num_parallel_calls, Tensor[] dense_defaults, string[] sparse_keys, string[] dense_keys, TF_DataType[] sparse_types, TensorShape[] dense_shapes, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ParseExampleDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -19923,7 +19923,7 @@ namespace Tensorflow.Operations
         ///    feature_list_dense_lengths :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor[] context_sparse_indices, Tensor[] context_sparse_values, Tensor[] context_sparse_shapes, Tensor[] context_dense_values, Tensor[] feature_list_sparse_indices, Tensor[] feature_list_sparse_values, Tensor[] feature_list_sparse_shapes, Tensor[] feature_list_dense_values, Tensor[] feature_list_dense_lengths) parse_sequence_example (Tensor serialized, Tensor debug_name, Tensor[] context_dense_defaults, string[] feature_list_dense_missing_assumed_empty, string[] context_sparse_keys, string[] context_dense_keys, string[] feature_list_sparse_keys, string[] feature_list_dense_keys, int? Ncontext_sparse = null, int? Ncontext_dense = null, int? Nfeature_list_sparse = null, int? Nfeature_list_dense = null, TF_DataType[] context_sparse_types = null, TF_DataType[] feature_list_dense_types = null, TensorShape[] context_dense_shapes = null, TF_DataType[] feature_list_sparse_types = null, TensorShape[] feature_list_dense_shapes = null, string name = "ParseSequenceExample")
+        public static (Tensor[] context_sparse_indices, Tensor[] context_sparse_values, Tensor[] context_sparse_shapes, Tensor[] context_dense_values, Tensor[] feature_list_sparse_indices, Tensor[] feature_list_sparse_values, Tensor[] feature_list_sparse_shapes, Tensor[] feature_list_dense_values, Tensor[] feature_list_dense_lengths) parse_sequence_example(Tensor serialized, Tensor debug_name, Tensor[] context_dense_defaults, string[] feature_list_dense_missing_assumed_empty, string[] context_sparse_keys, string[] context_dense_keys, string[] feature_list_sparse_keys, string[] feature_list_dense_keys, int? Ncontext_sparse = null, int? Ncontext_dense = null, int? Nfeature_list_sparse = null, int? Nfeature_list_dense = null, TF_DataType[] context_sparse_types = null, TF_DataType[] feature_list_dense_types = null, TensorShape[] context_dense_shapes = null, TF_DataType[] feature_list_sparse_types = null, TensorShape[] feature_list_dense_shapes = null, string name = "ParseSequenceExample")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
@@ -20029,7 +20029,7 @@ namespace Tensorflow.Operations
         ///    dense_values :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor[] sparse_indices, Tensor[] sparse_values, Tensor[] sparse_shapes, Tensor[] dense_values) parse_single_example (Tensor serialized, Tensor[] dense_defaults, int num_sparse, string[] sparse_keys, string[] dense_keys, TF_DataType[] sparse_types, TensorShape[] dense_shapes, string name = "ParseSingleExample")
+        public static (Tensor[] sparse_indices, Tensor[] sparse_values, Tensor[] sparse_shapes, Tensor[] dense_values) parse_single_example(Tensor serialized, Tensor[] dense_defaults, int num_sparse, string[] sparse_keys, string[] dense_keys, TF_DataType[] sparse_types, TensorShape[] dense_shapes, string name = "ParseSingleExample")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
@@ -20140,7 +20140,7 @@ namespace Tensorflow.Operations
         ///    feature_list_dense_values :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor[] context_sparse_indices, Tensor[] context_sparse_values, Tensor[] context_sparse_shapes, Tensor[] context_dense_values, Tensor[] feature_list_sparse_indices, Tensor[] feature_list_sparse_values, Tensor[] feature_list_sparse_shapes, Tensor[] feature_list_dense_values) parse_single_sequence_example (Tensor serialized, Tensor feature_list_dense_missing_assumed_empty, Tensor[] context_sparse_keys, Tensor[] context_dense_keys, Tensor[] feature_list_sparse_keys, Tensor[] feature_list_dense_keys, Tensor[] context_dense_defaults, Tensor debug_name, TF_DataType[] context_sparse_types = null, TF_DataType[] feature_list_dense_types = null, TensorShape[] context_dense_shapes = null, TF_DataType[] feature_list_sparse_types = null, TensorShape[] feature_list_dense_shapes = null, string name = "ParseSingleSequenceExample")
+        public static (Tensor[] context_sparse_indices, Tensor[] context_sparse_values, Tensor[] context_sparse_shapes, Tensor[] context_dense_values, Tensor[] feature_list_sparse_indices, Tensor[] feature_list_sparse_values, Tensor[] feature_list_sparse_shapes, Tensor[] feature_list_dense_values) parse_single_sequence_example(Tensor serialized, Tensor feature_list_dense_missing_assumed_empty, Tensor[] context_sparse_keys, Tensor[] context_dense_keys, Tensor[] feature_list_sparse_keys, Tensor[] feature_list_dense_keys, Tensor[] context_dense_defaults, Tensor debug_name, TF_DataType[] context_sparse_types = null, TF_DataType[] feature_list_dense_types = null, TensorShape[] context_dense_shapes = null, TF_DataType[] feature_list_sparse_types = null, TensorShape[] feature_list_dense_shapes = null, string name = "ParseSingleSequenceExample")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
@@ -20192,7 +20192,7 @@ namespace Tensorflow.Operations
         ///    A Tensor of type <c>out_type</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor parse_tensor (Tensor serialized, TF_DataType out_type, string name = "ParseTensor")
+        public static Tensor parse_tensor(Tensor serialized, TF_DataType out_type, string name = "ParseTensor")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
@@ -20224,7 +20224,7 @@ namespace Tensorflow.Operations
         ///    intended as a way to represent a value that will always be fed, and to
         ///    provide attrs that enable the fed value to be checked at runtime.
         /// </remarks>
-        public static Tensor placeholder (TF_DataType dtype, TensorShape shape = null, string name = "Placeholder")
+        public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = "Placeholder")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -20258,7 +20258,7 @@ namespace Tensorflow.Operations
         ///    intended as a way to represent a value that will always be fed, and to
         ///    provide attrs that enable the fed value to be checked at runtime.
         /// </remarks>
-        public static Tensor placeholder_v2 (TF_DataType dtype, TensorShape shape, string name = "PlaceholderV2")
+        public static Tensor placeholder_v2(TF_DataType dtype, TensorShape shape, string name = "PlaceholderV2")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -20284,7 +20284,7 @@ namespace Tensorflow.Operations
         ///    A placeholder tensor that defaults to <c>input</c> if it is not fed.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor placeholder_with_default (Tensor input, TensorShape shape, string name = "PlaceholderWithDefault")
+        public static Tensor placeholder_with_default(Tensor input, TensorShape shape, string name = "PlaceholderWithDefault")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -20314,7 +20314,7 @@ namespace Tensorflow.Operations
         ///    
         ///    where \\(\psi(x)\\) is the digamma function.
         /// </remarks>
-        public static Tensor polygamma (Tensor a, Tensor x, string name = "Polygamma")
+        public static Tensor polygamma(Tensor a, Tensor x, string name = "Polygamma")
         {
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
@@ -20342,7 +20342,7 @@ namespace Tensorflow.Operations
         ///    <c>int32</c> or <c>int64</c> and perform the bitcount on the result, than to feed in
         ///    8- or 16-bit inputs and then aggregate the resulting counts.
         /// </remarks>
-        public static Tensor population_count (Tensor x, string name = "PopulationCount")
+        public static Tensor population_count(Tensor x, string name = "PopulationCount")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -20373,7 +20373,7 @@ namespace Tensorflow.Operations
         ///    tf.pow(x, y) ==&amp;gt; [[256, 65536], [9, 27]]
         ///   </code>
         /// </remarks>
-        public static Tensor pow (Tensor x, Tensor y, string name = "Pow")
+        public static Tensor pow(Tensor x, Tensor y, string name = "Pow")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -20403,7 +20403,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor prefetch_dataset (Tensor input_dataset, Tensor buffer_size, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "PrefetchDataset")
+        public static Tensor prefetch_dataset(Tensor input_dataset, Tensor buffer_size, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "PrefetchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -20440,7 +20440,7 @@ namespace Tensorflow.Operations
         ///    op exists to prevent subtle bugs from silently returning unimplemented
         ///    gradients in some corner cases.
         /// </remarks>
-        public static Tensor prevent_gradient (Tensor input, string message = null, string name = "PreventGradient")
+        public static Tensor prevent_gradient(Tensor input, string message = null, string name = "PreventGradient")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -20478,7 +20478,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Passes <c>input</c> through to <c>output</c> and prints <c>data</c> when evaluating.
         /// </remarks>
-        public static Tensor print (Tensor input, Tensor[] data, string message = null, int? first_n = null, int? summarize = null, string name = "Print")
+        public static Tensor print(Tensor input, Tensor[] data, string message = null, int? first_n = null, int? summarize = null, string name = "Print")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -20532,7 +20532,7 @@ namespace Tensorflow.Operations
         ///    and DequeueMany) on a PriorityQueue will all require (resp. output) one extra
         ///    entry in their input (resp. output) lists.
         /// </remarks>
-        public static Tensor priority_queue (TensorShape[] shapes, TF_DataType[] component_types = null, int? capacity = null, string container = null, string shared_name = null, string name = "PriorityQueue")
+        public static Tensor priority_queue(TensorShape[] shapes, TF_DataType[] component_types = null, int? capacity = null, string container = null, string shared_name = null, string name = "PriorityQueue")
         {
             var dict = new Dictionary<string, object>();
             dict["shapes"] = shapes;
@@ -20587,7 +20587,7 @@ namespace Tensorflow.Operations
         ///    and DequeueMany) on a PriorityQueue will all require (resp. output) one extra
         ///    entry in their input (resp. output) lists.
         /// </remarks>
-        public static Tensor priority_queue_v2 (TensorShape[] shapes, TF_DataType[] component_types = null, int? capacity = null, string container = null, string shared_name = null, string name = "PriorityQueueV2")
+        public static Tensor priority_queue_v2(TensorShape[] shapes, TF_DataType[] component_types = null, int? capacity = null, string container = null, string shared_name = null, string name = "PriorityQueueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["shapes"] = shapes;
@@ -20629,7 +20629,7 @@ namespace Tensorflow.Operations
         ///    <c>axis</c>. If <c>keep_dims</c> is true, the reduced dimensions are
         ///    retained with length 1.
         /// </remarks>
-        public static Tensor prod (Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Prod")
+        public static Tensor prod(Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Prod")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -20675,7 +20675,7 @@ namespace Tensorflow.Operations
         ///    q_full, r_full = qr(a, full_matrices=True)
         ///   </code>
         /// </remarks>
-        public static (Tensor q, Tensor r) qr (Tensor input, bool? full_matrices = null, string name = "Qr")
+        public static (Tensor q, Tensor r) qr(Tensor input, bool? full_matrices = null, string name = "Qr")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -20709,7 +20709,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor quantize_and_dequantize (Tensor input, bool? signed_input = null, int? num_bits = null, bool? range_given = null, float? input_min = null, float? input_max = null, string name = "QuantizeAndDequantize")
+        public static Tensor quantize_and_dequantize(Tensor input, bool? signed_input = null, int? num_bits = null, bool? range_given = null, float? input_min = null, float? input_max = null, string name = "QuantizeAndDequantize")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -20811,7 +20811,7 @@ namespace Tensorflow.Operations
         ///    output = round(clamp(value, input_min, input_max) * scale_factor) / scale_factor.
         ///    
         /// </remarks>
-        public static Tensor quantize_and_dequantize_v2 (Tensor input, Tensor input_min, Tensor input_max, bool? signed_input = null, int? num_bits = null, bool? range_given = null, string name = "QuantizeAndDequantizeV2")
+        public static Tensor quantize_and_dequantize_v2(Tensor input, Tensor input_min, Tensor input_max, bool? signed_input = null, int? num_bits = null, bool? range_given = null, string name = "QuantizeAndDequantizeV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -20852,7 +20852,7 @@ namespace Tensorflow.Operations
         ///    This is almost identical to QuantizeAndDequantizeV2, except that num_bits is a
         ///    tensor, so its value can change during training.
         /// </remarks>
-        public static Tensor quantize_and_dequantize_v3 (Tensor input, Tensor input_min, Tensor input_max, Tensor num_bits, bool? signed_input = null, bool? range_given = null, string name = "QuantizeAndDequantizeV3")
+        public static Tensor quantize_and_dequantize_v3(Tensor input, Tensor input_min, Tensor input_max, Tensor num_bits, bool? signed_input = null, bool? range_given = null, string name = "QuantizeAndDequantizeV3")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -20916,7 +20916,7 @@ namespace Tensorflow.Operations
         ///    that output into this operator, we can reduce it from 32 bits down to 8 with
         ///    minimal loss of accuracy.
         /// </remarks>
-        public static (Tensor output, Tensor output_min, Tensor output_max) quantize_down_and_shrink_range (Tensor input, Tensor input_min, Tensor input_max, TF_DataType out_type, string name = "QuantizeDownAndShrinkRange")
+        public static (Tensor output, Tensor output_min, Tensor output_max) quantize_down_and_shrink_range(Tensor input, Tensor input_min, Tensor input_max, TF_DataType out_type, string name = "QuantizeDownAndShrinkRange")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -21059,7 +21059,7 @@ namespace Tensorflow.Operations
         ///    quantized values map to the same float value, which causes problems for
         ///    operations that have to perform further calculations on them.
         /// </remarks>
-        public static (Tensor output, Tensor output_min, Tensor output_max) quantize_v2 (Tensor input, Tensor min_range, Tensor max_range, TF_DataType T, string mode = null, string round_mode = null, string name = "QuantizeV2")
+        public static (Tensor output, Tensor output_min, Tensor output_max) quantize_v2(Tensor input, Tensor min_range, Tensor max_range, TF_DataType T, string mode = null, string round_mode = null, string name = "QuantizeV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -21112,7 +21112,7 @@ namespace Tensorflow.Operations
         ///    broadcasting [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor z, Tensor min_z, Tensor max_z) quantized_add (Tensor x, Tensor y, Tensor min_x, Tensor max_x, Tensor min_y, Tensor max_y, TF_DataType? Toutput = null, string name = "QuantizedAdd")
+        public static (Tensor z, Tensor min_z, Tensor max_z) quantized_add(Tensor x, Tensor y, Tensor min_x, Tensor max_x, Tensor min_y, Tensor max_y, TF_DataType? Toutput = null, string name = "QuantizedAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -21167,7 +21167,7 @@ namespace Tensorflow.Operations
         ///    max_output : The float value that the highest quantized output value represents.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor output, Tensor min_output, Tensor max_output) quantized_avg_pool (Tensor input, Tensor min_input, Tensor max_input, int[] ksize, int[] strides, string padding, string name = "QuantizedAvgPool")
+        public static (Tensor output, Tensor min_output, Tensor max_output) quantized_avg_pool(Tensor input, Tensor min_input, Tensor max_input, int[] ksize, int[] strides, string padding, string name = "QuantizedAvgPool")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -21265,7 +21265,7 @@ namespace Tensorflow.Operations
         ///    This op is deprecated and will be removed in the future. Prefer
         ///    <c>tf.nn.batch_normalization</c>.
         /// </remarks>
-        public static (Tensor result, Tensor result_min, Tensor result_max) quantized_batch_norm_with_global_normalization (Tensor t, Tensor t_min, Tensor t_max, Tensor m, Tensor m_min, Tensor m_max, Tensor v, Tensor v_min, Tensor v_max, Tensor beta, Tensor beta_min, Tensor beta_max, Tensor gamma, Tensor gamma_min, Tensor gamma_max, TF_DataType out_type, float variance_epsilon, bool scale_after_normalization, string name = "QuantizedBatchNormWithGlobalNormalization")
+        public static (Tensor result, Tensor result_min, Tensor result_max) quantized_batch_norm_with_global_normalization(Tensor t, Tensor t_min, Tensor t_max, Tensor m, Tensor m_min, Tensor m_max, Tensor v, Tensor v_min, Tensor v_max, Tensor beta, Tensor beta_min, Tensor beta_max, Tensor gamma, Tensor gamma_min, Tensor gamma_max, TF_DataType out_type, float variance_epsilon, bool scale_after_normalization, string name = "QuantizedBatchNormWithGlobalNormalization")
         {
             var dict = new Dictionary<string, object>();
             dict["t"] = t;
@@ -21330,7 +21330,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Broadcasts the values of bias on dimensions 0..N-2 of 'input'.
         /// </remarks>
-        public static (Tensor output, Tensor min_out, Tensor max_out) quantized_bias_add (Tensor input, Tensor bias, Tensor min_input, Tensor max_input, Tensor min_bias, Tensor max_bias, TF_DataType out_type, string name = "QuantizedBiasAdd")
+        public static (Tensor output, Tensor min_out, Tensor max_out) quantized_bias_add(Tensor input, Tensor bias, Tensor min_input, Tensor max_input, Tensor min_bias, Tensor max_bias, TF_DataType out_type, string name = "QuantizedBiasAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -21377,7 +21377,7 @@ namespace Tensorflow.Operations
         ///    output_max : The float value that the maximum quantized output value represents.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor output, Tensor output_min, Tensor output_max) quantized_concat (Tensor concat_dim, Tensor[] values, Tensor[] input_mins, Tensor[] input_maxes, string name = "QuantizedConcat")
+        public static (Tensor output, Tensor output_min, Tensor output_max) quantized_concat(Tensor concat_dim, Tensor[] values, Tensor[] input_mins, Tensor[] input_maxes, string name = "QuantizedConcat")
         {
             var dict = new Dictionary<string, object>();
             dict["concat_dim"] = concat_dim;
@@ -21446,7 +21446,7 @@ namespace Tensorflow.Operations
         ///    This means that you can only interpret the quantized output in the same way, by
         ///    taking the returned minimum and maximum values into account.
         /// </remarks>
-        public static (Tensor output, Tensor min_output, Tensor max_output) quantized_conv2d (Tensor input, Tensor filter, Tensor min_input, Tensor max_input, Tensor min_filter, Tensor max_filter, int[] strides, string padding, TF_DataType? out_type = null, int[] dilations = null, string name = "QuantizedConv2D")
+        public static (Tensor output, Tensor min_output, Tensor max_output) quantized_conv2d(Tensor input, Tensor filter, Tensor min_input, Tensor max_input, Tensor min_filter, Tensor max_filter, int[] strides, string padding, TF_DataType? out_type = null, int[] dilations = null, string name = "QuantizedConv2D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -21508,7 +21508,7 @@ namespace Tensorflow.Operations
         ///    y_max : The value represented by the highest quantized output.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor y, Tensor y_min, Tensor y_max) quantized_instance_norm (Tensor x, Tensor x_min, Tensor x_max, bool? output_range_given = null, float? given_y_min = null, float? given_y_max = null, float? variance_epsilon = null, float? min_separation = null, string name = "QuantizedInstanceNorm")
+        public static (Tensor y, Tensor y_min, Tensor y_max) quantized_instance_norm(Tensor x, Tensor x_min, Tensor x_max, bool? output_range_given = null, float? given_y_min = null, float? given_y_max = null, float? variance_epsilon = null, float? min_separation = null, string name = "QuantizedInstanceNorm")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -21581,7 +21581,7 @@ namespace Tensorflow.Operations
         ///    outer dimension of <c>b</c> (after being transposed if <c>transposed_b</c> is
         ///    non-zero).
         /// </remarks>
-        public static (Tensor output, Tensor min_out, Tensor max_out) quantized_mat_mul (Tensor a, Tensor b, Tensor min_a, Tensor max_a, Tensor min_b, Tensor max_b, TF_DataType? Toutput = null, bool? transpose_a = null, bool? transpose_b = null, TF_DataType? Tactivation = null, string name = "QuantizedMatMul")
+        public static (Tensor output, Tensor min_out, Tensor max_out) quantized_mat_mul(Tensor a, Tensor b, Tensor min_a, Tensor max_a, Tensor min_b, Tensor max_b, TF_DataType? Toutput = null, bool? transpose_a = null, bool? transpose_b = null, TF_DataType? Tactivation = null, string name = "QuantizedMatMul")
         {
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
@@ -21642,7 +21642,7 @@ namespace Tensorflow.Operations
         ///    max_output : The float value that the highest quantized output value represents.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor output, Tensor min_output, Tensor max_output) quantized_max_pool (Tensor input, Tensor min_input, Tensor max_input, int[] ksize, int[] strides, string padding, string name = "QuantizedMaxPool")
+        public static (Tensor output, Tensor min_output, Tensor max_output) quantized_max_pool(Tensor input, Tensor min_input, Tensor max_input, int[] ksize, int[] strides, string padding, string name = "QuantizedMaxPool")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -21693,7 +21693,7 @@ namespace Tensorflow.Operations
         ///    broadcasting [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor z, Tensor min_z, Tensor max_z) quantized_mul (Tensor x, Tensor y, Tensor min_x, Tensor max_x, Tensor min_y, Tensor max_y, TF_DataType? Toutput = null, string name = "QuantizedMul")
+        public static (Tensor z, Tensor min_z, Tensor max_z) quantized_mul(Tensor x, Tensor y, Tensor min_x, Tensor max_x, Tensor min_y, Tensor max_y, TF_DataType? Toutput = null, string name = "QuantizedMul")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -21735,7 +21735,7 @@ namespace Tensorflow.Operations
         ///    max_activations : The float value that the highest quantized value represents.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor activations, Tensor min_activations, Tensor max_activations) quantized_relu (Tensor features, Tensor min_features, Tensor max_features, TF_DataType? out_type = null, string name = "QuantizedRelu")
+        public static (Tensor activations, Tensor min_activations, Tensor max_activations) quantized_relu(Tensor features, Tensor min_features, Tensor max_features, TF_DataType? out_type = null, string name = "QuantizedRelu")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -21774,7 +21774,7 @@ namespace Tensorflow.Operations
         ///    max_activations : The float value that the highest quantized value represents.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor activations, Tensor min_activations, Tensor max_activations) quantized_relu6 (Tensor features, Tensor min_features, Tensor max_features, TF_DataType? out_type = null, string name = "QuantizedRelu6")
+        public static (Tensor activations, Tensor min_activations, Tensor max_activations) quantized_relu6(Tensor features, Tensor min_features, Tensor max_features, TF_DataType? out_type = null, string name = "QuantizedRelu6")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -21815,7 +21815,7 @@ namespace Tensorflow.Operations
         ///    max_activations : The float value that the highest quantized value represents.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor activations, Tensor min_activations, Tensor max_activations) quantized_relu_x (Tensor features, Tensor max_value, Tensor min_features, Tensor max_features, TF_DataType? out_type = null, string name = "QuantizedReluX")
+        public static (Tensor activations, Tensor min_activations, Tensor max_activations) quantized_relu_x(Tensor features, Tensor max_value, Tensor min_features, Tensor max_features, TF_DataType? out_type = null, string name = "QuantizedReluX")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -21858,7 +21858,7 @@ namespace Tensorflow.Operations
         /// </returns>
         /// <remarks>
         /// </remarks>
-        public static (Tensor output, Tensor output_min, Tensor output_max) quantized_reshape (Tensor tensor, Tensor shape, Tensor input_min, Tensor input_max, string name = "QuantizedReshape")
+        public static (Tensor output, Tensor output_min, Tensor output_max) quantized_reshape(Tensor tensor, Tensor shape, Tensor input_min, Tensor input_max, string name = "QuantizedReshape")
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
@@ -21905,7 +21905,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Input images and output images must be quantized types.
         /// </remarks>
-        public static (Tensor resized_images, Tensor out_min, Tensor out_max) quantized_resize_bilinear (Tensor images, Tensor size, Tensor min, Tensor max, bool? align_corners = null, string name = "QuantizedResizeBilinear")
+        public static (Tensor resized_images, Tensor out_min, Tensor out_max) quantized_resize_bilinear(Tensor images, Tensor size, Tensor min, Tensor max, bool? align_corners = null, string name = "QuantizedResizeBilinear")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -21945,7 +21945,7 @@ namespace Tensorflow.Operations
         ///    sufficient elements remain in the queue. Subsequent Dequeue(Many)
         ///    operations that would block will fail immediately.
         /// </remarks>
-        public static Operation queue_close (Tensor handle, bool? cancel_pending_enqueues = null, string name = "QueueClose")
+        public static Operation queue_close(Tensor handle, bool? cancel_pending_enqueues = null, string name = "QueueClose")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -21978,7 +21978,7 @@ namespace Tensorflow.Operations
         ///    sufficient elements remain in the queue. Subsequent Dequeue(Many)
         ///    operations that would block will fail immediately.
         /// </remarks>
-        public static Operation queue_close_v2 (Tensor handle, bool? cancel_pending_enqueues = null, string name = "QueueCloseV2")
+        public static Operation queue_close_v2(Tensor handle, bool? cancel_pending_enqueues = null, string name = "QueueCloseV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22018,7 +22018,7 @@ namespace Tensorflow.Operations
         ///    N.B. If the queue is empty, this operation will block until an element
         ///    has been dequeued (or 'timeout_ms' elapses, if specified).
         /// </remarks>
-        public static Tensor[] queue_dequeue (Tensor handle, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeue")
+        public static Tensor[] queue_dequeue(Tensor handle, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeue")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22071,7 +22071,7 @@ namespace Tensorflow.Operations
         ///    N.B. If the queue is empty, this operation will block until <c>n</c> elements
         ///    have been dequeued (or 'timeout_ms' elapses, if specified).
         /// </remarks>
-        public static Tensor[] queue_dequeue_many (Tensor handle, Tensor n, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueMany")
+        public static Tensor[] queue_dequeue_many(Tensor handle, Tensor n, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueMany")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22125,7 +22125,7 @@ namespace Tensorflow.Operations
         ///    N.B. If the queue is empty, this operation will block until <c>n</c> elements
         ///    have been dequeued (or 'timeout_ms' elapses, if specified).
         /// </remarks>
-        public static Tensor[] queue_dequeue_many_v2 (Tensor handle, Tensor n, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueManyV2")
+        public static Tensor[] queue_dequeue_many_v2(Tensor handle, Tensor n, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueManyV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22183,7 +22183,7 @@ namespace Tensorflow.Operations
         ///    the tuples stored in the given queue, and output <c>i</c> is the ith
         ///    component of the dequeued tuple.
         /// </remarks>
-        public static Tensor[] queue_dequeue_up_to (Tensor handle, Tensor n, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueUpTo")
+        public static Tensor[] queue_dequeue_up_to(Tensor handle, Tensor n, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueUpTo")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22241,7 +22241,7 @@ namespace Tensorflow.Operations
         ///    the tuples stored in the given queue, and output <c>i</c> is the ith
         ///    component of the dequeued tuple.
         /// </remarks>
-        public static Tensor[] queue_dequeue_up_to_v2 (Tensor handle, Tensor n, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueUpToV2")
+        public static Tensor[] queue_dequeue_up_to_v2(Tensor handle, Tensor n, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueUpToV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22285,7 +22285,7 @@ namespace Tensorflow.Operations
         ///    N.B. If the queue is empty, this operation will block until an element
         ///    has been dequeued (or 'timeout_ms' elapses, if specified).
         /// </remarks>
-        public static Tensor[] queue_dequeue_v2 (Tensor handle, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueV2")
+        public static Tensor[] queue_dequeue_v2(Tensor handle, TF_DataType[] component_types, int? timeout_ms = null, string name = "QueueDequeueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22325,7 +22325,7 @@ namespace Tensorflow.Operations
         ///    N.B. If the queue is full, this operation will block until the given
         ///    element has been enqueued (or 'timeout_ms' elapses, if specified).
         /// </remarks>
-        public static Operation queue_enqueue (Tensor handle, Tensor[] components, int? timeout_ms = null, string name = "QueueEnqueue")
+        public static Operation queue_enqueue(Tensor handle, Tensor[] components, int? timeout_ms = null, string name = "QueueEnqueue")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22368,7 +22368,7 @@ namespace Tensorflow.Operations
         ///    N.B. If the queue is full, this operation will block until the given
         ///    elements have been enqueued (or 'timeout_ms' elapses, if specified).
         /// </remarks>
-        public static Operation queue_enqueue_many (Tensor handle, Tensor[] components, int? timeout_ms = null, string name = "QueueEnqueueMany")
+        public static Operation queue_enqueue_many(Tensor handle, Tensor[] components, int? timeout_ms = null, string name = "QueueEnqueueMany")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22411,7 +22411,7 @@ namespace Tensorflow.Operations
         ///    N.B. If the queue is full, this operation will block until the given
         ///    elements have been enqueued (or 'timeout_ms' elapses, if specified).
         /// </remarks>
-        public static Operation queue_enqueue_many_v2 (Tensor handle, Tensor[] components, int? timeout_ms = null, string name = "QueueEnqueueManyV2")
+        public static Operation queue_enqueue_many_v2(Tensor handle, Tensor[] components, int? timeout_ms = null, string name = "QueueEnqueueManyV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22449,7 +22449,7 @@ namespace Tensorflow.Operations
         ///    N.B. If the queue is full, this operation will block until the given
         ///    element has been enqueued (or 'timeout_ms' elapses, if specified).
         /// </remarks>
-        public static Operation queue_enqueue_v2 (Tensor handle, Tensor[] components, int? timeout_ms = null, string name = "QueueEnqueueV2")
+        public static Operation queue_enqueue_v2(Tensor handle, Tensor[] components, int? timeout_ms = null, string name = "QueueEnqueueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22476,7 +22476,7 @@ namespace Tensorflow.Operations
         ///    This operation returns true if the queue is closed and false if the queue
         ///    is open.
         /// </remarks>
-        public static Tensor queue_is_closed (Tensor handle, string name = "QueueIsClosed")
+        public static Tensor queue_is_closed(Tensor handle, string name = "QueueIsClosed")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22500,7 +22500,7 @@ namespace Tensorflow.Operations
         ///    This operation returns true if the queue is closed and false if the queue
         ///    is open.
         /// </remarks>
-        public static Tensor queue_is_closed_v2 (Tensor handle, string name = "QueueIsClosedV2")
+        public static Tensor queue_is_closed_v2(Tensor handle, string name = "QueueIsClosedV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22521,7 +22521,7 @@ namespace Tensorflow.Operations
         ///    The number of elements in the given queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor queue_size (Tensor handle, string name = "QueueSize")
+        public static Tensor queue_size(Tensor handle, string name = "QueueSize")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22542,7 +22542,7 @@ namespace Tensorflow.Operations
         ///    The number of elements in the given queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor queue_size_v2 (Tensor handle, string name = "QueueSizeV2")
+        public static Tensor queue_size_v2(Tensor handle, string name = "QueueSizeV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -22584,7 +22584,7 @@ namespace Tensorflow.Operations
         ///    corresponding dimension of <c>input</c>, the dimension is cropped. If it is larger,
         ///    the dimension is padded with zeros.
         /// </remarks>
-        public static Tensor r_f_f_t (Tensor input, Tensor fft_length, string name = "RFFT")
+        public static Tensor r_f_f_t(Tensor input, Tensor fft_length, string name = "RFFT")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -22629,7 +22629,7 @@ namespace Tensorflow.Operations
         ///    corresponding dimension of <c>input</c>, the dimension is cropped. If it is larger,
         ///    the dimension is padded with zeros.
         /// </remarks>
-        public static Tensor r_f_f_t2d (Tensor input, Tensor fft_length, string name = "RFFT2D")
+        public static Tensor r_f_f_t2d(Tensor input, Tensor fft_length, string name = "RFFT2D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -22674,7 +22674,7 @@ namespace Tensorflow.Operations
         ///    corresponding dimension of <c>input</c>, the dimension is cropped. If it is larger,
         ///    the dimension is padded with zeros.
         /// </remarks>
-        public static Tensor r_f_f_t3d (Tensor input, Tensor fft_length, string name = "RFFT3D")
+        public static Tensor r_f_f_t3d(Tensor input, Tensor fft_length, string name = "RFFT3D")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -22705,7 +22705,7 @@ namespace Tensorflow.Operations
         ///    <c>output[..., 2]</c> contains value. All HSV values are in <c>[0,1]</c>. A hue of 0
         ///    corresponds to pure red, hue 1/3 is pure green, and 2/3 is pure blue.
         /// </remarks>
-        public static Tensor r_g_b_to_h_s_v (Tensor images, string name = "RGBToHSV")
+        public static Tensor r_g_b_to_h_s_v(Tensor images, string name = "RGBToHSV")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -22745,7 +22745,7 @@ namespace Tensorflow.Operations
         ///    rectangle from that location.  The random location is picked so the cropped
         ///    area will fit inside the original image.
         /// </remarks>
-        public static Tensor random_crop (Tensor image, Tensor size, int? seed = null, int? seed2 = null, string name = "RandomCrop")
+        public static Tensor random_crop(Tensor image, Tensor size, int? seed = null, int? seed2 = null, string name = "RandomCrop")
         {
             var dict = new Dictionary<string, object>();
             dict["image"] = image;
@@ -22781,7 +22781,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor random_dataset (Tensor seed, Tensor seed2, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "RandomDataset")
+        public static Tensor random_dataset(Tensor seed, Tensor seed2, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "RandomDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["seed"] = seed;
@@ -22825,7 +22825,7 @@ namespace Tensorflow.Operations
         ///    transformation-rejection from pairs of uniform and normal random variables.
         ///    See http://dl.acm.org/citation.cfm?id=358414
         /// </remarks>
-        public static Tensor random_gamma (Tensor shape, Tensor alpha, int? seed = null, int? seed2 = null, string name = "RandomGamma")
+        public static Tensor random_gamma(Tensor shape, Tensor alpha, int? seed = null, int? seed2 = null, string name = "RandomGamma")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -22851,7 +22851,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor random_gamma_grad (Tensor alpha, Tensor sample, string name = "RandomGammaGrad")
+        public static Tensor random_gamma_grad(Tensor alpha, Tensor sample, string name = "RandomGammaGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["alpha"] = alpha;
@@ -22877,7 +22877,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor random_poisson (Tensor shape, Tensor rate, int? seed = null, int? seed2 = null, string name = "RandomPoisson")
+        public static Tensor random_poisson(Tensor shape, Tensor rate, int? seed = null, int? seed2 = null, string name = "RandomPoisson")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -22931,7 +22931,7 @@ namespace Tensorflow.Operations
         ///    See Donald E. Knuth (1969). Seminumerical Algorithms. The Art of Computer
         ///    Programming, Volume 2. Addison Wesley
         /// </remarks>
-        public static Tensor random_poisson_v2 (Tensor shape, Tensor rate, int? seed = null, int? seed2 = null, TF_DataType? dtype = null, string name = "RandomPoissonV2")
+        public static Tensor random_poisson_v2(Tensor shape, Tensor rate, int? seed = null, int? seed2 = null, TF_DataType? dtype = null, string name = "RandomPoissonV2")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -22979,7 +22979,7 @@ namespace Tensorflow.Operations
         ///    [5, 6]]        [3, 4]]
         ///   </code>
         /// </remarks>
-        public static Tensor random_shuffle (Tensor value, int? seed = null, int? seed2 = null, string name = "RandomShuffle")
+        public static Tensor random_shuffle(Tensor value, int? seed = null, int? seed2 = null, string name = "RandomShuffle")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -23035,7 +23035,7 @@ namespace Tensorflow.Operations
         ///    The handle to the queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor random_shuffle_queue (TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, int? min_after_dequeue = null, int? seed = null, int? seed2 = null, string container = null, string shared_name = null, string name = "RandomShuffleQueue")
+        public static Tensor random_shuffle_queue(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, int? min_after_dequeue = null, int? seed = null, int? seed2 = null, string container = null, string shared_name = null, string name = "RandomShuffleQueue")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -23101,7 +23101,7 @@ namespace Tensorflow.Operations
         ///    The handle to the queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor random_shuffle_queue_v2 (TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, int? min_after_dequeue = null, int? seed = null, int? seed2 = null, string container = null, string shared_name = null, string name = "RandomShuffleQueueV2")
+        public static Tensor random_shuffle_queue_v2(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, int? min_after_dequeue = null, int? seed = null, int? seed2 = null, string container = null, string shared_name = null, string name = "RandomShuffleQueueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -23151,7 +23151,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    The generated values will have mean 0 and standard deviation 1.
         /// </remarks>
-        public static Tensor random_standard_normal (Tensor shape, TF_DataType dtype, int? seed = null, int? seed2 = null, string name = "RandomStandardNormal")
+        public static Tensor random_standard_normal(Tensor shape, TF_DataType dtype, int? seed = null, int? seed2 = null, string name = "RandomStandardNormal")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -23193,7 +23193,7 @@ namespace Tensorflow.Operations
         ///    The generated values follow a uniform distribution in the range <c>[0, 1)</c>. The
         ///    lower bound 0 is included in the range, while the upper bound 1 is excluded.
         /// </remarks>
-        public static Tensor random_uniform (Tensor shape, TF_DataType dtype, int? seed = null, int? seed2 = null, string name = "RandomUniform")
+        public static Tensor random_uniform(Tensor shape, TF_DataType dtype, int? seed = null, int? seed2 = null, string name = "RandomUniform")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -23242,7 +23242,7 @@ namespace Tensorflow.Operations
         ///    power of two.  The bias is small for values of <c>maxval - minval</c> significantly
         ///    smaller than the range of the output (either <c>2^32</c> or <c>2^64</c>).
         /// </remarks>
-        public static Tensor random_uniform_int (Tensor shape, Tensor minval, Tensor maxval, int? seed = null, int? seed2 = null, string name = "RandomUniformInt")
+        public static Tensor random_uniform_int(Tensor shape, Tensor minval, Tensor maxval, int? seed = null, int? seed2 = null, string name = "RandomUniformInt")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -23288,7 +23288,7 @@ namespace Tensorflow.Operations
         ///    tf.range(start, limit, delta) ==&amp;gt; [3, 6, 9, 12, 15]
         ///   </code>
         /// </remarks>
-        public static Tensor range (Tensor start, Tensor limit, Tensor delta, string name = "Range")
+        public static Tensor range(Tensor start, Tensor limit, Tensor delta, string name = "Range")
         {
             var dict = new Dictionary<string, object>();
             dict["start"] = start;
@@ -23322,7 +23322,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor range_dataset (Tensor start, Tensor stop, Tensor step, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "RangeDataset")
+        public static Tensor range_dataset(Tensor start, Tensor stop, Tensor step, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "RangeDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["start"] = start;
@@ -23360,7 +23360,7 @@ namespace Tensorflow.Operations
         ///    of a tensor is the number of indices required to uniquely select each element
         ///    of the tensor. Rank is also known as "order", "degree", or "ndims."
         /// </remarks>
-        public static Tensor rank (Tensor input, string name = "Rank")
+        public static Tensor rank(Tensor input, string name = "Rank")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -23379,7 +23379,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor read_file (Tensor filename, string name = "ReadFile")
+        public static Tensor read_file(Tensor filename, string name = "ReadFile")
         {
             var dict = new Dictionary<string, object>();
             dict["filename"] = filename;
@@ -23411,7 +23411,7 @@ namespace Tensorflow.Operations
         ///    influenced by any of the writes which depend directly or indirectly on this
         ///    operation.
         /// </remarks>
-        public static Tensor read_variable_op (Tensor resource, TF_DataType dtype, string name = "ReadVariableOp")
+        public static Tensor read_variable_op(Tensor resource, TF_DataType dtype, string name = "ReadVariableOp")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -23436,7 +23436,7 @@ namespace Tensorflow.Operations
         ///    This is the same as the number of ReaderRead executions that have
         ///    succeeded.
         /// </remarks>
-        public static Tensor reader_num_records_produced (Tensor reader_handle, string name = "ReaderNumRecordsProduced")
+        public static Tensor reader_num_records_produced(Tensor reader_handle, string name = "ReaderNumRecordsProduced")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23460,7 +23460,7 @@ namespace Tensorflow.Operations
         ///    This is the same as the number of ReaderRead executions that have
         ///    succeeded.
         /// </remarks>
-        public static Tensor reader_num_records_produced_v2 (Tensor reader_handle, string name = "ReaderNumRecordsProducedV2")
+        public static Tensor reader_num_records_produced_v2(Tensor reader_handle, string name = "ReaderNumRecordsProducedV2")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23480,7 +23480,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor reader_num_work_units_completed (Tensor reader_handle, string name = "ReaderNumWorkUnitsCompleted")
+        public static Tensor reader_num_work_units_completed(Tensor reader_handle, string name = "ReaderNumWorkUnitsCompleted")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23500,7 +23500,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor reader_num_work_units_completed_v2 (Tensor reader_handle, string name = "ReaderNumWorkUnitsCompletedV2")
+        public static Tensor reader_num_work_units_completed_v2(Tensor reader_handle, string name = "ReaderNumWorkUnitsCompletedV2")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23531,7 +23531,7 @@ namespace Tensorflow.Operations
         ///    Reader needs to start reading from a new file since it has finished
         ///    with the previous file).
         /// </remarks>
-        public static (Tensor key, Tensor value) reader_read (Tensor reader_handle, Tensor queue_handle, string name = "ReaderRead")
+        public static (Tensor key, Tensor value) reader_read(Tensor reader_handle, Tensor queue_handle, string name = "ReaderRead")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23570,7 +23570,7 @@ namespace Tensorflow.Operations
         ///    with the previous file).
         ///    It may return less than <c>num_records</c> even before the last batch.
         /// </remarks>
-        public static (Tensor keys, Tensor values) reader_read_up_to (Tensor reader_handle, Tensor queue_handle, Tensor num_records, string name = "ReaderReadUpTo")
+        public static (Tensor keys, Tensor values) reader_read_up_to(Tensor reader_handle, Tensor queue_handle, Tensor num_records, string name = "ReaderReadUpTo")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23610,7 +23610,7 @@ namespace Tensorflow.Operations
         ///    with the previous file).
         ///    It may return less than <c>num_records</c> even before the last batch.
         /// </remarks>
-        public static (Tensor keys, Tensor values) reader_read_up_to_v2 (Tensor reader_handle, Tensor queue_handle, Tensor num_records, string name = "ReaderReadUpToV2")
+        public static (Tensor keys, Tensor values) reader_read_up_to_v2(Tensor reader_handle, Tensor queue_handle, Tensor num_records, string name = "ReaderReadUpToV2")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23646,7 +23646,7 @@ namespace Tensorflow.Operations
         ///    Reader needs to start reading from a new file since it has finished
         ///    with the previous file).
         /// </remarks>
-        public static (Tensor key, Tensor value) reader_read_v2 (Tensor reader_handle, Tensor queue_handle, string name = "ReaderReadV2")
+        public static (Tensor key, Tensor value) reader_read_v2(Tensor reader_handle, Tensor queue_handle, string name = "ReaderReadV2")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23670,7 +23670,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation reader_reset (Tensor reader_handle, string name = "ReaderReset")
+        public static Operation reader_reset(Tensor reader_handle, string name = "ReaderReset")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23690,7 +23690,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation reader_reset_v2 (Tensor reader_handle, string name = "ReaderResetV2")
+        public static Operation reader_reset_v2(Tensor reader_handle, string name = "ReaderResetV2")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23718,7 +23718,7 @@ namespace Tensorflow.Operations
         ///    Not all Readers support being restored, so this can produce an
         ///    Unimplemented error.
         /// </remarks>
-        public static Operation reader_restore_state (Tensor reader_handle, Tensor state, string name = "ReaderRestoreState")
+        public static Operation reader_restore_state(Tensor reader_handle, Tensor state, string name = "ReaderRestoreState")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23747,7 +23747,7 @@ namespace Tensorflow.Operations
         ///    Not all Readers support being restored, so this can produce an
         ///    Unimplemented error.
         /// </remarks>
-        public static Operation reader_restore_state_v2 (Tensor reader_handle, Tensor state, string name = "ReaderRestoreStateV2")
+        public static Operation reader_restore_state_v2(Tensor reader_handle, Tensor state, string name = "ReaderRestoreStateV2")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23772,7 +23772,7 @@ namespace Tensorflow.Operations
         ///    Not all Readers support being serialized, so this can produce an
         ///    Unimplemented error.
         /// </remarks>
-        public static Tensor reader_serialize_state (Tensor reader_handle, string name = "ReaderSerializeState")
+        public static Tensor reader_serialize_state(Tensor reader_handle, string name = "ReaderSerializeState")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23796,7 +23796,7 @@ namespace Tensorflow.Operations
         ///    Not all Readers support being serialized, so this can produce an
         ///    Unimplemented error.
         /// </remarks>
-        public static Tensor reader_serialize_state_v2 (Tensor reader_handle, string name = "ReaderSerializeStateV2")
+        public static Tensor reader_serialize_state_v2(Tensor reader_handle, string name = "ReaderSerializeStateV2")
         {
             var dict = new Dictionary<string, object>();
             dict["reader_handle"] = reader_handle;
@@ -23830,7 +23830,7 @@ namespace Tensorflow.Operations
         ///    tf.real(input) ==&amp;gt; [-2.25, 3.25]
         ///   </code>
         /// </remarks>
-        public static Tensor real (Tensor input, TF_DataType? Tout = null, string name = "Real")
+        public static Tensor real(Tensor input, TF_DataType? Tout = null, string name = "Real")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -23859,7 +23859,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Div</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor real_div (Tensor x, Tensor y, string name = "RealDiv")
+        public static Tensor real_div(Tensor x, Tensor y, string name = "RealDiv")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -23882,7 +23882,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    I.e., \\(y = 1 / x\\).
         /// </remarks>
-        public static Tensor reciprocal (Tensor x, string name = "Reciprocal")
+        public static Tensor reciprocal(Tensor x, string name = "Reciprocal")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -23907,7 +23907,7 @@ namespace Tensorflow.Operations
         ///    Specifically, <c>grad = -dy * y*y</c>, where <c>y = 1/x</c>, and <c>dy</c>
         ///    is the corresponding input gradient.
         /// </remarks>
-        public static Tensor reciprocal_grad (Tensor y, Tensor dy, string name = "ReciprocalGrad")
+        public static Tensor reciprocal_grad(Tensor y, Tensor dy, string name = "ReciprocalGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
@@ -23950,7 +23950,7 @@ namespace Tensorflow.Operations
         ///    A tensor of shape [batch_size].
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor record_input (string file_pattern, int? file_random_seed = null, float? file_shuffle_shift_ratio = null, int? file_buffer_size = null, int? file_parallelism = null, int? batch_size = null, string compression_type = null, string name = "RecordInput")
+        public static Tensor record_input(string file_pattern, int? file_random_seed = null, float? file_shuffle_shift_ratio = null, int? file_buffer_size = null, int? file_parallelism = null, int? batch_size = null, string compression_type = null, string name = "RecordInput")
         {
             var dict = new Dictionary<string, object>();
             dict["file_pattern"] = file_pattern;
@@ -24020,7 +24020,7 @@ namespace Tensorflow.Operations
         ///    tf.reduce_join(a) = tf.reduce_join(a, [1, 0]) ==&amp;gt; "abcd"
         ///   </code>
         /// </remarks>
-        public static Tensor reduce_join (Tensor inputs, Tensor reduction_indices, bool? keep_dims = null, string separator = null, string name = "ReduceJoin")
+        public static Tensor reduce_join(Tensor inputs, Tensor reduction_indices, bool? keep_dims = null, string separator = null, string name = "ReduceJoin")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -24062,7 +24062,7 @@ namespace Tensorflow.Operations
         ///    it may be changed in the child frame. At most <c>parallel_iterations</c> iterations
         ///    are run in parallel in the child frame.
         /// </remarks>
-        public static Tensor ref_enter (Tensor data, string frame_name, bool? is_constant = null, int? parallel_iterations = null, string name = "RefEnter")
+        public static Tensor ref_enter(Tensor data, string frame_name, bool? is_constant = null, int? parallel_iterations = null, string name = "RefEnter")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -24091,7 +24091,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Exit makes its input <c>data</c> available to the parent frame.
         /// </remarks>
-        public static Tensor ref_exit (Tensor data, string name = "RefExit")
+        public static Tensor ref_exit(Tensor data, string name = "RefExit")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -24110,7 +24110,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor ref_identity (Tensor input, string name = "RefIdentity")
+        public static Tensor ref_identity(Tensor input, string name = "RefIdentity")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -24140,7 +24140,7 @@ namespace Tensorflow.Operations
         ///    <c>Merge</c> forwards the first tensor for become available to <c>output</c>, and sets
         ///    <c>value_index</c> to its index in <c>inputs</c>.
         /// </remarks>
-        public static (Tensor output, Tensor value_index) ref_merge (Tensor[] inputs, string name = "RefMerge")
+        public static (Tensor output, Tensor value_index) ref_merge(Tensor[] inputs, string name = "RefMerge")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -24164,7 +24164,7 @@ namespace Tensorflow.Operations
         ///    The same tensor as <c>data</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor ref_next_iteration (Tensor data, string name = "RefNextIteration")
+        public static Tensor ref_next_iteration(Tensor data, string name = "RefNextIteration")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -24188,7 +24188,7 @@ namespace Tensorflow.Operations
         ///    The forwarded tensor.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor ref_select (Tensor index, Tensor[] inputs, string name = "RefSelect")
+        public static Tensor ref_select(Tensor index, Tensor[] inputs, string name = "RefSelect")
         {
             var dict = new Dictionary<string, object>();
             dict["index"] = index;
@@ -24221,7 +24221,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See also <c>Switch</c> and <c>Merge</c>.
         /// </remarks>
-        public static (Tensor output_false, Tensor output_true) ref_switch (Tensor data, Tensor pred, string name = "RefSwitch")
+        public static (Tensor output_false, Tensor output_true) ref_switch(Tensor data, Tensor pred, string name = "RefSwitch")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -24257,7 +24257,7 @@ namespace Tensorflow.Operations
         ///    
         ///    The pattern follows the re2 syntax (https://github.com/google/re2/wiki/Syntax)
         /// </remarks>
-        public static Tensor regex_full_match (Tensor input, Tensor pattern, string name = "RegexFullMatch")
+        public static Tensor regex_full_match(Tensor input, Tensor pattern, string name = "RegexFullMatch")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -24292,7 +24292,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    It follows the re2 syntax (https://github.com/google/re2/wiki/Syntax)
         /// </remarks>
-        public static Tensor regex_replace (Tensor input, Tensor pattern, Tensor rewrite, bool? replace_global = null, string name = "RegexReplace")
+        public static Tensor regex_replace(Tensor input, Tensor pattern, Tensor rewrite, bool? replace_global = null, string name = "RegexReplace")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -24315,7 +24315,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor relu (Tensor features, string name = "Relu")
+        public static Tensor relu(Tensor features, string name = "Relu")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -24334,7 +24334,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor relu6 (Tensor features, string name = "Relu6")
+        public static Tensor relu6(Tensor features, string name = "Relu6")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -24360,7 +24360,7 @@ namespace Tensorflow.Operations
         ///    <c>gradients * (features &amp;gt; 0) * (features &amp;lt; 6)</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor relu6grad (Tensor gradients, Tensor features, string name = "Relu6Grad")
+        public static Tensor relu6grad(Tensor gradients, Tensor features, string name = "Relu6Grad")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -24386,7 +24386,7 @@ namespace Tensorflow.Operations
         ///    <c>gradients * (features &amp;gt; 0)</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor relu_grad (Tensor gradients, Tensor features, string name = "ReluGrad")
+        public static Tensor relu_grad(Tensor gradients, Tensor features, string name = "ReluGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -24425,7 +24425,7 @@ namespace Tensorflow.Operations
         ///    to a remote processor and execute that graph.  The execution results
         ///    will be passed to consumer nodes as outputs of this node.
         /// </remarks>
-        public static Tensor[] remote_fused_graph_execute (Tensor[] inputs, TF_DataType[] Toutputs, string serialized_remote_fused_graph_execute_info, string name = "RemoteFusedGraphExecute")
+        public static Tensor[] remote_fused_graph_execute(Tensor[] inputs, TF_DataType[] Toutputs, string serialized_remote_fused_graph_execute_info, string name = "RemoteFusedGraphExecute")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -24458,7 +24458,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor repeat_dataset (Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "RepeatDataset")
+        public static Tensor repeat_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "RepeatDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -24494,7 +24494,7 @@ namespace Tensorflow.Operations
         ///    typically used to produce the requested_output_min and requested_output_max for
         ///    Requantize.
         /// </remarks>
-        public static (Tensor output_min, Tensor output_max) requantization_range (Tensor input, Tensor input_min, Tensor input_max, string name = "RequantizationRange")
+        public static (Tensor output_min, Tensor output_max) requantization_range(Tensor input, Tensor input_min, Tensor input_max, string name = "RequantizationRange")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -24546,7 +24546,7 @@ namespace Tensorflow.Operations
         ///    input_max is 1.0f, and we are dealing with quint16 quantized data, then a 0
         ///    value in the 16-bit data should be interpreted as -1.0f, and a 65535 means 1.0f.
         /// </remarks>
-        public static (Tensor output, Tensor output_min, Tensor output_max) requantize (Tensor input, Tensor input_min, Tensor input_max, Tensor requested_output_min, Tensor requested_output_max, TF_DataType out_type, string name = "Requantize")
+        public static (Tensor output, Tensor output_min, Tensor output_max) requantize(Tensor input, Tensor input_min, Tensor input_max, Tensor requested_output_min, Tensor requested_output_max, TF_DataType out_type, string name = "Requantize")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -24635,7 +24635,7 @@ namespace Tensorflow.Operations
         ///    reshape(t, []) ==&amp;gt; 7
         ///   </code>
         /// </remarks>
-        public static Tensor reshape (Tensor tensor, Tensor shape, string name = "Reshape")
+        public static Tensor reshape(Tensor tensor, Tensor shape, string name = "Reshape")
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
@@ -24679,7 +24679,7 @@ namespace Tensorflow.Operations
         ///    input pixel's contribution to the average is weighted by the fraction of its
         ///    area that intersects the footprint.  This is the same as OpenCV's INTER_AREA.
         /// </remarks>
-        public static Tensor resize_area (Tensor images, Tensor size, bool? align_corners = null, string name = "ResizeArea")
+        public static Tensor resize_area(Tensor images, Tensor size, bool? align_corners = null, string name = "ResizeArea")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -24715,7 +24715,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Input images can be of different types but output images are always float.
         /// </remarks>
-        public static Tensor resize_bicubic (Tensor images, Tensor size, bool align_corners = false, bool half_pixel_centers = false, string name = "ResizeBicubic")
+        public static Tensor resize_bicubic(Tensor images, Tensor size, bool align_corners = false, bool half_pixel_centers = false, string name = "ResizeBicubic")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -24748,7 +24748,7 @@ namespace Tensorflow.Operations
         ///    float or double.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor resize_bicubic_grad (Tensor grads, Tensor original_image, bool? align_corners = null, string name = "ResizeBicubicGrad")
+        public static Tensor resize_bicubic_grad(Tensor grads, Tensor original_image, bool? align_corners = null, string name = "ResizeBicubicGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["grads"] = grads;
@@ -24784,7 +24784,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Input images can be of different types but output images are always float.
         /// </remarks>
-        public static Tensor resize_bilinear (Tensor images, Tensor size, bool? align_corners = null, string name = "ResizeBilinear")
+        public static Tensor resize_bilinear(Tensor images, Tensor size, bool? align_corners = null, string name = "ResizeBilinear")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -24818,7 +24818,7 @@ namespace Tensorflow.Operations
         ///    float or double.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor resize_bilinear_grad (Tensor grads, Tensor original_image, bool? align_corners = null, string name = "ResizeBilinearGrad")
+        public static Tensor resize_bilinear_grad(Tensor grads, Tensor original_image, bool? align_corners = null, string name = "ResizeBilinearGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["grads"] = grads;
@@ -24851,7 +24851,7 @@ namespace Tensorflow.Operations
         ///    <c>[batch, new_height, new_width, channels]</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor resize_nearest_neighbor (Tensor images, Tensor size, bool? align_corners = null, string name = "ResizeNearestNeighbor")
+        public static Tensor resize_nearest_neighbor(Tensor images, Tensor size, bool? align_corners = null, string name = "ResizeNearestNeighbor")
         {
             var dict = new Dictionary<string, object>();
             dict["images"] = images;
@@ -24884,7 +24884,7 @@ namespace Tensorflow.Operations
         ///    with respect to the input image.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor resize_nearest_neighbor_grad (Tensor grads, Tensor size, bool? align_corners = null, string name = "ResizeNearestNeighborGrad")
+        public static Tensor resize_nearest_neighbor_grad(Tensor grads, Tensor size, bool? align_corners = null, string name = "ResizeNearestNeighborGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["grads"] = grads;
@@ -24941,7 +24941,7 @@ namespace Tensorflow.Operations
         ///    v_t &amp;lt;- max(beta2 * v_{t-1}, abs(g))
         ///    variable &amp;lt;- variable - learning_rate / (1 - beta1^t) * m_t / (v_t + epsilon)
         /// </remarks>
-        public static Operation resource_apply_ada_max (Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ResourceApplyAdaMax")
+        public static Operation resource_apply_ada_max(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ResourceApplyAdaMax")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -24999,7 +24999,7 @@ namespace Tensorflow.Operations
         ///    update_accum = rho() * update_accum + (1 - rho()) * update.square();
         ///    var -= update;
         /// </remarks>
-        public static Operation resource_apply_adadelta (Tensor var, Tensor accum, Tensor accum_update, Tensor lr, Tensor rho, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ResourceApplyAdadelta")
+        public static Operation resource_apply_adadelta(Tensor var, Tensor accum, Tensor accum_update, Tensor lr, Tensor rho, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ResourceApplyAdadelta")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25047,7 +25047,7 @@ namespace Tensorflow.Operations
         ///    accum += grad * grad
         ///    var -= lr * grad * (1 / sqrt(accum))
         /// </remarks>
-        public static Operation resource_apply_adagrad (Tensor var, Tensor accum, Tensor lr, Tensor grad, bool? use_locking = null, bool? update_slots = null, string name = "ResourceApplyAdagrad")
+        public static Operation resource_apply_adagrad(Tensor var, Tensor accum, Tensor lr, Tensor grad, bool? use_locking = null, bool? update_slots = null, string name = "ResourceApplyAdagrad")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25099,7 +25099,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation resource_apply_adagrad_d_a (Tensor var, Tensor gradient_accumulator, Tensor gradient_squared_accumulator, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor global_step, bool? use_locking = null, string name = "ResourceApplyAdagradDA")
+        public static Operation resource_apply_adagrad_d_a(Tensor var, Tensor gradient_accumulator, Tensor gradient_squared_accumulator, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor global_step, bool? use_locking = null, string name = "ResourceApplyAdagradDA")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25169,7 +25169,7 @@ namespace Tensorflow.Operations
         ///    $$v_t := beta_2 * v_{t-1} + (1 - beta_2) * g * g$$
         ///    $$variable := variable - lr_t * m_t / (\sqrt{v_t} + \epsilon)$$
         /// </remarks>
-        public static Operation resource_apply_adam (Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power, Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, bool? use_locking = null, bool? use_nesterov = null, string name = "ResourceApplyAdam")
+        public static Operation resource_apply_adam(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power, Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad, bool? use_locking = null, bool? use_nesterov = null, string name = "ResourceApplyAdam")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25230,7 +25230,7 @@ namespace Tensorflow.Operations
         ///    update &amp;lt;- (alpha + sign_decay * sign(g) *sign(m)) * g
         ///    variable &amp;lt;- variable - lr_t * update
         /// </remarks>
-        public static Operation resource_apply_add_sign (Tensor var, Tensor m, Tensor lr, Tensor alpha, Tensor sign_decay, Tensor beta, Tensor grad, bool? use_locking = null, string name = "ResourceApplyAddSign")
+        public static Operation resource_apply_add_sign(Tensor var, Tensor m, Tensor lr, Tensor alpha, Tensor sign_decay, Tensor beta, Tensor grad, bool? use_locking = null, string name = "ResourceApplyAddSign")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25306,7 +25306,7 @@ namespace Tensorflow.Operations
         ///    mom &amp;lt;- momentum * mom_{t-1} + lr * grad / sqrt(ms - mg * mg + epsilon)
         ///    var &amp;lt;- var - mom
         /// </remarks>
-        public static Operation resource_apply_centered_r_m_s_prop (Tensor var, Tensor mg, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ResourceApplyCenteredRMSProp")
+        public static Operation resource_apply_centered_r_m_s_prop(Tensor var, Tensor mg, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ResourceApplyCenteredRMSProp")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25369,7 +25369,7 @@ namespace Tensorflow.Operations
         ///    var = (sign(linear) * l1 - linear) / quadratic if |linear| &amp;gt; l1 else 0.0
         ///    accum = accum_new
         /// </remarks>
-        public static Operation resource_apply_ftrl (Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor lr_power, bool? use_locking = null, string name = "ResourceApplyFtrl")
+        public static Operation resource_apply_ftrl(Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor lr_power, bool? use_locking = null, string name = "ResourceApplyFtrl")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25435,7 +25435,7 @@ namespace Tensorflow.Operations
         ///    var = (sign(linear) * l1 - linear) / quadratic if |linear| &amp;gt; l1 else 0.0
         ///    accum = accum_new
         /// </remarks>
-        public static Operation resource_apply_ftrl_v2 (Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor l2_shrinkage, Tensor lr_power, bool? use_locking = null, string name = "ResourceApplyFtrlV2")
+        public static Operation resource_apply_ftrl_v2(Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor lr, Tensor l1, Tensor l2, Tensor l2_shrinkage, Tensor lr_power, bool? use_locking = null, string name = "ResourceApplyFtrlV2")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25475,7 +25475,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation resource_apply_gradient_descent (Tensor var, Tensor alpha, Tensor delta, bool? use_locking = null, string name = "ResourceApplyGradientDescent")
+        public static Operation resource_apply_gradient_descent(Tensor var, Tensor alpha, Tensor delta, bool? use_locking = null, string name = "ResourceApplyGradientDescent")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25527,7 +25527,7 @@ namespace Tensorflow.Operations
         ///    accum = accum * momentum + grad
         ///    var -= lr * accum
         /// </remarks>
-        public static Operation resource_apply_momentum (Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor momentum, bool? use_locking = null, bool? use_nesterov = null, string name = "ResourceApplyMomentum")
+        public static Operation resource_apply_momentum(Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor momentum, bool? use_locking = null, bool? use_nesterov = null, string name = "ResourceApplyMomentum")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25583,7 +25583,7 @@ namespace Tensorflow.Operations
         ///    update &amp;lt;- exp(logbase * sign_decay * sign(g) * sign(m_t)) * g
         ///    variable &amp;lt;- variable - lr_t * update
         /// </remarks>
-        public static Operation resource_apply_power_sign (Tensor var, Tensor m, Tensor lr, Tensor logbase, Tensor sign_decay, Tensor beta, Tensor grad, bool? use_locking = null, string name = "ResourceApplyPowerSign")
+        public static Operation resource_apply_power_sign(Tensor var, Tensor m, Tensor lr, Tensor logbase, Tensor sign_decay, Tensor beta, Tensor grad, bool? use_locking = null, string name = "ResourceApplyPowerSign")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25635,7 +25635,7 @@ namespace Tensorflow.Operations
         ///    prox_v = var - lr * grad * (1 / sqrt(accum))
         ///    var = sign(prox_v)/(1+lr*l2) * max{|prox_v|-lr*l1,0}
         /// </remarks>
-        public static Operation resource_apply_proximal_adagrad (Tensor var, Tensor accum, Tensor lr, Tensor l1, Tensor l2, Tensor grad, bool? use_locking = null, string name = "ResourceApplyProximalAdagrad")
+        public static Operation resource_apply_proximal_adagrad(Tensor var, Tensor accum, Tensor lr, Tensor l1, Tensor l2, Tensor grad, bool? use_locking = null, string name = "ResourceApplyProximalAdagrad")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25682,7 +25682,7 @@ namespace Tensorflow.Operations
         ///    prox_v = var - alpha * delta
         ///    var = sign(prox_v)/(1+alpha*l2) * max{|prox_v|-alpha*l1,0}
         /// </remarks>
-        public static Operation resource_apply_proximal_gradient_descent (Tensor var, Tensor alpha, Tensor l1, Tensor l2, Tensor delta, bool? use_locking = null, string name = "ResourceApplyProximalGradientDescent")
+        public static Operation resource_apply_proximal_gradient_descent(Tensor var, Tensor alpha, Tensor l1, Tensor l2, Tensor delta, bool? use_locking = null, string name = "ResourceApplyProximalGradientDescent")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25745,7 +25745,7 @@ namespace Tensorflow.Operations
         ///    mom &amp;lt;- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)
         ///    var &amp;lt;- var - mom
         /// </remarks>
-        public static Operation resource_apply_r_m_s_prop (Tensor var, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ResourceApplyRMSProp")
+        public static Operation resource_apply_r_m_s_prop(Tensor var, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, bool? use_locking = null, string name = "ResourceApplyRMSProp")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -25784,7 +25784,7 @@ namespace Tensorflow.Operations
         ///    input, the values produced will all be distinct.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor resource_count_up_to (Tensor resource, int limit, TF_DataType T, string name = "ResourceCountUpTo")
+        public static Tensor resource_count_up_to(Tensor resource, int limit, TF_DataType T, string name = "ResourceCountUpTo")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -25827,7 +25827,7 @@ namespace Tensorflow.Operations
         ///    output[i, ..., j, :, ... :] = params[indices[i, ..., j], :, ..., :]
         ///   </code>
         /// </remarks>
-        public static Tensor resource_gather (Tensor resource, Tensor indices, TF_DataType dtype, bool? validate_indices = null, string name = "ResourceGather")
+        public static Tensor resource_gather(Tensor resource, Tensor indices, TF_DataType dtype, bool? validate_indices = null, string name = "ResourceGather")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -25878,7 +25878,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src='https://www.tensorflow.org/images/ScatterAdd.png' alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Operation resource_scatter_add (Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterAdd")
+        public static Operation resource_scatter_add(Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -25927,7 +25927,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src='https://www.tensorflow.org/images/ScatterAdd.png' alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Operation resource_scatter_div (Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterDiv")
+        public static Operation resource_scatter_div(Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterDiv")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -25976,7 +25976,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src='https://www.tensorflow.org/images/ScatterAdd.png' alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Operation resource_scatter_max (Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterMax")
+        public static Operation resource_scatter_max(Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterMax")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -26025,7 +26025,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src='https://www.tensorflow.org/images/ScatterAdd.png' alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Operation resource_scatter_min (Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterMin")
+        public static Operation resource_scatter_min(Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterMin")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -26074,7 +26074,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src='https://www.tensorflow.org/images/ScatterAdd.png' alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Operation resource_scatter_mul (Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterMul")
+        public static Operation resource_scatter_mul(Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterMul")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -26146,7 +26146,7 @@ namespace Tensorflow.Operations
         ///    See <c>tf.scatter_nd</c> for more details about how to make updates to
         ///    slices.
         /// </remarks>
-        public static Operation resource_scatter_nd_add (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ResourceScatterNdAdd")
+        public static Operation resource_scatter_nd_add(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ResourceScatterNdAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -26220,7 +26220,7 @@ namespace Tensorflow.Operations
         ///    See <c>tf.scatter_nd</c> for more details about how to make updates to
         ///    slices.
         /// </remarks>
-        public static Operation resource_scatter_nd_update (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ResourceScatterNdUpdate")
+        public static Operation resource_scatter_nd_update(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ResourceScatterNdUpdate")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -26271,7 +26271,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src='https://www.tensorflow.org/images/ScatterAdd.png' alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Operation resource_scatter_sub (Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterSub")
+        public static Operation resource_scatter_sub(Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterSub")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -26311,7 +26311,7 @@ namespace Tensorflow.Operations
         ///    # High rank indices (for each i, ..., j)
         ///    ref[indices[i, ..., j], ...] = updates[i, ..., j, ...]
         /// </remarks>
-        public static Operation resource_scatter_update (Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterUpdate")
+        public static Operation resource_scatter_update(Tensor resource, Tensor indices, Tensor updates, string name = "ResourceScatterUpdate")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -26357,7 +26357,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation resource_sparse_apply_adadelta (Tensor var, Tensor accum, Tensor accum_update, Tensor lr, Tensor rho, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyAdadelta")
+        public static Operation resource_sparse_apply_adadelta(Tensor var, Tensor accum, Tensor accum_update, Tensor lr, Tensor rho, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyAdadelta")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26410,7 +26410,7 @@ namespace Tensorflow.Operations
         ///    accum += grad * grad
         ///    var -= lr * grad * (1 / sqrt(accum))
         /// </remarks>
-        public static Operation resource_sparse_apply_adagrad (Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor indices, bool? use_locking = null, bool? update_slots = null, string name = "ResourceSparseApplyAdagrad")
+        public static Operation resource_sparse_apply_adagrad(Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor indices, bool? use_locking = null, bool? update_slots = null, string name = "ResourceSparseApplyAdagrad")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26466,7 +26466,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation resource_sparse_apply_adagrad_d_a (Tensor var, Tensor gradient_accumulator, Tensor gradient_squared_accumulator, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor global_step, bool? use_locking = null, string name = "ResourceSparseApplyAdagradDA")
+        public static Operation resource_sparse_apply_adagrad_d_a(Tensor var, Tensor gradient_accumulator, Tensor gradient_squared_accumulator, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor global_step, bool? use_locking = null, string name = "ResourceSparseApplyAdagradDA")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26545,7 +26545,7 @@ namespace Tensorflow.Operations
         ///    mom &amp;lt;- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)
         ///    var &amp;lt;- var - mom
         /// </remarks>
-        public static Operation resource_sparse_apply_centered_r_m_s_prop (Tensor var, Tensor mg, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyCenteredRMSProp")
+        public static Operation resource_sparse_apply_centered_r_m_s_prop(Tensor var, Tensor mg, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyCenteredRMSProp")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26613,7 +26613,7 @@ namespace Tensorflow.Operations
         ///    var = (sign(linear) * l1 - linear) / quadratic if |linear| &amp;gt; l1 else 0.0
         ///    accum = accum_new
         /// </remarks>
-        public static Operation resource_sparse_apply_ftrl (Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor lr_power, bool? use_locking = null, string name = "ResourceSparseApplyFtrl")
+        public static Operation resource_sparse_apply_ftrl(Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor lr_power, bool? use_locking = null, string name = "ResourceSparseApplyFtrl")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26684,7 +26684,7 @@ namespace Tensorflow.Operations
         ///    var = (sign(linear) * l1 - linear) / quadratic if |linear| &amp;gt; l1 else 0.0
         ///    accum = accum_new
         /// </remarks>
-        public static Operation resource_sparse_apply_ftrl_v2 (Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor l2_shrinkage, Tensor lr_power, bool? use_locking = null, string name = "ResourceSparseApplyFtrlV2")
+        public static Operation resource_sparse_apply_ftrl_v2(Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor l2_shrinkage, Tensor lr_power, bool? use_locking = null, string name = "ResourceSparseApplyFtrlV2")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26748,7 +26748,7 @@ namespace Tensorflow.Operations
         ///    accum = accum * momentum + grad
         ///    var -= lr * accum
         /// </remarks>
-        public static Operation resource_sparse_apply_momentum (Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor indices, Tensor momentum, bool? use_locking = null, bool? use_nesterov = null, string name = "ResourceSparseApplyMomentum")
+        public static Operation resource_sparse_apply_momentum(Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor indices, Tensor momentum, bool? use_locking = null, bool? use_nesterov = null, string name = "ResourceSparseApplyMomentum")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26806,7 +26806,7 @@ namespace Tensorflow.Operations
         ///    prox_v -= lr * grad * (1 / sqrt(accum))
         ///    var = sign(prox_v)/(1+lr*l2) * max{|prox_v|-lr*l1,0}
         /// </remarks>
-        public static Operation resource_sparse_apply_proximal_adagrad (Tensor var, Tensor accum, Tensor lr, Tensor l1, Tensor l2, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyProximalAdagrad")
+        public static Operation resource_sparse_apply_proximal_adagrad(Tensor var, Tensor accum, Tensor lr, Tensor l1, Tensor l2, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyProximalAdagrad")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26858,7 +26858,7 @@ namespace Tensorflow.Operations
         ///    prox_v = var - alpha * grad
         ///    var = sign(prox_v)/(1+alpha*l2) * max{|prox_v|-alpha*l1,0}
         /// </remarks>
-        public static Operation resource_sparse_apply_proximal_gradient_descent (Tensor var, Tensor alpha, Tensor l1, Tensor l2, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyProximalGradientDescent")
+        public static Operation resource_sparse_apply_proximal_gradient_descent(Tensor var, Tensor alpha, Tensor l1, Tensor l2, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyProximalGradientDescent")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26925,7 +26925,7 @@ namespace Tensorflow.Operations
         ///    mom &amp;lt;- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)
         ///    var &amp;lt;- var - mom
         /// </remarks>
-        public static Operation resource_sparse_apply_r_m_s_prop (Tensor var, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyRMSProp")
+        public static Operation resource_sparse_apply_r_m_s_prop(Tensor var, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "ResourceSparseApplyRMSProp")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -26980,7 +26980,7 @@ namespace Tensorflow.Operations
         ///    NOTE this op currently does not support broadcasting and so <c>value</c>'s
         ///    shape must be exactly the shape produced by the slice of <c>ref</c>.
         /// </remarks>
-        public static Operation resource_strided_slice_assign (Tensor referecne, Tensor begin, Tensor end, Tensor strides, Tensor value, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "ResourceStridedSliceAssign")
+        public static Operation resource_strided_slice_assign(Tensor referecne, Tensor begin, Tensor end, Tensor strides, Tensor value, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "ResourceStridedSliceAssign")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -27046,7 +27046,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See also <c>RestoreSlice</c>.
         /// </remarks>
-        public static Tensor restore (Tensor file_pattern, Tensor tensor_name, TF_DataType dt, int? preferred_shard = null, string name = "Restore")
+        public static Tensor restore(Tensor file_pattern, Tensor tensor_name, TF_DataType dt, int? preferred_shard = null, string name = "Restore")
         {
             var dict = new Dictionary<string, object>();
             dict["file_pattern"] = file_pattern;
@@ -27096,7 +27096,7 @@ namespace Tensorflow.Operations
         ///    The <c>shape_and_slice</c> input has the same format as the
         ///    elements of the <c>shapes_and_slices</c> input of the <c>SaveSlices</c> op.
         /// </remarks>
-        public static Tensor restore_slice (Tensor file_pattern, Tensor tensor_name, Tensor shape_and_slice, TF_DataType dt, int? preferred_shard = null, string name = "RestoreSlice")
+        public static Tensor restore_slice(Tensor file_pattern, Tensor tensor_name, Tensor shape_and_slice, TF_DataType dt, int? preferred_shard = null, string name = "RestoreSlice")
         {
             var dict = new Dictionary<string, object>();
             dict["file_pattern"] = file_pattern;
@@ -27150,7 +27150,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Callers must ensure all the named tensors are indeed stored in the checkpoint.
         /// </remarks>
-        public static Tensor[] restore_v2 (Tensor prefix, Tensor tensor_names, Tensor shape_and_slices, TF_DataType[] dtypes, string name = "RestoreV2")
+        public static Tensor[] restore_v2(Tensor prefix, Tensor tensor_names, Tensor shape_and_slices, TF_DataType[] dtypes, string name = "RestoreV2")
         {
             var dict = new Dictionary<string, object>();
             dict["prefix"] = prefix;
@@ -27225,7 +27225,7 @@ namespace Tensorflow.Operations
         ///    [12, 13, 14, 15]]]]
         ///   </code>
         /// </remarks>
-        public static Tensor reverse (Tensor tensor, Tensor dims, string name = "Reverse")
+        public static Tensor reverse(Tensor tensor, Tensor dims, string name = "Reverse")
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
@@ -27314,7 +27314,7 @@ namespace Tensorflow.Operations
         ///    output[2:, :, 3, :, ...] = input[2:, :, 3, :, ...]
         ///   </code>
         /// </remarks>
-        public static Tensor reverse_sequence (Tensor input, Tensor seq_lengths, int seq_dim, int? batch_dim = null, string name = "ReverseSequence")
+        public static Tensor reverse_sequence(Tensor input, Tensor seq_lengths, int seq_dim, int? batch_dim = null, string name = "ReverseSequence")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -27391,7 +27391,7 @@ namespace Tensorflow.Operations
         ///    [12, 13, 14, 15]]]]
         ///   </code>
         /// </remarks>
-        public static Tensor reverse_v2 (Tensor tensor, Tensor axis, string name = "ReverseV2")
+        public static Tensor reverse_v2(Tensor tensor, Tensor axis, string name = "ReverseV2")
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
@@ -27420,7 +27420,7 @@ namespace Tensorflow.Operations
         ///    If <c>y</c> is negative, or greater than or equal to than the width of <c>x</c> in bits
         ///    the result is implementation defined.
         /// </remarks>
-        public static Tensor right_shift (Tensor x, Tensor y, string name = "RightShift")
+        public static Tensor right_shift(Tensor x, Tensor y, string name = "RightShift")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -27451,7 +27451,7 @@ namespace Tensorflow.Operations
         ///    rint([-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0]) ==&amp;gt; [-2., -2., -0., 0., 2., 2., 2.]
         ///   </code>
         /// </remarks>
-        public static Tensor rint (Tensor x, string name = "Rint")
+        public static Tensor rint(Tensor x, string name = "Rint")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -27507,7 +27507,7 @@ namespace Tensorflow.Operations
         ///    roll(t, shift=[2, -3], axis=[1, 1]) ==&amp;gt; [[1, 2, 3, 4, 0], [6, 7, 8, 9, 5]]
         ///   </code>
         /// </remarks>
-        public static Tensor roll (Tensor input, Tensor shift, Tensor axis, string name = "Roll")
+        public static Tensor roll(Tensor input, Tensor shift, Tensor axis, string name = "Roll")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -27532,7 +27532,7 @@ namespace Tensorflow.Operations
         ///    Rounds half to even.  Also known as bankers rounding. If you want to round
         ///    according to the current system rounding mode use std::cint.
         /// </remarks>
-        public static Tensor round (Tensor x, string name = "Round")
+        public static Tensor round(Tensor x, string name = "Round")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -27628,7 +27628,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See the <c>TryRpc</c> op if you prefer to handle RPC failures manually in the graph.
         /// </remarks>
-        public static Tensor rpc (Tensor address, Tensor method, Tensor request, string protocol = null, bool? fail_fast = null, int? timeout_in_ms = null, string name = "Rpc")
+        public static Tensor rpc(Tensor address, Tensor method, Tensor request, string protocol = null, bool? fail_fast = null, int? timeout_in_ms = null, string name = "Rpc")
         {
             var dict = new Dictionary<string, object>();
             dict["address"] = address;
@@ -27658,7 +27658,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    I.e., \\(y = 1 / \sqrt{x}\\).
         /// </remarks>
-        public static Tensor rsqrt (Tensor x, string name = "Rsqrt")
+        public static Tensor rsqrt(Tensor x, string name = "Rsqrt")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -27683,7 +27683,7 @@ namespace Tensorflow.Operations
         ///    Specifically, <c>grad = dy * -0.5 * y^3</c>, where <c>y = rsqrt(x)</c>, and <c>dy</c>
         ///    is the corresponding input gradient.
         /// </remarks>
-        public static Tensor rsqrt_grad (Tensor y, Tensor dy, string name = "RsqrtGrad")
+        public static Tensor rsqrt_grad(Tensor y, Tensor dy, string name = "RsqrtGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
@@ -27787,7 +27787,7 @@ namespace Tensorflow.Operations
         ///    bounding box covering the whole image. If <c>use_image_if_no_bounding_boxes</c> is
         ///    false and no bounding boxes are supplied, an error is raised.
         /// </remarks>
-        public static (Tensor begin, Tensor size, Tensor bboxes) sample_distorted_bounding_box (Tensor image_size, Tensor bounding_boxes, int? seed = null, int? seed2 = null, float? min_object_covered = null, float[] aspect_ratio_range = null, float[] area_range = null, int? max_attempts = null, bool? use_image_if_no_bounding_boxes = null, string name = "SampleDistortedBoundingBox")
+        public static (Tensor begin, Tensor size, Tensor bboxes) sample_distorted_bounding_box(Tensor image_size, Tensor bounding_boxes, int? seed = null, int? seed2 = null, float? min_object_covered = null, float[] aspect_ratio_range = null, float[] area_range = null, int? max_attempts = null, bool? use_image_if_no_bounding_boxes = null, string name = "SampleDistortedBoundingBox")
         {
             var dict = new Dictionary<string, object>();
             dict["image_size"] = image_size;
@@ -27909,7 +27909,7 @@ namespace Tensorflow.Operations
         ///    bounding box covering the whole image. If <c>use_image_if_no_bounding_boxes</c> is
         ///    false and no bounding boxes are supplied, an error is raised.
         /// </remarks>
-        public static (Tensor begin, Tensor size, Tensor bboxes) sample_distorted_bounding_box_v2 (Tensor image_size, Tensor bounding_boxes, Tensor min_object_covered, int? seed = null, int? seed2 = null, float[] aspect_ratio_range = null, float[] area_range = null, int? max_attempts = null, bool? use_image_if_no_bounding_boxes = null, string name = "SampleDistortedBoundingBoxV2")
+        public static (Tensor begin, Tensor size, Tensor bboxes) sample_distorted_bounding_box_v2(Tensor image_size, Tensor bounding_boxes, Tensor min_object_covered, int? seed = null, int? seed2 = null, float[] aspect_ratio_range = null, float[] area_range = null, int? max_attempts = null, bool? use_image_if_no_bounding_boxes = null, string name = "SampleDistortedBoundingBoxV2")
         {
             var dict = new Dictionary<string, object>();
             dict["image_size"] = image_size;
@@ -27960,7 +27960,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See also <c>SaveSlices</c>.
         /// </remarks>
-        public static Operation save (Tensor filename, Tensor tensor_names, Tensor[] data, string name = "Save")
+        public static Operation save(Tensor filename, Tensor tensor_names, Tensor[] data, string name = "Save")
         {
             var dict = new Dictionary<string, object>();
             dict["filename"] = filename;
@@ -28016,7 +28016,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See also <c>Save</c>.
         /// </remarks>
-        public static Operation save_slices (Tensor filename, Tensor tensor_names, Tensor shapes_and_slices, Tensor[] data, string name = "SaveSlices")
+        public static Operation save_slices(Tensor filename, Tensor tensor_names, Tensor shapes_and_slices, Tensor[] data, string name = "SaveSlices")
         {
             var dict = new Dictionary<string, object>();
             dict["filename"] = filename;
@@ -28055,7 +28055,7 @@ namespace Tensorflow.Operations
         ///    specific slices of full tensors, "shape_and_slices" should be non-empty strings
         ///    and correspondingly well-formed.
         /// </remarks>
-        public static Operation save_v2 (Tensor prefix, Tensor tensor_names, Tensor shape_and_slices, Tensor[] tensors, string name = "SaveV2")
+        public static Operation save_v2(Tensor prefix, Tensor tensor_names, Tensor shape_and_slices, Tensor[] tensors, string name = "SaveV2")
         {
             var dict = new Dictionary<string, object>();
             dict["prefix"] = prefix;
@@ -28066,7 +28066,7 @@ namespace Tensorflow.Operations
             return op;
         }
 
-        public static Tensor scale_and_translate (Tensor images_t, Tensor new_size, Tensor[] scale, Tensor zeroes, string kernel_type, bool antialias)
+        public static Tensor scale_and_translate(Tensor images_t, Tensor new_size, Tensor[] scale, Tensor zeroes, string kernel_type, bool antialias)
         {
             throw new NotImplementedException("scale_and_translate");
         }
@@ -28091,7 +28091,7 @@ namespace Tensorflow.Operations
         ///    The input <c>tags</c> and <c>values</c> must have the same shape.  The generated summary
         ///    has a summary value for each tag-value pair in <c>tags</c> and <c>values</c>.
         /// </remarks>
-        public static Tensor scalar_summary (Tensor tags, Tensor values, string name = "ScalarSummary")
+        public static Tensor scalar_summary(Tensor tags, Tensor values, string name = "ScalarSummary")
         {
             var dict = new Dictionary<string, object>();
             dict["tags"] = tags;
@@ -28148,7 +28148,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/ScatterAdd.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor scatter_add (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterAdd")
+        public static Tensor scatter_add(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28206,7 +28206,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Requires <c>updates.shape = indices.shape + ref.shape[1:]</c> or <c>updates.shape = []</c>.
         /// </remarks>
-        public static Tensor scatter_div (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterDiv")
+        public static Tensor scatter_div(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterDiv")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28266,7 +28266,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/ScatterAdd.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor scatter_max (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterMax")
+        public static Tensor scatter_max(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterMax")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28326,7 +28326,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/ScatterAdd.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor scatter_min (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterMin")
+        public static Tensor scatter_min(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterMin")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28384,7 +28384,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Requires <c>updates.shape = indices.shape + ref.shape[1:]</c> or <c>updates.shape = []</c>.
         /// </remarks>
-        public static Tensor scatter_mul (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterMul")
+        public static Tensor scatter_mul(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterMul")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28496,7 +28496,7 @@ namespace Tensorflow.Operations
         ///    Note that on CPU, if an out of bound index is found, an error is returned.
         ///    On GPU, if an out of bound index is found, the index is ignored.
         /// </remarks>
-        public static Tensor scatter_nd (Tensor indices, Tensor updates, Tensor shape, string name = "ScatterNd")
+        public static Tensor scatter_nd(Tensor indices, Tensor updates, Tensor shape, string name = "ScatterNd")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -28566,7 +28566,7 @@ namespace Tensorflow.Operations
         ///    See <c>tf.scatter_nd</c> for more details about how to make updates to
         ///    slices.
         /// </remarks>
-        public static Tensor scatter_nd_add (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterNdAdd")
+        public static Tensor scatter_nd_add(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterNdAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28635,7 +28635,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See <c>tf.scatter_nd</c> for more details about how to make updates to slices.
         /// </remarks>
-        public static Tensor scatter_nd_non_aliasing_add (Tensor input, Tensor indices, Tensor updates, string name = "ScatterNdNonAliasingAdd")
+        public static Tensor scatter_nd_non_aliasing_add(Tensor input, Tensor indices, Tensor updates, string name = "ScatterNdNonAliasingAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -28705,7 +28705,7 @@ namespace Tensorflow.Operations
         ///    See <c>tf.scatter_nd</c> for more details about how to make updates to
         ///    slices.
         /// </remarks>
-        public static Tensor scatter_nd_sub (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterNdSub")
+        public static Tensor scatter_nd_sub(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterNdSub")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28781,7 +28781,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See also <c>tf.scatter_update</c> and <c>tf.batch_scatter_update</c>.
         /// </remarks>
-        public static Tensor scatter_nd_update (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterNdUpdate")
+        public static Tensor scatter_nd_update(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterNdUpdate")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28841,7 +28841,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/ScatterSub.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor scatter_sub (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterSub")
+        public static Tensor scatter_sub(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterSub")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28906,7 +28906,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See also <c>tf.batch_scatter_update</c> and <c>tf.scatter_nd_update</c>.
         /// </remarks>
-        public static Tensor scatter_update (Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterUpdate")
+        public static Tensor scatter_update(Tensor referecne, Tensor indices, Tensor updates, bool? use_locking = null, string name = "ScatterUpdate")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -28932,7 +28932,7 @@ namespace Tensorflow.Operations
         ///    vector. Each row contains the low and high parts of the fingerprint.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor sdca_fprint (Tensor input, string name = "SdcaFprint")
+        public static Tensor sdca_fprint(Tensor input, string name = "SdcaFprint")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -29036,7 +29036,7 @@ namespace Tensorflow.Operations
         ///    [Stochastic Dual Coordinate Ascent with Adaptive Probabilities](https://arxiv.org/abs/1502.08053).&amp;lt;br&amp;gt;
         ///    Dominik Csiba, Zheng Qu, Peter Richtarik. 2015
         /// </remarks>
-        public static (Tensor out_example_state_data, Tensor[] out_delta_sparse_weights, Tensor[] out_delta_dense_weights) sdca_optimizer (Tensor[] sparse_example_indices, Tensor[] sparse_feature_indices, Tensor[] sparse_feature_values, Tensor[] dense_features, Tensor example_weights, Tensor example_labels, Tensor[] sparse_indices, Tensor[] sparse_weights, Tensor[] dense_weights, Tensor example_state_data, string loss_type, float l1, float l2, int num_loss_partitions, int num_inner_iterations, bool? adaptative = null, string name = "SdcaOptimizer")
+        public static (Tensor out_example_state_data, Tensor[] out_delta_sparse_weights, Tensor[] out_delta_dense_weights) sdca_optimizer(Tensor[] sparse_example_indices, Tensor[] sparse_feature_indices, Tensor[] sparse_feature_values, Tensor[] dense_features, Tensor example_weights, Tensor example_labels, Tensor[] sparse_indices, Tensor[] sparse_weights, Tensor[] dense_weights, Tensor example_state_data, string loss_type, float l1, float l2, int num_loss_partitions, int num_inner_iterations, bool? adaptative = null, string name = "SdcaOptimizer")
         {
             var dict = new Dictionary<string, object>();
             dict["sparse_example_indices"] = sparse_example_indices;
@@ -29085,7 +29085,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation sdca_shrink_l1 (Tensor[] weights, float l1, float l2, string name = "SdcaShrinkL1")
+        public static Operation sdca_shrink_l1(Tensor[] weights, float l1, float l2, string name = "SdcaShrinkL1")
         {
             var dict = new Dictionary<string, object>();
             dict["weights"] = weights;
@@ -29127,7 +29127,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/SegmentMax.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor segment_max (Tensor data, Tensor segment_ids, string name = "SegmentMax")
+        public static Tensor segment_max(Tensor data, Tensor segment_ids, string name = "SegmentMax")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -29169,7 +29169,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/SegmentMean.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor segment_mean (Tensor data, Tensor segment_ids, string name = "SegmentMean")
+        public static Tensor segment_mean(Tensor data, Tensor segment_ids, string name = "SegmentMean")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -29210,7 +29210,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/SegmentMin.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor segment_min (Tensor data, Tensor segment_ids, string name = "SegmentMin")
+        public static Tensor segment_min(Tensor data, Tensor segment_ids, string name = "SegmentMin")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -29251,7 +29251,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/SegmentProd.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor segment_prod (Tensor data, Tensor segment_ids, string name = "SegmentProd")
+        public static Tensor segment_prod(Tensor data, Tensor segment_ids, string name = "SegmentProd")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -29292,7 +29292,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/SegmentSum.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor segment_sum (Tensor data, Tensor segment_ids, string name = "SegmentSum")
+        public static Tensor segment_sum(Tensor data, Tensor segment_ids, string name = "SegmentSum")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -29361,7 +29361,7 @@ namespace Tensorflow.Operations
         ///    
         ///   </code>
         /// </remarks>
-        public static Tensor select (Tensor condition, Tensor t, Tensor e, string name = "Select")
+        public static Tensor select(Tensor condition, Tensor t, Tensor e, string name = "Select")
         {
             var dict = new Dictionary<string, object>();
             dict["condition"] = condition;
@@ -29393,7 +29393,7 @@ namespace Tensorflow.Operations
         ///    eigenvalues, and subsequent [...,1:, :] containing the eigenvectors. The eigenvalues
         ///    are sorted in non-decreasing order.
         /// </remarks>
-        public static Tensor self_adjoint_eig (Tensor input, string name = "SelfAdjointEig")
+        public static Tensor self_adjoint_eig(Tensor input, string name = "SelfAdjointEig")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -29433,7 +29433,7 @@ namespace Tensorflow.Operations
         ///    e = self_adjoint_eig(a, compute_v=False)
         ///   </code>
         /// </remarks>
-        public static (Tensor e, Tensor v) self_adjoint_eig_v2 (Tensor input, bool? compute_v = null, string name = "SelfAdjointEigV2")
+        public static (Tensor e, Tensor v) self_adjoint_eig_v2(Tensor input, bool? compute_v = null, string name = "SelfAdjointEigV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -29466,7 +29466,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See [Self-Normalizing Neural Networks](https://arxiv.org/abs/1706.02515)
         /// </remarks>
-        public static Tensor selu (Tensor features, string name = "Selu")
+        public static Tensor selu(Tensor features, string name = "Selu")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -29491,7 +29491,7 @@ namespace Tensorflow.Operations
         ///    if outputs &amp;lt; 0, <c>scale * gradients</c> otherwise.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor selu_grad (Tensor gradients, Tensor outputs, string name = "SeluGrad")
+        public static Tensor selu_grad(Tensor gradients, Tensor outputs, string name = "SeluGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -29514,7 +29514,7 @@ namespace Tensorflow.Operations
         ///    resource.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor serialize_iterator (Tensor resource_handle, string name = "SerializeIterator")
+        public static Tensor serialize_iterator(Tensor resource_handle, string name = "SerializeIterator")
         {
             var dict = new Dictionary<string, object>();
             dict["resource_handle"] = resource_handle;
@@ -29553,7 +29553,7 @@ namespace Tensorflow.Operations
         ///    
         ///    The minibatch size <c>N</c> is extracted from <c>sparse_shape[0]</c>.
         /// </remarks>
-        public static Tensor serialize_many_sparse (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape, TF_DataType? out_type = null, string name = "SerializeManySparse")
+        public static Tensor serialize_many_sparse(Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape, TF_DataType? out_type = null, string name = "SerializeManySparse")
         {
             var dict = new Dictionary<string, object>();
             dict["sparse_indices"] = sparse_indices;
@@ -29587,7 +29587,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor serialize_sparse (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape, TF_DataType? out_type = null, string name = "SerializeSparse")
+        public static Tensor serialize_sparse(Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape, TF_DataType? out_type = null, string name = "SerializeSparse")
         {
             var dict = new Dictionary<string, object>();
             dict["sparse_indices"] = sparse_indices;
@@ -29612,7 +29612,7 @@ namespace Tensorflow.Operations
         ///    A serialized TensorProto proto of the input tensor.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor serialize_tensor (Tensor tensor, string name = "SerializeTensor")
+        public static Tensor serialize_tensor(Tensor tensor, string name = "SerializeTensor")
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
@@ -29651,7 +29651,7 @@ namespace Tensorflow.Operations
         ///    If <c>validate_indices</c> is <c>True</c>, this op validates the order and range of <c>set</c>
         ///    indices.
         /// </remarks>
-        public static Tensor set_size (Tensor set_indices, Tensor set_values, Tensor set_shape, bool? validate_indices = null, string name = "SetSize")
+        public static Tensor set_size(Tensor set_indices, Tensor set_values, Tensor set_shape, bool? validate_indices = null, string name = "SetSize")
         {
             var dict = new Dictionary<string, object>();
             dict["set_indices"] = set_indices;
@@ -29686,7 +29686,7 @@ namespace Tensorflow.Operations
         ///    shape(t) ==&amp;gt; [2, 2, 3]
         ///   </code>
         /// </remarks>
-        public static Tensor shape (Tensor input, TF_DataType? out_type = null, string name = "Shape")
+        public static Tensor shape(Tensor input, TF_DataType? out_type = null, string name = "Shape")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -29712,7 +29712,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    This operation returns N 1-D integer tensors representing shape of <c>input[i]s</c>.
         /// </remarks>
-        public static Tensor[] shape_n (Tensor[] input, TF_DataType? out_type = null, string name = "ShapeN")
+        public static Tensor[] shape_n(Tensor[] input, TF_DataType? out_type = null, string name = "ShapeN")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -29742,7 +29742,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    %s-%05d-of-%05d, basename, shard, num_shards.
         /// </remarks>
-        public static Tensor sharded_filename (Tensor basename, Tensor shard, Tensor num_shards, string name = "ShardedFilename")
+        public static Tensor sharded_filename(Tensor basename, Tensor shard, Tensor num_shards, string name = "ShardedFilename")
         {
             var dict = new Dictionary<string, object>();
             dict["basename"] = basename;
@@ -29765,7 +29765,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor sharded_filespec (Tensor basename, Tensor num_shards, string name = "ShardedFilespec")
+        public static Tensor sharded_filespec(Tensor basename, Tensor num_shards, string name = "ShardedFilespec")
         {
             var dict = new Dictionary<string, object>();
             dict["basename"] = basename;
@@ -29811,7 +29811,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    pseudorandomly.
         /// </remarks>
-        public static Tensor shuffle_and_repeat_dataset (Tensor input_dataset, Tensor buffer_size, Tensor seed, Tensor seed2, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ShuffleAndRepeatDataset")
+        public static Tensor shuffle_and_repeat_dataset(Tensor input_dataset, Tensor buffer_size, Tensor seed, Tensor seed2, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ShuffleAndRepeatDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -29862,7 +29862,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor shuffle_dataset (Tensor input_dataset, Tensor buffer_size, Tensor seed, Tensor seed2, TF_DataType[] output_types, TensorShape[] output_shapes, bool? reshuffle_each_iteration = null, string name = "ShuffleDataset")
+        public static Tensor shuffle_dataset(Tensor input_dataset, Tensor buffer_size, Tensor seed, Tensor seed2, TF_DataType[] output_types, TensorShape[] output_shapes, bool? reshuffle_each_iteration = null, string name = "ShuffleDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -29889,7 +29889,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    an error if no system is running.
         /// </remarks>
-        public static Operation shutdown_distributed_t_p_u (string name = "ShutdownDistributedTPU")
+        public static Operation shutdown_distributed_t_p_u(string name = "ShutdownDistributedTPU")
         {
             var dict = new Dictionary<string, object>();
             var op = tf.OpDefLib._apply_op_helper("ShutdownDistributedTPU", name: name, keywords: dict);
@@ -29910,7 +29910,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Specifically, <c>y = 1 / (1 + exp(-x))</c>.
         /// </remarks>
-        public static Tensor sigmoid (Tensor x, string name = "Sigmoid")
+        public static Tensor sigmoid(Tensor x, string name = "Sigmoid")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -29935,7 +29935,7 @@ namespace Tensorflow.Operations
         ///    Specifically, <c>grad = dy * y * (1 - y)</c>, where <c>y = sigmoid(x)</c>, and
         ///    <c>dy</c> is the corresponding input gradient.
         /// </remarks>
-        public static Tensor sigmoid_grad (Tensor y, Tensor dy, string name = "SigmoidGrad")
+        public static Tensor sigmoid_grad(Tensor y, Tensor dy, string name = "SigmoidGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
@@ -29960,7 +29960,7 @@ namespace Tensorflow.Operations
         ///    
         ///    For complex numbers, <c>y = sign(x) = x / |x|</c> if <c>x != 0</c>, otherwise <c>y = 0</c>.
         /// </remarks>
-        public static Tensor sign (Tensor x, string name = "Sign")
+        public static Tensor sign(Tensor x, string name = "Sign")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -29979,7 +29979,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor sin (Tensor x, string name = "Sin")
+        public static Tensor sin(Tensor x, string name = "Sin")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -29998,7 +29998,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor sinh (Tensor x, string name = "Sinh")
+        public static Tensor sinh(Tensor x, string name = "Sinh")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -30021,7 +30021,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    A placeholder for input pipeline graph optimizations.
         /// </remarks>
-        public static Tensor sink_dataset (Tensor input_dataset, string name = "SinkDataset")
+        public static Tensor sink_dataset(Tensor input_dataset, string name = "SinkDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -30053,7 +30053,7 @@ namespace Tensorflow.Operations
         ///    size(t) ==&amp;gt; 12
         ///   </code>
         /// </remarks>
-        public static Tensor size (Tensor input, TF_DataType? out_type = null, string name = "Size")
+        public static Tensor size(Tensor input, TF_DataType? out_type = null, string name = "Size")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -30084,7 +30084,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor skip_dataset (Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "SkipDataset")
+        public static Tensor skip_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "SkipDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -30131,7 +30131,7 @@ namespace Tensorflow.Operations
         ///    labels : A vector of word ids.
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor vocab_word, Tensor vocab_freq, Tensor words_per_epoch, Tensor current_epoch, Tensor total_words_processed, Tensor examples, Tensor labels) skipgram (string filename, int batch_size, int? window_size = null, int? min_count = null, float? subsample = null, string name = "Skipgram")
+        public static (Tensor vocab_word, Tensor vocab_freq, Tensor words_per_epoch, Tensor current_epoch, Tensor total_words_processed, Tensor examples, Tensor labels) skipgram(string filename, int batch_size, int? window_size = null, int? min_count = null, float? subsample = null, string name = "Skipgram")
         {
             var dict = new Dictionary<string, object>();
             dict["filename"] = filename;
@@ -30183,7 +30183,7 @@ namespace Tensorflow.Operations
         ///    *Requirements*:
         ///    0 &amp;lt;= begin[i] &amp;lt;= begin[i] + size[i] &amp;lt;= Di  for i in [0, n)
         /// </remarks>
-        public static Tensor slice (Tensor input, Tensor begin, Tensor size, string name = "Slice")
+        public static Tensor slice(Tensor input, Tensor begin, Tensor size, string name = "Slice")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -30222,7 +30222,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor slide_dataset (Tensor input_dataset, Tensor window_size, Tensor window_shift, Tensor window_stride, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "SlideDataset")
+        public static Tensor slide_dataset(Tensor input_dataset, Tensor window_size, Tensor window_shift, Tensor window_stride, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "SlideDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -30246,7 +30246,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor snapshot (Tensor input, string name = "Snapshot")
+        public static Tensor snapshot(Tensor input, string name = "Snapshot")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -30272,7 +30272,7 @@ namespace Tensorflow.Operations
         ///    
         ///    $$softmax[i, j] = exp(logits[i, j]) / sum_j(exp(logits[i, j]))$$
         /// </remarks>
-        public static Tensor softmax (Tensor logits, string name = "Softmax")
+        public static Tensor softmax(Tensor logits, string name = "Softmax")
         {
             var dict = new Dictionary<string, object>();
             dict["logits"] = logits;
@@ -30303,7 +30303,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Inputs are the logits, not probabilities.
         /// </remarks>
-        public static (Tensor loss, Tensor backprop) softmax_cross_entropy_with_logits (Tensor features, Tensor labels, string name = "SoftmaxCrossEntropyWithLogits")
+        public static (Tensor loss, Tensor backprop) softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = "SoftmaxCrossEntropyWithLogits")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -30326,7 +30326,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor softplus (Tensor features, string name = "Softplus")
+        public static Tensor softplus(Tensor features, string name = "Softplus")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -30350,7 +30350,7 @@ namespace Tensorflow.Operations
         ///    The gradients: <c>gradients / (1 + exp(-features))</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor softplus_grad (Tensor gradients, Tensor features, string name = "SoftplusGrad")
+        public static Tensor softplus_grad(Tensor gradients, Tensor features, string name = "SoftplusGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -30370,7 +30370,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor softsign (Tensor features, string name = "Softsign")
+        public static Tensor softsign(Tensor features, string name = "Softsign")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -30394,7 +30394,7 @@ namespace Tensorflow.Operations
         ///    The gradients: <c>gradients / (1 + abs(features)) ** 2</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor softsign_grad (Tensor gradients, Tensor features, string name = "SoftsignGrad")
+        public static Tensor softsign_grad(Tensor gradients, Tensor features, string name = "SoftsignGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -30514,7 +30514,7 @@ namespace Tensorflow.Operations
         ///    the zero-padding, both <c>height</c> and <c>width</c> of the input must be divisible by the
         ///    block size.
         /// </remarks>
-        public static Tensor space_to_batch (Tensor input, Tensor paddings, int block_size, string name = "SpaceToBatch")
+        public static Tensor space_to_batch(Tensor input, Tensor paddings, int block_size, string name = "SpaceToBatch")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -30660,7 +30660,7 @@ namespace Tensorflow.Operations
         ///    input are optionally zero padded according to <c>paddings</c>.  See below for a
         ///    precise description.
         /// </remarks>
-        public static Tensor space_to_batch_n_d (Tensor input, Tensor block_shape, Tensor paddings, string name = "SpaceToBatchND")
+        public static Tensor space_to_batch_n_d(Tensor input, Tensor block_shape, Tensor paddings, string name = "SpaceToBatchND")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -30772,7 +30772,7 @@ namespace Tensorflow.Operations
         ///    [13, 14, 15, 16]]]]
         ///   </code>
         /// </remarks>
-        public static Tensor space_to_depth (Tensor input, int block_size, string data_format = null, string name = "SpaceToDepth")
+        public static Tensor space_to_depth(Tensor input, int block_size, string data_format = null, string name = "SpaceToDepth")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -30819,7 +30819,7 @@ namespace Tensorflow.Operations
         ///    Does not add if local_step is smaller than the accumulator's
         ///    global_step.
         /// </remarks>
-        public static Operation sparse_accumulator_apply_gradient (Tensor handle, Tensor local_step, Tensor gradient_indices, Tensor gradient_values, Tensor gradient_shape, bool has_known_shape, string name = "SparseAccumulatorApplyGradient")
+        public static Operation sparse_accumulator_apply_gradient(Tensor handle, Tensor local_step, Tensor gradient_indices, Tensor gradient_values, Tensor gradient_shape, bool has_known_shape, string name = "SparseAccumulatorApplyGradient")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -30864,7 +30864,7 @@ namespace Tensorflow.Operations
         ///    the recorded global_step in the accumulator by 1, and resets the
         ///    aggregate to 0.
         /// </remarks>
-        public static (Tensor indices, Tensor values, Tensor shape) sparse_accumulator_take_gradient (Tensor handle, Tensor num_required, TF_DataType dtype, string name = "SparseAccumulatorTakeGradient")
+        public static (Tensor indices, Tensor values, Tensor shape) sparse_accumulator_take_gradient(Tensor handle, Tensor num_required, TF_DataType dtype, string name = "SparseAccumulatorTakeGradient")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -30928,7 +30928,7 @@ namespace Tensorflow.Operations
         ///    
         ///    In the following shapes, <c>nnz</c> is the count after taking <c>thresh</c> into account.
         /// </remarks>
-        public static (Tensor sum_indices, Tensor sum_values, Tensor sum_shape) sparse_add (Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b_indices, Tensor b_values, Tensor b_shape, Tensor thresh, string name = "SparseAdd")
+        public static (Tensor sum_indices, Tensor sum_values, Tensor sum_shape) sparse_add(Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b_indices, Tensor b_values, Tensor b_shape, Tensor thresh, string name = "SparseAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["a_indices"] = a_indices;
@@ -30980,7 +30980,7 @@ namespace Tensorflow.Operations
         ///    non-empty values of the sum, and outputs the gradients w.r.t. the non-empty
         ///    values of A and B.
         /// </remarks>
-        public static (Tensor a_val_grad, Tensor b_val_grad) sparse_add_grad (Tensor backprop_val_grad, Tensor a_indices, Tensor b_indices, Tensor sum_indices, string name = "SparseAddGrad")
+        public static (Tensor a_val_grad, Tensor b_val_grad) sparse_add_grad(Tensor backprop_val_grad, Tensor a_indices, Tensor b_indices, Tensor sum_indices, string name = "SparseAddGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["backprop_val_grad"] = backprop_val_grad;
@@ -31031,7 +31031,7 @@ namespace Tensorflow.Operations
         ///    Same as "var".
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor sparse_apply_adadelta (Tensor var, Tensor accum, Tensor accum_update, Tensor lr, Tensor rho, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyAdadelta")
+        public static Tensor sparse_apply_adadelta(Tensor var, Tensor accum, Tensor accum_update, Tensor lr, Tensor rho, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyAdadelta")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31085,7 +31085,7 @@ namespace Tensorflow.Operations
         ///    $$accum += grad * grad$$
         ///    $$var -= lr * grad * (1 / sqrt(accum))$$
         /// </remarks>
-        public static Tensor sparse_apply_adagrad (Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor indices, bool? use_locking = null, bool? update_slots = null, string name = "SparseApplyAdagrad")
+        public static Tensor sparse_apply_adagrad(Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor indices, bool? use_locking = null, bool? update_slots = null, string name = "SparseApplyAdagrad")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31142,7 +31142,7 @@ namespace Tensorflow.Operations
         ///    Same as "var".
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor sparse_apply_adagrad_d_a (Tensor var, Tensor gradient_accumulator, Tensor gradient_squared_accumulator, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor global_step, bool? use_locking = null, string name = "SparseApplyAdagradDA")
+        public static Tensor sparse_apply_adagrad_d_a(Tensor var, Tensor gradient_accumulator, Tensor gradient_squared_accumulator, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor global_step, bool? use_locking = null, string name = "SparseApplyAdagradDA")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31222,7 +31222,7 @@ namespace Tensorflow.Operations
         ///    $$mom &amp;lt;- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)$$
         ///    $$var &amp;lt;- var - mom$$
         /// </remarks>
-        public static Tensor sparse_apply_centered_r_m_s_prop (Tensor var, Tensor mg, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyCenteredRMSProp")
+        public static Tensor sparse_apply_centered_r_m_s_prop(Tensor var, Tensor mg, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyCenteredRMSProp")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31291,7 +31291,7 @@ namespace Tensorflow.Operations
         ///    $$var = (sign(linear) * l1 - linear) / quadratic\ if\ |linear| &amp;gt; l1\ else\ 0.0$$
         ///    $$accum = accum_{new}$$
         /// </remarks>
-        public static Tensor sparse_apply_ftrl (Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor lr_power, bool? use_locking = null, string name = "SparseApplyFtrl")
+        public static Tensor sparse_apply_ftrl(Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor lr_power, bool? use_locking = null, string name = "SparseApplyFtrl")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31363,7 +31363,7 @@ namespace Tensorflow.Operations
         ///    var = (sign(linear) * l1 - linear) / quadratic if |linear| &amp;gt; l1 else 0.0
         ///    accum = accum_new
         /// </remarks>
-        public static Tensor sparse_apply_ftrl_v2 (Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor l2_shrinkage, Tensor lr_power, bool? use_locking = null, string name = "SparseApplyFtrlV2")
+        public static Tensor sparse_apply_ftrl_v2(Tensor var, Tensor accum, Tensor linear, Tensor grad, Tensor indices, Tensor lr, Tensor l1, Tensor l2, Tensor l2_shrinkage, Tensor lr_power, bool? use_locking = null, string name = "SparseApplyFtrlV2")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31428,7 +31428,7 @@ namespace Tensorflow.Operations
         ///    $$accum = accum * momentum + grad$$
         ///    $$var -= lr * accum$$
         /// </remarks>
-        public static Tensor sparse_apply_momentum (Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor indices, Tensor momentum, bool? use_locking = null, bool? use_nesterov = null, string name = "SparseApplyMomentum")
+        public static Tensor sparse_apply_momentum(Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor indices, Tensor momentum, bool? use_locking = null, bool? use_nesterov = null, string name = "SparseApplyMomentum")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31487,7 +31487,7 @@ namespace Tensorflow.Operations
         ///    $$prox_v -= lr * grad * (1 / sqrt(accum))$$
         ///    $$var = sign(prox_v)/(1+lr*l2) * max{|prox_v|-lr*l1,0}$$
         /// </remarks>
-        public static Tensor sparse_apply_proximal_adagrad (Tensor var, Tensor accum, Tensor lr, Tensor l1, Tensor l2, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyProximalAdagrad")
+        public static Tensor sparse_apply_proximal_adagrad(Tensor var, Tensor accum, Tensor lr, Tensor l1, Tensor l2, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyProximalAdagrad")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31540,7 +31540,7 @@ namespace Tensorflow.Operations
         ///    $$prox_v = var - alpha * grad$$
         ///    $$var = sign(prox_v)/(1+alpha*l2) * max{|prox_v|-alpha*l1,0}$$
         /// </remarks>
-        public static Tensor sparse_apply_proximal_gradient_descent (Tensor var, Tensor alpha, Tensor l1, Tensor l2, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyProximalGradientDescent")
+        public static Tensor sparse_apply_proximal_gradient_descent(Tensor var, Tensor alpha, Tensor l1, Tensor l2, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyProximalGradientDescent")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31608,7 +31608,7 @@ namespace Tensorflow.Operations
         ///    $$mom &amp;lt;- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)$$
         ///    $$var &amp;lt;- var - mom$$
         /// </remarks>
-        public static Tensor sparse_apply_r_m_s_prop (Tensor var, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyRMSProp")
+        public static Tensor sparse_apply_r_m_s_prop(Tensor var, Tensor ms, Tensor mom, Tensor lr, Tensor rho, Tensor momentum, Tensor epsilon, Tensor grad, Tensor indices, bool? use_locking = null, string name = "SparseApplyRMSProp")
         {
             var dict = new Dictionary<string, object>();
             dict["var"] = var;
@@ -31696,7 +31696,7 @@ namespace Tensorflow.Operations
         ///    [    a] concat [  d e  ] = [    a   d e  ]
         ///    [b c  ]        [       ]   [b c          ]
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_concat (Tensor[] indices, Tensor[] values, Tensor[] shapes, int concat_dim, string name = "SparseConcat")
+        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_concat(Tensor[] indices, Tensor[] values, Tensor[] shapes, int concat_dim, string name = "SparseConcat")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -31745,7 +31745,7 @@ namespace Tensorflow.Operations
         ///    resets the aggregate to 0, and increments the global_step recorded by
         ///    the accumulator.
         /// </remarks>
-        public static Tensor sparse_conditional_accumulator (TF_DataType dtype, TensorShape shape, string container = null, string shared_name = null, string name = "SparseConditionalAccumulator")
+        public static Tensor sparse_conditional_accumulator(TF_DataType dtype, TensorShape shape, string container = null, string shared_name = null, string name = "SparseConditionalAccumulator")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -31843,7 +31843,7 @@ namespace Tensorflow.Operations
         ///    Fingerprint64("g"), FingerprintCat64(
         ///    Fingerprint64("e"), Fingerprint64("c")))
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_cross (Tensor[] indices, Tensor[] values, Tensor[] shapes, Tensor[] dense_inputs, bool hashed_output, int num_buckets, int hash_key, TF_DataType out_type, TF_DataType internal_type, string name = "SparseCross")
+        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_cross(Tensor[] indices, Tensor[] values, Tensor[] shapes, Tensor[] dense_inputs, bool hashed_output, int num_buckets, int hash_key, TF_DataType out_type, TF_DataType internal_type, string name = "SparseCross")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -31896,7 +31896,7 @@ namespace Tensorflow.Operations
         ///    indices and shape, but possibly with different non-zero values.  The output of
         ///    this Op is the resultant non-zero values.
         /// </remarks>
-        public static Tensor sparse_dense_cwise_add (Tensor sp_indices, Tensor sp_values, Tensor sp_shape, Tensor dense, string name = "SparseDenseCwiseAdd")
+        public static Tensor sparse_dense_cwise_add(Tensor sp_indices, Tensor sp_values, Tensor sp_shape, Tensor dense, string name = "SparseDenseCwiseAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["sp_indices"] = sp_indices;
@@ -31934,7 +31934,7 @@ namespace Tensorflow.Operations
         ///    *Limitation*: this Op only broadcasts the dense side to the sparse side, but not
         ///    the other direction.
         /// </remarks>
-        public static Tensor sparse_dense_cwise_div (Tensor sp_indices, Tensor sp_values, Tensor sp_shape, Tensor dense, string name = "SparseDenseCwiseDiv")
+        public static Tensor sparse_dense_cwise_div(Tensor sp_indices, Tensor sp_values, Tensor sp_shape, Tensor dense, string name = "SparseDenseCwiseDiv")
         {
             var dict = new Dictionary<string, object>();
             dict["sp_indices"] = sp_indices;
@@ -31976,7 +31976,7 @@ namespace Tensorflow.Operations
         ///    *Limitation*: this Op only broadcasts the dense side to the sparse side, but not
         ///    the other direction.
         /// </remarks>
-        public static Tensor sparse_dense_cwise_mul (Tensor sp_indices, Tensor sp_values, Tensor sp_shape, Tensor dense, string name = "SparseDenseCwiseMul")
+        public static Tensor sparse_dense_cwise_mul(Tensor sp_indices, Tensor sp_values, Tensor sp_shape, Tensor dense, string name = "SparseDenseCwiseMul")
         {
             var dict = new Dictionary<string, object>();
             dict["sp_indices"] = sp_indices;
@@ -32054,7 +32054,7 @@ namespace Tensorflow.Operations
         ///    
         ///    reverse_index_map[j] = out_j s.t. indices[j, :] == output_indices[out_j, :]
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_values, Tensor empty_row_indicator, Tensor reverse_index_map) sparse_fill_empty_rows (Tensor indices, Tensor values, Tensor dense_shape, Tensor default_value, string name = "SparseFillEmptyRows")
+        public static (Tensor output_indices, Tensor output_values, Tensor empty_row_indicator, Tensor reverse_index_map) sparse_fill_empty_rows(Tensor indices, Tensor values, Tensor dense_shape, Tensor default_value, string name = "SparseFillEmptyRows")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -32098,7 +32098,7 @@ namespace Tensorflow.Operations
         ///    d_default_value = sum_{k : 0 .. N_full - 1} (
         ///    grad_values[k] * 1{k not in reverse_index_map})
         /// </remarks>
-        public static (Tensor d_values, Tensor d_default_value) sparse_fill_empty_rows_grad (Tensor reverse_index_map, Tensor grad_values, string name = "SparseFillEmptyRowsGrad")
+        public static (Tensor d_values, Tensor d_default_value) sparse_fill_empty_rows_grad(Tensor reverse_index_map, Tensor grad_values, string name = "SparseFillEmptyRowsGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["reverse_index_map"] = reverse_index_map;
@@ -32142,7 +32142,7 @@ namespace Tensorflow.Operations
         ///    The gradient computation of this operation will only take advantage of sparsity
         ///    in the input gradient when that gradient comes from a Relu.
         /// </remarks>
-        public static Tensor sparse_mat_mul (Tensor a, Tensor b, bool? transpose_a = null, bool? transpose_b = null, bool? a_is_sparse = null, bool? b_is_sparse = null, string name = "SparseMatMul")
+        public static Tensor sparse_mat_mul(Tensor a, Tensor b, bool? transpose_a = null, bool? transpose_b = null, bool? a_is_sparse = null, bool? b_is_sparse = null, string name = "SparseMatMul")
         {
             var dict = new Dictionary<string, object>();
             dict["a"] = a;
@@ -32199,7 +32199,7 @@ namespace Tensorflow.Operations
         ///    with a single element is returned.  Additionally, the axes can be negative,
         ///    which are interpreted according to the indexing rules in Python.
         /// </remarks>
-        public static Tensor sparse_reduce_max (Tensor input_indices, Tensor input_values, Tensor input_shape, Tensor reduction_axes, bool? keep_dims = null, string name = "SparseReduceMax")
+        public static Tensor sparse_reduce_max(Tensor input_indices, Tensor input_values, Tensor input_shape, Tensor reduction_axes, bool? keep_dims = null, string name = "SparseReduceMax")
         {
             var dict = new Dictionary<string, object>();
             dict["input_indices"] = input_indices;
@@ -32255,7 +32255,7 @@ namespace Tensorflow.Operations
         ///    with a single element is returned.  Additionally, the axes can be negative,
         ///    which are interpreted according to the indexing rules in Python.
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_reduce_max_sparse (Tensor input_indices, Tensor input_values, Tensor input_shape, Tensor reduction_axes, bool? keep_dims = null, string name = "SparseReduceMaxSparse")
+        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_reduce_max_sparse(Tensor input_indices, Tensor input_values, Tensor input_shape, Tensor reduction_axes, bool? keep_dims = null, string name = "SparseReduceMaxSparse")
         {
             var dict = new Dictionary<string, object>();
             dict["input_indices"] = input_indices;
@@ -32312,7 +32312,7 @@ namespace Tensorflow.Operations
         ///    with a single element is returned.  Additionally, the axes can be negative,
         ///    which are interpreted according to the indexing rules in Python.
         /// </remarks>
-        public static Tensor sparse_reduce_sum (Tensor input_indices, Tensor input_values, Tensor input_shape, Tensor reduction_axes, bool? keep_dims = null, string name = "SparseReduceSum")
+        public static Tensor sparse_reduce_sum(Tensor input_indices, Tensor input_values, Tensor input_shape, Tensor reduction_axes, bool? keep_dims = null, string name = "SparseReduceSum")
         {
             var dict = new Dictionary<string, object>();
             dict["input_indices"] = input_indices;
@@ -32368,7 +32368,7 @@ namespace Tensorflow.Operations
         ///    with a single element is returned.  Additionally, the axes can be negative,
         ///    which are interpreted according to the indexing rules in Python.
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_reduce_sum_sparse (Tensor input_indices, Tensor input_values, Tensor input_shape, Tensor reduction_axes, bool? keep_dims = null, string name = "SparseReduceSumSparse")
+        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_reduce_sum_sparse(Tensor input_indices, Tensor input_values, Tensor input_shape, Tensor reduction_axes, bool? keep_dims = null, string name = "SparseReduceSumSparse")
         {
             var dict = new Dictionary<string, object>();
             dict["input_indices"] = input_indices;
@@ -32418,7 +32418,7 @@ namespace Tensorflow.Operations
         ///    If the tensor has rank <c>R</c> and <c>N</c> non-empty values, <c>input_indices</c> has
         ///    shape <c>[N, R]</c>, input_values has length <c>N</c>, and input_shape has length <c>R</c>.
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_values) sparse_reorder (Tensor input_indices, Tensor input_values, Tensor input_shape, string name = "SparseReorder")
+        public static (Tensor output_indices, Tensor output_values) sparse_reorder(Tensor input_indices, Tensor input_values, Tensor input_shape, string name = "SparseReorder")
         {
             var dict = new Dictionary<string, object>();
             dict["input_indices"] = input_indices;
@@ -32473,7 +32473,7 @@ namespace Tensorflow.Operations
         ///    <c>input_shape</c> has length <c>R_in</c>, <c>output_indices</c> has shape <c>[N, R_out]</c>, and
         ///    <c>output_shape</c> has length <c>R_out</c>.
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_shape) sparse_reshape (Tensor input_indices, Tensor input_shape, Tensor new_shape, string name = "SparseReshape")
+        public static (Tensor output_indices, Tensor output_shape) sparse_reshape(Tensor input_indices, Tensor input_shape, Tensor new_shape, string name = "SparseReshape")
         {
             var dict = new Dictionary<string, object>();
             dict["input_indices"] = input_indices;
@@ -32513,7 +32513,7 @@ namespace Tensorflow.Operations
         ///    Like <c>SegmentMean</c>, but <c>segment_ids</c> can have rank less than <c>data</c>'s first
         ///    dimension, selecting a subset of dimension 0, specified by <c>indices</c>.
         /// </remarks>
-        public static Tensor sparse_segment_mean (Tensor data, Tensor indices, Tensor segment_ids, string name = "SparseSegmentMean")
+        public static Tensor sparse_segment_mean(Tensor data, Tensor indices, Tensor segment_ids, string name = "SparseSegmentMean")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -32548,7 +32548,7 @@ namespace Tensorflow.Operations
         ///    Returns tensor "output" with same shape as grad, except for dimension 0 whose
         ///    value is output_dim0.
         /// </remarks>
-        public static Tensor sparse_segment_mean_grad (Tensor grad, Tensor indices, Tensor segment_ids, Tensor output_dim0, string name = "SparseSegmentMeanGrad")
+        public static Tensor sparse_segment_mean_grad(Tensor grad, Tensor indices, Tensor segment_ids, Tensor output_dim0, string name = "SparseSegmentMeanGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["grad"] = grad;
@@ -32589,7 +32589,7 @@ namespace Tensorflow.Operations
         ///    [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
         ///    for an explanation of segments.
         /// </remarks>
-        public static Tensor sparse_segment_mean_with_num_segments (Tensor data, Tensor indices, Tensor segment_ids, Tensor num_segments, string name = "SparseSegmentMeanWithNumSegments")
+        public static Tensor sparse_segment_mean_with_num_segments(Tensor data, Tensor indices, Tensor segment_ids, Tensor num_segments, string name = "SparseSegmentMeanWithNumSegments")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -32626,7 +32626,7 @@ namespace Tensorflow.Operations
         ///    [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
         ///    for an explanation of segments.
         /// </remarks>
-        public static Tensor sparse_segment_sqrt_n (Tensor data, Tensor indices, Tensor segment_ids, string name = "SparseSegmentSqrtN")
+        public static Tensor sparse_segment_sqrt_n(Tensor data, Tensor indices, Tensor segment_ids, string name = "SparseSegmentSqrtN")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -32661,7 +32661,7 @@ namespace Tensorflow.Operations
         ///    Returns tensor "output" with same shape as grad, except for dimension 0 whose
         ///    value is output_dim0.
         /// </remarks>
-        public static Tensor sparse_segment_sqrt_n_grad (Tensor grad, Tensor indices, Tensor segment_ids, Tensor output_dim0, string name = "SparseSegmentSqrtNGrad")
+        public static Tensor sparse_segment_sqrt_n_grad(Tensor grad, Tensor indices, Tensor segment_ids, Tensor output_dim0, string name = "SparseSegmentSqrtNGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["grad"] = grad;
@@ -32704,7 +32704,7 @@ namespace Tensorflow.Operations
         ///    [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
         ///    for an explanation of segments.
         /// </remarks>
-        public static Tensor sparse_segment_sqrt_n_with_num_segments (Tensor data, Tensor indices, Tensor segment_ids, Tensor num_segments, string name = "SparseSegmentSqrtNWithNumSegments")
+        public static Tensor sparse_segment_sqrt_n_with_num_segments(Tensor data, Tensor indices, Tensor segment_ids, Tensor num_segments, string name = "SparseSegmentSqrtNWithNumSegments")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -32765,7 +32765,7 @@ namespace Tensorflow.Operations
         ///    tf.segment_sum(c, tf.constant([0, 0, 1]))
         ///   </code>
         /// </remarks>
-        public static Tensor sparse_segment_sum (Tensor data, Tensor indices, Tensor segment_ids, string name = "SparseSegmentSum")
+        public static Tensor sparse_segment_sum(Tensor data, Tensor indices, Tensor segment_ids, string name = "SparseSegmentSum")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -32826,7 +32826,7 @@ namespace Tensorflow.Operations
         ///    #     [ 0  0  0  0]]
         ///   </code>
         /// </remarks>
-        public static Tensor sparse_segment_sum_with_num_segments (Tensor data, Tensor indices, Tensor segment_ids, Tensor num_segments, string name = "SparseSegmentSumWithNumSegments")
+        public static Tensor sparse_segment_sum_with_num_segments(Tensor data, Tensor indices, Tensor segment_ids, Tensor num_segments, string name = "SparseSegmentSumWithNumSegments")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -32886,7 +32886,7 @@ namespace Tensorflow.Operations
         ///    [ d e  ]
         ///    [      ]
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_slice (Tensor indices, Tensor values, Tensor shape, Tensor start, Tensor size, string name = "SparseSlice")
+        public static (Tensor output_indices, Tensor output_values, Tensor output_shape) sparse_slice(Tensor indices, Tensor values, Tensor shape, Tensor start, Tensor size, string name = "SparseSlice")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -32930,7 +32930,7 @@ namespace Tensorflow.Operations
         ///    the sliced <c>SparseTensor</c>, and outputs the gradients w.r.t.
         ///    the non-empty values of input <c>SparseTensor</c>.
         /// </remarks>
-        public static Tensor sparse_slice_grad (Tensor backprop_val_grad, Tensor input_indices, Tensor input_start, Tensor output_indices, string name = "SparseSliceGrad")
+        public static Tensor sparse_slice_grad(Tensor backprop_val_grad, Tensor input_indices, Tensor input_start, Tensor output_indices, string name = "SparseSliceGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["backprop_val_grad"] = backprop_val_grad;
@@ -32978,7 +32978,7 @@ namespace Tensorflow.Operations
         ///    Hence, the <c>SparseTensor</c> result has exactly the same non-zero indices and
         ///    shape.
         /// </remarks>
-        public static Tensor sparse_softmax (Tensor sp_indices, Tensor sp_values, Tensor sp_shape, string name = "SparseSoftmax")
+        public static Tensor sparse_softmax(Tensor sp_indices, Tensor sp_values, Tensor sp_shape, string name = "SparseSoftmax")
         {
             var dict = new Dictionary<string, object>();
             dict["sp_indices"] = sp_indices;
@@ -33015,7 +33015,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Inputs are the logits, not probabilities.
         /// </remarks>
-        public static (Tensor loss, Tensor backprop) sparse_softmax_cross_entropy_with_logits (Tensor features, Tensor labels, string name = "SparseSoftmaxCrossEntropyWithLogits")
+        public static (Tensor loss, Tensor backprop) sparse_softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = "SparseSoftmaxCrossEntropyWithLogits")
         {
             var dict = new Dictionary<string, object>();
             dict["features"] = features;
@@ -33061,7 +33061,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Assumes the two SparseTensors have the same shape, i.e., no broadcasting.
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_values) sparse_sparse_maximum (Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b_indices, Tensor b_values, Tensor b_shape, string name = "SparseSparseMaximum")
+        public static (Tensor output_indices, Tensor output_values) sparse_sparse_maximum(Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b_indices, Tensor b_values, Tensor b_shape, string name = "SparseSparseMaximum")
         {
             var dict = new Dictionary<string, object>();
             dict["a_indices"] = a_indices;
@@ -33111,7 +33111,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Assumes the two SparseTensors have the same shape, i.e., no broadcasting.
         /// </remarks>
-        public static (Tensor output_indices, Tensor output_values) sparse_sparse_minimum (Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b_indices, Tensor b_values, Tensor b_shape, string name = "SparseSparseMinimum")
+        public static (Tensor output_indices, Tensor output_values) sparse_sparse_minimum(Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b_indices, Tensor b_values, Tensor b_shape, string name = "SparseSparseMinimum")
         {
             var dict = new Dictionary<string, object>();
             dict["a_indices"] = a_indices;
@@ -33180,7 +33180,7 @@ namespace Tensorflow.Operations
         ///    [ d e  ]
         ///    [      ]
         /// </remarks>
-        public static (Tensor[] output_indices, Tensor[] output_values, Tensor[] output_shape) sparse_split (Tensor split_dim, Tensor indices, Tensor values, Tensor shape, int num_split, string name = "SparseSplit")
+        public static (Tensor[] output_indices, Tensor[] output_values, Tensor[] output_shape) sparse_split(Tensor split_dim, Tensor indices, Tensor values, Tensor shape, int num_split, string name = "SparseSplit")
         {
             var dict = new Dictionary<string, object>();
             dict["split_dim"] = split_dim;
@@ -33220,7 +33220,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    This Op does not require <c>a_indices</c> be sorted in standard lexicographic order.
         /// </remarks>
-        public static Tensor sparse_tensor_dense_add (Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b, string name = "SparseTensorDenseAdd")
+        public static Tensor sparse_tensor_dense_add(Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b, string name = "SparseTensorDenseAdd")
         {
             var dict = new Dictionary<string, object>();
             dict["a_indices"] = a_indices;
@@ -33271,7 +33271,7 @@ namespace Tensorflow.Operations
         ///    A should be sorted in order of increasing dimension 1 (i.e., "column major"
         ///    order instead of "row major" order).
         /// </remarks>
-        public static Tensor sparse_tensor_dense_mat_mul (Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b, bool? adjoint_a = null, bool? adjoint_b = null, string name = "SparseTensorDenseMatMul")
+        public static Tensor sparse_tensor_dense_mat_mul(Tensor a_indices, Tensor a_values, Tensor a_shape, Tensor b, bool? adjoint_a = null, bool? adjoint_b = null, string name = "SparseTensorDenseMatMul")
         {
             var dict = new Dictionary<string, object>();
             dict["a_indices"] = a_indices;
@@ -33301,7 +33301,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor sparse_tensor_slice_dataset (Tensor indices, Tensor values, Tensor dense_shape, string name = "SparseTensorSliceDataset")
+        public static Tensor sparse_tensor_slice_dataset(Tensor indices, Tensor values, Tensor dense_shape, string name = "SparseTensorSliceDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -33361,7 +33361,7 @@ namespace Tensorflow.Operations
         ///    contain any repeats. If <c>validate_indices</c> is true, these properties
         ///    are checked during execution.
         /// </remarks>
-        public static Tensor sparse_to_dense (Tensor sparse_indices, Tensor output_shape, Tensor sparse_values, Tensor default_value, bool? validate_indices = null, string name = "SparseToDense")
+        public static Tensor sparse_to_dense(Tensor sparse_indices, Tensor output_shape, Tensor sparse_values, Tensor default_value, bool? validate_indices = null, string name = "SparseToDense")
         {
             var dict = new Dictionary<string, object>();
             dict["sparse_indices"] = sparse_indices;
@@ -33445,7 +33445,7 @@ namespace Tensorflow.Operations
         ///    dimension contains the result of <c>set_operation</c> applied to the corresponding
         ///    <c>[0...n-1]</c> dimension of <c>set</c>.
         /// </remarks>
-        public static (Tensor result_indices, Tensor result_values, Tensor result_shape) sparse_to_sparse_set_operation (Tensor set1_indices, Tensor set1_values, Tensor set1_shape, Tensor set2_indices, Tensor set2_values, Tensor set2_shape, string set_operation, bool? validate_indices = null, string name = "SparseToSparseSetOperation")
+        public static (Tensor result_indices, Tensor result_values, Tensor result_shape) sparse_to_sparse_set_operation(Tensor set1_indices, Tensor set1_values, Tensor set1_shape, Tensor set2_indices, Tensor set2_values, Tensor set2_shape, string set_operation, bool? validate_indices = null, string name = "SparseToSparseSetOperation")
         {
             var dict = new Dictionary<string, object>();
             dict["set1_indices"] = set1_indices;
@@ -33489,7 +33489,7 @@ namespace Tensorflow.Operations
         ///    <c>values.shape[split_dim] / num_split</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor[] split (Tensor split_dim, Tensor value, int num_split, string name = "Split")
+        public static Tensor[] split(Tensor split_dim, Tensor value, int num_split, string name = "Split")
         {
             var dict = new Dictionary<string, object>();
             dict["split_dim"] = split_dim;
@@ -33528,7 +33528,7 @@ namespace Tensorflow.Operations
         ///    <c>size_splits[i]</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor[] split_v (Tensor value, Tensor size_splits, Tensor split_dim, int num_split, string name = "SplitV")
+        public static Tensor[] split_v(Tensor value, Tensor size_splits, Tensor split_dim, int num_split, string name = "SplitV")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -33565,7 +33565,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor sql_dataset (Tensor driver_name, Tensor data_source_name, Tensor query, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "SqlDataset")
+        public static Tensor sql_dataset(Tensor driver_name, Tensor data_source_name, Tensor query, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "SqlDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["driver_name"] = driver_name;
@@ -33591,7 +33591,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    I.e., \\(y = \sqrt{x} = x^{1/2}\\).
         /// </remarks>
-        public static Tensor sqrt (Tensor x, string name = "Sqrt")
+        public static Tensor sqrt(Tensor x, string name = "Sqrt")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -33616,7 +33616,7 @@ namespace Tensorflow.Operations
         ///    Specifically, <c>grad = dy * 0.5 / y</c>, where <c>y = sqrt(x)</c>, and <c>dy</c>
         ///    is the corresponding input gradient.
         /// </remarks>
-        public static Tensor sqrt_grad (Tensor y, Tensor dy, string name = "SqrtGrad")
+        public static Tensor sqrt_grad(Tensor y, Tensor dy, string name = "SqrtGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
@@ -33639,7 +33639,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    I.e., \\(y = x * x = x^2\\).
         /// </remarks>
-        public static Tensor square (Tensor x, string name = "Square")
+        public static Tensor square(Tensor x, string name = "Square")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -33664,7 +33664,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>SquaredDifference</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor squared_difference (Tensor x, Tensor y, string name = "SquaredDifference")
+        public static Tensor squared_difference(Tensor x, Tensor y, string name = "SquaredDifference")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -33712,7 +33712,7 @@ namespace Tensorflow.Operations
         ///    shape(squeeze(t, [2, 4])) ==&amp;gt; [1, 2, 3, 1]
         ///   </code>
         /// </remarks>
-        public static Tensor squeeze (Tensor input, int[] squeeze_dims = null, string name = "Squeeze")
+        public static Tensor squeeze(Tensor input, int[] squeeze_dims = null, string name = "Squeeze")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -33736,7 +33736,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stack (TF_DataType elem_type, string stack_name = null, string name = "Stack")
+        public static Tensor stack(TF_DataType elem_type, string stack_name = null, string name = "Stack")
         {
             var dict = new Dictionary<string, object>();
             dict["elem_type"] = elem_type;
@@ -33757,7 +33757,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation stack_close (Tensor handle, string name = "StackClose")
+        public static Operation stack_close(Tensor handle, string name = "StackClose")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -33777,7 +33777,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation stack_close_v2 (Tensor handle, string name = "StackCloseV2")
+        public static Operation stack_close_v2(Tensor handle, string name = "StackCloseV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -33799,7 +33799,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stack_pop (Tensor handle, TF_DataType elem_type, string name = "StackPop")
+        public static Tensor stack_pop(Tensor handle, TF_DataType elem_type, string name = "StackPop")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -33825,7 +33825,7 @@ namespace Tensorflow.Operations
         ///    The tensor that is popped from the top of the stack.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stack_pop_v2 (Tensor handle, TF_DataType elem_type, string name = "StackPopV2")
+        public static Tensor stack_pop_v2(Tensor handle, TF_DataType elem_type, string name = "StackPopV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -33849,7 +33849,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stack_push (Tensor handle, Tensor elem, bool? swap_memory = null, string name = "StackPush")
+        public static Tensor stack_push(Tensor handle, Tensor elem, bool? swap_memory = null, string name = "StackPush")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -33879,7 +33879,7 @@ namespace Tensorflow.Operations
         ///    The same tensor as the input 'elem'.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stack_push_v2 (Tensor handle, Tensor elem, bool? swap_memory = null, string name = "StackPushV2")
+        public static Tensor stack_push_v2(Tensor handle, Tensor elem, bool? swap_memory = null, string name = "StackPushV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -33912,7 +33912,7 @@ namespace Tensorflow.Operations
         ///    The handle to the stack.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stack_v2 (Tensor max_size, TF_DataType elem_type, string stack_name = null, string name = "StackV2")
+        public static Tensor stack_v2(Tensor max_size, TF_DataType elem_type, string stack_name = null, string name = "StackV2")
         {
             var dict = new Dictionary<string, object>();
             dict["max_size"] = max_size;
@@ -33955,7 +33955,7 @@ namespace Tensorflow.Operations
         ///    The basic functionality of this Op is similar to a queue with many
         ///    fewer capabilities and options.  This Op is optimized for performance.
         /// </remarks>
-        public static Operation stage (Tensor[] values, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "Stage")
+        public static Operation stage(Tensor[] values, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "Stage")
         {
             var dict = new Dictionary<string, object>();
             dict["values"] = values;
@@ -33991,7 +33991,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation stage_clear (TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "StageClear")
+        public static Operation stage_clear(TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "StageClear")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -34034,7 +34034,7 @@ namespace Tensorflow.Operations
         ///    this op will block until it does.   This Op is optimized for
         ///    performance.
         /// </remarks>
-        public static Tensor[] stage_peek (Tensor index, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "StagePeek")
+        public static Tensor[] stage_peek(Tensor index, TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "StagePeek")
         {
             var dict = new Dictionary<string, object>();
             dict["index"] = index;
@@ -34073,7 +34073,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stage_size (TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "StageSize")
+        public static Tensor stage_size(TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "StageSize")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -34112,7 +34112,7 @@ namespace Tensorflow.Operations
         ///    contains the drawn class labels with range <c>[0, num_classes)</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stateless_multinomial (Tensor logits, Tensor num_samples, Tensor seed, TF_DataType? output_dtype = null, string name = "StatelessMultinomial")
+        public static Tensor stateless_multinomial(Tensor logits, Tensor num_samples, Tensor seed, TF_DataType? output_dtype = null, string name = "StatelessMultinomial")
         {
             var dict = new Dictionary<string, object>();
             dict["logits"] = logits;
@@ -34148,7 +34148,7 @@ namespace Tensorflow.Operations
         ///    
         ///    The outputs are a deterministic function of <c>shape</c> and <c>seed</c>.
         /// </remarks>
-        public static Tensor stateless_random_normal (Tensor shape, Tensor seed, TF_DataType? dtype = null, string name = "StatelessRandomNormal")
+        public static Tensor stateless_random_normal(Tensor shape, Tensor seed, TF_DataType? dtype = null, string name = "StatelessRandomNormal")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -34184,7 +34184,7 @@ namespace Tensorflow.Operations
         ///    
         ///    The outputs are a deterministic function of <c>shape</c> and <c>seed</c>.
         /// </remarks>
-        public static Tensor stateless_random_uniform (Tensor shape, Tensor seed, TF_DataType? dtype = null, string name = "StatelessRandomUniform")
+        public static Tensor stateless_random_uniform(Tensor shape, Tensor seed, TF_DataType? dtype = null, string name = "StatelessRandomUniform")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -34221,7 +34221,7 @@ namespace Tensorflow.Operations
         ///    
         ///    The outputs are a deterministic function of <c>shape</c> and <c>seed</c>.
         /// </remarks>
-        public static Tensor stateless_truncated_normal (Tensor shape, Tensor seed, TF_DataType? dtype = null, string name = "StatelessTruncatedNormal")
+        public static Tensor stateless_truncated_normal(Tensor shape, Tensor seed, TF_DataType? dtype = null, string name = "StatelessTruncatedNormal")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -34260,7 +34260,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    It follows the re2 syntax (https://github.com/google/re2/wiki/Syntax)
         /// </remarks>
-        public static Tensor static_regex_replace (Tensor input, string pattern, string rewrite, bool? replace_global = null, string name = "StaticRegexReplace")
+        public static Tensor static_regex_replace(Tensor input, string pattern, string rewrite, bool? replace_global = null, string name = "StaticRegexReplace")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -34285,7 +34285,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stats_aggregator_handle (string container = null, string shared_name = null, string name = "StatsAggregatorHandle")
+        public static Tensor stats_aggregator_handle(string container = null, string shared_name = null, string name = "StatsAggregatorHandle")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -34307,7 +34307,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor stats_aggregator_summary (Tensor iterator, string name = "StatsAggregatorSummary")
+        public static Tensor stats_aggregator_summary(Tensor iterator, string name = "StatsAggregatorSummary")
         {
             var dict = new Dictionary<string, object>();
             dict["iterator"] = iterator;
@@ -34347,7 +34347,7 @@ namespace Tensorflow.Operations
         ///    *  Adversarial training, where no backprop should happen through the adversarial
         ///    example generation process.
         /// </remarks>
-        public static Tensor stop_gradient (Tensor input, string name = "StopGradient")
+        public static Tensor stop_gradient(Tensor input, string name = "StopGradient")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -34505,7 +34505,7 @@ namespace Tensorflow.Operations
         ///    <c>0 != strides[i] for i in [0, m)</c>
         ///    <c>ellipsis_mask must be a power of two (only one ellipsis)</c>
         /// </remarks>
-        public static Tensor strided_slice (Tensor input, Tensor begin, Tensor end, Tensor strides, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "StridedSlice")
+        public static Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "StridedSlice")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -34563,7 +34563,7 @@ namespace Tensorflow.Operations
         ///    NOTE this op currently does not support broadcasting and so <c>value</c>'s
         ///    shape must be exactly the shape produced by the slice of <c>ref</c>.
         /// </remarks>
-        public static Tensor strided_slice_assign (Tensor referecne, Tensor begin, Tensor end, Tensor strides, Tensor value, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "StridedSliceAssign")
+        public static Tensor strided_slice_assign(Tensor referecne, Tensor begin, Tensor end, Tensor strides, Tensor value, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "StridedSliceAssign")
         {
             var dict = new Dictionary<string, object>();
             dict["ref"] = referecne;
@@ -34624,7 +34624,7 @@ namespace Tensorflow.Operations
         ///    <c>dy</c> is the input gradient to be propagated and <c>shape</c> is the
         ///    shape of <c>StridedSlice</c>'s <c>input</c>.
         /// </remarks>
-        public static Tensor strided_slice_grad (Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "StridedSliceGrad")
+        public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy, int? begin_mask = null, int? end_mask = null, int? ellipsis_mask = null, int? new_axis_mask = null, int? shrink_axis_mask = null, string name = "StridedSliceGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -34666,7 +34666,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    with the given separator (default is an empty separator).
         /// </remarks>
-        public static Tensor string_join (Tensor[] inputs, string separator = null, string name = "StringJoin")
+        public static Tensor string_join(Tensor[] inputs, string separator = null, string name = "StringJoin")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -34722,7 +34722,7 @@ namespace Tensorflow.Operations
         ///    shape = [2, 3]
         ///    values = ['hello', 'world', 'a', 'b', 'c']
         /// </remarks>
-        public static (Tensor indices, Tensor values, Tensor shape) string_split (Tensor input, Tensor delimiter, bool? skip_empty = null, string name = "StringSplit")
+        public static (Tensor indices, Tensor values, Tensor shape) string_split(Tensor input, Tensor delimiter, bool? skip_empty = null, string name = "StringSplit")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -34785,7 +34785,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Note that the above mentioned behavior matches python's str.split.
         /// </remarks>
-        public static (Tensor indices, Tensor values, Tensor shape) string_split_v2 (Tensor input, Tensor sep, int? maxsplit = null, string name = "StringSplitV2")
+        public static (Tensor indices, Tensor values, Tensor shape) string_split_v2(Tensor input, Tensor sep, int? maxsplit = null, string name = "StringSplitV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -34813,7 +34813,7 @@ namespace Tensorflow.Operations
         ///    A string <c>Tensor</c> of the same shape as the input.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor string_strip (Tensor input, string name = "StringStrip")
+        public static Tensor string_strip(Tensor input, string name = "StringStrip")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -34845,7 +34845,7 @@ namespace Tensorflow.Operations
         ///    This functionality will be deprecated and it's recommended to use
         ///    <c>tf.string_to_hash_bucket_fast()</c> or <c>tf.string_to_hash_bucket_strong()</c>.
         /// </remarks>
-        public static Tensor string_to_hash_bucket (Tensor string_tensor, int num_buckets, string name = "StringToHashBucket")
+        public static Tensor string_to_hash_bucket(Tensor string_tensor, int num_buckets, string name = "StringToHashBucket")
         {
             var dict = new Dictionary<string, object>();
             dict["string_tensor"] = string_tensor;
@@ -34879,7 +34879,7 @@ namespace Tensorflow.Operations
         ///    to the same bucket. To prevent this problem, use a strong hash function with
         ///    <c>tf.string_to_hash_bucket_strong</c>.
         /// </remarks>
-        public static Tensor string_to_hash_bucket_fast (Tensor input, int num_buckets, string name = "StringToHashBucketFast")
+        public static Tensor string_to_hash_bucket_fast(Tensor input, int num_buckets, string name = "StringToHashBucketFast")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -34922,7 +34922,7 @@ namespace Tensorflow.Operations
         ///    that hash to the same bucket. This comes at a cost of roughly 4x higher compute
         ///    time than <c>tf.string_to_hash_bucket_fast</c>.
         /// </remarks>
-        public static Tensor string_to_hash_bucket_strong (Tensor input, int num_buckets, int[] key, string name = "StringToHashBucketStrong")
+        public static Tensor string_to_hash_bucket_strong(Tensor input, int num_buckets, int[] key, string name = "StringToHashBucketStrong")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -34951,7 +34951,7 @@ namespace Tensorflow.Operations
         ///    (Note that int32 overflow results in an error while float overflow
         ///    results in a rounded value.)
         /// </remarks>
-        public static Tensor string_to_number (Tensor string_tensor, TF_DataType? out_type = null, string name = "StringToNumber")
+        public static Tensor string_to_number(Tensor string_tensor, TF_DataType? out_type = null, string name = "StringToNumber")
         {
             var dict = new Dictionary<string, object>();
             dict["string_tensor"] = string_tensor;
@@ -34978,7 +34978,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>Subtract</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor sub (Tensor x, Tensor y, string name = "Sub")
+        public static Tensor sub(Tensor x, Tensor y, string name = "Sub")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -35083,7 +35083,7 @@ namespace Tensorflow.Operations
         ///    output = [b'hir', b'ee', b'n']
         ///   </code>
         /// </remarks>
-        public static Tensor substr (Tensor input, Tensor pos, Tensor len, string name = "Substr")
+        public static Tensor substr(Tensor input, Tensor pos, Tensor len, string name = "Substr")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -35119,7 +35119,7 @@ namespace Tensorflow.Operations
         ///    <c>axis</c>. If <c>keep_dims</c> is true, the reduced dimensions are
         ///    retained with length 1.
         /// </remarks>
-        public static Tensor sum (Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Sum")
+        public static Tensor sum(Tensor input, Tensor reduction_indices, bool? keep_dims = null, string name = "Sum")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -35174,7 +35174,7 @@ namespace Tensorflow.Operations
         ///    s, _, _ = svd(a, compute_uv=False)
         ///   </code>
         /// </remarks>
-        public static (Tensor s, Tensor u, Tensor v) svd (Tensor input, bool? compute_uv = null, bool? full_matrices = null, string name = "Svd")
+        public static (Tensor s, Tensor u, Tensor v) svd(Tensor input, bool? compute_uv = null, bool? full_matrices = null, string name = "Svd")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -35214,7 +35214,7 @@ namespace Tensorflow.Operations
         ///    
         ///    See also <c>RefSwitch</c> and <c>Merge</c>.
         /// </remarks>
-        public static (Tensor output_false, Tensor output_true) switch_ (Tensor data, Tensor pred, string name = "Switch")
+        public static (Tensor output_false, Tensor output_true) switch_(Tensor data, Tensor pred, string name = "Switch")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -35247,7 +35247,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor t_f_record_dataset (Tensor filenames, Tensor compression_type, Tensor buffer_size, string name = "TFRecordDataset")
+        public static Tensor t_f_record_dataset(Tensor filenames, Tensor compression_type, Tensor buffer_size, string name = "TFRecordDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["filenames"] = filenames;
@@ -35277,7 +35277,7 @@ namespace Tensorflow.Operations
         ///    The handle to reference the Reader.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor t_f_record_reader (string container = null, string shared_name = null, string compression_type = null, string name = "TFRecordReader")
+        public static Tensor t_f_record_reader(string container = null, string shared_name = null, string compression_type = null, string name = "TFRecordReader")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -35310,7 +35310,7 @@ namespace Tensorflow.Operations
         ///    The handle to reference the Reader.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor t_f_record_reader_v2 (string container = null, string shared_name = null, string compression_type = null, string name = "TFRecordReaderV2")
+        public static Tensor t_f_record_reader_v2(string container = null, string shared_name = null, string compression_type = null, string name = "TFRecordReaderV2")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -35355,7 +35355,7 @@ namespace Tensorflow.Operations
         ///    differentiation of graphs containing embeddings via the TPU Embedding Python
         ///    libraries.
         /// </remarks>
-        public static Tensor t_p_u_embedding_activations (Tensor embedding_variable, Tensor sliced_activations, int table_id, int lookup_id, string name = "TPUEmbeddingActivations")
+        public static Tensor t_p_u_embedding_activations(Tensor embedding_variable, Tensor sliced_activations, int table_id, int lookup_id, string name = "TPUEmbeddingActivations")
         {
             var dict = new Dictionary<string, object>();
             dict["embedding_variable"] = embedding_variable;
@@ -35409,7 +35409,7 @@ namespace Tensorflow.Operations
         ///    There should be at most one TPUEmbeddingEnqueueSparseBatch op in a signle
         ///    training step per TPU shard.
         /// </remarks>
-        public static Operation t_p_u_embedding_enqueue_sparse_batch (Tensor[] sample_indices, Tensor[] embedding_indices, Tensor[] aggregation_weights, int? device_ordinal = null, string name = "TPUEmbeddingEnqueueSparseBatch")
+        public static Operation t_p_u_embedding_enqueue_sparse_batch(Tensor[] sample_indices, Tensor[] embedding_indices, Tensor[] aggregation_weights, int? device_ordinal = null, string name = "TPUEmbeddingEnqueueSparseBatch")
         {
             var dict = new Dictionary<string, object>();
             dict["sample_indices"] = sample_indices;
@@ -35459,7 +35459,7 @@ namespace Tensorflow.Operations
         ///    trainable variables and optimizer state from TPU memory. This op enables
         ///    functionality equivalent to AdagradOptimizer.
         /// </remarks>
-        public static Operation t_p_u_embedding_load_adagrad_parameters (Tensor parameters, Tensor accumulators, string tpu_embedding_config, int table_id, int num_hosts, int host_id, string name = "TPUEmbeddingLoadAdagradParameters")
+        public static Operation t_p_u_embedding_load_adagrad_parameters(Tensor parameters, Tensor accumulators, string tpu_embedding_config, int table_id, int num_hosts, int host_id, string name = "TPUEmbeddingLoadAdagradParameters")
         {
             var dict = new Dictionary<string, object>();
             dict["parameters"] = parameters;
@@ -35506,7 +35506,7 @@ namespace Tensorflow.Operations
         ///    trainable variables and optimizer state from TPU memory. This op enables
         ///    functionality equivalent to GradientDescentOptimizer.
         /// </remarks>
-        public static Operation t_p_u_embedding_load_gradient_descent_parameters (Tensor parameters, string tpu_embedding_config, int table_id, int num_hosts, int host_id, string name = "TPUEmbeddingLoadGradientDescentParameters")
+        public static Operation t_p_u_embedding_load_gradient_descent_parameters(Tensor parameters, string tpu_embedding_config, int table_id, int num_hosts, int host_id, string name = "TPUEmbeddingLoadGradientDescentParameters")
         {
             var dict = new Dictionary<string, object>();
             dict["parameters"] = parameters;
@@ -35546,7 +35546,7 @@ namespace Tensorflow.Operations
         ///    Tensor of activations per table specified in the model. There can be at most
         ///    one ReceieveActivations op in the TPU graph.
         /// </remarks>
-        public static Tensor[] t_p_u_embedding_receive_activations (int num_tables, string tpu_embedding_config, string name = "TPUEmbeddingReceiveActivations")
+        public static Tensor[] t_p_u_embedding_receive_activations(int num_tables, string tpu_embedding_config, string name = "TPUEmbeddingReceiveActivations")
         {
             var dict = new Dictionary<string, object>();
             dict["num_tables"] = num_tables;
@@ -35590,7 +35590,7 @@ namespace Tensorflow.Operations
         ///    trainable variables and optimizer state from TPU memory. This op enables
         ///    functionality equivalent to AdagradOptimizer.
         /// </remarks>
-        public static (Tensor parameters, Tensor accumulators) t_p_u_embedding_retrieve_adagrad_parameters (string tpu_embedding_config, int table_id, int num_hosts, int host_id, string name = "TPUEmbeddingRetrieveAdagradParameters")
+        public static (Tensor parameters, Tensor accumulators) t_p_u_embedding_retrieve_adagrad_parameters(string tpu_embedding_config, int table_id, int num_hosts, int host_id, string name = "TPUEmbeddingRetrieveAdagradParameters")
         {
             var dict = new Dictionary<string, object>();
             dict["tpu_embedding_config"] = tpu_embedding_config;
@@ -35634,7 +35634,7 @@ namespace Tensorflow.Operations
         ///    trainable variables and optimizer state from TPU memory. This op enables
         ///    functionality equivalent to GradientDescentOptimizer.
         /// </remarks>
-        public static Tensor t_p_u_embedding_retrieve_gradient_descent_parameters (string tpu_embedding_config, int table_id, int num_hosts, int host_id, string name = "TPUEmbeddingRetrieveGradientDescentParameters")
+        public static Tensor t_p_u_embedding_retrieve_gradient_descent_parameters(string tpu_embedding_config, int table_id, int num_hosts, int host_id, string name = "TPUEmbeddingRetrieveGradientDescentParameters")
         {
             var dict = new Dictionary<string, object>();
             dict["tpu_embedding_config"] = tpu_embedding_config;
@@ -35668,7 +35668,7 @@ namespace Tensorflow.Operations
         ///    from these gradients via the optimizer specified in the configuration given
         ///    to tpu.initialize_system.
         /// </remarks>
-        public static Operation t_p_u_embedding_send_gradients (Tensor[] gradients, string tpu_embedding_config, string name = "TPUEmbeddingSendGradients")
+        public static Operation t_p_u_embedding_send_gradients(Tensor[] gradients, string tpu_embedding_config, string name = "TPUEmbeddingSendGradients")
         {
             var dict = new Dictionary<string, object>();
             dict["gradients"] = gradients;
@@ -35688,7 +35688,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor t_p_u_replicated_input (Tensor[] inputs, string name = "TPUReplicatedInput")
+        public static Tensor t_p_u_replicated_input(Tensor[] inputs, string name = "TPUReplicatedInput")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -35710,7 +35710,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor[] t_p_u_replicated_output (Tensor input, int num_replicas, string name = "TPUReplicatedOutput")
+        public static Tensor[] t_p_u_replicated_output(Tensor input, int num_replicas, string name = "TPUReplicatedOutput")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -35743,7 +35743,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor take_dataset (Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "TakeDataset")
+        public static Tensor take_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "TakeDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -35834,7 +35834,7 @@ namespace Tensorflow.Operations
         ///    shape = [2 50]
         ///   </code>
         /// </remarks>
-        public static (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape) take_many_sparse_from_tensors_map (Tensor sparse_handles, TF_DataType dtype, string container = null, string shared_name = null, string name = "TakeManySparseFromTensorsMap")
+        public static (Tensor sparse_indices, Tensor sparse_values, Tensor sparse_shape) take_many_sparse_from_tensors_map(Tensor sparse_handles, TF_DataType dtype, string container = null, string shared_name = null, string name = "TakeManySparseFromTensorsMap")
         {
             var dict = new Dictionary<string, object>();
             dict["sparse_handles"] = sparse_handles;
@@ -35862,7 +35862,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tan (Tensor x, string name = "Tan")
+        public static Tensor tan(Tensor x, string name = "Tan")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -35881,7 +35881,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tanh (Tensor x, string name = "Tanh")
+        public static Tensor tanh(Tensor x, string name = "Tanh")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -35906,7 +35906,7 @@ namespace Tensorflow.Operations
         ///    Specifically, <c>grad = dy * (1 - y*y)</c>, where <c>y = tanh(x)</c>, and <c>dy</c>
         ///    is the corresponding input gradient.
         /// </remarks>
-        public static Tensor tanh_grad (Tensor y, Tensor dy, string name = "TanhGrad")
+        public static Tensor tanh_grad(Tensor y, Tensor dy, string name = "TanhGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["y"] = y;
@@ -35953,7 +35953,7 @@ namespace Tensorflow.Operations
         ///    var = state_ops.assign_add(var, [[6.0, 7.0]])
         ///    final = state_ops._destroy_temporary_variable(var, var_name=var_name)
         /// </remarks>
-        public static Tensor temporary_variable (TensorShape shape, TF_DataType dtype, string var_name = null, string name = "TemporaryVariable")
+        public static Tensor temporary_variable(TensorShape shape, TF_DataType dtype, string var_name = null, string name = "TemporaryVariable")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -35975,7 +35975,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation tensor_array_close_v2 (Tensor handle, string name = "TensorArrayCloseV2")
+        public static Operation tensor_array_close_v2(Tensor handle, string name = "TensorArrayCloseV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -35999,7 +35999,7 @@ namespace Tensorflow.Operations
         ///    This enables the user to close and release the resource in the middle
         ///    of a step/run.
         /// </remarks>
-        public static Operation tensor_array_close_v3 (Tensor handle, string name = "TensorArrayCloseV3")
+        public static Operation tensor_array_close_v3(Tensor handle, string name = "TensorArrayCloseV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36028,7 +36028,7 @@ namespace Tensorflow.Operations
         ///    lengths :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor value, Tensor lengths) tensor_array_concat_v2 (Tensor handle, Tensor flow_in, TF_DataType dtype, TensorShape element_shape_except0 = null, string name = "TensorArrayConcatV2")
+        public static (Tensor value, Tensor lengths) tensor_array_concat_v2(Tensor handle, Tensor flow_in, TF_DataType dtype, TensorShape element_shape_except0 = null, string name = "TensorArrayConcatV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36089,7 +36089,7 @@ namespace Tensorflow.Operations
         ///    
         ///    All elements must have the same shape (excepting the first dimension).
         /// </remarks>
-        public static (Tensor value, Tensor lengths) tensor_array_concat_v3 (Tensor handle, Tensor flow_in, TF_DataType dtype, TensorShape element_shape_except0 = null, string name = "TensorArrayConcatV3")
+        public static (Tensor value, Tensor lengths) tensor_array_concat_v3(Tensor handle, Tensor flow_in, TF_DataType dtype, TensorShape element_shape_except0 = null, string name = "TensorArrayConcatV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36124,7 +36124,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_gather_v2 (Tensor handle, Tensor indices, Tensor flow_in, TF_DataType dtype, TensorShape element_shape = null, string name = "TensorArrayGatherV2")
+        public static Tensor tensor_array_gather_v2(Tensor handle, Tensor indices, Tensor flow_in, TF_DataType dtype, TensorShape element_shape = null, string name = "TensorArrayGatherV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36169,7 +36169,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    All elements selected by <c>indices</c> must have the same shape.
         /// </remarks>
-        public static Tensor tensor_array_gather_v3 (Tensor handle, Tensor indices, Tensor flow_in, TF_DataType dtype, TensorShape element_shape = null, string name = "TensorArrayGatherV3")
+        public static Tensor tensor_array_gather_v3(Tensor handle, Tensor indices, Tensor flow_in, TF_DataType dtype, TensorShape element_shape = null, string name = "TensorArrayGatherV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36198,7 +36198,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_grad_v2 (Tensor handle, Tensor flow_in, string source, string name = "TensorArrayGradV2")
+        public static Tensor tensor_array_grad_v2(Tensor handle, Tensor flow_in, string source, string name = "TensorArrayGradV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36269,7 +36269,7 @@ namespace Tensorflow.Operations
         ///    name when performing the creation / lookup, so that each separate gradient
         ///    calculation gets its own TensorArray accumulator.
         /// </remarks>
-        public static (Tensor grad_handle, Tensor flow_out) tensor_array_grad_v3 (Tensor handle, Tensor flow_in, string source, string name = "TensorArrayGradV3")
+        public static (Tensor grad_handle, Tensor flow_out) tensor_array_grad_v3(Tensor handle, Tensor flow_in, string source, string name = "TensorArrayGradV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36316,7 +36316,7 @@ namespace Tensorflow.Operations
         ///    computed. This enables multiple gradients for the same TensorArray to be
         ///    calculated using the same accumulator.
         /// </remarks>
-        public static (Tensor grad_handle, Tensor flow_out) tensor_array_grad_with_shape (Tensor handle, Tensor flow_in, Tensor shape_to_prepend, string source, string name = "TensorArrayGradWithShape")
+        public static (Tensor grad_handle, Tensor flow_out) tensor_array_grad_with_shape(Tensor handle, Tensor flow_in, Tensor shape_to_prepend, string source, string name = "TensorArrayGradWithShape")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36348,7 +36348,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_read_v2 (Tensor handle, Tensor index, Tensor flow_in, TF_DataType dtype, string name = "TensorArrayReadV2")
+        public static Tensor tensor_array_read_v2(Tensor handle, Tensor index, Tensor flow_in, TF_DataType dtype, string name = "TensorArrayReadV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36381,7 +36381,7 @@ namespace Tensorflow.Operations
         ///    The tensor that is read from the TensorArray.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_read_v3 (Tensor handle, Tensor index, Tensor flow_in, TF_DataType dtype, string name = "TensorArrayReadV3")
+        public static Tensor tensor_array_read_v3(Tensor handle, Tensor index, Tensor flow_in, TF_DataType dtype, string name = "TensorArrayReadV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36409,7 +36409,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_scatter_v2 (Tensor handle, Tensor indices, Tensor value, Tensor flow_in, string name = "TensorArrayScatterV2")
+        public static Tensor tensor_array_scatter_v2(Tensor handle, Tensor indices, Tensor value, Tensor flow_in, string name = "TensorArrayScatterV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36445,7 +36445,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    <c>indices</c> must be a vector, its length must match the first dim of <c>value</c>.
         /// </remarks>
-        public static Tensor tensor_array_scatter_v3 (Tensor handle, Tensor indices, Tensor value, Tensor flow_in, string name = "TensorArrayScatterV3")
+        public static Tensor tensor_array_scatter_v3(Tensor handle, Tensor indices, Tensor value, Tensor flow_in, string name = "TensorArrayScatterV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36469,7 +36469,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_size_v2 (Tensor handle, Tensor flow_in, string name = "TensorArraySizeV2")
+        public static Tensor tensor_array_size_v2(Tensor handle, Tensor flow_in, string name = "TensorArraySizeV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36494,7 +36494,7 @@ namespace Tensorflow.Operations
         ///    The current size of the TensorArray.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_size_v3 (Tensor handle, Tensor flow_in, string name = "TensorArraySizeV3")
+        public static Tensor tensor_array_size_v3(Tensor handle, Tensor flow_in, string name = "TensorArraySizeV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36520,7 +36520,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_split_v2 (Tensor handle, Tensor value, Tensor lengths, Tensor flow_in, string name = "TensorArraySplitV2")
+        public static Tensor tensor_array_split_v2(Tensor handle, Tensor value, Tensor lengths, Tensor flow_in, string name = "TensorArraySplitV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36580,7 +36580,7 @@ namespace Tensorflow.Operations
         ///    nt x d0 x d1 x ...
         ///    </code>
         /// </remarks>
-        public static Tensor tensor_array_split_v3 (Tensor handle, Tensor value, Tensor lengths, Tensor flow_in, string name = "TensorArraySplitV3")
+        public static Tensor tensor_array_split_v3(Tensor handle, Tensor value, Tensor lengths, Tensor flow_in, string name = "TensorArraySplitV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36613,7 +36613,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_v2 (Tensor size, TF_DataType dtype, TensorShape element_shape = null, bool? dynamic_size = null, bool? clear_after_read = null, string tensor_array_name = null, string name = "TensorArrayV2")
+        public static Tensor tensor_array_v2(Tensor size, TF_DataType dtype, TensorShape element_shape = null, bool? dynamic_size = null, bool? clear_after_read = null, string tensor_array_name = null, string name = "TensorArrayV2")
         {
             var dict = new Dictionary<string, object>();
             dict["size"] = size;
@@ -36679,7 +36679,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Write data via Write and read via Read or Pack.
         /// </remarks>
-        public static (Tensor handle, Tensor flow) tensor_array_v3 (Tensor size, TF_DataType dtype, TensorShape element_shape = null, bool? dynamic_size = null, bool? clear_after_read = null, bool? identical_element_shapes = null, string tensor_array_name = null, string name = "TensorArrayV3")
+        public static (Tensor handle, Tensor flow) tensor_array_v3(Tensor size, TF_DataType dtype, TensorShape element_shape = null, bool? dynamic_size = null, bool? clear_after_read = null, bool? identical_element_shapes = null, string tensor_array_name = null, string name = "TensorArrayV3")
         {
             var dict = new Dictionary<string, object>();
             dict["size"] = size;
@@ -36718,7 +36718,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_write_v2 (Tensor handle, Tensor index, Tensor value, Tensor flow_in, string name = "TensorArrayWriteV2")
+        public static Tensor tensor_array_write_v2(Tensor handle, Tensor index, Tensor value, Tensor flow_in, string name = "TensorArrayWriteV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36751,7 +36751,7 @@ namespace Tensorflow.Operations
         ///    A float scalar that enforces proper chaining of operations.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_write_v3 (Tensor handle, Tensor index, Tensor value, Tensor flow_in, string name = "TensorArrayWriteV3")
+        public static Tensor tensor_array_write_v3(Tensor handle, Tensor index, Tensor value, Tensor flow_in, string name = "TensorArrayWriteV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36776,7 +36776,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_dataset (Tensor[] components, TensorShape[] output_shapes, string name = "TensorDataset")
+        public static Tensor tensor_dataset(Tensor[] components, TensorShape[] output_shapes, string name = "TensorDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["components"] = components;
@@ -36803,7 +36803,7 @@ namespace Tensorflow.Operations
         ///    input_handle: the list
         ///    element_shape: the shape of elements of the list
         /// </remarks>
-        public static Tensor tensor_list_element_shape (Tensor input_handle, TF_DataType shape_type, string name = "TensorListElementShape")
+        public static Tensor tensor_list_element_shape(Tensor input_handle, TF_DataType shape_type, string name = "TensorListElementShape")
         {
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
@@ -36831,7 +36831,7 @@ namespace Tensorflow.Operations
         ///    tensor: The input tensor.
         ///    output_handle: The list.
         /// </remarks>
-        public static Tensor tensor_list_from_tensor (Tensor tensor, Tensor element_shape, string name = "TensorListFromTensor")
+        public static Tensor tensor_list_from_tensor(Tensor tensor, Tensor element_shape, string name = "TensorListFromTensor")
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
@@ -36864,7 +36864,7 @@ namespace Tensorflow.Operations
         ///    indices: The indices used to index into the list.
         ///    values: The tensor.
         /// </remarks>
-        public static Tensor tensor_list_gather (Tensor input_handle, Tensor indices, TF_DataType element_dtype, string name = "TensorListGather")
+        public static Tensor tensor_list_gather(Tensor input_handle, Tensor indices, TF_DataType element_dtype, string name = "TensorListGather")
         {
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
@@ -36897,7 +36897,7 @@ namespace Tensorflow.Operations
         ///    
         ///    
         /// </remarks>
-        public static Tensor tensor_list_get_item (Tensor input_handle, Tensor index, TF_DataType element_dtype, string name = "TensorListGetItem")
+        public static Tensor tensor_list_get_item(Tensor input_handle, Tensor index, TF_DataType element_dtype, string name = "TensorListGetItem")
         {
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
@@ -36922,7 +36922,7 @@ namespace Tensorflow.Operations
         ///    input_handle: the input list
         ///    length: the number of tensors in the list
         /// </remarks>
-        public static Tensor tensor_list_length (Tensor input_handle, string name = "TensorListLength")
+        public static Tensor tensor_list_length(Tensor input_handle, string name = "TensorListLength")
         {
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
@@ -36955,7 +36955,7 @@ namespace Tensorflow.Operations
         ///    element_dtype: the type of elements in the list
         ///    element_shape: the shape of the output tensor
         /// </remarks>
-        public static (Tensor output_handle, Tensor tensor) tensor_list_pop_back (Tensor input_handle, TF_DataType element_dtype, string name = "TensorListPopBack")
+        public static (Tensor output_handle, Tensor tensor) tensor_list_pop_back(Tensor input_handle, TF_DataType element_dtype, string name = "TensorListPopBack")
         {
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
@@ -36987,7 +36987,7 @@ namespace Tensorflow.Operations
         ///    element_dtype: the type of elements in the list.
         ///    element_shape: a shape compatible with that of elements in the list.
         /// </remarks>
-        public static Tensor tensor_list_push_back (Tensor input_handle, Tensor tensor, string name = "TensorListPushBack")
+        public static Tensor tensor_list_push_back(Tensor input_handle, Tensor tensor, string name = "TensorListPushBack")
         {
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
@@ -37018,7 +37018,7 @@ namespace Tensorflow.Operations
         ///    handle: the output list
         ///    element_dtype: the desired type of elements in the list.
         /// </remarks>
-        public static Tensor tensor_list_reserve (Tensor element_shape, Tensor num_elements, TF_DataType element_dtype, string name = "TensorListReserve")
+        public static Tensor tensor_list_reserve(Tensor element_shape, Tensor num_elements, TF_DataType element_dtype, string name = "TensorListReserve")
         {
             var dict = new Dictionary<string, object>();
             dict["element_shape"] = element_shape;
@@ -37053,7 +37053,7 @@ namespace Tensorflow.Operations
         ///    the shape of the tensor).
         ///    output_handle: The TensorList.
         /// </remarks>
-        public static Tensor tensor_list_scatter (Tensor tensor, Tensor indices, Tensor element_shape, string name = "TensorListScatter")
+        public static Tensor tensor_list_scatter(Tensor tensor, Tensor indices, Tensor element_shape, string name = "TensorListScatter")
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
@@ -37085,7 +37085,7 @@ namespace Tensorflow.Operations
         ///    output_handle: the new list, with the element in the proper position
         ///    
         /// </remarks>
-        public static Tensor tensor_list_set_item (Tensor input_handle, Tensor index, Tensor item, string name = "TensorListSetItem")
+        public static Tensor tensor_list_set_item(Tensor input_handle, Tensor index, Tensor item, string name = "TensorListSetItem")
         {
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
@@ -37119,7 +37119,7 @@ namespace Tensorflow.Operations
         ///    num_elements: optional. If not -1, the number of elements in the list.
         ///    
         /// </remarks>
-        public static Tensor tensor_list_stack (Tensor input_handle, TF_DataType element_dtype, int? num_elements = null, string name = "TensorListStack")
+        public static Tensor tensor_list_stack(Tensor input_handle, TF_DataType element_dtype, int? num_elements = null, string name = "TensorListStack")
         {
             var dict = new Dictionary<string, object>();
             dict["input_handle"] = input_handle;
@@ -37144,7 +37144,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_slice_dataset (Tensor[] components, TensorShape[] output_shapes, string name = "TensorSliceDataset")
+        public static Tensor tensor_slice_dataset(Tensor[] components, TensorShape[] output_shapes, string name = "TensorSliceDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["components"] = components;
@@ -37179,7 +37179,7 @@ namespace Tensorflow.Operations
         ///    a tag as well as a serialized SummaryMetadata proto string that contains
         ///    plugin-specific data. We will keep this op to maintain backwards compatibility.
         /// </remarks>
-        public static Tensor tensor_summary (Tensor tensor, string description = null, string[] labels = null, string display_name = null, string name = "TensorSummary")
+        public static Tensor tensor_summary(Tensor tensor, string description = null, string[] labels = null, string display_name = null, string name = "TensorSummary")
         {
             var dict = new Dictionary<string, object>();
             dict["tensor"] = tensor;
@@ -37212,7 +37212,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_summary_v2 (Tensor tag, Tensor tensor, Tensor serialized_summary_metadata, string name = "TensorSummaryV2")
+        public static Tensor tensor_summary_v2(Tensor tag, Tensor tensor, Tensor serialized_summary_metadata, string name = "TensorSummaryV2")
         {
             var dict = new Dictionary<string, object>();
             dict["tag"] = tag;
@@ -37242,7 +37242,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor text_line_dataset (Tensor filenames, Tensor compression_type, Tensor buffer_size, string name = "TextLineDataset")
+        public static Tensor text_line_dataset(Tensor filenames, Tensor compression_type, Tensor buffer_size, string name = "TextLineDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["filenames"] = filenames;
@@ -37273,7 +37273,7 @@ namespace Tensorflow.Operations
         ///    The handle to reference the Reader.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor text_line_reader (int? skip_header_lines = null, string container = null, string shared_name = null, string name = "TextLineReader")
+        public static Tensor text_line_reader(int? skip_header_lines = null, string container = null, string shared_name = null, string name = "TextLineReader")
         {
             var dict = new Dictionary<string, object>();
             if (skip_header_lines.HasValue)
@@ -37307,7 +37307,7 @@ namespace Tensorflow.Operations
         ///    The handle to reference the Reader.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor text_line_reader_v2 (int? skip_header_lines = null, string container = null, string shared_name = null, string name = "TextLineReaderV2")
+        public static Tensor text_line_reader_v2(int? skip_header_lines = null, string container = null, string shared_name = null, string name = "TextLineReaderV2")
         {
             var dict = new Dictionary<string, object>();
             if (skip_header_lines.HasValue)
@@ -37380,7 +37380,7 @@ namespace Tensorflow.Operations
         ///    the sampled candidates must be chosen independently of the context and of the
         ///    true labels.
         /// </remarks>
-        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) thread_unsafe_unigram_candidate_sampler (Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, int? seed = null, int? seed2 = null, string name = "ThreadUnsafeUnigramCandidateSampler")
+        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) thread_unsafe_unigram_candidate_sampler(Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, int? seed = null, int? seed2 = null, string name = "ThreadUnsafeUnigramCandidateSampler")
         {
             var dict = new Dictionary<string, object>();
             dict["true_classes"] = true_classes;
@@ -37422,7 +37422,7 @@ namespace Tensorflow.Operations
         ///    dimension. For example, tiling <c>[a b c d]</c> by <c>[2]</c> produces
         ///    <c>[a b c d a b c d]</c>.
         /// </remarks>
-        public static Tensor tile (Tensor input, Tensor multiples, string name = "Tile")
+        public static Tensor tile(Tensor input, Tensor multiples, string name = "Tile")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -37449,7 +37449,7 @@ namespace Tensorflow.Operations
         ///    along each dimension, <c>TileGrad</c> takes in <c>multiples</c> and aggregates
         ///    each repeated tile of <c>input</c> into <c>output</c>.
         /// </remarks>
-        public static Tensor tile_grad (Tensor input, Tensor multiples, string name = "TileGrad")
+        public static Tensor tile_grad(Tensor input, Tensor multiples, string name = "TileGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -37473,7 +37473,7 @@ namespace Tensorflow.Operations
         ///    Note: the timestamp is computed when the op is executed, not when it is added
         ///    to the graph.
         /// </remarks>
-        public static Tensor timestamp (string name = "Timestamp")
+        public static Tensor timestamp(string name = "Timestamp")
         {
             var dict = new Dictionary<string, object>();
             var op = tf.OpDefLib._apply_op_helper("Timestamp", name: name, keywords: dict);
@@ -37518,7 +37518,7 @@ namespace Tensorflow.Operations
         ///    
         ///    If <c>k</c> varies dynamically, use <c>TopKV2</c> below.
         /// </remarks>
-        public static (Tensor values, Tensor indices) top_k (Tensor input, int k, bool? sorted = null, string name = "TopK")
+        public static (Tensor values, Tensor indices) top_k(Tensor input, int k, bool? sorted = null, string name = "TopK")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -37567,7 +37567,7 @@ namespace Tensorflow.Operations
         ///    
         ///    If two elements are equal, the lower-index element appears first.
         /// </remarks>
-        public static (Tensor values, Tensor indices) top_k_v2 (Tensor input, Tensor k, bool? sorted = null, string name = "TopKV2")
+        public static (Tensor values, Tensor indices) top_k_v2(Tensor input, Tensor k, bool? sorted = null, string name = "TopKV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -37598,7 +37598,7 @@ namespace Tensorflow.Operations
         ///    The output <c>y</c> has the same rank as <c>x</c>. The shapes of <c>x</c> and <c>y</c> satisfy:
         ///    <c>y.shape[i] == x.shape[perm[i]] for i in [0, 1, ..., rank(x) - 1]</c>
         /// </remarks>
-        public static Tensor transpose (Tensor x, Tensor perm, string name = "Transpose")
+        public static Tensor transpose(Tensor x, Tensor perm, string name = "Transpose")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -37629,7 +37629,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>TruncateDiv</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor truncate_div (Tensor x, Tensor y, string name = "TruncateDiv")
+        public static Tensor truncate_div(Tensor x, Tensor y, string name = "TruncateDiv")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -37658,7 +37658,7 @@ namespace Tensorflow.Operations
         ///    *NOTE*: <c>TruncateMod</c> supports broadcasting. More about broadcasting
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
-        public static Tensor truncate_mod (Tensor x, Tensor y, string name = "TruncateMod")
+        public static Tensor truncate_mod(Tensor x, Tensor y, string name = "TruncateMod")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -37698,7 +37698,7 @@ namespace Tensorflow.Operations
         ///    deviation 1, except that values whose magnitude is more than 2 standard
         ///    deviations from the mean are dropped and re-picked.
         /// </remarks>
-        public static Tensor truncated_normal (Tensor shape, TF_DataType dtype, int? seed = null, int? seed2 = null, string name = "TruncatedNormal")
+        public static Tensor truncated_normal(Tensor shape, TF_DataType dtype, int? seed = null, int? seed2 = null, string name = "TruncatedNormal")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -37805,7 +37805,7 @@ namespace Tensorflow.Operations
         ///    will contain valid response values for those minibatch entries whose RPCs did
         ///    not fail; the rest of the entries will have empty strings.
         /// </remarks>
-        public static (Tensor response, Tensor status_code, Tensor status_message) try_rpc (Tensor address, Tensor method, Tensor request, string protocol = null, bool? fail_fast = null, int? timeout_in_ms = null, string name = "TryRpc")
+        public static (Tensor response, Tensor status_code, Tensor status_message) try_rpc(Tensor address, Tensor method, Tensor request, string protocol = null, bool? fail_fast = null, int? timeout_in_ms = null, string name = "TryRpc")
         {
             var dict = new Dictionary<string, object>();
             dict["address"] = address;
@@ -37867,7 +37867,7 @@ namespace Tensorflow.Operations
         ///    assumed to possibly belong to the same batch. If left empty, the op name will
         ///    be used as the shared name.
         /// </remarks>
-        public static Tensor unbatch (Tensor batched_tensor, Tensor batch_index, Tensor id, int timeout_micros, string container = null, string shared_name = null, string name = "Unbatch")
+        public static Tensor unbatch(Tensor batched_tensor, Tensor batch_index, Tensor id, int timeout_micros, string container = null, string shared_name = null, string name = "Unbatch")
         {
             var dict = new Dictionary<string, object>();
             dict["batched_tensor"] = batched_tensor;
@@ -37899,7 +37899,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor unbatch_dataset (Tensor input_dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "UnbatchDataset")
+        public static Tensor unbatch_dataset(Tensor input_dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "UnbatchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -37946,7 +37946,7 @@ namespace Tensorflow.Operations
         ///    are assumed to possibly belong to the same batch. If left empty, the op name
         ///    will be used as the shared name.
         /// </remarks>
-        public static Tensor unbatch_grad (Tensor original_input, Tensor batch_index, Tensor grad, Tensor id, string container = null, string shared_name = null, string name = "UnbatchGrad")
+        public static Tensor unbatch_grad(Tensor original_input, Tensor batch_index, Tensor grad, Tensor id, string container = null, string shared_name = null, string name = "UnbatchGrad")
         {
             var dict = new Dictionary<string, object>();
             dict["original_input"] = original_input;
@@ -38021,7 +38021,7 @@ namespace Tensorflow.Operations
         ///    the sampled candidates must be chosen independently of the context and of the
         ///    true labels.
         /// </remarks>
-        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) uniform_candidate_sampler (Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, int? seed = null, int? seed2 = null, string name = "UniformCandidateSampler")
+        public static (Tensor sampled_candidates, Tensor true_expected_count, Tensor sampled_expected_count) uniform_candidate_sampler(Tensor true_classes, int num_true, int num_sampled, bool unique, int range_max, int? seed = null, int? seed2 = null, string name = "UniformCandidateSampler")
         {
             var dict = new Dictionary<string, object>();
             dict["true_classes"] = true_classes;
@@ -38075,7 +38075,7 @@ namespace Tensorflow.Operations
         ///    idx ==&amp;gt; [0, 0, 1, 2, 2, 2, 3, 4, 4]
         ///   </code>
         /// </remarks>
-        public static (Tensor y, Tensor idx) unique (Tensor x, TF_DataType? out_idx = null, string name = "Unique")
+        public static (Tensor y, Tensor idx) unique(Tensor x, TF_DataType? out_idx = null, string name = "Unique")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -38155,7 +38155,7 @@ namespace Tensorflow.Operations
         ///    idx ==&amp;gt; [0, 1, 1]
         ///   </code>
         /// </remarks>
-        public static (Tensor y, Tensor idx) unique_v2 (Tensor x, Tensor axis, TF_DataType? out_idx = null, string name = "UniqueV2")
+        public static (Tensor y, Tensor idx) unique_v2(Tensor x, Tensor axis, TF_DataType? out_idx = null, string name = "UniqueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -38206,7 +38206,7 @@ namespace Tensorflow.Operations
         ///    count ==&amp;gt; [2, 1, 3, 1, 2]
         ///   </code>
         /// </remarks>
-        public static (Tensor y, Tensor idx, Tensor count) unique_with_counts (Tensor x, TF_DataType? out_idx = null, string name = "UniqueWithCounts")
+        public static (Tensor y, Tensor idx, Tensor count) unique_with_counts(Tensor x, TF_DataType? out_idx = null, string name = "UniqueWithCounts")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -38292,7 +38292,7 @@ namespace Tensorflow.Operations
         ///    count ==&amp;gt; [1, 2]
         ///   </code>
         /// </remarks>
-        public static (Tensor y, Tensor idx, Tensor count) unique_with_counts_v2 (Tensor x, Tensor axis, TF_DataType? out_idx = null, string name = "UniqueWithCountsV2")
+        public static (Tensor y, Tensor idx, Tensor count) unique_with_counts_v2(Tensor x, Tensor axis, TF_DataType? out_idx = null, string name = "UniqueWithCountsV2")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -38341,7 +38341,7 @@ namespace Tensorflow.Operations
         ///    
         ///    This is the opposite of <c>pack</c>.
         /// </remarks>
-        public static Tensor[] unpack (Tensor value, int num, int? axis = null, string name = "Unpack")
+        public static Tensor[] unpack(Tensor value, int num, int? axis = null, string name = "Unpack")
         {
             var dict = new Dictionary<string, object>();
             dict["value"] = value;
@@ -38380,7 +38380,7 @@ namespace Tensorflow.Operations
         ///    Equivalent to np.unravel_index
         ///    @end_compatibility
         /// </remarks>
-        public static Tensor unravel_index (Tensor indices, Tensor dims, string name = "UnravelIndex")
+        public static Tensor unravel_index(Tensor indices, Tensor dims, string name = "UnravelIndex")
         {
             var dict = new Dictionary<string, object>();
             dict["indices"] = indices;
@@ -38435,7 +38435,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/UnsortedSegmentMax.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor unsorted_segment_max (Tensor data, Tensor segment_ids, Tensor num_segments, string name = "UnsortedSegmentMax")
+        public static Tensor unsorted_segment_max(Tensor data, Tensor segment_ids, Tensor num_segments, string name = "UnsortedSegmentMax")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -38483,7 +38483,7 @@ namespace Tensorflow.Operations
         ///    If the given segment ID <c>i</c> is negative, then the corresponding value is
         ///    dropped, and will not be included in the result.
         /// </remarks>
-        public static Tensor unsorted_segment_min (Tensor data, Tensor segment_ids, Tensor num_segments, string name = "UnsortedSegmentMin")
+        public static Tensor unsorted_segment_min(Tensor data, Tensor segment_ids, Tensor num_segments, string name = "UnsortedSegmentMin")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -38530,7 +38530,7 @@ namespace Tensorflow.Operations
         ///    If the given segment ID <c>i</c> is negative, then the corresponding value is
         ///    dropped, and will not be included in the result.
         /// </remarks>
-        public static Tensor unsorted_segment_prod (Tensor data, Tensor segment_ids, Tensor num_segments, string name = "UnsortedSegmentProd")
+        public static Tensor unsorted_segment_prod(Tensor data, Tensor segment_ids, Tensor num_segments, string name = "UnsortedSegmentProd")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -38580,7 +38580,7 @@ namespace Tensorflow.Operations
         ///    &amp;lt;img style="width:100%" src="https://www.tensorflow.org/images/UnsortedSegmentSum.png" alt&amp;gt;
         ///    &amp;lt;/div&amp;gt;
         /// </remarks>
-        public static Tensor unsorted_segment_sum (Tensor data, Tensor segment_ids, Tensor num_segments, string name = "UnsortedSegmentSum")
+        public static Tensor unsorted_segment_sum(Tensor data, Tensor segment_ids, Tensor num_segments, string name = "UnsortedSegmentSum")
         {
             var dict = new Dictionary<string, object>();
             dict["data"] = data;
@@ -38614,7 +38614,7 @@ namespace Tensorflow.Operations
         ///    The basic functionality is similar to dequeue with many fewer
         ///    capabilities and options.  This Op is optimized for performance.
         /// </remarks>
-        public static Tensor[] unstage (TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "Unstage")
+        public static Tensor[] unstage(TF_DataType[] dtypes, int? capacity = null, int? memory_limit = null, string container = null, string shared_name = null, string name = "Unstage")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -38656,7 +38656,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor var_handle_op (TF_DataType dtype, TensorShape shape, string container = null, string shared_name = null, string name = "VarHandleOp")
+        public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape, string container = null, string shared_name = null, string name = "VarHandleOp")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -38683,7 +38683,7 @@ namespace Tensorflow.Operations
         ///    initialized.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor var_is_initialized_op (Tensor resource, string name = "VarIsInitializedOp")
+        public static Tensor var_is_initialized_op(Tensor resource, string name = "VarIsInitializedOp")
         {
             var dict = new Dictionary<string, object>();
             dict["resource"] = resource;
@@ -38710,7 +38710,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor variable (TensorShape shape, TF_DataType dtype, string container = null, string shared_name = null, string name = "Variable")
+        public static Tensor variable(TensorShape shape, TF_DataType dtype, string container = null, string shared_name = null, string name = "Variable")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -38746,7 +38746,7 @@ namespace Tensorflow.Operations
         ///    shape(t) ==&amp;gt; [2, 2, 3]
         ///   </code>
         /// </remarks>
-        public static Tensor variable_shape (Tensor input, TF_DataType? out_type = null, string name = "VariableShape")
+        public static Tensor variable_shape(Tensor input, TF_DataType? out_type = null, string name = "VariableShape")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -38787,7 +38787,7 @@ namespace Tensorflow.Operations
         ///    TODO(zhifengc/mrry): Adds a pointer to a more detail document
         ///    about sharing states in tensorflow.
         /// </remarks>
-        public static Tensor variable_v2 (TensorShape shape, TF_DataType dtype, string container = null, string shared_name = null, string name = "VariableV2")
+        public static Tensor variable_v2(TensorShape shape, TF_DataType dtype, string container = null, string shared_name = null, string name = "VariableV2")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -38872,7 +38872,7 @@ namespace Tensorflow.Operations
         ///    [2, 1, 1]]
         ///   </code>
         /// </remarks>
-        public static Tensor where (Tensor input, string name = "Where")
+        public static Tensor where(Tensor input, string name = "Where")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -38902,7 +38902,7 @@ namespace Tensorflow.Operations
         ///    To use, enqueue filenames in a Queue.  The output of ReaderRead will
         ///    be a filename (key) and the contents of that file (value).
         /// </remarks>
-        public static Tensor whole_file_reader (string container = null, string shared_name = null, string name = "WholeFileReader")
+        public static Tensor whole_file_reader(string container = null, string shared_name = null, string name = "WholeFileReader")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -38935,7 +38935,7 @@ namespace Tensorflow.Operations
         ///    To use, enqueue filenames in a Queue.  The output of ReaderRead will
         ///    be a filename (key) and the contents of that file (value).
         /// </remarks>
-        public static Tensor whole_file_reader_v2 (string container = null, string shared_name = null, string name = "WholeFileReaderV2")
+        public static Tensor whole_file_reader_v2(string container = null, string shared_name = null, string name = "WholeFileReaderV2")
         {
             var dict = new Dictionary<string, object>();
             if (container != null)
@@ -38963,7 +38963,7 @@ namespace Tensorflow.Operations
         ///    Heartbeats may be sent periodically to indicate the coordinator is still active,
         ///    to retrieve the current worker status and to expedite shutdown when necessary.
         /// </remarks>
-        public static Tensor worker_heartbeat (Tensor request, string name = "WorkerHeartbeat")
+        public static Tensor worker_heartbeat(Tensor request, string name = "WorkerHeartbeat")
         {
             var dict = new Dictionary<string, object>();
             dict["request"] = request;
@@ -38989,7 +38989,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    creates directory if not existing.
         /// </remarks>
-        public static Operation write_file (Tensor filename, Tensor contents, string name = "WriteFile")
+        public static Operation write_file(Tensor filename, Tensor contents, string name = "WriteFile")
         {
             var dict = new Dictionary<string, object>();
             dict["filename"] = filename;
@@ -39011,7 +39011,7 @@ namespace Tensorflow.Operations
         ///    a tensor of the same shape and type as x but filled with zeros.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor zeros_like (Tensor x, string name = "ZerosLike")
+        public static Tensor zeros_like(Tensor x, string name = "ZerosLike")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -39038,7 +39038,7 @@ namespace Tensorflow.Operations
         ///    
         ///    \\(\zeta(x, q) = \sum_{n=0}^{\infty} (q + n)^{-x}\\)
         /// </remarks>
-        public static Tensor zeta (Tensor x, Tensor q, string name = "Zeta")
+        public static Tensor zeta(Tensor x, Tensor q, string name = "Zeta")
         {
             var dict = new Dictionary<string, object>();
             dict["x"] = x;
@@ -39064,7 +39064,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor zip_dataset (Tensor[] input_datasets, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ZipDataset")
+        public static Tensor zip_dataset(Tensor[] input_datasets, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ZipDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_datasets"] = input_datasets;

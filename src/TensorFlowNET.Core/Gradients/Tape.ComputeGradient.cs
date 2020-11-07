@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Util;
 using static Tensorflow.tensorflow;
 
@@ -69,7 +68,7 @@ namespace Tensorflow.Gradients
                     else
                     {
                         any_gradient_nonzero = true;
-                        var new_gradients = grad_it.Count == 1 ? 
+                        var new_gradients = grad_it.Count == 1 ?
                             grad_it[0] :
                             gen_math_ops.add_n(grad_it.ToArray()); // vspace.AggregateGradients
 
@@ -91,8 +90,8 @@ namespace Tensorflow.Gradients
                     foreach (var i in zero_indices)
                         out_gradients[i] = trace.output_tensor_info[i].ZerosLike();
 
-                    in_gradients = CallBackwardFunction(trace.backward_function, 
-                        unneeded_gradients, 
+                    in_gradients = CallBackwardFunction(trace.backward_function,
+                        unneeded_gradients,
                         out_gradients);
 
                     if (in_gradients.Count() != trace.input_tensor_id.Count())
@@ -141,7 +140,7 @@ namespace Tensorflow.Gradients
                         if (gradients.find(id, out var grad_it))
                         {
                             // foreach (var g in grad_it)
-                                // DeleteGradient(g);
+                            // DeleteGradient(g);
                             gradients.erase(id);
                         }
                         continue;
@@ -151,7 +150,7 @@ namespace Tensorflow.Gradients
                     if (op_id == -1)
                         continue;
 
-                    if(state.op_missing_tensor.find(op_id, out var missing_it))
+                    if (state.op_missing_tensor.find(op_id, out var missing_it))
                     {
                         state.op_missing_tensor[op_id]--;
                         if (state.op_missing_tensor[op_id] == 0)
@@ -170,7 +169,7 @@ namespace Tensorflow.Gradients
                     result.Add(null);
                 else
                 {
-                    if(grad_it.Count > 1)
+                    if (grad_it.Count > 1)
                     {
                         var grad = gen_math_ops.add_n(grad_it.ToArray());
                         grad_it.Clear();
@@ -258,7 +257,7 @@ namespace Tensorflow.Gradients
             UnorderedMap<long, long> op_missing_tensor)
         {
             var result = new Queue<long>();
-            foreach(var op_entry in op_tape)
+            foreach (var op_entry in op_tape)
             {
                 if (!op_missing_tensor.find(op_entry.Key))
                     result.Enqueue(op_entry.Key);

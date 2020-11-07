@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System.Collections.Generic;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -31,8 +30,8 @@ namespace Tensorflow
         /// <param name="validate_indices"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor sparse_to_dense<T>(Tensor sparse_indices, 
-            int[] output_shape, 
+        public static Tensor sparse_to_dense<T>(Tensor sparse_indices,
+            int[] output_shape,
             T sparse_values,
             T default_value,
             bool validate_indices = true,

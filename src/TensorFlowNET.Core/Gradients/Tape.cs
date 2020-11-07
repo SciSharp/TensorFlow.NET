@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 using static Tensorflow.tensorflow;

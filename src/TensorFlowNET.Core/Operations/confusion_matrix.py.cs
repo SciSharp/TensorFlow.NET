@@ -42,7 +42,7 @@ namespace Tensorflow
                 var predictions_rank = predictions_shape.ndim;
                 var labels_shape = labels.TensorShape;
                 var labels_rank = labels_shape.ndim;
-                if(labels_rank > -1 && predictions_rank > -1)
+                if (labels_rank > -1 && predictions_rank > -1)
                 {
                     // Use static rank.
                     var rank_diff = predictions_rank - labels_rank;

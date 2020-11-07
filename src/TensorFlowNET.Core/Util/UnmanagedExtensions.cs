@@ -1,15 +1,15 @@
-﻿using System;
+﻿using NumSharp.Backends.Unmanaged;
+using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using NumSharp.Backends.Unmanaged;
 
 namespace Tensorflow.Util
 {
     public static class UnmanagedExtensions
     {
         //internally UnmanagedMemoryStream can't construct with null address.
-        private static readonly unsafe byte* _empty = (byte*) Marshal.AllocHGlobal(1);
+        private static readonly unsafe byte* _empty = (byte*)Marshal.AllocHGlobal(1);
 
         /// <summary>
         ///     Creates a memory stream based on given <paramref name="block"/>.
@@ -65,7 +65,7 @@ namespace Tensorflow.Util
                     return new UnmanagedMemoryStream(_empty, 0);
 
                 // ReSharper disable once AssignNullToNotNullAttribute
-                return new UnmanagedMemoryStream((byte*) address, length);
+                return new UnmanagedMemoryStream((byte*)address, length);
             }
         }
 
@@ -87,7 +87,7 @@ namespace Tensorflow.Util
                 if (address == IntPtr.Zero)
                     return new UnmanagedMemoryStream(_empty, 0);
 
-                return new UnmanagedMemoryStream((byte*) address + offset, length);
+                return new UnmanagedMemoryStream((byte*)address + offset, length);
             }
         }
     }

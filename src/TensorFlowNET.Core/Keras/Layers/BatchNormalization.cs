@@ -72,7 +72,7 @@ namespace Tensorflow.Keras.Layers
             }
 
             var axis_to_dim = new Dictionary<int, int>();
-            foreach(var x in axis)
+            foreach (var x in axis)
                 axis_to_dim[x] = input_shape[x];
 
             inputSpec = new InputSpec(ndim: ndims, axes: axis_to_dim);
@@ -186,8 +186,8 @@ namespace Tensorflow.Keras.Layers
             {
                 momentum_tensor = ops.convert_to_tensor(momentum);
             }
-                
-            if(training_value == null)
+
+            if (training_value == null)
             {
                 var mean_update = _assign_moving_average(moving_mean.AsTensor(), mean, momentum_tensor);
                 var variance_update = _assign_moving_average(moving_variance.AsTensor(), variance, momentum_tensor);

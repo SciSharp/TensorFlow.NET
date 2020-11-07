@@ -1,9 +1,5 @@
 ﻿using NumSharp;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Eager;
-using Tensorflow.Gradients;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -75,7 +71,7 @@ namespace Tensorflow
 
         public Tensor assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
         {
-            if(value.GetType() == typeof(Tensor))
+            if (value.GetType() == typeof(Tensor))
             {
                 var assign = gen_state_ops.assign(handle, value, use_locking: use_locking, name: name);
                 if (read_value)
@@ -88,11 +84,11 @@ namespace Tensorflow
                 handle, value_tensor, name: name);
             if (read_value)
                 return gen_resource_variable_ops.read_variable_op(handle, dtype);
-                // return _lazy_read(assign_op, value_tensor);
+            // return _lazy_read(assign_op, value_tensor);
             return assign_op;
         }
 
-        public Tensor value() 
+        public Tensor value()
             => GraphElement ?? _read_variable_op();
 
         protected Tensor _read_variable_op()
@@ -151,10 +147,10 @@ namespace Tensorflow
         {
             var assign_add_op = gen_resource_variable_ops.assign_add_variable_op(Handle,
                 ops.convert_to_tensor(delta, dtype: dtype), name: name);
-            
+
             if (read_value)
                 return gen_resource_variable_ops.read_variable_op(handle, dtype);
-                // return _lazy_read(assign_add_op);
+            // return _lazy_read(assign_add_op);
             return assign_add_op;
         }
 

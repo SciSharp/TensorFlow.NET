@@ -14,12 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp.Utilities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Tensorflow.Contexts;
 using Tensorflow.Eager;
 using Tensorflow.Gradients;
@@ -46,7 +41,7 @@ namespace Tensorflow
         public OpDefLibrary OpDefLib;
         public Context Context;
         public IEagerRunner Runner;
-        
+
         public tensorflow()
         {
             Status = new Status();
@@ -111,33 +106,33 @@ namespace Tensorflow
             {
                 tape_set = new List<ITape>();
             }
-                
+
             return tape_set;
         }
 
         public void __init__()
         {
-            
+
         }
 
         public void __enter__()
         {
-            
+
         }
 
         public void __exit__()
         {
-            
+
         }
 
         public void __del__()
         {
-            
+
         }
 
         public void Dispose()
         {
-            
+
         }
     }
 }

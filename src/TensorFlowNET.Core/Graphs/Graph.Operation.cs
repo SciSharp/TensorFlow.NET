@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -62,7 +61,7 @@ namespace Tensorflow
         /// </example>
         public Operation OperationByName(string operName)
         {
-            if (operName == null) 
+            if (operName == null)
                 throw new ArgumentNullException(nameof(operName));
 
             var handle = c_api.TF_GraphOperationByName(_handle, operName);
@@ -90,7 +89,7 @@ namespace Tensorflow
         /// This method may be called concurrently from multiple threads.
         /// </summary>
         /// <param name="name">The name of the `Operation` to return.</param>
-        public Operation get_operation_by_name(string name) 
+        public Operation get_operation_by_name(string name)
             => as_graph_element(name, allow_tensor: false, allow_operation: true) as Operation;
 
         public ITensorOrOperation _get_operation_by_name_unsafe(string name)
@@ -150,7 +149,7 @@ namespace Tensorflow
                 .Select(c_op => _create_op_from_tf_operation(c_op, compute_device: compute_devices))
                 .ToArray();
 
-            foreach(var op in new_ops)
+            foreach (var op in new_ops)
             {
                 var new_control_inputs = _control_dependencies_for_inputs(op.inputs)
                     .Select(x => x as Operation)

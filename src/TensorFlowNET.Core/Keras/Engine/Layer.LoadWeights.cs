@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Keras.Engine
+﻿namespace Tensorflow.Keras.Engine
 {
     public partial class Layer
     {
@@ -12,7 +8,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="filepath"></param>
         public void load_weights(string filepath)
         {
-            
+
         }
     }
 }

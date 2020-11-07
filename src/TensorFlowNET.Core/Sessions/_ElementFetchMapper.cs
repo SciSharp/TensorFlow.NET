@@ -17,7 +17,6 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace Tensorflow
 {
@@ -32,12 +31,12 @@ namespace Tensorflow
         {
             var g = graph ?? ops.get_default_graph();
 
-            foreach(var fetch in fetches)
+            foreach (var fetch in fetches)
             {
                 var el = g.as_graph_element(fetch, allow_tensor: true, allow_operation: true);
                 _unique_fetches.Add(el);
             }
-            
+
             _contraction_fn = contraction_fn;
         }
 

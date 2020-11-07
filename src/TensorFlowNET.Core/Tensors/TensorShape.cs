@@ -1,7 +1,6 @@
 ﻿using NumSharp;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -66,14 +65,14 @@ namespace Tensorflow
             switch (proto.Dim.Count)
             {
                 case 0: shape = new Shape(new int[0]); break;
-                case 1: shape = Shape.Vector((int) proto.Dim[0].Size); break;
-                case 2: shape = Shape.Matrix((int) proto.Dim[0].Size, (int) proto.Dim[1].Size); break;
+                case 1: shape = Shape.Vector((int)proto.Dim[0].Size); break;
+                case 2: shape = Shape.Matrix((int)proto.Dim[0].Size, (int)proto.Dim[1].Size); break;
                 default:
                     var protodims = proto.Dim;
                     var len = protodims.Count;
                     var dims = new int[len];
-                    for (int i = 0; i < len; i++) 
-                        dims[i] = (int) protodims[i].Size;
+                    for (int i = 0; i < len; i++)
+                        dims[i] = (int)protodims[i].Size;
 
 
                     shape = new Shape(dims); break;
@@ -93,7 +92,7 @@ namespace Tensorflow
 
         public TensorShape(int[][] dims)
         {
-            if(dims.Length == 1)
+            if (dims.Length == 1)
             {
                 switch (dims[0].Length)
                 {
@@ -145,7 +144,7 @@ namespace Tensorflow
 
         public bool is_compatible_with(TensorShape shape2)
         {
-            if(dims != null && shape2.dims != null)
+            if (dims != null && shape2.dims != null)
             {
                 if (dims.Length != shape2.dims.Length)
                     return false;
@@ -153,7 +152,7 @@ namespace Tensorflow
 
             return true;
         }
-        
+
         public void assert_has_rank(int rank)
         {
             if (rank != ndim)
@@ -247,10 +246,11 @@ namespace Tensorflow
         /// <summary>
         ///     Returns a cloned array from <see cref="dims"/>.
         /// </summary>
-        public int[] as_list() {
+        public int[] as_list()
+        {
             if (shape.IsEmpty)
                 throw new ValueError("as_list() is not defined on an unknown TensorShape.");
-            return (int[]) dims.Clone();
+            return (int[])dims.Clone();
         }
 
         public long[] as_list_long()
@@ -262,14 +262,14 @@ namespace Tensorflow
 
         public int num_elements()
         {
-            if(is_fully_defined())
+            if (is_fully_defined())
             {
                 var size = 1;
                 foreach (var dim in dims)
                     size *= dim;
                 return size;
-            }   
-            
+            }
+
             return -1;
         }
 

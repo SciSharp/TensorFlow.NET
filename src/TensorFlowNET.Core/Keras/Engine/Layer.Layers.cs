@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.Layers;
-using Tensorflow.Operations.Activation;
-using static Tensorflow.Binding;
+﻿using System.Collections.Generic;
 
 namespace Tensorflow.Keras.Engine
 {

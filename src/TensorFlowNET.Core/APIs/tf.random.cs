@@ -97,7 +97,7 @@ namespace Tensorflow
 
         public Tensor multinomial(Tensor logits, int num_samples, int? seed = null,
             string name = null, TF_DataType output_dtype = TF_DataType.DtInvalid)
-            => random_ops.multinomial(logits, num_samples, seed: seed, 
+            => random_ops.multinomial(logits, num_samples, seed: seed,
                 name: name, output_dtype: output_dtype);
     }
 }

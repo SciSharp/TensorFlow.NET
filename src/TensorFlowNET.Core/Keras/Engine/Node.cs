@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
@@ -52,7 +51,7 @@ namespace Tensorflow.Keras.Engine
             get
             {
                 var node_deps = new List<Node>();
-                foreach(var kt in KerasInputs)
+                foreach (var kt in KerasInputs)
                 {
                     var (layer, node_index, _) = kt.KerasHistory;
                     if (layer != null)
@@ -60,7 +59,7 @@ namespace Tensorflow.Keras.Engine
                 }
                 return node_deps.ToArray();
             }
-        } 
+        }
 
         public Node(Layer layer, NodeArgs args)
         {
@@ -70,7 +69,7 @@ namespace Tensorflow.Keras.Engine
             if (args.InputTensors != null)
                 KerasInputs.AddRange(args.InputTensors);
 
-            foreach(var(i, ele) in enumerate(KerasInputs))
+            foreach (var (i, ele) in enumerate(KerasInputs))
                 _keras_inputs_ids_and_indices[i] = ele.GetHashCode();
 
             // Wire up Node to Layers.

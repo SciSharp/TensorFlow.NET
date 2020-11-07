@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Framework.Models
+﻿namespace Tensorflow.Framework.Models
 {
     /// <summary>
     /// Describes a dense object with shape, dtype, and name.

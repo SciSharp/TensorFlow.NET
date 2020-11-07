@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using NumSharp;
+﻿using NumSharp;
+using System.Linq;
 using Tensorflow.Framework;
 
 namespace Tensorflow.Contrib.Learn.Estimators

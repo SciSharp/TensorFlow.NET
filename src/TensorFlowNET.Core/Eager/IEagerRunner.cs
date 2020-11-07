@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Contexts;
 using Tensorflow.Gradients;
 
@@ -13,8 +11,8 @@ namespace Tensorflow.Eager
             Tensor[] inputs, object[] attrs,
             string name = null);
 
-        (TF_DataType, Tensor[]) ArgsToMatchingEager(Context ctx, 
-            TF_DataType default_dtype = TF_DataType.DtInvalid, 
+        (TF_DataType, Tensor[]) ArgsToMatchingEager(Context ctx,
+            TF_DataType default_dtype = TF_DataType.DtInvalid,
             object[] args = null);
 
         Tensor[] TFE_FastPathExecute(Context ctx,

@@ -16,7 +16,6 @@
 
 using System;
 using System.Linq;
-using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations.Initializers
 {
@@ -64,10 +63,10 @@ namespace Tensorflow.Operations.Initializers
                 n = fan_in;
             else if (_mode == "FAN_OUT")
                 n = fan_out;
-            else if(_mode == "FAN_AVG")
+            else if (_mode == "FAN_AVG")
                 n = (fan_in + fan_out) / 2.0f;
 
-            if(_uniform)
+            if (_uniform)
             {
                 var limit = Convert.ToSingle(Math.Sqrt(3.0f * _scale / n));
                 return random_ops.random_uniform(args.Shape, -limit, limit, args.DType);

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Tensorflow.Operations
 {
@@ -52,8 +50,8 @@ namespace Tensorflow.Operations
 
         public BodyItemInRnnWhileLoop FromMergeVars(ITensorOrTensorArray[] mergeVars)
         {
-            time = (Tensor) mergeVars[1];
-            output_ta_t = new[] {(TensorArray) mergeVars[2]}; 
+            time = (Tensor)mergeVars[1];
+            output_ta_t = new[] { (TensorArray)mergeVars[2] };
             state = (Tensor)mergeVars[3];
             return this;
         }

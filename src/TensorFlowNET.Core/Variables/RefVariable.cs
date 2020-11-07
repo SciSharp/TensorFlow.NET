@@ -40,14 +40,14 @@ namespace Tensorflow
         public bool _in_graph_mode = true;
         public Tensor _initial_value;
         public bool _trainable;
-        
+
         public Tensor _snapshot;
         public bool _save_slice_info;
 
         private Operation _initializer_op;
         public Operation Initializer => _initializer_op;
         public Operation Op => _variable.op;
-        
+
         public TF_DataType dtype => _variable.dtype;
         public TensorShape shape => tensor_util.to_shape(_variable.shape);
         public string Device => "";
@@ -68,7 +68,7 @@ namespace Tensorflow
         {
             _in_graph_mode = true;
 
-            if(initial_value is Operation op)
+            if (initial_value is Operation op)
             {
                 _init_from_op(op);
             }
@@ -140,7 +140,7 @@ namespace Tensorflow
 
             var init_from_fn = initial_value.GetType().Name == "Func`1";
 
-            if(collections == null)
+            if (collections == null)
             {
                 collections = new List<string> { tf.GraphKeys.GLOBAL_VARIABLES };
             }
@@ -254,7 +254,7 @@ namespace Tensorflow
         {
             var op = tensor.op;
             var new_op = op_cache.ContainsKey(op.name) ? op_cache[op.name] : null;
-            if(new_op == null)
+            if (new_op == null)
             {
                 new_op = _safe_initial_value_from_op(name, op, op_cache);
                 op_cache[op.name] = new_op;
@@ -302,7 +302,7 @@ namespace Tensorflow
                 foreach (var attr_def in op.node_def.Attr)
                     attr_protos[attr_def.Key] = attr_def.Value;
 
-                return op.graph.create_op(new_op_type, new_op_inputs.ToArray(), op._output_types, 
+                return op.graph.create_op(new_op_type, new_op_inputs.ToArray(), op._output_types,
                     name: new_op_name, attrs: attr_protos);
             }
             return op;
@@ -311,7 +311,7 @@ namespace Tensorflow
         private Operation _find_initialized_value_for_variable(Operation variable_op)
         {
             var var_names = new[] { variable_op.node_def.Name, variable_op.node_def.Name + ":0" };
-            foreach(var collection_name in new[]{tf.GraphKeys.GLOBAL_VARIABLES,
+            foreach (var collection_name in new[]{tf.GraphKeys.GLOBAL_VARIABLES,
                             tf.GraphKeys.LOCAL_VARIABLES })
             {
                 foreach (var var in variable_op.graph.get_collection<RefVariable>(collection_name))
@@ -319,7 +319,7 @@ namespace Tensorflow
                         return var.initialized_value();
             }
 
-           return null;
+            return null;
         }
 
         /// <summary>
@@ -351,7 +351,7 @@ namespace Tensorflow
 
         public VariableDef to_proto(string export_scope)
         {
-            if(string.IsNullOrEmpty(export_scope) || _variable.name.StartsWith(export_scope))
+            if (string.IsNullOrEmpty(export_scope) || _variable.name.StartsWith(export_scope))
             {
                 var var_def = new VariableDef();
                 var_def.VariableName = ops.strip_name_scope(_variable.name, export_scope);

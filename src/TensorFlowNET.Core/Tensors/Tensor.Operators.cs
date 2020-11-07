@@ -17,7 +17,6 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using static Tensorflow.Binding;
 
@@ -295,7 +294,7 @@ namespace Tensorflow
         {
             bool is_floating = false;
             var types = new List<bool>();
-            
+
             if (x is Tensor t1)
                 types.add(t1.dtype.is_floating());
 
@@ -317,7 +316,7 @@ namespace Tensorflow
                 dtype = tl.dtype.as_base_dtype();
                 switchToGraphModeTemp = switchToGraphModeTemp || !tl.IsEagerTensor;
             }
-                
+
             if (y is Tensor tr)
             {
                 dtype = tr.dtype.as_base_dtype();

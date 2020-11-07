@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Tensorflow.Binding;
-using Tensorflow.Operations.Activation;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Operations;
+using Tensorflow.Operations.Activation;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -80,7 +77,7 @@ namespace Tensorflow
             // Parameters of gates are concatenated into one multiply for efficiency.
             Tensor c = null;
             Tensor h = null;
-            if(_state_is_tuple)
+            if (_state_is_tuple)
                 (c, h) = ((Tensor)_state.c, (Tensor)_state.h);
             else
             {

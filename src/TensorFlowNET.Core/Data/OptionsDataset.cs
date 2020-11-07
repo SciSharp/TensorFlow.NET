@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow
+﻿namespace Tensorflow
 {
     /// <summary>
     /// An identity `Dataset` that stores options.
@@ -11,7 +7,7 @@ namespace Tensorflow
     {
         DatasetOptions options;
 
-        public OptionsDataset(IDatasetV2 input_dataset, DatasetOptions options) 
+        public OptionsDataset(IDatasetV2 input_dataset, DatasetOptions options)
             : base(input_dataset)
         {
             this.options = options;

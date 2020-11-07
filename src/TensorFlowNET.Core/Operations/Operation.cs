@@ -14,11 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
-using Google.Protobuf.Collections;
 using NumSharp;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
@@ -88,7 +86,7 @@ namespace Tensorflow
             _outputs = new Tensor[NumOutputs];
             for (int i = 0; i < NumOutputs; i++)
                 _outputs[i] = new Tensor(this, i, OutputType(i));
-            
+
             // Dict mapping op name to file and line information for op colocation
             // context managers.
             _control_flow_context = _graph._get_control_flow_context();

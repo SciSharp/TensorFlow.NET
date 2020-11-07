@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
 using Tensorflow.Queues;
 
 namespace Tensorflow

@@ -53,7 +53,7 @@ namespace Tensorflow
 
             foreach (var node in inference_graph.Node)
             {
-                if(new string[] { "Variable", "VariableV2", "VarHandleOp" }.Contains(node.Op))
+                if (new string[] { "Variable", "VariableV2", "VarHandleOp" }.Contains(node.Op))
                 {
                     var variable_name = node.Name;
 
@@ -68,7 +68,7 @@ namespace Tensorflow
                     // There can be one or more Identity ops in between the ReadVariableOp and
                     // VarHandleOp.  Store the Identity ops with the associated dtypes.
                     var source_op_name = get_input_name(node);
-                    while(map_name_to_node[source_op_name].Op == "Identity")
+                    while (map_name_to_node[source_op_name].Op == "Identity")
                     {
                         throw new NotImplementedException("map_name_to_node[source_op_name].Op");
                         /*resource_identity_types[source_op_name] = node.attr["dtype"];
@@ -83,14 +83,14 @@ namespace Tensorflow
                 returned_variables = sess.run(variable_names);
 
             var variables_data_map = new Dictionary<string, NDArray>();
-            foreach(var (i, name) in enumerate(variable_dict_names))
+            foreach (var (i, name) in enumerate(variable_dict_names))
                 variables_data_map[name] = returned_variables[i];
             print($"Froze {len(returned_variables)} variables.");
 
             // Reconstruct the graph with constants in place of variables.
             var output_graph_def = new GraphDef();
             int how_many_converted = 0;
-            foreach(var input_node in inference_graph.Node)
+            foreach (var input_node in inference_graph.Node)
             {
                 var output_node = new NodeDef();
                 if (variables_data_map.ContainsKey(input_node.Name))
@@ -101,7 +101,7 @@ namespace Tensorflow
                     how_many_converted += 1;
                 }
                 // else if (resource_identity_types.ContainsKey(input_node.Name))
-                else if(input_node.Op == "ReadVariableOp")
+                else if (input_node.Op == "ReadVariableOp")
                 {
                     output_node.Op = "Identity";
                     output_node.Name = input_node.Name;
@@ -180,7 +180,7 @@ namespace Tensorflow
         {
             var nodes_to_keep = new List<string>();
             var next_to_visit = target_nodes.Select(x => x).ToList();
-            while(next_to_visit.Count > 0)
+            while (next_to_visit.Count > 0)
             {
                 var node = next_to_visit[0];
                 next_to_visit.RemoveAt(0);

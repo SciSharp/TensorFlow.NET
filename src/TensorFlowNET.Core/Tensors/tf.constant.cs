@@ -14,9 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
-using Tensorflow.Eager;
-
 namespace Tensorflow
 {
     public partial class tensorflow
@@ -40,10 +37,10 @@ namespace Tensorflow
                 verify_shape: false,
                 allow_broadcast: true);
 
-        public Tensor zeros(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
+        public Tensor zeros(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
             => array_ops.zeros(shape, dtype, name);
 
-        public Tensor ones(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) 
+        public Tensor ones(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
             => array_ops.ones(shape, dtype, name);
 
         public Tensor size(Tensor input,

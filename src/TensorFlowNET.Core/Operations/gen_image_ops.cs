@@ -16,7 +16,6 @@
 
 using System;
 using System.Linq;
-using Tensorflow.Contexts;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -29,7 +28,7 @@ namespace Tensorflow
             throw new NotImplementedException("combined_non_max_suppression");
         }
 
-        public static Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name= null)
+        public static Tensor convert_image_dtype(Tensor image, TF_DataType dtype, bool saturate = false, string name = null)
         {
             if (dtype == image.dtype)
                 return array_ops.identity(image, name: name);
@@ -41,7 +40,7 @@ namespace Tensorflow
                 if (image.dtype.is_integer() && dtype.is_integer())
                 {
                     throw new NotImplementedException("convert_image_dtype is_integer");
-                } 
+                }
                 else if (image.dtype.is_floating() && dtype.is_floating())
                 {
                     throw new NotImplementedException("convert_image_dtype is_floating");
@@ -82,7 +81,7 @@ namespace Tensorflow
                     "channels", channels,
                     "ratio", ratio,
                     "fancy_upscaling", fancy_upscaling,
-                    "try_recover_truncated", try_recover_truncated, 
+                    "try_recover_truncated", try_recover_truncated,
                     "acceptable_fraction", acceptable_fraction,
                     "dct_method", dct_method);
                 return results[0];
@@ -221,7 +220,7 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false, 
+        public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false,
             bool half_pixel_centers = false, string name = null)
             => tf.Context.RunInAutoMode(()
                 => tf.OpDefLib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new

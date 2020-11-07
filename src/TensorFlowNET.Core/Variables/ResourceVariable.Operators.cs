@@ -15,8 +15,6 @@
 ******************************************************************************/
 
 using NumSharp;
-using System;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

@@ -31,8 +31,8 @@ namespace Tensorflow
 
             c_api.TF_GraphImportGraphDefWithReturnOutputs(_handle, graph_def.Handle, opts.Handle, return_output_handle, num_return_outputs, s.Handle);
 
-            var tf_output_ptr = (TF_Output*) return_output_handle;
-            for (int i = 0; i < num_return_outputs; i++) 
+            var tf_output_ptr = (TF_Output*)return_output_handle;
+            for (int i = 0; i < num_return_outputs; i++)
                 return_outputs[i] = *(tf_output_ptr + i);
 
             Marshal.FreeHGlobal(return_output_handle);

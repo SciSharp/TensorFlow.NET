@@ -20,7 +20,7 @@ namespace Tensorflow
     {
         public Summaries.Summary summary = new Summaries.Summary();
 
-        public Tensor scalar(string name, Tensor tensor) 
+        public Tensor scalar(string name, Tensor tensor)
             => summary.scalar(name, tensor);
     }
 }

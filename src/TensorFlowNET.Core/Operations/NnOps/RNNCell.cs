@@ -56,8 +56,8 @@ namespace Tensorflow
         public RnnCell(bool trainable = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            bool? _reuse = null) : base(trainable: trainable, 
-                    name: name, 
+            bool? _reuse = null) : base(trainable: trainable,
+                    name: name,
                     dtype: dtype,
                     _reuse: _reuse)
         {
@@ -91,7 +91,7 @@ namespace Tensorflow
 
         private Tensor _zero_state_tensors(object state_size, Tensor batch_size, TF_DataType dtype)
         {
-            if(state_size is int state_size_int)
+            if (state_size is int state_size_int)
             {
                 var output = nest.map_structure(s =>
                 {

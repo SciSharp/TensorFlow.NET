@@ -30,7 +30,7 @@ namespace Tensorflow.Operations
             string data_format = "NHWC",
             string name = null)
         {
-            return tf_with(ops.name_scope(name, "MaxPool", value), scope => 
+            return tf_with(ops.name_scope(name, "MaxPool", value), scope =>
             {
                 name = scope;
                 value = ops.convert_to_tensor(value, name: "input");

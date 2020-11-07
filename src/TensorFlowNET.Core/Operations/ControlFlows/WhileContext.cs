@@ -19,8 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Operations.ControlFlows;
 using Tensorflow.Util;
-using static Tensorflow.control_flow_ops;
 using static Tensorflow.Binding;
+using static Tensorflow.control_flow_ops;
 
 namespace Tensorflow.Operations
 {
@@ -29,8 +29,8 @@ namespace Tensorflow.Operations
     /// </summary>
     public class WhileContext : ControlFlowContext
     {
-        bool _back_prop=true;
-        GradLoopState _grad_state =null;
+        bool _back_prop = true;
+        GradLoopState _grad_state = null;
         Tensor _maximum_iterations;
         public Tensor maximum_iterations => _maximum_iterations;
         int _parallel_iterations;
@@ -114,7 +114,7 @@ namespace Tensorflow.Operations
         /// <summary>
         /// Add the loop termination condition and body to the graph.
         /// </summary>
-        internal LoopVar<TItem> BuildLoop<TItem>(Func<LoopVar<TItem>, Tensor> pred, 
+        internal LoopVar<TItem> BuildLoop<TItem>(Func<LoopVar<TItem>, Tensor> pred,
             Func<LoopVar<TItem>, LoopVar<TItem>> body,
             LoopVar<TItem> loop_vars,
             TensorShape[] shape_invariants,
@@ -133,7 +133,7 @@ namespace Tensorflow.Operations
                     .ToArray();
 
             Enter();
-            var(original_body_result, exit_vars) = _BuildLoop(
+            var (original_body_result, exit_vars) = _BuildLoop(
                 pred, body, original_loop_vars, loop_vars_tensors, shape_invariants);
             Exit();
 
@@ -236,7 +236,7 @@ namespace Tensorflow.Operations
             // Build the graph for pred.
             var merge_vars_with_tensor_arrays = _convert_flows_to_tensorarrays(flat_loop_vars, merge_vars);
             var packed_vars = new LoopVar<TItem>(
-                (Tensor) merge_vars_with_tensor_arrays[0],
+                (Tensor)merge_vars_with_tensor_arrays[0],
                 new TItem().FromMergeVars(merge_vars_with_tensor_arrays));
             var pp = pred(packed_vars);
             var c = ops.convert_to_tensor(pp);
@@ -278,12 +278,12 @@ namespace Tensorflow.Operations
         private void _FixControlInputsAndContext(Tensor[] enters)
         {
             var graph = ops.get_default_graph();
-            foreach(var x in enters)
+            foreach (var x in enters)
             {
                 var inp_op = x.op.inputs[0].op;
                 var control_inputs = graph._control_dependencies_for_inputs(new[] { inp_op });
                 var outer_control_inputs = new List<Operation>();
-                foreach(Operation op in control_inputs)
+                foreach (Operation op in control_inputs)
                 {
                     // We need to keep control inputs that are in any ancestor
                     // ControlFlowContext, and within outer WhileContext.
@@ -320,7 +320,7 @@ namespace Tensorflow.Operations
         private void _InitializeValues(Tensor[] values)
         {
             _values = new HashSet<string>();
-            foreach(var x in values)
+            foreach (var x in values)
                 _values.Add(x.name);
         }
 
@@ -330,7 +330,7 @@ namespace Tensorflow.Operations
             {
 
             }
-        
+
             Operation[] external_inputs = new Operation[0];
             Operation[] control_inputs = new Operation[0];
             if (op.inputs.Length == 0)
@@ -421,16 +421,16 @@ namespace Tensorflow.Operations
 
             Enter();
             AddName(n.name);
-            var enter_n = _Enter(n, 
-                _name, 
-                is_constant: false, 
-                parallel_iterations: _parallel_iterations, 
+            var enter_n = _Enter(n,
+                _name,
+                is_constant: false,
+                parallel_iterations: _parallel_iterations,
                 name: "f_count");
             _loop_enters.Add(enter_n);
 
             var m1 = merge(new[] { enter_n, enter_n });
             var merge_n = m1[0];
-            var switch_n = @switch (merge_n, _pivot);
+            var switch_n = @switch(merge_n, _pivot);
 
             var index = math_ops.add(switch_n[1], 1);
             var next_n = _NextIteration(index);
@@ -471,7 +471,7 @@ namespace Tensorflow.Operations
             else
             {
                 var value = op.inputs[0];
-                if(outer_context is WhileContext wc)
+                if (outer_context is WhileContext wc)
                 {
                     // We are in a nested while loop.
                     var forward_ctxt = grad_state.forward_context;
@@ -567,7 +567,7 @@ namespace Tensorflow.Operations
             // before the pops of (i+1)-th execution of the same inner loop.
             if (outer_grad_state != null)
                 throw new NotImplementedException("outer_grad_state");
-                //outer_grad_state.grad_sync._add_control_input(final_zero.op);
+            //outer_grad_state.grad_sync._add_control_input(final_zero.op);
             ExitResult(new[] { final_zero });
             Exit();
             return next_count;
@@ -591,7 +591,7 @@ namespace Tensorflow.Operations
                 // use GetRealValue(), which adds the logic to save the history of
                 // val in forward.
                 var grad_ctxt = ops.get_default_graph()._get_control_flow_context();
-                if(grad_ctxt != null)
+                if (grad_ctxt != null)
                 {
                     grad_ctxt = grad_ctxt.GetWhileContext();
                     if (grad_ctxt.grad_state != null)
@@ -604,7 +604,7 @@ namespace Tensorflow.Operations
                                 forward_ctxt = forward_ctxt.GetWhileContext();
                             throw new NotImplementedException("control_flow_util.IsLoopExit");
                         }
-                        if(forward_ctxt == grad_ctxt.grad_state.forward_context)
+                        if (forward_ctxt == grad_ctxt.grad_state.forward_context)
                         {
                             var real_val = grad_ctxt.grad_state.GetRealValue(val);
                             _external_values[val.name] = real_val;

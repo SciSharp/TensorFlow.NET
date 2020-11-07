@@ -15,10 +15,8 @@
 ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Tensorflow
 {
@@ -77,7 +75,7 @@ namespace Tensorflow
 
         public void Dispose()
         {
-            lock(this)
+            lock (this)
             {
                 internal_dispose(true);
                 GC.SuppressFinalize(this);

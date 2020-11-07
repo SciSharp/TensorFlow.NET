@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Text;
-using NumSharp;
+﻿using System.Threading.Tasks;
 
 namespace Tensorflow
 {

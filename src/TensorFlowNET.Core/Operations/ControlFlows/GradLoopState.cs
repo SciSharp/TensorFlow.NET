@@ -17,7 +17,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using static Tensorflow.Binding;
 using util = Tensorflow.control_flow_util;
 
@@ -83,7 +82,7 @@ namespace Tensorflow.Operations.ControlFlows
         {
             get
             {
-                if(_grad_sync == null)
+                if (_grad_sync == null)
                 {
                     tf_with(ops.control_dependencies(null), delegate
                     {
@@ -201,7 +200,7 @@ namespace Tensorflow.Operations.ControlFlows
                     // Add the stack_push op in the context of value.op.
                     var swap_enabled = forward_context.swap_memory;
                     var value_ctxt = util.GetOutputContext(value.op);
-                    if(value_ctxt == forward_context)
+                    if (value_ctxt == forward_context)
                     {
                         // value is not nested in the forward context.
                         forward_context.Enter();
@@ -238,14 +237,14 @@ namespace Tensorflow.Operations.ControlFlows
         //      The current value (the top of the stack).
         //    """
 
-        public Tensor AddBackpropAccumulatedValue(Tensor history_value, Tensor value, bool dead_branch= false)
+        public Tensor AddBackpropAccumulatedValue(Tensor history_value, Tensor value, bool dead_branch = false)
         {
             var history_ctxt = history_value.op._get_control_flow_context();
             // Find the cond context that controls history_value if any.
             CondContext cond_ctxt = null;
             Tensor pop = null;
             var value_ctxt = value.op._get_control_flow_context();
-            while(value_ctxt != null && value_ctxt != history_ctxt)
+            while (value_ctxt != null && value_ctxt != history_ctxt)
             {
                 if (value_ctxt is CondContext cc)
                     cond_ctxt = cc;
@@ -254,7 +253,7 @@ namespace Tensorflow.Operations.ControlFlows
             tf_with(ops.control_dependencies(null), delegate
             {
                 grad_context.Enter();
-                if(cond_ctxt != null)
+                if (cond_ctxt != null)
                 {
                     throw new NotImplementedException("AddBackpropAccumulatedValue");
                 }
@@ -277,7 +276,7 @@ namespace Tensorflow.Operations.ControlFlows
         public Tensor GetRealValue(Tensor value)
         {
             Tensor real_value = null;
-            if(real_value == null)
+            if (real_value == null)
             {
                 var cur_value = value;
                 var cur_grad_state = this;
@@ -285,12 +284,12 @@ namespace Tensorflow.Operations.ControlFlows
                 while (true)
                 {
                     var enter_op = util.GetLoopConstantEnter(cur_value);
-                    if(enter_op != null)
+                    if (enter_op != null)
                     {
                         // Special case: cur_value comes from a constant Enter node.
                         cur_value = enter_op.inputs[0];
                         cur_grad_state = cur_grad_state.outer_grad_state;
-                        if(cur_grad_state == null)
+                        if (cur_grad_state == null)
                         {
                             // We are now outside all nested loops for this gradient(),
                             // so `value` is a loop invariant and there is no need to
@@ -320,7 +319,7 @@ namespace Tensorflow.Operations.ControlFlows
                     }
                 }
 
-                if(real_value == null)
+                if (real_value == null)
                 {
                     // Add the stack pop op in the grad context.
                     real_value = cur_grad_state.AddBackpropAccumulatedValue(history_value, cur_value);

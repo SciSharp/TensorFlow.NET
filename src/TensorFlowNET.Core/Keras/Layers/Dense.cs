@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
@@ -34,7 +33,7 @@ namespace Tensorflow.Keras.Layers
         IVariableV1 bias;
         Activation activation => args.Activation;
 
-        public Dense(DenseArgs args) : 
+        public Dense(DenseArgs args) :
             base(args)
         {
             this.args = args;
@@ -69,7 +68,7 @@ namespace Tensorflow.Keras.Layers
         {
             Tensor outputs = null;
             var rank = inputs.rank;
-            if(rank > 2)
+            if (rank > 2)
             {
                 throw new NotImplementedException("call rank > 2");
             }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NumSharp;
+using System;
 using System.Diagnostics;
-using System.Text;
-using NumSharp;
 
 namespace Tensorflow
 {
@@ -40,7 +38,7 @@ namespace Tensorflow
 
             var start = IndexInEpoch;
             // Shuffle for the first epoch
-            if(EpochsCompleted == 0 && start == 0 && shuffle)
+            if (EpochsCompleted == 0 && start == 0 && shuffle)
             {
                 var perm0 = np.arange(NumOfExamples);
                 np.random.shuffle(perm0);

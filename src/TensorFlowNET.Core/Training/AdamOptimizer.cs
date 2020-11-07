@@ -124,7 +124,7 @@ namespace Tensorflow.Train
             _create_non_slot_variable(initial_value: _beta2, name: "beta2_power", colocate_with: first_var);
 
             // Create slots for the first and second moments.
-            foreach(var v in var_list)
+            foreach (var v in var_list)
             {
                 _zeros_slot(v, "m", Name);
                 _zeros_slot(v, "v", Name);

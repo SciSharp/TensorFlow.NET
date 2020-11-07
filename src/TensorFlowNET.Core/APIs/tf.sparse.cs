@@ -52,7 +52,7 @@ namespace Tensorflow
             bool validate_indices = true,
             string name = null)
             => gen_sparse_ops.sparse_to_dense(sparse_indices,
-                output_shape, 
+                output_shape,
                 sparse_values,
                 default_value: default_value,
                 validate_indices: validate_indices,

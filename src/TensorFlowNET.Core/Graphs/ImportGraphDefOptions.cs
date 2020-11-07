@@ -22,7 +22,7 @@ namespace Tensorflow
     {
         public SafeImportGraphDefOptionsHandle Handle { get; }
 
-        public int NumReturnOutputs 
+        public int NumReturnOutputs
             => c_api.TF_ImportGraphDefOptionsNumReturnOutputs(Handle);
 
         public ImportGraphDefOptions()

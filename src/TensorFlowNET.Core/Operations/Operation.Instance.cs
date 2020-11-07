@@ -15,8 +15,6 @@
 ******************************************************************************/
 
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -31,7 +29,7 @@ namespace Tensorflow
         public Operation GetOperation(IntPtr handle)
         {
             var nodes = tf.get_default_graph()._nodes_by_name;
-            foreach(var node in nodes.Values)
+            foreach (var node in nodes.Values)
             {
                 if (node is Operation op)
                 {

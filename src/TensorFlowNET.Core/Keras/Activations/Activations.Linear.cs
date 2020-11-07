@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static Tensorflow.Binding;
-
-namespace Tensorflow.Keras
+﻿namespace Tensorflow.Keras
 {
     public partial class Activations
     {

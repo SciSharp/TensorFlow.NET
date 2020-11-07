@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
-using Tensorflow;
-using Tensorflow.Eager;
-using Tensorflow.Keras.ArgsDefinition;
 
 namespace Tensorflow.Keras.Optimizers
 {
@@ -89,8 +86,8 @@ namespace Tensorflow.Keras.Optimizers
             //         return var.assign(var.constraint(var))
         }
 
-        protected virtual Operation _resource_apply_dense(IVariableV1 var, 
-            Tensor grad, 
+        protected virtual Operation _resource_apply_dense(IVariableV1 var,
+            Tensor grad,
             Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
         {
             throw new NotImplementedException("_resource_apply_dense");
@@ -102,7 +99,7 @@ namespace Tensorflow.Keras.Optimizers
         {
             tf_with(ops.name_scope(name, "", new { skip_on_eager = true }), delegate
             {
-                foreach(var (grad, var) in grads_and_vars)
+                foreach (var (grad, var) in grads_and_vars)
                 {
                     tf_with(ops.name_scope("update"), delegate
                     {
@@ -139,7 +136,7 @@ namespace Tensorflow.Keras.Optimizers
                 DType = x.dtype.as_base_dtype()
             }).Distinct(new DeviceDType()).ToArray();
 
-            foreach(var device_dtype in keys)
+            foreach (var device_dtype in keys)
             {
                 _apply_state[device_dtype] = new Dictionary<string, Tensor>();
                 _prepare_local(device_dtype, _apply_state);
@@ -153,7 +150,7 @@ namespace Tensorflow.Keras.Optimizers
             throw new NotImplementedException("");
         }
 
-        protected virtual void _prepare_local(DeviceDType device_dtype, 
+        protected virtual void _prepare_local(DeviceDType device_dtype,
             Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
         {
             if (_hyper.ContainsKey("learning_rate"))
@@ -166,7 +163,7 @@ namespace Tensorflow.Keras.Optimizers
         Tensor _decayed_lr(TF_DataType var_dtype)
         {
             var lr_t = _get_hyper("learning_rate", var_dtype);
-            if(_initial_decay > 0.0f)
+            if (_initial_decay > 0.0f)
             {
                 throw new NotImplementedException("");
             }
@@ -181,12 +178,12 @@ namespace Tensorflow.Keras.Optimizers
 
         void _create_all_weights(IVariableV1[] var_list)
         {
-            if(_iterations == null)
+            if (_iterations == null)
             {
-                _iterations = add_weight("iter", 
-                    shape: new int[0], 
-                    dtype: TF_DataType.TF_INT64, 
-                    trainable: false, 
+                _iterations = add_weight("iter",
+                    shape: new int[0],
+                    dtype: TF_DataType.TF_INT64,
+                    trainable: false,
                     aggregation: VariableAggregation.OnlyFirstReplica);
                 _weights.Add(_iterations);
             }
@@ -220,7 +217,7 @@ namespace Tensorflow.Keras.Optimizers
 
         protected virtual void _create_slots(IVariableV1[] var_list)
         {
-            if(_momentum)
+            if (_momentum)
             {
                 /*for var in var_list:
                     self.add_slot(var, "momentum")*/

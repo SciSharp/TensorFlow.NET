@@ -1,7 +1,7 @@
-﻿using System;
+﻿using NumSharp;
+using System;
 using System.Linq;
 using System.Text;
-using NumSharp;
 using Tensorflow.Contrib.Learn.Estimators;
 
 namespace Tensorflow.Framework

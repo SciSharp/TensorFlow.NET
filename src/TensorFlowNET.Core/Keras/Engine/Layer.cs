@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
@@ -46,7 +45,7 @@ namespace Tensorflow.Keras.Engine
         protected bool built;
         public bool Trainable => args.Trainable;
         public TF_DataType DType => args.DType;
-        
+
         /// <summary>
         /// A stateful layer is a layer whose updates are run during inference too,
         /// for instance stateful RNNs.
@@ -68,7 +67,7 @@ namespace Tensorflow.Keras.Engine
         protected string name;
         protected string base_name;
         public string Name => name;
-        
+
         protected bool computePreviousMask;
         protected List<Operation> updates;
         public TensorShape BatchInputShape => args.BatchInputShape;
@@ -113,7 +112,7 @@ namespace Tensorflow.Keras.Engine
 
         bool _in_functional_construction_mode(Tensors inputs)
         {
-            return tf.Context.executing_eagerly() 
+            return tf.Context.executing_eagerly()
                 && inputs.Count(x => !x.IsEagerTensor) == inputs.Count();
         }
 
@@ -179,7 +178,7 @@ namespace Tensorflow.Keras.Engine
             tf.Context.eager_mode();
             build(inputs.shape);
             tf.Context.restore_mode();
-            
+
             built = true;
         }
 
@@ -190,7 +189,7 @@ namespace Tensorflow.Keras.Engine
 
         protected virtual void add_loss(Func<Tensor> losses)
         {
-            
+
         }
 
         /// <summary>
@@ -203,7 +202,7 @@ namespace Tensorflow.Keras.Engine
         {
             add_loss(() => regularizer.Apply(new RegularizerArgs
             {
-                
+
             }));
         }
 

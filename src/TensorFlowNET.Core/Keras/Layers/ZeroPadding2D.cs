@@ -1,7 +1,4 @@
 ﻿using NumSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
@@ -21,7 +18,7 @@ namespace Tensorflow.Keras.Layers
         NDArray padding;
         InputSpec input_spec;
 
-        public ZeroPadding2D(ZeroPadding2DArgs args, string data_format = null) 
+        public ZeroPadding2D(ZeroPadding2DArgs args, string data_format = null)
             : base(args)
         {
             this.data_format = conv_utils.normalize_data_format(data_format);

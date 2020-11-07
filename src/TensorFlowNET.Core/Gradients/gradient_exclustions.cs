@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Gradients
+﻿namespace Tensorflow.Gradients
 {
     public class gradient_exclustions
     {

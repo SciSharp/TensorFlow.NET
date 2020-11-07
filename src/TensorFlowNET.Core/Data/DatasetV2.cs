@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Framework.Models;
 
 namespace Tensorflow
@@ -18,9 +17,9 @@ namespace Tensorflow
         public TensorSpec[] structure { get; set; }
 
         public TensorShape[] output_shapes => structure.Select(x => x.shape).ToArray();
-        
+
         public TF_DataType[] output_types => structure.Select(x => x.dtype).ToArray();
-        
+
         public TensorSpec[] element_spec => structure;
 
         public IDatasetV2 cache(string filename = "")
@@ -54,7 +53,7 @@ namespace Tensorflow
             bool use_inter_op_parallelism = true,
             bool preserve_cardinality = true,
             bool use_legacy_function = false)
-            => new MapDataset(this, 
+            => new MapDataset(this,
                 map_func,
                 use_inter_op_parallelism: use_inter_op_parallelism,
                 preserve_cardinality: preserve_cardinality,

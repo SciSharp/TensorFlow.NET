@@ -16,7 +16,6 @@
 
 using System;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -37,8 +36,8 @@ namespace Tensorflow
             Func<Tensor, string, Tensor> activation = null,
             bool? reuse = null,
             string name = null,
-            TF_DataType dtype = TF_DataType.DtInvalid) : base(_reuse: reuse, 
-                name: name, 
+            TF_DataType dtype = TF_DataType.DtInvalid) : base(_reuse: reuse,
+                name: name,
                 dtype: dtype)
         {
             // Inputs must be 2-dimensional.

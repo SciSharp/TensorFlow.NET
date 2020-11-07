@@ -39,10 +39,10 @@ namespace Tensorflow.Operations.Initializers
             if (args.DType == TF_DataType.DtInvalid)
                 args.DType = dtype;
 
-            return random_ops.random_uniform(args.Shape, 
-                minval: minval, 
-                maxval: maxval, 
-                dtype: dtype, 
+            return random_ops.random_uniform(args.Shape,
+                minval: minval,
+                maxval: maxval,
+                dtype: dtype,
                 seed: seed);
         }
     }

@@ -32,14 +32,14 @@ namespace Tensorflow
             public IVariableV1 get_global_step(Graph graph)
                 => TrainingUtil.get_global_step(graph);
 
-            public Optimizer GradientDescentOptimizer(float learning_rate) 
+            public Optimizer GradientDescentOptimizer(float learning_rate)
                 => new GradientDescentOptimizer(learning_rate);
 
             public Optimizer GradientDescentOptimizer(Tensor learning_rate)
                 => new GradientDescentOptimizer(learning_rate);
 
-            public Optimizer AdamOptimizer(float learning_rate, float epsilon = 1e-8f, string name = "Adam") 
-                => new AdamOptimizer(learning_rate, epsilon:epsilon, name: name);
+            public Optimizer AdamOptimizer(float learning_rate, float epsilon = 1e-8f, string name = "Adam")
+                => new AdamOptimizer(learning_rate, epsilon: epsilon, name: name);
 
             public Optimizer AdamOptimizer(float learning_rate, TF_DataType dtype, string name = "Adam")
                 => new AdamOptimizer(learning_rate, name: name, dtype: dtype);
@@ -53,10 +53,10 @@ namespace Tensorflow
             public ExponentialMovingAverage ExponentialMovingAverage(float decay)
                 => new ExponentialMovingAverage(decay);
 
-            public Saver Saver(IVariableV1[] var_list = null, int max_to_keep = 5) 
+            public Saver Saver(IVariableV1[] var_list = null, int max_to_keep = 5)
                 => new Saver(var_list: var_list, max_to_keep: max_to_keep);
 
-            public string write_graph(Graph graph, string logdir, string name, bool as_text = true) 
+            public string write_graph(Graph graph, string logdir, string name, bool as_text = true)
                 => graph_io.write_graph(graph, logdir, name, as_text);
 
             public Graph load_graph(string freeze_graph_pb)

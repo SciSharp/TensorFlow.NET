@@ -29,7 +29,7 @@ namespace Tensorflow
             var consumers = new string[num_consumers];
             unsafe
             {
-                var inputptr = (TF_Input*) handle;
+                var inputptr = (TF_Input*)handle;
                 for (int i = 0; i < num; i++)
                 {
                     var oper = (inputptr + i)->oper;

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -8,7 +6,7 @@ namespace Tensorflow.Keras.Engine
     {
         public void Dispose()
         {
-            
+
         }
     }
 }

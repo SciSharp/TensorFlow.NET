@@ -41,7 +41,7 @@ namespace Tensorflow.Gradients
                                               keepdims: true);
             var updates_grad = array_ops.reshape(updates_grad_reshaped, input_value_shape);
 
-            return new Tensor[] 
+            return new Tensor[]
             {
                 updates_grad,
                 null
@@ -117,7 +117,7 @@ namespace Tensorflow.Gradients
                         new Tensor[] { non_neg_concat_dim, tf.constant(0) },
                         new Tensor[] { tf.constant(1), tf.constant(-1) });
                 var squeeze_sizes = array_ops.squeeze(slice);
-                out_grads = array_ops.split(axis: grad, value: squeeze_sizes, num_split:(int)non_neg_concat_dim).ToList();
+                out_grads = array_ops.split(axis: grad, value: squeeze_sizes, num_split: (int)non_neg_concat_dim).ToList();
             }
             else
             {
@@ -126,8 +126,8 @@ namespace Tensorflow.Gradients
                     out_grads.Add(gen_array_ops.slice(grad, begin, size));
             }
 
-            return (end_value_index <= dim_index ? 
-                out_grads.ToArray().Concat(new Tensor[] { null }) : 
+            return (end_value_index <= dim_index ?
+                out_grads.ToArray().Concat(new Tensor[] { null }) :
                 new Tensor[] { null }.Concat(out_grads)).ToArray();
         }
 
@@ -146,7 +146,7 @@ namespace Tensorflow.Gradients
         {
             var sizes = new Tensor[inputs.Length];
             bool fully_known = true;
-            for(int i = 0; i < inputs.Length; i++)
+            for (int i = 0; i < inputs.Length; i++)
             {
                 var x = inputs[i];
 
@@ -157,7 +157,7 @@ namespace Tensorflow.Gradients
                     break;
                 }
 
-              sizes[i] = input_shape;
+                sizes[i] = input_shape;
             }
 
             if (fully_known)
@@ -188,9 +188,9 @@ namespace Tensorflow.Gradients
             var axis_static = tensor_util.constant_value(axis);
 
             // For axis 0 gathers, build an appropriately shaped IndexedSlices.
-            if((int)axis_static == 0)
+            if ((int)axis_static == 0)
             {
-                var params_tail_shape = params_shape.slice(new NumSharp.Slice(start:1));
+                var params_tail_shape = params_shape.slice(new NumSharp.Slice(start: 1));
                 var values_shape = array_ops.concat(new[] { indices_size, params_tail_shape }, 0);
                 var values = array_ops.reshape(grad, values_shape);
                 indices = array_ops.reshape(indices, indices_size);
@@ -250,10 +250,10 @@ namespace Tensorflow.Gradients
             var before_pad = array_ops.reshape(begin_vec, shape);
             var after_pad = array_ops.reshape(array_ops.shape(input_vec) - slice_size - begin_vec, shape);
             var paddings = array_ops.concat(new Tensor[] { before_pad, after_pad }, 1);
-            return new Tensor[] 
+            return new Tensor[]
             {
-                array_ops.pad(grad, paddings), 
-                null, 
+                array_ops.pad(grad, paddings),
+                null,
                 null
             };
         }
@@ -267,7 +267,7 @@ namespace Tensorflow.Gradients
         [RegisterGradient("StopGradient")]
         public static Tensor[] _NoGradient(Operation op, Tensor[] grads)
         {
-            return new Tensor[] {null};
+            return new Tensor[] { null };
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace Tensorflow.Gradients
 
             var x = array_ops.shape(op.inputs[0], out_type: begin.dtype);
 
-            return new Tensor[] 
+            return new Tensor[]
             {
                 gen_array_ops.strided_slice_grad(
                     x,
@@ -313,7 +313,7 @@ namespace Tensorflow.Gradients
             var end = op.inputs[2];
             var strides = op.inputs[3];
 
-            return new Tensor[] 
+            return new Tensor[]
             {
                 null,
                 null,

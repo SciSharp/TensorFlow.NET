@@ -40,7 +40,7 @@ namespace Tensorflow
                 name = scope;
                 int np = 1;
                 ids = ops.convert_to_tensor(ids, name: "ids");
-                if(np == 1)
+                if (np == 1)
                 {
                     var gather = array_ops.gather(@params, ids, name: name);
                     var result = _clip(gather, ids, max_norm);
@@ -118,8 +118,8 @@ namespace Tensorflow
             throw new NotImplementedException("_clip");
         }
 
-        public static Tensor embedding_lookup(Tensor[] @params, Tensor ids, 
-            string partition_strategy = "mod", 
+        public static Tensor embedding_lookup(Tensor[] @params, Tensor ids,
+            string partition_strategy = "mod",
             string name = null,
             bool validate_indices = true,
             string max_norm = null)

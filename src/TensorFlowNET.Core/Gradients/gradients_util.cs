@@ -108,10 +108,10 @@ namespace Tensorflow
                         }
                     }
 
-                    if(loop_state != null)
+                    if (loop_state != null)
                     {
                         var loop_exits = loop_state.ProcessUnusedLoopExits(pending_count, to_ops_set);
-                        foreach(var y in loop_exits)
+                        foreach (var y in loop_exits)
                         {
                             //if(IsTrainable(y))
                             throw new NotImplementedException("");
@@ -236,7 +236,7 @@ namespace Tensorflow
                             if (loop_state != null)
                                 loop_state.ExitGradWhileContext(op, before: false);
                         }
-                        
+
                         // Update pending count for the inputs of op and enqueue ready ops.
                         _UpdatePendingAndEnqueueReady(grads, op, queue, pending_count, loop_state, xs);
                     }
@@ -376,7 +376,7 @@ namespace Tensorflow
                 yield return op.inputs[i];
         }
 
-        private static List<List<Tensor>> _AggregatedGrads(Dictionary<string, List<List<Tensor>>> grads, Operation op, string gradient_uid, 
+        private static List<List<Tensor>> _AggregatedGrads(Dictionary<string, List<List<Tensor>>> grads, Operation op, string gradient_uid,
             ControlFlowState loop_state, int aggregation_method = 0)
         {
             var out_grads = _GetGrads(grads, op);
@@ -385,8 +385,8 @@ namespace Tensorflow
             {
                 if (loop_state != null)
                 {
-                    if (out_grads.Count > 1 && 
-                        out_grads[1].Count > 0 && 
+                    if (out_grads.Count > 1 &&
+                        out_grads[1].Count > 0 &&
                         control_flow_util.IsLoopSwitch(op))
                         continue;
                 }
@@ -610,7 +610,7 @@ namespace Tensorflow
                         if (grad_state.pending_exits_count == 0)
                         {
                             var has_not_none_grad = false;
-                            foreach(var y in grad_state.deferred_exits)
+                            foreach (var y in grad_state.deferred_exits)
                             {
                                 if (_HasAnyNotNoneGrads(grads, y.op))
                                 {
@@ -664,7 +664,7 @@ namespace Tensorflow
         private static bool _HasAnyNotNoneGrads(Dictionary<string, List<List<Tensor>>> grads, Operation op)
         {
             var out_grads = _GetGrads(grads, op);
-            foreach(var out_grad in out_grads)
+            foreach (var out_grad in out_grads)
             {
                 if (out_grad.Exists(g => g != null))
                     return true;

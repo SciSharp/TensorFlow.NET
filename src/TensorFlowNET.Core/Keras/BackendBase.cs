@@ -49,7 +49,7 @@ namespace Tensorflow.Keras
             else if (isinstance(value, typeof(string)))
             {
                 ImageDataFormat dataFormat;
-                if(Enum.TryParse((string)value, true, out dataFormat))
+                if (Enum.TryParse((string)value, true, out dataFormat))
                 {
                     if (Enum.IsDefined(typeof(ImageDataFormat), dataFormat) | dataFormat.ToString().Contains(","))
                         return dataFormat;
@@ -67,7 +67,7 @@ namespace Tensorflow.Keras
             else if (dim_ordering == ImageDimOrder.tf)
                 _IMAGE_DATA_FORMAT = ImageDataFormat.channels_last;
             else
-                throw new Exception("Unknown dim_ordering:"+ dim_ordering);
+                throw new Exception("Unknown dim_ordering:" + dim_ordering);
         }
 
         public ImageDimOrder image_dim_ordering()

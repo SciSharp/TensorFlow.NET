@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Tensorflow.Keras;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Datasets;
@@ -9,7 +6,6 @@ using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {

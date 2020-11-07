@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Keras.Losses
+﻿namespace Tensorflow.Keras.Losses
 {
     public class ReductionV2
     {

@@ -14,10 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
-using System.Linq;
-using System;
-using static Tensorflow.Binding;
 using Tensorflow.Contexts;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {

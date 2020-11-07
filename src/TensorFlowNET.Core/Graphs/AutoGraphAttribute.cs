@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow.Eager;
-using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Graphs
@@ -23,19 +21,19 @@ namespace Tensorflow.Graphs
 
             if (functions.ContainsKey(func_name))
             {
-                if(args.Arguments[0] is Tensors tensor_inputs)
+                if (args.Arguments[0] is Tensors tensor_inputs)
                     args.ReturnValue = functions[func_name](tensor_inputs.ToArray());
                 else
                     args.ReturnValue = functions[func_name](args.Arguments.Select(x => x as Tensor).ToArray());
                 args.FlowBehavior = FlowBehavior.Return;
                 return;
-            }   
-            
+            }
+
             // make function as an Operation by autograph
             graph = new FuncGraph(func_name);
 
             // convert to Tensors
-            if(args.Arguments[0] is Tensors inputs)
+            if (args.Arguments[0] is Tensors inputs)
             {
                 originalInputs = inputs;
                 var new_inputs = inputs.Select(x => tf.placeholder(x.dtype, shape: x.TensorShape)).ToArray();
@@ -62,7 +60,7 @@ namespace Tensorflow.Graphs
 
             if (args.ReturnValue is Tensors outputs)
             {
-                if(args.Arguments[0] is Tensors inputs)
+                if (args.Arguments[0] is Tensors inputs)
                 {
                     graph.ToGraph(opers,
                         inputs.Select(x => x.op).ToArray(),

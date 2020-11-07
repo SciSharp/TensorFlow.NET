@@ -1,12 +1,6 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using NumSharp.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
@@ -55,14 +49,14 @@ namespace Tensorflow.Gradients
         private void _push_tape()
         {
             if (_recording)
-                throw new ValueError("Tape is still recording, This can happen if you try to " + 
+                throw new ValueError("Tape is still recording, This can happen if you try to " +
                     "re-enter an already-active tape.");
 
             if (_tape == null)
                 _tape = new Tape(_persistent, _watch_accessed_variables);
             else
                 tf.GetTapeSet().Add(_tape);
-           
+
             _recording = true;
         }
 
@@ -127,9 +121,9 @@ namespace Tensorflow.Gradients
                     _pop_tape();
             }
 
-            var results = tf.Runner.TFE_TapeGradient(_tape, 
-                new[] { target }, 
-                sources.Select(x => x.Handle).ToArray(), 
+            var results = tf.Runner.TFE_TapeGradient(_tape,
+                new[] { target },
+                sources.Select(x => x.Handle).ToArray(),
                 null);
 
             if (!_persistent)

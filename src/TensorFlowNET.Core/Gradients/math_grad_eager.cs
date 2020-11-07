@@ -14,12 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
 using System;
 using System.Linq;
 using Tensorflow.Eager;
-using Tensorflow.Operations;
-using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
 {

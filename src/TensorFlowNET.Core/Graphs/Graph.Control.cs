@@ -17,7 +17,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Tensorflow.Eager;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
@@ -97,7 +96,7 @@ namespace Tensorflow
                     //case IndexedSlices islice:
                     //    control_ops.Add(islice.op);
                     //    break;
-                    case Tensor t:                       
+                    case Tensor t:
                         control_ops.Add(t.op);
                         break;
                     case Operation op:
@@ -139,7 +138,7 @@ namespace Tensorflow
 
         public void _pop_control_dependencies_controller(_ControlDependenciesController controller)
         {
-            _control_dependencies_stack.RemoveAt(_control_dependencies_stack.Count-1);
+            _control_dependencies_stack.RemoveAt(_control_dependencies_stack.Count - 1);
         }
 
         /// <summary>

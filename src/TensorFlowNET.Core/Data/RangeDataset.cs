@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.Framework.Models;
+﻿using Tensorflow.Framework.Models;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Data
@@ -12,8 +9,8 @@ namespace Tensorflow.Data
         Tensor step;
         Tensor stop;
 
-        public RangeDataset(int stop, 
-            int start = 0, 
+        public RangeDataset(int stop,
+            int start = 0,
             int step = 1,
             TF_DataType output_type = TF_DataType.TF_INT64)
         {

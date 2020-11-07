@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using static Tensorflow.Binding;
+﻿using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Losses
 {
@@ -10,8 +6,8 @@ namespace Tensorflow.Keras.Losses
     {
         public SparseCategoricalCrossentropy(bool from_logits = false,
             string reduction = ReductionV2.AUTO,
-            string name = "sparse_categorical_crossentropy") : 
-            base(reduction: reduction, 
+            string name = "sparse_categorical_crossentropy") :
+            base(reduction: reduction,
                 name: name)
         {
 
