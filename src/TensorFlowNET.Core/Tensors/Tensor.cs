@@ -58,7 +58,7 @@ namespace Tensorflow
         ///     The Operation that produces this tensor as an output.
         /// </summary>
         public Operation op => _op;
-        public Tensor[] outputs => op.outputs;
+        public Tensor[] outputs => op?.outputs;
 
         /// <summary>
         /// The string name of this tensor.<br/>

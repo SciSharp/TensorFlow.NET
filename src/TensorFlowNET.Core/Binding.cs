@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace Tensorflow
 {
     public static partial class Binding
     {
+        [DebuggerNonUserCode]
         public static tensorflow tf { get; } = New<tensorflow>();
 
         /// <summary>

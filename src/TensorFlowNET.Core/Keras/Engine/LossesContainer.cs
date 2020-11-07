@@ -16,7 +16,6 @@ namespace Tensorflow.Keras.Engine
         Mean _loss_metric;
         bool _built;
         Tensor[] _per_output_metrics;
-        List<Tensor> loss_values;
         List<Tensor> loss_metric_values;
 
         public LossesContainer(ILossFunc losses, string[] output_names = null) 
@@ -25,7 +24,6 @@ namespace Tensorflow.Keras.Engine
             _user_losses = losses;
             _losses = losses;
             _loss_metric = new Mean(name: "loss");
-            loss_values = new List<Tensor>();
             loss_metric_values = new List<Tensor>();
             _built = false;
         }
@@ -37,15 +35,17 @@ namespace Tensorflow.Keras.Engine
         /// <param name="y_pred"></param>
         public Tensor Call(Tensor y_true, Tensor y_pred)
         {
-            Build(y_pred);
+            if (!_built)
+                Build(y_pred);
             var loss_value = _losses.Call(y_true, y_pred);
             var loss_metric_value = loss_value;
             var batch_dim = array_ops.shape(y_true)[0];
 
+            var loss_values = new List<Tensor>();
+
             /*if (_losses.Reduction == ReductionV2.SUM_OVER_BATCH_SIZE
                 || _losses.Reduction == ReductionV2.AUTO)
                 loss_value = losses_utils.scale_loss_for_distribution(loss_value);*/
-
             loss_values.append(loss_value);
             loss_metric_values.append(loss_metric_value);
 

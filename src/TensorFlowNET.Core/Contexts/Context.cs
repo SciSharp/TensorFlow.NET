@@ -65,6 +65,7 @@ namespace Tensorflow.Contexts
         /// Checks whether the current thread has eager execution enabled.
         /// </summary>
         /// <returns></returns>
+        [DebuggerStepThrough]
         public bool executing_eagerly()
             => context_switches.Current().EagerMode;
 

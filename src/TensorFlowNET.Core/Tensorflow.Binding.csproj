@@ -25,7 +25,11 @@ https://tensorflownet.readthedocs.io</Description>
 * Eager Mode is added finally.
 * tf.keras is partially working. 
 * tf.data is added.
-* autograph works partially.</PackageReleaseNotes>
+* autograph works partially.
+
+TensorFlow .NET v0.30 is focused on making more Keras API work including:
+* tf.keras.datasets
+* Building keras model in subclass, functional and sequential api</PackageReleaseNotes>
     <FileVersion>0.30.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
