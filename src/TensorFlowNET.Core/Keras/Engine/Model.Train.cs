@@ -16,7 +16,7 @@ namespace Tensorflow.Keras.Engine
             var data = iterator.next();
             var outputs = train_step(data[0], data[1]);
             tf_with(ops.control_dependencies(new object[0]), ctl => _train_counter.assign_add(1));
-            throw new NotImplementedException("");
+            return null;
         }
 
         /// <summary>
@@ -38,7 +38,6 @@ namespace Tensorflow.Keras.Engine
             // The _minimize call does a few extra steps unnecessary in most cases,
             // such as loss scaling and gradient clipping.
             _minimize(tape, optimizer, loss, trainable_variables);
-
             compiled_metrics.update_state(y, y_pred);
             return new[] { ("loss", loss) };
         }

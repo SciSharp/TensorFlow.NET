@@ -67,6 +67,21 @@ namespace Tensorflow
                 name: name);
         }
 
+        public static Tensor assign(IVariableV1 @ref, object value,
+            bool validate_shape = true,
+            bool use_locking = true,
+            string name = null)
+        {
+            if (@ref.dtype.is_ref_dtype())
+                return gen_state_ops.assign(@ref,
+                    value,
+                    validate_shape: validate_shape,
+                    use_locking: use_locking,
+                    name: name);
+            else
+                return @ref.assign(value, name: name);
+        }
+
         public static Tensor assign_sub(IVariableV1 @ref,
             Tensor value,
             bool use_locking = false,

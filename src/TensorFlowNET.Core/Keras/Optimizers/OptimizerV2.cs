@@ -71,7 +71,7 @@ namespace Tensorflow.Keras.Optimizers
                     return control_flow_ops.no_op();
 
                 var apply_state = _prepare(var_list);
-                if(experimental_aggregate_gradients)
+                // if(experimental_aggregate_gradients)
                 {
                     // var reduced_grads = _aggregate_gradients(grads_and_vars);
                     _distributed_apply(grads_and_vars, name, apply_state);
@@ -84,6 +84,9 @@ namespace Tensorflow.Keras.Optimizers
         void apply_grad_to_update_var(ResourceVariable var, Tensor grad, Dictionary<DeviceDType, Dictionary<string, Tensor>> apply_state)
         {
             _resource_apply_dense(var, grad, apply_state);
+            // if var.constraint is not None:
+            //     with ops.control_dependencies([update_op]):
+            //         return var.assign(var.constraint(var))
         }
 
         protected virtual Operation _resource_apply_dense(IVariableV1 var, 
