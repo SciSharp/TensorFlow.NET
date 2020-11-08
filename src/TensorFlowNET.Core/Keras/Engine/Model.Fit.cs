@@ -1,5 +1,7 @@
 ﻿using NumSharp;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 
@@ -51,17 +53,24 @@ namespace Tensorflow.Keras.Engine
 
             stop_training = false;
             _train_counter.assign(0);
-
+            bool first_step = true;
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
                 // reset_metrics();
                 // callbacks.on_epoch_begin(epoch)
                 // data_handler.catch_stop_iteration();
+                IEnumerable<(string, Tensor)> results = null;
                 foreach (var step in data_handler.steps())
                 {
                     // callbacks.on_train_batch_begin(step)
-                    step_function(iterator);
+                    results = step_function(iterator);
+                    if (first_step)
+                    {
+                        Console.WriteLine($"epoch: {epoch}, " + string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2}")));
+                        first_step = false;
+                    }
                 }
+                Console.WriteLine($"epoch: {epoch + 1}, " + string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2}")));
             }
         }
     }

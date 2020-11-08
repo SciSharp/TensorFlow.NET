@@ -49,6 +49,12 @@ namespace Tensorflow
         public static void add<T>(this IList<T> list, T element)
             => list.Add(element);
 
+        public static void add<T>(this IList<T> list, IEnumerable<T> elements)
+        {
+            foreach (var ele in elements)
+                list.Add(ele);
+        }
+
         public static void append<T>(this IList<T> list, T element)
             => list.Insert(list.Count, element);
 

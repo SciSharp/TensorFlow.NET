@@ -11,7 +11,6 @@ namespace Tensorflow.Keras.Engine
         Mean _loss_metric;
         bool _built;
         Tensor[] _per_output_metrics;
-        List<Tensor> loss_metric_values;
 
         public LossesContainer(ILossFunc losses, string[] output_names = null)
             : base(output_names)
@@ -19,7 +18,6 @@ namespace Tensorflow.Keras.Engine
             _user_losses = losses;
             _losses = losses;
             _loss_metric = new Mean(name: "loss");
-            loss_metric_values = new List<Tensor>();
             _built = false;
         }
 
@@ -37,6 +35,7 @@ namespace Tensorflow.Keras.Engine
             var batch_dim = array_ops.shape(y_true)[0];
 
             var loss_values = new List<Tensor>();
+            var loss_metric_values = new List<Tensor>();
 
             /*if (_losses.Reduction == ReductionV2.SUM_OVER_BATCH_SIZE
                 || _losses.Reduction == ReductionV2.AUTO)
@@ -68,6 +67,17 @@ namespace Tensorflow.Keras.Engine
         void _create_metrics()
         {
             // _per_output_metrics = _output_names.Select(x => null);
+        }
+
+        public IEnumerable<Metric> metrics
+        {
+            get
+            {
+                if (!_built)
+                    return new List<Metric>();
+
+                return new[] { _loss_metric };
+            }
         }
     }
 }

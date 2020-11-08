@@ -68,6 +68,9 @@ namespace Tensorflow
             return gen_math_ops.add_n(inputs, name: name);
         }
 
+        public static Tensor argmax(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+            => gen_math_ops.arg_max(input, dimension, output_type: output_type, name: name);
+
         public static Tensor round(Tensor x, string name = null)
         {
             x = ops.convert_to_tensor(x, name: "x");

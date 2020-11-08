@@ -5,6 +5,7 @@ using Tensorflow.Keras.Datasets;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Losses;
+using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Optimizers;
 
 namespace Tensorflow
@@ -20,6 +21,7 @@ namespace Tensorflow
         public Preprocessing preprocessing { get; } = new Preprocessing();
         public BackendImpl backend { get; } = new BackendImpl();
         public OptimizerApi optimizers { get; } = new OptimizerApi();
+        public MetricsApi metrics { get; } = new MetricsApi();
 
         public Sequential Sequential(List<Layer> layers = null,
                 string name = null)

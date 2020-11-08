@@ -9,11 +9,6 @@ namespace Tensorflow.Keras.Metrics
     /// </summary>
     public class Reduce : Metric
     {
-        IVariableV1 total;
-        IVariableV1 count;
-        string _reduction;
-        TF_DataType _dtype;
-
         public Reduce(string reduction, string name, TF_DataType dtype = TF_DataType.DtInvalid)
             : base(name: name, dtype: dtype)
         {
@@ -43,11 +38,18 @@ namespace Tensorflow.Keras.Metrics
             var value_sum = math_ops.reduce_sum(values);
             tf_with(ops.control_dependencies(new[] { value_sum }), ctl =>
             {
-                var update_total_op = total.assign_add(value_sum);
+                update_total_op = total.assign_add(value_sum);
             });
 
+            // Exit early if the reduction doesn't have a denominator.
+            if (_reduction == Reduction.SUM)
+                return update_total_op;
+
+            // Update `count` for reductions that require a denominator.
             Tensor num_values = null;
-            if (_reduction == ReductionV2.WEIGHTED_MEAN)
+            if (_reduction == Reduction.SUM_OVER_BATCH_SIZE)
+                num_values = math_ops.cast(array_ops.size(values), _dtype);
+            else if (_reduction == ReductionV2.WEIGHTED_MEAN)
             {
                 if (sample_weight == null)
                     num_values = math_ops.cast(array_ops.size(values), _dtype);
@@ -57,6 +59,16 @@ namespace Tensorflow.Keras.Metrics
 
             return tf_with(ops.control_dependencies(new[] { update_total_op }), ctl
                 => count.assign_add(num_values));
+        }
+
+        public override Tensor result()
+        {
+            if (_reduction == Reduction.SUM)
+                return array_ops.identity(total.AsTensor());
+            else if (_reduction == Reduction.WEIGHTED_MEAN || _reduction == Reduction.SUM_OVER_BATCH_SIZE)
+                return math_ops.div_no_nan(total.AsTensor(), count.AsTensor());
+
+            return base.result();
         }
     }
 }

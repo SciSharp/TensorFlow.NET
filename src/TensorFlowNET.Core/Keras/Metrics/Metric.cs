@@ -10,6 +10,11 @@ namespace Tensorflow.Keras.Metrics
     /// </summary>
     public class Metric : Layer
     {
+        protected IVariableV1 total;
+        protected IVariableV1 count;
+        protected string _reduction;
+        protected TF_DataType _dtype;
+
         public Metric(string name = null, TF_DataType dtype = TF_DataType.DtInvalid)
             : base(new LayerArgs
             {
@@ -44,5 +49,14 @@ namespace Tensorflow.Keras.Metrics
                     aggregation: aggregation);
             });
         }
+
+        public virtual Tensor update_state(Tensor y_true, Tensor y_pred, Tensor sample_weight = null)
+            => throw new NotImplementedException("");
+
+        public virtual Tensor result()
+            => throw new NotImplementedException("");
+
+        public override string ToString()
+            => $"{name} {(float)total.numpy()}/{(float)count.numpy()}";
     }
 }

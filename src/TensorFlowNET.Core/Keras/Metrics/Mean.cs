@@ -5,7 +5,7 @@
     /// </summary>
     public class Mean : Reduce
     {
-        public Mean(string name = "mean", TF_DataType dtype = TF_DataType.DtInvalid)
+        public Mean(string name = "mean", TF_DataType dtype = TF_DataType.TF_FLOAT)
             : base(Reduction.WEIGHTED_MEAN, name, dtype: dtype)
         {
 
