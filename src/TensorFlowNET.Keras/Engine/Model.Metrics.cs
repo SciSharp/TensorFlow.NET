@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Tensorflow.Keras.Metrics;
-using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -19,7 +18,7 @@ namespace Tensorflow.Keras.Engine
                         _metrics.add(compiled_metrics.metrics);
                 }
 
-                foreach(var layer in _flatten_layers())
+                foreach (var layer in _flatten_layers())
                 {
                     // _metrics.extend(layer.metrics);
                 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Datasets;
 using Tensorflow.Keras.Engine;

@@ -1,5 +1,4 @@
-﻿using static Tensorflow.Binding;
-using static Tensorflow.KerasExt;
+﻿using static Tensorflow.KerasExt;
 
 namespace Tensorflow.Keras
 {

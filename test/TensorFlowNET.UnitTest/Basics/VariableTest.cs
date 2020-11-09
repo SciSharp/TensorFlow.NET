@@ -1,8 +1,5 @@
-﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.Basics

@@ -242,9 +242,9 @@ namespace Tensorflow
                  image = ops.convert_to_tensor(image, name: "image");
                  image = _AssertAtLeast3DImage(image);
 
-                // can't get k to convert to tensor without throwing error about it being an int---
-                // might rework later. for now, k2 == k as Tensor
-                Tensor k2 = ops.convert_to_tensor(k, dtype: dtypes.int32, name: "k");
+                 // can't get k to convert to tensor without throwing error about it being an int---
+                 // might rework later. for now, k2 == k as Tensor
+                 Tensor k2 = ops.convert_to_tensor(k, dtype: dtypes.int32, name: "k");
                  k2.TensorShape.assert_has_rank(0);
                  k2 = gen_ops.mod(k2, tf.constant(4));
 
@@ -465,8 +465,8 @@ or rank = 4. Had rank = {0}", rank));
 
                  var assert_ops = _CheckAtLeast3DImage(image, require_static: false);
 
-                // batch: [0], height: [1], width: [2], depth: [3]
-                int[] bhwd = _ImageDimensions(image, rank: 4);
+                 // batch: [0], height: [1], width: [2], depth: [3]
+                 int[] bhwd = _ImageDimensions(image, rank: 4);
 
                  var after_padding_width = target_width - offset_width - bhwd[2];
 
@@ -544,8 +544,8 @@ or rank = 4. Had rank = {0}", rank));
 
                  var assert_ops = _CheckAtLeast3DImage(image, require_static: false);
 
-                // batch: [0], height: [1], width: [2], depth: [3]
-                int[] bhwd = _ImageDimensions(image, rank: 4);
+                 // batch: [0], height: [1], width: [2], depth: [3]
+                 int[] bhwd = _ImageDimensions(image, rank: 4);
 
                  assert_ops[assert_ops.Length] = _assert(check_ops.assert_greater_equal(tf.constant(offset_height),
                                                          tf.constant(0)), typeof(ValueError),
@@ -976,7 +976,7 @@ new_height, new_width");
 
                  image = image - image_mean;
                  image = tf.div(image, adjusted_stddev, name: scope); // name: scope in python version
-                return convert_image_dtype(image, orig_dtype, saturate: true);
+                 return convert_image_dtype(image, orig_dtype, saturate: true);
              });
         }
 
@@ -1177,9 +1177,9 @@ new_height, new_width");
                  image = ops.convert_to_tensor(image, name: "image");
                  var channels = image.TensorShape.as_list()[image.TensorShape.dims.Length - 1];
                  var orig_dtype = image.dtype;
-                // python code checks to ensure jpeq_quality is a tensor; unnecessary here since
-                // it is passed as a tensor
-                image = gen_ops.encode_jpeg_variable_quality(image, quality: jpeg_quality);
+                 // python code checks to ensure jpeq_quality is a tensor; unnecessary here since
+                 // it is passed as a tensor
+                 image = gen_ops.encode_jpeg_variable_quality(image, quality: jpeg_quality);
 
                  image = gen_ops.decode_jpeg(image, channels: channels);
                  return convert_image_dtype(image, orig_dtype, saturate: true);
@@ -1587,8 +1587,8 @@ new_height, new_width");
                      {
                          if (k > 0)
                          {
-                            // handle flat_imgs
-                            Tensor[] flat_imgs = new Tensor[] { };
+                             // handle flat_imgs
+                             Tensor[] flat_imgs = new Tensor[] { };
                              foreach ((Tensor x, Tensor t) in imgs.Zip(tails, Tuple.Create))
                              {
                                  flat_imgs[flat_imgs.Length] = array_ops.reshape(x, array_ops.concat(new Tensor[] { constant_op.constant(-1), t }, 0));
@@ -1602,42 +1602,42 @@ new_height, new_width");
                                                                  true_fn: () => padded_func_pass(),
                                                                  false_fn: () => flat_imgs);
 
-                            // handle downscaled
-                            Tensor[] downscaled = new Tensor[] { };
+                             // handle downscaled
+                             Tensor[] downscaled = new Tensor[] { };
                              foreach (Tensor x in padded)
                              {
                                  downscaled[downscaled.Length] = gen_ops.avg_pool(x, ksize: divisor, strides: divisor, padding: "VALID");
                              }
 
-                            // handle tails
-                            tails = new Tensor[] { };
+                             // handle tails
+                             tails = new Tensor[] { };
                              foreach (Tensor x in gen_array_ops.shape_n(downscaled))
                              {
                                  tails[tails.Length] = new Tensor(x.dims.Skip(1).Take(tails.Length - 1).ToArray());
                              }
 
                              imgs = new Tensor[] { };
-                            // tuples weren't working; this is hacky, but should work similarly.
-                            // zip loads the values into a tuple (Tensor, Tensor, Tensor) for each
-                            // zip entry; this just gets the length of the longest array, and loops
-                            // that many times, getting values (like zip) and using them similarly.
-                            for (int x = 0; x < Math.Max(Math.Max(downscaled.Length, heads.Length), tails.Length); x++)
+                             // tuples weren't working; this is hacky, but should work similarly.
+                             // zip loads the values into a tuple (Tensor, Tensor, Tensor) for each
+                             // zip entry; this just gets the length of the longest array, and loops
+                             // that many times, getting values (like zip) and using them similarly.
+                             for (int x = 0; x < Math.Max(Math.Max(downscaled.Length, heads.Length), tails.Length); x++)
                              {
                                  imgs[imgs.Length] = array_ops.reshape(downscaled[x], array_ops.concat(new Tensor[] { heads[x], tails[x] }, 0));
                              }
                          }
                      }
 
-                    // python code uses * to unpack imgs; how to replicate that here?
-                    // don't think that this is doing the same thing as the python code.
-                    (ssim_per_channel, cs) = _ssim_per_channel(
-                         img1: imgs[0],
-                         img2: imgs[1],
-                         max_val: max_val,
-                         filter_size: filter_size,
-                         filter_sigma: filter_sigma,
-                         k1: k1,
-                         k2: k2);
+                     // python code uses * to unpack imgs; how to replicate that here?
+                     // don't think that this is doing the same thing as the python code.
+                     (ssim_per_channel, cs) = _ssim_per_channel(
+                          img1: imgs[0],
+                          img2: imgs[1],
+                          max_val: max_val,
+                          filter_size: filter_size,
+                          filter_sigma: filter_sigma,
+                          k1: k1,
+                          k2: k2);
                      mcs.append(gen_nn_ops.relu(cs));
                  }
 

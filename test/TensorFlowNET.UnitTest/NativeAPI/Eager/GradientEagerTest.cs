@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using static Tensorflow.Binding;
 

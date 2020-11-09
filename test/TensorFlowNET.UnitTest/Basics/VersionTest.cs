@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.Basics

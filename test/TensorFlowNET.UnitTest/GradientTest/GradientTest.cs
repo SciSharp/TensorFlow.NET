@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
 using Tensorflow;
 using Tensorflow.UnitTest;
 using static Tensorflow.Binding;

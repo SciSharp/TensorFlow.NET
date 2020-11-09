@@ -1,13 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
-using FluentAssertions;
-using Google.Protobuf;
-using NumSharp.Backends;
 using Tensorflow;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
@@ -46,14 +42,14 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 inputs.Add(feed, new Tensor(3));
                 csession.SetInputs(inputs);
 
-                var outputs = new TF_Output[] {new TF_Output(add, 0)};
+                var outputs = new TF_Output[] { new TF_Output(add, 0) };
                 csession.SetOutputs(outputs);
 
                 csession.Run(s);
                 Tensor outTensor = csession.output_tensor(0);
                 EXPECT_EQ(TF_DataType.TF_INT32, outTensor.dtype);
                 EXPECT_EQ(0, outTensor.NDims);
-                ASSERT_EQ((ulong) sizeof(uint), outTensor.bytesize);
+                ASSERT_EQ((ulong)sizeof(uint), outTensor.bytesize);
                 var output_contents = outTensor.ToArray<int>();
                 EXPECT_EQ(3 + 2, output_contents[0]);
 
@@ -65,7 +61,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 inputs = new Dictionary<Operation, Tensor>();
                 inputs.Add(feed, new Tensor(7));
                 csession.SetInputs(inputs);
-                outputs = new TF_Output[] {new TF_Output(neg, 0)};
+                outputs = new TF_Output[] { new TF_Output(neg, 0) };
                 csession.SetOutputs(outputs);
                 csession.Run(s);
                 ASSERT_EQ(TF_Code.TF_OK, s.Code);
@@ -74,7 +70,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 ASSERT_TRUE(outTensor != IntPtr.Zero);
                 EXPECT_EQ(TF_DataType.TF_INT32, outTensor.dtype);
                 EXPECT_EQ(0, outTensor.NDims); // scalar
-                ASSERT_EQ((ulong) sizeof(uint), outTensor.bytesize);
+                ASSERT_EQ((ulong)sizeof(uint), outTensor.bytesize);
                 output_contents = outTensor.ToArray<int>();
                 EXPECT_EQ(-(7 + 2), output_contents[0]);
 
@@ -132,7 +128,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 }
             }
         }
-        
+
         [TestMethod]
         public void Autocast_Case0()
         {
@@ -142,14 +138,14 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             var ret = sess.run(operation);
 
             ret.Should().BeNull();
-        }        
+        }
 
         [TestMethod]
         public void Autocast_Case1()
         {
             var sess = tf.Session().as_default();
             var input = tf.placeholder(tf.float32, shape: new TensorShape(6));
-            var op = tf.reshape(input, new int[] {2, 3});
+            var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6)));
 
@@ -163,7 +159,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         {
             var sess = tf.Session().as_default();
             var input = tf.placeholder(tf.float64, shape: new TensorShape(6));
-            var op = tf.reshape(input, new int[] {2, 3});
+            var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(NPTypeCode.Single) + 0.1f));
 
@@ -177,7 +173,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         {
             var sess = tf.Session().as_default();
             var input = tf.placeholder(tf.int64, shape: new TensorShape(6));
-            var op = tf.reshape(input, new int[] {2, 3});
+            var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(NPTypeCode.Single) + 0.1f));
 
@@ -191,7 +187,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         {
             var sess = tf.Session().as_default();
             var input = tf.placeholder(tf.byte8, shape: new TensorShape(6));
-            var op = tf.reshape(input, new int[] {2, 3});
+            var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(NPTypeCode.Single) + 0.1f));
 

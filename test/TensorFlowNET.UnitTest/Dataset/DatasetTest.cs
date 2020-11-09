@@ -1,11 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Tensorflow;
-using Tensorflow.Keras;
-using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.Dataset
@@ -20,7 +15,7 @@ namespace TensorFlowNET.UnitTest.Dataset
             long value = 0;
 
             var dataset = tf.data.Dataset.range(3);
-            foreach(var (step, item) in enumerate(dataset))
+            foreach (var (step, item) in enumerate(dataset))
             {
                 Assert.AreEqual(iStep, step);
                 iStep++;
@@ -114,7 +109,7 @@ namespace TensorFlowNET.UnitTest.Dataset
             foreach (var item in dataset)
             {
                 Assert.AreEqual(value, (long)item.Item1);
-                value ++;
+                value++;
             }
         }
 

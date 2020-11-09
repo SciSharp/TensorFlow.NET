@@ -219,7 +219,7 @@ namespace System
                     return true;
                 }
             }
-            catch(MissingMethodException)
+            catch (MissingMethodException)
             {
                 // When getter only property name is given, the property is found but fails to set.
                 return false;

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using NumSharp;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using Tensorflow;
 using Tensorflow.UnitTest;
 using Tensorflow.Util;
@@ -393,11 +393,11 @@ namespace TensorFlowNET.UnitTest.nest_test
             var s = JArray.FromObject(structure1_plus1).ToString();
             Console.WriteLine(s);
             //    nest.assert_same_structure(structure1, structure1_plus1)
-            self.assertAllEqual( nest.flatten(structure1_plus1), new object[] { 2, 3, 4, 5, 6, 7 });
+            self.assertAllEqual(nest.flatten(structure1_plus1), new object[] { 2, 3, 4, 5, 6, 7 });
             self.assertAllEqual(nest.flatten(structure1_strings), new object[] { "1", "2", "3", "4", "5", "6" });
             var structure1_plus_structure2 = nest.map_structure(x => (int)(x[0]) + (int)(x[1]), structure1, structure2);
             self.assertEqual(
-                new object[] { new object[] { new object[] { 1 + 7, 2 + 8}, 3 + 9}, 4 + 10, new object[] { 5 + 11, 6 + 12}},
+                new object[] { new object[] { new object[] { 1 + 7, 2 + 8 }, 3 + 9 }, 4 + 10, new object[] { 5 + 11, 6 + 12 } },
                 structure1_plus_structure2);
 
             //    self.assertEqual(3, nest.map_structure(lambda x: x - 1, 4))

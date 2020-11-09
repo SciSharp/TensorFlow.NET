@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using Tensorflow;
-using Tensorflow.Functions;
 using static TensorFlowNET.UnitTest.c_test_util;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
@@ -61,7 +58,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             var func_feed = Placeholder(host_graph_, s_);
             var func_op = Use(new[] { func_feed });
             Run(new[] { new KeyValuePair<Operation, Tensor>(func_feed, Int32Tensor(3)) }, func_op, -3);
-            VerifyFDef(new string[] { "neg_0" }, 
+            VerifyFDef(new string[] { "neg_0" },
                 new List<IOSpec> { new IOSpec("feed", DataType.DtInt32) },
                 new List<IOSpec> { new IOSpec("neg", DataType.DtInt32) },
                 new List<EdgeSpec> { new EdgeSpec("feed", "neg_0:0"), new EdgeSpec("neg_0:y:0", "neg") },
@@ -211,9 +208,9 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             VerifyFDef(new string[] { "add_0" },
                 new List<IOSpec> { new IOSpec("feed1"), new IOSpec("feed2") },
                 new List<IOSpec> { new IOSpec("add") },
-                new List<EdgeSpec> 
-                { 
-                    new EdgeSpec("feed1", "add_0:0"), 
+                new List<EdgeSpec>
+                {
+                    new EdgeSpec("feed1", "add_0:0"),
                     new EdgeSpec("feed2", "add_0:1"),
                     new EdgeSpec("add_0:sum:0", "add")
                 },
@@ -397,7 +394,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 outputs.Select(x => new TF_Output(x, 0)).ToArray(),
                 output_names, expect_failure);
 
-        void DefineT(int num_opers, Operation[] opers, 
+        void DefineT(int num_opers, Operation[] opers,
             TF_Output[] inputs, TF_Output[] outputs,
             string[] output_names, bool expect_failure = false)
         {
@@ -405,7 +402,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 num_opers, num_opers == -1 ? null : opers.Select(x => (IntPtr)x).ToArray(),
                 inputs.Length, inputs.ToArray(),
                 outputs.Length, outputs.ToArray(),
-                output_names == null || output_names.Length == 0 ? null : output_names, 
+                output_names == null || output_names.Length == 0 ? null : output_names,
                 IntPtr.Zero, null, s_.Handle);
 
             if (expect_failure)
@@ -480,7 +477,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         void VerifyFDefNodes(FunctionDef fdef, string[] nodes)
         {
             ASSERT_EQ(nodes.Length, fdef.NodeDef.Count);
-            foreach(var node in fdef.NodeDef)
+            foreach (var node in fdef.NodeDef)
             {
                 ASSERT_TRUE(nodes.Contains(node.Name), $"Got unexpected node: {node.Name} in fdef: {fdef}");
             }
@@ -519,7 +516,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             // Build a set of edges from fdef
             var a_edges = new List<EdgeSpec>(); // actual edges
             // Get edges from inputs to body nodes and between body nodes
-            foreach(var node in fdef.NodeDef)
+            foreach (var node in fdef.NodeDef)
             {
                 for (int i = 0; i < node.Input.Count; ++i)
                 {
@@ -528,10 +525,10 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 }
             }
             // Get edges from body nodes to outputs and from inputs to outputs
-            foreach(var arg in fdef.Signature.OutputArg)
+            foreach (var arg in fdef.Signature.OutputArg)
             {
                 var iter = fdef.Ret.FirstOrDefault(x => x.Key == arg.Name);
-                if(iter.Key != null)
+                if (iter.Key != null)
                 {
                     a_edges.Add(new EdgeSpec(iter.Value, arg.Name));
                 }
@@ -541,7 +538,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 }
             }
             // Verify edges
-            foreach(var edge in e_edges)
+            foreach (var edge in e_edges)
             {
                 ASSERT_TRUE(a_edges.Contains(edge));
             }
@@ -552,14 +549,14 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             // If caller specified all edges, check that we have seen all
             if (is_exact_edges)
             {
-                ASSERT_EQ(e_edges.Count + c_edges.Count, a_edges.Count, 
+                ASSERT_EQ(e_edges.Count + c_edges.Count, a_edges.Count,
                     $"Expected edges: {e_edges}, Expected Control edges: {c_edges}, Actual edges: {a_edges}");
             }
         }
 
         public void Dispose()
         {
-            
+
         }
 
         public struct IOSpec

@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
-using Tensorflow.Eager;
 using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
@@ -193,25 +191,25 @@ namespace TensorFlowNET.UnitTest.ops_test
             });
 
             // Note assertItemsEqual(given, expected), expected and given parameters should be swapped below 
-            assertItemsEqual(new[] {a_1.op}, b_1.op.control_inputs);
-            assertItemsEqual(new[] {a_1.op, a_2.op}, b_2.op.control_inputs);
-            assertItemsEqual(new[] { a_1.op, a_2.op}, b_3.op.control_inputs);
-            assertItemsEqual(new[] {a_1.op, a_2.op}, b_4.op.control_inputs);
+            assertItemsEqual(new[] { a_1.op }, b_1.op.control_inputs);
+            assertItemsEqual(new[] { a_1.op, a_2.op }, b_2.op.control_inputs);
+            assertItemsEqual(new[] { a_1.op, a_2.op }, b_3.op.control_inputs);
+            assertItemsEqual(new[] { a_1.op, a_2.op }, b_4.op.control_inputs);
 
             assertItemsEqual(new object[0], c_1.op.control_inputs);
-            assertItemsEqual(new[] {a_2.op}, c_2.op.control_inputs);
-            assertItemsEqual(new[] {a_2.op, a_3.op}, c_3.op.control_inputs);
-            assertItemsEqual(new[] {a_2.op, a_3.op, a_4.op}, c_4.op.control_inputs);
+            assertItemsEqual(new[] { a_2.op }, c_2.op.control_inputs);
+            assertItemsEqual(new[] { a_2.op, a_3.op }, c_3.op.control_inputs);
+            assertItemsEqual(new[] { a_2.op, a_3.op, a_4.op }, c_4.op.control_inputs);
 
             assertItemsEqual(new object[0], d_1.op.control_inputs);
             assertItemsEqual(new object[0], d_2.op.control_inputs);
             assertItemsEqual(new object[0], d_3.op.control_inputs);
             assertItemsEqual(new object[0], d_4.op.control_inputs);
 
-            assertItemsEqual(new[] {a_1.op}, e_1.op.control_inputs);
-            assertItemsEqual(new[] {a_2.op}, e_2.op.control_inputs);
-            assertItemsEqual(new[] {a_3.op}, e_3.op.control_inputs);
-            assertItemsEqual(new[] {a_4.op}, e_4.op.control_inputs);
+            assertItemsEqual(new[] { a_1.op }, e_1.op.control_inputs);
+            assertItemsEqual(new[] { a_2.op }, e_2.op.control_inputs);
+            assertItemsEqual(new[] { a_3.op }, e_3.op.control_inputs);
+            assertItemsEqual(new[] { a_4.op }, e_4.op.control_inputs);
         }
 
         [Ignore("Don't know how to create an operation with two outputs")]

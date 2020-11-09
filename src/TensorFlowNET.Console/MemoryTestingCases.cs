@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NumSharp;
+﻿using NumSharp;
+using System;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -59,7 +57,7 @@ namespace Tensorflow
         public Action<int> Gradient
             => (iterate) =>
             {
-                for(int i = 0; i< iterate; i++)
+                for (int i = 0; i < iterate; i++)
                 {
                     var w = tf.constant(3112.0f);
                     using var tape = tf.GradientTape();

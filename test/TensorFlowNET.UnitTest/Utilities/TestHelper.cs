@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -11,6 +8,6 @@ namespace TensorFlowNET.UnitTest
         {
             var dir = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "..", "data");
             return Path.GetFullPath(Path.Combine(dir, fileName));
-        } 
+        }
     }
 }

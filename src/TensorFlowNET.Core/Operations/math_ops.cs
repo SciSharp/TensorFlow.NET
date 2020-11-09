@@ -136,8 +136,8 @@ namespace Tensorflow
             return tf_with(ops.name_scope(name, "saturate_cast", new[] { value }), name =>
              {
                  value = ops.convert_to_tensor(value, name: "value");
-                // dtype = dtypes.as_dtype(dtype).as_base_dtype();
-                if (value.dtype.min() < dtype.min())
+                 // dtype = dtypes.as_dtype(dtype).as_base_dtype();
+                 if (value.dtype.min() < dtype.min())
                      value = gen_math_ops.maximum(
                          value,
                          ops.convert_to_tensor(dtype.min(), dtype: value.dtype, name: "min"));
@@ -264,8 +264,8 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "Real", new[] { input }), scope =>
              {
-                // name = scope;
-                input = ops.convert_to_tensor(input, name: "input");
+                 // name = scope;
+                 input = ops.convert_to_tensor(input, name: "input");
                  if (input.dtype.is_complex())
                  {
                      var real_dtype = input.dtype.real_dtype();

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp;
+using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
 using Tensorflow;
 using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
@@ -147,7 +146,7 @@ namespace TensorFlowNET.UnitTest
                 {
                     for (int i = 0; i < 100; i++)
                     {
-                        var t = new Tensor(new int[] {1, 2, 3});
+                        var t = new Tensor(new int[] { 1, 2, 3 });
                     }
                 }
             }
@@ -171,7 +170,7 @@ namespace TensorFlowNET.UnitTest
                         var v = (int*)Marshal.AllocHGlobal(sizeof(int));
                         c_api.DeallocatorArgs _deallocatorArgs = new c_api.DeallocatorArgs();
                         var handle = c_api.TF_NewTensor(typeof(int).as_dtype(), dims: new long[0], num_dims: 0,
-                            data: (IntPtr) v, len: (UIntPtr) sizeof(int),
+                            data: (IntPtr)v, len: (UIntPtr)sizeof(int),
                             deallocator: (IntPtr data, IntPtr size, ref c_api.DeallocatorArgs args) => Marshal.FreeHGlobal(data),
                             ref _deallocatorArgs);
                         c_api.TF_DeleteTensor(handle);
@@ -190,8 +189,8 @@ namespace TensorFlowNET.UnitTest
             {
                 tf.peak_default_graph().Should().BeNull();
                 //graph is created automatically to perform create these operations
-                var a1 = tf.constant(new[] {2f}, shape: new[] {1});
-                var a2 = tf.constant(new[] {3f}, shape: new[] {1});
+                var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
+                var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
                 var math = a1 + a2;
                 for (int i = 0; i < 100; i++)
                 {
@@ -215,8 +214,8 @@ namespace TensorFlowNET.UnitTest
                 {
                     tf.peak_default_graph().Should().NotBeNull();
                     //graph is created automatically to perform create these operations
-                    var a1 = tf.constant(new[] {2f}, shape: new[] {1});
-                    var a2 = tf.constant(new[] {3f}, shape: new[] {1});
+                    var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
+                    var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
                     var math = a1 + a2;
 
                     var result = sess.run(math);
@@ -237,8 +236,8 @@ namespace TensorFlowNET.UnitTest
                 {
                     tf.peak_default_graph().Should().NotBeNull();
                     //graph is created automatically to perform create these operations
-                    var a1 = tf.constant(new[] {2f}, shape: new[] {1});
-                    var a2 = tf.constant(new[] {3f}, shape: new[] {1});
+                    var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
+                    var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
                     var math = a1 + a2;
                 }
             }
@@ -254,8 +253,8 @@ namespace TensorFlowNET.UnitTest
             {
                 tf.peak_default_graph().Should().BeNull();
                 //graph is created automatically to perform create these operations
-                var a1 = tf.constant(new[] {2f}, shape: new[] {1});
-                var a2 = tf.constant(new[] {3f}, shape: new[] {1});
+                var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
+                var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
                 var math = a1 + a2;
             }
         }
@@ -270,8 +269,8 @@ namespace TensorFlowNET.UnitTest
             {
                 tf.peak_default_graph().Should().BeNull();
                 //graph is created automatically to perform create these operations
-                var a1 = tf.constant(new[] {2f}, shape: new[] {1});
-                var a2 = tf.constant(new[] {3f}, shape: new[] {1}, name: "ConstantK");
+                var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
+                var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 }, name: "ConstantK");
                 var math = a1 + a2;
                 for (int i = 0; i < 100; i++)
                 {
@@ -295,7 +294,7 @@ namespace TensorFlowNET.UnitTest
                 for (int j = 0; j < 100; j++)
                 {
                     var sess = Session.LoadFromSavedModel(modelPath).as_default();
-                    var inputs = new[] {"sp", "fuel"};
+                    var inputs = new[] { "sp", "fuel" };
 
                     var inp = inputs.Select(name => sess.graph.OperationByName(name).output).ToArray();
                     var outp = sess.graph.OperationByName("softmax_tensor").output;

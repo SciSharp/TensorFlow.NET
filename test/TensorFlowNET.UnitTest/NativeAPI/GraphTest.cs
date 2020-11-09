@@ -1,9 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using Tensorflow;
-using Buffer = Tensorflow.Buffer;
 using static Tensorflow.Binding;
+using Buffer = Tensorflow.Buffer;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
 {

@@ -1,8 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Tensorflow;
 using static Tensorflow.Binding;
 
@@ -36,7 +32,7 @@ namespace TensorFlowNET.UnitTest.nn_test
         public void TanH()
         {
             var b = tf.nn.tanh(a, name: "TanH");
-            var expected = new float[] { 0.7615942f, -0.46211717f,  0.9977749f , -0.970452f,  0f, -0.99999547f };
+            var expected = new float[] { 0.7615942f, -0.46211717f, 0.9977749f, -0.970452f, 0f, -0.99999547f };
             var actual = b.ToArray<float>();
             Assert.IsTrue(Equal(expected, actual));
         }

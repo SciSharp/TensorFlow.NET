@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using Tensorflow;
-using Tensorflow.Functions;
 using Tensorflow.Util;
 using Buffer = Tensorflow.Buffer;
 
@@ -90,16 +88,19 @@ namespace TensorFlowNET.UnitTest
                     if (attr.Value.Type == DataType.DtInt32)
                     {
                         found_t = true;
-                    } else
+                    }
+                    else
                     {
                         return false;
                     }
-                } else if (attr.Key == "N")
+                }
+                else if (attr.Key == "N")
                 {
                     if (attr.Value.I == n)
                     {
                         found_n = true;
-                    } else
+                    }
+                    else
                     {
                         return false;
                     }
@@ -131,11 +132,13 @@ namespace TensorFlowNET.UnitTest
                     if (attr.Value.Type == DataType.DtInt32)
                     {
                         found_dtype = true;
-                    } else
+                    }
+                    else
                     {
                         return false;
                     }
-                } else if (attr.Key == "shape")
+                }
+                else if (attr.Key == "shape")
                 {
                     found_shape = true;
                 }
@@ -160,18 +163,21 @@ namespace TensorFlowNET.UnitTest
                     if (attr.Value.Type == DataType.DtInt32)
                     {
                         found_dtype = true;
-                    } else
+                    }
+                    else
                     {
                         return false;
                     }
-                } else if (attr.Key == "value")
+                }
+                else if (attr.Key == "value")
                 {
                     if (attr.Value.Tensor != null &&
                         attr.Value.Tensor.IntVal.Count == 1 &&
                         attr.Value.Tensor.IntVal[0] == v)
                     {
                         found_value = true;
-                    } else
+                    }
+                    else
                     {
                         return false;
                     }

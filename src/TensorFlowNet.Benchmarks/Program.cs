@@ -1,7 +1,7 @@
-﻿using System;
-using System.Reflection;
-using BenchmarkDotNet.Configs;
+﻿using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
+using System;
+using System.Reflection;
 
 namespace TensorFlowBenchmark
 {

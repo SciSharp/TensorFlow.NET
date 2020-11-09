@@ -1,9 +1,6 @@
-﻿using System;
-using BenchmarkDotNet.Attributes;
-using NumSharp;
+﻿using BenchmarkDotNet.Attributes;
 using Tensorflow;
 using Tensorflow.Eager;
-using static Tensorflow.Binding;
 
 namespace TensorFlowBenchmark
 {

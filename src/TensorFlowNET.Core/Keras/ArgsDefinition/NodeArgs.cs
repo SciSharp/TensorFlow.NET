@@ -1,6 +1,4 @@
-﻿using Tensorflow.Keras.Engine;
-
-namespace Tensorflow.Keras.ArgsDefinition
+﻿namespace Tensorflow.Keras.ArgsDefinition
 {
     public class NodeArgs
     {

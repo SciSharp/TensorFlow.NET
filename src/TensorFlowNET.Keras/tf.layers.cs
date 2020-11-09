@@ -64,7 +64,7 @@ namespace Tensorflow.Keras
                     Trainable = trainable,
                     Name = name
                 });
-                
+
                 return layer.Apply(inputs);
             }
 

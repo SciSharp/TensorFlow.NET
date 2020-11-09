@@ -1,13 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
-using FluentAssertions;
 using Tensorflow;
 using static Tensorflow.Binding;
-using Tensorflow.Framework;
 
 namespace TensorFlowNET.UnitTest.NativeAPI
 {
@@ -21,19 +19,19 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             var span = new Span<float>(array, 100, 500);
             fixed (float* ptr = &MemoryMarshal.GetReference(span))
             {
-                using (var t = new Tensor((IntPtr) ptr, new long[] {span.Length}, tf.float32, 4 * span.Length))
+                using (var t = new Tensor((IntPtr)ptr, new long[] { span.Length }, tf.float32, 4 * span.Length))
                 {
                     Assert.IsFalse(t.IsDisposed);
-                    Assert.AreEqual(2000, (int) t.bytesize);
+                    Assert.AreEqual(2000, (int)t.bytesize);
                 }
             }
 
             fixed (float* ptr = &array[0])
             {
-                using (var t = new Tensor((IntPtr) ptr, new long[] {array.Length}, tf.float32, 4 * array.Length))
+                using (var t = new Tensor((IntPtr)ptr, new long[] { array.Length }, tf.float32, 4 * array.Length))
                 {
                     Assert.IsFalse(t.IsDisposed);
-                    Assert.AreEqual(4000, (int) t.bytesize);
+                    Assert.AreEqual(4000, (int)t.bytesize);
                 }
             }
         }
@@ -42,22 +40,22 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         public unsafe void TensorFromArray()
         {
             var array = new float[1000];
-            using (var t = new Tensor(array, new long[] {array.Length}, tf.float32))
+            using (var t = new Tensor(array, new long[] { array.Length }, tf.float32))
             {
                 Assert.IsFalse(t.IsDisposed);
-                Assert.AreEqual(1000 * sizeof(float), (int) t.bytesize);
+                Assert.AreEqual(1000 * sizeof(float), (int)t.bytesize);
             }
 
-            using (var t = new Tensor(new float[] {1}, new long[] {1}, tf.float32))
+            using (var t = new Tensor(new float[] { 1 }, new long[] { 1 }, tf.float32))
             {
                 Assert.IsFalse(t.IsDisposed);
-                Assert.AreEqual(1 * sizeof(float), (int) t.bytesize);
+                Assert.AreEqual(1 * sizeof(float), (int)t.bytesize);
             }
 
-            using (var t = new Tensor(new float[] {1}, null, tf.float32))
+            using (var t = new Tensor(new float[] { 1 }, null, tf.float32))
             {
                 Assert.IsFalse(t.IsDisposed);
-                Assert.AreEqual(1 * sizeof(float), (int) t.bytesize);
+                Assert.AreEqual(1 * sizeof(float), (int)t.bytesize);
                 t.shape.Should().BeEmpty();
             }
         }
@@ -66,11 +64,11 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         public void AllocateTensor()
         {
             ulong num_bytes = 6 * sizeof(float);
-            long[] dims = {2, 3};
+            long[] dims = { 2, 3 };
             Tensor t = c_api.TF_AllocateTensor(TF_DataType.TF_FLOAT, dims, 2, num_bytes);
             EXPECT_EQ(TF_DataType.TF_FLOAT, t.dtype);
             EXPECT_EQ(2, t.NDims);
-            EXPECT_EQ((int) dims[0], t.shape[0]);
+            EXPECT_EQ((int)dims[0], t.shape[0]);
             EXPECT_EQ(num_bytes, t.bytesize);
             t.Dispose();
         }
@@ -104,10 +102,10 @@ namespace TensorFlowNET.UnitTest.NativeAPI
 
             EXPECT_EQ(tensor.dtype, TF_DataType.TF_FLOAT);
             EXPECT_EQ(tensor.rank, nd.ndim);
-            EXPECT_EQ((int) tensor.shape[0], nd.shape[0]);
-            EXPECT_EQ((int) tensor.shape[1], nd.shape[1]);
-            EXPECT_EQ(tensor.bytesize, (ulong) nd.size * sizeof(float));
-            Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), new float[] {1, 2, 3, 4, 5, 6}));
+            EXPECT_EQ((int)tensor.shape[0], nd.shape[0]);
+            EXPECT_EQ((int)tensor.shape[1], nd.shape[1]);
+            EXPECT_EQ(tensor.bytesize, (ulong)nd.size * sizeof(float));
+            Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), new float[] { 1, 2, 3, 4, 5, 6 }));
         }
 
         /// <summary>
@@ -136,7 +134,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             EXPECT_EQ(-1, num_dims);
 
             // Set the shape to be 2 x Unknown
-            long[] dims = {2, -1};
+            long[] dims = { 2, -1 };
             c_api.TF_GraphSetTensorShape(graph, feed_out_0, dims, dims.Length, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             num_dims = c_api.TF_GraphGetTensorNumDims(graph, feed_out_0, s.Handle);
@@ -165,8 +163,8 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(2, num_dims);
-            EXPECT_EQ(2, (int) returned_dims[0]);
-            EXPECT_EQ(3, (int) returned_dims[1]);
+            EXPECT_EQ(2, (int)returned_dims[0]);
+            EXPECT_EQ(3, (int)returned_dims[1]);
 
             // Try to set 'unknown' with same rank on the shape and see that
             // it doesn't change.
@@ -177,8 +175,8 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, num_dims, s.Handle);
             Assert.IsTrue(s.Code == TF_Code.TF_OK);
             EXPECT_EQ(2, num_dims);
-            EXPECT_EQ(2, (int) returned_dims[0]);
-            EXPECT_EQ(3, (int) returned_dims[1]);
+            EXPECT_EQ(2, (int)returned_dims[0]);
+            EXPECT_EQ(3, (int)returned_dims[1]);
 
             // Try to fetch a shape with the wrong num_dims
             c_api.TF_GraphGetTensorShape(graph, feed_out_0, returned_dims, 5, s.Handle);
@@ -208,7 +206,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
         public void sparse_to_dense()
         {
             var indices = tf.reshape(tf.range(0, 5), new int[] { 5, 1 });
-            var labels = tf.expand_dims(tf.constant(new[] { 0, 1, 2, 3, 4 }),1);
+            var labels = tf.expand_dims(tf.constant(new[] { 0, 1, 2, 3, 4 }), 1);
             var st = tf.concat(values: new[] { indices, labels }, axis: 1);
             var onehot = tf.sparse_to_dense(st, (5, 5), 1);
             using (var sess = tf.Session())

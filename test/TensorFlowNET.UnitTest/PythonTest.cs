@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using NumSharp;
+using System;
+using System.Collections;
+using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
 
@@ -37,7 +37,8 @@ namespace TensorFlowNET.UnitTest
             {
                 /*if (g[i] is NDArray && e[i] is NDArray)
                     assertItemsEqual((g[i] as NDArray).GetData<object>(), (e[i] as NDArray).GetData<object>());
-                else*/ if (e[i] is ICollection && g[i] is ICollection)
+                else*/
+                if (e[i] is ICollection && g[i] is ICollection)
                     assertEqual(g[i], e[i]);
                 else
                     Assert.AreEqual(e[i], g[i], $"Items differ at index {i}, expected {e[i]} but got {g[i]}");
@@ -183,11 +184,11 @@ namespace TensorFlowNET.UnitTest
             {
                 using (var sess = tf.Session())
                 {
-                    var ndarray=tensor.eval(sess);
+                    var ndarray = tensor.eval(sess);
                     if (typeof(T) == typeof(double))
                     {
                         double x = ndarray;
-                        result=x;
+                        result = x;
                     }
                     else if (typeof(T) == typeof(int))
                     {

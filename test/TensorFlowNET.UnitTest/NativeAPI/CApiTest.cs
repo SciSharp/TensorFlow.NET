@@ -4,7 +4,6 @@ using Tensorflow;
 using Tensorflow.Device;
 using Tensorflow.Eager;
 using Tensorflow.UnitTest;
-using Buffer = System.Buffer;
 
 namespace TensorFlowNET.UnitTest
 {

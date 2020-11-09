@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow;
 
 namespace TensorFlowNET.UnitTest.control_flow_ops_test
 {
@@ -16,7 +15,7 @@ namespace TensorFlowNET.UnitTest.control_flow_ops_test
         {
 
             //var embedding_matrix = variable_scope.get_variable(
-                //"embedding_matrix", initializer: new double[,] { { 2.0 }, { 3.0 } }, use_resource: true);
+            //"embedding_matrix", initializer: new double[,] { { 2.0 }, { 3.0 } }, use_resource: true);
 
             /*
             Tensor cond(Tensor it, Tensor _)

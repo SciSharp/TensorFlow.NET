@@ -18,7 +18,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             var data = new float[] { 1.0f, 2.0f, 3.0f, 4.0f };
             var t = c_api.TF_AllocateTensor(TF_FLOAT, dims, dims.Length, (ulong)data.Length * sizeof(float));
             tf.memcpy(c_api.TF_TensorData(t), data, data.Length * sizeof(float));
-            
+
             using var status = c_api.TF_NewStatus();
             var th = c_api.TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -146,7 +146,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
 
         SafeTensorHandleHandle TestScalarTensorHandle(float value)
         {
-            var data = new [] { value };
+            var data = new[] { value };
             var t = c_api.TF_AllocateTensor(TF_FLOAT, null, 0, sizeof(float));
             tf.memcpy(TF_TensorData(t), data, TF_TensorByteSize(t));
             using var status = TF_NewStatus();

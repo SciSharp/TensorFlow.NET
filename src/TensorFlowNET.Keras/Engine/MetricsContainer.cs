@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.Metrics;
-using static Tensorflow.Binding;
 using static Tensorflow.KerasExt;
 
 namespace Tensorflow.Keras.Engine

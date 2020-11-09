@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Tensorflow;
 using static Tensorflow.Binding;
 
@@ -27,7 +24,7 @@ namespace TensorFlowNET.UnitTest.Training
             Func<Tensor, Tensor> model = (x) => W * x + b;
 
             // Define the loss function
-            Func<Tensor, Tensor, Tensor> loss = (target_y, predicted_y) 
+            Func<Tensor, Tensor, Tensor> loss = (target_y, predicted_y)
                 => tf.reduce_mean(tf.square(target_y - predicted_y));
 
             int NUM_EXAMPLES = 1000;
@@ -54,7 +51,7 @@ namespace TensorFlowNET.UnitTest.Training
                 };
 
             var epochs = range(10);
-            foreach(var epoch in epochs)
+            foreach (var epoch in epochs)
             {
                 var current_loss = train(inputs, outputs, 0.1f);
                 print($"Epoch {epoch}: W={(float)W.numpy()} b={(float)b.numpy()}, loss={(float)current_loss.numpy()}");

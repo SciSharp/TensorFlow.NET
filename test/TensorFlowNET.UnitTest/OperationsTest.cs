@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NumSharp;
 using Tensorflow;
-using Tensorflow.Util;
-using Buffer = Tensorflow.Buffer;
-using static Tensorflow.Binding;
 using Tensorflow.UnitTest;
+using Tensorflow.Util;
+using static Tensorflow.Binding;
+using Buffer = Tensorflow.Buffer;
 
 namespace TensorFlowNET.UnitTest.Basics
 {
@@ -41,9 +41,9 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.float32);
             var c = tf.add(a, b);
 
-            using(var sess = tf.Session())
+            using (var sess = tf.Session())
             {
-                var o = sess.run(c, 
+                var o = sess.run(c,
                     new FeedItem(a, 3.0f),
                     new FeedItem(b, 2.0f));
                 Assert.AreEqual((float)o, 5.0f);
@@ -123,7 +123,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 Assert.IsTrue(o.array_equal(check));
             }
 
-            b = tf.cumsum(a, exclusive:true, reverse: true);
+            b = tf.cumsum(a, exclusive: true, reverse: true);
             check = np.array(15, 14, 12, 9, 5, 0);
 
             using (var sess = tf.Session())
@@ -136,7 +136,7 @@ namespace TensorFlowNET.UnitTest.Basics
         [TestMethod]
         public void logicalOpsTest()
         {
-            var a = tf.constant(new[] {1f, 2f, 3f, 4f, -4f, -3f, -2f, -1f});
+            var a = tf.constant(new[] { 1f, 2f, 3f, 4f, -4f, -3f, -2f, -1f });
             var b = tf.less(a, 0f);
             var c = tf.greater(a, 0f);
             var d = tf.cast(tf.logical_and(b, c), tf.int32);
@@ -516,7 +516,7 @@ namespace TensorFlowNET.UnitTest.Basics
 
         private IEnumerable<int> MultiplyArray(IReadOnlyCollection<int> first, IReadOnlyCollection<int> second)
         {
-            if(first.Count != second.Count)
+            if (first.Count != second.Count)
                 throw new ArgumentException("Arrays should be of equal size!");
 
             var firstEnumerator = first.GetEnumerator();
@@ -535,7 +535,7 @@ namespace TensorFlowNET.UnitTest.Basics
         }
         private IEnumerable<float> MultiplyArray(IReadOnlyCollection<float> first, IReadOnlyCollection<float> second)
         {
-            if(first.Count != second.Count)
+            if (first.Count != second.Count)
                 throw new ArgumentException("Arrays should be of equal size!");
 
             var firstEnumerator = first.GetEnumerator();
@@ -554,7 +554,7 @@ namespace TensorFlowNET.UnitTest.Basics
         }
         private IEnumerable<double> MultiplyArray(IReadOnlyCollection<double> first, IReadOnlyCollection<double> second)
         {
-            if(first.Count != second.Count)
+            if (first.Count != second.Count)
                 throw new ArgumentException("Arrays should be of equal size!");
 
             var firstEnumerator = first.GetEnumerator();
@@ -788,7 +788,7 @@ namespace TensorFlowNET.UnitTest.Basics
 
             var firstFloatFeed = Enumerable.Repeat(firstFloatVal, rows * cols).ToArray();
             var secondFloatFeed = Enumerable.Repeat(secondFloatVal, rows * cols).ToArray();
-            var floatResult = MultiplyArray(firstFloatFeed, secondFloatFeed.Select(x => 1/x).ToArray()).Sum();
+            var floatResult = MultiplyArray(firstFloatFeed, secondFloatFeed.Select(x => 1 / x).ToArray()).Sum();
 
             a = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
             b = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
@@ -837,7 +837,7 @@ namespace TensorFlowNET.UnitTest.Basics
 
             var firstDoubleFeed = Enumerable.Repeat(firstDoubleVal, rows * cols).ToArray();
             var secondDoubleFeed = Enumerable.Repeat(secondDoubleVal, rows * cols).ToArray();
-            var doubleResult = MultiplyArray(firstDoubleFeed, secondDoubleFeed.Select(x => 1/x).ToArray()).Sum();
+            var doubleResult = MultiplyArray(firstDoubleFeed, secondDoubleFeed.Select(x => 1 / x).ToArray()).Sum();
 
             a = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
             b = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));

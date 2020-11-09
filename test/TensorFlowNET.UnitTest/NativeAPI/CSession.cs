@@ -25,7 +25,7 @@ namespace TensorFlowNET.UnitTest
         {
             lock (Locks.ProcessWide)
             {
-                var config = new ConfigProto {InterOpParallelismThreads = 4};
+                var config = new ConfigProto { InterOpParallelismThreads = 4 };
                 session_ = new Session(graph, config, s);
             }
         }
@@ -78,7 +78,7 @@ namespace TensorFlowNET.UnitTest
         public unsafe void Run(Status s)
         {
             var inputs_ptr = inputs_.ToArray();
-            var input_values_ptr = input_values_.Select(x => (IntPtr) x).ToArray();
+            var input_values_ptr = input_values_.Select(x => (IntPtr)x).ToArray();
             var outputs_ptr = outputs_.ToArray();
             var output_values_ptr = output_values_.Select(x => IntPtr.Zero).ToArray();
             IntPtr[] targets_ptr = new IntPtr[0];

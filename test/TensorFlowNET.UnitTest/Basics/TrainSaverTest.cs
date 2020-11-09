@@ -44,7 +44,7 @@ namespace TensorFlowNET.UnitTest.Basics
         {
             tf_with(Session.LoadFromSavedModel("mobilenet"), sess =>
             {
-                
+
             });
         }
 

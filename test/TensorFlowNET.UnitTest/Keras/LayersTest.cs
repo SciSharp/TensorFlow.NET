@@ -1,7 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NumSharp;
 using static Tensorflow.KerasExt;
 
@@ -23,6 +20,8 @@ namespace TensorFlowNET.UnitTest.Keras
         [TestMethod]
         public void Functional()
         {
+            var layers = keras.layers;
+
             var inputs = keras.Input(shape: 784);
             Assert.AreEqual((None, 784), inputs.TensorShape);
 

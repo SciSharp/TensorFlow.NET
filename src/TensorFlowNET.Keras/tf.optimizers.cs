@@ -14,8 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Keras.Optimizers;
-
 namespace Tensorflow.Keras
 {
     public class tensorflow_backup

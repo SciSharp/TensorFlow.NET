@@ -6,6 +6,25 @@
     <LangVersion>8.0</LangVersion>
     <RootNamespace>Tensorflow.Keras</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
+    <Version>0.1.0</Version>
+    <Authors>Haiping Chen</Authors>
+    <Product>Keras for .NET</Product>
+    <Copyright>Apache 2.0, Haiping Chen 2020</Copyright>
+    <PackageId>TensorFlow.Keras</PackageId>
+    <PackageProjectUrl>https://github.com/SciSharp/TensorFlow.NET</PackageProjectUrl>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+    <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
+    <PackageReleaseNotes>Keras for .NET is a C# version of Keras migrated from the python version.</PackageReleaseNotes>
+    <Description>Keras for .NET developers.
+
+Keras is an API designed for human beings, not machines. Keras follows best practices for reducing cognitive load: it offers consistent &amp; simple APIs, it minimizes the number of user actions required for common use cases, and it provides clear &amp; actionable error messages.</Description>
+    <Company>SciSharp STACK</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageTags>tensorflow, keras, deep learning, machine learning</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

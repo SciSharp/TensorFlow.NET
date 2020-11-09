@@ -1,12 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using Tensorflow;
 using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
@@ -51,11 +46,11 @@ namespace TensorFlowNET.UnitTest.Basics
             image = image[tf.newaxis, tf.ellipsis, tf.newaxis];
             image = tf.image.resize(image, (3, 5));
             image = image[0, tf.ellipsis, 0];
-            Assert.IsTrue(Enumerable.SequenceEqual(new float[] { 0.6666667f, 0.3333333f, 0, 0, 0 }, 
+            Assert.IsTrue(Enumerable.SequenceEqual(new float[] { 0.6666667f, 0.3333333f, 0, 0, 0 },
                 image[0].ToArray<float>()));
-            Assert.IsTrue(Enumerable.SequenceEqual(new float[] { 0, 0, 1, 0, 0 }, 
+            Assert.IsTrue(Enumerable.SequenceEqual(new float[] { 0, 0, 1, 0, 0 },
                 image[1].ToArray<float>()));
-            Assert.IsTrue(Enumerable.SequenceEqual(new float[] { 0, 0, 0, 0.3333335f, 0.6666665f }, 
+            Assert.IsTrue(Enumerable.SequenceEqual(new float[] { 0, 0, 0, 0.3333335f, 0.6666665f },
                 image[2].ToArray<float>()));
             tf.compat.v1.disable_eager_execution();
         }

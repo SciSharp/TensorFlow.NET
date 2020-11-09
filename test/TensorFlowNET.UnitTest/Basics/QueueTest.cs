@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tensorflow;
 using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
@@ -20,7 +17,7 @@ namespace TensorFlowNET.UnitTest.Basics
             var enqueue = queue.enqueue(numbers);
             var dequeue_many = queue.dequeue_many(n: 3);
 
-            using(var sess = tf.Session())
+            using (var sess = tf.Session())
             {
                 sess.run(enqueue, (numbers, new[] { 1 }));
                 sess.run(enqueue, (numbers, new[] { 2, 3 }));
@@ -106,7 +103,7 @@ namespace TensorFlowNET.UnitTest.Basics
             {
                 init.run();
 
-                foreach(var i in range(9))
+                foreach (var i in range(9))
                     results += (int)sess.run(x) + ".";
 
                 // output in random order

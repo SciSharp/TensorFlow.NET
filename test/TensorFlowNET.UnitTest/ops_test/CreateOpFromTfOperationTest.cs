@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using Tensorflow.Operations;
 using Tensorflow.UnitTest;
@@ -28,14 +28,14 @@ namespace TensorFlowNET.UnitTest.ops_test
         {
             using (var g = tf.Graph().as_default())
             {
-                var x = constant_op.constant(new[,] {{1, 2, 3}, {4, 5, 6}});
-                var (c_op, op_desc) = ops._create_c_op(g, ops._NodeDef("Identity", "myop"), new[] {x}, new Operation[0]);
+                var x = constant_op.constant(new[,] { { 1, 2, 3 }, { 4, 5, 6 } });
+                var (c_op, op_desc) = ops._create_c_op(g, ops._NodeDef("Identity", "myop"), new[] { x }, new Operation[0]);
                 var op = g._create_op_from_tf_operation(c_op);
 
                 Assert.AreEqual("myop", op.name);
                 Assert.AreEqual("Identity", op.type);
                 Assert.AreEqual(1, len(op.outputs));
-                assertItemsEqual(new[] {2, 3}, op.outputs[0].shape);
+                assertItemsEqual(new[] { 2, 3 }, op.outputs[0].shape);
             }
         }
 
@@ -101,7 +101,7 @@ namespace TensorFlowNET.UnitTest.ops_test
         public void TestWhileLoop()
         {
             var graph = tf.Graph().as_default();
-            Operation x=null;
+            Operation x = null;
             x = constant_op.constant(42);
             var body = new Func<int, int>(i =>
             {
@@ -120,7 +120,7 @@ namespace TensorFlowNET.UnitTest.ops_test
             self.assertEqual(op.outputs.Length, 0);
             var op_input = op.inputs[0].op;
             self.assertEqual(op_input.type, "Enter");
-            self.assertItemsEqual(op_input.inputs.OfType<Operation>().ToArray(), new[] {x});
+            self.assertItemsEqual(op_input.inputs.OfType<Operation>().ToArray(), new[] { x });
             self.assertEqual(op.graph, graph);
             self.assertIsNotNone(op._get_control_flow_context());
             self.assertEqual(((ControlFlowContext)op._get_control_flow_context()).Name, "myloop/while_context");

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -46,7 +45,7 @@ namespace TensorFlowNET.UnitTest
             if (workload == null) throw new ArgumentNullException(nameof(workload));
             if (postRun == null) throw new ArgumentNullException(nameof(postRun));
             if (threadCount <= 0) throw new ArgumentOutOfRangeException(nameof(threadCount));
-            new MultiThreadedUnitTestExecuter(threadCount) {PostRun = postRun}.Run(workload);
+            new MultiThreadedUnitTestExecuter(threadCount) { PostRun = postRun }.Run(workload);
         }
 
         #endregion
@@ -81,12 +80,14 @@ namespace TensorFlowNET.UnitTest
                     try
                     {
                         workloads[0](0);
-                    } catch (Exception e)
+                    }
+                    catch (Exception e)
                     {
                         if (Debugger.IsAttached)
                             throw;
                         ex = e;
-                    } finally
+                    }
+                    finally
                     {
                         done_barrier2.Release(1);
                     }
@@ -111,12 +112,14 @@ namespace TensorFlowNET.UnitTest
                 try
                 {
                     core(threadid);
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     if (Debugger.IsAttached)
                         throw;
                     return e;
-                } finally
+                }
+                finally
                 {
                     done_barrier2.Release(1);
                 }
@@ -133,7 +136,8 @@ namespace TensorFlowNET.UnitTest
                     var i_local = i;
                     Threads[i] = new Thread(() => Exceptions[i_local] = ThreadCore(workload, i_local));
                 }
-            } else
+            }
+            else
             {
                 for (int i = 0; i < ThreadCount; i++)
                 {

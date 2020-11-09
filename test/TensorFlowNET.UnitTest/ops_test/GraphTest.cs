@@ -22,7 +22,8 @@ namespace TensorFlowNET.UnitTest.ops_test
             ops.reset_default_graph();
         }
 
-        private void _AssertDefault(Graph expected) {
+        private void _AssertDefault(Graph expected)
+        {
             Assert.AreSame(ops.get_default_graph(), expected);
         }
 
@@ -31,13 +32,13 @@ namespace TensorFlowNET.UnitTest.ops_test
         [TestMethod]
         public void testResetDefaultGraphNesting()
         {
-/*
-          def testResetDefaultGraphNesting(self):
-            g0 = ops.Graph()
-            with self.assertRaises(AssertionError):
-              with g0.as_default():
-                ops.reset_default_graph()
-*/
+            /*
+                      def testResetDefaultGraphNesting(self):
+                        g0 = ops.Graph()
+                        with self.assertRaises(AssertionError):
+                          with g0.as_default():
+                            ops.reset_default_graph()
+            */
         }
 
         [Ignore("Todo: Port")]

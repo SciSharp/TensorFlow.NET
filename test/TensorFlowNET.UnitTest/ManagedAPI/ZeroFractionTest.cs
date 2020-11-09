@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
+using System;
+using System.Linq;
 using Tensorflow;
 using Tensorflow.UnitTest;
 
@@ -16,7 +16,7 @@ namespace TensorFlowNET.UnitTest.nn_test
             int total_elements = np.prod(x.shape);
 
             var eps = 1e-8;
-            var nonzeros = x.Data<double>().Count(d=>Math.Abs(d)> eps);
+            var nonzeros = x.Data<double>().Count(d => Math.Abs(d) > eps);
             return 1.0 - nonzeros / (double)total_elements;
         }
 
@@ -26,7 +26,7 @@ namespace TensorFlowNET.UnitTest.nn_test
         {
             var x_shape = new Shape(5, 17);
             var x_np = np.random.randint(0, 2, x_shape);
-                //x_np.astype(np.float32);
+            //x_np.astype(np.float32);
             var y_np = this._ZeroFraction(x_np);
 
             var x_tf = constant_op.constant(x_np);
@@ -53,7 +53,7 @@ namespace TensorFlowNET.UnitTest.nn_test
         public void testZeroFraction2_27Zeros()
         {
             var sparsity = nn_impl.zero_fraction(
-                array_ops.zeros(new Shape((int) Math.Pow(2, 27 * 1.01)), dtypes.int8));
+                array_ops.zeros(new Shape((int)Math.Pow(2, 27 * 1.01)), dtypes.int8));
             self.assertAllClose(1.0, self.evaluate<NDArray>(sparsity));
         }
 

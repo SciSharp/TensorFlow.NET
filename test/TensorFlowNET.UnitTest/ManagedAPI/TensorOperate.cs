@@ -1,8 +1,6 @@
-﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using System.Linq;
-using Tensorflow;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.ManagedAPI
@@ -26,17 +24,17 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
         [TestMethod]
         public void InitTensorTest()
         {
-            var a = tf.constant(np.array(new[, ,] 
-            { 
-                { { 1 }, { 2 }, { 3 } }, 
-                { { 4 }, { 5 }, { 6 } } 
+            var a = tf.constant(np.array(new[, ,]
+            {
+                { { 1 }, { 2 }, { 3 } },
+                { { 4 }, { 5 }, { 6 } }
             }));
             Assert.IsTrue(Enumerable.SequenceEqual(new[] { 2, 3, 1 }, a.shape));
 
-            var b = tf.constant(new[, ,] 
-            { 
-                { { 1 }, { 2 }, { 3 } }, 
-                { { 4 }, { 5 }, { 6 } } 
+            var b = tf.constant(new[, ,]
+            {
+                { { 1 }, { 2 }, { 3 } },
+                { { 4 }, { 5 }, { 6 } }
             });
             Assert.IsTrue(Enumerable.SequenceEqual(new[] { 2, 3, 1 }, b.shape));
         }

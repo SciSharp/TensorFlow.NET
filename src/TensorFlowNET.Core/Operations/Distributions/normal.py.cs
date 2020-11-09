@@ -57,8 +57,8 @@ namespace Tensorflow
                      this._loc = array_ops.identity(loc, name);
                      this._scale = array_ops.identity(scale, name);
                      base._dtype = this._scale.dtype;
-                    // base._reparameterization_type = new ReparameterizationType("FULLY_REPARAMETERIZED");
-                    base._validate_args = validate_args;
+                     // base._reparameterization_type = new ReparameterizationType("FULLY_REPARAMETERIZED");
+                     base._validate_args = validate_args;
                      base._allow_nan_stats = allow_nan_stats;
                      base._parameters = parameters;
                      base._graph_parents = new List<Tensor>(new Tensor[] { this._loc, this._scale });

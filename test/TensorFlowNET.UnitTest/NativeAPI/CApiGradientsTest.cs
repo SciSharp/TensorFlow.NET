@@ -53,7 +53,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                     c_api.TF_GraphToGraphDef(graph, buffer.Handle, s.Handle);
                     bool ret = TF_GetCode(s) == TF_OK;
                     EXPECT_EQ(TF_OK, TF_GetCode(s));
-                    if (ret) 
+                    if (ret)
                         graph_def = GraphDef.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
                     return ret;
                 }
@@ -114,13 +114,13 @@ namespace TensorFlowNET.UnitTest.NativeAPI
                 IntPtr[] handles = new IntPtr[2] { IntPtr.Zero, IntPtr.Zero };
                 c_api.TF_AddGradientsWithPrefix(graph_, prefix, outputs, noutputs, inputs,
                                       ninputs, grad_inputs, s_.Handle, handles);
-                
+
                 var op = new Operation(handles[0]);
             }
             else
             {
                 //c_api.TF_AddGradientsWithPrefix(graph_, prefix, outputs, noutputs, inputs,
-                                        //ninputs, null, s_, grad_outputs);
+                //ninputs, null, s_, grad_outputs);
             }
         }
 
@@ -232,7 +232,7 @@ namespace TensorFlowNET.UnitTest.NativeAPI
             return t;
         }
 
-        private Operation MatMul(Graph graph, Status s, Operation l, Operation r, string name, 
+        private Operation MatMul(Graph graph, Status s, Operation l, Operation r, string name,
             bool transpose_a = false, bool transpose_b = false)
         {
             var desc = TF_NewOperation(graph, "MatMul", name);

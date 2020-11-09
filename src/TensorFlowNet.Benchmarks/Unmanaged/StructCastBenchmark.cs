@@ -1,11 +1,7 @@
-﻿using System;
+﻿using BenchmarkDotNet.Attributes;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using BenchmarkDotNet.Attributes;
-using Google.Protobuf.WellKnownTypes;
-using NumSharp;
-using Tensorflow;
-using static Tensorflow.Binding;
 
 namespace TensorFlowBenchmark.Unmanaged
 {
@@ -57,7 +53,7 @@ namespace TensorFlowBenchmark.Unmanaged
             UnmanagedStruct _;
             for (int i = 0; i < 10000; i++)
             {
-                _ = *(UnmanagedStruct*) dptr;
+                _ = *(UnmanagedStruct*)dptr;
             }
         }
 

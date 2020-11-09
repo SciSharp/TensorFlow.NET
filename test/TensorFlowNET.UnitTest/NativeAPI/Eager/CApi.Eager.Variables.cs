@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using Tensorflow;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;

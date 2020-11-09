@@ -36,7 +36,7 @@ namespace Tensorflow.Keras.Engine
             // such as loss scaling and gradient clipping.
             _minimize(tape, optimizer, loss, trainable_variables);
             compiled_metrics.update_state(y, y_pred);
-            
+
             return metrics.Select(x => (x.Name, x.result())).ToList();
         }
 
