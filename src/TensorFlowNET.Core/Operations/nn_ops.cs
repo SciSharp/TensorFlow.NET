@@ -24,7 +24,7 @@ namespace Tensorflow
 {
     public class nn_ops
     {
-        internal static ConvolutionInternal convolution_internal(string padding,
+        public static ConvolutionInternal convolution_internal(string padding,
             int[] strides,
             int[] dilation_rate,
             string name = null,

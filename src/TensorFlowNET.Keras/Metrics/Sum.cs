@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tensorflow.Keras.Metrics
+﻿namespace Tensorflow.Keras.Metrics
 {
-    public class Sum : Reduce
+    class Sum
     {
-        public Sum(string name, string dtype = null)
-           : base(Reduction.SUM, name, dtype)
-        {
-        }
     }
 }

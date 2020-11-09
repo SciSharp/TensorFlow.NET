@@ -15,6 +15,9 @@
 ******************************************************************************/
 
 using System;
+using System.Collections.Generic;
+using Tensorflow.Keras;
+using Tensorflow.Keras.Engine;
 using Tensorflow.Operations;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
@@ -42,7 +45,7 @@ namespace Tensorflow
     /// matching structure of Tensors having shape `[batch_size].concatenate(s)`
     /// for each `s` in `self.batch_size`.
     /// </summary>
-    public abstract class RnnCell : Layers.Layer
+    public abstract class RnnCell : ILayer
     {
         /// <summary>
         /// Attribute that indicates whether the cell is a TF RNN cell, due the slight
@@ -52,14 +55,24 @@ namespace Tensorflow
         public virtual object state_size { get; }
 
         public virtual int output_size { get; }
+        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public List<INode> InboundNodes => throw new NotImplementedException();
+
+        public List<INode> OutboundNodes => throw new NotImplementedException();
+
+        public List<ILayer> Layers => throw new NotImplementedException();
+
+        public bool Trainable => throw new NotImplementedException();
+
+        public List<IVariableV1> trainable_variables => throw new NotImplementedException();
+
+        public TensorShape output_shape => throw new NotImplementedException();
 
         public RnnCell(bool trainable = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            bool? _reuse = null) : base(trainable: trainable,
-                    name: name,
-                    dtype: dtype,
-                    _reuse: _reuse)
+            bool? _reuse = null)
         {
             _is_tf_rnn_cell = true;
         }
@@ -108,6 +121,16 @@ namespace Tensorflow
             }
 
             throw new NotImplementedException("_zero_state_tensors");
+        }
+
+        public Tensors Apply(Tensors inputs, Tensor state = null, bool is_training = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int count_params()
+        {
+            throw new NotImplementedException();
         }
     }
 }

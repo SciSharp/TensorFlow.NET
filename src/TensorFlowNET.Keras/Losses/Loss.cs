@@ -1,41 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Losses
 {
+    /// <summary>
+    /// Loss base class.
+    /// </summary>
     public abstract class Loss
     {
-        public static Tensor mean_squared_error(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
+        protected string reduction;
+        protected string name;
+        bool _allow_sum_over_batch_size;
+        string _name_scope;
 
-        public static Tensor mean_absolute_error(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
+        public string Reduction => reduction;
 
-        public static Tensor mean_absolute_percentage_error(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
+        public Loss(string reduction = ReductionV2.AUTO, string name = null)
+        {
+            this.reduction = reduction;
+            this.name = name;
+            _allow_sum_over_batch_size = false;
+        }
 
-        public static Tensor mean_squared_logarithmic_error(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
+        public virtual Tensor Apply(Tensor y_true, Tensor y_pred, bool from_logits = false, int axis = -1)
+        {
+            throw new NotImplementedException("");
+        }
 
-        public static Tensor _maybe_convert_labels(Tensor y_true) => throw new NotImplementedException();
+        public Tensor Call(Tensor y_true, Tensor y_pred)
+        {
+            var losses = Apply(y_true, y_pred);
+            return losses_utils.compute_weighted_loss(losses, reduction: ReductionV2.SUM_OVER_BATCH_SIZE);
+        }
 
-        public static Tensor squared_hinge(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
-
-        public static Tensor hinge(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
-
-        public static Tensor categorical_hinge(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
-
-        public static Tensor huber_loss(Tensor y_true, Tensor y_pred, float delta = 1) => throw new NotImplementedException();
-
-        public static Tensor logcosh(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
-
-        public static Tensor categorical_crossentropy(Tensor y_true, Tensor y_pred, bool from_logits = false, float label_smoothing = 0) => throw new NotImplementedException();
-
-        public static Tensor sparse_categorical_crossentropy(Tensor y_true, Tensor y_pred, bool from_logits = false, float axis = -1) => throw new NotImplementedException();
-
-        public static Tensor binary_crossentropy(Tensor y_true, Tensor y_pred, bool from_logits = false, float label_smoothing = 0) => throw new NotImplementedException();
-
-        public static Tensor kullback_leibler_divergence(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
-
-        public static Tensor poisson(Tensor y_true, Tensor y_pred) => throw new NotImplementedException();
-
-        public static Tensor cosine_similarity(Tensor y_true, Tensor y_pred, int axis = -1) => throw new NotImplementedException();
+        void _set_name_scope()
+        {
+            _name_scope = name;
+        }
     }
 }

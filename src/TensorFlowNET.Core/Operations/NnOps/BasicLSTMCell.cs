@@ -71,7 +71,7 @@ namespace Tensorflow
         /// <param name="training"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
             var one = constant_op.constant(1, dtype: dtypes.int32);
             // Parameters of gates are concatenated into one multiply for efficiency.

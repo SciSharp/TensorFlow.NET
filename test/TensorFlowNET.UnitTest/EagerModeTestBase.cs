@@ -3,16 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow;
-using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using static Tensorflow.Binding;
+using static Tensorflow.KerasExt;
 
 namespace TensorFlowNET.UnitTest
 {
     public class EagerModeTestBase : PythonTest
     {
-        protected KerasApi keras = tf.keras;
-        protected LayersApi layers = tf.keras.layers;
+        protected LayersApi layers = keras.layers;
 
         [TestInitialize]
         public void TestInit()

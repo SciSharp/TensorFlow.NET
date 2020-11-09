@@ -22,7 +22,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {
-    internal class ConvolutionInternal
+    public class ConvolutionInternal
     {
         ConvolutionalArgs args;
 

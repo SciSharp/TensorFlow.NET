@@ -137,8 +137,6 @@ namespace Tensorflow
                     is_training: is_training,
                     name: name);
 
-            public IPoolFunction max_pool_fn => new MaxPoolFunction();
-
             public Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null)
                 => nn_ops.max_pool(value, ksize, strides, padding, data_format: data_format, name: name);
 

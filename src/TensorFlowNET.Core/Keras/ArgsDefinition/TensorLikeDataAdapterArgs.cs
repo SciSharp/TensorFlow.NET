@@ -13,6 +13,6 @@ namespace Tensorflow.Keras.ArgsDefinition
         public int MaxQueueSize { get; set; }
         public int Worker { get; set; }
         public bool UseMultiprocessing { get; set; }
-        public Model Model { get; set; }
+        public IModel Model { get; set; }
     }
 }

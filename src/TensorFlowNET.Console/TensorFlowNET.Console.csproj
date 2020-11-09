@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
+    <ProjectReference Include="..\TensorFlowNET.Keras\Tensorflow.Keras.csproj" />
   </ItemGroup>
 
 </Project>

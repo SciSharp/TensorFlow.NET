@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,19 +6,22 @@ namespace Tensorflow.Keras.Metrics
 {
     public class MeanMetricWrapper : Mean
     {
-        public MeanMetricWrapper(Func<Tensor, Tensor, Tensor> fn, string name, string dtype = null) : base(name, dtype)
+        string name;
+        Func<Tensor, Tensor, Tensor> _fn = null;
+        
+        public MeanMetricWrapper(Func<Tensor, Tensor, Tensor> fn, string name, TF_DataType dtype = TF_DataType.TF_FLOAT)
+            : base(name: name, dtype: dtype)
         {
-            throw new NotImplementedException();
+            _fn = fn;
         }
 
-        public override Tensor result()
+        public override Tensor update_state(Tensor y_true, Tensor y_pred, Tensor sample_weight = null)
         {
-            throw new NotImplementedException();
-        }
+            y_true = math_ops.cast(y_true, _dtype);
+            y_pred = math_ops.cast(y_pred, _dtype);
 
-        public override Hashtable get_config()
-        {
-            throw new NotImplementedException();
+            var matches = _fn(y_true, y_pred);
+            return update_state(matches, sample_weight: sample_weight);
         }
     }
 }

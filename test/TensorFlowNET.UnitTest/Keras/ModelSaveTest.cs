@@ -3,10 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Keras.Layers;
-using NumSharp;
-using Tensorflow.UnitTest;
-using static Tensorflow.Binding;
+using static Tensorflow.KerasExt;
 
 namespace TensorFlowNET.UnitTest.Keras
 {
@@ -24,8 +21,6 @@ namespace TensorFlowNET.UnitTest.Keras
 
         Model GetModel()
         {
-            var keras = tf.keras;
-
             // Create a simple model.
             var inputs = keras.Input(shape: 32);
             var dense_layer = keras.layers.Dense(1);

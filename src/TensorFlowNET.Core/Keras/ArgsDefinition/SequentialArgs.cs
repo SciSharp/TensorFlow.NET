@@ -5,6 +5,6 @@ namespace Tensorflow.Keras.ArgsDefinition
 {
     public class SequentialArgs : ModelArgs
     {
-        public List<Layer> Layers { get; set; }
+        public List<ILayer> Layers { get; set; }
     }
 }
