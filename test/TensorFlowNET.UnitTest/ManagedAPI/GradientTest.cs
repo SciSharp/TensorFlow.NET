@@ -35,5 +35,17 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var y_grad = tape.gradient(y, x);
             Assert.AreEqual(9.0, (double)y);
         }
+
+        [TestMethod]
+        public void GradientOperatorMulTest()
+        {
+            var x = tf.constant(0f);
+            var w = tf.Variable(new float[] { 1, 1 });
+            using var gt = tf.GradientTape();
+            var y = x * w;
+            var gr = gt.gradient(y, w);
+            Assert.AreNotEqual(null, gr);
+        }
+
     }
 }
