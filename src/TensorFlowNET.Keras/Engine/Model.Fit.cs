@@ -54,6 +54,7 @@ namespace Tensorflow.Keras.Engine
             stop_training = false;
             _train_counter.assign(0);
             bool first_step = true;
+            Console.WriteLine($"Training...");
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
                 // reset_metrics();

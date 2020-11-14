@@ -5,6 +5,8 @@ PM> Install-Package TensorFlow.NET
 PM> Install-Package SciSharp.TensorFlow.Redist
 ```
 
+Add `<RuntimeIdentifier>win-x64</RuntimeIdentifier>` to a `PropertyGroup` in your `.csproj` when targeting `.NET 472`.
+
 ### Run in Linux
 
 Download Linux pre-built library and unzip `libtensorflow.so` and `libtensorflow_framework.so` into current running directory.
