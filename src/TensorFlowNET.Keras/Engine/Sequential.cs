@@ -17,7 +17,7 @@
 using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
-using static Tensorflow.KerasExt;
+using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Engine
 {

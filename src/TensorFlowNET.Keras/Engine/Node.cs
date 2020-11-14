@@ -41,7 +41,7 @@ namespace Tensorflow.Keras.Engine
         public TensorShape[] output_shapes;
         public List<Tensor> KerasInputs { get; set; } = new List<Tensor>();
         public ILayer Layer { get; set; }
-        public bool IsInput => args.InputTensors == null;
+        public bool is_input => args.InputTensors == null;
         public int[] FlatInputIds { get; set; }
         public int[] FlatOutputIds { get; set; }
         bool _single_positional_tensor_passed => KerasInputs.Count() == 1;

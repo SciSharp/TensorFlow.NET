@@ -16,11 +16,22 @@
 
 using System;
 using System.Linq;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Utils
 {
     public class generic_utils
     {
+        public static LayerConfig serialize_keras_object(ILayer instance)
+        {
+            var config = instance.get_config();
+            return new LayerConfig
+            {
+                Config = config,
+                ClassName = instance.GetType().Name
+            };
+        }
+
         public static string to_snake_case(string name)
         {
             return string.Concat(name.Select((x, i) =>

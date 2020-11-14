@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow.Keras.Engine;
-using static Tensorflow.KerasExt;
+using static Tensorflow.KerasApi;
 
 namespace TensorFlowNET.UnitTest.Keras
 {
@@ -10,21 +10,20 @@ namespace TensorFlowNET.UnitTest.Keras
     [TestClass]
     public class ModelSaveTest : EagerModeTestBase
     {
-        [TestMethod]
-        public void SaveAndLoadTest()
+        [TestMethod, Ignore]
+        public void GetAndFromConfig()
         {
-            var model = GetModel();
+            var model = GetFunctionalModel();
+            var config = model.get_config();
         }
 
-        Model GetModel()
+        Functional GetFunctionalModel()
         {
             // Create a simple model.
             var inputs = keras.Input(shape: 32);
             var dense_layer = keras.layers.Dense(1);
             var outputs = dense_layer.Apply(inputs);
-            var model = keras.Model(inputs, outputs);
-            model.compile("adam", "mean_squared_error");
-            return model;
+            return keras.Model(inputs, outputs);
         }
     }
 }

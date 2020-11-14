@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using Tensorflow.Keras;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Operations;
 using Tensorflow.Util;
@@ -129,6 +130,11 @@ namespace Tensorflow
         }
 
         public int count_params()
+        {
+            throw new NotImplementedException();
+        }
+
+        public LayerArgs get_config()
         {
             throw new NotImplementedException();
         }

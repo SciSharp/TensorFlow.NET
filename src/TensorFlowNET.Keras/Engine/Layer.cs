@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
@@ -241,5 +242,8 @@ namespace Tensorflow.Keras.Engine
                 return weights;
             }
         }
+
+        public virtual LayerArgs get_config()
+            => throw new NotImplementedException("");
     }
 }

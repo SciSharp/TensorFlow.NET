@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 
 namespace Tensorflow.Keras
@@ -14,5 +15,6 @@ namespace Tensorflow.Keras
         List<IVariableV1> trainable_variables { get; }
         TensorShape output_shape { get; }
         int count_params();
+        LayerArgs get_config();
     }
 }

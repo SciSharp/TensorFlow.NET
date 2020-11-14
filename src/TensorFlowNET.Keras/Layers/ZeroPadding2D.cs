@@ -2,7 +2,7 @@
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
-using static Tensorflow.KerasExt;
+using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Layers
 {

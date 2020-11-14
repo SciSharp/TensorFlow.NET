@@ -19,7 +19,7 @@ using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
-using static Tensorflow.KerasExt;
+using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -50,6 +50,7 @@ namespace Tensorflow.Keras.Layers
             {
                 var prefix = "input";
                 name = prefix + '_' + keras.backend.get_uid(prefix);
+                args.Name = name;
             }
 
             if (args.DType == TF_DataType.DtInvalid)
@@ -99,5 +100,8 @@ namespace Tensorflow.Keras.Layers
 
             tf.Context.restore_mode();
         }
+
+        public override LayerArgs get_config()
+            => args;
     }
 }

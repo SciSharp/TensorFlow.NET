@@ -10,7 +10,7 @@ namespace Tensorflow.Keras.Engine
     /// <summary>
     /// A `Functional` model is a `Model` defined as a directed graph of layers.
     /// </summary>
-    public class Functional : Model
+    public partial class Functional : Model
     {
         TensorShape _build_input_shape;
         bool _compute_output_and_mask_jointly;
@@ -283,7 +283,7 @@ namespace Tensorflow.Keras.Engine
 
             // Propagate to all previous tensors connected to this node.
             nodes_in_progress.Add(node);
-            if (!node.IsInput)
+            if (!node.is_input)
             {
                 foreach (var k_tensor in node.KerasInputs)
                 {
@@ -307,7 +307,7 @@ namespace Tensorflow.Keras.Engine
 
         Tensors run_internal_graph(Tensors inputs, bool training = false, Tensors mask = null)
         {
-            if (mask != null)
+            if (mask == null)
             {
                 Tensor[] masks = new Tensor[inputs.Count()];
                 foreach (var (i, input_t) in enumerate(inputs))
@@ -330,7 +330,7 @@ namespace Tensorflow.Keras.Engine
                 foreach (Node node in nodes)
                 {
                     // Input tensors already exist.
-                    if (node.IsInput)
+                    if (node.is_input)
                         continue;
 
                     var layer_inputs = node.MapArguments(tensor_dict);
