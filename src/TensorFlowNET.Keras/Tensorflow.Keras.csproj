@@ -12,7 +12,7 @@
     <Copyright>Apache 2.0, Haiping Chen 2020</Copyright>
     <PackageId>TensorFlow.Keras</PackageId>
     <PackageProjectUrl>https://github.com/SciSharp/TensorFlow.NET</PackageProjectUrl>
-    <PackageIcon>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIcon>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
     <PackageReleaseNotes>Keras for .NET is a C# version of Keras ported from the python version.</PackageReleaseNotes>
     <Description>Keras for .NET
