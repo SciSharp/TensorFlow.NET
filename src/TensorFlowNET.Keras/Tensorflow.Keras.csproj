@@ -12,15 +12,17 @@
     <Copyright>Apache 2.0, Haiping Chen 2020</Copyright>
     <PackageId>TensorFlow.Keras</PackageId>
     <PackageProjectUrl>https://github.com/SciSharp/TensorFlow.NET</PackageProjectUrl>
-    <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+    <PackageIcon>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIcon>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
-    <PackageReleaseNotes>Keras for .NET is a C# version of Keras migrated from the python version.</PackageReleaseNotes>
-    <Description>Keras for .NET developers.
+    <PackageReleaseNotes>Keras for .NET is a C# version of Keras ported from the python version.</PackageReleaseNotes>
+    <Description>Keras for .NET
 
 Keras is an API designed for human beings, not machines. Keras follows best practices for reducing cognitive load: it offers consistent &amp; simple APIs, it minimizes the number of user actions required for common use cases, and it provides clear &amp; actionable error messages.</Description>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>tensorflow, keras, deep learning, machine learning</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,15 +30,16 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.138" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
+    <Folder Include="Saving\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Saving\" />
+    <ProjectReference Include="..\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
   </ItemGroup>
 
 </Project>
