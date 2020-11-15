@@ -8,7 +8,9 @@
         ILayer layer;
         public ILayer Layer => layer;
         int node_index;
+        public int NodeIndex => node_index;
         int tensor_index;
+        public int TensorIndex => tensor_index;
         Tensor tensor;
 
         public KerasHistory(ILayer layer, int node_index, int tensor_index, Tensor tensor)

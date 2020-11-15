@@ -13,6 +13,6 @@ namespace Tensorflow.Keras.Engine
         INode[] ParentNodes { get; }
         IEnumerable<(ILayer, int, int, Tensor)> iterate_inbound();
         bool is_input { get; }
-        NodeConfig serialize(Func<string, int, string> make_node_key, Dictionary<string, int> node_conversion_map);
+        List<NodeConfig> serialize(Func<string, int, string> make_node_key, Dictionary<string, int> node_conversion_map);
     }
 }

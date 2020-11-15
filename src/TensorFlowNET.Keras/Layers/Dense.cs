@@ -84,5 +84,10 @@ namespace Tensorflow.Keras.Layers
 
             return outputs;
         }
+
+        public static Dense from_config(LayerArgs args)
+        {
+            return new Dense(args as DenseArgs);
+        }
     }
 }

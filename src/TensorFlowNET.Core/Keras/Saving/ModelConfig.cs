@@ -9,7 +9,10 @@ namespace Tensorflow.Keras.Saving
     {
         public string Name { get; set; }
         public List<LayerConfig> Layers { get; set; }
-        public List<ILayer> InputLayers { get; set; }
-        public List<ILayer> OutputLayers { get; set; }
+        public List<NodeConfig> InputLayers { get; set; }
+        public List<NodeConfig> OutputLayers { get; set; }
+
+        public override string ToString()
+            => $"{Name}, {Layers.Count} Layers, {InputLayers.Count} Input Layers, {OutputLayers.Count} Output Layers";
     }
 }

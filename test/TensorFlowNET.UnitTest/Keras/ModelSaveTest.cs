@@ -10,11 +10,13 @@ namespace TensorFlowNET.UnitTest.Keras
     [TestClass]
     public class ModelSaveTest : EagerModeTestBase
     {
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetAndFromConfig()
         {
             var model = GetFunctionalModel();
             var config = model.get_config();
+            var new_model = keras.models.from_config(config);
+            Assert.AreEqual(model.Layers.Count, new_model.Layers.Count);
         }
 
         Functional GetFunctionalModel()

@@ -761,13 +761,6 @@ namespace Tensorflow.Gradients
             {
                 sx = array_ops.shape(x);
                 sy = array_ops.shape(y);
-
-                var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
-                return new[]
-                {
-                   (sx, rx, true),
-                   (sy, ry, true)
-                };
             }
             else
             {
@@ -775,7 +768,12 @@ namespace Tensorflow.Gradients
                 sy = array_ops.shape_internal(y, optimize: false);
             }
 
-            throw new NotImplementedException("");
+            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+            return new[]
+            {
+                (sx, rx, true),
+                (sy, ry, true)
+            };
         }
     }
 }

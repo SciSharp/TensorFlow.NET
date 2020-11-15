@@ -244,6 +244,6 @@ namespace Tensorflow.Keras.Engine
         }
 
         public virtual LayerArgs get_config()
-            => throw new NotImplementedException("");
+            => args;
     }
 }

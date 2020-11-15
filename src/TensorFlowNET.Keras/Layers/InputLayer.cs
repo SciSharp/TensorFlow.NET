@@ -101,7 +101,9 @@ namespace Tensorflow.Keras.Layers
             tf.Context.restore_mode();
         }
 
-        public override LayerArgs get_config()
-            => args;
+        public static InputLayer from_config(LayerArgs args)
+        {
+            return new InputLayer(args as InputLayerArgs);
+        }
     }
 }

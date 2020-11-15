@@ -38,7 +38,7 @@ namespace Tensorflow.Eager
                 }*/
             }
 
-            Console.WriteLine($"RecordGradient: should_record={should_record}, op_name={op_name}");
+            // Console.WriteLine($"RecordGradient: should_record={should_record}, op_name={op_name}");
             if (!should_record) return should_record;
 
             Tensor[] op_outputs;

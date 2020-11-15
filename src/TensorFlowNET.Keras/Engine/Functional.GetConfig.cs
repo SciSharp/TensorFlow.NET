@@ -44,14 +44,14 @@ namespace Tensorflow.Keras.Engine
             var layer_configs = new List<LayerConfig>();
             foreach (var layer in _layers)
             {
-                var filtered_inbound_nodes = new List<INode>();
+                var filtered_inbound_nodes = new List<NodeConfig>();
                 foreach (var (original_node_index, node) in enumerate(layer.InboundNodes))
                 {
                     var node_key = _make_node_key(layer.Name, original_node_index);
                     if (NetworkNodes.Contains(node_key) && !node.is_input)
                     {
                         var node_data = node.serialize(_make_node_key, node_conversion_map);
-                        throw new NotImplementedException("");
+                        filtered_inbound_nodes.append(node_data);
                     }
                 }
 
@@ -62,12 +62,42 @@ namespace Tensorflow.Keras.Engine
             }
             config.Layers = layer_configs;
 
-            return config;
-        }
+            // Gather info about inputs and outputs.
+            var model_inputs = new List<NodeConfig>();
+            foreach (var i in range(_input_layers.Count))
+            {
+                var (layer, node_index, tensor_index) = _input_coordinates[i];
+                var node_key = _make_node_key(layer.Name, node_index);
+                if (!NetworkNodes.Contains(node_key))
+                    continue;
+                var new_node_index = node_conversion_map[node_key];
+                model_inputs.append(new NodeConfig
+                {
+                    Name = layer.Name,
+                    NodeIndex = new_node_index,
+                    TensorIndex = tensor_index
+                });
+            }
+            config.InputLayers = model_inputs;
 
-        bool _should_skip_first_node(ILayer layer)
-        {
-            return layer is Functional && layer.Layers[0] is InputLayer;
+            var model_outputs = new List<NodeConfig>();
+            foreach (var i in range(_output_layers.Count))
+            {
+                var (layer, node_index, tensor_index) = _output_coordinates[i];
+                var node_key = _make_node_key(layer.Name, node_index);
+                if (!NetworkNodes.Contains(node_key))
+                    continue;
+                var new_node_index = node_conversion_map[node_key];
+                model_outputs.append(new NodeConfig
+                {
+                    Name = layer.Name,
+                    NodeIndex = new_node_index,
+                    TensorIndex = tensor_index
+                });
+            }
+            config.OutputLayers = model_outputs;
+
+            return config;
         }
 
         string _make_node_key(string layer_name, int node_index)

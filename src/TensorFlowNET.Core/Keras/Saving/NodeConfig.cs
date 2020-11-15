@@ -9,5 +9,8 @@ namespace Tensorflow.Keras.Saving
         public string Name { get; set; }
         public int NodeIndex { get; set; }
         public int TensorIndex { get; set; }
+
+        public override string ToString()
+            => $"{Name}, {NodeIndex}, {TensorIndex}";
     }
 }

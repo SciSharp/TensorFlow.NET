@@ -5,7 +5,9 @@ using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Metrics;
+using Tensorflow.Keras.Models;
 using Tensorflow.Keras.Optimizers;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras
 {
@@ -21,6 +23,7 @@ namespace Tensorflow.Keras
         public BackendImpl backend { get; } = new BackendImpl();
         public OptimizerApi optimizers { get; } = new OptimizerApi();
         public MetricsApi metrics { get; } = new MetricsApi();
+        public ModelsApi models { get; } = new ModelsApi();
 
         public Sequential Sequential(List<ILayer> layers = null,
                 string name = null)

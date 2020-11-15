@@ -11,6 +11,6 @@ namespace Tensorflow.Keras.Saving
         public string Name { get; set; }
         public string ClassName { get; set; }
         public LayerArgs Config { get; set; }
-        public List<INode> InboundNodes { get; set; }
+        public List<NodeConfig> InboundNodes { get; set; }
     }
 }
