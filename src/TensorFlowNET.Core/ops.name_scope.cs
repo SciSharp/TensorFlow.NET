@@ -48,7 +48,7 @@ namespace Tensorflow
                 _skip_on_eager = skip_on_eager;
             }
 
-            // [DebuggerStepThrough]
+            [DebuggerStepThrough]
             public void __enter__()
             {
                 if (tf.Context.executing_eagerly())
@@ -96,7 +96,7 @@ namespace Tensorflow
                 return (scope_name, old_name);
             }
 
-            [DebuggerHidden]
+            [DebuggerStepThrough]
             public void Dispose()
             {
                 if (tf.Context.executing_eagerly())
@@ -105,7 +105,7 @@ namespace Tensorflow
                     get_default_graph()._name_stack = old_scope_name;
             }
 
-            [DebuggerNonUserCode]
+            [DebuggerStepThrough]
             public void __exit__()
             {
             }

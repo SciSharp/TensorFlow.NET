@@ -296,6 +296,7 @@ namespace Tensorflow
                 // outer_device_stack = None
             });
 
+            tf.Context.ScopeName = scope;
             return ops.name_scope(scope);
         }
 

@@ -87,9 +87,9 @@ namespace Tensorflow
             if (trainable && !collections.Contains(tf.GraphKeys.TRAINABLE_VARIABLES))
                 collections.Add(tf.GraphKeys.TRAINABLE_VARIABLES);
 
-            _in_graph_mode = !tf.Context.executing_eagerly();
             tf_with(ops.init_scope(), init_scope =>
             {
+                _in_graph_mode = !tf.Context.executing_eagerly();
                 var values = init_from_fn ? new object[0] : new object[] { initial_value };
                 tf_with(ops.name_scope(name, "Variable", values, skip_on_eager: false), scope =>
                 {
