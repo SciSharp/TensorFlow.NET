@@ -812,6 +812,9 @@ namespace Tensorflow
             return tf.Runner.Execute(ctx, "Split", num_split, _inputs_flat.ToArray(), _attrs, name: name);
         }
 
+        public static Tensor slice(Tensor input, Tensor[] begin, Tensor[] size, string name = null)
+            => gen_array_ops.slice(input, begin, size, name: name);
+
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
             => gen_array_ops.slice(input, begin, size, name: name);
 
