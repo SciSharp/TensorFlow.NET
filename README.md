@@ -1,6 +1,6 @@
 ![logo](docs/assets/tf.net.logo.png)
 
-**TensorFlow.NET** (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in C# which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. 
+**TensorFlow.NET** (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in C# which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. TensorFlow.NET has built-in Keras high-level interface and is released as an independent package [TensorFlow.Keras](https://www.nuget.org/packages/TensorFlow.Keras/).
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/wx4td43v2d3f2xj6?svg=true)](https://ci.appveyor.com/project/Haiping-Chen/tensorflow-net)
@@ -14,7 +14,7 @@
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
-### Why TensorFlow.NET ?
+### Why TensorFlow in .NET/ C# ?
 
 `SciSharp STACK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Since the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
 
@@ -22,20 +22,23 @@
 
 SciSharp's philosophy allows a large number of machine learning code written in Python to be quickly migrated to .NET, enabling .NET developers to use cutting edge machine learning models and access a vast number of Tensorflow resources which would not be possible without this project.
 
-In comparison to other projects, like for instance TensorFlowSharp which only provide Tensorflow's low-level C++ API and can only run models that were built using Python, Tensorflow.NET also implements Tensorflow's high level API where all the magic happens. This computation graph building layer is still under active development. Once it is completely implemented you can build new Machine Learning models in C#. 
+In comparison to other projects, like for instance [TensorFlowSharp](https://www.nuget.org/packages/TensorFlowSharp/) which only provide Tensorflow's low-level C++ API and can only run models that were built using Python, Tensorflow.NET also implements Tensorflow's high level API where all the magic happens. This computation graph building layer is still under active development. Once it is completely implemented you can build new Machine Learning models in C#. 
 
 ### How to use
 
-| TensorFlow  | tf native1.14 | tf native 1.15 | tf native 2.3 |
-| ----------- | ------------- | -------------- | ------------- |
-| tf.net 0.20 |               | x              | x             |
-| tf.net 0.15 | x             | x              |               |
-| tf.net 0.14 | x             |                |               |
+| TensorFlow                | tf native1.14 | tf native 1.15 | tf native 2.3 |
+| ------------------------- | ------------- | -------------- | ------------- |
+| tf.net 0.30, tf.keras 0.1 |               |                | x             |
+| tf.net 0.20               |               | x              | x             |
+| tf.net 0.15               | x             | x              |               |
+| tf.net 0.14               | x             |                |               |
 
 Install TF.NET and TensorFlow binary through NuGet.
 ```sh
 ### install tensorflow C# binding
 PM> Install-Package TensorFlow.NET
+### install keras for tensorflow
+PM> Install-Package TensorFlow.Keras
 
 ### Install tensorflow binary
 ### For CPU version
@@ -45,13 +48,14 @@ PM> Install-Package SciSharp.TensorFlow.Redist
 PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 ```
 
-Import TF.NET in your project.
+Import TF.NET and Keras API in your project.
 
 ```cs
 using static Tensorflow.Binding;
+using static Tensorflow.KerasApi;
 ```
 
-Linear Regression:
+Linear Regression in `Eager` mode:
 
 ```c#
 // Parameters        
@@ -91,6 +95,52 @@ foreach (var step in range(1, training_steps + 1))
 ```
 
 Run this example in [Jupyter Notebook](https://github.com/SciSharp/SciSharpCube).
+
+Toy version of `ResNet` in `Keras` functional API:
+
+```csharp
+// input layer
+var inputs = keras.Input(shape: (32, 32, 3), name: "img");
+
+// convolutional layer
+var x = layers.Conv2D(32, 3, activation: "relu").Apply(inputs);
+x = layers.Conv2D(64, 3, activation: "relu").Apply(x);
+var block_1_output = layers.MaxPooling2D(3).Apply(x);
+
+x = layers.Conv2D(64, 3, activation: "relu", padding: "same").Apply(block_1_output);
+x = layers.Conv2D(64, 3, activation: "relu", padding: "same").Apply(x);
+var block_2_output = layers.add(x, block_1_output);
+
+x = layers.Conv2D(64, 3, activation: "relu", padding: "same").Apply(block_2_output);
+x = layers.Conv2D(64, 3, activation: "relu", padding: "same").Apply(x);
+var block_3_output = layers.add(x, block_2_output);
+
+x = layers.Conv2D(64, 3, activation: "relu").Apply(block_3_output);
+x = layers.GlobalAveragePooling2D().Apply(x);
+x = layers.Dense(256, activation: "relu").Apply(x);
+x = layers.Dropout(0.5f).Apply(x);
+
+// output layer
+var outputs = layers.Dense(10).Apply(x);
+
+// build keras model
+model = keras.Model(inputs, outputs, name: "toy_resnet");
+model.summary();
+
+// compile keras model in tensorflow static graph
+model.compile(optimizer: keras.optimizers.RMSprop(1e-3f),
+	loss: keras.losses.CategoricalCrossentropy(from_logits: true),
+	metrics: new[] { "acc" });
+
+// prepare dataset
+var ((x_train, y_train), (x_test, y_test)) = keras.datasets.cifar10.load_data();
+
+// training
+model.fit(x_train[new Slice(0, 1000)], y_train[new Slice(0, 1000)], 
+          batch_size: 64, 
+          epochs: 10, 
+          validation_split: 0.2f);
+```
 
 Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html).
 

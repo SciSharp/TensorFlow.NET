@@ -167,5 +167,21 @@ namespace Tensorflow.Keras
 
         public class _DummyEagerGraph
         { }
+
+        /// <summary>
+        /// Categorical crossentropy between an output tensor and a target tensor.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="output"></param>
+        /// <param name="from_logits"></param>
+        /// <param name="axis"></param>
+        /// <returns></returns>
+        public Tensor categorical_crossentropy(Tensor target, Tensor output, bool from_logits = false, int axis = -1)
+        {
+            if (from_logits)
+                return tf.nn.softmax_cross_entropy_with_logits_v2(labels: target, logits: output, axis: axis);
+
+            throw new NotImplementedException("");
+        }
     }
 }

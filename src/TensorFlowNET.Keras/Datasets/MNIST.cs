@@ -17,7 +17,7 @@
 using NumSharp;
 using System;
 using System.IO;
-using System.Net;
+using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Datasets
 {
@@ -65,8 +65,7 @@ namespace Tensorflow.Keras.Datasets
                 return fileSaveTo;
             }
 
-            using var wc = new WebClient();
-            wc.DownloadFileTaskAsync(origin_folder + file_name, fileSaveTo).Wait();
+            Web.Download(origin_folder + file_name, Path.GetTempPath(), file_name);
 
             return fileSaveTo;
         }
