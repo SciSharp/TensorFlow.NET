@@ -90,7 +90,7 @@ namespace Tensorflow
                     value,
                     use_locking: use_locking,
                     name: name) :
-                @ref.assign(value, name: name) as Tensor;
+                @ref.assign_sub(value, name: name);
 
         //"""Update 'ref' by adding 'value' to it.
         //

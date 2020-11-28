@@ -82,13 +82,20 @@ namespace Tensorflow
             var value_tensor = ops.convert_to_tensor(value, dtype: dtype);
             var assign_op = gen_resource_variable_ops.assign_variable_op(
                 handle, value_tensor, name: name);
+
             if (read_value)
-            {
                 return gen_resource_variable_ops.read_variable_op(handle, dtype);
-                // var variable = _lazy_read(assign_op, value_tensor);
-                // return variable;
-            }
+            
             return assign_op;
+        }
+
+        public IVariableV1 assign_lazy_load(Tensor value, string name = null)
+        {
+            var value_tensor = ops.convert_to_tensor(value, dtype: dtype);
+            var assign_op = gen_resource_variable_ops.assign_variable_op(
+                handle, value_tensor, name: name);
+            var variable = _lazy_read(assign_op, value_tensor);
+            return variable;
         }
 
         public Tensor value()
@@ -155,6 +162,25 @@ namespace Tensorflow
                 return gen_resource_variable_ops.read_variable_op(handle, dtype);
             // return _lazy_read(assign_add_op);
             return assign_add_op;
+        }
+
+        public Tensor assign_sub<T>(T delta, bool use_locking = false, string name = null, bool read_value = true)
+        {
+            var assign_sub_op = gen_resource_variable_ops.assign_sub_variable_op(Handle,
+                ops.convert_to_tensor(delta, dtype: dtype), name: name);
+
+            if (read_value)
+                return gen_resource_variable_ops.read_variable_op(handle, dtype);
+            // return _lazy_read(assign_add_op);
+            return assign_sub_op;
+        }
+
+        public IVariableV1 assign_sub_lazy_load(Tensor delta, string name = null)
+        {
+            var assign_sub_op = gen_resource_variable_ops.assign_sub_variable_op(Handle,
+                ops.convert_to_tensor(delta, dtype: dtype), name: name);
+
+            return _lazy_read(assign_sub_op, delta);
         }
 
         public override string ToString()

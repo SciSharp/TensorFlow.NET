@@ -209,23 +209,23 @@ namespace Tensorflow.Keras.Layers
             return output;
         }
 
-        Tensor _assign_new_value(IVariableV1 variable, Tensor value)
+        void _assign_new_value(IVariableV1 variable, Tensor value)
         {
-            return tf_with(ops.name_scope("AssignNewValue", null, new { variable, value, momentum }), scope =>
+            tf_with(ops.name_scope("AssignNewValue", null, new { variable, value, momentum }), scope =>
             {
                 // var cm = ops.colocate_with(variable);
-                return state_ops.assign_sub(variable, value, name: scope);
+                variable.assign_lazy_load(value, name: scope);
             });
         }
 
-        Tensor _assign_moving_average(IVariableV1 variable, Tensor value, Tensor momentum)
+        void _assign_moving_average(IVariableV1 variable, Tensor value, Tensor momentum)
         {
-            return tf_with(ops.name_scope("AssignMovingAvg", null, new { variable, value, momentum }), scope =>
+            tf_with(ops.name_scope("AssignMovingAvg", null, new { variable, value, momentum }), scope =>
             {
                 // var cm = ops.colocate_with(variable);
                 var decay = ops.convert_to_tensor(1.0f - momentum, name: "decay");
                 var update_delta = (variable.AsTensor() - math_ops.cast(value, variable.dtype)) * decay;
-                return state_ops.assign_sub(variable, update_delta, name: scope);
+                variable.assign_sub_lazy_load(update_delta, name: scope);
             });
         }
     }

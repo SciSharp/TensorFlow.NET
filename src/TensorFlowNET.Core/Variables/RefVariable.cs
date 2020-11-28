@@ -23,6 +23,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
+    [Obsolete]
     public partial class RefVariable : IVariableV1, IProtoBuf<VariableDef, RefVariable>
     {
         protected string _name;
@@ -428,5 +429,20 @@ namespace Tensorflow
 
         public NDArray numpy()
             => throw new RuntimeError("Graph mode can't use numpy().");
+
+        public Tensor assign_sub<T>(T delta, bool use_locking = false, string name = null, bool read_value = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVariableV1 assign_sub_lazy_load(Tensor delta, string name = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVariableV1 assign_lazy_load(Tensor value, string name = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

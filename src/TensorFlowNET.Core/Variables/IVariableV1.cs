@@ -47,7 +47,10 @@ namespace Tensorflow
         TF_DataType dtype { get; }
         TensorShape shape { get; }
         Tensor assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true);
+        Tensor assign_sub<T>(T delta, bool use_locking = false, string name = null, bool read_value = true);
+        IVariableV1 assign_sub_lazy_load(Tensor delta, string name = null);
         Tensor assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true);
+        IVariableV1 assign_lazy_load(Tensor value, string name = null);
         Tensor AsTensor(TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false);
         NDArray numpy();
     }
