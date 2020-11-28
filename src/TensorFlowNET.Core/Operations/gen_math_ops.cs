@@ -578,10 +578,21 @@ namespace Tensorflow
                 x);
 
         public static Tensor logical_and(Tensor x, Tensor y, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("LogicalAnd", name, args: new { x, y });
+            => tf.OpDefLib._apply_op_helper("LogicalAnd", name, args: new { x, y });
 
-            return _op.outputs[0];
+        public static Tensor logical_and(bool x, bool y, string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "LogicalAnd", name,
+                    null,
+                    x, y);
+
+                return results[0];
+            }
+
+            return tf.OpDefLib._apply_op_helper("LogicalAnd", name, args: new { x, y });
         }
 
         public static Tensor logical_not(Tensor x, string name = null)
