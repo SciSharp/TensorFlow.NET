@@ -53,7 +53,6 @@ namespace Tensorflow.Keras.Engine
 
             stop_training = false;
             _train_counter.assign(0);
-            bool first_step = true;
             Console.WriteLine($"Training...");
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
@@ -65,11 +64,6 @@ namespace Tensorflow.Keras.Engine
                 {
                     // callbacks.on_train_batch_begin(step)
                     results = step_function(iterator);
-                    if (first_step)
-                    {
-                        Console.WriteLine($"epoch: {epoch}, " + string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2}")));
-                        first_step = false;
-                    }
                 }
                 Console.WriteLine($"epoch: {epoch + 1}, " + string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2}")));
             }

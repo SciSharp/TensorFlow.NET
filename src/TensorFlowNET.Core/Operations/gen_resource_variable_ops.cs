@@ -68,7 +68,7 @@ namespace Tensorflow
                     null,
                     resource, value);
 
-                return null;
+                return results.Length == 0 ? null : results[0];
             }
 
             var _op = tf.OpDefLib._apply_op_helper("AssignVariableOp", name, new { resource, value });

@@ -255,7 +255,7 @@ namespace Tensorflow
 
                 // The output cost shape should be the input minus axis.
                 var output_shape = array_ops.slice(input_shape,
-                    new int[] { 0 },
+                    new Tensor[] { constant_op.constant(0) },
                     new Tensor[] { math_ops.subtract(input_rank, 1) });
 
                 cost = array_ops.reshape(cost, output_shape);
@@ -274,35 +274,37 @@ namespace Tensorflow
             var rank = array_ops.rank(logits);
             var last_dim_size = array_ops.slice(array_ops.shape(logits),
                 new[] { math_ops.subtract(rank, 1) },
-                new[] { 1 });
+                new[] { constant_op.constant(1) });
 
             var ops = array_ops.concat(new[] { new[] { -1 }, (object)last_dim_size }, 0);
             var output = array_ops.reshape(logits, ops);
 
             // Set output shape if known.
-            // if not context.executing_eagerly():
-            var shape = logits.TensorShape;
-            if (shape != null && shape.ndim > 0)
+            if (!tf.Context.executing_eagerly())
             {
-                var product = 1;
-                var product_valid = true;
-                foreach (var d in shape.dims.Take(shape.ndim - 1))
+                var shape = logits.TensorShape;
+                if (shape != null && shape.ndim > 0)
                 {
-                    if (d == -1)
+                    var product = 1;
+                    var product_valid = true;
+                    foreach (var d in shape.dims.Take(shape.ndim - 1))
                     {
-                        product_valid = false;
-                        break;
+                        if (d == -1)
+                        {
+                            product_valid = false;
+                            break;
+                        }
+                        else
+                        {
+                            product *= d;
+                        }
                     }
-                    else
-                    {
-                        product *= d;
-                    }
-                }
 
-                if (product_valid)
-                {
-                    var output_shape = new[] { product };
-                    throw new NotImplementedException("_flatten_outer_dims product_valid");
+                    if (product_valid)
+                    {
+                        var output_shape = new[] { product };
+                        throw new NotImplementedException("_flatten_outer_dims product_valid");
+                    }
                 }
             }
 

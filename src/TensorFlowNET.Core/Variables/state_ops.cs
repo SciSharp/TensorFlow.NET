@@ -85,10 +85,12 @@ namespace Tensorflow
         public static Tensor assign_sub(IVariableV1 @ref,
             Tensor value,
             bool use_locking = false,
-            string name = null) => gen_state_ops.assign_sub(@ref,
-                value,
-                use_locking: use_locking,
-                name: name);
+            string name = null) => @ref.dtype.is_ref_dtype() ?
+                gen_state_ops.assign_sub(@ref,
+                    value,
+                    use_locking: use_locking,
+                    name: name) :
+                @ref.assign(value, name: name) as Tensor;
 
         //"""Update 'ref' by adding 'value' to it.
         //

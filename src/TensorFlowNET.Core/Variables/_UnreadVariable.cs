@@ -6,7 +6,7 @@ namespace Tensorflow
     /// Represents a future for a read of a variable.
     /// Pretends to be the tensor if anyone looks.
     /// </summary>
-    public class _UnreadVariable : BaseResourceVariable
+    public class _UnreadVariable : BaseResourceVariable, IVariableV1
     {
         public override string Name => _in_graph_mode ? _parent_op.name : "UnreadVariable";
 

@@ -23,6 +23,7 @@ namespace Tensorflow
         public Graph graph => items.First().graph;
         public bool IsEagerTensor => items.First().IsEagerTensor;
         public bool IsList { get; set; }
+        public int Length => items.Length;
 
         public Tensor this[int index]
         {

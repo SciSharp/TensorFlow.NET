@@ -207,11 +207,11 @@ namespace Tensorflow.Keras.Engine
             }));
         }
 
-        protected virtual void add_update(Tensor[] updates, bool inputs = false)
+        /*protected virtual void add_update(Tensor[] updates, bool inputs = false)
         {
             var updates_op = updates.Select(x => x.op).ToArray();
             this.updates.AddRange(updates_op);
-        }
+        }*/
 
         // Determine layer name (non-unique).
         protected virtual void _init_set_name(string name, bool zero_based = true)

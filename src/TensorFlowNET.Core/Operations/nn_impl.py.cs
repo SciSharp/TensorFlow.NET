@@ -99,20 +99,21 @@ namespace Tensorflow
         public static Tensor[] fused_batch_norm(Tensor x,
             IVariableV1 scale,
             IVariableV1 offset,
-            Tensor mean,
-            Tensor variance,
+            IVariableV1 mean,
+            IVariableV1 variance,
             float epsilon = 0.001f,
             string data_format = "NHWC",
             bool is_training = true,
-            string name = null)
+            string name = null,
+            float exponential_avg_factor = 1.0f)
         {
             x = ops.convert_to_tensor(x, name: "input");
             var scale_tensor = ops.convert_to_tensor(scale, name: "scale");
             var offset_tensor = ops.convert_to_tensor(offset, name: "offset");
-            if (mean == null)
+            /*if (mean == null)
                 mean = constant_op.constant(new float[0]);
             if (variance == null)
-                variance = constant_op.constant(new float[0]);
+                variance = constant_op.constant(new float[0]);*/
             var min_epsilon = 1.001e-5f;
             epsilon = epsilon > min_epsilon ? epsilon : min_epsilon;
 
@@ -122,15 +123,16 @@ namespace Tensorflow
                 mean,
                 variance,
                 epsilon,
-                data_format,
-                is_training,
-                name);
+                exponential_avg_factor: exponential_avg_factor,
+                data_format: data_format,
+                is_training: is_training,
+                name: name);
 
             var y = results[0];
-            var batch_mean = results[1];
-            var batch_var = results[2];
+            var running_mean = results[1];
+            var running_var = results[2];
 
-            return new[] { y, batch_mean, batch_var };
+            return new[] { y, running_mean, running_var };
         }
 
         /// <summary>

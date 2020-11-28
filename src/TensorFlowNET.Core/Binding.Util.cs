@@ -180,7 +180,7 @@ namespace Tensorflow
             }
         }
 
-        // [DebuggerStepThrough]
+        [DebuggerStepThrough]
         public static void tf_with<T>(T py, Action<T> action) where T : ITensorFlowObject
         {
             try

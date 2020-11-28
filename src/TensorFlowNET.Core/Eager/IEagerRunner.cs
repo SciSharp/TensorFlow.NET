@@ -38,5 +38,7 @@ namespace Tensorflow.Eager
             Tensor[] inputs,
             object[] attrs,
             Tensor[] results);
+
+        bool MustRecordGradient();
     }
 }

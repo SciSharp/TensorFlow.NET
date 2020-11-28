@@ -91,7 +91,7 @@ namespace Tensorflow.Contexts
         }
 
         [DebuggerStepThrough]
-        public Tensor RunInAutoMode(Func<Tensor> graphAction, Func<Tensor> eagerAction, params Tensor[] tensors)
+        public T RunInAutoMode<T>(Func<T> graphAction, Func<T> eagerAction, params Tensor[] tensors)
         {
             var shouldRunInEager = executing_eagerly()
                 && tensors.Count(x => x.IsEagerTensor) == tensors.Length;

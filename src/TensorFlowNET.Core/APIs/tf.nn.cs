@@ -126,16 +126,18 @@ namespace Tensorflow
             public Tensor[] fused_batch_norm(Tensor x,
                 IVariableV1 scale,
                 IVariableV1 offset,
-                Tensor mean = null,
-                Tensor variance = null,
+                IVariableV1 mean = null,
+                IVariableV1 variance = null,
                 float epsilon = 0.001f,
                 string data_format = "NHWC",
                 bool is_training = true,
-                string name = null) => nn_impl.fused_batch_norm(x, scale, offset, mean, variance,
+                string name = null,
+                float exponential_avg_factor = 1.0f) => nn_impl.fused_batch_norm(x, scale, offset, mean, variance,
                     epsilon: epsilon,
                     data_format: data_format,
                     is_training: is_training,
-                    name: name);
+                    name: name,
+                    exponential_avg_factor: exponential_avg_factor);
 
             public Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null)
                 => nn_ops.max_pool(value, ksize, strides, padding, data_format: data_format, name: name);

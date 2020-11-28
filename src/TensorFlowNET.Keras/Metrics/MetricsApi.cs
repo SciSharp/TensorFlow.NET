@@ -2,6 +2,12 @@
 {
     public class MetricsApi
     {
+        public Tensor categorical_accuracy(Tensor y_true, Tensor y_pred)
+        {
+            var eql = math_ops.equal(math_ops.argmax(y_true, -1), math_ops.argmax(y_pred, -1));
+            return math_ops.cast(eql, TF_DataType.TF_FLOAT);
+        }
+
         /// <summary>
         /// Calculates how often predictions matches integer labels.
         /// </summary>

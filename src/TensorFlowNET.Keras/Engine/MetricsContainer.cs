@@ -60,7 +60,19 @@ namespace Tensorflow.Keras.Engine
             Func<Tensor, Tensor, Tensor> metric_obj = null;
             if (metric == "accuracy" || metric == "acc")
             {
-                metric_obj = keras.metrics.sparse_categorical_accuracy;
+                var y_t_rank = y_t.rank;
+                var y_p_rank = y_p.rank;
+                var y_t_last_dim = y_t.shape[^1];
+                var y_p_last_dim = y_p.shape[^1];
+
+                bool is_binary = y_p_last_dim == 1;
+                bool is_sparse_categorical = (y_t_rank < y_p_rank || y_t_last_dim == 1) && y_p_last_dim > 1;
+
+                if (is_sparse_categorical)
+                    metric_obj = keras.metrics.sparse_categorical_accuracy;
+                else
+                    metric_obj = keras.metrics.categorical_accuracy;
+
                 return new MeanMetricWrapper(metric_obj, metric);
             }
 

@@ -83,8 +83,11 @@ namespace Tensorflow
             var assign_op = gen_resource_variable_ops.assign_variable_op(
                 handle, value_tensor, name: name);
             if (read_value)
+            {
                 return gen_resource_variable_ops.read_variable_op(handle, dtype);
-            // return _lazy_read(assign_op, value_tensor);
+                // var variable = _lazy_read(assign_op, value_tensor);
+                // return variable;
+            }
             return assign_op;
         }
 
@@ -111,7 +114,7 @@ namespace Tensorflow
             return result;
         }
 
-        BaseResourceVariable _lazy_read(Operation op, Tensor value)
+        IVariableV1 _lazy_read(Operation op, Tensor value)
         {
             variable_accessed(this);
             return new _UnreadVariable(handle, _dtype, _shape, _in_graph_mode, _unique_id);

@@ -52,7 +52,7 @@ namespace Tensorflow.Framework
         {
             var pred_value = tensor_util.constant_value(pred);
             if (pred_value is null)
-                return null;
+                return pred.eval(new Session(pred.graph));
 
             return pred_value;
         }

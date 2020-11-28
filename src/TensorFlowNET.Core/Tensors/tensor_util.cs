@@ -51,12 +51,13 @@ namespace Tensorflow
 
         private static NDArray _ConstantValue(Tensor tensor, bool partial)
         {
-            if (tensor.op.type == "Const")
+            switch (tensor.op.type)
             {
-                return MakeNdarray(tensor.op.get_attr("value") as TensorProto);
+                case "Const":
+                    return MakeNdarray(tensor.op.get_attr("value") as TensorProto);
+                default:
+                    return null;
             }
-
-            return null;
         }
 
         public static NDArray MakeNdarray(TensorProto tensor)

@@ -335,6 +335,7 @@ namespace Tensorflow.Keras.Engine
 
                     var layer_inputs = node.MapArguments(tensor_dict);
 
+                    // Console.WriteLine($"{node.Layer}: {node.Layer.Name}");
                     var outputs = node.Layer.Apply(layer_inputs, is_training: training);
 
                     // Update tensor_dict for next input

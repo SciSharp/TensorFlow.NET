@@ -1,11 +1,15 @@
-﻿namespace Tensorflow.Keras.Losses
+﻿using Tensorflow.Keras.Utils;
+
+namespace Tensorflow.Keras.Losses
 {
     public class LossFunctionWrapper : Loss
     {
         public LossFunctionWrapper(string reduction = ReductionV2.AUTO,
-            string name = null)
+            string name = null,
+            bool from_logits = false)
             : base(reduction: reduction,
-                  name: name)
+                  name: name,
+                  from_logits: from_logits)
         {
         }
     }
