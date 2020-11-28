@@ -28,8 +28,7 @@ namespace Tensorflow.Keras.Layers
         /// <param name="renorm"></param>
         /// <param name="renorm_momentum"></param>
         /// <returns></returns>
-        public Tensors batch_normalization(Tensor inputs,
-            int axis = -1,
+        public BatchNormalization BatchNormalization(int axis = -1,
             float momentum = 0.99f,
             float epsilon = 0.001f,
             bool center = true,
@@ -38,31 +37,26 @@ namespace Tensorflow.Keras.Layers
             IInitializer gamma_initializer = null,
             IInitializer moving_mean_initializer = null,
             IInitializer moving_variance_initializer = null,
-            Tensor training = null,
             bool trainable = true,
             string name = null,
             bool renorm = false,
             float renorm_momentum = 0.99f)
-        {
-            var layer = new BatchNormalization(new BatchNormalizationArgs
-            {
-                Axis = axis,
-                Momentum = momentum,
-                Epsilon = epsilon,
-                Center = center,
-                Scale = scale,
-                BetaInitializer = beta_initializer,
-                GammaInitializer = gamma_initializer,
-                MovingMeanInitializer = moving_mean_initializer,
-                MovingVarianceInitializer = moving_variance_initializer,
-                Renorm = renorm,
-                RenormMomentum = renorm_momentum,
-                Trainable = trainable,
-                Name = name
-            });
-
-            return layer.Apply(inputs);
-        }
+                => new BatchNormalization(new BatchNormalizationArgs
+                {
+                    Axis = axis,
+                    Momentum = momentum,
+                    Epsilon = epsilon,
+                    Center = center,
+                    Scale = scale,
+                    BetaInitializer = beta_initializer ?? tf.zeros_initializer,
+                    GammaInitializer = gamma_initializer ?? tf.ones_initializer,
+                    MovingMeanInitializer = moving_mean_initializer ?? tf.zeros_initializer,
+                    MovingVarianceInitializer = moving_variance_initializer ?? tf.ones_initializer,
+                    Renorm = renorm,
+                    RenormMomentum = renorm_momentum,
+                    Trainable = trainable,
+                    Name = name
+                });
 
         /// <summary>
         /// 
@@ -115,53 +109,64 @@ namespace Tensorflow.Keras.Layers
                     Activation = activation ?? keras.activations.Linear
                 });
 
-        public Tensor conv2d(Tensor inputs,
-            int filters,
-            int[] kernel_size,
-            int[] strides = null,
+        public Conv2D Conv2D(int filters,
+            TensorShape kernel_size = null,
+            TensorShape strides = null,
             string padding = "valid",
-            string data_format = "channels_last",
-            int[] dilation_rate = null,
+            string data_format = null,
+            TensorShape dilation_rate = null,
+            int groups = 1,
+            string activation = null,
             bool use_bias = true,
-            Activation activation = null,
-            IInitializer kernel_initializer = null,
-            IInitializer bias_initializer = null,
-            bool trainable = true,
-            string name = null)
-        {
-            if (strides == null)
-                strides = new int[] { 1, 1 };
-            if (dilation_rate == null)
-                dilation_rate = new int[] { 1, 1 };
-            if (bias_initializer == null)
-                bias_initializer = tf.zeros_initializer;
-
-            var layer = new Conv2D(new Conv2DArgs
-            {
-                Filters = filters,
-                KernelSize = kernel_size,
-                Strides = strides,
-                Padding = padding,
-                DataFormat = data_format,
-                DilationRate = dilation_rate,
-                Activation = activation,
-                UseBias = use_bias,
-                KernelInitializer = kernel_initializer,
-                BiasInitializer = bias_initializer,
-                Trainable = trainable,
-                Name = name
-            });
-
-            return layer.Apply(inputs);
-        }
+            string kernel_initializer = "glorot_uniform",
+            string bias_initializer = "zeros",
+            string kernel_regularizer = null,
+            string bias_regularizer = null,
+            string activity_regularizer = null)
+                => new Conv2D(new Conv2DArgs
+                {
+                    Rank = 2,
+                    Filters = filters,
+                    KernelSize = kernel_size,
+                    Strides = strides == null ? (1, 1) : strides,
+                    Padding = padding,
+                    DataFormat = data_format,
+                    DilationRate = dilation_rate == null ? (1, 1) : dilation_rate,
+                    Groups = groups,
+                    UseBias = use_bias,
+                    KernelInitializer = GetInitializerByName(kernel_initializer),
+                    BiasInitializer = GetInitializerByName(bias_initializer),
+                    Activation = GetActivationByName(activation)
+                });
 
         public Dense Dense(int units,
             Activation activation = null,
+            IInitializer kernel_initializer = null,
+            IInitializer bias_initializer = null,
             TensorShape input_shape = null)
             => new Dense(new DenseArgs
             {
                 Units = units,
                 Activation = activation ?? keras.activations.Linear,
+                KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
+                BiasInitializer = bias_initializer ?? tf.zeros_initializer,
+                InputShape = input_shape
+            });
+
+        public Dense Dense(int units)
+            => new Dense(new DenseArgs
+            {
+                Units = units,
+                Activation = GetActivationByName("linear")
+            });
+
+        public Dense Dense(int units,
+            string activation = null,
+            TensorShape input_shape = null)
+            => new Dense(new DenseArgs
+            {
+                Units = units,
+                Activation = GetActivationByName(activation),
                 InputShape = input_shape
             });
 
@@ -367,6 +372,12 @@ namespace Tensorflow.Keras.Layers
                 Padding = padding
             });
 
+        public Tensor add(params Tensor[] inputs)
+            => new Add(new MergeArgs { Inputs = inputs }).Apply(inputs);
+
+        public GlobalAveragePooling2D GlobalAveragePooling2D()
+            => new GlobalAveragePooling2D(new Pooling2DArgs { });
+
         Activation GetActivationByName(string name)
             => name switch
             {
@@ -375,6 +386,15 @@ namespace Tensorflow.Keras.Layers
                 "sigmoid" => keras.activations.Sigmoid,
                 "tanh" => keras.activations.Tanh,
                 _ => keras.activations.Linear
+            };
+
+        IInitializer GetInitializerByName(string name)
+            => name switch
+            {
+                "glorot_uniform" => tf.glorot_uniform_initializer,
+                "zeros" => tf.zeros_initializer,
+                "ones" => tf.ones_initializer,
+                _ => tf.glorot_uniform_initializer
             };
     }
 }

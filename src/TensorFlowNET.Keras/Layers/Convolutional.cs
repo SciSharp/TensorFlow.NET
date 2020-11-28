@@ -20,6 +20,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Operations;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
