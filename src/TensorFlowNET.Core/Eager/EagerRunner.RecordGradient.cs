@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Tensorflow.Gradients;
 using static Tensorflow.Binding;
 using static Tensorflow.tensorflow;
@@ -38,7 +39,7 @@ namespace Tensorflow.Eager
                 }*/
             }
 
-            // Console.WriteLine($"RecordGradient: should_record={should_record}, op_name={op_name}");
+            tf.Logger.LogDebug($"RecordGradient: should_record={should_record}, op_name={op_name}");
             if (!should_record) return should_record;
 
             Tensor[] op_outputs;

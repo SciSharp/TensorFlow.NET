@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Tensorflow.Contexts;
 using Tensorflow.Eager;
@@ -41,9 +43,18 @@ namespace Tensorflow
         public OpDefLibrary OpDefLib;
         public Context Context;
         public IEagerRunner Runner;
+        public ILogger Logger;
+        ServiceProvider serviceProvider;
 
         public tensorflow()
         {
+            serviceProvider = new ServiceCollection()
+                .AddLogging(cfg => cfg.AddConsole())
+                .Configure<LoggerFilterOptions>(cfg => cfg.MinLevel = LogLevel.Warning)
+                .BuildServiceProvider();
+
+            Logger = serviceProvider.GetService<ILogger<tensorflow>>();
+
             Status = new Status();
             Context = new Context(new ContextOptions(), Status);
             OpDefLib = new OpDefLibrary();

@@ -40,5 +40,7 @@ namespace Tensorflow.Eager
             Tensor[] results);
 
         bool MustRecordGradient();
+
+        int TapeSetPossibleGradientTypes(params Tensor[] args);
     }
 }

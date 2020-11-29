@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Tensorflow.Util;
+using Microsoft.Extensions.Logging;
 using static Tensorflow.Binding;
 using static Tensorflow.tensorflow;
 
@@ -42,6 +44,7 @@ namespace Tensorflow.Gradients
             if (!CouldBackprop())
                 return;
 
+            tf.Logger.LogDebug($"Watch tensor_id={tensor_id}");
             tensor_tape_.emplace(tensor_id, -1);
         }
 
@@ -50,8 +53,13 @@ namespace Tensorflow.Gradients
             for (int i = 0; i < tensor_ids.Length; ++i)
             {
                 if (tensor_tape_.find(tensor_ids[i]))
+                {
                     if (IsDtypeTrainable(dtypes[i]))
+                    {
+                        tf.Logger.LogDebug($"tape.h->ShouldRecord: should_record = true, tensor_tape_.size()={tensor_tape_.Count}, tensor_ids[{i}]={tensor_ids[i]}");
                         return true;
+                    }
+                }
             }
             return false;
         }
