@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
+using Tensorflow;
 using static Tensorflow.KerasApi;
 
 namespace TensorFlowNET.UnitTest.Keras

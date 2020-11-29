@@ -6,7 +6,7 @@ using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Layers
 {
-    public class LayersApi
+    public partial class LayersApi
     {
         /// <summary>
         /// Functional interface for the batch normalization layer.
@@ -372,19 +372,8 @@ namespace Tensorflow.Keras.Layers
                 InputShape = input_shape
             });
 
-        /// <summary>
-        /// Zero-padding layer for 2D input (e.g. picture).
-        /// </summary>
-        /// <param name="padding"></param>
-        /// <returns></returns>
-        public ZeroPadding2D ZeroPadding2D(NDArray padding)
-            => new ZeroPadding2D(new ZeroPadding2DArgs
-            {
-                Padding = padding
-            });
-
-        public Tensor add(params Tensor[] inputs)
-            => new Add(new MergeArgs { Inputs = inputs }).Apply(inputs);
+        public Add Add(params Tensor[] inputs)
+            => new Add(new MergeArgs { Inputs = inputs });
 
         public GlobalAveragePooling2D GlobalAveragePooling2D()
             => new GlobalAveragePooling2D(new Pooling2DArgs { });
