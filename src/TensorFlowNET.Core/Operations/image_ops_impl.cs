@@ -2210,7 +2210,7 @@ new_height, new_width");
         /// <param name="antialias"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor resize_images_v2(Tensor images, TensorShape size, string method = ResizeMethod.BILINEAR,
+        public static Tensor resize_images_v2<T>(Tensor images, T size, string method = ResizeMethod.BILINEAR,
             bool preserve_aspect_ratio = false,
             bool antialias = false,
             string name = null)

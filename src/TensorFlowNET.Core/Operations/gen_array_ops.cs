@@ -175,16 +175,30 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                /*var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Pad", name,
                     null,
                     input, paddings);
-                return results[0];
+                return results[0];*/
+                return pad_eager_fallback(input, paddings, name: name, ctx: tf.Context);
             }
 
             var _op = tf.OpDefLib._apply_op_helper("Pad", name: name, args: new { input, paddings });
 
             return _op.output;
+        }
+
+        private static Tensor pad_eager_fallback(Tensor inputs, Tensor padding, string name = null, Context ctx = null)
+        {
+            var (_attr_T, input) = tf.Runner.ArgsToMatchingEager(ctx, args: new[] { inputs });
+            var (_attr_Tpaddings, paddings) = tf.Runner.ArgsToMatchingEager(ctx, default_dtype: tf.int32, args: new[] { padding });
+            var _inputs_flat = input.concat(paddings);
+            var _attrs = new object[] { "T", _attr_T, "Tpaddings", _attr_Tpaddings };
+
+            var results = tf.Runner.Execute(ctx, "Pad", 1, _inputs_flat, _attrs, name: name);
+            if (tf.Runner.MustRecordGradient())
+                tf.Runner.RecordGradient("Pad", _inputs_flat, _attrs, results);
+            return results[0];
         }
 
         public static Tensor pack(Tensor[] values, int axis = 0, string name = null)

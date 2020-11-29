@@ -183,5 +183,48 @@ namespace Tensorflow.Keras
 
             throw new NotImplementedException("");
         }
+
+        /// <summary>
+        /// Resizes the images contained in a 4D tensor.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="height_factor"></param>
+        /// <param name="width_factor"></param>
+        /// <param name="data_format"></param>
+        /// <param name="interpolation"></param>
+        /// <returns></returns>
+        public Tensor resize_images(Tensor x, int height_factor, int width_factor, 
+            string data_format, string interpolation = "nearest")
+        {
+            var (rows, cols) = (0, 0);
+            if (data_format == "channels_first")
+                (rows, cols) = (2, 3);
+            else if (data_format == "channels_last")
+                (rows, cols) = (1, 2);
+            else
+                throw new ValueError($"Invalid `data_format` argument: {data_format}");
+
+            var original_shape = x.shape;
+            var new_shape = array_ops.shape(x)[new Slice(rows, cols + 1)];
+            new_shape *= constant_op.constant(np.array(height_factor, width_factor));
+
+            if (data_format == "channels_first")
+                // x = permute_dimensions(x, [0, 2, 3, 1]);
+                throw new NotImplementedException("");
+            if (interpolation == "nearest")
+                x = tf.image.resize_images_v2(x, new_shape, method: ResizeMethod.NEAREST_NEIGHBOR);
+
+            if (data_format == "channels_first")
+                // x = permute_dimensions(x, [0, 3, 1, 2]);
+                throw new NotImplementedException("");
+
+            int new_height = original_shape[rows] < 0 ? -1 : original_shape[rows] * height_factor;
+            int new_width = original_shape[cols] < 0 ? -1 : original_shape[cols] * width_factor;
+
+            TensorShape output_shape = data_format == "channels_first" ?
+                (-1, -1, new_height, new_width) : (-1, new_height, new_width, -1);
+            x.set_shape(output_shape);
+            return x;
+        }
     }
 }

@@ -60,7 +60,11 @@ namespace Tensorflow
 
             public Tensor resize_images_v2(Tensor images, TensorShape size, string method = ResizeMethod.BILINEAR, bool preserve_aspect_ratio = false, bool antialias = false,
                 string name = null)
-                => image_ops_impl.resize_images(images, tf.constant(size.dims), method, preserve_aspect_ratio, antialias, name);
+                => image_ops_impl.resize_images_v2(images, size, method, preserve_aspect_ratio, antialias, name);
+
+            public Tensor resize_images_v2(Tensor images, Tensor size, string method = ResizeMethod.BILINEAR, bool preserve_aspect_ratio = false, bool antialias = false,
+                string name = null)
+                => image_ops_impl.resize_images_v2(images, size, method, preserve_aspect_ratio, antialias, name);
 
             public Tensor resize_images_with_pad(Tensor image, int target_height, int target_width, string method, bool antialias)
                 => image_ops_impl.resize_images_with_pad(image, target_height, target_width, method, antialias);
@@ -207,6 +211,9 @@ namespace Tensorflow
                     name, sorted_input, canonicalized_coordinates, tile_size);
 
             public Tensor resize(Tensor image, TensorShape size, string method = ResizeMethod.BILINEAR)
+                => image_ops_impl.resize_images_v2(image, size, method: method);
+
+            public Tensor resize(Tensor image, Tensor size, string method = ResizeMethod.BILINEAR)
                 => image_ops_impl.resize_images_v2(image, size, method: method);
 
             public Tensor resize_bilinear(Tensor images, Tensor size, bool align_corners = false, bool half_pixel_centers = false, string name = null)
