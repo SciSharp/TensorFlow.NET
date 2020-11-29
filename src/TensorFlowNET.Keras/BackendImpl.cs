@@ -226,5 +226,25 @@ namespace Tensorflow.Keras
             x.set_shape(output_shape);
             return x;
         }
+
+        /// <summary>
+        /// Concatenates a list of tensors alongside the specified axis.
+        /// </summary>
+        /// <param name="tensors">list of tensors to concatenate.</param>
+        /// <param name="axis">concatenation axis.</param>
+        /// <returns></returns>
+        public Tensor concatenate(Tensors tensors, int axis = -1)
+        {
+            if(axis < 0)
+            {
+                var rank = tensors[0].NDims;
+                if (rank > -1)
+                    axis %= rank;
+                else
+                    axis = 0;
+            }
+
+            return array_ops.concat(tensors, axis);
+        }
     }
 }

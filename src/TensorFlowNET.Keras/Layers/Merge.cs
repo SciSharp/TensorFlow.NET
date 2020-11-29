@@ -14,7 +14,7 @@ namespace Tensorflow.Keras.Layers
 
         }
 
-        protected override void build(TensorShape input_shape)
+        protected override void build(Tensors inputs)
         {
             // output_shape = input_shape.dims[1^];
         }
@@ -24,7 +24,7 @@ namespace Tensorflow.Keras.Layers
             return _merge_function(inputs);
         }
 
-        Tensors _merge_function(Tensors inputs)
+        protected virtual Tensors _merge_function(Tensors inputs)
         {
             var output = inputs[0];
             foreach (var i in range(1, inputs.Length))

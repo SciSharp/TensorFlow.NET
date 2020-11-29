@@ -177,13 +177,13 @@ namespace Tensorflow.Keras.Engine
             tf.init_scope();
 
             tf.Context.eager_mode();
-            build(inputs.shape);
+            build(inputs);
             tf.Context.restore_mode();
 
             built = true;
         }
 
-        protected virtual void build(TensorShape input_shape)
+        protected virtual void build(Tensors inputs)
         {
             built = true;
         }

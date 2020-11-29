@@ -407,7 +407,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
 
             var ret = tensor.TensorShape.unknown_shape(shape.dims[0]);
             var value = constant_value(tensor);
-            if (value != null)
+            if (!(value is null))
             {
                 int[] d_ = { };
                 foreach (int d in value)
@@ -418,7 +418,6 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                         d_[d_.Length] = -1; // None
                 }
                 ret = ret.merge_with(new TensorShape(d_));
-
             }
             return ret;
         }

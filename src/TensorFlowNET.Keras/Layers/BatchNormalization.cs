@@ -52,8 +52,9 @@ namespace Tensorflow.Keras.Layers
             axis = args.Axis.dims;
         }
 
-        protected override void build(TensorShape input_shape)
+        protected override void build(Tensors inputs)
         {
+            TensorShape input_shape = inputs.shape;
             var ndims = input_shape.ndim;
             foreach (var (idx, x) in enumerate(axis))
                 if (x < 0)

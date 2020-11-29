@@ -41,8 +41,9 @@ namespace Tensorflow.Keras.Layers
             this.inputSpec = new InputSpec(min_ndim: 2);
         }
 
-        protected override void build(TensorShape input_shape)
+        protected override void build(Tensors inputs)
         {
+            TensorShape input_shape = inputs.shape;
             var last_dim = input_shape.dims.Last();
             var axes = new Dictionary<int, int>();
             axes[-1] = last_dim;
