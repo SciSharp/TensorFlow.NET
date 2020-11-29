@@ -22,5 +22,8 @@ namespace Tensorflow.Gradients
 
         public Tensor OnesLike()
             => tf.ones(shape: shape, dtype: dtype);
+
+        public override string ToString()
+            => $"{id}, {shape}, {dtype.as_numpy_name()}";
     }
 }

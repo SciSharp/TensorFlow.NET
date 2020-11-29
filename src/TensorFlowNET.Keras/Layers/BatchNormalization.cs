@@ -196,7 +196,7 @@ namespace Tensorflow.Keras.Layers
                     _assign_moving_average(moving_variance, variance, momentum_tensor);
 
                 if (use_fused_avg_updates)
-                    _assign_new_value(moving_variance, mean);
+                    _assign_new_value(moving_variance, variance);
                 else
                     _assign_moving_average(moving_variance, variance, momentum_tensor);
 
