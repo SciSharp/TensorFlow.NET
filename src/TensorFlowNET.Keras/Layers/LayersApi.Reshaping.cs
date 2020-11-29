@@ -34,5 +34,16 @@ namespace Tensorflow.Keras.Layers
             {
                 Size = size ?? (2, 2)
             });
+
+        /// <summary>
+        /// Layer that reshapes inputs into the given shape.
+        /// </summary>
+        /// <param name="target_shape"></param>
+        /// <returns></returns>
+        public Reshape Reshape(TensorShape target_shape)
+            => new Reshape(new ReshapeArgs
+            {
+                TargetShape = target_shape
+            });
     }
 }

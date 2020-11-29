@@ -372,8 +372,8 @@ namespace Tensorflow.Keras.Layers
                 InputShape = input_shape
             });
 
-        public Add Add(params Tensor[] inputs)
-            => new Add(new MergeArgs { Inputs = inputs });
+        public Add Add()
+            => new Add(new MergeArgs { });
 
         public GlobalAveragePooling2D GlobalAveragePooling2D()
             => new GlobalAveragePooling2D(new Pooling2DArgs { });

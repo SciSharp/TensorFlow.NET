@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
-using Tensorflow;
+using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
 namespace TensorFlowNET.UnitTest.Keras
@@ -25,6 +25,15 @@ namespace TensorFlowNET.UnitTest.Keras
             var x = np.arange(np.prod(input_shape)).reshape(input_shape);
             var y = keras.layers.UpSampling2D(size: (1, 2)).Apply(x);
             Assert.AreEqual((2, 2, 2, 3), y.shape);
+        }
+
+        [TestMethod]
+        public void Reshape()
+        {
+            var inputs = tf.zeros((10, 5, 20));
+            var outputs = keras.layers.LeakyReLU().Apply(inputs);
+            outputs = keras.layers.Reshape((20, 5)).Apply(outputs);
+            Assert.AreEqual((10, 20, 5), outputs.shape);
         }
     }
 }
