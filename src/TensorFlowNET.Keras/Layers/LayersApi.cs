@@ -315,6 +315,17 @@ namespace Tensorflow.Keras.Layers
             return layer.Apply(inputs);
         }
 
+        /// <summary>
+        /// Leaky version of a Rectified Linear Unit.
+        /// </summary>
+        /// <param name="alpha">Negative slope coefficient.</param>
+        /// <returns></returns>
+        public Layer LeakyReLU(float alpha = 0.3f)
+            => new LeakyReLU(new LeakyReLUArgs
+            {
+                Alpha = alpha
+            });
+
         public Layer LSTM(int units,
             Activation activation = null,
             Activation recurrent_activation = null,
