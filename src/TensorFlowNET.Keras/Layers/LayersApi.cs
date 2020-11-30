@@ -321,7 +321,7 @@ namespace Tensorflow.Keras.Layers
         /// <param name="alpha">Negative slope coefficient.</param>
         /// <returns></returns>
         public Layer LeakyReLU(float alpha = 0.3f)
-            => new LeakyReLU(new LeakyReLUArgs
+            => new LeakyReLu(new LeakyReLuArgs
             {
                 Alpha = alpha
             });

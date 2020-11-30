@@ -531,6 +531,17 @@ namespace Tensorflow.Operations
 
         public static Tensor leaky_relu_grad(Tensor gradients, Tensor features, float alpha = 0.2f, string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "LeakyReluGrad", name,
+                    null,
+                    gradients, features,
+                    "alpha", alpha);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("LeakyReluGrad", name: name, args: new
             {
                 gradients,

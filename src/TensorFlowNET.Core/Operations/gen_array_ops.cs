@@ -496,6 +496,24 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor[] split_v(Tensor value, Tensor size_splits, 
+            int axis, int num_split, string name = null)
+        {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "SplitV", name,
+                    null,
+                    value, size_splits, axis, 
+                    "num_split", num_split);
+
+                return results;
+            }
+
+            var _op = tf.OpDefLib._apply_op_helper("SplitV", name, new { split_dim = axis, value, num_split });
+            return _op.outputs;
+        }
+
         public static Tensor tile<T>(Tensor input, T multiples, string name = null)
             => tf.Context.RunInAutoMode(()
                 => tf.OpDefLib._apply_op_helper("Tile", name, new { input, multiples }).output, ()

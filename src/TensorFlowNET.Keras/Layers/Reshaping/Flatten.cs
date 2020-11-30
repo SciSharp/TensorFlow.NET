@@ -1,9 +1,10 @@
 ﻿using System;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.Keras.Engine
+namespace Tensorflow.Keras.Layers
 {
     public class Flatten : Layer
     {

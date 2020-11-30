@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 using Tensorflow.Util;
 using static Tensorflow.tensorflow;
 using static Tensorflow.Binding;
@@ -36,7 +35,7 @@ namespace Tensorflow.Gradients
             foreach (var o in output_tensors)
             {
                 tensor_tape_[o.GetID()] = op_id;
-                tf.Logger.LogDebug($"RecordOperation: tensor_tape_[{o.GetID()}] = {op_id}");
+                tf.Logger.Debug($"RecordOperation: tensor_tape_[{o.GetID()}] = {op_id}");
                 tensor_usage_[o.GetID()] = 1;
                 tensors.Add(o);
             }

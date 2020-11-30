@@ -10,11 +10,11 @@ namespace Tensorflow.Keras.Layers
     /// <summary>
     /// Leaky version of a Rectified Linear Unit.
     /// </summary>
-    public class LeakyReLU : Layer
+    public class LeakyReLu : Layer
     {
-        LeakyReLUArgs args;
+        LeakyReLuArgs args;
         float alpha => args.Alpha;
-        public LeakyReLU(LeakyReLUArgs args) : base(args)
+        public LeakyReLu(LeakyReLuArgs args) : base(args)
         {
             this.args = args;
         }

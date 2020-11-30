@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Utils;
-using Microsoft.Extensions.Logging;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
@@ -336,7 +335,7 @@ namespace Tensorflow.Keras.Engine
 
                     var layer_inputs = node.MapArguments(tensor_dict);
 
-                    tf.Logger.LogDebug($"{node.Layer}: {node.Layer.Name}");
+                    tf.Logger.Debug($"{node.Layer}: {node.Layer.Name}");
                     var outputs = node.Layer.Apply(layer_inputs, is_training: training);
 
                     // Update tensor_dict for next input

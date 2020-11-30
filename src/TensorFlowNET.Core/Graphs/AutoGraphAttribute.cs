@@ -56,6 +56,8 @@ namespace Tensorflow.Graphs
 
         public override void OnExit(MethodExecutionArgs args)
         {
+            var returnValue = mark_as_return(args.ReturnValue as Tensors);
+
             var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
 
             if (args.ReturnValue is Tensors outputs)
@@ -101,6 +103,11 @@ namespace Tensorflow.Graphs
 
             // run function
             args.ReturnValue = function(originalInputs);
+        }
+
+        Tensor mark_as_return(Tensor tensor)
+        {
+            return array_ops.identity(tensor);
         }
     }
 }

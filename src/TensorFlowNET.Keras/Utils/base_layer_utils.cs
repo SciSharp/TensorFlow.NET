@@ -151,12 +151,23 @@ namespace Tensorflow.Keras.Utils
 
                     // recursively
                     CreateKerasHistoryHelper(layer_inputs, processed_ops, created_layers);
-                    var op_layer = new TensorFlowOpLayer(new TensorFlowOpLayerArgs
+                    Layer op_layer = null;
+                    /*var op_layer = new TensorFlowOpLayer(new TensorFlowOpLayerArgs
                     {
                         NodeDef = op.node_def,
                         Constants = constants,
                         Name = op.name
-                    });
+                    });*/
+                    op_layer = op.type switch
+                    {
+                        // "AddV2" => keras.layers.Add(),
+                        _ => new TensorFlowOpLayer(new TensorFlowOpLayerArgs
+                        {
+                            NodeDef = op.node_def,
+                            Constants = constants,
+                            Name = op.name
+                        })
+                    };
                     created_layers.Add(op_layer);
                     op_layer.SetConnectivityMetadata(layer_inputs, op.outputs);
                     processed_ops.Add(op);

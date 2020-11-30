@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class LeakyReLUArgs : LayerArgs
+    public class LeakyReLuArgs : LayerArgs
     {
         /// <summary>
         /// Negative slope coefficient.

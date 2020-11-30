@@ -842,7 +842,7 @@ namespace Tensorflow
             // Restore shape information where possible.
             if (!tf.Context.executing_eagerly())
             {
-                var paddings_constant = tensor_util.constant_value(result.op.inputs[1], partial: true);
+                var paddings_constant = tensor_util.constant_value(paddings);
                 var input_shape = result.op.inputs[0].TensorShape;
                 if (input_shape.ndim > -1 &&
                     !result.TensorShape.is_fully_defined() &&
