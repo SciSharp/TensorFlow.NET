@@ -14,15 +14,15 @@
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
-### Why TensorFlow in .NET/ C# ?
+### Why TensorFlow in C# and F# ?
 
-`SciSharp STACK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Since the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# with a zero learning curve. Take a look at a comparison picture and see how comfortably a   Tensorflow/Python script translates into a C# program with TensorFlow.NET.
+`SciSharp STACK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Since the APIs are kept as similar as possible you can immediately adapt any existing Tensorflow code in C# or F# with a zero learning curve. Take a look at a comparison picture and see how comfortably a Tensorflow/Python script translates into a C# program with TensorFlow.NET.
 
 ![pythn vs csharp](docs/assets/syntax-comparision.png)
 
 SciSharp's philosophy allows a large number of machine learning code written in Python to be quickly migrated to .NET, enabling .NET developers to use cutting edge machine learning models and access a vast number of Tensorflow resources which would not be possible without this project.
 
-In comparison to other projects, like for instance [TensorFlowSharp](https://www.nuget.org/packages/TensorFlowSharp/) which only provide Tensorflow's low-level C++ API and can only run models that were built using Python, Tensorflow.NET also implements Tensorflow's high level API where all the magic happens. This computation graph building layer is still under active development. Once it is completely implemented you can build new Machine Learning models in C#. 
+In comparison to other projects, like for instance [TensorFlowSharp](https://www.nuget.org/packages/TensorFlowSharp/) which only provide Tensorflow's low-level C++ API and can only run models that were built using Python, Tensorflow.NET also implements Tensorflow's high level API where all the magic happens. This computation graph building layer is still under active development. Once it is completely implemented you can build new Machine Learning models in C# or F#. 
 
 ### How to use
 
@@ -35,7 +35,7 @@ In comparison to other projects, like for instance [TensorFlowSharp](https://www
 
 Install TF.NET and TensorFlow binary through NuGet.
 ```sh
-### install tensorflow C# binding
+### install tensorflow C#/F# binding
 PM> Install-Package TensorFlow.NET
 ### install keras for tensorflow
 PM> Install-Package TensorFlow.Keras
@@ -154,15 +154,15 @@ Feel like contributing to one of the hottest projects in the Machine Learning fi
 
 You can:
 * Let everyone know about this project
-* Port Tensorflow unit tests from Python to C#
-* Port missing Tensorflow code from Python to C#
-* Port Tensorflow examples to C# and raise issues if you come accross missing parts of the API
+* Port Tensorflow unit tests from Python to C# or F#
+* Port missing Tensorflow code from Python to C# or F#
+* Port Tensorflow examples to C# or F# and raise issues if you come accross missing parts of the API
 * Debug one of the unit tests that is marked as Ignored to get it to work
 * Debug one of the not yet working examples and get it to work
 
 ### How to debug unit tests:
 
-The best way to find out why a unit test is failing is to single step it in C# and its pendant Python at the same time to see where the flow of execution digresses or where variables exhibit different values. Good Python IDEs like PyCharm let you single step into the tensorflow library code. 
+The best way to find out why a unit test is failing is to single step it in C# or F# and its corresponding Python at the same time to see where the flow of execution digresses or where variables exhibit different values. Good Python IDEs like PyCharm let you single step into the tensorflow library code. 
 
 ### Git Knowhow for Contributors
 
