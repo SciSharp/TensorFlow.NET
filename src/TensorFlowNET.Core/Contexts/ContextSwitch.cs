@@ -33,5 +33,8 @@ namespace Tensorflow.Contexts
         public Action EnterContextFn { get; set; }
 
         public string DeviceStack { get; set; }
+
+        public override string ToString()
+            => $"EagerMode: {EagerMode}, IsBuildingFunction: {IsBuildingFunction}";
     }
 }

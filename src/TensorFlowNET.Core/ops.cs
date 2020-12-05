@@ -190,13 +190,9 @@ namespace Tensorflow
                 // Add attrs
                 foreach (var attr in node_def.Attr)
                 {
-                    var bytes = attr.Value.ToByteArray(); //TODO: we can use attr.Value.WriteTo with a memory stream.
-                    var protoHandle = Marshal.AllocHGlobal(bytes.Length);
-                    Marshal.Copy(bytes, 0, protoHandle, bytes.Length);
-                    uint len = (uint)bytes.Length;
-                    c_api.TF_SetAttrValueProto(op_desc, attr.Key, protoHandle, proto_len: len, status: status.Handle);
+                    var bytes = attr.Value.ToByteArray();
+                    c_api.TF_SetAttrValueProto(op_desc, attr.Key, bytes, proto_len: bytes.Length, status: status.Handle);
                     status.Check(true);
-                    Marshal.FreeHGlobal(protoHandle);
                 }
 
                 var c_op = c_api.TF_FinishOperation(op_desc, status.Handle);

@@ -168,7 +168,7 @@ namespace Tensorflow
             if (op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
 
-            (_handle, OpDesc) = ops._create_c_op(g, node_def, inputs, control_input_ops.ToArray());
+            (_handle, OpDesc) = ops._create_c_op(g, node_def, inputs, control_input_ops.ToArray(), op_def);
             _is_stateful = op_def.IsStateful;
 
             // Initialize self._outputs.
