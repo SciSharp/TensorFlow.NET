@@ -13,8 +13,6 @@ namespace Tensorflow.Gradients
         void RecordOperation(string op_type,
             Tensor[] input_tensors,
             TapeTensor[] output_tensors,
-            long[] input_tensor_id,
-            TF_DataType[] input_dtypes,
             Func<BackwardFunction> backward_function_getter);
 
         void VariableAccessed(ResourceVariable variable);

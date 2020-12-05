@@ -235,6 +235,14 @@ namespace Tensorflow
             }
 
             var _op = tf.OpDefLib._apply_op_helper("Identity", name, new { input });
+            
+            if (tf.Runner.MustRecordGradient())
+            {
+                tf.Runner.RecordGradient("Identity", _op.inputs, new object[] 
+                {
+                    "T", _op.get_attr<TF_DataType>("T")
+                }, _op.outputs);
+            }                
 
             return _op.output;
         }
@@ -632,8 +640,8 @@ namespace Tensorflow
         public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy,
             int begin_mask = 0, int end_mask = 0, int ellipsis_mask = 0, int new_axis_mask = 0,
             int shrink_axis_mask = 0, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("StridedSliceGrad", name, new
+            => tf.Context.RunInAutoMode2(
+                () => tf.OpDefLib._apply_op_helper("StridedSliceGrad", name, new
                 {
                     shape,
                     begin,
@@ -645,8 +653,8 @@ namespace Tensorflow
                     ellipsis_mask,
                     new_axis_mask,
                     shrink_axis_mask
-                }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                }).output, 
+                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "StridedSliceGrad", name,
                     null,
                     shape, begin, end, strides, dy,
@@ -654,8 +662,22 @@ namespace Tensorflow
                     "end_mask", end_mask,
                     "ellipsis_mask", ellipsis_mask,
                     "new_axis_mask", new_axis_mask,
-                    "shrink_axis_mask", shrink_axis_mask).FirstOrDefault(),
-                shape, begin, end, strides, dy);
+                    "shrink_axis_mask", shrink_axis_mask).FirstOrDefault(), 
+                (op) =>
+                {
+                    var attrs = new object[]
+                    {
+                        "T", op.get_attr<TF_DataType>("T"),
+                        "Index", op.get_attr<TF_DataType>("Index"),
+                        "begin_mask", op.get_attr<long>("begin_mask"),
+                        "end_mask", op.get_attr<long>("end_mask"),
+                        "ellipsis_mask", op.get_attr<long>("ellipsis_mask"),
+                        "new_axis_mask", op.get_attr<long>("new_axis_mask"),
+                        "shrink_axis_mask", op.get_attr<long>("shrink_axis_mask")
+                    };
+                    tf.Runner.RecordGradient("StridedSliceGrad", op.inputs, attrs, op.outputs);
+                },
+                new Tensors(shape, begin, end, strides, dy));
 
         /// <summary>
         /// Removes dimensions of size 1 from the shape of a tensor.

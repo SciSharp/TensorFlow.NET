@@ -10,12 +10,17 @@ namespace Tensorflow.Graphs
     /// </summary>
     public class FuncGraph : Graph
     {
-        List<Operation> inputs;
-        List<Operation> outputs;
         Graph outer_graph;
+        public Graph OuterGraph => outer_graph;
+
         string func_name;
+
+        // _handle == IntPtr.Zero ? string.Empty : c_api.StringPiece(c_api.TF_FunctionName(_handle));
         IntPtr func_handle;
         public string FuncName => func_name;
+
+        public Tensors Inputs { get; set; }
+        public Tensors Outputs { get; set; }
 
         /// <summary>
         /// Construct a new FuncGraph.
@@ -29,8 +34,17 @@ namespace Tensorflow.Graphs
             as_default();
         }
 
+        public FuncGraph(IntPtr handle, string name)
+        {
+            outer_graph = ops.get_default_graph();
+            func_name = name;
+
+            tf.Context.graph_mode();
+            as_default();
+        }
+
         public IntPtr ToGraph(Operation[] opers,
-            Operation[] inputs, Operation[] outputs,
+            Tensor[] inputs, Tensor[] outputs,
             string[] output_names)
         {
             using var status = new Status();
@@ -40,9 +54,9 @@ namespace Tensorflow.Graphs
                 opers.Length,
                 opers.Select(x => (IntPtr)x).ToArray(),
                 inputs.Length,
-                inputs.Select(x => new TF_Output(x, 0)).ToArray(),
+                inputs.Select(x => new TF_Output(x.op, 0)).ToArray(),
                 outputs.Length,
-                outputs.Select(x => new TF_Output(x, 0)).ToArray(),
+                outputs.Select(x => new TF_Output(x.op, 0)).ToArray(),
                 output_names == null || output_names.Length == 0 ? null : output_names,
                 IntPtr.Zero,
                 null,
@@ -57,13 +71,18 @@ namespace Tensorflow.Graphs
 
             func_name = c_api.StringPiece(c_api.TF_FunctionName(func_handle));
 
+            Inputs = inputs;
+            // mark_as_return
+            Outputs = outputs.Select(x => array_ops.identity(x)).ToArray();
+
+            tf.Context.restore_mode();
+
             return func_handle;
         }
 
         protected override void DisposeManagedResources()
         {
             base.DisposeManagedResources();
-            tf.Context.restore_mode();
         }
     }
 }

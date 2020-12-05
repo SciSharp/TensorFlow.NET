@@ -56,7 +56,7 @@ namespace Tensorflow.Keras.Engine
 
             // Record the gradient because custom-made ops don't go through the
             // code-gen'd eager call path
-            var op_type = op.node_def.Name;
+            var op_type = op.node_def.Op;
 
             tf.Runner.RecordGradient(op_type, op.inputs._inputs, null, op.outputs);
 

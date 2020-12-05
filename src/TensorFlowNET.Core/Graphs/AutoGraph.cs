@@ -18,10 +18,11 @@ namespace Tensorflow.Graphs
 
                 var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
                 var func_handle = graph.ToGraph(opers,
-                    new Operation[] { input },
-                    new Operation[] { output },
+                    new[] { input },
+                    new[] { output },
                     null);
             }
+            
 
             return (Tensor input) =>
             {
@@ -48,11 +49,11 @@ namespace Tensorflow.Graphs
 
                 var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
                 var func_handle = graph.ToGraph(opers,
-                    new Operation[] { input1, input2 },
-                    new Operation[] { output },
+                    new[] { input1, input2 },
+                    new[] { output },
                     null);
             }
-
+            
             return (Tensor a, Tensor b) =>
             {
                 var result = tf.Runner.TFE_Execute(tf.Context,

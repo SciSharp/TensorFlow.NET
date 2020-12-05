@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
+using Tensorflow.Graphs;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.ManagedAPI
@@ -36,7 +37,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        // [AutoGraph]
+        [AutoGraph]
         Tensor Mul(Tensor a, Tensor b)
         {
             return a * b;

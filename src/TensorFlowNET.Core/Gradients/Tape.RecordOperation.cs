@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Tensorflow.Util;
 using static Tensorflow.tensorflow;
 using static Tensorflow.Binding;
+using System.Linq;
 
 namespace Tensorflow.Gradients
 {
@@ -14,18 +15,19 @@ namespace Tensorflow.Gradients
         public void RecordOperation(string op_type,
             Tensor[] input_tensors,
             TapeTensor[] output_tensors,
-            long[] input_tensor_id,
-            TF_DataType[] input_dtypes,
             Func<BackwardFunction> backward_function_getter)
         {
-            if (!ShouldRecord(input_tensor_id, input_dtypes))
+            var input_ids = input_tensors.Select(x => x.Id).ToArray();
+            var input_dtypes = input_tensors.Select(x => x.dtype).ToArray();
+
+            if (!ShouldRecord(input_ids, input_dtypes))
             {
                 return;
             }
 
             long op_id = next_op_id_++;
-            var ids = new List<long>(input_tensor_id.Length);
-            foreach (var i in input_tensor_id)
+            var ids = new List<long>(input_ids.Length);
+            foreach (var i in input_ids)
             {
                 tensor_usage_[i]++;
                 ids.Add(i);

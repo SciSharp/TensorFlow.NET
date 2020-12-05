@@ -48,6 +48,9 @@ namespace Tensorflow
             SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_FunctionSetAttrValueProto(IntPtr func, string attr_name, byte[] proto, int proto_len, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_FunctionName(IntPtr func);
 
         [DllImport(TensorFlowLibName)]

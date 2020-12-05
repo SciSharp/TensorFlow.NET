@@ -23,6 +23,8 @@ using Tensorflow.Gradients;
 
 namespace Tensorflow
 {
+    public delegate Tensor[] BackwardFunction(Tensor[] grads, long[] unneeded_gradients);
+
     public partial class tensorflow : ITensorFlowObject
     {
         public TF_DataType byte8 = TF_DataType.TF_UINT8;
@@ -36,8 +38,6 @@ namespace Tensorflow
         public TF_DataType @bool = TF_DataType.TF_BOOL;
         public TF_DataType chars = TF_DataType.TF_STRING;
         public TF_DataType @string = TF_DataType.TF_STRING;
-
-        public delegate Tensor[] BackwardFunction(Tensor[] grads, long[] unneeded_gradients);
 
         public Status Status;
         public OpDefLibrary OpDefLib;

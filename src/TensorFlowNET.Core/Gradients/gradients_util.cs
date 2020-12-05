@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Graphs;
 using Tensorflow.Operations.ControlFlows;
 using static Tensorflow.Binding;
 
@@ -39,7 +40,14 @@ namespace Tensorflow
 
             // If src_graph is a _FuncGraph (i.e. a function body), gather it and all
             // ancestor graphs. This is necessary for correctly handling captured values.
+            var func_graphs = new List<FuncGraph>();
             var curr_graph = src_graph;
+            if (src_graph is FuncGraph func_graph)
+            {
+                func_graphs.append(func_graph);
+                curr_graph = func_graph.OuterGraph;
+            }
+                
 
             if (stop_gradients == null)
                 stop_gradients = new Tensor[0];
@@ -84,7 +92,7 @@ namespace Tensorflow
                     var to_ops = ys.Select(x => x.op).ToList();
                     var from_ops = xs.Select(x => x.op).ToList();
                     var stop_gradient_ops = stop_gradients.Select(x => x.op).ToList();
-                    (reachable_to_ops, pending_count, loop_state) = _PendingCount(to_ops, from_ops, colocate_gradients_with_ops, new List<object>(), xs);
+                    (reachable_to_ops, pending_count, loop_state) = _PendingCount(to_ops, from_ops, colocate_gradients_with_ops, func_graphs , xs);
 
                     // Add the initial gradients for the ys.
                     foreach (var (y, grad_y) in zip(ys, grad_ys))
@@ -258,11 +266,8 @@ namespace Tensorflow
         {
             var new_grad_ys = new List<Tensor>();
 
-            for (int i = 0; i < grad_ys.Length; i++)
+            foreach(var (i, (y, grad_y)) in enumerate(zip(ys, grad_ys)))
             {
-                var grad_y = grad_ys[i];
-                var y = ys[i];
-
                 _maybe_colocate_with(y.op, gradient_uid, colocate_gradients_with_ops);
 
                 if (grad_y == null)
@@ -272,8 +277,17 @@ namespace Tensorflow
                     var shape = array_ops.shape(y);
                     var constant = constant_op.constant(y.dtype == TF_DataType.TF_DOUBLE ? (object)1.0 : (object)1.0f, name: $"grad_ys_{i}");
                     var fill = gen_array_ops.fill(shape, constant);
-                    new_grad_ys.Add(fill);
+                    new_grad_ys.append(fill);
+                    continue;
                 }
+
+                if (y.dtype.is_floating() || y.dtype.is_integer())
+                {
+
+                }
+
+                // Create a grad_y tensor in the name scope of the gradient.
+                new_grad_ys.append(array_ops.identity(grad_y, name: $"grad_ys_{i}"));
             }
 
             return new_grad_ys.ToArray();
@@ -294,7 +308,11 @@ namespace Tensorflow
         /// <param name="colocate_gradients_with_ops"></param>
         /// <param name="func_graphs"></param>
         /// <param name="xs"></param>
-        private static (Operation[], Dictionary<string, int>, ControlFlowState) _PendingCount(List<Operation> to_ops, List<Operation> from_ops, bool colocate_gradients_with_ops, List<object> func_graphs, Tensor[] xs)
+        private static (Operation[], Dictionary<string, int>, ControlFlowState) _PendingCount(List<Operation> to_ops, 
+            List<Operation> from_ops, 
+            bool colocate_gradients_with_ops, 
+            List<FuncGraph> func_graphs, 
+            Tensor[] xs)
         {
             // Mark reachable ops from from_ops.
             var reached_ops = new List<Operation>();
@@ -511,7 +529,7 @@ namespace Tensorflow
         /// <param name="from_ops"></param>
         /// <param name="reached_ops"></param>
         /// <param name="func_graphs"></param>
-        private static void _MarkReachedOps(List<Operation> from_ops, List<Operation> reached_ops, List<object> func_graphs)
+        private static void _MarkReachedOps(List<Operation> from_ops, List<Operation> reached_ops, List<FuncGraph> func_graphs)
         {
             Queue<Operation> queue = new Queue<Operation>(from_ops);
             while (queue.Count > 0)
@@ -538,7 +556,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="t"></param>
         /// <param name="func_graphs"></param>
-        private static Operation[] _Consumers(Tensor t, List<object> func_graphs)
+        private static Operation[] _Consumers(Tensor t, List<FuncGraph> func_graphs)
         {
             return t.consumers();
         }
@@ -647,7 +665,7 @@ namespace Tensorflow
             }
         }
 
-        private static bool IsTrainable(Tensor tensor)
+        public static bool IsTrainable(Tensor tensor)
         {
             var dtype = tensor.dtype.as_base_dtype();
             return new TF_DataType[] { dtypes.float16, dtypes.float32, dtypes.float64,

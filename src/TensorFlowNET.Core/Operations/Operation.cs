@@ -218,6 +218,8 @@ namespace Tensorflow
             {
                 case nameof(Int32):
                     return x.List.I.Select(x => (T)Convert.ChangeType(x, typeof(T))).ToArray();
+                case nameof(Int64):
+                    return x.List.I.Select(x => (T)Convert.ChangeType(x, typeof(T))).ToArray();
                 default:
                     return null;
             }

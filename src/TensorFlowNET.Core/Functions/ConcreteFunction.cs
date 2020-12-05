@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Framework.Models;
 using Tensorflow.Graphs;
@@ -11,10 +12,33 @@ namespace Tensorflow.Functions
     /// </summary>
     public class ConcreteFunction : IDisposable
     {
-        public string Name => _handle == IntPtr.Zero ? string.Empty : c_api.StringPiece(c_api.TF_FunctionName(_handle));
         IntPtr _handle;
+        FuncGraph func_graph;
+
+        public string Name
+        {
+            get
+            {
+                if (func_graph != null)
+                    return func_graph.FuncName;
+
+                return _handle == IntPtr.Zero ? string.Empty : c_api.StringPiece(c_api.TF_FunctionName(_handle));
+            }
+        }
+        
         public Tensor[] Outputs;
+        public Type ReturnType;
         public TensorSpec[] OutputStructure;
+
+        public ConcreteFunction(string name)
+        {
+            func_graph = new FuncGraph(name);
+        }
+
+        public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs)
+        {
+            func_graph = graph;
+        }
 
         public ConcreteFunction(Func<Tensor, Tensor> func, TF_DataType dtype)
         {
@@ -28,8 +52,8 @@ namespace Tensorflow.Functions
 
                 var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
                 _handle = graph.ToGraph(opers,
-                    new Operation[] { input },
-                    new Operation[] { output },
+                    new[] { input },
+                    new[] { output },
                     null);
             }
         }
@@ -48,8 +72,8 @@ namespace Tensorflow.Functions
 
                 var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
                 _handle = graph.ToGraph(opers,
-                    new Operation[] { input },
-                    new Operation[] { output.variant_tensor.op },
+                    new[] { input },
+                    new[] { output.variant_tensor },
                     null);
             }
         }
@@ -72,10 +96,36 @@ namespace Tensorflow.Functions
 
                 var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
                 _handle = graph.ToGraph(opers,
-                    new Operation[] { input1, input2, input3 },
-                    new Operation[] { outputs.Item1.op, outputs.Item2.op },
+                    new[] { input1, input2, input3 },
+                    new[] { outputs.Item1, outputs.Item2 },
                     null);
             }
+        }
+
+        public void ToGraph(Tensors inputs, Tensors outputs)
+        {
+            var opers = func_graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+            _handle = func_graph.ToGraph(opers,
+                inputs,
+                outputs,
+                null);
+        }
+
+        public Tensors Invoke(Tensors inputs)
+        {
+            var forward_backward = SelectForwardAndBackwardFunctions(inputs, 1, tf.Context.executing_eagerly());
+            var (forward_function, args_with_tangents) = forward_backward.Forward();
+            Tensors flat_outputs = null;
+            if (tf.Context.executing_eagerly())
+                flat_outputs = forward_function.Call(args_with_tangents);
+            forward_backward.Record(flat_outputs);
+            return flat_outputs;
+        }
+
+        ForwardBackwardCall SelectForwardAndBackwardFunctions(Tensors args, int possible_gradient_type, bool executing_eagerly)
+        {
+            var functions = new FirstOrderTapeGradientFunctions(func_graph, false);
+            return new ForwardBackwardCall(functions, args, tape_watching: true);
         }
 
         public void Dispose()
