@@ -9,8 +9,6 @@ namespace Tensorflow.Eager
         bool TapeSetRecordForwardprop(string op_type,
             Tensor[] input_tensors,
             TapeTensor[] output_tensors,
-            long[] input_ids,
-            TF_DataType[] input_dtypes,
             Func<BackwardFunction> backward_function_getter)
         {
             if (!CouldForwardprop())

@@ -54,10 +54,7 @@ namespace Tensorflow.Gradients
                 if (tensor_tape_.find(tensor_ids[i]))
                 {
                     if (IsDtypeTrainable(dtypes[i]))
-                    {
-                        tf.Logger.Debug($"tape.h->ShouldRecord: should_record = true, tensor_tape_.size()={tensor_tape_.Count}, tensor_ids[{i}]={tensor_ids[i]}");
                         return true;
-                    }
                 }
             }
             return false;

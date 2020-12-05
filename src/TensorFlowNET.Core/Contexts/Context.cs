@@ -18,6 +18,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Contexts
 {
@@ -110,6 +111,36 @@ namespace Tensorflow.Contexts
                 else
                 {
                     return graphAction();
+                }
+            }
+        }
+
+        [DebuggerStepThrough]
+        public Tensors RunInAutoMode2(Func<Tensors> graphAction, 
+            Func<Tensors> eagerAction, 
+            Action<Operation> recordGradient,
+            Tensors tensors)
+        {
+            var shouldRunInEager = executing_eagerly()
+                && tensors.Count(x => x.IsEagerTensor) == tensors.Length;
+
+            if (shouldRunInEager)
+                return eagerAction();
+            else
+            {
+                if (executing_eagerly())
+                {
+                    graph_mode();
+                    var result = graphAction();
+                    restore_mode();
+                    return result;
+                }
+                else
+                {
+                    var result = graphAction();
+                    if (tf.Runner.MustRecordGradient())
+                        recordGradient(result[0].op);
+                    return result;
                 }
             }
         }

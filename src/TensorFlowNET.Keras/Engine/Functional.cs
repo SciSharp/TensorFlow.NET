@@ -335,9 +335,10 @@ namespace Tensorflow.Keras.Engine
 
                     var layer_inputs = node.MapArguments(tensor_dict);
 
-                    tf.Logger.Debug($"{node.Layer}: {node.Layer.Name}");
+                    tf.Logger.Debug($"{depth}: {node.Layer}: {node.Layer.Name}");
                     var outputs = node.Layer.Apply(layer_inputs, is_training: training);
-
+                    foreach (var output in outputs.Where(x => x != null))
+                        tf.Logger.Debug($"{output.TensorShape}");
                     // Update tensor_dict for next input
                     foreach (var (x_id, y) in zip(node.FlatOutputIds, outputs))
                         tensor_dict[x_id] = new Queue<Tensor>(Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y));

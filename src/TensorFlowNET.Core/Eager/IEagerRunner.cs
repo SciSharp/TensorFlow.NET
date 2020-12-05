@@ -1,6 +1,7 @@
 ﻿using System;
 using Tensorflow.Contexts;
 using Tensorflow.Gradients;
+using static Tensorflow.tensorflow;
 
 namespace Tensorflow.Eager
 {
@@ -37,7 +38,8 @@ namespace Tensorflow.Eager
         bool RecordGradient(string op_name,
             Tensor[] inputs,
             object[] attrs,
-            Tensor[] results);
+            Tensor[] results,
+            Func<BackwardFunction> getBackwardFunction = null);
 
         bool MustRecordGradient();
 

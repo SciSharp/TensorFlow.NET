@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Tensorflow.Gradients;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -47,11 +48,17 @@ namespace Tensorflow
                     {
                         RegisterGradientFunction(m.GetCustomAttribute<RegisterGradient>().Name,
                             (oper, out_grads) =>
-                                 g.InvokeMember(m.Name,
-                                    BindingFlags.InvokeMethod,
-                                    null,
-                                    null,
-                                    args: new object[] { oper, out_grads }) as Tensor[]
+                            {
+                                tf.Logger.Debug($"Caculate Gradient: {m.Name}");
+                                var results = g.InvokeMember(m.Name,
+                                   BindingFlags.InvokeMethod,
+                                   null,
+                                   null,
+                                   args: new object[] { oper, out_grads }) as Tensor[];
+                                foreach (var result in results.Where(x => x != null))
+                                    tf.Logger.Debug($"{result.TensorShape}");
+                                return results;
+                            }
                         );
                     }
 

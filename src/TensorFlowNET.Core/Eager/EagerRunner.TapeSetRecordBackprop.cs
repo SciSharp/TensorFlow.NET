@@ -10,8 +10,6 @@ namespace Tensorflow.Eager
         void TapeSetRecordBackprop(string op_type,
             Tensor[] input_tensors,
             TapeTensor[] output_tensors,
-            long[] input_ids,
-            TF_DataType[] input_dtypes,
             Func<BackwardFunction> backward_function_getter)
         {
             if (!CouldBackprop())
@@ -22,7 +20,6 @@ namespace Tensorflow.Eager
             foreach (var tape in tf.GetTapeSet())
             {
                 tape.RecordOperation(op_type, input_tensors, output_tensors,
-                    input_ids, input_dtypes,
                     backward_function_getter);
             }
         }

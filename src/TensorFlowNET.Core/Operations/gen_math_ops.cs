@@ -358,7 +358,7 @@ namespace Tensorflow
             }
 
             var op = tf.OpDefLib._apply_op_helper("SigmoidGrad", name: name, args: new { y, dy });
-
+            
             return op.output;
         }
 
