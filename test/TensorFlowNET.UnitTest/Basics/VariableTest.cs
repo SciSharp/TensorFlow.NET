@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NumSharp;
 using System.Linq;
 using static Tensorflow.Binding;
 
@@ -45,6 +46,41 @@ namespace TensorFlowNET.UnitTest.Basics
             var v2 = v1.assign(v1 + 1.0f);
             Assert.AreEqual(v1.numpy(), v2.numpy());
             Assert.AreEqual(11f, (float)v1.numpy());
+        }
+
+        /// <summary>
+        /// Assign tensor to slice of other tensor.
+        /// https://www.tensorflow.org/api_docs/python/tf/Variable#__getitem__
+        /// </summary>
+        [TestMethod]
+        public void SliceAssign()
+        {
+            NDArray nd = new float[,]
+            {
+                { 1, 2, 3 },
+                { 4, 5, 6 },
+                { 7, 8, 9 }
+            };
+            var x = tf.Variable(nd);
+
+            // get slice form variable
+            var sliced = x[":2", ":2"];
+            Assert.AreEqual(nd[0][":2"], sliced[0].numpy());
+            Assert.AreEqual(nd[1][":2"], sliced[1].numpy());
+
+            // assign to the sliced tensor
+            sliced.assign(22 * tf.ones((2, 2)));
+
+            // test assigned value
+            nd = new float[,]
+            {
+                { 22, 22, 3 },
+                { 22, 22, 6 },
+                { 7, 8, 9 }
+            };
+            Assert.AreEqual(nd[0], x[0].numpy());
+            Assert.AreEqual(nd[1], x[1].numpy());
+            Assert.AreEqual(nd[2], x[2].numpy());
         }
 
         [TestMethod]

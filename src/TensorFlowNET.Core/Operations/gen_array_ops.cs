@@ -593,6 +593,30 @@ namespace Tensorflow
                     "shrink_axis_mask", shrink_axis_mask).FirstOrDefault(),
                 input, begin, end, strides);
 
+        public static Operation resource_strided_slice_assign(Tensor input, Tensor begin, Tensor end, Tensor strides, Tensor value,
+            int begin_mask = 0,
+            int end_mask = 0,
+            int ellipsis_mask = 0,
+            int new_axis_mask = 0,
+            int shrink_axis_mask = 0,
+            string name = null)
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("ResourceStridedSliceAssign", name, new
+                {
+                    input, begin, end, strides, value,
+                    begin_mask, end_mask, ellipsis_mask, new_axis_mask, shrink_axis_mask
+                }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ResourceStridedSliceAssign", name,
+                    null,
+                    input, begin, end, strides, value,
+                    "begin_mask", begin_mask,
+                    "end_mask", end_mask,
+                    "ellipsis_mask", ellipsis_mask,
+                    "new_axis_mask", new_axis_mask,
+                    "shrink_axis_mask", shrink_axis_mask).FirstOrDefault(),
+                input, begin, end, strides, value);
+
         public static Tensor strided_slice<T>(Tensor input, T[] begin, T[] end, T[] strides,
             int begin_mask = 0,
             int end_mask = 0,

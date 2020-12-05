@@ -30,81 +30,28 @@ namespace Tensorflow
         {
             get
             {
-                var begin = new List<int>();
-                var end = new List<int>();
-                var strides = new List<int>();
+                var args = tensor_util.ParseSlices(slices);
 
-                var index = 0;
-                var (new_axis_mask, shrink_axis_mask) = (0, 0);
-                var (begin_mask, end_mask) = (0, 0);
-                var ellipsis_mask = 0;
-
-                foreach (var s in slices)
-                {
-                    if (s.IsNewAxis)
-                    {
-                        begin.Add(0);
-                        end.Add(0);
-                        strides.Add(1);
-                        new_axis_mask |= (1 << index);
-                    }
-                    else if (s.IsEllipsis)
-                    {
-                        begin.Add(0);
-                        end.Add(0);
-                        strides.Add(1);
-                        ellipsis_mask |= (1 << index);
-                    }
-                    else
-                    {
-                        if (s.Start.HasValue)
-                        {
-                            begin.Add(s.Start.Value);
-                        }
-                        else
-                        {
-                            begin.Add(0);
-                            begin_mask |= (1 << index);
-                        }
-
-                        if (s.Stop.HasValue)
-                        {
-                            end.Add(s.Stop.Value);
-                        }
-                        else
-                        {
-                            end.Add(0);
-                            end_mask |= (1 << index);
-                        }
-
-                        strides.Add(s.Step);
-                        if (s.IsIndex)
-                            shrink_axis_mask |= (1 << index);
-                    }
-
-                    index += 1;
-                }
-
-                return tf_with(ops.name_scope(null, "strided_slice", new { begin, end, strides }), scope =>
+                return tf_with(ops.name_scope(null, "strided_slice", args), scope =>
                 {
                     string name = scope;
-                    if (begin != null)
+                    if (args.Begin != null)
                     {
                         var (packed_begin, packed_end, packed_strides) =
-                            (array_ops.stack(begin.ToArray()),
-                                array_ops.stack(end.ToArray()),
-                                array_ops.stack(strides.ToArray()));
+                            (array_ops.stack(args.Begin),
+                                array_ops.stack(args.End),
+                                array_ops.stack(args.Strides));
 
                         return gen_array_ops.strided_slice(
                             this,
                             packed_begin,
                             packed_end,
                             packed_strides,
-                            begin_mask: begin_mask,
-                            end_mask: end_mask,
-                            shrink_axis_mask: shrink_axis_mask,
-                            new_axis_mask: new_axis_mask,
-                            ellipsis_mask: ellipsis_mask,
+                            begin_mask: args.BeginMask,
+                            end_mask: args.EndMask,
+                            shrink_axis_mask: args.ShrinkAxisMask,
+                            new_axis_mask: args.NewAxisMask,
+                            ellipsis_mask: args.EllipsisMask,
                             name: name);
                     }
 

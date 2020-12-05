@@ -89,6 +89,22 @@ namespace Tensorflow
             return assign_op;
         }
 
+        public void StridedSliceAssign(Tensor value, ParsedSliceArgs slice)
+        {
+            _strided_slice_assign(slice.PackedBegin, slice.PackedEnd, slice.PackedStrides, value);
+        }
+
+        void _strided_slice_assign(Tensor begin, Tensor end, Tensor strides, Tensor value, string name = null,
+            int begin_mask = 0, int end_mask = 0, int ellipsis_mask = 0, int new_axis_mask = 0, int shrink_axis_mask = 0)
+        {
+            var op = gen_array_ops.resource_strided_slice_assign(handle, begin, end, strides, value,
+                begin_mask: begin_mask,
+                end_mask: end_mask,
+                ellipsis_mask: ellipsis_mask,
+                new_axis_mask: new_axis_mask,
+                shrink_axis_mask: shrink_axis_mask);
+        }
+
         public IVariableV1 assign_lazy_load(Tensor value, string name = null)
         {
             var value_tensor = ops.convert_to_tensor(value, dtype: dtype);

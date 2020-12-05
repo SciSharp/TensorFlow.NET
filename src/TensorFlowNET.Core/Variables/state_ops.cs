@@ -40,21 +40,6 @@ namespace Tensorflow
                 container: container,
                 shared_name: shared_name);
 
-        public static Tensor assign(Tensor @ref, object value,
-            bool validate_shape = true,
-            bool use_locking = true,
-            string name = null)
-        {
-            if (@ref.dtype.is_ref_dtype())
-                return gen_state_ops.assign(@ref,
-                    value,
-                    validate_shape: validate_shape,
-                    use_locking: use_locking,
-                    name: name);
-
-            return @ref.assign((Tensor)value, name: name);
-        }
-
         public static Tensor assign<T>(T @ref, object value,
             bool validate_shape = true,
             bool use_locking = true,

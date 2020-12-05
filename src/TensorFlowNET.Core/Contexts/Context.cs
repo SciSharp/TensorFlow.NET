@@ -91,7 +91,7 @@ namespace Tensorflow.Contexts
             context_switches.Pop();
         }
 
-        [DebuggerStepThrough]
+        // [DebuggerStepThrough]
         public T RunInAutoMode<T>(Func<T> graphAction, Func<T> eagerAction, params Tensor[] tensors)
         {
             var shouldRunInEager = executing_eagerly()
@@ -115,7 +115,7 @@ namespace Tensorflow.Contexts
             }
         }
 
-        [DebuggerStepThrough]
+        // [DebuggerStepThrough]
         public Tensors RunInAutoMode2(Func<Tensors> graphAction, 
             Func<Tensors> eagerAction, 
             Action<Operation> recordGradient,

@@ -16,6 +16,7 @@
 
 using NumSharp;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
@@ -583,6 +584,76 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 default:
                     return nd.ToString();
             }
+        }
+
+        public static ParsedSliceArgs ParseSlices(Slice[] slices)
+        {
+            var begin = new List<int>();
+            var end = new List<int>();
+            var strides = new List<int>();
+
+            var index = 0;
+            var (new_axis_mask, shrink_axis_mask) = (0, 0);
+            var (begin_mask, end_mask) = (0, 0);
+            var ellipsis_mask = 0;
+
+            foreach (var s in slices)
+            {
+                if (s.IsNewAxis)
+                {
+                    begin.Add(0);
+                    end.Add(0);
+                    strides.Add(1);
+                    new_axis_mask |= (1 << index);
+                }
+                else if (s.IsEllipsis)
+                {
+                    begin.Add(0);
+                    end.Add(0);
+                    strides.Add(1);
+                    ellipsis_mask |= (1 << index);
+                }
+                else
+                {
+                    if (s.Start.HasValue)
+                    {
+                        begin.Add(s.Start.Value);
+                    }
+                    else
+                    {
+                        begin.Add(0);
+                        begin_mask |= (1 << index);
+                    }
+
+                    if (s.Stop.HasValue)
+                    {
+                        end.Add(s.Stop.Value);
+                    }
+                    else
+                    {
+                        end.Add(0);
+                        end_mask |= (1 << index);
+                    }
+
+                    strides.Add(s.Step);
+                    if (s.IsIndex)
+                        shrink_axis_mask |= (1 << index);
+                }
+
+                index += 1;
+            }
+
+            return new ParsedSliceArgs
+            {
+                Begin = begin.ToArray(),
+                End = end.ToArray(),
+                Strides = strides.ToArray(),
+                BeginMask = begin_mask,
+                EndMask = end_mask,
+                EllipsisMask = ellipsis_mask,
+                ShrinkAxisMask = shrink_axis_mask,
+                NewAxisMask = new_axis_mask
+            };
         }
     }
 }

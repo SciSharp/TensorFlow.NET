@@ -34,43 +34,6 @@ namespace Tensorflow
                                                       name: name);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="self"></param>
-        /// <param name="value"></param>
-        /// <param name="use_locking"></param>
-        /// <param name="read_value"></param>
-        /// <returns>
-        /// If `read_value` is `True`, this method will return the new value of the
-        /// variable after the assignment has completed.Otherwise, when in graph mode
-        /// it will return the `Operation` that does the assignment, and when in eager
-        /// mode it will return `None`.
-        /// </returns>
-        public static Operation assign(this Tensor self, Tensor value, bool use_locking = false, string name = null, bool read_value = true)
-        {
-            var value_tensor = ops.convert_to_tensor(value, dtype: self.dtype);
-            self.assert_is_compatible_with(value_tensor);
-            var assign_op = gen_resource_variable_ops.assign_variable_op(self, value_tensor, name: name);
-            if (read_value)
-            {
-                return self._lazy_read(assign_op);
-            }
-
-            return assign_op;
-        }
-
-        public static Operation _lazy_read(this Tensor self, Operation op)
-        {
-            variable_accessed(self);
-            throw new NotImplementedException();
-        }
-
-        public static void variable_accessed(this Tensor variable)
-        {
-            throw new NotImplementedException();
-        }
-
         public static bool is_resource_variable(IVariableV1 var)
         {
             return var is ResourceVariable;
