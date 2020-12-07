@@ -26,11 +26,11 @@ namespace Tensorflow.Keras.Layers
 
             var result = array_ops.reshape(inputs, shape.ToArray());
             if (!tf.Context.executing_eagerly())
-                result.set_shape(compute_output_shape(inputs.shape));
+                result.set_shape(ComputeOutputShape(inputs.shape));
             return result;
         }
 
-        TensorShape compute_output_shape(TensorShape input_shape)
+        public override TensorShape ComputeOutputShape(TensorShape input_shape)
         {
             if (input_shape.dims[0] == -1)
             {

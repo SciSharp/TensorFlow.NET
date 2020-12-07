@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -11,5 +12,8 @@ namespace Tensorflow.Keras.Engine
         {
             _layers.AddRange(layers);
         }
+
+        public virtual TensorShape ComputeOutputShape(TensorShape input_shape)
+            => throw new NotImplementedException("");
     }
 }
