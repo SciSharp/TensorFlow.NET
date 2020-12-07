@@ -47,10 +47,12 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             Assert.AreEqual(10, (int)r);
         }
 
+
         [TestMethod, Ignore]
         public void ScanFunctionGraphMode()
         {
             tf.compat.v1.disable_eager_execution();
+
             Func<Tensor, Tensor, Tensor> fn = (prev, current) => tf.add(prev, current);
             var input = tf.placeholder(TF_DataType.TF_FLOAT, new TensorShape(6));
             var scan = tf.scan(fn, input);
