@@ -201,7 +201,7 @@ for step = 1 to  (training_steps + 1) do
     // Run the optimization to update W and b values.
     // Wrap computation inside a GradientTape for automatic differentiation.
     use g = tf.GradientTape()
-    // Linear regressoin (Wx + b).
+    // Linear regression (Wx + b).
     let pred = W * train_X + b
     // Mean square error.
     let loss = tf.reduce_sum(tf.pow(pred - train_Y,2)) / (2 * n_samples)
