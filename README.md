@@ -169,12 +169,12 @@ Linear Regression in `Eager` mode:
 #r "nuget: SciSharp.TensorFlow.Redist"
 #r "nuget: NumSharp"
 
-open System
 open NumSharp
 open Tensorflow
-open Tensorflow.Keras
+open type Tensorflow.Binding
+open type Tensorflow.KerasApi
 
-let tf = Binding.New<tensorflow>()
+let tf = New<tensorflow>()
 tf.enable_eager_execution()
 
 // Parameters
@@ -194,7 +194,7 @@ let n_samples = train_X.shape.[0]
 // We can set a fixed init value in order to demo
 let W = tf.Variable(-0.06f,name = "weight")
 let b = tf.Variable(-0.73f, name = "bias")
-let optimizer = KerasApi.keras.optimizers.SGD(learning_rate)
+let optimizer = keras.optimizers.SGD(learning_rate)
 
 // Run training for the given number of steps.
 for step = 1 to  (training_steps + 1) do 
@@ -210,7 +210,7 @@ for step = 1 to  (training_steps + 1) do
     let gradients = g.gradient(loss,struct (W,b))
 
     // Update W and b following gradients.
-    optimizer.apply_gradients(Binding.zip(gradients, struct (W,b)))
+    optimizer.apply_gradients(zip(gradients, struct (W,b)))
 
     if (step % display_step) = 0 then
         let pred = W * train_X + b
