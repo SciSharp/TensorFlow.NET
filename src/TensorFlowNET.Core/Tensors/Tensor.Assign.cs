@@ -18,7 +18,9 @@ namespace Tensorflow
                 return OriginalVar;
             }
             else
-                throw new RuntimeError("Operation doesn't support.");
+            {
+                throw new RuntimeError($"Operation doesn't support. {this.name} is a constant tensor. Make sure to initiate {this.name} from tf.Variable() and declare {this.name} as ResourceVariable or var.");
+            }
         }
     }
 }
