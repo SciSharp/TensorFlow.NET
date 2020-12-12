@@ -13,7 +13,7 @@ namespace System
     /// int lastElement = someArray[^1]; // lastElement = 5
     /// </code>
     /// </remarks>
-    internal readonly struct Index : IEquatable<Index>
+    public readonly struct Index : IEquatable<Index>
     {
         private readonly int _value;
 
@@ -150,7 +150,7 @@ namespace System
     /// int[] subArray2 = someArray[1..^0]; // { 2, 3, 4, 5 }
     /// </code>
     /// </remarks>
-    internal readonly struct Range : IEquatable<Range>
+    public readonly struct Range : IEquatable<Range>
     {
         /// <summary>Represent the inclusive start index of the Range.</summary>
         public Index Start { get; }
@@ -229,46 +229,6 @@ namespace System
             }
 
             return (start, end - start);
-        }
-    }
-}
-
-namespace System.Runtime.CompilerServices
-{
-    internal static class RuntimeHelpers
-    {
-        /// <summary>
-        /// Slices the specified array using the specified range.
-        /// </summary>
-        public static T[] GetSubArray<T>(T[] array, Range range)
-        {
-            if (array == null)
-            {
-                throw new ArgumentNullException(nameof(array));
-            }
-
-            (int offset, int length) = range.GetOffsetAndLength(array.Length);
-
-            if (default(T) != null || typeof(T[]) == array.GetType())
-            {
-                // We know the type of the array to be exactly T[].
-
-                if (length == 0)
-                {
-                    return Array.Empty<T>();
-                }
-
-                var dest = new T[length];
-                Array.Copy(array, offset, dest, 0, length);
-                return dest;
-            }
-            else
-            {
-                // The array is actually a U[] where U:T.
-                var dest = (T[])Array.CreateInstance(array.GetType().GetElementType(), length);
-                Array.Copy(array, offset, dest, 0, length);
-                return dest;
-            }
         }
     }
 }
