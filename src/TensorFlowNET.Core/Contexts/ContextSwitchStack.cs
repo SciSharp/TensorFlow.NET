@@ -25,17 +25,18 @@ namespace Tensorflow.Contexts
     {
         Stack<ContextSwitch> stack;
 
-        public ContextSwitchStack(bool isEager)
+        public ContextSwitchStack(bool isEager, bool isFunc)
         {
             stack = new Stack<ContextSwitch>();
-            Push(isEager);
+            Push(isEager, isFunc);
         }
 
-        public void Push(bool isEager)
+        public void Push(bool isEager, bool isFunc)
         {
             stack.Push(new ContextSwitch
             {
-                EagerMode = isEager
+                EagerMode = isEager,
+                IsBuildingFunction = isFunc
             });
         }
 

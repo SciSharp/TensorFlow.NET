@@ -25,7 +25,7 @@ namespace Tensorflow.Keras.Engine
             // using var graph = tf.keras.backend.get_graph().as_default();
 
             if (!inputs.IsEagerTensor)
-                tf.Context.graph_mode();
+                tf.Context.graph_mode(isFunc: true);
 
             tf_with(ops.name_scope(_name_scope()), scope =>
             {

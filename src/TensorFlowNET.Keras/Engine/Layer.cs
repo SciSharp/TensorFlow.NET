@@ -176,9 +176,17 @@ namespace Tensorflow.Keras.Engine
 
             tf.init_scope();
 
-            tf.Context.eager_mode();
+            bool need_restore_mode = false;
+            if (inputs.IsEagerTensor || tf.Context.is_build_function())
+            {
+                need_restore_mode = true;
+                tf.Context.eager_mode();
+            }
+               
             build(inputs);
-            tf.Context.restore_mode();
+
+            if (need_restore_mode)
+                tf.Context.restore_mode();
 
             built = true;
         }

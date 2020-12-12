@@ -42,7 +42,7 @@ namespace Tensorflow.Contexts
         {
             Handle = c_api.TFE_NewContext(opts.Handle, status.Handle);
             status.Check(true);
-            context_switches = new ContextSwitchStack(defaultExecutionMode == EAGER_MODE);
+            context_switches = new ContextSwitchStack(defaultExecutionMode == EAGER_MODE, false);
             initialized = true;
         }
 
@@ -70,21 +70,19 @@ namespace Tensorflow.Contexts
         public bool executing_eagerly()
             => context_switches.Current().EagerMode;
 
+        public bool is_build_function()
+            => context_switches.Current().IsBuildingFunction;
+
         public string shared_name(string name = null)
             => !string.IsNullOrEmpty(name) || !executing_eagerly() ?
                 name :
                 "cd2c89b7-88b7-44c8-ad83-06c2a9158347";
 
-        public void graph_mode()
-            => mode(false);
+        public void graph_mode(bool isFunc = false)
+            => context_switches.Push(false, isFunc);
 
-        public void eager_mode()
-            => mode(true);
-
-        void mode(bool isEager)
-        {
-            context_switches.Push(isEager);
-        }
+        public void eager_mode(bool isFunc = false)
+            => context_switches.Push(true, isFunc);
 
         public void restore_mode()
         {
