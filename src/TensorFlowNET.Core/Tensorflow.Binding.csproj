@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
-    <Version>0.31.0</Version>
+    <Version>0.31.1</Version>
     <LangVersion>8.0</LangVersion>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
@@ -19,7 +19,7 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.31.0.0</AssemblyVersion>
+    <AssemblyVersion>0.31.1.0</AssemblyVersion>
     <PackageReleaseNotes>tf.net 0.20.x and above are based on tensorflow native 2.x.
 
 * Eager Mode is added finally.
@@ -30,7 +30,7 @@ https://tensorflownet.readthedocs.io</Description>
 TensorFlow .NET v0.30 is focused on making more Keras API work including:
 * tf.keras.datasets
 * Building keras model in subclass, functional and sequential api</PackageReleaseNotes>
-    <FileVersion>0.31.0.0</FileVersion>
+    <FileVersion>0.31.1.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
