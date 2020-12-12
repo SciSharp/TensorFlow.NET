@@ -26,18 +26,16 @@ In comparison to other projects, like for instance [TensorFlowSharp](https://www
 
 ### How to use
 
-| TensorFlow                | tf native1.14 | tf native 1.15 | tf native 2.3 |
-| ------------------------- | ------------- | -------------- | ------------- |
-| tf.net 0.30, tf.keras 0.1 |               |                | x             |
-| tf.net 0.20               |               | x              | x             |
-| tf.net 0.15               | x             | x              |               |
-| tf.net 0.14               | x             |                |               |
-
-Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html).
-
-There are many examples reside at [TensorFlow.NET Examples](https://github.com/SciSharp/TensorFlow.NET-Examples).
+| TensorFlow                 | tf native1.14 | tf native 1.15 | tf native 2.3 |
+| -------------------------- | ------------- | -------------- | ------------- |
+| tf.net 0.3x, tf.keras 0.2x |               |                | x             |
+| tf.net 0.2x                |               | x              | x             |
+| tf.net 0.1x                | x             | x              |               |
+| tf.net 0.1x                | x             |                |               |
 
 Troubleshooting of running example or installation, please  refer [here](tensorflowlib/README.md).
+
+There are many examples reside at [TensorFlow.NET Examples](https://github.com/SciSharp/TensorFlow.NET-Examples) written in C# and F#.
 
 #### C# Example
 
@@ -67,18 +65,16 @@ Linear Regression in `Eager` mode:
 
 ```c#
 // Parameters        
-int training_steps = 1000;
-float learning_rate = 0.01f;
-int display_step = 100;
+var training_steps = 1000;
+var learning_rate = 0.01f;
+var display_step = 100;
 
 // Sample data
-NDArray train_X, train_Y;
-int n_samples;
-train_X = np.array(3.3f, 4.4f, 5.5f, 6.71f, 6.93f, 4.168f, 9.779f, 6.182f, 7.59f, 2.167f,
+var train_X = np.array(3.3f, 4.4f, 5.5f, 6.71f, 6.93f, 4.168f, 9.779f, 6.182f, 7.59f, 2.167f,
              7.042f, 10.791f, 5.313f, 7.997f, 5.654f, 9.27f, 3.1f);
-train_Y = np.array(1.7f, 2.76f, 2.09f, 3.19f, 1.694f, 1.573f, 3.366f, 2.596f, 2.53f, 1.221f,
+var train_Y = np.array(1.7f, 2.76f, 2.09f, 3.19f, 1.694f, 1.573f, 3.366f, 2.596f, 2.53f, 1.221f,
              2.827f, 3.465f, 1.65f, 2.904f, 2.42f, 2.94f, 1.3f);
-n_samples = train_X.shape[0];
+var n_samples = train_X.shape[0];
 
 // We can set a fixed init value in order to demo
 var W = tf.Variable(-0.06f, name: "weight");
@@ -218,6 +214,7 @@ for step = 1 to  (training_steps + 1) do
         printfn $"step: {step}, loss: {loss.numpy()}, W: {W.numpy()}, b: {b.numpy()}"
 ```
 
+Read the docs & book [The Definitive Guide to Tensorflow.NET](https://tensorflownet.readthedocs.io/en/latest/FrontCover.html) if you want to know more about TensorFlow for .NET under the hood.
 
 ### Contribute:
 
@@ -249,9 +246,7 @@ git pull upstream master
 
 ### Contact
 
-Feel free to star or raise issue on [Github](https://github.com/SciSharp/TensorFlow.NET).
-
-Follow us on [Medium](https://medium.com/scisharp).
+Follow us on [Twitter](https://twitter.com/ScisharpStack), [Facebook](https://www.facebook.com/scisharp.stack.9), [Medium](https://medium.com/scisharp), [LinkedIn](https://www.linkedin.com/company/scisharp-stack/).
 
 Join our chat on [Gitter](https://gitter.im/sci-sharp/community).
 
