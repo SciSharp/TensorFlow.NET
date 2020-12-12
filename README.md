@@ -28,10 +28,10 @@ In comparison to other projects, like for instance [TensorFlowSharp](https://www
 
 | TensorFlow                 | tf native1.14 | tf native 1.15 | tf native 2.3 |
 | -------------------------- | ------------- | -------------- | ------------- |
-| tf.net 0.3x, tf.keras 0.2x |               |                | x             |
+| tf.net 0.3x, tf.keras 0.2 |               |                | x             |
 | tf.net 0.2x                |               | x              | x             |
-| tf.net 0.1x                | x             | x              |               |
-| tf.net 0.1x                | x             |                |               |
+| tf.net 0.15                | x             | x              |               |
+| tf.net 0.14                | x             |                |               |
 
 Troubleshooting of running example or installation, please  refer [here](tensorflowlib/README.md).
 
