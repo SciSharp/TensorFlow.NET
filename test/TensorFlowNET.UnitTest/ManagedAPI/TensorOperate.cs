@@ -8,9 +8,19 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
     [TestClass]
     public class TensorOperate
     {
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TransposeTest()
         {
+            // https://www.tensorflow.org/api_docs/python/tf/transpose#for_example_2
+            var x = tf.constant(new int[,] {
+                { 1, 2, 3 },
+                { 4, 5, 6 }
+            });
+            var transpose_x = tf.transpose(x);
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 4 }, transpose_x[0].numpy().ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 2, 5 }, transpose_x[1].numpy().ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 6 }, transpose_x[2].numpy().ToArray<int>()));
+
             var a = tf.constant(np.array(new[, , ,] { { { { 1, 11, 2, 22 } }, { { 3, 33, 4, 44 } } },
                 { { { 5, 55, 6, 66 } }, { { 7, 77, 8, 88 } } } }));
             var b = tf.transpose(a, new[] { 3, 1, 2, 0 });
