@@ -83,6 +83,26 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.AreEqual(nd[2], x[2].numpy());
         }
 
+        [TestMethod, Ignore]
+        public void TypeMismatchedSliceAssign()
+        {
+            NDArray intNd = new int[]
+            {
+                1, -2, 3
+            };
+            NDArray doubleNd = new double[]
+            {
+                -5, 6, -7
+            };
+            var x = tf.Variable(doubleNd);
+
+            var slice = x[":"];
+            Assert.ThrowsException<System.Exception>(
+                // this statement exit without throwing any exception but the "test execution summary" seems not able to detect that.
+                () => slice.assign(intNd)
+            );
+        }
+
         [TestMethod]
         public void Accumulation()
         {
