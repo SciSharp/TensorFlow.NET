@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
    Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -619,6 +619,16 @@ namespace Tensorflow
 
         public static Tensor squared_difference(Tensor x, Tensor y, string name = null)
         {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "SquaredDifference", name,
+                    null,
+                    x,y);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("SquaredDifference", name, args: new { x, y, name });
 
             return _op.outputs[0];
