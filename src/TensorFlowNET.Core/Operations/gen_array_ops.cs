@@ -531,7 +531,7 @@ namespace Tensorflow
                     input, multiples).FirstOrDefault(),
                 input);
 
-        public static Tensor transpose<T1, T2>(T1 x, T2 perm, string name = null)
+        public static Tensor transpose<T1>(Tensor x, T1 perm, string name = null)
         {
             if (tf.Context.executing_eagerly())
             {
