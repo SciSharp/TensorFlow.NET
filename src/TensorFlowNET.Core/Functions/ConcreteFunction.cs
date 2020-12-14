@@ -109,6 +109,8 @@ namespace Tensorflow.Functions
                 inputs,
                 outputs,
                 null);
+
+            OutputStructure = outputs.Select(x => x.ToTensorSpec()).ToArray();
         }
 
         public Tensors Invoke(Tensors inputs)
