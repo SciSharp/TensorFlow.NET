@@ -41,7 +41,7 @@ namespace Tensorflow.Keras
             int num_channels = 0;
             if (color_mode == "rgb")
                 num_channels = 3;
-            // C:/Users/haipi/.keras/datasets/flower_photos
+            
             var (image_paths, label_list, class_name_list) = keras.preprocessing.dataset_utils.index_directory(directory,
                 formats: WHITELIST_FORMATS,
                 class_names: class_names,

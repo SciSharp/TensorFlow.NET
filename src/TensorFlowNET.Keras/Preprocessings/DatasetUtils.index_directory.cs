@@ -40,8 +40,8 @@ namespace Tensorflow.Keras.Preprocessings
                 labels.AddRange(Enumerable.Range(0, files.Length).Select(x => label));
             }
 
-            var return_labels = new int[labels.Count];
-            var return_file_paths = new string[file_paths.Count];
+            var return_labels = labels.Select(x => x).ToArray();
+            var return_file_paths = file_paths.Select(x => x).ToArray();
 
             if (shuffle)
             {
