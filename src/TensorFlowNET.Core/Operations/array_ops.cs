@@ -779,7 +779,22 @@ namespace Tensorflow
             return gen_array_ops.gather_v2(@params, indices, axis, name: name);
         }
 
-        public static Tensor transpose<T1, T2>(T1 a, T2 perm, string name = "transpose", bool conjugate = false)
+        public static Tensor transpose<T1>(T1 a, TensorShape perm, string name = "transpose", bool conjugate = false)
+        {
+            return tf_with(ops.name_scope(name, "transpose", new { a }), scope =>
+            {
+                var a_tensor = ops.convert_to_tensor(a);
+                if(perm == null)
+                {
+                    var rank = a_tensor.rank;
+                    perm = range(0, rank).OrderByDescending(x => x).ToArray();
+                }
+
+                return gen_array_ops.transpose(a_tensor, perm, name: scope);
+            });
+        }
+
+        public static Tensor transpose(Tensor a, Tensor perm, string name = "transpose", bool conjugate = false)
         {
             return tf_with(ops.name_scope(name, "transpose", new { a }), scope =>
             {
