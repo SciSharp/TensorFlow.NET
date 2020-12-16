@@ -714,7 +714,23 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
+        public static Tensor softplus(Tensor features, string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Softplus", name,
+                    null,
+                    features);
 
+                return results[0];
+            }
+
+            var _op = tf.OpDefLib._apply_op_helper("Softplus", name, args: new { features });
+
+            return _op.outputs[0];
+        }
+        
         public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate = false, string name = null)
             => tf.Context.RunInAutoMode(()
                 => tf.OpDefLib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate }).output, ()
@@ -1068,6 +1084,15 @@ namespace Tensorflow
 
         public static Tensor _abs(Tensor x, string name = null)
         {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Abs", name,
+                     null,
+                     x);
+
+                return results[0];
+            }
             var _op = tf.OpDefLib._apply_op_helper("Abs", name, args: new { x });
 
             return _op.output;
@@ -1202,6 +1227,15 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor rsqrt(Tensor x, string name = null)
         {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Rsqrt", name,
+                    null,
+                    x);
+
+                return results[0];
+            }
             var _op = tf.OpDefLib._apply_op_helper("Rsqrt", name, new { x });
 
             return _op.outputs[0];
