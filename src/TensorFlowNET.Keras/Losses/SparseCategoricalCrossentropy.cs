@@ -4,14 +4,11 @@ namespace Tensorflow.Keras.Losses
 {
     public class SparseCategoricalCrossentropy : LossFunctionWrapper, ILossFunc
     {
-        public SparseCategoricalCrossentropy(bool from_logits = false,
-            string reduction = ReductionV2.AUTO,
-            string name = "sparse_categorical_crossentropy") :
-            base(reduction: reduction,
-                name: name)
-        {
-
-        }
+        public SparseCategoricalCrossentropy(
+            bool from_logits = false,
+            string reduction = null,
+            string name = null) :
+            base(reduction: reduction, name: name == null ? "sparse_categorical_crossentropy" : name){ }
 
         public override Tensor Apply(Tensor target, Tensor output, bool from_logits = false, int axis = -1)
         {

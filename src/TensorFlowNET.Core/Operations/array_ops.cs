@@ -506,6 +506,27 @@ namespace Tensorflow
             }
         }
 
+
+        public static Tensor where_v2(Tensor condition, object x = null, object y = null, string name = null)
+        {
+            if (x == null && y == null)
+            {
+                return tf_with(ops.name_scope(name, "Where", new { condition }), scope =>
+                {
+                    name = scope;
+                    condition = ops.convert_to_tensor(condition, preferred_dtype: dtypes.@bool, name: "condition");
+                    return gen_array_ops.where(condition: condition, name: name);
+                });
+            }
+            else if (x != null && y != null)
+            {
+                return gen_array_ops.select_v2(condition, x, y, name);
+            }
+            else
+            {
+                throw new ValueError("x and y must both be non-None or both be None.");
+            }
+        }
         /// <summary>
         /// Returns the shape of a tensor.
         /// </summary>

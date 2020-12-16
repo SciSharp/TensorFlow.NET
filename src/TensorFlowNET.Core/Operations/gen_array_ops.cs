@@ -423,6 +423,21 @@ namespace Tensorflow
             var _op = tf.OpDefLib._apply_op_helper("Select", name, new { condition, t = x, e = y });
             return _op.outputs[0];
         }
+        public static Tensor select_v2<Tx, Ty>(Tensor condition, Tx x, Ty y, string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "SelectV2", name,
+                    null,
+                    condition, x, y);
+
+                return results[0];
+            }
+
+            var _op = tf.OpDefLib._apply_op_helper("SelectV2", name, new { condition, t = x, e = y });
+            return _op.outputs[0];
+        }
 
         public static Tensor scatter_nd(Tensor indices, Tensor updates, Tensor[] shape, string name = null)
         {
