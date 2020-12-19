@@ -1,6 +1,6 @@
 ﻿namespace System.Runtime.CompilerServices
 {
-    public static class RuntimeHelpers
+    internal static class RuntimeHelpers
     {
         /// <summary>
         /// Slices the specified array using the specified range.
