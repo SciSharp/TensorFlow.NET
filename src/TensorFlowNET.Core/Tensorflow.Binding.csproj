@@ -82,7 +82,6 @@ TensorFlow .NET v0.30 is focused on making more Keras API work including:
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.11.4" />
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.138" />
     <PackageReference Include="NumSharp.Lite" Version="0.1.9" />
     <PackageReference Include="Protobuf.Text" Version="0.4.0" />
