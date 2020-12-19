@@ -35,7 +35,7 @@ namespace Tensorflow.Keras.Engine
 
         public int[] node_indices;
         public int[] tensor_indices;
-        public Tensors input_tensors => args.InputTensors;
+        public Tensors input_tensors => is_input ? Outputs : args.InputTensors;
         public Tensors Outputs => args.Outputs;
         public TensorShape[] input_shapes;
         public TensorShape[] output_shapes;

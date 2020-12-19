@@ -62,16 +62,21 @@ namespace Tensorflow.Keras
         /// <returns></returns>
         public Tensor Input(TensorShape shape = null,
                 int batch_size = -1,
+                TensorShape batch_input_shape = null,
                 TF_DataType dtype = TF_DataType.DtInvalid,
                 string name = null,
                 bool sparse = false,
                 bool ragged = false,
                 Tensor tensor = null)
         {
+            if (batch_input_shape != null)
+                shape = batch_input_shape.dims[1..];
+
             var args = new InputLayerArgs
             {
                 Name = name,
                 InputShape = shape,
+                BatchInputShape = batch_input_shape,
                 BatchSize = batch_size,
                 DType = dtype,
                 Sparse = sparse,

@@ -39,10 +39,12 @@ namespace Tensorflow.Keras.Engine
             _input_coordinates = new List<KerasHistory>();
             _output_coordinates = new List<KerasHistory>();
             tensor_usage_count = new Dictionary<int, int>();
+            if (this is Sequential)
+                return;
             _init_graph_network(inputs, outputs);
         }
 
-        void _init_graph_network(Tensors inputs, Tensors outputs)
+        protected void _init_graph_network(Tensors inputs, Tensors outputs)
         {
             _is_graph_network = true;
             this.inputs = inputs;

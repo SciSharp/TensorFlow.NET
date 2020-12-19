@@ -28,7 +28,7 @@ namespace TensorFlowNET.UnitTest.Basics
         public void decode_image()
         {
             var img = tf.image.decode_image(contents);
-            Assert.AreEqual(img.name, "decode_image/cond_jpeg/Merge:0");
+            Assert.AreEqual(img.name, "decode_image/Identity:0");
         }
 
         [TestMethod]

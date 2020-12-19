@@ -57,7 +57,7 @@ namespace TensorFlowNET.UnitTest.Keras
                 { 2, 3, 4, 5 },
                 { 3, 4, 5, 6 }
             });
-            model.compile("rmsprop", "mse");
+            // model.compile("rmsprop", "mse");
             var output_array = model.predict(input_array);
             Assert.AreEqual((32, 10, 64), output_array.TensorShape);
         }
