@@ -41,7 +41,7 @@ namespace Tensorflow.Keras.Utils
             }
 
             var wc = new WebClient();
-            Console.WriteLine($"Downloading {relativeFilePath}");
+            Console.WriteLine($"Downloading from {url}");
             var download = Task.Run(() => wc.DownloadFile(url, relativeFilePath));
             while (!download.IsCompleted)
             {
@@ -49,7 +49,7 @@ namespace Tensorflow.Keras.Utils
                 Console.Write(".");
             }
             Console.WriteLine("");
-            Console.WriteLine($"Downloaded {relativeFilePath}");
+            Console.WriteLine($"Downloaded to {relativeFilePath}");
 
             return true;
         }

@@ -17,5 +17,6 @@
         IDatasetV2 GetDataset();
         int GetSize();
         (Tensor, Tensor) Expand1d(Tensor x, Tensor y);
+        bool ShouldRecreateIterator();
     }
 }
