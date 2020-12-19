@@ -142,5 +142,14 @@ namespace TensorFlowNET.UnitTest.Dataset
                 value++;
             }
         }
+
+        [TestMethod, Ignore]
+        public void Cardinality()
+        {
+            var dataset = tf.data.Dataset.range(10);
+            dataset = dataset.map(x => x + 1);
+            var cardinality = dataset.dataset_cardinality();
+            Assert.AreEqual(new long[] { 10 }, cardinality.numpy());
+        }
     }
 }

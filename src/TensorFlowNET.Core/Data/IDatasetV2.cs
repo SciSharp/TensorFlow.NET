@@ -75,6 +75,11 @@ namespace Tensorflow
         /// <returns></returns>
         IDatasetV2 apply_options();
 
+        /// <summary>
+        /// Returns the cardinality of `dataset`, if known.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         Tensor dataset_cardinality(string name = null);
     }
 }
