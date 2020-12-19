@@ -143,7 +143,7 @@ namespace TensorFlowNET.UnitTest.Dataset
             }
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void Cardinality()
         {
             var dataset = tf.data.Dataset.range(10);

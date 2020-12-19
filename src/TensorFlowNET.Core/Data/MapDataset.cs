@@ -25,7 +25,9 @@ namespace Tensorflow
             variant_tensor = ops.map_dataset(input_dataset.variant_tensor,
                 func,
                 output_types,
-                output_shapes);
+                output_shapes,
+                use_inter_op_parallelism: use_inter_op_parallelism,
+                preserve_cardinality: preserve_cardinality);
         }
     }
 }
