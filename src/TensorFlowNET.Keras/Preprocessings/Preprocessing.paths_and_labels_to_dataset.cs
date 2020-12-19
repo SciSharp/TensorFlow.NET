@@ -31,7 +31,7 @@ namespace Tensorflow.Keras
             img = tf.image.decode_image(
                 img, channels: num_channels, expand_animations: false);
             img = tf.image.resize_images_v2(img, image_size, method: interpolation);
-            img.set_shape((image_size[0], image_size[1], num_channels));
+            // img.set_shape((image_size[0], image_size[1], num_channels));
             return img;
         }
     }

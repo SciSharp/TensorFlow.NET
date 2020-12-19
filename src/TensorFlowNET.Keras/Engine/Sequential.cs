@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
+using Tensorflow.Keras.Utils;
 using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Engine
@@ -25,36 +26,40 @@ namespace Tensorflow.Keras.Engine
     /// `Sequential` groups a linear stack of layers into a `tf.keras.Model`.
     /// `Sequential` provides training and inference features on this model.
     /// </summary>
-    public class Sequential : Model
+    public class Sequential : Functional
     {
         SequentialArgs args;
         bool _is_graph_network;
-        Tensor inputs;
-        Tensor outputs;
+        Tensors inputs;
+        Tensors outputs;
 
-        bool computeOutputAndMaskJointly;
-        bool autoTrackSubLayers;
-        TensorShape inferredInputShape;
-        bool hasExplicitInputShape;
-        TF_DataType inputDType;
-        List<ILayer> layers => args.Layers;
-        public TensorShape output_shape => outputs.TensorShape;
+        bool _compute_output_and_mask_jointly;
+        bool _auto_track_sub_layers;
+        TensorShape _inferred_input_shape;
+        bool _has_explicit_input_shape;
+        TF_DataType _input_dtype;
+        
+        public TensorShape output_shape => outputs[0].TensorShape;
         bool built = false;
 
         public Sequential(SequentialArgs args)
-            : base(new ModelArgs
-            {
-                Name = args.Name
-            })
+            : base(args.Inputs, args.Outputs, name: args.Name)
         {
             this.args = args;
             if (args.Layers == null)
                 args.Layers = new List<ILayer>();
             // SupportsMasking = true;
-            computeOutputAndMaskJointly = true;
-            autoTrackSubLayers = false;
-            hasExplicitInputShape = false;
+            _compute_output_and_mask_jointly = true;
+            _auto_track_sub_layers = false;
+            _has_explicit_input_shape = false;
             _is_graph_network = false;
+
+            // Add to the model any layers passed to the constructor.
+            if (args.Layers != null)
+            {
+                foreach (var layer in args.Layers)
+                    add(layer as Layer);
+            }
         }
 
         public void add(Tensor tensor)
@@ -71,7 +76,7 @@ namespace Tensorflow.Keras.Engine
         {
             built = false;
             var set_inputs = false;
-            if (layers.Count == 0)
+            if (_layers.Count == 0)
             {
                 if (layer is InputLayer)
                 {
@@ -83,7 +88,7 @@ namespace Tensorflow.Keras.Engine
                     {
                         // Instantiate an input layer.
                         var x = keras.Input(
-                              shape: layer.BatchInputShape,
+                              batch_input_shape: layer.BatchInputShape,
                               dtype: layer.DType,
                               name: layer.Name + "_input");
 
@@ -99,36 +104,26 @@ namespace Tensorflow.Keras.Engine
                 {
                     // If an input layer (placeholder) is available.
                     outputs = layer.InboundNodes[^1].Outputs;
+                    inputs = layer_utils.get_source_inputs(outputs[0]);
+                    built = true;
+                    _has_explicit_input_shape = true;
                 }
-
             }
             else if (outputs != null)
             {
                 outputs = layer.Apply(outputs);
+                built = true;
             }
 
             if (set_inputs || _is_graph_network)
             {
                 _init_graph_network(inputs, outputs);
+                _is_graph_network = true;
             }
             else
             {
 
             }
-        }
-
-        void _init_graph_network(Tensor inputs, Tensor outputs)
-        {
-            _is_graph_network = true;
-            this.inputs = inputs;
-            this.outputs = outputs;
-            built = true;
-            _map_graph_network(inputs, outputs);
-        }
-
-        void _map_graph_network(Tensor inputs, Tensor outputs)
-        {
-            layers.add(outputs.KerasHistory.Layer);
         }
     }
 }
