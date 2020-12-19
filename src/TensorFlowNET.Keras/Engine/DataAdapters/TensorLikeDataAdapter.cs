@@ -9,14 +9,14 @@ namespace Tensorflow.Keras.Engine.DataAdapters
     /// </summary>
     public class TensorLikeDataAdapter : IDataAdapter
     {
-        TensorLikeDataAdapterArgs args;
+        DataAdapterArgs args;
         int _size;
         int _batch_size;
         int num_samples;
         int num_full_batches;
         IDatasetV2 _dataset;
 
-        public TensorLikeDataAdapter(TensorLikeDataAdapterArgs args)
+        public TensorLikeDataAdapter(DataAdapterArgs args)
         {
             this.args = args;
             _process_tensorlike();

@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -410,14 +411,10 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             var value = constant_value(tensor);
             if (!(value is null))
             {
-                int[] d_ = { };
-                foreach (int d in value)
-                {
-                    if (d >= 0)
-                        d_[d_.Length] = d;
-                    else
-                        d_[d_.Length] = -1; // None
-                }
+                var d_ = new int[value.size];
+                foreach (var (index, d) in enumerate(value.ToArray<int>()))
+                    d_[index] = d >= 0 ? d : -1;
+                
                 ret = ret.merge_with(new TensorShape(d_));
             }
             return ret;
@@ -577,7 +574,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                     return string.Join(string.Empty, nd.ToArray<byte>()
                         .Select(x => x < 32 || x > 127 ? "\\x" + x.ToString("x") : Convert.ToChar(x).ToString()));
                 case TF_DataType.TF_BOOL:
-                    return (nd.GetByte(0) > 0).ToString();
+                    return nd.GetBoolean(0).ToString();
                 case TF_DataType.TF_VARIANT:
                 case TF_DataType.TF_RESOURCE:
                     return "<unprintable>";

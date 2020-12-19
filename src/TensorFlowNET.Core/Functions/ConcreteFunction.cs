@@ -109,6 +109,8 @@ namespace Tensorflow.Functions
                 inputs,
                 outputs,
                 null);
+
+            OutputStructure = outputs.Select(x => x.ToTensorSpec()).ToArray();
         }
 
         public Tensors Invoke(Tensors inputs)
@@ -127,6 +129,9 @@ namespace Tensorflow.Functions
             var functions = new FirstOrderTapeGradientFunctions(func_graph, false);
             return new ForwardBackwardCall(functions, args, tape_watching: true);
         }
+
+        public override string ToString()
+            => Name;
 
         public void Dispose()
         {

@@ -37,19 +37,38 @@ namespace Tensorflow.Keras.Engine.DataAdapters
                 _steps_per_execution_value = args.StepsPerExecution.numpy();
             }
 
-            _adapter = new TensorLikeDataAdapter(new TensorLikeDataAdapterArgs
+            if(args.Dataset == null)
             {
-                X = args.X,
-                Y = args.Y,
-                BatchSize = args.BatchSize,
-                Steps = args.StepsPerEpoch,
-                Epochs = args.Epochs - args.InitialEpoch,
-                Shuffle = args.Shuffle,
-                MaxQueueSize = args.MaxQueueSize,
-                Worker = args.Workers,
-                UseMultiprocessing = args.UseMultiprocessing,
-                Model = args.Model
-            });
+                _adapter = new TensorLikeDataAdapter(new DataAdapterArgs
+                {
+                    X = args.X,
+                    Y = args.Y,
+                    BatchSize = args.BatchSize,
+                    Steps = args.StepsPerEpoch,
+                    Epochs = args.Epochs - args.InitialEpoch,
+                    Shuffle = args.Shuffle,
+                    MaxQueueSize = args.MaxQueueSize,
+                    Worker = args.Workers,
+                    UseMultiprocessing = args.UseMultiprocessing,
+                    Model = args.Model
+                });
+            }
+            else
+            {
+                _adapter = new DatasetAdapter(new DataAdapterArgs
+                {
+                    Dataset = args.Dataset,
+                    BatchSize = args.BatchSize,
+                    Steps = args.StepsPerEpoch,
+                    Epochs = args.Epochs - args.InitialEpoch,
+                    Shuffle = args.Shuffle,
+                    MaxQueueSize = args.MaxQueueSize,
+                    Worker = args.Workers,
+                    UseMultiprocessing = args.UseMultiprocessing,
+                    Model = args.Model
+                });
+            }
+            
             _dataset = _adapter.GetDataset();
             _inferred_steps = _infer_steps(args.StepsPerEpoch, _dataset);
             _current_step = 0;
@@ -66,7 +85,8 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             if (adapter_steps > -1)
                 return adapter_steps;
 
-            throw new NotImplementedException("");
+            var size = dataset.dataset_cardinality();
+            return size.numpy();
         }
 
         public IEnumerable<(int, OwnedIterator)> enumerate_epochs()

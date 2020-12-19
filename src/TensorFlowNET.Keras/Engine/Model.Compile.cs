@@ -9,10 +9,6 @@ namespace Tensorflow.Keras.Engine
     {
         LossesContainer compiled_loss;
         MetricsContainer compiled_metrics;
-        public void compile(string optimizerName, ILossFunc lossName)
-        {
-            throw new NotImplementedException("");
-        }
 
         public void compile(ILossFunc loss, OptimizerV2 optimizer, string[] metrics)
         {
@@ -29,12 +25,12 @@ namespace Tensorflow.Keras.Engine
             this.loss = loss;
         }
 
-        public void compile(string optimizerName, string lossName)
+        public void compile(string optimizer, string loss, string[] metrics)
         {
-            switch (optimizerName)
+            switch (optimizer)
             {
                 case "rmsprop":
-                    optimizer = new RMSprop(new RMSpropArgs
+                    this.optimizer = new RMSprop(new RMSpropArgs
                     {
 
                     });

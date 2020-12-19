@@ -2,10 +2,11 @@
 
 namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class TensorLikeDataAdapterArgs
+    public class DataAdapterArgs
     {
         public Tensor X { get; set; }
         public Tensor Y { get; set; }
+        public IDatasetV2 Dataset { get; set; }
         public int BatchSize { get; set; } = 32;
         public int Steps { get; set; }
         public int Epochs { get; set; }

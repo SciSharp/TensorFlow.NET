@@ -187,5 +187,34 @@ namespace Tensorflow.Keras.Utils
             var total = weight_shapes.Select(p => (int)np.prod(p.dims)).Sum();
             return total;
         }
+
+        public static Tensors get_source_inputs(Tensor tensor, ILayer layer = null,  int node_index = -1)
+        {
+            if (layer == null)
+                (layer, node_index, _) = tensor.KerasHistory;
+            if (layer.InboundNodes == null || layer.InboundNodes.Count == 0)
+                return tensor;
+            else
+            {
+                var node = layer.InboundNodes[node_index];
+                if (node.is_input)
+                    return node.input_tensors;
+                else
+                {
+                    var source_tensors = new List<Tensor>();
+                    foreach (var _layer in node.iterate_inbound())
+                    {
+                        (layer, node_index, tensor) = (_layer.Item1, _layer.Item2, _layer.Item4);
+                        var previous_sources = get_source_inputs(tensor, layer, node_index);
+                        foreach(var x in previous_sources)
+                        {
+                            // should be check if exist?
+                            source_tensors.append(x);
+                        }
+                    }
+                    return source_tensors;
+                }
+            }
+        }
     }
 }

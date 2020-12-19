@@ -74,5 +74,7 @@ namespace Tensorflow
         /// </summary>
         /// <returns></returns>
         IDatasetV2 apply_options();
+
+        Tensor dataset_cardinality(string name = null);
     }
 }
