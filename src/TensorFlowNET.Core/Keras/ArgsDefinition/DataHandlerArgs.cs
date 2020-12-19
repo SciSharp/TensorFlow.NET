@@ -6,6 +6,7 @@ namespace Tensorflow.Keras.ArgsDefinition
     {
         public Tensor X { get; set; }
         public Tensor Y { get; set; }
+        public IDatasetV2 Dataset { get; set; }
         public int BatchSize { get; set; } = 32;
         public int StepsPerEpoch { get; set; } = -1;
         public int InitialEpoch { get; set; } = 0;

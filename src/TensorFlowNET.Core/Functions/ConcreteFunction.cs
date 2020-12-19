@@ -130,6 +130,9 @@ namespace Tensorflow.Functions
             return new ForwardBackwardCall(functions, args, tape_watching: true);
         }
 
+        public override string ToString()
+            => Name;
+
         public void Dispose()
         {
             c_api.TFE_ContextRemoveFunction(tf.Context.Handle, Name, tf.Status.Handle);
