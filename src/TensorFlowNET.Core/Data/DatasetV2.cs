@@ -132,9 +132,7 @@ namespace Tensorflow
                     break;
                 }
 
-                yield return results.Length == 2
-                    ? (results[0], results[1])
-                    : (null, results[0]);
+                yield return (results[0], results.Length == 1 ? null : results[1]);
             }
         }
 
