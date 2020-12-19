@@ -15,12 +15,12 @@ namespace Tensorflow.Keras.Losses
         string _name_scope;
 
         public string Reduction => reduction;
-
+        public string Name => name;
         public Loss(string reduction = ReductionV2.AUTO, 
             string name = null,
             bool from_logits = false)
         {
-            this.reduction = reduction;
+            this.reduction = reduction == null ? ReductionV2.SUM_OVER_BATCH_SIZE : reduction;
             this.name = name;
             this.from_logits = from_logits;
             _allow_sum_over_batch_size = false;
@@ -31,10 +31,10 @@ namespace Tensorflow.Keras.Losses
             throw new NotImplementedException("");
         }
 
-        public Tensor Call(Tensor y_true, Tensor y_pred)
+        public Tensor Call(Tensor y_true, Tensor y_pred, Tensor sample_weight = null)
         {
             var losses = Apply(y_true, y_pred, from_logits: from_logits);
-            return losses_utils.compute_weighted_loss(losses, reduction: ReductionV2.SUM_OVER_BATCH_SIZE);
+            return losses_utils.compute_weighted_loss(losses, reduction: this.reduction , sample_weight: sample_weight);
         }
 
         void _set_name_scope()

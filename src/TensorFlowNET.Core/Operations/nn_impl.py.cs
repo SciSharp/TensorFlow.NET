@@ -31,7 +31,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor l2_normalize(Tensor x,
             int axis = 0,
-            float epsilon = 1e-12f,
+            Tensor epsilon =null,
             string name = null)
         {
             return tf_with(ops.name_scope(name, "l2_normalize", new { x }), scope =>
@@ -39,7 +39,7 @@ namespace Tensorflow
                 x = ops.convert_to_tensor(x, name: "x");
                 var sq = math_ops.square(x);
                 var square_sum = math_ops.reduce_sum(sq, axis, keepdims: true);
-                var x_inv_norm = math_ops.rsqrt(math_ops.maximum(square_sum, epsilon));
+                var x_inv_norm = math_ops.rsqrt(math_ops.maximum(square_sum, epsilon == null ? tf.Variable(1e-12f) : epsilon));
                 return math_ops.multiply(x, x_inv_norm, name: name);
             });
         }
