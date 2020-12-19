@@ -6,6 +6,10 @@ namespace Tensorflow
     {
         static void Main(string[] args)
         {
+            // this class is used explor new features.
+            var exploring = new Exploring();
+            // exploring.Run();
+
             // boot .net core 10.5M.
             var mm = new MemoryMonitor();
             // warm up tensorflow.net 28.5M.
