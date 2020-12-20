@@ -242,16 +242,17 @@ namespace Tensorflow
             if (string.IsNullOrEmpty(oneof_value))
                 return null;
 
-            if (oneof_value == "list")
-                throw new NotImplementedException($"Unsupported field type in {x.ToString()}");
-
-            if (string.Equals("type", oneof_value, StringComparison.OrdinalIgnoreCase))
-                return x.Type;
-
-            object result = x.GetType().GetProperty(oneof_value).GetValue(x);
-            if (result is Google.Protobuf.ByteString byteString)
-                return byteString.ToStringUtf8();
-            return result;
+            switch (oneof_value.ToLower())
+            {
+                case "list":
+                    throw new NotImplementedException($"Unsupported field type in {oneof_value}");
+                case "type":
+                    return x.Type;
+                case "s":
+                    return x.S.ToStringUtf8();
+                default:
+                    return x.GetType().GetProperty(oneof_value).GetValue(x);
+            }
         }
 
         public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)

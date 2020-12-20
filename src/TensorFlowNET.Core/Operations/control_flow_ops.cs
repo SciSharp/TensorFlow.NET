@@ -65,7 +65,7 @@ namespace Tensorflow
                 return gen_control_flow_ops.next_iteration(data, name: name);
         }
 
-        public static Operation Assert(Tensor condition, object[] data, int? summarize = null, string name = null)
+        public static Operation Assert(Tensor condition, object[] data, long? summarize = null, string name = null)
         {
             if (tf.executing_eagerly())
             {

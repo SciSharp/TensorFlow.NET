@@ -63,8 +63,8 @@ namespace Tensorflow
         }
 
         public static Tensor decode_jpeg(Tensor contents,
-            int channels = 0,
-            int ratio = 1,
+            long channels = 0,
+            long ratio = 1,
             bool fancy_upscaling = true,
             bool try_recover_truncated = false,
             float acceptable_fraction = 1,

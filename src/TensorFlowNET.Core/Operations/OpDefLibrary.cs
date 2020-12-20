@@ -276,12 +276,16 @@ namespace Tensorflow
                 }
                 else
                 {
-                    attrs[input_arg.NumberAttr] = (values as Tensor[]).Length;
-                    inferred_from[input_arg.NumberAttr] = input_name;
-                    var num_attr = op_def.Attr.First(x => x.Name == input_arg.NumberAttr);
-                    if (num_attr.HasMinimum && (values as Tensor[]).Length < num_attr.Minimum)
-                        throw new ValueError($"List argument '{input_name}' to '{op_type_name}' Op with length {(values as Tensor[]).Length} shorter " +
-                            $"than minimum length {num_attr.Minimum}");
+                    if(values is Tensor[] tensors)
+                    {
+                        var num_attr = op_def.Attr.First(x => x.Name == input_arg.NumberAttr);
+                        if (num_attr.HasMinimum && tensors.Length < num_attr.Minimum)
+                            throw new ValueError($"List argument '{input_name}' to '{op_type_name}' Op with length {(values as Tensor[]).Length} shorter " +
+                                $"than minimum length {num_attr.Minimum}");
+
+                        attrs[input_arg.NumberAttr] = Convert.ToInt64(tensors.Length);
+                        inferred_from[input_arg.NumberAttr] = input_name;
+                    }
                 }
 
                 // All tensors must have the same base type.
@@ -378,7 +382,10 @@ namespace Tensorflow
                     attr_value.F = (float)value;
                     break;
                 case "int":
-                    attr_value.I = (int)value;
+                    if (value is long value_long)
+                        attr_value.I = value_long;
+                    else
+                        attr_value.I = Convert.ToInt64(value);
                     if (attr_def.HasMinimum && attr_value.I < attr_def.Minimum)
                         throw new ValueError($"Attr '{attr_def.Name}' of '{op_def.Name}' Op passed {attr_value.I} less than minimum {attr_def.Minimum}.");
                     break;
