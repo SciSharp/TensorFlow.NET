@@ -578,11 +578,11 @@ namespace Tensorflow
         }
 
         public static Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides,
-            int begin_mask = 0,
-            int end_mask = 0,
-            int ellipsis_mask = 0,
-            int new_axis_mask = 0,
-            int shrink_axis_mask = 0,
+            long begin_mask = 0,
+            long end_mask = 0,
+            long ellipsis_mask = 0,
+            long new_axis_mask = 0,
+            long shrink_axis_mask = 0,
             string name = null)
             => tf.Context.RunInAutoMode(()
                 => tf.OpDefLib._apply_op_helper("StridedSlice", name, new
@@ -655,68 +655,6 @@ namespace Tensorflow
 
             return _op.outputs[0];
         }
-
-        /// <summary>
-        /// Returns the gradient of `StridedSlice`.
-        /// 
-        /// Since `StridedSlice` cuts out pieces of its `input` which is size
-        /// `shape`, its gradient will have the same shape (which is passed here
-        /// as `shape`). The gradient will be zero in any element that the slice
-        /// does not select.
-        /// </summary>
-        /// <param name="shape">Must be one of the following types: `int32`, `int64`.</param>
-        /// <param name="begin">Must have the same type as `shape`.</param>
-        /// <param name="end">Must have the same type as `shape`.</param>
-        /// <param name="strides">Must have the same type as `shape`.</param>
-        /// <param name="dy">A `Tensor`.</param>
-        /// <param name="begin_mask">An optional `int`. Defaults to `0`.</param>
-        /// <param name="end_mask">An optional `int`. Defaults to `0`.</param>
-        /// <param name="ellipsis_mask">An optional `int`. Defaults to `0`.</param>
-        /// <param name="new_axis_mask">An optional `int`. Defaults to `0`.</param>
-        /// <param name="shrink_axis_mask">An optional `int`. Defaults to `0`.</param>
-        /// <param name="name">A name for the operation (optional).</param>
-        /// <returns>A `Tensor`. Has the same type as `dy`.</returns>
-        public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy,
-            int begin_mask = 0, int end_mask = 0, int ellipsis_mask = 0, int new_axis_mask = 0,
-            int shrink_axis_mask = 0, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("StridedSliceGrad", name, new
-                {
-                    shape,
-                    begin,
-                    end,
-                    strides,
-                    dy,
-                    begin_mask,
-                    end_mask,
-                    ellipsis_mask,
-                    new_axis_mask,
-                    shrink_axis_mask
-                }).output, 
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "StridedSliceGrad", name,
-                    null,
-                    shape, begin, end, strides, dy,
-                    "begin_mask", begin_mask,
-                    "end_mask", end_mask,
-                    "ellipsis_mask", ellipsis_mask,
-                    "new_axis_mask", new_axis_mask,
-                    "shrink_axis_mask", shrink_axis_mask).FirstOrDefault(), 
-                (op) =>
-                {
-                    var attrs = new object[]
-                    {
-                        "T", op.get_attr<TF_DataType>("T"),
-                        "Index", op.get_attr<TF_DataType>("Index"),
-                        "begin_mask", op.get_attr<long>("begin_mask"),
-                        "end_mask", op.get_attr<long>("end_mask"),
-                        "ellipsis_mask", op.get_attr<long>("ellipsis_mask"),
-                        "new_axis_mask", op.get_attr<long>("new_axis_mask"),
-                        "shrink_axis_mask", op.get_attr<long>("shrink_axis_mask")
-                    };
-                    tf.Runner.RecordGradient("StridedSliceGrad", op.inputs, attrs, op.outputs);
-                },
-                new Tensors(shape, begin, end, strides, dy));
 
         /// <summary>
         /// Removes dimensions of size 1 from the shape of a tensor.

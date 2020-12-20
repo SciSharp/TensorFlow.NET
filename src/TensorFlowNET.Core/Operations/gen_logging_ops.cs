@@ -21,7 +21,7 @@ namespace Tensorflow
 {
     public class gen_logging_ops
     {
-        public static Operation _assert(Tensor condition, object[] data, int? summarize = 3, string name = null)
+        public static Operation _assert(Tensor condition, object[] data, long? summarize = 3, string name = null)
         {
             if (!summarize.HasValue)
                 summarize = 3;
