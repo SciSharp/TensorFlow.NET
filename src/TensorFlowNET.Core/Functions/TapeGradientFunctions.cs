@@ -44,7 +44,7 @@ namespace Tensorflow.Functions
         public void Record(Tensors flat_outputs, Tensors inference_args)
         {
             var (backward_function, to_record) = _wrap_backward_function(_forward_graph, _backward, flat_outputs);
-            tf.Runner.RecordGradient(_forward.Name, flat_outputs, new object[0], inference_args, 
+            tf.Runner.RecordGradient(_forward.Name, inference_args, new object[0], to_record,
                 getBackwardFunction: () => backward_function);
         }
 
@@ -52,20 +52,16 @@ namespace Tensorflow.Functions
         {
             BackwardFunction _backward_function_wrapper = (output_grads, unneeded_gradients) =>
             {
-                return new Tensor[0];
-
-                /*var gradients = ops.gradientFunctions[op_name](new EagerOperation
+                var processed_args = new List<Tensor>();
+                var input_index = 0;
+                foreach (var (output_index, arg) in enumerate(output_grads))
                 {
-                    Name = op_name,
-                    NumInputs = op_inputs.Length,
-                    Inputs = op_inputs,
-                    NumOutputs = op_outputs.Length,
-                    Outputs = op_outputs,
-                    SkipInputIndices = unneeded_gradients,
-                    Attrs = attrs
-                }, output_grads);
-
-                return gradients;*/
+                    if (arg is null)
+                        throw new NotImplementedException("");
+                    processed_args.add(arg);
+                    input_index += 1;
+                }
+                return output_grads;// backward.Invoke(processed_args.ToArray());
             };
 
             return (_backward_function_wrapper, flat_outputs);

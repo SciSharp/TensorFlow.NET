@@ -85,10 +85,13 @@ namespace Tensorflow.Gradients
             var out_grads = new List<Tensor>();
             if(concat_dim is EagerTensor)
             {
-                var non_neg_concat_dim = (int)concat_dim % input_values[0].rank;
+                var dim_int = (int)concat_dim;
+                var non_neg_concat_dim = dim_int < 0 
+                    ? input_values[0].rank + dim_int 
+                    : dim_int % input_values[0].rank;
                 var sizes = input_values.Select(x => x.shape[non_neg_concat_dim]).ToArray();
                 var sizes_tensor = constant_op.constant(sizes);
-                out_grads = gen_array_ops.split_v(grad, sizes_tensor, sizes[0], non_neg_concat_dim).ToList();
+                out_grads = array_ops.split(grad, sizes_tensor, non_neg_concat_dim).ToList();
             }
             else if (constant_op.is_constant(concat_dim))
             {

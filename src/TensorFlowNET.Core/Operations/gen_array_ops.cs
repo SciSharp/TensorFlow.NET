@@ -527,7 +527,7 @@ namespace Tensorflow
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "SplitV", name,
                     null,
-                    value, size_splits, axis, 
+                    value, size_splits, axis,
                     "num_split", num_split);
 
                 return results;

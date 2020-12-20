@@ -346,21 +346,21 @@ namespace Tensorflow
         ///    <c>dy</c> is the corresponding input gradient.
         /// </remarks>
         public static Tensor sigmoid_grad(Tensor y, Tensor dy, string name = "SigmoidGrad")
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+            => tf.Context.RunInAutoMode2(
+                () => tf.OpDefLib._apply_op_helper("SigmoidGrad", name, new { y, dy }).output,
+                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "SigmoidGrad", name,
                     null,
-                    y, dy);
-
-                return results[0];
-            }
-
-            var op = tf.OpDefLib._apply_op_helper("SigmoidGrad", name: name, args: new { y, dy });
-            
-            return op.output;
-        }
+                    y, dy).FirstOrDefault(),
+                (op) =>
+                {
+                    var attrs = new object[]
+                    {
+                        "T", op.get_attr<TF_DataType>("T")
+                    };
+                    tf.Runner.RecordGradient("SigmoidGrad", op.inputs, attrs, op.outputs);
+                }, 
+                new Tensors(y, dy));
 
         public static Tensor sign<T>(T x, string name = "Sign")
         {

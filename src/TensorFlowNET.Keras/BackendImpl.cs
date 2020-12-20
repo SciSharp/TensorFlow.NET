@@ -239,7 +239,7 @@ namespace Tensorflow.Keras
             {
                 var rank = tensors[0].NDims;
                 if (rank > -1)
-                    axis %= rank;
+                    axis += rank;
                 else
                     axis = 0;
             }

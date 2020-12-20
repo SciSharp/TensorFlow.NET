@@ -380,7 +380,8 @@ namespace Tensorflow.Eager
                     c_api.TFE_OpSetAttrBool(op, key, Convert.ToBoolean(value));
                     break;
                 case TF_AttrType.TF_ATTR_INT:
-                    c_api.TFE_OpSetAttrInt(op, key, Convert.ToInt64(value));
+                    attr_list_sizes[key] = Convert.ToInt64(value);
+                    c_api.TFE_OpSetAttrInt(op, key, attr_list_sizes[key]);
                     break;
                 case TF_AttrType.TF_ATTR_FLOAT:
                     c_api.TFE_OpSetAttrFloat(op, key, Convert.ToSingle(value));

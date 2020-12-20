@@ -885,6 +885,15 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor[] split(Tensor value, Tensor size_splits, int axis, int num = -1,
+            string name = "split")
+        {
+            if (num == -1)
+                num = size_splits.shape[0];
+
+            return gen_array_ops.split_v(value, size_splits, axis, num, name: name);
+        }
+
         public static Tensor[] split<T>(Tensor value, int num_split, T axis,
             string name = "split")
         {

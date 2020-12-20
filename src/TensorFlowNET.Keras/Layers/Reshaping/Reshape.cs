@@ -21,7 +21,8 @@ namespace Tensorflow.Keras.Layers
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
-            var shape = new List<int> { inputs.shape[0] };
+            var shape_tensor = array_ops.shape(inputs);
+            var shape = new List<int> { shape_tensor.shape[0] };
             shape.AddRange(args.TargetShape.dims);
 
             var result = array_ops.reshape(inputs, shape.ToArray());
