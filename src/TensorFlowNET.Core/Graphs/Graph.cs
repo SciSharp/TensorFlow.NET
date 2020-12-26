@@ -557,16 +557,16 @@ namespace Tensorflow
 
         public Tensor[] external_captures()
         {
-            Tensor[] captures = new Tensor[this._captures.Count];
-            ICollection inner = this._captures.Keys; // c[0]
+            Tensor[] captures = new Tensor[_captures.Count];
+            ICollection inner = _captures.Keys; // c[0]
             inner.CopyTo(captures, 0);
             return captures;
         }
 
         public Tensor[] internal_captures()
         {
-            Tensor[] captures = new Tensor[this._captures.Count];
-            ICollection inner = this._captures.Values; // c[1]
+            Tensor[] captures = new Tensor[_captures.Count];
+            ICollection inner = _captures.Values; // c[1]
             inner.CopyTo(captures, 0);
             return captures;
         }

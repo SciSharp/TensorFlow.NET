@@ -241,7 +241,7 @@ namespace Tensorflow
         /// <param name="value">const void*</param>
         /// <param name="length">size_t</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrString(SafeOpHandle op, string attr_name, string value, uint length);
+        public static extern void TFE_OpSetAttrString(SafeOpHandle op, string attr_name, string value, ulong length);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrTypeList(SafeOpHandle op, string attr_name, TF_DataType[] values, int num_values);

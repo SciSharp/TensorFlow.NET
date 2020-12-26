@@ -48,7 +48,7 @@ namespace Tensorflow.Functions
                 getBackwardFunction: () => backward_function);
         }
 
-        (BackwardFunction, Tensors) _wrap_backward_function(FuncGraph forward_graph, ConcreteFunction backward, Tensors flat_outputs)
+        (BackwardFunction, Tensors) _wrap_backward_function(FuncGraph forward_graph, ConcreteFunction backward, Tensors outputs)
         {
             BackwardFunction _backward_function_wrapper = (output_grads, unneeded_gradients) =>
             {
@@ -61,10 +61,11 @@ namespace Tensorflow.Functions
                     processed_args.add(arg);
                     input_index += 1;
                 }
-                return output_grads;// backward.Invoke(processed_args.ToArray());
+
+                return backward.CallFlat(processed_args.ToArray(), outputs);
             };
 
-            return (_backward_function_wrapper, flat_outputs);
+            return (_backward_function_wrapper, outputs);
         }
 
         protected (EagerDefinedFunction, FuncGraph, ConcreteFunction, List<int>, int) 
@@ -82,7 +83,7 @@ namespace Tensorflow.Functions
             }
 
             var gradients_wrt_outputs = new List<Tensor>();
-            var backwards_graph = new FuncGraph($"{_BACKWARD_PREFIX}{_func_graph.FuncName}_{ops.uid()}");
+            var backwards_graph = new FuncGraph($"{_BACKWARD_PREFIX}_{ops.uid()}");
             foreach (var output in trainable_outputs)
                 gradients_wrt_outputs.Add(tf.placeholder(output.dtype, output.shape));
             var gradients_wrt_inputs = gradients_util._GradientsHelper(trainable_outputs.ToArray(),
@@ -90,16 +91,15 @@ namespace Tensorflow.Functions
                 grad_ys: gradients_wrt_outputs.ToArray(),
                 src_graph: _func_graph);
 
-            tf.Context.restore_mode();
-
-            var forward_function_name = $"{_FORWARD_PREFIX}{_func_graph.FuncName}_{ops.uid()}";
+            var forward_function_name = $"{_FORWARD_PREFIX}_{ops.uid()}";
             var backward_function_attr = new Dictionary<string, string>();
             backward_function_attr[FORWARD_FUNCTION_ATTRIBUTE_NAME] = forward_function_name;
+            gradients_wrt_outputs.append(backwards_graph.internal_captures());
             backwards_graph.Inputs = gradients_wrt_outputs;
             backwards_graph.Outputs = gradients_wrt_inputs;
 
             var backward_function = new ConcreteFunction(backwards_graph, backward_function_attr);
-
+            
             var forward_function_attr = new Dictionary<string, string>();
             forward_function_attr[BACKWARD_FUNCTION_ATTRIBUTE_NAME] = backward_function.Name;
             var forward_function = new EagerDefinedFunction(forward_function_name, _func_graph, 

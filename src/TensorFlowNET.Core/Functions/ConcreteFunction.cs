@@ -14,6 +14,7 @@ namespace Tensorflow.Functions
     {
         IntPtr _handle;
         FuncGraph func_graph;
+        public Tensor[] CapturedInputs => func_graph.external_captures();
 
         public string Name
         {
@@ -38,6 +39,8 @@ namespace Tensorflow.Functions
         public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs)
         {
             func_graph = graph;
+
+            ToGraph(graph.Inputs, graph.Outputs);
         }
 
         public ConcreteFunction(Func<Tensor, Tensor> func, TF_DataType dtype)
@@ -122,6 +125,21 @@ namespace Tensorflow.Functions
                 flat_outputs = forward_function.Call(args_with_tangents);
             forward_backward.Record(flat_outputs);
             return flat_outputs;
+        }
+
+        public Tensor[] CallFlat(Tensor[] args, Tensor[] captured_inputs)
+        {
+            var new_args = new List<Tensor>();
+            new_args.AddRange(args);
+            new_args.AddRange(captured_inputs);
+            args = new_args.ToArray();
+
+            var attrs = new object[] 
+            {
+                "executor_type", "", 
+                "config_proto", tf.Context.FunctionCallOptions.config_proto_serialized()
+            };
+            return tf.Runner.Execute(tf.Context, func_graph.FuncName, 1, args, attrs);
         }
 
         ForwardBackwardCall SelectForwardAndBackwardFunctions(Tensors args, int possible_gradient_type, bool executing_eagerly)

@@ -371,7 +371,7 @@ namespace Tensorflow.Eager
             switch (type)
             {
                 case TF_AttrType.TF_ATTR_STRING:
-                    c_api.TFE_OpSetAttrString(op, key, value.ToString(), (uint)value.ToString().Length);
+                    c_api.TFE_OpSetAttrString(op, key, value.ToString(), (ulong)value.ToString().Length);
                     break;
                 case TF_AttrType.TF_ATTR_TYPE:
                     c_api.TFE_OpSetAttrType(op, key, (TF_DataType)value);

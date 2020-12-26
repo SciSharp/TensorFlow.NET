@@ -26,7 +26,9 @@ namespace Tensorflow.Graphs
         public Tensors Outputs { get; set; }
         public Dictionary<string, string> Attrs { get; set; }
 
-        Dictionary<long, (Tensor, Tensor)> _captures = new Dictionary<long, (Tensor, Tensor)>();
+        // new Dictionary<long, (Tensor, Tensor)> _captures = new Dictionary<long, (Tensor, Tensor)>();
+        // public new Tensor[] external_captures => _captures.Values.Select(x => x.Item1).ToArray();
+
         /// <summary>
         /// Construct a new FuncGraph.
         /// </summary>
@@ -129,7 +131,7 @@ namespace Tensorflow.Graphs
         Tensor _capture_helper(Tensor tensor, string name, TensorShape shape = null)
         {
             Tensor placeholder = null;
-            if (!_captures.ContainsKey(tensor.Id))
+            if (!_captures.Contains(tensor.Id))
             {
                 placeholder = _create_substitute_placeholder(tensor,
                     name: name,
@@ -139,7 +141,7 @@ namespace Tensorflow.Graphs
             }
             else
             {
-                placeholder = _captures[tensor.Id].Item1;
+                placeholder = (((Tensor, Tensor))_captures[tensor.Id]).Item2;
             }
 
             BackwardFunction _backward_function_wrapper = (output_grads, unneeded_gradients) =>

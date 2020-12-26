@@ -35,6 +35,7 @@ namespace Tensorflow.Contexts
         public string ScopeName { get; set; } = "";
         bool initialized = false;
         ContextSwitchStack context_switches;
+        public FunctionCallOptions FunctionCallOptions { get; }
 
         public SafeContextHandle Handle { get; }
 
@@ -44,6 +45,7 @@ namespace Tensorflow.Contexts
             status.Check(true);
             context_switches = new ContextSwitchStack(defaultExecutionMode == EAGER_MODE, false);
             initialized = true;
+            FunctionCallOptions = new FunctionCallOptions();
         }
 
         /// <summary>

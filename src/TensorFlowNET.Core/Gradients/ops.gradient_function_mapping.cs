@@ -49,14 +49,14 @@ namespace Tensorflow
                         RegisterGradientFunction(m.GetCustomAttribute<RegisterGradient>().Name,
                             (oper, out_grads) =>
                             {
-                                tf.Logger.Debug($"Caculate Gradient: {m.Name}");
+                                tf.Logger.Debug($"Caculate Gradient: {oper.name} {m.Name}");
                                 var results = g.InvokeMember(m.Name,
                                    BindingFlags.InvokeMethod,
                                    null,
                                    null,
                                    args: new object[] { oper, out_grads }) as Tensor[];
                                 foreach (var result in results.Where(x => x != null))
-                                    tf.Logger.Debug($"{result.TensorShape}");
+                                    tf.Logger.Debug($"Gradient: {result.name} {result.TensorShape}");
                                 return results;
                             }
                         );
