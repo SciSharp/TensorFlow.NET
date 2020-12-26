@@ -15,6 +15,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         public IDataAdapter DataAdapter => _adapter;
         IDatasetV2 _dataset;
         int _inferred_steps;
+        public int Inferredsteps => _inferred_steps;
         int _current_step;
         int _step_increment;
         bool _insufficient_data;
