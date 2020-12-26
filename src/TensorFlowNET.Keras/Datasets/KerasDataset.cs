@@ -20,5 +20,6 @@ namespace Tensorflow.Keras.Datasets
     {
         public Mnist mnist { get; } = new Mnist();
         public Cifar10 cifar10 { get; } = new Cifar10();
+        public Imdb imdb { get; } = new Imdb();
     }
 }

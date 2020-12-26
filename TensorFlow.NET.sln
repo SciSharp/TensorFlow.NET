@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.Console", "src\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.Keras", "src\TensorFlowNET.Keras\Tensorflow.Keras.csproj", "{49D71826-C03D-4FA7-9BAC-22C1327E65CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tensorflow.Text", "src\TensorFlowNET.Text\Tensorflow.Text.csproj", "{1AB8108D-4FFE-4A16-88E7-328EAF686370}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.Text", "src\TensorFlowNET.Text\Tensorflow.Text.csproj", "{1AB8108D-4FFE-4A16-88E7-328EAF686370}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.Recommenders", "src\TensorFlowNET.Recommenders\Tensorflow.Recommenders.csproj", "{F17AAECB-960A-4E18-A270-BAD776F0E55B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -175,6 +177,30 @@ Global
 		{1AB8108D-4FFE-4A16-88E7-328EAF686370}.Release|x64.Build.0 = Release|Any CPU
 		{1AB8108D-4FFE-4A16-88E7-328EAF686370}.Release|x86.ActiveCfg = Release|Any CPU
 		{1AB8108D-4FFE-4A16-88E7-328EAF686370}.Release|x86.Build.0 = Release|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug|x64.Build.0 = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug|x86.Build.0 = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug-Minimal|Any CPU.ActiveCfg = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug-Minimal|Any CPU.Build.0 = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug-Minimal|x64.ActiveCfg = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug-Minimal|x64.Build.0 = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug-Minimal|x86.ActiveCfg = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Debug-Minimal|x86.Build.0 = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Publish|Any CPU.ActiveCfg = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Publish|Any CPU.Build.0 = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Publish|x64.ActiveCfg = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Publish|x64.Build.0 = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Publish|x86.ActiveCfg = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Publish|x86.Build.0 = Debug|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Release|x64.ActiveCfg = Release|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Release|x64.Build.0 = Release|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Release|x86.ActiveCfg = Release|Any CPU
+		{F17AAECB-960A-4E18-A270-BAD776F0E55B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

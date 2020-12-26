@@ -57,5 +57,20 @@ namespace Tensorflow.Keras
             dataset = dataset.batch(batch_size);
             return dataset;
         }
+
+        public IDatasetV2 text_dataset_from_directory(string directory,
+            string labels = "inferred",
+            string label_mode = "int",
+            string[] class_names = null,
+            int batch_size = 32,
+            bool shuffle = true,
+            int? seed = null,
+            float validation_split = 0.2f,
+            string subset = null)
+        {
+           
+
+            return null;
+        }
     }
 }
