@@ -40,7 +40,7 @@ namespace Tensorflow.Functions
         {
             func_graph = graph;
 
-            ToGraph(graph.Inputs, graph.Outputs);
+            ToGraph(graph.Inputs, graph.Outputs.Where(x => x != null).ToArray());
         }
 
         public ConcreteFunction(Func<Tensor, Tensor> func, TF_DataType dtype)

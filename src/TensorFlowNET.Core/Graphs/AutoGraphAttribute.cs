@@ -18,7 +18,7 @@ namespace Tensorflow.Graphs
 
         public override void OnEntry(MethodExecutionArgs args)
         {
-            func_name = $"autograph_{args.Instance.GetHashCode()}.{args.Method.Name}";
+            func_name = $"autograph_{args.Instance.GetType().FullName}.{args.Method.Name}";
 
             if (functions.ContainsKey(func_name))
             {
