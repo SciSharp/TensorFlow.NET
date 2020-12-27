@@ -60,7 +60,7 @@ namespace Tensorflow.Keras.Engine
 
             tf.Runner.RecordGradient(op_type, op.inputs._inputs, null, op.outputs);
 
-            return op.output;
+            return op.outputs;
         }
     }
 }

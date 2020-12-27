@@ -16,15 +16,22 @@ namespace Tensorflow.Graphs
         Graph outer_graph;
         public Graph OuterGraph => outer_graph;
 
-        string func_name;
-
         // _handle == IntPtr.Zero ? string.Empty : c_api.StringPiece(c_api.TF_FunctionName(_handle));
         IntPtr func_handle;
-        public string FuncName => func_name;
+        public string FuncName => _graph_key;
 
         public Tensors Inputs { get; set; }
         public Tensors Outputs { get; set; }
         public Dictionary<string, string> Attrs { get; set; }
+
+        public Dictionary<long, (Tensor, Tensor)> _captures 
+            = new Dictionary<long, (Tensor, Tensor)>();
+
+        public Tensor[] external_captures()
+            => _captures.Select(x => x.Value.Item1).ToArray();
+
+        public Tensor[] internal_captures()
+            => _captures.Select(x => x.Value.Item2).ToArray();
 
         // new Dictionary<long, (Tensor, Tensor)> _captures = new Dictionary<long, (Tensor, Tensor)>();
         // public new Tensor[] external_captures => _captures.Values.Select(x => x.Item1).ToArray();
@@ -35,7 +42,7 @@ namespace Tensorflow.Graphs
         public FuncGraph(string name) : base()
         {
             outer_graph = ops.get_default_graph();
-            func_name = name;
+            _graph_key = name;
 
             tf.Context.graph_mode();
             as_default();
@@ -44,7 +51,7 @@ namespace Tensorflow.Graphs
         public FuncGraph(IntPtr handle, string name, Dictionary<string, string> attrs) : base()
         {
             outer_graph = ops.get_default_graph();
-            func_name = name;
+            _graph_key = name;
             Attrs = attrs;
             // Will to test if FuncGraph has memory leak
             // c_api.TF_DeleteGraph(_handle);
@@ -60,7 +67,7 @@ namespace Tensorflow.Graphs
         {
             using var status = new Status();
             func_handle = c_api.TF_GraphToFunction(_handle,
-                func_name,
+                _graph_key,
                 false,
                 opers.Length,
                 opers.Select(x => (IntPtr)x).ToArray(),
@@ -82,7 +89,7 @@ namespace Tensorflow.Graphs
             c_api.TFE_ContextAddFunction(tf.Context.Handle, func_handle, status.Handle);
             status.Check(true);
 
-            func_name = c_api.StringPiece(c_api.TF_FunctionName(func_handle));
+            _graph_key = c_api.StringPiece(c_api.TF_FunctionName(func_handle));
 
             Inputs = inputs;
             // mark_as_return
@@ -131,7 +138,7 @@ namespace Tensorflow.Graphs
         Tensor _capture_helper(Tensor tensor, string name, TensorShape shape = null)
         {
             Tensor placeholder = null;
-            if (!_captures.Contains(tensor.Id))
+            if (!_captures.ContainsKey(tensor.Id))
             {
                 placeholder = _create_substitute_placeholder(tensor,
                     name: name,
@@ -141,7 +148,7 @@ namespace Tensorflow.Graphs
             }
             else
             {
-                placeholder = (((Tensor, Tensor))_captures[tensor.Id]).Item2;
+                placeholder = _captures[tensor.Id].Item2;
             }
 
             BackwardFunction _backward_function_wrapper = (output_grads, unneeded_gradients) =>
@@ -160,7 +167,7 @@ namespace Tensorflow.Graphs
 
         void add_capture(Tensor tensor, Tensor placeholder)
         {
-            _captures[tensor.Id] = (tensor, placeholder);
+            _captures.Add(tensor.Id, (tensor, placeholder));
             if (Inputs == null)
                 Inputs = new Tensors(placeholder);
             else

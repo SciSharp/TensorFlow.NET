@@ -139,7 +139,7 @@ namespace Tensorflow.Functions
                 "executor_type", "", 
                 "config_proto", tf.Context.FunctionCallOptions.config_proto_serialized()
             };
-            return tf.Runner.Execute(tf.Context, func_graph.FuncName, 1, args, attrs);
+            return tf.Runner.Execute(tf.Context, func_graph.FuncName, func_graph.Outputs.Length, args, attrs);
         }
 
         ForwardBackwardCall SelectForwardAndBackwardFunctions(Tensors args, int possible_gradient_type, bool executing_eagerly)

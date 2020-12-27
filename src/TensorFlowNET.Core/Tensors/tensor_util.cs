@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
+using Tensorflow.Graphs;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -392,14 +393,14 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             }
             else if (tensor.op.type == "Placeholder" &&
                   tensor.op.graph.building_function &&
-                  hasattr(tensor.op.graph, "internal_captures"))
+                  tensor.op.graph is FuncGraph func_graph)
             {
                 int i = 0;
-                foreach (Tensor capture in tensor.op.graph.internal_captures())
+                foreach (Tensor capture in func_graph.internal_captures())
                 {
                     if (capture.GetType() == typeof(Tensor))
                     {
-                        var external_capture = tensor.op.graph.external_captures()[i];
+                        var external_capture = func_graph.external_captures()[i];
                         return constant_value_as_shape(external_capture);
                     }
 

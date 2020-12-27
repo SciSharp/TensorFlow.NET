@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tensorflow.Graphs;
 using static Tensorflow.Binding;
@@ -61,7 +62,7 @@ namespace Tensorflow.Functions
                     processed_args.add(arg);
                     input_index += 1;
                 }
-
+                tf.Logger.Debug($"Invoke backward function: {backward.Name}");
                 return backward.CallFlat(processed_args.ToArray(), outputs);
             };
 
@@ -90,6 +91,14 @@ namespace Tensorflow.Functions
                 _func_graph.Inputs,
                 grad_ys: gradients_wrt_outputs.ToArray(),
                 src_graph: _func_graph);
+
+            var captures_from_forward = backwards_graph.external_captures()
+                .Where(x => !x.IsEagerTensor && x.graph == _func_graph)
+                .ToArray();
+            foreach(var capture in captures_from_forward)
+            {
+                _func_graph.Outputs.Add(capture);
+            }
 
             var forward_function_name = $"{_FORWARD_PREFIX}_{ops.uid()}";
             var backward_function_attr = new Dictionary<string, string>();

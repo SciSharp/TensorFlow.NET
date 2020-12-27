@@ -18,7 +18,7 @@ namespace Tensorflow.Graphs
 
         public override void OnEntry(MethodExecutionArgs args)
         {
-            func_name = $"autograph_{args.Instance.GetType().FullName}.{args.Method.Name}";
+            func_name = $"autograph_{args.Instance.GetHashCode()}.{args.Method.Name}";
 
             if (functions.ContainsKey(func_name))
             {
@@ -44,13 +44,13 @@ namespace Tensorflow.Graphs
             }
             else
             {
-                originalInputs = new Tensors(args.Arguments.Length);
+                originalInputs = new Tensors();
                 // convert args to placeholder
                 for (var i = 0; i < args.Arguments.Length; i++)
                 {
                     if (args.Arguments[i] is EagerTensor tensor)
                     {
-                        originalInputs[i] = tensor;
+                        originalInputs.Add(tensor);
                         args.Arguments[i] = tf.placeholder(tensor.dtype, shape: tensor.TensorShape, name: "inputs");
                     }
                 }

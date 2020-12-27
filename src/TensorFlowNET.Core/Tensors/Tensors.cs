@@ -15,7 +15,7 @@ namespace Tensorflow
     /// </summary>
     public class Tensors : IEnumerable<Tensor>
     {
-        Tensor[] items;
+        List<Tensor> items = new List<Tensor>();
 
         public TF_DataType dtype => items.First().dtype;
         public TensorShape shape => items.First().TensorShape;
@@ -23,7 +23,7 @@ namespace Tensorflow
         public Graph graph => items.First().graph;
         public bool IsEagerTensor => items.First().IsEagerTensor;
         public bool IsList { get; set; }
-        public int Length => items.Length;
+        public int Length => items.Count();
 
         public Tensor this[int index]
         {
@@ -40,17 +40,12 @@ namespace Tensorflow
 
         public Tensors(params Tensor[] tensors)
         {
-            items = tensors;
+            items.AddRange(tensors);
         }
 
         public Tensors(NDArray nd)
         {
-            items = new[] { ops.convert_to_tensor(nd) };
-        }
-
-        public Tensors(int count)
-        {
-            items = new Tensor[count];
+            items.Add(ops.convert_to_tensor(nd));
         }
 
         public IEnumerator<Tensor> GetEnumerator()
@@ -58,6 +53,9 @@ namespace Tensorflow
             foreach (var tensor in items)
                 yield return tensor;
         }
+
+        public void Add(Tensor tensor)
+            => items.Add(tensor);
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -80,11 +78,11 @@ namespace Tensorflow
             => tensors.FirstOrDefault();
 
         public static implicit operator Tensor[](Tensors tensors)
-            => tensors.items;
+            => tensors.items.ToArray();
 
         public override string ToString()
-            => items.Length == 1
+            => items.Count() == 1
                ? items.First().ToString()
-               : items.Length + " Tensors" + ". " + string.Join(", ", items.Select(x => x.name));
+               : items.Count() + " Tensors" + ". " + string.Join(", ", items.Select(x => x.name));
     }
 }

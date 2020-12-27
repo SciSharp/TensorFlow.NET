@@ -87,7 +87,7 @@ namespace Tensorflow
         private List<Tensor> _unfeedable_tensors = new List<Tensor>();
 
         public string _name_stack = "";
-        private string _graph_key;
+        protected string _graph_key;
         public string graph_key => _graph_key;
         public string _last_loss_reduction;
         public bool _is_loss_scaled_by_optimizer { get; set; }
@@ -551,24 +551,6 @@ namespace Tensorflow
         public static implicit operator IntPtr(Graph graph)
         {
             return graph._handle;
-        }
-
-        public OrderedDictionary _captures => new OrderedDictionary();
-
-        public Tensor[] external_captures()
-        {
-            Tensor[] captures = new Tensor[_captures.Count];
-            ICollection inner = _captures.Keys; // c[0]
-            inner.CopyTo(captures, 0);
-            return captures;
-        }
-
-        public Tensor[] internal_captures()
-        {
-            Tensor[] captures = new Tensor[_captures.Count];
-            ICollection inner = _captures.Values; // c[1]
-            inner.CopyTo(captures, 0);
-            return captures;
         }
     }
 }
