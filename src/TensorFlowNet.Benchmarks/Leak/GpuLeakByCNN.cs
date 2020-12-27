@@ -6,14 +6,15 @@ using NumSharp;
 using Tensorflow.Keras;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
+using BenchmarkDotNet.Attributes;
 
 namespace Tensorflow.Benchmark.Leak
 {
-    class GpuLeakByCNN
+    public class GpuLeakByCNN
     {
         protected static LayersApi layers = new LayersApi();
-
-        public static void Test()
+        [Benchmark]
+        public void Run()
         {
             int num = 50, width = 64, height = 64;
             // if width = 128, height = 128, the exception occurs faster
@@ -29,16 +30,16 @@ namespace Tensorflow.Benchmark.Leak
 
             tf.enable_eager_execution();
 
-            var inputss = keras.Input((height, width, 3));
+            var inputs = keras.Input((height, width, 3));
 
-            var inputs = layers.Conv2D(32, (3, 3), activation: keras.activations.Relu).Apply(inputss);
-            inputs = layers.MaxPooling2D((2, 2)).Apply(inputs);
+            var layer = layers.Conv2D(32, (3, 3), activation: keras.activations.Relu).Apply(inputs);
+            layer = layers.MaxPooling2D((2, 2)).Apply(layer);
 
-            inputs = layers.Flatten().Apply(inputs);
+            layer = layers.Flatten().Apply(layer);
 
-            var outputs = layers.Dense(10).Apply(inputs);
+            var outputs = layers.Dense(10).Apply(layer);
 
-            var model = keras.Model(inputss, outputs, "gpuleak");
+            var model = keras.Model(inputs, outputs, "gpuleak");
 
             model.summary();
 
@@ -46,7 +47,7 @@ namespace Tensorflow.Benchmark.Leak
              optimizer: keras.optimizers.RMSprop(),
              metrics: new[] { "accuracy" });
 
-            model.fit(inputImages, outLables, epochs: 200);
+            model.fit(inputImages, outLables, batch_size: 1, epochs: 200);
         }
     }
 }

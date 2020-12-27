@@ -97,7 +97,8 @@ namespace Tensorflow.Functions
                 .ToArray();
             foreach(var capture in captures_from_forward)
             {
-                _func_graph.Outputs.Add(capture);
+                if (!_func_graph.Outputs.Contains(capture))
+                    _func_graph.Outputs.Add(capture);
             }
 
             var forward_function_name = $"{_FORWARD_PREFIX}_{ops.uid()}";
