@@ -16,6 +16,12 @@ namespace Tensorflow.Benchmark.Leak
         [Benchmark]
         public void Run()
         {
+            tf.debugging.set_log_device_placement(true);
+            
+            var a = tf.constant(3.0);
+            var b = tf.constant(2.0);
+            var c = tf.multiply(a, b);
+
             int num = 50, width = 64, height = 64;
             // if width = 128, height = 128, the exception occurs faster
 
@@ -47,7 +53,7 @@ namespace Tensorflow.Benchmark.Leak
              optimizer: keras.optimizers.RMSprop(),
              metrics: new[] { "accuracy" });
 
-            model.fit(inputImages, outLables, batch_size: 1, epochs: 200);
+            model.fit(inputImages, outLables, batch_size: 32, epochs: 200);
         }
     }
 }

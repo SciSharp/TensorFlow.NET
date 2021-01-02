@@ -14,18 +14,29 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Debugging;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using Tensorflow.Eager;
+using static Tensorflow.Binding;
+using Google.Protobuf;
 
-namespace Tensorflow
+namespace Tensorflow.Contexts
 {
-    public partial class tensorflow
+    /// <summary>
+    /// Environment in which eager operations execute.
+    /// </summary>
+    public sealed partial class Context
     {
-        /// <summary>
-        /// Public API for tf.debugging namespace
-        /// https://www.tensorflow.org/api_docs/python/tf/debugging
-        /// More debugging instructions
-        /// https://developer.ibm.com/technologies/artificial-intelligence/tutorials/debug-tensorflow/
-        /// </summary>
-        public DebugImpl debugging => new DebugImpl();
+        ContextDevicePlacementPolicy _device_policy;
+        bool _log_device_placement;
+
+        public void log_device_placement(bool enable)
+        {
+            if (_handle != null)
+                c_api.TFE_ContextSetLogDevicePlacement(_handle, enable, tf.Status.Handle);
+            _log_device_placement = enable;
+            // _thread_local_data.function_call_options = null;
+        }
     }
 }

@@ -53,7 +53,7 @@ namespace Tensorflow
                 .CreateLogger();
 
             Status = new Status();
-            Context = new Context(new ContextOptions(), Status);
+            Context = new Context();
             OpDefLib = new OpDefLibrary();
             ConstructThreadingObjects();
             InitGradientEnvironment();

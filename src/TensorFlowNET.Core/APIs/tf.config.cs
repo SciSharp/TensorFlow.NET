@@ -14,18 +14,19 @@
    limitations under the License.
 ******************************************************************************/
 
-namespace Tensorflow.Contrib.Learn.Preprocessing
-{
-    public class VocabularyProcessor
-    {
-        private int _max_document_length;
-        private int _min_frequency;
+using Tensorflow.Contexts;
+using Tensorflow.Framework;
 
-        public VocabularyProcessor(int max_document_length,
-            int min_frequency)
-        {
-            _max_document_length = max_document_length;
-            _min_frequency = min_frequency;
-        }
+namespace Tensorflow
+{
+    public partial class tensorflow
+    {
+        /// <summary>
+        /// Public API for tf.debugging namespace
+        /// https://www.tensorflow.org/api_docs/python/tf/debugging
+        /// More debugging instructions
+        /// https://developer.ibm.com/technologies/artificial-intelligence/tutorials/debug-tensorflow/
+        /// </summary>
+        public ConfigImpl config => new ConfigImpl();
     }
 }

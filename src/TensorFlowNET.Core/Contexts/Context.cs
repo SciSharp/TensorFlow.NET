@@ -19,13 +19,14 @@ using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
+using Google.Protobuf;
 
 namespace Tensorflow.Contexts
 {
     /// <summary>
     /// Environment in which eager operations execute.
     /// </summary>
-    public sealed class Context : IDisposable
+    public sealed partial class Context : IDisposable
     {
         public const int GRAPH_MODE = 0;
         public const int EAGER_MODE = 1;
@@ -37,14 +38,14 @@ namespace Tensorflow.Contexts
         ContextSwitchStack context_switches;
         public FunctionCallOptions FunctionCallOptions { get; }
 
-        public SafeContextHandle Handle { get; }
+        SafeContextHandle _handle;
+        public SafeContextHandle Handle => _handle;
 
-        public Context(ContextOptions opts, Status status)
+        public Context()
         {
-            Handle = c_api.TFE_NewContext(opts.Handle, status.Handle);
-            status.Check(true);
+            _device_policy = ContextDevicePlacementPolicy.DEVICE_PLACEMENT_SILENT;
             context_switches = new ContextSwitchStack(defaultExecutionMode == EAGER_MODE, false);
-            initialized = true;
+            initialized = false;
             FunctionCallOptions = new FunctionCallOptions();
         }
 
@@ -55,14 +56,25 @@ namespace Tensorflow.Contexts
         {
             if (initialized)
                 return;
+
+            _config = config();
+            var config_str = _config.ToByteArray();
+
+            using var opts = new ContextOptions();
+            using var status = new Status();
+            c_api.TFE_ContextOptionsSetConfig(opts.Handle, config_str, (ulong)config_str.Length, status.Handle);
+            status.Check(true);
+            c_api.TFE_ContextOptionsSetDevicePlacementPolicy(opts.Handle, _device_policy);
+            _handle = c_api.TFE_NewContext(opts.Handle, status.Handle);
+            status.Check(true);
             initialized = true;
         }
 
         public void start_step()
-            => c_api.TFE_ContextStartStep(Handle);
+            => c_api.TFE_ContextStartStep(_handle);
 
         public void end_step()
-            => c_api.TFE_ContextEndStep(Handle);
+            => c_api.TFE_ContextEndStep(_handle);
 
         /// <summary>
         /// Checks whether the current thread has eager execution enabled.
@@ -91,61 +103,7 @@ namespace Tensorflow.Contexts
             context_switches.Pop();
         }
 
-        // [DebuggerStepThrough]
-        public T RunInAutoMode<T>(Func<T> graphAction, Func<T> eagerAction, params Tensor[] tensors)
-        {
-            var shouldRunInEager = executing_eagerly()
-                && tensors.Count(x => x.IsEagerTensor) == tensors.Length;
-
-            if (shouldRunInEager)
-                return eagerAction();
-            else
-            {
-                if (executing_eagerly())
-                {
-                    graph_mode();
-                    var result = graphAction();
-                    restore_mode();
-                    return result;
-                }
-                else
-                {
-                    return graphAction();
-                }
-            }
-        }
-
-        // [DebuggerStepThrough]
-        public Tensors RunInAutoMode2(Func<Tensors> graphAction, 
-            Func<Tensors> eagerAction, 
-            Action<Operation> recordGradient,
-            Tensors tensors)
-        {
-            var shouldRunInEager = executing_eagerly()
-                && tensors.Count(x => x.IsEagerTensor) == tensors.Length;
-
-            if (shouldRunInEager)
-                return eagerAction();
-            else
-            {
-                if (executing_eagerly())
-                {
-                    graph_mode();
-                    var result = graphAction();
-                    restore_mode();
-                    return result;
-                }
-                else
-                {
-                    var result = graphAction();
-                    if (tf.Runner.MustRecordGradient())
-                        recordGradient(result[0].op);
-                    return result;
-                }
-            }
-        }
-
         public void Dispose()
-            => Handle.Dispose();
+            => _handle.Dispose();
     }
 }

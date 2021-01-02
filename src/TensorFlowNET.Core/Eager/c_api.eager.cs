@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using System;
 using System.Runtime.InteropServices;
+using Tensorflow.Contexts;
 using Tensorflow.Device;
 using Tensorflow.Eager;
 using Tensorflow.Util;
@@ -17,12 +18,38 @@ namespace Tensorflow
         public static extern SafeContextOptionsHandle TFE_NewContextOptions();
 
         /// <summary>
+        /// Set the config in TF_ContextOptions.options.
+        /// config should be a serialized tensorflow.ConfigProto proto.
+        /// If config was not parsed successfully as a ConfigProto, record the
+        /// error information in *status.
+        /// </summary>
+        /// <param name="options">TFE_ContextOptions*</param>
+        /// <param name="proto"></param>
+        /// <param name="proto_len">size_t</param>
+        /// <param name="status">SafeStatusHandle</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ContextOptionsSetConfig(SafeContextOptionsHandle opts, byte[] proto, ulong proto_len, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ContextOptionsSetDevicePlacementPolicy(SafeContextOptionsHandle opts, ContextDevicePlacementPolicy device_policy);
+
+        /// <summary>
         /// Destroy an options object.
         /// </summary>
         /// <param name="options">TFE_ContextOptions*</param>
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_DeleteContextOptions(IntPtr options);
 
+        /// <summary>
+        /// Configure device placement policy logging for the eager executor. Note this
+        /// policy is applied to any subsequent op executions.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="enable"></param>
+        /// <param name="status"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ContextSetLogDevicePlacement(SafeContextHandle ctx, bool enable, SafeStatusHandle status);
+        
         /// <summary>
         /// 
         /// </summary>
