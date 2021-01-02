@@ -124,10 +124,8 @@ namespace Tensorflow.Keras.Datasets
         string Download()
         {
             var dst = Path.Combine(Path.GetTempPath(), dest_folder);
-            Directory.CreateDirectory(dst);
-
             Web.Download(origin_folder + file_name, dst, file_name);
-            Compress.ExtractTGZ(Path.Combine(Path.GetTempPath(), file_name), dst);
+            Compress.ExtractTGZ(Path.Combine(dst, file_name), dst);
 
             return Path.Combine(dst, "cifar-10-batches-py");
         }

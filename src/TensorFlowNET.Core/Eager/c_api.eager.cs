@@ -381,6 +381,13 @@ namespace Tensorflow
         public static extern SafeDeviceListHandle TFE_ContextListDevices(SafeContextHandle ctx, SafeStatusHandle status);
 
         /// <summary>
+        /// Clears the internal caches in the TFE context. Useful when reseeding random ops.
+        /// </summary>
+        /// <param name="ctx">TFE_Context*</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ContextClearCaches(SafeContextHandle ctx);
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="h">TFE_TensorHandle*</param>

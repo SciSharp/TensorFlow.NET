@@ -57,9 +57,9 @@ namespace Tensorflow.Contexts
             if (initialized)
                 return;
 
-            _config = config();
-            var config_str = _config.ToByteArray();
-
+            Config = MergeConfig();
+            FunctionCallOptions.Config = Config;
+            var config_str = Config.ToByteArray();
             using var opts = new ContextOptions();
             using var status = new Status();
             c_api.TFE_ContextOptionsSetConfig(opts.Handle, config_str, (ulong)config_str.Length, status.Handle);
@@ -82,7 +82,9 @@ namespace Tensorflow.Contexts
         /// <returns></returns>
         [DebuggerStepThrough]
         public bool executing_eagerly()
-            => context_switches.Current().EagerMode;
+        {
+            return context_switches.Current().EagerMode;
+        }
 
         public bool is_build_function()
             => context_switches.Current().IsBuildingFunction;

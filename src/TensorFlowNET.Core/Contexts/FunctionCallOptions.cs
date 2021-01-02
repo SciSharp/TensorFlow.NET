@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using Google.Protobuf;
-using Google.Protobuf.Collections;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Contexts
 {
     public class FunctionCallOptions
     {
+        public ConfigProto Config { get; set; }
+
         public string config_proto_serialized()
         {
-            var config = new ConfigProto
-            {
-                AllowSoftPlacement = true,
-            };
-            return config.ToByteString().ToStringUtf8();
+            return Config.ToByteString().ToStringUtf8();
         }
     }
 }

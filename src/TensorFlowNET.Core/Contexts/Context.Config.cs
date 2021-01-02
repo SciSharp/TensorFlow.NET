@@ -16,6 +16,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Tensorflow.Contexts
 {
@@ -24,24 +25,28 @@ namespace Tensorflow.Contexts
     /// </summary>
     public sealed partial class Context
     {
-        ConfigProto _config;
-
-        ConfigProto config()
+        public ConfigProto Config { get; set; } = new ConfigProto
         {
-            var config = new ConfigProto()
+            GpuOptions = new GPUOptions
             {
-                LogDevicePlacement = _log_device_placement,
-                GpuOptions = _compute_gpu_options()
-            };
+            }
+        };
 
-            return config;
+        ConfigProto MergeConfig()
+        {
+            Config.LogDevicePlacement = _log_device_placement;
+            // var gpu_options = _compute_gpu_options();
+            // Config.GpuOptions.AllowGrowth = gpu_options.AllowGrowth;
+            return Config;
         }
 
         GPUOptions _compute_gpu_options()
         {
+            // By default, TensorFlow maps nearly all of the GPU memory of all GPUs 
+            // https://www.tensorflow.org/guide/gpu
             return new GPUOptions()
             {
-
+                AllowGrowth = get_memory_growth("GPU")
             };
         }
     }
