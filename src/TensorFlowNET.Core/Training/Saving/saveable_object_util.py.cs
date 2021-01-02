@@ -66,7 +66,7 @@ namespace Tensorflow
             else
             {
                 ops.init_scope();
-                var variable = ops.internal_convert_to_tensor(op, as_ref: true);
+                var variable = ops.convert_to_tensor(op, as_ref: true);
                 if (variable.dtype.is_ref_dtype())
                     yield return new ReferenceVariableSaveable(variable, "", name);
                 else
@@ -103,7 +103,7 @@ namespace Tensorflow
                             if (!var.dtype.is_ref_dtype())
                                 tensor = var.GraphElement;
                             else
-                                tensor = ops.internal_convert_to_tensor(var, as_ref: true);
+                                tensor = ops.convert_to_tensor(var, as_ref: true);
                         }
 
                         if (tensor.op.type == "ReadVariableOp")

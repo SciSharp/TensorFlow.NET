@@ -1,6 +1,7 @@
 ﻿using System;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
+using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -22,7 +23,7 @@ namespace Tensorflow.Keras.Engine
             Tensors outputs = null;
             using var ctxManager = CallContext.enter();
 
-            // using var graph = tf.keras.backend.get_graph().as_default();
+            // using var graph = keras.backend.get_graph();
 
             if (!inputs.IsEagerTensor)
                 tf.Context.graph_mode(isFunc: true);

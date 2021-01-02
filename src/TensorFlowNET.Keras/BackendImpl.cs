@@ -17,6 +17,7 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
+using Tensorflow.Graphs;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras
@@ -78,6 +79,12 @@ namespace Tensorflow.Keras
 
         public Graph get_graph()
         {
+            if (tf.Context.executing_eagerly())
+            {
+                if (_GRAPH == null)
+                    _GRAPH = new FuncGraph("keras_graph");
+                return _GRAPH;
+            }
             return ops.get_default_graph();
         }
 

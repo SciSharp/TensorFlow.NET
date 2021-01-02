@@ -118,6 +118,9 @@ namespace Tensorflow
             }
         }
 
+        protected Graph outer_graph;
+        public Graph OuterGraph => outer_graph;
+
         public Graph()
         {
             _handle = c_api.TF_NewGraph();

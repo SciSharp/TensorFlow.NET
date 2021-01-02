@@ -148,7 +148,7 @@ namespace Tensorflow
                         else if (default_type_attr_map.ContainsKey(input_arg.TypeAttr))
                             default_dtype = (DataType)default_type_attr_map[input_arg.TypeAttr];
 
-                        var value = ops.internal_convert_to_tensor(values,
+                        var value = ops.convert_to_tensor(values,
                             name: input_name,
                             dtype: dtype.as_tf_dtype(),
                             as_ref: input_arg.IsRef,

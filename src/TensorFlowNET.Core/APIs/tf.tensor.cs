@@ -19,7 +19,7 @@ namespace Tensorflow
     public partial class tensorflow
     {
         public Tensor convert_to_tensor(object value, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid)
-            => ops.convert_to_tensor(value, dtype, name, preferred_dtype);
+            => ops.convert_to_tensor(value, dtype, name, preferred_dtype: preferred_dtype);
 
         public Tensor strided_slice(Tensor input, Tensor begin, Tensor end, Tensor strides = null,
             int begin_mask = 0,

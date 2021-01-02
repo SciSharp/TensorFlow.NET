@@ -13,9 +13,6 @@ namespace Tensorflow.Graphs
     /// </summary>
     public class FuncGraph : Graph
     {
-        Graph outer_graph;
-        public Graph OuterGraph => outer_graph;
-
         // _handle == IntPtr.Zero ? string.Empty : c_api.StringPiece(c_api.TF_FunctionName(_handle));
         IntPtr func_handle;
         public string FuncName => _graph_key;
@@ -42,8 +39,10 @@ namespace Tensorflow.Graphs
         public FuncGraph(string name) : base()
         {
             outer_graph = ops.get_default_graph();
+            while (outer_graph.building_function)
+                outer_graph = outer_graph.OuterGraph;
             _graph_key = name;
-
+            building_function = true;
             tf.Context.graph_mode();
             as_default();
         }
@@ -51,7 +50,10 @@ namespace Tensorflow.Graphs
         public FuncGraph(IntPtr handle, string name, Dictionary<string, string> attrs) : base()
         {
             outer_graph = ops.get_default_graph();
+            while (outer_graph.building_function)
+                outer_graph = outer_graph.OuterGraph;
             _graph_key = name;
+            building_function = true;
             Attrs = attrs;
             // Will to test if FuncGraph has memory leak
             // c_api.TF_DeleteGraph(_handle);
@@ -108,7 +110,7 @@ namespace Tensorflow.Graphs
             return base.create_op(op_type, inputs, dtypes, input_types, name, attrs, op_def, compute_device);
         }
 
-        Tensor capture(Tensor tensor, string name = null, TF_DataType shape = TF_DataType.DtInvalid)
+        public Tensor capture(Tensor tensor, string name = null, TF_DataType shape = TF_DataType.DtInvalid)
         {
             if(tensor is EagerTensor)
             {

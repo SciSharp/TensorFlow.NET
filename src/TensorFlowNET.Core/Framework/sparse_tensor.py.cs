@@ -29,7 +29,7 @@ namespace Tensorflow.Framework
             {
                 indices = ops.convert_to_tensor(
                     indices_, name: "indices", dtype: dtypes.int64);
-                values = ops.internal_convert_to_tensor(values_, name: "values");
+                values = ops.convert_to_tensor(values_, name: "values");
                 dense_shape = ops.convert_to_tensor(
                     dense_shape_, name: "dense_shape", dtype: dtypes.int64);
             });

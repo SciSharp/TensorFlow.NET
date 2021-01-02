@@ -69,7 +69,7 @@ namespace Tensorflow.Eager
             return placeholder;
         }
 
-        public Tensor AsContatnt(string name = null)
+        public Tensor AsConstant(string name = null)
         {
             Tensor constant = null;
             tf_with(ops.control_dependencies(null), delegate
