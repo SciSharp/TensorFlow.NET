@@ -293,5 +293,12 @@ namespace Tensorflow
             else
                 return self;
         }
+
+        public static bool is_value_dtype(this TF_DataType type)
+        {
+            return ((int)type >= 1 && (int)type <= 19)
+                || type == TF_DataType.TF_UINT32
+                || type == TF_DataType.TF_UINT64;
+        }
     }
 }

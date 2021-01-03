@@ -21,12 +21,10 @@ namespace Tensorflow.Keras.Engine
                 base_layer_utils.create_keras_history(inputs);
 
             Tensors outputs = null;
-            using var ctxManager = CallContext.enter();
+            using var ctxManager = CallContext.enter(build_graph: true);
 
-            // using var graph = keras.backend.get_graph();
-
-            if (!inputs.IsEagerTensor)
-                tf.Context.graph_mode(isFunc: true);
+            var graph = keras.backend.get_graph();
+            graph.as_default();
 
             tf_with(ops.name_scope(_name_scope()), scope =>
             {
@@ -48,8 +46,7 @@ namespace Tensorflow.Keras.Engine
                 _set_mask_metadata(inputs, outputs, null);
             });
 
-            if (!inputs.IsEagerTensor)
-                tf.Context.restore_mode();
+            tf.Context.restore_mode();
 
             return outputs;
         }

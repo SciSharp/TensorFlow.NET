@@ -26,6 +26,7 @@ namespace Tensorflow.Functions
             var output_names = new string[0];
 
             _func_graph = new FuncGraph(graph, name, attrs);
+            _func_graph.as_default();
             _func_graph.ToGraph(operations, inputs, outputs, output_names);
         }
 

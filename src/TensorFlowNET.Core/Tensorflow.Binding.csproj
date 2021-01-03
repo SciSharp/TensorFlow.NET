@@ -5,7 +5,7 @@
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
-    <Version>0.31.2</Version>
+    <Version>0.32.0</Version>
     <LangVersion>8.0</LangVersion>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
@@ -15,7 +15,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>http://scisharpstack.org</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
-    <PackageTags>TensorFlow, NumSharp, SciSharp, MachineLearning, TensorFlow.NET, C#, TF.NET</PackageTags>
+    <PackageTags>TensorFlow, SciSharp, Machine Learning, TensorFlow.NET, TF.NET, AI</PackageTags>
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>

@@ -83,6 +83,7 @@ namespace Tensorflow.Keras
             {
                 if (_GRAPH == null)
                     _GRAPH = new FuncGraph("keras_graph");
+                
                 return _GRAPH;
             }
             return ops.get_default_graph();

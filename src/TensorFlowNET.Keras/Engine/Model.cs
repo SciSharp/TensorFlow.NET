@@ -4,6 +4,7 @@ using Tensorflow.Keras.Engine.DataAdapters;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
 using static Tensorflow.Binding;
+using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -51,6 +52,7 @@ namespace Tensorflow.Keras.Engine
         {
             // Used to cache `trainable` attr of `Layer`s for `fit`.
             _compiled_trainable_state = _get_trainable_state();
+            keras.backend._GRAPH = null;
         }
 
         void _init_batch_counters()

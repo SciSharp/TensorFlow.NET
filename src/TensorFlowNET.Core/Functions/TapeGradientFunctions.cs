@@ -85,6 +85,7 @@ namespace Tensorflow.Functions
 
             var gradients_wrt_outputs = new List<Tensor>();
             var backwards_graph = new FuncGraph($"{_BACKWARD_PREFIX}_{ops.uid()}");
+            backwards_graph.as_default();
             foreach (var output in trainable_outputs)
                 gradients_wrt_outputs.Add(tf.placeholder(output.dtype, output.shape));
             var gradients_wrt_inputs = gradients_util._GradientsHelper(trainable_outputs.ToArray(),

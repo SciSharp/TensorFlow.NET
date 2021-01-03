@@ -105,6 +105,11 @@ namespace Tensorflow.Contexts
             context_switches.Pop();
         }
 
+        public void reset_context()
+        {
+            c_api.TFE_ContextClearCaches(_handle);
+        }
+
         public void Dispose()
             => _handle.Dispose();
     }

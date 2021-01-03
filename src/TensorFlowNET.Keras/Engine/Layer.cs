@@ -180,7 +180,7 @@ namespace Tensorflow.Keras.Engine
             if (inputs.IsEagerTensor || tf.Context.is_build_function())
             {
                 need_restore_mode = true;
-                tf.Context.eager_mode();
+                tf.Context.eager_mode(isFunc: tf.Context.is_build_function());
             }
                
             build(inputs);

@@ -30,9 +30,6 @@ namespace Tensorflow.Graphs
         public Tensor[] internal_captures()
             => _captures.Select(x => x.Value.Item2).ToArray();
 
-        // new Dictionary<long, (Tensor, Tensor)> _captures = new Dictionary<long, (Tensor, Tensor)>();
-        // public new Tensor[] external_captures => _captures.Values.Select(x => x.Item1).ToArray();
-
         /// <summary>
         /// Construct a new FuncGraph.
         /// </summary>
@@ -43,8 +40,6 @@ namespace Tensorflow.Graphs
                 outer_graph = outer_graph.OuterGraph;
             _graph_key = name;
             building_function = true;
-            tf.Context.graph_mode();
-            as_default();
         }
 
         public FuncGraph(IntPtr handle, string name, Dictionary<string, string> attrs) : base()
@@ -58,9 +53,6 @@ namespace Tensorflow.Graphs
             // Will to test if FuncGraph has memory leak
             // c_api.TF_DeleteGraph(_handle);
             _handle = handle;
-
-            tf.Context.graph_mode();
-            as_default();
         }
 
         public IntPtr ToGraph(Operation[] opers,
@@ -110,11 +102,21 @@ namespace Tensorflow.Graphs
             return base.create_op(op_type, inputs, dtypes, input_types, name, attrs, op_def, compute_device);
         }
 
-        public Tensor capture(Tensor tensor, string name = null, TF_DataType shape = TF_DataType.DtInvalid)
+        const int _EAGER_CONST_THRESHOLD = 128;
+        public Tensor capture(Tensor tensor, string name = null, TensorShape shape = null)
         {
             if(tensor is EagerTensor)
             {
-                throw new NotImplementedException("");
+                if (name == null)
+                    name = ops.uid().ToString();
+
+                // Small EagerTensors are captured with Const ops
+                if (dtypes.is_value_dtype(tensor.dtype) 
+                    && (tensor.rank == 0 || tensor.size < _EAGER_CONST_THRESHOLD))
+                    return capture_eager_tensor(tensor, name);
+
+                // Large EagerTensors and resources are captured with Placeholder ops
+                return _capture_helper(tensor, name, shape: shape);
             }
 
             if(tensor.graph != this)
@@ -136,6 +138,9 @@ namespace Tensorflow.Graphs
 
             return tensor;
         }
+
+        Tensor capture_eager_tensor(Tensor tensor, string name)
+            => throw new NotImplementedException("");
 
         Tensor _capture_helper(Tensor tensor, string name, TensorShape shape = null)
         {
@@ -190,7 +195,8 @@ namespace Tensorflow.Graphs
             if (dtype == TF_DataType.DtInvalid)
                 dtype = value.dtype;
 
-            var placeholder = tf_with(ops.control_dependencies(null), ctl => array_ops.placeholder(dtype, shape: shape, name: name));
+            var placeholder = tf_with(ops.control_dependencies(null), ctl
+                => array_ops.placeholder(dtype, shape: shape, name: name));
             // custom_gradient.copy_handle_data(value, placeholder)
             return placeholder;
         }
@@ -209,6 +215,13 @@ namespace Tensorflow.Graphs
                 c_api.TF_FunctionSetAttrValueProto(func_handle, _name, serialized, serialized.Length, tf.Status.Handle);
                 tf.Status.Check(true);
             }
+        }
+
+        public override Graph as_default()
+        {
+            tf.Context.graph_mode(isFunc: true);
+            ops.set_default_graph(this);
+            return this;
         }
 
         protected override void DisposeManagedResources()

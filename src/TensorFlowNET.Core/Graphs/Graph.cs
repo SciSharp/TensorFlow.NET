@@ -148,7 +148,7 @@ namespace Tensorflow
         /// Returns a context manager that makes this `Graph` the default graph.
         /// </summary>
         /// <returns></returns>
-        public Graph as_default()
+        public virtual Graph as_default()
         {
             return ops.set_default_graph(this);
         }

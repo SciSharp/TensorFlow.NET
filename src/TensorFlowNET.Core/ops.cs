@@ -113,13 +113,13 @@ namespace Tensorflow
             {
                 if (tf.executing_eagerly())
                     return eager_tensor;
-                /*else
+                else
                 {
                     var graph = get_default_graph();
                     if (!graph.building_function)
                         throw new RuntimeError("Attempting to capture an EagerTensor without building a function.");
                     return (graph as FuncGraph).capture(eager_tensor, name: name);
-                }*/
+                }
             }
 
             Tensor ret = value switch

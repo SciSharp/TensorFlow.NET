@@ -34,6 +34,7 @@ namespace Tensorflow.Functions
         public ConcreteFunction(string name)
         {
             func_graph = new FuncGraph(name);
+            func_graph.as_default();
         }
 
         public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs)
@@ -48,17 +49,16 @@ namespace Tensorflow.Functions
             string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
 
             // IntPtr func_handle;
-            using (var graph = new FuncGraph(func_name))
-            {
-                var input = tf.placeholder(dtype);
-                var output = func(input);
+            using var graph = new FuncGraph(func_name);
+            graph.as_default();
+            var input = tf.placeholder(dtype);
+            var output = func(input);
 
-                var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
-                _handle = graph.ToGraph(opers,
-                    new[] { input },
-                    new[] { output },
-                    null);
-            }
+            var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+            _handle = graph.ToGraph(opers,
+                new[] { input },
+                new[] { output },
+                null);
         }
 
         public ConcreteFunction(Func<Tensor, IDatasetV2> func, TF_DataType dtype)
@@ -66,19 +66,19 @@ namespace Tensorflow.Functions
             string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
 
             // IntPtr func_handle;
-            using (var graph = new FuncGraph(func_name))
-            {
-                var input = tf.placeholder(dtype);
-                var output = func(input);
+            using var graph = new FuncGraph(func_name);
+            graph.as_default();
 
-                OutputStructure = output.structure;
+            var input = tf.placeholder(dtype);
+            var output = func(input);
 
-                var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
-                _handle = graph.ToGraph(opers,
-                    new[] { input },
-                    new[] { output.variant_tensor },
-                    null);
-            }
+            OutputStructure = output.structure;
+
+            var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+            _handle = graph.ToGraph(opers,
+                new[] { input },
+                new[] { output.variant_tensor },
+                null);
         }
 
         public ConcreteFunction(Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> func,
@@ -87,22 +87,22 @@ namespace Tensorflow.Functions
             string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
 
             // IntPtr func_handle;
-            using (var graph = new FuncGraph(func_name))
-            {
-                var input1 = tf.placeholder(dtypes[0], shape: shapes[0], name: "args");
-                var input2 = tf.placeholder(dtypes[1], shape: shapes[1], name: "args");
-                var input3 = tf.placeholder(dtypes[2], shape: shapes[2], name: "args");
-                var outputs = func(input1, (input2, input3));
+            using var graph = new FuncGraph(func_name);
+            graph.as_default();
 
-                Outputs = new[] { outputs.Item1, outputs.Item2 };
-                OutputStructure = new[] { outputs.Item1.ToTensorSpec(), outputs.Item2.ToTensorSpec() };
+            var input1 = tf.placeholder(dtypes[0], shape: shapes[0], name: "args");
+            var input2 = tf.placeholder(dtypes[1], shape: shapes[1], name: "args");
+            var input3 = tf.placeholder(dtypes[2], shape: shapes[2], name: "args");
+            var outputs = func(input1, (input2, input3));
 
-                var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
-                _handle = graph.ToGraph(opers,
-                    new[] { input1, input2, input3 },
-                    new[] { outputs.Item1, outputs.Item2 },
-                    null);
-            }
+            Outputs = new[] { outputs.Item1, outputs.Item2 };
+            OutputStructure = new[] { outputs.Item1.ToTensorSpec(), outputs.Item2.ToTensorSpec() };
+
+            var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+            _handle = graph.ToGraph(opers,
+                new[] { input1, input2, input3 },
+                new[] { outputs.Item1, outputs.Item2 },
+                null);
         }
 
         public void ToGraph(Tensors inputs, Tensors outputs)

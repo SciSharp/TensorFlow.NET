@@ -13,6 +13,7 @@ namespace Tensorflow.Graphs
             // IntPtr func_handle;
             using (var graph = new FuncGraph(func_name))
             {
+                graph.as_default();
                 var input = tf.placeholder(tf.int32);
                 var output = func(input);
 
@@ -43,6 +44,7 @@ namespace Tensorflow.Graphs
             // IntPtr func_handle;
             using (var graph = new FuncGraph(func_name))
             {
+                graph.as_default();
                 var input1 = tf.placeholder(tf.int32);
                 var input2 = tf.placeholder(tf.int32);
                 var output = func(input1, input2);
