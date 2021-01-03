@@ -17,8 +17,8 @@ namespace Tensorflow.Graphs
         IntPtr func_handle;
         public string FuncName => _graph_key;
 
-        public Tensors Inputs { get; set; }
-        public Tensors Outputs { get; set; }
+        public Tensors Inputs { get; set; } = new Tensors();
+        public Tensors Outputs { get; set; } = new Tensors();
         public Dictionary<string, string> Attrs { get; set; }
 
         public Dictionary<long, (Tensor, Tensor)> _captures 
@@ -175,14 +175,7 @@ namespace Tensorflow.Graphs
         void add_capture(Tensor tensor, Tensor placeholder)
         {
             _captures.Add(tensor.Id, (tensor, placeholder));
-            if (Inputs == null)
-                Inputs = new Tensors(placeholder);
-            else
-            {
-                var inputs = Inputs.ToList();
-                inputs.Add(placeholder);
-                Inputs = new Tensors(inputs.ToArray());
-            }
+            Inputs.Add(placeholder);
         }
 
         Tensor _create_substitute_placeholder(Tensor value, 

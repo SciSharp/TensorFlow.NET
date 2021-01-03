@@ -39,7 +39,8 @@ namespace Tensorflow
         public BaseSession(string target = "", Graph g = null, ConfigProto config = null, Status status = null)
         {
             _graph = g ?? ops.get_default_graph();
-            _graph.as_default();
+            if (!_graph.building_function)
+                _graph.as_default();
             _target = Encoding.UTF8.GetBytes(target);
 
             using (var opts = new SessionOptions(target, config))
