@@ -207,6 +207,7 @@ namespace Tensorflow.Keras
             var graph_fn = new ConcreteFunction(exec_graph);
 
             _CURRENT_SCRATCH_GRAPH = null;
+            tf.Context.restore_mode();
             // return outputs.eval();
             throw new NotImplementedException("");
         }

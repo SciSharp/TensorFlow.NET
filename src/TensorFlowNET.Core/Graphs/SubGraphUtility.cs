@@ -95,6 +95,8 @@ namespace Tensorflow.Graphs
                 _copy_non_source(op, graph, op_map, base_graph);
             }
 
+            tf.Context.restore_mode();
+
             return op_map;
         }
 
