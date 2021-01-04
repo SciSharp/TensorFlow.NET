@@ -873,22 +873,6 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor mul(Tensor x, Tensor y, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Mul", name,
-                    null,
-                    x, y);
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Mul", name, args: new { x, y });
-
-            return _op.output;
-        }
-
         public static Tensor mul<Tx, Ty>(Tx x, Ty y, string name = null)
         {
             if (tf.Context.executing_eagerly())

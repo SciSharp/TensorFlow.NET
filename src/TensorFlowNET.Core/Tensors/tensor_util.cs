@@ -69,27 +69,25 @@ namespace Tensorflow
             int num_elements = np.prod(shape);
             var tensor_dtype = tensor.Dtype.as_numpy_dtype();
 
-            if (tensor.TensorContent.Length > 0)
+            if (shape.Length > 0 && tensor.TensorContent.Length > 0)
             {
                 return np.frombuffer(tensor.TensorContent.ToByteArray(), tensor_dtype).reshape(shape);
             }
             else if (tensor.Dtype == DataType.DtHalf || tensor.Dtype == DataType.DtBfloat16)
-#pragma warning disable CS0642 // Possible mistaken empty statement
-                ;
-#pragma warning restore CS0642 // Possible mistaken empty statement
+            {
+                return np.array(tensor.HalfVal).reshape(shape);
+            }
             else if (tensor.Dtype == DataType.DtFloat)
-#pragma warning disable CS0642 // Possible mistaken empty statement
-                ;
-#pragma warning restore CS0642 // Possible mistaken empty statement
+            {
+                return np.array(tensor.FloatVal).reshape(shape);
+            }
             else if (new DataType[] { DataType.DtInt32, DataType.DtUint8 }.Contains(tensor.Dtype))
             {
-                if (tensor.IntVal.Count == 1)
-                    return np.repeat(np.array(tensor.IntVal[0]), num_elements).reshape(shape);
+                return np.array(tensor.IntVal).reshape(shape);
             }
             else if (tensor.Dtype == DataType.DtBool)
             {
-                if (tensor.BoolVal.Count == 1)
-                    return np.repeat(np.array(tensor.BoolVal[0]), num_elements).reshape(shape);
+                return np.array(tensor.BoolVal).reshape(shape);
             }
 
             throw new NotImplementedException("MakeNdarray");
@@ -396,11 +394,11 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                   tensor.op.graph is FuncGraph func_graph)
             {
                 int i = 0;
-                foreach (Tensor capture in func_graph.internal_captures())
+                foreach (Tensor capture in func_graph.internal_captures)
                 {
                     if (capture.GetType() == typeof(Tensor))
                     {
-                        var external_capture = func_graph.external_captures()[i];
+                        var external_capture = func_graph.external_captures[i];
                         return constant_value_as_shape(external_capture);
                     }
 

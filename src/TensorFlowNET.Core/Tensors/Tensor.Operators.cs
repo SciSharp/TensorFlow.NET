@@ -309,25 +309,19 @@ namespace Tensorflow
         private static Tensor BinaryOpWrapper<Tx, Ty>(string name, Tx x, Ty y)
         {
             TF_DataType dtype = TF_DataType.DtInvalid;
-            bool switchToGraphModeTemp = !tf.executing_eagerly();
 
             if (x is Tensor tl)
             {
                 dtype = tl.dtype.as_base_dtype();
-                switchToGraphModeTemp = switchToGraphModeTemp || !tl.IsEagerTensor;
             }
 
             if (y is Tensor tr)
             {
                 dtype = tr.dtype.as_base_dtype();
-                switchToGraphModeTemp = switchToGraphModeTemp || !tr.IsEagerTensor;
             }
 
             return tf_with(ops.name_scope(null, name, new { x, y }), scope =>
             {
-                if (switchToGraphModeTemp)
-                    tf.Context.graph_mode();
-
                 Tensor result;
                 var x1 = ops.convert_to_tensor(x, dtype: dtype, name: "x");
                 var y1 = ops.convert_to_tensor(y, dtype: dtype, name: "y");
@@ -347,7 +341,7 @@ namespace Tensorflow
                         result = math_ops.truediv(x1, y1, name: scope);
                         break;
                     case "mul":
-                        result = gen_math_ops.mul(x1, y1, name: scope);
+                        result = math_ops.multiply(x1, y1, name: scope);
                         break;
                     case "sub":
                         result = gen_math_ops.sub(x1, y1, name: scope);
@@ -358,9 +352,6 @@ namespace Tensorflow
                     default:
                         throw new NotImplementedException($"BinaryOpWrapper: {name} - {typeof(Tx).Name}, {typeof(Ty).Name}");
                 }
-
-                if (switchToGraphModeTemp)
-                    tf.Context.restore_mode();
 
                 return result;
             });

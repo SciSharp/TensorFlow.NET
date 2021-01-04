@@ -14,7 +14,7 @@ namespace Tensorflow.Functions
     {
         IntPtr _handle;
         FuncGraph func_graph;
-        public Tensor[] CapturedInputs => func_graph.external_captures();
+        public Tensor[] CapturedInputs => func_graph.external_captures;
 
         public string Name
         {
@@ -37,7 +37,7 @@ namespace Tensorflow.Functions
             func_graph.as_default();
         }
 
-        public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs)
+        public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs = null)
         {
             func_graph = graph;
 

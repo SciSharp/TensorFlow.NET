@@ -21,14 +21,19 @@ namespace Tensorflow.Graphs
         public Tensors Outputs { get; set; } = new Tensors();
         public Dictionary<string, string> Attrs { get; set; }
 
-        public Dictionary<long, (Tensor, Tensor)> _captures 
+        Dictionary<long, (Tensor, Tensor)> _captures
             = new Dictionary<long, (Tensor, Tensor)>();
 
-        public Tensor[] external_captures()
+        public Tensor[] external_captures
             => _captures.Select(x => x.Value.Item1).ToArray();
+        public (Tensor, Tensor)[] captures
+            => _captures.Values.Select(x => x).ToArray();
 
-        public Tensor[] internal_captures()
+        public Tensor[] internal_captures
             => _captures.Select(x => x.Value.Item2).ToArray();
+
+        public Tensor[] captured_inputs
+            => external_captures;
 
         /// <summary>
         /// Construct a new FuncGraph.

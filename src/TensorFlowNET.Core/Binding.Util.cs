@@ -46,6 +46,15 @@ namespace Tensorflow
             }
         }
 
+        public static void difference_update<T>(this IList<T> list, IList<T> list2)
+        {
+            foreach(var el in list2)
+            {
+                if (list.Contains(el))
+                    list.Remove(el);
+            }
+        }
+
         public static void add<T>(this IList<T> list, T element)
             => list.Add(element);
 
@@ -156,6 +165,13 @@ namespace Tensorflow
         public static IEnumerable<int> range(int start, int end)
         {
             return Enumerable.Range(start, end - start);
+        }
+
+        public static IEnumerable<T> reversed<T>(IList<T> values)
+        {
+            var len = values.Count;
+            for (int i = len - 1; i >= 0; i--)
+                yield return values[i];
         }
 
         public static T New<T>() where T : ITensorFlowObject, new()
@@ -284,7 +300,7 @@ namespace Tensorflow
             for (int i = 0; i < len; i++)
                 yield return (i, values[i]);
         }
-
+        
         public static IEnumerable<(int, T)> enumerate<T>(IEnumerable<T> values, int start = 0, int step = 1)
         {
             int i = 0;

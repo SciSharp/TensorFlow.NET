@@ -44,6 +44,23 @@ namespace Tensorflow
         public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.add(x, y, name);
 
+        public static Tensor add_v2(Tensor x, Tensor y, string name = null)
+            => tf.Context.RunInAutoMode2(
+                () => tf.OpDefLib._apply_op_helper("AddV2", name, new { x, y }).output,
+                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "AddV2", name,
+                    null,
+                    x, y).FirstOrDefault(),
+                (op) =>
+                {
+                    var attrs = new object[]
+                    {
+                        "T", op.get_attr<TF_DataType>("T")
+                    };
+                    tf.Runner.RecordGradient("AddV2", op.inputs, attrs, op.outputs);
+                },
+                new Tensors(x, y));
+
         public static Tensor add_v2<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.add_v2(x, y, name);
 
@@ -250,6 +267,23 @@ namespace Tensorflow
 
         public static Tensor sqrt(Tensor x, string name = null)
             => gen_math_ops.sqrt(x, name: name);
+
+        public static Tensor multiply(Tensor x, Tensor y, string name = null)
+            => tf.Context.RunInAutoMode2(
+                () => tf.OpDefLib._apply_op_helper("Mul", name, new { x, y }).output,
+                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Mul", name,
+                    null,
+                    x, y).FirstOrDefault(),
+                (op) =>
+                {
+                    var attrs = new object[]
+                    {
+                        "T", op.get_attr<TF_DataType>("T")
+                    };
+                    tf.Runner.RecordGradient("Mul", op.inputs, attrs, op.outputs);
+                },
+                new Tensors(x, y));
 
         public static Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(x, y, name: name);

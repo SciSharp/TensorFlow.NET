@@ -93,7 +93,7 @@ namespace Tensorflow.Functions
                 grad_ys: gradients_wrt_outputs.ToArray(),
                 src_graph: _func_graph);
 
-            var captures_from_forward = backwards_graph.external_captures()
+            var captures_from_forward = backwards_graph.external_captures
                 .Where(x => !x.IsEagerTensor && x.graph == _func_graph)
                 .ToArray();
             foreach(var capture in captures_from_forward)
@@ -105,7 +105,7 @@ namespace Tensorflow.Functions
             var forward_function_name = $"{_FORWARD_PREFIX}_{ops.uid()}";
             var backward_function_attr = new Dictionary<string, string>();
             backward_function_attr[FORWARD_FUNCTION_ATTRIBUTE_NAME] = forward_function_name;
-            gradients_wrt_outputs.append(backwards_graph.internal_captures());
+            gradients_wrt_outputs.append(backwards_graph.internal_captures);
             backwards_graph.Inputs = gradients_wrt_outputs;
             backwards_graph.Outputs = gradients_wrt_inputs;
 

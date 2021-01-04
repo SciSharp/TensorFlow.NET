@@ -17,8 +17,10 @@
 using NumSharp;
 using System;
 using System.Collections.Generic;
+using Tensorflow.Functions;
 using Tensorflow.Graphs;
 using static Tensorflow.Binding;
+using static Tensorflow.Graphs.SubGraphUtility;
 
 namespace Tensorflow.Keras
 {
@@ -33,6 +35,7 @@ namespace Tensorflow.Keras
         public Session _SESSION => ops.get_default_session();
 
         public Graph _GRAPH;
+        FuncGraph _CURRENT_SCRATCH_GRAPH;
         public Dictionary<Graph, GraphLearningPhase> _GRAPH_LEARNING_PHASES;
         //Dictionary<Graph, Dictionary<string, int>> PER_GRAPH_LAYER_NAME_UIDS;
         public bool _MANUAL_VAR_INIT = false;
@@ -87,6 +90,14 @@ namespace Tensorflow.Keras
                 return _GRAPH;
             }
             return ops.get_default_graph();
+        }
+
+        FuncGraph _scratch_graph()
+        {
+            if (_CURRENT_SCRATCH_GRAPH == null)
+                _CURRENT_SCRATCH_GRAPH = new FuncGraph("keras_scratch_graph");
+            
+            return _CURRENT_SCRATCH_GRAPH;
         }
 
         public int get_uid(string prefix)
@@ -168,9 +179,36 @@ namespace Tensorflow.Keras
         /// </summary>
         /// <param name="outputs"></param>
         /// <returns></returns>
-        public NDArray eval_in_eager_or_function(Tensor outputs)
+        public NDArray eval_in_eager_or_function(Tensors outputs)
         {
-            return outputs.eval();
+            if (outputs[0].op.type == "Const")
+                return tensor_util.constant_value(outputs);
+                
+            var source_graph = outputs.graph;
+            using var exec_graph = _scratch_graph();
+            var global_graph = get_graph();
+            if (source_graph == global_graph && exec_graph != global_graph)
+            {
+                var lifted_map = lift_to_graph(outputs, exec_graph, 
+                    new List<Tensor>(), 
+                    add_sources: true, 
+                    handle_captures: true, 
+                    base_graph: source_graph);
+            }
+            if (outputs[0].op.type == "Placeholder"
+                || outputs[0].op.type == "StridedSlice")
+                return exec_graph.external_captures[0].numpy();
+
+            // Consolidate updates
+            exec_graph.as_default();
+            exec_graph.Inputs = exec_graph.internal_captures;
+            exec_graph.Outputs = outputs;
+            
+            var graph_fn = new ConcreteFunction(exec_graph);
+
+            _CURRENT_SCRATCH_GRAPH = null;
+            // return outputs.eval();
+            throw new NotImplementedException("");
         }
 
         public class _DummyEagerGraph
