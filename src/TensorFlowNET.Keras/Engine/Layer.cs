@@ -239,6 +239,21 @@ namespace Tensorflow.Keras.Engine
                 return layer_utils.count_params(this, weights);
             return 0;
         }
+        List<IVariableV1> ILayer.trainable_weights
+        {
+            get
+            {
+                return trainable_weights;
+            }
+        }
+
+        List<IVariableV1> ILayer.non_trainable_weights
+        {
+            get
+            {
+                return non_trainable_weights;
+            }
+        }
 
         public List<IVariableV1> weights
         {

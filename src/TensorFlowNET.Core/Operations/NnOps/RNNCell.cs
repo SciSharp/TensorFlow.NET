@@ -67,6 +67,8 @@ namespace Tensorflow
         public bool Trainable => throw new NotImplementedException();
 
         public List<IVariableV1> trainable_variables => throw new NotImplementedException();
+        public List<IVariableV1> trainable_weights => throw new NotImplementedException();
+        public List<IVariableV1> non_trainable_weights => throw new NotImplementedException();
 
         public TensorShape output_shape => throw new NotImplementedException();
 
