@@ -925,7 +925,28 @@ namespace Tensorflow
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
             => gen_array_ops.slice(input, begin, size, name: name);
 
-        public static Tensor stack(object values, int axis = 0, string name = "stack")
+        public static Tensor slice(Tensor input, Tensor begin, Tensor size, string name = null)
+            => tf.Context.RunInAutoMode2(
+                () => tf.OpDefLib._apply_op_helper("Slice", name, new
+                {
+                    input, begin, size
+                }).output,
+                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Slice", name,
+                    null,
+                    input, begin, size).FirstOrDefault(),
+                (op) =>
+                {
+                    var attrs = new object[]
+                    {
+                        "T", op.get_attr<TF_DataType>("T"),
+                        "Index", op.get_attr<int>("Index")
+                    };
+                    tf.Runner.RecordGradient("Slice", op.inputs, attrs, op.outputs);
+                },
+                new Tensors(input, begin, size));
+        
+    public static Tensor stack(object values, int axis = 0, string name = "stack")
         {
             if (axis == 0)
                 // If the input is a constant list, it can be converted to a constant op

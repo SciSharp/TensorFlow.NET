@@ -8,6 +8,9 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Graphs
 {
+    /// <summary>
+    /// func_graph.py func_graph_from_py_func
+    /// </summary>
     [AllowChangingInputArguments]
     public sealed class AutoGraphAttribute : OnMethodBoundaryAspect
     {
@@ -18,15 +21,16 @@ namespace Tensorflow.Graphs
 
         public override void OnEntry(MethodExecutionArgs args)
         {
-            func_name = $"{args.Method.Name}_{Guid.NewGuid()}";
+            // TODO: func_name can be cache in FullName + Args
+            func_name = $"{args.Method.DeclaringType.FullName}.{args.Method.Name}_{Guid.NewGuid()}";
 
             if (functions.ContainsKey(func_name))
             {
                 function = functions[func_name];
                 if (args.Arguments[0] is Tensors tensor_inputs)
-                    args.ReturnValue = ConvertReturnValue(function.Invoke(tensor_inputs));
+                    args.ReturnValue = ConvertReturnValue(function.FilteredCall(tensor_inputs));
                 else
-                    args.ReturnValue = ConvertReturnValue(function.Invoke(args.Arguments.Select(x => x as Tensor).ToArray()));
+                    args.ReturnValue = ConvertReturnValue(function.FilteredCall(args.Arguments.Select(x => x as Tensor).ToArray()));
                 args.FlowBehavior = FlowBehavior.Return;
                 return;
             }
@@ -62,14 +66,27 @@ namespace Tensorflow.Graphs
         {
             if (args.ReturnValue is Tensors outputs)
             {
-                if (args.Arguments[0] is Tensors inputs)
-                    function.ToGraph(inputs, outputs);
+                Tensors inputs = null;
+                outputs = mark_as_return(outputs);
+                if (args.Arguments[0] is Tensors inputs1)
+                    inputs = inputs1;
                 else
-                    function.ToGraph(args.Arguments.Select(x => x as Tensor).ToArray(), outputs);
+                    inputs = args.Arguments.Select(x => x as Tensor).ToArray();
+
+                inputs = inputs.Where(x => x.op.OpType == "Placeholder" 
+                    && x.op.name.StartsWith("inputs")).ToArray();
+
+                function.ToGraph(inputs, outputs);
             }
-            else
-                function.ToGraph(args.Arguments.Select(x => x as Tensor).ToArray(), args.ReturnValue as Tensor);
-            
+            else if (args.ReturnValue is Tensor output)
+            {
+                var inputs = args.Arguments.Select(x => x as Tensor)
+                    .Where(x => x.op.type == "Placeholder" && x.op.name.StartsWith("inputs"))
+                    .ToArray();
+                var outputs2 = array_ops.identity(output);
+                function.ToGraph(inputs, outputs2);
+            }
+
             function.Exit();
 
             // cache function.
@@ -77,7 +94,7 @@ namespace Tensorflow.Graphs
             functions[func_name] = function;
 
             // run function
-            args.ReturnValue = ConvertReturnValue(function.Invoke(originalInputs));
+            args.ReturnValue = ConvertReturnValue(function.FilteredCall(originalInputs));
         }
 
         object ConvertReturnValue(Tensors tensors)
@@ -86,6 +103,21 @@ namespace Tensorflow.Graphs
                 return (Tensor)tensors;
             else
                 return tensors;
+        }
+
+        /// <summary>
+        /// Acts like identity but marks the `Tensor` as a return value.
+        /// </summary>
+        /// <param name="tensors"></param>
+        /// <returns></returns>
+        public Tensors mark_as_return(Tensors tensors)
+        {
+            if (tensors == null)
+                return null;
+            var result = new Tensors();
+            foreach (var tensor in tensors)
+                result.Add(array_ops.identity(tensor));
+            return result;
         }
     }
 }

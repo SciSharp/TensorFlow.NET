@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -47,7 +47,6 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.138" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
-    <PackageReference Include="ShellProgressBar" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

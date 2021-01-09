@@ -14,6 +14,7 @@ namespace Tensorflow.Functions
     {
         IntPtr _handle;
         FuncGraph func_graph;
+        public Tensor[] Inputs => func_graph.Inputs;
         public Tensor[] CapturedInputs => func_graph.external_captures;
 
         public string Name
@@ -127,30 +128,53 @@ namespace Tensorflow.Functions
             func_graph.Exit();
         }
 
-        public Tensors Invoke(Tensors inputs)
+        public Tensors FilteredCall(Tensors inputs)
         {
-            var forward_backward = SelectForwardAndBackwardFunctions(inputs, 1, tf.Context.executing_eagerly());
+            return CallFlat(inputs, CapturedInputs);
+        }
+
+        /// <summary>
+        /// Executes the wrapped function.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="captured_inputs"></param>
+        /// <returns></returns>
+        public Tensor[] CallFlat(Tensor[] args, Tensor[] captured_inputs)
+        {
+            var executing_eagerly = tf.Context.executing_eagerly();
+            var default_graph = ops.get_default_graph();
+            var tensor_inputs = new Tensors();
+            foreach (var (i, arg) in enumerate(args))
+            {
+                tensor_inputs.Add(arg);
+                // If we're graph building, shape inference is on.
+                if (!executing_eagerly)
+                {
+                }
+            }
+            tensor_inputs.AddRange(captured_inputs);
+
+            args = tensor_inputs.ToArray();
+
+            var possible_gradient_type = tf.Runner.MustRecordGradient() ? 1 : 0;
+            // No tape is watching; skip to running the function.
+            if (possible_gradient_type == 0 && executing_eagerly)
+            {
+                var attrs = new object[]
+                {
+                    "executor_type", "",
+                    "config_proto", tf.Context.FunctionCallOptions.config_proto_serialized()
+                };
+                return tf.Runner.Execute(tf.Context, func_graph.FuncName, func_graph.Outputs.Length, args, attrs);
+            }
+
+            var forward_backward = SelectForwardAndBackwardFunctions(args, possible_gradient_type, executing_eagerly);
             var (forward_function, args_with_tangents) = forward_backward.Forward();
             Tensors flat_outputs = null;
-            if (tf.Context.executing_eagerly())
+            if (executing_eagerly)
                 flat_outputs = forward_function.Call(args_with_tangents);
             forward_backward.Record(flat_outputs);
             return flat_outputs;
-        }
-
-        public Tensor[] CallFlat(Tensor[] args, Tensor[] captured_inputs)
-        {
-            var new_args = new List<Tensor>();
-            new_args.AddRange(args);
-            new_args.AddRange(captured_inputs);
-            args = new_args.ToArray();
-
-            var attrs = new object[] 
-            {
-                "executor_type", "", 
-                "config_proto", tf.Context.FunctionCallOptions.config_proto_serialized()
-            };
-            return tf.Runner.Execute(tf.Context, func_graph.FuncName, func_graph.Outputs.Length, args, attrs);
         }
 
         ForwardBackwardCall SelectForwardAndBackwardFunctions(Tensors args, int possible_gradient_type, bool executing_eagerly)

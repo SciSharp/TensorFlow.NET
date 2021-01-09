@@ -126,6 +126,16 @@ namespace Tensorflow
         public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0,
             string name = null)
         {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "RandomShuffle", name,
+                    null,
+                    value, seed, seed2);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("RandomShuffle",
                 name: name,
                 args: new { value, seed, seed2 });

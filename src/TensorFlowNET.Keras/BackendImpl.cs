@@ -16,6 +16,7 @@
 
 using NumSharp;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Tensorflow.Functions;
 using Tensorflow.Graphs;
@@ -197,7 +198,7 @@ namespace Tensorflow.Keras
             }
             if (outputs[0].op.type == "Placeholder"
                 || outputs[0].op.type == "StridedSlice")
-                return exec_graph.external_captures[0].numpy();
+                return exec_graph.external_captures.Last().numpy();
 
             // Consolidate updates
             exec_graph.as_default();

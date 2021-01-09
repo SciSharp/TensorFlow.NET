@@ -31,11 +31,17 @@ namespace Tensorflow.Functions
 
         public Tensors Call(Tensors args)
         {
+            var attrs = new object[]
+                {
+                    "executor_type", "",
+                    "config_proto", tf.Context.FunctionCallOptions.config_proto_serialized()
+                };
+
             var results = tf.Runner.TFE_Execute(tf.Context,
                 tf.Context.DeviceName,
                 _func_graph.FuncName,
                 args,
-                null,
+                attrs,
                 _num_outputs);
 
             return results;

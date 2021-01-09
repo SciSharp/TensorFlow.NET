@@ -1,5 +1,4 @@
 ﻿using NumSharp;
-using ShellProgressBar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,15 +87,8 @@ namespace Tensorflow.Keras.Engine
         {
             stop_training = false;
             _train_counter.assign(0);
-            var options = new ProgressBarOptions
-            {
-                ProgressCharacter = '.',
-                ProgressBarOnBottom = true
-            };
-
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
-                using var pbar = new ProgressBar(data_handler.Inferredsteps, "Training...", options);
                 // reset_metrics();
                 // callbacks.on_epoch_begin(epoch)
                 // data_handler.catch_stop_iteration();
@@ -105,7 +97,7 @@ namespace Tensorflow.Keras.Engine
                     // callbacks.on_train_batch_begin(step)
                     var results = step_function(iterator);
                     var result_pairs = string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2:F6}"));
-                    pbar.Tick($"[Epoch: {epoch + 1:D3}/{epochs:D3}, Step: {step + 1:D4}/{data_handler.Inferredsteps:D4}, {result_pairs}]");
+                    Console.WriteLine($"[Epoch: {epoch + 1:D3}/{epochs:D3}, Step: {step + 1:D4}/{data_handler.Inferredsteps:D4}, {result_pairs}]");
                 }
             }
         }

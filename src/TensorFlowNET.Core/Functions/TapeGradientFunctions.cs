@@ -49,24 +49,61 @@ namespace Tensorflow.Functions
                 getBackwardFunction: () => backward_function);
         }
 
+        /// <summary>
+        /// Create a backward function given `outputs` from the forward function.
+        /// </summary>
+        /// <param name="forward_graph"></param>
+        /// <param name="backward"></param>
+        /// <param name="outputs"></param>
+        /// <returns></returns>
         (BackwardFunction, Tensors) _wrap_backward_function(FuncGraph forward_graph, ConcreteFunction backward, Tensors outputs)
         {
-            BackwardFunction _backward_function_wrapper = (output_grads, unneeded_gradients) =>
+            var capture_mapping = new Dictionary<long, Tensor>();
+            foreach(var (i, output) in enumerate(outputs))
+                capture_mapping[forward_graph.Outputs[i].Id] = output;
+
+            var remapped_captures = new Tensors();
+            foreach(var capture in backward.CapturedInputs)
             {
-                var processed_args = new List<Tensor>();
+                if (capture_mapping.ContainsKey(capture.Id))
+                    remapped_captures.Add(capture_mapping[capture.Id]);
+            }
+
+            var backward_function_inputs = backward.Inputs.Length - backward.CapturedInputs.Length;
+            var recorded_outputs = new Tensors();
+            var relevant_outputs = outputs;
+            var trainable_recorded_outputs = 0;
+            var skip_positions = new List<int>();
+            foreach (var (output_index, output) in enumerate(relevant_outputs))
+            {
+                if (trainable_recorded_outputs < backward_function_inputs)
+                    recorded_outputs.Add(output);
+                if (gradients_util.IsTrainable(output))
+                    trainable_recorded_outputs += 1;
+                else
+                    skip_positions.Add(output_index);
+            }
+
+            BackwardFunction _backward_function_wrapper = (args, unneeded_gradients) =>
+            {
+                var processed_args = new Tensors();
                 var input_index = 0;
-                foreach (var (output_index, arg) in enumerate(output_grads))
+                foreach (var (output_index, arg) in enumerate(args))
                 {
-                    if (arg is null)
+                    if (skip_positions.Contains(output_index))
+                        continue;
+                    if (arg == null)
                         throw new NotImplementedException("");
-                    processed_args.add(arg);
+                    processed_args.Add(arg);
                     input_index += 1;
+                    if (input_index >= backward_function_inputs)
+                        break;
                 }
                 tf.Logger.Debug($"Invoke backward function: {backward.Name}");
-                return backward.CallFlat(processed_args.ToArray(), outputs);
+                return backward.CallFlat(processed_args, remapped_captures);
             };
 
-            return (_backward_function_wrapper, outputs);
+            return (_backward_function_wrapper, recorded_outputs);
         }
 
         protected (EagerDefinedFunction, FuncGraph, ConcreteFunction, List<int>, int) 
@@ -103,7 +140,7 @@ namespace Tensorflow.Functions
             }
             backwards_graph.Exit();
 
-            var forward_function_name = $"{_FORWARD_PREFIX}_{ops.uid()}";
+            var forward_function_name = $"{_FORWARD_PREFIX}_{_func_graph.FuncName}_{ops.uid()}";
             var backward_function_attr = new Dictionary<string, string>();
             backward_function_attr[FORWARD_FUNCTION_ATTRIBUTE_NAME] = forward_function_name;
             gradients_wrt_outputs.append(backwards_graph.internal_captures);
