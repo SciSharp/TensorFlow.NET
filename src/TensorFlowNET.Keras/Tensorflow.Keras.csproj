@@ -18,7 +18,9 @@
 
 * Support CIFAR-10 dataset in keras.datasets.
 * Support Conv2D functional API.
-* Support BatchNormalization layer.</PackageReleaseNotes>
+* Support BatchNormalization layer.
+* Building keras model in subclass, functional and sequential api
+* Implemented backward_function.</PackageReleaseNotes>
     <Description>Keras for .NET
 
 Keras is an API designed for human beings, not machines. Keras follows best practices for reducing cognitive load: it offers consistent &amp; simple APIs, it minimizes the number of user actions required for common use cases, and it provides clear &amp; actionable error messages.</Description>
