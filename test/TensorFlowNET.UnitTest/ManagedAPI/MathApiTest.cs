@@ -6,7 +6,7 @@ using static Tensorflow.Binding;
 namespace TensorFlowNET.UnitTest.ManagedAPI
 {
     [TestClass]
-    public class MathApiTest : TFNetApiTest
+    public class MathApiTest : EagerModeTestBase
     {
         // A constant vector of size 6
         Tensor a = tf.constant(new float[] { 1.0f, -0.5f, 3.4f, -2.1f, 0.0f, -6.5f });

@@ -73,6 +73,7 @@ namespace TensorFlowNET.UnitTest
                 tf.peak_default_graph().Should().BeNull();
                 var beforehand = tf.get_default_graph(); //this should create default automatically.
                 beforehand.graph_key.Should().NotContain("-0/", "Already created a graph in an other thread.");
+                beforehand.as_default();
                 tf.peak_default_graph().Should().NotBeNull();
 
                 using (var sess = tf.Session())

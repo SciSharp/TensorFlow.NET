@@ -6,7 +6,7 @@ using static Tensorflow.Binding;
 namespace TensorFlowNET.UnitTest.ManagedAPI
 {
     [TestClass]
-    public class BitwiseApiTest : TFNetApiTest
+    public class BitwiseApiTest : EagerModeTestBase
     {
         [TestInitialize]
         public void Init()

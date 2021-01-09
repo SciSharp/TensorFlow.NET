@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tensorflow;
-using static TensorFlowNET.UnitTest.c_test_util;
+using static Tensorflow.Native.UnitTest.c_test_util;
 
-namespace TensorFlowNET.UnitTest.NativeAPI
+namespace Tensorflow.Native.UnitTest
 {
     /// <summary>
     /// tensorflow\c\c_api_function_test.cc

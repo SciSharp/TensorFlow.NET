@@ -40,9 +40,19 @@ namespace Tensorflow.Contexts
             });
         }
 
+        public void Clear()
+        {
+            stack.Clear();
+        }
+
         public void Pop()
         {
             stack.Pop();
+        }
+
+        public int Count()
+        {
+            return stack.Count;
         }
 
         public ContextSwitch Current()

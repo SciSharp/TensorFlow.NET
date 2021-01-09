@@ -5,6 +5,7 @@
     <Version>0.0.1</Version>
     <Description>TensorFlow Recommenders is a library for building recommender system models using TensorFlow.</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

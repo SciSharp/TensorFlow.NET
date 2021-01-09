@@ -1,10 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Tensorflow;
 using static Tensorflow.Binding;
-using Buffer = Tensorflow.Buffer;
 
-namespace TensorFlowNET.UnitTest.NativeAPI
+namespace Tensorflow.Native.UnitTest
 {
     [TestClass]
     public class GraphTest : CApiTest

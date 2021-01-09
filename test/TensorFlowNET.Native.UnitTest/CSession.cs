@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tensorflow;
 using Tensorflow.Util;
 
-namespace TensorFlowNET.UnitTest
+namespace Tensorflow.Native.UnitTest
 {
     /// <summary>
     /// tensorflow\c\c_test_util.cc

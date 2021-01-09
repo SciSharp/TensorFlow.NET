@@ -6,10 +6,10 @@ using System.Threading;
 using Tensorflow;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.NativeAPI
+namespace TensorFlowNET.UnitTest
 {
     [TestClass]
-    public class EnforcedSinglethreadingTests : CApiTest
+    public class EnforcedSinglethreadingTests
     {
         private static readonly object _singlethreadLocker = new object();
 

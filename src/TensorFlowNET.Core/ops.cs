@@ -78,6 +78,21 @@ namespace Tensorflow
             return get_default_graph().get_collection_ref<T>(key);
         }
 
+        public static Graph _get_graph_from_inputs(params object[] op_input_list)
+        {
+            var current_default_graph = get_default_graph();
+            if (current_default_graph.building_function)
+                return current_default_graph;
+
+            Graph graph = null;
+            foreach (var op_input in op_input_list)
+            {
+                if (op_input is Tensor op_input_tensor)
+                    graph = graph ?? op_input_tensor.graph;
+            }
+            return graph ?? current_default_graph;
+        }
+
         public static Graph _get_graph_from_inputs(Tensors op_input_list)
             => _get_graph_from_inputs(op_input_list: op_input_list, graph: null);
 
@@ -335,6 +350,11 @@ namespace Tensorflow
         public static int uid()
         {
             return Interlocked.Increment(ref uid_number);
+        }
+
+        public static void reset_uid()
+        {
+            uid_number = -1;
         }
 
         public static void colocate_with(bool ignore_existing = false)

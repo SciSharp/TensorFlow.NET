@@ -115,10 +115,10 @@ namespace Tensorflow.Keras
         public void reset_uids() => PER_GRAPH_LAYER_NAME_UIDS = new Dictionary<Graph, Dictionary<string, int>>();
         public void clear_session()
         {
-            ops.reset_default_graph();
+            tf.Context.reset_context();
             reset_uids();
             ops.set_default_session(tf.Session(ops.get_default_graph()));
-            var phase = tf.placeholder_with_default(false, new int[] { }, name: "keras_learning_phase");
+            // var phase = tf.placeholder_with_default(false, new int[] { }, name: "keras_learning_phase");
             _GRAPH_LEARNING_PHASES = new Dictionary<Graph, GraphLearningPhase>();
             _GRAPH_LEARNING_PHASES[tf.get_default_graph()] = 0;
         }
@@ -185,7 +185,7 @@ namespace Tensorflow.Keras
                 return tensor_util.constant_value(outputs);
                 
             var source_graph = outputs.graph;
-            using var exec_graph = _scratch_graph();
+            var exec_graph = _scratch_graph();
             var global_graph = get_graph();
             if (source_graph == global_graph && exec_graph != global_graph)
             {

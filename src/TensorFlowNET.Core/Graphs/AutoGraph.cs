@@ -8,7 +8,7 @@ namespace Tensorflow.Graphs
     {
         public Func<Tensor, Tensor> to_graph(Func<Tensor, Tensor> func)
         {
-            string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
+            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
 
             // IntPtr func_handle;
             using (var graph = new FuncGraph(func_name))
@@ -22,6 +22,7 @@ namespace Tensorflow.Graphs
                     new[] { input },
                     new[] { output },
                     null);
+                graph.Exit();
             }
             
 
@@ -39,7 +40,7 @@ namespace Tensorflow.Graphs
 
         public Func<Tensor, Tensor, Tensor> to_graph(Func<Tensor, Tensor, Tensor> func)
         {
-            string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
+            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
 
             // IntPtr func_handle;
             using (var graph = new FuncGraph(func_name))
@@ -54,6 +55,7 @@ namespace Tensorflow.Graphs
                     new[] { input1, input2 },
                     new[] { output },
                     null);
+                graph.Exit();
             }
             
             return (Tensor a, Tensor b) =>

@@ -1,9 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Runtime.InteropServices;
-using Tensorflow;
 
-namespace TensorFlowNET.UnitTest.NativeAPI
+namespace Tensorflow.Native.UnitTest
 {
     /// <summary>
     /// tensorflow\c\c_api_test.cc

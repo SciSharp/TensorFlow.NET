@@ -30,7 +30,7 @@ namespace Tensorflow
 
         public Operation _apply_op_helper(string op_type_name, string name = null, Dictionary<string, object> keywords = null)
         {
-            var g = ops.get_default_graph();
+            var g = ops._get_graph_from_inputs(keywords == null ? new object[0] : keywords.Values.ToArray());
             var op_def = g.GetOpDef(op_type_name);
 
             // Default name if not specified.
@@ -59,7 +59,8 @@ namespace Tensorflow
             var input_types = new List<TF_DataType>();
             object values = null;
 
-            return tf_with(ops.name_scope(name), scope =>
+            g.as_default();
+            var ret_op = tf_with(ops.name_scope(name), scope =>
             {
                 var inferred_from = new Dictionary<string, object>();
                 var base_types = new List<TF_DataType>();
@@ -249,6 +250,8 @@ namespace Tensorflow
 
                 return op;
             });
+            g.Exit();
+            return ret_op;
         }
 
         private void _MaybeColocateWith(ITensorOrOperation[] inputs)

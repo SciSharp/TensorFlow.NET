@@ -1,13 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Tensorflow;
 using Tensorflow.Device;
 using Tensorflow.Eager;
-using Tensorflow.UnitTest;
 
-namespace TensorFlowNET.UnitTest
+namespace Tensorflow.Native.UnitTest
 {
-    public class CApiTest : GraphModeTestBase
+    public class CApiTest
     {
         protected static readonly TF_Code TF_OK = TF_Code.TF_OK;
         protected static readonly TF_DataType TF_FLOAT = TF_DataType.TF_FLOAT;

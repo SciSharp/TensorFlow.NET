@@ -37,19 +37,7 @@ namespace Tensorflow.Contexts
             if (shouldRunInEager)
                 return eagerAction();
             else
-            {
-                if (executing_eagerly())
-                {
-                    graph_mode();
-                    var result = graphAction();
-                    restore_mode();
-                    return result;
-                }
-                else
-                {
-                    return graphAction();
-                }
-            }
+                return graphAction();
         }
 
         // [DebuggerStepThrough]

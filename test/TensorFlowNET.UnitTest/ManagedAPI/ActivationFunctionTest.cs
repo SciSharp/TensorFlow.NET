@@ -5,7 +5,7 @@ using static Tensorflow.Binding;
 namespace TensorFlowNET.UnitTest.nn_test
 {
     [TestClass]
-    public class ActivationFunctionTest : TFNetApiTest
+    public class ActivationFunctionTest : EagerModeTestBase
     {
         // A constant vector of size 6
         Tensor a = tf.constant(new float[] { 1.0f, -0.5f, 3.4f, -2.1f, 0.0f, -6.5f });

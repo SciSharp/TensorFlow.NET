@@ -146,6 +146,7 @@ namespace Tensorflow
 
         /// <summary>
         /// Returns a context manager that makes this `Graph` the default graph.
+        /// Must call Exit() to pop graph
         /// </summary>
         /// <returns></returns>
         public virtual Graph as_default()
@@ -487,7 +488,7 @@ namespace Tensorflow
 
         protected override void DisposeManagedResources()
         {
-            ops.default_graph_stack.remove(this);
+            
         }
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
@@ -527,6 +528,11 @@ namespace Tensorflow
             status.Check();
 
             return new TensorShape(dims.Select(x => (int)x).ToArray());
+        }
+
+        public virtual void Exit()
+        {
+            ops.pop_graph();
         }
 
         string debugString = string.Empty;

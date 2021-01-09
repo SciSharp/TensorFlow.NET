@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Tensorflow;
 using Tensorflow.Util;
-using Buffer = Tensorflow.Buffer;
 
-namespace TensorFlowNET.UnitTest
+namespace Tensorflow.Native.UnitTest
 {
     /// <summary>
     /// Port from `tensorflow\c\c_test_util.cc`

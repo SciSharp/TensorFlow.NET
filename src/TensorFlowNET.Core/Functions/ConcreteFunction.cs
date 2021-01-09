@@ -34,7 +34,6 @@ namespace Tensorflow.Functions
         public ConcreteFunction(string name)
         {
             func_graph = new FuncGraph(name);
-            func_graph.as_default();
         }
 
         public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs = null)
@@ -46,7 +45,7 @@ namespace Tensorflow.Functions
 
         public ConcreteFunction(Func<Tensor, Tensor> func, TF_DataType dtype)
         {
-            string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
+            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
 
             // IntPtr func_handle;
             using var graph = new FuncGraph(func_name);
@@ -59,11 +58,12 @@ namespace Tensorflow.Functions
                 new[] { input },
                 new[] { output },
                 null);
+            graph.Exit();
         }
 
         public ConcreteFunction(Func<Tensor, IDatasetV2> func, TF_DataType dtype)
         {
-            string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
+            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
 
             // IntPtr func_handle;
             using var graph = new FuncGraph(func_name);
@@ -79,12 +79,13 @@ namespace Tensorflow.Functions
                 new[] { input },
                 new[] { output.variant_tensor },
                 null);
+            graph.Exit();
         }
 
         public ConcreteFunction(Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> func,
             TF_DataType[] dtypes, TensorShape[] shapes)
         {
-            string func_name = $"autograph_{Guid.NewGuid()}_{func.Method.Name}";
+            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
 
             // IntPtr func_handle;
             using var graph = new FuncGraph(func_name);
@@ -103,6 +104,7 @@ namespace Tensorflow.Functions
                 new[] { input1, input2, input3 },
                 new[] { outputs.Item1, outputs.Item2 },
                 null);
+            graph.Exit();
         }
 
         public void ToGraph(Tensors inputs, Tensors outputs)
@@ -112,8 +114,17 @@ namespace Tensorflow.Functions
                 inputs,
                 outputs,
                 null);
-
             OutputStructure = outputs.Select(x => x.ToTensorSpec()).ToArray();
+        }
+
+        public void Enter()
+        {
+            func_graph.as_default();
+        }
+
+        public void Exit()
+        {
+            func_graph.Exit();
         }
 
         public Tensors Invoke(Tensors inputs)

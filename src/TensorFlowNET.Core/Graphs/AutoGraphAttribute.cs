@@ -18,7 +18,7 @@ namespace Tensorflow.Graphs
 
         public override void OnEntry(MethodExecutionArgs args)
         {
-            func_name = $"autograph_{args.Instance.GetHashCode()}.{args.Method.Name}";
+            func_name = $"{args.Method.Name}_{Guid.NewGuid()}";
 
             if (functions.ContainsKey(func_name))
             {
@@ -34,6 +34,7 @@ namespace Tensorflow.Graphs
             // make function as an Operation by autograph
             // need to restore mode when exits
             function = new ConcreteFunction(func_name);
+            function.Enter();
 
             // convert to Tensors
             if (args.Arguments[0] is Tensors inputs)
@@ -68,6 +69,8 @@ namespace Tensorflow.Graphs
             }
             else
                 function.ToGraph(args.Arguments.Select(x => x as Tensor).ToArray(), args.ReturnValue as Tensor);
+            
+            function.Exit();
 
             // cache function.
             function.ReturnType = args.ReturnValue.GetType();

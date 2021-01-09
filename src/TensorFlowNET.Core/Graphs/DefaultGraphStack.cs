@@ -25,63 +25,43 @@ namespace Tensorflow
     /// </summary>
     public class DefaultGraphStack
     {
-        private readonly List<StackModel> _stack = new List<StackModel>();
+        private readonly Stack<Graph> _stack = new Stack<Graph>();
+        Graph _global_default_graph;
 
-        public void set_controller(Graph @default)
+        public Graph get_default()
         {
-            if (!_stack.Exists(x => x.Graph == @default))
-                _stack.Add(new StackModel { Graph = @default, IsDefault = true });
+            if (_stack.Count > 0)
+                return _stack.Peek();
+            else if (_global_default_graph != null)
+                return _global_default_graph;
+            else
+                _global_default_graph = new Graph();
 
-            foreach (var s in _stack)
-                s.IsDefault = s.Graph == @default;
+            return _global_default_graph;
         }
 
-        public Graph get_controller()
+        public Graph get_controller(Graph g)
         {
-            if (_stack.Count == 0 || _stack.Count(x => x.IsDefault) == 0)
-                _stack.Add(new StackModel { Graph = tf.Graph(), IsDefault = true });
-            for (var i = _stack.Count - 1; i >= 0; i--)
-            {
-                var x = _stack[i];
-                if (x.IsDefault)
-                    return x.Graph;
-            }
-
-            throw new TensorflowException("Unable to find a default graph");
+            _stack.Push(g);
+            return g;
         }
 
         public Graph peak_controller()
         {
-            if (_stack.Count == 0 || _stack.Count(x => x.IsDefault) == 0)
+            if (_stack.Count == 0)
                 return null;
-            for (var i = _stack.Count - 1; i >= 0; i--)
-            {
-                var x = _stack[i];
-                if (x.IsDefault)
-                    return x.Graph;
-            }
-
-            return null;
+            return _stack.Peek();
         }
 
-        public bool remove(Graph g)
+        public void pop()
         {
-            if (_stack.Count == 0)
-                return false;
-
-            var sm = _stack.Find(model => model.Graph == g);
-            return sm != null && _stack.Remove(sm);
+            _stack.Pop();
         }
 
         public void reset()
         {
             _stack.Clear();
-        }
-
-        private class StackModel
-        {
-            public Graph Graph { get; set; }
-            public bool IsDefault { get; set; }
+            _global_default_graph = null;
         }
     }
 }

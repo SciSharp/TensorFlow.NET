@@ -7,7 +7,7 @@ using static Tensorflow.Binding;
 namespace TensorFlowNET.UnitTest.ManagedAPI
 {
     [TestClass]
-    public class FunctionApiTest : TFNetApiTest
+    public class FunctionApiTest : EagerModeTestBase
     {
         Tensor Min(Tensor a, Tensor b)
         {

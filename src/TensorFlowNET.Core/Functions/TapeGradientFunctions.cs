@@ -84,7 +84,7 @@ namespace Tensorflow.Functions
             }
 
             var gradients_wrt_outputs = new List<Tensor>();
-            var backwards_graph = new FuncGraph($"{_BACKWARD_PREFIX}_{ops.uid()}");
+            var backwards_graph = new FuncGraph($"{_BACKWARD_PREFIX}_{_func_graph.FuncName}_{ops.uid()}");
             backwards_graph.as_default();
             foreach (var output in trainable_outputs)
                 gradients_wrt_outputs.Add(tf.placeholder(output.dtype, output.shape));
@@ -101,6 +101,7 @@ namespace Tensorflow.Functions
                 if (!_func_graph.Outputs.Contains(capture))
                     _func_graph.Outputs.Add(capture);
             }
+            backwards_graph.Exit();
 
             var forward_function_name = $"{_FORWARD_PREFIX}_{ops.uid()}";
             var backward_function_attr = new Dictionary<string, string>();

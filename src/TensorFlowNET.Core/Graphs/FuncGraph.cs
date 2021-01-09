@@ -94,8 +94,6 @@ namespace Tensorflow.Graphs
             // mark_as_return
             Outputs = outputs;// .Select(x => array_ops.identity(x)).ToArray();
 
-            tf.Context.restore_mode();
-
             return func_handle;
         }
 
@@ -247,9 +245,10 @@ namespace Tensorflow.Graphs
             return this;
         }
 
-        protected override void DisposeManagedResources()
+        public override void Exit()
         {
-            base.DisposeManagedResources();
+            tf.Context.restore_mode();
+            ops.pop_graph();
         }
     }
 }

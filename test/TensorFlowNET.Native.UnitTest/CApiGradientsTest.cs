@@ -1,11 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using System;
-using Tensorflow;
 using Tensorflow.Util;
-using Buffer = Tensorflow.Buffer;
 
-namespace TensorFlowNET.UnitTest.NativeAPI
+namespace Tensorflow.Native.UnitTest
 {
     /// <summary>
     /// tensorflow\c\c_api_test.cc

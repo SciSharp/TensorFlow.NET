@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Tensorflow;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.NativeAPI
+namespace Tensorflow.Native.UnitTest.Eager
 {
     public partial class CApiEagerTest
     {

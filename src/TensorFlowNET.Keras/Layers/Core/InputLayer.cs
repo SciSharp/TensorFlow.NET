@@ -81,8 +81,9 @@ namespace Tensorflow.Keras.Layers
                     sparse: args.Sparse,
                     ragged: args.Ragged);
 
+                graph.Exit();
+
                 isPlaceholder = true;
-                tf.Context.restore_mode();
             }
 
             // Create an input node to add to self.outbound_node

@@ -46,7 +46,7 @@ namespace Tensorflow.Keras.Engine
                 _set_mask_metadata(inputs, outputs, null);
             });
 
-            tf.Context.restore_mode();
+            graph.Exit();
 
             return outputs;
         }
