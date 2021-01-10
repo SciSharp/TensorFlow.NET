@@ -142,6 +142,19 @@ namespace Tensorflow.Keras
             _GRAPH_LEARNING_PHASES[tf.get_default_graph()] = (GraphLearningPhase)((value) ? 1 : 0);
         }
 
+        public void batch_set_value(List<(IVariableV1, NDArray)> tuples)
+        {
+            if (ops.executing_eagerly_outside_functions())
+            {
+                foreach (var (x, value) in tuples)
+                    x.assign(value);
+            }
+            else
+            {
+                throw new NotImplementedException("");
+            }
+        }
+
         /// <summary>
         /// Pads the 2nd and 3rd dimensions of a 4D tensor.
         /// </summary>

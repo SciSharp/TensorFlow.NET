@@ -46,7 +46,6 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HDF.PInvoke.1.10" Version="1.10.500" />
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.138" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NumSharp.Lite" Version="0.1.10" />

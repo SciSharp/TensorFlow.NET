@@ -532,5 +532,13 @@ namespace Tensorflow
             var g = get_default_graph();
             return g.get_name_scope();
         }
+
+        public static bool executing_eagerly_outside_functions()
+        {
+            if (tf.Context.executing_eagerly())
+                return true;
+            else
+                throw new NotImplementedException("");
+        }
     }
 }
