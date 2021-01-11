@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NumSharp;
+using System;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 
@@ -21,7 +22,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="use_multiprocessing"></param>
         /// <returns></returns>
         public Tensor predict(Tensor x,
-            int batch_size = 32,
+            int batch_size = -1,
             int verbose = 0,
             int steps = -1,
             int max_queue_size = 10,
