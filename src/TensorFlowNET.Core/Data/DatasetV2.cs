@@ -60,7 +60,7 @@ namespace Tensorflow
                 preserve_cardinality: preserve_cardinality,
                 use_legacy_function: use_legacy_function);
 
-        public IDatasetV2 map(Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> map_func, int num_parallel_calls = -1)
+        public IDatasetV2 map(Func<Tensors, Tensors> map_func, int num_parallel_calls = -1)
             => new ParallelMapDataset(this, map_func, num_parallel_calls: num_parallel_calls);
 
         public IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func)

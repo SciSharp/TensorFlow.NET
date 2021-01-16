@@ -9,7 +9,7 @@ namespace Tensorflow
     public class ParallelMapDataset : UnaryDataset
     {
         public ParallelMapDataset(IDatasetV2 input_dataset,
-            Func<Tensor, (Tensor, Tensor), (Tensor, Tensor)> map_func,
+            Func<Tensors, Tensors> map_func,
             int num_parallel_calls = -1,
             bool use_inter_op_parallelism = true,
             bool preserve_cardinality = false,

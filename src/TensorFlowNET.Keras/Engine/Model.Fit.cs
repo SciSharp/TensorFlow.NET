@@ -97,7 +97,7 @@ namespace Tensorflow.Keras.Engine
                     // callbacks.on_train_batch_begin(step)
                     var results = step_function(iterator);
                     var result_pairs = string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2:F6}"));
-                    Console.WriteLine($"[Epoch: {epoch + 1:D3}/{epochs:D3}, Step: {step + 1:D4}/{data_handler.Inferredsteps:D4}, {result_pairs}]");
+                    Console.WriteLine($"Epoch: {epoch + 1:D3}/{epochs:D3}, Step: {step + 1:D4}/{data_handler.Inferredsteps:D4}, {result_pairs}");
                 }
             }
         }

@@ -12,8 +12,7 @@ namespace Tensorflow
         public TensorDataset(Tensors elements)
         {
             _tensors = elements;
-            var batched_spec = _tensors.Select(x => x.ToTensorSpec()).ToArray();
-            structure = batched_spec.Select(x => x._unbatch()).ToArray();
+            structure = _tensors.Select(x => x.ToTensorSpec()).ToArray();
 
             variant_tensor = ops.tensor_dataset(_tensors, output_shapes);
         }
