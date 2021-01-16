@@ -121,5 +121,15 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.IsTrue(Enumerable.SequenceEqual(new[] { 1, 2 }, neg_x.shape));
             Assert.IsTrue(Enumerable.SequenceEqual(new[] { -1, -2 }, neg_x.numpy().ToArray<int>()));
         }
+
+        [TestMethod]
+        public void IdentityOriginalTensor()
+        {
+            var a = tf.Variable(5);
+            var a_identity = tf.identity(a);
+            a.assign_add(1);
+            Assert.AreEqual(5, (int)a_identity.numpy());
+            Assert.AreEqual(6, (int)a.numpy());
+        }
     }
 }

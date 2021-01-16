@@ -60,12 +60,10 @@ namespace Tensorflow.Operations
                 name = scope;
                 if (num_spatial_dims == 2)
                 {
-                    var filters_tensor = filters.AsTensor();
-
                     result = gen_nn_ops.conv2d(new Conv2dParams
                     {
                         Input = input,
-                        Filter = filters_tensor,
+                        Filter = filters,
                         Strides = strides,
                         Padding = padding,
                         DataFormat = data_format,

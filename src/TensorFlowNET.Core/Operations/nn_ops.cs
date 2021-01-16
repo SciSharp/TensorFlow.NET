@@ -46,16 +46,14 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor bias_add(Tensor value,
-            Tensor bias,
+            IVariableV1 bias,
             string data_format = null,
             string name = null)
         {
             return tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
             {
                 name = scope;
-                value = ops.convert_to_tensor(value, name: "input");
-                var bias_tensor = ops.convert_to_tensor(bias, dtype: value.dtype, name: "bias");
-                return gen_nn_ops.bias_add(value, bias_tensor, data_format: data_format, name: name);
+                return gen_nn_ops.bias_add(value, bias, data_format: data_format, name: name);
             });
         }
 

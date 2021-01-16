@@ -85,7 +85,7 @@ namespace Tensorflow
                 throw new NotImplementedException("BasicLstmCell call");
             }
             var gate_inputs = math_ops.matmul(array_ops.concat(new[] { (Tensor)inputs, h }, 1), _kernel.AsTensor());
-            gate_inputs = nn_ops.bias_add(gate_inputs, _bias.AsTensor());
+            gate_inputs = nn_ops.bias_add(gate_inputs, _bias);
 
             // i = input_gate, j = new_input, f = forget_gate, o = output_gate
             var tensors = array_ops.split(value: gate_inputs, num_split: 4, axis: one);

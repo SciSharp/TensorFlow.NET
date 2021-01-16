@@ -32,7 +32,7 @@ namespace Tensorflow
                 var parameters = new Conv2dParams
                 {
                     Input = input,
-                    Filter = filter.AsTensor(),
+                    Filter = filter,
                     Strides = strides,
                     Padding = padding,
                     UseCudnnOnGpu = use_cudnn_on_gpu,
@@ -153,7 +153,7 @@ namespace Tensorflow
                 return tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
                 {
                     name = scope;
-                    return gen_nn_ops.bias_add(value, bias.AsTensor(), data_format: data_format, name: name);
+                    return gen_nn_ops.bias_add(value, bias, data_format: data_format, name: name);
                 });
             }
 

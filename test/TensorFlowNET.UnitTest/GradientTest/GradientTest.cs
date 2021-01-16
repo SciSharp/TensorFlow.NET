@@ -45,13 +45,13 @@ namespace TensorFlowNET.UnitTest.Gradient
             }
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void testGradients()
         {
             var g = tf.Graph().as_default();
             var inp = tf.constant(1.0, shape: new[] { 32, 100 }, name: "in");
             var w = tf.constant(1.0, shape: new[] { 100, 10 }, name: "w");
-            var b = tf.constant(1.0, shape: new[] { 10 }, name: "b");
+            var b = tf.Variable(1.0, shape: new[] { 10 }, name: "b");
             var xw = math_ops.matmul(inp, w, name: "xw");
             var h = nn_ops.bias_add(xw, b, name: "h");
             var w_grad = gradients_impl.gradients(new[] { h }, new[] { w })[0];
