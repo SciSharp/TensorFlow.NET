@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Data;
 using Tensorflow.Framework.Models;
 using static Tensorflow.Binding;
 
@@ -25,6 +26,9 @@ namespace Tensorflow
 
         public IDatasetV2 cache(string filename = "")
             => new CacheDataset(this, filename: filename);
+
+        public IDatasetV2 concatenate(IDatasetV2 dataset)
+            => new ConcatenateDataset(this, dataset);
 
         public IDatasetV2 take(int count = -1)
             => new TakeDataset(this, count: count);

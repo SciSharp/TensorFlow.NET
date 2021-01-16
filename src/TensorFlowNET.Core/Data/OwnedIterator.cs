@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Tensorflow.Framework.Models;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -36,7 +38,10 @@ namespace Tensorflow
         {
             try
             {
-                return ops.iterator_get_next(_iterator_resource, _dataset.output_types, _dataset.output_shapes);
+                var results = ops.iterator_get_next(_iterator_resource, _dataset.output_types, _dataset.output_shapes);
+                foreach(var (i, tensor) in enumerate(results))
+                    tensor.set_shape(_element_spec[i].shape);
+                return results;
             }
             catch (OutOfRangeError ex)
             {
