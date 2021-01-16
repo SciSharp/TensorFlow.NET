@@ -1,12 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
+using Tensorflow;
+using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.Native.UnitTest.Eager
+namespace TensorFlowNET.UnitTest.Gradient
 {
     [TestClass]
-    public class GradientEagerTest
+    public class GradientEagerTest : EagerModeTestBase
     {
         [TestMethod]
         public void ConstantSquare()

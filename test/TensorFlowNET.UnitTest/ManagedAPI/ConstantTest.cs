@@ -8,7 +8,7 @@ using static Tensorflow.Binding;
 namespace TensorFlowNET.UnitTest.Basics
 {
     [TestClass]
-    public class ConstantTest
+    public class ConstantTest : EagerModeTestBase
     {
         Status status = new Status();
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Tensorflow.Native.UnitTest.Sessions
 {
-    [TestClass, Ignore]
+    [TestClass]
     public class SessionTest : CApiTest
     {
         /// <summary>
