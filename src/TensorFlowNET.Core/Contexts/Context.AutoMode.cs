@@ -32,19 +32,25 @@ namespace Tensorflow.Contexts
         {
             if (tf.Context.has_graph_arg(args))
             {
-                return graphAction();
+                if (executing_eagerly())
+                {
+                    graph_mode();
+                    var result = graphAction();
+                    restore_mode();
+                    return result;
+                }
+                else
+                {
+                    return graphAction();
+                }
             }
             else
             {
-                try
+                if (tf.Context.executing_eagerly())
                 {
                     return eagerAction();
                 }
-                catch (InvalidArgumentError ex)
-                {
-                    throw ex;
-                }
-                catch (Exception ex)
+                else
                 {
                     return graphAction();
                 }

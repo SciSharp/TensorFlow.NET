@@ -36,7 +36,7 @@ namespace Tensorflow
             if (as_ref)
                 return handle;
             else
-                return AsTensor();
+                return GraphElement ?? read_value();
         }
     }
 }
