@@ -38,9 +38,9 @@ namespace Tensorflow.Eager
                     }
                 }*/
             }
-
-            tf.Logger.Debug($"RecordGradient: should_record={should_record}, op_name={op_name}");
+            
             if (!should_record) return should_record;
+            tf.Logger.Debug($"RecordGradient: op_name={op_name}");
 
             Tensor[] op_outputs;
 #pragma warning disable CS0219 // Variable is assigned but its value is never used

@@ -134,7 +134,7 @@ namespace Tensorflow.Functions
         /// <param name="args"></param>
         /// <param name="captured_inputs"></param>
         /// <returns></returns>
-        public Tensor[] CallFlat(Tensor[] args, Tensor[] captured_inputs)
+        public Tensors CallFlat(Tensor[] args, Tensor[] captured_inputs)
         {
             var executing_eagerly = tf.Context.executing_eagerly();
             var default_graph = ops.get_default_graph();

@@ -150,7 +150,8 @@ namespace Tensorflow
                 TensorShape ts => constant_op.constant(ts.dims, dtype: dtype, name: name),
                 int[] dims => constant_op.constant(dims, dtype: dtype, name: name),
                 string str => constant_op.constant(str, dtype: tf.@string, name: name),
-                object[] objects => array_ops._autopacking_conversion_function(objects, dtype: dtype, name: name),
+                string[] str => constant_op.constant(str, dtype: tf.@string, name: name),
+                IEnumerable<object> objects => array_ops._autopacking_conversion_function(objects, dtype: dtype, name: name),
                 _ => constant_op.constant(value, dtype: dtype, name: name)
             };
 
@@ -500,18 +501,16 @@ namespace Tensorflow
             return ret.ToArray();
         }
 
-        public static Tensor[] internal_convert_n_to_tensor(object values, TF_DataType dtype = TF_DataType.DtInvalid,
+        public static Tensor[] internal_convert_n_to_tensor(object[] values, TF_DataType dtype = TF_DataType.DtInvalid,
             string name = null, TF_DataType preferred_dtype = TF_DataType.DtInvalid,
             bool as_ref = false)
         {
             var ret = new List<Tensor>();
-
-            foreach ((int i, object value) in enumerate(values as object[]))
+            foreach ((int i, object value) in enumerate(values))
             {
                 string n = string.IsNullOrEmpty(name) ? "" : $"{name}_{i}";
                 ret.Add(convert_to_tensor(value, dtype: dtype, name: n, as_ref: as_ref, preferred_dtype: preferred_dtype));
             }
-
             return ret.ToArray();
         }
 

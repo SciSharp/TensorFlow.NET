@@ -156,8 +156,8 @@ namespace Tensorflow
                     return val;
                 case NDArray val:
                     return new EagerTensor(val, ctx.DeviceName);
-                //case TensorShape val:
-                //return new EagerTensor(val.dims, ctx.DeviceName);
+                case TensorShape val:
+                    return new EagerTensor(val.dims, ctx.DeviceName);
                 case string val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case string[] val:

@@ -78,15 +78,15 @@ namespace Tensorflow
         /// <param name="axis"></param>
         /// <param name="name"></param>
         /// <returns>A `Tensor` resulting from concatenation of the input tensors.</returns>
-        public Tensor concat(IList<Tensor> values, int axis, string name = "concat")
+        public Tensor concat(IEnumerable<Tensor> values, int axis, string name = "concat")
         {
-            if (values.Count == 1)
+            if (values.Count() == 1)
             {
                 return tf_with(ops.name_scope(name), scope =>
                 {
                     var tensor = ops.convert_to_tensor(axis, name: "concat_dim", dtype: dtypes.int32);
                     Debug.Assert(tensor.TensorShape.ndim == 0);
-                    return identity(values[0], name: scope);
+                    return identity(values.First(), name: scope);
                 });
             }
 

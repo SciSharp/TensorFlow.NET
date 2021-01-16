@@ -202,20 +202,14 @@ namespace Tensorflow
         }
 
         public static Tensor pack(Tensor[] values, int axis = 0, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Pack", name, new { values, axis }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Pack", name,
                     null,
                     values,
-                    "axis", axis);
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Pack", name: name, args: new { values, axis });
-            return _op.output;
-        }
+                    "axis", axis).FirstOrDefault(),
+                values, axis);
 
         /// <summary>
         /// Return a tensor with the same shape and contents as the input tensor or value.
@@ -338,12 +332,39 @@ namespace Tensorflow
                     "Reshape", name,
                     null,
                     tensor, shape).FirstOrDefault(),
-                tensor);
+                tensor, shape);
 
-        public static Tensor reshape(Tensor tensor, int[] shape, string name = null)
+        public static Tensor reshape(Tensor tensor, object[] shape, string name = null)
         {
-            var _op = tf.OpDefLib._apply_op_helper("Reshape", name, new { tensor, shape });
-            return _op.outputs[0];
+            try
+            {
+                return tf.Context.RunInAutoMode(()
+                     => tf.OpDefLib._apply_op_helper("Reshape", name, new { tensor, shape }).output, ()
+                     => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                         "Reshape", name,
+                         null,
+                         tensor, shape).FirstOrDefault(),
+                     tensor, shape);
+            }
+            catch (InvalidArgumentError ex)
+            {
+                return reshape_eager_fallback(tensor, shape, name, tf.Context);
+            }
+        }
+
+        private static Tensor reshape_eager_fallback(Tensor tensor, object[] shape, string name, Context ctx)
+        {
+            var (_attr_T, _input) = tf.Runner.ArgsToMatchingEager(ctx, args: new[] { tensor });
+            var (_attr_Tshape, _input_shape) = tf.Runner.ArgsToMatchingEager(ctx, args: new object[] { shape }, default_dtype: TF_DataType.TF_INT32);
+            var _inputs_flat = new[] { _input[0], _input_shape[0] };
+            var _attrs = new object[] { "T", _attr_T, "Tshape", _attr_Tshape };
+
+            var results = tf.Runner.Execute(ctx, "Reshape", 1, _inputs_flat, _attrs, name: name);
+            if (tf.Runner.MustRecordGradient())
+            {
+                tf.Runner.RecordGradient("Reshape", _inputs_flat, _attrs, results);
+            }
+            return results[0];
         }
 
         /// <summary>
@@ -537,14 +558,23 @@ namespace Tensorflow
             return _op.outputs;
         }
 
-        public static Tensor tile<T>(Tensor input, T multiples, string name = null)
+        public static Tensor tile(Tensor input, Tensor multiples, string name = null)
             => tf.Context.RunInAutoMode(()
                 => tf.OpDefLib._apply_op_helper("Tile", name, new { input, multiples }).output, ()
                 => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "Tile", name,
                     null,
                     input, multiples).FirstOrDefault(),
-                input);
+                input, multiples);
+
+        public static Tensor tile(Tensor input, object[] multiples, string name = null)
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("Tile", name, new { input, multiples }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Tile", name,
+                    null,
+                    input, multiples).FirstOrDefault(),
+                input, multiples);
 
         public static Tensor transpose<T1>(Tensor x, T1 perm, string name = null)
         {

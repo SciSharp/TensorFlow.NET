@@ -60,6 +60,9 @@ namespace Tensorflow
         public void AddRange(Tensor[] tensors)
             => items.AddRange(tensors);
 
+        public void Insert(int index, Tensor tensor)
+            => items.Insert(index, tensor);
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();

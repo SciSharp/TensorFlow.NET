@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Framework
 {
@@ -65,5 +66,17 @@ namespace Tensorflow.Framework
 
         public static TensorShape as_shape(this Shape shape)
              => new TensorShape(shape.Dimensions);
+
+        public static TensorShape most_specific_compatible_shape(this TensorShape self, TensorShape other)
+        {
+            var dims = range(self.rank).Select(x => -1).ToArray();
+            foreach(var (i, (d1, d2)) in enumerate(zip(self.dims, other.dims)))
+            {
+                if (d1 == d2)
+                    dims[i] = d1;
+            }
+
+            return new TensorShape(dims);
+        }
     }
 }

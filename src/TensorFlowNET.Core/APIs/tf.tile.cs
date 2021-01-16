@@ -13,13 +13,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ******************************************************************************/
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public Tensor tile<T>(Tensor input,
-                T multiples,
-                string name = null) => gen_array_ops.tile(input, multiples, name);
+        public Tensor tile(Tensor input, Tensor multiples, string name = null)
+            => gen_array_ops.tile(input, multiples, name);
+
+        public Tensor tile(Tensor input, object[] multiples, string name = null)
+            => gen_array_ops.tile(input, multiples, name);
+
+        public Tensor tile(Tensor input, TensorShape multiples, string name = null) 
+        {
+            var multiples_tensor = constant_op.constant(multiples);
+            return gen_array_ops.tile(input, multiples_tensor, name);
+        } 
     }
 }

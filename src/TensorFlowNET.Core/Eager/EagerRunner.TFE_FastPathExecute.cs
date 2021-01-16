@@ -50,7 +50,7 @@ namespace Tensorflow.Eager
 
             var op_def = tf.get_default_graph().GetOpDef(opName);
 
-            var flattened_attrs = new List<object>(op_def.InputArg.Count);
+            var flattened_attrs = new List<object>(op_def.Attr.Count * 2);
             var flattened_inputs = new List<Tensor>(op_def.InputArg.Count);
 
             // Set non-inferred attrs, including setting defaults if the attr is passed in
@@ -221,23 +221,9 @@ namespace Tensorflow.Eager
             SafeTensorHandleHandle input_handle;
 
             // ConvertToTensor();
-            switch (inputs)
-            {
-                case EagerTensor input:
-                    input_handle = input.EagerTensorHandle;
-                    flattened_inputs.Add(input);
-                    break;
-                case ResourceVariable variable:
-                    var var_tensor = variable.AsTensor();
-                    input_handle = var_tensor.EagerTensorHandle;
-                    flattened_inputs.Add(var_tensor);
-                    break;
-                default:
-                    var tensor = tf.convert_to_tensor(inputs);
-                    input_handle = tensor.EagerTensorHandle;
-                    flattened_inputs.Add(tensor);
-                    break;
-            }
+            var tensor = tf.convert_to_tensor(inputs);
+            input_handle = tensor.EagerTensorHandle;
+            flattened_inputs.Add(tensor);
 
             if (add_type_attr && !string.IsNullOrEmpty(input_arg.TypeAttr))
             {

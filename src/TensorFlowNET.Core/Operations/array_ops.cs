@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Contexts;
+using Tensorflow.Eager;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
 
@@ -215,7 +216,7 @@ namespace Tensorflow
             }
         }
 
-        public static Tensor _autopacking_conversion_function(object[] v, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
+        public static Tensor _autopacking_conversion_function(IEnumerable<object> v, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)
         {
             var inferred_dtype = _get_dtype_from_nested_lists(v);
             if (dtype == TF_DataType.DtInvalid)
@@ -224,7 +225,7 @@ namespace Tensorflow
             return _autopacking_helper(v, dtype, name == null ? "packed" : name);
         }
 
-        private static TF_DataType _get_dtype_from_nested_lists(object[] list_or_tuple)
+        private static TF_DataType _get_dtype_from_nested_lists(IEnumerable<object> list_or_tuple)
         {
             TF_DataType dtype = TF_DataType.DtInvalid;
 
@@ -251,11 +252,14 @@ namespace Tensorflow
         /// <param name="dtype"></param>
         /// <param name="name"></param>
         /// <returns>A `tf.Tensor` with value equivalent to `list_or_tuple`.</returns>
-        public static Tensor _autopacking_helper(object[] list_or_tuple, TF_DataType dtype, string name)
+        public static Tensor _autopacking_helper(IEnumerable<object> list_or_tuple, TF_DataType dtype, string name)
         {
             var must_pack = false;
             var converted_elems = new List<object>();
-            return tf_with(ops.name_scope(name), scope =>
+
+            bool switch_to_graph = tf.Context.switched_to_graph(list_or_tuple.ToArray());
+
+            var result = tf_with(ops.name_scope(name), scope =>
             {
                 foreach (var (i, elem) in enumerate(list_or_tuple))
                 {
@@ -268,8 +272,17 @@ namespace Tensorflow
                     var elems_as_tensors = new List<Tensor>();
                     foreach (var (i, elem) in enumerate(converted_elems))
                     {
-                        if (elem is Tensor tensor)
+                        if (elem is EagerTensor eager_tensor)
+                        {
+                            if(switch_to_graph)
+                                elems_as_tensors.Add(constant_op.constant(eager_tensor.numpy(), dtype: dtype, name: i.ToString()));
+                            else
+                                elems_as_tensors.Add(eager_tensor);
+                        }
+                        else if (elem is Tensor tensor)
+                        {
                             elems_as_tensors.Add(tensor);
+                        }
                         else
                         {
                             var elem_tensor = constant_op.constant(elem, dtype: dtype, name: i.ToString());
@@ -284,6 +297,11 @@ namespace Tensorflow
                     return tf.constant(np.array(new float[0]));
                 }
             });
+
+            if (switch_to_graph)
+                tf.Context.restore_mode();
+
+            return result;
         }
 
         public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1)
@@ -351,8 +369,14 @@ namespace Tensorflow
         public static Tensor ones_like<T>(T tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
             => ones_like_impl(tensor, dtype, name, optimize);
 
-        public static Tensor reshape<T2>(Tensor tensor, T2 shape, string name = null)
-            => gen_array_ops.reshape(tensor, shape, null);
+        public static Tensor reshape(Tensor tensor, Tensor shape, string name = null)
+            => gen_array_ops.reshape(tensor, shape, name: name);
+
+        public static Tensor reshape(Tensor tensor, TensorShape shape, string name = null)
+            => gen_array_ops.reshape(tensor, shape, name: name);
+
+        public static Tensor reshape(Tensor tensor, object[] shape, string name = null)
+            => gen_array_ops.reshape(tensor, shape, name: name);
 
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
         {

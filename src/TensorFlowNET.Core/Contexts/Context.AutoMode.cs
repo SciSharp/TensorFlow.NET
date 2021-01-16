@@ -28,16 +28,27 @@ namespace Tensorflow.Contexts
     /// </summary>
     public sealed partial class Context
     {
-        // [DebuggerStepThrough]
-        public T RunInAutoMode<T>(Func<T> graphAction, Func<T> eagerAction, params Tensor[] tensors)
+        public T RunInAutoMode<T>(Func<T> graphAction, Func<T> eagerAction, params object[] args)
         {
-            var shouldRunInEager = executing_eagerly()
-                && tensors.Count(x => x.IsEagerTensor) == tensors.Length;
-
-            if (shouldRunInEager)
-                return eagerAction();
-            else
+            if (tf.Context.has_graph_arg(args))
+            {
                 return graphAction();
+            }
+            else
+            {
+                try
+                {
+                    return eagerAction();
+                }
+                catch (InvalidArgumentError ex)
+                {
+                    throw ex;
+                }
+                catch (Exception ex)
+                {
+                    return graphAction();
+                }
+            }
         }
 
         // [DebuggerStepThrough]
@@ -46,12 +57,7 @@ namespace Tensorflow.Contexts
             Action<Operation> recordGradient,
             Tensors tensors)
         {
-            var shouldRunInEager = executing_eagerly()
-                && tensors.Count(x => x.IsEagerTensor) == tensors.Length;
-
-            if (shouldRunInEager)
-                return eagerAction();
-            else
+            if (tf.Context.has_graph_arg(tensors))
             {
                 if (executing_eagerly())
                 {
@@ -67,6 +73,10 @@ namespace Tensorflow.Contexts
                         recordGradient(result[0].op);
                     return result;
                 }
+            }
+            else
+            {
+                return eagerAction();
             }
         }
     }

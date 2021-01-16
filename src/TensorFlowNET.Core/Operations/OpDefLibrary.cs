@@ -132,7 +132,7 @@ namespace Tensorflow
                         if (!input_arg.IsRef && dtype != DataType.DtInvalid)
                             dtype = dtype.as_base_dtype();
 
-                        values = ops.internal_convert_n_to_tensor(values,
+                        values = ops.internal_convert_n_to_tensor(values as object[],
                             name: input_arg.Name,
                             dtype: dtype.as_tf_dtype(),
                             preferred_dtype: default_dtype.as_tf_dtype(),

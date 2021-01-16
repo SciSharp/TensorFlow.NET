@@ -20,6 +20,7 @@ using System.Linq;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 using Google.Protobuf;
+using Tensorflow.Util;
 
 namespace Tensorflow.Contexts
 {
@@ -102,6 +103,29 @@ namespace Tensorflow.Contexts
 
         public void eager_mode(bool isFunc = false)
             => context_switches.Push(true, isFunc);
+
+        public bool switched_to_graph(params object[] args)
+        {
+            var switching_to_graph = has_graph_arg(args) && tf.Context.executing_eagerly();
+            if (switching_to_graph)
+                tf.Context.graph_mode(tf.Context.is_build_function());
+            return switching_to_graph;
+        }
+
+        public bool has_graph_arg(params object[] args)
+        {
+            var flatten_args = nest.flatten<object>(args);
+            bool has_graph_arg = false;
+            foreach (var el in flatten_args)
+            {
+                if (el is Tensor tensor && !tensor.IsEagerTensor)
+                {
+                    has_graph_arg = true;
+                    break;
+                }
+            }
+            return has_graph_arg;
+        }
 
         public void restore_mode()
         {

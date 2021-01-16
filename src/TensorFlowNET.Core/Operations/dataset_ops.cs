@@ -22,7 +22,11 @@ namespace Tensorflow
                 return results[0];
             }
 
-            throw new NotImplementedException("");
+            var _op = tf.OpDefLib._apply_op_helper("TensorDataset",
+                name: name,
+                args: new { components, output_shapes });
+
+            return _op.output;
         }
 
         /// <summary>
@@ -178,6 +182,28 @@ namespace Tensorflow
             }
 
             throw new NotImplementedException("");
+        }
+
+        public Tensor concatenate_dataset(Tensor input_dataset, Tensor another_dataset,
+            TF_DataType[] output_types, TensorShape[] output_shapes,
+            string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "ConcatenateDataset", name,
+                    null,
+                    input_dataset, another_dataset,
+                    "output_types", output_types,
+                    "output_shapes", output_shapes);
+                return results[0];
+            }
+
+            var _op = tf.OpDefLib._apply_op_helper("ConcatenateDataset",
+                name: name,
+                args: new { input_dataset, another_dataset, output_types, output_shapes });
+
+            return _op.outputs[0];
         }
 
         public Tensor cache_dataset_v2(Tensor input_dataset, Tensor filename, Tensor cache,

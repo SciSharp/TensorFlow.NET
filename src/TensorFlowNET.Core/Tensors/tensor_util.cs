@@ -123,6 +123,17 @@ namespace Tensorflow
             {
                 nparray = nd;
             }
+            else if(values is string str)
+            {
+                // scalar string
+                nparray = convert_to_numpy_ndarray(values);
+                shape = new int[0];
+            }
+            else if(values is string[] strings)
+            {
+                nparray = convert_to_numpy_ndarray(values);
+                shape = new[] { strings.Length };
+            }
             else
             {
                 if (values == null)
@@ -151,9 +162,14 @@ namespace Tensorflow
             {
                 if (numpy_dtype == TF_DataType.TF_STRING)
                 {
-                    // scalar string
-                    shape = new int[0];
-                    shape_size = 0;
+                    if (nparray.ndim == 0)
+                    {
+                        // scalar string
+                        shape = new int[0];
+                        shape_size = 0;
+                    }
+                    else
+                        throw new NotImplementedException($"Not implemented for {nparray.ndim} dims string array.");
                 }
                 else
                 {
@@ -428,6 +444,9 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 case NDArray val:
                     nd = val;
                     break;
+                case TensorShape val:
+                    nd = val.dims;
+                    break;
                 case bool boolVal:
                     nd = boolVal;
                     break;
@@ -471,7 +490,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                     nd = new NDArray(Encoding.ASCII.GetBytes(strVal));
                     break;
                 case string[] strVals:
-                    nd = strVals;
+                    nd = np.array(strVals);
                     break;
                 case byte[] byteValues:
                     nd = byteValues;

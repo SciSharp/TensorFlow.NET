@@ -1874,7 +1874,7 @@ new_height, new_width");
         {
             using (ops.name_scope("suppression_loop_body"))
             {
-                var num_tiles = Math.Floor((double)array_ops.shape(boxes).dims[1] / tile_size);
+                var num_tiles = array_ops.shape(boxes).dims[1] / tile_size;
                 var batch_size = array_ops.shape(boxes).dims[0];
 
                 (Tensor, Tensor, Tensor, Tensor) cross_suppression_func(Tensor boxes, Tensor box_slice, Tensor iou_threshold, Tensor inner_idx, int tile_size)

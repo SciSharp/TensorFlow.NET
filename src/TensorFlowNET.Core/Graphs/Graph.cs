@@ -151,6 +151,7 @@ namespace Tensorflow
         /// <returns></returns>
         public virtual Graph as_default()
         {
+            tf.Context.graph_mode(isFunc: false);
             return ops.set_default_graph(this);
         }
 
@@ -532,6 +533,7 @@ namespace Tensorflow
 
         public virtual void Exit()
         {
+            tf.Context.restore_mode();
             ops.pop_graph();
         }
 

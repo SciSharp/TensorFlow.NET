@@ -99,8 +99,18 @@ namespace Tensorflow.Functions
                     if (input_index >= backward_function_inputs)
                         break;
                 }
+
                 tf.Logger.Debug($"Invoke backward function: {backward.Name}");
-                return backward.CallFlat(processed_args, remapped_captures);
+                var gradients = backward.CallFlat(processed_args, remapped_captures);
+
+                foreach (var unneeded_gradient_index in unneeded_gradients)
+                {
+                    var index = Convert.ToInt32(unneeded_gradient_index);
+                    if (gradients.Length <= index)
+                        gradients.Insert(index, null);
+                }
+
+                return gradients;
             };
 
             return (_backward_function_wrapper, recorded_outputs);
