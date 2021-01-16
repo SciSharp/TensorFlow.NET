@@ -5,7 +5,7 @@ using Tensorflow.Keras.Losses;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.UnitTest.Keras
+namespace TensorFlowNET.Keras.UnitTest
 {
     [TestClass]
     public class LogCosh

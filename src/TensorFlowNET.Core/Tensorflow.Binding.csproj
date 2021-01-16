@@ -82,7 +82,7 @@ TensorFlow .NET v0.3x is focused on making more Keras API works</PackageReleaseN
   <ItemGroup>
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.138" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="NumSharp.Lite" Version="0.1.10" />
+    <PackageReference Include="NumSharp.Lite" Version="0.1.11" />
     <PackageReference Include="Protobuf.Text" Version="0.4.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
   </ItemGroup>

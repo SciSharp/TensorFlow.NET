@@ -2,7 +2,7 @@
 using Tensorflow.Keras.Engine;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.UnitTest.Keras
+namespace TensorFlowNET.Keras.UnitTest
 {
     /// <summary>
     /// https://www.tensorflow.org/guide/keras/save_and_serialize

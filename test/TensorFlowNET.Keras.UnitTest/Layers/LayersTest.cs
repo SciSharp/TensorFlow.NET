@@ -3,7 +3,7 @@ using NumSharp;
 using Tensorflow;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.UnitTest.Keras
+namespace TensorFlowNET.Keras.UnitTest
 {
     /// <summary>
     /// https://www.tensorflow.org/versions/r2.3/api_docs/python/tf/keras/layers
@@ -24,7 +24,7 @@ namespace TensorFlowNET.UnitTest.Keras
             var layers = keras.layers;
 
             var inputs = keras.Input(shape: 784);
-            Assert.AreEqual((None, 784), inputs.TensorShape);
+            Assert.AreEqual((-1, 784), inputs.TensorShape);
 
             var dense = layers.Dense(64, activation: keras.activations.Relu);
             var x = dense.Apply(inputs);
@@ -59,7 +59,7 @@ namespace TensorFlowNET.UnitTest.Keras
             });
             // model.compile("rmsprop", "mse");
             var output_array = model.predict(input_array);
-            Assert.AreEqual((32, 10, 64), output_array.TensorShape);
+            Assert.AreEqual((32, 10, 64), output_array.shape);
         }
 
         /// <summary>
