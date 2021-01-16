@@ -14,6 +14,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         int _batch_size;
         int num_samples;
         int num_full_batches;
+        int _partial_batch_size;
 
         public TensorLikeDataAdapter(DataAdapterArgs args)
         {
@@ -22,9 +23,9 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             num_samples = args.X.shape[0];
             var batch_size = args.BatchSize == -1 ? 32 : args.BatchSize;
             _batch_size = batch_size;
-            _size = Convert.ToInt32(Math.Floor(num_samples / (batch_size + 0f)));
+            _size = num_samples < batch_size ? num_samples % batch_size : num_samples / batch_size;
             num_full_batches = num_samples / batch_size;
-            var _partial_batch_size = num_samples % batch_size;
+            _partial_batch_size = num_samples % batch_size;
 
             var indices_dataset = tf.data.Dataset.range(1);
             indices_dataset = indices_dataset.repeat(args.Epochs);
@@ -57,6 +58,15 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             var first_k_indices = array_ops.slice(indices, new int[] { 0 }, new int[] { num_in_full_batch });
             first_k_indices = array_ops.reshape(first_k_indices, new int[] { num_full_batches, _batch_size });
             var flat_dataset = tf.data.Dataset.from_tensor_slices(first_k_indices);
+            if (_partial_batch_size > 0)
+            {
+                var array = array_ops.slice(indices, 
+                    new[] { constant_op.constant(num_in_full_batch)}, 
+                    new[] { constant_op.constant(_partial_batch_size)});
+                var index_remainder = tf.data.Dataset.from_tensor(array);
+                flat_dataset = flat_dataset.concatenate(index_remainder);
+            }
+                
             return flat_dataset;
         }
 

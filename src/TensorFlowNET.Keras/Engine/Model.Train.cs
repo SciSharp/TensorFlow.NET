@@ -8,7 +8,7 @@ namespace Tensorflow.Keras.Engine
 {
     public partial class Model
     {
-        IEnumerable<(string, Tensor)> step_function(OwnedIterator iterator)
+        IEnumerable<(string, Tensor)> train_step_function(OwnedIterator iterator)
         {
             var data = iterator.next();
             var outputs = train_step(data[0], data[1]);

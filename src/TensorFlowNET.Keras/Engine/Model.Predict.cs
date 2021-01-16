@@ -1,7 +1,10 @@
 ﻿using NumSharp;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -21,7 +24,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="workers"></param>
         /// <param name="use_multiprocessing"></param>
         /// <returns></returns>
-        public Tensor predict(Tensor x,
+        public Tensors predict(Tensor x,
             int batch_size = -1,
             int verbose = 0,
             int steps = -1,
@@ -43,7 +46,35 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            throw new NotImplementedException("");
+            Tensors outputs = null;
+            _predict_counter.assign(0);
+            // callbacks.on_predict_begin()
+            foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
+            {
+                foreach(var step in data_handler.steps())
+                {
+                    // callbacks.on_predict_batch_begin(step)
+                    var batch_outputs = run_predict_step(iterator);
+                    outputs = batch_outputs;
+                    var end_step = step + data_handler.StepIncrement;
+                    // callbacks.on_predict_batch_end(end_step, {'outputs': batch_outputs})
+                }
+            }
+            // callbacks.on_predict_end()
+            return outputs;
+        }
+
+        Tensors run_predict_step(OwnedIterator iterator)
+        {
+            var data = iterator.next();
+            var outputs = predict_step(data[0]);
+            tf_with(ops.control_dependencies(new object[0]), ctl => _predict_counter.assign_add(1));
+            return outputs;
+        }
+
+        Tensors predict_step(Tensor data)
+        {
+            return Apply(data, is_training: false);
         }
     }
 }

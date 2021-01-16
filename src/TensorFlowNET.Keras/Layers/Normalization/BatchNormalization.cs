@@ -142,9 +142,6 @@ namespace Tensorflow.Keras.Layers
             if (use_fused_avg_updates)
                 exponential_avg_factor = 1.0f - momentum;
 
-            var beta = this.beta;
-            var gamma = this.gamma;
-
             Func<Tensor[]> _fused_batch_norm_training = () =>
             {
                 return tf.nn.fused_batch_norm(

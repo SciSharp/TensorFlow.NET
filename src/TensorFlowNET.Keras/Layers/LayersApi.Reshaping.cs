@@ -45,5 +45,11 @@ namespace Tensorflow.Keras.Layers
             {
                 TargetShape = target_shape
             });
+
+        public Reshape Reshape(object[] target_shape)
+            => new Reshape(new ReshapeArgs
+            {
+                TargetShapeObjects = target_shape
+            });
     }
 }

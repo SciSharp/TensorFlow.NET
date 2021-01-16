@@ -18,6 +18,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         public int Inferredsteps => _inferred_steps;
         int _current_step;
         int _step_increment;
+        public int StepIncrement => _step_increment;
         bool _insufficient_data;
         int _steps_per_execution_value;
         int _initial_epoch => args.InitialEpoch;
@@ -73,7 +74,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             _dataset = _adapter.GetDataset();
             _inferred_steps = _infer_steps(args.StepsPerEpoch, _dataset);
             _current_step = 0;
-            _step_increment = args.StepsPerExecution.numpy() - 1;
+            _step_increment = _steps_per_execution_value - 1;
             _insufficient_data = false;
         }
 
