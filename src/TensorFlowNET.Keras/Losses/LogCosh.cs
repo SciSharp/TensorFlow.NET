@@ -12,7 +12,7 @@ namespace Tensorflow.Keras.Losses
         public LogCosh(
             string reduction = null,
             string name = null) :
-            base(reduction: reduction, name: name == null ? "huber" : name){ }
+            base(reduction: reduction, name: name == null ? "log_cosh" : name){ }
 
         public override Tensor Apply(Tensor y_true = null, Tensor y_pred =null, bool from_logits = false, int axis = -1)
         {
