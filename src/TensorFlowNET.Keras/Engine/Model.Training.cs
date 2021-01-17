@@ -27,9 +27,15 @@ namespace Tensorflow.Keras.Engine
             }
             else
             {
-                fdf5_format.load_weights_from_hdf5_group(fileId, Layers);
+                hdf5_format.load_weights_from_hdf5_group(fileId, Layers);
             }
-            H5G.close(fileId);
+            Hdf5.CloseFile(fileId);
+        }
+        public void save_weights(string filepath, bool overwrite = true, string save_format = null, object options = null)
+        {
+            long fileId = Hdf5.CreateFile(filepath);
+            hdf5_format.save_weights_to_hdf5_group(fileId, Layers);
+            Hdf5.CloseFile(fileId);
         }
     }
 }
