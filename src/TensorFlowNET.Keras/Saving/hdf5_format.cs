@@ -101,26 +101,28 @@ namespace Tensorflow.Keras.Saving
                 if (success)
                     original_backend = attr.First();
             }
-            List<ILayer> filtered_layers = new List<ILayer>();
-            List<IVariableV1> weights;
+
+            var filtered_layers = new List<ILayer>();
             foreach (var layer in layers)
             {
-                weights = _legacy_weights(layer);
+                var weights = _legacy_weights(layer);
                 if (weights.Count > 0)
-                {
                     filtered_layers.append(layer);
-                }
             }
+
             string[] layer_names = load_attributes_from_hdf5_group(f, "layer_names");
             var filtered_layer_names = new List<string>();
             foreach(var name in layer_names)
             {
+                if (!filtered_layers.Select(x => x.Name).Contains(name))
+                    continue;
                 long g = H5G.open(f, name);
                 var weight_names = load_attributes_from_hdf5_group(g, "weight_names");
                 if (weight_names.Count() > 0)
                     filtered_layer_names.Add(name);
                 H5G.close(g);
             }
+
             layer_names = filtered_layer_names.ToArray();
             if (layer_names.Length != filtered_layers.Count())
                 throw new ValueError("You are trying to load a weight file " +
@@ -133,7 +135,6 @@ namespace Tensorflow.Keras.Saving
                 var weight_values = new List<NDArray>();
                 long g = H5G.open(f, name);
                 var weight_names = load_attributes_from_hdf5_group(g, "weight_names");
-                var get_Name = "";
                 foreach (var i_ in weight_names)
                 {
                     (bool success, Array result) = Hdf5.ReadDataset<float>(g, i_);
@@ -153,6 +154,7 @@ namespace Tensorflow.Keras.Saving
                         $"{weight_values.Count()} elements.");
                 weight_value_tuples.AddRange(zip(symbolic_weights, weight_values));
             }
+
             keras.backend.batch_set_value(weight_value_tuples);
         }
         public static void toarrayf4(long filepath = -1, Dictionary<string, object> custom_objects = null, bool compile = false)
@@ -175,43 +177,37 @@ namespace Tensorflow.Keras.Saving
             Hdf5.WriteAttribute(f, "keras_version", "2.5.0");
 
             long g = 0, crDataGroup=0;
-            List<IVariableV1> weights = new List<IVariableV1>();
-            //List<IVariableV1> weight_values = new List<IVariableV1>();
-            List<string> weight_names = new List<string>();
-            foreach (var layer in layers) {
-                weight_names = new List<string>();
-                g = Hdf5.CreateOrOpenGroup(f, Hdf5Utils.NormalizedName(layer.Name));
-                weights = _legacy_weights(layer);
-                //weight_values= keras.backend.batch_get_value(weights);
+            foreach (var layer in layers)
+            {
+                var weights = _legacy_weights(layer);
+                if (weights.Count == 0)
+                    continue;
+
+                var weight_names = new List<string>();
+                // weight_values= keras.backend.batch_get_value(weights);
                 foreach (var weight in weights)
-                {
                     weight_names.Add(weight.Name);
-                }
+                
+                g = Hdf5.CreateOrOpenGroup(f, Hdf5Utils.NormalizedName(layer.Name));
                 save_attributes_to_hdf5_group(g, "weight_names", weight_names.ToArray());
-                Tensor tensor = null;
-                foreach (var (name, val) in zip(weight_names, weights)) {
-               
-                     tensor = val.AsTensor();
+                foreach (var (name, val) in zip(weight_names, weights))
+                {
+                    var tensor = val.AsTensor();
                     if (name.IndexOf("/") > 1)
                     {
                         crDataGroup = Hdf5.CreateOrOpenGroup(g, Hdf5Utils.NormalizedName(name.Split('/')[0]));
                         WriteDataset(crDataGroup, name.Split('/')[1], tensor);
                         Hdf5.CloseGroup(crDataGroup);
                     }
-                    else {
+                    else
+                    {
                         WriteDataset(crDataGroup, name, tensor);
                     }
-                   
-                    tensor = null;
-               }
+                }
                 Hdf5.CloseGroup(g);
-                weight_names = null;
             }
-            weights = null;
-           // weight_values = null;
-
-  
         }
+
         private static void save_attributes_to_hdf5_group(long f,string name ,Array data)
         {
             int num_chunks = 1;

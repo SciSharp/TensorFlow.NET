@@ -318,16 +318,16 @@ namespace Tensorflow.Operations
             return _op.outputs;
         }
 
-        public static Tensor[] fused_batch_norm_v3(Tensor x,
-        Tensor scale,
-        Tensor offset,
-        IVariableV1 mean,
-        IVariableV1 variance,
-        float epsilon = 0.0001f,
-        float exponential_avg_factor = 1.0f,
-        string data_format = "NHWC",
-        bool is_training = true,
-        string name = null)
+        public static Tensors fused_batch_norm_v3(Tensor x,
+            IVariableV1 scale,
+            IVariableV1 offset,
+            IVariableV1 mean,
+            IVariableV1 variance,
+            float epsilon = 0.0001f,
+            float exponential_avg_factor = 1.0f,
+            string data_format = "NHWC",
+            bool is_training = true,
+            string name = null)
         {
             if (tf.executing_eagerly())
             {
@@ -337,8 +337,8 @@ namespace Tensorflow.Operations
                     x,
                     scale,
                     offset,
-                    mean.AsTensor(),
-                    variance.AsTensor(),
+                    mean,
+                    variance,
                     "epsilon", epsilon,
                     "exponential_avg_factor", exponential_avg_factor,
                     "data_format", data_format,

@@ -107,9 +107,6 @@ namespace Tensorflow
             string name = null,
             float exponential_avg_factor = 1.0f)
         {
-            x = ops.convert_to_tensor(x, name: "input");
-            var scale_tensor = ops.convert_to_tensor(scale, name: "scale");
-            var offset_tensor = ops.convert_to_tensor(offset, name: "offset");
             /*if (mean == null)
                 mean = constant_op.constant(new float[0]);
             if (variance == null)
@@ -118,11 +115,11 @@ namespace Tensorflow
             epsilon = epsilon > min_epsilon ? epsilon : min_epsilon;
 
             var results = gen_nn_ops.fused_batch_norm_v3(x,
-                scale_tensor,
-                offset_tensor,
+                scale,
+                offset,
                 mean,
                 variance,
-                epsilon,
+                epsilon: epsilon,
                 exponential_avg_factor: exponential_avg_factor,
                 data_format: data_format,
                 is_training: is_training,

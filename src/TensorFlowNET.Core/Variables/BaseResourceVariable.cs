@@ -163,11 +163,14 @@ namespace Tensorflow
         /// </summary>
         /// <returns></returns>
         protected Tensor read_value()
-            => tf_with(ops.name_scope("Read"), delegate
-            {
-                var value = _read_variable_op();
-                return array_ops.identity(value);
+        {
+            var value = tf_with(ops.name_scope("Read"), delegate
+            { 
+                return _read_variable_op(); 
             });
+            return array_ops.identity(value);
+        }
+            
 
         public Tensor assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true)
         {
