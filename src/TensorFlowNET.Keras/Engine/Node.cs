@@ -42,10 +42,10 @@ namespace Tensorflow.Keras.Engine
         public List<Tensor> KerasInputs { get; set; } = new List<Tensor>();
         public ILayer Layer { get; set; }
         public bool is_input => args.InputTensors == null;
-        public int[] FlatInputIds { get; set; }
-        public int[] FlatOutputIds { get; set; }
+        public long[] FlatInputIds { get; set; }
+        public long[] FlatOutputIds { get; set; }
         bool _single_positional_tensor_passed => KerasInputs.Count() == 1;
-        Dictionary<int, int> _keras_inputs_ids_and_indices = new Dictionary<int, int>();
+        Dictionary<int, long> _keras_inputs_ids_and_indices = new Dictionary<int, long>();
         public INode[] ParentNodes
         {
             get
@@ -70,7 +70,7 @@ namespace Tensorflow.Keras.Engine
                 KerasInputs.AddRange(args.InputTensors);
 
             foreach (var (i, ele) in enumerate(KerasInputs))
-                _keras_inputs_ids_and_indices[i] = ele.GetHashCode();
+                _keras_inputs_ids_and_indices[i] = ele.Id;
 
             // Wire up Node to Layers.
             layer.InboundNodes.Add(this);
@@ -89,8 +89,8 @@ namespace Tensorflow.Keras.Engine
                 tensor.KerasHistory = new KerasHistory(layer, node_index, i, tensor);
 
             // Cached for performance.
-            FlatInputIds = KerasInputs.Select(x => x.GetHashCode()).ToArray();
-            FlatOutputIds = Outputs.Select(x => x.GetHashCode()).ToArray();
+            FlatInputIds = KerasInputs.Select(x => x.Id).ToArray();
+            FlatOutputIds = Outputs.Select(x => x.Id).ToArray();
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         /// <param name="tensor_dict"></param>
         /// <returns></returns>
-        public Tensors MapArguments(Dictionary<int, Queue<Tensor>> tensor_dict)
+        public Tensors MapArguments(Dictionary<long, Queue<Tensor>> tensor_dict)
         {
             if (_single_positional_tensor_passed)
             {

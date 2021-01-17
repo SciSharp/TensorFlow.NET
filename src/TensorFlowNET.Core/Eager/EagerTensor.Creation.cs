@@ -4,7 +4,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
-    public partial class EagerTensor : Tensor
+    public partial class EagerTensor
     {
         public EagerTensor() : base(IntPtr.Zero)
         {
@@ -48,8 +48,8 @@ namespace Tensorflow.Eager
             if (_handle == IntPtr.Zero)
                 _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.Status.Handle);
 
-            //print($"new Tensor {Id} {_handle.ToString("x16")}");
-            //print($"new TensorHandle {Id} {EagerTensorHandle.ToString("x16")}");
+            // print($"New TensorHandle {Id} 0x{_handle.ToString("x16")}");
+            // print($"New EagerTensorHandle {Id} {EagerTensorHandle}");
 
             return this;
         }
@@ -96,14 +96,14 @@ namespace Tensorflow.Eager
         {
             base.DisposeManagedResources();
 
-            //print($"deleting DeleteTensorHandle {Id} {EagerTensorHandle.ToString("x16")}");
+            // print($"Delete EagerTensorHandle {Id} {EagerTensorHandle}");
             EagerTensorHandle.Dispose();
         }
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             base.DisposeUnmanagedResources(handle);
-            //print($"deleting DeleteTensorHandle {Id} {_handle.ToString("x16")}");
+            // print($"Delete TensorHandle {Id} 0x{_handle.ToString("x16")}");
         }
     }
 }
