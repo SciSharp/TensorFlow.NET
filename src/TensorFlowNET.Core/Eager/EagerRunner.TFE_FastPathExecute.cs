@@ -172,7 +172,7 @@ namespace Tensorflow.Eager
 
         SafeOpHandle GetOp(Context ctx, string op_or_function_name, Status status)
         {
-            if (thread_local_eager_operation_map.find(ctx, out var op))
+            /*if (thread_local_eager_operation_map.find(ctx, out var op))
                 c_api.TFE_OpReset(op, op_or_function_name, ctx.DeviceName, status.Handle);
             else
             {
@@ -181,7 +181,8 @@ namespace Tensorflow.Eager
             }
 
             status.Check(true);
-            return op;
+            return op;*/
+            return c_api.TFE_NewOp(ctx.Handle, op_or_function_name, status.Handle);
         }
 
         bool HasAccumulator()

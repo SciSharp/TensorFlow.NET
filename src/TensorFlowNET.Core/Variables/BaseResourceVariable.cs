@@ -162,7 +162,7 @@ namespace Tensorflow
         /// read the value only after some condition is true.
         /// </summary>
         /// <returns></returns>
-        Tensor read_value()
+        protected Tensor read_value()
             => tf_with(ops.name_scope("Read"), delegate
             {
                 var value = _read_variable_op();

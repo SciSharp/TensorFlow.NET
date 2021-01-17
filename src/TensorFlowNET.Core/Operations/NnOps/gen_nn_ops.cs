@@ -171,7 +171,7 @@ namespace Tensorflow.Operations
         }
 
         public static Tensor bias_add(Tensor value,
-            Tensor bias,
+            IVariableV1 bias,
             string data_format = null,
             string name = null)
         {
