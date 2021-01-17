@@ -140,7 +140,7 @@ namespace Tensorflow.Keras.Saving
                     if (get_Name.IndexOf("/") > 1) {
                         get_Name = get_Name.Split('/')[1];
                     }
-                    (bool success, Array result) = Hdf5.ReadDataset<float>(g, get_Name);
+                    (bool success, Array result) = Hdf5.ReadDataset<float>(g, get_Name, alternativeName: i_);
                     if (success)
                         weight_values.Add(np.array(result));
                 }
@@ -276,13 +276,13 @@ namespace Tensorflow.Keras.Saving
                     Hdf5.WriteDatasetFromArray<float>(f, name, data.numpy().ToMuliDimArray<float>());
                     break;
                 case TF_DataType.TF_DOUBLE:
-                    Hdf5.WriteDatasetFromArray<double>(f, name, data.numpy().ToMuliDimArray<float>());
+                    Hdf5.WriteDatasetFromArray<double>(f, name, data.numpy().ToMuliDimArray<double>());
                     break;
                 case TF_DataType.TF_INT32:
-                    Hdf5.WriteDatasetFromArray<int>(f, name, data.numpy().ToMuliDimArray<float>());
+                    Hdf5.WriteDatasetFromArray<int>(f, name, data.numpy().ToMuliDimArray<int>());
                     break;
                 case TF_DataType.TF_INT64:
-                    Hdf5.WriteDatasetFromArray<long>(f, name, data.numpy().ToMuliDimArray<float>());
+                    Hdf5.WriteDatasetFromArray<long>(f, name, data.numpy().ToMuliDimArray<long>());
                     break;
                 default:
                     Hdf5.WriteDatasetFromArray<float>(f, name, data.numpy().ToMuliDimArray<float>());
