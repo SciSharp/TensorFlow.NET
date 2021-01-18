@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using NumSharp;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -9,26 +12,35 @@ namespace Tensorflow
         public void WarmUp()
         {
             print($"tensorflow native version: v{tf.VERSION}");
+            var a = tf.constant(np.ones(10, 10));
+            var b = tf.Variable(a);
+            var c = tf.Variable(b);
+            var d = b * c;
+            print(d.numpy());
+
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            Thread.Sleep(1000);
         }
 
         public void Execute(int epoch, int iterate, Action<int> process)
         {
-            /*GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();*/
-
             print($"{process.Method.Name} started...");
-            for (int i = 0; i < epoch; i++)
-            {
-                var initialMemory = Process.GetCurrentProcess().PrivateMemorySize64;// GC.GetTotalMemory(true);
-                process(iterate);
-                var finalMemory = Process.GetCurrentProcess().PrivateMemorySize64; //GC.GetTotalMemory(true);
-                print($"Epoch {i}: {Format(finalMemory - initialMemory)}.");
-            }
 
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+            // new thread to run
+            Task.Run(() =>
+            {
+                for (int i = 0; i < epoch; i++)
+                {
+                    var initialMemory = Process.GetCurrentProcess().PrivateMemorySize64;// GC.GetTotalMemory(true);
+                    process(iterate);
+                    var finalMemory = Process.GetCurrentProcess().PrivateMemorySize64; //GC.GetTotalMemory(true);
+                    print($"Epoch {i}: {Format(finalMemory - initialMemory)}.");
+
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
+            }).Wait();
 
             print($"Total {process.Method.Name} usage {Format(Process.GetCurrentProcess().PrivateMemorySize64)}");
         }

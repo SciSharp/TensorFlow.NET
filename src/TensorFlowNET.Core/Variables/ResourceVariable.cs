@@ -26,18 +26,6 @@ namespace Tensorflow
     /// </summary>
     public partial class ResourceVariable : BaseResourceVariable, IVariableV1
     {
-        Tensor _cached_value;
-        public string Device => handle.Device;
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-        public Graph Graph => handle.graph;
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
-        public Operation op => handle.op;
-        public Tensor is_initialized_op { get; set; }
-
-        public ResourceVariable(IntPtr handle, IntPtr tensor) : base(handle, tensor)
-        {
-        }
-
         public ResourceVariable(object initial_value = null,
             bool trainable = true,
             List<string> collections = null,
@@ -150,7 +138,6 @@ namespace Tensorflow
                           graph_mode: _in_graph_mode);
 
                         gen_resource_variable_ops.assign_variable_op(handle, _initial_value);
-                        is_initialized_op = null;
                         initializer_op = null;
                         _graph_element = null;
                         _dtype = _initial_value.dtype.as_base_dtype();
@@ -199,8 +186,6 @@ namespace Tensorflow
             {
                 prepend_name_scope = ops.prepend_name_scope(variable_def.SnapshotName, import_scope: import_scope);
                 var snapshot = g.as_graph_element(prepend_name_scope) as Tensor;
-                if (snapshot.op.type != "ReadVariableOp")
-                    _cached_value = snapshot;
                 while (snapshot.op.type != "ReadVariableOp")
                     snapshot = snapshot.op.inputs[0];
                 _graph_element = snapshot;

@@ -13,7 +13,7 @@ namespace Tensorflow
     /// and Tensor[] from Tensors implicitily. 
     /// It works for tuple and scalar as well.
     /// </summary>
-    public class Tensors : IEnumerable<Tensor>
+    public class Tensors : IEnumerable<Tensor>, IDisposable
     {
         List<Tensor> items = new List<Tensor>();
 
@@ -90,5 +90,11 @@ namespace Tensorflow
             => items.Count() == 1
                ? items.First().ToString()
                : items.Count() + " Tensors" + ". " + string.Join(", ", items.Select(x => x.name));
+
+        public void Dispose()
+        {
+            foreach (var item in items)
+                item.Dispose();
+        }
     }
 }

@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using NumSharp;
+using NumSharp.Backends.Unmanaged;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -30,11 +31,6 @@ namespace Tensorflow
     [SuppressMessage("ReSharper", "InvokeAsExtensionMethod")]
     public partial class Tensor
     {
-        /// <summary>
-        ///     When Tensor was created from an object that is managed by C#'s GC - this will hold reference to prevent it from being collected.
-        /// </summary>
-        protected object AllocationReferenceHolder;
-
         /// <summary>
         ///     The handle that was used to allocate this tensor, dependent on <see cref="AllocationType"/>.
         /// </summary>
@@ -545,33 +541,34 @@ namespace Tensorflow
                 return;
             }
 
-            _handle = CreateTensorFromNDArray(nd, tensorDType);
+            CreateTensorFromNDArray(nd, tensorDType);
         }
 
-        private unsafe IntPtr CreateTensorFromNDArray(NDArray nd, TF_DataType? given_dtype)
+        private unsafe void CreateTensorFromNDArray(NDArray nd, TF_DataType? given_dtype)
         {
             if (nd.typecode == NPTypeCode.String)
                 throw new NotImplementedException("Support for NDArray of type string not implemented yet");
 
             var arraySlice = nd.Unsafe.Storage.Shape.IsContiguous ? nd.GetData() : nd.CloneData();
 
-            var handle = TF_NewTensor(
+            _handle = TF_NewTensor(
                 given_dtype ?? nd.dtype.as_dtype(),
                 dims: nd.shape.Select(i => (long)i).ToArray(),
                 num_dims: nd.ndim,
                 data: arraySlice.Address,
                 len: (ulong)(nd.size * nd.dtypesize));
 
-            //if TF decided not to perform copy, hold reference for given NDArray.
-            if (TF_TensorData(handle).ToPointer() == arraySlice.Address)
+            // if TF decided not to perform copy, hold reference for given NDArray.
+            if (TensorDataPointer.ToPointer() == arraySlice.Address)
             {
                 AllocationType = AllocationType.FromPointer;
-                AllocationReferenceHolder = arraySlice;
+                AllocationHandle = arraySlice;
+#if TRACK_TENSOR_LIFE
+                print($"New Tensor {Id} {AllocationType} 0x{TensorDataPointer.ToString("x16")}");
+#endif
             }
             else
                 AllocationType = AllocationType.Tensorflow;
-
-            return handle;
         }
 
         public Tensor(Operation op, int value_index, TF_DataType dtype)

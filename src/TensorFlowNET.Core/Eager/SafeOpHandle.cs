@@ -16,6 +16,7 @@
 
 using System;
 using Tensorflow.Util;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
@@ -23,15 +24,22 @@ namespace Tensorflow.Eager
     {
         private SafeOpHandle()
         {
+
         }
 
         public SafeOpHandle(IntPtr handle)
             : base(handle)
         {
+#if TRACK_TENSOR_LIFE
+            print($"Get OpHandle 0x{handle.ToString("x16")}");
+#endif
         }
 
         protected override bool ReleaseHandle()
         {
+#if TRACK_TENSOR_LIFE
+            print($"Delete OpHandle 0x{handle.ToString("x16")}");
+#endif
             c_api.TFE_DeleteOp(handle);
             SetHandle(IntPtr.Zero);
             return true;

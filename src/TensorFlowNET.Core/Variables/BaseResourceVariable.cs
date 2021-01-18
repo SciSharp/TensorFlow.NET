@@ -43,7 +43,7 @@ namespace Tensorflow
         public Operation Initializer => initializer_op;
         public Operation Op => handle.op;
         public Graph Graph => handle.graph;
-        public string Device => "";
+        public string Device => handle.Device;
 
         public BaseResourceVariable()
         {

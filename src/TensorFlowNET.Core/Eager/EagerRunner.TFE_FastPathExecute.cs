@@ -158,7 +158,7 @@ namespace Tensorflow.Eager
             c_api.TFE_Execute(op, retVals, out num_retvals, status.Handle);
             status.Check(true);
 
-            var flat_result = retVals.Select(x => new EagerTensor(x)).ToArray();
+            var flat_result = retVals.Select(x => new EagerTensor(x, op)).ToArray();
 
             if (op_exec_info.run_callbacks)
             {
@@ -182,7 +182,11 @@ namespace Tensorflow.Eager
 
             status.Check(true);
             return op;*/
-            return c_api.TFE_NewOp(ctx.Handle, op_or_function_name, status.Handle);
+            var op = c_api.TFE_NewOp(ctx.Handle, op_or_function_name, status.Handle);
+#if TRACK_TENSOR_LIFE
+            print($"New OpHandle 0x{op.DangerousGetHandle().ToString("x16")}");
+#endif
+            return op;
         }
 
         bool HasAccumulator()
@@ -219,22 +223,18 @@ namespace Tensorflow.Eager
             SafeOpHandle op,
             Status status)
         {
-            SafeTensorHandleHandle input_handle;
-
-            // ConvertToTensor();
             var tensor = tf.convert_to_tensor(inputs);
-            input_handle = tensor.EagerTensorHandle;
             flattened_inputs.Add(tensor);
 
             if (add_type_attr && !string.IsNullOrEmpty(input_arg.TypeAttr))
             {
-                var dtype = c_api.TFE_TensorHandleDataType(input_handle);
+                var dtype = c_api.TFE_TensorHandleDataType(tensor.EagerTensorHandle);
                 c_api.TFE_OpSetAttrType(op, input_arg.TypeAttr, dtype);
                 flattened_attrs.Add(input_arg.TypeAttr);
                 flattened_attrs.Add(dtype);
             }
 
-            c_api.TFE_OpAddInput(op, input_handle, status.Handle);
+            c_api.TFE_OpAddInput(op, tensor.EagerTensorHandle, status.Handle);
             status.Check(true);
 
             return true;

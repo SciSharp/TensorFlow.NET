@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using NumSharp;
+using NumSharp.Backends.Unmanaged;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -253,30 +254,43 @@ namespace Tensorflow
         /// <remarks>Equivalent to what you would perform inside <see cref="DisposableObject.Dispose"/></remarks>
         protected override void DisposeManagedResources()
         {
-            AllocationReferenceHolder = null;
+
         }
 
         [SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
-            c_api.TF_DeleteTensor(handle);
-            if (AllocationHandle == null)
-                return;
+            if (AllocationHandle != null)
+            {
 
-            if (AllocationType == AllocationType.GCHandle)
-            {
-                ((GCHandle)AllocationHandle).Free();
-                AllocationHandle = null;
-                AllocationType = AllocationType.None;
+#if TRACK_TENSOR_LIFE
+                print($"Delete AllocationHandle.{AllocationType} 0x{TensorDataPointer.ToString("x16")}");
+#endif
+                if (AllocationType == AllocationType.GCHandle)
+                {
+                    ((GCHandle)AllocationHandle).Free();
+                    AllocationHandle = null;
+                    AllocationType = AllocationType.None;
+                }
+                else if (AllocationType == AllocationType.Marshal)
+                {
+                    Marshal.FreeHGlobal((IntPtr)AllocationHandle);
+                    AllocationHandle = null;
+                    AllocationType = AllocationType.None;
+                }
+                else if (AllocationType == AllocationType.FromPointer)
+                {
+                    AllocationHandle = null;
+                    AllocationType = AllocationType.None;
+                }
+                else
+                    throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
             }
-            else if (AllocationType == AllocationType.Marshal)
-            {
-                Marshal.FreeHGlobal((IntPtr)AllocationHandle);
-                AllocationHandle = null;
-                AllocationType = AllocationType.None;
-            }
-            else
-                throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
+
+#if TRACK_TENSOR_LIFE
+            print($"Delete TensorHandle 0x{handle.ToString("x16")}");
+#endif
+            c_api.TF_DeleteTensor(handle);
         }
 
         public virtual IntPtr ToPointer()

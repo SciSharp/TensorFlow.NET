@@ -16,6 +16,7 @@
 
 using System;
 using Tensorflow.Util;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
@@ -32,6 +33,9 @@ namespace Tensorflow.Eager
 
         protected override bool ReleaseHandle()
         {
+#if TRACK_TENSOR_LIFE
+            print($"Delete EagerTensorHandle 0x{handle.ToString("x16")}");
+#endif
             c_api.TFE_DeleteTensorHandle(handle);
             SetHandle(IntPtr.Zero);
             return true;

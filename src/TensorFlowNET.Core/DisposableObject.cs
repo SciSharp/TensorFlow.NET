@@ -22,6 +22,7 @@ namespace Tensorflow
 {
     /// <summary>
     /// Abstract class for disposable object allocated in unmanaged runtime.
+    /// https://docs.microsoft.com/en-us/dotnet/api/system.idisposable.dispose?redirectedfrom=MSDN&view=net-5.0#System_IDisposable_Dispose
     /// </summary>
     public abstract class DisposableObject : IDisposable
     {
@@ -36,24 +37,31 @@ namespace Tensorflow
             => _handle = handle;
 
         [SuppressMessage("ReSharper", "InvertIf")]
-        private void internal_dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (_disposed)
                 return;
 
-            _disposed = true;
-
             //first handle managed, they might use the unmanaged resources.
             if (disposing)
+            {
                 // dispose managed state (managed objects).
                 DisposeManagedResources();
+            }
 
-            //free unmanaged memory
+            // free unmanaged memory
             if (_handle != IntPtr.Zero)
             {
+                // Call the appropriate methods to clean up
+                // unmanaged resources here.
+                // If disposing is false,
+                // only the following code is executed.
                 DisposeUnmanagedResources(_handle);
                 _handle = IntPtr.Zero;
             }
+
+            // Note disposing has been done.
+            _disposed = true;
         }
 
         /// <summary>
@@ -68,29 +76,20 @@ namespace Tensorflow
         /// </summary>
         protected abstract void DisposeUnmanagedResources(IntPtr handle);
 
-        ~DisposableObject()
-        {
-            internal_dispose(false);
-        }
-
         public void Dispose()
         {
-            lock (this)
-            {
-                internal_dispose(true);
-                GC.SuppressFinalize(this);
-            }
+            Dispose(true);
+            // This object will be cleaned up by the Dispose method.
+            // Therefore, you should call GC.SupressFinalize to
+            // take this object off the finalization queue
+            // and prevent finalization code for this object
+            // from executing a second time.
+            GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        ///     If <see cref="_handle"/> is <see cref="IntPtr.Zero"/> then throws <see cref="ObjectDisposedException"/>
-        /// </summary>
-        /// <exception cref="ObjectDisposedException">When <see cref="_handle"/> is <see cref="IntPtr.Zero"/></exception>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected void EnsureNotDisposed()
+        ~DisposableObject()
         {
-            if (_disposed)
-                throw new ObjectDisposedException($"Unable to access disposed object, Type: {GetType().Name}");
+            Dispose(false);
         }
     }
 }
