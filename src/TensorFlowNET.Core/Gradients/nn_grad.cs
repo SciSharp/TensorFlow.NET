@@ -111,7 +111,7 @@ namespace Tensorflow.Gradients
               "implementation's interaction with tf.gradients()");
 
             var grad_0 = grads[0];
-
+            
             return new Tensor[]
             {
                 _BroadcastMul(grad_0, sparse_softmax_grad_without_gradient),
@@ -119,6 +119,18 @@ namespace Tensorflow.Gradients
             };
         }
 
+        [RegisterGradient("SquaredDifference")]
+        public static Tensor[] _SquaredDifferenceGrad(Operation op, Tensor[] grads)
+        {
+           //"""Returns the gradient for (x-y)^2."""
+            Tensor x = op.inputs[0];
+            Tensor y = op.inputs[1];
+            return new Tensor[]
+            {
+                x,
+                y
+            };
+        }
         /// <summary>
         /// Gradient function for Conv2D.
         /// </summary>
