@@ -100,6 +100,9 @@ namespace Tensorflow
             if (read_value)
                 return gen_resource_variable_ops.read_variable_op(handle, dtype);
 
+            if (assign_op == null)
+                return null;
+
             return assign_op;
         }
 

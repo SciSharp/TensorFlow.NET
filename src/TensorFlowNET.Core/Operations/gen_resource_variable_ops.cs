@@ -63,7 +63,7 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "AssignVariableOp", name,
                     null,
                     resource, value);

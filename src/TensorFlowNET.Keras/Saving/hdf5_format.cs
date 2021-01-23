@@ -71,18 +71,20 @@ namespace Tensorflow.Keras.Saving
             var target_class = layer.GetType().Name;
             return weights;
         }
+
         public static void save_optimizer_weights_to_hdf5_group(long filepath = -1, Dictionary<string, object> custom_objects = null, bool compile = false)
         {
 
         }
+
         public static void load_optimizer_weights_from_hdf5_group(long filepath = -1, Dictionary<string, object> custom_objects = null, bool compile = false)
         {
 
         }
 
-        public static void load_weights_from_hdf5_group(long f, List<ILayer> layers)
+        public static List<(IVariableV1, NDArray)> load_weights_from_hdf5_group(long f, List<ILayer> layers)
         {
-            string original_keras_version = "2.4.0";
+            string original_keras_version = "2.5.0";
             string original_backend = null;
             if (Hdf5.AttributeExists(f, "keras_version"))
             {
@@ -156,15 +158,19 @@ namespace Tensorflow.Keras.Saving
             }
 
             keras.backend.batch_set_value(weight_value_tuples);
+            return weight_value_tuples;
         }
+
         public static void toarrayf4(long filepath = -1, Dictionary<string, object> custom_objects = null, bool compile = false)
         {
 
         }
+
         public static void load_weights_from_hdf5_group_by_name(long filepath = -1, Dictionary<string, object> custom_objects = null, bool compile = false)
         {
 
         }
+
         public static void save_weights_to_hdf5_group(long f, List<ILayer> layers)
         {
             List<string> layerName=new List<string>();
@@ -260,8 +266,8 @@ namespace Tensorflow.Keras.Saving
                 WriteAttrs(f, getType,name, data);
               
             }
-
         }
+
         private static void WriteDataset(long f,  string name, Tensor data)
         {
             switch (data.dtype)
@@ -283,6 +289,7 @@ namespace Tensorflow.Keras.Saving
                     break;
             }
         }
+
         private static void WriteAttrs(long f,string typename, string name, Array data)
         {
             switch (typename)
@@ -307,6 +314,7 @@ namespace Tensorflow.Keras.Saving
                     break;
             }
         }
+
         private static List<List<object>> Split(Array list, int chunkSize)
         {
             var splitList = new List<List<object>>();
@@ -327,6 +335,7 @@ namespace Tensorflow.Keras.Saving
 
             return splitList;
         }
+
         public static string[] load_attributes_from_hdf5_group(long group, string name)
         {
             if (Hdf5.AttributeExists(group, name))
@@ -337,6 +346,7 @@ namespace Tensorflow.Keras.Saving
             }
             return null;
         }
+
         public static void load_attributes_from_hdf5_group(long filepath = -1, Dictionary<string, object> custom_objects = null, bool compile = false)
         {
 

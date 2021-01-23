@@ -7,7 +7,7 @@ namespace Tensorflow.Eager
 {
     public partial class EagerTensor
     {
-        public EagerTensor(SafeTensorHandleHandle handle) : base(IntPtr.Zero)
+        public EagerTensor(SafeTensorHandleHandle handle)
         {
             _id = ops.uid();
             EagerTensorHandle = handle;

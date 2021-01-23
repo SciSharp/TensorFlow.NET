@@ -163,6 +163,9 @@ namespace Tensorflow
                     break;
                 case TF_DataType.TF_STRING:
                     return np.array(StringBytes()[0]);
+                case TF_DataType.TF_UINT8:
+                    storage = new UnmanagedStorage(NPTypeCode.Byte);
+                    break;
                 case TF_DataType.TF_INT32:
                     storage = new UnmanagedStorage(NPTypeCode.Int32);
                     break;
@@ -186,23 +189,6 @@ namespace Tensorflow
             return new NDArray(storage);
         }
 
-        /*protected unsafe NDArray GetScalar(TF_DataType dtype)
-        {
-            switch(dtype)
-            {
-                case TF_DataType.TF_STRING:
-                    return (NDArray)StringData()[0];
-                case TF_DataType.TF_INT32:
-                    return *(int*)buffer;
-                case TF_DataType.TF_FLOAT:
-                    return *(float*)buffer;
-                case TF_DataType.TF_DOUBLE:
-                    return *(double*)buffer;
-                default:
-                    return BufferToArray();
-            }
-        }*/
-
         /// <summary>
         /// Copies the memory of current buffer onto newly allocated array.
         /// </summary>
@@ -210,7 +196,6 @@ namespace Tensorflow
         public unsafe byte[] BufferToArray()
         {
             // ReSharper disable once LocalVariableHidesMember
-            var bytesize = (long)this.bytesize;
             var data = new byte[bytesize];
             fixed (byte* dst = data)
                 System.Buffer.MemoryCopy(buffer.ToPointer(), dst, bytesize, bytesize);

@@ -48,6 +48,11 @@ namespace Tensorflow
 
         public IntPtr TensorDataPointer => _handle == IntPtr.Zero ? IntPtr.Zero : TF_TensorData(_handle);
 
+        public Tensor()
+        {
+
+        }
+
         /// <summary>
         ///     Create a Tensor object from an existing TF handle
         /// </summary>
@@ -56,6 +61,9 @@ namespace Tensorflow
         {
             _handle = handle;
             //no need to set AllocationType = AllocationType.None;
+#if TRACK_TENSOR_LIFE
+            print($"New Tensor 0x{_handle.ToString("x16")} {AllocationType} String Data: 0x{TensorDataPointer.ToString("x16")}");
+#endif
         }
 
         public Tensor(int value)

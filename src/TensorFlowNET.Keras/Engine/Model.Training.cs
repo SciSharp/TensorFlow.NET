@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using HDF.PInvoke;
 using HDF5CSharp;
+using NumSharp;
 using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Engine
 {
      public partial class Model
     {
-        public void load_weights(string filepath, bool by_name = false, bool skip_mismatch = false, object options = null)
+        public List<(IVariableV1, NDArray)> load_weights(string filepath, bool by_name = false, bool skip_mismatch = false, object options = null)
         {
             long fileId = Hdf5.OpenFile(filepath, true);
 
@@ -17,20 +18,20 @@ namespace Tensorflow.Keras.Engine
             bool lsuccess = Hdf5.GroupExists(fileId, "layer_names");
 
             if (!lsuccess && msuccess)
-            {
                 fileId = H5G.open(fileId, "model_weights");
-            }
+
             if (by_name)
-            {
                 //fdf5_format.load_weights_from_hdf5_group_by_name();
                 throw new NotImplementedException("");
-            }
             else
             {
-                hdf5_format.load_weights_from_hdf5_group(fileId, Layers);
+                var weights = hdf5_format.load_weights_from_hdf5_group(fileId, Layers);
+                Hdf5.CloseFile(fileId);
+                // return a reference to prevent GC collect Variable.
+                return weights;
             }
-            Hdf5.CloseFile(fileId);
         }
+
         public void save_weights(string filepath, bool overwrite = true, string save_format = null, object options = null)
         {
             long fileId = Hdf5.CreateFile(filepath);
