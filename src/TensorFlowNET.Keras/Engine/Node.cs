@@ -40,7 +40,8 @@ namespace Tensorflow.Keras.Engine
         public TensorShape[] input_shapes;
         public TensorShape[] output_shapes;
         public List<Tensor> KerasInputs { get; set; } = new List<Tensor>();
-        public ILayer Layer { get; set; }
+        ILayer _layer;
+        public ILayer Layer => _layer;
         public bool is_input => args.InputTensors == null;
         public long[] FlatInputIds { get; set; }
         public long[] FlatOutputIds { get; set; }
@@ -61,19 +62,24 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        public Node(Layer layer, NodeArgs args)
+        public Node(NodeArgs args)
         {
             this.args = args;
-            this.Layer = layer;
+        }
+
+        public void Connect(Layer layer)
+        {
+            _layer = layer;
 
             if (args.InputTensors != null)
                 KerasInputs.AddRange(args.InputTensors);
-
+            
             foreach (var (i, ele) in enumerate(KerasInputs))
                 _keras_inputs_ids_and_indices[i] = ele.Id;
 
             // Wire up Node to Layers.
             layer.InboundNodes.Add(this);
+            
             foreach (var kt in KerasInputs)
             {
                 if (kt.KerasHistory == null)
@@ -86,7 +92,7 @@ namespace Tensorflow.Keras.Engine
             // Set metadata on outputs.
             var node_index = layer.InboundNodes.Count - 1;
             foreach (var (i, tensor) in enumerate(Outputs))
-                tensor.KerasHistory = new KerasHistory(layer, node_index, i, tensor);
+                tensor.KerasHistory = new KerasHistory(layer, node_index, i);
 
             // Cached for performance.
             FlatInputIds = KerasInputs.Select(x => x.Id).ToArray();

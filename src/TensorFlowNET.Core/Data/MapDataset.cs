@@ -15,7 +15,7 @@ namespace Tensorflow
             bool preserve_cardinality = false,
             bool use_legacy_function = false) : base(input_dataset)
         {
-            using var func = new ConcreteFunction($"{map_func.Method.Name}_{Guid.NewGuid()}");
+            var func = new ConcreteFunction($"{map_func.Method.Name}_{Guid.NewGuid()}");
             func.Enter();
             var input = tf.placeholder(input_dataset.element_spec[0].dtype);
             var output = map_func(input);

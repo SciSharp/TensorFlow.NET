@@ -13,8 +13,7 @@ namespace Tensorflow.Graphs
     /// </summary>
     public class FuncGraph : Graph
     {
-        // _handle == IntPtr.Zero ? string.Empty : c_api.StringPiece(c_api.TF_FunctionName(_handle));
-        IntPtr func_handle;
+        IntPtr _func_graph_handle;
         public string FuncName => _graph_key;
 
         public Tensors Inputs { get; set; } = new Tensors();
@@ -60,12 +59,12 @@ namespace Tensorflow.Graphs
             _handle = handle;
         }
 
-        public IntPtr ToGraph(Operation[] opers,
+        public void ToGraph(Operation[] opers,
             Tensor[] inputs, Tensor[] outputs,
             string[] output_names)
         {
-            using var status = new Status();
-            func_handle = c_api.TF_GraphToFunction(_handle,
+            var status = new Status();
+            _func_graph_handle = c_api.TF_GraphToFunction(_handle,
                 _graph_key,
                 false,
                 opers.Length,
@@ -82,19 +81,17 @@ namespace Tensorflow.Graphs
 
             SetAttrs();
 
-            c_api.TF_GraphCopyFunction(outer_graph, func_handle, IntPtr.Zero, status.Handle);
+            // c_api.TF_GraphCopyFunction(outer_graph, _func_graph_handle, IntPtr.Zero, status.Handle);
+            // status.Check(true);
+
+            c_api.TFE_ContextAddFunction(tf.Context.Handle, _func_graph_handle, status.Handle);
             status.Check(true);
 
-            c_api.TFE_ContextAddFunction(tf.Context.Handle, func_handle, status.Handle);
-            status.Check(true);
-
-            _graph_key = c_api.StringPiece(c_api.TF_FunctionName(func_handle));
+            _graph_key = c_api.StringPiece(c_api.TF_FunctionName(_func_graph_handle));
 
             Inputs = inputs;
             // mark_as_return
             Outputs = outputs;// .Select(x => array_ops.identity(x)).ToArray();
-
-            return func_handle;
         }
 
         public override Operation create_op(string op_type, Tensor[] inputs, TF_DataType[] dtypes, TF_DataType[] input_types = null, string name = null, Dictionary<string, AttrValue> attrs = null, OpDef op_def = null, bool compute_device = true)
@@ -233,7 +230,7 @@ namespace Tensorflow.Graphs
                 {
                     S = ByteString.CopyFromUtf8(attr_value)
                 }.ToByteArray();
-                c_api.TF_FunctionSetAttrValueProto(func_handle, _name, serialized, serialized.Length, tf.Status.Handle);
+                c_api.TF_FunctionSetAttrValueProto(_func_graph_handle, _name, serialized, serialized.Length, tf.Status.Handle);
                 tf.Status.Check(true);
             }
         }
@@ -249,6 +246,13 @@ namespace Tensorflow.Graphs
         {
             tf.Context.restore_mode();
             ops.pop_graph();
+        }
+
+        protected override void DisposeUnmanagedResources(IntPtr handle)
+        {
+            c_api.TFE_ContextRemoveFunction(tf.Context.Handle, _graph_key, tf.Status.Handle);
+            c_api.TF_DeleteFunction(_func_graph_handle);
+            base.DisposeUnmanagedResources(handle);
         }
     }
 }

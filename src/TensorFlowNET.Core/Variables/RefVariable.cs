@@ -344,7 +344,7 @@ namespace Tensorflow
                 return assign;
             return assign.op;
         }
-
+        
         public override string ToString()
         {
             return $"tf.RefVariable '{Name}' shape={shape} dtype={dtype}";

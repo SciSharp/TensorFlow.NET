@@ -120,15 +120,14 @@ namespace Tensorflow.Keras.Engine
         public void SetConnectivityMetadata(Tensors inputs, Tensors outputs)
             => _set_connectivity_metadata_(inputs, outputs);
 
-        private Tensors _set_connectivity_metadata_(Tensors inputs, Tensors outputs)
+        private void _set_connectivity_metadata_(Tensors inputs, Tensors outputs)
         {
-            new Node(this, new NodeArgs
+            var node = new Node(new NodeArgs
             {
                 InputTensors = inputs,
                 Outputs = outputs
             });
-
-            return outputs;
+            node.Connect(this);
         }
 
         private void _handle_activity_regularization(Tensors inputs, Tensors outputs)

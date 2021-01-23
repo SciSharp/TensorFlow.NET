@@ -21,10 +21,17 @@ namespace Tensorflow
 {
     public class gen_logging_ops
     {
-        public static Operation _assert(Tensor condition, object[] data, long? summarize = 3, string name = null)
+        public static Operation assert(Tensor condition, object[] data, long summarize = 3, string name = null)
         {
-            if (!summarize.HasValue)
-                summarize = 3;
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Assert", name,
+                    null,
+                    new object[] { condition, data, summarize });
+
+                return results[0];
+            }
 
             var _op = tf.OpDefLib._apply_op_helper("Assert", name, args: new { condition, data, summarize });
 

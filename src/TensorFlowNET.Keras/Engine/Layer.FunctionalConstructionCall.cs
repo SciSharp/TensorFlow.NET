@@ -40,8 +40,8 @@ namespace Tensorflow.Keras.Engine
                     throw new NotImplementedException("");
 
                 outputs = Call(inputs);
-
-                outputs = _set_connectivity_metadata_(inputs, outputs);
+                
+                _set_connectivity_metadata_(inputs, outputs);
                 _handle_activity_regularization(inputs, outputs);
                 _set_mask_metadata(inputs, outputs, null);
             });

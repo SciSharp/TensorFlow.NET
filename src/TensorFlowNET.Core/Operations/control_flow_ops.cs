@@ -65,7 +65,7 @@ namespace Tensorflow
                 return gen_control_flow_ops.next_iteration(data, name: name);
         }
 
-        public static Operation Assert(Tensor condition, object[] data, long? summarize = null, string name = null)
+        public static Operation Assert(Tensor condition, object[] data, long summarize = 3, string name = null)
         {
             if (tf.executing_eagerly())
             {
@@ -82,7 +82,7 @@ namespace Tensorflow
                 condition = ops.convert_to_tensor(condition, name: "Condition");
                 Func<Operation[]> true_assert = () =>
                 {
-                    var assert = gen_logging_ops._assert(condition, data, summarize, name: "Assert");
+                    var assert = gen_logging_ops.assert(condition, data, summarize, name: "Assert");
                     return new Operation[] { assert };
                 };
 

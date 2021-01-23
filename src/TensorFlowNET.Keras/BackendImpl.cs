@@ -118,10 +118,20 @@ namespace Tensorflow.Keras
         {
             tf.Context.reset_context();
             reset_uids();
-            ops.set_default_session(tf.Session(ops.get_default_graph()));
             // var phase = tf.placeholder_with_default(false, new int[] { }, name: "keras_learning_phase");
-            _GRAPH_LEARNING_PHASES = new Dictionary<Graph, GraphLearningPhase>();
-            _GRAPH_LEARNING_PHASES[tf.get_default_graph()] = 0;
+            if (_GRAPH_LEARNING_PHASES != null)
+                _GRAPH_LEARNING_PHASES.Clear();
+            if (_GRAPH_LEARNING_PHASES != null)
+                _GRAPH_LEARNING_PHASES.Clear();
+            PER_GRAPH_LAYER_NAME_UIDS.Clear();
+            _CURRENT_SCRATCH_GRAPH = null;
+            _GRAPH = null;
+            
+            ops.set_default_session(tf.Session(ops.get_default_graph()));
+            tf.enable_eager_execution();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
         public void manual_variable_initialization(bool value)
         {
@@ -147,7 +157,7 @@ namespace Tensorflow.Keras
             if (ops.executing_eagerly_outside_functions())
             {
                 foreach (var (x, value) in tuples)
-                    x.assign(value);
+                    x.assign(value, read_value: false);
             }
             else
             {

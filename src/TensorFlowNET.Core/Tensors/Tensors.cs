@@ -43,6 +43,11 @@ namespace Tensorflow
             items.AddRange(tensors);
         }
 
+        public Tensors(IEnumerable<Tensor> tensors)
+        {
+            items.AddRange(tensors);
+        }
+
         public Tensors(NDArray nd)
         {
             items.Add(ops.convert_to_tensor(nd));

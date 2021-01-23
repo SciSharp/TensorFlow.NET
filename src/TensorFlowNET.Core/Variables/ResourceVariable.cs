@@ -78,8 +78,7 @@ namespace Tensorflow
             tf_with(ops.init_scope(), init_scope =>
             {
                 _in_graph_mode = !tf.Context.executing_eagerly();
-                var values = init_from_fn ? new object[0] : new object[] { initial_value };
-                tf_with(ops.name_scope(name, "Variable", values, skip_on_eager: false), scope =>
+                tf_with(ops.name_scope(name, "Variable", initial_value, skip_on_eager: false), scope =>
                 {
                     name = scope;
                     var handle_name = ops.name_from_scope_name(name);
@@ -103,19 +102,17 @@ namespace Tensorflow
                     tf_with(ops.name_scope("Initializer"), delegate
                     {
                         if (initial_value.GetType().GetInterface("IInitializer") != null)
-                            initial_value = ops.convert_to_tensor((initial_value as IInitializer).Apply(new InitializerArgs(shape, dtype: dtype)));
+                            _initial_value = ops.convert_to_tensor((initial_value as IInitializer).Apply(new InitializerArgs(shape, dtype: dtype)));
                         else
                         {
                             var value = init_from_fn ? (initial_value as Func<Tensor>)() : initial_value;
-                            initial_value = ops.convert_to_tensor(value,
+                            _initial_value = ops.convert_to_tensor(value,
                                 name: "initial_value",
                                 dtype: dtype);
                         }
                     });
-                    _shape = shape ?? (initial_value as Tensor).TensorShape;
-                    _initial_value = initial_value as Tensor;
 
-
+                    _shape = shape ?? _initial_value.TensorShape;
 
                     if (_in_graph_mode)
                     {
@@ -141,7 +138,7 @@ namespace Tensorflow
                         initializer_op = null;
                         _graph_element = null;
                         _dtype = _initial_value.dtype.as_base_dtype();
-                        initial_value = _in_graph_mode ? initial_value : null;
+                        // initial_value = _in_graph_mode ? initial_value : null;
                     }
 
                     base.__init__(trainable: trainable,

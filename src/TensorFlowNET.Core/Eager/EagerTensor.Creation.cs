@@ -1,57 +1,56 @@
 ﻿using NumSharp;
 using System;
+using System.Linq;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
     public partial class EagerTensor
     {
-        SafeOpHandle _opHandle;
-
-        public EagerTensor(SafeTensorHandleHandle handle, SafeOpHandle opHandle) : base(IntPtr.Zero)
+        public EagerTensor(SafeTensorHandleHandle handle) : base(IntPtr.Zero)
         {
-            _opHandle = opHandle;
+            _id = ops.uid();
             EagerTensorHandle = handle;
             Resolve();
         }
 
         public EagerTensor(string value, string device_name) : base(value)
         {
-            SetEagerTensorHandleAndResolve();
+            NewEagerTensorHandle(_handle);
         }
 
         public EagerTensor(byte[] value, string device_name, TF_DataType dtype) : base(value, dType: dtype)
         {
-            SetEagerTensorHandleAndResolve();
+            NewEagerTensorHandle(_handle);
         }
 
         public EagerTensor(string[] value, string device_name) : base(value)
         {
-            SetEagerTensorHandleAndResolve();
+            NewEagerTensorHandle(_handle);
         }
 
         public EagerTensor(NDArray value, string device_name) : base(value)
         {
-            SetEagerTensorHandleAndResolve();
+            NewEagerTensorHandle(_handle);
         }
 
-        void SetEagerTensorHandleAndResolve()
-        {
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
-            Resolve();
-        }
-
-        public EagerTensor Resolve()
+        void NewEagerTensorHandle(IntPtr h)
         {
             _id = ops.uid();
-
-            if (_handle == IntPtr.Zero)
-                _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.Status.Handle);
+            EagerTensorHandle = c_api.TFE_NewTensorHandle(h, tf.Status.Handle);
+            tf.Status.Check(true);
 #if TRACK_TENSOR_LIFE
-            print($"New TensorHandle {Id} 0x{_handle.ToString("x16")}");
-            print($"New EagerTensorHandle {Id} {EagerTensorHandle}");
+            print($"New EagerTensorHandle {EagerTensorHandle} {Id} From 0x{h.ToString("x16")}");
 #endif
-            return this;
+        }
+
+        private void Resolve()
+        {
+            _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.Status.Handle);
+            tf.Status.Check(true);
+#if TRACK_TENSOR_LIFE
+            print($"Take EagerTensorHandle {EagerTensorHandle} {Id} Resolving 0x{_handle.ToString("x16")}");
+#endif
         }
 
         /// <summary>
@@ -80,22 +79,10 @@ namespace Tensorflow.Eager
             }
         }
 
-        public override IntPtr ToPointer()
-            => EagerTensorHandle?.DangerousGetHandle() ?? IntPtr.Zero;
-
-        protected override void DisposeManagedResources()
-        {
-            base.DisposeManagedResources();
-        }
-
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             base.DisposeUnmanagedResources(handle);
-            
             EagerTensorHandle.Dispose();
-
-            if (_opHandle != null)
-                _opHandle.Dispose();
         }
     }
 }

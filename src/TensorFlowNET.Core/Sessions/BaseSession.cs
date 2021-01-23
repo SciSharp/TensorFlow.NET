@@ -456,11 +456,6 @@ namespace Tensorflow
         private void _extend_graph()
         { }
 
-        public void close()
-        {
-            Dispose();
-        }
-
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             lock (Locks.ProcessWide)

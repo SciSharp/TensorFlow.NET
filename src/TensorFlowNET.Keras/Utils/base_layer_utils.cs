@@ -42,15 +42,13 @@ namespace Tensorflow.Keras.Utils
             Func<Tensor> init_val = () => args.Initializer.Apply(new InitializerArgs(args.Shape, dtype: args.DType));
 
             var variable_dtype = args.DType.as_base_dtype();
-            var v = tf.Variable(init_val,
+            return tf.Variable(init_val,
                 dtype: variable_dtype,
                 shape: args.Shape,
                 name: args.Name,
                 trainable: args.Trainable,
                 validate_shape: args.ValidateShape,
                 use_resource: args.UseResource);
-
-            return v;
         }
 
         /// <summary>

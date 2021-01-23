@@ -101,7 +101,7 @@ namespace Tensorflow
             foreach (var op_input in op_input_list)
             {
                 // Determine if this is a valid graph_element.
-                var graph_element = op_input;
+                // var graph_element = op_input;
             }
 
             return get_default_graph();

@@ -26,7 +26,7 @@ namespace Tensorflow
     /// </summary>
     public static class resource_variable_ops
     {
-        public static ITensorOrOperation shape_safe_assign_variable_handle(Tensor handle, int[] shape, Tensor value, string name = null)
+        public static Operation shape_safe_assign_variable_handle(Tensor handle, int[] shape, Tensor value, string name = null)
         {
             var value_tensor = ops.convert_to_tensor(value);
             return gen_resource_variable_ops.assign_variable_op(handle,
@@ -96,8 +96,10 @@ namespace Tensorflow
                 // We create an assert Op instead of checking right away in order to be
                 // compatible with ASYNC execution mode. Further, since not all devices
                 // support string tensors, we encode the assertion string in the Op name
-                /*gen_logging_ops._assert(
-                    math_ops.logical_not(exists), [exists], name = "EagerVariableNameReuse");*/
+                /*gen_logging_ops.assert(gen_math_ops.logical_not(exists),
+                    new[] { exists },
+                    name: "EagerVariableNameReuse");*/
+
                 var handle_data = new HandleData();
                 handle_data.IsSet = true;
                 handle_data.ShapeAndType.Add(new HandleShapeAndType

@@ -90,10 +90,11 @@ namespace Tensorflow.Keras.Layers
             // and set output_tensors' _keras_history.
             // input_tensor._keras_history = base_layer.KerasHistory(self, 0, 0)
             // input_tensor._keras_mask = None
-            new Node(this, new NodeArgs
+            var node = new Node(new NodeArgs
             {
                 Outputs = args.InputTensor
             });
+            node.Connect(this);
 
             typeSpec = new TensorSpec(args.InputTensor.TensorShape,
                 dtype: args.InputTensor.dtype,

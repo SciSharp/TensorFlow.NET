@@ -81,7 +81,7 @@ namespace Tensorflow.Contexts
         /// Checks whether the current thread has eager execution enabled.
         /// </summary>
         /// <returns></returns>
-        // [DebuggerStepThrough]
+        [DebuggerStepThrough]
         public bool executing_eagerly()
         {
             if(context_switches.Count() == 0)
@@ -136,8 +136,11 @@ namespace Tensorflow.Contexts
         public void reset_context()
         {
             ops.reset_uid();
+            // tf.defaultSession = null;
             ops.reset_default_graph();
             context_switches.Clear();
+            tf.Context.ensure_initialized();
+
             if (_handle != null)
                 c_api.TFE_ContextClearCaches(_handle);
         }

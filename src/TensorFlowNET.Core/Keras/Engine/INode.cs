@@ -8,7 +8,7 @@ namespace Tensorflow.Keras.Engine
     {
         Tensors input_tensors { get; }
         Tensors Outputs { get; }
-        ILayer Layer { get; set; }
+        ILayer Layer { get; }
         List<Tensor> KerasInputs { get; set; }
         INode[] ParentNodes { get; }
         IEnumerable<(ILayer, int, int, Tensor)> iterate_inbound();

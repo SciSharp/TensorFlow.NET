@@ -72,8 +72,8 @@ namespace Tensorflow.Keras.Engine.DataAdapters
 
         IDatasetV2 slice_inputs(IDatasetV2 indices_dataset, Tensors elements)
         {
-            var dataset2 = tf.data.Dataset.from_tensor(elements).repeat();
-            var dataset = tf.data.Dataset.zip(indices_dataset, dataset2);
+            var dataset = tf.data.Dataset.from_tensor(elements).repeat();
+            dataset = tf.data.Dataset.zip(indices_dataset, dataset);
 
             dataset = dataset.map(inputs =>
             {
@@ -84,9 +84,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
                 return new Tensors(results);
             });
 
-            dataset = dataset.with_options(new DatasetOptions { });
-
-            return dataset;
+            return dataset.with_options(new DatasetOptions { });
         }
 
         public override int GetSize()

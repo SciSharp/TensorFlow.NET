@@ -10,24 +10,14 @@ namespace Tensorflow.Functions
     /// <summary>
     /// 
     /// </summary>
-    public class ConcreteFunction : IDisposable
+    public class ConcreteFunction
     {
-        IntPtr _handle;
         FuncGraph func_graph;
         public Tensor[] Inputs => func_graph.Inputs;
         public Tensor[] CapturedInputs => func_graph.external_captures;
 
-        public string Name
-        {
-            get
-            {
-                if (func_graph != null)
-                    return func_graph.FuncName;
+        public string Name => func_graph?.FuncName;
 
-                return _handle == IntPtr.Zero ? string.Empty : c_api.StringPiece(c_api.TF_FunctionName(_handle));
-            }
-        }
-        
         public Tensor[] Outputs;
         public Type ReturnType;
         public TensorSpec[] OutputStructure;
@@ -48,39 +38,37 @@ namespace Tensorflow.Functions
         {
             string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
 
-            // IntPtr func_handle;
-            using var graph = new FuncGraph(func_name);
-            graph.as_default();
+            func_graph = new FuncGraph(func_name);
+            func_graph.as_default();
             var input = tf.placeholder(dtype);
             var output = func(input);
 
-            var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
-            _handle = graph.ToGraph(opers,
+            var opers = func_graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+            func_graph.ToGraph(opers,
                 new[] { input },
                 new[] { output },
                 null);
-            graph.Exit();
+            func_graph.Exit();
         }
 
         public ConcreteFunction(Func<Tensor, IDatasetV2> func, TF_DataType dtype)
         {
             string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
 
-            // IntPtr func_handle;
-            using var graph = new FuncGraph(func_name);
-            graph.as_default();
+            func_graph = new FuncGraph(func_name);
+            func_graph.as_default();
 
             var input = tf.placeholder(dtype);
             var output = func(input);
 
             OutputStructure = output.structure;
 
-            var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
-            _handle = graph.ToGraph(opers,
+            var opers = func_graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+            func_graph.ToGraph(opers,
                 new[] { input },
                 new[] { output.variant_tensor },
                 null);
-            graph.Exit();
+            func_graph.Exit();
         }
 
         public ConcreteFunction(Func<Tensors, Tensors> func,
@@ -89,8 +77,8 @@ namespace Tensorflow.Functions
             string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
 
             // IntPtr func_handle;
-            using var graph = new FuncGraph(func_name);
-            graph.as_default();
+            func_graph = new FuncGraph(func_name);
+            func_graph.as_default();
 
             var inputs = new Tensors();
             foreach(var (i, dtype) in enumerate(dtypes))
@@ -98,15 +86,15 @@ namespace Tensorflow.Functions
             Outputs = func(inputs);
             OutputStructure = Outputs.Select(x => x.ToTensorSpec()).ToArray();
 
-            var opers = graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
-            _handle = graph.ToGraph(opers, inputs, Outputs, null);
-            graph.Exit();
+            var opers = func_graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+            func_graph.ToGraph(opers, inputs, Outputs, null);
+            func_graph.Exit();
         }
 
         public void ToGraph(Tensors inputs, Tensors outputs)
         {
             var opers = func_graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
-            _handle = func_graph.ToGraph(opers,
+            func_graph.ToGraph(opers,
                 inputs,
                 outputs,
                 null);
@@ -180,11 +168,5 @@ namespace Tensorflow.Functions
 
         public override string ToString()
             => Name;
-
-        public void Dispose()
-        {
-            c_api.TFE_ContextRemoveFunction(tf.Context.Handle, Name, tf.Status.Handle);
-            c_api.TF_DeleteFunction(_handle);
-        }
     }
 }

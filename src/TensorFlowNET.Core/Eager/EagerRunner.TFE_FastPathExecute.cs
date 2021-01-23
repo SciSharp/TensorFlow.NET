@@ -46,7 +46,7 @@ namespace Tensorflow.Eager
             op_exec_info.run_callbacks = op_exec_info.run_gradient_callback || op_exec_info.run_post_exec_callbacks;
 
             var status = tf.Status;
-            var op = GetOp(ctx, opName, status);
+            using var op = GetOp(ctx, opName, status);
 
             var op_def = tf.get_default_graph().GetOpDef(opName);
 
@@ -158,7 +158,8 @@ namespace Tensorflow.Eager
             c_api.TFE_Execute(op, retVals, out num_retvals, status.Handle);
             status.Check(true);
 
-            var flat_result = retVals.Select(x => new EagerTensor(x, op)).ToArray();
+            var flat_result = retVals.Select(x => new EagerTensor(x)).ToArray();
+
 
             if (op_exec_info.run_callbacks)
             {
@@ -183,9 +184,7 @@ namespace Tensorflow.Eager
             status.Check(true);
             return op;*/
             var op = c_api.TFE_NewOp(ctx.Handle, op_or_function_name, status.Handle);
-#if TRACK_TENSOR_LIFE
-            print($"New OpHandle 0x{op.DangerousGetHandle().ToString("x16")}");
-#endif
+            status.Check(true);
             return op;
         }
 

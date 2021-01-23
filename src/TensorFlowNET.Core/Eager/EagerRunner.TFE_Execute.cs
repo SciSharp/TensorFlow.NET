@@ -42,8 +42,7 @@ namespace Tensorflow.Eager
             int num_outputs)
         {
             var status = tf.Status;
-            var op = GetOp(ctx, op_name, status);
-            status.Check(true);
+            using var op = GetOp(ctx, op_name, status);
             c_api.TFE_OpSetDevice(op, device_name, status.Handle);
             if (status.ok())
             {
@@ -67,7 +66,7 @@ namespace Tensorflow.Eager
                 c_api.TFE_Execute(op, outputs, out num_outputs, status.Handle);
                 status.Check(true);
             }
-            return outputs.Select(x => new EagerTensor(x, op)).ToArray();
+            return outputs.Select(x => new EagerTensor(x)).ToArray();
         }
     }
 }

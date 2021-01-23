@@ -64,7 +64,7 @@ namespace Tensorflow.Keras.Engine
             {
                 var (layer, node_index, tensor_index) = x.KerasHistory;
                 _output_layers.append(layer);
-                _output_coordinates.append(new KerasHistory(layer, node_index, tensor_index, x));
+                _output_coordinates.append(new KerasHistory(layer, node_index, tensor_index));
             }
 
             // Build self._input_layers:
@@ -72,7 +72,7 @@ namespace Tensorflow.Keras.Engine
             {
                 var (layer, node_index, tensor_index) = x.KerasHistory;
                 _input_layers.append(layer);
-                _input_coordinates.append(new KerasHistory(layer, node_index, tensor_index, x));
+                _input_coordinates.append(new KerasHistory(layer, node_index, tensor_index));
             }
 
             // Keep track of the network's nodes and layers.

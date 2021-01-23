@@ -7,8 +7,6 @@ namespace Tensorflow
     /// </summary>
     public class OptimizeDataset : UnaryUnchangedStructureDataset
     {
-        Tensor _optimizations;
-
         public OptimizeDataset(IDatasetV2 dataset,
             string[] optimizations = null,
             string[] optimization_configs = null) :
@@ -19,7 +17,7 @@ namespace Tensorflow
             if (optimization_configs == null)
                 optimization_configs = new string[0];
 
-            _optimizations = tf.convert_to_tensor(optimizations, dtype: TF_DataType.TF_STRING, name: "optimizations");
+            var _optimizations = tf.convert_to_tensor(optimizations, dtype: TF_DataType.TF_STRING, name: "optimizations");
             variant_tensor = ops.optimize_dataset(
                 _input_dataset.variant_tensor,
                 _optimizations,

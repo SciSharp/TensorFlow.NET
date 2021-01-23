@@ -79,7 +79,7 @@ namespace Tensorflow
                     return (null, null);
 
                 if (name == null)
-                    name = "";
+                    name = _default_name;
 
                 var scope_name = name;
                 var old_name = ctx.ScopeName;

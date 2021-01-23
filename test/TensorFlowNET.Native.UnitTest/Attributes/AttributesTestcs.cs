@@ -8,13 +8,13 @@ namespace Tensorflow.Native.UnitTest
     /// `class CApiAttributesTest`
     /// </summary>
     [TestClass]
-    public class CApiAttributesTestcs : CApiTest, IDisposable
+    public class AttributesTestcs : CApiTest, IDisposable
     {
         private Graph graph_;
         private int counter_;
         private Status s_;
 
-        public CApiAttributesTestcs()
+        public AttributesTestcs()
         {
             s_ = new Status();
             graph_ = new Graph();

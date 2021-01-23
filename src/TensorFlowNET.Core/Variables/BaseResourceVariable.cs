@@ -1,5 +1,7 @@
 ﻿using NumSharp;
 using System;
+using Tensorflow.Eager;
+using Tensorflow.Variables;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -22,7 +24,6 @@ namespace Tensorflow
         public bool trainable => _trainable;
 
         protected Tensor _initial_value;
-        public Tensor initial_value => _initial_value;
 
         public Operation initializer => initializer_op;
 
@@ -44,14 +45,10 @@ namespace Tensorflow
         public Operation Op => handle.op;
         public Graph Graph => handle.graph;
         public string Device => handle.Device;
+        EagerResourceDeleter eager_resource_deleter;
 
         public BaseResourceVariable()
         {
-        }
-
-        public BaseResourceVariable(IntPtr handle, IntPtr tensor)
-        {
-            _handle = handle;
         }
 
         public void __init__(bool trainable = true,
@@ -66,7 +63,24 @@ namespace Tensorflow
             this.handle = handle;
             _name = name;
 
-            // handle_deleter
+            // After the handle has been created, set up a way to clean it up when
+            // executing eagerly. We'll hold the only reference to the deleter, so that
+            // when this object is garbage collected the deleter will be too. This
+            // means ResourceVariables can be part of reference cycles without those
+            // cycles being uncollectable.
+            if (handle.IsEagerTensor)
+            {
+                _handle = handle.EagerTensorHandle.DangerousGetHandle();
+                eager_resource_deleter = new EagerResourceDeleter(handle, handle.Device);
+            }
+            else
+            {
+                _handle = handle;
+            }
+
+#if TRACK_TENSOR_LIFE
+            print($"Created Resource 0x{_handle.ToString("x16")} {_name}");
+#endif
         }
 
         public Tensor assign<T>(T value, bool use_locking = false, string name = null, bool read_value = true)
@@ -85,7 +99,7 @@ namespace Tensorflow
 
             if (read_value)
                 return gen_resource_variable_ops.read_variable_op(handle, dtype);
-            
+
             return assign_op;
         }
 
@@ -214,6 +228,9 @@ namespace Tensorflow
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
+#if TRACK_TENSOR_LIFE
+            print($"Deleted Resource 0x{handle.ToString("x16")} {_name}");
+#endif
         }
 
         public Tensor AsTensor(TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool as_ref = false)

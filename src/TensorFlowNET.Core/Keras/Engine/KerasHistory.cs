@@ -11,14 +11,12 @@
         public int NodeIndex => node_index;
         int tensor_index;
         public int TensorIndex => tensor_index;
-        Tensor tensor;
 
-        public KerasHistory(ILayer layer, int node_index, int tensor_index, Tensor tensor)
+        public KerasHistory(ILayer layer, int node_index, int tensor_index)
         {
             this.layer = layer;
             this.node_index = node_index;
             this.tensor_index = tensor_index;
-            this.tensor = tensor;
         }
 
         public void Deconstruct(out ILayer layer, out int node_index, out int tensor_index)
@@ -29,6 +27,6 @@
         }
 
         public override string ToString()
-            => $"{layer.GetType().Name} {layer.Name} {tensor.name}";
+            => $"{layer.GetType().Name} {layer.Name}";
     }
 }

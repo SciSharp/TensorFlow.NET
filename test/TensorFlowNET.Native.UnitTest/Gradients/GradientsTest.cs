@@ -10,7 +10,7 @@ namespace Tensorflow.Native.UnitTest
     /// `class CApiGradientsTest`
     /// </summary>
     [TestClass]
-    public class CApiGradientsTest : CApiTest, IDisposable
+    public class GradientsTest : CApiTest, IDisposable
     {
         private Graph graph_ = new Graph();
         private Graph expected_graph_ = new Graph();

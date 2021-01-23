@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using Tensorflow.Eager;
 using Tensorflow.Framework;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Variables;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -260,12 +261,11 @@ namespace Tensorflow
         [SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
+#if TRACK_TENSOR_LIFE
+            print($"Delete Tensor 0x{handle.ToString("x16")} {AllocationType} Data: 0x{TensorDataPointer.ToString("x16")}");
+#endif
             if (AllocationHandle != null)
             {
-
-#if TRACK_TENSOR_LIFE
-                print($"Delete AllocationHandle.{AllocationType} 0x{TensorDataPointer.ToString("x16")}");
-#endif
                 if (AllocationType == AllocationType.GCHandle)
                 {
                     ((GCHandle)AllocationHandle).Free();
@@ -287,17 +287,9 @@ namespace Tensorflow
                     throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
             }
 
-#if TRACK_TENSOR_LIFE
-            print($"Delete TensorHandle 0x{handle.ToString("x16")}");
-#endif
             c_api.TF_DeleteTensor(handle);
         }
 
-        public virtual IntPtr ToPointer()
-            => _handle;
-
         public bool IsDisposed => _disposed;
-
-        // public int tensor_int_val { get; set; }
     }
 }

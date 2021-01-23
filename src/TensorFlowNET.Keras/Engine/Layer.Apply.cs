@@ -40,7 +40,8 @@ namespace Tensorflow.Keras.Engine
 
                 outputs = Call(inputs, state: state, is_training: is_training);
 
-                outputs = _set_connectivity_metadata_(inputs, outputs);
+                // memory leak
+                // _set_connectivity_metadata_(inputs, outputs);
                 _handle_activity_regularization(inputs, outputs);
                 _set_mask_metadata(inputs, outputs, null);
             });

@@ -181,7 +181,6 @@ namespace Tensorflow
 
             storage.Allocate(new Shape(shape));
 
-            var bytesize = (long)this.bytesize;
             System.Buffer.MemoryCopy(buffer.ToPointer(), storage.Address, bytesize, bytesize);
 
             return new NDArray(storage);

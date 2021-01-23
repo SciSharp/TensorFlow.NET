@@ -51,6 +51,8 @@ namespace Tensorflow.Benchmark.Leak
              metrics: new[] { "accuracy" });
 
             model.fit(inputImages, outLables, batch_size: 32, epochs: 200);
+
+            keras.backend.clear_session();
         }
     }
 }

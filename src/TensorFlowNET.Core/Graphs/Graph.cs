@@ -302,7 +302,7 @@ namespace Tensorflow
 
         public void device(string device_name)
         {
-            throw new NotImplementedException("");
+            
         }
 
         private void _create_op_helper(Operation op, bool compute_device = true)

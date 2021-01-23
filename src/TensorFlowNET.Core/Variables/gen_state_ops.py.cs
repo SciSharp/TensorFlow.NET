@@ -60,6 +60,18 @@ namespace Tensorflow
             bool use_locking = true,
             string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Assign", name,
+                    null,
+                    @ref, value,
+                    "validate_shape", validate_shape,
+                    "use_locking", use_locking);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("Assign", name: name, args: new { @ref, value, validate_shape, use_locking });
 
             var _result = _op.outputs;

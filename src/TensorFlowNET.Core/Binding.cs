@@ -4,7 +4,6 @@ namespace Tensorflow
 {
     public static partial class Binding
     {
-        [DebuggerHidden]
         public static tensorflow tf { get; } = New<tensorflow>();
 
         /// <summary>

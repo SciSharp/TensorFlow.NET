@@ -6,6 +6,7 @@
     <RootNamespace>Tensorflow</RootNamespace>
     <AssemblyName>Tensorflow</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

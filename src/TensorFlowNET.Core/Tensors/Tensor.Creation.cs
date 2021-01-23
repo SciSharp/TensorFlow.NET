@@ -475,11 +475,11 @@ namespace Tensorflow
                 size += TF_StringEncodedSize((ulong)b.Length);
 
             ulong src_size = size + (ulong)buffer.Length * sizeof(ulong);
-            IntPtr handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, src_size);
+            _handle = TF_AllocateTensor(TF_DataType.TF_STRING, shape, shape.Length, src_size);
             AllocationType = AllocationType.Tensorflow;
 
             // Clear offset table
-            IntPtr input = TF_TensorData(handle);
+            IntPtr input = TensorDataPointer;
             IntPtr data_start = input + buffer.Length * sizeof(ulong);
             IntPtr limit = input + (int)src_size;
             ulong offset = 0;
@@ -496,7 +496,9 @@ namespace Tensorflow
                 }
             }
 
-            _handle = handle;
+#if TRACK_TENSOR_LIFE
+            print($"New Tensor 0x{_handle.ToString("x16")} {AllocationType} String Data: 0x{TensorDataPointer.ToString("x16")}");
+#endif
         }
 
         public unsafe Tensor(NDArray nd, TF_DataType? tensorDType = null)
@@ -563,12 +565,13 @@ namespace Tensorflow
             {
                 AllocationType = AllocationType.FromPointer;
                 AllocationHandle = arraySlice;
-#if TRACK_TENSOR_LIFE
-                print($"New Tensor {Id} {AllocationType} 0x{TensorDataPointer.ToString("x16")}");
-#endif
             }
             else
                 AllocationType = AllocationType.Tensorflow;
+
+#if TRACK_TENSOR_LIFE
+            print($"New Tensor 0x{_handle.ToString("x16")} {AllocationType} Data: 0x{TensorDataPointer.ToString("x16")}");
+#endif
         }
 
         public Tensor(Operation op, int value_index, TF_DataType dtype)

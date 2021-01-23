@@ -68,7 +68,7 @@ namespace Tensorflow
                     null,
                     resource, value);
 
-                return results.Length == 0 ? null : results[0];
+                return null;
             }
 
             var _op = tf.OpDefLib._apply_op_helper("AssignVariableOp", name, new { resource, value });
@@ -113,7 +113,8 @@ namespace Tensorflow
                     "container", container,
                     "shared_name", shared_name,
                     "dtype", dtype,
-                    "shape", shape.dims);
+                    "shape", shape.dims,
+                    "allowed_devices", new string[0]);
 
                 return results[0];
             }
@@ -124,6 +125,28 @@ namespace Tensorflow
                 shape,
                 container,
                 shared_name
+            });
+
+            return _op.output;
+        }
+
+        public static Tensor destroy_resource_op(Tensor resource, bool ignore_lookup_error = true, string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "DestroyResourceOp", name,
+                    null,
+                    resource,
+                    "ignore_lookup_error", ignore_lookup_error);
+
+                return results.Length == 0 ? null : results[0];
+            }
+
+            var _op = tf.OpDefLib._apply_op_helper("DestroyResourceOp", name, new
+            {
+                resource,
+                ignore_lookup_error
             });
 
             return _op.output;

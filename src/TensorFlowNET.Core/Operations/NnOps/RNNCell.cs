@@ -72,6 +72,10 @@ namespace Tensorflow
 
         public TensorShape output_shape => throw new NotImplementedException();
 
+        public TensorShape BatchInputShape => throw new NotImplementedException();
+
+        public TF_DataType DType => throw new NotImplementedException();
+
         public RnnCell(bool trainable = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,

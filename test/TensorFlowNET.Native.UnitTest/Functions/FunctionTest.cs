@@ -11,7 +11,7 @@ namespace Tensorflow.Native.UnitTest
     /// `class CApiColocationTest`
     /// </summary>
     [TestClass]
-    public class CApiFunctionTest : CApiTest, IDisposable
+    public class FunctionTest : CApiTest, IDisposable
     {
         Graph func_graph_;
         Graph host_graph_;

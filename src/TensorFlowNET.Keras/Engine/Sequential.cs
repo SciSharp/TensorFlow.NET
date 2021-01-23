@@ -64,7 +64,7 @@ namespace Tensorflow.Keras.Engine
 
         public void add(Tensor tensor)
         {
-            var layer = tensor.KerasHistory.Layer as Layer;
+            var layer = tensor.KerasHistory.Layer;
             add(layer);
         }
 
@@ -72,7 +72,7 @@ namespace Tensorflow.Keras.Engine
         /// Adds a layer instance on top of the layer stack.
         /// </summary>
         /// <param name="layer"></param>
-        public void add(Layer layer)
+        public void add(ILayer layer)
         {
             built = false;
             var set_inputs = false;

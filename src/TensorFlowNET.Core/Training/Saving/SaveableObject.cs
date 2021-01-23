@@ -40,7 +40,7 @@ namespace Tensorflow
             this.name = name;
         }
 
-        public virtual ITensorOrOperation restore(Tensor[] restored_tensors, TensorShape[] restored_shapes = null)
+        public virtual Operation restore(Tensor[] restored_tensors, TensorShape[] restored_shapes = null)
         {
             var restored_tensor = restored_tensors[0];
             return gen_state_ops.assign(op,

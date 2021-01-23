@@ -59,6 +59,8 @@ namespace Tensorflow.Keras.Engine
                     var end_step = step + data_handler.StepIncrement;
                     // callbacks.on_predict_batch_end(end_step, {'outputs': batch_outputs})
                 }
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
             // callbacks.on_predict_end()
             return outputs;

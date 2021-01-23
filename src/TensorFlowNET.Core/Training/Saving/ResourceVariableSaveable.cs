@@ -35,7 +35,7 @@ namespace Tensorflow
             this.name = name;
         }
 
-        public override ITensorOrOperation restore(Tensor[] restored_tensors, TensorShape[] restored_shapes = null)
+        public override Operation restore(Tensor[] restored_tensors, TensorShape[] restored_shapes = null)
         {
             var restored_tensor = restored_tensors[0];
             restored_tensor = array_ops.identity(restored_tensor);
