@@ -59,6 +59,9 @@ namespace Tensorflow
             shape = new Shape();
         }
 
+        public static TensorShape Scalar
+            => new TensorShape(new int[0]);
+
         public TensorShape(TensorShapeProto proto)
         {
             if (proto.UnknownRank) return;

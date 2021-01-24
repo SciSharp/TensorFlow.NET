@@ -12,7 +12,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
         {
             var jpg = tf.constant(new byte[] { 0x41, 0xff, 0xd8, 0xff }, tf.@string);
             var strings = jpg.ToString();
-            Assert.AreEqual(strings, @"tf.Tensor: shape=(), dtype=string, numpy=A\xff\xd8\xff");
+            Assert.AreEqual(strings, @"tf.Tensor: shape=(), dtype=string, numpy='A\xff\xd8\xff'");
         }
 
         [TestMethod]
@@ -21,16 +21,16 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var str1 = tf.constant("Hello1");
             var str2 = tf.constant("Hello2");
             var result = tf.equal(str1, str2);
-            Assert.IsFalse(result.ToScalar<bool>());
+            Assert.IsFalse(result.numpy());
 
             var str3 = tf.constant("Hello1");
             result = tf.equal(str1, str3);
-            Assert.IsTrue(result.ToScalar<bool>());
+            Assert.IsTrue(result.numpy());
 
             var str4 = tf.strings.substr(str1, 0, 5);
             var str5 = tf.strings.substr(str2, 0, 5);
             result = tf.equal(str4, str5);
-            Assert.IsTrue(result.ToScalar<bool>());
+            Assert.IsTrue(result.numpy());
         }
 
         [TestMethod]

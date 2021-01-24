@@ -25,7 +25,7 @@ namespace Tensorflow
 
             FuncGraph(mm);
 
-            // 85M
+            // 65M
             Console.WriteLine("Finished.");
             Console.ReadLine();
         }

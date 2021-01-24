@@ -29,66 +29,6 @@ namespace Tensorflow
     [SuppressMessage("ReSharper", "InvokeAsExtensionMethod")]
     public partial class Tensor
     {
-        public T ToScalar<T>()
-        {
-            unsafe
-            {
-                if (typeof(T).as_dtype() == this.dtype && this.dtype != TF_DataType.TF_STRING)
-                    return Unsafe.Read<T>(this.buffer.ToPointer());
-
-                switch (this.dtype)
-                {
-#if _REGEN
-                    %foreach supported_numericals_TF_DataType,supported_numericals,supported_numericals_lowercase%
-                    case TF_DataType.#1:
-                        return Converts.ChangeType<T>(*(#3*) this.buffer);
-                    %
-#else
-
-                    case TF_DataType.TF_UINT8:
-                        return Converts.ChangeType<T>(*(byte*)this.buffer);
-                    case TF_DataType.TF_INT16:
-                        return Converts.ChangeType<T>(*(short*)this.buffer);
-                    case TF_DataType.TF_UINT16:
-                        return Converts.ChangeType<T>(*(ushort*)this.buffer);
-                    case TF_DataType.TF_INT32:
-                        return Converts.ChangeType<T>(*(int*)this.buffer);
-                    case TF_DataType.TF_UINT32:
-                        return Converts.ChangeType<T>(*(uint*)this.buffer);
-                    case TF_DataType.TF_INT64:
-                        return Converts.ChangeType<T>(*(long*)this.buffer);
-                    case TF_DataType.TF_UINT64:
-                        return Converts.ChangeType<T>(*(ulong*)this.buffer);
-                    case TF_DataType.TF_DOUBLE:
-                        return Converts.ChangeType<T>(*(double*)this.buffer);
-                    case TF_DataType.TF_FLOAT:
-                        return Converts.ChangeType<T>(*(float*)this.buffer);
-#endif
-                    case TF_DataType.TF_STRING:
-                        if (this.NDims != 0)
-                            throw new ArgumentException($"{nameof(Tensor)} can only be scalar.");
-
-                        IntPtr stringStartAddress = IntPtr.Zero;
-                        ulong dstLen = 0;
-
-                        c_api.TF_StringDecode((byte*)this.buffer + 8, this.bytesize, (byte**)&stringStartAddress, ref dstLen, tf.Status.Handle);
-                        tf.Status.Check(true);
-
-                        var dstLenInt = checked((int)dstLen);
-                        var value = Encoding.UTF8.GetString((byte*)stringStartAddress, dstLenInt);
-                        if (typeof(T) == typeof(string))
-                            return (T)(object)value;
-                        else
-                            return Converts.ChangeType<T>(value);
-
-                    case TF_DataType.TF_COMPLEX64:
-                    case TF_DataType.TF_COMPLEX128:
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-        }
-
         public unsafe void CopyTo(NDArray nd)
         {
             if (!nd.Shape.IsContiguous)

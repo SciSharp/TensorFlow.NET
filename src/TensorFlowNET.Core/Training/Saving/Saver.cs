@@ -193,7 +193,7 @@ namespace Tensorflow
 
                 if (write_state)
                 {
-                    var path = UTF8Encoding.UTF8.GetString((byte[])model_checkpoint_path[0]);
+                    var path = NDArray.AsStringArray(model_checkpoint_path[0])[0];
                     _RecordLastCheckpoint(path);
                     checkpoint_management.update_checkpoint_state_internal(
                         save_dir: save_path_parent,
@@ -211,7 +211,7 @@ namespace Tensorflow
                 export_meta_graph(meta_graph_filename, strip_default_attrs: strip_default_attrs, save_debug_info: save_debug_info);
             }
 
-            return _is_empty ? string.Empty : UTF8Encoding.UTF8.GetString((byte[])model_checkpoint_path[0]);
+            return _is_empty ? string.Empty : NDArray.AsStringArray(model_checkpoint_path[0])[0];
         }
 
         public (Saver, object) import_meta_graph(string meta_graph_or_file,

@@ -576,9 +576,14 @@ would not be rank 1.", tensor.op.get_attr("axis")));
         {
             var dtype = tensor.dtype;
 
-            if (dtype == TF_DataType.TF_STRING && tensor.NDims > 0)
+            if (dtype == TF_DataType.TF_STRING)
             {
-                return $"['{string.Join("', '", tensor.StringData())}']";
+                if (tensor.rank == 0)
+                    return "'" + string.Join(string.Empty, tensor.StringBytes()[0]
+                        .Take(25)
+                        .Select(x => x < 32 || x > 127 ? "\\x" + x.ToString("x") : Convert.ToChar(x).ToString())) + "'";
+                else
+                    return $"['{string.Join("', '", tensor.StringData().Take(25))}']";
             }
 
             var nd = tensor.numpy();
