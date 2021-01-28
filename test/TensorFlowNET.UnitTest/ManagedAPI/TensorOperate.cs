@@ -132,7 +132,6 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
         }
 
         #region ones/zeros like
-        [Ignore]
         [TestMethod]
         public void TestOnesLike()
         {

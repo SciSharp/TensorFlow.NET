@@ -591,6 +591,15 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
+        public static Tensor ones_like(Tensor x, string name = null)
+            => tf.Context.RunInAutoMode(()
+                => tf.OpDefLib._apply_op_helper("OnesLike", name, new { x }).output, ()
+                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "OnesLike", name,
+                    null,
+                    x).FirstOrDefault(),
+                x);
+
         public static Tensor zeros_like(Tensor x, string name = null)
             => tf.Context.RunInAutoMode(()
                 => tf.OpDefLib._apply_op_helper("ZerosLike", name, new { x }).output, ()
