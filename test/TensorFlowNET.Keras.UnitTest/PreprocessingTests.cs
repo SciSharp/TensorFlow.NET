@@ -19,13 +19,42 @@ namespace TensorFlowNET.Keras.UnitTest
                 "It was the best of times, it was the worst of times.",
                 "this is a new dawn, an era to follow the previous era.",
                 };
+
+        private readonly string[][] tokenized_texts = new string[][] {
+                new string[] {"It","was","the","best","of","times","it","was","the","worst","of","times"},
+                new string[] {"this","is","a","new","dawn","an","era","to","follow","the","previous","era","It","can","not","be","said","to","start","anew" },
+                new string[] {"It","was","the","best","of","times","it","was","the","worst","of","times"},
+                new string[] {"this","is","a","new","dawn","an","era","to","follow","the","previous","era" },
+                };
+
+        private readonly string[] processed_texts = new string[] {
+                "it was the best of times it was the worst of times",
+                "this is a new dawn an era to follow the previous era it can not be said to start anew",
+                "it was the best of times it was the worst of times",
+                "this is a new dawn an era to follow the previous era",
+                };
+
         private const string OOV = "<OOV>";
 
         [TestMethod]
         public void TokenizeWithNoOOV()
         {
-            var tokenizer = keras.preprocessing.text.Tokenizer(lower: true);
+            var tokenizer = keras.preprocessing.text.Tokenizer();
             tokenizer.fit_on_texts(texts);
+
+            Assert.AreEqual(23, tokenizer.word_index.Count);
+
+            Assert.AreEqual(7, tokenizer.word_index["worst"]);
+            Assert.AreEqual(12, tokenizer.word_index["dawn"]);
+            Assert.AreEqual(16, tokenizer.word_index["follow"]);
+        }
+
+        [TestMethod]
+        public void TokenizeWithNoOOV_Tkn()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer();
+            // Use the list version, where the tokenization has already been done.
+            tokenizer.fit_on_texts(tokenized_texts);
 
             Assert.AreEqual(23, tokenizer.word_index.Count);
 
@@ -37,7 +66,7 @@ namespace TensorFlowNET.Keras.UnitTest
         [TestMethod]
         public void TokenizeWithOOV()
         {
-            var tokenizer = keras.preprocessing.text.Tokenizer(lower: true, oov_token: OOV);
+            var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
             tokenizer.fit_on_texts(texts);
 
             Assert.AreEqual(24, tokenizer.word_index.Count);
@@ -49,9 +78,160 @@ namespace TensorFlowNET.Keras.UnitTest
         }
 
         [TestMethod]
+        public void TokenizeWithOOV_Tkn()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
+            // Use the list version, where the tokenization has already been done.
+            tokenizer.fit_on_texts(tokenized_texts);
+
+            Assert.AreEqual(24, tokenizer.word_index.Count);
+
+            Assert.AreEqual(1, tokenizer.word_index[OOV]);
+            Assert.AreEqual(8, tokenizer.word_index["worst"]);
+            Assert.AreEqual(13, tokenizer.word_index["dawn"]);
+            Assert.AreEqual(17, tokenizer.word_index["follow"]);
+        }
+
+        [TestMethod]
+        public void TokenizeTextsToSequences()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer();
+            tokenizer.fit_on_texts(texts);
+
+            var sequences = tokenizer.texts_to_sequences(texts);
+            Assert.AreEqual(4, sequences.Count);
+
+            Assert.AreEqual(tokenizer.word_index["worst"], sequences[0][9]);
+            Assert.AreEqual(tokenizer.word_index["previous"], sequences[1][10]);
+        }
+
+        [TestMethod]
+        public void TokenizeTextsToSequences_Tkn()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer();
+            // Use the list version, where the tokenization has already been done.
+            tokenizer.fit_on_texts(tokenized_texts);
+
+            var sequences = tokenizer.texts_to_sequences(tokenized_texts);
+            Assert.AreEqual(4, sequences.Count);
+
+            Assert.AreEqual(tokenizer.word_index["worst"], sequences[0][9]);
+            Assert.AreEqual(tokenizer.word_index["previous"], sequences[1][10]);
+        }
+
+        [TestMethod]
+        public void TokenizeTextsToSequencesAndBack()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer();
+            tokenizer.fit_on_texts(texts);
+
+            var sequences = tokenizer.texts_to_sequences(texts);
+            Assert.AreEqual(4, sequences.Count);
+
+            var processed = tokenizer.sequences_to_texts(sequences);
+
+            Assert.AreEqual(4, processed.Count);
+
+            for (var i = 0; i < processed.Count; i++)
+                Assert.AreEqual(processed_texts[i], processed[i]);
+        }
+
+        [TestMethod]
+        public void TokenizeTextsToSequencesAndBack_Tkn1()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer();
+            // Use the list version, where the tokenization has already been done.
+            tokenizer.fit_on_texts(tokenized_texts);
+
+            // Use the list version, where the tokenization has already been done.
+            var sequences = tokenizer.texts_to_sequences(tokenized_texts);
+            Assert.AreEqual(4, sequences.Count);
+
+            var processed = tokenizer.sequences_to_texts(sequences);
+
+            Assert.AreEqual(4, processed.Count);
+
+            for (var i = 0; i < processed.Count; i++)
+                Assert.AreEqual(processed_texts[i], processed[i]);
+        }
+
+        [TestMethod]
+        public void TokenizeTextsToSequencesAndBack_Tkn2()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer();
+            // Use the list version, where the tokenization has already been done.
+            tokenizer.fit_on_texts(tokenized_texts);
+
+            var sequences = tokenizer.texts_to_sequences(texts);
+            Assert.AreEqual(4, sequences.Count);
+
+            var processed = tokenizer.sequences_to_texts(sequences);
+
+            Assert.AreEqual(4, processed.Count);
+
+            for (var i = 0; i < processed.Count; i++)
+                Assert.AreEqual(processed_texts[i], processed[i]);
+        }
+
+        [TestMethod]
+        public void TokenizeTextsToSequencesAndBack_Tkn3()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer();
+            tokenizer.fit_on_texts(texts);
+
+            // Use the list version, where the tokenization has already been done.
+            var sequences = tokenizer.texts_to_sequences(tokenized_texts);
+            Assert.AreEqual(4, sequences.Count);
+
+            var processed = tokenizer.sequences_to_texts(sequences);
+
+            Assert.AreEqual(4, processed.Count);
+
+            for (var i = 0; i < processed.Count; i++)
+                Assert.AreEqual(processed_texts[i], processed[i]);
+        }
+        [TestMethod]
+        public void TokenizeTextsToSequencesWithOOV()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
+            tokenizer.fit_on_texts(texts);
+
+            var sequences = tokenizer.texts_to_sequences(texts);
+            Assert.AreEqual(4, sequences.Count);
+
+            Assert.AreEqual(tokenizer.word_index["worst"], sequences[0][9]);
+            Assert.AreEqual(tokenizer.word_index["previous"], sequences[1][10]);
+
+            for (var i = 0; i < sequences.Count; i++)
+                for (var j = 0; j < sequences[i].Length; j++)
+                Assert.AreNotEqual(tokenizer.word_index[OOV], sequences[i][j]);
+        }
+
+        [TestMethod]
+        public void TokenizeTextsToSequencesWithOOVPresent()
+        {
+            var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV, num_words:20);
+            tokenizer.fit_on_texts(texts);
+
+            var sequences = tokenizer.texts_to_sequences(texts);
+            Assert.AreEqual(4, sequences.Count);
+
+            Assert.AreEqual(tokenizer.word_index["worst"], sequences[0][9]);
+            Assert.AreEqual(tokenizer.word_index["previous"], sequences[1][10]);
+
+            var oov_count = 0;
+            for (var i = 0; i < sequences.Count; i++)
+                for (var j = 0; j < sequences[i].Length; j++)
+                    if (tokenizer.word_index[OOV] == sequences[i][j])
+                        oov_count += 1;
+
+            Assert.AreEqual(5, oov_count);
+        }
+
+        [TestMethod]
         public void PadSequencesWithDefaults()
         {
-            var tokenizer = keras.preprocessing.text.Tokenizer(lower: true, oov_token: OOV);
+            var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
             tokenizer.fit_on_texts(texts);
 
             var sequences = tokenizer.texts_to_sequences(texts);
@@ -74,7 +254,7 @@ namespace TensorFlowNET.Keras.UnitTest
         [TestMethod]
         public void PadSequencesPrePaddingTrunc()
         {
-            var tokenizer = keras.preprocessing.text.Tokenizer(lower: true, oov_token: OOV);
+            var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
             tokenizer.fit_on_texts(texts);
 
             var sequences = tokenizer.texts_to_sequences(texts);
@@ -97,7 +277,7 @@ namespace TensorFlowNET.Keras.UnitTest
         [TestMethod]
         public void PadSequencesPostPaddingTrunc()
         {
-            var tokenizer = keras.preprocessing.text.Tokenizer(lower: true, oov_token: OOV);
+            var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
             tokenizer.fit_on_texts(texts);
 
             var sequences = tokenizer.texts_to_sequences(texts);
