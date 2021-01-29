@@ -6,5 +6,8 @@ namespace Tensorflow.Keras
     {
         public Sequence sequence => new Sequence();
         public DatasetUtils dataset_utils => new DatasetUtils();
+        public TextApi text => _text;
+
+        private static TextApi _text = new TextApi();
     }
 }
