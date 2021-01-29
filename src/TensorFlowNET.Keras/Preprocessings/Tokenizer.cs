@@ -3,6 +3,7 @@ using Serilog.Debugging;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -315,13 +316,125 @@ namespace Tensorflow.Keras.Text
         }
 
         /// <summary>
+        /// Convert a list of texts to a Numpy matrix.
+        /// </summary>
+        /// <param name="texts">A sequence of strings containing one or more tokens.</param>
+        /// <param name="mode">One of "binary", "count", "tfidf", "freq".</param>
+        /// <returns></returns>
+        public NDArray texts_to_matrix(IEnumerable<string> texts, string mode = "binary")
+        {
+            return sequences_to_matrix(texts_to_sequences(texts), mode);
+        }
+
+        /// <summary>
+        /// Convert a list of texts to a Numpy matrix.
+        /// </summary>
+        /// <param name="texts">A sequence of lists of strings, each containing one token.</param>
+        /// <param name="mode">One of "binary", "count", "tfidf", "freq".</param>
+        /// <returns></returns>
+        public NDArray texts_to_matrix(IEnumerable<IList<string>> texts, string mode = "binary")
+        {
+            return sequences_to_matrix(texts_to_sequences(texts), mode);
+        }
+
+        /// <summary>
         /// Converts a list of sequences into a Numpy matrix.
         /// </summary>
-        /// <param name="sequences"></param>
+        /// <param name="sequences">A sequence of lists of integers, encoding tokens.</param>
+        /// <param name="mode">One of "binary", "count", "tfidf", "freq".</param>
         /// <returns></returns>
-        public NDArray sequences_to_matrix(IEnumerable<IList<int>> sequences)
+        public NDArray sequences_to_matrix(IEnumerable<IList<int>> sequences, string mode = "binary")
         {
-            throw new NotImplementedException("sequences_to_matrix");
+            if (!modes.Contains(mode)) throw new InvalidArgumentError($"Unknown vectorization mode: {mode}");
+            var word_count = 0;
+
+            if (num_words == -1)
+            {
+                if (word_index != null)
+                {
+                    word_count = word_index.Count + 1;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Specifya dimension ('num_words' arugment), or fit on some text data first.");
+                }
+            }
+            else
+            {
+                word_count = num_words;
+            }
+
+            if (mode == "tfidf" && this.document_count == 0)
+            {
+                throw new InvalidOperationException("Fit the Tokenizer on some text data before using the 'tfidf' mode.");
+            }
+
+            var x = np.zeros(sequences.Count(), word_count);
+
+            for (int i = 0; i < sequences.Count(); i++)
+            {
+                var seq = sequences.ElementAt(i);
+                if (seq == null || seq.Count == 0)
+                    continue;
+
+                var counts = new Dictionary<int, int>();
+
+                var seq_length = seq.Count;
+
+                foreach (var j in seq)
+                {
+                    if (j >= word_count)
+                        continue;
+                    var count = 0;
+                    counts.TryGetValue(j, out count);
+                    counts[j] = count + 1;
+                }
+
+                if (mode == "count")
+                {
+                    foreach (var kv in counts)
+                    {
+                        var j = kv.Key;
+                        var c = kv.Value;
+                        x[i, j] = c;
+                    }
+                }
+                else if (mode == "freq")
+                {
+                    foreach (var kv in counts)
+                    {
+                        var j = kv.Key;
+                        var c = kv.Value;
+                        x[i, j] = ((double)c) / seq_length;
+                    }
+                }
+                else if (mode == "binary")
+                {
+                    foreach (var kv in counts)
+                    {
+                        var j = kv.Key;
+                        var c = kv.Value;
+                        x[i, j] = 1;
+                    }
+                }
+                else if (mode == "tfidf")
+                {
+                    foreach (var kv in counts)
+                    {
+                        var j = kv.Key;
+                        var c = kv.Value;
+                        var id = 0;
+                        var _ = index_docs.TryGetValue(j, out id);
+                        var tf = 1 + np.log(c);
+                        var idf = np.log(1 + document_count / (1 + id));
+                        x[i, j] = tf * idf;
+                    }
+                }
+            }
+
+            return x;
         }
+
+        private string[] modes = new string[] { "binary", "count", "tfidf", "freq" };
     }
 }
