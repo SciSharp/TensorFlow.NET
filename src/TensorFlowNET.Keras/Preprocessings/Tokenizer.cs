@@ -56,7 +56,7 @@ namespace Tensorflow.Keras.Text
         /// <summary>
         /// Updates internal vocabulary based on a list of texts. 
         /// </summary>
-        /// <param name="texts"></param>
+        /// <param name="texts">A list of strings, each containing one or more tokens.</param>
         /// <remarks>Required before using texts_to_sequences or texts_to_matrix.</remarks>
         public void fit_on_texts(IEnumerable<string> texts)
         {
@@ -90,7 +90,7 @@ namespace Tensorflow.Keras.Text
             }
 
             var wcounts = word_counts.AsEnumerable().ToList();
-            wcounts.Sort((kv1, kv2) => -kv1.Value.CompareTo(kv2.Value));
+            wcounts.Sort((kv1, kv2) => -kv1.Value.CompareTo(kv2.Value));    // Note: '-' gives us descending order.
 
             var sorted_voc = (oov_token == null) ? new List<string>() : new List<string>() { oov_token };
             sorted_voc.AddRange(word_counts.Select(kv => kv.Key));
@@ -120,7 +120,12 @@ namespace Tensorflow.Keras.Text
             }
         }
 
-        public void fit_on_texts(IEnumerable<IList<string>> texts)
+        /// <summary>
+        /// Updates internal vocabulary based on a list of texts. 
+        /// </summary>
+        /// <param name="texts">A list of list of strings, each containing one token.</param>
+        /// <remarks>Required before using texts_to_sequences or texts_to_matrix.</remarks>
+        public void fit_on_texts(IEnumerable<IEnumerable<string>> texts)
         {
             foreach (var seq in texts)
             {
@@ -197,7 +202,7 @@ namespace Tensorflow.Keras.Text
         /// <param name="texts"></param>
         /// <returns></returns>
         /// <remarks>Only top num_words-1 most frequent words will be taken into account.Only words known by the tokenizer will be taken into account.</remarks>
-        public IList<int[]> texts_to_sequences(IEnumerable<IList<string>> texts)
+        public IList<int[]> texts_to_sequences(IEnumerable<IEnumerable<string>> texts)
         {
             return texts_to_sequences_generator(texts).ToArray();
         }
@@ -224,6 +229,13 @@ namespace Tensorflow.Keras.Text
             });
         }
 
+        public IEnumerable<int[]> texts_to_sequences_generator(IEnumerable<IEnumerable<string>> texts)
+        {
+            int oov_index = -1;
+            var _ = (oov_token != null) && word_index.TryGetValue(oov_token, out oov_index);
+            return texts.Select(seq => ConvertToSequence(oov_index, seq).ToArray());
+        }
+
         private List<int> ConvertToSequence(int oov_index, IEnumerable<string> seq)
         {
             var vect = new List<int>();
@@ -244,20 +256,13 @@ namespace Tensorflow.Keras.Text
                         vect.Add(i);
                     }
                 }
-                else if(oov_index != -1)
+                else if (oov_index != -1)
                 {
                     vect.Add(oov_index);
                 }
             }
 
             return vect;
-        }
-
-        public IEnumerable<int[]> texts_to_sequences_generator(IEnumerable<IList<string>> texts)
-        {
-            int oov_index = -1;
-            var _ = (oov_token != null) && word_index.TryGetValue(oov_token, out oov_index);
-            return texts.Select(seq => ConvertToSequence(oov_index, seq).ToArray());
         }
 
         /// <summary>
@@ -271,7 +276,7 @@ namespace Tensorflow.Keras.Text
             return sequences_to_texts_generator(sequences).ToArray();
         }
 
-        public IEnumerable<string> sequences_to_texts_generator(IEnumerable<int[]> sequences)
+        public IEnumerable<string> sequences_to_texts_generator(IEnumerable<IList<int>> sequences)
         {
             int oov_index = -1;
             var _ = (oov_token != null) && word_index.TryGetValue(oov_token, out oov_index);
@@ -280,7 +285,7 @@ namespace Tensorflow.Keras.Text
             {
 
                 var bldr = new StringBuilder();
-                for (var i = 0; i < seq.Length; i++)
+                for (var i = 0; i < seq.Count; i++)
                 {
                     if (i > 0) bldr.Append(' ');
 
@@ -314,7 +319,7 @@ namespace Tensorflow.Keras.Text
         /// </summary>
         /// <param name="sequences"></param>
         /// <returns></returns>
-        public NDArray sequences_to_matrix(IEnumerable<int[]> sequences)
+        public NDArray sequences_to_matrix(IEnumerable<IList<int>> sequences)
         {
             throw new NotImplementedException("sequences_to_matrix");
         }
