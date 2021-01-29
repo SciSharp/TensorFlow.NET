@@ -15,23 +15,23 @@ namespace TensorFlowNET.Keras.UnitTest
     {
         private readonly string[] texts = new string[] {
                 "It was the best of times, it was the worst of times.",
-                "Mr and Mrs Dursley of number four, Privet Drive, were proud to say that they were perfectly normal, thank you very much.",
+                "this is a new dawn, an era to follow the previous era. It can not be said to start anew.",
                 "It was the best of times, it was the worst of times.",
-                "Mr and Mrs Dursley of number four, Privet Drive.",
+                "this is a new dawn, an era to follow the previous era.",
                 };
 
         private readonly string[][] tokenized_texts = new string[][] {
                 new string[] {"It","was","the","best","of","times","it","was","the","worst","of","times"},
-                new string[] {"mr","and","mrs","dursley","of","number","four","privet","drive","were","proud","to","say","that","they","were","perfectly","normal","thank","you","very","much"},
+                new string[] {"this","is","a","new","dawn","an","era","to","follow","the","previous","era","It","can","not","be","said","to","start","anew" },
                 new string[] {"It","was","the","best","of","times","it","was","the","worst","of","times"},
-                new string[] {"mr","and","mrs","dursley","of","number","four","privet","drive"},
+                new string[] {"this","is","a","new","dawn","an","era","to","follow","the","previous","era" },
                 };
 
         private readonly string[] processed_texts = new string[] {
                 "it was the best of times it was the worst of times",
-                "mr and mrs dursley of number four privet drive were proud to say that they were perfectly normal thank you very much",
+                "this is a new dawn an era to follow the previous era it can not be said to start anew",
                 "it was the best of times it was the worst of times",
-                "mr and mrs dursley of number four privet drive",
+                "this is a new dawn an era to follow the previous era",
                 };
 
         private const string OOV = "<OOV>";
@@ -42,11 +42,11 @@ namespace TensorFlowNET.Keras.UnitTest
             var tokenizer = keras.preprocessing.text.Tokenizer();
             tokenizer.fit_on_texts(texts);
 
-            Assert.AreEqual(27, tokenizer.word_index.Count);
+            Assert.AreEqual(23, tokenizer.word_index.Count);
 
             Assert.AreEqual(7, tokenizer.word_index["worst"]);
-            Assert.AreEqual(12, tokenizer.word_index["number"]);
-            Assert.AreEqual(16, tokenizer.word_index["were"]);
+            Assert.AreEqual(12, tokenizer.word_index["dawn"]);
+            Assert.AreEqual(16, tokenizer.word_index["follow"]);
         }
 
         [TestMethod]
@@ -56,11 +56,11 @@ namespace TensorFlowNET.Keras.UnitTest
             // Use the list version, where the tokenization has already been done.
             tokenizer.fit_on_texts(tokenized_texts);
 
-            Assert.AreEqual(27, tokenizer.word_index.Count);
+            Assert.AreEqual(23, tokenizer.word_index.Count);
 
             Assert.AreEqual(7, tokenizer.word_index["worst"]);
-            Assert.AreEqual(12, tokenizer.word_index["number"]);
-            Assert.AreEqual(16, tokenizer.word_index["were"]);
+            Assert.AreEqual(12, tokenizer.word_index["dawn"]);
+            Assert.AreEqual(16, tokenizer.word_index["follow"]);
         }
 
         [TestMethod]
@@ -69,12 +69,12 @@ namespace TensorFlowNET.Keras.UnitTest
             var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
             tokenizer.fit_on_texts(texts);
 
-            Assert.AreEqual(28, tokenizer.word_index.Count);
+            Assert.AreEqual(24, tokenizer.word_index.Count);
 
             Assert.AreEqual(1,  tokenizer.word_index[OOV]);
             Assert.AreEqual(8,  tokenizer.word_index["worst"]);
-            Assert.AreEqual(13, tokenizer.word_index["number"]);
-            Assert.AreEqual(17, tokenizer.word_index["were"]);
+            Assert.AreEqual(13, tokenizer.word_index["dawn"]);
+            Assert.AreEqual(17, tokenizer.word_index["follow"]);
         }
 
         [TestMethod]
@@ -84,12 +84,12 @@ namespace TensorFlowNET.Keras.UnitTest
             // Use the list version, where the tokenization has already been done.
             tokenizer.fit_on_texts(tokenized_texts);
 
-            Assert.AreEqual(28, tokenizer.word_index.Count);
+            Assert.AreEqual(24, tokenizer.word_index.Count);
 
             Assert.AreEqual(1, tokenizer.word_index[OOV]);
             Assert.AreEqual(8, tokenizer.word_index["worst"]);
-            Assert.AreEqual(13, tokenizer.word_index["number"]);
-            Assert.AreEqual(17, tokenizer.word_index["were"]);
+            Assert.AreEqual(13, tokenizer.word_index["dawn"]);
+            Assert.AreEqual(17, tokenizer.word_index["follow"]);
         }
 
         [TestMethod]
@@ -102,7 +102,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(4, sequences.Count);
 
             Assert.AreEqual(tokenizer.word_index["worst"], sequences[0][9]);
-            Assert.AreEqual(tokenizer.word_index["proud"], sequences[1][10]);
+            Assert.AreEqual(tokenizer.word_index["previous"], sequences[1][10]);
         }
 
         [TestMethod]
@@ -116,7 +116,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(4, sequences.Count);
 
             Assert.AreEqual(tokenizer.word_index["worst"], sequences[0][9]);
-            Assert.AreEqual(tokenizer.word_index["proud"], sequences[1][10]);
+            Assert.AreEqual(tokenizer.word_index["previous"], sequences[1][10]);
         }
 
         [TestMethod]
@@ -200,7 +200,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(4, sequences.Count);
 
             Assert.AreEqual(tokenizer.word_index["worst"], sequences[0][9]);
-            Assert.AreEqual(tokenizer.word_index["proud"], sequences[1][10]);
+            Assert.AreEqual(tokenizer.word_index["previous"], sequences[1][10]);
 
             for (var i = 0; i < sequences.Count; i++)
                 for (var j = 0; j < sequences[i].Length; j++)
@@ -217,7 +217,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(4, sequences.Count);
 
             Assert.AreEqual(tokenizer.word_index["worst"], sequences[0][9]);
-            Assert.AreEqual(tokenizer.word_index["proud"], sequences[1][10]);
+            Assert.AreEqual(tokenizer.word_index["previous"], sequences[1][10]);
 
             var oov_count = 0;
             for (var i = 0; i < sequences.Count; i++)
@@ -225,7 +225,7 @@ namespace TensorFlowNET.Keras.UnitTest
                     if (tokenizer.word_index[OOV] == sequences[i][j])
                         oov_count += 1;
 
-            Assert.AreEqual(9, oov_count);
+            Assert.AreEqual(5, oov_count);
         }
 
         [TestMethod]
@@ -238,15 +238,15 @@ namespace TensorFlowNET.Keras.UnitTest
             var padded = keras.preprocessing.sequence.pad_sequences(sequences);
 
             Assert.AreEqual(4, padded.shape[0]);
-            Assert.AreEqual(22, padded.shape[1]);
+            Assert.AreEqual(20, padded.shape[1]);
 
             var firstRow = padded[0];
             var secondRow = padded[1];
 
-            Assert.AreEqual(tokenizer.word_index["worst"], padded[0, 19].GetInt32());
+            Assert.AreEqual(tokenizer.word_index["worst"], padded[0, 17].GetInt32());
             for (var i = 0; i < 8; i++)
                 Assert.AreEqual(0, padded[0, i].GetInt32());
-            Assert.AreEqual(tokenizer.word_index["proud"], padded[1, 10].GetInt32());
+            Assert.AreEqual(tokenizer.word_index["previous"], padded[1, 10].GetInt32());
             for (var i = 0; i < 20; i++)
                 Assert.AreNotEqual(0, padded[1, i].GetInt32());
         }
@@ -269,7 +269,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(tokenizer.word_index["worst"], padded[0, 12].GetInt32());
             for (var i = 0; i < 3; i++)
                 Assert.AreEqual(0, padded[0, i].GetInt32());
-            Assert.AreEqual(tokenizer.word_index["proud"], padded[1, 3].GetInt32());
+            Assert.AreEqual(tokenizer.word_index["previous"], padded[1, 5].GetInt32());
             for (var i = 0; i < 15; i++)
                 Assert.AreNotEqual(0, padded[1, i].GetInt32());
         }
@@ -292,7 +292,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(tokenizer.word_index["worst"], padded[0, 9].GetInt32());
             for (var i = 12; i < 15; i++)
                 Assert.AreEqual(0, padded[0, i].GetInt32());
-            Assert.AreEqual(tokenizer.word_index["proud"], padded[1, 10].GetInt32());
+            Assert.AreEqual(tokenizer.word_index["previous"], padded[1, 10].GetInt32());
             for (var i = 0; i < 15; i++)
                 Assert.AreNotEqual(0, padded[1, i].GetInt32());
         }
