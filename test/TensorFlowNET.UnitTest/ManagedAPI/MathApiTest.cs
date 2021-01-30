@@ -48,5 +48,14 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var x5 = tf.reduce_sum(b, (0, 1));
             Assert.AreEqual(-4.7f, (float)x5);
         }
+
+        [TestMethod]
+        public void Erf()
+        {
+            var erf = tf.math.erf(a, name: "erf");
+            var expected = new float[] { 0.8427007f, -0.5204999f, 0.99999845f, -0.9970206f, 0f, -1f };
+            var actual = erf.ToArray<float>();
+            Assert.IsTrue(Equal(expected, actual));
+        }
     }
 }

@@ -265,6 +265,29 @@ namespace Tensorflow
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.equal(x, y, name: name);
 
+        /// <summary>
+        /// Computes the Gauss error function of `x` element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor erf(Tensor x, string name = null)
+            => tf.Context.RunInAutoMode2(
+                () => tf.OpDefLib._apply_op_helper("Erf", name, new { x }).output,
+                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Erf", name,
+                    null,
+                    x).FirstOrDefault(),
+                (op) =>
+                {
+                    var attrs = new object[]
+                    {
+                        "T", op.get_attr<TF_DataType>("T")
+                    };
+                    tf.Runner.RecordGradient("Erf", op.inputs, attrs, op.outputs);
+                },
+                new Tensors(x));
+
         public static Tensor sqrt(Tensor x, string name = null)
             => gen_math_ops.sqrt(x, name: name);
 
