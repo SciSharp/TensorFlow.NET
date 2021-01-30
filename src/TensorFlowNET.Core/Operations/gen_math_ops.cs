@@ -376,8 +376,18 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor cos(Tensor x, string name = null)
+        public static Tensor cos<T>(T x, string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Cos", name,
+                    null,
+                    x);
+
+                return results[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("Cos", name, args: new { x });
 
             return _op.outputs[0];

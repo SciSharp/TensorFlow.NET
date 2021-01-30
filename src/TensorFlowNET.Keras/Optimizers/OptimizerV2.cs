@@ -26,6 +26,9 @@ namespace Tensorflow.Keras.Optimizers
         protected float _initial_decay = 0.0f;
         protected bool _use_locking = true;
 
+        public IVariableV1 lr
+            => _hyper_variables["learning_rate"];
+
         Dictionary<string, Dictionary<string, IVariableV1>> _slots;
         List<string> _slot_names;
 

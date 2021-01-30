@@ -56,15 +56,31 @@ namespace Tensorflow
             {
                 var nd = np.zeros(1 * 256 * 256 * 3).astype(np.float32).reshape(1, 256, 256, 3);
                 ResourceVariable variable = tf.Variable(nd);
-                var nd2 = np.arange(1 * 256 * 256 * 3).astype(np.float32).reshape(1, 256, 256, 3);
-                variable.assign(nd2);
 
-                for (int i = 0; i< 100; i++)
+                for (int i = 0; i< 10; i++)
                 {
                     var v = variable.numpy();
                 }
             };
 
+        public Action<int, int> VariableAssign
+            => (epoch, iterate) =>
+            {
+                ResourceVariable variable = tf.Variable(3112f);
+                AssignVariable(variable);
+                for (int i = 0; i < 100; i++)
+                {
+                    var v = variable.numpy();
+                    if ((float)v != 1984f)
+                        throw new ValueError("");
+                }
+            };
+
+        void AssignVariable(IVariableV1 v)
+        {
+            using var tensor = tf.constant(1984f);
+            v.assign(tensor);
+        }
 
         public Action<int, int> MathAdd
             => (epoch, iterate) =>
