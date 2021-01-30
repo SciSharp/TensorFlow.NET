@@ -16,6 +16,10 @@ namespace Tensorflow.Keras.Text
     /// (each integer being the index of a token in a dictionary) or into a vector where the coefficient for 
     /// each token could be binary, based on word count, based on tf-idf...
     /// </summary>
+    /// <remarks>
+    /// This code is a fairly straight port of the Python code for Keras text preprocessing found at:
+    /// https://github.com/keras-team/keras-preprocessing/blob/master/keras_preprocessing/text.py
+    /// </remarks>
     public class Tokenizer
     {
         private readonly int num_words;
@@ -51,7 +55,7 @@ namespace Tensorflow.Keras.Text
             this.split = split;
             this.char_level = char_level;
             this.oov_token = oov_token;
-            this.analyzer = analyzer;
+            this.analyzer = analyzer != null ? analyzer : (text) => TextApi.text_to_word_sequence(text, filters, lower, split);
         }
 
         /// <summary>

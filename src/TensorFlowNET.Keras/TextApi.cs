@@ -17,14 +17,7 @@ namespace Tensorflow.Keras
                 string oov_token = null,
                 Func<string, IEnumerable<string>> analyzer = null)
         {
-            if (analyzer != null)
-            {
-                return new Keras.Text.Tokenizer(num_words, filters, lower, split, char_level, oov_token, analyzer);
-            }
-            else
-            {
-                return new Keras.Text.Tokenizer(num_words, filters, lower, split, char_level, oov_token, (text) => text_to_word_sequence(text, filters, lower, split));
-            }
+            return new Keras.Text.Tokenizer(num_words, filters, lower, split, char_level, oov_token, analyzer);
         }
 
         public static IEnumerable<string> text_to_word_sequence(string text, string filters = DefaultFilter, bool lower = true, char split = ' ')
