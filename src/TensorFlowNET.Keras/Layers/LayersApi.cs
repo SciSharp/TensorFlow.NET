@@ -142,6 +142,7 @@ namespace Tensorflow.Keras.Layers
         public Dense Dense(int units,
             Activation activation = null,
             IInitializer kernel_initializer = null,
+            bool use_bias = true,
             IInitializer bias_initializer = null,
             TensorShape input_shape = null)
             => new Dense(new DenseArgs
@@ -149,7 +150,7 @@ namespace Tensorflow.Keras.Layers
                 Units = units,
                 Activation = activation ?? keras.activations.Linear,
                 KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
-                BiasInitializer = bias_initializer ?? tf.zeros_initializer,
+                BiasInitializer = bias_initializer ?? (use_bias ? tf.zeros_initializer : null),
                 InputShape = input_shape
             });
 
@@ -374,6 +375,9 @@ namespace Tensorflow.Keras.Layers
 
         public Add Add()
             => new Add(new MergeArgs { });
+
+        public Subtract Subtract()
+            => new Subtract(new MergeArgs { });
 
         public GlobalAveragePooling2D GlobalAveragePooling2D()
             => new GlobalAveragePooling2D(new Pooling2DArgs { });

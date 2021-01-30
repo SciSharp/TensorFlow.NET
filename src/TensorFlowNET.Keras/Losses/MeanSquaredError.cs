@@ -17,7 +17,7 @@ namespace Tensorflow.Keras.Losses
         {
             Tensor y_pred_dispatch = ops.convert_to_tensor(y_pred);
             Tensor y_true_cast = gen_math_ops.cast(y_true, y_pred_dispatch.dtype);
-            return  gen_math_ops.mean(gen_math_ops.squared_difference(y_pred_dispatch, y_true_cast), axis: -1);
+            return gen_math_ops.mean(gen_math_ops.squared_difference(y_pred_dispatch, y_true_cast), axis: -1);
         }
     }
 }
