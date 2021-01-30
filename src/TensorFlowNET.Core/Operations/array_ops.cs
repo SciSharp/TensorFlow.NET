@@ -400,9 +400,22 @@ namespace Tensorflow
         public static Tensor reshape(Tensor tensor, object[] shape, string name = null)
             => gen_array_ops.reshape(tensor, shape, name: name);
 
+        private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
+        {
+            return tf_with(ops.name_scope(name, "ones_like", new { tensor }), scope =>
+            {
+                name = scope;
+                var tensor1 = ops.convert_to_tensor(tensor, name: "tensor");
+                var ones_shape = shape_internal(tensor1, optimize: optimize);
+                if (dtype == TF_DataType.DtInvalid)
+                    dtype = tensor1.dtype;
+                var ret = ones(ones_shape, dtype: dtype, name: name);
+                return ret;
+            });
+        }
+
         public static Tensor ones(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
-            dtype = dtype.as_base_dtype();
             return tf_with(ops.name_scope(name, "ones", new { shape }), scope =>
             {
                 name = scope;
@@ -585,11 +598,10 @@ namespace Tensorflow
 
                 if (!tf.Context.executing_eagerly())
                 {
-                    var input_tensor = ops.convert_to_tensor(input);
-                    var input_shape = input_tensor.TensorShape;
-                    if (optimize && input_tensor.NDims > -1 && input_shape.is_fully_defined())
+                    var input_shape = input.TensorShape;
+                    if (optimize && input.NDims > -1 && input_shape.is_fully_defined())
                     {
-                        var nd = np.array(input_tensor.shape).astype(out_type.as_numpy_dtype());
+                        var nd = np.array(input.shape).astype(out_type.as_numpy_dtype());
                         return constant_op.constant(nd, name: name);
                     }
                 }

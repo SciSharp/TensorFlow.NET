@@ -118,6 +118,9 @@ namespace Tensorflow
         public Tensor cos(Tensor x, string name = null)
             => gen_math_ops.cos(x, name);
 
+        public Tensor cos(float x, string name = null)
+            => gen_math_ops.cos(x, name);
+
         /// <summary>
         /// Computes hyperbolic cosine of x element-wise.
         /// </summary>

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Reflection;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Layers;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
@@ -150,31 +151,18 @@ namespace Tensorflow.Keras.Utils
 
                     // recursively
                     CreateKerasHistoryHelper(layer_inputs, processed_ops, created_layers);
-                    var op_layer = GetLayer<ITensorFlowOpLayer>(new TensorFlowOpLayerArgs
+                    var opLayerArgs = new TensorFlowOpLayerArgs
                     {
                         NodeDef = op.node_def,
                         Constants = constants,
                         Name = op.name
-                    });
+                    };
+                    var op_layer = new TensorFlowOpLayer(opLayerArgs);
                     created_layers.Add(op_layer);
                     op_layer.SetConnectivityMetadata(layer_inputs, op.outputs);
                     processed_ops.Add(op);
                 }
             }
-        }
-
-        static Layer GetLayer<T>(LayerArgs args)
-        {
-            Layer layer = default;
-            var assemble = Assembly.Load("TensorFlow.Keras.Layers");
-            foreach (var type in assemble.GetTypes().Where(x => x.GetInterface(typeof(T).Name) != null))
-            {
-                layer = (Layer)Activator.CreateInstance(type, new object[] { args });
-            }
-
-            if (layer == null)
-                throw new NotImplementedException($"Can't find implementation for type {args.GetType().Name}");
-            return layer;
         }
 
         // recusive
