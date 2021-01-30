@@ -90,17 +90,17 @@ namespace Tensorflow
                 size *= s;
 
             var buffer = new byte[size][];
-            var src = c_api.TF_TensorData(_handle);
-            src += (int)(size * 8);
+            var data_start = c_api.TF_TensorData(_handle);
+            data_start += (int)(size * sizeof(ulong));
             for (int i = 0; i < buffer.Length; i++)
             {
                 IntPtr dst = IntPtr.Zero;
                 ulong dstLen = 0;
-                var read = c_api.TF_StringDecode((byte*)src, bytesize, (byte**)&dst, ref dstLen, tf.Status.Handle);
+                var read = c_api.TF_StringDecode((byte*)data_start, bytesize, (byte**)&dst, ref dstLen, tf.Status.Handle);
                 tf.Status.Check(true);
                 buffer[i] = new byte[(int)dstLen];
                 Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);
-                src += (int)read;
+                data_start += (int)read;
             }
 
             return buffer;

@@ -388,14 +388,12 @@ namespace Tensorflow
                 if (dtype == TF_DataType.DtInvalid)
                     dtype = tensor1.dtype;
                 var ret = ones(ones_shape, dtype: dtype, name: name);
-                ret.shape = tensor1.shape;
                 return ret;
             });
         }
 
         public static Tensor ones(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
         {
-            dtype = dtype.as_base_dtype();
             return tf_with(ops.name_scope(name, "ones", new { shape }), scope =>
             {
                 name = scope;
@@ -578,11 +576,10 @@ namespace Tensorflow
 
                 if (!tf.Context.executing_eagerly())
                 {
-                    var input_tensor = ops.convert_to_tensor(input);
-                    var input_shape = input_tensor.TensorShape;
-                    if (optimize && input_tensor.NDims > -1 && input_shape.is_fully_defined())
+                    var input_shape = input.TensorShape;
+                    if (optimize && input.NDims > -1 && input_shape.is_fully_defined())
                     {
-                        var nd = np.array(input_tensor.shape).astype(out_type.as_numpy_dtype());
+                        var nd = np.array(input.shape).astype(out_type.as_numpy_dtype());
                         return constant_op.constant(nd, name: name);
                     }
                 }

@@ -327,31 +327,17 @@ namespace Tensorflow
         public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
         {
             var r = _ReductionDims(input_tensor, axis);
-            if (axis == null)
-            {
-                var m = gen_math_ops.mean(input_tensor, r, keepdims, name);
-                return _may_reduce_to_scalar(keepdims, axis, m);
-            }
-            else
-            {
-                var m = gen_math_ops.mean(input_tensor, axis, keepdims, name);
-                return _may_reduce_to_scalar(keepdims, axis, m);
-            }
+            var axis_tensor = axis == null ? r : ops.convert_to_tensor(axis);
+            var m = gen_math_ops.mean(input_tensor, axis_tensor, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis_tensor, m);
         }
 
         public static Tensor reduce_mean(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
         {
-            if (axis == null)
-            {
-                var r = _ReductionDims(input_tensors, axis);
-                var m = gen_math_ops.mean(input_tensors, r, keepdims, name);
-                return _may_reduce_to_scalar(keepdims, axis, m);
-            }
-            else
-            {
-                var m = gen_math_ops.mean(input_tensors, axis, keepdims, name);
-                return _may_reduce_to_scalar(keepdims, axis, m);
-            }
+            var r = _ReductionDims(input_tensors, axis);
+            var axis_tensor = axis == null ? r : ops.convert_to_tensor(axis.Value);
+            var m = gen_math_ops.mean(input_tensors, axis_tensor, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
         /// <summary>

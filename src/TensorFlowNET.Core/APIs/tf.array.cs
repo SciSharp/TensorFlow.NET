@@ -215,6 +215,9 @@ namespace Tensorflow
         public Tensor ones_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
             => array_ops.ones_like(tensor, dtype: dtype, name: name, optimize: optimize);
 
+        public Tensor ones_like(NDArray nd, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
+            => array_ops.ones_like(nd, dtype: dtype, name: name, optimize: optimize);
+
         public Tensor one_hot(Tensor indices, int depth,
             Tensor on_value = null,
             Tensor off_value = null,
@@ -289,6 +292,9 @@ namespace Tensorflow
         /// <returns>A `Tensor` with all elements set to zero.</returns>
         public Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
             => array_ops.zeros_like(tensor, dtype: dtype, name: name, optimize: optimize);
+
+        public Tensor zeros_like(NDArray nd, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
+            => array_ops.zeros_like(nd, dtype: dtype, name: name, optimize: optimize);
 
         /// <summary>
         /// Stops gradient computation.
