@@ -58,9 +58,7 @@ namespace Tensorflow.Keras
             var type = getNPType(dtype);
             var nd = new NDArray(type, new Shape(length.Count(), maxlen.Value),true);
 
-#pragma warning disable CS0162 // Unreachable code detected
             for (int i = 0; i < nd.shape[0]; i++)
-#pragma warning restore CS0162 // Unreachable code detected
             {
                 var s = sequences.ElementAt(i);
                 if (s.Length > maxlen.Value)
