@@ -65,7 +65,7 @@ namespace Tensorflow.Keras
                 {
                     s = (truncating == "pre") ? s.Slice(s.Length - maxlen.Value, s.Length) : s.Slice(0, maxlen.Value);
                 }
-                var sliceString = (padding == "pre") ? (i.ToString() + "," + (maxlen-s.Length).ToString() + ":") : (i.ToString() + ",:" + s.Length);
+                var sliceString = (padding == "pre") ? $"{i},{maxlen-s.Length}:" : $"{i},:{s.Length}";
                 nd[sliceString] = np.array(s);
             }
 
