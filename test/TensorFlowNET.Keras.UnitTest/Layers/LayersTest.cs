@@ -36,7 +36,7 @@ namespace TensorFlowNET.Keras.UnitTest
             var model = keras.Model(inputs, outputs, name: "mnist_model");
             model.summary();
         }
-        
+
         /// <summary>
         /// Custom layer test, used in Dueling DQN
         /// </summary>
@@ -45,10 +45,10 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var layers = keras.layers;
             var inputs = layers.Input(shape: 24);
-            var x = layers.Dense(128, activation:"relu").Apply(inputs);
+            var x = layers.Dense(128, activation: "relu").Apply(inputs);
             var value = layers.Dense(24).Apply(x);
             var adv = layers.Dense(1).Apply(x);
-            
+
             var mean = adv - tf.reduce_mean(adv, axis: 1, keepdims: true);
             adv = layers.Subtract().Apply((adv, mean));
             var outputs = layers.Add().Apply((value, adv));
@@ -105,9 +105,14 @@ namespace TensorFlowNET.Keras.UnitTest
         }
 
         [TestMethod]
+        [Ignore]
         public void SimpleRNN()
         {
-
+            var inputs = np.random.rand(32, 10, 8).astype(np.float32);
+            var simple_rnn = keras.layers.SimpleRNN(4);
+            var output = simple_rnn.Apply(inputs);
+            Assert.AreEqual((32, 4), output.shape);
         }
+
     }
 }

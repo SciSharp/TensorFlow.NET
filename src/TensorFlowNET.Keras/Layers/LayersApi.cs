@@ -1,4 +1,5 @@
 ﻿using NumSharp;
+using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
@@ -326,6 +327,24 @@ namespace Tensorflow.Keras.Layers
             {
                 Alpha = alpha
             });
+
+        public Layer SimpleRNN(int units) => SimpleRNN(units, "tanh");
+
+        public Layer SimpleRNN(int units,
+            Activation activation = null)
+                => new SimpleRNN(new SimpleRNNArgs
+                {
+                    Units = units,
+                    Activation = activation
+                });
+
+        public Layer SimpleRNN(int units,
+            string activation = "tanh")
+                => new SimpleRNN(new SimpleRNNArgs
+                {
+                    Units = units,
+                    Activation = GetActivationByName(activation)
+                });
 
         public Layer LSTM(int units,
             Activation activation = null,
