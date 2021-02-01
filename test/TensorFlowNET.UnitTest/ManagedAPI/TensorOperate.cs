@@ -132,28 +132,25 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
         }
 
         #region ones/zeros like
-        [Ignore]
         [TestMethod]
         public void TestOnesLike()
         {
             #region 2-dimension
-            var testCase2D = tf.constant(new int[,]
+            var ones2D = tf.ones_like(new int[,]
             {
                 { 1, 2, 3 },
                 { 4, 5, 6 }
             });
-            var ones2D = tf.ones_like(testCase2D);
 
             Assert.AreEqual(new[] { 1, 1, 1 }, ones2D[0].numpy());
             Assert.AreEqual(new[] { 1, 1, 1 }, ones2D[1].numpy());
             #endregion
 
             #region 1-dimension
-            var testCase1D = tf.constant(new int[,]
+            var ones1D = tf.ones_like(new int[,]
             {
                 { 1, 2, 3 }
             });
-            var ones1D = tf.ones_like(testCase1D);
 
             Assert.AreEqual(new[] { 1, 1, 1 }, ones1D[0].numpy());
             #endregion
@@ -163,23 +160,21 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
         public void TestZerosLike()
         {
             #region 2-dimension
-            var testCase2D = tf.constant(new int[,]
+            var zeros2D = tf.zeros_like(new int[,]
             {
                 { 1, 2, 3 },
                 { 4, 5, 6 }
             });
-            var zeros2D = tf.zeros_like(testCase2D);
 
             Assert.AreEqual(new[] { 0, 0, 0 }, zeros2D[0].numpy());
             Assert.AreEqual(new[] { 0, 0, 0 }, zeros2D[1].numpy());
             #endregion
 
             #region 1-dimension
-            var testCase1D = tf.constant(new int[,]
+            var zeros1D = tf.zeros_like(new int[,]
             {
                 { 1, 2, 3 }
             });
-            var zeros1D = tf.zeros_like(testCase1D);
 
             Assert.AreEqual(new[] { 0, 0, 0 }, zeros1D[0].numpy());
             #endregion

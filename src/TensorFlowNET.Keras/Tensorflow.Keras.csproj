@@ -21,7 +21,9 @@
 * Support BatchNormalization layer.
 * Building keras model in subclass, functional and sequential api
 * Implemented backward_function.
-* Support model.load_weights.</PackageReleaseNotes>
+* Support model.load_weights.
+* Add Subtract layer
+* Support YOLOv3 model.</PackageReleaseNotes>
     <Description>Keras for .NET
 
 Keras is an API designed for human beings, not machines. Keras follows best practices for reducing cognitive load: it offers consistent &amp; simple APIs, it minimizes the number of user actions required for common use cases, and it provides clear &amp; actionable error messages.</Description>
@@ -62,6 +64,10 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Engine\Interfaces\" />
   </ItemGroup>
 
 </Project>

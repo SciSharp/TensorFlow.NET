@@ -137,6 +137,8 @@ namespace Tensorflow
         {
             switch (a)
             {
+                case Tensors arr:
+                    return arr.Length;
                 case Array arr:
                     return arr.Length;
                 case IList arr:

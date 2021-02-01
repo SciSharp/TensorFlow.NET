@@ -27,10 +27,10 @@ namespace Tensorflow.Keras.Losses
             Tensor error = math_ops.subtract(y_pred_cast, y_true_cast);
             Tensor abs_error = math_ops.abs(error);
             Tensor half = ops.convert_to_tensor(0.5, dtype: abs_error.dtype);
-            return gen_math_ops.mean(array_ops.where_v2(abs_error <= delta, 
-                                                        half * math_ops.pow(error, 2), 
+            return gen_math_ops.mean(array_ops.where_v2(abs_error <= delta,
+                                                        half * math_ops.pow(error, 2),
                                                         half * math_ops.pow(delta, 2) + delta * (abs_error - delta)),
-                                     axis : -1);
+                                     axis: -1);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
+using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
 namespace TensorFlowNET.Keras.UnitTest
@@ -35,71 +36,31 @@ namespace TensorFlowNET.Keras.UnitTest
             var model = keras.Model(inputs, outputs, name: "mnist_model");
             model.summary();
         }
-        
+
         /// <summary>
         /// Custom layer test, used in Dueling DQN
         /// </summary>
         [TestMethod, Ignore]
-        public void FunctionalTest()
+        public void TensorFlowOpLayer()
         {
             var layers = keras.layers;
             var inputs = layers.Input(shape: 24);
-            var x = layers.Dense(128, activation:"relu").Apply(inputs);
+            var x = layers.Dense(128, activation: "relu").Apply(inputs);
             var value = layers.Dense(24).Apply(x);
             var adv = layers.Dense(1).Apply(x);
-            
-            var adv_out = adv - Binding.tf.reduce_mean(adv, axis: 1, keepdims: true); // Here's problem.
-            var outputs = layers.Add().Apply(new Tensors(adv_out, value));
+
+            var mean = adv - tf.reduce_mean(adv, axis: 1, keepdims: true);
+            adv = layers.Subtract().Apply((adv, mean));
+            var outputs = layers.Add().Apply((value, adv));
             var model = keras.Model(inputs, outputs);
-            model.summary();
             model.compile(optimizer: keras.optimizers.RMSprop(0.001f),
                           loss: keras.losses.MeanSquaredError(),
                           metrics: new[] { "acc" });
-            // Here we consider the adv_out is one layer, which is a little different from py's version
-            Assert.AreEqual(model.Layers.Count, 6);
-
-            // py code:
-            //from tensorflow.keras.layers import Input, Dense, Add, Subtract, Lambda
-            //from tensorflow.keras.models import Model
-            //from tensorflow.keras.optimizers import RMSprop
-            //import tensorflow.keras.backend as K
-
-            //inputs = Input(24)
-            //x = Dense(128, activation = "relu")(inputs)
-            //value = Dense(24)(x)
-            //adv = Dense(1)(x)
-            //meam = Lambda(lambda x: K.mean(x, axis = 1, keepdims = True))(adv)
-            //adv = Subtract()([adv, meam])
-            //outputs = Add()([value, adv])
-            //model = Model(inputs, outputs)
-            //model.compile(loss = "mse", optimizer = RMSprop(1e-3))
-            //model.summary()
-
-            //py output:
-            //Model: "functional_3"
-            //__________________________________________________________________________________________________
-            //Layer(type)                    Output Shape         Param #     Connected to
-            //==================================================================================================
-            //input_2 (InputLayer)            [(None, 24)]         0
-            //__________________________________________________________________________________________________
-            //dense_3 (Dense)                 (None, 128)          3200        input_2[0][0]
-            //__________________________________________________________________________________________________
-            //dense_5 (Dense)                 (None, 1)            129         dense_3[0][0]
-            //__________________________________________________________________________________________________
-            //lambda_1 (Lambda)               (None, 1)            0           dense_5[0][0]
-            //__________________________________________________________________________________________________
-            //dense_4 (Dense)                 (None, 24)           3096        dense_3[0][0]
-            //__________________________________________________________________________________________________
-            //subtract_1 (Subtract)           (None, 1)            0           dense_5[0][0]
-            //                                                                 lambda_1[0][0]
-            //__________________________________________________________________________________________________
-            //add_1 (Add)                     (None, 24)           0           dense_4[0][0]
-            //                                                                 subtract_1[0][0]
-            //==================================================================================================
-            //Total params: 6,425
-            //Trainable params: 6,425
-            //Non-trainable params: 0
-            //__________________________________________________________________________________________________
+            model.summary();
+            Assert.AreEqual(model.Layers.Count, 8);
+            var result = model.predict(tf.constant(np.arange(24).astype(np.float32)[np.newaxis, Slice.All]));
+            Assert.AreEqual(result.shape, new TensorShape(1, 24));
+            model.fit(np.arange(24).astype(np.float32)[np.newaxis, Slice.All], np.arange(24).astype(np.float32)[np.newaxis, Slice.All], verbose: 0); 
         }
 
         /// <summary>
@@ -147,9 +108,14 @@ namespace TensorFlowNET.Keras.UnitTest
         }
 
         [TestMethod]
+        [Ignore]
         public void SimpleRNN()
         {
-
+            var inputs = np.random.rand(32, 10, 8).astype(np.float32);
+            var simple_rnn = keras.layers.SimpleRNN(4);
+            var output = simple_rnn.Apply(inputs);
+            Assert.AreEqual((32, 4), output.shape);
         }
+
     }
 }

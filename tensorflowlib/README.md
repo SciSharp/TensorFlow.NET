@@ -56,7 +56,7 @@ Set ENV `BAZEL_VC=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\
 
 1. Build static library
 
-`bazel build --config=opt //tensorflow:tensorflow`
+`bazel build --output_base=C:/tmp/tfcompilation build --config=opt //tensorflow:tensorflow`
 
 2. Build pip package
 

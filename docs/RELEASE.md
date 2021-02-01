@@ -4,6 +4,25 @@
 
 This release contains contributions from many people at SciSharp as well as the external contributors.
 
+**Release Date 02/06/2021**
+
+### TensorFlow.Binding v0.33.0
+
+* Improve memory usage
+* Fix minor bugs
+
+### TensorFlow.Keras v0.4.0
+
+* Add Subtract layer
+
+* Add model.load_weights and model.save_weights
+
+* Fix memory leak issue
+
+* Support to build YOLOv3 object detection model
+
+  
+
 **Release Date 01/09/2021**
 
 ### TensorFlow.Binding v0.32.0
