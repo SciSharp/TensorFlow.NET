@@ -315,6 +315,12 @@ namespace Tensorflow.Keras.Layers
             return layer.Apply(inputs);
         }
 
+        public Layer ReLU() => new ReLu(new LayerArgs { });
+
+        public Layer Tanh() => new Tanh(new LayerArgs { });
+
+        public Layer Sigmoid() => new Sigmoid(new LayerArgs { });
+
         /// <summary>
         /// Leaky version of a Rectified Linear Unit.
         /// </summary>
@@ -392,6 +398,8 @@ namespace Tensorflow.Keras.Layers
             => name switch
             {
                 "glorot_uniform" => tf.glorot_uniform_initializer,
+                "random_uniform" => tf.random_uniform_initializer,
+                "orthogonal" => tf.orthogonal_initializer,
                 "zeros" => tf.zeros_initializer,
                 "ones" => tf.ones_initializer,
                 _ => tf.glorot_uniform_initializer

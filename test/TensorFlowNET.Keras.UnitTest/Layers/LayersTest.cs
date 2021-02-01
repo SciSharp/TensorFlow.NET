@@ -123,7 +123,9 @@ namespace TensorFlowNET.Keras.UnitTest
                 { 2, 3, 4, 5 },
                 { 3, 4, 5, 6 }
             });
-            // model.compile("rmsprop", "mse");
+            model.compile(optimizer: keras.optimizers.RMSprop(0.001f),
+                          loss: keras.losses.MeanSquaredError(),
+                          metrics: new[] { "acc" });
             var output_array = model.predict(input_array);
             Assert.AreEqual((32, 10, 64), output_array.shape);
         }

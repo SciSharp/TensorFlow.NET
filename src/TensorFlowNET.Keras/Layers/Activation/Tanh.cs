@@ -10,18 +10,15 @@ namespace Tensorflow.Keras.Layers
     /// <summary>
     /// Leaky version of a Rectified Linear Unit.
     /// </summary>
-    public class LeakyReLu : Layer
+    public class Tanh : Layer
     {
-        LeakyReLuArgs args;
-        float alpha => args.Alpha;
-        public LeakyReLu(LeakyReLuArgs args) : base(args)
+        public Tanh(LayerArgs args) : base(args)
         {
-            this.args = args;
         }
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
         {
-            return tf.nn.relu(inputs);
+            return tf.nn.tanh(inputs, name: Name);
         }
     }
 }
