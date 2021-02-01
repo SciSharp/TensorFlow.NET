@@ -52,6 +52,10 @@ namespace Tensorflow
             // 100K float variable.
             mm.Execute(10, batchSize, basic.Variable);
 
+            mm.Execute(10, batchSize, basic.VariableRead);
+
+            mm.Execute(10, batchSize, basic.VariableAssign);
+
             // 1 million math.
             mm.Execute(10, 100 * batchSize, basic.MathAdd);
 

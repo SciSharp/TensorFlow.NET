@@ -69,12 +69,13 @@ namespace Tensorflow
             => items.Insert(index, tensor);
 
         IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+            => GetEnumerator();
 
         public static implicit operator Tensors(Tensor tensor)
             => new Tensors(tensor);
+
+        public static implicit operator Tensors((Tensor, Tensor) tuple)
+            => new Tensors(tuple.Item1, tuple.Item2);
 
         public static implicit operator Tensors(NDArray nd)
             => new Tensors(nd);

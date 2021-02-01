@@ -17,7 +17,9 @@ namespace Tensorflow.Keras
                 return results[0];
             }
 
-            throw new NotImplementedException("");
+            var _op = tf.OpDefLib._apply_op_helper("Tanh", name: name, args: new { x = features });
+
+            return _op.output;
         };
     }
 }

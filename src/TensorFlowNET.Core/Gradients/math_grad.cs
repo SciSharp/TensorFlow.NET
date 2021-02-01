@@ -138,6 +138,9 @@ namespace Tensorflow.Gradients
         [RegisterNoGradient("GreaterEqual")]
         public static Tensor[] _GreaterEqualGrad(Operation op, Tensor[] grads) => null;
 
+        [RegisterNoGradient("OnesLike")]
+        public static Tensor[] _OnesLike(Operation op, Tensor[] grads) => null;
+
         [RegisterNoGradient("ZerosLike")]
         public static Tensor[] _ZerosLike(Operation op, Tensor[] grads) => null;
 

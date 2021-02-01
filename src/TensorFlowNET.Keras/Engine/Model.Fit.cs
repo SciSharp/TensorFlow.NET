@@ -51,7 +51,7 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            FitInternal(epochs);
+            FitInternal(epochs, verbose);
         }
 
         public void fit(IDatasetV2 dataset, 
@@ -80,10 +80,10 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            FitInternal(epochs);
+            FitInternal(epochs, verbose);
         }
 
-        void FitInternal(int epochs)
+        void FitInternal(int epochs, int verbose)
         {
             stop_training = false;
             _train_counter.assign(0);
@@ -96,8 +96,11 @@ namespace Tensorflow.Keras.Engine
                 {
                     // callbacks.on_train_batch_begin(step)
                     var results = train_step_function(iterator);
-                    var result_pairs = string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2:F6}"));
-                    Console.WriteLine($"Epoch: {epoch + 1:D3}/{epochs:D3}, Step: {step + 1:D4}/{data_handler.Inferredsteps:D4}, {result_pairs}");
+                    if (verbose == 1)
+                    {
+                        var result_pairs = string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2:F6}"));
+                        Console.WriteLine($"Epoch: {epoch + 1:D3}/{epochs:D3}, Step: {step + 1:D4}/{data_handler.Inferredsteps:D4}, {result_pairs}");
+                    }
                 }
 
                 GC.Collect();

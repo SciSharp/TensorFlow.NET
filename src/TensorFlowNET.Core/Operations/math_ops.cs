@@ -265,6 +265,29 @@ namespace Tensorflow
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.equal(x, y, name: name);
 
+        /// <summary>
+        /// Computes the Gauss error function of `x` element-wise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Tensor erf(Tensor x, string name = null)
+            => tf.Context.RunInAutoMode2(
+                () => tf.OpDefLib._apply_op_helper("Erf", name, new { x }).output,
+                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Erf", name,
+                    null,
+                    x).FirstOrDefault(),
+                (op) =>
+                {
+                    var attrs = new object[]
+                    {
+                        "T", op.get_attr<TF_DataType>("T")
+                    };
+                    tf.Runner.RecordGradient("Erf", op.inputs, attrs, op.outputs);
+                },
+                new Tensors(x));
+
         public static Tensor sqrt(Tensor x, string name = null)
             => gen_math_ops.sqrt(x, name: name);
 
@@ -327,31 +350,17 @@ namespace Tensorflow
         public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
         {
             var r = _ReductionDims(input_tensor, axis);
-            if (axis == null)
-            {
-                var m = gen_math_ops.mean(input_tensor, r, keepdims, name);
-                return _may_reduce_to_scalar(keepdims, axis, m);
-            }
-            else
-            {
-                var m = gen_math_ops.mean(input_tensor, axis, keepdims, name);
-                return _may_reduce_to_scalar(keepdims, axis, m);
-            }
+            var axis_tensor = axis == null ? r : ops.convert_to_tensor(axis);
+            var m = gen_math_ops.mean(input_tensor, axis_tensor, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis_tensor, m);
         }
 
         public static Tensor reduce_mean(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
         {
-            if (axis == null)
-            {
-                var r = _ReductionDims(input_tensors, axis);
-                var m = gen_math_ops.mean(input_tensors, r, keepdims, name);
-                return _may_reduce_to_scalar(keepdims, axis, m);
-            }
-            else
-            {
-                var m = gen_math_ops.mean(input_tensors, axis, keepdims, name);
-                return _may_reduce_to_scalar(keepdims, axis, m);
-            }
+            var r = _ReductionDims(input_tensors, axis);
+            var axis_tensor = axis == null ? r : ops.convert_to_tensor(axis.Value);
+            var m = gen_math_ops.mean(input_tensors, axis_tensor, keepdims, name);
+            return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
         /// <summary>

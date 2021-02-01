@@ -28,6 +28,7 @@ namespace Tensorflow.Contexts
     /// </summary>
     public sealed partial class Context
     {
+        // [DebuggerStepThrough]
         public T RunInAutoMode<T>(Func<T> graphAction, Func<T> eagerAction, params object[] args)
         {
             if (tf.Context.has_graph_arg(args))

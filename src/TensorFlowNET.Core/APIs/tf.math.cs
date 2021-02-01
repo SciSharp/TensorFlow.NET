@@ -23,6 +23,15 @@ namespace Tensorflow
         {
             public Tensor log(Tensor x, string name = null)
                 => gen_math_ops.log(x, name);
+
+            /// <summary>
+            /// Computes the Gauss error function of `x` element-wise.
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public Tensor erf(Tensor x, string name = null)
+                => math_ops.erf(x, name);
         }
 
         public Tensor abs(Tensor x, string name = null)
@@ -116,6 +125,9 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor cos(Tensor x, string name = null)
+            => gen_math_ops.cos(x, name);
+
+        public Tensor cos(float x, string name = null)
             => gen_math_ops.cos(x, name);
 
         /// <summary>

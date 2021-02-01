@@ -46,7 +46,7 @@ namespace Tensorflow
     /// matching structure of Tensors having shape `[batch_size].concatenate(s)`
     /// for each `s` in `self.batch_size`.
     /// </summary>
-    public abstract class RnnCell : ILayer
+    public abstract class RnnCell : ILayer, RNNArgs.IRnnArgCell
     {
         /// <summary>
         /// Attribute that indicates whether the cell is a TF RNN cell, due the slight
