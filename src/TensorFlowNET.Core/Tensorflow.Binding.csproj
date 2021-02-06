@@ -25,9 +25,11 @@ https://tensorflownet.readthedocs.io</Description>
 * Eager Mode is added finally.
 * tf.keras is partially working. 
 * tf.data is added.
-* autograph works partially.
+* Autograph works partially.
+* Improve memory usage.
 
-TensorFlow .NET v0.3x is focused on making more Keras API works</PackageReleaseNotes>
+TensorFlow .NET v0.3x is focused on making more Keras API works.
+Keras API is a separate package released as TensorFlow.Keras.</PackageReleaseNotes>
     <FileVersion>0.33.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -83,7 +85,7 @@ TensorFlow .NET v0.3x is focused on making more Keras API works</PackageReleaseN
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.138" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="NumSharp.Lite" Version="0.1.12" />
-    <PackageReference Include="Protobuf.Text" Version="0.4.0" />
+    <PackageReference Include="Protobuf.Text" Version="0.5.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
   </ItemGroup>
 </Project>

@@ -181,6 +181,30 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern unsafe ulong TF_StringEncode(byte* src, ulong src_len, byte* dst, ulong dst_len, SafeStatusHandle status);
 
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_StringInit(IntPtr t);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_StringCopy(IntPtr dst, string text, long size);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_StringAssignView(IntPtr dst, IntPtr text, long size);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TF_StringGetDataPointer(IntPtr tst);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern TF_TString_Type TF_StringGetType(IntPtr tst);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern ulong TF_StringGetSize(IntPtr tst);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern ulong TF_StringGetCapacity(IntPtr tst);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_StringDealloc(IntPtr tst);
+
         /// <summary>
         /// Decode a string encoded using TF_StringEncode.
         /// </summary>

@@ -108,6 +108,32 @@ namespace Tensorflow.Native.UnitTest.Tensors
         }
 
         /// <summary>
+        /// Port from c_api_test.cc
+        /// `TEST_F(CApiAttributesTest, StringTensor)`
+        /// </summary>
+        [TestMethod, Ignore("Waiting for PR https://github.com/tensorflow/tensorflow/pull/46804")]
+        public void StringTensor()
+        {
+            string text = "Hello world!.";
+
+            var tensor = c_api.TF_AllocateTensor(TF_DataType.TF_STRING,
+                null,
+                0,
+                1 * 24);
+            var tstr = c_api.TF_StringInit(tensor);
+            var data = c_api.TF_StringGetDataPointer(tstr);
+            c_api.TF_StringCopy(tstr, text, text.Length);
+
+            Assert.AreEqual((ulong)text.Length, c_api.TF_StringGetSize(tstr));
+            Assert.AreEqual(text, c_api.StringPiece(data));
+            Assert.AreEqual((ulong)text.Length, c_api.TF_TensorByteSize(tensor));
+            Assert.AreEqual(0, c_api.TF_NumDims(tensor));
+
+            TF_DeleteTensor(tensor);
+            c_api.TF_StringDealloc(tstr);
+        }
+
+        /// <summary>
         /// Port from tensorflow\c\c_api_test.cc
         /// `TEST(CAPI, SetShape)`
         /// </summary>
