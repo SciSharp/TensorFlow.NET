@@ -25,7 +25,7 @@ namespace Tensorflow.Keras.Engine
         {
             (x, y) = data_handler.DataAdapter.Expand1d(x, y);
             using var tape = tf.GradientTape();
-            var y_pred = Apply(x, is_training: true);
+            var y_pred = Apply(x, training: true);
             var loss = compiled_loss.Call(y, y_pred);
 
             // For custom training steps, users can just write:

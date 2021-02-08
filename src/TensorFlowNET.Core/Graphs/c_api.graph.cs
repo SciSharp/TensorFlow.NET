@@ -322,5 +322,18 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
 
         public static extern void TF_UpdateEdge(IntPtr graph, TF_Output new_src, TF_Input dst, SafeStatusHandle status);
+
+        /// <summary>
+        /// Attempts to evaluate `output`. This will only be possible if `output` doesn't
+        /// depend on any graph inputs (this function is safe to call if this isn't the
+        /// case though).
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="output"></param>
+        /// <param name="result"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern bool TF_TryEvaluateConstant(IntPtr graph, TF_Output output, IntPtr[] result, SafeStatusHandle status);
     }
 }

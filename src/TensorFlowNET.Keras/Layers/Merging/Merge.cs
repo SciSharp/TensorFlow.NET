@@ -19,7 +19,7 @@ namespace Tensorflow.Keras.Layers
             // output_shape = input_shape.dims[1^];
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
             return _merge_function(inputs);
         }

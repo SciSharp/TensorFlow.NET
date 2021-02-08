@@ -32,7 +32,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
             if (tf.Context.executing_eagerly())
                 return _defun_call(inputs);

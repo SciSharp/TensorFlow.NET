@@ -36,6 +36,7 @@ namespace Tensorflow.Keras.Layers
         bool fused;
         int[] axis;
         string _data_format;
+        TensorShape kernel_size;
         IInitializer beta_initializer => args.BetaInitializer;
         IInitializer gamma_initializer => args.GammaInitializer;
         IInitializer moving_mean_initializer => args.MovingMeanInitializer;
@@ -120,10 +121,35 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool training = false)
+        public override TensorShape ComputeOutputShape(TensorShape input_shape)
+        {
+            return input_shape;
+        }
+
+        (Tensor, Tensor) _moments(Tensors inputs, int[] reduction_axes, bool keep_dims)
+        {
+            var (mean, variance) = _calculate_mean_and_var(inputs, reduction_axes, keep_dims);
+            if (_support_zero_size_input())
+                throw new NotImplementedException("");
+            return (mean, variance);
+        }
+
+        (Tensor, Tensor) _calculate_mean_and_var(Tensors inputs, int[] reduction_axes, bool keep_dims)
+        {
+            return nn_impl.moments(inputs, reduction_axes, keep_dims: keep_dims);
+        }
+
+        bool _support_zero_size_input()
+        {
+            return false;
+        }
+
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
             Tensor outputs = null;
-            var training_tensor = tf.logical_and(training, Trainable);
+            var training_tensor = training == null
+                ? tf.placeholder(tf.@bool, TensorShape.Scalar)
+                : tf.logical_and(training.Value, Trainable);
             if (fused)
             {
                 // var training = tf.convert_to_tensor(training);
@@ -131,7 +157,49 @@ namespace Tensorflow.Keras.Layers
                 return outputs;
             }
 
-            throw new NotImplementedException("BatchNormalization call");
+            var inputs_dtype = inputs.dtype.as_base_dtype();
+            var input_shape = inputs.shape;
+            var ndims = len(input_shape);
+            var reduction_axes = range(ndims).Where(x => !axis.Contains(x)).ToArray();
+
+            // Broadcasting only necessary for single-axis batch norm where the axis is
+            // not the last dimension
+            var broadcast_shape = range(ndims).Select(x => 1).ToArray();
+            broadcast_shape[axis[0]] = input_shape.dims[axis[0]];
+
+            var (scale, offset) = (gamma, beta);
+            var training_value = tf_utils.constant_value(training_tensor);
+
+            Tensor mean;
+            Tensor variance;
+            if (training_value.HasValue && training_value.Value == false)
+            {
+                (mean, variance) = (moving_mean.AsTensor(), moving_variance.AsTensor());
+            }
+            else
+            {
+                var keep_dims = len(axis) > 1;
+                (mean, variance) = _moments(inputs, reduction_axes, keep_dims: keep_dims);
+                mean = tf_utils.smart_cond(training_tensor,
+                    () => new[] { mean },
+                    () => new[] { ops.convert_to_tensor(moving_mean) }).FirstOrDefault();
+
+                variance = tf_utils.smart_cond(training_tensor,
+                  () => new[] { variance },
+                  () => new[] { ops.convert_to_tensor(moving_variance) }).FirstOrDefault();
+
+                var (new_mean, new_variance) = (mean, variance);
+            }
+
+            mean = math_ops.cast(mean, inputs.dtype);
+            variance = math_ops.cast(variance, inputs.dtype);
+            var offset_tensor = math_ops.cast(offset, inputs.dtype);
+            var scale_tensor = math_ops.cast(scale, inputs.dtype);
+            outputs = nn_impl.batch_normalization(inputs, mean, variance,
+                offset_tensor, scale_tensor, epsilon);
+            // If some components of the shape got lost due to adjustments, fix that.
+            outputs.set_shape(input_shape);
+            return outputs;
         }
 
         private Tensor _fused_batch_norm(Tensor inputs, Tensor training)

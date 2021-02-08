@@ -21,6 +21,31 @@ namespace Tensorflow
 {
     public class nn_impl
     {
+        public static Tensor conv2d_transpose(Tensor value = null,
+            IVariableV1 filter = null,
+            Tensor output_shape = null,
+            TensorShape strides = null,
+            string padding = "SAME",
+            string data_format = "NHWC",
+            string name = null,
+            TensorShape dilations = null)
+        {
+            if (dilations == null)
+                dilations = (1, 1, 1, 1);
+            return tf_with(ops.name_scope(name, "conv2d_transpose", new { value, filter, output_shape }), scope =>
+            {
+                return gen_nn_ops.conv2d_backprop_input(
+                    input_sizes: output_shape,
+                    filter: filter.AsTensor(),
+                    out_backprop: value,
+                    strides: strides,
+                    padding: padding,
+                    data_format: data_format,
+                    dilations: dilations,
+                    name: name);
+            });
+        }
+
         /// <summary>
         /// Normalizes along dimension `axis` using an L2 norm.
         /// </summary>
@@ -80,6 +105,23 @@ namespace Tensorflow
                     return (math_ops.cast(mean, x.dtype), math_ops.cast(variance, x.dtype));
                 else
                     return (mean, variance);
+            });
+        }
+
+        public static Tensor batch_normalization(Tensor x,
+            Tensor mean,
+            Tensor variance,
+            Tensor offset,
+            Tensor scale,
+            float variance_epsilon = 0.001f,
+            string name = null)
+        {
+            return tf_with(ops.name_scope(name, "batchnorm", new { x, mean, variance, scale, offset }), scope =>
+            {
+                var inv = math_ops.rsqrt(variance + variance_epsilon);
+                inv *= scale;
+                return x * math_ops.cast(inv, x.dtype) + math_ops.cast(
+                    offset == null ? (-mean * inv) : (offset - mean * inv), x.dtype);
             });
         }
 

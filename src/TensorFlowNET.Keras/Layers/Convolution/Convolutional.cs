@@ -99,7 +99,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = false)
         {
             var outputs = _convolution_op.Apply(inputs, kernel);
             if (use_bias)
@@ -119,5 +119,8 @@ namespace Tensorflow.Keras.Layers
 
             return outputs;
         }
+
+        protected virtual int _get_channel_axis()
+            => data_format == "channels_first" ? -1 - rank : -1;
     }
 }

@@ -76,7 +76,7 @@ namespace Tensorflow.Keras.Engine
 
         Tensors predict_step(Tensor data)
         {
-            return Apply(data, is_training: false);
+            return Apply(data, training: false);
         }
     }
 }

@@ -301,9 +301,9 @@ namespace Tensorflow.Keras.Engine
             nodes_in_decreasing_depth.append(node);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
-            return run_internal_graph(inputs, is_training);
+            return run_internal_graph(inputs, training.Value);
         }
 
         Tensors run_internal_graph(Tensors inputs, bool training = false, Tensors mask = null)

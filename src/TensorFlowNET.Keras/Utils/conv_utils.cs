@@ -14,7 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Utils
 {
@@ -62,6 +64,34 @@ namespace Tensorflow.Keras.Utils
             if (string.IsNullOrEmpty(value))
                 return ImageDataFormat.channels_last.ToString();
             return value.ToLower();
+        }
+
+        public static int deconv_output_length(int input_length,
+                         int filter_size,
+                         string padding,
+                         int output_padding = -1,
+                         int stride = 0,
+                         int dilation = 1)
+        {
+            // Get the dilated kernel size
+            filter_size = filter_size + (filter_size - 1) * (dilation - 1);
+
+            // Infer length if output padding is None, else compute the exact length
+            int length = -1;
+            if (output_padding == -1)
+            {
+                if (padding == "valid")
+                    length = input_length * stride + max(filter_size - stride, 0);
+                else if (padding == "full")
+                    length = input_length * stride - (stride + filter_size - 2);
+                else if (padding == "same")
+                    length = input_length * stride;
+            }
+            else
+            {
+                throw new NotImplementedException("");
+            }
+            return length;
         }
     }
 }

@@ -140,6 +140,51 @@ namespace Tensorflow.Keras.Layers
                     Activation = GetActivationByName(activation)
                 });
 
+        /// <summary>
+        /// Transposed convolution layer (sometimes called Deconvolution).
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <param name="kernel_size"></param>
+        /// <param name="strides"></param>
+        /// <param name="padding"></param>
+        /// <param name="data_format"></param>
+        /// <param name="dilation_rate"></param>
+        /// <param name="activation"></param>
+        /// <param name="use_bias"></param>
+        /// <param name="kernel_initializer"></param>
+        /// <param name="bias_initializer"></param>
+        /// <param name="kernel_regularizer"></param>
+        /// <param name="bias_regularizer"></param>
+        /// <param name="activity_regularizer"></param>
+        /// <returns></returns>
+        public Conv2DTranspose Conv2DTranspose(int filters,
+            TensorShape kernel_size = null,
+            TensorShape strides = null,
+            string padding = "valid",
+            string data_format = null,
+            TensorShape dilation_rate = null,
+            string activation = null,
+            bool use_bias = true,
+            string kernel_initializer = null,
+            string bias_initializer = null,
+            string kernel_regularizer = null,
+            string bias_regularizer = null,
+            string activity_regularizer = null)
+                => new Conv2DTranspose(new Conv2DArgs
+                {
+                    Rank = 2,
+                    Filters = filters,
+                    KernelSize = kernel_size,
+                    Strides = strides == null ? (1, 1) : strides,
+                    Padding = padding,
+                    DataFormat = data_format,
+                    DilationRate = dilation_rate == null ? (1, 1) : dilation_rate,
+                    UseBias = use_bias,
+                    KernelInitializer = GetInitializerByName(kernel_initializer),
+                    BiasInitializer = GetInitializerByName(bias_initializer),
+                    Activation = GetActivationByName(activation)
+                });
+
         public Dense Dense(int units,
             Activation activation = null,
             IInitializer kernel_initializer = null,

@@ -10,9 +10,9 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         /// <param name="input"></param>
         /// <param name="state"></param>
-        /// <param name="is_training"></param>
+        /// <param name="training"></param>
         /// <returns></returns>
-        public Tensors Apply(Tensors inputs, Tensor state = null, bool is_training = false)
+        public Tensors Apply(Tensors inputs, Tensor state = null, bool training = false)
         {
             callContext = callContext ?? new ThreadLocal<CallContext>()
             {
@@ -38,7 +38,7 @@ namespace Tensorflow.Keras.Engine
                 if (!built)
                     MaybeBuild(inputs);
 
-                outputs = Call(inputs, state: state, is_training: is_training);
+                outputs = Call(inputs, state: state, training: training);
 
                 // memory leak
                 // _set_connectivity_metadata_(inputs, outputs);

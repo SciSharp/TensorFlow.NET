@@ -19,7 +19,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
             var shapes = new List<object>();
             shapes.Add(array_ops.shape(inputs)[0]);

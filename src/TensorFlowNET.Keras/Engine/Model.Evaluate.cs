@@ -73,7 +73,7 @@ namespace Tensorflow.Keras.Engine
         List<(string, Tensor)> test_step(Tensor x, Tensor y)
         {
             (x, y) = data_handler.DataAdapter.Expand1d(x, y);
-            var y_pred = Apply(x, is_training: false);
+            var y_pred = Apply(x, training: false);
             var loss = compiled_loss.Call(y, y_pred);
 
             compiled_metrics.update_state(y, y_pred);

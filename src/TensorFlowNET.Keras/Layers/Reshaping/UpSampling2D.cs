@@ -24,7 +24,7 @@ namespace Tensorflow.Keras.Layers
             inputSpec = new InputSpec(ndim: 4);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool is_training = false)
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
             return keras.backend.resize_images(inputs, 
                 size[0], size[1], 

@@ -317,5 +317,30 @@ namespace Tensorflow.Keras
 
             return array_ops.concat(tensors, axis);
         }
+
+        public Tensor conv2d_transpose(Tensor x,
+                     IVariableV1 kernel,
+                     Tensor output_shape,
+                     TensorShape strides = null,
+                     string padding = "valid",
+                     string data_format = null,
+                     TensorShape dilation_rate = null)
+        {
+            var force_transpose = false;
+            if (data_format == "channels_first" && !dilation_rate.Equals(new[] { 1, 1 }))
+                force_transpose = true;
+            // x, tf_data_format = _preprocess_conv2d_input(x, data_format, force_transpose)
+            var tf_data_format = "NHWC";
+            padding = padding.ToUpper();
+            strides = new TensorShape(1, strides[0], strides[1], 1);
+            if (dilation_rate.Equals(new[] { 1, 1 }))
+                x = nn_impl.conv2d_transpose(x, kernel, output_shape, strides,
+                    padding: padding,
+                    data_format: tf_data_format);
+            else
+                throw new NotImplementedException("");
+
+            return x;
+        }
     }
 }

@@ -8,9 +8,10 @@ using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Engine
 {
-     public partial class Model
+    public partial class Model
     {
-        public List<(IVariableV1, NDArray)> load_weights(string filepath, bool by_name = false, bool skip_mismatch = false, object options = null)
+        List<(IVariableV1, NDArray)> LoadedWeights;
+        public void load_weights(string filepath, bool by_name = false, bool skip_mismatch = false, object options = null)
         {
             long fileId = Hdf5.OpenFile(filepath, true);
 
@@ -25,10 +26,8 @@ namespace Tensorflow.Keras.Engine
                 throw new NotImplementedException("");
             else
             {
-                var weights = hdf5_format.load_weights_from_hdf5_group(fileId, Layers);
+                LoadedWeights = hdf5_format.load_weights_from_hdf5_group(fileId, Layers);
                 Hdf5.CloseFile(fileId);
-                // return a reference to prevent GC collect Variable.
-                return weights;
             }
         }
 

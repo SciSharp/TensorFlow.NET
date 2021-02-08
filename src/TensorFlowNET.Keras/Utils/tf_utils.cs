@@ -37,6 +37,17 @@ namespace Tensorflow.Keras.Utils
             return true;
         }
 
+        public static Tensor[] smart_cond<T>(IVariableV1 pred,
+            Func<T[]> true_fn = null,
+            Func<T[]> false_fn = null,
+            string name = null)
+        {
+            return control_flow_ops.cond(pred.AsTensor(),
+                true_fn: true_fn,
+                false_fn: false_fn,
+                name: name);
+        }
+
         public static Tensor[] smart_cond<T>(Tensor pred,
             Func<T[]> true_fn = null,
             Func<T[]> false_fn = null,

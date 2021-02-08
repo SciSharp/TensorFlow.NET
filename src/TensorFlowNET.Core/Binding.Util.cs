@@ -149,12 +149,17 @@ namespace Tensorflow
                     return ndArray.ndim == 0 ? 1 : ndArray.shape[0];
                 case IEnumerable enumerable:
                     return enumerable.OfType<object>().Count();
+                case TensorShape arr:
+                    return arr.ndim;
             }
             throw new NotImplementedException("len() not implemented for type: " + a.GetType());
         }
 
         public static float min(float a, float b)
             => Math.Min(a, b);
+
+        public static int max(int a, int b)
+            => Math.Max(a, b);
 
         public static T[] list<T>(IEnumerable<T> list)
             => list.ToArray();

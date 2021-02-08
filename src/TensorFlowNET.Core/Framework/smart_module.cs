@@ -15,6 +15,8 @@
 ******************************************************************************/
 
 using System;
+using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Framework
 {
@@ -52,7 +54,14 @@ namespace Tensorflow.Framework
         {
             var pred_value = tensor_util.constant_value(pred);
             if (pred_value is null)
-                return pred.eval(new Session(pred.graph));
+            {
+                var result = range(pred.op.NumOutputs).Select(x => IntPtr.Zero).ToArray();
+                var evaluated = c_api.TF_TryEvaluateConstant(pred.graph, pred._as_tf_output(), result, tf.Status.Handle);
+                if (!evaluated || c_api.TF_GetCode(tf.Status.Handle) != TF_Code.TF_OK)
+                    return null;
+                else
+                    throw new NotImplementedException("");
+            }
 
             return pred_value;
         }

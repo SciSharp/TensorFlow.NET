@@ -50,6 +50,6 @@ namespace Tensorflow.Keras.Engine
         }
 
         public override string ToString()
-            => $"min_ndim={min_ndim}, , axes={axes.Count}";
+            => $"ndim={ndim}, min_ndim={min_ndim}, axes={axes.Count}";
     }
 }
