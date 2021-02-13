@@ -374,6 +374,16 @@ namespace Tensorflow
 
         public static Tensor sign<T>(T x, string name = "Sign")
         {
+            if (tf.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "Sign", name,
+                    null,
+                    x);
+
+                return results[0];
+            }
+
             var op = tf.OpDefLib._apply_op_helper("Sign", name: name, args: new { x });
 
             return op.outputs[0];
