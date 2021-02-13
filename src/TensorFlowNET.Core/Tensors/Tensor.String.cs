@@ -8,27 +8,7 @@ namespace Tensorflow
 {
     public partial class Tensor
     {
-        const ulong TF_TSRING_SIZE = 24;
-
-        public IntPtr StringTensor25(string[] strings, TensorShape shape)
-        {
-            var handle = c_api.TF_AllocateTensor(TF_DataType.TF_STRING,
-                shape.dims.Select(x => (long)x).ToArray(),
-                shape.ndim,
-                (ulong)shape.size * TF_TSRING_SIZE);
-
-            var data = c_api.TF_TensorData(handle);
-            var tstr = c_api.TF_StringInit(handle);
-            // AllocationHandle = tstr;
-            // AllocationType = AllocationType.Tensorflow;
-            for (int i = 0; i< strings.Length; i++)
-            {
-                c_api.TF_StringCopy(tstr, strings[i], strings[i].Length);
-                tstr += (int)TF_TSRING_SIZE;
-            }
-            // c_api.TF_StringDealloc(tstr);
-            return handle;
-        }
+        const int TF_TSRING_SIZE = 24;
 
         public IntPtr StringTensor(string[] strings, TensorShape shape)
         {
@@ -40,69 +20,28 @@ namespace Tensorflow
             return StringTensor(buffer, shape);
         }
 
-        public unsafe IntPtr StringTensor(byte[][] buffer, TensorShape shape)
+        public IntPtr StringTensor(byte[][] buffer, TensorShape shape)
         {
-            ulong size = 0;
-            foreach (var b in buffer)
-                size += c_api.TF_StringEncodedSize((ulong)b.Length);
-
-            var src_size = size + (ulong)buffer.Length * sizeof(ulong);
             var handle = c_api.TF_AllocateTensor(TF_DataType.TF_STRING,
-                shape.dims.Select(x => (long)x).ToArray(),
+                shape.ndim == 0 ? null : shape.dims.Select(x => (long)x).ToArray(),
                 shape.ndim,
-                src_size);
-            AllocationType = AllocationType.Tensorflow;
+                (ulong)shape.size * TF_TSRING_SIZE);
 
-            IntPtr data_start = c_api.TF_TensorData(handle);
-            IntPtr string_start = data_start + buffer.Length * sizeof(ulong);
-            IntPtr limit = data_start + (int)src_size;
-            ulong offset = 0;
+            var tstr = c_api.TF_TensorData(handle);
+#if TRACK_TENSOR_LIFE
+            print($"New TString 0x{handle.ToString("x16")} {AllocationType} Data: 0x{tstr.ToString("x16")}");
+#endif
             for (int i = 0; i < buffer.Length; i++)
             {
-                Marshal.WriteInt64(data_start, i * sizeof(ulong), (long)offset);
-                if (buffer[i].Length == 0)
-                {
-                    Marshal.WriteByte(string_start, 0);
-                    break;
-                }
-
-                fixed (byte* src = &buffer[i][0])
-                {
-                    /*Marshal.WriteByte(string_start, Convert.ToByte(buffer[i].Length));
-                    tf.memcpy((string_start + 1).ToPointer(), src, (ulong)buffer[i].Length);
-                    string_start += buffer[i].Length + 1;
-                    offset += buffer[i].Length + 1;*/
-
-                    var written = c_api.TF_StringEncode(src, (ulong)buffer[i].Length, (byte*)string_start, (ulong)(limit.ToInt64() - string_start.ToInt64()), tf.Status.Handle);
-                    tf.Status.Check(true);
-                    string_start += (int)written;
-                    offset += written;
-                }
+                c_api.TF_StringInit(tstr);
+                c_api.TF_StringCopy(tstr, buffer[i], buffer[i].Length);
+                var data = c_api.TF_StringGetDataPointer(tstr);
+                tstr += TF_TSRING_SIZE;
             }
 
             return handle;
         }
 
-        public string[] StringData25()
-        {
-            string[] strings = new string[c_api.TF_Dim(_handle, 0)];
-            var tstrings = TensorDataPointer; 
-            for (int i = 0; i< strings.Length; i++)
-            {
-                var tstringData = c_api.TF_StringGetDataPointer(tstrings);
-                /*var size = c_api.TF_StringGetSize(tstrings);
-                var capacity = c_api.TF_StringGetCapacity(tstrings);
-                var type = c_api.TF_StringGetType(tstrings);*/
-                strings[i] = c_api.StringPiece(tstringData);
-                tstrings += (int)TF_TSRING_SIZE;
-            }
-            return strings;
-        }
-
-        /// <summary>
-        ///     Extracts string array from current Tensor.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">When <see cref="dtype"/> != TF_DataType.TF_STRING</exception>
         public string[] StringData()
         {
             var buffer = StringBytes();
@@ -114,7 +53,7 @@ namespace Tensorflow
             return _str;
         }
 
-        public unsafe byte[][] StringBytes()
+        public byte[][] StringBytes()
         {
             if (dtype != TF_DataType.TF_STRING)
                 throw new InvalidOperationException($"Unable to call StringData when dtype != TF_DataType.TF_STRING (dtype is {dtype})");
@@ -123,24 +62,22 @@ namespace Tensorflow
             // TF_STRING tensors are encoded with a table of 8-byte offsets followed by TF_StringEncode-encoded bytes.
             // [offset1, offset2,...,offsetn, s1size, s1bytes, s2size, s2bytes,...,snsize,snbytes]
             //
-            long size = 1;
+            int size = 1;
             foreach (var s in TensorShape.dims)
                 size *= s;
 
             var buffer = new byte[size][];
-            var data_start = c_api.TF_TensorData(_handle);
-            data_start += (int)(size * sizeof(ulong));
+            var tstrings = TensorDataPointer;
             for (int i = 0; i < buffer.Length; i++)
             {
-                IntPtr dst = IntPtr.Zero;
-                ulong dstLen = 0;
-                var read = c_api.TF_StringDecode((byte*)data_start, bytesize, (byte**)&dst, ref dstLen, tf.Status.Handle);
-                tf.Status.Check(true);
-                buffer[i] = new byte[(int)dstLen];
-                Marshal.Copy(dst, buffer[i], 0, buffer[i].Length);
-                data_start += (int)read;
+                var data = c_api.TF_StringGetDataPointer(tstrings);
+                var len = c_api.TF_StringGetSize(tstrings);
+                buffer[i] = new byte[len];
+                // var capacity = c_api.TF_StringGetCapacity(tstrings);
+                // var type = c_api.TF_StringGetType(tstrings);
+                Marshal.Copy(data, buffer[i], 0, Convert.ToInt32(len));
+                tstrings += TF_TSRING_SIZE;
             }
-
             return buffer;
         }
     }

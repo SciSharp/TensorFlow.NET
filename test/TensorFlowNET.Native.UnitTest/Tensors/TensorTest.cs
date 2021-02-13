@@ -111,7 +111,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
         /// Port from c_api_test.cc
         /// `TEST_F(CApiAttributesTest, StringTensor)`
         /// </summary>
-        [TestMethod, Ignore("Waiting for PR https://github.com/tensorflow/tensorflow/pull/46804")]
+        [TestMethod]
         public void StringTensor()
         {
             string text = "Hello world!.";
@@ -120,13 +120,14 @@ namespace Tensorflow.Native.UnitTest.Tensors
                 null,
                 0,
                 1 * 24);
-            var tstr = c_api.TF_StringInit(tensor);
-            var data = c_api.TF_StringGetDataPointer(tstr);
+            var tstr = c_api.TF_TensorData(tensor);
+            c_api.TF_StringInit(tstr);
             c_api.TF_StringCopy(tstr, text, text.Length);
+            var data = c_api.TF_StringGetDataPointer(tstr);
 
             Assert.AreEqual((ulong)text.Length, c_api.TF_StringGetSize(tstr));
             Assert.AreEqual(text, c_api.StringPiece(data));
-            Assert.AreEqual((ulong)text.Length, c_api.TF_TensorByteSize(tensor));
+            Assert.AreEqual(TF_TString_Type.TF_TSTR_SMALL, c_api.TF_StringGetType(tensor));
             Assert.AreEqual(0, c_api.TF_NumDims(tensor));
 
             TF_DeleteTensor(tensor);

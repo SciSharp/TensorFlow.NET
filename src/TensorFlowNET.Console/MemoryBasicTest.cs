@@ -4,6 +4,8 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Tensorflow
 {
@@ -35,13 +37,15 @@ namespace Tensorflow
         public Action<int, int> ConstantString
             => (epoch, iterate) =>
             {
-                var tensor = tf.constant(new string[] 
+                var strList = new string[]
                 {
                     "Biden immigration bill would put millions of illegal immigrants on 8-year fast-track to citizenship",
                     "The Associated Press, which also reported that the eight-year path is in the bill.",
                     "The bill would also include provisions to stem the flow of migration by addressing root causes of migration from south of the border."
-                });
-                var data = tensor.numpy();
+                };
+
+                var tensor = tf.constant(strList, TF_DataType.TF_STRING);
+                var data = tensor.StringData();
             };
 
         public Action<int, int> Variable

@@ -47,7 +47,7 @@ namespace Tensorflow
             // explaination of constant
             mm.Execute(10, 100 * batchSize, basic.Constant2x3);
 
-            mm.Execute(10, 100 * batchSize, basic.ConstantString);
+            mm.Execute(10, batchSize, basic.ConstantString);
 
             // 100K float variable.
             mm.Execute(10, batchSize, basic.Variable);
