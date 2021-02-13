@@ -21,40 +21,41 @@ namespace Tensorflow.Keras.Preprocessings
         /// file_paths, labels, class_names
         /// </returns>
         public (string[], int[], string[]) index_directory(string directory,
+            string labels,
             string[] formats = null,
             string[] class_names = null,
             bool shuffle = true,
             int? seed = null,
             bool follow_links = false)
         {
-            var labels = new List<int>();
+            var label_list = new List<int>();
             var file_paths = new List<string>();
 
             var class_dirs = Directory.GetDirectories(directory);
-            class_names = class_dirs.Select(x => x.Split(Path.DirectorySeparatorChar)[^1]).ToArray();
+            class_names = class_dirs.Select(x => x.Split(Path.DirectorySeparatorChar).Last()).ToArray();
 
             for (var label = 0; label < class_dirs.Length; label++)
             {
                 var files = Directory.GetFiles(class_dirs[label]);
                 file_paths.AddRange(files);
-                labels.AddRange(Enumerable.Range(0, files.Length).Select(x => label));
+                label_list.AddRange(Enumerable.Range(0, files.Length).Select(x => label));
             }
 
-            var return_labels = labels.Select(x => x).ToArray();
+            var return_labels = label_list.Select(x => x).ToArray();
             var return_file_paths = file_paths.Select(x => x).ToArray();
 
             if (shuffle)
             {
                 if (!seed.HasValue)
                     seed = np.random.randint((long)1e6);
-                var random_index = np.arange(labels.Count);
+                var random_index = np.arange(label_list.Count);
                 var rng = np.random.RandomState(seed.Value);
                 rng.shuffle(random_index);
                 var index = random_index.ToArray<int>();
 
-                for (int i = 0; i < labels.Count; i++)
+                for (int i = 0; i < label_list.Count; i++)
                 {
-                    return_labels[i] = labels[index[i]];
+                    return_labels[i] = label_list[index[i]];
                     return_file_paths[i] = file_paths[index[i]];
                 }
             }

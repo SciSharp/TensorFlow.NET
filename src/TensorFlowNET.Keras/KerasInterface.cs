@@ -11,6 +11,7 @@ using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Models;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras
 {
@@ -27,6 +28,7 @@ namespace Tensorflow.Keras
         public OptimizerApi optimizers { get; } = new OptimizerApi();
         public MetricsApi metrics { get; } = new MetricsApi();
         public ModelsApi models { get; } = new ModelsApi();
+        public KerasUtils utils { get; } = new KerasUtils();
 
         public Sequential Sequential(List<ILayer> layers = null,
                 string name = null)
@@ -73,7 +75,7 @@ namespace Tensorflow.Keras
                 Tensor tensor = null)
         {
             if (batch_input_shape != null)
-                shape = batch_input_shape.dims[1..];
+                shape = batch_input_shape.dims.Skip(1).ToArray();
 
             var args = new InputLayerArgs
             {

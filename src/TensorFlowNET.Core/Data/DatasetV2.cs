@@ -14,6 +14,7 @@ namespace Tensorflow
     public class DatasetV2 : IDatasetV2
     {
         protected dataset_ops ops = new dataset_ops();
+        public string[] class_names { get; set; }
         public Tensor variant_tensor { get; set; }
 
         public TensorSpec[] structure { get; set; }
@@ -54,7 +55,7 @@ namespace Tensorflow
         public IDatasetV2 optimize(string[] optimizations, string[] optimization_configs)
             => new OptimizeDataset(this, optimizations, optimization_configs: optimization_configs);
 
-        public IDatasetV2 map(Func<Tensor, Tensor> map_func,
+        public IDatasetV2 map(Func<Tensors, Tensors> map_func,
             bool use_inter_op_parallelism = true,
             bool preserve_cardinality = true,
             bool use_legacy_function = false)
@@ -64,7 +65,7 @@ namespace Tensorflow
                 preserve_cardinality: preserve_cardinality,
                 use_legacy_function: use_legacy_function);
 
-        public IDatasetV2 map(Func<Tensors, Tensors> map_func, int num_parallel_calls = -1)
+        public IDatasetV2 map(Func<Tensors, Tensors> map_func, int num_parallel_calls)
             => new ParallelMapDataset(this, map_func, num_parallel_calls: num_parallel_calls);
 
         public IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Tensorflow.Keras.Preprocessings
 {
@@ -17,18 +18,21 @@ namespace Tensorflow.Keras.Preprocessings
             float validation_split,
             string subset)
         {
+            if (string.IsNullOrEmpty(subset))
+                return (samples, labels);
+
             var num_val_samples = Convert.ToInt32(samples.Length * validation_split);
             if (subset == "training")
             {
                 Console.WriteLine($"Using {samples.Length - num_val_samples} files for training.");
-                samples = samples[..^num_val_samples];
-                labels = labels[..^num_val_samples];
+                samples = samples.Take(samples.Length - num_val_samples).ToArray();
+                labels = labels.Take(labels.Length - num_val_samples).ToArray();
             }
             else if (subset == "validation")
             {
                 Console.WriteLine($"Using {num_val_samples} files for validation.");
-                samples = samples[(samples.Length - num_val_samples)..];
-                labels = labels[(labels.Length - num_val_samples)..];
+                samples = samples.Skip(samples.Length - num_val_samples).ToArray();
+                labels = labels.Skip(labels.Length - num_val_samples).ToArray();
             }
             else
                 throw new NotImplementedException("");

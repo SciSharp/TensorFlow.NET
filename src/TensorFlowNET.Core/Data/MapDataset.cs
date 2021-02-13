@@ -10,7 +10,7 @@ namespace Tensorflow
     public class MapDataset : UnaryDataset
     {
         public MapDataset(IDatasetV2 input_dataset,
-            Func<Tensor, Tensor> map_func,
+            Func<Tensors, Tensors> map_func,
             bool use_inter_op_parallelism = true,
             bool preserve_cardinality = false,
             bool use_legacy_function = false) : base(input_dataset)

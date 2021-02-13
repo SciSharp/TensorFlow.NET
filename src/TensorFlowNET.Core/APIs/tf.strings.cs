@@ -25,6 +25,30 @@ namespace Tensorflow
             string_ops ops = new string_ops();
 
             /// <summary>
+            /// Converts all uppercase characters into their respective lowercase replacements.
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="encoding"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public Tensor lower(Tensor input, string encoding = "", string name = null)
+                => ops.lower(input: input, encoding: encoding, name: name);
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="pattern"></param>
+            /// <param name="rewrite"></param>
+            /// <param name="replace_global"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public Tensor regex_replace(Tensor input, string pattern, string rewrite,
+                bool replace_global = true, string name = null)
+                => ops.regex_replace(input, pattern, rewrite,
+                    replace_global: replace_global, name: name);
+
+            /// <summary>
             /// Return substrings from `Tensor` of strings.
             /// </summary>
             /// <param name="input"></param>

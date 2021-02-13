@@ -43,6 +43,7 @@ namespace Tensorflow.Keras
                 num_channels = 3;
             
             var (image_paths, label_list, class_name_list) = keras.preprocessing.dataset_utils.index_directory(directory,
+                labels,
                 formats: WHITELIST_FORMATS,
                 class_names: class_names,
                 shuffle: shuffle,
@@ -64,13 +65,30 @@ namespace Tensorflow.Keras
             string[] class_names = null,
             int batch_size = 32,
             bool shuffle = true,
+            int max_length = -1,
             int? seed = null,
             float validation_split = 0.2f,
-            string subset = null)
+            string subset = null,
+            bool follow_links = false)
         {
-           
+            var (file_paths, label_list, class_name_list) = dataset_utils.index_directory(
+               directory,
+               labels,
+               formats: new[] { ".txt" },
+               class_names: class_names,
+               shuffle: shuffle,
+               seed: seed,
+               follow_links: follow_links);
 
-            return null;
+            (file_paths, label_list) = dataset_utils.get_training_or_validation_split(
+                file_paths, label_list, validation_split, subset);
+
+            var dataset = paths_and_labels_to_dataset(file_paths, label_list, label_mode, class_name_list.Length);
+            if (shuffle)
+                dataset = dataset.shuffle(batch_size * 8, seed: seed);
+            dataset = dataset.batch(batch_size);
+            dataset.class_names = class_name_list;
+            return dataset;
         }
     }
 }

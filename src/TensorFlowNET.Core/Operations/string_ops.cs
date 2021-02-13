@@ -20,6 +20,54 @@ namespace Tensorflow
 {
     public class string_ops
     {
+        public Tensor lower(Tensor input, string encoding = "", string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "StringLower", name,
+                    null,
+                    input, encoding);
+
+                return results[0];
+            }
+
+            var _op = tf.OpDefLib._apply_op_helper("StringLower", name: name, args: new
+            {
+                input,
+                encoding
+            });
+
+            return _op.output;
+        }
+
+        public Tensor regex_replace(Tensor input, string pattern, string rewrite,
+                bool replace_global = true, string name = null)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
+                    "StaticRegexReplace", name,
+                    null,
+                    input, 
+                    "pattern", pattern,
+                    "rewrite", rewrite, 
+                    "replace_global", replace_global);
+
+                return results[0];
+            }
+
+            var _op = tf.OpDefLib._apply_op_helper("StaticRegexReplace", name: name, args: new
+            {
+                input,
+                pattern,
+                rewrite,
+                replace_global
+            });
+
+            return _op.output;
+        }
+
         /// <summary>
         /// Return substrings from `Tensor` of strings.
         /// </summary>

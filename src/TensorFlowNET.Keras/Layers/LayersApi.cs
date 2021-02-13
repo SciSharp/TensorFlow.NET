@@ -9,6 +9,8 @@ namespace Tensorflow.Keras.Layers
 {
     public partial class LayersApi
     {
+        public Preprocessing preprocessing { get; } = new Preprocessing();
+
         /// <summary>
         /// Functional interface for the batch normalization layer.
         /// http://arxiv.org/abs/1502.03167

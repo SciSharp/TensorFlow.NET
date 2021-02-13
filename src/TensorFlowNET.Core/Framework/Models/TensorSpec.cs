@@ -15,7 +15,7 @@ namespace Tensorflow.Framework.Models
             if (_shape.ndim == 0)
                 throw new ValueError("Unbatching a tensor is only supported for rank >= 1");
 
-            return new TensorSpec(_shape.dims[1..], _dtype);
+            return new TensorSpec(_shape.dims.Skip(1).ToArray(), _dtype);
         }
 
         public TensorSpec _batch(int dim = -1)

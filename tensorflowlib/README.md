@@ -56,7 +56,7 @@ Set ENV `BAZEL_VC=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\
 
 1. Build static library
 
-`bazel build --output_base=C:/tmp/tfcompilation build --config=opt //tensorflow:tensorflow`
+`bazel build --output_base=C:/tmp/tfcompilation --config=opt //tensorflow:tensorflow`
 
 2. Build pip package
 
@@ -69,6 +69,16 @@ Set ENV `BAZEL_VC=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\
 4. Install from local wheel file.
 
 `pip install C:/tmp/tensorflow_pkg/tensorflow-1.15.0-cp36-cp36m-win_amd64.whl`
+
+### Build from source for MacOS
+
+```shell
+$ cd /usr/local/lib/bazel/bin
+$ curl -LO https://release.bazel.build/3.7.2/release/bazel-3.7.2-darwin-x86_64
+$ chmod +x bazel-3.7.2-darwin-x86_64
+$ cd ~/Projects/tensorflow
+$ bazel build --config=opt //tensorflow:tensorflow
+```
 
 ### Build specific version for tf.net
 
