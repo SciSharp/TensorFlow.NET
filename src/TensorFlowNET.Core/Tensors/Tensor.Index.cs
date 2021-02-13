@@ -60,12 +60,8 @@ namespace Tensorflow
             }
         }
 
-        public Tensor this[Range slices]
-            => throw new NotImplementedException("");
-
         public Tensor this[params string[] slices]
             => this[slices.Select(x => new Slice(x)).ToArray()];
-
 
         public Tensor slice(Slice slice)
         {

@@ -119,7 +119,7 @@ namespace TensorFlowNET.UnitTest.Dataset
             long value = 0;
 
             var dataset = tf.data.Dataset.range(0, 2);
-            dataset = dataset.map(x => x + 10);
+            dataset = dataset.map(x => x[0] + 10);
 
             foreach (var item in dataset)
             {
@@ -147,7 +147,7 @@ namespace TensorFlowNET.UnitTest.Dataset
         public void Cardinality()
         {
             var dataset = tf.data.Dataset.range(10);
-            dataset = dataset.map(x => x + 1);
+            dataset = dataset.map(x => x[0] + 1);
             var cardinality = dataset.dataset_cardinality();
             Assert.AreEqual(new long[] { 10 }, cardinality.numpy());
         }
