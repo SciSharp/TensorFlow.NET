@@ -737,44 +737,35 @@ namespace Tensorflow
         public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy,
             long begin_mask = 0, long end_mask = 0, long ellipsis_mask = 0, long new_axis_mask = 0,
             long shrink_axis_mask = 0, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("StridedSliceGrad", name, new
+            => tf.Context.RunInAutoMode2("StridedSliceGrad", name, new AutoModeArgs
+            {
+                OpInputArgs = new
                 {
                     shape,
                     begin,
                     end,
                     strides,
-                    dy,
+                    dy
+                },
+                OpAttrs = new
+                {
                     begin_mask,
                     end_mask,
                     ellipsis_mask,
                     new_axis_mask,
                     shrink_axis_mask
-                }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "StridedSliceGrad", name,
-                    null,
-                    shape, begin, end, strides, dy,
-                    "begin_mask", begin_mask,
-                    "end_mask", end_mask,
-                    "ellipsis_mask", ellipsis_mask,
-                    "new_axis_mask", new_axis_mask,
-                    "shrink_axis_mask", shrink_axis_mask).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
-                    {
-                        "T", op.get_attr<TF_DataType>("T"),
-                        "Index", op.get_attr<TF_DataType>("Index"),
-                        "begin_mask", op.get_attr<long>("begin_mask"),
-                        "end_mask", op.get_attr<long>("end_mask"),
-                        "ellipsis_mask", op.get_attr<long>("ellipsis_mask"),
-                        "new_axis_mask", op.get_attr<long>("new_axis_mask"),
-                        "shrink_axis_mask", op.get_attr<long>("shrink_axis_mask")
-                    };
-                    tf.Runner.RecordGradient("StridedSliceGrad", op.inputs, attrs, op.outputs);
                 },
-                new Tensors(shape, begin, end, strides, dy));
+                GetGradientAttrs = (op) => new
+                {
+                    T = op.get_attr<TF_DataType>("T"),
+                    Index = op.get_attr<TF_DataType>("Index"),
+                    begin_mask = op.get_attr<long>("begin_mask"),
+                    end_mask = op.get_attr<long>("end_mask"),
+                    ellipsis_mask = op.get_attr<long>("ellipsis_mask"),
+                    new_axis_mask = op.get_attr<long>("new_axis_mask"),
+                    shrink_axis_mask = op.get_attr<long>("shrink_axis_mask")
+                }
+            });
 
         /// <summary>
         /// Removes dimensions of size 1 from the shape of a tensor.
@@ -969,27 +960,15 @@ namespace Tensorflow
             => gen_array_ops.slice(input, begin, size, name: name);
 
         public static Tensor slice(Tensor input, Tensor begin, Tensor size, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("Slice", name, new
+            => tf.Context.RunInAutoMode2("Slice", name, new AutoModeArgs
+            {
+                OpInputArgs = new { input, begin, size },
+                GetGradientAttrs = (op) => new
                 {
-                    input,
-                    begin,
-                    size
-                }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Slice", name,
-                    null,
-                    input, begin, size).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
-                    {
-                        "T", op.get_attr<TF_DataType>("T"),
-                        "Index", op.get_attr<int>("Index")
-                    };
-                    tf.Runner.RecordGradient("Slice", op.inputs, attrs, op.outputs);
-                },
-                new Tensors(input, begin, size));
+                    T = op.get_attr<TF_DataType>("T"),
+                    Index = op.get_attr<int>("Index")
+                }
+            });
 
         public static Tensor stack(object values, int axis = 0, string name = "stack")
         {

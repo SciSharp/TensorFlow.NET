@@ -18,6 +18,21 @@ namespace Tensorflow.Eager
         int kFastPathExecuteInputStartIndex = 0;
         UnorderedMap<Context, SafeOpHandle> thread_local_eager_operation_map = new UnorderedMap<Context, SafeOpHandle>();
 
+        public Tensor[] TFE_FastPathExecute2(Context ctx,
+            string device_name,
+            string opName,
+            string name,
+            Action callbacks,
+            object[] inputArgs,
+            object[] attrs)
+        {
+            var args = new List<object>();
+            args.AddRange(inputArgs);
+            if (attrs != null)
+                args.AddRange(attrs);
+            return TFE_FastPathExecute(ctx, device_name, opName, name, callbacks, args.ToArray());
+        }
+
         public Tensor[] TFE_FastPathExecute(Context ctx,
             string device_name,
             string opName,

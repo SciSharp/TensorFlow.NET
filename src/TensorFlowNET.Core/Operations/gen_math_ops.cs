@@ -141,29 +141,17 @@ namespace Tensorflow
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor mean(Tensor input, Tensor axis, bool keep_dims = false, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("Mean", name, new
+            => tf.Context.RunInAutoMode2("Mean", name, new AutoModeArgs
+            {
+                OpInputArgs = new { input, axis },
+                OpAttrs = new { keep_dims, reduction_indices = axis },
+                GetGradientAttrs = (op) => new
                 {
-                    input,
-                    reduction_indices = axis,
-                    keep_dims = keep_dims
-                }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Mean", name,
-                    null,
-                    input, axis,
-                    "keep_dims", keep_dims).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
-                    {
-                        "T", op.get_attr<TF_DataType>("T"),
-                        "Tidx", op.get_attr<TF_DataType>("Tidx"),
-                        "keep_dims", op.get_attr<bool>("keep_dims")
-                    };
-                    tf.Runner.RecordGradient("Mean", op.inputs, attrs, op.outputs);
-                },
-                new Tensors(input, axis));
+                    T = op.get_attr<TF_DataType>("T"),
+                    Tidx = op.get_attr<TF_DataType>("Tidx"),
+                    keep_dims = op.get_attr<bool>("keep_dims")
+                }
+            });
 
         public static Tensor mean(Tensor[] inputs, Tensor axis, bool keep_dims = false, string name = null)
         {
@@ -356,21 +344,10 @@ namespace Tensorflow
         ///    <c>dy</c> is the corresponding input gradient.
         /// </remarks>
         public static Tensor sigmoid_grad(Tensor y, Tensor dy, string name = "SigmoidGrad")
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("SigmoidGrad", name, new { y, dy }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "SigmoidGrad", name,
-                    null,
-                    y, dy).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
-                    {
-                        "T", op.get_attr<TF_DataType>("T")
-                    };
-                    tf.Runner.RecordGradient("SigmoidGrad", op.inputs, attrs, op.outputs);
-                }, 
-                new Tensors(y, dy));
+            => tf.Context.RunInAutoMode2("SigmoidGrad", name, new AutoModeArgs
+            {
+                OpInputArgs = new { y, dy }
+            });
 
         public static Tensor sign<T>(T x, string name = "Sign")
         {
@@ -806,21 +783,10 @@ namespace Tensorflow
         }
 
         public static Tensor sub(Tensor x, Tensor y, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("Sub", name, new { x, y }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Sub", name,
-                    null,
-                    x, y).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
-                    {
-                        "T", op.get_attr<TF_DataType>("T")
-                    };
-                    tf.Runner.RecordGradient("Sub", op.inputs, attrs, op.outputs);
-                },
-                new Tensors(x, y));
+            => tf.Context.RunInAutoMode2("Sub", name, new AutoModeArgs
+            {
+                OpInputArgs = new { x, y }
+            });
 
         public static Tensor sub<Tx, Ty>(Tx x, Ty y, string name = null)
         {

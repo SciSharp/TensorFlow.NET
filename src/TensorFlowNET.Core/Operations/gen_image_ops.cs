@@ -240,30 +240,16 @@ namespace Tensorflow
 
         public static Tensor resize_nearest_neighbor_grad(Tensor grads, Tensor size, bool align_corners = false,
             bool half_pixel_centers = false, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("ResizeNearestNeighborGrad", name, new
+                => tf.Context.RunInAutoMode2("ResizeNearestNeighborGrad", name, new AutoModeArgs
                 {
-                    grads,
-                    size,
-                    align_corners,
-                    half_pixel_centers
-                }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ResizeNearestNeighborGrad", name,
-                    null,
-                    grads, size,
-                    "align_corners", align_corners,
-                    "half_pixel_centers", half_pixel_centers).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
+                    OpInputArgs = new { grads, size },
+                    OpAttrs = new { align_corners, half_pixel_centers },
+                    GetGradientAttrs = (op) => new
                     {
-                        "T", op.get_attr<TF_DataType>("T"),
-                        "align_corners", op.get_attr<bool>("align_corners"),
-                        "half_pixel_centers", op.get_attr<bool>("half_pixel_centers")
-                    };
-                    tf.Runner.RecordGradient("ResizeNearestNeighborGrad", op.inputs, attrs, op.outputs);
-                },
-                new Tensors(grads, size));
+                        T = op.get_attr<TF_DataType>("T"),
+                        align_corners = op.get_attr<bool>("align_corners"),
+                        half_pixel_centers = op.get_attr<bool>("half_pixel_centers")
+                    }
+                });
     }
 }

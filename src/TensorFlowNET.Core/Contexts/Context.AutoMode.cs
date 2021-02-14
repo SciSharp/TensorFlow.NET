@@ -20,6 +20,7 @@ using System.Linq;
 using Tensorflow.Eager;
 using static Tensorflow.Binding;
 using Google.Protobuf;
+using System.Collections.Generic;
 
 namespace Tensorflow.Contexts
 {
@@ -57,14 +58,39 @@ namespace Tensorflow.Contexts
                 }
             }
         }
-
+        
         // [DebuggerStepThrough]
-        public Tensors RunInAutoMode2(Func<Tensors> graphAction,
-            Func<Tensors> eagerAction,
-            Action<Operation> recordGradient,
-            Tensors tensors)
+        public Tensors RunInAutoMode2(string OpType, string Name, AutoModeArgs args)
         {
-            if (tf.Context.has_graph_arg(tensors))
+            var inputArgs = ConvertToDict(args.OpInputArgs);
+            var attrDict = ConvertToDict(args.OpAttrs);
+            
+            Func<Tensor> graphAction = () =>
+            {
+                foreach (var attr in attrDict)
+                    inputArgs[attr.Key] = attr.Value;
+                return tf.OpDefLib._apply_op_helper(OpType, Name, inputArgs).output;
+            };
+
+            Func<Tensor> eagerAction = () =>
+            {
+                var attrs = new object[attrDict.Count() * 2];
+                int i = 0;
+                foreach(var arg in attrDict)
+                {
+                    attrs[i]= arg.Key;
+                    attrs[i + 1] = arg.Value;
+                    i += 2;
+                }    
+
+                return tf.Runner.TFE_FastPathExecute2(tf.Context, tf.Context.DeviceName,
+                    OpType, Name,
+                    null,
+                    inputArgs.Values.ToArray(), 
+                    attrs).FirstOrDefault();
+            };
+
+            if (tf.Context.has_graph_arg(inputArgs.Values))
             {
                 if (executing_eagerly())
                 {
@@ -77,7 +103,28 @@ namespace Tensorflow.Contexts
                 {
                     var result = graphAction();
                     if (tf.Runner.MustRecordGradient())
-                        recordGradient(result[0].op);
+                    {
+                        var op = result[0].op;
+                        Dictionary<string, object> attrs;
+                        if (args.GetGradientAttrs == null)
+                        {
+                            attrs = new Dictionary<string, object>();
+                            attrs["T"] = op.get_attr<TF_DataType>("T");
+                        }
+                        else
+                        {
+                            attrs = ConvertToDict(args.GetGradientAttrs(op));
+                        }
+                        var args1 = new object[attrs.Count() * 2];
+                        int i = 0;
+                        foreach (var arg in attrs)
+                        {
+                            args1[i] = arg.Key;
+                            args1[i + 1] = arg.Value;
+                            i += 2;
+                        }
+                        tf.Runner.RecordGradient(OpType, op.inputs, args1, op.outputs);
+                    }
                     return result;
                 }
             }

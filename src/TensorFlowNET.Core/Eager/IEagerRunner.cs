@@ -16,6 +16,14 @@ namespace Tensorflow.Eager
             TF_DataType default_dtype = TF_DataType.DtInvalid,
             object[] args = null);
 
+        Tensor[] TFE_FastPathExecute2(Context ctx,
+            string device_name,
+            string opName,
+            string name,
+            Action callbacks,
+            object[] inputArgs,
+            object[] attrs);
+
         Tensor[] TFE_FastPathExecute(Context ctx,
             string device_name,
             string opName,
