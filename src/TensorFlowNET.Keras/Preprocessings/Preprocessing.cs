@@ -11,7 +11,7 @@ namespace Tensorflow.Keras
         public DatasetUtils dataset_utils => new DatasetUtils();
 
         public TextVectorization TextVectorization(Func<Tensor, Tensor> standardize = null,
-            string split = "standardize",
+            string split = "whitespace",
             int max_tokens = -1,
             string output_mode = "int",
             int output_sequence_length = -1) => new TextVectorization(new TextVectorizationArgs

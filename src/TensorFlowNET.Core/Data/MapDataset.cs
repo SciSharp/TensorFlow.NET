@@ -17,9 +17,11 @@ namespace Tensorflow
         {
             var func = new ConcreteFunction($"{map_func.Method.Name}_{Guid.NewGuid()}");
             func.Enter();
-            var input = tf.placeholder(input_dataset.element_spec[0].dtype);
-            var output = map_func(input);
-            func.ToGraph(input, output);
+            var inputs = new Tensors();
+            foreach (var input in input_dataset.element_spec)
+                inputs.Add(tf.placeholder(input.dtype, shape: input.shape));
+            var outputs = map_func(inputs);
+            func.ToGraph(inputs, outputs);
             func.Exit();
 
             structure = func.OutputStructure;
