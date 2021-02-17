@@ -42,6 +42,8 @@ namespace Tensorflow.Contexts
         SafeContextHandle _handle;
         public SafeContextHandle Handle => _handle;
 
+        int? _seed;
+
         public Context()
         {
             _device_policy = ContextDevicePlacementPolicy.DEVICE_PLACEMENT_SILENT;
@@ -70,6 +72,12 @@ namespace Tensorflow.Contexts
             status.Check(true);
             initialized = true;
         }
+
+        public void set_global_seed(int? seed)
+            => _seed = seed;
+
+        public int? global_seed()
+            => _seed;
 
         public void start_step()
             => c_api.TFE_ContextStartStep(_handle);

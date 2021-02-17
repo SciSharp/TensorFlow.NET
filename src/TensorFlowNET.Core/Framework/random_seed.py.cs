@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using static Tensorflow.Binding;
+
 namespace Tensorflow
 {
     public class random_seed
@@ -22,8 +24,18 @@ namespace Tensorflow
 
         public static (int?, int?) get_seed(int? op_seed = null)
         {
+            int? global_seed;
+
+            if (tf.executing_eagerly())
+                global_seed = tf.Context.global_seed();
+            else
+                global_seed = ops.get_default_graph().seed;
+
+            if (global_seed.HasValue)
+                return (global_seed, op_seed);
+
             if (op_seed.HasValue)
-                return (DEFAULT_GRAPH_SEED, 0);
+                return (DEFAULT_GRAPH_SEED, op_seed);
             else
                 return (null, null);
         }
