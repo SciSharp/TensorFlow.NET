@@ -131,7 +131,9 @@ namespace Tensorflow
                 var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
                     "RandomShuffle", name,
                     null,
-                    value, seed, seed2);
+                    value,
+                    "seed", seed,
+                    "seed2", seed2);
 
                 return results[0];
             }
