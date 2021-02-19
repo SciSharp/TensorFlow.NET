@@ -15,7 +15,9 @@
 ******************************************************************************/
 
 using NumSharp;
+using NumSharp.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tensorflow.Keras
@@ -34,14 +36,18 @@ namespace Tensorflow.Keras
         /// <param name="truncating">String, 'pre' or 'post'</param>
         /// <param name="value">Float or String, padding value.</param>
         /// <returns></returns>
-        public NDArray pad_sequences(NDArray sequences,
+        public NDArray pad_sequences(IEnumerable<int[]> sequences,
             int? maxlen = null,
             string dtype = "int32",
             string padding = "pre",
             string truncating = "pre",
             object value = null)
         {
-            int[] length = new int[sequences.size];
+            if (value != null) throw new NotImplementedException("padding with a specific value.");
+            if (padding != "pre" && padding != "post") throw new InvalidArgumentError("padding must be 'pre' or 'post'.");
+            if (truncating != "pre" && truncating != "post") throw new InvalidArgumentError("truncating must be 'pre' or 'post'.");
+
+            var length = sequences.Select(s => s.Length);
 
             if (maxlen == null)
                 maxlen = length.Max();
@@ -49,19 +55,26 @@ namespace Tensorflow.Keras
             if (value == null)
                 value = 0f;
 
-            var nd = new NDArray(np.int32, new Shape(sequences.size, maxlen.Value));
-#pragma warning disable CS0162 // Unreachable code detected
+            var type = getNPType(dtype);
+            var nd = new NDArray(type, new Shape(length.Count(), maxlen.Value), true);
+
             for (int i = 0; i < nd.shape[0]; i++)
-#pragma warning restore CS0162 // Unreachable code detected
             {
-                switch (sequences[i])
+                var s = sequences.ElementAt(i);
+                if (s.Length > maxlen.Value)
                 {
-                    default:
-                        throw new NotImplementedException("pad_sequences");
+                    s = (truncating == "pre") ? s.Slice(s.Length - maxlen.Value, s.Length) : s.Slice(0, maxlen.Value);
                 }
+                var sliceString = (padding == "pre") ? $"{i},{maxlen - s.Length}:" : $"{i},:{s.Length}";
+                nd[sliceString] = np.array(s);
             }
 
             return nd;
+        }
+
+        private Type getNPType(string typeName)
+        {
+            return System.Type.GetType("NumSharp.np,NumSharp").GetField(typeName).GetValue(null) as Type;
         }
     }
 }
