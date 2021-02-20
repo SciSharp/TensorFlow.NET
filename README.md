@@ -9,7 +9,7 @@
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/javiercp/BinderTF.NET/master?urlpath=lab)
 
-*master branch is based on tensorflow 2.3 now, v0.15-tensorflow1.15 is from tensorflow1.15.*
+*master branch is based on tensorflow v2.4, v0.3x branch is based on tensorflow v2.3, v0.15-tensorflow1.15 is from tensorflow1.15.*
 
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
@@ -30,7 +30,8 @@ Go through the online docs [TensorFlow for .NET](https://scisharp.github.io/tens
 
 | TensorFlow                 | tf native1.14, cuda 10.0 | tf native 1.15, cuda 10.0 | tf native 2.3, cuda 10.1 | tf native 2.4, cuda 11 |
 | -------------------------- | ------------- | -------------- | ------------- | ------------- |
-| tf.net 0.3x, tf.keras 0.2 |               |                | x | not compatible |
+| tf.net 0.4x, tf.keras 0.5 |  |  |  | x |
+| tf.net 0.3x, tf.keras 0.4 |               |                | x |  |
 | tf.net 0.2x          |               | x | x |              |
 | tf.net 0.15          | x | x |               |               |
 | tf.net 0.14          | x |                |               |               |
@@ -50,10 +51,10 @@ PM> Install-Package TensorFlow.Keras
 
 ### Install tensorflow binary
 ### For CPU version
-PM> Install-Package SciSharp.TensorFlow.Redist -Version 2.3.1
+PM> Install-Package SciSharp.TensorFlow.Redist
 
 ### For GPU version (CUDA and cuDNN are required)
-PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU -Version 2.3.1
+PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 ```
 
 Import TF.NET and Keras API in your project.

@@ -39,7 +39,7 @@ namespace Tensorflow
                 => math_ops.matmul(a, b);
 
             public Tensor batch_matmul(Tensor x, Tensor y, bool adj_x = false, bool adj_y = false, string name = null)
-                => tf.Context.ExecuteOp("BatchMatMul", name, new ExecuteOpArgs(x, y).SetAttributes(new { adj_x, adj_y }));
+                => math_ops.batch_matmul(x, y, adj_x: adj_x, adj_y: adj_y, name: name);
         }
 
         public Tensor diag(Tensor diagonal, string name = null)
@@ -74,6 +74,6 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor batch_matmul(Tensor x, Tensor y, bool adj_x = false, bool adj_y = false, string name = null)
-            => tf.Context.ExecuteOp("BatchMatMul", name, new ExecuteOpArgs(x, y).SetAttributes(new { adj_x, adj_y }));
+            => math_ops.batch_matmul(x, y, adj_x: adj_x, adj_y: adj_y, name: name);
     }
 }

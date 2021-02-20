@@ -796,21 +796,16 @@ namespace Tensorflow
         public static Tensor batch_matmul(Tensor x, Tensor y,
             bool adj_x = false, bool adj_y = false,
             string name = null)
-        {
-            Tensor result = null;
-
-            tf_with(ops.name_scope(name, "MatMul", new Tensor[] { x, y }), scope =>
+            => tf_with(ops.name_scope(name, "MatMul", new Tensor[] { x, y }), scope =>
             {
                 name = scope;
 
                 x = ops.convert_to_tensor(x, name: "a");
                 y = ops.convert_to_tensor(y, name: "b");
 
-                result = math_ops.batch_matmul(x, y, adj_x, adj_y, name);
+                return tf.Context.ExecuteOp("BatchMatMul", name, new ExecuteOpArgs(x, y)
+                    .SetAttributes(new { adj_x, adj_y }));
             });
-
-            return result;
-        }
 
         /// <summary>
         /// Returns the complex conjugate of a complex number.
