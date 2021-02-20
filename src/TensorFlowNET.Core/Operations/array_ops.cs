@@ -737,7 +737,7 @@ namespace Tensorflow
         public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy,
             long begin_mask = 0, long end_mask = 0, long ellipsis_mask = 0, long new_axis_mask = 0,
             long shrink_axis_mask = 0, string name = null)
-            => tf.Context.RunInAutoMode2("StridedSliceGrad", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("StridedSliceGrad", name, new AutoModeArgs
             {
                 OpInputArgs = new
                 {
@@ -960,7 +960,7 @@ namespace Tensorflow
             => gen_array_ops.slice(input, begin, size, name: name);
 
         public static Tensor slice(Tensor input, Tensor begin, Tensor size, string name = null)
-            => tf.Context.RunInAutoMode2("Slice", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("Slice", name, new AutoModeArgs
             {
                 OpInputArgs = new { input, begin, size },
                 GetGradientAttrs = (op) => new

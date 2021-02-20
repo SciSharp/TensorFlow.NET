@@ -30,49 +30,19 @@ namespace Tensorflow.Contexts
     public sealed partial class Context
     {
         // [DebuggerStepThrough]
-        public T RunInAutoMode<T>(Func<T> graphAction, Func<T> eagerAction, params object[] args)
-        {
-            if (tf.Context.has_graph_arg(args))
-            {
-                if (executing_eagerly())
-                {
-                    graph_mode();
-                    var result = graphAction();
-                    restore_mode();
-                    return result;
-                }
-                else
-                {
-                    return graphAction();
-                }
-            }
-            else
-            {
-                if (tf.Context.executing_eagerly())
-                {
-                    return eagerAction();
-                }
-                else
-                {
-                    return graphAction();
-                }
-            }
-        }
-        
-        // [DebuggerStepThrough]
-        public Tensors RunInAutoMode2(string OpType, string Name, AutoModeArgs args)
+        public Tensors ExecuteOp(string OpType, string Name, AutoModeArgs args)
         {
             var inputArgs = ConvertToDict(args.OpInputArgs);
             var attrDict = ConvertToDict(args.OpAttrs);
             
-            Func<Tensor> graphAction = () =>
+            Func<Tensors> graphAction = () =>
             {
                 foreach (var attr in attrDict)
                     inputArgs[attr.Key] = attr.Value;
-                return tf.OpDefLib._apply_op_helper(OpType, Name, inputArgs).output;
+                return tf.OpDefLib._apply_op_helper(OpType, Name, inputArgs).outputs;
             };
 
-            Func<Tensor> eagerAction = () =>
+            Func<Tensors> eagerAction = () =>
             {
                 var attrs = new object[attrDict.Count() * 2];
                 int i = 0;
@@ -87,7 +57,7 @@ namespace Tensorflow.Contexts
                     OpType, Name,
                     null,
                     inputArgs.Values.ToArray(), 
-                    attrs).FirstOrDefault();
+                    attrs);
             };
 
             if (tf.Context.has_graph_arg(inputArgs.Values))

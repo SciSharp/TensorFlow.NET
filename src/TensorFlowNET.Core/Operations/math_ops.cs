@@ -45,7 +45,7 @@ namespace Tensorflow
             => gen_math_ops.add(x, y, name);
 
         public static Tensor add_v2(Tensor x, Tensor y, string name = null)
-            => tf.Context.RunInAutoMode2("AddV2", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("AddV2", name, new AutoModeArgs
             {
                 OpInputArgs = new { x, y }
             });
@@ -261,7 +261,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor erf(Tensor x, string name = null)
-            => tf.Context.RunInAutoMode2("Erf", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("Erf", name, new AutoModeArgs
             {
                 OpInputArgs = new { x }
             });
@@ -270,7 +270,7 @@ namespace Tensorflow
             => gen_math_ops.sqrt(x, name: name);
 
         public static Tensor multiply(Tensor x, Tensor y, string name = null)
-            => tf.Context.RunInAutoMode2("Mul", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("Mul", name, new AutoModeArgs
             {
                 OpInputArgs = new { x, y }
             });

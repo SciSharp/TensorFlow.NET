@@ -222,25 +222,15 @@ namespace Tensorflow
 
         public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false,
             bool half_pixel_centers = false, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new
+                => tf.Context.ExecuteOp("ResizeNearestNeighbor", name, new AutoModeArgs
                 {
-                    images,
-                    size,
-                    align_corners,
-                    half_pixel_centers
-                }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ResizeNearestNeighbor", name,
-                    null,
-                    images, size,
-                    "align_corners", align_corners,
-                    "half_pixel_centers", half_pixel_centers).FirstOrDefault(),
-                images);
+                    OpInputArgs = new { images, size },
+                    OpAttrs = new { align_corners, half_pixel_centers }
+                });
 
         public static Tensor resize_nearest_neighbor_grad(Tensor grads, Tensor size, bool align_corners = false,
             bool half_pixel_centers = false, string name = null)
-                => tf.Context.RunInAutoMode2("ResizeNearestNeighborGrad", name, new AutoModeArgs
+                => tf.Context.ExecuteOp("ResizeNearestNeighborGrad", name, new AutoModeArgs
                 {
                     OpInputArgs = new { grads, size },
                     OpAttrs = new { align_corners, half_pixel_centers },

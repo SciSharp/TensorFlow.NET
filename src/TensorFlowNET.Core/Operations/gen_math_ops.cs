@@ -116,13 +116,10 @@ namespace Tensorflow
         ///    [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
         /// </remarks>
         public static Tensor div_no_nan(Tensor x, Tensor y, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("DivNoNan", name: name, new { x, y }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "DivNoNan", name,
-                    null,
-                    x, y).FirstOrDefault(),
-                x, y);
+            => tf.Context.ExecuteOp("DivNoNan", name, new AutoModeArgs
+            {
+                OpInputArgs = new { x, y }
+            });
 
         public static Tensor mean(Tensor input, int axis, bool keep_dims = false, string name = null)
             => mean(input, ops.convert_to_tensor(axis), keep_dims: keep_dims, name: name);
@@ -141,7 +138,7 @@ namespace Tensorflow
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor mean(Tensor input, Tensor axis, bool keep_dims = false, string name = null)
-            => tf.Context.RunInAutoMode2("Mean", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("Mean", name, new AutoModeArgs
             {
                 OpInputArgs = new { input, axis },
                 OpAttrs = new { keep_dims, reduction_indices = axis },
@@ -318,13 +315,10 @@ namespace Tensorflow
         ///    Specifically, <c>y = 1 / (1 + exp(-x))</c>.
         /// </remarks>
         public static Tensor sigmoid(Tensor x, string name = "Sigmoid")
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("Sigmoid", name: name, new { x }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Sigmoid", name,
-                    null,
-                    x).FirstOrDefault(),
-                x);
+            => tf.Context.ExecuteOp("Sigmoid", name, new AutoModeArgs
+            {
+                OpInputArgs = new { x }
+            });
 
         /// <summary>
         ///    Computes the gradient of the sigmoid of <c>x</c> wrt its input.
@@ -344,7 +338,7 @@ namespace Tensorflow
         ///    <c>dy</c> is the corresponding input gradient.
         /// </remarks>
         public static Tensor sigmoid_grad(Tensor y, Tensor dy, string name = "SigmoidGrad")
-            => tf.Context.RunInAutoMode2("SigmoidGrad", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("SigmoidGrad", name, new AutoModeArgs
             {
                 OpInputArgs = new { y, dy }
             });
@@ -576,13 +570,10 @@ namespace Tensorflow
         }
 
         public static Tensor log1p(Tensor x, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("Log1p", name: name, new { x }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Log1p", name,
-                    null,
-                    x).FirstOrDefault(),
-                x);
+            => tf.Context.ExecuteOp("Log1p", name, new AutoModeArgs
+            {
+                OpInputArgs = new { x }
+            });
 
         public static Tensor logical_and(Tensor x, Tensor y, string name = null)
             => tf.OpDefLib._apply_op_helper("LogicalAnd", name, args: new { x, y });
@@ -691,13 +682,10 @@ namespace Tensorflow
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> A `Tensor`. Has the same type as `x`.</returns>
         public static Tensor exp(Tensor x, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("Exp", name, args: new { x }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Exp", name,
-                    null,
-                    x).FirstOrDefault(),
-                x);
+            => tf.Context.ExecuteOp("Exp", name, new AutoModeArgs
+            {
+                OpInputArgs = new { x }
+            });
 
         /// <summary>
         /// Computes natural logarithm of x element-wise.
@@ -739,14 +727,11 @@ namespace Tensorflow
         }
         
         public static Tensor cast(Tensor x, TF_DataType DstT, bool Truncate = false, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("Cast", name, args: new { x, DstT, Truncate }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Cast", name,
-                    null,
-                    x,
-                    "DstT", DstT, "Truncate", Truncate).FirstOrDefault(),
-                x);
+            => tf.Context.ExecuteOp("Cast", name, new AutoModeArgs
+            {
+                OpInputArgs = new { x },
+                OpAttrs = new { DstT, Truncate }
+            });
 
         public static Tensor neg(Tensor x, string name = null)
         {
@@ -783,7 +768,7 @@ namespace Tensorflow
         }
 
         public static Tensor sub(Tensor x, Tensor y, string name = null)
-            => tf.Context.RunInAutoMode2("Sub", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("Sub", name, new AutoModeArgs
             {
                 OpInputArgs = new { x, y }
             });
@@ -1087,14 +1072,17 @@ namespace Tensorflow
         }
 
         public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("Max", name, new { input, reduction_indices = axis, keep_dims }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Max", name,
-                    null,
-                    input, axis,
-                    "keep_dims", keep_dims).FirstOrDefault(),
-                input as Tensor);
+            => tf.Context.ExecuteOp("Max", name, new AutoModeArgs
+            {
+                OpInputArgs = new { input, axis },
+                OpAttrs = new { keep_dims, reduction_indices = axis },
+                GetGradientAttrs = (op) => new
+                {
+                    T = op.get_attr<TF_DataType>("T"),
+                    align_corners = op.get_attr<bool>("align_corners"),
+                    half_pixel_centers = op.get_attr<bool>("half_pixel_centers")
+                }
+            });
 
         public static Tensor _min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
         {
@@ -1170,13 +1158,10 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor range(Tensor start, Tensor limit, Tensor delta, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("Range", name, new { start, limit, delta }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Range", name,
-                    null,
-                    start, limit, delta).FirstOrDefault(),
-                start, limit, delta);
+            => tf.Context.ExecuteOp("Range", name, new AutoModeArgs
+            {
+                OpInputArgs = new { start, limit, delta }
+            });
 
         /// <summary>
         ///    Rounds the values of a tensor to the nearest integer, element-wise.
