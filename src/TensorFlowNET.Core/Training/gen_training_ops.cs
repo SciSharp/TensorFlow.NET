@@ -21,46 +21,19 @@ namespace Tensorflow
 {
     public class gen_training_ops
     {
-        public static Operation resource_apply_adam(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power,
+        public static Tensor resource_apply_adam(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power,
             Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad,
             bool use_locking = false, bool use_nesterov = false, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var result = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ResourceApplyAdam", name,
-                    null,
-                    var, m, v, beta1_power, beta2_power, lr, beta1, beta2, epsilon, grad,
-                    "use_locking", use_locking,
-                    "use_nesterov", use_nesterov);
-                return null;
-            }
-
-            throw new NotImplementedException("");
-        }
+                => tf.Context.ExecuteOp("ResourceApplyAdam", name, 
+                    new ExecuteOpArgs(var, m, v, beta1_power, beta2_power, lr, beta1, beta2, epsilon, grad)
+                        .SetAttributes(new { use_locking, use_nesterov }));
 
         public static Tensor apply_adam(Tensor var, Tensor m, Tensor v, Tensor beta1_power, Tensor beta2_power,
             Tensor lr, Tensor beta1, Tensor beta2, Tensor epsilon, Tensor grad,
             bool use_locking = false, bool use_nesterov = false, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("ApplyAdam", name, new
-            {
-                var,
-                m,
-                v,
-                beta1_power,
-                beta2_power,
-                lr,
-                beta1,
-                beta2,
-                epsilon,
-                grad,
-                use_locking,
-                use_nesterov
-            });
-
-            return _op.outputs[0];
-        }
+                => tf.Context.ExecuteOp("ApplyAdam", name, 
+                    new ExecuteOpArgs(var, m, v, beta1_power, beta2_power, lr, beta1, beta2, epsilon, grad)
+                        .SetAttributes(new { use_locking, use_nesterov }));
 
         public static Tensor apply_gradient_descent(IVariableV1 var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
         {
@@ -75,27 +48,8 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Operation resource_apply_gradient_descent(Tensor var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var result = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ResourceApplyGradientDescent", name,
-                    null,
-                    var, alpha, delta,
-                    "use_locking", use_locking);
-                return null;
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("ResourceApplyGradientDescent", name, new
-            {
-                var,
-                alpha,
-                delta,
-                use_locking
-            });
-
-            return _op;
-        }
+        public static Tensor resource_apply_gradient_descent(Tensor var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
+            => tf.Context.ExecuteOp("ResourceApplyGradientDescent", name, 
+                new ExecuteOpArgs(var, alpha, delta).SetAttributes(new { use_locking }));
     }
 }

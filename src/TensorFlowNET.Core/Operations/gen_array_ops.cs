@@ -45,20 +45,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor concat_v2<T, Ta>(T[] values, Ta axis, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ConcatV2", name,
-                    null,
-                    values, axis);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("ConcatV2", name: name, args: new { values, axis });
-            return _op.output;
-        }
+            => tf.Context.ExecuteOp("ConcatV2", name, new ExecuteOpArgs(values, axis));
 
         public static Tensor concat_v2(Tensor[] values, Tensor axis, string name = null)
         {
@@ -72,10 +59,7 @@ namespace Tensorflow
         }
 
         public static Tensor concat_v2(Tensor[] values, int axis, string name = null)
-            => tf.Context.ExecuteOp("ConcatV2", name, new AutoModeArgs
-            {
-                OpInputArgs = new { values, axis }
-            });
+            => tf.Context.ExecuteOp("ConcatV2", name, new ExecuteOpArgs(values, axis));
 
         private static Tensor concat_v2_eager_fallback<T1, T2>(T1[] values, T2 axis, string name, Context ctx)
         {
@@ -127,38 +111,11 @@ namespace Tensorflow
         ///   </code>
         /// </remarks>
         public static Tensor diag(Tensor diagonal, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Diag", name,
-                    null,
-                    diagonal);
-
-                return results[0];
-            }
-
-            var op = tf.OpDefLib._apply_op_helper("Diag", name: name, args: new { diagonal });
-
-            return op.output;
-        }
+            => tf.Context.ExecuteOp("Diag", name, new ExecuteOpArgs(diagonal));
 
         public static Tensor expand_dims(Tensor input, int axis, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ExpandDims", name,
-                    null,
-                    input, tf.convert_to_tensor(axis));
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("ExpandDims", name: name, args: new { input, dim = axis });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("ExpandDims", name, new ExecuteOpArgs(input, axis)
+                .SetAttributes(new { dim = axis }));
 
         public static Tensor gather_v2<T1, T2>(T1 @params, T2 indices, int axis, string name = null)
         {
@@ -198,11 +155,10 @@ namespace Tensorflow
         }
 
         public static Tensor pack(Tensor[] values, int axis = 0, string name = null)
-            => tf.Context.ExecuteOp("Pack", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("Pack", name, new ExecuteOpArgs()
             {
-                OpInputArgs = new { values },
-                OpAttrs = new { axis }
-            });
+                OpInputArgs = new object[] { values }
+            }.SetAttributes(new { axis }));
 
         /// <summary>
         /// Return a tensor with the same shape and contents as the input tensor or value.
@@ -210,29 +166,7 @@ namespace Tensorflow
         /// <param name="input"></param>
         /// <param name="name"></param>
         public static Tensor identity(Tensor input, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Identity", name,
-                    null,
-                    input);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Identity", name, new { input });
-            
-            if (tf.Runner.MustRecordGradient())
-            {
-                tf.Runner.RecordGradient("Identity", _op.inputs, new object[] 
-                {
-                    "T", _op.get_attr<TF_DataType>("T")
-                }, _op.outputs);
-            }                
-
-            return _op.output;
-        }
+            => tf.Context.ExecuteOp("Identity", name, new ExecuteOpArgs(input));
 
         public static Tensor invert_permutation(Tensor x, string name = null)
         {
@@ -249,21 +183,7 @@ namespace Tensorflow
         }
 
         public static Tensor rank(Tensor input, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Rank", name,
-                    null,
-                    input);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Rank", name: name, args: new { input });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Rank", name, new ExecuteOpArgs(input));
 
         /// <summary>
         /// Creates a tensor filled with a scalar value.
@@ -273,20 +193,7 @@ namespace Tensorflow
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `value`.</returns>
         public static Tensor fill<T>(Tensor dims, T value, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Fill", name,
-                    null,
-                    dims, value);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Fill", name, new { dims, value });
-            return _op.output;
-        }
+            => tf.Context.ExecuteOp("Fill", name, new ExecuteOpArgs(dims, value));
 
         /// <summary>
         /// Return the reduction indices for computing gradients of s0 op s1 with broadcast.
@@ -297,19 +204,8 @@ namespace Tensorflow
         /// <returns>A tuple of `Tensor` objects (r0, r1).</returns>
         public static (Tensor, Tensor) broadcast_gradient_args(Tensor s0, Tensor s1, string name = "")
         {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "BroadcastGradientArgs", name,
-                    null,
-                    s0, s1);
-
-                return (results[0], results[1]);
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("BroadcastGradientArgs", name, new { s0, s1 });
-
-            return (_op.outputs[0], _op.outputs[1]);
+            var results = tf.Context.ExecuteOp("BroadcastGradientArgs", name, new ExecuteOpArgs(s0, s1));
+            return (results[0], results[1]);
         }
 
         public static Tensor reverse<T>(Tensor tensor, T axis, string name = null)
@@ -319,16 +215,10 @@ namespace Tensorflow
         }
 
         public static Tensor reshape<T>(Tensor tensor, T shape, string name = null)
-            => tf.Context.ExecuteOp("Reshape", name, new AutoModeArgs
-            {
-                OpInputArgs = new { tensor, shape }
-            });
+            => tf.Context.ExecuteOp("Reshape", name, new ExecuteOpArgs(tensor, shape));
 
         public static Tensor reshape(Tensor tensor, object[] shape, string name = null)
-            => tf.Context.ExecuteOp("Reshape", name, new AutoModeArgs
-            {
-                OpInputArgs = new { tensor, shape }
-            });
+            => tf.Context.ExecuteOp("Reshape", name, new ExecuteOpArgs(tensor, shape));
 
         private static Tensor reshape_eager_fallback(Tensor tensor, object[] shape, string name, Context ctx)
         {
@@ -378,21 +268,8 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             int axis = -1,
             string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "OneHot", name,
-                    null,
-                    indices, depth, on_value, off_value,
-                    "axis", axis);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("OneHot", name, new { indices, depth, on_value, off_value, axis });
-            return _op.outputs[0];
-        }
+                => tf.Context.ExecuteOp("OneHot", name, new ExecuteOpArgs(indices, depth, on_value, off_value)
+                    .SetAttributes(new { axis }));
 
         /// <summary>
         /// A placeholder op that passes through `input` when its output is not fed.
@@ -408,35 +285,10 @@ namespace Tensorflow
         }
 
         public static Tensor select<Tx, Ty>(Tensor condition, Tx x, Ty y, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Select", name,
-                    null,
-                    condition, x, y);
+            => tf.Context.ExecuteOp("Select", name, new ExecuteOpArgs(condition, x, y));
 
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Select", name, new { condition, t = x, e = y });
-            return _op.outputs[0];
-        }
         public static Tensor select_v2<Tx, Ty>(Tensor condition, Tx x, Ty y, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "SelectV2", name,
-                    null,
-                    condition, x, y);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("SelectV2", name, new { condition, t = x, e = y });
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("SelectV2", name, new ExecuteOpArgs(condition, x, y));
 
         public static Tensor scatter_nd(Tensor indices, Tensor updates, Tensor[] shape, string name = null)
         {
@@ -445,11 +297,8 @@ namespace Tensorflow
         }
 
         public static Tensor shape(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
-            => tf.Context.ExecuteOp("Shape", name, new AutoModeArgs
-            {
-                OpInputArgs = new { input },
-                OpAttrs = new { out_type }
-            });
+            => tf.Context.ExecuteOp("Shape", name, new ExecuteOpArgs(input)
+                .SetAttributes(new { out_type }));
 
         /// <summary>
         /// Returns shape of tensors.
@@ -459,21 +308,10 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor[] shape_n(Tensor[] input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
-        {
-            if (tf.executing_eagerly())
+            => tf.Context.ExecuteOp("ShapeN", name, new ExecuteOpArgs()
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ShapeN", name,
-                    null,
-                    input,
-                    "out_type", out_type);
-
-                return results;
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("ShapeN", name, new { input, out_type });
-            return _op.outputs;
-        }
+                OpInputArgs = new object[] { input }
+            }.SetAttributes(new { out_type }));
 
         public static Tensor size(Tensor input, TF_DataType out_type = TF_DataType.TF_INT32, string name = null)
         {
@@ -516,60 +354,23 @@ namespace Tensorflow
 
         public static Tensor[] split_v(Tensor value, Tensor size_splits, 
             int axis, int num_split, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "SplitV", name,
-                    null,
-                    value, size_splits, axis,
-                    "num_split", num_split);
-
-                return results;
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("SplitV", name, new { split_dim = axis, value, num_split });
-            return _op.outputs;
-        }
+                => tf.Context.ExecuteOp("SplitV", name, new ExecuteOpArgs(value, size_splits, axis)
+                    .SetAttributes(new { num_split }));
 
         public static Tensor tile(Tensor input, Tensor multiples, string name = null)
-            => tf.Context.ExecuteOp("Tile", name, new AutoModeArgs
-            {
-                OpInputArgs = new { input, multiples }
-            });
+            => tf.Context.ExecuteOp("Tile", name, new ExecuteOpArgs(input, multiples));
 
         public static Tensor tile(Tensor input, object[] multiples, string name = null)
-            => tf.Context.ExecuteOp("Tile", name, new AutoModeArgs
-            {
-                OpInputArgs = new { input, multiples }
-            });
+            => tf.Context.ExecuteOp("Tile", name, new ExecuteOpArgs(input, multiples));
 
         public static Tensor transpose<T1>(Tensor x, T1 perm, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Transpose", name,
-                    null,
-                    x, perm);
-
-                return results[0];
-            }
-            var _op = tf.OpDefLib._apply_op_helper("Transpose", name, new { x, perm });
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Transpose", name, new ExecuteOpArgs(x, perm));
 
         public static Tensor ones_like(Tensor x, string name = null)
-            => tf.Context.ExecuteOp("OnesLike", name, new AutoModeArgs
-            {
-                OpInputArgs = new { x }
-            });
+            => tf.Context.ExecuteOp("OnesLike", name, new ExecuteOpArgs(x));
 
         public static Tensor zeros_like(Tensor x, string name = null)
-            => tf.Context.ExecuteOp("ZerosLike", name, new AutoModeArgs
-            {
-                OpInputArgs = new { x }
-            });
+            => tf.Context.ExecuteOp("ZerosLike", name, new ExecuteOpArgs(x));
 
         public static Tensor stop_gradient(Tensor x, string name = null)
         {
@@ -585,18 +386,15 @@ namespace Tensorflow
             long new_axis_mask = 0,
             long shrink_axis_mask = 0,
             string name = null)
-                => tf.Context.ExecuteOp("StridedSlice", name, new AutoModeArgs
-                {
-                    OpInputArgs = new { input, begin, end, strides },
-                    OpAttrs = new 
+                => tf.Context.ExecuteOp("StridedSlice", name, new ExecuteOpArgs(input, begin, end, strides)
+                    .SetAttributes(new
                     {
                         begin_mask,
                         end_mask,
                         ellipsis_mask,
                         new_axis_mask,
                         shrink_axis_mask
-                    }
-                });
+                    }));
 
         public static Tensor resource_strided_slice_assign(Tensor input, Tensor begin, Tensor end, Tensor strides, Tensor value,
             int begin_mask = 0,
@@ -605,17 +403,15 @@ namespace Tensorflow
             int new_axis_mask = 0,
             int shrink_axis_mask = 0,
             string name = null)
-                => tf.Context.ExecuteOp("ResourceStridedSliceAssign", name, new AutoModeArgs
-                {
-                    OpInputArgs = new { input, begin, end, strides, value },
-                    OpAttrs = new {
+                => tf.Context.ExecuteOp("ResourceStridedSliceAssign", name, new ExecuteOpArgs(input, begin, end, strides, value)
+                    .SetAttributes(new
+                    {
                         begin_mask,
                         end_mask,
                         ellipsis_mask,
                         new_axis_mask,
                         shrink_axis_mask
-                    }
-                });
+                    }));
 
         public static Tensor strided_slice<T>(Tensor input, T[] begin, T[] end, T[] strides,
             int begin_mask = 0,
@@ -653,23 +449,8 @@ namespace Tensorflow
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> A `Tensor`. Has the same type as `input`.</returns>
         public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Squeeze", name,
-                    null,
-                    input,
-                    "squeeze_dims", axis);
-
-                return results[0];
-            }
-
-            if (axis == null) axis = new int[0];
-            var _op = tf.OpDefLib._apply_op_helper("Squeeze", name, args: new { input, squeeze_dims = axis });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Squeeze", name, new ExecuteOpArgs(input)
+                .SetAttributes(new { squeeze_dims = axis }));
 
         /// <summary>
         /// Return the shape of s0 op s1 with broadcast.
@@ -695,20 +476,6 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor broadcast_to<T>(Tensor input, T shape, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "BroadcastTo", name,
-                    null,
-                    input, shape);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("BroadcastTo", name, args: new { input, shape, name });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("BroadcastTo", name, new ExecuteOpArgs(input, shape));
     }
 }

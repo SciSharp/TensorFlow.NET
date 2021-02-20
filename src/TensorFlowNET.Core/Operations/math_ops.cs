@@ -45,10 +45,7 @@ namespace Tensorflow
             => gen_math_ops.add(x, y, name);
 
         public static Tensor add_v2(Tensor x, Tensor y, string name = null)
-            => tf.Context.ExecuteOp("AddV2", name, new AutoModeArgs
-            {
-                OpInputArgs = new { x, y }
-            });
+            => tf.Context.ExecuteOp("AddV2", name, new ExecuteOpArgs(x, y));
 
         public static Tensor add_v2<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.add_v2(x, y, name);
@@ -261,19 +258,13 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor erf(Tensor x, string name = null)
-            => tf.Context.ExecuteOp("Erf", name, new AutoModeArgs
-            {
-                OpInputArgs = new { x }
-            });
+            => tf.Context.ExecuteOp("Erf", name, new ExecuteOpArgs(x));
 
         public static Tensor sqrt(Tensor x, string name = null)
             => gen_math_ops.sqrt(x, name: name);
 
         public static Tensor multiply(Tensor x, Tensor y, string name = null)
-            => tf.Context.ExecuteOp("Mul", name, new AutoModeArgs
-            {
-                OpInputArgs = new { x, y }
-            });
+            => tf.Context.ExecuteOp("Mul", name, new ExecuteOpArgs(x, y));
 
         public static Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
@@ -720,23 +711,10 @@ namespace Tensorflow
             => tf_with(ops.name_scope(name, "Pow", new { x, y }), scope =>
             {
                 name = scope;
+                var x_tensor = ops.convert_to_tensor(x, name: "x");
+                var y_tensor = ops.convert_to_tensor(y, name: "y", dtype: x_tensor.dtype.as_base_dtype());
 
-                if (tf.executing_eagerly())
-                {
-                    var x_tensor = ops.convert_to_tensor(x, name: "x");
-                    var y_tensor = ops.convert_to_tensor(y, name: "y", dtype: x_tensor.dtype.as_base_dtype());
-
-                    var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                        "Pow", name,
-                        null,
-                        x_tensor, y_tensor);
-
-                    return results[0];
-                }
-
-                var _op = tf.OpDefLib._apply_op_helper("Pow", name, args: new { x, y });
-
-                return _op.output;
+                return tf.Context.ExecuteOp("Pow", name, new ExecuteOpArgs(x_tensor, y_tensor));
             });
 
         public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
@@ -828,7 +806,7 @@ namespace Tensorflow
                 x = ops.convert_to_tensor(x, name: "a");
                 y = ops.convert_to_tensor(y, name: "b");
 
-                result = gen_math_ops.batch_mat_mul(x, y, adj_x, adj_y, name);
+                result = math_ops.batch_matmul(x, y, adj_x, adj_y, name);
             });
 
             return result;

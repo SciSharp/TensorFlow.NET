@@ -15,84 +15,54 @@ namespace Tensorflow.Eager
     /// </summary>
     public partial class EagerRunner
     {
-        int kFastPathExecuteInputStartIndex = 0;
         UnorderedMap<Context, SafeOpHandle> thread_local_eager_operation_map = new UnorderedMap<Context, SafeOpHandle>();
 
-        public Tensor[] TFE_FastPathExecute2(Context ctx,
-            string device_name,
-            string opName,
-            string name,
-            Action callbacks,
-            object[] inputArgs,
-            object[] attrs)
+        public Tensor[] TFE_FastPathExecute(FastPathOpExecInfo op_exec_info)
         {
-            var args = new List<object>();
-            args.AddRange(inputArgs);
-            if (attrs != null)
-                args.AddRange(attrs);
-            return TFE_FastPathExecute(ctx, device_name, opName, name, callbacks, args.ToArray());
-        }
+            if (op_exec_info.ctx == null)
+                op_exec_info.ctx = tf.Context;
+            if (string.IsNullOrEmpty(op_exec_info.device_name))
+                op_exec_info.device_name = tf.Context.DeviceName;
 
-        public Tensor[] TFE_FastPathExecute(Context ctx,
-            string device_name,
-            string opName,
-            string name,
-            Action callbacks,
-            params object[] args)
-        {
-            if (ctx == null)
-                throw new ValueError("This function does not handle the case of the path where " +
-                    "all inputs are not already EagerTensors.");
-
-            int args_size = args.Length;
             var attr_list_sizes = new Dictionary<string, long>();
 
-            FastPathOpExecInfo op_exec_info = new FastPathOpExecInfo()
-            {
-                ctx = ctx,
-                args = args,
-                device_name = device_name,
-                op_name = opName,
-                name = name,
-            };
-
             op_exec_info.run_gradient_callback = HasAccumulatorOrTape();
-            op_exec_info.run_post_exec_callbacks = callbacks != null;
+            op_exec_info.run_post_exec_callbacks = op_exec_info.callbacks != null;
             op_exec_info.run_callbacks = op_exec_info.run_gradient_callback || op_exec_info.run_post_exec_callbacks;
 
             var status = tf.Status;
-            using var op = GetOp(ctx, opName, status);
+            using var op = GetOp(op_exec_info.ctx, op_exec_info.op_name, status);
 
-            var op_def = tf.get_default_graph().GetOpDef(opName);
+            var op_def = tf.get_default_graph().GetOpDef(op_exec_info.op_name);
 
             var flattened_attrs = new List<object>(op_def.Attr.Count * 2);
             var flattened_inputs = new List<Tensor>(op_def.InputArg.Count);
 
             // Set non-inferred attrs, including setting defaults if the attr is passed in
             // as None.
-            for (int i = kFastPathExecuteInputStartIndex + op_def.InputArg.Count; i < args_size; i += 2)
+            if(op_exec_info.attrs != null)
             {
-                var attr_name = args[i].ToString();
-                var attr_value = args[i + 1];
-
-                var attr = op_def.Attr.FirstOrDefault(x => x.Name == attr_name);
-                if (attr != null)
+                foreach (var attr1 in op_exec_info.attrs)
                 {
-                    flattened_attrs.Add(attr_name);
-                    flattened_attrs.Add(attr_value);
+                    var attr = op_def.Attr.FirstOrDefault(x => x.Name == attr1.Key);
+                    if (attr != null)
+                    {
+                        flattened_attrs.Add(attr.Name);
+                        flattened_attrs.Add(attr1.Value);
 
-                    SetOpAttrWithDefaults(ctx, op, attr, attr_name, attr_value, attr_list_sizes, status);
-                    status.Check(true);
+                        SetOpAttrWithDefaults(op_exec_info.ctx, op, attr, attr.Name, attr1.Value, attr_list_sizes, status);
+                        status.Check(true);
+                    }
                 }
             }
 
-            c_api.TFE_OpSetDevice(op, device_name, status.Handle);
+            c_api.TFE_OpSetDevice(op, op_exec_info.device_name, status.Handle);
             status.Check(true);
 
             // Add inferred attrs and inputs.
             for (int i = 0; i < op_def.InputArg.Count; i++)
             {
-                var input = args[kFastPathExecuteInputStartIndex + i];
+                var input = op_exec_info.args[i];
                 var input_arg = op_def.InputArg[i];
                 if (!string.IsNullOrEmpty(input_arg.NumberAttr))
                 {
@@ -107,7 +77,7 @@ namespace Tensorflow.Eager
 
                     if (len > 0)
                     {
-                        var fast_input_array = (object[])args[i];
+                        var fast_input_array = (object[])op_exec_info.args[i];
                         // First item adds the type attr.
                         if (!AddInputToOp(fast_input_array[i], true, input_arg, flattened_attrs, flattened_inputs, op, status))
                             return null;
@@ -151,7 +121,7 @@ namespace Tensorflow.Eager
                 else
                 {
                     // The item is a single item.
-                    AddInputToOp(args[i], true, input_arg, flattened_attrs, flattened_inputs, op, status);
+                    AddInputToOp(op_exec_info.args[i], true, input_arg, flattened_attrs, flattened_inputs, op, status);
                 }
             }
 
@@ -179,7 +149,7 @@ namespace Tensorflow.Eager
             if (op_exec_info.run_callbacks)
             {
                 RunCallbacks(op_exec_info,
-                    kFastPathExecuteInputStartIndex + op_def.InputArg.Count(),
+                    op_def.InputArg.Count(),
                     flattened_inputs.ToArray(), flattened_attrs.ToArray(), flat_result);
             }
 

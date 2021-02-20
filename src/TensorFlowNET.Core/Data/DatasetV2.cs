@@ -105,18 +105,7 @@ namespace Tensorflow
         }
 
         public Tensor dataset_cardinality(string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "DatasetCardinality", name,
-                    null,
-                    variant_tensor);
-                return results[0];
-            }
-
-            throw new NotImplementedException("");
-        }
+            => tf.Context.ExecuteOp("DatasetCardinality", name, new ExecuteOpArgs(variant_tensor));
 
         public override string ToString()
             => $"{GetType().Name} shapes: {string.Join(", ", structure.Select(x => x.shape))}, types: {string.Join(", ", structure.Select(x => "tf." + x.dtype.as_numpy_name()))}";

@@ -30,37 +30,35 @@ namespace Tensorflow.Contexts
     public sealed partial class Context
     {
         // [DebuggerStepThrough]
-        public Tensors ExecuteOp(string OpType, string Name, AutoModeArgs args)
+        public Tensors ExecuteOp(string OpType, string Name, ExecuteOpArgs args)
         {
-            var inputArgs = ConvertToDict(args.OpInputArgs);
-            var attrDict = ConvertToDict(args.OpAttrs);
-            
             Func<Tensors> graphAction = () =>
             {
-                foreach (var attr in attrDict)
-                    inputArgs[attr.Key] = attr.Value;
-                return tf.OpDefLib._apply_op_helper(OpType, Name, inputArgs).outputs;
+                var keywords = new Dictionary<string, object>();
+                if(args.OpInputArgs != null)
+                {
+                    foreach (var (i, input) in enumerate(args.OpInputArgs))
+                        keywords[$"input_{i}"] = input;
+                }
+
+                if(args.OpAttrs != null)
+                {
+                    foreach (var attr in args.OpAttrs)
+                        keywords[attr.Key] = attr.Value;
+                }
+
+                return tf.OpDefLib._apply_op_helper(OpType, Name, keywords).outputs;
             };
 
             Func<Tensors> eagerAction = () =>
             {
-                var attrs = new object[attrDict.Count() * 2];
-                int i = 0;
-                foreach(var arg in attrDict)
+                return tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(OpType, Name, args.OpInputArgs)
                 {
-                    attrs[i]= arg.Key;
-                    attrs[i + 1] = arg.Value;
-                    i += 2;
-                }    
-
-                return tf.Runner.TFE_FastPathExecute2(tf.Context, tf.Context.DeviceName,
-                    OpType, Name,
-                    null,
-                    inputArgs.Values.ToArray(), 
-                    attrs);
+                    attrs = args.OpAttrs
+                });
             };
 
-            if (tf.Context.has_graph_arg(inputArgs.Values))
+            if (tf.Context.has_graph_arg(args.OpInputArgs))
             {
                 if (executing_eagerly())
                 {
