@@ -45,8 +45,8 @@ namespace Tensorflow.Keras.Datasets
 
         (NDArray, NDArray) LoadX(byte[] bytes)
         {
-            var y = np.Load_Npz<byte[,,]>(bytes);
-            return (y["x_train.npy"], y["x_test.npy"]);
+            var x = np.Load_Npz<byte[,,]>(bytes);
+            return (x["x_train.npy"], x["x_test.npy"]);
         }
 
         (NDArray, NDArray) LoadY(byte[] bytes)
