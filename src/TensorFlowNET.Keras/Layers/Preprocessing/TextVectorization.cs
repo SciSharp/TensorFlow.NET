@@ -47,14 +47,16 @@ namespace Tensorflow.Keras.Layers
 
         Tensors _preprocess(Tensors inputs)
         {
+            Tensor input_tensor = null;
             if (args.Standardize != null)
-                inputs = args.Standardize(inputs);
+                input_tensor = args.Standardize(inputs);
             if (!string.IsNullOrEmpty(args.Split))
             {
                 if (inputs.shape.ndim > 1)
-                    inputs = array_ops.squeeze(inputs, axis: new[] { -1 });
+                    input_tensor = array_ops.squeeze(inputs, axis: new[] { -1 });
                 if (args.Split == "whitespace")
-                    inputs = tf.strings.split(inputs);
+                    input_tensor = tf.strings.split(inputs);
+
             }
             return inputs;
         }

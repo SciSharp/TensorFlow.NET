@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Framework;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -42,9 +43,25 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("Substr", name, new ExecuteOpArgs(input, pos, len)
                 .SetAttributes(new { unit = @uint }));
 
-        public Tensor string_split_v2(Tensor input, string sep = "", int maxsplit = -1, string name = null)
+        public SparseTensor string_split_v2(Tensor input, string sep = "", int maxsplit = -1, string name = null)
         {
-            return null;
+            return tf_with(ops.name_scope(name, "StringSplit"), scope =>
+            {
+                var sep_tensor = ops.convert_to_tensor(sep, dtype: TF_DataType.TF_STRING);
+                var result = tf.Context.ExecuteOp("StringSplitV2", name,
+                    new ExecuteOpArgs(input, sep)
+                    {
+                        GetGradientAttrs = op => new
+                        {
+                            maxsplit = op.get_attr<int>("maxsplit")
+                        }
+                    }.SetAttributes(new { maxsplit }));
+                var (indices, values, shape) = (result[0], result[1], result[2]);
+                indices.set_shape(new TensorShape(-1, 2));
+                values.set_shape(new TensorShape(-1));
+                shape.set_shape(new TensorShape(2));
+                return new SparseTensor(indices, values, shape);
+            });
         }
     }
 }

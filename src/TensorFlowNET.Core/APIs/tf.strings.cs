@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Framework;
+
 namespace Tensorflow
 {
     public partial class tensorflow
@@ -65,7 +67,7 @@ namespace Tensorflow
                     string name = null, string @uint = "BYTE")
                 => ops.substr(input, pos, len, @uint: @uint, name: name);
 
-            public Tensor split(Tensor input, string sep = "", int maxsplit = -1, string name = null)
+            public SparseTensor split(Tensor input, string sep = "", int maxsplit = -1, string name = null)
                 => ops.string_split_v2(input, sep: sep, maxsplit : maxsplit, name : name);
         }
     }

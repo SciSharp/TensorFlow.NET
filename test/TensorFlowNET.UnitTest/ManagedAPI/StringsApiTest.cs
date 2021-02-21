@@ -58,5 +58,12 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             Assert.AreEqual(strings[1], stringData[1]);
             Assert.AreEqual(strings[2], stringData[2]);
         }
+
+        [TestMethod]
+        public void StringSplit()
+        {
+            var tensor = tf.constant(new[] { "hello world", "tensorflow .net" });
+            tf.strings.split(tensor);
+        }
     }
 }

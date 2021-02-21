@@ -14,17 +14,18 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using Tensorflow.Framework;
 
 namespace Tensorflow
 {
     public partial class tensorflow
     {
-        public SparseTensor<T> SparseTensor<T>(long[,] indices, T[] values, long[] dense_shape)
-            => new SparseTensor<T>(indices, values, dense_shape);
+        public SparseTensor SparseTensor(long[,] indices, Array values, long[] dense_shape)
+            => new SparseTensor(indices, values, dense_shape);
 
-        public Tensor sparse_tensor_to_dense<T>(SparseTensor<T> sp_input,
-            T default_value = default,
+        public Tensor sparse_tensor_to_dense(SparseTensor sp_input,
+            Array default_value = default,
             bool validate_indices = true,
             string name = null)
             => gen_sparse_ops.sparse_to_dense(sp_input.indices,
