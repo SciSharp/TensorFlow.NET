@@ -49,6 +49,10 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DocumentationFile>Tensorflow.Keras.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.138" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

@@ -249,13 +249,6 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor cumsum<T>(Tensor x, T axis, bool exclusive = false, bool reverse = false, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Cumsum", name, args: new { x, axis, exclusive, reverse });
-
-            return _op.outputs[0];
-        }
-
         /// <summary>
         /// Computes the sum along segments of a tensor.
         /// </summary>

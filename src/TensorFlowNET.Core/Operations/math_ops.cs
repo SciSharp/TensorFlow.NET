@@ -168,15 +168,12 @@ namespace Tensorflow
         }
 
         public static Tensor cumsum<T>(Tensor x, T axis = default, bool exclusive = false, bool reverse = false, string name = null)
-        {
-            return tf_with(ops.name_scope(name, "Cumsum", new { x }), scope =>
-              {
-                  name = scope;
-                  x = ops.convert_to_tensor(x, name: "x");
-
-                  return gen_math_ops.cumsum(x, axis: axis, exclusive: exclusive, reverse: reverse, name: name);
-              });
-        }
+            => tf_with(ops.name_scope(name, "Cumsum", new { x }), scope =>
+            {
+                name = scope;
+                return tf.Context.ExecuteOp("Cumsum", name, new ExecuteOpArgs(x, axis)
+                    .SetAttributes(new { exclusive, reverse }));
+            });
 
         /// <summary>
         /// Computes Psi, the derivative of Lgamma (the log of the absolute value of
@@ -805,6 +802,31 @@ namespace Tensorflow
 
                 return tf.Context.ExecuteOp("BatchMatMul", name, new ExecuteOpArgs(x, y)
                     .SetAttributes(new { adj_x, adj_y }));
+            });
+
+        public static Tensor bincount(Tensor arr, Tensor weights = null,
+             Tensor minlength = null,
+             Tensor maxlength = null,
+             TF_DataType dtype = TF_DataType.TF_INT32,
+             string name = null,
+             TensorShape axis = null,
+             bool binary_output = false)
+            => tf_with(ops.name_scope(name, "bincount"), scope =>
+            {
+                name = scope;
+                if(!binary_output && axis == null)
+                {
+                    var array_is_nonempty = math_ops.reduce_prod(array_ops.shape(arr)) > 0;
+                    var output_size = math_ops.cast(array_is_nonempty, dtypes.int32) * (math_ops.reduce_max(arr) + 1);
+                    if (minlength != null)
+                        output_size = math_ops.maximum(minlength, output_size);
+                    if (maxlength != null)
+                        output_size = math_ops.minimum(maxlength, output_size);
+                    var weights = constant_op.constant(new long[0], dtype: dtype);
+                    return tf.Context.ExecuteOp("Bincount", name, new ExecuteOpArgs(arr, output_size, weights));
+                }
+
+                throw new NotImplementedException("");
             });
 
         /// <summary>

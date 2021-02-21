@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
 
@@ -27,9 +28,30 @@ namespace Tensorflow
     /// </summary>
     public class RaggedTensor : CompositeTensor
     {
-        public RaggedTensor(Tensor values, RowPartition row_partition, bool validate = true)
+        Tensor _values;
+        RowPartition _row_partition;
+        public TF_DataType dtype => _values.dtype;
+        public TensorShape shape
         {
+            get
+            {
+                var nrows = _row_partition.static_nrows;
+                var ncols = _row_partition.static_uniform_row_length;
+                return new TensorShape(nrows, ncols);
+            }
+        }
 
+        public RaggedTensor(Tensor values,
+            bool @internal = true,
+            RowPartition row_partition = null)
+        {
+            _values = values;
+            _row_partition = row_partition;
+        }
+
+        public static RaggedTensor from_row_partition(Tensor values, RowPartition row_partition, bool validate = true)
+        {
+            return new RaggedTensor(values, @internal: true, row_partition: row_partition);
         }
 
         /// <summary>
@@ -49,8 +71,21 @@ namespace Tensorflow
                 var row_partition = RowPartition.from_value_rowids(value_rowids,
                   nrows: nrows,
                   validate: validate);
-                return new RaggedTensor(values, row_partition, validate: validate);
+                return from_row_partition(values, row_partition, validate: validate);
             });
+        }
+
+        public override string ToString()
+            => $"tf.RaggedTensor: shape={shape} [{string.Join(", ", _values.StringData().Take(10))}]";
+
+        public static implicit operator Tensor(RaggedTensor indexedSlices)
+        {
+            return indexedSlices._values;
+        }
+
+        public static implicit operator RaggedTensor(Tensor tensor)
+        {
+            return tensor.Tag as RaggedTensor;
         }
     }
 }

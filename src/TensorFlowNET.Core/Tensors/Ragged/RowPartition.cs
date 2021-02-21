@@ -27,11 +27,35 @@ namespace Tensorflow
     /// </summary>
     public class RowPartition : CompositeTensor
     {
+        Tensor _row_splits;
+        Tensor _row_lengths;
+        Tensor _value_rowids;
+        Tensor _nrows;
+
+        public int static_nrows
+        {
+            get
+            {
+                return _row_splits.shape[0] - 1;
+            }
+        }
+
+        public int static_uniform_row_length
+        {
+            get
+            {
+                return -1;
+            }
+        }
+
         public RowPartition(Tensor row_splits, 
             Tensor row_lengths = null, Tensor value_rowids = null, Tensor nrows = null,
             Tensor uniform_row_length = null)
         {
-
+            _row_splits = row_splits;
+            _row_lengths = row_lengths;
+            _value_rowids = value_rowids;
+            _nrows = nrows;
         }
 
         /// <summary>
@@ -47,8 +71,18 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(null, "RowPartitionFromValueRowIds"), scope =>
             {
-                Tensor row_lengths = null;
-                Tensor row_splits = null;
+                var value_rowids_int32 = math_ops.cast(value_rowids, dtypes.int32);
+                var nrows_int32 = math_ops.cast(nrows, dtypes.int32);
+                var row_lengths = tf.math.bincount(value_rowids_int32, 
+                    minlength: nrows_int32,
+                    maxlength: nrows_int32,
+                    dtype: value_rowids.dtype);
+                var row_splits = array_ops.concat(new object[]
+                {
+                    ops.convert_to_tensor(new long[] { 0 }),
+                    tf.cumsum(row_lengths)
+                }, axis: 0);
+
                 return new RowPartition(row_splits,
                     row_lengths: row_lengths,
                     value_rowids: value_rowids,

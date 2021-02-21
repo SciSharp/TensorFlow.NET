@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using NumSharp;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
 
@@ -43,7 +44,7 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("Substr", name, new ExecuteOpArgs(input, pos, len)
                 .SetAttributes(new { unit = @uint }));
 
-        public SparseTensor string_split_v2(Tensor input, string sep = "", int maxsplit = -1, string name = null)
+        public RaggedTensor string_split_v2(Tensor input, string sep = "", int maxsplit = -1, string name = null)
         {
             return tf_with(ops.name_scope(name, "StringSplit"), scope =>
             {
@@ -60,7 +61,12 @@ namespace Tensorflow
                 indices.set_shape(new TensorShape(-1, 2));
                 values.set_shape(new TensorShape(-1));
                 shape.set_shape(new TensorShape(2));
-                return new SparseTensor(indices, values, shape);
+
+                var sparse_result = new SparseTensor(indices, values, shape);
+                return RaggedTensor.from_value_rowids(sparse_result.values,
+                    value_rowids: sparse_result.indices[Slice.All, 0],
+                    nrows: sparse_result.dense_shape[0],
+                    validate: false);
             });
         }
     }
