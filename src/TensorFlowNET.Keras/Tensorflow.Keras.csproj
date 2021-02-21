@@ -64,10 +64,6 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Engine\Interfaces\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
   </ItemGroup>
 

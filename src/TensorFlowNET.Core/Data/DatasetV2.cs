@@ -68,6 +68,17 @@ namespace Tensorflow
         public IDatasetV2 map(Func<Tensors, Tensors> map_func, int num_parallel_calls)
             => new ParallelMapDataset(this, map_func, num_parallel_calls: num_parallel_calls);
 
+        public OwnedIterator make_one_shot_iterator()
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                // with ops.colocate_with(self._variant_tensor)
+                return new OwnedIterator(this);
+            }
+
+            throw new NotImplementedException("");
+        }
+
         public IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func)
             => new FlatMapDataset(this, map_func);
 

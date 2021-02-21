@@ -41,5 +41,10 @@ namespace Tensorflow
                 string @uint = "BYTE", string name = null)
             => tf.Context.ExecuteOp("Substr", name, new ExecuteOpArgs(input, pos, len)
                 .SetAttributes(new { unit = @uint }));
+
+        public Tensor string_split_v2(Tensor input, string sep = "", int maxsplit = -1, string name = null)
+        {
+            return null;
+        }
     }
 }

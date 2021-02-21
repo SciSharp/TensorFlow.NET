@@ -64,6 +64,9 @@ namespace Tensorflow
             public Tensor substr(string input, int pos, int len,
                     string name = null, string @uint = "BYTE")
                 => ops.substr(input, pos, len, @uint: @uint, name: name);
+
+            public Tensor split(Tensor input, string sep = "", int maxsplit = -1, string name = null)
+                => ops.string_split_v2(input, sep: sep, maxsplit : maxsplit, name : name);
         }
     }
 }
