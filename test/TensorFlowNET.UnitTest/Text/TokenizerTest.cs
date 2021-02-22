@@ -10,10 +10,12 @@ namespace TensorFlowNET.UnitTest.Text
     [TestClass]
     public class TokenizerTest
     {
-        [TestMethod]
+        [TestMethod, Ignore]
         public void Tokenize()
         {
             var docs = tf.constant(new[] { "Everything not saved will be lost." });
+            var tokenizer = text.WhitespaceTokenizer();
+            var tokens = tokenizer.tokenize(docs);
         }
     }
 }

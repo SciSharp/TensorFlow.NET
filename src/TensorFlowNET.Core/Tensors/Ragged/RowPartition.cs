@@ -28,6 +28,7 @@ namespace Tensorflow
     public class RowPartition : CompositeTensor
     {
         Tensor _row_splits;
+        public Tensor row_splits => _row_splits;
         Tensor _row_lengths;
         Tensor _value_rowids;
         Tensor _nrows;
@@ -87,6 +88,15 @@ namespace Tensorflow
                     row_lengths: row_lengths,
                     value_rowids: value_rowids,
                     nrows: nrows);
+            });
+        }
+
+        public static RowPartition from_row_splits(Tensor row_splits,
+            bool validate = true, TF_DataType preferred_dtype = TF_DataType.DtInvalid)
+        {
+            return tf_with(ops.name_scope(null, "RowPartitionFromRowSplits"), scope =>
+            {
+                return new RowPartition(row_splits);
             });
         }
     }

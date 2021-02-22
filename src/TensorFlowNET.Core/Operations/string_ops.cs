@@ -44,6 +44,22 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("Substr", name, new ExecuteOpArgs(input, pos, len)
                 .SetAttributes(new { unit = @uint }));
 
+        /// <summary>
+        /// Computes the length of each string given in the input tensor.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <param name="unit"></param>
+        /// <returns></returns>
+        public Tensor string_length(Tensor input, string name = null, string unit = "BYTE")
+            => tf.Context.ExecuteOp("StringLength", name, new ExecuteOpArgs(input)
+            {
+                GetGradientAttrs = op => new
+                {
+                    unit = op.get_attr<string>("unit")
+                }
+            }.SetAttributes(new { unit }));
+
         public RaggedTensor string_split_v2(Tensor input, string sep = "", int maxsplit = -1, string name = null)
         {
             return tf_with(ops.name_scope(name, "StringSplit"), scope =>
@@ -68,6 +84,50 @@ namespace Tensorflow
                     nrows: sparse_result.dense_shape[0],
                     validate: false);
             });
+        }
+
+        public (RaggedTensor, RaggedTensor) unicode_decode_with_offsets(Tensor input, string input_encoding, string errors,
+            int replacement_char = 0xFFFD, bool replace_control_characters = false, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "UnicodeDecodeWithOffsets"), scope =>
+            {
+                var (codepoints, byte_start_offsets) = _unicode_decode(input, input_encoding, errors, 
+                    replacement_char, replace_control_characters,
+                    with_offsets: true, name: name);
+                return (codepoints, byte_start_offsets);
+            });
+        }
+
+        (RaggedTensor, RaggedTensor) _unicode_decode(Tensor input, string input_encoding, string errors, int replacement_char,
+                    bool replace_control_characters, bool with_offsets, string name = null)
+        {
+            if (with_offsets)
+            {
+                var flat_result = tf.Context.ExecuteOp("UnicodeDecodeWithOffsets", name, new ExecuteOpArgs(input)
+                {
+                    GetGradientAttrs = op => new
+                    {
+                        input_encoding = op.get_attr<string>("input_encoding"),
+                        errors = op.get_attr<string>("errors"),
+                        replacement_char = op.get_attr<int>("replacement_char"),
+                        replace_control_characters = op.get_attr<bool>("replace_control_characters"),
+                        Tsplits = op.get_attr<TF_DataType>("Tsplits")
+                    }
+                }.SetAttributes(new
+                {
+                    input_encoding,
+                    errors,
+                    replacement_char,
+                    replace_control_characters
+                }));
+
+                var codepoints = RaggedTensor.from_row_splits(flat_result[1], flat_result[0], validate: false);
+
+                var offsets = RaggedTensor.from_row_splits(flat_result[2], flat_result[0], validate: false);
+                return (codepoints, offsets);
+            }
+
+            return (null, null);
         }
     }
 }

@@ -55,10 +55,9 @@ namespace Tensorflow.Keras.Layers
                 if (inputs.shape.ndim > 1)
                     input_tensor = array_ops.squeeze(inputs, axis: new[] { -1 });
                 if (args.Split == "whitespace")
-                    input_tensor = tf.strings.split(inputs);
-
+                    input_tensor = tf.strings.split(input_tensor);
             }
-            return inputs;
+            return input_tensor;
         }
     }
 }

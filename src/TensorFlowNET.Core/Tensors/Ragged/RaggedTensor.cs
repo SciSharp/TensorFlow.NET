@@ -20,6 +20,7 @@ using System.Text;
 using System.Linq;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
+using NumSharp;
 
 namespace Tensorflow
 {
@@ -30,6 +31,8 @@ namespace Tensorflow
     {
         Tensor _values;
         RowPartition _row_partition;
+        Tensor _row_splits => _row_partition.row_splits;
+
         public TF_DataType dtype => _values.dtype;
         public TensorShape shape
         {
@@ -39,6 +42,28 @@ namespace Tensorflow
                 var ncols = _row_partition.static_uniform_row_length;
                 return new TensorShape(nrows, ncols);
             }
+        }
+
+        public RaggedTensor this[params Slice[] slices]
+        {
+            get
+            {
+                var row_key = slices[0];
+                var inner_keys = slices.Skip(1).ToArray();
+
+                var args = tensor_util.ParseSlices(slices);
+
+                return tf_with(ops.name_scope(null, "RaggedGetItem", args), scope =>
+                {
+                    string name = scope;
+                    return _ragged_getitem_inner_dimensions(this, inner_keys);
+                });
+            }
+        }
+
+        RaggedTensor _ragged_getitem_inner_dimensions(RaggedTensor input, Slice[] slices)
+        {
+            return input;
         }
 
         public RaggedTensor(Tensor values,
@@ -75,13 +100,44 @@ namespace Tensorflow
             });
         }
 
+        public static RaggedTensor from_row_splits(Tensor values, Tensor row_splits, 
+            string name = null, bool validate = true)
+        {
+            return tf_with(ops.name_scope(name, "RaggedFromRowSplits"), scope =>
+            {
+                var row_partition = RowPartition.from_row_splits(row_splits,
+                  validate: validate);
+                return from_row_partition(values, row_partition, validate: validate);
+            });
+        }
+
+        Tensor _to_variant(bool batched_input = false, string name = null)
+            => tf_with(ops.name_scope(name, "RaggedToVariant"), scope =>
+            {
+                return tf.Context.ExecuteOp("RaggedTensorToVariant", name,
+                    new ExecuteOpArgs(nested_row_splits, flat_values)
+                    {
+                        GetGradientAttrs = op => new
+                        {
+                            RAGGED_RANK = op.get_attr<int>("RAGGED_RANK"),
+                            Tvalues = op.get_attr<TF_DataType>("Tvalues"),
+                            Tsplits = op.get_attr<TF_DataType>("Tsplits"),
+                            batched_input = op.get_attr<bool>("batched_input")
+                        }
+                    }.SetAttributes(new { batched_input }));
+            });
+
+        Tensor flat_values
+            => _values;
+
+        Tensor[] nested_row_splits
+            => new[] { _row_splits };
+
         public override string ToString()
             => $"tf.RaggedTensor: shape={shape} [{string.Join(", ", _values.StringData().Take(10))}]";
 
         public static implicit operator Tensor(RaggedTensor indexedSlices)
-        {
-            return indexedSlices._values;
-        }
+            => indexedSlices._to_variant();
 
         public static implicit operator RaggedTensor(Tensor tensor)
         {
