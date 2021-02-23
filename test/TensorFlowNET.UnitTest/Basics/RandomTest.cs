@@ -37,7 +37,7 @@ namespace TensorFlowNET.UnitTest.Basics
         /// <summary>
         /// compare to Test above, seed is also added in params
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TFRandomSeedTest2()
         {
             var initValue = np.arange(6).reshape(3, 2);
@@ -83,7 +83,7 @@ namespace TensorFlowNET.UnitTest.Basics
         /// <summary>
         /// compare to Test above, seed is also added in params
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TFRandomRaodomSeedTest2()
         {
             tf.set_random_seed(1234);
