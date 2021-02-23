@@ -68,6 +68,17 @@ namespace Tensorflow
         public IDatasetV2 map(Func<Tensors, Tensors> map_func, int num_parallel_calls)
             => new ParallelMapDataset(this, map_func, num_parallel_calls: num_parallel_calls);
 
+        public OwnedIterator make_one_shot_iterator()
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                // with ops.colocate_with(self._variant_tensor)
+                return new OwnedIterator(this);
+            }
+
+            throw new NotImplementedException("");
+        }
+
         public IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func)
             => new FlatMapDataset(this, map_func);
 
@@ -105,18 +116,7 @@ namespace Tensorflow
         }
 
         public Tensor dataset_cardinality(string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "DatasetCardinality", name,
-                    null,
-                    variant_tensor);
-                return results[0];
-            }
-
-            throw new NotImplementedException("");
-        }
+            => tf.Context.ExecuteOp("DatasetCardinality", name, new ExecuteOpArgs(variant_tensor));
 
         public override string ToString()
             => $"{GetType().Name} shapes: {string.Join(", ", structure.Select(x => x.shape))}, types: {string.Join(", ", structure.Select(x => "tf." + x.dtype.as_numpy_name()))}";

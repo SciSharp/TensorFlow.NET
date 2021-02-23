@@ -72,6 +72,8 @@ namespace Tensorflow
         IDatasetV2 map(Func<Tensors, Tensors> map_func,
             int num_parallel_calls);
 
+        OwnedIterator make_one_shot_iterator();
+
         IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func);
 
         IDatasetV2 model(AutotuneAlgorithm algorithm, long cpu_budget);

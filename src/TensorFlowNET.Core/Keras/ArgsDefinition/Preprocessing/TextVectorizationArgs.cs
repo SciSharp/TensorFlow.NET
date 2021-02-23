@@ -11,5 +11,6 @@ namespace Tensorflow.Keras.ArgsDefinition
         public int MaxTokens { get; set; } = -1;
         public string OutputMode { get; set; } = "int";
         public int OutputSequenceLength { get; set; } = -1;
+        public string[] Vocabulary { get; set; }
     }
 }

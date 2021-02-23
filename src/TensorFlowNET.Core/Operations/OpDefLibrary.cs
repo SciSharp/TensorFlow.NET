@@ -68,16 +68,20 @@ namespace Tensorflow
                 string _scope_name = scope;
 
                 // Perform input type inference
-                foreach (var input_arg in op_def.InputArg)
+                foreach (var (i, input_arg) in enumerate(op_def.InputArg))
                 {
                     var input_name = input_arg.Name;
-
+                    
                     if (keywords.ContainsKey(input_name))
                         values = keywords[input_name];
                     else if (keywords.ContainsKey(input_name + "_"))
                     {
                         input_name += "_";
                         values = keywords[input_name];
+                    }
+                    else if (keywords.ContainsKey($"input_{i}"))
+                    {
+                        values = keywords[$"input_{i}"];
                     }
                     else
                         throw new TypeError("No argument for input " + input_name);

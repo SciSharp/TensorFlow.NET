@@ -94,20 +94,7 @@ namespace Tensorflow.Operations
         /// <param name="name"></param>
         /// <returns></returns>
         Tensor unary_op(Tensor x, string opName, string name)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    opName, name,
-                    null,
-                    x);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper(opName, name, args: new { x });
-            return _op.output;
-        }
+            => tf.Context.ExecuteOp(opName, name, new ExecuteOpArgs(x));
 
         /// <summary>
         /// Helper method to invoke binary operator with specified name.
@@ -118,21 +105,7 @@ namespace Tensorflow.Operations
         /// <param name="name"></param>
         /// <returns></returns>
         Tensor binary_op(Tensor x, Tensor y, string opName, string name)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    opName, name,
-                    null,
-                    x, y);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper(opName, name, args: new { x, y });
-            return _op.output;
-        }
-
+            => tf.Context.ExecuteOp(opName, name, new ExecuteOpArgs(x, y));
         #endregion
     }
 }

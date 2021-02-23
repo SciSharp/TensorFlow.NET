@@ -57,20 +57,8 @@ namespace Tensorflow
         ///    gradients in some corner cases.
         /// </remarks>
         public static Tensor prevent_gradient(Tensor input, string message = "", string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "PreventGradient", name,
-                    null,
-                    input,
-                    "message", message);
-                return results[0];
-            }
-
-            var op = tf.OpDefLib._apply_op_helper("PreventGradient", name: name, args: new { input, message });
-            return op.output;
-        }
+            => tf.Context.ExecuteOp("PreventGradient", name, new ExecuteOpArgs(input)
+                .SetAttributes(new { message }));
 
         internal static Tensor constant(object value,
             TF_DataType dtype = TF_DataType.DtInvalid,
@@ -737,35 +725,27 @@ namespace Tensorflow
         public static Tensor strided_slice_grad(Tensor shape, Tensor begin, Tensor end, Tensor strides, Tensor dy,
             long begin_mask = 0, long end_mask = 0, long ellipsis_mask = 0, long new_axis_mask = 0,
             long shrink_axis_mask = 0, string name = null)
-            => tf.Context.RunInAutoMode2("StridedSliceGrad", name, new AutoModeArgs
-            {
-                OpInputArgs = new
+            => tf.Context.ExecuteOp("StridedSliceGrad", name,
+                new ExecuteOpArgs(shape, begin, end, strides, dy)
                 {
-                    shape,
-                    begin,
-                    end,
-                    strides,
-                    dy
-                },
-                OpAttrs = new
+                    GetGradientAttrs = (op) => new
+                    {
+                        T = op.get_attr<TF_DataType>("T"),
+                        Index = op.get_attr<TF_DataType>("Index"),
+                        begin_mask = op.get_attr<long>("begin_mask"),
+                        end_mask = op.get_attr<long>("end_mask"),
+                        ellipsis_mask = op.get_attr<long>("ellipsis_mask"),
+                        new_axis_mask = op.get_attr<long>("new_axis_mask"),
+                        shrink_axis_mask = op.get_attr<long>("shrink_axis_mask")
+                    }
+                }.SetAttributes(new
                 {
                     begin_mask,
                     end_mask,
                     ellipsis_mask,
                     new_axis_mask,
                     shrink_axis_mask
-                },
-                GetGradientAttrs = (op) => new
-                {
-                    T = op.get_attr<TF_DataType>("T"),
-                    Index = op.get_attr<TF_DataType>("Index"),
-                    begin_mask = op.get_attr<long>("begin_mask"),
-                    end_mask = op.get_attr<long>("end_mask"),
-                    ellipsis_mask = op.get_attr<long>("ellipsis_mask"),
-                    new_axis_mask = op.get_attr<long>("new_axis_mask"),
-                    shrink_axis_mask = op.get_attr<long>("shrink_axis_mask")
-                }
-            });
+                }));
 
         /// <summary>
         /// Removes dimensions of size 1 from the shape of a tensor.
@@ -800,38 +780,17 @@ namespace Tensorflow
                 int num_cols = -1,
                 float padding_value = 0,
                 string align = "RIGHT_LEFT")
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "MatrixDiagV3", name,
-                    null,
-                    diagonal, k, num_rows, num_cols, padding_value,
-                    "align", align);
-                return results[0];
-            }
-
-            throw new NotImplementedException("");
-        }
+            => tf.Context.ExecuteOp("MatrixDiagV3", name, 
+                new ExecuteOpArgs(diagonal, k, num_rows, num_cols, padding_value)
+                    .SetAttributes(new { align }));
 
         public static Tensor matrix_set_diag(Tensor input,
             Tensor diagonal,
             string name = "set_diag",
             int k = 0,
             string align = "RIGHT_LEFT")
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "MatrixSetDiagV3", name,
-                    null,
-                    input, diagonal, k,
-                    "align", align);
-                return results[0];
-            }
-
-            throw new NotImplementedException("");
-        }
+                => tf.Context.ExecuteOp("MatrixSetDiagV3", name, new ExecuteOpArgs(input, diagonal, k)
+                    .SetAttributes(new { align }));
 
         /// <summary>
         /// Computes the shape of a broadcast given symbolic shapes.
@@ -960,9 +919,8 @@ namespace Tensorflow
             => gen_array_ops.slice(input, begin, size, name: name);
 
         public static Tensor slice(Tensor input, Tensor begin, Tensor size, string name = null)
-            => tf.Context.RunInAutoMode2("Slice", name, new AutoModeArgs
+            => tf.Context.ExecuteOp("Slice", name, new ExecuteOpArgs(input, begin, size)
             {
-                OpInputArgs = new { input, begin, size },
                 GetGradientAttrs = (op) => new
                 {
                     T = op.get_attr<TF_DataType>("T"),

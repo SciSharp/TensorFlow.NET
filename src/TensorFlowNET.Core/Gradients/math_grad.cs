@@ -291,23 +291,23 @@ namespace Tensorflow.Gradients
             var b = math_ops.conj(op.inputs[1]);
             if (!t_a && !t_b)
             {
-                grad_a = gen_math_ops.batch_mat_mul(grad, b, adj_y: true);
-                grad_b = gen_math_ops.batch_mat_mul(a, grad, adj_x: true);
+                grad_a = math_ops.batch_matmul(grad, b, adj_y: true);
+                grad_b = math_ops.batch_matmul(a, grad, adj_x: true);
             }
             else if (!t_a && t_b)
             {
-                grad_a = gen_math_ops.batch_mat_mul(grad, b);
-                grad_b = gen_math_ops.batch_mat_mul(grad, a, adj_x: true);
+                grad_a = math_ops.batch_matmul(grad, b);
+                grad_b = math_ops.batch_matmul(grad, a, adj_x: true);
             }
             else if (t_a && !t_b)
             {
-                grad_a = gen_math_ops.batch_mat_mul(grad, b);
-                grad_b = gen_math_ops.batch_mat_mul(grad, a, adj_x: true);
+                grad_a = math_ops.batch_matmul(grad, b);
+                grad_b = math_ops.batch_matmul(grad, a, adj_x: true);
             }
             else if (t_a && t_b)
             {
-                grad_a = gen_math_ops.batch_mat_mul(b, grad, adj_x: true, adj_y: true);
-                grad_b = gen_math_ops.batch_mat_mul(grad, a, adj_x: true, adj_y: true);
+                grad_a = math_ops.batch_matmul(b, grad, adj_x: true, adj_y: true);
+                grad_b = math_ops.batch_matmul(grad, a, adj_x: true, adj_y: true);
             }
 
             return new Tensor[] { grad_a, grad_b };

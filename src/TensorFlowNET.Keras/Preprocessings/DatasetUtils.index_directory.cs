@@ -1,4 +1,5 @@
 ﻿using NumSharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -60,6 +61,7 @@ namespace Tensorflow.Keras.Preprocessings
                 }
             }
 
+            Console.WriteLine($"Found {return_file_paths.Length} files belonging to {class_names.Length} classes.");
             return (return_file_paths, return_labels, class_names);
         }
     }

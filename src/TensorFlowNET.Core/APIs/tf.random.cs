@@ -93,7 +93,12 @@ namespace Tensorflow
             => random_ops.random_shuffle(value, seed: seed, name: name);
 
         public void set_random_seed(int seed)
-            => ops.get_default_graph().seed = seed;
+        {
+            if (executing_eagerly())
+                Context.set_global_seed(seed);
+            else
+                ops.get_default_graph().seed = seed;
+        }
 
         public Tensor multinomial(Tensor logits, int num_samples, int? seed = null,
             string name = null, TF_DataType output_dtype = TF_DataType.DtInvalid)

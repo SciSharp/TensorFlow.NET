@@ -7,7 +7,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public class EagerTensorV2 : DisposableObject, ITensor
+    public class EagerTensorV2 : DisposableObject
     {
         SafeTensorHandleHandle EagerTensorHandle;
         public string Device

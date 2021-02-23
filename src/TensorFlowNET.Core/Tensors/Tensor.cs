@@ -33,9 +33,7 @@ namespace Tensorflow
     /// </summary>
     [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
     public partial class Tensor : DisposableObject,
-        ITensor,
         ITensorOrOperation,
-        _TensorLike,
         ITensorOrTensorArray,
         IPackable<Tensor>,
         ICanBeFlattened
@@ -97,6 +95,7 @@ namespace Tensorflow
         public SafeTensorHandleHandle EagerTensorHandle { get; set; }
 
         public bool IsEagerTensor => this is EagerTensor;
+        public bool IsSparseTensor => this is SparseTensor;
 
         /// <summary>
         ///     Returns the shape of a tensor.

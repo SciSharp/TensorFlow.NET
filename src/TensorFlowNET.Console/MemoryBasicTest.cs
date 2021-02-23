@@ -112,16 +112,18 @@ namespace Tensorflow
                 var strides = new[] { 1, 1, 1, 1 };
                 var dilations = new[] { 1, 1, 1, 1 };
 
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Conv2D", null,
-                    null,
-                    input, filter,
-                    "strides", strides,
-                    "use_cudnn_on_gpu", true,
-                    "padding", "VALID",
-                    "explicit_paddings", new int[0],
-                    "data_format", "NHWC",
-                    "dilations", dilations);
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("Conv2D", null, input, filter)
+                {
+                    attrs = ConvertToDict(new
+                    {
+                        strides,
+                        use_cudnn_on_gpu = true,
+                        padding = "VALID",
+                        explicit_paddings = new int[0],
+                        data_format = "NHWC",
+                        dilations
+                    })
+                });
             };
 
         public Action<int, int> Conv2DWithVariable
@@ -132,16 +134,18 @@ namespace Tensorflow
                 var strides = new[] { 1, 1, 1, 1 };
                 var dilations = new[] { 1, 1, 1, 1 };
 
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Conv2D", null,
-                    null,
-                    input, filter,
-                    "strides", strides,
-                    "use_cudnn_on_gpu", true,
-                    "padding", "VALID",
-                    "explicit_paddings", new int[0],
-                    "data_format", "NHWC",
-                    "dilations", dilations);
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("Conv2D", null, input, filter)
+                {
+                    attrs = ConvertToDict(new
+                    {
+                        strides,
+                        use_cudnn_on_gpu = true,
+                        padding = "VALID",
+                        explicit_paddings = new int[0],
+                        data_format = "NHWC",
+                        dilations
+                    })
+                });
             };
 
         public Action<int, int> Dataset

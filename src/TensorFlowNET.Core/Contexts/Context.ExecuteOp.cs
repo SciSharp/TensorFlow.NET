@@ -30,67 +30,35 @@ namespace Tensorflow.Contexts
     public sealed partial class Context
     {
         // [DebuggerStepThrough]
-        public T RunInAutoMode<T>(Func<T> graphAction, Func<T> eagerAction, params object[] args)
+        public Tensors ExecuteOp(string OpType, string Name, ExecuteOpArgs args)
         {
-            if (tf.Context.has_graph_arg(args))
+            Func<Tensors> graphAction = () =>
             {
-                if (executing_eagerly())
+                var keywords = new Dictionary<string, object>();
+                if(args.OpInputArgs != null)
                 {
-                    graph_mode();
-                    var result = graphAction();
-                    restore_mode();
-                    return result;
+                    foreach (var (i, input) in enumerate(args.OpInputArgs))
+                        keywords[$"input_{i}"] = input;
                 }
-                else
+
+                if(args.OpAttrs != null)
                 {
-                    return graphAction();
+                    foreach (var attr in args.OpAttrs)
+                        keywords[attr.Key] = attr.Value;
                 }
-            }
-            else
-            {
-                if (tf.Context.executing_eagerly())
-                {
-                    return eagerAction();
-                }
-                else
-                {
-                    return graphAction();
-                }
-            }
-        }
-        
-        // [DebuggerStepThrough]
-        public Tensors RunInAutoMode2(string OpType, string Name, AutoModeArgs args)
-        {
-            var inputArgs = ConvertToDict(args.OpInputArgs);
-            var attrDict = ConvertToDict(args.OpAttrs);
-            
-            Func<Tensor> graphAction = () =>
-            {
-                foreach (var attr in attrDict)
-                    inputArgs[attr.Key] = attr.Value;
-                return tf.OpDefLib._apply_op_helper(OpType, Name, inputArgs).output;
+
+                return tf.OpDefLib._apply_op_helper(OpType, Name, keywords).outputs;
             };
 
-            Func<Tensor> eagerAction = () =>
+            Func<Tensors> eagerAction = () =>
             {
-                var attrs = new object[attrDict.Count() * 2];
-                int i = 0;
-                foreach(var arg in attrDict)
+                return tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(OpType, Name, args.OpInputArgs)
                 {
-                    attrs[i]= arg.Key;
-                    attrs[i + 1] = arg.Value;
-                    i += 2;
-                }    
-
-                return tf.Runner.TFE_FastPathExecute2(tf.Context, tf.Context.DeviceName,
-                    OpType, Name,
-                    null,
-                    inputArgs.Values.ToArray(), 
-                    attrs).FirstOrDefault();
+                    attrs = args.OpAttrs
+                });
             };
 
-            if (tf.Context.has_graph_arg(inputArgs.Values))
+            if (tf.Context.has_graph_arg(args.OpInputArgs))
             {
                 if (executing_eagerly())
                 {
