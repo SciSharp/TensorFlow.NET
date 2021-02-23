@@ -79,7 +79,8 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0,
             string name = null)
-                => tf.Context.ExecuteOp("RandomShuffle", name, new ExecuteOpArgs(value, seed, seed2));
+               => tf.Context.ExecuteOp("RandomShuffle", name, new ExecuteOpArgs(value)
+                   .SetAttributes(new { seed = seed, seed2 = seed2 }));
 
         /// <summary>
         /// Outputs random values from a truncated normal distribution.

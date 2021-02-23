@@ -14,7 +14,7 @@ namespace TensorFlowNET.UnitTest.Basics
         /// Test the function of setting random seed
         /// This will help regenerate the same result
         /// </summary>
-        [TestMethod, Ignore]
+        [TestMethod]
         public void TFRandomSeedTest()
         {
             var initValue = np.arange(6).reshape(3, 2);
@@ -60,7 +60,7 @@ namespace TensorFlowNET.UnitTest.Basics
         /// <summary>
         /// This part we use funcs in tf.random rather than only tf
         /// </summary>
-        [TestMethod, Ignore]
+        [TestMethod]
         public void TFRandomRaodomSeedTest()
         {
             tf.set_random_seed(1234);

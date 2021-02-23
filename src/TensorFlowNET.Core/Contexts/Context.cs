@@ -42,6 +42,9 @@ namespace Tensorflow.Contexts
         SafeContextHandle _handle;
         public SafeContextHandle Handle => _handle;
 
+        int? _seed;
+        Random _rng;
+
         public Context()
         {
             _device_policy = ContextDevicePlacementPolicy.DEVICE_PLACEMENT_SILENT;
@@ -71,6 +74,24 @@ namespace Tensorflow.Contexts
             initialized = true;
         }
 
+        public void set_global_seed(int? seed)
+        {
+            _seed = seed;
+            if (seed.HasValue)
+                _rng = new Random(seed.Value);
+            else
+                _rng = null;
+            // Also clear the kernel cache, to reset any existing seeds
+            if (_handle != null)
+                c_api.TFE_ContextClearCaches(_handle);
+        }
+
+        public int? global_seed()
+            => _seed;
+
+        public int? internal_operation_seed()
+            => _rng?.Next(0, int.MaxValue);
+
         public void start_step()
             => c_api.TFE_ContextStartStep(_handle);
 
@@ -86,7 +107,7 @@ namespace Tensorflow.Contexts
         {
             if(context_switches.Count() == 0)
                 tf.enable_eager_execution();
-            
+
             return context_switches.Current().EagerMode;
         }
 

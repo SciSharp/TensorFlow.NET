@@ -151,5 +151,25 @@ namespace TensorFlowNET.UnitTest.Dataset
             var cardinality = dataset.dataset_cardinality();
             Assert.AreEqual(new long[] { 10 }, cardinality.numpy());
         }
+
+        [TestMethod]
+        public void Shuffle()
+        {
+            tf.set_random_seed(1234);
+
+            var dataset = tf.data.Dataset.range(3);
+            var shuffled = dataset.shuffle(3);
+
+            var zipped = tf.data.Dataset.zip(dataset, shuffled);
+
+            bool allEqual = true;
+            foreach (var item in zipped)
+            {
+                if (item.Item1 != item.Item2)
+                    allEqual = false;
+            }
+
+            Assert.IsFalse(allEqual);
+        }
     }
 }
