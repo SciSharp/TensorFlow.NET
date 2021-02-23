@@ -42,7 +42,7 @@ namespace Tensorflow.Keras.Layers
             if (BatchInputShape != null)
             {
                 args.BatchSize = BatchInputShape.dims[0];
-                args.InputShape = BatchInputShape.dims[1..];
+                args.InputShape = BatchInputShape.dims.Skip(1).ToArray();
             }
 
             // moved to base class

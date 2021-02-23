@@ -24,10 +24,8 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "AssignSubVariableOp", name,
-                    null,
-                    resource, value);
+                tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(
+                    "AssignSubVariableOp", name, resource, value));
 
                 return null;
             }
@@ -46,10 +44,8 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "AssignAddVariableOp", name,
-                    null,
-                    resource, value);
+                tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("AssignAddVariableOp", name,
+                    resource, value));
 
                 return null;
             }
@@ -63,10 +59,8 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "AssignVariableOp", name,
-                    null,
-                    resource, value);
+                tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("AssignVariableOp", name,
+                    resource, value));
 
                 return null;
             }
@@ -80,10 +74,8 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "VarIsInitializedOp", name,
-                    null,
-                    resource);
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("VarIsInitializedOp", name,
+                    resource));
 
                 return results[0];
             }
@@ -107,14 +99,17 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "VarHandleOp", name,
-                    null,
-                    "container", container,
-                    "shared_name", shared_name,
-                    "dtype", dtype,
-                    "shape", shape.dims,
-                    "allowed_devices", new string[0]);
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("VarHandleOp", name)
+                {
+                    attrs = ConvertToDict(new
+                    {
+                        dtype,
+                        shape = shape.dims,
+                        container,
+                        shared_name,
+                        allowed_devices = new string[0]
+                    })
+                });
 
                 return results[0];
             }
@@ -131,26 +126,8 @@ namespace Tensorflow
         }
 
         public static Tensor destroy_resource_op(Tensor resource, bool ignore_lookup_error = true, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "DestroyResourceOp", name,
-                    null,
-                    resource,
-                    "ignore_lookup_error", ignore_lookup_error);
-
-                return results.Length == 0 ? null : results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("DestroyResourceOp", name, new
-            {
-                resource,
-                ignore_lookup_error
-            });
-
-            return _op.output;
-        }
+            => tf.Context.ExecuteOp("DestroyResourceOp", name, 
+                new ExecuteOpArgs(resource).SetAttributes(new { ignore_lookup_error }));
 
         /// <summary>
         /// Reads the value of a variable.
@@ -160,26 +137,8 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor read_variable_op(Tensor resource, TF_DataType dtype, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ReadVariableOp", name,
-                    null,
-                    resource,
-                    "dtype", dtype);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("ReadVariableOp", name, new
-            {
-                resource,
-                dtype
-            });
-
-            return _op.output;
-        }
+        => tf.Context.ExecuteOp("ReadVariableOp", name, new ExecuteOpArgs(resource)
+            .SetAttributes(new { dtype }));
 
         public static Tensor resource_gather(Tensor resource, Tensor indices, TF_DataType dtype,
             int batch_dims = 0, bool validate_indices = true, string name = null)

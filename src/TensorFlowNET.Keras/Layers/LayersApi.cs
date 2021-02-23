@@ -9,6 +9,8 @@ namespace Tensorflow.Keras.Layers
 {
     public partial class LayersApi
     {
+        public Preprocessing preprocessing { get; } = new Preprocessing();
+
         /// <summary>
         /// Functional interface for the batch normalization layer.
         /// http://arxiv.org/abs/1502.03167
@@ -323,6 +325,16 @@ namespace Tensorflow.Keras.Layers
             return input_layer.InboundNodes[0].Outputs;
         }
 
+        public MaxPooling1D MaxPooling1D(int? pool_size = null,
+            int? strides = null,
+            string padding = "valid")
+            => new MaxPooling1D(new Pooling1DArgs
+            {
+                PoolSize = pool_size ?? 2,
+                Strides = strides ?? (pool_size ?? 2),
+                Padding = padding
+            });
+
         public MaxPooling2D MaxPooling2D(TensorShape pool_size = null,
             TensorShape strides = null,
             string padding = "valid")
@@ -445,6 +457,20 @@ namespace Tensorflow.Keras.Layers
 
         public GlobalAveragePooling2D GlobalAveragePooling2D()
             => new GlobalAveragePooling2D(new Pooling2DArgs { });
+
+        public GlobalAveragePooling1D GlobalAveragePooling1D(string data_format = "channels_last")
+            => new GlobalAveragePooling1D(new Pooling1DArgs { DataFormat = data_format });
+
+        public GlobalAveragePooling2D GlobalAveragePooling2D(string data_format = "channels_last")
+            => new GlobalAveragePooling2D(new Pooling2DArgs { DataFormat = data_format });
+
+        public GlobalMaxPooling1D GlobalMaxPooling1D(string data_format = "channels_last")
+            => new GlobalMaxPooling1D(new Pooling1DArgs { DataFormat = data_format });
+
+        public GlobalMaxPooling2D GlobalMaxPooling2D(string data_format = "channels_last")
+            => new GlobalMaxPooling2D(new Pooling2DArgs { DataFormat = data_format });
+
+
 
         Activation GetActivationByName(string name)
             => name switch

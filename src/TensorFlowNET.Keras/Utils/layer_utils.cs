@@ -67,7 +67,7 @@ namespace Tensorflow.Keras.Utils
                     line_length = 65;
                 if (positions == null)
                     positions = new[] { 0.45f, 0.85f, 1.0f };
-                if (positions[^1] <= 1)
+                if (positions.Last() <= 1)
                     positions = positions.Select(p => line_length * p).ToArray();
                 to_display = new[] { "Layer (type)", "Output Shape", "Param #" };
             }
@@ -77,7 +77,7 @@ namespace Tensorflow.Keras.Utils
                     line_length = 98;
                 if (positions == null)
                     positions = new[] { 0.33f, 0.55f, 0.67f, 1.0f };
-                if (positions[^1] <= 1)
+                if (positions.Last() <= 1)
                     positions = positions.Select(p => line_length * p).ToArray();
                 to_display = new[] { "Layer (type)", "Output Shape", "Param #", "Connected to" };
 
@@ -118,7 +118,7 @@ namespace Tensorflow.Keras.Utils
             foreach (var i in range(fields.Length))
             {
                 if (i > 0)
-                    line = line[0..^1] + " ";
+                    line = line + " ";
                 line += fields[i];
                 line = string.Join("", line.Take(positions[i]));
                 line += string.Join("", range(positions[i] - len(line)).Select(x => " "));

@@ -40,37 +40,16 @@ namespace Tensorflow.Operations
         /// <param name="parameters"></param>
         /// <returns></returns>
         public static Tensor conv2d(Conv2dParams parameters)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Conv2D", parameters.Name,
-                    null,
-                    parameters.Input, parameters.Filter,
-                    "strides", parameters.Strides,
-                    "use_cudnn_on_gpu", parameters.UseCudnnOnGpu,
-                    "padding", parameters.Padding,
-                    "explicit_paddings", parameters.ExplicitPaddings,
-                    "data_format", parameters.DataFormat,
-                    "dilations", parameters.Dilations);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Conv2D", name: parameters.Name, args: new
-            {
-                input = parameters.Input,
-                filter = parameters.Filter,
-                strides = parameters.Strides,
-                padding = parameters.Padding,
-                use_cudnn_on_gpu = parameters.UseCudnnOnGpu,
-                explicit_paddings = parameters.ExplicitPaddings,
-                data_format = parameters.DataFormat,
-                dilations = parameters.Dilations
-            });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Conv2D", parameters.Name, new ExecuteOpArgs(parameters.Input, parameters.Filter)
+                .SetAttributes(new
+                {
+                    strides = parameters.Strides,
+                    padding = parameters.Padding,
+                    use_cudnn_on_gpu = parameters.UseCudnnOnGpu,
+                    explicit_paddings = parameters.ExplicitPaddings,
+                    data_format = parameters.DataFormat,
+                    dilations = parameters.Dilations
+                }));
 
         /// <summary>
         /// Computes the gradients of convolution with respect to the filter.
@@ -83,43 +62,16 @@ namespace Tensorflow.Operations
             string data_format = "NHWC",
             int[] dilations = null,
             string name = null)
-        {
-            if (explicit_paddings == null)
-                explicit_paddings = new int[0];
-            if (dilations == null)
-                dilations = new int[] { 1, 1, 1, 1 };
-
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Conv2DBackpropFilter", name,
-                    null,
-                    input, filter_sizes, out_backprop,
-                    "strides", strides,
-                    "use_cudnn_on_gpu", use_cudnn_on_gpu,
-                    "padding", padding,
-                    "explicit_paddings", explicit_paddings,
-                    "data_format", data_format,
-                    "dilations", dilations);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropFilter", name: name, args: new
-            {
-                input,
-                filter_sizes,
-                out_backprop,
-                strides,
-                padding,
-                use_cudnn_on_gpu,
-                explicit_paddings,
-                data_format,
-                dilations
-            });
-
-            return _op.outputs[0];
-        }
+                => tf.Context.ExecuteOp("Conv2DBackpropFilter", name, new ExecuteOpArgs(input, filter_sizes, out_backprop)
+                    .SetAttributes(new
+                    {
+                        strides,
+                        padding,
+                        use_cudnn_on_gpu,
+                        explicit_paddings = explicit_paddings ?? new int[0],
+                        data_format,
+                        dilations = dilations ?? new int[] { 1, 1, 1, 1 }
+                    }));
 
         /// <summary>
         /// Computes the gradients of convolution with respect to the input.
@@ -132,99 +84,29 @@ namespace Tensorflow.Operations
             string data_format = "NHWC",
             int[] dilations = null,
             string name = null)
-        {
-            if (explicit_paddings == null)
-                explicit_paddings = new int[0];
-            if (dilations == null)
-                dilations = new int[] { 1, 1, 1, 1 };
-
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Conv2DBackpropInput", name,
-                    null,
-                    input_sizes, filter, out_backprop,
-                    "strides", strides,
-                    "use_cudnn_on_gpu", use_cudnn_on_gpu,
-                    "padding", padding,
-                    "explicit_paddings", explicit_paddings,
-                    "data_format", data_format,
-                    "dilations", dilations);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Conv2DBackpropInput", name: name, args: new
-            {
-                input_sizes,
-                filter,
-                out_backprop,
-                strides,
-                padding,
-                use_cudnn_on_gpu,
-                explicit_paddings,
-                data_format,
-                dilations
-            });
-
-            return _op.outputs[0];
-        }
+                => tf.Context.ExecuteOp("Conv2DBackpropInput", name, new ExecuteOpArgs(input_sizes, filter, out_backprop)
+                    .SetAttributes(new
+                    {
+                        strides,
+                        padding,
+                        use_cudnn_on_gpu,
+                        explicit_paddings = explicit_paddings ?? new int[0],
+                        data_format,
+                        dilations = dilations ?? new int[] { 1, 1, 1, 1 }
+                    }));
 
         public static Tensor bias_add(Tensor value,
             IVariableV1 bias,
             string data_format = null,
             string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "BiasAdd", name,
-                    null,
-                    value, bias,
-                    "data_format", data_format);
-
-                return results[0];
-            }
-
-            if (data_format == null)
-                data_format = "NHWC";
-
-            var _op = tf.OpDefLib._apply_op_helper("BiasAdd", name: name, args: new
-            {
-                value,
-                bias,
-                data_format
-            });
-
-            return _op.outputs[0];
-        }
+                => tf.Context.ExecuteOp("BiasAdd", name, new ExecuteOpArgs(value, bias)
+                    .SetAttributes(new { data_format = data_format ?? "NHWC" }));
 
         public static Tensor bias_add_grad(Tensor out_backprop,
             string data_format = "NHWC",
             string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "BiasAddGrad", name,
-                    null,
-                    out_backprop,
-                    "data_format", data_format);
-
-                return results[0];
-            }
-
-            if (data_format == null)
-                data_format = "NHWC";
-
-            var _op = tf.OpDefLib._apply_op_helper("BiasAddGrad", name: name, args: new
-            {
-                out_backprop,
-                data_format
-            });
-
-            return _op.outputs[0];
-        }
+                => tf.Context.ExecuteOp("BiasAddGrad", name, new ExecuteOpArgs(out_backprop)
+                    .SetAttributes(new { data_format = data_format ?? "NHWC" }));
 
         /// <summary>
         /// Computes exponential linear: <c>exp(features) - 1</c> if &amp;lt; 0, <c>features</c> otherwise.
@@ -269,29 +151,19 @@ namespace Tensorflow.Operations
         }
 
         public static Tensor[] fused_batch_norm_grad_v3(FusedBatchNormParams @params)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("FusedBatchNormGradV3", name: @params.Name,
-                    args: new 
-                    {
-                        y_backprop = @params.YBackprop,
-                        x = @params.X,
-                        scale = @params.Scale,
-                        reserve_space_1 = @params.ReserveSpace1,
-                        reserve_space_2 = @params.ReserveSpace2,
-                        reserve_space_3 = @params.ReserveSpace3,
-                        epsilon = @params.Epsilon,
-                        data_format = @params.DataFormat,
-                        is_training = @params.IsTraining
-                    }).outputs, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "FusedBatchNormGradV3", @params.Name,
-                    null,
-                    @params.YBackprop, @params.X, @params.Scale,
-                    @params.ReserveSpace1, @params.ReserveSpace2, @params.ReserveSpace3,
-                    "epsilon", @params.Epsilon, 
-                    "data_format", @params.DataFormat, 
-                    "is_training", @params.IsTraining),
-                @params.YBackprop);
+            => tf.Context.ExecuteOp("FusedBatchNormGradV3", @params.Name,
+                new ExecuteOpArgs(@params.YBackprop,
+                    @params.X,
+                    @params.Scale,
+                    @params.ReserveSpace1,
+                    @params.ReserveSpace2,
+                    @params.ReserveSpace3)
+                .SetAttributes(new
+                {
+                    epsilon = @params.Epsilon,
+                    data_format = @params.DataFormat,
+                    is_training = @params.IsTraining
+                }));
 
         public static Tensor[] fused_batch_norm(Tensor x,
                 Tensor scale,
@@ -328,39 +200,8 @@ namespace Tensorflow.Operations
             string data_format = "NHWC",
             bool is_training = true,
             string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "FusedBatchNormV3", name,
-                    null,
-                    x,
-                    scale,
-                    offset,
-                    mean,
-                    variance,
-                    "epsilon", epsilon,
-                    "exponential_avg_factor", exponential_avg_factor,
-                    "data_format", data_format,
-                    "is_training", is_training);
-
-                return results;
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("FusedBatchNormV3", name: name, args: new
-            {
-                x,
-                scale,
-                offset,
-                mean,
-                variance,
-                epsilon,
-                data_format,
-                is_training
-            });
-
-            return _op.outputs;
-        }
+                => tf.Context.ExecuteOp("FusedBatchNormV3", name, new ExecuteOpArgs(x, scale, offset, mean, variance)
+                    .SetAttributes(new { epsilon, data_format, is_training }));
 
         /// <summary>
         /// Local Response Normalization.
@@ -388,14 +229,7 @@ namespace Tensorflow.Operations
         }
 
         public static Tensor log_softmax(Tensor logits, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("LogSoftmax", name: name,
-                    args: new { logits }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "LogSoftmax", name,
-                    null,
-                    logits).FirstOrDefault(),
-                logits);
+            => tf.Context.ExecuteOp("LogSoftmax", name, new ExecuteOpArgs(logits));
 
         /// <summary>
         /// Says whether the targets are in the top `K` predictions.
@@ -418,19 +252,8 @@ namespace Tensorflow.Operations
         }
 
         public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("LeakyRelu", name: name,
-                    args: new
-                    {
-                        features,
-                        alpha
-                    }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "LeakyRelu", name,
-                    null,
-                    features,
-                    "alpha", alpha).FirstOrDefault(),
-                features);
+            => tf.Context.ExecuteOp("LeakyRelu", name,
+                new ExecuteOpArgs(features).SetAttributes(new { alpha }));
 
         public static Tensor max_pool(Tensor input,
             int[] ksize,
@@ -438,63 +261,25 @@ namespace Tensorflow.Operations
             string padding,
             string data_format = "NHWC",
             string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "MaxPool", name,
-                    null,
-                    input,
-                    "ksize", ksize,
-                    "strides", strides,
-                    "padding", padding,
-                    "data_format", data_format);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("MaxPool", name: name, args: new
-            {
-                input,
-                ksize,
-                strides,
-                padding,
-                data_format,
-            });
-
-            return _op.outputs[0];
-        }
+                => tf.Context.ExecuteOp("MaxPool", name, new ExecuteOpArgs(input)
+                    .SetAttributes(new
+                    {
+                        ksize,
+                        strides,
+                        padding,
+                        data_format
+                    }));
 
         public static Tensor max_pool_grad(Tensor orig_input, Tensor orig_output, Tensor grad, int[] ksize, int[] strides, string padding,
             string data_format = "NHWC", string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "MaxPoolGrad", name,
-                    null,
-                    orig_input, orig_output, grad,
-                    "ksize", ksize,
-                    "strides", strides,
-                    "padding", padding,
-                    "data_format", data_format);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("MaxPoolGrad", name: name, args: new
-            {
-                orig_input,
-                orig_output,
-                grad,
-                ksize,
-                strides,
-                padding,
-                data_format
-            });
-
-            return _op.outputs[0];
-        }
+                => tf.Context.ExecuteOp("MaxPoolGrad", name, new ExecuteOpArgs(orig_input, orig_output, grad)
+                    .SetAttributes(new
+                    {
+                        ksize,
+                        strides,
+                        padding,
+                        data_format
+                    }));
 
         public static Tensor[] top_kv2(Tensor input, int k, bool sorted = true, string name = null)
         {
@@ -509,68 +294,14 @@ namespace Tensorflow.Operations
         }
 
         public static Tensor relu_grad(Tensor gradients, Tensor features, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ReluGrad", name,
-                    null,
-                    gradients, features);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("ReluGrad", name: name, args: new
-            {
-                gradients,
-                features
-            });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("ReluGrad", name, new ExecuteOpArgs(gradients, features));
 
         public static Tensor leaky_relu_grad(Tensor gradients, Tensor features, float alpha = 0.2f, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "LeakyReluGrad", name,
-                    null,
-                    gradients, features,
-                    "alpha", alpha);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("LeakyReluGrad", name: name, args: new
-            {
-                gradients,
-                features,
-                alpha
-            });
-
-            return _op.output;
-        }
+            => tf.Context.ExecuteOp("LeakyReluGrad", name, new ExecuteOpArgs(gradients, features)
+                .SetAttributes(new { alpha }));
 
         public static Tensor softmax(Tensor logits, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Softmax", name,
-                    null,
-                    logits);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Softmax", name: name, args: new
-            {
-                logits
-            });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Softmax", name, new ExecuteOpArgs(logits));
 
         /// <summary>
         /// Computes softmax cross entropy cost and gradients to backpropagate.
@@ -581,23 +312,9 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static (Tensor, Tensor) softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = null)
         {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "SoftmaxCrossEntropyWithLogits", name,
-                    null,
-                    features, labels);
+            var results = tf.Context.ExecuteOp("SoftmaxCrossEntropyWithLogits", name, new ExecuteOpArgs(features, labels));
 
-                return (results[0], results[1]);
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("SoftmaxCrossEntropyWithLogits", name: name, args: new
-            {
-                features,
-                labels
-            });
-
-            return (_op.outputs[0], _op.outputs[1]);
+            return (results[0], results[1]);
         }
 
         /// <summary>
@@ -629,21 +346,9 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static (Tensor loss, Tensor backprop) sparse_softmax_cross_entropy_with_logits(Tensor features, Tensor labels, string name = "SparseSoftmaxCrossEntropyWithLogits")
         {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "SparseSoftmaxCrossEntropyWithLogits", name,
-                    null,
-                    features, labels);
+            var results = tf.Context.ExecuteOp("SparseSoftmaxCrossEntropyWithLogits", name, new ExecuteOpArgs(features, labels));
 
-                return (results[0], results[1]);
-            }
-
-            var op = tf.OpDefLib._apply_op_helper("SparseSoftmaxCrossEntropyWithLogits", name: name, args: new { features, labels });
-            int _idx = 0;
-            var loss = op.outputs[_idx++];
-            var backprop = op.outputs[_idx++];
-            return (loss, backprop);
+            return (results[0], results[1]);
         }
 
         /// <summary>
@@ -653,35 +358,9 @@ namespace Tensorflow.Operations
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `features`.</returns>
         public static Tensor relu(Tensor features, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Relu", name,
-                    null,
-                    features);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Relu", name: name, args: new { features });
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Relu", name, new ExecuteOpArgs(features));
 
         public static Tensor tanh(Tensor x, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Tanh", name,
-                    null,
-                    x);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Tanh", name: name, args: new { x });
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Tanh", name, new ExecuteOpArgs(x));
     }
 }

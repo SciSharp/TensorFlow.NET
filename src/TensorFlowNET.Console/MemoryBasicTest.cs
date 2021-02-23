@@ -4,6 +4,8 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Tensorflow
 {
@@ -35,13 +37,15 @@ namespace Tensorflow
         public Action<int, int> ConstantString
             => (epoch, iterate) =>
             {
-                var tensor = tf.constant(new string[] 
+                var strList = new string[]
                 {
                     "Biden immigration bill would put millions of illegal immigrants on 8-year fast-track to citizenship",
                     "The Associated Press, which also reported that the eight-year path is in the bill.",
                     "The bill would also include provisions to stem the flow of migration by addressing root causes of migration from south of the border."
-                });
-                var data = tensor.numpy();
+                };
+
+                var tensor = tf.constant(strList, TF_DataType.TF_STRING);
+                var data = tensor.StringData();
             };
 
         public Action<int, int> Variable
@@ -108,16 +112,18 @@ namespace Tensorflow
                 var strides = new[] { 1, 1, 1, 1 };
                 var dilations = new[] { 1, 1, 1, 1 };
 
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Conv2D", null,
-                    null,
-                    input, filter,
-                    "strides", strides,
-                    "use_cudnn_on_gpu", true,
-                    "padding", "VALID",
-                    "explicit_paddings", new int[0],
-                    "data_format", "NHWC",
-                    "dilations", dilations);
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("Conv2D", null, input, filter)
+                {
+                    attrs = ConvertToDict(new
+                    {
+                        strides,
+                        use_cudnn_on_gpu = true,
+                        padding = "VALID",
+                        explicit_paddings = new int[0],
+                        data_format = "NHWC",
+                        dilations
+                    })
+                });
             };
 
         public Action<int, int> Conv2DWithVariable
@@ -128,16 +134,18 @@ namespace Tensorflow
                 var strides = new[] { 1, 1, 1, 1 };
                 var dilations = new[] { 1, 1, 1, 1 };
 
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Conv2D", null,
-                    null,
-                    input, filter,
-                    "strides", strides,
-                    "use_cudnn_on_gpu", true,
-                    "padding", "VALID",
-                    "explicit_paddings", new int[0],
-                    "data_format", "NHWC",
-                    "dilations", dilations);
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("Conv2D", null, input, filter)
+                {
+                    attrs = ConvertToDict(new
+                    {
+                        strides,
+                        use_cudnn_on_gpu = true,
+                        padding = "VALID",
+                        explicit_paddings = new int[0],
+                        data_format = "NHWC",
+                        dilations
+                    })
+                });
             };
 
         public Action<int, int> Dataset

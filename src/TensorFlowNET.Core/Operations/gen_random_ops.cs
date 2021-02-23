@@ -29,31 +29,8 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor random_standard_normal(Tensor shape, TF_DataType dtype = TF_DataType.DtInvalid, int? seed = null, int? seed2 = null, string name = null)
-        {
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "RandomStandardNormal", name,
-                    null,
-                    shape,
-                    "seed", seed,
-                    "seed2", seed2,
-                    "dtype", dtype);
-
-                return results[0];
-            }
-
-            if (!seed.HasValue)
-                seed = 0;
-            if (!seed2.HasValue)
-                seed2 = 0;
-
-            var _op = tf.OpDefLib._apply_op_helper("RandomStandardNormal",
-                name: name,
-                args: new { shape, dtype, seed, seed2 });
-
-            return _op.output;
-        }
+            => tf.Context.ExecuteOp("RandomStandardNormal", name, new ExecuteOpArgs(shape)
+                .SetAttributes(new { dtype, seed = seed ?? 0, seed2 = seed2 ?? 0 }));
 
         /// <summary>
         /// Outputs random integers from a uniform distribution.
@@ -89,31 +66,8 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor random_uniform(Tensor shape, TF_DataType dtype, int? seed = 0, int? seed2 = 0, string name = null)
-        {
-            if (!seed.HasValue)
-                seed = 0;
-            if (!seed2.HasValue)
-                seed2 = 0;
-
-            if (tf.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "RandomUniform", name,
-                    null,
-                    shape,
-                    "seed", seed,
-                    "seed2", seed2,
-                    "dtype", dtype);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("RandomUniform",
-                name: name,
-                args: new { shape, dtype, seed, seed2 });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("RandomUniform", name, new ExecuteOpArgs(shape)
+                .SetAttributes(new { dtype, seed = seed ?? 0, seed2 = seed2 ?? 0 }));
 
         /// <summary>
         /// 
@@ -125,25 +79,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0,
             string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "RandomShuffle", name,
-                    null,
-                    value,
-                    "seed", seed,
-                    "seed2", seed2);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("RandomShuffle",
-                name: name,
-                args: new { value, seed, seed2 });
-
-            return _op.output;
-        }
+                => tf.Context.ExecuteOp("RandomShuffle", name, new ExecuteOpArgs(value, seed, seed2));
 
         /// <summary>
         /// Outputs random values from a truncated normal distribution.
@@ -156,31 +92,8 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor truncated_normal(Tensor shape, TF_DataType dtype, int? seed = 0,
             int? seed2 = 0, string name = null)
-        {
-            if (!seed.HasValue)
-                seed = 0;
-            if (!seed2.HasValue)
-                seed2 = 0;
-
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "TruncatedNormal", name,
-                    null,
-                    shape,
-                    "seed", seed,
-                    "seed2", seed2,
-                    "dtype", dtype);
-
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("TruncatedNormal",
-                name: name,
-                args: new { shape, dtype, seed, seed2 });
-
-            return _op.output;
-        }
+                => tf.Context.ExecuteOp("TruncatedNormal", name, new ExecuteOpArgs(shape)
+                    .SetAttributes(new { dtype, seed = seed ?? 0, seed2 = seed2 ?? 0 }));
 
         public static Tensor multinomial(Tensor logits, int num_samples, int? seed = 0,
             int? seed2 = 0, TF_DataType output_dtype = TF_DataType.TF_INT64, string name = null)

@@ -6,7 +6,7 @@
     <LangVersion>8.0</LangVersion>
     <RootNamespace>Tensorflow.Keras</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
-    <Version>0.4.0</Version>
+    <Version>0.5.0</Version>
     <Authors>Haiping Chen</Authors>
     <Product>Keras for .NET</Product>
     <Copyright>Apache 2.0, Haiping Chen 2020</Copyright>
@@ -23,7 +23,8 @@
 * Implemented backward_function.
 * Support model.load_weights.
 * Add Subtract layer
-* Support YOLOv3 model.</PackageReleaseNotes>
+* Support YOLOv3 model.
+* Text preprocessing</PackageReleaseNotes>
     <Description>Keras for .NET
 
 Keras is an API designed for human beings, not machines. Keras follows best practices for reducing cognitive load: it offers consistent &amp; simple APIs, it minimizes the number of user actions required for common use cases, and it provides clear &amp; actionable error messages.</Description>
@@ -34,8 +35,8 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
     <RepositoryType>Git</RepositoryType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>0.4.0.0</AssemblyVersion>
-    <FileVersion>0.4.0.0</FileVersion>
+    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <FileVersion>0.5.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
@@ -46,6 +47,10 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DocumentationFile>Tensorflow.Keras.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -60,10 +65,6 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Engine\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -15,7 +15,6 @@
 ******************************************************************************/
 
 using NumSharp;
-using NumSharp.Backends.Unmanaged;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -24,7 +23,6 @@ using System.Runtime.InteropServices;
 using Tensorflow.Eager;
 using Tensorflow.Framework;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Variables;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -35,9 +33,7 @@ namespace Tensorflow
     /// </summary>
     [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
     public partial class Tensor : DisposableObject,
-        ITensor,
         ITensorOrOperation,
-        _TensorLike,
         ITensorOrTensorArray,
         IPackable<Tensor>,
         ICanBeFlattened
@@ -99,6 +95,7 @@ namespace Tensorflow
         public SafeTensorHandleHandle EagerTensorHandle { get; set; }
 
         public bool IsEagerTensor => this is EagerTensor;
+        public bool IsSparseTensor => this is SparseTensor;
 
         /// <summary>
         ///     Returns the shape of a tensor.
@@ -285,6 +282,22 @@ namespace Tensorflow
                 }
                 else
                     throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
+            }
+
+            if (dtype == TF_DataType.TF_STRING)
+            {
+                int size = 1;
+                foreach (var s in TensorShape.dims)
+                    size *= s;
+                var tstr = TensorDataPointer;
+#if TRACK_TENSOR_LIFE
+                print($"Delete TString 0x{handle.ToString("x16")} {AllocationType} Data: 0x{tstrings.ToString("x16")}");
+#endif
+                for (int i = 0; i < size; i++)
+                {
+                    c_api.TF_StringDealloc(tstr);
+                    tstr += TF_TSRING_SIZE;
+                }
             }
 
             c_api.TF_DeleteTensor(handle);

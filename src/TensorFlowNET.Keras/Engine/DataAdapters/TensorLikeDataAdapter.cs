@@ -39,7 +39,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             dataset = slice_inputs(indices_dataset, inputs);
         }
 
-        Tensor permutation(Tensor tensor)
+        Tensors permutation(Tensors tensor)
         {
             var indices = math_ops.range(num_samples, dtype: dtypes.int64);
             if (args.Shuffle)
@@ -82,7 +82,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
                     .Select(x => gen_array_ops.gather_v2(x, indices, 0))
                     .ToArray();
                 return new Tensors(results);
-            });
+            }, -1);
 
             return dataset.with_options(new DatasetOptions { });
         }

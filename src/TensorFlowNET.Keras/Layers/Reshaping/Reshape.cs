@@ -37,7 +37,7 @@ namespace Tensorflow.Keras.Layers
 
         public override TensorShape ComputeOutputShape(TensorShape input_shape)
         {
-            if (input_shape.dims[1..].Contains(-1))
+            if (input_shape.dims.Skip(1).Contains(-1))
             {
                 throw new NotImplementedException("");
             }

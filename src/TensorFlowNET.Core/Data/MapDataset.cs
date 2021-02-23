@@ -10,16 +10,18 @@ namespace Tensorflow
     public class MapDataset : UnaryDataset
     {
         public MapDataset(IDatasetV2 input_dataset,
-            Func<Tensor, Tensor> map_func,
+            Func<Tensors, Tensors> map_func,
             bool use_inter_op_parallelism = true,
             bool preserve_cardinality = false,
             bool use_legacy_function = false) : base(input_dataset)
         {
             var func = new ConcreteFunction($"{map_func.Method.Name}_{Guid.NewGuid()}");
             func.Enter();
-            var input = tf.placeholder(input_dataset.element_spec[0].dtype);
-            var output = map_func(input);
-            func.ToGraph(input, output);
+            var inputs = new Tensors();
+            foreach (var input in input_dataset.element_spec)
+                inputs.Add(tf.placeholder(input.dtype, shape: input.shape));
+            var outputs = map_func(inputs);
+            func.ToGraph(inputs, outputs);
             func.Exit();
 
             structure = func.OutputStructure;

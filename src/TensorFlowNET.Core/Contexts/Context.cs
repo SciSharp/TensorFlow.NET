@@ -136,7 +136,10 @@ namespace Tensorflow.Contexts
         public bool has_graph_arg(params object[] args)
         {
             var flatten_args = nest.flatten<object>(args);
-            bool has_graph_arg = false;
+            /*if (flatten_args.Count(x => x.GetType().IsValueType) == flatten_args.Count())
+                return tf.Context.executing_eagerly() == false*/
+
+            bool has_graph_arg = !tf.Context.executing_eagerly();
             foreach (var el in flatten_args)
             {
                 if (el is Tensor tensor && !tensor.IsEagerTensor)

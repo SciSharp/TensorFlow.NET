@@ -26,6 +26,7 @@ namespace Tensorflow
             dataset = dataset.apply_options();
             _dataset = dataset;
             _element_spec = dataset.element_spec;
+            // _flat_output_types = 
             (_iterator_resource, _deleter) = ops.anonymous_iterator_v2(_dataset.output_types, _dataset.output_shapes);
             ops.make_iterator(dataset.variant_tensor, _iterator_resource);
         }

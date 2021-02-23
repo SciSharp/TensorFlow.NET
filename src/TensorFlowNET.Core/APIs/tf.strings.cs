@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Framework;
+
 namespace Tensorflow
 {
     public partial class tensorflow
@@ -23,6 +25,30 @@ namespace Tensorflow
         public class StringsApi
         {
             string_ops ops = new string_ops();
+
+            /// <summary>
+            /// Converts all uppercase characters into their respective lowercase replacements.
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="encoding"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public Tensor lower(Tensor input, string encoding = "", string name = null)
+                => ops.lower(input: input, encoding: encoding, name: name);
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="pattern"></param>
+            /// <param name="rewrite"></param>
+            /// <param name="replace_global"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public Tensor regex_replace(Tensor input, string pattern, string rewrite,
+                bool replace_global = true, string name = null)
+                => ops.regex_replace(input, pattern, rewrite,
+                    replace_global: replace_global, name: name);
 
             /// <summary>
             /// Return substrings from `Tensor` of strings.
@@ -40,6 +66,27 @@ namespace Tensorflow
             public Tensor substr(string input, int pos, int len,
                     string name = null, string @uint = "BYTE")
                 => ops.substr(input, pos, len, @uint: @uint, name: name);
+
+            /// <summary>
+            /// String lengths of `input`.
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="name"></param>
+            /// <param name="unit"></param>
+            /// <returns></returns>
+            public Tensor string_length(Tensor input, string name = null, string unit = "BYTE")
+                => ops.string_length(input, name: name, unit: unit);
+
+            public RaggedTensor split(Tensor input, string sep = "", int maxsplit = -1, string name = null)
+                => ops.string_split_v2(input, sep: sep, maxsplit : maxsplit, name : name);
+
+            public (RaggedTensor, RaggedTensor) unicode_decode_with_offsets(Tensor input, string input_encoding, 
+                string errors = "replace", int replacement_char = 0xFFFD, 
+                bool replace_control_characters = false, string name = null)
+                => ops.unicode_decode_with_offsets(input, input_encoding, errors,
+                    replacement_char: replacement_char,
+                    replace_control_characters: replace_control_characters,
+                    name: name);
         }
     }
 }

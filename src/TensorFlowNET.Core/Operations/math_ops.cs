@@ -45,21 +45,7 @@ namespace Tensorflow
             => gen_math_ops.add(x, y, name);
 
         public static Tensor add_v2(Tensor x, Tensor y, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("AddV2", name, new { x, y }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "AddV2", name,
-                    null,
-                    x, y).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
-                    {
-                        "T", op.get_attr<TF_DataType>("T")
-                    };
-                    tf.Runner.RecordGradient("AddV2", op.inputs, attrs, op.outputs);
-                },
-                new Tensors(x, y));
+            => tf.Context.ExecuteOp("AddV2", name, new ExecuteOpArgs(x, y));
 
         public static Tensor add_v2<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.add_v2(x, y, name);
@@ -182,15 +168,12 @@ namespace Tensorflow
         }
 
         public static Tensor cumsum<T>(Tensor x, T axis = default, bool exclusive = false, bool reverse = false, string name = null)
-        {
-            return tf_with(ops.name_scope(name, "Cumsum", new { x }), scope =>
-              {
-                  name = scope;
-                  x = ops.convert_to_tensor(x, name: "x");
-
-                  return gen_math_ops.cumsum(x, axis: axis, exclusive: exclusive, reverse: reverse, name: name);
-              });
-        }
+            => tf_with(ops.name_scope(name, "Cumsum", new { x }), scope =>
+            {
+                name = scope;
+                return tf.Context.ExecuteOp("Cumsum", name, new ExecuteOpArgs(x, axis)
+                    .SetAttributes(new { exclusive, reverse }));
+            });
 
         /// <summary>
         /// Computes Psi, the derivative of Lgamma (the log of the absolute value of
@@ -272,41 +255,13 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor erf(Tensor x, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("Erf", name, new { x }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Erf", name,
-                    null,
-                    x).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
-                    {
-                        "T", op.get_attr<TF_DataType>("T")
-                    };
-                    tf.Runner.RecordGradient("Erf", op.inputs, attrs, op.outputs);
-                },
-                new Tensors(x));
+            => tf.Context.ExecuteOp("Erf", name, new ExecuteOpArgs(x));
 
         public static Tensor sqrt(Tensor x, string name = null)
             => gen_math_ops.sqrt(x, name: name);
 
         public static Tensor multiply(Tensor x, Tensor y, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("Mul", name, new { x, y }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "Mul", name,
-                    null,
-                    x, y).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
-                    {
-                        "T", op.get_attr<TF_DataType>("T")
-                    };
-                    tf.Runner.RecordGradient("Mul", op.inputs, attrs, op.outputs);
-                },
-                new Tensors(x, y));
+            => tf.Context.ExecuteOp("Mul", name, new ExecuteOpArgs(x, y));
 
         public static Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
@@ -753,23 +708,10 @@ namespace Tensorflow
             => tf_with(ops.name_scope(name, "Pow", new { x, y }), scope =>
             {
                 name = scope;
+                var x_tensor = ops.convert_to_tensor(x, name: "x");
+                var y_tensor = ops.convert_to_tensor(y, name: "y", dtype: x_tensor.dtype.as_base_dtype());
 
-                if (tf.executing_eagerly())
-                {
-                    var x_tensor = ops.convert_to_tensor(x, name: "x");
-                    var y_tensor = ops.convert_to_tensor(y, name: "y", dtype: x_tensor.dtype.as_base_dtype());
-
-                    var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                        "Pow", name,
-                        null,
-                        x_tensor, y_tensor);
-
-                    return results[0];
-                }
-
-                var _op = tf.OpDefLib._apply_op_helper("Pow", name, args: new { x, y });
-
-                return _op.output;
+                return tf.Context.ExecuteOp("Pow", name, new ExecuteOpArgs(x_tensor, y_tensor));
             });
 
         public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
@@ -851,21 +793,41 @@ namespace Tensorflow
         public static Tensor batch_matmul(Tensor x, Tensor y,
             bool adj_x = false, bool adj_y = false,
             string name = null)
-        {
-            Tensor result = null;
-
-            tf_with(ops.name_scope(name, "MatMul", new Tensor[] { x, y }), scope =>
+            => tf_with(ops.name_scope(name, "MatMul", new Tensor[] { x, y }), scope =>
             {
                 name = scope;
 
                 x = ops.convert_to_tensor(x, name: "a");
                 y = ops.convert_to_tensor(y, name: "b");
 
-                result = gen_math_ops.batch_mat_mul(x, y, adj_x, adj_y, name);
+                return tf.Context.ExecuteOp("BatchMatMul", name, new ExecuteOpArgs(x, y)
+                    .SetAttributes(new { adj_x, adj_y }));
             });
 
-            return result;
-        }
+        public static Tensor bincount(Tensor arr, Tensor weights = null,
+             Tensor minlength = null,
+             Tensor maxlength = null,
+             TF_DataType dtype = TF_DataType.TF_INT32,
+             string name = null,
+             TensorShape axis = null,
+             bool binary_output = false)
+            => tf_with(ops.name_scope(name, "bincount"), scope =>
+            {
+                name = scope;
+                if(!binary_output && axis == null)
+                {
+                    var array_is_nonempty = math_ops.reduce_prod(array_ops.shape(arr)) > 0;
+                    var output_size = math_ops.cast(array_is_nonempty, dtypes.int32) * (math_ops.reduce_max(arr) + 1);
+                    if (minlength != null)
+                        output_size = math_ops.maximum(minlength, output_size);
+                    if (maxlength != null)
+                        output_size = math_ops.minimum(maxlength, output_size);
+                    var weights = constant_op.constant(new long[0], dtype: dtype);
+                    return tf.Context.ExecuteOp("Bincount", name, new ExecuteOpArgs(arr, output_size, weights));
+                }
+
+                throw new NotImplementedException("");
+            });
 
         /// <summary>
         /// Returns the complex conjugate of a complex number.

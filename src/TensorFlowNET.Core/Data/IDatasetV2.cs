@@ -6,6 +6,8 @@ namespace Tensorflow
 {
     public interface IDatasetV2 : IEnumerable<(Tensor, Tensor)>
     {
+        string[] class_names { get; set; }
+
         Tensor variant_tensor { get; set; }
 
         TensorShape[] output_shapes { get; }
@@ -62,13 +64,15 @@ namespace Tensorflow
 
         IDatasetV2 optimize(string[] optimizations, string[] optimization_configs);
 
-        IDatasetV2 map(Func<Tensor, Tensor> map_func,
+        IDatasetV2 map(Func<Tensors, Tensors> map_func,
             bool use_inter_op_parallelism = true,
             bool preserve_cardinality = true,
             bool use_legacy_function = false);
 
         IDatasetV2 map(Func<Tensors, Tensors> map_func,
-            int num_parallel_calls = -1);
+            int num_parallel_calls);
+
+        OwnedIterator make_one_shot_iterator();
 
         IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func);
 

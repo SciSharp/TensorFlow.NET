@@ -182,7 +182,10 @@ namespace Tensorflow
         public static extern unsafe ulong TF_StringEncode(byte* src, ulong src_len, byte* dst, ulong dst_len, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_StringInit(IntPtr t);
+        public static extern void TF_StringInit(IntPtr t);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_StringCopy(IntPtr dst, byte[] text, long size);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TF_StringCopy(IntPtr dst, string text, long size);

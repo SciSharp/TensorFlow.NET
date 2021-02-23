@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Tensorflow.Framework;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
@@ -45,7 +46,7 @@ namespace Tensorflow.Keras.Layers
                     return array_ops.reshape(inputs, new[] { batch_dim, -1 });
                 }
 
-                var non_batch_dims = ((int[])input_shape)[1..];
+                var non_batch_dims = ((int[])input_shape).Skip(1).ToArray();
                 var num = 1;
                 if (non_batch_dims.Length > 0)
                 {

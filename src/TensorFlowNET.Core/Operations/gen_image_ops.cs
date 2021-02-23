@@ -70,38 +70,17 @@ namespace Tensorflow
             float acceptable_fraction = 1,
             string dct_method = "",
             string name = null)
-        {
-            // Add nodes to the TensorFlow graph.
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "DecodeJpeg", name,
-                    null,
-                    contents,
-                    "channels", channels,
-                    "ratio", ratio,
-                    "fancy_upscaling", fancy_upscaling,
-                    "try_recover_truncated", try_recover_truncated,
-                    "acceptable_fraction", acceptable_fraction,
-                    "dct_method", dct_method);
-                return results[0];
-            }
-            else
-            {
-                var _op = tf.OpDefLib._apply_op_helper("DecodeJpeg", name: name, args: new
-                {
-                    contents,
-                    channels,
-                    ratio,
-                    fancy_upscaling,
-                    try_recover_truncated,
-                    acceptable_fraction,
-                    dct_method
-                });
-
-                return _op.outputs[0];
-            }
-        }
+                => tf.Context.ExecuteOp("DecodeJpeg", name,
+                    new ExecuteOpArgs(contents).SetAttributes(
+                    new
+                    {
+                        channels,
+                        ratio,
+                        fancy_upscaling,
+                        try_recover_truncated,
+                        acceptable_fraction,
+                        dct_method
+                    }));
 
         public static Tensor decode_gif(Tensor contents,
             string name = null)
@@ -171,99 +150,36 @@ namespace Tensorflow
             bool align_corners = false,
             bool half_pixel_centers = false,
             string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ResizeBilinear", name,
-                    null,
-                    images, size,
-                    "align_corners", align_corners,
-                    "half_pixel_centers", half_pixel_centers);
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("ResizeBilinear", name: name, args: new
-            {
-                images,
-                size,
-                align_corners
-            });
-
-            return _op.outputs[0];
-        }
+                => tf.Context.ExecuteOp("ResizeBilinear", name,
+                    new ExecuteOpArgs(images, size).SetAttributes(new
+                    {
+                        align_corners,
+                        half_pixel_centers
+                    }));
 
         public static Tensor resize_bicubic(Tensor images,
             Tensor size,
             bool align_corners = false,
             bool half_pixel_centers = false,
             string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                var results = tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ResizeBicubic", name,
-                    null,
-                    images, size,
-                    "align_corners", align_corners,
-                    "half_pixel_centers", half_pixel_centers);
-                return results[0];
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("ResizeBicubic", name: name, args: new
-            {
-                images,
-                size,
-                align_corners
-            });
-
-            return _op.outputs[0];
-        }
-
+                => tf.Context.ExecuteOp("ResizeBicubic", name, 
+                    new ExecuteOpArgs(images, size).SetAttributes(new { align_corners, half_pixel_centers }));
+        
         public static Tensor resize_nearest_neighbor<Tsize>(Tensor images, Tsize size, bool align_corners = false,
             bool half_pixel_centers = false, string name = null)
-            => tf.Context.RunInAutoMode(()
-                => tf.OpDefLib._apply_op_helper("ResizeNearestNeighbor", name: name, args: new
-                {
-                    images,
-                    size,
-                    align_corners,
-                    half_pixel_centers
-                }).output, ()
-                => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ResizeNearestNeighbor", name,
-                    null,
-                    images, size,
-                    "align_corners", align_corners,
-                    "half_pixel_centers", half_pixel_centers).FirstOrDefault(),
-                images);
+                => tf.Context.ExecuteOp("ResizeNearestNeighbor", name, 
+                    new ExecuteOpArgs(images, size).SetAttributes(new { align_corners, half_pixel_centers }));
 
         public static Tensor resize_nearest_neighbor_grad(Tensor grads, Tensor size, bool align_corners = false,
             bool half_pixel_centers = false, string name = null)
-            => tf.Context.RunInAutoMode2(
-                () => tf.OpDefLib._apply_op_helper("ResizeNearestNeighborGrad", name, new
+                => tf.Context.ExecuteOp("ResizeNearestNeighborGrad", name, new ExecuteOpArgs(grads, size)
                 {
-                    grads,
-                    size,
-                    align_corners,
-                    half_pixel_centers
-                }).output,
-                () => tf.Runner.TFE_FastPathExecute(tf.Context, tf.Context.DeviceName,
-                    "ResizeNearestNeighborGrad", name,
-                    null,
-                    grads, size,
-                    "align_corners", align_corners,
-                    "half_pixel_centers", half_pixel_centers).FirstOrDefault(),
-                (op) =>
-                {
-                    var attrs = new object[]
+                    GetGradientAttrs = (op) => new
                     {
-                        "T", op.get_attr<TF_DataType>("T"),
-                        "align_corners", op.get_attr<bool>("align_corners"),
-                        "half_pixel_centers", op.get_attr<bool>("half_pixel_centers")
-                    };
-                    tf.Runner.RecordGradient("ResizeNearestNeighborGrad", op.inputs, attrs, op.outputs);
-                },
-                new Tensors(grads, size));
+                        T = op.get_attr<TF_DataType>("T"),
+                        align_corners = op.get_attr<bool>("align_corners"),
+                        half_pixel_centers = op.get_attr<bool>("half_pixel_centers")
+                    }
+                }.SetAttributes(new { align_corners, half_pixel_centers }));
     }
 }

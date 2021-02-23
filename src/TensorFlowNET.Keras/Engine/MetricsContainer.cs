@@ -62,8 +62,8 @@ namespace Tensorflow.Keras.Engine
             {
                 var y_t_rank = y_t.rank;
                 var y_p_rank = y_p.rank;
-                var y_t_last_dim = y_t.shape[^1];
-                var y_p_last_dim = y_p.shape[^1];
+                var y_t_last_dim = y_t.shape[y_t.shape.Length - 1];
+                var y_p_last_dim = y_p.shape[y_p.shape.Length - 1];
 
                 bool is_binary = y_p_last_dim == 1;
                 bool is_sparse_categorical = (y_t_rank < y_p_rank || y_t_last_dim == 1) && y_p_last_dim > 1;

@@ -32,6 +32,28 @@ namespace Tensorflow
             /// <returns></returns>
             public Tensor erf(Tensor x, string name = null)
                 => math_ops.erf(x, name);
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="arr"></param>
+            /// <param name="weights"></param>
+            /// <param name="minlength"></param>
+            /// <param name="maxlength"></param>
+            /// <param name="dtype"></param>
+            /// <param name="name"></param>
+            /// <param name="axis"></param>
+            /// <param name="binary_output"></param>
+            /// <returns></returns>
+            public Tensor bincount(Tensor arr, Tensor weights = null,
+                Tensor minlength = null,
+                Tensor maxlength = null,
+                TF_DataType dtype = TF_DataType.TF_INT32,
+                string name = null,
+                TensorShape axis = null,
+                bool binary_output = false)
+                => math_ops.bincount(arr, weights: weights, minlength: minlength, maxlength: maxlength,
+                    dtype: dtype, name: name, axis: axis, binary_output: binary_output);
         }
 
         public Tensor abs(Tensor x, string name = null)

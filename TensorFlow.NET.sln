@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.Binding", "src\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.Benchmark", "src\TensorFlowNet.Benchmarks\Tensorflow.Benchmark.csproj", "{3A6EB896-604F-4E25-B677-B8103BCF3D2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.UnitTest", "test\TensorFlowNET.UnitTest\Tensorflow.UnitTest.csproj", "{23C28035-2FCE-41F3-9A12-E73CE8A5AE32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.Binding.UnitTest", "test\TensorFlowNET.UnitTest\Tensorflow.Binding.UnitTest.csproj", "{23C28035-2FCE-41F3-9A12-E73CE8A5AE32}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tensorflow.Console", "src\TensorFlowNET.Console\Tensorflow.Console.csproj", "{03F06299-3F4B-4449-A709-3A647657BC0C}"
 EndProject

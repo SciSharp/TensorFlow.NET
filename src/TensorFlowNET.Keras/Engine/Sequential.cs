@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Linq;
 using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
@@ -103,7 +104,7 @@ namespace Tensorflow.Keras.Engine
                 if (set_inputs)
                 {
                     // If an input layer (placeholder) is available.
-                    outputs = layer.InboundNodes[^1].Outputs;
+                    outputs = layer.InboundNodes.Last().Outputs;
                     inputs = layer_utils.get_source_inputs(outputs[0]);
                     built = true;
                     _has_explicit_input_shape = true;
