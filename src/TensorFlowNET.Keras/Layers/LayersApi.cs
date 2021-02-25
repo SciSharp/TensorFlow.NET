@@ -12,25 +12,31 @@ namespace Tensorflow.Keras.Layers
         public Preprocessing preprocessing { get; } = new Preprocessing();
 
         /// <summary>
-        /// Functional interface for the batch normalization layer.
+        /// Layer that normalizes its inputs.
+        /// Batch normalization applies a transformation that maintains the mean output close to 0 and the output standard deviation close to 1.
+        /// Importantly, batch normalization works differently during training and during inference.
+        /// 
         /// http://arxiv.org/abs/1502.03167
         /// </summary>
-        /// <param name="inputs"></param>
-        /// <param name="axis"></param>
-        /// <param name="momentum"></param>
-        /// <param name="epsilon"></param>
-        /// <param name="center"></param>
-        /// <param name="scale"></param>
-        /// <param name="beta_initializer"></param>
-        /// <param name="gamma_initializer"></param>
-        /// <param name="moving_mean_initializer"></param>
-        /// <param name="moving_variance_initializer"></param>
-        /// <param name="training"></param>
-        /// <param name="trainable"></param>
-        /// <param name="name"></param>
-        /// <param name="renorm"></param>
-        /// <param name="renorm_momentum"></param>
-        /// <returns></returns>
+        /// <param name="axis">The axis that should be normalized (typically the features axis). 
+        /// For instance, after a Conv2D layer with data_format="channels_first", set axis=1 in BatchNormalization.
+        /// </param>
+        /// <param name="momentum">Momentum for the moving average.</param>
+        /// <param name="epsilon">Small float added to variance to avoid dividing by zero.</param>
+        /// <param name="center">If True, add offset of beta to normalized tensor. If False, beta is ignored.</param>
+        /// <param name="scale">If True, multiply by gamma. If False, gamma is not used. When the next layer is linear (also e.g. nn.relu), this can be disabled since the scaling will be done by the next layer.</param>
+        /// <param name="beta_initializer">Initializer for the beta weight.</param>
+        /// <param name="gamma_initializer">Initializer for the gamma weight.</param>
+        /// <param name="moving_mean_initializer">Initializer for the moving mean.</param>
+        /// <param name="moving_variance_initializer">Initializer for the moving variance.</param>
+        /// <param name="trainable">Boolean, if True the variables will be marked as trainable.</param>
+        /// <param name="name">Layer name.</param>
+        /// <param name="renorm">Whether to use Batch Renormalization. This adds extra variables during training. The inference is the same for either value of this parameter.</param>
+        /// <param name="renorm_momentum">Momentum used to update the moving means and standard deviations with renorm. 
+        /// Unlike momentum, this affects training and should be neither too small (which would add noise) nor too large (which would give stale estimates). 
+        /// Note that momentum is still applied to get the means and variances for inference.
+        /// </param>
+        /// <returns>Tensor of the same shape as input.</returns>
         public BatchNormalization BatchNormalization(int axis = -1,
             float momentum = 0.99f,
             float epsilon = 0.001f,
@@ -62,23 +68,25 @@ namespace Tensorflow.Keras.Layers
                 });
 
         /// <summary>
-        /// 
+        /// 2D convolution layer (e.g. spatial convolution over images).
+        /// This layer creates a convolution kernel that is convolved with the layer input to produce a tensor of outputs.
+        /// If use_bias is True, a bias vector is created and added to the outputs.Finally, if activation is not None, it is applied to the outputs as well.
         /// </summary>
-        /// <param name="filters"></param>
-        /// <param name="kernel_size"></param>
-        /// <param name="strides"></param>
-        /// <param name="padding"></param>
-        /// <param name="data_format"></param>
-        /// <param name="dilation_rate"></param>
-        /// <param name="groups"></param>
-        /// <param name="activation">tf.keras.activations</param>
-        /// <param name="use_bias"></param>
-        /// <param name="kernel_initializer"></param>
-        /// <param name="bias_initializer"></param>
-        /// <param name="kernel_regularizer"></param>
-        /// <param name="bias_regularizer"></param>
-        /// <param name="activity_regularizer"></param>
-        /// <returns></returns>
+        /// <param name="filters">Integer, the dimensionality of the output space (i.e. the number of output filters in the convolution)</param>
+        /// <param name="kernel_size">An integer or tuple/list of 2 integers, specifying the height and width of the 2D convolution window. Can be a single integer to specify the same value for all spatial dimensions.</param>
+        /// <param name="strides">An integer or tuple/list of 2 integers, specifying the strides of the convolution along the height and width. Can be a single integer to specify the same value for all spatial dimensions. Specifying any stride value != 1 is incompatible with specifying any dilation_rate value != 1.</param>
+        /// <param name="padding">one of "valid" or "same" (case-insensitive). "valid" means no padding. "same" results in padding evenly to the left/right or up/down of the input such that output has the same height/width dimension as the input.</param>
+        /// <param name="data_format">A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. channels_last corresponds to inputs with shape (batch_size, height, width, channels) while channels_first corresponds to inputs with shape (batch_size, channels, height, width). It defaults to the image_data_format value found in your Keras config file at ~/.keras/keras.json. If you never set it, then it will be channels_last.</param>
+        /// <param name="dilation_rate">an integer or tuple/list of 2 integers, specifying the dilation rate to use for dilated convolution. Can be a single integer to specify the same value for all spatial dimensions. Currently, specifying any dilation_rate value != 1 is incompatible with specifying any stride value != 1.</param>
+        /// <param name="groups">A positive integer specifying the number of groups in which the input is split along the channel axis. Each group is convolved separately with filters / groups filters. The output is the concatenation of all the groups results along the channel axis. Input channels and filters must both be divisible by groups.</param>
+        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (see keras.activations).</param>
+        /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
+        /// <param name="kernel_initializer">Initializer for the kernel weights matrix (see keras.initializers).</param>
+        /// <param name="bias_initializer">Initializer for the bias vector (see keras.initializers).</param>
+        /// <param name="kernel_regularizer">Regularizer function applied to the kernel weights matrix (see keras.regularizers).</param>
+        /// <param name="bias_regularizer">Regularizer function applied to the bias vector (see keras.regularizers).</param>
+        /// <param name="activity_regularizer">Regularizer function applied to the output of the layer (its "activation") (see keras.regularizers).</param>
+        /// <returns>A tensor of rank 4+ representing activation(conv2d(inputs, kernel) + bias).</returns>
         public Conv2D Conv2D(int filters,
             TensorShape kernel_size = null,
             TensorShape strides = null,
@@ -112,6 +120,26 @@ namespace Tensorflow.Keras.Layers
                     Activation = activation ?? keras.activations.Linear
                 });
 
+        /// <summary>
+        /// 2D convolution layer (e.g. spatial convolution over images).
+        /// This layer creates a convolution kernel that is convolved with the layer input to produce a tensor of outputs.
+        /// If use_bias is True, a bias vector is created and added to the outputs.Finally, if activation is not None, it is applied to the outputs as well.
+        /// </summary>
+        /// <param name="filters">Integer, the dimensionality of the output space (i.e. the number of output filters in the convolution)</param>
+        /// <param name="kernel_size">An integer or tuple/list of 2 integers, specifying the height and width of the 2D convolution window. Can be a single integer to specify the same value for all spatial dimensions.</param>
+        /// <param name="strides">An integer or tuple/list of 2 integers, specifying the strides of the convolution along the height and width. Can be a single integer to specify the same value for all spatial dimensions. Specifying any stride value != 1 is incompatible with specifying any dilation_rate value != 1.</param>
+        /// <param name="padding">one of "valid" or "same" (case-insensitive). "valid" means no padding. "same" results in padding evenly to the left/right or up/down of the input such that output has the same height/width dimension as the input.</param>
+        /// <param name="data_format">A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. channels_last corresponds to inputs with shape (batch_size, height, width, channels) while channels_first corresponds to inputs with shape (batch_size, channels, height, width). It defaults to the image_data_format value found in your Keras config file at ~/.keras/keras.json. If you never set it, then it will be channels_last.</param>
+        /// <param name="dilation_rate">an integer or tuple/list of 2 integers, specifying the dilation rate to use for dilated convolution. Can be a single integer to specify the same value for all spatial dimensions. Currently, specifying any dilation_rate value != 1 is incompatible with specifying any stride value != 1.</param>
+        /// <param name="groups">A positive integer specifying the number of groups in which the input is split along the channel axis. Each group is convolved separately with filters / groups filters. The output is the concatenation of all the groups results along the channel axis. Input channels and filters must both be divisible by groups.</param>
+        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (see keras.activations).</param>
+        /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
+        /// <param name="kernel_initializer">The name of the initializer for the kernel weights matrix (see keras.initializers).</param>
+        /// <param name="bias_initializer">The name of the initializer for the bias vector (see keras.initializers).</param>
+        /// <param name="kernel_regularizer">The name of the regularizer function applied to the kernel weights matrix (see keras.regularizers).</param>
+        /// <param name="bias_regularizer">The name of the regularizer function applied to the bias vector (see keras.regularizers).</param>
+        /// <param name="activity_regularizer">The name of the regularizer function applied to the output of the layer (its "activation") (see keras.regularizers).</param>
+        /// <returns>A tensor of rank 4+ representing activation(conv2d(inputs, kernel) + bias).</returns>
         public Conv2D Conv2D(int filters,
             TensorShape kernel_size = null,
             TensorShape strides = null,
@@ -145,24 +173,24 @@ namespace Tensorflow.Keras.Layers
         /// <summary>
         /// Transposed convolution layer (sometimes called Deconvolution).
         /// </summary>
-        /// <param name="filters"></param>
-        /// <param name="kernel_size"></param>
-        /// <param name="strides"></param>
-        /// <param name="padding"></param>
-        /// <param name="data_format"></param>
-        /// <param name="dilation_rate"></param>
-        /// <param name="activation"></param>
-        /// <param name="use_bias"></param>
-        /// <param name="kernel_initializer"></param>
-        /// <param name="bias_initializer"></param>
-        /// <param name="kernel_regularizer"></param>
-        /// <param name="bias_regularizer"></param>
-        /// <param name="activity_regularizer"></param>
-        /// <returns></returns>
+        /// <param name="filters">Integer, the dimensionality of the output space (i.e. the number of output filters in the convolution)</param>
+        /// <param name="kernel_size">An integer or tuple/list of 2 integers, specifying the height and width of the 2D convolution window. Can be a single integer to specify the same value for all spatial dimensions.</param>
+        /// <param name="strides">An integer or tuple/list of 2 integers, specifying the strides of the convolution along the height and width. Can be a single integer to specify the same value for all spatial dimensions. Specifying any stride value != 1 is incompatible with specifying any dilation_rate value != 1.</param>
+        /// <param name="output_padding">one of "valid" or "same" (case-insensitive). "valid" means no padding. "same" results in padding evenly to the left/right or up/down of the input such that output has the same height/width dimension as the input.</param>
+        /// <param name="data_format">A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. channels_last corresponds to inputs with shape (batch_size, height, width, channels) while channels_first corresponds to inputs with shape (batch_size, channels, height, width). It defaults to the image_data_format value found in your Keras config file at ~/.keras/keras.json. If you never set it, then it will be channels_last.</param>
+        /// <param name="dilation_rate">an integer or tuple/list of 2 integers, specifying the dilation rate to use for dilated convolution. Can be a single integer to specify the same value for all spatial dimensions. Currently, specifying any dilation_rate value != 1 is incompatible with specifying any stride value != 1.</param>
+        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (see keras.activations).</param>
+        /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
+        /// <param name="kernel_initializer">The name of the initializer for the kernel weights matrix (see keras.initializers).</param>
+        /// <param name="bias_initializer">The name of the initializer for the bias vector (see keras.initializers).</param>
+        /// <param name="kernel_regularizer">The name of the regularizer function applied to the kernel weights matrix (see keras.regularizers).</param>
+        /// <param name="bias_regularizer">The name of the regularizer function applied to the bias vector (see keras.regularizers).</param>
+        /// <param name="activity_regularizer">The name of the regularizer function applied to the output of the layer (its "activation") (see keras.regularizers).</param>
+        /// <returns>A tensor of rank 4+ representing activation(conv2d(inputs, kernel) + bias).</returns>
         public Conv2DTranspose Conv2DTranspose(int filters,
             TensorShape kernel_size = null,
             TensorShape strides = null,
-            string padding = "valid",
+            string output_padding = "valid",
             string data_format = null,
             TensorShape dilation_rate = null,
             string activation = null,
@@ -178,7 +206,7 @@ namespace Tensorflow.Keras.Layers
                     Filters = filters,
                     KernelSize = kernel_size,
                     Strides = strides == null ? (1, 1) : strides,
-                    Padding = padding,
+                    Padding = output_padding,
                     DataFormat = data_format,
                     DilationRate = dilation_rate == null ? (1, 1) : dilation_rate,
                     UseBias = use_bias,
@@ -187,6 +215,20 @@ namespace Tensorflow.Keras.Layers
                     Activation = GetActivationByName(activation)
                 });
 
+        /// <summary>
+        /// Just your regular densely-connected NN layer.
+        /// 
+        /// Dense implements the operation: output = activation(dot(input, kernel) + bias) where activation is the 
+        /// element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, 
+        /// and bias is a bias vector created by the layer (only applicable if use_bias is True).
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (ie. "linear" activation: a(x) = x).</param>
+        /// <param name="kernel_initializer">Initializer for the kernel weights matrix.</param>
+        /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
+        /// <param name="bias_initializer">Initializer for the bias vector.</param>
+        /// <param name="input_shape">N-D tensor with shape: (batch_size, ..., input_dim). The most common situation would be a 2D input with shape (batch_size, input_dim).</param>
+        /// <returns>N-D tensor with shape: (batch_size, ..., units). For instance, for a 2D input with shape (batch_size, input_dim), the output would have shape (batch_size, units).</returns>
         public Dense Dense(int units,
             Activation activation = null,
             IInitializer kernel_initializer = null,
@@ -202,6 +244,15 @@ namespace Tensorflow.Keras.Layers
                 InputShape = input_shape
             });
 
+        /// <summary>
+        /// Just your regular densely-connected NN layer.
+        /// 
+        /// Dense implements the operation: output = activation(dot(input, kernel) + bias) where activation is the 
+        /// element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, 
+        /// and bias is a bias vector created by the layer (only applicable if use_bias is True).
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <returns>N-D tensor with shape: (batch_size, ..., units). For instance, for a 2D input with shape (batch_size, input_dim), the output would have shape (batch_size, units).</returns>
         public Dense Dense(int units)
             => new Dense(new DenseArgs
             {
@@ -209,6 +260,17 @@ namespace Tensorflow.Keras.Layers
                 Activation = GetActivationByName("linear")
             });
 
+        /// <summary>
+        /// Just your regular densely-connected NN layer.
+        /// 
+        /// Dense implements the operation: output = activation(dot(input, kernel) + bias) where activation is the 
+        /// element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, 
+        /// and bias is a bias vector created by the layer (only applicable if use_bias is True).
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (ie. "linear" activation: a(x) = x).</param>
+        /// <param name="input_shape">N-D tensor with shape: (batch_size, ..., input_dim). The most common situation would be a 2D input with shape (batch_size, input_dim).</param>
+        /// <returns>N-D tensor with shape: (batch_size, ..., units). For instance, for a 2D input with shape (batch_size, input_dim), the output would have shape (batch_size, units).</returns>
         public Dense Dense(int units,
             string activation = null,
             TensorShape input_shape = null)
@@ -260,6 +322,18 @@ namespace Tensorflow.Keras.Layers
             return layer.Apply(inputs);
         }
 
+        /// <summary>
+        /// Applies Dropout to the input.
+        /// The Dropout layer randomly sets input units to 0 with a frequency of rate at each step during training time, 
+        /// which helps prevent overfitting.Inputs not set to 0 are scaled up by 1/(1 - rate) such that the sum over all inputs is unchanged.
+        /// </summary>
+        /// <param name="rate">Float between 0 and 1. Fraction of the input units to drop.</param>
+        /// <param name="noise_shape">1D integer tensor representing the shape of the binary dropout mask that will be multiplied with the input. For instance, 
+        /// if your inputs have shape (batch_size, timesteps, features) and you want the dropout mask to be the same for all timesteps, 
+        /// you can use noise_shape=(batch_size, 1, features).
+        /// </param>
+        /// <param name="seed">An integer to use as random seed.</param>
+        /// <returns></returns>
         public Dropout Dropout(float rate, TensorShape noise_shape = null, int? seed = null)
             => new Dropout(new DropoutArgs
             {
@@ -295,6 +369,15 @@ namespace Tensorflow.Keras.Layers
                 EmbeddingsInitializer = embeddings_initializer
             });
 
+        /// <summary>
+        /// Flattens the input. Does not affect the batch size.
+        /// </summary>
+        /// <param name="data_format">A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. 
+        /// channels_last corresponds to inputs with shape (batch, ..., channels) while channels_first corresponds to inputs with shape (batch, channels, ...). 
+        /// It defaults to the image_data_format value found in your Keras config file at ~/.keras/keras.json. 
+        /// If you never set it, then it will be "channels_last".
+        /// </param>
+        /// <returns></returns>
         public Flatten Flatten(string data_format = null)
             => new Flatten(new FlattenArgs
             {
@@ -303,12 +386,18 @@ namespace Tensorflow.Keras.Layers
 
         /// <summary>
         /// `Input()` is used to instantiate a Keras tensor.
+        ///  Keras tensor is a TensorFlow symbolic tensor object, which we augment with certain attributes that allow us 
+        ///  to build a Keras model just by knowing the inputs and outputs of the model.
         /// </summary>
         /// <param name="shape">A shape tuple not including the batch size.</param>
-        /// <param name="name"></param>
-        /// <param name="sparse"></param>
-        /// <param name="ragged"></param>
-        /// <returns></returns>
+        /// <param name="name">An optional name string for the layer. Should be unique in a model (do not reuse the same name twice). It will be autogenerated if it isn't provided.</param>
+        /// <param name="sparse">A boolean specifying whether the placeholder to be created is sparse. Only one of 'ragged' and 'sparse' can be True. 
+        /// Note that, if sparse is False, sparse tensors can still be passed into the input - they will be densified with a default value of 0.
+        /// </param>
+        /// <param name="ragged">A boolean specifying whether the placeholder to be created is ragged. Only one of 'ragged' and 'sparse' can be True. 
+        /// In this case, values of 'None' in the 'shape' argument represent ragged dimensions. For more information about RaggedTensors, see this guide.
+        /// </param>
+        /// <returns>A tensor.</returns>
         public Tensors Input(TensorShape shape,
             string name = null,
             bool sparse = false,
@@ -325,35 +414,90 @@ namespace Tensorflow.Keras.Layers
             return input_layer.InboundNodes[0].Outputs;
         }
 
+        /// <summary>
+        /// Max pooling operation for 1D temporal data.
+        /// </summary>
+        /// <param name="pool_size">Integer, size of the max pooling window.</param>
+        /// <param name="strides">Integer, or null. Specifies how much the pooling window moves for each pooling step. If null, it will default to pool_size.</param>
+        /// <param name="padding">One of "valid" or "same" (case-insensitive). "valid" means no padding. 
+        /// "same" results in padding evenly to the left/right or up/down of the input such that output has the same height/width dimension as the input.
+        /// </param>
+        /// <param name="data_format">
+        /// A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. 
+        /// channels_last corresponds to inputs with shape (batch, steps, features) while channels_first corresponds to inputs with shape (batch, features, steps).
+        /// </param>
+        /// <returns></returns>
         public MaxPooling1D MaxPooling1D(int? pool_size = null,
             int? strides = null,
-            string padding = "valid")
+            string padding = "valid",
+            string data_format = null)
             => new MaxPooling1D(new Pooling1DArgs
             {
                 PoolSize = pool_size ?? 2,
                 Strides = strides ?? (pool_size ?? 2),
-                Padding = padding
+                Padding = padding,
+                DataFormat = data_format
             });
 
+        /// <summary>
+        /// Max pooling operation for 2D spatial data.
+        /// Downsamples the input representation by taking the maximum value over the window defined by pool_size for each dimension along the features axis.
+        /// The window is shifted by strides in each dimension. The resulting output when using "valid" padding option has a shape(number of rows or columns) 
+        /// of: output_shape = (input_shape - pool_size + 1) / strides)
+        /// The resulting output shape when using the "same" padding option is: output_shape = input_shape / strides
+        /// </summary>
+        /// <param name="pool_size">
+        /// Integer or tuple of 2 integers, window size over which to take the maximum. 
+        /// (2, 2) will take the max value over a 2x2 pooling window. If only one integer is specified, the same window length will be used for both dimensions.
+        /// </param>
+        /// <param name="strides">
+        /// Integer, tuple of 2 integers, or null. Strides values. Specifies how far the pooling window moves for each pooling step. 
+        /// If null, it will default to pool_size.
+        /// </param>
+        /// <param name="padding">One of "valid" or "same" (case-insensitive). "valid" means no padding. 
+        /// "same" results in padding evenly to the left/right or up/down of the input such that output has the same height/width dimension as the input.
+        /// </param>
+        /// <param name="data_format">
+        /// A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. 
+        /// channels_last corresponds to inputs with shape (batch, height, width, channels) while channels_first corresponds to 
+        /// inputs with shape (batch, channels, height, width). 
+        /// It defaults to the image_data_format value found in your Keras config file at ~/.keras/keras.json. 
+        /// If you never set it, then it will be "channels_last"</param>
+        /// <returns></returns>
         public MaxPooling2D MaxPooling2D(TensorShape pool_size = null,
             TensorShape strides = null,
-            string padding = "valid")
+            string padding = "valid",
+            string data_format = null)
             => new MaxPooling2D(new MaxPooling2DArgs
             {
                 PoolSize = pool_size ?? (2, 2),
                 Strides = strides,
-                Padding = padding
+                Padding = padding,
+                DataFormat = data_format
             });
 
         /// <summary>
         /// Max pooling layer for 2D inputs (e.g. images).
         /// </summary>
         /// <param name="inputs">The tensor over which to pool. Must have rank 4.</param>
-        /// <param name="pool_size"></param>
-        /// <param name="strides"></param>
-        /// <param name="padding"></param>
-        /// <param name="data_format"></param>
-        /// <param name="name"></param>
+        /// <param name="pool_size">
+        /// Integer or tuple of 2 integers, window size over which to take the maximum. 
+        /// (2, 2) will take the max value over a 2x2 pooling window. If only one integer is specified, the same window length will be used for both dimensions.
+        /// </param>
+        /// <param name="strides">
+        /// Integer, tuple of 2 integers, or null. Strides values. Specifies how far the pooling window moves for each pooling step. 
+        /// If null, it will default to pool_size.
+        /// </param>
+        /// <param name="padding">One of "valid" or "same" (case-insensitive). "valid" means no padding. 
+        /// "same" results in padding evenly to the left/right or up/down of the input such that output has the same height/width dimension as the input.
+        /// </param>
+        /// <param name="data_format">
+        /// A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. 
+        /// channels_last corresponds to inputs with shape (batch, height, width, channels) while channels_first corresponds to 
+        /// inputs with shape (batch, channels, height, width). 
+        /// It defaults to the image_data_format value found in your Keras config file at ~/.keras/keras.json. 
+        /// If you never set it, then it will be "channels_last"</param>        
+        /// <param name="name">A name for the layer</param>
         /// <returns></returns>
         public Tensor max_pooling2d(Tensor inputs,
             int[] pool_size,
@@ -385,8 +529,19 @@ namespace Tensorflow.Keras.Layers
                 Alpha = alpha
             });
 
+        /// <summary>
+        /// Fully-connected RNN where the output is to be fed back to input.
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <returns></returns>
         public Layer SimpleRNN(int units) => SimpleRNN(units, "tanh");
 
+        /// <summary>
+        /// Fully-connected RNN where the output is to be fed back to input.
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <param name="activation">Activation function to use. If you pass null, no activation is applied (ie. "linear" activation: a(x) = x).</param>
+        /// <returns></returns>
         public Layer SimpleRNN(int units,
             Activation activation = null)
                 => new SimpleRNN(new SimpleRNNArgs
@@ -395,6 +550,12 @@ namespace Tensorflow.Keras.Layers
                     Activation = activation
                 });
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <param name="activation">The name of the activation function to use. Default: hyperbolic tangent (tanh)..</param>
+        /// <returns></returns>
         public Layer SimpleRNN(int units,
             string activation = "tanh")
                 => new SimpleRNN(new SimpleRNNArgs
@@ -403,6 +564,33 @@ namespace Tensorflow.Keras.Layers
                     Activation = GetActivationByName(activation)
                 });
 
+        /// <summary>
+        /// Long Short-Term Memory layer - Hochreiter 1997.
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <param name="activation">Activation function to use. If you pass null, no activation is applied (ie. "linear" activation: a(x) = x).</param>
+        /// <param name="recurrent_activation">Activation function to use for the recurrent step. If you pass null, no activation is applied (ie. "linear" activation: a(x) = x).</param>
+        /// <param name="use_bias">Boolean (default True), whether the layer uses a bias vector.</param>
+        /// <param name="kernel_initializer">Initializer for the kernel weights matrix, used for the linear transformation of the inputs. Default: glorot_uniform.</param>
+        /// <param name="recurrent_initializer">Initializer for the recurrent_kernel weights matrix, used for the linear transformation of the recurrent state. Default: orthogonal.</param>
+        /// <param name="bias_initializer">Initializer for the bias vector. Default: zeros.</param>
+        /// <param name="unit_forget_bias">Boolean (default True). If True, add 1 to the bias of the forget gate at initialization. Setting it to true will also force bias_initializer="zeros". This is recommended in Jozefowicz et al..</param>
+        /// <param name="dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the inputs. Default: 0.</param>
+        /// <param name="recurrent_dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the recurrent state. Default: 0.</param>
+        /// <param name="implementation"></param>
+        /// <param name="return_sequences">Boolean. Whether to return the last output. in the output sequence, or the full sequence. Default: False.</param>
+        /// <param name="return_state">Whether to return the last state in addition to the output. Default: False.</param>
+        /// <param name="go_backwards">Boolean (default false). If True, process the input sequence backwards and return the reversed sequence.</param>
+        /// <param name="stateful">Boolean (default False). If True, the last state for each sample at index i in a batch will be used as initial state for the sample of index i in the following batch.</param>
+        /// <param name="time_major">
+        /// The shape format of the inputs and outputs tensors. If True, the inputs and outputs will be in shape [timesteps, batch, feature], 
+        /// whereas in the False case, it will be [batch, timesteps, feature]. Using time_major = True is a bit more efficient because it avoids transposes at the 
+        /// beginning and end of the RNN calculation. However, most TensorFlow data is batch-major, so by default this function accepts input and emits output in batch-major form.</param>
+        /// <param name="unroll">
+        /// Boolean (default False). If True, the network will be unrolled, else a symbolic loop will be used. Unrolling can speed-up a RNN, 
+        /// although it tends to be more memory-intensive. Unrolling is only suitable for short sequences.
+        /// </param>
+        /// <returns></returns>
         public Layer LSTM(int units,
             Activation activation = null,
             Activation recurrent_activation = null,
@@ -439,6 +627,13 @@ namespace Tensorflow.Keras.Layers
                     Unroll = unroll
                 });
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="scale"></param>
+        /// <param name="offset"></param>
+        /// <param name="input_shape"></param>
+        /// <returns></returns>
         public Rescaling Rescaling(float scale,
             float offset = 0,
             TensorShape input_shape = null)
@@ -449,28 +644,72 @@ namespace Tensorflow.Keras.Layers
                 InputShape = input_shape
             });
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Add Add()
             => new Add(new MergeArgs { });
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Subtract Subtract()
             => new Subtract(new MergeArgs { });
 
+        /// <summary>
+        /// Global max pooling operation for spatial data.
+        /// </summary>
+        /// <returns></returns>
         public GlobalAveragePooling2D GlobalAveragePooling2D()
             => new GlobalAveragePooling2D(new Pooling2DArgs { });
 
+        /// <summary>
+        /// Global average pooling operation for temporal data.
+        /// </summary>
+        /// <param name="data_format"> A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. 
+        /// channels_last corresponds to inputs with shape (batch, steps, features) while channels_first corresponds to inputs with shape (batch, features, steps).
+        /// </param>
+        /// <returns></returns>
         public GlobalAveragePooling1D GlobalAveragePooling1D(string data_format = "channels_last")
             => new GlobalAveragePooling1D(new Pooling1DArgs { DataFormat = data_format });
 
+        /// <summary>
+        /// Global max pooling operation for spatial data.
+        /// </summary>
+        /// <param name="data_format">A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. 
+        /// channels_last corresponds to inputs with shape (batch, height, width, channels) while channels_first corresponds to inputs with shape (batch, channels, height, width).</param>
+        /// <returns></returns>
         public GlobalAveragePooling2D GlobalAveragePooling2D(string data_format = "channels_last")
             => new GlobalAveragePooling2D(new Pooling2DArgs { DataFormat = data_format });
 
+        /// <summary>
+        /// Global max pooling operation for 1D temporal data.
+        /// Downsamples the input representation by taking the maximum value over the time dimension.
+        /// </summary>
+        /// <param name="data_format"> A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. 
+        /// channels_last corresponds to inputs with shape (batch, steps, features) while channels_first corresponds to inputs with shape (batch, features, steps).
+        /// </param>
+        /// <returns></returns>
         public GlobalMaxPooling1D GlobalMaxPooling1D(string data_format = "channels_last")
             => new GlobalMaxPooling1D(new Pooling1DArgs { DataFormat = data_format });
 
+        /// <summary>
+        /// Global max pooling operation for spatial data.
+        /// </summary>
+        /// <param name="data_format">A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. 
+        /// channels_last corresponds to inputs with shape (batch, height, width, channels) while channels_first corresponds to inputs with shape (batch, channels, height, width).</param>
+        /// <returns></returns>
         public GlobalMaxPooling2D GlobalMaxPooling2D(string data_format = "channels_last")
             => new GlobalMaxPooling2D(new Pooling2DArgs { DataFormat = data_format });
 
 
+        /// <summary>
+        /// Get an activation function layer from its name.
+        /// </summary>
+        /// <param name="name">The name of the activation function. One of linear, relu, sigmoid, and tanh.</param>
+        /// <returns></returns>
 
         Activation GetActivationByName(string name)
             => name switch
@@ -482,6 +721,11 @@ namespace Tensorflow.Keras.Layers
                 _ => keras.activations.Linear
             };
 
+        /// <summary>
+        /// Get an weights initializer from its name.
+        /// </summary>
+        /// <param name="name">The name of the initializer. One of zeros, ones, and glorot_uniform.</param>
+        /// <returns></returns>
         IInitializer GetInitializerByName(string name)
             => name switch
             {

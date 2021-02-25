@@ -31,7 +31,7 @@ namespace Tensorflow.Util
             proc.Start();
 
             while (!proc.StandardOutput.EndOfStream)
-                Console.WriteLine(proc.StandardOutput.ReadLine());
+                Binding.tf_output_redirect.WriteLine(proc.StandardOutput.ReadLine());
         }
 
         public static void Bash(string command)
@@ -44,7 +44,7 @@ namespace Tensorflow.Util
             proc.Start();
 
             while (!proc.StandardOutput.EndOfStream)
-                Console.WriteLine(proc.StandardOutput.ReadLine());
+                Binding.tf_output_redirect.WriteLine(proc.StandardOutput.ReadLine());
         }
     }
 }

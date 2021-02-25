@@ -53,7 +53,7 @@ namespace Tensorflow.Keras.Utils
             var flag = gzArchiveName.Split(Path.DirectorySeparatorChar).Last().Split('.').First() + ".bin";
             if (File.Exists(Path.Combine(destFolder, flag))) return;
 
-            Console.WriteLine($"Extracting.");
+            Binding.tf_output_redirect.WriteLine($"Extracting.");
             var task = Task.Run(() =>
             {
                 ZipFile.ExtractToDirectory(gzArchiveName, destFolder);
@@ -62,12 +62,12 @@ namespace Tensorflow.Keras.Utils
             while (!task.IsCompleted)
             {
                 Thread.Sleep(200);
-                Console.Write(".");
+                Binding.tf_output_redirect.Write(".");
             }
 
             File.Create(Path.Combine(destFolder, flag));
-            Console.WriteLine("");
-            Console.WriteLine("Extracting is completed.");
+            Binding.tf_output_redirect.WriteLine("");
+            Binding.tf_output_redirect.WriteLine("Extracting is completed.");
         }
 
         public static void ExtractTGZ(String gzArchiveName, String destFolder)
@@ -75,7 +75,7 @@ namespace Tensorflow.Keras.Utils
             var flag = gzArchiveName.Split(Path.DirectorySeparatorChar).Last().Split('.').First() + ".bin";
             if (File.Exists(Path.Combine(destFolder, flag))) return;
 
-            Console.WriteLine($"Extracting.");
+            Binding.tf_output_redirect.WriteLine($"Extracting.");
             var task = Task.Run(() =>
             {
                 using (var inStream = File.OpenRead(gzArchiveName))
@@ -91,12 +91,12 @@ namespace Tensorflow.Keras.Utils
             while (!task.IsCompleted)
             {
                 Thread.Sleep(200);
-                Console.Write(".");
+                Binding.tf_output_redirect.Write(".");
             }
 
             File.Create(Path.Combine(destFolder, flag));
-            Console.WriteLine("");
-            Console.WriteLine("Extracting is completed.");
+            Binding.tf_output_redirect.WriteLine("");
+            Binding.tf_output_redirect.WriteLine("Extracting is completed.");
         }
     }
 }

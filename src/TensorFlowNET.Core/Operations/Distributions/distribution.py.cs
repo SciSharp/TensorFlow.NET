@@ -166,7 +166,7 @@ namespace Tensorflow
 
         public void repr()
         {
-            Console.WriteLine($"<Reparameteriation Type: {this._rep_type}>");
+            Binding.tf_output_redirect.WriteLine($"<Reparameteriation Type: {this._rep_type}>");
         }
 
         public bool eq(ReparameterizationType other)

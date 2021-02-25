@@ -24,13 +24,13 @@ namespace Tensorflow.Keras.Preprocessings
             var num_val_samples = Convert.ToInt32(samples.Length * validation_split);
             if (subset == "training")
             {
-                Console.WriteLine($"Using {samples.Length - num_val_samples} files for training.");
+                Binding.tf_output_redirect.WriteLine($"Using {samples.Length - num_val_samples} files for training.");
                 samples = samples.Take(samples.Length - num_val_samples).ToArray();
                 labels = labels.Take(labels.Length - num_val_samples).ToArray();
             }
             else if (subset == "validation")
             {
-                Console.WriteLine($"Using {num_val_samples} files for validation.");
+                Binding.tf_output_redirect.WriteLine($"Using {num_val_samples} files for validation.");
                 samples = samples.Skip(samples.Length - num_val_samples).ToArray();
                 labels = labels.Skip(labels.Length - num_val_samples).ToArray();
             }
