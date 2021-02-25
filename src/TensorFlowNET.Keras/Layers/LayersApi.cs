@@ -66,7 +66,7 @@ namespace Tensorflow.Keras.Layers
                     Trainable = trainable,
                     Name = name
                 });
-
+#if false
         /// <summary>
         /// 2D convolution layer (e.g. spatial convolution over images).
         /// This layer creates a convolution kernel that is convolved with the layer input to produce a tensor of outputs.
@@ -119,6 +119,7 @@ namespace Tensorflow.Keras.Layers
                     ActivityRegularizer = activity_regularizer,
                     Activation = activation ?? keras.activations.Linear
                 });
+#endif
 
         /// <summary>
         /// 2D convolution layer (e.g. spatial convolution over images).
@@ -158,7 +159,7 @@ namespace Tensorflow.Keras.Layers
                 {
                     Rank = 2,
                     Filters = filters,
-                    KernelSize = kernel_size,
+                    KernelSize = (kernel_size == null) ? (5,5) : kernel_size,
                     Strides = strides == null ? (1, 1) : strides,
                     Padding = padding,
                     DataFormat = data_format,
