@@ -565,25 +565,31 @@ namespace Tensorflow.Keras.Layers
                 });
 
         /// <summary>
-        /// 
+        /// Long Short-Term Memory layer - Hochreiter 1997.
         /// </summary>
-        /// <param name="units"></param>
-        /// <param name="activation"></param>
-        /// <param name="recurrent_activation"></param>
-        /// <param name="use_bias"></param>
-        /// <param name="kernel_initializer"></param>
-        /// <param name="recurrent_initializer"></param>
-        /// <param name="bias_initializer"></param>
-        /// <param name="unit_forget_bias"></param>
-        /// <param name="dropout"></param>
-        /// <param name="recurrent_dropout"></param>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <param name="activation">Activation function to use. If you pass null, no activation is applied (ie. "linear" activation: a(x) = x).</param>
+        /// <param name="recurrent_activation">Activation function to use for the recurrent step. If you pass null, no activation is applied (ie. "linear" activation: a(x) = x).</param>
+        /// <param name="use_bias">Boolean (default True), whether the layer uses a bias vector.</param>
+        /// <param name="kernel_initializer">Initializer for the kernel weights matrix, used for the linear transformation of the inputs. Default: glorot_uniform.</param>
+        /// <param name="recurrent_initializer">Initializer for the recurrent_kernel weights matrix, used for the linear transformation of the recurrent state. Default: orthogonal.</param>
+        /// <param name="bias_initializer">Initializer for the bias vector. Default: zeros.</param>
+        /// <param name="unit_forget_bias">Boolean (default True). If True, add 1 to the bias of the forget gate at initialization. Setting it to true will also force bias_initializer="zeros". This is recommended in Jozefowicz et al..</param>
+        /// <param name="dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the inputs. Default: 0.</param>
+        /// <param name="recurrent_dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the recurrent state. Default: 0.</param>
         /// <param name="implementation"></param>
-        /// <param name="return_sequences"></param>
-        /// <param name="return_state"></param>
-        /// <param name="go_backwards"></param>
-        /// <param name="stateful"></param>
-        /// <param name="time_major"></param>
-        /// <param name="unroll"></param>
+        /// <param name="return_sequences">Boolean. Whether to return the last output. in the output sequence, or the full sequence. Default: False.</param>
+        /// <param name="return_state">Whether to return the last state in addition to the output. Default: False.</param>
+        /// <param name="go_backwards">Boolean (default false). If True, process the input sequence backwards and return the reversed sequence.</param>
+        /// <param name="stateful">Boolean (default False). If True, the last state for each sample at index i in a batch will be used as initial state for the sample of index i in the following batch.</param>
+        /// <param name="time_major">
+        /// The shape format of the inputs and outputs tensors. If True, the inputs and outputs will be in shape [timesteps, batch, feature], 
+        /// whereas in the False case, it will be [batch, timesteps, feature]. Using time_major = True is a bit more efficient because it avoids transposes at the 
+        /// beginning and end of the RNN calculation. However, most TensorFlow data is batch-major, so by default this function accepts input and emits output in batch-major form.</param>
+        /// <param name="unroll">
+        /// Boolean (default False). If True, the network will be unrolled, else a symbolic loop will be used. Unrolling can speed-up a RNN, 
+        /// although it tends to be more memory-intensive. Unrolling is only suitable for short sequences.
+        /// </param>
         /// <returns></returns>
         public Layer LSTM(int units,
             Activation activation = null,
