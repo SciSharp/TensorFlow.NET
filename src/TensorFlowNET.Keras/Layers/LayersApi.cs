@@ -66,7 +66,7 @@ namespace Tensorflow.Keras.Layers
                     Trainable = trainable,
                     Name = name
                 });
-#if false
+
         /// <summary>
         /// 2D convolution layer (e.g. spatial convolution over images).
         /// This layer creates a convolution kernel that is convolved with the layer input to produce a tensor of outputs.
@@ -119,7 +119,6 @@ namespace Tensorflow.Keras.Layers
                     ActivityRegularizer = activity_regularizer,
                     Activation = activation ?? keras.activations.Linear
                 });
-#endif
 
         /// <summary>
         /// 2D convolution layer (e.g. spatial convolution over images).
