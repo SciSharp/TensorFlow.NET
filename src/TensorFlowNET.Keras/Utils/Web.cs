@@ -36,20 +36,20 @@ namespace Tensorflow.Keras.Utils
 
             if (File.Exists(relativeFilePath))
             {
-                Console.WriteLine($"{relativeFilePath} already exists.");
+                Binding.tf_output_redirect.WriteLine($"{relativeFilePath} already exists.");
                 return false;
             }
 
             var wc = new WebClient();
-            Console.WriteLine($"Downloading from {url}");
+            Binding.tf_output_redirect.WriteLine($"Downloading from {url}");
             var download = Task.Run(() => wc.DownloadFile(url, relativeFilePath));
             while (!download.IsCompleted)
             {
                 Thread.Sleep(1000);
-                Console.Write(".");
+                Binding.tf_output_redirect.Write(".");
             }
-            Console.WriteLine("");
-            Console.WriteLine($"Downloaded to {relativeFilePath}");
+            Binding.tf_output_redirect.WriteLine("");
+            Binding.tf_output_redirect.WriteLine($"Downloaded to {relativeFilePath}");
 
             return true;
         }

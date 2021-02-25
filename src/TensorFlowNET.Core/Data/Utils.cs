@@ -27,14 +27,14 @@ namespace Tensorflow
 
             if (showProgressInConsole)
             {
-                Console.WriteLine($"Downloading {fileName}");
+                Binding.tf_output_redirect.WriteLine($"Downloading {fileName}");
             }
 
             if (File.Exists(fileSaveTo))
             {
                 if (showProgressInConsole)
                 {
-                    Console.WriteLine($"The file {fileName} already exists");
+                    Binding.tf_output_redirect.WriteLine($"The file {fileName} already exists");
                 }
 
                 return;
@@ -64,12 +64,12 @@ namespace Tensorflow
             var destFilePath = Path.Combine(saveTo, destFileName);
 
             if (showProgressInConsole)
-                Console.WriteLine($"Unzippinng {Path.GetFileName(zipFile)}");
+                Binding.tf_output_redirect.WriteLine($"Unzippinng {Path.GetFileName(zipFile)}");
 
             if (File.Exists(destFilePath))
             {
                 if (showProgressInConsole)
-                    Console.WriteLine($"The file {destFileName} already exists");
+                    Binding.tf_output_redirect.WriteLine($"The file {destFileName} already exists");
             }
 
             using (GZipStream unzipStream = new GZipStream(File.OpenRead(zipFile), CompressionMode.Decompress))
@@ -107,7 +107,7 @@ namespace Tensorflow
             }
 
             await showProgressTask;
-            Console.WriteLine("Done.");
+            Binding.tf_output_redirect.WriteLine("Done.");
         }
 
         private static async Task ShowProgressInConsole(CancellationTokenSource cts)
@@ -119,17 +119,17 @@ namespace Tensorflow
             while (!cts.IsCancellationRequested)
             {
                 await Task.Delay(100);
-                Console.Write(".");
+                Binding.tf_output_redirect.Write(".");
                 cols++;
 
                 if (cols % 50 == 0)
                 {
-                    Console.WriteLine();
+                    Binding.tf_output_redirect.WriteLine();
                 }
             }
 
             if (cols > 0)
-                Console.WriteLine();
+                Binding.tf_output_redirect.WriteLine();
         }
     }
 }

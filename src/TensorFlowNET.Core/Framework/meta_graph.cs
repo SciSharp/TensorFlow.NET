@@ -134,7 +134,7 @@ namespace Tensorflow
                                         }
                                         break;
                                     default:
-                                        Console.WriteLine($"import_scoped_meta_graph_with_return_elements {col.Key}");
+                                        Binding.tf_output_redirect.WriteLine($"import_scoped_meta_graph_with_return_elements {col.Key}");
                                         continue;
                                 }
                             }
@@ -142,7 +142,7 @@ namespace Tensorflow
 
                         break;
                     default:
-                        Console.WriteLine($"Cannot identify data type for collection {col.Key}. Skipping.");
+                        Binding.tf_output_redirect.WriteLine($"Cannot identify data type for collection {col.Key}. Skipping.");
                         break;
                 }
             }

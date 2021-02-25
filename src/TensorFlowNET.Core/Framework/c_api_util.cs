@@ -62,18 +62,18 @@ namespace Tensorflow
                 if (!File.Exists(file))
                 {
                     var wc = new WebClient();
-                    Console.WriteLine($"Downloading Tensorflow library from {url}...");
+                    Binding.tf_output_redirect.WriteLine($"Downloading Tensorflow library from {url}...");
                     var download = Task.Run(() => wc.DownloadFile(url, file));
                     while (!download.IsCompleted)
                     {
                         Thread.Sleep(1000);
-                        Console.Write(".");
+                        Binding.tf_output_redirect.Write(".");
                     }
-                    Console.WriteLine("");
-                    Console.WriteLine($"Downloaded successfully.");
+                    Binding.tf_output_redirect.WriteLine("");
+                    Binding.tf_output_redirect.WriteLine($"Downloaded successfully.");
                 }
 
-                Console.WriteLine($"Extracting...");
+                Binding.tf_output_redirect.WriteLine($"Extracting...");
                 var task = Task.Run(() =>
                 {
                     switch (Environment.OSVersion.Platform)
@@ -97,11 +97,11 @@ namespace Tensorflow
                 while (!task.IsCompleted)
                 {
                     Thread.Sleep(100);
-                    Console.Write(".");
+                    Binding.tf_output_redirect.Write(".");
                 }
 
-                Console.WriteLine("");
-                Console.WriteLine("Extraction is completed.");
+                Binding.tf_output_redirect.WriteLine("");
+                Binding.tf_output_redirect.WriteLine("Extraction is completed.");
             }
 
             isDllDownloaded = true;

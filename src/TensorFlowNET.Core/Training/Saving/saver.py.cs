@@ -78,7 +78,7 @@ namespace Tensorflow
                 else
                 {
                     // If no graph variables exist, then a Saver cannot be constructed.
-                    Console.WriteLine("Saver not created because there are no variables in the" +
+                    Binding.tf_output_redirect.WriteLine("Saver not created because there are no variables in the" +
                         " graph to restore");
                     return null;
                 }
@@ -102,7 +102,7 @@ namespace Tensorflow
                 var output_graph_def = tf.graph_util.convert_variables_to_constants(sess,
                     graph.as_graph_def(),
                     output_node_names);
-                Console.WriteLine($"Froze {output_graph_def.Node.Count} nodes.");
+                Binding.tf_output_redirect.WriteLine($"Froze {output_graph_def.Node.Count} nodes.");
                 File.WriteAllBytes(output_pb, output_graph_def.ToByteArray());
                 return output_pb;
             }

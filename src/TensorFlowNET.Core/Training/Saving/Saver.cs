@@ -242,7 +242,7 @@ namespace Tensorflow
             if (!checkpoint_management.checkpoint_exists(save_path))
                 throw new ValueError($"The passed save_path is not a valid checkpoint: {save_path}");
 
-            Console.WriteLine($"Restoring parameters from {save_path}");
+            Binding.tf_output_redirect.WriteLine($"Restoring parameters from {save_path}");
 
             if (tf.Context.executing_eagerly())
 #pragma warning disable CS0642 // Possible mistaken empty statement

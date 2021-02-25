@@ -61,7 +61,7 @@ namespace Tensorflow.Keras.Datasets
 
             if (File.Exists(fileSaveTo))
             {
-                Console.WriteLine($"The file {fileSaveTo} already exists");
+                Binding.tf_output_redirect.WriteLine($"The file {fileSaveTo} already exists");
                 return fileSaveTo;
             }
 
