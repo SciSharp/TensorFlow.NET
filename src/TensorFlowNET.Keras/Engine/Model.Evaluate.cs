@@ -46,7 +46,7 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            Console.WriteLine($"Testing...");
+            Binding.tf_output_redirect.WriteLine($"Testing...");
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
                 // reset_metrics();
@@ -58,7 +58,7 @@ namespace Tensorflow.Keras.Engine
                     // callbacks.on_train_batch_begin(step)
                     results = test_function(iterator);
                 }
-                Console.WriteLine($"iterator: {epoch + 1}, " + string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2}")));
+                Binding.tf_output_redirect.WriteLine($"iterator: {epoch + 1}, " + string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2}")));
             }
         }
 
