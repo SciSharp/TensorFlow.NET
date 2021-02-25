@@ -24,7 +24,7 @@ namespace Tensorflow
             sw.Start();
             images = np.multiply(images, 1.0f / 255.0f);
             sw.Stop();
-            Console.WriteLine($"{sw.ElapsedMilliseconds}ms");
+            Binding.tf_output_redirect.WriteLine($"{sw.ElapsedMilliseconds}ms");
             Data = images;
 
             labels = labels.astype(dataType);

@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace Tensorflow
@@ -112,16 +113,33 @@ namespace Tensorflow
             }
         }
 
+        private static TextWriter writer = null;
+
+        public static TextWriter tf_output_redirect { 
+            set
+            {
+                var originWriter = writer ?? Console.Out;
+                originWriter.Flush();
+                if (originWriter is StringWriter)
+                    (originWriter as StringWriter).GetStringBuilder().Clear();
+                writer = value;
+            }
+            get
+            {
+                return writer ?? Console.Out;
+            }
+        }
+
         public static void print(object obj)
         {
-            Console.WriteLine(_tostring(obj));
+            tf_output_redirect.WriteLine(_tostring(obj));
         }
 
         public static void print(string format, params object[] objects)
         {
             if (!format.Contains("{}"))
             {
-                Console.WriteLine(format + " " + string.Join(" ", objects.Select(x => x.ToString())));
+                tf_output_redirect.WriteLine(format + " " + string.Join(" ", objects.Select(x => x.ToString())));
                 return;
             }
 
@@ -130,7 +148,7 @@ namespace Tensorflow
 
             }
 
-            Console.WriteLine(format);
+            tf_output_redirect.WriteLine(format);
         }
 
         public static int len(object a)
