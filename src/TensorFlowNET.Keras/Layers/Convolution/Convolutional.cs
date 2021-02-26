@@ -93,6 +93,7 @@ namespace Tensorflow.Keras.Layers
             _convolution_op = nn_ops.convolution_internal(tf_padding,
                 strides,
                 dilation_rate,
+                rank,
                 data_format: _tf_data_format,
                 name: tf_op_name);
 
