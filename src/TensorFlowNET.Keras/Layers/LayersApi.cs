@@ -68,6 +68,113 @@ namespace Tensorflow.Keras.Layers
                 });
 
         /// <summary>
+        /// 1D convolution layer (e.g. temporal convolution).
+        /// This layer creates a convolution kernel that is convolved with the layer input over a single spatial(or temporal) dimension to produce a tensor of outputs.If use_bias is True, a bias vector is created and added to the outputs.Finally, if activation is not None, it is applied to the outputs as well.
+        /// </summary>
+        /// <param name="filters">Integer, the dimensionality of the output space (i.e. the number of output filters in the convolution)</param>
+        /// <param name="kernel_size">An integer specifying the width of the 1D convolution window.</param>
+        /// <param name="strides">An integer specifying the stride of the convolution window . Specifying any stride value != 1 is incompatible with specifying any dilation_rate value != 1.</param>
+        /// <param name="padding">one of "valid" or "same" (case-insensitive). "valid" means no padding. "same" results in padding evenly to the left/right or up/down of the input such that output has the same height/width dimension as the input.</param>
+        /// <param name="data_format">A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. channels_last corresponds to inputs with shape (batch_size, height, width, channels) while channels_first corresponds to inputs with shape (batch_size, channels, height, width). It defaults to the image_data_format value found in your Keras config file at ~/.keras/keras.json. If you never set it, then it will be channels_last.</param>
+        /// <param name="dilation_rate">An integer specifying the dilation rate to use for dilated convolution.Currently, specifying any dilation_rate value != 1 is incompatible with specifying any stride value != 1.</param>
+        /// <param name="groups">A positive integer specifying the number of groups in which the input is split along the channel axis. Each group is convolved separately with filters / groups filters. The output is the concatenation of all the groups results along the channel axis. Input channels and filters must both be divisible by groups.</param>
+        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (see keras.activations).</param>
+        /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
+        /// <param name="kernel_initializer">Initializer for the kernel weights matrix (see keras.initializers).</param>
+        /// <param name="bias_initializer">Initializer for the bias vector (see keras.initializers).</param>
+        /// <param name="kernel_regularizer">Regularizer function applied to the kernel weights matrix (see keras.regularizers).</param>
+        /// <param name="bias_regularizer">Regularizer function applied to the bias vector (see keras.regularizers).</param>
+        /// <param name="activity_regularizer">Regularizer function applied to the output of the layer (its "activation") (see keras.regularizers).</param>
+        /// <returns>A tensor of rank 3 representing activation(conv1d(inputs, kernel) + bias).</returns>
+        public Conv1D Conv1D(int filters,
+            int? kernel_size = null,
+            int? strides = null,
+            string padding = "valid",
+            string data_format = null,
+            int? dilation_rate = null,
+            int groups = 1,
+            Activation activation = null,
+            bool use_bias = true,
+            IInitializer kernel_initializer = null,
+            IInitializer bias_initializer = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            IRegularizer activity_regularizer = null)
+        {
+            // Special case: Conv1D will be implemented as Conv2D with H=1, so we need to add a 1-sized dimension to the kernel.
+            // Lower-level logic handles the stride and dilation_rate, but the kernel_size needs to be set properly here.
+
+            var kernel = (kernel_size == null) ? (1, 5) : (1, kernel_size.Value);
+            return new Conv1D(new Conv1DArgs
+            {
+                Rank = 1,
+                Filters = filters,
+                KernelSize = kernel,
+                Strides = strides == null ? 1 : strides,
+                Padding = padding,
+                DataFormat = data_format,
+                DilationRate = dilation_rate == null ? 1 : dilation_rate,
+                Groups = groups,
+                UseBias = use_bias,
+                KernelInitializer = kernel_initializer == null ? tf.glorot_uniform_initializer : kernel_initializer,
+                BiasInitializer = bias_initializer == null ? tf.zeros_initializer : bias_initializer,
+                KernelRegularizer = kernel_regularizer,
+                BiasRegularizer = bias_regularizer,
+                ActivityRegularizer = activity_regularizer,
+                Activation = activation ?? keras.activations.Linear
+            });
+        }
+
+        /// <summary>
+        /// 1D convolution layer (e.g. temporal convolution).
+        /// This layer creates a convolution kernel that is convolved with the layer input over a single spatial(or temporal) dimension to produce a tensor of outputs.If use_bias is True, a bias vector is created and added to the outputs.Finally, if activation is not None, it is applied to the outputs as well.
+        /// </summary>
+        /// <param name="filters">Integer, the dimensionality of the output space (i.e. the number of output filters in the convolution)</param>
+        /// <param name="kernel_size">An integer specifying the width of the 1D convolution window.</param>
+        /// <param name="strides">An integer specifying the stride of the convolution window . Specifying any stride value != 1 is incompatible with specifying any dilation_rate value != 1.</param>
+        /// <param name="padding">one of "valid" or "same" (case-insensitive). "valid" means no padding. "same" results in padding evenly to the left/right or up/down of the input such that output has the same height/width dimension as the input.</param>
+        /// <param name="data_format">A string, one of channels_last (default) or channels_first. The ordering of the dimensions in the inputs. channels_last corresponds to inputs with shape (batch_size, height, width, channels) while channels_first corresponds to inputs with shape (batch_size, channels, height, width). It defaults to the image_data_format value found in your Keras config file at ~/.keras/keras.json. If you never set it, then it will be channels_last.</param>
+        /// <param name="dilation_rate">An integer specifying the dilation rate to use for dilated convolution.Currently, specifying any dilation_rate value != 1 is incompatible with specifying any stride value != 1.</param>
+        /// <param name="groups">A positive integer specifying the number of groups in which the input is split along the channel axis. Each group is convolved separately with filters / groups filters. The output is the concatenation of all the groups results along the channel axis. Input channels and filters must both be divisible by groups.</param>
+        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (see keras.activations).</param>
+        /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
+        /// <param name="kernel_initializer">Initializer for the kernel weights matrix (see keras.initializers).</param>
+        /// <param name="bias_initializer">Initializer for the bias vector (see keras.initializers).</param>
+        /// <returns>A tensor of rank 3 representing activation(conv1d(inputs, kernel) + bias).</returns>
+        public Conv1D Conv1D(int filters,
+            int? kernel_size = null,
+            int? strides = null,
+            string padding = "valid",
+            string data_format = null,
+            int? dilation_rate = null,
+            int groups = 1,
+            string activation = null,
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string bias_initializer = "zeros")
+        {
+            // Special case: Conv1D will be implemented as Conv2D with H=1, so we need to add a 1-sized dimension to the kernel.
+            // Lower-level logic handles the stride and dilation_rate, but the kernel_size needs to be set properly here.
+
+            var kernel = (kernel_size == null) ? (1, 5) : (1, kernel_size.Value);
+            return new Conv1D(new Conv1DArgs
+            {
+                Rank = 1,
+                Filters = filters,
+                KernelSize = kernel,
+                Strides = strides == null ? 1 : strides,
+                Padding = padding,
+                DataFormat = data_format,
+                DilationRate = dilation_rate == null ? 1 : dilation_rate,
+                Groups = groups,
+                UseBias = use_bias,
+                Activation = GetActivationByName(activation),
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer)
+            });
+        }
+
+        /// <summary>
         /// 2D convolution layer (e.g. spatial convolution over images).
         /// This layer creates a convolution kernel that is convolved with the layer input to produce a tensor of outputs.
         /// If use_bias is True, a bias vector is created and added to the outputs.Finally, if activation is not None, it is applied to the outputs as well.
@@ -105,7 +212,7 @@ namespace Tensorflow.Keras.Layers
                 {
                     Rank = 2,
                     Filters = filters,
-                    KernelSize = kernel_size,
+                    KernelSize = (kernel_size == null) ? (5, 5) : kernel_size,
                     Strides = strides == null ? (1, 1) : strides,
                     Padding = padding,
                     DataFormat = data_format,
@@ -150,10 +257,7 @@ namespace Tensorflow.Keras.Layers
             string activation = null,
             bool use_bias = true,
             string kernel_initializer = "glorot_uniform",
-            string bias_initializer = "zeros",
-            string kernel_regularizer = null,
-            string bias_regularizer = null,
-            string activity_regularizer = null)
+            string bias_initializer = "zeros")
                 => new Conv2D(new Conv2DArgs
                 {
                     Rank = 2,
@@ -204,7 +308,7 @@ namespace Tensorflow.Keras.Layers
                 {
                     Rank = 2,
                     Filters = filters,
-                    KernelSize = kernel_size,
+                    KernelSize = (kernel_size == null) ? (5, 5) : kernel_size,
                     Strides = strides == null ? (1, 1) : strides,
                     Padding = output_padding,
                     DataFormat = data_format,

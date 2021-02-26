@@ -27,9 +27,11 @@ namespace Tensorflow
         public static ConvolutionInternal convolution_internal(string padding,
             int[] strides,
             int[] dilation_rate,
+            int rank,
             string name = null,
             string data_format = null) => new ConvolutionInternal(new ConvolutionalArgs
             {
+                Rank = rank,
                 Padding = padding,
                 Strides = strides,
                 DilationRate = dilation_rate,
