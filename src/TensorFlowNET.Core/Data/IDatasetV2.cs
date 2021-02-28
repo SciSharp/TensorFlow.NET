@@ -76,7 +76,7 @@ namespace Tensorflow
 
         IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func);
 
-        IDatasetV2 model(AutotuneAlgorithm algorithm, long cpu_budget);
+        IDatasetV2 model(AutotuneAlgorithm algorithm, long cpu_budget, long ram_budget);
 
         IDatasetV2 with_options(DatasetOptions options);
 

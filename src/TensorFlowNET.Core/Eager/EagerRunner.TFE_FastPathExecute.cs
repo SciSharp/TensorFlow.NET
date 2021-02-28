@@ -295,7 +295,7 @@ namespace Tensorflow.Eager
         {
             if (type == TF_AttrType.TF_ATTR_STRING && values is string[] values3)
             {
-                c_api.TFE_OpSetAttrStringList(op, key, new IntPtr[0], values3.Select(x => x.Length).ToArray(), values3.Length);
+                c_api.TFE_OpSetAttrStringList(op, key, values3, values3.Select(x => Convert.ToUInt64(x.Length)).ToArray(), values3.Length);
                 attr_list_sizes[key] = values3.Length;
             }
             else if (type == TF_AttrType.TF_ATTR_SHAPE && values is TensorShape[] values1)

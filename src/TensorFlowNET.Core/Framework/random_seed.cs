@@ -67,8 +67,19 @@ namespace Tensorflow
             if (seed2 is null)
                 _seed2 = constant_op.constant(0, dtype: TF_DataType.TF_INT64, name: "seed2");
             else
-                _seed2 = constant_op.constant(seed2.Value, dtype: TF_DataType.TF_INT64, name: "seed2");
-
+            {
+                _seed2 = tf_with(ops.name_scope("seed2"), scope =>
+                {
+                    _seed2 = constant_op.constant(seed2.Value, dtype: TF_DataType.TF_INT64);
+                    return array_ops.where_v2(
+                      math_ops.logical_and(
+                          math_ops.equal(_seed, 0l), math_ops.equal(_seed2, 0l)),
+                      constant_op.constant(2^31 - 1, dtype: dtypes.int64),
+                      _seed2,
+                      name: scope);
+                });
+            }
+                
             return (_seed, _seed2);
         }
     }

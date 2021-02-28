@@ -168,6 +168,20 @@ namespace Tensorflow
                         optimization_configs = optimization_configs ?? new string[0]
                     }));
 
+        public Tensor optimize_dataset_v2(Tensor input_dataset, Tensor optimizations_enabled,
+            Tensor optimizations_disabled, Tensor optimizations_default,
+            TF_DataType[] output_types, TensorShape[] output_shapes,
+            string[] optimization_configs = null,
+            string name = null)
+                => tf.Context.ExecuteOp("OptimizeDatasetV2", name, new ExecuteOpArgs(input_dataset, 
+                        optimizations_enabled, optimizations_disabled, optimizations_default)
+                    .SetAttributes(new
+                    {
+                        output_types,
+                        output_shapes,
+                        optimization_configs = optimization_configs ?? new string[0]
+                    }));
+
         /// <summary>
         /// Identity transformation that models performance.
         /// </summary>
@@ -180,13 +194,14 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor model_dataset(Tensor input_dataset,
             TF_DataType[] output_types, TensorShape[] output_shapes,
-            AutotuneAlgorithm algorithm, long cpu_budget,
+            AutotuneAlgorithm algorithm, long cpu_budget, long ram_budget,
             string name = null)
                 => tf.Context.ExecuteOp("ModelDataset", name, new ExecuteOpArgs(input_dataset)
                     .SetAttributes(new
                     {
                         algorithm,
                         cpu_budget,
+                        ram_budget,
                         output_types,
                         output_shapes
                     }));

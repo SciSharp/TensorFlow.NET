@@ -252,7 +252,7 @@ namespace Tensorflow
         public static extern void TFE_OpSetAttrShapeList(SafeOpHandle op, string attr_name, IntPtr[] dims, int[] num_dims, int num_values, SafeStatusHandle out_status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrStringList(SafeOpHandle op, string attr_name, IntPtr[] values, int[] lengths, int num_values);
+        public static extern void TFE_OpSetAttrStringList(SafeOpHandle op, string attr_name, string[] values, ulong[] lengths, int num_values);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TFE_OpSetAttrBool(SafeOpHandle op, string attr_name, bool value);

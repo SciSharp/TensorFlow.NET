@@ -327,24 +327,16 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("Log1p", name, new ExecuteOpArgs(x));
 
         public static Tensor logical_and(Tensor x, Tensor y, string name = null)
-            => tf.OpDefLib._apply_op_helper("LogicalAnd", name, args: new { x, y });
+            => tf.Context.ExecuteOp("LogicalAnd", name, new ExecuteOpArgs(x, y));
 
         public static Tensor logical_and(bool x, bool y, string name = null)
             => tf.Context.ExecuteOp("LogicalAnd", name, new ExecuteOpArgs(x, y));
 
         public static Tensor logical_not(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("LogicalNot", name, args: new { x });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("LogicalNot", name, new ExecuteOpArgs(x));
 
         public static Tensor logical_or(Tensor x, Tensor y, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("LogicalOr", name, args: new { x, y });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("LogicalOr", name, new ExecuteOpArgs(x, y));
 
         public static Tensor logical_xor(Tensor x, Tensor y, string name = "LogicalXor")
         {

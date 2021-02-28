@@ -77,10 +77,10 @@ namespace Tensorflow
         /// <param name="seed2"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor random_shuffle(Tensor value, int seed = 0, int seed2 = 0,
+        public static Tensor random_shuffle(Tensor value, int? seed = 0, int? seed2 = 0,
             string name = null)
                => tf.Context.ExecuteOp("RandomShuffle", name, new ExecuteOpArgs(value)
-                   .SetAttributes(new { seed = seed, seed2 = seed2 }));
+                   .SetAttributes(new { seed = seed ?? 0, seed2 = seed2 ?? 0 }));
 
         /// <summary>
         /// Outputs random values from a truncated normal distribution.
