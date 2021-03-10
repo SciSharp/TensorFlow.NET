@@ -119,10 +119,42 @@ namespace Tensorflow
 
         public static Tensor gather_v2<T1, T2>(T1 @params, T2 indices, int axis, string name = null)
         {
+            if (tf.Context.executing_eagerly())
+            {
+                try
+                {
+                    var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("GatherV2", name, @params, indices, axis, "batch_dims")
+                    {
+                        ctx = tf.Context,
+                        device_name = tf.Context.DeviceName
+                    });
+                    return results[0];
+                }
+                catch (Exception exc)
+                {
+                    return gather_v2_eager_fallback(@params, indices, axis, name, tf.Context);
+                }
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("GatherV2", name: name, new { @params, indices, axis });
 
             return _op.outputs[0];
         }
+
+        private static Tensor gather_v2_eager_fallback(object @params, object indices, int axis, string name, Context ctx)
+        {
+            var (_attr_T, param) = tf.Runner.ArgsToMatchingEager(ctx, args: new[] { @params });
+            var (_attr_Tindice, indice) = tf.Runner.ArgsToMatchingEager(ctx, default_dtype: tf.int32, args: new[] { indices });
+            var (_attr_Taxis, axiss) = tf.Runner.ArgsToMatchingEager(ctx, default_dtype: tf.int32, args: new object[] { axis });
+            var _inputs_flat = param.concat(indice).concat(axiss);
+            var _attrs = new object[] { "batch_dims", 0, "Tparams", _attr_T, "Tindices", _attr_Tindice, "Taxis", _attr_Taxis };
+
+            var results = tf.Runner.Execute(ctx, "GatherV2", 1, _inputs_flat, _attrs, name: name);
+            if (tf.Runner.MustRecordGradient())
+                tf.Runner.RecordGradient("GatherV2", _inputs_flat, _attrs, results);
+            return results[0];
+        }
+
 
         public static Tensor pad(Tensor input, Tensor paddings, string name = null)
         {

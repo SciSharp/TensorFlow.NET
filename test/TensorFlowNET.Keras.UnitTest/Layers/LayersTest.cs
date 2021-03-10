@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
 using Tensorflow;
+using Tensorflow.Operations.Initializers;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
@@ -60,13 +61,26 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(model.Layers.Count, 8);
             var result = model.predict(tf.constant(np.arange(24).astype(np.float32)[np.newaxis, Slice.All]));
             Assert.AreEqual(result.shape, new TensorShape(1, 24));
-            model.fit(np.arange(24).astype(np.float32)[np.newaxis, Slice.All], np.arange(24).astype(np.float32)[np.newaxis, Slice.All], verbose: 0); 
+            model.fit(np.arange(24).astype(np.float32)[np.newaxis, Slice.All], np.arange(24).astype(np.float32)[np.newaxis, Slice.All], verbose: 0);
         }
 
         /// <summary>
         /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding
         /// </summary>
-        [TestMethod, Ignore]
+        [TestMethod]
+        public void Embedding_Simple()
+        {
+            var emb = keras.layers.Embedding(256, 12, input_length: 4);
+            var input_array = np.arange(12).reshape(3, 4).astype(np.float32);
+            var output = emb.Apply(input_array);
+            Assert.AreEqual(new TensorShape(3, 4, 12), output.shape);
+        }
+
+        /// <summary>
+        /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding
+        /// </summary>
+        [TestMethod]
+        [Ignore]
         public void Embedding()
         {
             var model = keras.Sequential();

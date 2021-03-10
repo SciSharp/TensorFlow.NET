@@ -48,7 +48,7 @@ namespace Tensorflow.Keras.Layers
             if (args.BatchInputShape == null)
                 args.BatchInputShape = new int[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray();
 
-            embeddings_initializer = embeddings_initializer ?? tf.random_uniform_initializer;
+            embeddings_initializer = args.EmbeddingsInitializer ?? tf.random_uniform_initializer;
             SupportsMasking = mask_zero;
         }
 
