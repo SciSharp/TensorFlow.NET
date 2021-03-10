@@ -117,28 +117,13 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("ExpandDims", name, new ExecuteOpArgs(input, axis)
                 .SetAttributes(new { dim = axis }));
 
-        public static Tensor gather_v2<T1, T2>(T1 @params, T2 indices, int axis, string name = null)
+        public static Tensor gather_v2<T1, T2>(T1 @params, T2 indices, int axis, int batch_dims = 0, string name = null)
         {
-            if (tf.Context.executing_eagerly())
-            {
-                try
-                {
-                    var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("GatherV2", name, @params, indices, axis, "batch_dims", 0)
-                    {
-                        ctx = tf.Context,
-                        device_name = tf.Context.DeviceName
-                    });
-                    return results[0];
-                }
-                catch (Exception exc)
-                {
-                    return gather_v2_eager_fallback(@params, indices, axis, name, tf.Context);
-                }
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("GatherV2", name: name, new { @params, indices, axis });
-
-            return _op.outputs[0];
+            var result = tf.Context.ExecuteOp("GatherV2", name, new ExecuteOpArgs(
+                @params,
+                indices,
+                axis).SetAttributes(new { batch_dims }));
+            return result [0];
         }
 
         private static Tensor gather_v2_eager_fallback(object @params, object indices, int axis, string name, Context ctx)
@@ -380,6 +365,12 @@ namespace Tensorflow
 
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
         {
+            if (tf.executing_eagerly())
+            {
+                var outputs = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("Slice", name, input, begin, size));
+                return outputs[0];
+            }
+
             var _op = tf.OpDefLib._apply_op_helper("Slice", name, new { input, begin, size });
             return _op.outputs[0];
         }

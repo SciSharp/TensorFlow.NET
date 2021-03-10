@@ -69,7 +69,17 @@ namespace Tensorflow
             float maxval = 1,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             int? seed = null,
-            string name = null) => random_ops.random_uniform(shape, minval, maxval, dtype, seed, name);
+            string name = null)
+        {
+            if (dtype.is_integer())
+            {
+                return random_ops.random_uniform_int(shape, (int)minval, (int)maxval, dtype, seed, name);
+            }
+            else
+            {
+                return random_ops.random_uniform(shape, minval, maxval, dtype, seed, name);
+            }
+        }
 
         public Tensor truncated_normal(TensorShape shape,
             float mean = 0.0f,

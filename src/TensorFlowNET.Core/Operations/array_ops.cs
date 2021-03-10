@@ -843,7 +843,22 @@ namespace Tensorflow
             return gen_array_ops.concat_v2(values, axis, name: name);
         }
 
-        public static Tensor gather<T1, T2>(T1 @params, T2 indices, string name = null, int axis = 0)
+        /// <summary>
+        /// Gather slices from `params` according to `indices`. `indices` must be an integer tensor of any dimension(often 1-D).
+        /// </summary>
+        /// <typeparam name="T1">Element type of the indexed tensor.</typeparam>
+        /// <typeparam name="T2">Element type of the index tensor.</typeparam>
+        /// <param name="params">The `Tensor` from which to gather values. Must be at least rank `axis + 1`.</param>
+        /// <param name="indices">The index `Tensor`.  Must be one of the following types: `int32`, `int64`. The values must be in range `[0, params.shape[axis])`.</param>
+        /// <param name="name">A name for the operation (optional).</param>
+        /// <param name="axis">
+        /// A `Tensor`. Must be one of the following types: `int32`, `int64`. 
+        /// The `axis` in `params` to gather `indices` from.Must be greater than or equal to `batch_dims`.  
+        /// Defaults to the first non-batch dimension. Supports negative indexes.
+        /// </param>
+        /// <param name="batch_dims">An integer. The number of batch dimensions. Must be less than or equal to rank(indices).</param>
+        /// <returns></returns>
+        public static Tensor gather<T1, T2>(T1 @params, T2 indices, string name = null, int axis = 0, int batch_dims = 0)
         {
             if (axis != 0)
                 return gen_array_ops.gather_v2(@params, indices, axis, name: name);
@@ -913,7 +928,7 @@ namespace Tensorflow
         }
 
         public static Tensor slice(Tensor input, Tensor[] begin, Tensor[] size, string name = null)
-            => gen_array_ops.slice(input, begin, size, name: name);
+               => gen_array_ops.slice(input, begin, size, name: name);
 
         public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
             => gen_array_ops.slice(input, begin, size, name: name);
@@ -927,6 +942,7 @@ namespace Tensorflow
                     Index = op.get_attr<int>("Index")
                 }
             });
+
 
         public static Tensor stack(object values, int axis = 0, string name = "stack")
         {
