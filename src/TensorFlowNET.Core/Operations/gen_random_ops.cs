@@ -43,18 +43,8 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor random_uniform_int(Tensor shape, Tensor minval, Tensor maxval, int? seed = 0, int? seed2 = 0, string name = null)
-        {
-            if (!seed.HasValue)
-                seed = 0;
-            if (!seed2.HasValue)
-                seed2 = 0;
-
-            var _op = tf.OpDefLib._apply_op_helper("RandomUniformInt",
-                name: name,
-                args: new { shape, minval, maxval, seed, seed2 });
-
-            return _op.outputs[0];
-        }
+         => tf.Context.ExecuteOp("RandomUniformInt", name, new ExecuteOpArgs(shape, minval, maxval)
+                .SetAttributes(new { seed = seed ?? 0, seed2 = seed2 ?? 0 }));
 
         /// <summary>
         /// Outputs random values from a uniform distribution.
