@@ -123,7 +123,7 @@ namespace Tensorflow
             {
                 try
                 {
-                    var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("GatherV2", name, @params, indices, axis, "batch_dims")
+                    var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("GatherV2", name, @params, indices, axis, "batch_dims", 0)
                     {
                         ctx = tf.Context,
                         device_name = tf.Context.DeviceName
