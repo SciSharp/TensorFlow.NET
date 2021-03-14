@@ -52,10 +52,11 @@ namespace Tensorflow.Contexts
 
             Func<Tensors> eagerAction = () =>
             {
-                return tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(OpType, Name, args.OpInputArgs)
+                var opExecInfo = new FastPathOpExecInfo(OpType, Name, args.OpInputArgs)
                 {
                     attrs = args.OpAttrs
-                });
+                };
+                return tf.Runner.TFE_FastPathExecute(opExecInfo);
             };
 
             if (tf.Context.has_graph_arg(args.OpInputArgs))

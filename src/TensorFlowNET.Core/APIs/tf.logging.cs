@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2021 Haiping Chen. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,22 +14,10 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Debugging;
-using static Tensorflow.Binding;
-
 namespace Tensorflow
 {
     public partial class tensorflow
     {
-        /// <summary>
-        /// Public API for tf.debugging namespace
-        /// https://www.tensorflow.org/api_docs/python/tf/debugging
-        /// More debugging instructions
-        /// https://developer.ibm.com/technologies/artificial-intelligence/tutorials/debug-tensorflow/
-        /// </summary>
-        public DebugImpl debugging => new DebugImpl();
-
-        public void print(Tensor input)
-            => tf.logging.print_v2(input);
+        public logging_ops logging => new logging_ops();
     }
 }

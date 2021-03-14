@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Framework;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -76,6 +76,9 @@ namespace Tensorflow
             /// <returns></returns>
             public Tensor string_length(Tensor input, string name = null, string unit = "BYTE")
                 => ops.string_length(input, name: name, unit: unit);
+
+            public Tensor format(string template, Tensor[] inputs, string placeholder = "{}", int summarize = 3, string name = null)
+                => ops.string_format(inputs, template: template, placeholder: placeholder, summarize: summarize, name: name);
 
             public RaggedTensor split(Tensor input, string sep = "", int maxsplit = -1, string name = null)
                 => ops.string_split_v2(input, sep: sep, maxsplit : maxsplit, name : name);

@@ -60,6 +60,19 @@ namespace Tensorflow
                 }
             }.SetAttributes(new { unit }));
 
+        public Tensor string_format(Tensor[] inputs, string template = "%s", string placeholder = "%s", int summarize = 3, string name = null)
+            => tf.Context.ExecuteOp("StringFormat", name, new ExecuteOpArgs()
+            {
+                OpInputArgs = new object[] { inputs },
+                GetGradientAttrs = op => new
+                {
+                    T = op.get_attr<TF_DataType>("T"),
+                    template = op.get_attr<string>("template"),
+                    placeholder = op.get_attr<string>("placeholder"),
+                    summarize = op.get_attr<int>("summarize")
+                }
+            }.SetAttributes(new { template, placeholder, summarize }));
+
         public RaggedTensor string_split_v2(Tensor input, string sep = "", int maxsplit = -1, string name = null)
         {
             return tf_with(ops.name_scope(name, "StringSplit"), scope =>
