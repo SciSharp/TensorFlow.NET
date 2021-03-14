@@ -36,7 +36,7 @@ namespace Tensorflow.Functions
 
         public ConcreteFunction(Func<Tensor, Tensor> func, TF_DataType dtype)
         {
-            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
+            string func_name = $"{func.Method.Name}_{ops.uid_function()}";
 
             func_graph = new FuncGraph(func_name);
             func_graph.as_default();
@@ -53,7 +53,7 @@ namespace Tensorflow.Functions
 
         public ConcreteFunction(Func<Tensor, IDatasetV2> func, TF_DataType dtype)
         {
-            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
+            string func_name = $"{func.Method.Name}_{ops.uid_function()}";
 
             func_graph = new FuncGraph(func_name);
             func_graph.as_default();
@@ -74,7 +74,7 @@ namespace Tensorflow.Functions
         public ConcreteFunction(Func<Tensors, Tensors> func,
             TF_DataType[] dtypes, TensorShape[] shapes)
         {
-            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
+            string func_name = $"{func.Method.Name}_{ops.uid_function()}";
 
             // IntPtr func_handle;
             func_graph = new FuncGraph(func_name);

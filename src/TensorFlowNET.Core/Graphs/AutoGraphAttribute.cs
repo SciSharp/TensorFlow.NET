@@ -22,7 +22,7 @@ namespace Tensorflow.Graphs
         public override void OnEntry(MethodExecutionArgs args)
         {
             // TODO: func_name can be cache in FullName + Args
-            func_name = $"{args.Method.DeclaringType.FullName}.{args.Method.Name}_{Guid.NewGuid()}";
+            func_name = $"{args.Method.DeclaringType.FullName}.{args.Method.Name}_{ops.uid_function()}";
 
             if (functions.ContainsKey(func_name))
             {

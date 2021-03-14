@@ -8,7 +8,7 @@ namespace Tensorflow.Graphs
     {
         public Func<Tensor, Tensor> to_graph(Func<Tensor, Tensor> func)
         {
-            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
+            string func_name = $"{func.Method.Name}_{ops.uid_function()}";
 
             var graph = new FuncGraph(func_name);
             graph.as_default();
@@ -38,7 +38,7 @@ namespace Tensorflow.Graphs
 
         public Func<Tensor, Tensor, Tensor> to_graph(Func<Tensor, Tensor, Tensor> func)
         {
-            string func_name = $"{func.Method.Name}_{Guid.NewGuid()}";
+            string func_name = $"{func.Method.Name}_{ops.uid_function()}";
 
             var graph = new FuncGraph(func_name);
             graph.as_default();

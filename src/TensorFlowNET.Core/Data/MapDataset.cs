@@ -15,11 +15,11 @@ namespace Tensorflow
             bool preserve_cardinality = false,
             bool use_legacy_function = false) : base(input_dataset)
         {
-            var func = new ConcreteFunction($"{map_func.Method.Name}_{Guid.NewGuid()}");
+            var func = new ConcreteFunction($"{map_func.Method.Name}_{Tensorflow.ops.uid_function()}");
             func.Enter();
             var inputs = new Tensors();
             foreach (var input in input_dataset.element_spec)
-                inputs.Add(tf.placeholder(input.dtype, shape: input.shape));
+                inputs.Add(tf.placeholder(input.dtype, shape: input.shape, name: "arg"));
             var outputs = map_func(inputs);
             func.ToGraph(inputs, outputs);
             func.Exit();
