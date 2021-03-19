@@ -161,18 +161,10 @@ namespace Tensorflow
         }
 
         public static Tensor acos(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Acos", name, args: new { x });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Acos", name, new ExecuteOpArgs(x));
 
         public static Tensor asin(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Asin", name, args: new { x });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Asin", name, new ExecuteOpArgs(x));
 
         public static Tensor add(Tensor x, Tensor y, string name = null)
             => tf.Context.ExecuteOp("Add", name, new ExecuteOpArgs(x, y));
@@ -233,21 +225,13 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("Sign", name, new ExecuteOpArgs(x));
 
         public static Tensor sinh(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Sinh", name, args: new { x });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Sinh", name, new ExecuteOpArgs(x));
 
         public static Tensor cos<T>(T x, string name = null)
             => tf.Context.ExecuteOp("Cos", name, new ExecuteOpArgs(x));
 
         public static Tensor cosh(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Cosh", name, args: new { x });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("Cosh", name, new ExecuteOpArgs(x));
 
         /// <summary>
         /// Computes the sum along segments of a tensor.
@@ -308,11 +292,8 @@ namespace Tensorflow
         /// The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
         public static Tensor lgamma(Tensor x, string name = null)
-        {
-            var op = tf.OpDefLib._apply_op_helper("Lgamma", name: name, args: new { x });
+            => tf.Context.ExecuteOp("Lgamma", name, new ExecuteOpArgs(x));
 
-            return op.output;
-        }
 
         public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => tf.Context.ExecuteOp("GreaterEqual", name, new ExecuteOpArgs(x, y));
@@ -365,18 +346,11 @@ namespace Tensorflow
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> A `Tensor` of type `bool`.</returns>
         public static Tensor is_finite(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("IsFinite", name, args: new { x });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("IsFinite", name, new ExecuteOpArgs(x));
 
         public static Tensor is_nan(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("IsNan", name: name, args: new { x });
+            => tf.Context.ExecuteOp("IsNan", name, new ExecuteOpArgs(x));
 
-            return _op.outputs[0];
-        }
 
         /// <summary>
         /// Computes exponential of x element-wise.  \\(y = e^x\\).
@@ -577,11 +551,7 @@ namespace Tensorflow
         ///    according to the current system rounding mode use std::cint.
         /// </remarks>
         public static Tensor round(Tensor x, string name = "Round")
-        {
-            var op = tf.OpDefLib._apply_op_helper("Round", name: name, new { x });
-
-            return op.output;
-        }
+            => tf.Context.ExecuteOp("Round", name, new ExecuteOpArgs(x));
 
         /// <summary>
         /// Computes reciprocal of square root of x element-wise.
