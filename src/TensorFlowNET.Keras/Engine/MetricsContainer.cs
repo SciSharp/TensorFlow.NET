@@ -68,7 +68,9 @@ namespace Tensorflow.Keras.Engine
                 bool is_binary = y_p_last_dim == 1;
                 bool is_sparse_categorical = (y_t_rank < y_p_rank || y_t_last_dim == 1) && y_p_last_dim > 1;
 
-                if (is_sparse_categorical)
+                if (is_binary)
+                    metric_obj = keras.metrics.binary_accuracy;
+                else if (is_sparse_categorical)
                     metric_obj = keras.metrics.sparse_categorical_accuracy;
                 else
                     metric_obj = keras.metrics.categorical_accuracy;

@@ -137,6 +137,14 @@ namespace Tensorflow.Keras
         {
             _MANUAL_VAR_INIT = value;
         }
+
+        public Tensor mean(Tensor x, int axis = -1, bool keepdims = false)
+        {
+            if (x.dtype.as_base_dtype() == TF_DataType.TF_BOOL)
+                x = math_ops.cast(x, TF_DataType.TF_FLOAT);
+            return math_ops.reduce_mean(x, axis: new[] { axis }, keepdims: false);
+        }
+
         public GraphLearningPhase learning_phase()
         {
             var graph = tf.get_default_graph();

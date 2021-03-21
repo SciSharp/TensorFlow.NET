@@ -1,7 +1,16 @@
-﻿namespace Tensorflow.Keras.Metrics
+﻿using static Tensorflow.KerasApi;
+
+namespace Tensorflow.Keras.Metrics
 {
     public class MetricsApi
     {
+        public Tensor binary_accuracy(Tensor y_true, Tensor y_pred)
+        {
+            float threshold = 0.5f;
+            y_pred = math_ops.cast(y_pred > threshold, y_pred.dtype);
+            return keras.backend.mean(math_ops.equal(y_true, y_pred), axis: -1);
+        }
+
         public Tensor categorical_accuracy(Tensor y_true, Tensor y_pred)
         {
             var eql = math_ops.equal(math_ops.argmax(y_true, -1), math_ops.argmax(y_pred, -1));

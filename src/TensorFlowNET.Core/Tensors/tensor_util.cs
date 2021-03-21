@@ -596,8 +596,6 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 case TF_DataType.TF_STRING:
                     return string.Join(string.Empty, nd.ToArray<byte>()
                         .Select(x => x < 32 || x > 127 ? "\\x" + x.ToString("x") : Convert.ToChar(x).ToString()));
-                case TF_DataType.TF_BOOL:
-                    return nd.GetBoolean(0).ToString();
                 case TF_DataType.TF_VARIANT:
                 case TF_DataType.TF_RESOURCE:
                     return "<unprintable>";
