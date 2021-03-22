@@ -634,6 +634,23 @@ namespace Tensorflow.Gradients
             });
         }
 
+        [RegisterGradient("Asin")]
+        public static Tensor[] _ASinGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            return tf_with(ops.control_dependencies(grads), delegate
+            {
+                x = math_ops.conj(x);
+                // the derivative of
+                // y = asin(x)
+                // is
+                // d/dx asin(x) = 1 / sqrt(1-x*x) 
+                return new Tensor[] { math_ops.multiply(grad, 1 / gen_math_ops.sqrt(1 - gen_math_ops.square(x))) };
+            });
+        }
+
         [RegisterGradient("Sin")]
         public static Tensor[] _SinGrad(Operation op, Tensor[] grads)
         {
@@ -660,6 +677,23 @@ namespace Tensorflow.Gradients
             });
         }
 
+        [RegisterGradient("Acos")]
+        public static Tensor[] _ACosGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            return tf_with(ops.control_dependencies(grads), delegate
+            {
+                // the derivative of
+                // y = acos(x)
+                // is
+                // d/dx acos(x) = -1 / sqrt(1-x*x) = -d/dx asin(x)
+                x = math_ops.conj(x);
+                return new Tensor[] { math_ops.multiply(grad, -1 / gen_math_ops.sqrt(1 - gen_math_ops.square(x))) };
+            });
+        }
+
         [RegisterGradient("Cos")]
         public static Tensor[] _CosGrad(Operation op, Tensor[] grads)
         {
@@ -683,6 +717,23 @@ namespace Tensorflow.Gradients
             {
                 x = math_ops.conj(x);
                 return new Tensor[] { math_ops.multiply(grad, gen_math_ops.sinh(x)) };
+            });
+        }
+
+        [RegisterGradient("Atan")]
+        public static Tensor[] _ATanGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            return tf_with(ops.control_dependencies(grads), delegate
+            {
+                // the derivative of
+                // y = atan(x)
+                // is
+                // d/dx atan(x) = 1 / (1 + x*x)
+                x = math_ops.conj(x);
+                return new Tensor[] { math_ops.multiply(grad, 1 / (1 + gen_math_ops.square(x))) };
             });
         }
 
