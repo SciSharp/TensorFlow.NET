@@ -64,7 +64,8 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor arg_min(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
-            => tf.OpDefLib._apply_op_helper("ArgMin", name, args: new { input, dimension, output_type }).outputs[0];
+            => tf.Context.ExecuteOp("ArgMin", name, new ExecuteOpArgs(input, dimension)
+                .SetAttributes(new { output_type }));
 
         /// <summary>
         /// Computes Psi, the derivative of Lgamma (the log of the absolute value of
