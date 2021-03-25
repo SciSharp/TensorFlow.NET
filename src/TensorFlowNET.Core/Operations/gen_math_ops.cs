@@ -476,8 +476,11 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
-            => tf.Context.ExecuteOp("Max", name, new ExecuteOpArgs(input, axis)
+        /// <summary>
+        /// Subroutine for Min or Max functions. See _min and _max
+        /// </summary>
+        private static Tensor MinOrMax<Tx, Ty>(Tx input, Ty axis, string methodName, bool keep_dims = false, string name = null)
+            => tf.Context.ExecuteOp(methodName, name, new ExecuteOpArgs(input, axis)
             {
                 GetGradientAttrs = (op) => new
                 {
@@ -487,12 +490,12 @@ namespace Tensorflow
                 }
             }.SetAttributes(new { keep_dims, reduction_indices = axis }));
 
-        public static Tensor _min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Min", name, new { input, reduction_indices = axis, keep_dims });
+        public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+            => MinOrMax(input, axis, "Max", keep_dims: keep_dims, name: name);
 
-            return _op.outputs[0];
-        }
+        public static Tensor _min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+            => MinOrMax(input, axis, "Min", keep_dims: keep_dims, name: name);
+
 
         public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
             => tf.Context.ExecuteOp("Pow", name, new ExecuteOpArgs(x, y));
