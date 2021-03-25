@@ -193,11 +193,8 @@ namespace Tensorflow
         }
 
         public static Tensor log(Tensor x, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Log", name: name, args: new { x });
+            => tf.Context.ExecuteOp("Log", name, new ExecuteOpArgs(x));
 
-            return _op.outputs[0];
-        }
 
         public static Tensor rank(Tensor input, string name = null)
             => tf.Context.ExecuteOp("Rank", name, new ExecuteOpArgs(input));
