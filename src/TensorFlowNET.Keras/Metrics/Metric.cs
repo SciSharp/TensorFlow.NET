@@ -2,6 +2,7 @@
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
+using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Metrics
 {
@@ -52,6 +53,12 @@ namespace Tensorflow.Keras.Metrics
 
         public virtual Tensor update_state(Tensor y_true, Tensor y_pred, Tensor sample_weight = null)
             => throw new NotImplementedException("");
+
+        public virtual void reset_states()
+        {
+            foreach (var v in weights)
+                v.assign(0);
+        }
 
         public virtual Tensor result()
             => throw new NotImplementedException("");

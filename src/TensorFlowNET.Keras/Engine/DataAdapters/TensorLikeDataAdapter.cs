@@ -23,7 +23,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             num_samples = args.X.shape[0];
             var batch_size = args.BatchSize == -1 ? 32 : args.BatchSize;
             _batch_size = batch_size;
-            _size = num_samples < batch_size ? num_samples % batch_size : num_samples / batch_size;
+            _size = Convert.ToInt32(Math.Ceiling(num_samples / (batch_size + 0.0f)));
             num_full_batches = num_samples / batch_size;
             _partial_batch_size = num_samples % batch_size;
 

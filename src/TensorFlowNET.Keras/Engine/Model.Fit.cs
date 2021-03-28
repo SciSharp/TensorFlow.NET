@@ -89,7 +89,7 @@ namespace Tensorflow.Keras.Engine
             _train_counter.assign(0);
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
-                // reset_metrics();
+                reset_metrics();
                 // callbacks.on_epoch_begin(epoch)
                 // data_handler.catch_stop_iteration();
                 foreach (var step in data_handler.steps())

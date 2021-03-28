@@ -48,7 +48,7 @@ namespace Tensorflow
         public tensorflow()
         {
             Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+                .MinimumLevel.Error()
                 .WriteTo.Console()
                 .CreateLogger();
 

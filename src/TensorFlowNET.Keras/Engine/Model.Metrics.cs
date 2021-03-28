@@ -10,6 +10,7 @@ namespace Tensorflow.Keras.Engine
             get
             {
                 var _metrics = new List<Metric>();
+
                 if (_is_compiled)
                 {
                     if (compiled_loss != null)
@@ -18,13 +19,17 @@ namespace Tensorflow.Keras.Engine
                         _metrics.add(compiled_metrics.metrics);
                 }
 
-                foreach (var layer in _flatten_layers())
-                {
-                    // _metrics.extend(layer.metrics);
-                }
+                /*foreach (var layer in _flatten_layers())
+                    _metrics.extend(layer.metrics);*/
 
                 return _metrics;
             }
+        }
+
+        void reset_metrics()
+        {
+            foreach (var metric in metrics)
+                metric.reset_states();
         }
     }
 }
