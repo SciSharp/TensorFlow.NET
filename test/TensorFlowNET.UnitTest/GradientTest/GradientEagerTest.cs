@@ -25,7 +25,6 @@ namespace TensorFlowNET.UnitTest.Gradient
             Assert.AreEqual((float)grad, 3.0f);
         }
 
-        [Ignore]
         [TestMethod]
         public void SquaredDifference_Constant()
         {

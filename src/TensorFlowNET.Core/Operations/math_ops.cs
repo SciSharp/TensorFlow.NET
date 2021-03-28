@@ -272,6 +272,9 @@ namespace Tensorflow
         public static Tensor mul_no_nan<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul_no_nan(x, y, name: name);
 
+        public static Tensor scalar_mul<Tscale, Tx>(Tscale scale, Tx x, string name = null)
+            => tf.Context.ExecuteOp("Mul", name, new ExecuteOpArgs(scale, x));
+
         public static Tensor real(Tensor input, string name = null)
         {
             return tf_with(ops.name_scope(name, "Real", new[] { input }), scope =>

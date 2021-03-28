@@ -122,13 +122,14 @@ namespace Tensorflow.Gradients
         [RegisterGradient("SquaredDifference")]
         public static Tensor[] _SquaredDifferenceGrad(Operation op, Tensor[] grads)
         {
-           //"""Returns the gradient for (x-y)^2."""
             Tensor x = op.inputs[0];
             Tensor y = op.inputs[1];
+            var scale = ops.convert_to_tensor(2.0f, dtype: x.dtype);
+            var x_grad = math_ops.scalar_mul(scale, grads[0]) * (x - y);
             return new Tensor[]
             {
-                x,
-                y
+                x_grad,
+                -x_grad
             };
         }
         /// <summary>
