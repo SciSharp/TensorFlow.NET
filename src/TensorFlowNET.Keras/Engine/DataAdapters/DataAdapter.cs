@@ -21,6 +21,8 @@ namespace Tensorflow.Keras.Engine.DataAdapters
 
         public virtual (Tensor, Tensor) Expand1d(Tensor x, Tensor y)
         {
+            if (x.TensorShape.ndim == 1)
+                x = array_ops.expand_dims(x, axis: -1);
             if (y.TensorShape.ndim == 1)
                 y = array_ops.expand_dims(y, axis: -1);
             return (x, y);
