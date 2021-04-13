@@ -531,7 +531,7 @@ namespace Tensorflow
                 dims: nd.shape.Select(i => (long)i).ToArray(),
                 num_dims: nd.ndim,
                 data: arraySlice.Address,
-                len: (ulong)(nd.size * nd.dtypesize));
+                len: (ulong)nd.size * (ulong)nd.dtypesize);
 
             // if TF decided not to perform copy, hold reference for given NDArray.
             if (TensorDataPointer.ToPointer() == arraySlice.Address)
