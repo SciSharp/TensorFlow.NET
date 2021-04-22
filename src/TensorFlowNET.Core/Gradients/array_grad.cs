@@ -258,7 +258,7 @@ namespace Tensorflow.Gradients
             var input_rank = array_ops.rank(input_vec);
             var slice_size = array_ops.shape(op.outputs[0]);
 
-            var shape = array_ops.stack(new Tensor[] { input_rank, new Tensor(1) });
+            var shape = array_ops.stack(new Tensor[] { input_rank, ops.convert_to_tensor(1) });
             var before_pad = array_ops.reshape(begin_vec, shape);
             var after_pad = array_ops.reshape(array_ops.shape(input_vec) - slice_size - begin_vec, shape);
             var paddings = array_ops.concat(new Tensor[] { before_pad, after_pad }, 1);

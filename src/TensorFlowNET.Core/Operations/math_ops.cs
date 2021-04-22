@@ -441,7 +441,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var input_shape_val = input_shape.numpy();
-                foreach (var axes_val in axes.numpy().ToArray<int>())
+                foreach (var axes_val in axes.ToArray<int>())
                     input_shape_val[axes_val] = 1;
                 return tf.constant(input_shape_val);
             }
