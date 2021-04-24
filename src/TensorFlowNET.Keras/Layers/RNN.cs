@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+// from tensorflow.python.distribute import distribution_strategy_context as ds_context;
 
 namespace Tensorflow.Keras.Layers
 {
     public class RNN : Layer
     {
         private RNNArgs args;
+        private object input_spec = null; // or NoneValue??
+        private object state_spec = null;
+        private object _states = null;
+        private object constants_spec = null;
+        private int _num_constants = 0;
 
         public RNN(RNNArgs args) : base(PreConstruct(args))
         {
@@ -18,16 +24,13 @@ namespace Tensorflow.Keras.Layers
             // the input spec will be the list of specs for nested inputs, the structure
             // of the input_spec will be the same as the input.
 
-            //self.input_spec = None
-            //self.state_spec = None
-            //self._states = None
-            //self.constants_spec = None
-            //self._num_constants = 0
-
-            //if stateful:
-            //  if ds_context.has_strategy():
-            //    raise ValueError('RNNs with stateful=True not yet supported with '
-            //                     'tf.distribute.Strategy.')
+            //if(stateful)
+            //{
+            //    if (ds_context.has_strategy()) // ds_context????
+            //    {
+            //        throw new Exception("RNNs with stateful=True not yet supported with tf.distribute.Strategy");
+            //    }
+            //}
         }
 
         private static RNNArgs PreConstruct(RNNArgs args)
@@ -41,16 +44,16 @@ namespace Tensorflow.Keras.Layers
             // false case, output from previous timestep is returned for masked timestep.
             var zeroOutputForMask = (bool)args.Kwargs.Get("zero_output_for_mask", false);
 
-            object input_shape;
-            var propIS = args.Kwargs.Get("input_shape", null);
-            var propID = args.Kwargs.Get("input_dim", null);
-            var propIL = args.Kwargs.Get("input_length", null);
+            TensorShape input_shape;
+            var propIS = (TensorShape)args.Kwargs.Get("input_shape", null);
+            var propID = (int?)args.Kwargs.Get("input_dim", null);
+            var propIL = (int?)args.Kwargs.Get("input_length", null);
 
             if (propIS == null && (propID != null || propIL != null))
             {
-                input_shape = (
-                    propIL ?? new NoneValue(),  // maybe null is needed here 
-                    propID ?? new NoneValue()); // and here
+                input_shape = new TensorShape(
+                    propIL ?? -1,
+                    propID ?? -1);
                 args.Kwargs["input_shape"] = input_shape;
             }
 
@@ -102,6 +105,15 @@ namespace Tensorflow.Keras.Layers
         Tensor _generate_zero_filled_state_for_cell(LSTMCell cell, Tensor batch_size)
         {
             throw new NotImplementedException("");
+        }
+
+        // Check whether the state_size contains multiple states.
+        public static bool _is_multiple_state(object state_size)
+        {
+            var myIndexerProperty = state_size.GetType().GetProperty("Item");
+            return myIndexerProperty != null
+                && myIndexerProperty.GetIndexParameters().Length == 1
+                && !(state_size.GetType() == typeof(TensorShape));
         }
     }
 }
