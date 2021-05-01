@@ -18,6 +18,8 @@ namespace Tensorflow.Keras.Utils
             string archive_format = "auto",
             string cache_dir = null)
         {
+            if (string.IsNullOrEmpty(cache_dir))
+                cache_dir = Path.GetTempPath();
             var datadir_base = cache_dir;
             Directory.CreateDirectory(datadir_base);
 
@@ -26,10 +28,14 @@ namespace Tensorflow.Keras.Utils
 
             Web.Download(origin, datadir, fname);
 
+            var archive = Path.Combine(datadir, fname);
+
             if (untar)
-                Compress.ExtractTGZ(Path.Combine(datadir_base, fname), datadir_base);
-            else if (extract)
-                Compress.ExtractGZip(Path.Combine(datadir_base, fname), datadir_base);
+                Compress.ExtractTGZ(archive, datadir);
+            else if (extract && fname.EndsWith(".gz"))
+                Compress.ExtractGZip(archive, datadir);
+            else if (extract && fname.EndsWith(".zip"))
+                Compress.UnZip(archive, datadir);
 
             return datadir;
         }

@@ -155,39 +155,34 @@ namespace Tensorflow
 
         protected unsafe NDArray GetNDArray(TF_DataType dtype)
         {
-            UnmanagedStorage storage;
+            if (dtype == TF_DataType.TF_STRING)
+                return np.array(StringData());
+
+            var count = Convert.ToInt64(size);
+            IUnmanagedMemoryBlock mem;
             switch (dtype)
             {
                 case TF_DataType.TF_BOOL:
-                    storage = new UnmanagedStorage(NPTypeCode.Boolean);
-                    break;
-                case TF_DataType.TF_STRING:
-                    var nd = np.array(StringData());
-                    return nd;
-                case TF_DataType.TF_UINT8:
-                    storage = new UnmanagedStorage(NPTypeCode.Byte);
+                    mem = new UnmanagedMemoryBlock<bool>((bool*)buffer, count);
                     break;
                 case TF_DataType.TF_INT32:
-                    storage = new UnmanagedStorage(NPTypeCode.Int32);
+                    mem = new UnmanagedMemoryBlock<int>((int*)buffer, count);
                     break;
                 case TF_DataType.TF_INT64:
-                    storage = new UnmanagedStorage(NPTypeCode.Int64);
+                    mem = new UnmanagedMemoryBlock<long>((long*)buffer, count);
                     break;
                 case TF_DataType.TF_FLOAT:
-                    storage = new UnmanagedStorage(NPTypeCode.Float);
+                    mem = new UnmanagedMemoryBlock<float>((float*)buffer, count);
                     break;
                 case TF_DataType.TF_DOUBLE:
-                    storage = new UnmanagedStorage(NPTypeCode.Double);
+                    mem = new UnmanagedMemoryBlock<double>((double*)buffer, count);
                     break;
                 default:
-                    return BufferToArray();
+                    mem = new UnmanagedMemoryBlock<byte>((byte*)buffer, count);
+                    break;
             }
 
-            storage.Allocate(new Shape(shape));
-
-            System.Buffer.MemoryCopy(buffer.ToPointer(), storage.Address, bytesize, bytesize);
-
-            return new NDArray(storage);
+            return new NDArray(ArraySlice.FromMemoryBlock(mem, copy: true), new Shape(shape));
         }
 
         /// <summary>
