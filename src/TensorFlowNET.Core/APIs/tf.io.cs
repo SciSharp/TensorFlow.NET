@@ -26,9 +26,11 @@ namespace Tensorflow
         public class IoApi
         {
             io_ops ops;
+            public GFile gfile;
             public IoApi()
             {
                 ops = new io_ops();
+                gfile = new GFile();
             }
 
             public Tensor read_file(string filename, string name = null)

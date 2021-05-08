@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -48,6 +49,19 @@ namespace Tensorflow.IO
                 foreach (var dir in subdirs)
                     foreach (var f in walk_v2(dir, topdown))
                         yield return f;
+        }
+
+        public string[] listdir(string data_dir)
+            => Directory.GetDirectories(data_dir)
+                .Select(x => x.Split(Path.DirectorySeparatorChar).Last())
+                .ToArray();
+
+        public string[] glob(string data_dir)
+        {
+            var dirs = new List<string>();
+            foreach(var dir in Directory.GetDirectories(data_dir))
+                dirs.AddRange(Directory.GetFiles(dir));
+            return dirs.ToArray();
         }
     }
 }

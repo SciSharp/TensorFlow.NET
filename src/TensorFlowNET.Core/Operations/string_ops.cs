@@ -73,11 +73,19 @@ namespace Tensorflow
                 }
             }.SetAttributes(new { template, placeholder, summarize }));
 
-        public RaggedTensor string_split_v2(Tensor input, string sep = "", int maxsplit = -1, string name = null)
+        public RaggedTensor string_split_v2(Tensor input, string sep = " ", int maxsplit = -1, string name = null)
         {
             return tf_with(ops.name_scope(name, "StringSplit"), scope =>
             {
                 var sep_tensor = ops.convert_to_tensor(sep, dtype: TF_DataType.TF_STRING);
+                if(input.rank == 0)
+                {
+                    return string_split_v2(array_ops.stack(new[] { input }),
+                        sep: sep,
+                        maxsplit: maxsplit,
+                        name: name)[0];
+                }
+                
                 var result = tf.Context.ExecuteOp("StringSplitV2", name,
                     new ExecuteOpArgs(input, sep)
                     {

@@ -134,7 +134,7 @@ namespace Tensorflow
             => new[] { _row_splits };
 
         public override string ToString()
-            => $"tf.RaggedTensor: shape={shape} [{string.Join(", ", _values.StringData().Take(10))}]";
+            => $"tf.RaggedTensor: shape={_values.TensorShape} [{string.Join(", ", _values.StringData().Take(10))}]";
 
         public static implicit operator Tensor(RaggedTensor indexedSlices)
             => indexedSlices._to_variant();

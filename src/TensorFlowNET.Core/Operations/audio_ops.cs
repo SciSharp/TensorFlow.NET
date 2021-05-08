@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2020 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,16 +14,16 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
+using Tensorflow.Contexts;
+using static Tensorflow.Binding;
+
 namespace Tensorflow
 {
-    public partial class tensorflow
+    public class audio_ops
     {
-        public DataOps data { get; } = new DataOps();
-
-        public class DataOps
-        {
-            public int AUTOTUNE = -1;
-            public DatasetManager Dataset { get; } = new DatasetManager();
-        }
+        public Tensors decode_wav(Tensor contents, int desired_channels = -1, int desired_samples = -1, string name = null)
+            => tf.Context.ExecuteOp("DecodeWav", name, new ExecuteOpArgs(contents)
+                .SetAttributes(new { desired_channels, desired_samples }));
     }
 }

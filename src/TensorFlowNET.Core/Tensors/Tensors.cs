@@ -92,6 +92,12 @@ namespace Tensorflow
         public static implicit operator Tensor[](Tensors tensors)
             => tensors.items.ToArray();
 
+        public void Deconstruct(out Tensor a, out Tensor b)
+        {
+            a = items[0];
+            b = items[1];
+        }
+
         public override string ToString()
             => items.Count() == 1
                ? items.First().ToString()

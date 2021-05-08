@@ -188,6 +188,9 @@ namespace Tensorflow
         public Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
             => array_ops.slice(input, begin, size, name: name);
 
+        public Tensor squeeze(Tensor input, int axis, string name = null, int squeeze_dims = -1)
+            => array_ops.squeeze(input, new[] { axis }, name);
+
         public Tensor squeeze(Tensor input, int[] axis = null, string name = null, int squeeze_dims = -1)
             => array_ops.squeeze(input, axis, name);
 
