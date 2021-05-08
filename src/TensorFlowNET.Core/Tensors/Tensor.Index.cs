@@ -120,6 +120,35 @@ namespace Tensorflow
             });
         }
 
+        public Tensor this[params Tensor[] slice]
+        {
+            get
+            {
+                var args = tensor_util.ParseSlices(slice);
+
+                return tf_with(ops.name_scope(null, "strided_slice", args), scope =>
+                {
+                    string name = scope;
+
+                    var tensor = gen_array_ops.strided_slice(
+                        this,
+                        args.PackedBegin,
+                        args.PackedEnd,
+                        args.PackedStrides,
+                        begin_mask: args.BeginMask,
+                        end_mask: args.EndMask,
+                        shrink_axis_mask: args.ShrinkAxisMask,
+                        new_axis_mask: args.NewAxisMask,
+                        ellipsis_mask: args.EllipsisMask,
+                        name: name);
+
+                    tensor.OriginalVarSlice = args;
+
+                    return tensor;
+                });
+            }
+        }
+
         public Tensor slice(int start)
         {
             var slice_spec = new int[] { start };

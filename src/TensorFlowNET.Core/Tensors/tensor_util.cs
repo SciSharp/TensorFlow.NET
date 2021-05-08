@@ -673,5 +673,38 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 NewAxisMask = new_axis_mask
             };
         }
+
+        public static ParsedSliceArgs ParseSlices(Tensor[] slices)
+        {
+            var begin = new List<Tensor>();
+            var end = new List<Tensor>();
+            var strides = new List<Tensor>();
+
+            var index = 0;
+            var (new_axis_mask, shrink_axis_mask) = (0, 0);
+            var (begin_mask, end_mask) = (0, 0);
+            var ellipsis_mask = 0;
+
+            foreach (var s in slices)
+            {
+                begin.Add(s);
+                end.Add(s + 1);
+                shrink_axis_mask |= (1 << index);
+                strides.Add(tf.constant(1, dtype: s.dtype));
+                index += 1;
+            }
+
+            return new ParsedSliceArgs
+            {
+                PackedBegin = array_ops.stack(begin),
+                PackedEnd = array_ops.stack(end),
+                PackedStrides = array_ops.stack(strides),
+                BeginMask = begin_mask,
+                EndMask = end_mask,
+                EllipsisMask = ellipsis_mask,
+                ShrinkAxisMask = shrink_axis_mask,
+                NewAxisMask = new_axis_mask
+            };
+        }
     }
 }

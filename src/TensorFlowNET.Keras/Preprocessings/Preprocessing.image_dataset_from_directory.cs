@@ -1,4 +1,6 @@
 ﻿using static Tensorflow.KerasApi;
+using static Tensorflow.Binding;
+using NumSharp; 
 
 namespace Tensorflow.Keras
 {
@@ -41,7 +43,7 @@ namespace Tensorflow.Keras
             int num_channels = 0;
             if (color_mode == "rgb")
                 num_channels = 3;
-            
+
             var (image_paths, label_list, class_name_list) = keras.preprocessing.dataset_utils.index_directory(directory,
                 labels,
                 formats: WHITELIST_FORMATS,
@@ -89,6 +91,51 @@ namespace Tensorflow.Keras
             dataset = dataset.batch(batch_size);
             dataset.class_names = class_name_list;
             return dataset;
+        }
+
+        /// <summary>
+        /// Creates a dataset of sliding windows over a timeseries provided as array.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="sequence_length"></param>
+        /// <param name="sequence_stride"></param>
+        /// <param name="sampling_rate"></param>
+        /// <param name="batch_size"></param>
+        /// <param name="shuffle"></param>
+        /// <returns></returns>
+        public IDatasetV2 timeseries_dataset_from_array(Tensor data, int sequence_length,
+            int sequence_stride = 1, int sampling_rate = 1, int batch_size = 128,
+            bool shuffle = false, int seed = (int)1e6, int start_index = 0, int? end_index = null)
+        {
+            if (!end_index.HasValue)
+                end_index = len(data);
+
+            var num_seqs = end_index.Value - start_index - (sequence_length * sampling_rate) + 1;
+            var index_dtype = num_seqs < 2147483647 ? tf.int32 : tf.int64;
+            var start_positions = np.arange(0, num_seqs, sequence_stride);
+            if (shuffle)
+            {
+                var rng = np.random.RandomState(seed);
+                rng.shuffle(start_positions);
+            }
+
+            var sequence_length_tensor = math_ops.cast(sequence_length, dtype: index_dtype);
+            var sampling_rate_tensor = math_ops.cast(sampling_rate, dtype: index_dtype);
+
+            var start_positions_tensor = tf.constant(start_positions);
+            var positions_ds = tf.data.Dataset.from_tensor(start_positions_tensor).repeat();
+            var z = tf.data.Dataset.zip(tf.data.Dataset.range(len(start_positions)), positions_ds);
+            var indices = z.map(m =>
+            {
+                var (i, positions) = (m[0], m[1]);
+                return tf.range(positions[i], positions[i] + sequence_length_tensor * sampling_rate_tensor, sampling_rate_tensor);
+            }, num_parallel_calls: -1);
+            return null;
+        }
+
+        IDatasetV2 sequences_from_indices(Tensor array, Tensor indices_ds, Tensor start_index, Tensor end_index)
+        {
+            return null;
         }
     }
 }
