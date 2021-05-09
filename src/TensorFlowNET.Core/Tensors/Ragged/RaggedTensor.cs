@@ -44,6 +44,18 @@ namespace Tensorflow
             }
         }
 
+        public Tensor this[int index]
+        {
+            get
+            {
+                return tf_with(ops.name_scope(null, "RaggedGetItem"), scope =>
+                {
+                    string name = scope;
+                    return _ragged_getitem(index);
+                });
+            }
+        }
+
         public RaggedTensor this[params Slice[] slices]
         {
             get
@@ -59,6 +71,14 @@ namespace Tensorflow
                     return _ragged_getitem_inner_dimensions(this, inner_keys);
                 });
             }
+        }
+
+        Tensor _ragged_getitem(int row_key)
+        {
+            var starts = _row_splits[":-1"];
+            var limits = _row_splits["1:"];
+            var row = _values[starts[row_key], limits[row_key]];
+            return row;
         }
 
         RaggedTensor _ragged_getitem_inner_dimensions(RaggedTensor input, Slice[] slices)
@@ -134,7 +154,7 @@ namespace Tensorflow
             => new[] { _row_splits };
 
         public override string ToString()
-            => $"tf.RaggedTensor: shape={_values.TensorShape} [{string.Join(", ", _values.StringData().Take(10))}]";
+            => $"tf.RaggedTensor: shape={shape} [{string.Join(", ", _values.StringData().Take(10))}]";
 
         public static implicit operator Tensor(RaggedTensor indexedSlices)
             => indexedSlices._to_variant();

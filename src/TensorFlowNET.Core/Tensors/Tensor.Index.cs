@@ -120,11 +120,11 @@ namespace Tensorflow
             });
         }
 
-        public Tensor this[params Tensor[] slice]
+        public Tensor this[Tensor start, Tensor stop = null, Tensor step = null]
         {
             get
             {
-                var args = tensor_util.ParseSlices(slice);
+                var args = tensor_util.ParseSlices(start, stop: stop, step: step);
 
                 return tf_with(ops.name_scope(null, "strided_slice", args), scope =>
                 {

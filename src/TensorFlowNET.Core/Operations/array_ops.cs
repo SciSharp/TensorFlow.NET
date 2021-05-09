@@ -191,14 +191,13 @@ namespace Tensorflow
 
         private static Tensor _constant_if_small<T>(T value, TensorShape shape, TF_DataType dtype, string name)
         {
-            Tensor shape_t = null;
             if (shape.size < 1000)
             {
                 return constant_op.constant(value, shape: shape, dtype: dtype, name: name);
             }
             else
             {
-                shape_t = constant_op._tensor_shape_tensor_conversion_function(shape);
+                var shape_t = constant_op._tensor_shape_tensor_conversion_function(shape);
                 var c = constant_op.constant(0, dtype: dtype);
                 return gen_array_ops.fill(shape_t, c, name: name);
             }

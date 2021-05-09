@@ -674,25 +674,30 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             };
         }
 
-        public static ParsedSliceArgs ParseSlices(Tensor[] slices)
+        public static ParsedSliceArgs ParseSlices(Tensor start, Tensor stop = null, Tensor step = null)
         {
             var begin = new List<Tensor>();
             var end = new List<Tensor>();
             var strides = new List<Tensor>();
 
-            var index = 0;
+            // var index = 0;
             var (new_axis_mask, shrink_axis_mask) = (0, 0);
             var (begin_mask, end_mask) = (0, 0);
             var ellipsis_mask = 0;
 
-            foreach (var s in slices)
-            {
-                begin.Add(s);
-                end.Add(s + 1);
-                shrink_axis_mask |= (1 << index);
-                strides.Add(tf.constant(1, dtype: s.dtype));
-                index += 1;
-            }
+            begin.Add(start);
+
+            if (stop == null)
+                end.Add(start + 1);
+            else
+                end.Add(stop);
+
+            // shrink_axis_mask |= (1 << index);
+
+            if (step == null)
+                strides.Add(tf.constant(1, dtype: start.dtype));
+            else
+                strides.Add(step);
 
             return new ParsedSliceArgs
             {

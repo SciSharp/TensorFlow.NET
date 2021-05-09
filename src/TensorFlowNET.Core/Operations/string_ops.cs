@@ -80,10 +80,11 @@ namespace Tensorflow
                 var sep_tensor = ops.convert_to_tensor(sep, dtype: TF_DataType.TF_STRING);
                 if(input.rank == 0)
                 {
-                    return string_split_v2(array_ops.stack(new[] { input }),
+                    var parts = string_split_v2(array_ops.stack(new[] { input }),
                         sep: sep,
                         maxsplit: maxsplit,
-                        name: name)[0];
+                        name: name);
+                    return parts;
                 }
                 
                 var result = tf.Context.ExecuteOp("StringSplitV2", name,
