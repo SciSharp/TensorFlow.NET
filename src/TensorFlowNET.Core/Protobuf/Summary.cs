@@ -78,8 +78,7 @@ namespace Tensorflow {
     [pbr::OriginalName("DATA_CLASS_UNKNOWN")] Unknown = 0,
     /// <summary>
     /// Scalar time series. Each `Value` for the corresponding tag must have
-    /// `tensor` set to a rank-0 tensor of floating-point dtype, which will be
-    /// converted to float64.
+    /// `tensor` set to a rank-0 tensor of type `DT_FLOAT` (float32).
     /// </summary>
     [pbr::OriginalName("DATA_CLASS_SCALAR")] Scalar = 1,
     /// <summary>

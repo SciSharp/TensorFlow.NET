@@ -70,7 +70,7 @@ namespace Tensorflow {
             "EWNvbXByZXNzaW9uX2xldmVsGAMgASgFEhoKEmNhY2hlX3JwY19yZXNwb25z",
             "ZRgEIAEoCBIqCiJkaXNhYmxlX3Nlc3Npb25fY29ubmVjdGlvbl9zaGFyaW5n",
             "GAUgASgIIjAKD1Nlc3Npb25NZXRhZGF0YRIMCgRuYW1lGAEgASgJEg8KB3Zl",
-            "cnNpb24YAiABKAMiyAoKC0NvbmZpZ1Byb3RvEj4KDGRldmljZV9jb3VudBgB",
+            "cnNpb24YAiABKAMijA0KC0NvbmZpZ1Byb3RvEj4KDGRldmljZV9jb3VudBgB",
             "IAMoCzIoLnRlbnNvcmZsb3cuQ29uZmlnUHJvdG8uRGV2aWNlQ291bnRFbnRy",
             "eRIkChxpbnRyYV9vcF9wYXJhbGxlbGlzbV90aHJlYWRzGAIgASgFEiQKHGlu",
             "dGVyX29wX3BhcmFsbGVsaXNtX3RocmVhZHMYBSABKAUSHwoXdXNlX3Blcl9z",
@@ -87,7 +87,7 @@ namespace Tensorflow {
             "CBIoCiBzaGFyZV9jbHVzdGVyX2RldmljZXNfaW5fc2Vzc2lvbhgRIAEoCBI6",
             "CgxleHBlcmltZW50YWwYECABKAsyJC50ZW5zb3JmbG93LkNvbmZpZ1Byb3Rv",
             "LkV4cGVyaW1lbnRhbBoyChBEZXZpY2VDb3VudEVudHJ5EgsKA2tleRgBIAEo",
-            "CRINCgV2YWx1ZRgCIAEoBToCOAEawgQKDEV4cGVyaW1lbnRhbBIfChdjb2xs",
+            "CRINCgV2YWx1ZRgCIAEoBToCOAEahgcKDEV4cGVyaW1lbnRhbBIfChdjb2xs",
             "ZWN0aXZlX2dyb3VwX2xlYWRlchgBIAEoCRIVCg1leGVjdXRvcl90eXBlGAMg",
             "ASgJEhoKEnJlY3ZfYnVmX21heF9jaHVuaxgEIAEoBRIZChF1c2VfbnVtYV9h",
             "ZmZpbml0eRgFIAEoCBI1Ci1jb2xsZWN0aXZlX2RldGVybWluaXN0aWNfc2Vx",
@@ -97,46 +97,54 @@ namespace Tensorflow {
             "KAgSKAogc2hhcmVfY2x1c3Rlcl9kZXZpY2VzX2luX3Nlc3Npb24YCiABKAgS",
             "NQoQc2Vzc2lvbl9tZXRhZGF0YRgLIAEoCzIbLnRlbnNvcmZsb3cuU2Vzc2lv",
             "bk1ldGFkYXRhEiEKGW9wdGltaXplX2Zvcl9zdGF0aWNfZ3JhcGgYDCABKAgS",
-            "GgoSZW5hYmxlX21saXJfYnJpZGdlGA0gASgIEiYKHmVuYWJsZV9tbGlyX2dy",
-            "YXBoX29wdGltaXphdGlvbhgQIAEoCBInCh9kaXNhYmxlX291dHB1dF9wYXJ0",
-            "aXRpb25fZ3JhcGhzGA4gASgIEiMKG3hsYV9mdXNpb25fYXV0b3R1bmVyX3Ro",
-            "cmVzaBgPIAEoA0oECAIQAyLhBAoKUnVuT3B0aW9ucxI2Cgt0cmFjZV9sZXZl",
-            "bBgBIAEoDjIhLnRlbnNvcmZsb3cuUnVuT3B0aW9ucy5UcmFjZUxldmVsEhUK",
-            "DXRpbWVvdXRfaW5fbXMYAiABKAMSHAoUaW50ZXJfb3BfdGhyZWFkX3Bvb2wY",
-            "AyABKAUSHwoXb3V0cHV0X3BhcnRpdGlvbl9ncmFwaHMYBSABKAgSLwoNZGVi",
-            "dWdfb3B0aW9ucxgGIAEoCzIYLnRlbnNvcmZsb3cuRGVidWdPcHRpb25zEioK",
-            "InJlcG9ydF90ZW5zb3JfYWxsb2NhdGlvbnNfdXBvbl9vb20YByABKAgSOQoM",
-            "ZXhwZXJpbWVudGFsGAggASgLMiMudGVuc29yZmxvdy5SdW5PcHRpb25zLkV4",
-            "cGVyaW1lbnRhbBrSAQoMRXhwZXJpbWVudGFsEhwKFGNvbGxlY3RpdmVfZ3Jh",
-            "cGhfa2V5GAEgASgDEhwKFHVzZV9ydW5faGFuZGxlcl9wb29sGAIgASgIElsK",
-            "GHJ1bl9oYW5kbGVyX3Bvb2xfb3B0aW9ucxgDIAEoCzI5LnRlbnNvcmZsb3cu",
-            "UnVuT3B0aW9ucy5FeHBlcmltZW50YWwuUnVuSGFuZGxlclBvb2xPcHRpb25z",
-            "GikKFVJ1bkhhbmRsZXJQb29sT3B0aW9ucxIQCghwcmlvcml0eRgBIAEoAyJS",
-            "CgpUcmFjZUxldmVsEgwKCE5PX1RSQUNFEAASEgoOU09GVFdBUkVfVFJBQ0UQ",
-            "ARISCg5IQVJEV0FSRV9UUkFDRRACEg4KCkZVTExfVFJBQ0UQA0oECAQQBSKH",
-            "AwoLUnVuTWV0YWRhdGESKQoKc3RlcF9zdGF0cxgBIAEoCzIVLnRlbnNvcmZs",
-            "b3cuU3RlcFN0YXRzEiwKCmNvc3RfZ3JhcGgYAiABKAsyGC50ZW5zb3JmbG93",
-            "LkNvc3RHcmFwaERlZhIuChBwYXJ0aXRpb25fZ3JhcGhzGAMgAygLMhQudGVu",
-            "c29yZmxvdy5HcmFwaERlZhI/Cg9mdW5jdGlvbl9ncmFwaHMYBCADKAsyJi50",
-            "ZW5zb3JmbG93LlJ1bk1ldGFkYXRhLkZ1bmN0aW9uR3JhcGhzGq0BCg5GdW5j",
-            "dGlvbkdyYXBocxIuChBwYXJ0aXRpb25fZ3JhcGhzGAEgAygLMhQudGVuc29y",
-            "Zmxvdy5HcmFwaERlZhI0ChZwcmVfb3B0aW1pemF0aW9uX2dyYXBoGAIgASgL",
-            "MhQudGVuc29yZmxvdy5HcmFwaERlZhI1Chdwb3N0X29wdGltaXphdGlvbl9n",
-            "cmFwaBgDIAEoCzIULnRlbnNvcmZsb3cuR3JhcGhEZWYiOgoQVGVuc29yQ29u",
-            "bmVjdGlvbhITCgtmcm9tX3RlbnNvchgBIAEoCRIRCgl0b190ZW5zb3IYAiAB",
-            "KAkisAMKD0NhbGxhYmxlT3B0aW9ucxIMCgRmZWVkGAEgAygJEg0KBWZldGNo",
-            "GAIgAygJEg4KBnRhcmdldBgDIAMoCRIrCgtydW5fb3B0aW9ucxgEIAEoCzIW",
-            "LnRlbnNvcmZsb3cuUnVuT3B0aW9ucxI3ChF0ZW5zb3JfY29ubmVjdGlvbhgF",
-            "IAMoCzIcLnRlbnNvcmZsb3cuVGVuc29yQ29ubmVjdGlvbhJCCgxmZWVkX2Rl",
-            "dmljZXMYBiADKAsyLC50ZW5zb3JmbG93LkNhbGxhYmxlT3B0aW9ucy5GZWVk",
-            "RGV2aWNlc0VudHJ5EkQKDWZldGNoX2RldmljZXMYByADKAsyLS50ZW5zb3Jm",
-            "bG93LkNhbGxhYmxlT3B0aW9ucy5GZXRjaERldmljZXNFbnRyeRIXCg9mZXRj",
-            "aF9za2lwX3N5bmMYCCABKAgaMgoQRmVlZERldmljZXNFbnRyeRILCgNrZXkY",
-            "ASABKAkSDQoFdmFsdWUYAiABKAk6AjgBGjMKEUZldGNoRGV2aWNlc0VudHJ5",
-            "EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAFCdwoYb3JnLnRlbnNv",
-            "cmZsb3cuZnJhbWV3b3JrQgxDb25maWdQcm90b3NQAVpIZ2l0aHViLmNvbS90",
-            "ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL2NvcmVf",
-            "cHJvdG9zX2dvX3Byb3Rv+AEBYgZwcm90bzM="));
+            "GgoSZW5hYmxlX21saXJfYnJpZGdlGA0gASgIElMKE21saXJfYnJpZGdlX3Jv",
+            "bGxvdXQYESABKA4yNi50ZW5zb3JmbG93LkNvbmZpZ1Byb3RvLkV4cGVyaW1l",
+            "bnRhbC5NbGlyQnJpZGdlUm9sbG91dBImCh5lbmFibGVfbWxpcl9ncmFwaF9v",
+            "cHRpbWl6YXRpb24YECABKAgSJwofZGlzYWJsZV9vdXRwdXRfcGFydGl0aW9u",
+            "X2dyYXBocxgOIAEoCBIjCht4bGFfZnVzaW9uX2F1dG90dW5lcl90aHJlc2gY",
+            "DyABKAMSEAoIdXNlX3RmcnQYEiABKAgi2gEKEU1saXJCcmlkZ2VSb2xsb3V0",
+            "EiMKH01MSVJfQlJJREdFX1JPTExPVVRfVU5TUEVDSUZJRUQQABIfChtNTElS",
+            "X0JSSURHRV9ST0xMT1VUX0VOQUJMRUQQARIgChxNTElSX0JSSURHRV9ST0xM",
+            "T1VUX0RJU0FCTEVEEAISKQolTUxJUl9CUklER0VfUk9MTE9VVF9TQUZFX01P",
+            "REVfRU5BQkxFRBADEjIKLk1MSVJfQlJJREdFX1JPTExPVVRfU0FGRV9NT0RF",
+            "X0ZBTExCQUNLX0VOQUJMRUQQBEoECAIQAyLhBAoKUnVuT3B0aW9ucxI2Cgt0",
+            "cmFjZV9sZXZlbBgBIAEoDjIhLnRlbnNvcmZsb3cuUnVuT3B0aW9ucy5UcmFj",
+            "ZUxldmVsEhUKDXRpbWVvdXRfaW5fbXMYAiABKAMSHAoUaW50ZXJfb3BfdGhy",
+            "ZWFkX3Bvb2wYAyABKAUSHwoXb3V0cHV0X3BhcnRpdGlvbl9ncmFwaHMYBSAB",
+            "KAgSLwoNZGVidWdfb3B0aW9ucxgGIAEoCzIYLnRlbnNvcmZsb3cuRGVidWdP",
+            "cHRpb25zEioKInJlcG9ydF90ZW5zb3JfYWxsb2NhdGlvbnNfdXBvbl9vb20Y",
+            "ByABKAgSOQoMZXhwZXJpbWVudGFsGAggASgLMiMudGVuc29yZmxvdy5SdW5P",
+            "cHRpb25zLkV4cGVyaW1lbnRhbBrSAQoMRXhwZXJpbWVudGFsEhwKFGNvbGxl",
+            "Y3RpdmVfZ3JhcGhfa2V5GAEgASgDEhwKFHVzZV9ydW5faGFuZGxlcl9wb29s",
+            "GAIgASgIElsKGHJ1bl9oYW5kbGVyX3Bvb2xfb3B0aW9ucxgDIAEoCzI5LnRl",
+            "bnNvcmZsb3cuUnVuT3B0aW9ucy5FeHBlcmltZW50YWwuUnVuSGFuZGxlclBv",
+            "b2xPcHRpb25zGikKFVJ1bkhhbmRsZXJQb29sT3B0aW9ucxIQCghwcmlvcml0",
+            "eRgBIAEoAyJSCgpUcmFjZUxldmVsEgwKCE5PX1RSQUNFEAASEgoOU09GVFdB",
+            "UkVfVFJBQ0UQARISCg5IQVJEV0FSRV9UUkFDRRACEg4KCkZVTExfVFJBQ0UQ",
+            "A0oECAQQBSKHAwoLUnVuTWV0YWRhdGESKQoKc3RlcF9zdGF0cxgBIAEoCzIV",
+            "LnRlbnNvcmZsb3cuU3RlcFN0YXRzEiwKCmNvc3RfZ3JhcGgYAiABKAsyGC50",
+            "ZW5zb3JmbG93LkNvc3RHcmFwaERlZhIuChBwYXJ0aXRpb25fZ3JhcGhzGAMg",
+            "AygLMhQudGVuc29yZmxvdy5HcmFwaERlZhI/Cg9mdW5jdGlvbl9ncmFwaHMY",
+            "BCADKAsyJi50ZW5zb3JmbG93LlJ1bk1ldGFkYXRhLkZ1bmN0aW9uR3JhcGhz",
+            "Gq0BCg5GdW5jdGlvbkdyYXBocxIuChBwYXJ0aXRpb25fZ3JhcGhzGAEgAygL",
+            "MhQudGVuc29yZmxvdy5HcmFwaERlZhI0ChZwcmVfb3B0aW1pemF0aW9uX2dy",
+            "YXBoGAIgASgLMhQudGVuc29yZmxvdy5HcmFwaERlZhI1Chdwb3N0X29wdGlt",
+            "aXphdGlvbl9ncmFwaBgDIAEoCzIULnRlbnNvcmZsb3cuR3JhcGhEZWYiOgoQ",
+            "VGVuc29yQ29ubmVjdGlvbhITCgtmcm9tX3RlbnNvchgBIAEoCRIRCgl0b190",
+            "ZW5zb3IYAiABKAkisAMKD0NhbGxhYmxlT3B0aW9ucxIMCgRmZWVkGAEgAygJ",
+            "Eg0KBWZldGNoGAIgAygJEg4KBnRhcmdldBgDIAMoCRIrCgtydW5fb3B0aW9u",
+            "cxgEIAEoCzIWLnRlbnNvcmZsb3cuUnVuT3B0aW9ucxI3ChF0ZW5zb3JfY29u",
+            "bmVjdGlvbhgFIAMoCzIcLnRlbnNvcmZsb3cuVGVuc29yQ29ubmVjdGlvbhJC",
+            "CgxmZWVkX2RldmljZXMYBiADKAsyLC50ZW5zb3JmbG93LkNhbGxhYmxlT3B0",
+            "aW9ucy5GZWVkRGV2aWNlc0VudHJ5EkQKDWZldGNoX2RldmljZXMYByADKAsy",
+            "LS50ZW5zb3JmbG93LkNhbGxhYmxlT3B0aW9ucy5GZXRjaERldmljZXNFbnRy",
+            "eRIXCg9mZXRjaF9za2lwX3N5bmMYCCABKAgaMgoQRmVlZERldmljZXNFbnRy",
+            "eRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBGjMKEUZldGNoRGV2",
+            "aWNlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAFChAEK",
+            "GG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0IMQ29uZmlnUHJvdG9zUAFaVWdp",
+            "dGh1Yi5jb20vdGVuc29yZmxvdy90ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28v",
+            "Y29yZS9wcm90b2J1Zi9mb3JfY29yZV9wcm90b3NfZ29fcHJvdG/4AQFiBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.CostGraphReflection.Descriptor, global::Tensorflow.GraphReflection.Descriptor, global::Tensorflow.StepStatsReflection.Descriptor, global::Tensorflow.ClusterReflection.Descriptor, global::Tensorflow.DebugReflection.Descriptor, global::Tensorflow.RewriterConfigReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -146,7 +154,7 @@ namespace Tensorflow {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ThreadPoolOptionProto), global::Tensorflow.ThreadPoolOptionProto.Parser, new[]{ "NumThreads", "GlobalName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RPCOptions), global::Tensorflow.RPCOptions.Parser, new[]{ "UseRpcForInprocessMaster", "CompressionAlgorithm", "CompressionLevel", "CacheRpcResponse", "DisableSessionConnectionSharing" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SessionMetadata), global::Tensorflow.SessionMetadata.Parser, new[]{ "Name", "Version" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ConfigProto), global::Tensorflow.ConfigProto.Parser, new[]{ "DeviceCount", "IntraOpParallelismThreads", "InterOpParallelismThreads", "UsePerSessionThreads", "SessionInterOpThreadPool", "PlacementPeriod", "DeviceFilters", "GpuOptions", "AllowSoftPlacement", "LogDevicePlacement", "GraphOptions", "OperationTimeoutInMs", "RpcOptions", "ClusterDef", "IsolateSessionState", "ShareClusterDevicesInSession", "Experimental" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ConfigProto.Types.Experimental), global::Tensorflow.ConfigProto.Types.Experimental.Parser, new[]{ "CollectiveGroupLeader", "ExecutorType", "RecvBufMaxChunk", "UseNumaAffinity", "CollectiveDeterministicSequentialExecution", "CollectiveNccl", "ShareSessionStateInClusterspecPropagation", "DisableThreadSpinning", "ShareClusterDevicesInSession", "SessionMetadata", "OptimizeForStaticGraph", "EnableMlirBridge", "EnableMlirGraphOptimization", "DisableOutputPartitionGraphs", "XlaFusionAutotunerThresh" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ConfigProto), global::Tensorflow.ConfigProto.Parser, new[]{ "DeviceCount", "IntraOpParallelismThreads", "InterOpParallelismThreads", "UsePerSessionThreads", "SessionInterOpThreadPool", "PlacementPeriod", "DeviceFilters", "GpuOptions", "AllowSoftPlacement", "LogDevicePlacement", "GraphOptions", "OperationTimeoutInMs", "RpcOptions", "ClusterDef", "IsolateSessionState", "ShareClusterDevicesInSession", "Experimental" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ConfigProto.Types.Experimental), global::Tensorflow.ConfigProto.Types.Experimental.Parser, new[]{ "CollectiveGroupLeader", "ExecutorType", "RecvBufMaxChunk", "UseNumaAffinity", "CollectiveDeterministicSequentialExecution", "CollectiveNccl", "ShareSessionStateInClusterspecPropagation", "DisableThreadSpinning", "ShareClusterDevicesInSession", "SessionMetadata", "OptimizeForStaticGraph", "EnableMlirBridge", "MlirBridgeRollout", "EnableMlirGraphOptimization", "DisableOutputPartitionGraphs", "XlaFusionAutotunerThresh", "UseTfrt" }, null, new[]{ typeof(global::Tensorflow.ConfigProto.Types.Experimental.Types.MlirBridgeRollout) }, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunOptions), global::Tensorflow.RunOptions.Parser, new[]{ "TraceLevel", "TimeoutInMs", "InterOpThreadPool", "OutputPartitionGraphs", "DebugOptions", "ReportTensorAllocationsUponOom", "Experimental" }, null, new[]{ typeof(global::Tensorflow.RunOptions.Types.TraceLevel) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunOptions.Types.Experimental), global::Tensorflow.RunOptions.Types.Experimental.Parser, new[]{ "CollectiveGraphKey", "UseRunHandlerPool", "RunHandlerPoolOptions" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunOptions.Types.Experimental.Types.RunHandlerPoolOptions), global::Tensorflow.RunOptions.Types.Experimental.Types.RunHandlerPoolOptions.Parser, new[]{ "Priority" }, null, null, null, null)})}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunMetadata), global::Tensorflow.RunMetadata.Parser, new[]{ "StepStats", "CostGraph", "PartitionGraphs", "FunctionGraphs" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RunMetadata.Types.FunctionGraphs), global::Tensorflow.RunMetadata.Types.FunctionGraphs.Parser, new[]{ "PartitionGraphs", "PreOptimizationGraph", "PostOptimizationGraph" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.TensorConnection), global::Tensorflow.TensorConnection.Parser, new[]{ "FromTensor", "ToTensor" }, null, null, null, null),
@@ -3279,9 +3287,11 @@ namespace Tensorflow {
           sessionMetadata_ = other.sessionMetadata_ != null ? other.sessionMetadata_.Clone() : null;
           optimizeForStaticGraph_ = other.optimizeForStaticGraph_;
           enableMlirBridge_ = other.enableMlirBridge_;
+          mlirBridgeRollout_ = other.mlirBridgeRollout_;
           enableMlirGraphOptimization_ = other.enableMlirGraphOptimization_;
           disableOutputPartitionGraphs_ = other.disableOutputPartitionGraphs_;
           xlaFusionAutotunerThresh_ = other.xlaFusionAutotunerThresh_;
+          useTfrt_ = other.useTfrt_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -3488,6 +3498,9 @@ namespace Tensorflow {
         public const int EnableMlirBridgeFieldNumber = 13;
         private bool enableMlirBridge_;
         /// <summary>
+        /// This field will eventually be deprecated and replaced by
+        /// mlir_bridge_rollout (b/166038521).
+        ///
         /// Whether to enable the MLIR-based TF->XLA bridge.
         ///
         /// This is a replacement to the existing bridge, and not ready for
@@ -3505,6 +3518,23 @@ namespace Tensorflow {
           get { return enableMlirBridge_; }
           set {
             enableMlirBridge_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "mlir_bridge_rollout" field.</summary>
+        public const int MlirBridgeRolloutFieldNumber = 17;
+        private global::Tensorflow.ConfigProto.Types.Experimental.Types.MlirBridgeRollout mlirBridgeRollout_ = global::Tensorflow.ConfigProto.Types.Experimental.Types.MlirBridgeRollout.Unspecified;
+        /// <summary>
+        /// This field is underdevelopment, for now use enable_mlir_bridge
+        /// (b/166038521).
+        ///
+        /// Whether to enable the MLIR-based TF->XLA bridge.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Tensorflow.ConfigProto.Types.Experimental.Types.MlirBridgeRollout MlirBridgeRollout {
+          get { return mlirBridgeRollout_; }
+          set {
+            mlirBridgeRollout_ = value;
           }
         }
 
@@ -3562,6 +3592,20 @@ namespace Tensorflow {
           }
         }
 
+        /// <summary>Field number for the "use_tfrt" field.</summary>
+        public const int UseTfrtFieldNumber = 18;
+        private bool useTfrt_;
+        /// <summary>
+        /// Whether runtime execution uses TFRT.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool UseTfrt {
+          get { return useTfrt_; }
+          set {
+            useTfrt_ = value;
+          }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override bool Equals(object other) {
           return Equals(other as Experimental);
@@ -3587,9 +3631,11 @@ namespace Tensorflow {
           if (!object.Equals(SessionMetadata, other.SessionMetadata)) return false;
           if (OptimizeForStaticGraph != other.OptimizeForStaticGraph) return false;
           if (EnableMlirBridge != other.EnableMlirBridge) return false;
+          if (MlirBridgeRollout != other.MlirBridgeRollout) return false;
           if (EnableMlirGraphOptimization != other.EnableMlirGraphOptimization) return false;
           if (DisableOutputPartitionGraphs != other.DisableOutputPartitionGraphs) return false;
           if (XlaFusionAutotunerThresh != other.XlaFusionAutotunerThresh) return false;
+          if (UseTfrt != other.UseTfrt) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -3608,9 +3654,11 @@ namespace Tensorflow {
           if (sessionMetadata_ != null) hash ^= SessionMetadata.GetHashCode();
           if (OptimizeForStaticGraph != false) hash ^= OptimizeForStaticGraph.GetHashCode();
           if (EnableMlirBridge != false) hash ^= EnableMlirBridge.GetHashCode();
+          if (MlirBridgeRollout != global::Tensorflow.ConfigProto.Types.Experimental.Types.MlirBridgeRollout.Unspecified) hash ^= MlirBridgeRollout.GetHashCode();
           if (EnableMlirGraphOptimization != false) hash ^= EnableMlirGraphOptimization.GetHashCode();
           if (DisableOutputPartitionGraphs != false) hash ^= DisableOutputPartitionGraphs.GetHashCode();
           if (XlaFusionAutotunerThresh != 0L) hash ^= XlaFusionAutotunerThresh.GetHashCode();
+          if (UseTfrt != false) hash ^= UseTfrt.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -3684,6 +3732,14 @@ namespace Tensorflow {
             output.WriteRawTag(128, 1);
             output.WriteBool(EnableMlirGraphOptimization);
           }
+          if (MlirBridgeRollout != global::Tensorflow.ConfigProto.Types.Experimental.Types.MlirBridgeRollout.Unspecified) {
+            output.WriteRawTag(136, 1);
+            output.WriteEnum((int) MlirBridgeRollout);
+          }
+          if (UseTfrt != false) {
+            output.WriteRawTag(144, 1);
+            output.WriteBool(UseTfrt);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -3728,6 +3784,9 @@ namespace Tensorflow {
           if (EnableMlirBridge != false) {
             size += 1 + 1;
           }
+          if (MlirBridgeRollout != global::Tensorflow.ConfigProto.Types.Experimental.Types.MlirBridgeRollout.Unspecified) {
+            size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) MlirBridgeRollout);
+          }
           if (EnableMlirGraphOptimization != false) {
             size += 2 + 1;
           }
@@ -3736,6 +3795,9 @@ namespace Tensorflow {
           }
           if (XlaFusionAutotunerThresh != 0L) {
             size += 1 + pb::CodedOutputStream.ComputeInt64Size(XlaFusionAutotunerThresh);
+          }
+          if (UseTfrt != false) {
+            size += 2 + 1;
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -3787,6 +3849,9 @@ namespace Tensorflow {
           if (other.EnableMlirBridge != false) {
             EnableMlirBridge = other.EnableMlirBridge;
           }
+          if (other.MlirBridgeRollout != global::Tensorflow.ConfigProto.Types.Experimental.Types.MlirBridgeRollout.Unspecified) {
+            MlirBridgeRollout = other.MlirBridgeRollout;
+          }
           if (other.EnableMlirGraphOptimization != false) {
             EnableMlirGraphOptimization = other.EnableMlirGraphOptimization;
           }
@@ -3795,6 +3860,9 @@ namespace Tensorflow {
           }
           if (other.XlaFusionAutotunerThresh != 0L) {
             XlaFusionAutotunerThresh = other.XlaFusionAutotunerThresh;
+          }
+          if (other.UseTfrt != false) {
+            UseTfrt = other.UseTfrt;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -3870,9 +3938,59 @@ namespace Tensorflow {
                 EnableMlirGraphOptimization = input.ReadBool();
                 break;
               }
+              case 136: {
+                MlirBridgeRollout = (global::Tensorflow.ConfigProto.Types.Experimental.Types.MlirBridgeRollout) input.ReadEnum();
+                break;
+              }
+              case 144: {
+                UseTfrt = input.ReadBool();
+                break;
+              }
             }
           }
         }
+
+        #region Nested types
+        /// <summary>Container for nested types declared in the Experimental message type.</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static partial class Types {
+          /// <summary>
+          /// An enum that describes the state of the MLIR bridge rollout.
+          /// </summary>
+          public enum MlirBridgeRollout {
+            /// <summary>
+            /// If this field is left unspecified, the MLIR bridge may be selectively
+            /// enabled on a per graph basis.
+            /// </summary>
+            [pbr::OriginalName("MLIR_BRIDGE_ROLLOUT_UNSPECIFIED")] Unspecified = 0,
+            /// <summary>
+            /// Enabling the MLIR bridge enables it for all graphs in this session.
+            /// </summary>
+            [pbr::OriginalName("MLIR_BRIDGE_ROLLOUT_ENABLED")] Enabled = 1,
+            /// <summary>
+            /// Disabling the MLIR bridge disables it for all graphs in this session.
+            /// </summary>
+            [pbr::OriginalName("MLIR_BRIDGE_ROLLOUT_DISABLED")] Disabled = 2,
+            /// <summary>
+            /// Enable the MLIR bridge on a per graph basis based on an analysis of
+            /// the features used in the graph. If the features used by the graph are
+            /// supported by the MLIR bridge, the MLIR bridge will be used to run the
+            /// graph.
+            /// </summary>
+            [pbr::OriginalName("MLIR_BRIDGE_ROLLOUT_SAFE_MODE_ENABLED")] SafeModeEnabled = 3,
+            /// <summary>
+            /// Enable the MLIR bridge in a fallback mode on a per graph basis based
+            /// on an analysis of the features used in the graph.
+            /// Running the MLIR bridge in the fallback mode means that it is
+            /// executed and it commits all the changes to the TF graph in case
+            /// of success. And it does not in case of failures and let the old bridge
+            /// to process the TF graph.
+            /// </summary>
+            [pbr::OriginalName("MLIR_BRIDGE_ROLLOUT_SAFE_MODE_FALLBACK_ENABLED")] SafeModeFallbackEnabled = 4,
+          }
+
+        }
+        #endregion
 
       }
 

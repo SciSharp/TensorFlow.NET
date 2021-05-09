@@ -27,22 +27,25 @@ namespace Tensorflow {
             "CjV0ZW5zb3JmbG93L3B5dGhvbi9mcmFtZXdvcmsvY3BwX3NoYXBlX2luZmVy",
             "ZW5jZS5wcm90bxIKdGVuc29yZmxvdxoldGVuc29yZmxvdy9jb3JlL2ZyYW1l",
             "d29yay90eXBlcy5wcm90bxosdGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay90",
-            "ZW5zb3Jfc2hhcGUucHJvdG8i7QIKF0NwcFNoYXBlSW5mZXJlbmNlUmVzdWx0",
+            "ZW5zb3Jfc2hhcGUucHJvdG8ipQMKF0NwcFNoYXBlSW5mZXJlbmNlUmVzdWx0",
             "EisKBXNoYXBlGAEgASgLMhwudGVuc29yZmxvdy5UZW5zb3JTaGFwZVByb3Rv",
             "EkMKC2hhbmRsZV9kYXRhGAQgASgLMi4udGVuc29yZmxvdy5DcHBTaGFwZUlu",
-            "ZmVyZW5jZVJlc3VsdC5IYW5kbGVEYXRhGmYKEkhhbmRsZVNoYXBlQW5kVHlw",
-            "ZRIrCgVzaGFwZRgBIAEoCzIcLnRlbnNvcmZsb3cuVGVuc29yU2hhcGVQcm90",
-            "bxIjCgVkdHlwZRgCIAEoDjIULnRlbnNvcmZsb3cuRGF0YVR5cGUabAoKSGFu",
-            "ZGxlRGF0YRIOCgZpc19zZXQYASABKAgSTgoOc2hhcGVfYW5kX3R5cGUYAiAD",
-            "KAsyNi50ZW5zb3JmbG93LkNwcFNoYXBlSW5mZXJlbmNlUmVzdWx0LkhhbmRs",
-            "ZVNoYXBlQW5kVHlwZUoECAIQA0oECAMQBCJlCh1DcHBTaGFwZUluZmVyZW5j",
-            "ZUlucHV0c05lZWRlZBIcChRpbnB1dF90ZW5zb3JzX25lZWRlZBgBIAMoBRIm",
-            "Ch5pbnB1dF90ZW5zb3JzX2FzX3NoYXBlc19uZWVkZWQYAiADKAVCA/gBAWIG",
-            "cHJvdG8z"));
+            "ZmVyZW5jZVJlc3VsdC5IYW5kbGVEYXRhGp0BChJIYW5kbGVTaGFwZUFuZFR5",
+            "cGUSKwoFc2hhcGUYASABKAsyHC50ZW5zb3JmbG93LlRlbnNvclNoYXBlUHJv",
+            "dG8SIwoFZHR5cGUYAiABKA4yFC50ZW5zb3JmbG93LkRhdGFUeXBlEjUKEHNw",
+            "ZWNpYWxpemVkX3R5cGUYAyABKA4yGy50ZW5zb3JmbG93LlNwZWNpYWxpemVk",
+            "VHlwZRpsCgpIYW5kbGVEYXRhEg4KBmlzX3NldBgBIAEoCBJOCg5zaGFwZV9h",
+            "bmRfdHlwZRgCIAMoCzI2LnRlbnNvcmZsb3cuQ3BwU2hhcGVJbmZlcmVuY2VS",
+            "ZXN1bHQuSGFuZGxlU2hhcGVBbmRUeXBlSgQIAhADSgQIAxAEImUKHUNwcFNo",
+            "YXBlSW5mZXJlbmNlSW5wdXRzTmVlZGVkEhwKFGlucHV0X3RlbnNvcnNfbmVl",
+            "ZGVkGAEgAygFEiYKHmlucHV0X3RlbnNvcnNfYXNfc2hhcGVzX25lZWRlZBgC",
+            "IAMoBUJhWlxnaXRodWIuY29tL3RlbnNvcmZsb3cvdGVuc29yZmxvdy90ZW5z",
+            "b3JmbG93L2dvL3B5dGhvbi9mcmFtZXdvcmsvY3BwX3NoYXBlX2luZmVyZW5j",
+            "ZV9nb19wcm90b/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult), global::Tensorflow.CppShapeInferenceResult.Parser, new[]{ "Shape", "HandleData" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult.Types.HandleShapeAndType), global::Tensorflow.CppShapeInferenceResult.Types.HandleShapeAndType.Parser, new[]{ "Shape", "Dtype" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult), global::Tensorflow.CppShapeInferenceResult.Parser, new[]{ "Shape", "HandleData" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult.Types.HandleShapeAndType), global::Tensorflow.CppShapeInferenceResult.Types.HandleShapeAndType.Parser, new[]{ "Shape", "Dtype", "SpecializedType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceResult.Types.HandleData), global::Tensorflow.CppShapeInferenceResult.Types.HandleData.Parser, new[]{ "IsSet", "ShapeAndType" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CppShapeInferenceInputsNeeded), global::Tensorflow.CppShapeInferenceInputsNeeded.Parser, new[]{ "InputTensorsNeeded", "InputTensorsAsShapesNeeded" }, null, null, null, null)
           }));
@@ -249,6 +252,7 @@ namespace Tensorflow {
         public HandleShapeAndType(HandleShapeAndType other) : this() {
           shape_ = other.shape_ != null ? other.shape_.Clone() : null;
           dtype_ = other.dtype_;
+          specializedType_ = other.specializedType_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -279,6 +283,22 @@ namespace Tensorflow {
           }
         }
 
+        /// <summary>Field number for the "specialized_type" field.</summary>
+        public const int SpecializedTypeFieldNumber = 3;
+        private global::Tensorflow.SpecializedType specializedType_ = global::Tensorflow.SpecializedType.StInvalid;
+        /// <summary>
+        /// For dtype==DT_VARIANT, specialized_type may indicate a more specific
+        /// type. For other dtypes or when the information is unavailable it is set
+        /// to ST_INVALID.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Tensorflow.SpecializedType SpecializedType {
+          get { return specializedType_; }
+          set {
+            specializedType_ = value;
+          }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override bool Equals(object other) {
           return Equals(other as HandleShapeAndType);
@@ -294,6 +314,7 @@ namespace Tensorflow {
           }
           if (!object.Equals(Shape, other.Shape)) return false;
           if (Dtype != other.Dtype) return false;
+          if (SpecializedType != other.SpecializedType) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -302,6 +323,7 @@ namespace Tensorflow {
           int hash = 1;
           if (shape_ != null) hash ^= Shape.GetHashCode();
           if (Dtype != global::Tensorflow.DataType.DtInvalid) hash ^= Dtype.GetHashCode();
+          if (SpecializedType != global::Tensorflow.SpecializedType.StInvalid) hash ^= SpecializedType.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -323,6 +345,10 @@ namespace Tensorflow {
             output.WriteRawTag(16);
             output.WriteEnum((int) Dtype);
           }
+          if (SpecializedType != global::Tensorflow.SpecializedType.StInvalid) {
+            output.WriteRawTag(24);
+            output.WriteEnum((int) SpecializedType);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -336,6 +362,9 @@ namespace Tensorflow {
           }
           if (Dtype != global::Tensorflow.DataType.DtInvalid) {
             size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Dtype);
+          }
+          if (SpecializedType != global::Tensorflow.SpecializedType.StInvalid) {
+            size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) SpecializedType);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -357,6 +386,9 @@ namespace Tensorflow {
           if (other.Dtype != global::Tensorflow.DataType.DtInvalid) {
             Dtype = other.Dtype;
           }
+          if (other.SpecializedType != global::Tensorflow.SpecializedType.StInvalid) {
+            SpecializedType = other.SpecializedType;
+          }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 
@@ -377,6 +409,10 @@ namespace Tensorflow {
               }
               case 16: {
                 Dtype = (global::Tensorflow.DataType) input.ReadEnum();
+                break;
+              }
+              case 24: {
+                SpecializedType = (global::Tensorflow.SpecializedType) input.ReadEnum();
                 break;
               }
             }

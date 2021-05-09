@@ -25,38 +25,40 @@ namespace Tensorflow {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiB0ZW5zb3JmbG93L2NvcmUvdXRpbC9ldmVudC5wcm90bxIKdGVuc29yZmxv",
-            "dxondGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay9zdW1tYXJ5LnByb3RvIrsC",
+            "dxondGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay9zdW1tYXJ5LnByb3RvIr8C",
             "CgVFdmVudBIRCgl3YWxsX3RpbWUYASABKAESDAoEc3RlcBgCIAEoAxIWCgxm",
             "aWxlX3ZlcnNpb24YAyABKAlIABITCglncmFwaF9kZWYYBCABKAxIABImCgdz",
-            "dW1tYXJ5GAUgASgLMhMudGVuc29yZmxvdy5TdW1tYXJ5SAASLQoLbG9nX21l",
-            "c3NhZ2UYBiABKAsyFi50ZW5zb3JmbG93LkxvZ01lc3NhZ2VIABItCgtzZXNz",
-            "aW9uX2xvZxgHIAEoCzIWLnRlbnNvcmZsb3cuU2Vzc2lvbkxvZ0gAEjwKE3Rh",
-            "Z2dlZF9ydW5fbWV0YWRhdGEYCCABKAsyHS50ZW5zb3JmbG93LlRhZ2dlZFJ1",
-            "bk1ldGFkYXRhSAASGAoObWV0YV9ncmFwaF9kZWYYCSABKAxIAEIGCgR3aGF0",
-            "IpkBCgpMb2dNZXNzYWdlEisKBWxldmVsGAEgASgOMhwudGVuc29yZmxvdy5M",
-            "b2dNZXNzYWdlLkxldmVsEg8KB21lc3NhZ2UYAiABKAkiTQoFTGV2ZWwSCwoH",
-            "VU5LTk9XThAAEg0KCURFQlVHR0lORxAKEggKBElORk8QFBIICgRXQVJOEB4S",
-            "CQoFRVJST1IQKBIJCgVGQVRBTBAyIrYBCgpTZXNzaW9uTG9nEjQKBnN0YXR1",
-            "cxgBIAEoDjIkLnRlbnNvcmZsb3cuU2Vzc2lvbkxvZy5TZXNzaW9uU3RhdHVz",
-            "EhcKD2NoZWNrcG9pbnRfcGF0aBgCIAEoCRILCgNtc2cYAyABKAkiTAoNU2Vz",
-            "c2lvblN0YXR1cxIWChJTVEFUVVNfVU5TUEVDSUZJRUQQABIJCgVTVEFSVBAB",
-            "EggKBFNUT1AQAhIOCgpDSEVDS1BPSU5UEAMiNgoRVGFnZ2VkUnVuTWV0YWRh",
-            "dGESCwoDdGFnGAEgASgJEhQKDHJ1bl9tZXRhZGF0YRgCIAEoDCIkCg5XYXRj",
-            "aGRvZ0NvbmZpZxISCgp0aW1lb3V0X21zGAEgASgDIiYKEVJlcXVlc3RlZEV4",
-            "aXRDb2RlEhEKCWV4aXRfY29kZRgBIAEoBSK2AQoWV29ya2VySGVhcnRiZWF0",
-            "UmVxdWVzdBI1Cg1zaHV0ZG93bl9tb2RlGAEgASgOMh4udGVuc29yZmxvdy5X",
-            "b3JrZXJTaHV0ZG93bk1vZGUSMwoPd2F0Y2hkb2dfY29uZmlnGAIgASgLMhou",
-            "dGVuc29yZmxvdy5XYXRjaGRvZ0NvbmZpZxIwCglleGl0X2NvZGUYAyABKAsy",
-            "HS50ZW5zb3JmbG93LlJlcXVlc3RlZEV4aXRDb2RlIoMBChdXb3JrZXJIZWFy",
-            "dGJlYXRSZXNwb25zZRIvCg1oZWFsdGhfc3RhdHVzGAEgASgOMhgudGVuc29y",
-            "Zmxvdy5Xb3JrZXJIZWFsdGgSJQoKd29ya2VyX2xvZxgCIAMoCzIRLnRlbnNv",
-            "cmZsb3cuRXZlbnQSEAoIaG9zdG5hbWUYAyABKAkqWwoMV29ya2VySGVhbHRo",
-            "EgYKAk9LEAASHAoYUkVDRUlWRURfU0hVVERPV05fU0lHTkFMEAESEgoOSU5U",
-            "RVJOQUxfRVJST1IQAhIRCg1TSFVUVElOR19ET1dOEAMqawoSV29ya2VyU2h1",
-            "dGRvd25Nb2RlEgsKB0RFRkFVTFQQABISCg5OT1RfQ09ORklHVVJFRBABEhgK",
-            "FFdBSVRfRk9SX0NPT1JESU5BVE9SEAISGgoWU0hVVERPV05fQUZURVJfVElN",
-            "RU9VVBADQicKE29yZy50ZW5zb3JmbG93LnV0aWxCC0V2ZW50UHJvdG9zUAH4",
-            "AQFiBnByb3RvMw=="));
+            "dW1tYXJ5GAUgASgLMhMudGVuc29yZmxvdy5TdW1tYXJ5SAASMQoLbG9nX21l",
+            "c3NhZ2UYBiABKAsyFi50ZW5zb3JmbG93LkxvZ01lc3NhZ2VCAhgBSAASLQoL",
+            "c2Vzc2lvbl9sb2cYByABKAsyFi50ZW5zb3JmbG93LlNlc3Npb25Mb2dIABI8",
+            "ChN0YWdnZWRfcnVuX21ldGFkYXRhGAggASgLMh0udGVuc29yZmxvdy5UYWdn",
+            "ZWRSdW5NZXRhZGF0YUgAEhgKDm1ldGFfZ3JhcGhfZGVmGAkgASgMSABCBgoE",
+            "d2hhdCKhAQoKTG9nTWVzc2FnZRIrCgVsZXZlbBgBIAEoDjIcLnRlbnNvcmZs",
+            "b3cuTG9nTWVzc2FnZS5MZXZlbBIPCgdtZXNzYWdlGAIgASgJIlEKBUxldmVs",
+            "EgsKB1VOS05PV04QABINCglERUJVR0dJTkcQChIICgRJTkZPEBQSCAoEV0FS",
+            "ThAeEgkKBUVSUk9SECgSCQoFRkFUQUwQMhoCGAE6AhgBIrYBCgpTZXNzaW9u",
+            "TG9nEjQKBnN0YXR1cxgBIAEoDjIkLnRlbnNvcmZsb3cuU2Vzc2lvbkxvZy5T",
+            "ZXNzaW9uU3RhdHVzEhcKD2NoZWNrcG9pbnRfcGF0aBgCIAEoCRILCgNtc2cY",
+            "AyABKAkiTAoNU2Vzc2lvblN0YXR1cxIWChJTVEFUVVNfVU5TUEVDSUZJRUQQ",
+            "ABIJCgVTVEFSVBABEggKBFNUT1AQAhIOCgpDSEVDS1BPSU5UEAMiNgoRVGFn",
+            "Z2VkUnVuTWV0YWRhdGESCwoDdGFnGAEgASgJEhQKDHJ1bl9tZXRhZGF0YRgC",
+            "IAEoDCIkCg5XYXRjaGRvZ0NvbmZpZxISCgp0aW1lb3V0X21zGAEgASgDIiYK",
+            "EVJlcXVlc3RlZEV4aXRDb2RlEhEKCWV4aXRfY29kZRgBIAEoBSK2AQoWV29y",
+            "a2VySGVhcnRiZWF0UmVxdWVzdBI1Cg1zaHV0ZG93bl9tb2RlGAEgASgOMh4u",
+            "dGVuc29yZmxvdy5Xb3JrZXJTaHV0ZG93bk1vZGUSMwoPd2F0Y2hkb2dfY29u",
+            "ZmlnGAIgASgLMhoudGVuc29yZmxvdy5XYXRjaGRvZ0NvbmZpZxIwCglleGl0",
+            "X2NvZGUYAyABKAsyHS50ZW5zb3JmbG93LlJlcXVlc3RlZEV4aXRDb2RlIoMB",
+            "ChdXb3JrZXJIZWFydGJlYXRSZXNwb25zZRIvCg1oZWFsdGhfc3RhdHVzGAEg",
+            "ASgOMhgudGVuc29yZmxvdy5Xb3JrZXJIZWFsdGgSJQoKd29ya2VyX2xvZxgC",
+            "IAMoCzIRLnRlbnNvcmZsb3cuRXZlbnQSEAoIaG9zdG5hbWUYAyABKAkqWwoM",
+            "V29ya2VySGVhbHRoEgYKAk9LEAASHAoYUkVDRUlWRURfU0hVVERPV05fU0lH",
+            "TkFMEAESEgoOSU5URVJOQUxfRVJST1IQAhIRCg1TSFVUVElOR19ET1dOEAMq",
+            "awoSV29ya2VyU2h1dGRvd25Nb2RlEgsKB0RFRkFVTFQQABISCg5OT1RfQ09O",
+            "RklHVVJFRBABEhgKFFdBSVRfRk9SX0NPT1JESU5BVE9SEAISGgoWU0hVVERP",
+            "V05fQUZURVJfVElNRU9VVBADQnAKE29yZy50ZW5zb3JmbG93LnV0aWxCC0V2",
+            "ZW50UHJvdG9zUAFaR2dpdGh1Yi5jb20vdGVuc29yZmxvdy90ZW5zb3JmbG93",
+            "L3RlbnNvcmZsb3cvZ28vY29yZS91dGlsL2V2ZW50X2dvX3Byb3Rv+AEBYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.SummaryReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.WorkerHealth), typeof(global::Tensorflow.WorkerShutdownMode), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -243,9 +245,11 @@ namespace Tensorflow {
     /// <summary>Field number for the "log_message" field.</summary>
     public const int LogMessageFieldNumber = 6;
     /// <summary>
-    /// The user output a log message. Not all messages are logged, only ones
-    /// generated via the Python tensorboard_logging module.
+    /// The user output a log message. This was theoretically used by the defunct
+    /// tensorboard_logging module, which has since been removed; this field is
+    /// now deprecated and should not be used.
     /// </summary>
+    [global::System.ObsoleteAttribute]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Tensorflow.LogMessage LogMessage {
       get { return whatCase_ == WhatOneofCase.LogMessage ? (global::Tensorflow.LogMessage) what_ : null; }
@@ -572,7 +576,11 @@ namespace Tensorflow {
 
   /// <summary>
   /// Protocol buffer used for logging messages to the events file.
+  ///
+  /// This was theoretically used by the defunct tensorboard_logging module, which
+  /// has been removed; this message is now deprecated and should not be used.
   /// </summary>
+  [global::System.ObsoleteAttribute]
   public sealed partial class LogMessage : pb::IMessage<LogMessage> {
     private static readonly pb::MessageParser<LogMessage> _parser = new pb::MessageParser<LogMessage>(() => new LogMessage());
     private pb::UnknownFieldSet _unknownFields;

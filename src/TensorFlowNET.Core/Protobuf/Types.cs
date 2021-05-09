@@ -43,13 +43,14 @@ namespace Tensorflow {
             "X1JFRhB0EhEKDURUX1VJTlQxNl9SRUYQdRIVChFEVF9DT01QTEVYMTI4X1JF",
             "RhB2Eg8KC0RUX0hBTEZfUkVGEHcSEwoPRFRfUkVTT1VSQ0VfUkVGEHgSEgoO",
             "RFRfVkFSSUFOVF9SRUYQeRIRCg1EVF9VSU5UMzJfUkVGEHoSEQoNRFRfVUlO",
-            "VDY0X1JFRhB7QnoKGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0ILVHlwZXNQ",
-            "cm90b3NQAVpMZ2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVu",
-            "c29yZmxvdy9nby9jb3JlL2ZyYW1ld29yay90eXBlc19nb19wcm90b/gBAWIG",
-            "cHJvdG8z"));
+            "VDY0X1JFRhB7KkYKD1NwZWNpYWxpemVkVHlwZRIOCgpTVF9JTlZBTElEEAAS",
+            "EgoOU1RfVEVOU09SX0xJU1QQARIPCgtTVF9PUFRJT05BTBACQnoKGG9yZy50",
+            "ZW5zb3JmbG93LmZyYW1ld29ya0ILVHlwZXNQcm90b3NQAVpMZ2l0aHViLmNv",
+            "bS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL2Zy",
+            "YW1ld29yay90eXBlc19nb19wcm90b/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.DataType), }, null, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tensorflow.DataType), typeof(global::Tensorflow.SpecializedType), }, null, null));
     }
     #endregion
 
@@ -146,6 +147,27 @@ namespace Tensorflow {
     [pbr::OriginalName("DT_VARIANT_REF")] DtVariantRef = 121,
     [pbr::OriginalName("DT_UINT32_REF")] DtUint32Ref = 122,
     [pbr::OriginalName("DT_UINT64_REF")] DtUint64Ref = 123,
+  }
+
+  /// <summary>
+  /// For identifying the underlying type of a variant. For variants, the types
+  /// listed here are a subset of the types in the variant type registry,
+  /// corresponding to commonly used variants which must occasionally be
+  /// special-cased.
+  /// </summary>
+  public enum SpecializedType {
+    /// <summary>
+    /// Invalid/unknown specialized type.
+    /// </summary>
+    [pbr::OriginalName("ST_INVALID")] StInvalid = 0,
+    /// <summary>
+    /// "tensorflow::TensorList" in the variant type registry.
+    /// </summary>
+    [pbr::OriginalName("ST_TENSOR_LIST")] StTensorList = 1,
+    /// <summary>
+    /// "tensorflow::data::Optional" in the variant type registry.
+    /// </summary>
+    [pbr::OriginalName("ST_OPTIONAL")] StOptional = 2,
   }
 
   #endregion

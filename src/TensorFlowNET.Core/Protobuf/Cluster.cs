@@ -28,10 +28,11 @@ namespace Tensorflow {
             "c29yZmxvdyJyCgZKb2JEZWYSDAoEbmFtZRgBIAEoCRIsCgV0YXNrcxgCIAMo",
             "CzIdLnRlbnNvcmZsb3cuSm9iRGVmLlRhc2tzRW50cnkaLAoKVGFza3NFbnRy",
             "eRILCgNrZXkYASABKAUSDQoFdmFsdWUYAiABKAk6AjgBIi0KCkNsdXN0ZXJE",
-            "ZWYSHwoDam9iGAEgAygLMhIudGVuc29yZmxvdy5Kb2JEZWZCegoab3JnLnRl",
-            "bnNvcmZsb3cuZGlzdHJ1bnRpbWVCDUNsdXN0ZXJQcm90b3NQAVpIZ2l0aHVi",
-            "LmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3Jl",
-            "L2NvcmVfcHJvdG9zX2dvX3Byb3Rv+AEBYgZwcm90bzM="));
+            "ZWYSHwoDam9iGAEgAygLMhIudGVuc29yZmxvdy5Kb2JEZWZChwEKGm9yZy50",
+            "ZW5zb3JmbG93LmRpc3RydW50aW1lQg1DbHVzdGVyUHJvdG9zUAFaVWdpdGh1",
+            "Yi5jb20vdGVuc29yZmxvdy90ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28vY29y",
+            "ZS9wcm90b2J1Zi9mb3JfY29yZV9wcm90b3NfZ29fcHJvdG/4AQFiBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {

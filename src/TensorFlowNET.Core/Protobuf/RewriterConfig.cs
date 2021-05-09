@@ -29,65 +29,73 @@ namespace Tensorflow {
             "dHJfdmFsdWUucHJvdG8aLnRlbnNvcmZsb3cvY29yZS9wcm90b2J1Zi92ZXJp",
             "Zmllcl9jb25maWcucHJvdG8iOwoTQXV0b1BhcmFsbGVsT3B0aW9ucxIOCgZl",
             "bmFibGUYASABKAgSFAoMbnVtX3JlcGxpY2FzGAIgASgFIisKFlNjb3BlZEFs",
-            "bG9jYXRvck9wdGlvbnMSEQoJZW5hYmxlX29wGAEgAygJIpURCg5SZXdyaXRl",
-            "ckNvbmZpZxI7ChBsYXlvdXRfb3B0aW1pemVyGAEgASgOMiEudGVuc29yZmxv",
-            "dy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSOwoQY29uc3RhbnRfZm9sZGluZxgD",
-            "IAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEj0KEnNo",
-            "YXBlX29wdGltaXphdGlvbhgNIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJD",
-            "b25maWcuVG9nZ2xlEjQKCXJlbWFwcGluZxgOIAEoDjIhLnRlbnNvcmZsb3cu",
-            "UmV3cml0ZXJDb25maWcuVG9nZ2xlEkYKG2NvbW1vbl9zdWJncmFwaF9lbGlt",
-            "aW5hdGlvbhgYIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9n",
-            "Z2xlEkIKF2FyaXRobWV0aWNfb3B0aW1pemF0aW9uGAcgASgOMiEudGVuc29y",
-            "Zmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSQgoXZGVwZW5kZW5jeV9vcHRp",
-            "bWl6YXRpb24YCCABKA4yIS50ZW5zb3JmbG93LlJld3JpdGVyQ29uZmlnLlRv",
-            "Z2dsZRI8ChFsb29wX29wdGltaXphdGlvbhgJIAEoDjIhLnRlbnNvcmZsb3cu",
-            "UmV3cml0ZXJDb25maWcuVG9nZ2xlEkAKFWZ1bmN0aW9uX29wdGltaXphdGlv",
-            "bhgKIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEjkK",
-            "DmRlYnVnX3N0cmlwcGVyGAsgASgOMiEudGVuc29yZmxvdy5SZXdyaXRlckNv",
-            "bmZpZy5Ub2dnbGUSHQoVZGlzYWJsZV9tb2RlbF9wcnVuaW5nGAIgASgIEkgK",
-            "HXNjb3BlZF9hbGxvY2F0b3Jfb3B0aW1pemF0aW9uGA8gASgOMiEudGVuc29y",
-            "Zmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSQwoYcGluX3RvX2hvc3Rfb3B0",
-            "aW1pemF0aW9uGBIgASgOMiEudGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5U",
-            "b2dnbGUSQgoXaW1wbGVtZW50YXRpb25fc2VsZWN0b3IYFiABKA4yIS50ZW5z",
-            "b3JmbG93LlJld3JpdGVyQ29uZmlnLlRvZ2dsZRI/ChRhdXRvX21peGVkX3By",
-            "ZWNpc2lvbhgXIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9n",
-            "Z2xlEkMKGGF1dG9fbWl4ZWRfcHJlY2lzaW9uX21rbBgZIAEoDjIhLnRlbnNv",
-            "cmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEh4KFmRpc2FibGVfbWV0YV9v",
-            "cHRpbWl6ZXIYEyABKAgSTwoZbWV0YV9vcHRpbWl6ZXJfaXRlcmF0aW9ucxgM",
+            "bG9jYXRvck9wdGlvbnMSEQoJZW5hYmxlX29wGAEgAygJIuETCg5SZXdyaXRl",
+            "ckNvbmZpZxJDChVjcHVfbGF5b3V0X2NvbnZlcnNpb24YMiABKA4yJC50ZW5z",
+            "b3JmbG93LlJld3JpdGVyQ29uZmlnLkNwdUxheW91dBI7ChBsYXlvdXRfb3B0",
+            "aW1pemVyGAEgASgOMiEudGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dn",
+            "bGUSOwoQY29uc3RhbnRfZm9sZGluZxgDIAEoDjIhLnRlbnNvcmZsb3cuUmV3",
+            "cml0ZXJDb25maWcuVG9nZ2xlEj0KEnNoYXBlX29wdGltaXphdGlvbhgNIAEo",
+            "DjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEjQKCXJlbWFw",
+            "cGluZxgOIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xl",
+            "EkYKG2NvbW1vbl9zdWJncmFwaF9lbGltaW5hdGlvbhgYIAEoDjIhLnRlbnNv",
+            "cmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEkIKF2FyaXRobWV0aWNfb3B0",
+            "aW1pemF0aW9uGAcgASgOMiEudGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5U",
+            "b2dnbGUSQgoXZGVwZW5kZW5jeV9vcHRpbWl6YXRpb24YCCABKA4yIS50ZW5z",
+            "b3JmbG93LlJld3JpdGVyQ29uZmlnLlRvZ2dsZRI8ChFsb29wX29wdGltaXph",
+            "dGlvbhgJIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xl",
+            "EkAKFWZ1bmN0aW9uX29wdGltaXphdGlvbhgKIAEoDjIhLnRlbnNvcmZsb3cu",
+            "UmV3cml0ZXJDb25maWcuVG9nZ2xlEjkKDmRlYnVnX3N0cmlwcGVyGAsgASgO",
+            "MiEudGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSHQoVZGlzYWJs",
+            "ZV9tb2RlbF9wcnVuaW5nGAIgASgIEkgKHXNjb3BlZF9hbGxvY2F0b3Jfb3B0",
+            "aW1pemF0aW9uGA8gASgOMiEudGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5U",
+            "b2dnbGUSQwoYcGluX3RvX2hvc3Rfb3B0aW1pemF0aW9uGBIgASgOMiEudGVu",
+            "c29yZmxvdy5SZXdyaXRlckNvbmZpZy5Ub2dnbGUSQgoXaW1wbGVtZW50YXRp",
+            "b25fc2VsZWN0b3IYFiABKA4yIS50ZW5zb3JmbG93LlJld3JpdGVyQ29uZmln",
+            "LlRvZ2dsZRI/ChRhdXRvX21peGVkX3ByZWNpc2lvbhgXIAEoDjIhLnRlbnNv",
+            "cmZsb3cuUmV3cml0ZXJDb25maWcuVG9nZ2xlEkMKGGF1dG9fbWl4ZWRfcHJl",
+            "Y2lzaW9uX21rbBgZIAEoDjIhLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcu",
+            "VG9nZ2xlEh4KFmRpc2FibGVfbWV0YV9vcHRpbWl6ZXIYEyABKAgSQAoVdXNl",
+            "X3BsdWdpbl9vcHRpbWl6ZXJzGBwgASgOMiEudGVuc29yZmxvdy5SZXdyaXRl",
+            "ckNvbmZpZy5Ub2dnbGUSTwoZbWV0YV9vcHRpbWl6ZXJfaXRlcmF0aW9ucxgM",
             "IAEoDjIsLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuTnVtSXRlcmF0aW9u",
-            "c1R5cGUSFwoPbWluX2dyYXBoX25vZGVzGBEgASgFEkIKE21lbW9yeV9vcHRp",
-            "bWl6YXRpb24YBCABKA4yJS50ZW5zb3JmbG93LlJld3JpdGVyQ29uZmlnLk1l",
-            "bU9wdFR5cGUSLwonbWVtb3J5X29wdGltaXplcl90YXJnZXRfbm9kZV9uYW1l",
-            "X3Njb3BlGAYgASgJEiEKGW1ldGFfb3B0aW1pemVyX3RpbWVvdXRfbXMYFCAB",
-            "KAMSNgoNYXV0b19wYXJhbGxlbBgFIAEoCzIfLnRlbnNvcmZsb3cuQXV0b1Bh",
-            "cmFsbGVsT3B0aW9ucxIgChhmYWlsX29uX29wdGltaXplcl9lcnJvcnMYFSAB",
-            "KAgSQQoVc2NvcGVkX2FsbG9jYXRvcl9vcHRzGBAgASgLMiIudGVuc29yZmxv",
-            "dy5TY29wZWRBbGxvY2F0b3JPcHRpb25zEhIKCm9wdGltaXplcnMYZCADKAkS",
-            "SwoRY3VzdG9tX29wdGltaXplcnMYyAEgAygLMi8udGVuc29yZmxvdy5SZXdy",
-            "aXRlckNvbmZpZy5DdXN0b21HcmFwaE9wdGltaXplchJECh9pbnRlcl9vcHRp",
-            "bWl6ZXJfdmVyaWZpZXJfY29uZmlnGKwCIAEoCzIaLnRlbnNvcmZsb3cuVmVy",
-            "aWZpZXJDb25maWcSRgohcG9zdF9vcHRpbWl6YXRpb25fdmVyaWZpZXJfY29u",
-            "ZmlnGK0CIAEoCzIaLnRlbnNvcmZsb3cuVmVyaWZpZXJDb25maWcaygEKFEN1",
-            "c3RvbUdyYXBoT3B0aW1pemVyEgwKBG5hbWUYASABKAkSWAoNcGFyYW1ldGVy",
-            "X21hcBgCIAMoCzJBLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuQ3VzdG9t",
-            "R3JhcGhPcHRpbWl6ZXIuUGFyYW1ldGVyTWFwRW50cnkaSgoRUGFyYW1ldGVy",
-            "TWFwRW50cnkSCwoDa2V5GAEgASgJEiQKBXZhbHVlGAIgASgLMhUudGVuc29y",
-            "Zmxvdy5BdHRyVmFsdWU6AjgBIjYKBlRvZ2dsZRILCgdERUZBVUxUEAASBgoC",
-            "T04QARIHCgNPRkYQAhIOCgpBR0dSRVNTSVZFEAMiPAoRTnVtSXRlcmF0aW9u",
-            "c1R5cGUSFQoRREVGQVVMVF9OVU1fSVRFUlMQABIHCgNPTkUQARIHCgNUV08Q",
-            "AiKfAQoKTWVtT3B0VHlwZRITCg9ERUZBVUxUX01FTV9PUFQQABIOCgpOT19N",
-            "RU1fT1BUEAESCgoGTUFOVUFMEAISFwoTU1dBUFBJTkdfSEVVUklTVElDUxAE",
-            "EhwKGFJFQ09NUFVUQVRJT05fSEVVUklTVElDUxAFEhkKFVNDSEVEVUxJTkdf",
-            "SEVVUklTVElDUxAGEg4KCkhFVVJJU1RJQ1MQA0J/ChhvcmcudGVuc29yZmxv",
-            "dy5mcmFtZXdvcmtCFFJld3JpdGVyQ29uZmlnUHJvdG9zUAFaSGdpdGh1Yi5j",
-            "b20vdGVuc29yZmxvdy90ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28vY29yZS9j",
-            "b3JlX3Byb3Rvc19nb19wcm90b/gBAWIGcHJvdG8z"));
+            "c1R5cGUSFwoPbWluX2dyYXBoX25vZGVzGBEgASgFEjsKM2V4cGVyaW1lbnRh",
+            "bF9kaXNhYmxlX2NvbXByZXNzZWRfdGVuc29yX29wdGltaXphdGlvbhgaIAEo",
+            "CBI7CjNleHBlcmltZW50YWxfZGlzYWJsZV9mb2xkaW5nX3F1YW50aXphdGlv",
+            "bl9lbXVsYXRpb24YGyABKAgSQgoTbWVtb3J5X29wdGltaXphdGlvbhgEIAEo",
+            "DjIlLnRlbnNvcmZsb3cuUmV3cml0ZXJDb25maWcuTWVtT3B0VHlwZRIvCidt",
+            "ZW1vcnlfb3B0aW1pemVyX3RhcmdldF9ub2RlX25hbWVfc2NvcGUYBiABKAkS",
+            "IQoZbWV0YV9vcHRpbWl6ZXJfdGltZW91dF9tcxgUIAEoAxI2Cg1hdXRvX3Bh",
+            "cmFsbGVsGAUgASgLMh8udGVuc29yZmxvdy5BdXRvUGFyYWxsZWxPcHRpb25z",
+            "EiAKGGZhaWxfb25fb3B0aW1pemVyX2Vycm9ycxgVIAEoCBJBChVzY29wZWRf",
+            "YWxsb2NhdG9yX29wdHMYECABKAsyIi50ZW5zb3JmbG93LlNjb3BlZEFsbG9j",
+            "YXRvck9wdGlvbnMSEgoKb3B0aW1pemVycxhkIAMoCRJLChFjdXN0b21fb3B0",
+            "aW1pemVycxjIASADKAsyLy50ZW5zb3JmbG93LlJld3JpdGVyQ29uZmlnLkN1",
+            "c3RvbUdyYXBoT3B0aW1pemVyEkQKH2ludGVyX29wdGltaXplcl92ZXJpZmll",
+            "cl9jb25maWcYrAIgASgLMhoudGVuc29yZmxvdy5WZXJpZmllckNvbmZpZxJG",
+            "CiFwb3N0X29wdGltaXphdGlvbl92ZXJpZmllcl9jb25maWcYrQIgASgLMhou",
+            "dGVuc29yZmxvdy5WZXJpZmllckNvbmZpZxrKAQoUQ3VzdG9tR3JhcGhPcHRp",
+            "bWl6ZXISDAoEbmFtZRgBIAEoCRJYCg1wYXJhbWV0ZXJfbWFwGAIgAygLMkEu",
+            "dGVuc29yZmxvdy5SZXdyaXRlckNvbmZpZy5DdXN0b21HcmFwaE9wdGltaXpl",
+            "ci5QYXJhbWV0ZXJNYXBFbnRyeRpKChFQYXJhbWV0ZXJNYXBFbnRyeRILCgNr",
+            "ZXkYASABKAkSJAoFdmFsdWUYAiABKAsyFS50ZW5zb3JmbG93LkF0dHJWYWx1",
+            "ZToCOAEiNgoGVG9nZ2xlEgsKB0RFRkFVTFQQABIGCgJPThABEgcKA09GRhAC",
+            "Eg4KCkFHR1JFU1NJVkUQAyJJCglDcHVMYXlvdXQSGAoUTk9fQ09OVkVSU0lP",
+            "Tl9PTl9DUFUQABIQCgxOQ0hXX1RPX05IV0MQARIQCgxOSFdDX1RPX05DSFcQ",
+            "AiI8ChFOdW1JdGVyYXRpb25zVHlwZRIVChFERUZBVUxUX05VTV9JVEVSUxAA",
+            "EgcKA09ORRABEgcKA1RXTxACIp8BCgpNZW1PcHRUeXBlEhMKD0RFRkFVTFRf",
+            "TUVNX09QVBAAEg4KCk5PX01FTV9PUFQQARIKCgZNQU5VQUwQAhIXChNTV0FQ",
+            "UElOR19IRVVSSVNUSUNTEAQSHAoYUkVDT01QVVRBVElPTl9IRVVSSVNUSUNT",
+            "EAUSGQoVU0NIRURVTElOR19IRVVSSVNUSUNTEAYSDgoKSEVVUklTVElDUxAD",
+            "QowBChhvcmcudGVuc29yZmxvdy5mcmFtZXdvcmtCFFJld3JpdGVyQ29uZmln",
+            "UHJvdG9zUAFaVWdpdGh1Yi5jb20vdGVuc29yZmxvdy90ZW5zb3JmbG93L3Rl",
+            "bnNvcmZsb3cvZ28vY29yZS9wcm90b2J1Zi9mb3JfY29yZV9wcm90b3NfZ29f",
+            "cHJvdG/4AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, global::Tensorflow.VerifierConfigReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.AutoParallelOptions), global::Tensorflow.AutoParallelOptions.Parser, new[]{ "Enable", "NumReplicas" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.ScopedAllocatorOptions), global::Tensorflow.ScopedAllocatorOptions.Parser, new[]{ "EnableOp" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RewriterConfig), global::Tensorflow.RewriterConfig.Parser, new[]{ "LayoutOptimizer", "ConstantFolding", "ShapeOptimization", "Remapping", "CommonSubgraphElimination", "ArithmeticOptimization", "DependencyOptimization", "LoopOptimization", "FunctionOptimization", "DebugStripper", "DisableModelPruning", "ScopedAllocatorOptimization", "PinToHostOptimization", "ImplementationSelector", "AutoMixedPrecision", "AutoMixedPrecisionMkl", "DisableMetaOptimizer", "MetaOptimizerIterations", "MinGraphNodes", "MemoryOptimization", "MemoryOptimizerTargetNodeNameScope", "MetaOptimizerTimeoutMs", "AutoParallel", "FailOnOptimizerErrors", "ScopedAllocatorOpts", "Optimizers", "CustomOptimizers", "InterOptimizerVerifierConfig", "PostOptimizationVerifierConfig" }, null, new[]{ typeof(global::Tensorflow.RewriterConfig.Types.Toggle), typeof(global::Tensorflow.RewriterConfig.Types.NumIterationsType), typeof(global::Tensorflow.RewriterConfig.Types.MemOptType) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RewriterConfig.Types.CustomGraphOptimizer), global::Tensorflow.RewriterConfig.Types.CustomGraphOptimizer.Parser, new[]{ "Name", "ParameterMap" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, })})
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RewriterConfig), global::Tensorflow.RewriterConfig.Parser, new[]{ "CpuLayoutConversion", "LayoutOptimizer", "ConstantFolding", "ShapeOptimization", "Remapping", "CommonSubgraphElimination", "ArithmeticOptimization", "DependencyOptimization", "LoopOptimization", "FunctionOptimization", "DebugStripper", "DisableModelPruning", "ScopedAllocatorOptimization", "PinToHostOptimization", "ImplementationSelector", "AutoMixedPrecision", "AutoMixedPrecisionMkl", "DisableMetaOptimizer", "UsePluginOptimizers", "MetaOptimizerIterations", "MinGraphNodes", "ExperimentalDisableCompressedTensorOptimization", "ExperimentalDisableFoldingQuantizationEmulation", "MemoryOptimization", "MemoryOptimizerTargetNodeNameScope", "MetaOptimizerTimeoutMs", "AutoParallel", "FailOnOptimizerErrors", "ScopedAllocatorOpts", "Optimizers", "CustomOptimizers", "InterOptimizerVerifierConfig", "PostOptimizationVerifierConfig" }, null, new[]{ typeof(global::Tensorflow.RewriterConfig.Types.Toggle), typeof(global::Tensorflow.RewriterConfig.Types.CpuLayout), typeof(global::Tensorflow.RewriterConfig.Types.NumIterationsType), typeof(global::Tensorflow.RewriterConfig.Types.MemOptType) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RewriterConfig.Types.CustomGraphOptimizer), global::Tensorflow.RewriterConfig.Types.CustomGraphOptimizer.Parser, new[]{ "Name", "ParameterMap" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, })})
           }));
     }
     #endregion
@@ -404,6 +412,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RewriterConfig(RewriterConfig other) : this() {
+      cpuLayoutConversion_ = other.cpuLayoutConversion_;
       layoutOptimizer_ = other.layoutOptimizer_;
       constantFolding_ = other.constantFolding_;
       shapeOptimization_ = other.shapeOptimization_;
@@ -421,8 +430,11 @@ namespace Tensorflow {
       autoMixedPrecision_ = other.autoMixedPrecision_;
       autoMixedPrecisionMkl_ = other.autoMixedPrecisionMkl_;
       disableMetaOptimizer_ = other.disableMetaOptimizer_;
+      usePluginOptimizers_ = other.usePluginOptimizers_;
       metaOptimizerIterations_ = other.metaOptimizerIterations_;
       minGraphNodes_ = other.minGraphNodes_;
+      experimentalDisableCompressedTensorOptimization_ = other.experimentalDisableCompressedTensorOptimization_;
+      experimentalDisableFoldingQuantizationEmulation_ = other.experimentalDisableFoldingQuantizationEmulation_;
       memoryOptimization_ = other.memoryOptimization_;
       memoryOptimizerTargetNodeNameScope_ = other.memoryOptimizerTargetNodeNameScope_;
       metaOptimizerTimeoutMs_ = other.metaOptimizerTimeoutMs_;
@@ -439,6 +451,20 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RewriterConfig Clone() {
       return new RewriterConfig(this);
+    }
+
+    /// <summary>Field number for the "cpu_layout_conversion" field.</summary>
+    public const int CpuLayoutConversionFieldNumber = 50;
+    private global::Tensorflow.RewriterConfig.Types.CpuLayout cpuLayoutConversion_ = global::Tensorflow.RewriterConfig.Types.CpuLayout.NoConversionOnCpu;
+    /// <summary>
+    /// CPU Conversion settings between NHCW and NCHW.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.RewriterConfig.Types.CpuLayout CpuLayoutConversion {
+      get { return cpuLayoutConversion_; }
+      set {
+        cpuLayoutConversion_ = value;
+      }
     }
 
     /// <summary>Field number for the "layout_optimizer" field.</summary>
@@ -694,6 +720,20 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "use_plugin_optimizers" field.</summary>
+    public const int UsePluginOptimizersFieldNumber = 28;
+    private global::Tensorflow.RewriterConfig.Types.Toggle usePluginOptimizers_ = global::Tensorflow.RewriterConfig.Types.Toggle.Default;
+    /// <summary>
+    /// Optimizers registered by plugin (default is ON)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.RewriterConfig.Types.Toggle UsePluginOptimizers {
+      get { return usePluginOptimizers_; }
+      set {
+        usePluginOptimizers_ = value;
+      }
+    }
+
     /// <summary>Field number for the "meta_optimizer_iterations" field.</summary>
     public const int MetaOptimizerIterationsFieldNumber = 12;
     private global::Tensorflow.RewriterConfig.Types.NumIterationsType metaOptimizerIterations_ = global::Tensorflow.RewriterConfig.Types.NumIterationsType.DefaultNumIters;
@@ -723,6 +763,40 @@ namespace Tensorflow {
       get { return minGraphNodes_; }
       set {
         minGraphNodes_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "experimental_disable_compressed_tensor_optimization" field.</summary>
+    public const int ExperimentalDisableCompressedTensorOptimizationFieldNumber = 26;
+    private bool experimentalDisableCompressedTensorOptimization_;
+    /// <summary>
+    /// Disable optimizations that assume compressed tensors. Note that this flag
+    /// is experimental and may be removed in the future.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool ExperimentalDisableCompressedTensorOptimization {
+      get { return experimentalDisableCompressedTensorOptimization_; }
+      set {
+        experimentalDisableCompressedTensorOptimization_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "experimental_disable_folding_quantization_emulation" field.</summary>
+    public const int ExperimentalDisableFoldingQuantizationEmulationFieldNumber = 27;
+    private bool experimentalDisableFoldingQuantizationEmulation_;
+    /// <summary>
+    /// Disable folding quantization emulation ops such as FakeQuantWithMinMax* and
+    /// QuantizeAndDequantize*. Some compilers (e.g. the TF-to-tflite converter)
+    /// have to extract quantization configs (e.g. min/max range, number of bits,
+    /// and per-channel) from the quantization emulation ops. Note that this flag
+    /// is experimental and may be removed in the future. See b/174138564 for more
+    /// details.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool ExperimentalDisableFoldingQuantizationEmulation {
+      get { return experimentalDisableFoldingQuantizationEmulation_; }
+      set {
+        experimentalDisableFoldingQuantizationEmulation_ = value;
       }
     }
 
@@ -900,6 +974,7 @@ namespace Tensorflow {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (CpuLayoutConversion != other.CpuLayoutConversion) return false;
       if (LayoutOptimizer != other.LayoutOptimizer) return false;
       if (ConstantFolding != other.ConstantFolding) return false;
       if (ShapeOptimization != other.ShapeOptimization) return false;
@@ -917,8 +992,11 @@ namespace Tensorflow {
       if (AutoMixedPrecision != other.AutoMixedPrecision) return false;
       if (AutoMixedPrecisionMkl != other.AutoMixedPrecisionMkl) return false;
       if (DisableMetaOptimizer != other.DisableMetaOptimizer) return false;
+      if (UsePluginOptimizers != other.UsePluginOptimizers) return false;
       if (MetaOptimizerIterations != other.MetaOptimizerIterations) return false;
       if (MinGraphNodes != other.MinGraphNodes) return false;
+      if (ExperimentalDisableCompressedTensorOptimization != other.ExperimentalDisableCompressedTensorOptimization) return false;
+      if (ExperimentalDisableFoldingQuantizationEmulation != other.ExperimentalDisableFoldingQuantizationEmulation) return false;
       if (MemoryOptimization != other.MemoryOptimization) return false;
       if (MemoryOptimizerTargetNodeNameScope != other.MemoryOptimizerTargetNodeNameScope) return false;
       if (MetaOptimizerTimeoutMs != other.MetaOptimizerTimeoutMs) return false;
@@ -935,6 +1013,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (CpuLayoutConversion != global::Tensorflow.RewriterConfig.Types.CpuLayout.NoConversionOnCpu) hash ^= CpuLayoutConversion.GetHashCode();
       if (LayoutOptimizer != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= LayoutOptimizer.GetHashCode();
       if (ConstantFolding != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= ConstantFolding.GetHashCode();
       if (ShapeOptimization != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= ShapeOptimization.GetHashCode();
@@ -952,8 +1031,11 @@ namespace Tensorflow {
       if (AutoMixedPrecision != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= AutoMixedPrecision.GetHashCode();
       if (AutoMixedPrecisionMkl != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= AutoMixedPrecisionMkl.GetHashCode();
       if (DisableMetaOptimizer != false) hash ^= DisableMetaOptimizer.GetHashCode();
+      if (UsePluginOptimizers != global::Tensorflow.RewriterConfig.Types.Toggle.Default) hash ^= UsePluginOptimizers.GetHashCode();
       if (MetaOptimizerIterations != global::Tensorflow.RewriterConfig.Types.NumIterationsType.DefaultNumIters) hash ^= MetaOptimizerIterations.GetHashCode();
       if (MinGraphNodes != 0) hash ^= MinGraphNodes.GetHashCode();
+      if (ExperimentalDisableCompressedTensorOptimization != false) hash ^= ExperimentalDisableCompressedTensorOptimization.GetHashCode();
+      if (ExperimentalDisableFoldingQuantizationEmulation != false) hash ^= ExperimentalDisableFoldingQuantizationEmulation.GetHashCode();
       if (MemoryOptimization != global::Tensorflow.RewriterConfig.Types.MemOptType.DefaultMemOpt) hash ^= MemoryOptimization.GetHashCode();
       if (MemoryOptimizerTargetNodeNameScope.Length != 0) hash ^= MemoryOptimizerTargetNodeNameScope.GetHashCode();
       if (MetaOptimizerTimeoutMs != 0L) hash ^= MetaOptimizerTimeoutMs.GetHashCode();
@@ -1077,6 +1159,22 @@ namespace Tensorflow {
         output.WriteRawTag(200, 1);
         output.WriteEnum((int) AutoMixedPrecisionMkl);
       }
+      if (ExperimentalDisableCompressedTensorOptimization != false) {
+        output.WriteRawTag(208, 1);
+        output.WriteBool(ExperimentalDisableCompressedTensorOptimization);
+      }
+      if (ExperimentalDisableFoldingQuantizationEmulation != false) {
+        output.WriteRawTag(216, 1);
+        output.WriteBool(ExperimentalDisableFoldingQuantizationEmulation);
+      }
+      if (UsePluginOptimizers != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
+        output.WriteRawTag(224, 1);
+        output.WriteEnum((int) UsePluginOptimizers);
+      }
+      if (CpuLayoutConversion != global::Tensorflow.RewriterConfig.Types.CpuLayout.NoConversionOnCpu) {
+        output.WriteRawTag(144, 3);
+        output.WriteEnum((int) CpuLayoutConversion);
+      }
       optimizers_.WriteTo(output, _repeated_optimizers_codec);
       customOptimizers_.WriteTo(output, _repeated_customOptimizers_codec);
       if (interOptimizerVerifierConfig_ != null) {
@@ -1095,6 +1193,9 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (CpuLayoutConversion != global::Tensorflow.RewriterConfig.Types.CpuLayout.NoConversionOnCpu) {
+        size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) CpuLayoutConversion);
+      }
       if (LayoutOptimizer != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) LayoutOptimizer);
       }
@@ -1146,11 +1247,20 @@ namespace Tensorflow {
       if (DisableMetaOptimizer != false) {
         size += 2 + 1;
       }
+      if (UsePluginOptimizers != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
+        size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) UsePluginOptimizers);
+      }
       if (MetaOptimizerIterations != global::Tensorflow.RewriterConfig.Types.NumIterationsType.DefaultNumIters) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MetaOptimizerIterations);
       }
       if (MinGraphNodes != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(MinGraphNodes);
+      }
+      if (ExperimentalDisableCompressedTensorOptimization != false) {
+        size += 2 + 1;
+      }
+      if (ExperimentalDisableFoldingQuantizationEmulation != false) {
+        size += 2 + 1;
       }
       if (MemoryOptimization != global::Tensorflow.RewriterConfig.Types.MemOptType.DefaultMemOpt) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MemoryOptimization);
@@ -1188,6 +1298,9 @@ namespace Tensorflow {
     public void MergeFrom(RewriterConfig other) {
       if (other == null) {
         return;
+      }
+      if (other.CpuLayoutConversion != global::Tensorflow.RewriterConfig.Types.CpuLayout.NoConversionOnCpu) {
+        CpuLayoutConversion = other.CpuLayoutConversion;
       }
       if (other.LayoutOptimizer != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
         LayoutOptimizer = other.LayoutOptimizer;
@@ -1240,11 +1353,20 @@ namespace Tensorflow {
       if (other.DisableMetaOptimizer != false) {
         DisableMetaOptimizer = other.DisableMetaOptimizer;
       }
+      if (other.UsePluginOptimizers != global::Tensorflow.RewriterConfig.Types.Toggle.Default) {
+        UsePluginOptimizers = other.UsePluginOptimizers;
+      }
       if (other.MetaOptimizerIterations != global::Tensorflow.RewriterConfig.Types.NumIterationsType.DefaultNumIters) {
         MetaOptimizerIterations = other.MetaOptimizerIterations;
       }
       if (other.MinGraphNodes != 0) {
         MinGraphNodes = other.MinGraphNodes;
+      }
+      if (other.ExperimentalDisableCompressedTensorOptimization != false) {
+        ExperimentalDisableCompressedTensorOptimization = other.ExperimentalDisableCompressedTensorOptimization;
+      }
+      if (other.ExperimentalDisableFoldingQuantizationEmulation != false) {
+        ExperimentalDisableFoldingQuantizationEmulation = other.ExperimentalDisableFoldingQuantizationEmulation;
       }
       if (other.MemoryOptimization != global::Tensorflow.RewriterConfig.Types.MemOptType.DefaultMemOpt) {
         MemoryOptimization = other.MemoryOptimization;
@@ -1401,6 +1523,22 @@ namespace Tensorflow {
             AutoMixedPrecisionMkl = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
             break;
           }
+          case 208: {
+            ExperimentalDisableCompressedTensorOptimization = input.ReadBool();
+            break;
+          }
+          case 216: {
+            ExperimentalDisableFoldingQuantizationEmulation = input.ReadBool();
+            break;
+          }
+          case 224: {
+            UsePluginOptimizers = (global::Tensorflow.RewriterConfig.Types.Toggle) input.ReadEnum();
+            break;
+          }
+          case 400: {
+            CpuLayoutConversion = (global::Tensorflow.RewriterConfig.Types.CpuLayout) input.ReadEnum();
+            break;
+          }
           case 802: {
             optimizers_.AddEntriesFrom(input, _repeated_optimizers_codec);
             break;
@@ -1441,6 +1579,15 @@ namespace Tensorflow {
         /// actual feed.
         /// </summary>
         [pbr::OriginalName("AGGRESSIVE")] Aggressive = 3,
+      }
+
+      /// <summary>
+      /// Enum for layout conversion between NCHW and NHWC on CPU. Default is OFF.
+      /// </summary>
+      public enum CpuLayout {
+        [pbr::OriginalName("NO_CONVERSION_ON_CPU")] NoConversionOnCpu = 0,
+        [pbr::OriginalName("NCHW_TO_NHWC")] NchwToNhwc = 1,
+        [pbr::OriginalName("NHWC_TO_NCHW")] NhwcToNchw = 2,
       }
 
       /// <summary>

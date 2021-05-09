@@ -42,4 +42,8 @@ protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/util/event.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/training/checkpoint_state.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/framework/cpp_shape_inference.proto
 
+ECHO protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/keras/protobuf/projector_config.proto
+ECHO protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/keras/protobuf/versions.proto
+ECHO protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/keras/protobuf/saved_metadata.proto
+
 PAUSE

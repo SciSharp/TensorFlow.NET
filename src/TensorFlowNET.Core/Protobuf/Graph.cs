@@ -132,8 +132,6 @@ namespace Tensorflow {
     public const int LibraryFieldNumber = 2;
     private global::Tensorflow.FunctionDefLibrary library_;
     /// <summary>
-    /// EXPERIMENTAL. DO NOT USE OR DEPEND ON THIS YET.
-    ///
     /// "library" provides user-defined functions.
     ///
     /// Naming:

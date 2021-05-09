@@ -27,32 +27,34 @@ namespace Tensorflow {
             "CiZ0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL29wX2RlZi5wcm90bxIKdGVu",
             "c29yZmxvdxoqdGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay9hdHRyX3ZhbHVl",
             "LnByb3RvGiV0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3R5cGVzLnByb3Rv",
-            "ItAFCgVPcERlZhIMCgRuYW1lGAEgASgJEisKCWlucHV0X2FyZxgCIAMoCzIY",
-            "LnRlbnNvcmZsb3cuT3BEZWYuQXJnRGVmEiwKCm91dHB1dF9hcmcYAyADKAsy",
-            "GC50ZW5zb3JmbG93Lk9wRGVmLkFyZ0RlZhIWCg5jb250cm9sX291dHB1dBgU",
-            "IAMoCRInCgRhdHRyGAQgAygLMhkudGVuc29yZmxvdy5PcERlZi5BdHRyRGVm",
-            "Ei4KC2RlcHJlY2F0aW9uGAggASgLMhkudGVuc29yZmxvdy5PcERlcHJlY2F0",
-            "aW9uEg8KB3N1bW1hcnkYBSABKAkSEwoLZGVzY3JpcHRpb24YBiABKAkSFgoO",
-            "aXNfY29tbXV0YXRpdmUYEiABKAgSFAoMaXNfYWdncmVnYXRlGBAgASgIEhMK",
-            "C2lzX3N0YXRlZnVsGBEgASgIEiIKGmFsbG93c191bmluaXRpYWxpemVkX2lu",
-            "cHV0GBMgASgIGp8BCgZBcmdEZWYSDAoEbmFtZRgBIAEoCRITCgtkZXNjcmlw",
-            "dGlvbhgCIAEoCRIiCgR0eXBlGAMgASgOMhQudGVuc29yZmxvdy5EYXRhVHlw",
-            "ZRIRCgl0eXBlX2F0dHIYBCABKAkSEwoLbnVtYmVyX2F0dHIYBSABKAkSFgoO",
-            "dHlwZV9saXN0X2F0dHIYBiABKAkSDgoGaXNfcmVmGBAgASgIGr0BCgdBdHRy",
-            "RGVmEgwKBG5hbWUYASABKAkSDAoEdHlwZRgCIAEoCRIsCg1kZWZhdWx0X3Zh",
-            "bHVlGAMgASgLMhUudGVuc29yZmxvdy5BdHRyVmFsdWUSEwoLZGVzY3JpcHRp",
-            "b24YBCABKAkSEwoLaGFzX21pbmltdW0YBSABKAgSDwoHbWluaW11bRgGIAEo",
-            "AxItCg5hbGxvd2VkX3ZhbHVlcxgHIAEoCzIVLnRlbnNvcmZsb3cuQXR0clZh",
-            "bHVlIjUKDU9wRGVwcmVjYXRpb24SDwoHdmVyc2lvbhgBIAEoBRITCgtleHBs",
-            "YW5hdGlvbhgCIAEoCSInCgZPcExpc3QSHQoCb3AYASADKAsyES50ZW5zb3Jm",
-            "bG93Lk9wRGVmQnsKGG9yZy50ZW5zb3JmbG93LmZyYW1ld29ya0ILT3BEZWZQ",
-            "cm90b3NQAVpNZ2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVu",
-            "c29yZmxvdy9nby9jb3JlL2ZyYW1ld29yay9vcF9kZWZfZ29fcHJvdG/4AQFi",
-            "BnByb3RvMw=="));
+            "Gi90ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3Jlc291cmNlX2hhbmRsZS5w",
+            "cm90byKUBgoFT3BEZWYSDAoEbmFtZRgBIAEoCRIrCglpbnB1dF9hcmcYAiAD",
+            "KAsyGC50ZW5zb3JmbG93Lk9wRGVmLkFyZ0RlZhIsCgpvdXRwdXRfYXJnGAMg",
+            "AygLMhgudGVuc29yZmxvdy5PcERlZi5BcmdEZWYSFgoOY29udHJvbF9vdXRw",
+            "dXQYFCADKAkSJwoEYXR0chgEIAMoCzIZLnRlbnNvcmZsb3cuT3BEZWYuQXR0",
+            "ckRlZhIuCgtkZXByZWNhdGlvbhgIIAEoCzIZLnRlbnNvcmZsb3cuT3BEZXBy",
+            "ZWNhdGlvbhIPCgdzdW1tYXJ5GAUgASgJEhMKC2Rlc2NyaXB0aW9uGAYgASgJ",
+            "EhYKDmlzX2NvbW11dGF0aXZlGBIgASgIEhQKDGlzX2FnZ3JlZ2F0ZRgQIAEo",
+            "CBITCgtpc19zdGF0ZWZ1bBgRIAEoCBIiChphbGxvd3NfdW5pbml0aWFsaXpl",
+            "ZF9pbnB1dBgTIAEoCBrjAQoGQXJnRGVmEgwKBG5hbWUYASABKAkSEwoLZGVz",
+            "Y3JpcHRpb24YAiABKAkSIgoEdHlwZRgDIAEoDjIULnRlbnNvcmZsb3cuRGF0",
+            "YVR5cGUSEQoJdHlwZV9hdHRyGAQgASgJEhMKC251bWJlcl9hdHRyGAUgASgJ",
+            "EhYKDnR5cGVfbGlzdF9hdHRyGAYgASgJEkIKC2hhbmRsZV9kYXRhGAcgAygL",
+            "Mi0udGVuc29yZmxvdy5SZXNvdXJjZUhhbmRsZVByb3RvLkR0eXBlQW5kU2hh",
+            "cGUSDgoGaXNfcmVmGBAgASgIGr0BCgdBdHRyRGVmEgwKBG5hbWUYASABKAkS",
+            "DAoEdHlwZRgCIAEoCRIsCg1kZWZhdWx0X3ZhbHVlGAMgASgLMhUudGVuc29y",
+            "Zmxvdy5BdHRyVmFsdWUSEwoLZGVzY3JpcHRpb24YBCABKAkSEwoLaGFzX21p",
+            "bmltdW0YBSABKAgSDwoHbWluaW11bRgGIAEoAxItCg5hbGxvd2VkX3ZhbHVl",
+            "cxgHIAEoCzIVLnRlbnNvcmZsb3cuQXR0clZhbHVlIjUKDU9wRGVwcmVjYXRp",
+            "b24SDwoHdmVyc2lvbhgBIAEoBRITCgtleHBsYW5hdGlvbhgCIAEoCSInCgZP",
+            "cExpc3QSHQoCb3AYASADKAsyES50ZW5zb3JmbG93Lk9wRGVmQnsKGG9yZy50",
+            "ZW5zb3JmbG93LmZyYW1ld29ya0ILT3BEZWZQcm90b3NQAVpNZ2l0aHViLmNv",
+            "bS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL2Zy",
+            "YW1ld29yay9vcF9kZWZfZ29fcHJvdG/4AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.ResourceHandleReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef), global::Tensorflow.OpDef.Parser, new[]{ "Name", "InputArg", "OutputArg", "ControlOutput", "Attr", "Deprecation", "Summary", "Description", "IsCommutative", "IsAggregate", "IsStateful", "AllowsUninitializedInput" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.ArgDef), global::Tensorflow.OpDef.Types.ArgDef.Parser, new[]{ "Name", "Description", "Type", "TypeAttr", "NumberAttr", "TypeListAttr", "IsRef" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef), global::Tensorflow.OpDef.Parser, new[]{ "Name", "InputArg", "OutputArg", "ControlOutput", "Attr", "Deprecation", "Summary", "Description", "IsCommutative", "IsAggregate", "IsStateful", "AllowsUninitializedInput" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.ArgDef), global::Tensorflow.OpDef.Types.ArgDef.Parser, new[]{ "Name", "Description", "Type", "TypeAttr", "NumberAttr", "TypeListAttr", "HandleData", "IsRef" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.AttrDef), global::Tensorflow.OpDef.Types.AttrDef.Parser, new[]{ "Name", "Type", "DefaultValue", "Description", "HasMinimum", "Minimum", "AllowedValues" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDeprecation), global::Tensorflow.OpDeprecation.Parser, new[]{ "Version", "Explanation" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpList), global::Tensorflow.OpList.Parser, new[]{ "Op" }, null, null, null, null)
@@ -569,6 +571,7 @@ namespace Tensorflow {
           typeAttr_ = other.typeAttr_;
           numberAttr_ = other.numberAttr_;
           typeListAttr_ = other.typeListAttr_;
+          handleData_ = other.handleData_.Clone();
           isRef_ = other.isRef_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
@@ -672,6 +675,19 @@ namespace Tensorflow {
           }
         }
 
+        /// <summary>Field number for the "handle_data" field.</summary>
+        public const int HandleDataFieldNumber = 7;
+        private static readonly pb::FieldCodec<global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape> _repeated_handleData_codec
+            = pb::FieldCodec.ForMessage(58, global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape.Parser);
+        private readonly pbc::RepeatedField<global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape> handleData_ = new pbc::RepeatedField<global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape>();
+        /// <summary>
+        /// The handle data for resource inputs.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<global::Tensorflow.ResourceHandleProto.Types.DtypeAndShape> HandleData {
+          get { return handleData_; }
+        }
+
         /// <summary>Field number for the "is_ref" field.</summary>
         public const int IsRefFieldNumber = 16;
         private bool isRef_;
@@ -707,6 +723,7 @@ namespace Tensorflow {
           if (TypeAttr != other.TypeAttr) return false;
           if (NumberAttr != other.NumberAttr) return false;
           if (TypeListAttr != other.TypeListAttr) return false;
+          if(!handleData_.Equals(other.handleData_)) return false;
           if (IsRef != other.IsRef) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
@@ -720,6 +737,7 @@ namespace Tensorflow {
           if (TypeAttr.Length != 0) hash ^= TypeAttr.GetHashCode();
           if (NumberAttr.Length != 0) hash ^= NumberAttr.GetHashCode();
           if (TypeListAttr.Length != 0) hash ^= TypeListAttr.GetHashCode();
+          hash ^= handleData_.GetHashCode();
           if (IsRef != false) hash ^= IsRef.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
@@ -758,6 +776,7 @@ namespace Tensorflow {
             output.WriteRawTag(50);
             output.WriteString(TypeListAttr);
           }
+          handleData_.WriteTo(output, _repeated_handleData_codec);
           if (IsRef != false) {
             output.WriteRawTag(128, 1);
             output.WriteBool(IsRef);
@@ -788,6 +807,7 @@ namespace Tensorflow {
           if (TypeListAttr.Length != 0) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(TypeListAttr);
           }
+          size += handleData_.CalculateSize(_repeated_handleData_codec);
           if (IsRef != false) {
             size += 2 + 1;
           }
@@ -820,6 +840,7 @@ namespace Tensorflow {
           if (other.TypeListAttr.Length != 0) {
             TypeListAttr = other.TypeListAttr;
           }
+          handleData_.Add(other.handleData_);
           if (other.IsRef != false) {
             IsRef = other.IsRef;
           }
@@ -856,6 +877,10 @@ namespace Tensorflow {
               }
               case 50: {
                 TypeListAttr = input.ReadString();
+                break;
+              }
+              case 58: {
+                handleData_.AddEntriesFrom(input, _repeated_handleData_codec);
                 break;
               }
               case 128: {

@@ -82,10 +82,10 @@ namespace Tensorflow {
             "bmZvOgI4ARpGCgxPdXRwdXRzRW50cnkSCwoDa2V5GAEgASgJEiUKBXZhbHVl",
             "GAIgASgLMhYudGVuc29yZmxvdy5UZW5zb3JJbmZvOgI4ASJNCgxBc3NldEZp",
             "bGVEZWYSKwoLdGVuc29yX2luZm8YASABKAsyFi50ZW5zb3JmbG93LlRlbnNv",
-            "ckluZm8SEAoIZmlsZW5hbWUYAiABKAlCegoYb3JnLnRlbnNvcmZsb3cuZnJh",
-            "bWV3b3JrQg9NZXRhR3JhcGhQcm90b3NQAVpIZ2l0aHViLmNvbS90ZW5zb3Jm",
-            "bG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL2NvcmVfcHJvdG9z",
-            "X2dvX3Byb3Rv+AEBYgZwcm90bzM="));
+            "ckluZm8SEAoIZmlsZW5hbWUYAiABKAlChwEKGG9yZy50ZW5zb3JmbG93LmZy",
+            "YW1ld29ya0IPTWV0YUdyYXBoUHJvdG9zUAFaVWdpdGh1Yi5jb20vdGVuc29y",
+            "Zmxvdy90ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28vY29yZS9wcm90b2J1Zi9m",
+            "b3JfY29yZV9wcm90b3NfZ29fcHJvdG/4AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.AnyReflection.Descriptor, global::Tensorflow.GraphReflection.Descriptor, global::Tensorflow.OpDefReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.SavedObjectGraphReflection.Descriptor, global::Tensorflow.SaverReflection.Descriptor, global::Tensorflow.StructReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -2536,7 +2536,7 @@ namespace Tensorflow {
   /// graph.
   ///
   /// For example, a model with two loss computations, sharing a single input,
-  /// might have the following signature_def map.
+  /// might have the following signature_def map, in a MetaGraphDef message.
   ///
   /// Note that across the two SignatureDefs "loss_A" and "loss_B", the input key,
   /// output key, and method_name are identical, and will be used by system(s) that
@@ -2562,9 +2562,9 @@ namespace Tensorflow {
   ///         tensor_shape: ...
   ///       }
   ///     }
+  ///     method_name: "some/package/compute_loss"
   ///   }
   ///   ...
-  ///   method_name: "some/package/compute_loss"
   /// }
   /// signature_def {
   ///   key: "loss_B"
@@ -2585,9 +2585,9 @@ namespace Tensorflow {
   ///         tensor_shape: ...
   ///       }
   ///     }
+  ///     method_name: "some/package/compute_loss"
   ///   }
   ///   ...
-  ///   method_name: "some/package/compute_loss"
   /// }
   /// </summary>
   public sealed partial class SignatureDef : pb::IMessage<SignatureDef> {

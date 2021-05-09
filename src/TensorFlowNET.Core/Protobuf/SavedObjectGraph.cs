@@ -61,24 +61,30 @@ namespace Tensorflow {
             "qAEKFVNhdmVkQ29uY3JldGVGdW5jdGlvbhIUCgxib3VuZF9pbnB1dHMYAiAD",
             "KAUSQgodY2Fub25pY2FsaXplZF9pbnB1dF9zaWduYXR1cmUYAyABKAsyGy50",
             "ZW5zb3JmbG93LlN0cnVjdHVyZWRWYWx1ZRI1ChBvdXRwdXRfc2lnbmF0dXJl",
-            "GAQgASgLMhsudGVuc29yZmxvdy5TdHJ1Y3R1cmVkVmFsdWUifAoZU2F2ZWRC",
-            "YXJlQ29uY3JldGVGdW5jdGlvbhIeChZjb25jcmV0ZV9mdW5jdGlvbl9uYW1l",
-            "GAEgASgJEhkKEWFyZ3VtZW50X2tleXdvcmRzGAIgAygJEiQKHGFsbG93ZWRf",
-            "cG9zaXRpb25hbF9hcmd1bWVudHMYAyABKAMiIgoNU2F2ZWRDb25zdGFudBIR",
-            "CglvcGVyYXRpb24YASABKAki9gEKDVNhdmVkVmFyaWFibGUSIwoFZHR5cGUY",
-            "ASABKA4yFC50ZW5zb3JmbG93LkRhdGFUeXBlEisKBXNoYXBlGAIgASgLMhwu",
-            "dGVuc29yZmxvdy5UZW5zb3JTaGFwZVByb3RvEhEKCXRyYWluYWJsZRgDIAEo",
-            "CBI8Cg9zeW5jaHJvbml6YXRpb24YBCABKA4yIy50ZW5zb3JmbG93LlZhcmlh",
-            "YmxlU3luY2hyb25pemF0aW9uEjQKC2FnZ3JlZ2F0aW9uGAUgASgOMh8udGVu",
-            "c29yZmxvdy5WYXJpYWJsZUFnZ3JlZ2F0aW9uEgwKBG5hbWUYBiABKAkilQEK",
-            "DEZ1bmN0aW9uU3BlYxIwCgtmdWxsYXJnc3BlYxgBIAEoCzIbLnRlbnNvcmZs",
-            "b3cuU3RydWN0dXJlZFZhbHVlEhEKCWlzX21ldGhvZBgCIAEoCBI0Cg9pbnB1",
-            "dF9zaWduYXR1cmUYBSABKAsyGy50ZW5zb3JmbG93LlN0cnVjdHVyZWRWYWx1",
-            "ZUoECAMQBEoECAQQBSIfCg1TYXZlZFJlc291cmNlEg4KBmRldmljZRgBIAEo",
-            "CSJBCg5TYXZlYWJsZU9iamVjdBIVCg1zYXZlX2Z1bmN0aW9uGAIgASgFEhgK",
-            "EHJlc3RvcmVfZnVuY3Rpb24YAyABKAVCTVpIZ2l0aHViLmNvbS90ZW5zb3Jm",
-            "bG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL2NvcmVfcHJvdG9z",
-            "X2dvX3Byb3Rv+AEBYgZwcm90bzM="));
+            "GAQgASgLMhsudGVuc29yZmxvdy5TdHJ1Y3R1cmVkVmFsdWUirQEKGVNhdmVk",
+            "QmFyZUNvbmNyZXRlRnVuY3Rpb24SHgoWY29uY3JldGVfZnVuY3Rpb25fbmFt",
+            "ZRgBIAEoCRIZChFhcmd1bWVudF9rZXl3b3JkcxgCIAMoCRIkChxhbGxvd2Vk",
+            "X3Bvc2l0aW9uYWxfYXJndW1lbnRzGAMgASgDEi8KDWZ1bmN0aW9uX3NwZWMY",
+            "BCABKAsyGC50ZW5zb3JmbG93LkZ1bmN0aW9uU3BlYyIiCg1TYXZlZENvbnN0",
+            "YW50EhEKCW9wZXJhdGlvbhgBIAEoCSLXAgoNU2F2ZWRWYXJpYWJsZRIjCgVk",
+            "dHlwZRgBIAEoDjIULnRlbnNvcmZsb3cuRGF0YVR5cGUSKwoFc2hhcGUYAiAB",
+            "KAsyHC50ZW5zb3JmbG93LlRlbnNvclNoYXBlUHJvdG8SEQoJdHJhaW5hYmxl",
+            "GAMgASgIEjwKD3N5bmNocm9uaXphdGlvbhgEIAEoDjIjLnRlbnNvcmZsb3cu",
+            "VmFyaWFibGVTeW5jaHJvbml6YXRpb24SNAoLYWdncmVnYXRpb24YBSABKA4y",
+            "Hy50ZW5zb3JmbG93LlZhcmlhYmxlQWdncmVnYXRpb24SDAoEbmFtZRgGIAEo",
+            "CRIOCgZkZXZpY2UYByABKAkSTwosZXhwZXJpbWVudGFsX2Rpc3RyaWJ1dGVk",
+            "X3ZhcmlhYmxlX2NvbXBvbmVudHMYCCADKAsyGS50ZW5zb3JmbG93LlNhdmVk",
+            "VmFyaWFibGUi+wEKDEZ1bmN0aW9uU3BlYxIwCgtmdWxsYXJnc3BlYxgBIAEo",
+            "CzIbLnRlbnNvcmZsb3cuU3RydWN0dXJlZFZhbHVlEhEKCWlzX21ldGhvZBgC",
+            "IAEoCBI0Cg9pbnB1dF9zaWduYXR1cmUYBSABKAsyGy50ZW5zb3JmbG93LlN0",
+            "cnVjdHVyZWRWYWx1ZRI4CgtqaXRfY29tcGlsZRgGIAEoDjIjLnRlbnNvcmZs",
+            "b3cuRnVuY3Rpb25TcGVjLkppdENvbXBpbGUiKgoKSml0Q29tcGlsZRILCgdE",
+            "RUZBVUxUEAASBgoCT04QARIHCgNPRkYQAkoECAMQBEoECAQQBSIfCg1TYXZl",
+            "ZFJlc291cmNlEg4KBmRldmljZRgBIAEoCSJBCg5TYXZlYWJsZU9iamVjdBIV",
+            "Cg1zYXZlX2Z1bmN0aW9uGAIgASgFEhgKEHJlc3RvcmVfZnVuY3Rpb24YAyAB",
+            "KAVCWlpVZ2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29y",
+            "Zmxvdy9nby9jb3JlL3Byb3RvYnVmL2Zvcl9jb3JlX3Byb3Rvc19nb19wcm90",
+            "b/gBAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.VariableReflection.Descriptor, global::Tensorflow.VersionsReflection.Descriptor, global::Tensorflow.StructReflection.Descriptor, global::Tensorflow.TrackableObjectGraphReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -88,10 +94,10 @@ namespace Tensorflow {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedAsset), global::Tensorflow.SavedAsset.Parser, new[]{ "AssetFileDefIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedFunction), global::Tensorflow.SavedFunction.Parser, new[]{ "ConcreteFunctions", "FunctionSpec" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedConcreteFunction), global::Tensorflow.SavedConcreteFunction.Parser, new[]{ "BoundInputs", "CanonicalizedInputSignature", "OutputSignature" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedBareConcreteFunction), global::Tensorflow.SavedBareConcreteFunction.Parser, new[]{ "ConcreteFunctionName", "ArgumentKeywords", "AllowedPositionalArguments" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedBareConcreteFunction), global::Tensorflow.SavedBareConcreteFunction.Parser, new[]{ "ConcreteFunctionName", "ArgumentKeywords", "AllowedPositionalArguments", "FunctionSpec" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedConstant), global::Tensorflow.SavedConstant.Parser, new[]{ "Operation" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedVariable), global::Tensorflow.SavedVariable.Parser, new[]{ "Dtype", "Shape", "Trainable", "Synchronization", "Aggregation", "Name" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionSpec), global::Tensorflow.FunctionSpec.Parser, new[]{ "Fullargspec", "IsMethod", "InputSignature" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedVariable), global::Tensorflow.SavedVariable.Parser, new[]{ "Dtype", "Shape", "Trainable", "Synchronization", "Aggregation", "Name", "Device", "ExperimentalDistributedVariableComponents" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionSpec), global::Tensorflow.FunctionSpec.Parser, new[]{ "Fullargspec", "IsMethod", "InputSignature", "JitCompile" }, null, new[]{ typeof(global::Tensorflow.FunctionSpec.Types.JitCompile) }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedResource), global::Tensorflow.SavedResource.Parser, new[]{ "Device" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SaveableObject), global::Tensorflow.SaveableObject.Parser, new[]{ "SaveFunction", "RestoreFunction" }, null, null, null, null)
           }));
@@ -320,7 +326,7 @@ namespace Tensorflow {
     /// Objects which this object depends on: named edges in the dependency
     /// graph.
     ///
-    /// Note: currently only valid if kind == "user_object".
+    /// Note: currently only valid if kind == "user_object" or "resource".
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> Children {
@@ -799,6 +805,9 @@ namespace Tensorflow {
     public const int MetadataFieldNumber = 3;
     private string metadata_ = "";
     /// <summary>
+    /// Deprecated! At the time of deprecation, Keras was the only user of this
+    /// field, and its saving and loading code will be updated shortly.
+    /// Please save your application-specific metadata to separate file
     /// Initialization-related metadata.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1468,6 +1477,7 @@ namespace Tensorflow {
       concreteFunctionName_ = other.concreteFunctionName_;
       argumentKeywords_ = other.argumentKeywords_.Clone();
       allowedPositionalArguments_ = other.allowedPositionalArguments_;
+      functionSpec_ = other.functionSpec_ != null ? other.functionSpec_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1517,6 +1527,25 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "function_spec" field.</summary>
+    public const int FunctionSpecFieldNumber = 4;
+    private global::Tensorflow.FunctionSpec functionSpec_;
+    /// <summary>
+    /// The spec of the function that this ConcreteFunction is traced from. This
+    /// allows the ConcreteFunction to be called with nest structure inputs. This
+    /// field may not be populated. If this field is absent, the concrete function
+    /// can only be called with flat inputs.
+    /// TODO(b/169361281): support calling saved ConcreteFunction with structured
+    /// inputs in C++ SavedModel API.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.FunctionSpec FunctionSpec {
+      get { return functionSpec_; }
+      set {
+        functionSpec_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SavedBareConcreteFunction);
@@ -1533,6 +1562,7 @@ namespace Tensorflow {
       if (ConcreteFunctionName != other.ConcreteFunctionName) return false;
       if(!argumentKeywords_.Equals(other.argumentKeywords_)) return false;
       if (AllowedPositionalArguments != other.AllowedPositionalArguments) return false;
+      if (!object.Equals(FunctionSpec, other.FunctionSpec)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1542,6 +1572,7 @@ namespace Tensorflow {
       if (ConcreteFunctionName.Length != 0) hash ^= ConcreteFunctionName.GetHashCode();
       hash ^= argumentKeywords_.GetHashCode();
       if (AllowedPositionalArguments != 0L) hash ^= AllowedPositionalArguments.GetHashCode();
+      if (functionSpec_ != null) hash ^= FunctionSpec.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1564,6 +1595,10 @@ namespace Tensorflow {
         output.WriteRawTag(24);
         output.WriteInt64(AllowedPositionalArguments);
       }
+      if (functionSpec_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(FunctionSpec);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1578,6 +1613,9 @@ namespace Tensorflow {
       size += argumentKeywords_.CalculateSize(_repeated_argumentKeywords_codec);
       if (AllowedPositionalArguments != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(AllowedPositionalArguments);
+      }
+      if (functionSpec_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FunctionSpec);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1596,6 +1634,12 @@ namespace Tensorflow {
       argumentKeywords_.Add(other.argumentKeywords_);
       if (other.AllowedPositionalArguments != 0L) {
         AllowedPositionalArguments = other.AllowedPositionalArguments;
+      }
+      if (other.functionSpec_ != null) {
+        if (functionSpec_ == null) {
+          FunctionSpec = new global::Tensorflow.FunctionSpec();
+        }
+        FunctionSpec.MergeFrom(other.FunctionSpec);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1618,6 +1662,13 @@ namespace Tensorflow {
           }
           case 24: {
             AllowedPositionalArguments = input.ReadInt64();
+            break;
+          }
+          case 34: {
+            if (functionSpec_ == null) {
+              FunctionSpec = new global::Tensorflow.FunctionSpec();
+            }
+            input.ReadMessage(FunctionSpec);
             break;
           }
         }
@@ -1793,6 +1844,8 @@ namespace Tensorflow {
       synchronization_ = other.synchronization_;
       aggregation_ = other.aggregation_;
       name_ = other.name_;
+      device_ = other.device_;
+      experimentalDistributedVariableComponents_ = other.experimentalDistributedVariableComponents_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1867,6 +1920,35 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "device" field.</summary>
+    public const int DeviceFieldNumber = 7;
+    private string device_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Device {
+      get { return device_; }
+      set {
+        device_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "experimental_distributed_variable_components" field.</summary>
+    public const int ExperimentalDistributedVariableComponentsFieldNumber = 8;
+    private static readonly pb::FieldCodec<global::Tensorflow.SavedVariable> _repeated_experimentalDistributedVariableComponents_codec
+        = pb::FieldCodec.ForMessage(66, global::Tensorflow.SavedVariable.Parser);
+    private readonly pbc::RepeatedField<global::Tensorflow.SavedVariable> experimentalDistributedVariableComponents_ = new pbc::RepeatedField<global::Tensorflow.SavedVariable>();
+    /// <summary>
+    /// List of component variables for a distributed variable.
+    ///
+    /// When this field is non-empty, the SavedVariable will be assumed
+    /// to be a distributed variable defined by the components listed here.
+    ///
+    /// This is only supported by experimental loaders at the moment.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Tensorflow.SavedVariable> ExperimentalDistributedVariableComponents {
+      get { return experimentalDistributedVariableComponents_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SavedVariable);
@@ -1886,6 +1968,8 @@ namespace Tensorflow {
       if (Synchronization != other.Synchronization) return false;
       if (Aggregation != other.Aggregation) return false;
       if (Name != other.Name) return false;
+      if (Device != other.Device) return false;
+      if(!experimentalDistributedVariableComponents_.Equals(other.experimentalDistributedVariableComponents_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1898,6 +1982,8 @@ namespace Tensorflow {
       if (Synchronization != global::Tensorflow.VariableSynchronization.Auto) hash ^= Synchronization.GetHashCode();
       if (Aggregation != global::Tensorflow.VariableAggregation.None) hash ^= Aggregation.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (Device.Length != 0) hash ^= Device.GetHashCode();
+      hash ^= experimentalDistributedVariableComponents_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1935,6 +2021,11 @@ namespace Tensorflow {
         output.WriteRawTag(50);
         output.WriteString(Name);
       }
+      if (Device.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Device);
+      }
+      experimentalDistributedVariableComponents_.WriteTo(output, _repeated_experimentalDistributedVariableComponents_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1961,6 +2052,10 @@ namespace Tensorflow {
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
       }
+      if (Device.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Device);
+      }
+      size += experimentalDistributedVariableComponents_.CalculateSize(_repeated_experimentalDistributedVariableComponents_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1993,6 +2088,10 @@ namespace Tensorflow {
       if (other.Name.Length != 0) {
         Name = other.Name;
       }
+      if (other.Device.Length != 0) {
+        Device = other.Device;
+      }
+      experimentalDistributedVariableComponents_.Add(other.experimentalDistributedVariableComponents_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -2029,6 +2128,14 @@ namespace Tensorflow {
           }
           case 50: {
             Name = input.ReadString();
+            break;
+          }
+          case 58: {
+            Device = input.ReadString();
+            break;
+          }
+          case 66: {
+            experimentalDistributedVariableComponents_.AddEntriesFrom(input, _repeated_experimentalDistributedVariableComponents_codec);
             break;
           }
         }
@@ -2069,6 +2176,7 @@ namespace Tensorflow {
       fullargspec_ = other.fullargspec_ != null ? other.fullargspec_.Clone() : null;
       isMethod_ = other.isMethod_;
       inputSignature_ = other.inputSignature_ != null ? other.inputSignature_.Clone() : null;
+      jitCompile_ = other.jitCompile_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2119,6 +2227,17 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "jit_compile" field.</summary>
+    public const int JitCompileFieldNumber = 6;
+    private global::Tensorflow.FunctionSpec.Types.JitCompile jitCompile_ = global::Tensorflow.FunctionSpec.Types.JitCompile.Default;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.FunctionSpec.Types.JitCompile JitCompile {
+      get { return jitCompile_; }
+      set {
+        jitCompile_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as FunctionSpec);
@@ -2135,6 +2254,7 @@ namespace Tensorflow {
       if (!object.Equals(Fullargspec, other.Fullargspec)) return false;
       if (IsMethod != other.IsMethod) return false;
       if (!object.Equals(InputSignature, other.InputSignature)) return false;
+      if (JitCompile != other.JitCompile) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2144,6 +2264,7 @@ namespace Tensorflow {
       if (fullargspec_ != null) hash ^= Fullargspec.GetHashCode();
       if (IsMethod != false) hash ^= IsMethod.GetHashCode();
       if (inputSignature_ != null) hash ^= InputSignature.GetHashCode();
+      if (JitCompile != global::Tensorflow.FunctionSpec.Types.JitCompile.Default) hash ^= JitCompile.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2169,6 +2290,10 @@ namespace Tensorflow {
         output.WriteRawTag(42);
         output.WriteMessage(InputSignature);
       }
+      if (JitCompile != global::Tensorflow.FunctionSpec.Types.JitCompile.Default) {
+        output.WriteRawTag(48);
+        output.WriteEnum((int) JitCompile);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2185,6 +2310,9 @@ namespace Tensorflow {
       }
       if (inputSignature_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(InputSignature);
+      }
+      if (JitCompile != global::Tensorflow.FunctionSpec.Types.JitCompile.Default) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) JitCompile);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2211,6 +2339,9 @@ namespace Tensorflow {
           InputSignature = new global::Tensorflow.StructuredValue();
         }
         InputSignature.MergeFrom(other.InputSignature);
+      }
+      if (other.JitCompile != global::Tensorflow.FunctionSpec.Types.JitCompile.Default) {
+        JitCompile = other.JitCompile;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2241,9 +2372,36 @@ namespace Tensorflow {
             input.ReadMessage(InputSignature);
             break;
           }
+          case 48: {
+            JitCompile = (global::Tensorflow.FunctionSpec.Types.JitCompile) input.ReadEnum();
+            break;
+          }
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the FunctionSpec message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      /// <summary>
+      /// Whether the function should be compiled by XLA.
+      ///
+      /// The public interface to `tf.function` uses an optional boolean to
+      /// represent three distinct states for this field.  Unfortunately, proto3
+      /// removes the ability to explicitly check for the presence or absence of a
+      /// field, so we instead map to an enum.
+      ///
+      /// See `tf.function` for details.
+      /// </summary>
+      public enum JitCompile {
+        [pbr::OriginalName("DEFAULT")] Default = 0,
+        [pbr::OriginalName("ON")] On = 1,
+        [pbr::OriginalName("OFF")] Off = 2,
+      }
+
+    }
+    #endregion
 
   }
 
