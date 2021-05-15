@@ -30,18 +30,13 @@ namespace Tensorflow.Keras.Engine
     public class Sequential : Functional
     {
         SequentialArgs args;
-        bool _is_graph_network;
-        Tensors inputs;
-        Tensors outputs;
 
         bool _compute_output_and_mask_jointly;
         bool _auto_track_sub_layers;
         TensorShape _inferred_input_shape;
         bool _has_explicit_input_shape;
-        TF_DataType _input_dtype;
         
         public TensorShape output_shape => outputs[0].TensorShape;
-        bool built = false;
 
         public Sequential(SequentialArgs args)
             : base(args.Inputs, args.Outputs, name: args.Name)

@@ -44,6 +44,7 @@ namespace Tensorflow.Keras.Engine
         /// the layer's weights.
         /// </summary>
         protected bool built;
+        public bool Built => built;
         public bool Trainable => args.Trainable;
         public TF_DataType DType => args.DType;
 

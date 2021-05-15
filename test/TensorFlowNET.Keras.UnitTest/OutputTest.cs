@@ -8,7 +8,7 @@ using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 using Tensorflow.Keras;
 
-namespace Tensorflow.Keras.UnitTest
+namespace TensorFlowNET.Keras.UnitTest
 {
     [TestClass]
     public class OutputTest

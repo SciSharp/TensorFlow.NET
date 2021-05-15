@@ -75,6 +75,8 @@ namespace Tensorflow
         public TensorShape BatchInputShape => throw new NotImplementedException();
 
         public TF_DataType DType => throw new NotImplementedException();
+        protected bool built = false;
+        public bool Built => built;
 
         public RnnCell(bool trainable = true,
             string name = null,
