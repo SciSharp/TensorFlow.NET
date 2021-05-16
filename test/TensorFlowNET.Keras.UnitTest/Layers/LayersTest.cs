@@ -131,5 +131,13 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual((32, 4), output.shape);
         }
 
+        [TestMethod]
+        public void Resizing()
+        {
+            var inputs = tf.random.uniform((10, 32, 32, 3));
+            var layer = keras.layers.preprocessing.Resizing(16, 16);
+            var output = layer.Apply(inputs);
+            Assert.AreEqual((10, 16, 16, 3), output.shape);
+        }
     }
 }
