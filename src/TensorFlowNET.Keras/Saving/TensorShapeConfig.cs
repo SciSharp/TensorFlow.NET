@@ -10,6 +10,6 @@ namespace Tensorflow.Keras.Saving
         public int?[] Items { get; set; }
 
         public static implicit operator TensorShape(TensorShapeConfig shape)
-            => new TensorShape(shape.Items.Select(x => x.HasValue ? x.Value : -1).ToArray());
+            => shape == null ? null : new TensorShape(shape.Items.Select(x => x.HasValue ? x.Value : -1).ToArray());
     }
 }

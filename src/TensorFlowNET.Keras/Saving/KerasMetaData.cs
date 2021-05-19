@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +17,7 @@ namespace Tensorflow.Keras.Saving
         public int SharedObjectId { get; set; }
         [JsonProperty("must_restore_from_config")]
         public bool MustRestoreFromConfig { get; set; }
-        public ModelConfig Config { get; set; }
+        public JObject Config { get; set; }
         [JsonProperty("build_input_shape")]
         public TensorShapeConfig BuildInputShape { get; set; }
     }

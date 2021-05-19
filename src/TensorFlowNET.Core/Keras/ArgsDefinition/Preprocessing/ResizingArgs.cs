@@ -1,6 +1,6 @@
 ﻿namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class ResizingArgs : LayerArgs
+    public class ResizingArgs : PreprocessingLayerArgs
     {
         public int Height { get; set; }
         public int Width { get; set; }

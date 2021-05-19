@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Layers;
 using ThirdParty.Tensorflow.Python.Keras.Protobuf;
 using static Tensorflow.Binding;
+using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Saving
 {
@@ -73,7 +75,7 @@ namespace Tensorflow.Keras.Saving
             {
                 model = new Sequential(new SequentialArgs
                 {
-                    Name = config.Name
+                    Name = config.GetValue("name").ToString()
                 });
             }
             else if (class_name == "Functional")
@@ -97,7 +99,12 @@ namespace Tensorflow.Keras.Saving
             var class_name = metadata.ClassName;
             var shared_object_id = metadata.SharedObjectId;
             var must_restore_from_config = metadata.MustRestoreFromConfig;
-
+            var obj = class_name switch
+            {
+                "Resizing" => Resizing.from_config(config),
+                _ => throw new NotImplementedException("")
+            };
+            var built = _try_build_layer(obj, node_id, metadata.BuildInputShape);
             return null;
         }
 
@@ -151,6 +158,14 @@ namespace Tensorflow.Keras.Saving
         }
 
         bool _try_build_layer(Model obj, int node_id, TensorShape build_input_shape)
+        {
+            if (obj.Built)
+                return true;
+
+            return false;
+        }
+
+        bool _try_build_layer(Layer obj, int node_id, TensorShape build_input_shape)
         {
             if (obj.Built)
                 return true;

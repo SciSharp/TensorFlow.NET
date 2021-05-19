@@ -45,5 +45,7 @@
         public IRegularizer ActivityRegularizer { get; set; }
 
         public bool Autocast { get; set; }
+
+        public bool IsFromConfig { get; set; }
     }
 }
