@@ -10,9 +10,16 @@ namespace Tensorflow.Keras.Engine
         LossesContainer compiled_loss;
         MetricsContainer compiled_metrics;
 
-        public void compile(ILossFunc loss, OptimizerV2 optimizer, string[] metrics)
+        public void compile(OptimizerV2 optimizer = null, 
+            ILossFunc loss = null, 
+            string[] metrics = null)
         {
-            this.optimizer = optimizer;
+            this.optimizer = optimizer ?? new RMSprop(new RMSpropArgs
+            {
+            });
+
+            this.loss = loss ?? new MeanSquaredError();
+
             compiled_loss = new LossesContainer(loss, output_names: output_names);
             compiled_metrics = new MetricsContainer(metrics, output_names: output_names);
 
@@ -22,7 +29,6 @@ namespace Tensorflow.Keras.Engine
             // Initialize cache attrs.
             _reset_compile_cache();
             _is_compiled = true;
-            this.loss = loss;
         }
 
         public void compile(string optimizer, string loss, string[] metrics)

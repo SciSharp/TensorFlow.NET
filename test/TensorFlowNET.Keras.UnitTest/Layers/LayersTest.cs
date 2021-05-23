@@ -1,7 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSharp;
+using System.Collections.Generic;
 using Tensorflow;
-using Tensorflow.Operations.Initializers;
+using Tensorflow.Keras;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
@@ -13,6 +14,18 @@ namespace TensorFlowNET.Keras.UnitTest
     [TestClass]
     public class LayersTest : EagerModeTestBase
     {
+        // [TestMethod]
+        public void InputLayer()
+        {
+            var model = keras.Sequential(new List<ILayer>
+            {
+              keras.layers.InputLayer(input_shape: 4),
+              keras.layers.Dense(8)
+            });
+            model.compile(optimizer: keras.optimizers.RMSprop(0.001f));
+            model.fit(np.zeros((10, 4)), np.ones((10, 8)));
+        }
+
         [TestMethod]
         public void Sequential()
         {

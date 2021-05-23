@@ -518,6 +518,18 @@ namespace Tensorflow.Keras.Layers
             return input_layer.InboundNodes[0].Outputs;
         }
 
+        public InputLayer InputLayer(TensorShape input_shape,
+            string name = null,
+            bool sparse = false,
+            bool ragged = false)
+            => new InputLayer(new InputLayerArgs
+            {
+                InputShape = input_shape,
+                Name = name,
+                Sparse = sparse,
+                Ragged = ragged
+            });
+
         /// <summary>
         /// Max pooling operation for 1D temporal data.
         /// </summary>

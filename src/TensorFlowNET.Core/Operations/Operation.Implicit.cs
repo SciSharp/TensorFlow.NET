@@ -31,8 +31,6 @@ namespace Tensorflow
             => op._handle;
         public static implicit operator Tensor(Operation op)
             => op.output;
-        public static implicit operator RefVariable(Operation op)
-            => new RefVariable(op);
 
         public override string ToString()
         {
