@@ -147,7 +147,18 @@ namespace TensorFlowNET.UnitTest.Dataset
         public void Cardinality()
         {
             var dataset = tf.data.Dataset.range(10);
+            var cardinality = dataset.dataset_cardinality();
+            Assert.AreEqual(new long[] { 10 }, cardinality.numpy());
             dataset = dataset.map(x => x[0] + 1);
+            cardinality = dataset.dataset_cardinality();
+            Assert.AreEqual(new long[] { 10 }, cardinality.numpy());
+        }
+
+        [TestMethod]
+        public void CardinalityWithAutoTune()
+        {
+            var dataset = tf.data.Dataset.range(10);
+            dataset = dataset.map(x => x, num_parallel_calls: -1);
             var cardinality = dataset.dataset_cardinality();
             Assert.AreEqual(new long[] { 10 }, cardinality.numpy());
         }

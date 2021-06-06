@@ -585,6 +585,10 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 else
                     return $"['{string.Join("', '", tensor.StringData().Take(25))}']";
             }
+            else if(dtype == TF_DataType.TF_VARIANT)
+            {
+                return "<unprintable>";
+            }
 
             var nd = tensor.numpy();
 

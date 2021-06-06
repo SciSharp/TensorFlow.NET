@@ -100,6 +100,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
                 using var data_iterator = new OwnedIterator(_dataset);
                 yield return (epoch, data_iterator);
             }
+            // _adapter.on_epoch_end()
         }
 
         public IEnumerable<int> steps()

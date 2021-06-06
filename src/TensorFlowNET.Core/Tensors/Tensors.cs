@@ -38,6 +38,8 @@ namespace Tensorflow
             }
         }
 
+        public Tensor this[params string[] slices]
+            => items.First()[slices];
         public Tensors(params Tensor[] tensors)
         {
             items.AddRange(tensors);

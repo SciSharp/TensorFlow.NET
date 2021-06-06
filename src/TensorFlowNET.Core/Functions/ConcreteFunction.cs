@@ -71,7 +71,7 @@ namespace Tensorflow.Functions
             func_graph.Exit();
         }
 
-        public ConcreteFunction(Func<Tensors, Tensors> func,
+        /*public ConcreteFunction(Func<Tensors, Tensors> func,
             TF_DataType[] dtypes, TensorShape[] shapes)
         {
             string func_name = $"{func.Method.Name}_{ops.uid_function()}";
@@ -89,7 +89,7 @@ namespace Tensorflow.Functions
             var opers = func_graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
             func_graph.ToGraph(opers, inputs, Outputs, null);
             func_graph.Exit();
-        }
+        }*/
 
         public void ToGraph(Tensors inputs, Tensors outputs)
         {

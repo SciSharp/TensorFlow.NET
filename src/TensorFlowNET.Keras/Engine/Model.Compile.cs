@@ -33,22 +33,22 @@ namespace Tensorflow.Keras.Engine
 
         public void compile(string optimizer, string loss, string[] metrics)
         {
-            switch (optimizer)
+            var _optimizer = optimizer switch
             {
-                case "rmsprop":
-                    this.optimizer = new RMSprop(new RMSpropArgs
-                    {
+                "rmsprop" => new RMSprop(new RMSpropArgs
+                {
 
-                    });
-                    break;
-            }
+                }),
+                _ => throw new NotImplementedException("")
+            };
 
-            int experimental_steps_per_execution = 1;
-            _configure_steps_per_execution(experimental_steps_per_execution);
+            var _loss = loss switch
+            {
+                "mse" => new MeanSquaredError(),
+                _ => throw new NotImplementedException("")
+            };
 
-            _reset_compile_cache();
-
-            _is_compiled = true;
+            compile(optimizer: _optimizer, loss: _loss, metrics: metrics);
         }
     }
 }

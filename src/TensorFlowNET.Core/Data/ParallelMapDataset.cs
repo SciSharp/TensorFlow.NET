@@ -15,18 +15,26 @@ namespace Tensorflow
             bool preserve_cardinality = false,
             bool use_legacy_function = false) : base(input_dataset)
         {
-            var func = new ConcreteFunction(map_func,
-                input_dataset.element_spec.Select(x => x.dtype).ToArray(),
-                input_dataset.element_spec.Select(x => x.shape).ToArray());
+            var func = new ConcreteFunction($"{map_func.Method.Name}_{Tensorflow.ops.uid_function()}");
+            func.Enter();
+            var inputs = new Tensors();
+            foreach (var input in input_dataset.element_spec)
+                inputs.Add(tf.placeholder(input.dtype, shape: input.shape, name: "arg"));
+            var outputs = map_func(inputs);
+            func.ToGraph(inputs, outputs);
+            func.Exit();
 
             structure = func.OutputStructure;
+
             var _num_parallel_calls = tf.convert_to_tensor(num_parallel_calls, dtype: tf.int64,
                 name: "num_parallel_calls");
             variant_tensor = ops.parallel_map_dataset_v2(input_dataset.variant_tensor,
                 _num_parallel_calls,
                 func,
                 output_types,
-                output_shapes);
+                output_shapes,
+                use_inter_op_parallelism: use_inter_op_parallelism,
+                preserve_cardinality: preserve_cardinality);
         }
     }
 }

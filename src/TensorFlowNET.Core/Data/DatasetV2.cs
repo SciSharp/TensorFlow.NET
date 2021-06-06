@@ -66,7 +66,9 @@ namespace Tensorflow
                 use_legacy_function: use_legacy_function);
 
         public IDatasetV2 map(Func<Tensors, Tensors> map_func, int num_parallel_calls)
-            => new ParallelMapDataset(this, map_func, num_parallel_calls: num_parallel_calls);
+            => new ParallelMapDataset(this, map_func, 
+                num_parallel_calls: num_parallel_calls,
+                preserve_cardinality: true);
 
         public OwnedIterator make_one_shot_iterator()
         {

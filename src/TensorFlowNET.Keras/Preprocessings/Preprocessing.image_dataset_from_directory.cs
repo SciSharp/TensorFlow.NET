@@ -124,10 +124,11 @@ namespace Tensorflow.Keras
 
             var start_positions_tensor = tf.constant(start_positions);
             var positions_ds = tf.data.Dataset.from_tensors(start_positions_tensor).repeat();
-            var z = tf.data.Dataset.zip(tf.data.Dataset.range(len(start_positions)), positions_ds);
+            var r = tf.data.Dataset.range(len(start_positions));
+            var z = tf.data.Dataset.zip(r, positions_ds);
             var indices = z.map(m =>
             {
-                var (i, positions) = (m[0], m[1]);
+                var (i, positions) = m;
                 return tf.range(positions[i], positions[i] + sequence_length_tensor * sampling_rate_tensor, sampling_rate_tensor);
             }, num_parallel_calls: -1);
             var dataset = sequences_from_indices(data, indices, start_index, end_index);
@@ -142,7 +143,11 @@ namespace Tensorflow.Keras
         {
             var dataset = tf.data.Dataset.from_tensors(array[new Slice(start: start_index, stop: end_index)]);
             dataset = tf.data.Dataset.zip(dataset.repeat(), indices_ds)
-                .map(x => array_ops.gather(x[0], x[1]), num_parallel_calls: -1);
+                .map(x =>
+                {
+                    var (steps, indx) = x;
+                    return array_ops.gather(steps, indx);
+                }, num_parallel_calls: -1);
             return dataset;
         }
     }
