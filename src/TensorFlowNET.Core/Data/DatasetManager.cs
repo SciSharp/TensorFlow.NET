@@ -14,10 +14,10 @@ namespace Tensorflow
         /// </summary>
         /// <param name="tensors"></param>
         /// <returns></returns>
-        public IDatasetV2 from_tensor(NDArray tensors)
+        public IDatasetV2 from_tensors(NDArray tensors)
             => new TensorDataset(tensors);
 
-        public IDatasetV2 from_tensor(Tensors tensors)
+        public IDatasetV2 from_tensors(Tensors tensors)
             => new TensorDataset(tensors);
 
         public IDatasetV2 from_tensor_slices(Tensor features, Tensor labels)

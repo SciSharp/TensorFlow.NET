@@ -63,7 +63,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
                 var array = array_ops.slice(indices, 
                     new[] { constant_op.constant(num_in_full_batch)}, 
                     new[] { constant_op.constant(_partial_batch_size)});
-                var index_remainder = tf.data.Dataset.from_tensor(array);
+                var index_remainder = tf.data.Dataset.from_tensors(array);
                 flat_dataset = flat_dataset.concatenate(index_remainder);
             }
                 
@@ -72,7 +72,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
 
         IDatasetV2 slice_inputs(IDatasetV2 indices_dataset, Tensors elements)
         {
-            var dataset = tf.data.Dataset.from_tensor(elements).repeat();
+            var dataset = tf.data.Dataset.from_tensors(elements).repeat();
             dataset = tf.data.Dataset.zip(indices_dataset, dataset);
 
             dataset = dataset.map(inputs =>
