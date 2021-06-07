@@ -40,5 +40,11 @@ namespace Tensorflow.Keras.Metrics
 
             return math_ops.cast(math_ops.equal(y_true, y_pred), TF_DataType.TF_FLOAT);
         }
+
+        public Tensor mean_absolute_error(Tensor y_true, Tensor y_pred)
+        {
+            y_true = math_ops.cast(y_true, y_pred.dtype);
+            return keras.backend.mean(math_ops.abs(y_pred - y_true), axis: -1);
+        }
     }
 }
