@@ -23,6 +23,8 @@ namespace Tensorflow
         public class DataOps
         {
             public int AUTOTUNE = -1;
+            public int INFINITE_CARDINALITY = -1;
+            public int UNKNOWN_CARDINALITY = -2;
             public DatasetManager Dataset { get; } = new DatasetManager();
         }
     }

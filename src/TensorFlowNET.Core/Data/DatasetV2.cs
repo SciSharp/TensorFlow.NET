@@ -70,6 +70,12 @@ namespace Tensorflow
                 num_parallel_calls: num_parallel_calls,
                 preserve_cardinality: true);
 
+        public IDatasetV2 filter(Func<Tensors, Tensors> predicate_func)
+            => new FilterDataset(this, predicate_func);
+
+        public IDatasetV2 filter(Func<Tensor, bool> predicate_func)
+            => new FilterDataset(this, predicate_func);
+
         public OwnedIterator make_one_shot_iterator()
         {
             if (tf.Context.executing_eagerly())
@@ -105,13 +111,15 @@ namespace Tensorflow
             // (3) Apply graph rewrite options
             var graph_rewrites = new[]
             {
-                "noop_elimination",
                 "map_and_batch_fusion",
+                "map_parallelization",
+                "noop_elimination",
                 "shuffle_and_repeat_fusion"
             };
             var graph_rewrite_configs = new string[]
             {
                 "autotune_buffer_sizes:autotune:true",
+                "batch_parallelization:autotune:true",
                 "disable_prefetch_legacy_autotune:autotune:true",
                 "enable_gradient_descent:autotune:true",
                 "map_parallelization:autotune:true"
@@ -124,7 +132,7 @@ namespace Tensorflow
             return dataset;
         }
 
-        public Tensor dataset_cardinality(string name = null)
+        public Tensor cardinality(string name = null)
             => tf.Context.ExecuteOp("DatasetCardinality", name, new ExecuteOpArgs(variant_tensor));
 
         public override string ToString()

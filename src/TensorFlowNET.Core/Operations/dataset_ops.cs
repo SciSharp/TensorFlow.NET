@@ -250,6 +250,25 @@ namespace Tensorflow
                     }));
 
         /// <summary>
+        /// Creates a dataset containing elements of `input_dataset` matching `predicate`.
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <param name="predicate"></param>
+        /// <param name="output_types"></param>
+        /// <param name="output_shapes"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor filter_dataset(Tensor dataset, ConcreteFunction predicate, TF_DataType[] output_types, TensorShape[] output_shapes,
+            string name = null)
+                => tf.Context.ExecuteOp("FilterDataset", name, new ExecuteOpArgs(dataset, new Tensor[0])
+                    .SetAttributes(new
+                    {
+                        predicate,
+                        output_types,
+                        output_shapes
+                    }));
+
+        /// <summary>
         /// Creates a dataset that applies `f` to the outputs of `input_dataset`.
         /// </summary>
         /// <param name="dataset"></param>

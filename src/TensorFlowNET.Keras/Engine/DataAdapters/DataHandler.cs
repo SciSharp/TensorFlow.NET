@@ -87,7 +87,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             if (adapter_steps > -1)
                 return adapter_steps;
 
-            var size = dataset.dataset_cardinality();
+            var size = dataset.cardinality();
             return size.numpy();
         }
 

@@ -29,48 +29,48 @@ namespace Tensorflow.Contexts
     /// </summary>
     public sealed partial class Context
     {
-        // [DebuggerStepThrough]
-        public Tensors ExecuteOp(string OpType, string Name, ExecuteOpArgs args)
+        Tensors ExecGraphAction(string OpType, string Name, ExecuteOpArgs args)
         {
-            Func<Tensors> graphAction = () =>
+            var keywords = new Dictionary<string, object>();
+            if (args.OpInputArgs != null)
             {
-                var keywords = new Dictionary<string, object>();
-                if(args.OpInputArgs != null)
-                {
-                    foreach (var (i, input) in enumerate(args.OpInputArgs))
-                        keywords[$"input_{i}"] = input;
-                }
+                foreach (var (i, input) in enumerate(args.OpInputArgs))
+                    keywords[$"input_{i}"] = input;
+            }
 
-                if(args.OpAttrs != null)
-                {
-                    foreach (var attr in args.OpAttrs)
-                        keywords[attr.Key] = attr.Value;
-                }
-
-                return tf.OpDefLib._apply_op_helper(OpType, Name, keywords).outputs;
-            };
-
-            Func<Tensors> eagerAction = () =>
+            if (args.OpAttrs != null)
             {
-                var opExecInfo = new FastPathOpExecInfo(OpType, Name, args.OpInputArgs)
-                {
-                    attrs = args.OpAttrs
-                };
-                return tf.Runner.TFE_FastPathExecute(opExecInfo);
-            };
+                foreach (var attr in args.OpAttrs)
+                    keywords[attr.Key] = attr.Value;
+            }
 
+            return tf.OpDefLib._apply_op_helper(OpType, Name, keywords).outputs;
+        }
+
+        Tensors ExecEagerAction(string OpType, string Name, ExecuteOpArgs args)
+        {
+            var opExecInfo = new FastPathOpExecInfo(OpType, Name, args.OpInputArgs)
+            {
+                attrs = args.OpAttrs
+            };
+            return tf.Runner.TFE_FastPathExecute(opExecInfo);
+        }
+
+        // [DebuggerStepThrough]
+        public Tensors ExecuteOp(string opType, string name, ExecuteOpArgs args)
+        {
             if (tf.Context.has_graph_arg(args.OpInputArgs))
             {
                 if (executing_eagerly())
                 {
                     graph_mode();
-                    var result = graphAction();
+                    var result = ExecGraphAction(opType, name, args);
                     restore_mode();
                     return result;
                 }
                 else
                 {
-                    var result = graphAction();
+                    var result = ExecGraphAction(opType, name, args);
                     if (tf.Runner.MustRecordGradient())
                     {
                         var op = result[0].op;
@@ -92,14 +92,14 @@ namespace Tensorflow.Contexts
                             args1[i + 1] = arg.Value;
                             i += 2;
                         }
-                        tf.Runner.RecordGradient(OpType, op.inputs, args1, op.outputs);
+                        tf.Runner.RecordGradient(opType, op.inputs, args1, op.outputs);
                     }
                     return result;
                 }
             }
             else
             {
-                return eagerAction();
+                return ExecEagerAction(opType, name, args);
             }
         }
     }

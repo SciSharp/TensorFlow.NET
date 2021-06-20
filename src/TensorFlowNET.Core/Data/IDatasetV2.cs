@@ -72,6 +72,9 @@ namespace Tensorflow
         IDatasetV2 map(Func<Tensors, Tensors> map_func,
             int num_parallel_calls);
 
+        IDatasetV2 filter(Func<Tensors, Tensors> map_func);
+        IDatasetV2 filter(Func<Tensor, bool> map_func);
+
         OwnedIterator make_one_shot_iterator();
 
         IDatasetV2 flat_map(Func<Tensor, IDatasetV2> map_func);
@@ -91,6 +94,6 @@ namespace Tensorflow
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        Tensor dataset_cardinality(string name = null);
+        Tensor cardinality(string name = null);
     }
 }

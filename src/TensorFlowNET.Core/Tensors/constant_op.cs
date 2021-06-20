@@ -144,6 +144,12 @@ namespace Tensorflow
                         break;
                 }
             }
+            else if (dtype != TF_DataType.DtInvalid &&
+                value is NDArray nd &&
+                dtypes.as_dtype(nd.dtype) != dtype)
+            {
+                value = nd.astype(dtype.as_numpy_dtype());
+            }
 
             if (dtype == TF_DataType.TF_STRING && value is byte[] bytes)
                 return new EagerTensor(bytes, ctx.DeviceName, TF_DataType.TF_STRING);
