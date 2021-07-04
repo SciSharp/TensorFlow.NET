@@ -57,15 +57,15 @@ namespace Tensorflow.Keras.Engine
 
         void _init_batch_counters()
         {
-            _train_counter = tf.Variable(0,
+            _train_counter = tf.Variable(0L,
                 dtype: TF_DataType.TF_INT64,
                 aggregation: VariableAggregation.OnlyFirstReplica);
 
-            _test_counter = tf.Variable(0,
+            _test_counter = tf.Variable(0L,
                 dtype: TF_DataType.TF_INT64,
                 aggregation: VariableAggregation.OnlyFirstReplica);
 
-            _predict_counter = tf.Variable(0,
+            _predict_counter = tf.Variable(0L,
                 dtype: TF_DataType.TF_INT64,
                 aggregation: VariableAggregation.OnlyFirstReplica);
         }

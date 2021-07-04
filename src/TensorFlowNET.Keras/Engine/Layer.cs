@@ -158,7 +158,7 @@ namespace Tensorflow.Keras.Engine
         /// <returns></returns>
         protected virtual Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
-            throw new NotImplementedException("");
+            return inputs;
         }
 
         protected virtual string _name_scope()

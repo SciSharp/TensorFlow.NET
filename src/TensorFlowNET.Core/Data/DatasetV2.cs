@@ -25,6 +25,8 @@ namespace Tensorflow
 
         public TensorSpec[] element_spec => structure;
 
+        public int length => cardinality().numpy();
+
         public IDatasetV2 cache(string filename = "")
             => new CacheDataset(this, filename: filename);
 
@@ -136,7 +138,9 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("DatasetCardinality", name, new ExecuteOpArgs(variant_tensor));
 
         public override string ToString()
-            => $"{GetType().Name} shapes: {string.Join(", ", structure.Select(x => x.shape))}, types: {string.Join(", ", structure.Select(x => "tf." + x.dtype.as_numpy_name()))}";
+            => $"{GetType().Name} shapes: {string.Join(", ", structure.Select(x => x.shape))}, " +
+            $"types: {string.Join(", ", structure.Select(x => "tf." + x.dtype.as_numpy_name()))}, " +
+            $"len: {length}";
 
         public IEnumerator<(Tensor, Tensor)> GetEnumerator()
         {

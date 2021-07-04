@@ -2,7 +2,9 @@
 using BenchmarkDotNet.Running;
 using System;
 using System.Reflection;
+using Tensorflow.Benchmark.Crash;
 using Tensorflow.Benchmark.Leak;
+using static Tensorflow.Binding;
 
 namespace TensorFlowBenchmark
 {
@@ -10,6 +12,8 @@ namespace TensorFlowBenchmark
     {
         static void Main(string[] args)
         {
+            print(tf.VERSION);
+            new RepeatDataSetCrash().Run();
             new GpuLeakByCNN().Run();
 
             if (args?.Length > 0)

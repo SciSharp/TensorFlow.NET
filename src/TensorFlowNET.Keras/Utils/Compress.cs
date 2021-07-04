@@ -53,6 +53,9 @@ namespace Tensorflow.Keras.Utils
             var flag = gzArchiveName.Split(Path.DirectorySeparatorChar).Last().Split('.').First() + ".bin";
             if (File.Exists(Path.Combine(destFolder, flag))) return;
 
+            var destFileName = gzArchiveName.Replace(".zip", string.Empty);
+            if (File.Exists(destFileName)) return;
+
             Binding.tf_output_redirect.WriteLine($"Extracting.");
             var task = Task.Run(() =>
             {
