@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -510,7 +510,7 @@ namespace Tensorflow
             {
                 value = ops.convert_to_tensor(value);
                 var value_shape = value.TensorShape;
-                num = value_shape.dims[axis];
+                num = (int)value_shape.dims[axis];
             }
 
             return gen_array_ops.unpack(value, num: num.Value, axis: axis, name: name);
@@ -588,7 +588,7 @@ namespace Tensorflow
                     var input_shape = input.TensorShape;
                     if (optimize && input.NDims > -1 && input_shape.is_fully_defined())
                     {
-                        var nd = np.array(input.shape).astype(out_type.as_numpy_dtype());
+                        var nd = np.array(input.shape).astype(out_type.as_system_dtype());
                         return constant_op.constant(nd, name: name);
                     }
                 }

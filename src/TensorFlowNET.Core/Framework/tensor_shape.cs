@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 using System;
 using System.Linq;
 using System.Text;
@@ -29,13 +29,13 @@ namespace Tensorflow.Framework
             bool _shape_is_compatible_0dim(Shape _this, Shape _other)
             {
                 var __other = tensor_shape.as_shape(_other);
-                if (_this.Dimensions == null || __other.dims == null)
+                if (_this.dims == null || __other.dims == null)
                     return true;
 
-                if (_this.NDim != __other.ndim)
+                if (_this.ndim != __other.ndim)
                     return false;
 
-                foreach (var (x_dim, y_dim) in _this.Dimensions.Zip(__other.dims, (x_dim, y_dim) => (x_dim, y_dim)))
+                foreach (var (x_dim, y_dim) in _this.dims.Zip(__other.dims, (x_dim, y_dim) => (x_dim, y_dim)))
                 {
                     if (x_dim != y_dim)
                         return false;
@@ -62,14 +62,14 @@ namespace Tensorflow.Framework
         }
 
         public static int dimension_value(Dimension dimension)
-            => dimension.value;
+            => (int)dimension.value;
 
         public static TensorShape as_shape(this Shape shape)
-             => new TensorShape(shape.Dimensions);
+             => new TensorShape(shape.dims);
 
         public static TensorShape most_specific_compatible_shape(this TensorShape self, TensorShape other)
         {
-            var dims = range(self.rank).Select(x => -1).ToArray();
+            var dims = range(self.rank).Select(x => -1L).ToArray();
             foreach(var (i, (d1, d2)) in enumerate(zip(self.dims, other.dims)))
             {
                 if (d1 == d2)

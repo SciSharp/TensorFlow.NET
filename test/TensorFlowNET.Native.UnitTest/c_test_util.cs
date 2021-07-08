@@ -38,7 +38,7 @@ namespace Tensorflow.Native.UnitTest
                 using (var buffer = new Buffer())
                 {
                     c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer.Handle, s.Handle);
-                    attr_value = AttrValue.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
+                    attr_value = AttrValue.Parser.ParseFrom(buffer.ToArray());
                 }
 
                 return s.Code == TF_Code.TF_OK;
@@ -54,7 +54,7 @@ namespace Tensorflow.Native.UnitTest
                 {
                     c_api.TF_GraphToGraphDef(graph, buffer.Handle, s.Handle);
                     s.Check();
-                    return GraphDef.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
+                    return GraphDef.Parser.ParseFrom(buffer.ToArray());
                 }
             }
         }

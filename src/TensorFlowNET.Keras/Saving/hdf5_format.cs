@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using HDF.PInvoke;
-using NumSharp;
+using Tensorflow.Numpy;
 using Tensorflow.Keras.Engine;
 using HDF5CSharp;
 using static Tensorflow.Binding;

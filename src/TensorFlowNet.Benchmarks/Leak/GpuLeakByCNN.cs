@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.Layers;
-using NumSharp;
+using Tensorflow.Numpy;
 using Tensorflow.Keras;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
@@ -28,8 +28,8 @@ namespace Tensorflow.Benchmark.Leak
 
             bytes = new byte[num];
             var outLables = np.array(bytes);
-            Console.WriteLine("Image.Shape={0}", inputImages.Shape);
-            Console.WriteLine("Label.Shape={0}", outLables.Shape);
+            Console.WriteLine("Image.Shape={0}", inputImages.dims);
+            Console.WriteLine("Label.Shape={0}", outLables.dims);
 
             tf.enable_eager_execution();
 

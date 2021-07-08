@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -396,7 +396,7 @@ namespace Tensorflow.Operations
             // Restore some shape information
             foreach (var (output, output_size) in zip(final_outputs, flat_output_size))
             {
-                var shape = rnn_cell_impl._concat(new[] { const_time_steps, const_batch_size }, output_size, @static: true);
+                var shape = rnn_cell_impl._concat(new int[] { (int)const_time_steps, (int)const_batch_size }, output_size, @static: true);
                 output.set_shape(shape);
             }
 
@@ -436,7 +436,7 @@ namespace Tensorflow.Operations
             };
             var x_t = array_ops.transpose(x, array_ops.concat(con1, 0));
 
-            var dims = new int[] { x_static_shape.dims[1], x_static_shape.dims[0] }
+            var dims = new [] { x_static_shape.dims[1], x_static_shape.dims[0] }
                 .ToList();
             dims.AddRange(x_static_shape.dims.Skip(2));
             var shape = new TensorShape(dims.ToArray());

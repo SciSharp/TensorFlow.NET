@@ -15,7 +15,7 @@ namespace Tensorflow
                     else if (rank != shape1.rank)
                         return false;
                     return Enumerable.SequenceEqual(shape1.dims, dims);
-                case int[] shape2:
+                case long[] shape2:
                     if (rank != shape2.Length)
                         return false;
                     return Enumerable.SequenceEqual(dims, shape2);

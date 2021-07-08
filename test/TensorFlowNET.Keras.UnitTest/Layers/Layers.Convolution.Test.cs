@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
+using Tensorflow.Numpy;
 using Tensorflow;
 using Tensorflow.Operations;
 using static Tensorflow.KerasApi;
@@ -20,8 +20,8 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(3, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1] - 4, y.shape[1]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1] - 4, y.shape[1]);
             Assert.AreEqual(filters, y.shape[2]);
         }
 
@@ -36,8 +36,8 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(3, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1] - 2, y.shape[1]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1] - 2, y.shape[1]);
             Assert.AreEqual(filters, y.shape[2]);
         }
 
@@ -52,8 +52,8 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(3, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1], y.shape[1]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1], y.shape[1]);
             Assert.AreEqual(filters, y.shape[2]);
         }
 
@@ -67,8 +67,8 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(3, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1] - 5, y.shape[1]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1] - 5, y.shape[1]);
             Assert.AreEqual(filters, y.shape[2]);
         }
 
@@ -82,8 +82,8 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(3, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1] - 4, y.shape[1]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1] - 4, y.shape[1]);
             Assert.AreEqual(filters, y.shape[2]);
         }
 
@@ -97,8 +97,8 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(3, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1], y.shape[1]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1], y.shape[1]);
             Assert.AreEqual(filters, y.shape[2]);
         }
 
@@ -112,9 +112,9 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(4, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1] - 4, y.shape[1]);
-            Assert.AreEqual(x.shape[2] - 4, y.shape[2]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1] - 4, y.shape[1]);
+            Assert.AreEqual(x.dims[2] - 4, y.shape[2]);
             Assert.AreEqual(filters, y.shape[3]);
         }
 
@@ -128,9 +128,9 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(4, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1] - 2, y.shape[1]);
-            Assert.AreEqual(x.shape[2] - 2, y.shape[2]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1] - 2, y.shape[1]);
+            Assert.AreEqual(x.dims[2] - 2, y.shape[2]);
             Assert.AreEqual(filters, y.shape[3]);
         }
 
@@ -144,9 +144,9 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(4, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1], y.shape[1]);
-            Assert.AreEqual(x.shape[2], y.shape[2]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1], y.shape[1]);
+            Assert.AreEqual(x.dims[2], y.shape[2]);
             Assert.AreEqual(filters, y.shape[3]);
         }
 
@@ -160,9 +160,9 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(4, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1] - 5, y.shape[1]);
-            Assert.AreEqual(x.shape[2] - 5, y.shape[2]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1] - 5, y.shape[1]);
+            Assert.AreEqual(x.dims[2] - 5, y.shape[2]);
             Assert.AreEqual(filters, y.shape[3]);
         }
 
@@ -176,9 +176,9 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(4, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1] - 4, y.shape[1]);
-            Assert.AreEqual(x.shape[2] - 4, y.shape[2]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1] - 4, y.shape[1]);
+            Assert.AreEqual(x.dims[2] - 4, y.shape[2]);
             Assert.AreEqual(filters, y.shape[3]);
         }
 
@@ -192,9 +192,9 @@ namespace TensorFlowNET.Keras.UnitTest
             var y = conv.Apply(x);
 
             Assert.AreEqual(4, y.shape.ndim);
-            Assert.AreEqual(x.shape[0], y.shape[0]);
-            Assert.AreEqual(x.shape[1], y.shape[1]);
-            Assert.AreEqual(x.shape[2], y.shape[2]);
+            Assert.AreEqual(x.dims[0], y.shape[0]);
+            Assert.AreEqual(x.dims[1], y.shape[1]);
+            Assert.AreEqual(x.dims[2], y.shape[2]);
             Assert.AreEqual(filters, y.shape[3]);
         }
     }

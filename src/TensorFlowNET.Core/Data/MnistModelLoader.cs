@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -82,15 +82,15 @@ namespace Tensorflow
 
             var testLabels = ExtractLabels(Path.Combine(setting.TrainDir, Path.GetFileNameWithoutExtension(TEST_LABELS)), one_hot: setting.OneHot, limit: setting.TestSize);
 
-            var end = trainImages.shape[0];
+            var end = trainImages.dims[0];
 
             var validationSize = setting.ValidationSize;
 
             var validationImages = trainImages[np.arange(validationSize)];
             var validationLabels = trainLabels[np.arange(validationSize)];
 
-            trainImages = trainImages[np.arange(validationSize, end)];
-            trainLabels = trainLabels[np.arange(validationSize, end)];
+            trainImages = trainImages[np.arange(validationSize, (int)end)];
+            trainLabels = trainLabels[np.arange(validationSize, (int)end)];
 
             var dtype = setting.DataType;
             var reshape = setting.ReShape;
@@ -159,9 +159,9 @@ namespace Tensorflow
 
         private NDArray DenseToOneHot(NDArray labels_dense, int num_classes)
         {
-            var num_labels = labels_dense.shape[0];
+            var num_labels = labels_dense.dims[0];
             var index_offset = np.arange(num_labels) * num_classes;
-            var labels_one_hot = np.zeros(num_labels, num_classes);
+            var labels_one_hot = np.zeros((num_labels, num_classes));
             var labels = labels_dense.Data<byte>();
             for (int row = 0; row < num_labels; row++)
             {

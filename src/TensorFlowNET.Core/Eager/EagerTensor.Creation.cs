@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 using System;
 using System.Linq;
 using static Tensorflow.Binding;
@@ -14,25 +14,18 @@ namespace Tensorflow.Eager
             Resolve();
         }
 
-        public EagerTensor(string value, string device_name) : base(value)
+        public EagerTensor(object value,string device_name, TF_DataType dtype = TF_DataType.TF_UINT8) : base((float[])value)
+        {
+            throw new NotImplementedException("");
+        }
+
+        public EagerTensor(object value, Shape shape = null, string device_name = null, TF_DataType dtype = TF_DataType.TF_UINT8) : base((float[])value)
         {
             NewEagerTensorHandle(_handle);
         }
 
-        public EagerTensor(byte[] value, string device_name, TF_DataType dtype) : base(value, dType: dtype)
-        {
-            NewEagerTensorHandle(_handle);
-        }
-
-        public EagerTensor(string[] value, string device_name) : base(value)
-        {
-            NewEagerTensorHandle(_handle);
-        }
-
-        public EagerTensor(NDArray value, string device_name) : base(value)
-        {
-            NewEagerTensorHandle(_handle);
-        }
+        internal unsafe EagerTensor(Array array, Shape shape) : base(array, shape)
+            => NewEagerTensorHandle(_handle);
 
         void NewEagerTensorHandle(IntPtr h)
         {

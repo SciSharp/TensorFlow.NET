@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Collections;
 using System.Linq;

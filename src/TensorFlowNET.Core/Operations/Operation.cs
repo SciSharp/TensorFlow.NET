@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -207,7 +207,7 @@ namespace Tensorflow
                 c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
                 tf.Status.Check(true);
 
-                x = AttrValue.Parser.ParseFrom(buf.DangerousMemoryBlock.Stream());
+                x = AttrValue.Parser.ParseFrom(buf.ToArray());
             }
 
             string oneof_value = x.ValueCase.ToString();
@@ -235,7 +235,7 @@ namespace Tensorflow
                 c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
                 tf.Status.Check(true);
 
-                x = AttrValue.Parser.ParseFrom(buf.DangerousMemoryBlock.Stream());
+                x = AttrValue.Parser.ParseFrom(buf.ToArray());
             }
 
             string oneof_value = x.ValueCase.ToString();
@@ -269,7 +269,7 @@ namespace Tensorflow
                     c_api.TF_OperationToNodeDef(_handle, buffer.Handle, s.Handle);
                     s.Check();
 
-                    return NodeDef.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
+                    return NodeDef.Parser.ParseFrom(buffer.ToArray());
                 }
         }
 

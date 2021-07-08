@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Tensorflow.Keras.Utils;
-using NumSharp;
+using Tensorflow.Numpy;
 using System.Linq;
 
 namespace Tensorflow.Keras.Datasets
@@ -44,7 +44,7 @@ namespace Tensorflow.Keras.Datasets
 
             var lines = File.ReadAllLines(Path.Combine(dst, "imdb_train.txt"));
             var x_train_string = new string[lines.Length];
-            var y_train = np.zeros(new int[] { lines.Length }, NPTypeCode.Int64);
+            var y_train = np.zeros(new int[] { lines.Length }, NumpyDType.Int64);
             for (int i = 0; i < lines.Length; i++)
             {
                 y_train[i] = long.Parse(lines[i].Substring(0, 1));
@@ -55,7 +55,7 @@ namespace Tensorflow.Keras.Datasets
 
             File.ReadAllLines(Path.Combine(dst, "imdb_test.txt"));
             var x_test_string = new string[lines.Length];
-            var y_test = np.zeros(new int[] { lines.Length }, NPTypeCode.Int64);
+            var y_test = np.zeros(new int[] { lines.Length }, NumpyDType.Int64);
             for (int i = 0; i < lines.Length; i++)
             {
                 y_test[i] = long.Parse(lines[i].Substring(0, 1));

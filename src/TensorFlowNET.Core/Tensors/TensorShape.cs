@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -19,7 +19,7 @@ namespace Tensorflow
         /// <summary>
         ///     Returns a list of Dimensions, or None if the shape is unspecified.
         /// </summary>
-        public int[] dims => shape.Dimensions;
+        public long[] dims => shape.dims;
 
         /// <summary>
         ///     Returns the rank of this shape.
@@ -30,17 +30,17 @@ namespace Tensorflow
         /// <summary>
         ///     Returns the rank of this shape.
         /// </summary>
-        public int rank => _rank > -1 ? shape.NDim : -1;
+        public int rank => _rank > -1 ? shape.ndim : -1;
 
         /// <summary>
         ///     Returns the size this shape represents.
         /// </summary>
-        public int size
+        public long size
         {
             get
             {
-                var dims = shape.Dimensions;
-                var computed = 1;
+                var dims = shape.dims;
+                var computed = 1L;
                 for (int i = 0; i < dims.Length; i++)
                 {
                     var val = dims[i];
@@ -60,25 +60,23 @@ namespace Tensorflow
         }
 
         public static TensorShape Scalar
-            => new TensorShape(new int[0]);
+            => new TensorShape(new long[0]);
 
         public TensorShape(TensorShapeProto proto)
         {
             if (proto.UnknownRank) return;
             switch (proto.Dim.Count)
             {
-                case 0: shape = new Shape(new int[0]); break;
-                case 1: shape = Shape.Vector((int)proto.Dim[0].Size); break;
-                case 2: shape = Shape.Matrix((int)proto.Dim[0].Size, (int)proto.Dim[1].Size); break;
+                case 0: shape = new Shape(new long[0]); 
+                    break;
                 default:
                     var protodims = proto.Dim;
                     var len = protodims.Count;
-                    var dims = new int[len];
+                    var dims = new long[len];
                     for (int i = 0; i < len; i++)
-                        dims[i] = (int)protodims[i].Size;
-
-
-                    shape = new Shape(dims); break;
+                        dims[i] = protodims[i].Size;
+                    shape = new Shape(dims); 
+                    break;
             }
         }
 
@@ -86,23 +84,36 @@ namespace Tensorflow
         {
             switch (dims.Length)
             {
-                case 0: shape = new Shape(new int[0]); break;
-                case 1: shape = Shape.Vector(dims[0]); break;
-                case 2: shape = Shape.Matrix(dims[0], dims[1]); break;
-                default: shape = new Shape(dims); break;
+                case 0:
+                    shape = new Shape(new long[0]);
+                    break;
+                default:
+                    shape = new Shape(dims.Select(x => Convert.ToInt64(x)).ToArray());
+                    break;
             }
         }
 
-        public TensorShape(int[][] dims)
+        public TensorShape(params long[] dims)
+        {
+            switch (dims.Length)
+            {
+                case 0: shape = new Shape(new long[0]); 
+                    break;
+                default: shape = new Shape(dims); 
+                    break;
+            }
+        }
+
+        public TensorShape(long[][] dims)
         {
             if (dims.Length == 1)
             {
                 switch (dims[0].Length)
                 {
-                    case 0: shape = new Shape(new int[0]); break;
-                    case 1: shape = Shape.Vector((int)dims[0][0]); break;
-                    case 2: shape = Shape.Matrix(dims[0][0], dims[1][2]); break;
-                    default: shape = new Shape(dims[0]); break;
+                    case 0: shape = new Shape(new long[0]); 
+                        break;
+                    default: shape = new Shape(dims[0]); 
+                        break;
                 }
             }
             else
@@ -134,7 +145,7 @@ namespace Tensorflow
             }
         }
 
-        public int this[int index] => index < 0 ? dims[ndim + index] : dims[index];
+        public long this[int index] => index < 0 ? dims[ndim + index] : dims[index];
 
         /// <summary>
         ///     Returns True iff `self` is fully defined in every dimension.
@@ -186,7 +197,7 @@ namespace Tensorflow
             if (rank == -1)
                 return new TensorShape(-1);
             else
-                return new TensorShape(Enumerable.Repeat(-1, rank).ToArray());
+                return new TensorShape(Enumerable.Repeat(-1L, rank).ToArray());
         }
 
         /// <summary>
@@ -195,7 +206,7 @@ namespace Tensorflow
         /// <param name="other"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TensorShape concatenate(int[] other)
+        public TensorShape concatenate(long[] other)
         {
             return concatenate(new TensorShape(other));
         }
@@ -213,7 +224,7 @@ namespace Tensorflow
                 return new TensorShape();
             else
             {
-                var concatenate_dims = new int[ndim + otherShape.ndim];
+                var concatenate_dims = new long[ndim + otherShape.ndim];
                 for (int i = 0; i < ndim; i++)
                     concatenate_dims[i] = dims[i];
 
@@ -234,7 +245,7 @@ namespace Tensorflow
             if (dims == null)
                 return other;
 
-            var new_dims = new List<int>();
+            var new_dims = new List<long>();
 
             foreach (var i in range(ndim))
             {
@@ -249,11 +260,11 @@ namespace Tensorflow
         /// <summary>
         ///     Returns a cloned array from <see cref="dims"/>.
         /// </summary>
-        public int[] as_list()
+        public long[] as_list()
         {
             if (shape.IsEmpty)
                 throw new ValueError("as_list() is not defined on an unknown TensorShape.");
-            return (int[])dims.Clone();
+            return (long[])dims.Clone();
         }
 
         public long[] as_list_long()
@@ -263,11 +274,11 @@ namespace Tensorflow
             return dims.Select(x => Convert.ToInt64(x)).ToArray();
         }
 
-        public int num_elements()
+        public long num_elements()
         {
             if (is_fully_defined())
             {
-                var size = 1;
+                var size = 1L;
                 foreach (var dim in dims)
                     size *= dim;
                 return size;

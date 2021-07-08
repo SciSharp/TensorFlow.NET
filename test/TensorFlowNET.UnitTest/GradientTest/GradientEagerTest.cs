@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow;
+using Tensorflow.Numpy;
 using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
@@ -64,8 +65,8 @@ namespace TensorFlowNET.UnitTest.Gradient
             // Calcute the gradient of (x1-x2)^2 
             // by Automatic Differentiation in Eager mode
             // Expected is 2*(abs(x1-x2))
-            Tensor x1 = new NumSharp.NDArray( new float[] { 1, 3, 5, 21, 19, 17 });
-            Tensor x2 = new NumSharp.NDArray(new float[] { 29, 27, 23, 7, 11, 13 });
+            Tensor x1 = new NDArray( new float[] { 1, 3, 5, 21, 19, 17 });
+            Tensor x2 = new NDArray(new float[] { 29, 27, 23, 7, 11, 13 });
             float[] expected = new float[] {
                 (29-1) * 2,
                 (27-3) * 2,

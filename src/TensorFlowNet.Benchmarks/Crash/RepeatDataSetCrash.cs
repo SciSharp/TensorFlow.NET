@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System;
 using System.Collections.Generic;
-using NumSharp;
+using Tensorflow.Numpy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 

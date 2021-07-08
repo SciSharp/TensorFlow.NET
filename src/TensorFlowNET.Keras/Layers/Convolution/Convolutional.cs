@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
@@ -47,11 +48,11 @@ namespace Tensorflow.Keras.Layers
         public Convolutional(ConvolutionalArgs args) : base(args)
         {
             this.args = args;
-            args.KernelSize = conv_utils.normalize_tuple(args.KernelSize.dims, args.Rank, "kernel_size");
-            args.Strides = conv_utils.normalize_tuple(args.Strides.dims, args.Rank, "strides");
+            args.KernelSize = conv_utils.normalize_tuple(args.KernelSize.dims.Select(x => (int)x).ToArray(), args.Rank, "kernel_size");
+            args.Strides = conv_utils.normalize_tuple(args.Strides.dims.Select(x => (int)x).ToArray(), args.Rank, "strides");
             args.Padding = conv_utils.normalize_padding(args.Padding);
             args.DataFormat = conv_utils.normalize_data_format(args.DataFormat);
-            args.DilationRate = conv_utils.normalize_tuple(args.DilationRate.dims, args.Rank, "dilation_rate");
+            args.DilationRate = conv_utils.normalize_tuple(args.DilationRate.dims.Select(x => (int)x).ToArray(), args.Rank, "dilation_rate");
             inputSpec = new InputSpec(ndim: rank + 2);
             _tf_data_format = conv_utils.convert_data_format(data_format, rank + 2);
         }
@@ -60,10 +61,10 @@ namespace Tensorflow.Keras.Layers
         {
             TensorShape input_shape = inputs.shape;
             int channel_axis = data_format == "channels_first" ? 1 : -1;
-            int input_channel = channel_axis < 0 ?
+            var input_channel = channel_axis < 0 ?
                 input_shape.dims[input_shape.ndim + channel_axis] :
                 input_shape.dims[channel_axis];
-            TensorShape kernel_shape = kernel_size.dims.concat(new int[] { input_channel / args.Groups, filters });
+            TensorShape kernel_shape = kernel_size.dims.concat(new long[] { input_channel / args.Groups, filters });
             kernel = add_weight(name: "kernel",
                 shape: kernel_shape,
                 initializer: kernel_initializer,
@@ -78,7 +79,7 @@ namespace Tensorflow.Keras.Layers
                     dtype: DType);
 
             var axes = new Dictionary<int, int>();
-            axes.Add(-1, input_channel);
+            axes.Add(-1, (int)input_channel);
             inputSpec = new InputSpec(min_ndim: rank + 2, axes: axes);
 
             string tf_padding;

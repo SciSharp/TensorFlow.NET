@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +56,7 @@ namespace Tensorflow
                 if (shape == null)
                     return t;
 
-                if (t.shape.SequenceEqual(shape.dims))
+                if (t.shape.Select(x => Convert.ToInt64(x)).SequenceEqual(shape.dims))
                     return t;
 
                 if (verify_shape)
@@ -146,9 +146,9 @@ namespace Tensorflow
             }
             else if (dtype != TF_DataType.DtInvalid &&
                 value is NDArray nd &&
-                dtypes.as_dtype(nd.dtype) != dtype)
+                nd.dtype.as_tf_dtype() != dtype)
             {
-                value = nd.astype(dtype.as_numpy_dtype());
+                value = nd.astype(dtype.as_system_dtype());
             }
 
             if (dtype == TF_DataType.TF_STRING && value is byte[] bytes)
@@ -160,6 +160,8 @@ namespace Tensorflow
                     return val;
                 case NDArray val:
                     return new EagerTensor(val, ctx.DeviceName);
+                case Shape val:
+                    return new EagerTensor(val.dims, new Shape(val.ndim));
                 case TensorShape val:
                     return new EagerTensor(val.dims, ctx.DeviceName);
                 case string val:
@@ -177,23 +179,23 @@ namespace Tensorflow
                 case byte[,,] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case int val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(new[] { val }, Shape.Scalar);
                 case int[] val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(val, new Shape(val.Length));
                 case int[,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(val, new Shape(val.GetLength(0), val.GetLength(1)));
                 case int[,,] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case long val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case long[] val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(val, new Shape(val.Length));
                 case long[,] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case long[,,] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case float val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(new[] { val }, Shape.Scalar);
                 case float[] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case float[,] val:
@@ -201,7 +203,7 @@ namespace Tensorflow
                 case float[,,] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case double val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(new[] { val }, Shape.Scalar);
                 case double[] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case double[,] val:
@@ -227,7 +229,7 @@ namespace Tensorflow
             bool as_ref = false)
         {
             var s_list = s.dims;
-            var int64_value = 0;
+            var int64_value = 0L;
             foreach (var dim in s_list)
             {
                 if (dim > Math.Pow(2, 31))

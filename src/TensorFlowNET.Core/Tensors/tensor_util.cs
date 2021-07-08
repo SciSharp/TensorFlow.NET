@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,7 +117,7 @@ namespace Tensorflow
 
             // We first convert value to a numpy array or scalar.
             NDArray nparray = null;
-            var np_dt = dtype.as_numpy_dtype();
+            var np_dt = dtype.as_system_dtype();
 
             if (values is NDArray nd)
             {
@@ -145,7 +145,7 @@ namespace Tensorflow
                     nparray = nparray.astype(np_dt);
             }
 
-            var numpy_dtype = nparray.dtype.as_dtype(dtype: dtype);
+            var numpy_dtype = nparray.dtype.as_tf_dtype();
             if (numpy_dtype == TF_DataType.DtInvalid)
                 throw new TypeError($"Unrecognized data type: {nparray.dtype}");
 
@@ -155,7 +155,7 @@ namespace Tensorflow
                 numpy_dtype = dtype;
 
             bool is_same_size = false;
-            int shape_size = 0;
+            ulong shape_size = 0;
 
             // If shape is not given, get the shape from the numpy array.
             if (shape == null)
@@ -173,14 +173,14 @@ namespace Tensorflow
                 }
                 else
                 {
-                    shape = nparray.shape;
+                    shape = nparray.dims.Select(x => Convert.ToInt32(x)).ToArray();
                     is_same_size = true;
                     shape_size = nparray.size;
                 }
             }
             else
             {
-                shape_size = new TensorShape(shape).size;
+                shape_size = (ulong)new Shape(shape.Select(x => Convert.ToInt64(x)).ToArray()).size;
                 is_same_size = shape_size == nparray.size;
             }
 
@@ -214,7 +214,7 @@ namespace Tensorflow
 
             var proto_values = nparray.ravel();
 
-            switch (nparray.dtype.Name)
+            switch (nparray.dtype.ToString())
             {
                 case "Bool":
                 case "Boolean":
@@ -286,18 +286,18 @@ scalar with value '-1' to describe an unknown shape.", value_));
                     return pre_cast;
                 var cast_dtype = dtypes.as_dtype((Type)tensor.op.get_attr("DstT"));
                 if (!Array.Exists(new[] { dtypes.int32, dtypes.int64 }, cast_dtype_ => cast_dtype_ == cast_dtype))
-                    return tensor.TensorShape.unknown_shape(shape.dims[0]);
+                    return tensor.TensorShape.unknown_shape((int)shape.dims[0]);
 
-                int[] x_ = { };
+                long[] x_ = { };
                 foreach (var x in pre_cast.as_list())
                     if (x != -1)
                         x_[x_.Length] = x;
                     else
                         x_[x_.Length] = -1;
-                var dest_dtype_shape_array = np.array(x_).astype(cast_dtype.as_numpy_dtype());
+                var dest_dtype_shape_array = np.array(x_).astype(cast_dtype.as_system_dtype());
 
-                int[] y_ = { };
-                foreach (int y in dest_dtype_shape_array)
+                long[] y_ = { };
+                foreach (int y in dest_dtype_shape_array.Data<int>())
                     if (y >= 0)
                         y_[y_.Length] = y;
                     else
@@ -331,7 +331,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                     {
                         new_dim = new Dimension(pack_input_val);
                     }
-                    ret_ = ret_.concatenate(new int[] { new_dim });
+                    ret_ = ret_.concatenate(new long[] { new_dim });
                 }
                 return ret_;
             }
@@ -422,7 +422,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 }
             }
 
-            var ret = tensor.TensorShape.unknown_shape(shape.dims[0]);
+            var ret = tensor.TensorShape.unknown_shape((int)shape.dims[0]);
             var value = constant_value(tensor);
             if (!(value is null))
             {
@@ -543,7 +543,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
 
         public static TensorShape as_shape(this Shape shape)
         {
-            return new TensorShape(shape.Dimensions);
+            return new TensorShape(shape.dims);
         }
 
         public static TensorShape reshape(this Shape shape, int[] dims)
@@ -575,6 +575,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
         public static string to_numpy_string(Tensor tensor)
         {
             var dtype = tensor.dtype;
+            var shape = tensor.shape;
 
             if (dtype == TF_DataType.TF_STRING)
             {
@@ -593,14 +594,43 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             {
                 return "<unprintable>";
             }
-
-            var nd = tensor.numpy();
-
-            if (nd.size == 0)
-                return "[]";
-
-            return nd.ToString();
+            else if (dtype == TF_DataType.TF_INT32)
+            {
+                var array = tensor.ToArray<int>();
+                return DisplayArrayAsString(array);
+            }
+            else if (dtype == TF_DataType.TF_INT64)
+            {
+                var array = tensor.ToArray<long>();
+                return DisplayArrayAsString(array);
+            }
+            else if (dtype == TF_DataType.TF_FLOAT)
+            {
+                var array = tensor.ToArray<float>();
+                return DisplayArrayAsString(array);
+            }
+            else if(dtype == TF_DataType.TF_DOUBLE)
+            {
+                var array = tensor.ToArray<double>();
+                return DisplayArrayAsString(array);
+            }
+            else
+            {
+                var array = tensor.ToArray<byte>();
+                return DisplayArrayAsString(array);
+            }
         }
+
+        static string DisplayArrayAsString<T>(T[] array)
+        {
+            var display = "[";
+            if (array.Length < 10)
+                display += string.Join(", ", array);
+            else
+                display += string.Join(", ", array.Take(3)) + " ... " + string.Join(", ", array.Skip(array.Length - 3));
+            return display + "]";
+        }
+        
 
         public static ParsedSliceArgs ParseSlices(Slice[] slices)
         {

@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;

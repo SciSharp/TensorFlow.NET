@@ -56,7 +56,7 @@ namespace Tensorflow
 
             _kernel = add_weight(
                 _WEIGHTS_VARIABLE_NAME,
-                shape: new[] { input_depth + _num_units, _num_units });
+                shape: new int[] { (int)(input_depth + _num_units), _num_units });
 
             _bias = add_weight(
                 _BIAS_VARIABLE_NAME,

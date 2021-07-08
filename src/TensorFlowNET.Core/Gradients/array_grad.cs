@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Eager;
 using Tensorflow.Framework;
+using Tensorflow.Numpy;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
@@ -201,7 +202,7 @@ namespace Tensorflow.Gradients
             // For axis 0 gathers, build an appropriately shaped IndexedSlices.
             if ((int)axis_static == 0)
             {
-                var params_tail_shape = params_shape.slice(new NumSharp.Slice(start: 1));
+                var params_tail_shape = params_shape.slice(new Slice(start: 1));
                 var values_shape = array_ops.concat(new[] { indices_size, params_tail_shape }, 0);
                 var values = array_ops.reshape(grad, values_shape);
                 indices = array_ops.reshape(indices, indices_size);

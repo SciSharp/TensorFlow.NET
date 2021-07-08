@@ -1,7 +1,7 @@
-﻿using NumSharp;
-using NumSharp.Utilities;
+﻿using Tensorflow.Numpy;
 using System;
 using System.Threading.Tasks;
+using Tensorflow.Util;
 
 namespace Tensorflow
 {
@@ -18,7 +18,8 @@ namespace Tensorflow
         /// <exception cref="NotSupportedException"></exception>
         public static Tensor ToTensor(NDArray nd, TF_DataType? astype = null)
         {
-            return new Tensor(astype == null ? nd : nd.astype(astype.Value.as_numpy_typecode(), false));
+            // return new Tensor(astype == null ? nd : nd.astype(astype.Value.as_numpy_typecode(), false));
+            throw new NotImplementedException("");
         }
 
         /// <summary>
@@ -27,9 +28,10 @@ namespace Tensorflow
         /// <param name="nd">The ndarray to convert.</param>
         /// <param name="astype">Convert <see cref="Array"/> to given <paramref name="astype"/> before inserting it into a <see cref="Tensor"/>.</param>
         /// <exception cref="NotSupportedException"></exception>
-        public static Tensor ToTensor(NDArray nd, NPTypeCode? astype = null)
+        public static Tensor ToTensor(NDArray nd, NumpyDType? astype = null)
         {
-            return new Tensor(astype == null ? nd : nd.astype(astype.Value, false));
+            // return new Tensor(astype == null ? nd : nd.astype(astype.Value, false));
+            throw new NotImplementedException("");
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace Tensorflow
             if (array == null) throw new ArgumentNullException(nameof(array));
             var arrtype = array.ResolveElementType();
 
-            var astype_type = astype?.as_numpy_dtype() ?? arrtype;
+            var astype_type = astype?.as_system_dtype() ?? arrtype;
             if (astype_type == arrtype)
             {
                 //no conversion required
@@ -54,8 +56,8 @@ namespace Tensorflow
 
                 if (astype == TF_DataType.TF_INT8)
                 {
-                    if (array.Rank != 1 || array.GetType().GetElementType()?.IsArray == true) //is multidim or jagged
-                        array = Arrays.Flatten(array);
+                    // if (array.Rank != 1 || array.GetType().GetElementType()?.IsArray == true) //is multidim or jagged
+                        // array = Arrays.Flatten(array);
 
                     return new Tensor((sbyte[])array);
                 }
@@ -64,41 +66,22 @@ namespace Tensorflow
                 if (array.Rank != 1 || array.GetType().GetElementType().IsArray)
                     return new Tensor(new NDArray(array));
 
-#if _REGEN
-                #region Compute
-		        switch (arrtype)
-		        {
-			        %foreach supported_dtypes,supported_dtypes_lowercase%
-			        case NPTypeCode.#1: return new Tensor((#2[])arr);
-			        %
-			        default:
-				        throw new NotSupportedException();
-		        }
-                #endregion
-#else
-
-                #region Compute
-
                 switch (arrtype.GetTypeCode())
                 {
-                    case NPTypeCode.Boolean: return new Tensor((bool[])array);
-                    case NPTypeCode.Byte: return new Tensor((byte[])array);
-                    case NPTypeCode.Int16: return new Tensor((short[])array);
-                    case NPTypeCode.UInt16: return new Tensor((ushort[])array);
-                    case NPTypeCode.Int32: return new Tensor((int[])array);
-                    case NPTypeCode.UInt32: return new Tensor((uint[])array);
-                    case NPTypeCode.Int64: return new Tensor((long[])array);
-                    case NPTypeCode.UInt64: return new Tensor((ulong[])array);
-                    case NPTypeCode.Char: return new Tensor((char[])array);
-                    case NPTypeCode.Double: return new Tensor((double[])array);
-                    case NPTypeCode.Single: return new Tensor((float[])array);
+                    case NumpyDType.Boolean: return new Tensor((bool[])array);
+                    case NumpyDType.Byte: return new Tensor((byte[])array);
+                    case NumpyDType.Int16: return new Tensor((short[])array);
+                    case NumpyDType.UInt16: return new Tensor((ushort[])array);
+                    case NumpyDType.Int32: return new Tensor((int[])array);
+                    case NumpyDType.UInt32: return new Tensor((uint[])array);
+                    case NumpyDType.Int64: return new Tensor((long[])array);
+                    case NumpyDType.UInt64: return new Tensor((ulong[])array);
+                    // case NPTypeCode.Char: return new Tensor((char[])array);
+                    case NumpyDType.Double: return new Tensor((double[])array);
+                    case NumpyDType.Single: return new Tensor((float[])array);
                     default:
                         throw new NotSupportedException();
                 }
-
-                #endregion
-
-#endif
             }
             else
             {
@@ -106,7 +89,7 @@ namespace Tensorflow
                 //by this point astype is not null.
 
                 //flatten if required
-                if (array.Rank != 1 || array.GetType().GetElementType()?.IsArray == true) //is multidim or jagged
+                /*if (array.Rank != 1 || array.GetType().GetElementType()?.IsArray == true) //is multidim or jagged
                     array = Arrays.Flatten(array);
 
                 try
@@ -122,7 +105,8 @@ namespace Tensorflow
                     var ret = Array.CreateInstance(astype_type, array.LongLength);
                     Parallel.For(0, ret.LongLength, i => ret.SetValue(Convert.ChangeType(array.GetValue(i), astype_type), i));
                     return ToTensor(ret, null);
-                }
+                }*/
+                throw new NotImplementedException("");
             }
         }
 
@@ -145,22 +129,7 @@ namespace Tensorflow
                 if (constantType == TF_DataType.TF_STRING)
                     return new Tensor((string)(object)constant);
 
-#if _REGEN
-                #region Compute
-		    switch (InfoOf<T>.NPTypeCode)
-		    {
-			    %foreach supported_dtypes,supported_dtypes_lowercase%
-			    case NPTypeCode.#1: return new Tensor((#2)(object)constant);
-			    %
-			    default:
-				    throw new NotSupportedException();
-		    }
-                #endregion
-#else
-
-                #region Compute
-
-                switch (InfoOf<T>.NPTypeCode)
+                /*switch (InfoOf<T>.NPTypeCode)
                 {
                     case NPTypeCode.Boolean: return new Tensor((bool)(object)constant);
                     case NPTypeCode.Byte: return new Tensor((byte)(object)constant);
@@ -170,20 +139,18 @@ namespace Tensorflow
                     case NPTypeCode.UInt32: return new Tensor((uint)(object)constant);
                     case NPTypeCode.Int64: return new Tensor((long)(object)constant);
                     case NPTypeCode.UInt64: return new Tensor((ulong)(object)constant);
-                    case NPTypeCode.Char: return new Tensor(Converts.ToByte(constant));
+                    // case NPTypeCode.Char: return new Tensor(Converts.ToByte(constant));
                     case NPTypeCode.Double: return new Tensor((double)(object)constant);
                     case NPTypeCode.Single: return new Tensor((float)(object)constant);
                     default:
                         throw new NotSupportedException();
-                }
-
-                #endregion
-#endif
+                }*/
+                throw new NotImplementedException("");
             }
 
             //conversion required
 
-            if (astype == TF_DataType.TF_INT8)
+            /*if (astype == TF_DataType.TF_INT8)
                 return new Tensor(Converts.ToSByte(constant));
 
             if (astype == TF_DataType.TF_STRING)
@@ -191,20 +158,7 @@ namespace Tensorflow
 
             var astype_np = astype?.as_numpy_typecode();
 
-#if _REGEN
-            #region Compute
-		    switch (astype_np)
-		    {
-			    %foreach supported_dtypes,supported_dtypes_lowercase%
-			    case NPTypeCode.#1: return new Tensor(Converts.To#1(constant));
-			    %
-			    default:
-				    throw new NotSupportedException();
-		    }
-            #endregion
-#else
 
-            #region Compute
             switch (astype_np)
             {
                 case NPTypeCode.Boolean: return new Tensor(Converts.ToBoolean(constant));
@@ -220,9 +174,9 @@ namespace Tensorflow
                 case NPTypeCode.Single: return new Tensor(Converts.ToSingle(constant));
                 default:
                     throw new NotSupportedException();
-            }
-            #endregion
-#endif
+            }*/
+            throw new NotImplementedException("");
+
         }
 
         /// <summary>
@@ -233,7 +187,7 @@ namespace Tensorflow
         /// <exception cref="NotSupportedException"></exception>
         public static Tensor ToTensor(string constant, TF_DataType? astype = null)
         {
-            switch (astype)
+            /*switch (astype)
             {
                 //was conversion requested?
                 case null:
@@ -246,20 +200,6 @@ namespace Tensorflow
                     {
                         var astype_np = astype?.as_numpy_typecode();
 
-#if _REGEN
-                        #region Compute
-		            switch (astype_np)
-		            {
-			            %foreach supported_dtypes,supported_dtypes_lowercase%
-			            case NPTypeCode.#1: return new Tensor(Converts.To#1(constant));
-			            %
-			            default:
-				            throw new NotSupportedException();
-		            }
-                        #endregion
-#else
-
-                        #region Compute
                         switch (astype_np)
                         {
                             case NPTypeCode.Boolean: return new Tensor(Converts.ToBoolean(constant));
@@ -276,10 +216,9 @@ namespace Tensorflow
                             default:
                                 throw new NotSupportedException();
                         }
-                        #endregion
-#endif
                     }
-            }
+            }*/
+            throw new NotImplementedException("");
         }
 
     }

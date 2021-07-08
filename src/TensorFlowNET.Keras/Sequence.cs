@@ -14,8 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
-using NumSharp.Utilities;
+using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,14 +55,15 @@ namespace Tensorflow.Keras
                 value = 0f;
 
             var type = getNPType(dtype);
-            var nd = new NDArray(type, new Shape(length.Count(), maxlen.Value), true);
+            var nd = new NDArray(type, new Shape(length.Count(), maxlen.Value));
 
-            for (int i = 0; i < nd.shape[0]; i++)
+            for (int i = 0; i < nd.dims[0]; i++)
             {
                 var s = sequences.ElementAt(i);
                 if (s.Length > maxlen.Value)
                 {
-                    s = (truncating == "pre") ? s.Slice(s.Length - maxlen.Value, s.Length) : s.Slice(0, maxlen.Value);
+                    throw new NotImplementedException("");
+                    // s = (truncating == "pre") ? s.Slice(s.Length - maxlen.Value, s.Length) : s.Slice(0, maxlen.Value);
                 }
                 var sliceString = (padding == "pre") ? $"{i},{maxlen - s.Length}:" : $"{i},:{s.Length}";
                 nd[sliceString] = np.array(s);

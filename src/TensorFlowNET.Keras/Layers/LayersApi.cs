@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;

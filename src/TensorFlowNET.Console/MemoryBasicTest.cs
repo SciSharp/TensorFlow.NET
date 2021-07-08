@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 using System;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;

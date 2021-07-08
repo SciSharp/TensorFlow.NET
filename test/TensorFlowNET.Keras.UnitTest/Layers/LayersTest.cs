@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
+using Tensorflow.Numpy;
 using System.Collections.Generic;
 using Tensorflow;
 using Tensorflow.Keras;

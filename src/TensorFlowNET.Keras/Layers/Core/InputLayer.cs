@@ -41,7 +41,7 @@ namespace Tensorflow.Keras.Layers
 
             if (BatchInputShape != null)
             {
-                args.BatchSize = BatchInputShape.dims[0];
+                args.BatchSize = (int)BatchInputShape.dims[0];
                 args.InputShape = BatchInputShape.dims.Skip(1).ToArray();
             }
 
@@ -62,7 +62,7 @@ namespace Tensorflow.Keras.Layers
             {
                 if (args.InputShape != null)
                 {
-                    args.BatchInputShape = new int[] { args.BatchSize }
+                    args.BatchInputShape = new long[] { args.BatchSize }
                         .Concat(args.InputShape.dims)
                         .ToArray();
                 }

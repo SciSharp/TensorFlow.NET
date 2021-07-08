@@ -1,9 +1,5 @@
-﻿using NumSharp;
-using NumSharp.Backends;
-using NumSharp.Backends.Unmanaged;
-using NumSharp.Utilities;
+﻿using Tensorflow.Numpy;
 using System;
-using System.Runtime.InteropServices;
 using System.Text;
 using static Tensorflow.Binding;
 
@@ -59,21 +55,9 @@ namespace Tensorflow
                 {
                     unsafe
                     {
-#if _REGEN
+                        throw new NotImplementedException("");
                         #region Compute
-		                switch (dtype.as_numpy_dtype().GetTypeCode())
-		                {
-			                %foreach supported_dtypes,supported_dtypes_lowercase%
-			                case NPTypeCode.#1: return new T[] {Converts.ChangeType<T>(*(#2*) buffer)};
-			                %
-			                case NPTypeCode.String: return new T[] {Converts.ChangeType<T>((string)this)};
-			                default:
-				                throw new NotSupportedException();
-		                }
-                        #endregion
-#else
-                        #region Compute
-                        switch (dtype.as_numpy_dtype().GetTypeCode())
+                        /*switch (dtype.as_numpy_dtype().GetTypeCode())
                         {
                             case NPTypeCode.Boolean: return new T[] { Converts.ChangeType<T>(*(bool*)buffer) };
                             case NPTypeCode.Byte: return new T[] { Converts.ChangeType<T>(*(byte*)buffer) };
@@ -89,9 +73,8 @@ namespace Tensorflow
                             case NPTypeCode.String: return new T[] { Converts.ChangeType<T>((string)this) };
                             default:
                                 throw new NotSupportedException();
-                        }
+                        }*/
                         #endregion
-#endif
                     }
                 }
 
@@ -102,21 +85,9 @@ namespace Tensorflow
                     fixed (T* dstRet = ret)
                     {
                         T* dst = dstRet; //local stack copy
-
-#if _REGEN
+                        throw new NotImplementedException("");
                         #region Compute
-		                switch (dtype.as_numpy_dtype().GetTypeCode())
-		                {
-			                %foreach supported_dtypes,supported_dtypes_lowercase%
-			                case NPTypeCode.#1: new UnmanagedMemoryBlock<#2>((#2*) buffer, len).CastTo(new UnmanagedMemoryBlock<T>(dst, len), null, null); break;
-			                %
-			                default:
-				                throw new NotSupportedException();
-		                }
-                        #endregion
-#else
-                        #region Compute
-                        switch (dtype.as_numpy_dtype().GetTypeCode())
+                        /*switch (dtype.as_numpy_dtype().GetTypeCode())
                         {
                             case NPTypeCode.Boolean: new UnmanagedMemoryBlock<bool>((bool*)buffer, len).CastTo(new UnmanagedMemoryBlock<T>(dst, len), null, null); break;
                             case NPTypeCode.Byte: new UnmanagedMemoryBlock<byte>((byte*)buffer, len).CastTo(new UnmanagedMemoryBlock<T>(dst, len), null, null); break;
@@ -132,10 +103,8 @@ namespace Tensorflow
                             case NPTypeCode.String: throw new NotSupportedException("Unable to convert from string to other dtypes"); //TODO! this should call Converts.To<T> 
                             default:
                                 throw new NotSupportedException();
-                        }
+                        }*/
                         #endregion
-#endif
-
                     }
                 }
 
@@ -153,36 +122,11 @@ namespace Tensorflow
         public NDArray numpy()
             => GetNDArray(dtype);
 
-        protected unsafe NDArray GetNDArray(TF_DataType dtype)
+        protected NDArray GetNDArray(TF_DataType dtype)
         {
-            if (dtype == TF_DataType.TF_STRING)
-                return np.array(StringData());
-
-            var count = Convert.ToInt64(size);
-            IUnmanagedMemoryBlock mem;
-            switch (dtype)
-            {
-                case TF_DataType.TF_BOOL:
-                    mem = new UnmanagedMemoryBlock<bool>((bool*)buffer, count);
-                    break;
-                case TF_DataType.TF_INT32:
-                    mem = new UnmanagedMemoryBlock<int>((int*)buffer, count);
-                    break;
-                case TF_DataType.TF_INT64:
-                    mem = new UnmanagedMemoryBlock<long>((long*)buffer, count);
-                    break;
-                case TF_DataType.TF_FLOAT:
-                    mem = new UnmanagedMemoryBlock<float>((float*)buffer, count);
-                    break;
-                case TF_DataType.TF_DOUBLE:
-                    mem = new UnmanagedMemoryBlock<double>((double*)buffer, count);
-                    break;
-                default:
-                    mem = new UnmanagedMemoryBlock<byte>((byte*)buffer, count);
-                    break;
-            }
-
-            return new NDArray(ArraySlice.FromMemoryBlock(mem, copy: true), new Shape(shape));
+            /*if (dtype == TF_DataType.TF_STRING)
+                return np.array(StringData());*/
+            return new NDArray(this);
         }
 
         /// <summary>

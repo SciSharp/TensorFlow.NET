@@ -81,13 +81,13 @@ namespace TensorFlowNET.UnitTest.Basics
                 init.run();
 
                 var result = sess.run(x);
-                Assert.AreEqual(result[0].GetInt64(), 2L);
+                Assert.AreEqual(result[0], 2L);
 
                 result = sess.run(x);
-                Assert.AreEqual(result[0].GetInt64(), 3L);
+                Assert.AreEqual(result[0], 3L);
 
                 result = sess.run(x);
-                Assert.AreEqual(result[0].GetInt64(), 4L);
+                Assert.AreEqual(result[0], 4L);
             }
         }
 

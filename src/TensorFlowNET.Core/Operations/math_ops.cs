@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -726,7 +726,18 @@ namespace Tensorflow
             }
 
             if (delta == null)
-                delta = 1;
+            {
+                if (limit is int)
+                    delta = 1;
+                else if (limit is long)
+                    delta = 1L;
+                else if (limit is float)
+                    delta = 1.0f;
+                else if (limit is double)
+                    delta = 1.0d;
+                else
+                    delta = 1;
+            }
 
             return tf_with(ops.name_scope(name, "Range", new { start, limit, delta }), scope =>
             {
@@ -883,14 +894,14 @@ namespace Tensorflow
                     // free_dims
                     int[] free_dims = { };
                     foreach (int i in free)
-                        free_dims[free_dims.Length] = shape_a[i];
+                        free_dims[free_dims.Length] = (int)shape_a[i];
 
                     int prod_free = (int)np.prod(free_dims);
 
                     // prod_axes
                     int[] prod_axes_pre = { };
                     foreach (int i in axes)
-                        prod_axes_pre[prod_axes_pre.Length] = shape_a[i];
+                        prod_axes_pre[prod_axes_pre.Length] = (int)shape_a[i];
                     int prod_axes = (int)np.prod(prod_axes_pre);
 
                     // perm

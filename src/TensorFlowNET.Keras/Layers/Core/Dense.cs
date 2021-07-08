@@ -46,7 +46,7 @@ namespace Tensorflow.Keras.Layers
             TensorShape input_shape = inputs.shape;
             var last_dim = input_shape.dims.Last();
             var axes = new Dictionary<int, int>();
-            axes[-1] = last_dim;
+            axes[-1] = (int)last_dim;
             inputSpec = new InputSpec(min_ndim: 2, axes: axes);
             kernel = add_weight(
                 "kernel",

@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace TensorFlowNET.UnitTest.Basics
         {
             var handle = c_api.TF_GetAllOpList();
             using var buffer = new Buffer(handle);
-            var op_list = OpList.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
+            var op_list = OpList.Parser.ParseFrom(buffer.ToArray());
 
             var _registered_ops = new Dictionary<string, OpDef>();
             foreach (var op_def in op_list.Op)

@@ -285,7 +285,7 @@ namespace Tensorflow
                 var shape = logits.TensorShape;
                 if (shape != null && shape.ndim > 0)
                 {
-                    var product = 1;
+                    var product = 1L;
                     var product_valid = true;
                     foreach (var d in shape.dims.Take(shape.ndim - 1))
                     {

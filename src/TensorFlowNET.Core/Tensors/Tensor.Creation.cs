@@ -14,8 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
-using NumSharp.Backends.Unmanaged;
+using Tensorflow.Numpy;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -66,6 +65,45 @@ namespace Tensorflow
 #endif
         }
 
+        internal Tensor(Array array, Shape shape)
+            => InitTensor(array, shape);
+
+        unsafe void InitTensor(Array array, Shape shape)
+        {
+            var dtype = array.GetType().GetElementType().as_dtype();
+            var length = (ulong)(array.Length * dtype.get_datatype_size());
+
+            switch (array)
+            {
+                case int[] val:
+                    fixed (void* addr = &val[0])
+                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                    break;
+                case int[,] val:
+                    fixed (void* addr = &val[0, 0])
+                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                    break;
+                case long[] val:
+                    fixed (void* addr = &val[0])
+                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                    break;
+                case float[] val:
+                    fixed (void* addr = &val[0])
+                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                    break;
+                case float[,] val:
+                    fixed (void* addr = &val[0, 0])
+                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                    break;
+                case double[] val:
+                    fixed (void* addr = &val[0])
+                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                    break;
+                default:
+                    throw new NotImplementedException("");
+            }
+        }
+
         public Tensor(int value)
         {
             unsafe
@@ -107,38 +145,6 @@ namespace Tensorflow
             AllocationType = TF_TensorData(_handle).ToPointer() == data_ptr ? AllocationType.FromPointer : AllocationType.Tensorflow;
         }
 
-#if _REGEN
-        %types = ["sbyte", "bool", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "Complex"]
-        %foreach types%
-        
-        /// <summary>
-        ///     Create a 1d Tensor from the given linear array and shape
-        /// </summary>
-        public Tensor(#1[] data, TF_DataType? dType = null)
-        {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(#1)), new long[] {data.Length}, data, #(#1=="Complex"|"Marshal.SizeOf<Complex>()"|"sizeof(#(str(#1)))"));
-        }
-
-        /// <summary>
-        ///     Create a N-dimensional Tensor from the given array
-        /// </summary>
-        public Tensor(#1[] data, long[] shape, TF_DataType? dType = null)
-        {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(#1)), shape, data, #(#1=="Complex"|"Marshal.SizeOf<Complex>()"|"sizeof(#(str(#1)))"));
-        }
-
-        /// <summary>
-        ///     Create a scalar Tensor from the given value
-        /// </summary>
-        public unsafe Tensor(#1 value, TF_DataType? dType = null)
-        {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(#1)), dims: new long[0], num_dims: 0, len: (UIntPtr) sizeof(#1));
-            *(#1*) TF_TensorData(_handle) = value;
-            AllocationType = AllocationType.Tensorflow;
-        }
-        %
-#else
-
         /// <summary>
         ///     Create a 1d Tensor from the given linear array and shape
         /// </summary>
@@ -177,6 +183,11 @@ namespace Tensorflow
         ///     Create a N-dimensional Tensor from the given array
         /// </summary>
         public Tensor(bool[] data, long[] shape, TF_DataType? dType = null)
+        {
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(bool)), shape, data, sizeof(bool));
+        }
+
+        internal Tensor(float[] data, long[] shape, TF_DataType? dType = null)
         {
             _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(bool)), shape, data, sizeof(bool));
         }
@@ -382,14 +393,6 @@ namespace Tensorflow
         }
 
         /// <summary>
-        ///     Create a N-dimensional Tensor from the given array
-        /// </summary>
-        public Tensor(float[] data, long[] shape, TF_DataType? dType = null)
-        {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(float)), shape, data, sizeof(float));
-        }
-
-        /// <summary>
         ///     Create a scalar Tensor from the given value
         /// </summary>
         public unsafe Tensor(float value, TF_DataType? dType = null)
@@ -450,7 +453,6 @@ namespace Tensorflow
             *(Complex*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
-#endif
 
         /// <summary>
         ///     Create a string Tensor from the given string
@@ -474,7 +476,7 @@ namespace Tensorflow
         public unsafe Tensor(NDArray nd, TF_DataType? tensorDType = null)
         {
             if (tensorDType == null)
-                tensorDType = nd.dtype.as_dtype();
+                tensorDType = nd.dtype.as_tf_dtype();
 
             // todo: handle nd of type "String" here too
             /*if (tensorDType == TF_DataType.TF_STRING && nd.typecode == NPTypeCode.Byte)
@@ -521,26 +523,25 @@ namespace Tensorflow
 
         private unsafe void CreateTensorFromNDArray(NDArray nd, TF_DataType? given_dtype)
         {
-            if (nd.typecode == NPTypeCode.String)
+            if (nd.dtype == NumpyDType.String)
                 throw new NotImplementedException("Support for NDArray of type string not implemented yet");
 
-            var arraySlice = nd.Unsafe.Storage.Shape.IsContiguous ? nd.GetData() : nd.CloneData();
-
-            _handle = TF_NewTensor(
-                given_dtype ?? nd.dtype.as_dtype(),
-                dims: nd.shape.Select(i => (long)i).ToArray(),
+            throw new NotImplementedException("");
+            /*_handle = TF_NewTensor(
+                given_dtype ?? nd.dtype.as_tf_dtype(),
+                dims: nd.dims.Select(i => (long)i).ToArray(),
                 num_dims: nd.ndim,
-                data: arraySlice.Address,
-                len: (ulong)nd.size * (ulong)nd.dtypesize);
+                data: nd.Address,
+                len: nd.size * nd.dtypesize);
 
             // if TF decided not to perform copy, hold reference for given NDArray.
-            if (TensorDataPointer.ToPointer() == arraySlice.Address)
+            if (TensorDataPointer == nd.Address)
             {
                 AllocationType = AllocationType.FromPointer;
-                AllocationHandle = arraySlice;
+                AllocationHandle = nd;
             }
             else
-                AllocationType = AllocationType.Tensorflow;
+                AllocationType = AllocationType.Tensorflow;*/
         }
 
         public Tensor(Operation op, int value_index, TF_DataType dtype)
@@ -591,7 +592,7 @@ namespace Tensorflow
         protected IntPtr CreateTensorFromArray(TF_DataType dt, long[] shape, Array data, int start, int count, int element_size)
         {
             if (start < 0 || start > data.Length - count)
-                throw new ArgumentException($"Array length {data.Length} does not match the given shape {new Shape(shape.Cast<int>().ToArray())}");
+                throw new ArgumentException($"Array length {data.Length} does not match the given shape {new Shape(shape.ToArray())}");
 
             // get a handle to the pinned array which we will pass on to the tensor computation engine to use
             var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);

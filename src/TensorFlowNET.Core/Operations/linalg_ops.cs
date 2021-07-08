@@ -20,11 +20,11 @@ namespace Tensorflow
                 var diag_size = Math.Min(num_rows, num_columns);
                 if (batch_shape == null)
                     batch_shape = new TensorShape(new int[0]);
-                var diag_shape = batch_shape.dims.concat(new[] { diag_size });
+                var diag_shape = batch_shape.dims.concat(new long[] { diag_size });
 
-                int[] shape = null;
+                long[] shape = null;
                 if (!is_square)
-                    shape = batch_shape.dims.concat(new[] { num_rows, num_columns });
+                    shape = batch_shape.dims.concat(new long[] { num_rows, num_columns });
 
                 var diag_ones = array_ops.ones(diag_shape, dtype: dtype);
                 if (is_square)

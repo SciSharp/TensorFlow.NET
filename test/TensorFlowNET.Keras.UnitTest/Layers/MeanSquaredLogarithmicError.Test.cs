@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
+using Tensorflow.Numpy;
 using Tensorflow;
 using Tensorflow.Keras.Losses;
 using static Tensorflow.Binding;

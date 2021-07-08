@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -149,7 +149,8 @@ namespace Tensorflow
         /// </summary>
         public virtual void set_shape(TensorShape shape)
         {
-            this.shape = shape.rank >= 0 ? shape.dims : null;
+            // this.shape = shape.rank >= 0 ? shape.dims : null;
+            throw new NotImplementedException("");
         }
 
         /// <summary>
@@ -286,12 +287,12 @@ namespace Tensorflow
 
             if (dtype == TF_DataType.TF_STRING)
             {
-                int size = 1;
+                long size = 1;
                 foreach (var s in TensorShape.dims)
                     size *= s;
                 var tstr = TensorDataPointer;
 #if TRACK_TENSOR_LIFE
-                print($"Delete TString 0x{handle.ToString("x16")} {AllocationType} Data: 0x{tstrings.ToString("x16")}");
+                print($"Delete TString 0x{handle.ToString("x16")} {AllocationType} Data: 0x{tstr.ToString("x16")}");
 #endif
                 for (int i = 0; i < size; i++)
                 {

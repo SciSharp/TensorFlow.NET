@@ -38,7 +38,7 @@ namespace Tensorflow
             {
                 status.Check(true);
                 // limit size to 250M, recursion to max 100
-                var inputStream = CodedInputStream.CreateWithLimits(buffer.DangerousMemoryBlock.Stream(), 250 * 1024 * 1024, 100);
+                var inputStream = CodedInputStream.CreateWithLimits(buffer.DangerousMemoryBlock, 250 * 1024 * 1024, 100);
                 def = GraphDef.Parser.ParseFrom(inputStream);
             }
 

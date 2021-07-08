@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
-using NumSharp.Utilities;
+using Tensorflow.Numpy;
 using Tensorflow;
 using static Tensorflow.Binding;
 

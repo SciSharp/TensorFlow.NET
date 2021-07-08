@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +30,7 @@ namespace Tensorflow.Keras.Engine
             int workers = 1,
             bool use_multiprocessing = false)
         {
-            int train_count = Convert.ToInt32(x.shape[0] * (1 - validation_split));
+            int train_count = Convert.ToInt32(x.dims[0] * (1 - validation_split));
             var train_x = x[new Slice(0, train_count)];
             var train_y = y[new Slice(0, train_count)];
             var val_x = x[new Slice(train_count)];

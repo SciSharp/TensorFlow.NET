@@ -2,10 +2,10 @@
 {
     public class Dimension
     {
-        int _value;
-        public int value => _value;
+        long _value;
+        public long value => _value;
 
-        public Dimension(int value)
+        public Dimension(long value)
         {
             _value = value;
         }
@@ -18,10 +18,10 @@
                 return new Dimension(_value);
         }
 
-        public static implicit operator Dimension(int value)
+        public static implicit operator Dimension(long value)
             => new Dimension(value);
 
-        public static implicit operator int(Dimension dimension)
+        public static implicit operator long(Dimension dimension)
             => dimension.value;
 
         public override string ToString() => $"Dimension({_value})";

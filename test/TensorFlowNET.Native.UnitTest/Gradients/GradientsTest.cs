@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NumSharp;
+using Tensorflow.Numpy;
 using System;
 using Tensorflow.Util;
 
@@ -52,7 +52,7 @@ namespace Tensorflow.Native.UnitTest
                     bool ret = TF_GetCode(s) == TF_OK;
                     EXPECT_EQ(TF_OK, TF_GetCode(s));
                     if (ret)
-                        graph_def = GraphDef.Parser.ParseFrom(buffer.DangerousMemoryBlock.Stream());
+                        graph_def = GraphDef.Parser.ParseFrom(buffer.ToArray());
                     return ret;
                 }
             }

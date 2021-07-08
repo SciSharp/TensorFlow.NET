@@ -50,7 +50,7 @@ namespace Tensorflow.Keras.Layers
         public BatchNormalization(BatchNormalizationArgs args) : base(args)
         {
             this.args = args;
-            axis = args.Axis.dims;
+            axis = args.Axis.dims.Select(x => (int)x).ToArray();
         }
 
         protected override void build(Tensors inputs)
@@ -75,7 +75,7 @@ namespace Tensorflow.Keras.Layers
 
             var axis_to_dim = new Dictionary<int, int>();
             foreach (var x in axis)
-                axis_to_dim[x] = input_shape[x];
+                axis_to_dim[x] = (int)input_shape[x];
 
             inputSpec = new InputSpec(ndim: ndims, axes: axis_to_dim);
             var param_dtype = DType == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : DType;
@@ -165,7 +165,7 @@ namespace Tensorflow.Keras.Layers
             // Broadcasting only necessary for single-axis batch norm where the axis is
             // not the last dimension
             var broadcast_shape = range(ndims).Select(x => 1).ToArray();
-            broadcast_shape[axis[0]] = input_shape.dims[axis[0]];
+            broadcast_shape[axis[0]] = (int)input_shape.dims[axis[0]];
 
             var (scale, offset) = (gamma, beta);
             var training_value = tf_utils.constant_value(training_tensor);

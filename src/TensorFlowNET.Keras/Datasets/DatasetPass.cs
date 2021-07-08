@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 
 namespace Tensorflow.Keras.Datasets
 {

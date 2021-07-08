@@ -62,7 +62,7 @@ namespace Tensorflow
             // TF_STRING tensors are encoded with a table of 8-byte offsets followed by TF_StringEncode-encoded bytes.
             // [offset1, offset2,...,offsetn, s1size, s1bytes, s2size, s2bytes,...,snsize,snbytes]
             //
-            int size = 1;
+            long size = 1;
             foreach (var s in TensorShape.dims)
                 size *= s;
 

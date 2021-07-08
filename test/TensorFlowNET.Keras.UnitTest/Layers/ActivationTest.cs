@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NumSharp;
+using Tensorflow.Numpy;
 using static Tensorflow.KerasApi;
 using Tensorflow;
 

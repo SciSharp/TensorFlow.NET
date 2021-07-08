@@ -14,8 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp;
-using NumSharp.Utilities;
+using Tensorflow.Numpy;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -90,12 +89,12 @@ namespace Tensorflow
             switch (obj)
             {
                 case NDArray nd:
-                    return nd.ToString(false);
-                case Array arr:
+                    return nd.ToString();
+                /*case Array arr:
                     if (arr.Rank != 1 || arr.GetType().GetElementType()?.IsArray == true)
                         arr = Arrays.Flatten(arr);
                     var objs = toObjectArray(arr);
-                    return $"[{string.Join(", ", objs.Select(_tostring))}]";
+                    return $"[{string.Join(", ", objs.Select(_tostring))}]";*/
                 default:
                     return obj?.ToString() ?? "null";
             }
@@ -166,7 +165,7 @@ namespace Tensorflow
                 case ICollection arr:
                     return arr.Count;
                 case NDArray ndArray:
-                    return ndArray.ndim == 0 ? 1 : ndArray.shape[0];
+                    return ndArray.ndim == 0 ? 1 : (int)ndArray.dims[0];
                 case IEnumerable enumerable:
                     return enumerable.OfType<object>().Count();
                 case TensorShape arr:
@@ -272,10 +271,11 @@ namespace Tensorflow
         public static IEnumerable<(T, T)> zip<T>(NDArray t1, NDArray t2)
             where T : unmanaged
         {
-            var a = t1.AsIterator<T>();
+            /*var a = t1.AsIterator<T>();
             var b = t2.AsIterator<T>();
             while (a.HasNext() && b.HasNext())
-                yield return (a.MoveNext(), b.MoveNext());
+                yield return (a.MoveNext(), b.MoveNext());*/
+            throw new NotImplementedException("");
         }
 
         public static IEnumerable<(T1, T2)> zip<T1, T2>(IList<T1> t1, IList<T2> t2)
@@ -296,8 +296,9 @@ namespace Tensorflow
         {
             var a = t1.AsIterator<T1>();
             var b = t2.AsIterator<T2>();
-            while (a.HasNext() && b.HasNext())
-                yield return (a.MoveNext(), b.MoveNext());
+            //while (a.HasNext() && b.HasNext())
+            //yield return (a.MoveNext(), b.MoveNext());
+            throw new NotImplementedException("");
         }
 
         public static IEnumerable<(T1, T2)> zip<T1, T2>(IEnumerable<T1> e1, IEnumerable<T2> e2)

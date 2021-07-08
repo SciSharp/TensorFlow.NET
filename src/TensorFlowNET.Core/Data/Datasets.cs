@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 
 namespace Tensorflow
 {
@@ -19,7 +19,7 @@ namespace Tensorflow
 
         public (NDArray, NDArray) Randomize(NDArray x, NDArray y)
         {
-            var perm = np.random.permutation(y.shape[0]);
+            var perm = np.random.permutation((int)y.dims[0]);
             np.random.shuffle(perm);
             return (x[perm], y[perm]);
         }

@@ -14,8 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
-using NumSharp.Backends.Unmanaged;
 using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 using Tensorflow.Util;
 using static Tensorflow.c_api;
@@ -43,12 +43,12 @@ namespace Tensorflow
         ///
         /// <inheritdoc cref="SafeHandleLease" path="/devdoc/usage"/>
         /// </remarks>
-        public unsafe UnmanagedMemoryBlock<byte> DangerousMemoryBlock
+        public unsafe MemoryStream DangerousMemoryBlock
         {
             get
             {
                 ref readonly TF_Buffer buffer = ref DangerousBuffer;
-                return new UnmanagedMemoryBlock<byte>((byte*)buffer.data.ToPointer(), (long)buffer.length);
+                return new MemoryStream(ToArray());
             }
         }
 
@@ -90,17 +90,19 @@ namespace Tensorflow
         /// <summary>
         ///     Copies this buffer's contents onto a <see cref="byte"/> array.
         /// </summary>
-        public byte[] ToArray()
+        public unsafe byte[] ToArray()
         {
             using (Handle.Lease())
             {
-                var block = DangerousMemoryBlock;
-                var len = block.Count;
-                if (len == 0)
-                    return Array.Empty<byte>();
+                ref readonly TF_Buffer buffer = ref DangerousBuffer;
 
-                var data = new byte[len];
-                block.CopyTo(data, 0);
+                if (buffer.length == 0)
+                    return new byte[0];
+
+                var data = new byte[DangerousBuffer.length];
+                fixed (byte* dst = data)
+                    System.Buffer.MemoryCopy(buffer.data.ToPointer(), dst, buffer.length, buffer.length);
+
                 return data;
             }
         }

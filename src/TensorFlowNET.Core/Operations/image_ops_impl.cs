@@ -51,7 +51,7 @@ namespace Tensorflow
                 return false;
         }
 
-        internal static int[] _ImageDimensions(Tensor image, int rank)
+        internal static long[] _ImageDimensions(Tensor image, int rank)
         {
             if (image.TensorShape.is_fully_defined())
                 return image.TensorShape.as_list();
@@ -60,13 +60,13 @@ namespace Tensorflow
                 var static_shape = image.TensorShape.with_rank(rank).as_list();
                 var dynamic_shape = array_ops.unstack(array_ops.shape(image), rank);
 
-                int[] ss_storage = null;
-                int[] ds_storage = null;
+                long[] ss_storage = null;
+                long[] ds_storage = null;
                 // var sd = static_shape.Zip(dynamic_shape, (first, second) => storage[storage.Length] = first;
                 var sd = static_shape.Zip(dynamic_shape, (ss, ds) =>
                 {
                     ss_storage[ss_storage.Length] = ss;
-                    ds_storage[ds_storage.Length] = (int)ds;
+                    ds_storage[ds_storage.Length] = (long)ds;
                     return true;
                 });
 
@@ -110,14 +110,14 @@ namespace Tensorflow
                 }
             }
 
-            var image_shape_last_three_elements = new TensorShape(new int[3] {
+            var image_shape_last_three_elements = new TensorShape(new[] {
                                                 image_shape.dims[image_shape.dims.Length - 1],
                                                 image_shape.dims[image_shape.dims.Length - 2],
                                                 image_shape.dims[image_shape.dims.Length - 3]});
             if (!image_shape_last_three_elements.is_fully_defined())
             {
                 Tensor image_shape_ = array_ops.shape(image);
-                var image_shape_return = tf.constant(new int[3] {
+                var image_shape_return = tf.constant(new[] {
                     image_shape_.dims[image_shape.dims.Length - 1],
                     image_shape_.dims[image_shape.dims.Length - 2],
                     image_shape_.dims[image_shape.dims.Length - 3]});
@@ -146,7 +146,7 @@ namespace Tensorflow
             if (image_shape == image_shape.unknown_shape())
             {
                 // c# defaults null types to 0 anyhow, so this should be a pretty equivalent port
-                result.set_shape(new TensorShape(new int[] { 0, 0, 0 }));
+                result.set_shape(new TensorShape(new long[] { 0, 0, 0 }));
             }
             else
             {
@@ -284,7 +284,7 @@ namespace Tensorflow
                                 math_ops.equal(k, 3), _rot270()};
 
             var result = control_flow_ops.case_v2(cases, callable_default: () => new Tensor[] { image }, exclusive: true, name: name_scope);
-            result.set_shape(new[] { -1, -1, image.TensorShape.dims[2] });
+            result.set_shape(new long[] { -1, -1, image.TensorShape.dims[2] });
             return result;
         }
 
@@ -466,7 +466,7 @@ or rank = 4. Had rank = {0}", rank));
                  var assert_ops = _CheckAtLeast3DImage(image, require_static: false);
 
                  // batch: [0], height: [1], width: [2], depth: [3]
-                 int[] bhwd = _ImageDimensions(image, rank: 4);
+                 var bhwd = _ImageDimensions(image, rank: 4);
 
                  var after_padding_width = target_width - offset_width - bhwd[2];
 
@@ -496,7 +496,7 @@ or rank = 4. Had rank = {0}", rank));
 
                  TensorShape padded_shape_result()
                  {
-                     int[] i_remnants = { };
+                     long[] i_remnants = { };
                      foreach (var i in new[] { bhwd[0], target_height, target_width, bhwd[3] })
                          if (_is_tensor(i))
                              return null;
@@ -534,7 +534,7 @@ or rank = 4. Had rank = {0}", rank));
                  {
                      is_batch = false;
                      image = array_ops.expand_dims(image, 0);
-                     image.set_shape(new TensorShape(new int[] { 0, 0, 0, 0 }));
+                     image.set_shape(new TensorShape(new long[] { 0, 0, 0, 0 }));
                  }
                  else if (image_shape.ndim != 4)
                  {
@@ -545,7 +545,7 @@ or rank = 4. Had rank = {0}", rank));
                  var assert_ops = _CheckAtLeast3DImage(image, require_static: false);
 
                  // batch: [0], height: [1], width: [2], depth: [3]
-                 int[] bhwd = _ImageDimensions(image, rank: 4);
+                 var bhwd = _ImageDimensions(image, rank: 4);
 
                  assert_ops[assert_ops.Length] = _assert(check_ops.assert_greater_equal(tf.constant(offset_height),
                                                          tf.constant(0)), typeof(ValueError),
@@ -575,7 +575,7 @@ or rank = 4. Had rank = {0}", rank));
 
                  TensorShape cropped_shape_result()
                  {
-                     int[] i_remnants = { };
+                     long[] i_remnants = { };
                      foreach (var i in new[] { bhwd[0], target_height, target_width, bhwd[3] })
                          if (_is_tensor(i))
                              return null;
@@ -668,12 +668,12 @@ or rank = 4. Had rank = {0}", rank));
                              return x == y;
                      }
 
-                     int[] _hw_ = _ImageDimensions(image, rank: 4);
-                     int width_diff = (int)target_width - _hw_[2];
+                     var _hw_ = _ImageDimensions(image, rank: 4);
+                     var width_diff = (long)target_width - _hw_[2];
                      int offset_crop_width = (int)max_(Math.Floor(Math.Abs((decimal)width_diff) / 2), 0);
                      int offset_pad_width = (int)max_(Math.Floor((decimal)width_diff / 2), 0);
 
-                     int height_diff = (int)target_height - _hw_[1];
+                     var height_diff = (long)target_height - _hw_[1];
                      int offset_crop_height = (int)max_(Math.Floor(Math.Abs((decimal)height_diff) / 2), 0);
                      int offset_pad_height = (int)max_(Math.Floor((decimal)height_diff / 2), 0);
 
@@ -687,7 +687,7 @@ or rank = 4. Had rank = {0}", rank));
                      if (resized.TensorShape.ndim == Unknown)
                          throw new ValueError("resized contains no shape.");
 
-                     int[] _rhrw_ = _ImageDimensions(resized, rank: 4);
+                     var _rhrw_ = _ImageDimensions(resized, rank: 4);
 
                      assert_ops = new Operation[2];
                      assert_ops[0] = _assert(
@@ -782,7 +782,7 @@ new_height, new_width");
 
                   images = resizer_fn(images, size);
 
-                  images.set_shape(new TensorShape(new int[] { Unknown, new_height_const, new_width_const, Unknown }));
+                  images.set_shape(new TensorShape(new long[] { Unknown, new_height_const, new_width_const, Unknown }));
 
                   if (!is_batch)
                       images = array_ops.squeeze(images, axis: new int[] { 0 });
@@ -1181,7 +1181,7 @@ new_height, new_width");
                  // it is passed as a tensor
                  image = gen_ops.encode_jpeg_variable_quality(image, quality: jpeg_quality);
 
-                 image = gen_ops.decode_jpeg(image, channels: channels);
+                 image = gen_ops.decode_jpeg(image, channels: (int)channels);
                  return convert_image_dtype(image, orig_dtype, saturate: true);
              });
         }
@@ -1369,7 +1369,7 @@ new_height, new_width");
             TensorShape shape1 = img1.TensorShape.with_rank_at_least(3);
             TensorShape shape2 = img2.TensorShape.with_rank_at_least(3);
             shape1 = new TensorShape(shape1.dims.Skip(shape1.dims.Length - 3).Take(shape1.dims.Length - (shape1.dims.Length - 3)).ToArray());
-            tensor_shape.assert_is_compatible_with(self: new Tensor(shape1), other: new Tensor(shape2.dims.Skip(shape2.dims.Length - 3).Take(shape2.dims.Length - (shape2.dims.Length - 3)).ToArray()));
+            tensor_shape.assert_is_compatible_with(self: new Tensor(shape1.dims), other: new Tensor(shape2.dims.Skip(shape2.dims.Length - 3).Take(shape2.dims.Length - (shape2.dims.Length - 3)).ToArray()));
 
             if (shape1.ndim != -1 && shape2.ndim != -1)
             {
@@ -1377,7 +1377,7 @@ new_height, new_width");
                 var shape2_temp = shape2.dims.Skip(shape2.dims.Length - 3).Take(shape2.dims.Length - (shape1.dims.Length - 3)).ToArray();
                 Array.Reverse(shape1_temp);
                 Array.Reverse(shape2_temp);
-                foreach ((int dim1, int dim2) in shape1_temp.Zip(shape2_temp, Tuple.Create))
+                foreach (var (dim1, dim2) in shape1_temp.Zip(shape2_temp, Tuple.Create))
                 {
                     if (dim1 != 1 || dim2 != 1 /*|| !dim1.is_compatible_with(dim2)*/)
                         throw new ValueError(String.Format("Two images are not compatible: {0} and {1}", shape1, shape2));

@@ -70,26 +70,6 @@ namespace TensorFlowBenchmark
                 }
             }
         }*/
-
-        [Benchmark]
-        public void RawTensorV1()
-        {
-            var c = new EagerTensor(new float[,]
-            {
-                { 3.0f, 1.0f },
-                { 1.0f, 2.0f }
-            }, "");
-        }
-
-        [Benchmark]
-        public void RawTensorV2()
-        {
-            var c = new EagerTensorV2(new float[,]
-            {
-                { 3.0f, 1.0f },
-                { 1.0f, 2.0f }
-            });
-        }
     }
 }
 

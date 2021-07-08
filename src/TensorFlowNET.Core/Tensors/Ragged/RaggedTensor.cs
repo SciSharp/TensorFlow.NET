@@ -20,7 +20,7 @@ using System.Text;
 using System.Linq;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
-using NumSharp;
+using Tensorflow.Numpy;
 
 namespace Tensorflow
 {

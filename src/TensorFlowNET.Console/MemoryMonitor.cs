@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using NumSharp;
+using Tensorflow.Numpy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
@@ -12,12 +12,17 @@ namespace Tensorflow
     {
         public void WarmUp()
         {
+            while (true)
+            {
+                var ones = np.ones((128, 128));
+            }
+
             TensorShape shape = (1, 32, 32, 3);
             np.arange(shape.size).astype(np.float32).reshape(shape.dims);
 
             print($"tensorflow native version: v{tf.VERSION}");
             tf.Context.ensure_initialized();
-            var a = tf.constant(np.ones(10, 10));
+            var a = tf.constant(np.ones((10, 10)));
             var b = tf.Variable(a);
             var c = tf.Variable(b);
             var d = b * c;

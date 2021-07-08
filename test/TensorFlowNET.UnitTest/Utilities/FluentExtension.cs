@@ -1,9 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
-using NumSharp;
-using NumSharp.Backends;
-using NumSharp.Utilities;
+using Tensorflow.Numpy;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -24,14 +22,10 @@ namespace TensorFlowNET.UnitTest
             return new NDArrayAssertions(arr);
         }
 
-        public static NDArrayAssertions Should(this UnmanagedStorage arr)
-        {
-            return new NDArrayAssertions(arr);
-        }
-
         public static string ToString(this Array arr, bool flat)
         {
-            return new NDArray(arr).ToString(flat);
+            // return new NDArray(arr).ToString(flat);
+            throw new NotImplementedException("");
         }
     }
 
@@ -47,13 +41,13 @@ namespace TensorFlowNET.UnitTest
 
         public AndConstraint<ShapeAssertions> BeOfSize(int size, string because = null, params object[] becauseArgs)
         {
-            Subject.Size.Should().Be(size, because, becauseArgs);
+            Subject.size.Should().Be((ulong)size, because, becauseArgs);
             return new AndConstraint<ShapeAssertions>(this);
         }
 
         public AndConstraint<ShapeAssertions> NotBeOfSize(int size, string because = null, params object[] becauseArgs)
         {
-            Subject.Size.Should().NotBe(size, because, becauseArgs);
+            Subject.size.Should().NotBe((ulong)size, because, becauseArgs);
             return new AndConstraint<ShapeAssertions>(this);
         }
 
@@ -65,7 +59,7 @@ namespace TensorFlowNET.UnitTest
             if (dimensions.Length == 0)
                 throw new ArgumentException("Value cannot be an empty collection.", nameof(dimensions));
 
-            Subject.Dimensions.Should().BeEquivalentTo(dimensions);
+            Subject.dims.Should().BeEquivalentTo(dimensions);
             return new AndConstraint<ShapeAssertions>(this);
         }
 
@@ -92,7 +86,7 @@ namespace TensorFlowNET.UnitTest
             if (shape != null)
                 for (int i = 0; i < shape.Length; i++)
                 {
-                    Subject.Dimensions[i].Should().Be((int)shape[i]);
+                    Subject.dims[i].Should().Be((int)shape[i]);
                 }
 
             return new AndConstraint<ShapeAssertions>(this);
@@ -110,7 +104,7 @@ namespace TensorFlowNET.UnitTest
 
         public AndConstraint<ShapeAssertions> HaveNDim(int ndim)
         {
-            Subject.Dimensions.Length.Should().Be(ndim);
+            Subject.dims.Length.Should().Be(ndim);
             return new AndConstraint<ShapeAssertions>(this);
         }
 
@@ -153,7 +147,7 @@ namespace TensorFlowNET.UnitTest
 
         public AndConstraint<ShapeAssertions> BeNDim(int ndim)
         {
-            Subject.Dimensions.Length.Should().Be(ndim);
+            Subject.dims.Length.Should().Be(ndim);
             return new AndConstraint<ShapeAssertions>(this);
         }
     }
@@ -166,16 +160,11 @@ namespace TensorFlowNET.UnitTest
             Subject = instance;
         }
 
-        public NDArrayAssertions(UnmanagedStorage instance)
-        {
-            Subject = new NDArray(instance);
-        }
-
         protected override string Identifier => "shape";
 
         public AndConstraint<NDArrayAssertions> BeOfSize(int size, string because = null, params object[] becauseArgs)
         {
-            Subject.size.Should().Be(size, because, becauseArgs);
+            Subject.size.Should().Be((ulong)size, because, becauseArgs);
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
@@ -187,7 +176,7 @@ namespace TensorFlowNET.UnitTest
             if (dimensions.Length == 0)
                 throw new ArgumentException("Value cannot be an empty collection.", nameof(dimensions));
 
-            Subject.Unsafe.Storage.Shape.Dimensions.Should().BeEquivalentTo(dimensions);
+            Subject.dims.Should().BeEquivalentTo(dimensions);
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
@@ -204,7 +193,7 @@ namespace TensorFlowNET.UnitTest
             if (shape != null)
                 for (int i = 0; i < shape.Length; i++)
                 {
-                    Subject.Unsafe.Storage.Shape.Dimensions[i].Should().Be((int)shape[i]);
+                    Subject.dims[i].Should().Be((int)shape[i]);
                 }
 
             return new AndConstraint<NDArrayAssertions>(this);
@@ -214,52 +203,52 @@ namespace TensorFlowNET.UnitTest
         {
             Execute.Assertion
                 .BecauseOf(because, becauseArgs)
-                .ForCondition(!Subject.Unsafe.Storage.Shape.Equals(shape))
-                .FailWith($"Expected shape to be {shape.ToString()} but got {Subject.ToString()}");
+                .ForCondition(!Subject.dims.Equals(shape.dims))
+                .FailWith($"Expected shape to be {shape} but got {Subject}");
 
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
         public AndConstraint<NDArrayAssertions> HaveNDim(int ndim)
         {
-            Subject.Unsafe.Storage.Shape.Dimensions.Length.Should().Be(ndim);
+            Subject.ndim.Should().Be(ndim);
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
         public AndConstraint<NDArrayAssertions> BeBroadcasted()
         {
-            Subject.Unsafe.Storage.Shape.IsBroadcasted.Should().BeTrue();
+            Subject.shape.IsBroadcasted.Should().BeTrue();
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
         public AndConstraint<NDArrayAssertions> NotBeBroadcasted()
         {
-            Subject.Unsafe.Storage.Shape.IsBroadcasted.Should().BeFalse();
+            Subject.shape.IsBroadcasted.Should().BeFalse();
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
         public AndConstraint<NDArrayAssertions> BeSliced()
         {
-            Subject.Unsafe.Storage.Shape.IsSliced.Should().BeTrue();
+            Subject.shape.IsSliced.Should().BeTrue();
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
         public AndConstraint<NDArrayAssertions> BeScalar()
         {
-            Subject.Unsafe.Storage.Shape.IsScalar.Should().BeTrue();
+            Subject.shape.IsScalar.Should().BeTrue();
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
         public AndConstraint<NDArrayAssertions> BeScalar(object value)
         {
-            Subject.Unsafe.Storage.Shape.IsScalar.Should().BeTrue();
+            Subject.shape.IsScalar.Should().BeTrue();
             Subject.GetValue().Should().Be(value);
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
-        public AndConstraint<NDArrayAssertions> BeOfType(NPTypeCode typeCode)
+        public AndConstraint<NDArrayAssertions> BeOfType(NumpyDType typeCode)
         {
-            Subject.typecode.Should().Be(typeCode);
+            Subject.dtype.Should().Be(typeCode);
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
@@ -271,26 +260,26 @@ namespace TensorFlowNET.UnitTest
 
         public AndConstraint<NDArrayAssertions> BeOfType<T>()
         {
-            Subject.typecode.Should().Be(InfoOf<T>.NPTypeCode);
+            Subject.dtype.Should().Be(InfoOf<T>.NPTypeCode);
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
         public AndConstraint<NDArrayAssertions> NotBeSliced()
         {
-            Subject.Unsafe.Storage.Shape.IsSliced.Should().BeFalse();
+            Subject.shape.IsSliced.Should().BeFalse();
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
         public AndConstraint<NDArrayAssertions> NotBeScalar()
         {
-            Subject.Unsafe.Storage.Shape.IsScalar.Should().BeFalse();
+            Subject.shape.IsScalar.Should().BeFalse();
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
 
         public AndConstraint<NDArrayAssertions> BeNDim(int ndim)
         {
-            Subject.Unsafe.Storage.Shape.Dimensions.Length.Should().Be(ndim);
+            Subject.ndim.Should().Be(ndim);
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
@@ -298,7 +287,7 @@ namespace TensorFlowNET.UnitTest
         {
             Execute.Assertion
                 .ForCondition(np.array_equal(Subject, expected))
-                .FailWith($"Expected the subject and other ndarray to be equals.\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n{expected.ToString(false)}");
+                .FailWith($"Expected the subject and other ndarray to be equals.\n------- Subject -------\n{Subject}\n------- Expected -------\n{expected}");
 
             return new AndConstraint<NDArrayAssertions>(this);
         }
@@ -308,7 +297,7 @@ namespace TensorFlowNET.UnitTest
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            Subject.size.Should().Be(values.Length, "the method BeOfValues also confirms the sizes are matching with given values.");
+            Subject.size.Should().Be((ulong)values.Length, "the method BeOfValues also confirms the sizes are matching with given values.");
 
 #if _REGEN
             #region Compute
@@ -344,12 +333,11 @@ namespace TensorFlowNET.UnitTest
 
             #region Compute
 
-            switch (Subject.typecode)
+            switch (Subject.dtype)
             {
-                case NPTypeCode.Boolean:
+                case NumpyDType.Boolean:
                     {
                         var iter = Subject.AsIterator<bool>();
-                        var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -358,20 +346,20 @@ namespace TensorFlowNET.UnitTest
                                 .FailWith($"Expected the NDArray to have atleast {values.Length} but in fact it has size of {i}.");
 
                             var expected = Convert.ToBoolean(values[i]);
-                            var nextval = next();
+                            /*var nextval = iter.MoveNext();
 
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
-                                .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Boolean).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
+                                .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Boolean).\n------- Subject -------\n{Subject}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);*/
                         }
 
                         break;
                     }
 
-                case NPTypeCode.Byte:
+                case NumpyDType.Byte:
                     {
                         var iter = Subject.AsIterator<byte>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -385,15 +373,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Byte).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.Int16:
+                case NumpyDType.Int16:
                     {
                         var iter = Subject.AsIterator<short>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -407,15 +395,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Int16).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.UInt16:
+                case NumpyDType.UInt16:
                     {
                         var iter = Subject.AsIterator<ushort>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -429,15 +417,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: UInt16).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.Int32:
+                case NumpyDType.Int32:
                     {
                         var iter = Subject.AsIterator<int>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -451,15 +439,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Int32).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.UInt32:
+                case NumpyDType.UInt32:
                     {
                         var iter = Subject.AsIterator<uint>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -473,15 +461,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: UInt32).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.Int64:
+                case NumpyDType.Int64:
                     {
                         var iter = Subject.AsIterator<long>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -495,15 +483,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Int64).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.UInt64:
+                case NumpyDType.UInt64:
                     {
                         var iter = Subject.AsIterator<ulong>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -517,15 +505,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: UInt64).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.Char:
+                case NumpyDType.Char:
                     {
                         var iter = Subject.AsIterator<char>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -539,15 +527,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Char).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.Double:
+                case NumpyDType.Double:
                     {
                         var iter = Subject.AsIterator<double>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -561,15 +549,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Double).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.Single:
+                case NumpyDType.Single:
                     {
                         var iter = Subject.AsIterator<float>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -583,15 +571,15 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Single).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
 
-                case NPTypeCode.Decimal:
+                case NumpyDType.Decimal:
                     {
                         var iter = Subject.AsIterator<decimal>();
-                        var next = iter.MoveNext;
+                        /*var next = iter.MoveNext;
                         var hasnext = iter.HasNext;
                         for (int i = 0; i < values.Length; i++)
                         {
@@ -605,7 +593,7 @@ namespace TensorFlowNET.UnitTest
                             Execute.Assertion
                                 .ForCondition(expected == nextval)
                                 .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Decimal).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }
+                        }*/
 
                         break;
                     }
@@ -624,37 +612,10 @@ namespace TensorFlowNET.UnitTest
 
         public AndConstraint<NDArrayAssertions> AllValuesBe(object val)
         {
-#if _REGEN
-            #region Compute
-		    switch (Subject.typecode)
-		    {
-			    %foreach supported_dtypes,supported_dtypes_lowercase%
-			    case NPTypeCode.#1: 
-                {
-                    var iter = Subject.AsIterator<#2>();
-                    var next = iter.MoveNext;
-                    var hasnext = iter.HasNext;
-                    var expected = Convert.To#1(val);
-                    for (int i = 0; hasnext(); i++)
-                    {
-                        var nextval = next();
-
-                        Execute.Assertion
-                            .ForCondition(expected == nextval)
-                            .FailWith($"Expected NDArray's {2}th value to be {0}, but found {1} (dtype: #1).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n{val}", expected, nextval, i);
-                    }
-                    break;
-                }
-			    %
-			    default:
-				    throw new NotSupportedException();
-		    }
-            #endregion
-#else
 
             #region Compute
 
-            switch (Subject.typecode)
+            /*switch (Subject.typecode)
             {
                 case NPTypeCode.Boolean:
                     {
@@ -874,12 +835,9 @@ namespace TensorFlowNET.UnitTest
 
                 default:
                     throw new NotSupportedException();
-            }
+            }*/
 
             #endregion
-
-#endif
-
 
             return new AndConstraint<NDArrayAssertions>(this);
         }
@@ -889,43 +847,11 @@ namespace TensorFlowNET.UnitTest
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            Subject.size.Should().Be(values.Length, "the method BeOfValuesApproximately also confirms the sizes are matching with given values.");
-
-#if _REGEN
-            #region Compute
-		    switch (Subject.typecode)
-		    {
-			    %foreach supported_dtypes,supported_dtypes_lowercase%
-			    case NPTypeCode.#1: 
-                {
-                    var iter = Subject.AsIterator<#2>();
-                    var next = iter.MoveNext;
-                    var hasnext = iter.HasNext;
-                    for (int i = 0; i < values.Length; i++)
-                    {
-                        Execute.Assertion
-                            .ForCondition(hasnext())
-                            .FailWith($"Expected the NDArray to have atleast {values.Length} but in fact it has size of {i}.");
-                        
-                        var expected = Convert.To#1(values[i]);
-                        var nextval = next();
-
-                        Execute.Assertion
-                            .ForCondition(Math.Abs(expected - nextval) <= sensitivity)
-                            .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Boolean).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                    }
-                    break;
-                }
-			    %
-			    default:
-				    throw new NotSupportedException();
-		    }
-            #endregion
-#else
+            Subject.size.Should().Be((ulong)values.Length, "the method BeOfValuesApproximately also confirms the sizes are matching with given values.");
 
             #region Compute
 
-            switch (Subject.typecode)
+            /*switch (Subject.typecode)
             {
                 case NPTypeCode.Boolean:
                     {
@@ -1193,12 +1119,9 @@ namespace TensorFlowNET.UnitTest
 
                 default:
                     throw new NotSupportedException();
-            }
+            }*/
 
             #endregion
-
-#endif
-
 
             return new AndConstraint<NDArrayAssertions>(this);
         }

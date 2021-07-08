@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 using System;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;

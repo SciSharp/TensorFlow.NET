@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Tensorflow.Numpy;
 using Serilog.Debugging;
 using System;
 using System.Collections.Generic;
@@ -373,7 +373,7 @@ namespace Tensorflow.Keras.Text
                 throw new InvalidOperationException("Fit the Tokenizer on some text data before using the 'tfidf' mode.");
             }
 
-            var x = np.zeros(sequences.Count(), word_count);
+            var x = np.zeros((sequences.Count(), word_count));
 
             for (int i = 0; i < sequences.Count(); i++)
             {

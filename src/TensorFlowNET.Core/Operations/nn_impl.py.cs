@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Numpy;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
@@ -185,7 +186,7 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope("count_nonzero", "count_nonzero", new { input_tensor }), scope =>
             {
-                var zero = array_ops.zeros(new NumSharp.Shape(), dtype: input_tensor.dtype);
+                var zero = array_ops.zeros(new Shape(), dtype: input_tensor.dtype);
                 var nonzero_count = math_ops.reduce_sum(
                 math_ops.cast(gen_math_ops.not_equal(input_tensor, zero), dtype: dtype), name: "nonzero_count");
                 return nonzero_count;

@@ -108,7 +108,7 @@ namespace Tensorflow.Keras.Engine
             // Manage input shape information if passed.
             if (args.BatchInputShape == null && args.InputShape != null)
             {
-                args.BatchInputShape = new int[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray();
+                args.BatchInputShape = new long[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray();
             }
         }
 

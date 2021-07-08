@@ -65,7 +65,7 @@ namespace Tensorflow.Keras.Layers
             if(inputs.shape.rank > -1)
             {
                 var dims = inputs.shape.dims;
-                (height, width) = (dims[h_axis], dims[w_axis]);
+                (height, width) = ((int)dims[h_axis], (int)dims[w_axis]);
             }
             var (kernel_h, kernel_w) = kernel_size;
             var (stride_h, stride_w) = strides;
@@ -74,18 +74,18 @@ namespace Tensorflow.Keras.Layers
 
             // Infer the dynamic output shape:
             var out_height = conv_utils.deconv_output_length(height,
-                                                 kernel_h,
+                                                 (int)kernel_h,
                                                  padding: padding,
                                                  output_padding: out_pad_h,
-                                                 stride: stride_h,
-                                                 dilation: dilation_rate[0]);
+                                                 stride: (int)stride_h,
+                                                 dilation: (int)dilation_rate[0]);
 
             var out_width = conv_utils.deconv_output_length(width,
-                                                kernel_w,
+                                                (int)kernel_w,
                                                 padding: padding,
                                                 output_padding: out_pad_w,
-                                                stride: stride_w,
-                                                dilation: dilation_rate[1]);
+                                                stride: (int)stride_w,
+                                                dilation: (int)dilation_rate[1]);
 
             Tensor output_shape_tensor;
             if (data_format == "channels_first")
@@ -130,19 +130,19 @@ namespace Tensorflow.Keras.Layers
             var (out_pad_h, out_pad_w) = (-1, -1);
             output_shape[c_axis] = filters;
             output_shape[h_axis] = conv_utils.deconv_output_length(
-                output_shape[h_axis],
-                kernel_h,
+                (int)output_shape[h_axis],
+                (int)kernel_h,
                 padding: padding,
                 output_padding: out_pad_h,
-                stride: stride_h,
-                dilation: dilation_rate[0]);
+                stride: (int)stride_h,
+                dilation: (int)dilation_rate[0]);
             output_shape[w_axis] = conv_utils.deconv_output_length(
-                output_shape[w_axis],
-                kernel_w,
+                (int)output_shape[w_axis],
+                (int)kernel_w,
                 padding: padding,
                 output_padding: out_pad_w,
-                stride: stride_w,
-                dilation: dilation_rate[1]);
+                stride: (int)stride_w,
+                dilation: (int)dilation_rate[1]);
 
             return new TensorShape(output_shape);
         }

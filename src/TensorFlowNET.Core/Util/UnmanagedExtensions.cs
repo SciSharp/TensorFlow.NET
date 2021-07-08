@@ -1,5 +1,4 @@
-﻿using NumSharp.Backends.Unmanaged;
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -10,42 +9,6 @@ namespace Tensorflow.Util
     {
         //internally UnmanagedMemoryStream can't construct with null address.
         private static readonly unsafe byte* _empty = (byte*)Marshal.AllocHGlobal(1);
-
-        /// <summary>
-        ///     Creates a memory stream based on given <paramref name="block"/>.
-        /// </summary>
-        /// <param name="block">The block to stream. Can be default/null.</param>
-        /// <remarks>There is no need to dispose the returned <see cref="UnmanagedMemoryStream"/></remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static UnmanagedMemoryStream Stream(this UnmanagedMemoryBlock<byte> block)
-        {
-            unsafe
-            {
-                if (block.Address == null)
-                    return new UnmanagedMemoryStream(_empty, 0);
-                return new UnmanagedMemoryStream(block.Address, block.BytesCount);
-            }
-        }
-
-        /// <summary>
-        ///     Creates a memory stream based on given <paramref name="block"/>.
-        /// </summary>
-        /// <param name="block">The block to stream. Can be default/null.</param>
-        /// <param name="offset">Offset from the start of the block.</param>
-        /// <remarks>There is no need to dispose the returned <see cref="UnmanagedMemoryStream"/></remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static UnmanagedMemoryStream Stream(this UnmanagedMemoryBlock<byte> block, long offset)
-        {
-            if (block.BytesCount - offset <= 0)
-                throw new ArgumentOutOfRangeException(nameof(offset));
-
-            unsafe
-            {
-                if (block.Address == null)
-                    return new UnmanagedMemoryStream(_empty, 0);
-                return new UnmanagedMemoryStream(block.Address + offset, block.BytesCount - offset);
-            }
-        }
 
         /// <summary>
         ///     Creates a memory stream based on given <paramref name="address"/>.
