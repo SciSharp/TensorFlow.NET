@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,7 +127,7 @@ namespace Tensorflow
             if (dtype != TF_DataType.DtInvalid &&
                 value.GetType().Name != "NDArray" &&
                 value.GetType().BaseType.Name != "Array" &&
-                dtypes.as_base_dtype(dtype) != dtypes.as_dtype(value.GetType()))
+                dtypes.as_base_dtype(dtype) != dtypes.as_tf_dtype(value.GetType()))
             {
                 switch (dtype)
                 {
@@ -169,9 +169,9 @@ namespace Tensorflow
                 case string[] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case bool val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(new[] { val }, Shape.Scalar);
                 case byte val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(new[] { val }, Shape.Scalar);
                 case byte[] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case byte[,] val:
@@ -187,7 +187,7 @@ namespace Tensorflow
                 case int[,,] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case long val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(new[] { val }, Shape.Scalar);
                 case long[] val:
                     return new EagerTensor(val, new Shape(val.Length));
                 case long[,] val:

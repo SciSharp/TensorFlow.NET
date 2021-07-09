@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace Tensorflow.Numpy
+namespace Tensorflow.NumPy
 {
     public partial class np
     {

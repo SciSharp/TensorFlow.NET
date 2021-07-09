@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Tensorflow.Numpy
+namespace Tensorflow.NumPy
 {
     public class InfoOf<T>
     {

@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;

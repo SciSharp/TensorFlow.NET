@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Tensorflow.Numpy
+namespace Tensorflow.NumPy
 {
     /// <summary>                                                                                                                                         <br></br>
     /// NDArray can be indexed using slicing                                                                                                              <br></br>

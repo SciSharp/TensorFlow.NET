@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Numerics;
 
@@ -126,7 +126,7 @@ namespace Tensorflow
         /// <param name="dtype"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException">When <paramref name="type"/> has no equivalent <see cref="TF_DataType"/></exception>
-        public static TF_DataType as_dtype(this Type type, TF_DataType? dtype = null)
+        public static TF_DataType as_tf_dtype(this Type type, TF_DataType? dtype = null)
         {
             switch (type.Name)
             {

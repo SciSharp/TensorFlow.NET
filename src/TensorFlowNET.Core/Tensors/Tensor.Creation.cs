@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -70,11 +70,15 @@ namespace Tensorflow
 
         unsafe void InitTensor(Array array, Shape shape)
         {
-            var dtype = array.GetType().GetElementType().as_dtype();
+            var dtype = array.GetType().GetElementType().as_tf_dtype();
             var length = (ulong)(array.Length * dtype.get_datatype_size());
 
             switch (array)
             {
+                case bool[] val:
+                    fixed (void* addr = &val[0])
+                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                    break;
                 case int[] val:
                     fixed (void* addr = &val[0])
                         _handle = TF_NewTensor(shape, dtype, addr, length);
@@ -150,7 +154,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(sbyte[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(sbyte)), new long[] { data.Length }, data, sizeof(sbyte));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(sbyte)), new long[] { data.Length }, data, sizeof(sbyte));
         }
 
         /// <summary>
@@ -158,7 +162,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(sbyte[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(sbyte)), shape, data, sizeof(sbyte));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(sbyte)), shape, data, sizeof(sbyte));
         }
 
         /// <summary>
@@ -166,7 +170,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(sbyte value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(sbyte)), dims: new long[0], num_dims: 0, len: sizeof(sbyte));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(sbyte)), dims: new long[0], num_dims: 0, len: sizeof(sbyte));
             *(sbyte*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -176,7 +180,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(bool[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(bool)), new long[] { data.Length }, data, sizeof(bool));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(bool)), new long[] { data.Length }, data, sizeof(bool));
         }
 
         /// <summary>
@@ -184,12 +188,12 @@ namespace Tensorflow
         /// </summary>
         public Tensor(bool[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(bool)), shape, data, sizeof(bool));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(bool)), shape, data, sizeof(bool));
         }
 
         internal Tensor(float[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(bool)), shape, data, sizeof(bool));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(bool)), shape, data, sizeof(bool));
         }
 
         /// <summary>
@@ -197,7 +201,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(bool value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(bool)), dims: new long[0], num_dims: 0, len: sizeof(bool));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(bool)), dims: new long[0], num_dims: 0, len: sizeof(bool));
             *(bool*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -207,7 +211,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(byte[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(byte)), new long[] { data.Length }, data, sizeof(byte));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(byte)), new long[] { data.Length }, data, sizeof(byte));
         }
 
         /// <summary>
@@ -215,7 +219,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(byte[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(byte)), shape, data, sizeof(byte));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(byte)), shape, data, sizeof(byte));
         }
 
         /// <summary>
@@ -223,7 +227,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(byte value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(byte)), dims: new long[0], num_dims: 0, len: sizeof(byte));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(byte)), dims: new long[0], num_dims: 0, len: sizeof(byte));
             *(byte*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -233,7 +237,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(short[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(short)), new long[] { data.Length }, data, sizeof(short));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(short)), new long[] { data.Length }, data, sizeof(short));
         }
 
         /// <summary>
@@ -241,7 +245,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(short[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(short)), shape, data, sizeof(short));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(short)), shape, data, sizeof(short));
         }
 
         /// <summary>
@@ -249,7 +253,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(short value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(short)), dims: new long[0], num_dims: 0, len: sizeof(short));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(short)), dims: new long[0], num_dims: 0, len: sizeof(short));
             *(short*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -259,7 +263,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(ushort[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(ushort)), new long[] { data.Length }, data, sizeof(ushort));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(ushort)), new long[] { data.Length }, data, sizeof(ushort));
         }
 
         /// <summary>
@@ -267,7 +271,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(ushort[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(ushort)), shape, data, sizeof(ushort));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(ushort)), shape, data, sizeof(ushort));
         }
 
         /// <summary>
@@ -275,7 +279,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(ushort value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(ushort)), dims: new long[0], num_dims: 0, len: sizeof(ushort));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(ushort)), dims: new long[0], num_dims: 0, len: sizeof(ushort));
             *(ushort*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -285,7 +289,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(int[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(int)), new long[] { data.Length }, data, sizeof(int));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(int)), new long[] { data.Length }, data, sizeof(int));
         }
 
         /// <summary>
@@ -293,7 +297,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(int[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(int)), shape, data, sizeof(int));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(int)), shape, data, sizeof(int));
         }
 
         /// <summary>
@@ -301,7 +305,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(int value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(int)), dims: new long[0], num_dims: 0, len: sizeof(int));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(int)), dims: new long[0], num_dims: 0, len: sizeof(int));
             *(int*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -311,7 +315,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(uint[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(uint)), new long[] { data.Length }, data, sizeof(uint));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(uint)), new long[] { data.Length }, data, sizeof(uint));
         }
 
         /// <summary>
@@ -319,7 +323,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(uint[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(uint)), shape, data, sizeof(uint));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(uint)), shape, data, sizeof(uint));
         }
 
         /// <summary>
@@ -327,7 +331,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(uint value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(uint)), dims: new long[0], num_dims: 0, len: sizeof(uint));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(uint)), dims: new long[0], num_dims: 0, len: sizeof(uint));
             *(uint*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -337,7 +341,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(long[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(long)), new long[] { data.Length }, data, sizeof(long));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(long)), new long[] { data.Length }, data, sizeof(long));
         }
 
         /// <summary>
@@ -345,7 +349,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(long[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(long)), shape, data, sizeof(long));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(long)), shape, data, sizeof(long));
         }
 
         /// <summary>
@@ -353,7 +357,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(long value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(long)), dims: new long[0], num_dims: 0, len: sizeof(long));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(long)), dims: new long[0], num_dims: 0, len: sizeof(long));
             *(long*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -363,7 +367,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(ulong[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(ulong)), new long[] { data.Length }, data, sizeof(ulong));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(ulong)), new long[] { data.Length }, data, sizeof(ulong));
         }
 
         /// <summary>
@@ -371,7 +375,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(ulong[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(ulong)), shape, data, sizeof(ulong));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(ulong)), shape, data, sizeof(ulong));
         }
 
         /// <summary>
@@ -379,7 +383,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(ulong value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(ulong)), dims: new long[0], num_dims: 0, len: sizeof(ulong));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(ulong)), dims: new long[0], num_dims: 0, len: sizeof(ulong));
             *(ulong*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -397,7 +401,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(float value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(float)), dims: new long[0], num_dims: 0, len: sizeof(float));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(float)), dims: new long[0], num_dims: 0, len: sizeof(float));
             *(float*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -407,7 +411,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(double[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(double)), new long[] { data.Length }, data, sizeof(double));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(double)), new long[] { data.Length }, data, sizeof(double));
         }
 
         /// <summary>
@@ -415,7 +419,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(double[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(double)), shape, data, sizeof(double));
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(double)), shape, data, sizeof(double));
         }
 
         /// <summary>
@@ -423,7 +427,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(double value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(double)), dims: new long[0], num_dims: 0, len: sizeof(double));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(double)), dims: new long[0], num_dims: 0, len: sizeof(double));
             *(double*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }
@@ -433,7 +437,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(Complex[] data, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(Complex)), new long[] { data.Length }, data, Marshal.SizeOf<Complex>());
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(Complex)), new long[] { data.Length }, data, Marshal.SizeOf<Complex>());
         }
 
         /// <summary>
@@ -441,7 +445,7 @@ namespace Tensorflow
         /// </summary>
         public Tensor(Complex[] data, long[] shape, TF_DataType? dType = null)
         {
-            _handle = CreateTensorFromArray(dType ?? dtypes.as_dtype(typeof(Complex)), shape, data, Marshal.SizeOf<Complex>());
+            _handle = CreateTensorFromArray(dType ?? dtypes.as_tf_dtype(typeof(Complex)), shape, data, Marshal.SizeOf<Complex>());
         }
 
         /// <summary>
@@ -449,7 +453,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe Tensor(Complex value, TF_DataType? dType = null)
         {
-            _handle = TF_AllocateTensor(dType ?? dtypes.as_dtype(typeof(Complex)), dims: new long[0], num_dims: 0, len: (ulong)sizeof(Complex));
+            _handle = TF_AllocateTensor(dType ?? dtypes.as_tf_dtype(typeof(Complex)), dims: new long[0], num_dims: 0, len: (ulong)sizeof(Complex));
             *(Complex*)TF_TensorData(_handle) = value;
             AllocationType = AllocationType.Tensorflow;
         }

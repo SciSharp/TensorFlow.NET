@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Numpy
+namespace Tensorflow.NumPy
 {
     public partial class NDIterator<TOut> : NDIterator, IEnumerable<TOut>, IDisposable where TOut : unmanaged
     {

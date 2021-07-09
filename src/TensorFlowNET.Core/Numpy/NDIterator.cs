@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Numpy
+namespace Tensorflow.NumPy
 {
     public delegate ref T MoveNextReferencedDelegate<T>() where T : unmanaged;
 

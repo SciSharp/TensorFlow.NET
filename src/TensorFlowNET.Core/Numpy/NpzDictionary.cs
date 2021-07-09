@@ -6,7 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 
-namespace Tensorflow.Numpy
+namespace Tensorflow.NumPy
 {
     public class NpzDictionary<T> : IDisposable, IReadOnlyDictionary<string, T>, ICollection<T>
         where T : class,

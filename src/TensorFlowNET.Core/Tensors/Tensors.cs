@@ -1,4 +1,4 @@
-﻿using Tensorflow.Numpy;
+﻿using Tensorflow.NumPy;
 using System;
 using System.Collections;
 using System.Collections.Generic;

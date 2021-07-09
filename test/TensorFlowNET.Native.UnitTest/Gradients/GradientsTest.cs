@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using Tensorflow.Util;
 

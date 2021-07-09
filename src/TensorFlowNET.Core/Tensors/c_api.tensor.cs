@@ -17,7 +17,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 
 namespace Tensorflow
 {

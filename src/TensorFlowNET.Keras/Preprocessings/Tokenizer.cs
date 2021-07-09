@@ -1,4 +1,4 @@
-﻿using Tensorflow.Numpy;
+﻿using Tensorflow.NumPy;
 using Serilog.Debugging;
 using System;
 using System.Collections.Generic;

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Tensorflow.Numpy
+namespace Tensorflow.NumPy
 {
     public partial class NDArray
     {
         Tensor _tensor;
-
         public NumpyDType dtype => _tensor.dtype.as_numpy_typecode();
         public ulong size => _tensor.size;
         public ulong dtypesize => _tensor.itemsize;
@@ -165,6 +164,9 @@ namespace Tensorflow.Numpy
 
         public static implicit operator NDArray(float[] value)
             => new NDArray(value);
+
+        public static implicit operator Tensor(NDArray nd)
+            => nd._tensor;
 
         public static NDArray operator /(NDArray x, NDArray y) => throw new NotImplementedException("");
 

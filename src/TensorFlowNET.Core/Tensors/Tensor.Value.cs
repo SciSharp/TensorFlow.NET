@@ -1,4 +1,4 @@
-﻿using Tensorflow.Numpy;
+﻿using Tensorflow.NumPy;
 using System;
 using System.Text;
 using static Tensorflow.Binding;
@@ -21,7 +21,7 @@ namespace Tensorflow
         public T[] ToArray<T>() where T : unmanaged
         {
             //Are the types matching?
-            if (typeof(T).as_dtype() == dtype)
+            if (typeof(T).as_tf_dtype() == dtype)
             {
                 if (NDims == 0 && size == 1)  //is it a scalar?
                 {

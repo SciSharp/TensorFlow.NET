@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Eager;
 using Tensorflow.Framework;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients

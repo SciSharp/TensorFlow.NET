@@ -5,22 +5,16 @@ using System.Numerics;
 using System.Text;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.Numpy
+namespace Tensorflow.NumPy
 {
     public partial class np
     {
-        public static NDArray array(object data)
-            => throw new NotImplementedException("");
-
         public static NDArray array(Array data)
             => new NDArray(tf.constant(data));
 
         public static NDArray array<T>(params T[] data)
             where T : unmanaged
             => new NDArray(tf.constant(data));
-
-        public static NDArray array(params float[] data)
-            => throw new NotImplementedException("");
 
         public static NDArray arange<T>(T end)
             where T : unmanaged
@@ -33,6 +27,19 @@ namespace Tensorflow.Numpy
         public static NDArray empty(Shape shape, NumpyDType dtype = NumpyDType.Double)
             => new NDArray(tf.zeros(shape, dtype: dtype.as_tf_dtype()));
 
+        public static NDArray eye(int N, int? M = null, int k = 0, NumpyDType dtype = NumpyDType.Double)
+            => tf.numpy.eye(N, M: M, k: k, dtype: dtype);
+
+        public static NDArray full<T>(Shape shape, T fill_value)
+            => new NDArray(tf.fill(tf.constant(shape), fill_value));
+
+        public static NDArray linspace<T>(T start, T stop, int num = 50, bool endpoint = true, bool retstep = false,
+            NumpyDType dtype = NumpyDType.Double, int axis = 0) where T : unmanaged
+            => tf.numpy.linspace(start, stop, num: num, endpoint: endpoint, retstep: retstep, dtype: dtype, axis: axis);
+
+        public static (NDArray, NDArray) meshgrid<T>(T x, T y, bool copy = true, bool sparse = false)
+            => tf.numpy.meshgrid(new[] { x, y }, copy: copy, sparse: sparse);
+
         public static NDArray ones(Shape shape, NumpyDType dtype = NumpyDType.Double)
             => new NDArray(tf.ones(shape, dtype: dtype.as_tf_dtype()));
 
@@ -41,8 +48,5 @@ namespace Tensorflow.Numpy
 
         public static NDArray zeros(Shape shape, NumpyDType dtype = NumpyDType.Double)
             => new NDArray(tf.zeros(shape, dtype: dtype.as_tf_dtype()));
-
-        public static NDArray full<T>(Shape shape, T fill_value)
-            => new NDArray(tf.fill(tf.constant(shape), fill_value));
     }
 }

@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -173,6 +173,9 @@ namespace Tensorflow
             }
             throw new NotImplementedException("len() not implemented for type: " + a.GetType());
         }
+
+        public static int min(int a, int b)
+            => Math.Min(a, b);
 
         public static float min(float a, float b)
             => Math.Min(a, b);

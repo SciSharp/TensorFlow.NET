@@ -1,6 +1,6 @@
 ﻿using static Tensorflow.KerasApi;
 using static Tensorflow.Binding;
-using Tensorflow.Numpy; 
+using Tensorflow.NumPy; 
 
 namespace Tensorflow.Keras
 {

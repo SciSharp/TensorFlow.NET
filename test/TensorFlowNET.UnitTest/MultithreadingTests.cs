@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.IO;
 using System.Linq;
@@ -170,7 +170,7 @@ namespace TensorFlowNET.UnitTest
                     {
                         var v = (int*)Marshal.AllocHGlobal(sizeof(int));
                         c_api.DeallocatorArgs _deallocatorArgs = new c_api.DeallocatorArgs();
-                        var handle = c_api.TF_NewTensor(typeof(int).as_dtype(), dims: new long[0], num_dims: 0,
+                        var handle = c_api.TF_NewTensor(typeof(int).as_tf_dtype(), dims: new long[0], num_dims: 0,
                             data: (IntPtr)v, len: (UIntPtr)sizeof(int),
                             deallocator: (IntPtr data, IntPtr size, ref c_api.DeallocatorArgs args) => Marshal.FreeHGlobal(data),
                             ref _deallocatorArgs);

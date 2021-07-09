@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2021 Haiping Chen. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -18,17 +18,12 @@ using Tensorflow.NumPy;
 
 namespace Tensorflow
 {
-    /// <summary>
-    /// in order to limit function return value 
-    /// is Tensor or Operation
-    /// </summary>
-    public interface ITensorOrOperation
+    public partial class tensorflow
     {
-        string Device { get; }
-        Operation op { get; }
-        string name { get; }
-        TF_DataType dtype { get; }
-        Tensor[] outputs { get; }
-        NDArray numpy();
+        /// <summary>
+        /// NumPy API on TensorFlow
+        /// https://www.tensorflow.org/api_docs/python/tf/experimental/numpy
+        /// </summary>
+        public NumPyImpl numpy => new NumPyImpl();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Tensorflow.Numpy;
+﻿using Tensorflow.NumPy;
 using System.Linq;
 using static Tensorflow.Binding;
 

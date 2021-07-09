@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -186,7 +186,7 @@ namespace Tensorflow
 
         private static Tensor _constant_if_small(int value, Tensor shape)
         {
-            return shape < 1000;
+            return shape < 1000L;
         }
 
         private static Tensor _constant_if_small<T>(T value, TensorShape shape, TF_DataType dtype, string name)
@@ -212,7 +212,7 @@ namespace Tensorflow
             return _autopacking_helper(v, dtype, name == null ? "packed" : name);
         }
 
-        private static TF_DataType _get_dtype_from_nested_lists(IEnumerable<object> list_or_tuple)
+        private static TF_DataType _get_dtype_from_nested_lists<T>(IEnumerable<T> list_or_tuple)
         {
             TF_DataType dtype = TF_DataType.DtInvalid;
 
@@ -222,6 +222,9 @@ namespace Tensorflow
                 {
                     case Tensor t:
                         dtype = t.dtype.as_base_dtype();
+                        break;
+                    case NDArray t:
+                        dtype = t.dtype.as_tf_dtype();
                         break;
                 }
 
@@ -574,7 +577,7 @@ namespace Tensorflow
         public static Tensor shape_v2(Tensor input, string name = null, TF_DataType out_type = TF_DataType.TF_INT32)
             => shape_internal(input, name, optimize: true, out_type: out_type);
 
-        public static Tensor size(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
+        public static Tensor size<T>(T input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
             => size_internal(input, name, optimize: optimize, out_type: out_type);
 
         public static Tensor shape_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
@@ -597,7 +600,7 @@ namespace Tensorflow
             });
         }
 
-        private static Tensor size_internal(Tensor input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
+        private static Tensor size_internal<T>(T input, string name = null, bool optimize = true, TF_DataType out_type = TF_DataType.TF_INT32)
         {
             return tf_with(ops.name_scope(name, "Size", new { input }), scope =>
             {
@@ -613,7 +616,7 @@ namespace Tensorflow
                     }
                 }
 
-                return gen_array_ops.size(input, name: name, out_type: out_type);
+                return gen_array_ops.size(input_tensor, name: name, out_type: out_type);
             });
         }
 
@@ -777,7 +780,7 @@ namespace Tensorflow
                 int k = 0,
                 int num_rows = -1,
                 int num_cols = -1,
-                float padding_value = 0,
+                double padding_value = 0,
                 string align = "RIGHT_LEFT")
             => tf.Context.ExecuteOp("MatrixDiagV3", name, 
                 new ExecuteOpArgs(diagonal, k, num_rows, num_cols, padding_value)
@@ -790,6 +793,40 @@ namespace Tensorflow
             string align = "RIGHT_LEFT")
                 => tf.Context.ExecuteOp("MatrixSetDiagV3", name, new ExecuteOpArgs(input, diagonal, k)
                     .SetAttributes(new { align }));
+
+        public static Tensor[] meshgrid<T>(T[] array, bool copy = true, bool sparse = false, string indexing = "xy")
+        {
+            return tf_with(ops.name_scope(null, "meshgrid", array), scope =>
+            {
+                var ndim = array.Length;
+                var s0 = range(ndim).Select(x => 1).ToArray();
+
+                var output = new List<Tensor>();
+                foreach (var (i, x) in enumerate(array))
+                {
+                    var shape = s0[..i].concat(new[] { -1 }).concat(s0[(i + 1)..]);
+                    output.add(reshape(stack(x), shape));
+                }
+
+                // Create parameters for broadcasting each tensor to the full size
+                var shapes = array.Select(x => size(x)).ToArray();
+                var output_dtype = _get_dtype_from_nested_lists(array).as_base_dtype();
+                if (indexing == "xy" && ndim > 1)
+                {
+                    output[0] = reshape(output[0], new[] { 1, -1 }.concat(range(ndim - 2).Select(x => 1).ToArray()));
+                    output[1] = reshape(output[1], new[] { -1, 1 }.concat(range(ndim - 2).Select(x => 1).ToArray()));
+                    (shapes[0], shapes[1]) = (shapes[1], shapes[0]);
+                }
+
+                if(sparse)
+                    return output.ToArray();
+                else
+                {
+                    var mult_fact = ones(shapes, output_dtype);
+                    return output.Select(x => x * mult_fact).ToArray();
+                }
+            });
+        }
 
         /// <summary>
         /// Computes the shape of a broadcast given symbolic shapes.

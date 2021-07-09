@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using HDF.PInvoke;
 using HDF5CSharp;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Engine

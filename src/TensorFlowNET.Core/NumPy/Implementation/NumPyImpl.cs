@@ -4,11 +4,7 @@ using System.Text;
 
 namespace Tensorflow.NumPy
 {
-    public enum IteratorType
+    public partial class NumPyImpl
     {
-        Scalar,
-        Vector,
-        Matrix,
-        Tensor
     }
 }

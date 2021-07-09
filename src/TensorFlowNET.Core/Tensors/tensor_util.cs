@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,19 +75,19 @@ namespace Tensorflow
             }
             else if (tensor.Dtype == DataType.DtHalf || tensor.Dtype == DataType.DtBfloat16)
             {
-                return np.array(tensor.HalfVal).reshape(shape);
+                return np.array(tensor.HalfVal.ToArray()).reshape(shape);
             }
             else if (tensor.Dtype == DataType.DtFloat)
             {
-                return np.array(tensor.FloatVal).reshape(shape);
+                return np.array(tensor.FloatVal.ToArray()).reshape(shape);
             }
             else if (new DataType[] { DataType.DtInt32, DataType.DtUint8 }.Contains(tensor.Dtype))
             {
-                return np.array(tensor.IntVal).reshape(shape);
+                return np.array(tensor.IntVal.ToArray()).reshape(shape);
             }
             else if (tensor.Dtype == DataType.DtBool)
             {
-                return np.array(tensor.BoolVal).reshape(shape);
+                return np.array(tensor.BoolVal.ToArray()).reshape(shape);
             }
 
             throw new NotImplementedException("MakeNdarray");
@@ -284,7 +284,7 @@ scalar with value '-1' to describe an unknown shape.", value_));
                 var pre_cast = constant_value_as_shape(tensor.op.inputs[0]);
                 if (pre_cast.dims == null)
                     return pre_cast;
-                var cast_dtype = dtypes.as_dtype((Type)tensor.op.get_attr("DstT"));
+                var cast_dtype = dtypes.as_tf_dtype((Type)tensor.op.get_attr("DstT"));
                 if (!Array.Exists(new[] { dtypes.int32, dtypes.int64 }, cast_dtype_ => cast_dtype_ == cast_dtype))
                     return tensor.TensorShape.unknown_shape((int)shape.dims[0]);
 
@@ -594,35 +594,43 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             {
                 return "<unprintable>";
             }
+            else if (dtype == TF_DataType.TF_BOOL)
+            {
+                var array = tensor.ToArray<bool>();
+                return DisplayArrayAsString(array, tensor.shape);
+            }
             else if (dtype == TF_DataType.TF_INT32)
             {
                 var array = tensor.ToArray<int>();
-                return DisplayArrayAsString(array);
+                return DisplayArrayAsString(array, tensor.shape);
             }
             else if (dtype == TF_DataType.TF_INT64)
             {
                 var array = tensor.ToArray<long>();
-                return DisplayArrayAsString(array);
+                return DisplayArrayAsString(array, tensor.shape);
             }
             else if (dtype == TF_DataType.TF_FLOAT)
             {
                 var array = tensor.ToArray<float>();
-                return DisplayArrayAsString(array);
+                return DisplayArrayAsString(array, tensor.shape);
             }
             else if(dtype == TF_DataType.TF_DOUBLE)
             {
                 var array = tensor.ToArray<double>();
-                return DisplayArrayAsString(array);
+                return DisplayArrayAsString(array, tensor.shape);
             }
             else
             {
                 var array = tensor.ToArray<byte>();
-                return DisplayArrayAsString(array);
+                return DisplayArrayAsString(array, tensor.shape);
             }
         }
 
-        static string DisplayArrayAsString<T>(T[] array)
+        static string DisplayArrayAsString<T>(T[] array, Shape shape)
         {
+            if (shape.ndim == 0)
+                return array[0].ToString();
+
             var display = "[";
             if (array.Length < 10)
                 display += string.Join(", ", array);

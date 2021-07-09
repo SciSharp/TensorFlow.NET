@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Collections;
 using System.Linq;
@@ -327,6 +327,9 @@ namespace TensorFlowNET.UnitTest
 
         #endregion
 
-
+        public void AssetSequenceEqual<T>(T[] a, T[] b)
+        {
+            Assert.IsTrue(Enumerable.SequenceEqual(a, b));
+        }
     }
 }

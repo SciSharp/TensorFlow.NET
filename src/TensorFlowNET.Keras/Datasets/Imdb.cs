@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Tensorflow.Keras.Utils;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System.Linq;
 
 namespace Tensorflow.Keras.Datasets

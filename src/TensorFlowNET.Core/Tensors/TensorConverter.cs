@@ -1,4 +1,4 @@
-﻿using Tensorflow.Numpy;
+﻿using Tensorflow.NumPy;
 using System;
 using System.Threading.Tasks;
 using Tensorflow.Util;
@@ -122,7 +122,7 @@ namespace Tensorflow
             if (astype == null)
             {
                 //No conversion required
-                var constantType = typeof(T).as_dtype();
+                var constantType = typeof(T).as_tf_dtype();
                 if (constantType == TF_DataType.TF_INT8)
                     return new Tensor((sbyte)(object)constant);
 

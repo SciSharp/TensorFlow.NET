@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Diagnostics;
 using System.Linq;

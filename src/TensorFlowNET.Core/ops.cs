@@ -16,7 +16,7 @@
 
 using Google.Protobuf;
 using Google.Protobuf.Collections;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -126,8 +126,15 @@ namespace Tensorflow
 
             if (value is EagerTensor eager_tensor)
             {
+                if (dtype == TF_DataType.DtInvalid)
+                    dtype = eager_tensor.dtype;
+
                 if (tf.executing_eagerly())
+                {
+                    if (dtype != eager_tensor.dtype)
+                        return gen_math_ops.cast(eager_tensor, dtype.as_base_dtype(), name: name);
                     return eager_tensor;
+                }
                 else
                 {
                     var graph = get_default_graph();
@@ -136,6 +143,8 @@ namespace Tensorflow
                     return (graph as FuncGraph).capture(eager_tensor, name: name);
                 }
             }
+            else if (value is NDArray nd)
+                return nd;
 
             Tensor ret = value switch
             {

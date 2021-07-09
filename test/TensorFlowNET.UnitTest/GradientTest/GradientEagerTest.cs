@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow;
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 

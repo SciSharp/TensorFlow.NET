@@ -1,4 +1,4 @@
-﻿using Tensorflow.Numpy;
+﻿using Tensorflow.NumPy;
 using System;
 using Tensorflow.Eager;
 using Tensorflow.Variables;

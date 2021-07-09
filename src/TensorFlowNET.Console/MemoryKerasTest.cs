@@ -1,4 +1,4 @@
-﻿using Tensorflow.Numpy;
+﻿using Tensorflow.NumPy;
 using System;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;

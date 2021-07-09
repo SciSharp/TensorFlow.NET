@@ -14,7 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Numpy;
+using Tensorflow.NumPy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -430,6 +430,42 @@ namespace Tensorflow
         public static Tensor lgamma(Tensor x, string name = null)
             => gen_math_ops.lgamma(x, name: name);
 
+        public static Tensor linspace(Tensor start, Tensor stop, Tensor num, string name = null, int axis = 0)
+        {
+            return tf_with(ops.name_scope(name, "linspace", new { start, stop }), scope =>
+            {
+                var expanded_start = array_ops.expand_dims(start, axis: axis);
+                var expanded_stop = array_ops.expand_dims(stop, axis: axis);
+                var shape = array_ops.shape(expanded_start);
+                var ndims = array_ops.shape(shape)[0];
+
+                var axis_tensor = array_ops.where_v2(constant_op.constant(axis >= 0), x: axis, y: ndims + axis);
+
+                // The purpose is to avoid having negative values when repeating.
+                var num_fill = gen_math_ops.maximum(num - 2, 0);
+                var n_steps = gen_math_ops.maximum(num - 1, 1);
+                var delta = (expanded_stop - expanded_start) / cast(n_steps, expanded_stop.dtype);
+
+                var range_end = array_ops.where_v2(num >= 0, n_steps, -1);
+                var desired_range = cast(range(1, range_end, dtype: dtypes.int64), delta.dtype);
+                var mask = gen_math_ops.equal(axis, range(ndims));
+                var desired_range_shape = array_ops.where_v2(mask, num_fill, 1);
+                desired_range = array_ops.reshape(desired_range, desired_range_shape);
+                var res = expanded_start + delta * desired_range;
+
+                // Add the start and endpoints to the result, and slice out the desired
+                // portion.
+                var all_tensors = new[] { expanded_start, res, expanded_stop };
+                var concatenated = array_ops.concat(all_tensors, axis: axis);
+                var begin = array_ops.zeros_like(shape);
+                var size = array_ops.where_v2(mask, num, shape);
+
+                return array_ops.slice(concatenated, begin, size);
+            });
+
+            throw new NotImplementedException("");
+        }
+
         /// <summary>
         /// Helper function for reduction ops.
         /// </summary>
@@ -725,15 +761,24 @@ namespace Tensorflow
                 start = 0;
             }
 
+            if (dtype == TF_DataType.DtInvalid)
+            {
+                if (limit is Tensor tensor)
+                    dtype = tensor.dtype;
+                else
+                    dtype = limit.GetType().as_tf_dtype();
+            }
+                
+
             if (delta == null)
             {
-                if (limit is int)
+                if (dtype == TF_DataType.TF_INT32)
                     delta = 1;
-                else if (limit is long)
+                else if (dtype == TF_DataType.TF_INT64)
                     delta = 1L;
-                else if (limit is float)
+                else if (dtype == TF_DataType.TF_FLOAT)
                     delta = 1.0f;
-                else if (limit is double)
+                else if (dtype == TF_DataType.TF_DOUBLE)
                     delta = 1.0d;
                 else
                     delta = 1;
