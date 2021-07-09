@@ -84,30 +84,11 @@ namespace Tensorflow.NumPy
         public static NDArray frombuffer(byte[] bytes, string dtype)
             => throw new NotImplementedException("");
 
-        
-
-        public static NDArray prod(in NDArray a, int? axis = null, Type dtype = null, bool keepdims = false)
-            => throw new NotImplementedException("");
-
-        public static NDArray prod(params int[] array)
-            => throw new NotImplementedException("");
-
-        public static NDArray multiply(in NDArray x1, in NDArray x2)
-            => throw new NotImplementedException("");
-
-        public static NDArray sum(NDArray x1)
-            => throw new NotImplementedException("");
-
         public static NDArray squeeze(NDArray x1)
-            => throw new NotImplementedException("");
-        
-        public static NDArray log(NDArray x) 
             => throw new NotImplementedException("");
 
         public static bool allclose(NDArray a, NDArray b, double rtol = 1.0E-5, double atol = 1.0E-8,
             bool equal_nan = false) => throw new NotImplementedException("");
-
-        
 
         public static class random
         {

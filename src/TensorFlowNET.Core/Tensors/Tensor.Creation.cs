@@ -103,6 +103,10 @@ namespace Tensorflow
                     fixed (void* addr = &val[0])
                         _handle = TF_NewTensor(shape, dtype, addr, length);
                     break;
+                case double[,] val:
+                    fixed (void* addr = &val[0, 0])
+                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                    break;
                 default:
                     throw new NotImplementedException("");
             }

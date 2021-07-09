@@ -159,7 +159,7 @@ namespace Tensorflow
                 case EagerTensor val:
                     return val;
                 case NDArray val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return (EagerTensor)val;
                 case Shape val:
                     return new EagerTensor(val.dims, new Shape(val.ndim));
                 case TensorShape val:
@@ -172,47 +172,25 @@ namespace Tensorflow
                     return new EagerTensor(new[] { val }, Shape.Scalar);
                 case byte val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
-                case byte[] val:
-                    return new EagerTensor(val, ctx.DeviceName);
-                case byte[,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
-                case byte[,,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
                 case int val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
-                case int[] val:
-                    return new EagerTensor(val, new Shape(val.Length));
-                case int[,] val:
-                    return new EagerTensor(val, new Shape(val.GetLength(0), val.GetLength(1)));
-                case int[,,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
                 case long val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
-                case long[] val:
-                    return new EagerTensor(val, new Shape(val.Length));
-                case long[,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
-                case long[,,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
                 case float val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
-                case float[] val:
-                    return new EagerTensor(val, ctx.DeviceName);
-                case float[,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
-                case float[,,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
                 case double val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
-                case double[] val:
-                    return new EagerTensor(val, ctx.DeviceName);
-                case double[,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
-                case double[,,] val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                case Array val:
+                    return new EagerTensor(val, GetArrayDims(val));
                 default:
                     throw new NotImplementedException($"convert_to_eager_tensor {value.GetType()}");
             }
+        }
+
+        static Shape GetArrayDims(Array array)
+        {
+            var dims = range(array.Rank).Select(x => (long)array.GetLength(x)).ToArray();
+            return new Shape(dims);
         }
 
         /// <summary>

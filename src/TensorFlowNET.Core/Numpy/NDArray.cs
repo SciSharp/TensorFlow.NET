@@ -17,22 +17,32 @@ namespace Tensorflow.NumPy
 
         public NDArray(bool value)
         {
+            _tensor = ops.convert_to_tensor(value);
+        }
 
+        public NDArray(byte value)
+        {
+            _tensor = ops.convert_to_tensor(value);
+        }
+
+        public NDArray(int value)
+        {
+            _tensor = ops.convert_to_tensor(value);
         }
 
         public NDArray(float value)
         {
-
+            _tensor = ops.convert_to_tensor(value);
         }
 
         public NDArray(double value)
         {
-
+            _tensor = ops.convert_to_tensor(value);
         }
 
         public NDArray(Array value, Shape shape = null)
         {
-
+            _tensor = ops.convert_to_tensor(value);
         }
 
         public NDArray(Type dtype, Shape shape)
@@ -134,39 +144,6 @@ namespace Tensorflow.NumPy
             => _tensor.ToArray<T>();
         public T[] ToArray<T>() where T : unmanaged
             => _tensor.ToArray<T>();
-
-        public static implicit operator NDArray(Array array)
-            => new NDArray(array);
-
-        public static implicit operator bool(NDArray nd)
-            => nd._tensor.ToArray<bool>()[0];
-
-        public static implicit operator int(NDArray nd)
-            => nd._tensor.ToArray<int>()[0];
-
-        public static implicit operator NDArray(bool value)
-            => new NDArray(value);
-
-        public static implicit operator NDArray(float value)
-            => new NDArray(value);
-
-        public static implicit operator NDArray(double value)
-            => new NDArray(value);
-
-        public static implicit operator NDArray(byte[] value)
-            => new NDArray(value);
-
-        public static implicit operator byte[](NDArray nd)
-            => nd.ToByteArray();
-
-        public static implicit operator NDArray(int[] value)
-            => new NDArray(value, new Shape(value.Length));
-
-        public static implicit operator NDArray(float[] value)
-            => new NDArray(value);
-
-        public static implicit operator Tensor(NDArray nd)
-            => nd._tensor;
 
         public static NDArray operator /(NDArray x, NDArray y) => throw new NotImplementedException("");
 

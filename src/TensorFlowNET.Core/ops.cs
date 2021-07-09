@@ -157,7 +157,6 @@ namespace Tensorflow
                 RefVariable varVal => varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref),
                 ResourceVariable varVal => varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref),
                 TensorShape ts => constant_op.constant(ts.dims, dtype: dtype, name: name),
-                int[] dims => constant_op.constant(dims, dtype: dtype, name: name),
                 string str => constant_op.constant(str, dtype: tf.@string, name: name),
                 string[] str => constant_op.constant(str, dtype: tf.@string, name: name),
                 IEnumerable<object> objects => array_ops._autopacking_conversion_function(objects, dtype: dtype, name: name),

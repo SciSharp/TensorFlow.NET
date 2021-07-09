@@ -31,6 +31,7 @@ namespace Tensorflow
         public static Tensor operator -(ResourceVariable x, ResourceVariable y) => x.value() - y.value();
 
         public static Tensor operator *(ResourceVariable x, ResourceVariable y) => x.value() * y.value();
+        public static Tensor operator *(ResourceVariable x, Tensor y) => x.value() * y;
         public static Tensor operator *(ResourceVariable x, NDArray y) => x.value() * y;
 
         public static Tensor operator <(ResourceVariable x, Tensor y) => x.value() < y;
