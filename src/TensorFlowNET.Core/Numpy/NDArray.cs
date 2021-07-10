@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.NumPy
 {
@@ -55,48 +56,12 @@ namespace Tensorflow.NumPy
             Initialize(shape, dtype: dtype);
         }
 
-        public NDArray(Tensor value)
+        public NDArray(Tensor value, Shape? shape = null)
         {
-            _tensor = value;
-        }
-
-        public NDArray this[params int[] index]
-        {
-            get
-            {
-                throw new NotImplementedException("");
-            }
-
-            set
-            {
-
-            }
-        }
-
-        public NDArray this[params Slice[] slices]
-        {
-            get
-            {
-                throw new NotImplementedException("");
-            }
-
-            set
-            {
-
-            }
-        }
-
-        public NDArray this[NDArray mask]
-        {
-            get
-            {
-                throw new NotImplementedException("");
-            }
-
-            set
-            {
-
-            }
+            if (shape is not null)
+                _tensor = tf.reshape(value, shape);
+            else
+                _tensor = value;
         }
 
         public static NDArray Scalar<T>(T value) where T : unmanaged
@@ -129,15 +94,14 @@ namespace Tensorflow.NumPy
 
         public bool HasNext() => throw new NotImplementedException("");
         public T MoveNext<T>() => throw new NotImplementedException("");
-        public NDArray reshape(params int[] shape) => throw new NotImplementedException("");
-        public NDArray reshape(params long[] shape) => throw new NotImplementedException("");
+        public NDArray reshape(Shape newshape) => new NDArray(_tensor, newshape);
         public NDArray astype(Type type) => throw new NotImplementedException("");
         public NDArray astype(NumpyDType type) => throw new NotImplementedException("");
         public bool array_equal(NDArray rhs) => throw new NotImplementedException("");
         public NDArray ravel() => throw new NotImplementedException("");
         public void shuffle(NDArray nd) => throw new NotImplementedException("");
         public Array ToMuliDimArray<T>() => throw new NotImplementedException("");
-        public byte[] ToByteArray() => _tensor.ToArray<byte>();
+        public byte[] ToByteArray() => _tensor.BufferToArray();
         public static string[] AsStringArray(NDArray arr) => throw new NotImplementedException("");
 
         public T[] Data<T>() where T : unmanaged

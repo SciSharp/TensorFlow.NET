@@ -360,7 +360,7 @@ namespace Tensorflow.Eager
                     c_api.TFE_OpSetAttrFloat(op, key, Convert.ToSingle(value));
                     break;
                 case TF_AttrType.TF_ATTR_SHAPE:
-                    var dims = (value as int[]).Select(x => (long)x).ToArray();
+                    var dims = (value as long[]).ToArray();
                     c_api.TFE_OpSetAttrShape(op, key, dims, dims.Length, status.Handle);
                     status.Check(true);
                     break;

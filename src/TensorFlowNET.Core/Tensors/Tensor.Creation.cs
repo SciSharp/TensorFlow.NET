@@ -465,7 +465,7 @@ namespace Tensorflow
         /// <summary>
         ///     Create a string Tensor from the given string
         /// </summary>
-        public unsafe Tensor(string str)
+        public Tensor(string str)
         {
             _handle = StringTensor(new string[] { str }, TensorShape.Scalar);
 #if TRACK_TENSOR_LIFE
@@ -473,7 +473,7 @@ namespace Tensorflow
 #endif
         }
 
-        public unsafe Tensor(string[] strings)
+        public Tensor(string[] strings)
         {
             _handle = StringTensor(strings, new TensorShape(strings.Length));
 #if TRACK_TENSOR_LIFE

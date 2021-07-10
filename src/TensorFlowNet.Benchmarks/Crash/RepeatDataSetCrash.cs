@@ -12,7 +12,7 @@ namespace Tensorflow.Benchmark.Crash
         [Benchmark]
         public void Run()
         {
-            var data = tf.convert_to_tensor(np.arange(0, 50000 * 10).astype(np.float32).reshape(50000, 10));
+            var data = tf.convert_to_tensor(np.arange(0, 50000 * 10).astype(np.float32).reshape((50000, 10)));
 
             var dataset = keras.preprocessing.timeseries_dataset_from_array(data,
                 sequence_length: 10,

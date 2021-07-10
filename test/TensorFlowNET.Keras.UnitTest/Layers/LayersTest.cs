@@ -84,7 +84,7 @@ namespace TensorFlowNET.Keras.UnitTest
         public void Embedding_Simple()
         {
             var emb = keras.layers.Embedding(256, 12, input_length: 4);
-            var input_array = np.arange(12).reshape(3, 4).astype(np.float32);
+            var input_array = np.arange(12).reshape((3, 4)).astype(np.float32);
             var output = emb.Apply(input_array);
             Assert.AreEqual(new TensorShape(3, 4, 12), output.shape);
         }

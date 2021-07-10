@@ -136,10 +136,10 @@ namespace TensorFlowNET.UnitTest.Basics
         [TestMethod]
         public void NDimConst()
         {
-            var nd = np.array(new int[][]
+            var nd = np.array(new int[,]
             {
-                new int[]{ 3, 1, 1 },
-                new int[]{ 2, 1, 3 }
+                { 3, 1, 1 },
+                { 2, 1, 3 }
             });
 
             var tensor = tf.constant(nd);

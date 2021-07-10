@@ -54,7 +54,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void batch_to_space_nd()
         {
-            var inputs = np.arange(24).reshape(4, 2, 3);
+            var inputs = np.arange(24).reshape((4, 2, 3));
             var block_shape = new[] { 2, 2 };
             int[,] crops = { { 0, 0 }, { 0, 0 } };
             var tensor = tf.batch_to_space_nd(inputs, block_shape, crops);

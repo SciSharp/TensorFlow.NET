@@ -2,6 +2,7 @@
 using Tensorflow.NumPy;
 using System.Linq;
 using static Tensorflow.Binding;
+using System;
 
 namespace TensorFlowNET.UnitTest.Basics
 {
@@ -13,7 +14,7 @@ namespace TensorFlowNET.UnitTest.Basics
         {
             var x = tf.Variable(10, name: "x");
             Assert.AreEqual(0, x.shape.ndim);
-            Assert.AreEqual(10, (int)x.numpy());
+            Assert.AreEqual(x.numpy(), 10);
         }
 
         [TestMethod]
@@ -28,7 +29,7 @@ namespace TensorFlowNET.UnitTest.Basics
         {
             var x = tf.constant(3, name: "x");
             var y = tf.Variable(x + 1, name: "y");
-            Assert.AreEqual(4, (int)y.numpy());
+            Assert.AreEqual(y.numpy(), 4);
         }
 
         [TestMethod]
@@ -36,7 +37,7 @@ namespace TensorFlowNET.UnitTest.Basics
         {
             var variable = tf.Variable(31, name: "tree");
             var unread = variable.assign(12);
-            Assert.AreEqual(12, (int)unread.numpy());
+            Assert.AreEqual(unread.numpy(), 12);
         }
 
         [TestMethod]
@@ -45,7 +46,7 @@ namespace TensorFlowNET.UnitTest.Basics
             var v1 = tf.Variable(10.0f, name: "v1");
             var v2 = v1.assign(v1 + 1.0f);
             Assert.AreEqual(v1.numpy(), v2.numpy());
-            Assert.AreEqual(11f, (float)v1.numpy());
+            Assert.AreEqual(v1.numpy(), 11f);
         }
 
         [TestMethod]
@@ -71,6 +72,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 { 4, 5, 6 },
                 { 7, 8, 9 }
             };
+
             var x = tf.Variable(nd);
 
             // get slice form variable
@@ -93,7 +95,8 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.AreEqual(nd[2], x[2].numpy());
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
+        [ExpectedException(typeof(ArrayTypeMismatchException))]
         public void TypeMismatchedSliceAssign()
         {
             NDArray intNd = new int[]
@@ -105,12 +108,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 -5, 6, -7
             };
             var x = tf.Variable(doubleNd);
-
-            var slice = x[":"];
-            Assert.ThrowsException<System.Exception>(
-                // this statement exit without throwing any exception but the "test execution summary" seems not able to detect that.
-                () => slice.assign(intNd)
-            );
+            x[":"].assign(intNd);
         }
 
         [TestMethod]
@@ -120,7 +118,7 @@ namespace TensorFlowNET.UnitTest.Basics
             for (int i = 0; i < 5; i++)
                 x.assign(x + 1);
 
-            Assert.AreEqual(15, (int)x.numpy());
+            Assert.AreEqual(x.numpy(), 15);
         }
 
         [TestMethod]
@@ -138,8 +136,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var a = tf.Variable(5);
             var a_identity = tf.identity(a);
             a.assign_add(1);
-            Assert.AreEqual(5, (int)a_identity.numpy());
-            Assert.AreEqual(6, (int)a.numpy());
+            Assert.AreEqual(a_identity.numpy(), 5);
+            Assert.AreEqual(a.numpy(), 6);
         }
     }
 }

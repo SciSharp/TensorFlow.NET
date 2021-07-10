@@ -29,7 +29,7 @@ namespace Tensorflow
         public Action<int, int> Constant2x3
             => (epoch, iterate) =>
             {
-                var nd = np.arange(1000).reshape(10, 100);
+                var nd = np.arange(1000).reshape((10, 100));
                 var tensor = tf.constant(nd);
                 var data = tensor.numpy();
             };
@@ -51,14 +51,14 @@ namespace Tensorflow
         public Action<int, int> Variable
             => (epoch, iterate) =>
             {
-                var nd = np.arange(1 * 256 * 256 * 3).reshape(1, 256, 256, 3);
+                var nd = np.arange(1 * 256 * 256 * 3).reshape((1, 256, 256, 3));
                 ResourceVariable variable = tf.Variable(nd);
             };
 
         public Action<int, int> VariableRead
             => (epoch, iterate) =>
             {
-                var nd = np.zeros(1 * 256 * 256 * 3).astype(np.float32).reshape(1, 256, 256, 3);
+                var nd = np.zeros(1 * 256 * 256 * 3).astype(np.float32).reshape((1, 256, 256, 3));
                 ResourceVariable variable = tf.Variable(nd);
 
                 for (int i = 0; i< 10; i++)

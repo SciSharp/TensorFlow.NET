@@ -94,7 +94,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
         [TestMethod]
         public void Tensor()
         {
-            var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape(2, 3);
+            var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape((2, 3));
 
             var tensor = new Tensor(nd);
             var array = tensor.ToArray<float>();

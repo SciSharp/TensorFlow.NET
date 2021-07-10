@@ -17,7 +17,7 @@ namespace Tensorflow
 
             NumOfExamples = (int)images.dims[0];
 
-            images = images.reshape(images.dims[0], images.dims[1] * images.dims[2]);
+            images = images.reshape((images.dims[0], images.dims[1] * images.dims[2]));
             images = images.astype(dataType);
             // for debug np.multiply performance
             var sw = new Stopwatch();

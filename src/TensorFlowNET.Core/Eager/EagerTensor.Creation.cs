@@ -24,6 +24,9 @@ namespace Tensorflow.Eager
             NewEagerTensorHandle(_handle);
         }
 
+        internal unsafe EagerTensor(string value) : base(value)
+            => NewEagerTensorHandle(_handle);
+
         internal unsafe EagerTensor(Array array, Shape shape) : base(array, shape)
             => NewEagerTensorHandle(_handle);
 

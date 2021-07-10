@@ -1,4 +1,4 @@
-﻿using Tensorflow.NumPy;
+﻿using System;
 
 namespace Tensorflow
 {
@@ -12,6 +12,9 @@ namespace Tensorflow
 
         public ResourceVariable assign(Tensor tensor)
         {
+            if (tensor.dtype != dtype)
+                throw new ArrayTypeMismatchException("");
+
             if (OriginalVar != null)
             {
                 OriginalVar.StridedSliceAssign(tensor, OriginalVarSlice);

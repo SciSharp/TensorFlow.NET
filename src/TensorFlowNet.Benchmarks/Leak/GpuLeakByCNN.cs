@@ -24,7 +24,7 @@ namespace Tensorflow.Benchmark.Leak
 
             var bytes = new byte[num * width * height * 3];
             var inputImages = np.array(bytes) / 255.0f;
-            inputImages = inputImages.reshape(num, height, width, 3);
+            inputImages = inputImages.reshape((num, height, width, 3));
 
             bytes = new byte[num];
             var outLables = np.array(bytes);

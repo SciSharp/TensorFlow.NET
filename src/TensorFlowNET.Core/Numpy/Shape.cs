@@ -48,6 +48,8 @@ namespace Tensorflow
         public static implicit operator Shape((long, long, long, long) dims)
             => new Shape(dims.Item1, dims.Item2, dims.Item3, dims.Item4);
 
+        public bool IsEmpty => size == 0;
+
         public bool IsScalar => ndim == 0;
 
         public static Shape Scalar
@@ -72,8 +74,6 @@ namespace Tensorflow
                 return (ulong)computed;
             }
         }
-
-        public bool IsEmpty => throw new NotImplementedException("");
 
         public override bool Equals(object obj)
         {

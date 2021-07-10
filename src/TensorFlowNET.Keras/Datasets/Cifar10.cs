@@ -118,7 +118,7 @@ namespace Tensorflow.Keras.Datasets
             var value = new Span<byte>(pickle, start_pos, value_length).ToArray();
             start_pos += value_length;
 
-            return (key, np.array(value).reshape(10000, 3, 32, 32));
+            return (key, np.array(value).reshape((10000, 3, 32, 32)));
         }
 
         string Download()

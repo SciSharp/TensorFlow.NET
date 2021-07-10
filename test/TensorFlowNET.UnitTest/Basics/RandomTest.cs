@@ -17,7 +17,7 @@ namespace TensorFlowNET.UnitTest.Basics
         [TestMethod]
         public void TFRandomSeedTest()
         {
-            var initValue = np.arange(6).reshape(3, 2);
+            var initValue = np.arange(6).reshape((3, 2));
             tf.set_random_seed(1234);
             var a1 = tf.random_uniform(1);
             var b1 = tf.random_shuffle(tf.constant(initValue));
@@ -40,7 +40,7 @@ namespace TensorFlowNET.UnitTest.Basics
         [TestMethod, Ignore]
         public void TFRandomSeedTest2()
         {
-            var initValue = np.arange(6).reshape(3, 2);
+            var initValue = np.arange(6).reshape((3, 2));
             tf.set_random_seed(1234);
             var a1 = tf.random_uniform(1, seed:1234);
             var b1 = tf.random_shuffle(tf.constant(initValue), seed: 1234);

@@ -165,7 +165,7 @@ namespace Tensorflow
                 case TensorShape val:
                     return new EagerTensor(val.dims, ctx.DeviceName);
                 case string val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(val);
                 case string[] val:
                     return new EagerTensor(val, ctx.DeviceName);
                 case bool val:

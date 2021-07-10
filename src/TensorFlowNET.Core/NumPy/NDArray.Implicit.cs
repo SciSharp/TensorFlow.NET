@@ -18,6 +18,9 @@ namespace Tensorflow.NumPy
         public static implicit operator int(NDArray nd)
             => nd._tensor.ToArray<int>()[0];
 
+        public static implicit operator float(NDArray nd)
+            => nd._tensor.ToArray<float>()[0];
+
         public static implicit operator double(NDArray nd)
             => nd._tensor.ToArray<double>()[0];
 

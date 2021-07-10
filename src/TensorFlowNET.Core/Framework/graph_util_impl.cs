@@ -135,8 +135,9 @@ namespace Tensorflow
             output_node.Attr["dtype"] = dtype;
             output_node.Attr["value"] = new AttrValue()
             {
-                Tensor = tensor_util.make_tensor_proto(
-                data, dtype: dtype.Type.as_tf_dtype(), shape: data_shape)
+                Tensor = tensor_util.make_tensor_proto(data, 
+                    dtype: dtype.Type.as_tf_dtype(), 
+                    shape: data_shape)
             };
 
             return output_node;

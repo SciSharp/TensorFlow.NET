@@ -18,8 +18,8 @@ namespace TensorFlowNET.UnitTest
         {
             lock (this)
             {
-                var a = constant_op.constant(np.array(3.0).reshape(1, 1));
-                var b = constant_op.constant(np.array(2.0).reshape(1, 1));
+                var a = constant_op.constant(np.array(3.0).reshape((1, 1)));
+                var b = constant_op.constant(np.array(2.0).reshape((1, 1)));
                 var c = math_ops.matmul(a, b, name: "matmul");
                 using (var sess = tf.Session())
                 {

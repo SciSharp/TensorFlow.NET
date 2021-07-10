@@ -124,7 +124,7 @@ namespace Tensorflow
                 bytestream.Read(buf, 0, buf.Length);
 
                 var data = np.frombuffer(buf, np.@byte);
-                data = data.reshape(num_images, rows, cols, 1);
+                data = data.reshape((num_images, rows, cols, 1));
 
                 return data;
             }
