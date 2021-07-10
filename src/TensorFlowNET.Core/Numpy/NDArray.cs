@@ -41,7 +41,6 @@ namespace Tensorflow.NumPy
         public NDArray reshape(Shape newshape) => new NDArray(_tensor, newshape);
         public NDArray astype(Type type) => throw new NotImplementedException("");
         public NDArray astype(TF_DataType type) => throw new NotImplementedException("");
-        public bool array_equal(NDArray rhs) => throw new NotImplementedException("");
         public NDArray ravel() => throw new NotImplementedException("");
         public void shuffle(NDArray nd) => throw new NotImplementedException("");
         public Array ToMuliDimArray<T>() => throw new NotImplementedException("");

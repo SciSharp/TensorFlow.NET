@@ -74,7 +74,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(b);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
         }
 
@@ -88,7 +88,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(b);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
         }
 
@@ -102,7 +102,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(b);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
 
             b = tf.cumsum(a, exclusive: true);
@@ -111,7 +111,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(b);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
 
             b = tf.cumsum(a, reverse: true);
@@ -120,7 +120,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(b);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
 
             b = tf.cumsum(a, exclusive: true, reverse: true);
@@ -129,7 +129,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(b);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
         }
 
@@ -145,7 +145,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(d);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
 
             d = tf.cast(tf.logical_not(b), tf.int32);
@@ -154,7 +154,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(d);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
 
             d = tf.cast(tf.logical_or(b, c), tf.int32);
@@ -163,7 +163,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(d);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
 
             d = tf.cast(tf.logical_xor(b, c), tf.int32);
@@ -172,7 +172,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(d);
-                Assert.IsTrue(o.array_equal(check));
+                Assert.IsTrue(np.array_equal(o, check));
             }
         }
 
@@ -311,7 +311,7 @@ namespace TensorFlowNET.UnitTest.Basics
             }
 
             // Testing `operator +(Tensor x, double y)
-            c = tf.reduce_sum(tf.reduce_sum(a + secondFloatVal, 1));
+            c = tf.reduce_sum(tf.reduce_sum(a + secondDoubleVal, 1));
             using (var sess = tf.Session())
             {
                 var o = sess.run(c,
@@ -320,7 +320,7 @@ namespace TensorFlowNET.UnitTest.Basics
             }
 
             // Testing `operator +(double x, Tensor y)
-            c = tf.reduce_sum(tf.reduce_sum(secondFloatVal + a, 1));
+            c = tf.reduce_sum(tf.reduce_sum(secondDoubleVal + a, 1));
             using (var sess = tf.Session())
             {
                 var o = sess.run(c,
@@ -486,7 +486,7 @@ namespace TensorFlowNET.UnitTest.Basics
             }
 
             // Testing `operator -(Tensor x, double y)
-            c = tf.reduce_sum(tf.reduce_sum(a - secondFloatVal, 1));
+            c = tf.reduce_sum(tf.reduce_sum(a - secondDoubleVal, 1));
             using (var sess = tf.Session())
             {
                 var o = sess.run(c,
@@ -495,7 +495,7 @@ namespace TensorFlowNET.UnitTest.Basics
             }
 
             // Testing `operator -(double x, Tensor y)
-            c = tf.reduce_sum(tf.reduce_sum(secondFloatVal - a, 1));
+            c = tf.reduce_sum(tf.reduce_sum(secondDoubleVal - a, 1));
             using (var sess = tf.Session())
             {
                 var o = sess.run(c,
@@ -707,7 +707,7 @@ namespace TensorFlowNET.UnitTest.Basics
             }
 
             // Testing `operator *(Tensor x, double y)
-            c = tf.reduce_sum(tf.reduce_sum(a * secondFloatVal, 1));
+            c = tf.reduce_sum(tf.reduce_sum(a * secondDoubleVal, 1));
             using (var sess = tf.Session())
             {
                 var o = sess.run(c,
@@ -716,7 +716,7 @@ namespace TensorFlowNET.UnitTest.Basics
             }
 
             // Testing `operator *(double x, Tensor y)
-            c = tf.reduce_sum(tf.reduce_sum(firstFloatVal * b, 1));
+            c = tf.reduce_sum(tf.reduce_sum(firstDoubleVal * b, 1));
             using (var sess = tf.Session())
             {
                 var o = sess.run(c,

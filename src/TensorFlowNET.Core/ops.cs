@@ -20,7 +20,6 @@ using Tensorflow.NumPy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using Tensorflow.Contexts;
 using Tensorflow.Eager;
@@ -126,12 +125,9 @@ namespace Tensorflow
 
             if (value is EagerTensor eager_tensor)
             {
-                if (dtype == TF_DataType.DtInvalid)
-                    dtype = eager_tensor.dtype;
-
                 if (tf.executing_eagerly())
                 {
-                    if (dtype != eager_tensor.dtype)
+                    if (dtype != TF_DataType.DtInvalid && dtype != eager_tensor.dtype)
                         return gen_math_ops.cast(eager_tensor, dtype.as_base_dtype(), name: name);
                     return eager_tensor;
                 }
@@ -146,6 +142,7 @@ namespace Tensorflow
             else if (value is NDArray nd)
                 return nd;
 
+            // graph mode
             Tensor ret = value switch
             {
                 NDArray nd => constant_op.constant(nd, dtype: dtype, name: name),
@@ -164,6 +161,10 @@ namespace Tensorflow
                 IEnumerable<object> objects => array_ops._autopacking_conversion_function(objects, dtype: dtype, name: name),
                 _ => constant_op.constant(value, dtype: dtype, name: name)
             };
+
+            var original_dtype = value.GetDataType();
+            if (dtype != TF_DataType.DtInvalid && dtype != original_dtype)
+                ret = gen_math_ops.cast(ret, dtype.as_base_dtype(), name: name);
 
             return ret;
         }

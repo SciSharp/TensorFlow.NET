@@ -210,7 +210,7 @@ namespace Tensorflow
                 => image_ops_impl.non_max_suppression_padded(boxes, scores, max_output_size, iou_threshold, score_threshold, pad_to_max_output_size,
                     name, sorted_input, canonicalized_coordinates, tile_size);
 
-            public Tensor resize(Tensor image, TensorShape size, string method = ResizeMethod.BILINEAR)
+            public Tensor resize(Tensor image, Shape size, string method = ResizeMethod.BILINEAR)
                 => image_ops_impl.resize_images_v2(image, size, method: method);
 
             public Tensor resize(Tensor image, Tensor size, string method = ResizeMethod.BILINEAR)

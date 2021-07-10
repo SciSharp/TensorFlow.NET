@@ -206,7 +206,7 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void SessionRun_InsideSession()
         {
-            MultiThreadedUnitTestExecuter.Run(8, Core);
+            MultiThreadedUnitTestExecuter.Run(1, Core);
 
             //the core method
             void Core(int tid)
@@ -220,7 +220,7 @@ namespace TensorFlowNET.UnitTest
                     var math = a1 + a2;
 
                     var result = sess.run(math);
-                    result[0].GetAtIndex<float>(0).Should().Be(5);
+                    result.GetAtIndex<float>(0).Should().Be(5);
                 }
             }
         }

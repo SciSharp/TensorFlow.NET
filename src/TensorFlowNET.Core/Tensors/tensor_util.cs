@@ -181,7 +181,10 @@ namespace Tensorflow
 
             if (tensor.GetType() == typeof(EagerTensor))
             {
-                return new TensorShape(tensor.numpy().ToArray<int>());
+                if(tensor.dtype == TF_DataType.TF_INT64)
+                    return new TensorShape(tensor.ToArray<long>());
+                else
+                    return new TensorShape(tensor.ToArray<int>());
             }
 
             if (tensor.TensorShape.ndim == 0)

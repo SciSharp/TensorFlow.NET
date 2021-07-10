@@ -2229,7 +2229,9 @@ new_height, new_width");
 
                 throw new NotImplementedException("resize_images_v2");
             };
-            return _resize_images_common(images, resize_fn, ops.convert_to_tensor(size),
+
+            var size_tensor = ops.convert_to_tensor(size, dtype: tf.int32);
+            return _resize_images_common(images, resize_fn, size_tensor,
                 preserve_aspect_ratio: preserve_aspect_ratio,
                 skip_resize_if_same: false,
                 name: name);

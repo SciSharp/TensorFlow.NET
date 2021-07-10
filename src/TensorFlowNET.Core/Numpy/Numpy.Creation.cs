@@ -10,11 +10,11 @@ namespace Tensorflow.NumPy
     public partial class np
     {
         public static NDArray array(Array data)
-            => new NDArray(tf.constant(data));
+            => new NDArray(data);
 
         public static NDArray array<T>(params T[] data)
             where T : unmanaged
-            => new NDArray(tf.constant(data));
+            => new NDArray(data);
 
         public static NDArray arange<T>(T end)
             where T : unmanaged

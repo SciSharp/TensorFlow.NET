@@ -51,7 +51,7 @@ namespace Tensorflow.NumPy
         public static double infinity => double.PositiveInfinity;
 
         public static bool array_equal(NDArray a, NDArray b)
-            => throw new NotImplementedException("");
+            => a.Equals(b);
 
         public static NDArray concatenate(NDArray[] arrays, int axis = 0) 
             => throw new NotImplementedException("");

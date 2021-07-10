@@ -521,24 +521,16 @@ namespace Tensorflow
             }
         }
 
-        public static unsafe byte[] ToByteArray(Array array)
+        public static TF_DataType GetDataType(this object data)
         {
-            /*var size = array.GetShape().size;
-            byte[]? bytes = null;
-            switch (array)
+            var type = data.GetType();
+            switch (data)
             {
-                case float[] arr:
-                    var len = new byte[size * sizeof(float)];
-                    fixed (void* addr = &arr[0])
-                        System.Buffer.MemoryCopy(addr, dst, bytesize, bytesize);
-                    tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(array.ToArray());
-                    break;
+                case Shape shape:
+                    return TF_DataType.TF_INT64;
                 default:
-                    throw new NotImplementedException("");
+                    return type.as_tf_dtype();
             }
-
-            return bytes;*/
-            throw new NotImplementedException("");
         }
     }
 }
