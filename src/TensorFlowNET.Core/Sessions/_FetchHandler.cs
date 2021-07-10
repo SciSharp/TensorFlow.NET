@@ -70,73 +70,18 @@ namespace Tensorflow
                 if (is_op)
                 {
                     if (tensor_values.Length > 0)
-                    {
-                        switch (tensor_values[0].dtype)
-                        {
-                            case NumpyDType.Int32:
-                                full_values.Add(float.NaN);
-                                break;
-                            case NumpyDType.Single:
-                                full_values.Add(float.NaN);
-                                break;
-                            case NumpyDType.Double:
-                                full_values.Add(float.NaN);
-                                break;
-                            case NumpyDType.String:
-                                full_values.Add(float.NaN);
-                                break;
-                            case NumpyDType.Char:
-                                full_values.Add(float.NaN);
-                                break;
-                            case NumpyDType.Byte:
-                                full_values.Add(float.NaN);
-                                break;
-                            default:
-                                throw new NotImplementedException($"build_results tensor_values[0] {tensor_values[0].dtype}");
-                        }
-                    }
+                        full_values.Add(float.NaN);
                     else
-                    {
                         full_values.Add(null);
-                    }
                 }
                 else
                 {
                     var value = tensor_values[j];
                     j += 1;
                     if (value.ndim == 0)
-                    {
-                        switch (value.dtype)
-                        {
-                            case NumpyDType.Int16:
-                                full_values.Add(value.GetValue<short>(0));
-                                break;
-                            case NumpyDType.Int32:
-                                full_values.Add(value.GetValue<int>(0));
-                                break;
-                            case NumpyDType.Int64:
-                                full_values.Add(value.GetValue<long>(0));
-                                break;
-                            case NumpyDType.Single:
-                                full_values.Add(value.GetValue<float>(0));
-                                break;
-                            case NumpyDType.Double:
-                                full_values.Add(value.GetValue<double>(0));
-                                break;
-                            case NumpyDType.Boolean:
-                                full_values.Add(value.GetValue<bool>(0));
-                                break;
-                            /*case "String":
-                                full_values.Add(value.Data<byte>()[0]);
-                                break;*/
-                            default:
-                                throw new NotImplementedException($"build_results tensor_values[0] {tensor_values[0].dtype}");
-                        }
-                    }
+                        full_values.Add(value);
                     else
-                    {
                         full_values.Add(value[np.arange(0, (int)value.dims[0])]);
-                    }
                 }
                 i += 1;
             }

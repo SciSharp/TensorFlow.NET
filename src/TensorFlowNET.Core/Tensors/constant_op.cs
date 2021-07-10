@@ -74,6 +74,7 @@ namespace Tensorflow
                 }
             }
 
+            // graph mode
             Graph g = ops.get_default_graph();
             var tensor_value = new AttrValue();
             tensor_value.Tensor = tensor_util.make_tensor_proto(value,

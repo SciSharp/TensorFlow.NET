@@ -46,7 +46,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 var o = sess.run(c,
                     new FeedItem(a, 3.0f),
                     new FeedItem(b, 2.0f));
-                Assert.AreEqual((float)o, 5.0f);
+                Assert.AreEqual(o, 5.0f);
             }
         }
 
@@ -60,7 +60,7 @@ namespace TensorFlowNET.UnitTest.Basics
             using (var sess = tf.Session())
             {
                 var o = sess.run(c);
-                Assert.AreEqual((float)o, 9.0f);
+                Assert.AreEqual(o, 9.0f);
             }
         }
 

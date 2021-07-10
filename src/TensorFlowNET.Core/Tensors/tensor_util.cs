@@ -116,21 +116,43 @@ namespace Tensorflow
                 return tp;
 
             dtype = values.GetType().as_tf_dtype();
-            // We first convert value to a numpy array or scalar.
             var tensor_proto = new TensorProto
             {
                 Dtype = dtype.as_datatype_enum(),
-                // TensorShape = tensor_util.as_shape(shape.dims)
             };
 
-            /*if (is_same_size && _TENSOR_CONTENT_TYPES.Contains(numpy_dtype) && shape_size > 1)
+            // scalar
+            if (!values.GetType().IsArray)
             {
-                byte[] bytes = nparray.ToByteArray();
-                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes.ToArray());
+                tensor_proto.TensorShape = tensor_util.as_shape(new int[0]);
+
+                switch (values)
+                {
+                    case bool val:
+                        tensor_proto.BoolVal.AddRange(new[] { val });
+                        break;
+                    case int val:
+                        tensor_proto.IntVal.AddRange(new[] { val });
+                        break;
+                    case long val:
+                        tensor_proto.Int64Val.AddRange(new[] { val });
+                        break;
+                    case float val:
+                        tensor_proto.FloatVal.AddRange(new[] { val });
+                        break;
+                    case double val:
+                        tensor_proto.DoubleVal.AddRange(new[] { val });
+                        break;
+                    case string val:
+                        tensor_proto.StringVal.AddRange(val.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x.ToString())));
+                        break;
+                    default:
+                        throw new Exception("make_tensor_proto Not Implemented");
+                }
+
                 return tensor_proto;
             }
-
-            if (numpy_dtype == TF_DataType.TF_STRING && !(values is NDArray))
+            else if (dtype == TF_DataType.TF_STRING && !(values is NDArray))
             {
                 if (values is string str)
                 {
@@ -144,33 +166,18 @@ namespace Tensorflow
 
                 return tensor_proto;
             }
-
-            var proto_values = nparray.ravel();*/
-            
-            switch (values)
+            else
             {
-                case float val:
-                    tensor_proto.TensorShape = tensor_util.as_shape(new int[0]);
-                    tensor_proto.FloatVal.AddRange(new[] { val });
-                    break;
-                /*case "Bool":
-                case "Boolean":
-                    tensor_proto.BoolVal.AddRange(proto_values.Data<bool>());
-                    break;
-                case "Int32":
-                    tensor_proto.IntVal.AddRange(proto_values.Data<int>());
-                    break;
-                case "Int64":
-                    tensor_proto.Int64Val.AddRange(proto_values.Data<long>());
-                    break;
-                case "Double":
-                    tensor_proto.DoubleVal.AddRange(proto_values.Data<double>());
-                    break;
-                case "String":
-                    tensor_proto.StringVal.AddRange(proto_values.Data<string>().Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x.ToString())));
-                    break;*/
-                default:
-                    throw new Exception("make_tensor_proto Not Implemented");
+                tensor_proto.TensorShape = tensor_util.as_shape(shape);
+
+                // array
+                if (_TENSOR_CONTENT_TYPES.Contains(dtype))
+                {
+                    throw new NotImplementedException("");
+                    /*byte[] bytes = nparray.ToByteArray();
+                    tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes.ToArray());
+                    return tensor_proto;*/
+                }
             }
 
             return tensor_proto;
