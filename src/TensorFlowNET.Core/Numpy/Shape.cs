@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Tensorflow.NumPy
+namespace Tensorflow
 {
     public class Shape
     {
         public int ndim => _dims.Length;
         long[] _dims;
         public long[] dims => _dims;
+
+        public Shape() 
+        {
+        }
+
+        public Shape(params int[] dims)
+            => _dims = dims.Select(x => Convert.ToInt64(x)).ToArray();
 
         public Shape(params long[] dims)
             => _dims = dims;
@@ -21,14 +28,27 @@ namespace Tensorflow.NumPy
             => new Shape(dims);
 
         public static implicit operator Shape(int[] dims)
-            => new Shape(dims.Select(x => Convert.ToInt64(x)).ToArray());
+            => new Shape(dims);
+
+        public static implicit operator Shape((int, int) dims)
+            => new Shape(dims.Item1, dims.Item2);
 
         public static implicit operator Shape((long, long) dims)
             => new Shape(dims.Item1, dims.Item2);
 
-        public bool IsSliced => throw new NotImplementedException("");
-        public bool IsScalar => throw new NotImplementedException("");
-        public bool IsBroadcasted => throw new NotImplementedException("");
+        public static implicit operator Shape((int, int, int) dims)
+            => new Shape(dims.Item1, dims.Item2, dims.Item3);
+
+        public static implicit operator Shape((long, long, long) dims)
+            => new Shape(dims.Item1, dims.Item2, dims.Item3);
+
+        public static implicit operator Shape((int, int, int, int) dims)
+            => new Shape(dims.Item1, dims.Item2, dims.Item3, dims.Item4);
+
+        public static implicit operator Shape((long, long, long, long) dims)
+            => new Shape(dims.Item1, dims.Item2, dims.Item3, dims.Item4);
+
+        public bool IsScalar => ndim == 0;
 
         public static Shape Scalar
             => new Shape(new long[0]);
@@ -54,6 +74,18 @@ namespace Tensorflow.NumPy
         }
 
         public bool IsEmpty => throw new NotImplementedException("");
+
+        public override bool Equals(object obj)
+        {
+            if(obj is Shape shape)
+            {
+                if (shape.ndim != ndim)
+                    return false;
+                if (Enumerable.SequenceEqual(dims, shape.dims))
+                    return true;
+            }
+            return base.Equals(obj);
+        }
 
         public override string ToString()
         {

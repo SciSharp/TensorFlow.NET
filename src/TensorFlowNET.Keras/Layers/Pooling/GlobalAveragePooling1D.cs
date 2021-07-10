@@ -15,9 +15,9 @@ namespace Tensorflow.Keras.Layers
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
             if (data_format == "channels_last")
-                return math_ops.reduce_mean(inputs, new int[] { 1 }, false);
+                return math_ops.reduce_mean(inputs, 1, false);
             else
-                return math_ops.reduce_mean(inputs, new int[] { 2 }, false);
+                return math_ops.reduce_mean(inputs, 2, false);
         }
     }
 }

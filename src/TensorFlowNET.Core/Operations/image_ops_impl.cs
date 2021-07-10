@@ -968,9 +968,9 @@ new_height, new_width");
                  var num_pixels_ = array_ops.shape(image).dims;
                  num_pixels_ = num_pixels_.Skip(num_pixels_.Length - 3).Take(num_pixels_.Length - (num_pixels_.Length - 3)).ToArray();
                  Tensor num_pixels = math_ops.reduce_prod(new Tensor(num_pixels_));
-                 Tensor image_mean = math_ops.reduce_mean(image, axis: new int[] { -1, -2, -3 }, keepdims: true);
+                 Tensor image_mean = math_ops.reduce_mean(image, axis: new(-1, -2, -3), keepdims: true);
 
-                 var stddev = math_ops.reduce_std(image, axis: new int[] { -1, -2, -3 }, keepdims: true);
+                 var stddev = math_ops.reduce_std(image, axis: new(-1, -2, -3), keepdims: true);
                  var min_stddev = math_ops.rsqrt(math_ops.cast(num_pixels, image.dtype));
                  var adjusted_stddev = math_ops.maximum(stddev, min_stddev);
 
@@ -1408,7 +1408,7 @@ new_height, new_width");
                  max_val = convert_image_dtype(max_val, dtypes.float32);
                  a = convert_image_dtype(a, dtypes.float32);
                  b = convert_image_dtype(b, dtypes.float32);
-                 Tensor mse = math_ops.reduce_mean(gen_math_ops.squared_difference(a, b), new int[] { -3, -2, -1 });
+                 Tensor mse = math_ops.reduce_mean(gen_math_ops.squared_difference(a, b), new(-3, -2, -1));
                  var psnr_val = math_ops.subtract(
                      (20 * math_ops.log(max_val)) / math_ops.log(ops.convert_to_tensor(10.0)),
                      math_ops.cast(10 / math_ops.log(ops.convert_to_tensor(10)), dtypes.float32) * math_ops.log(mse),
@@ -1503,8 +1503,8 @@ new_height, new_width");
             (Tensor luminance, Tensor cs) = _ssim_helper(img1, img2, reducer, max_val, compensation, k1, k2);
 
             var axes = constant_op.constant(new[] { -3, -2 }, dtype: dtypes.int32);
-            var ssim_val = math_ops.reduce_mean(luminance * cs, axes.dims);
-            cs = math_ops.reduce_mean(cs, axes.dims);
+            var ssim_val = math_ops.reduce_mean(luminance * cs, new(axes.dims));
+            cs = math_ops.reduce_mean(cs, new(axes.dims));
             return (ssim_val, cs);
         }
 
@@ -1527,7 +1527,7 @@ new_height, new_width");
                  (Tensor ssim_per_channel, Tensor ___) = _ssim_per_channel(img1, img2, max_val, filter_size,
                                                                              filter_sigma, k1, k2);
 
-                 return math_ops.reduce_mean(ssim_per_channel, new int[] { -1 });
+                 return math_ops.reduce_mean(ssim_per_channel, new(-1));
              });
         }
 
@@ -1645,9 +1645,9 @@ new_height, new_width");
                  var mcs_and_ssim = array_ops.stack(
                      math_ops.add(mcs, new[] { gen_nn_ops.relu(ssim_per_channel) }), axis: -1);
                  var ms_ssim = math_ops.reduce_prod(
-                     math_ops.pow(mcs_and_ssim, power_factors), new int[] { -1 });
+                     math_ops.pow(mcs_and_ssim, power_factors), new(-1));
 
-                 return math_ops.reduce_mean(ms_ssim, new int[] { -1 });
+                 return math_ops.reduce_mean(ms_ssim, new(-1));
              });
         }
 
@@ -1830,7 +1830,7 @@ new_height, new_width");
                 new object[] { batch_size, tile_size, 4 });
             var iou = _bbox_overlap(new_slice, box_slice);
             var box_slice_after_suppression = array_ops.expand_dims(
-                math_ops.cast(math_ops.reduce_all(iou < iou_threshold, new int[] { 1 }),
+                math_ops.cast(math_ops.reduce_all(iou < iou_threshold, new(1)),
                                 box_slice.dtype),
                 2) * box_slice;
             return (boxes, box_slice_after_suppression, iou_threshold, inner_idx + 1);
@@ -1913,7 +1913,7 @@ new_height, new_width");
 
                 output_size = output_size + math_ops.reduce_sum(
                     math_ops.cast(
-                        math_ops.reduce_any(box_slice > 0, new int[] { 2 }), dtypes.int32), new int[] { 1 });
+                        math_ops.reduce_any(box_slice > 0, new(2)), dtypes.int32), new int[] { 1 });
             }
             return (boxes, iou_threshold, output_size, idx + 1);
         }
@@ -2074,7 +2074,7 @@ new_height, new_width");
 
             (Tensor values, Tensor indices) = gen_ops.top_k_v2(
                                                 math_ops.cast(math_ops.reduce_any(
-                                                    (Tensor)selboxes__output_size_[0] > 0, new int[] { 2 }), dtypes.int32) *
+                                                    (Tensor)selboxes__output_size_[0] > 0, new(2)), dtypes.int32) *
                                                 array_ops.expand_dims(
                                                     math_ops.range(num_boxes_after_padding, 0, -1), 0),
                                                 max_output_size);

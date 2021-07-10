@@ -89,7 +89,7 @@ namespace Tensorflow
                 => gen_nn_ops.elu(features, name: name);
 
             public (Tensor, Tensor) moments(Tensor x,
-                int[] axes,
+                Axis axes,
                 string name = null,
                 bool keep_dims = false) => nn_impl.moments(x,
                     axes,

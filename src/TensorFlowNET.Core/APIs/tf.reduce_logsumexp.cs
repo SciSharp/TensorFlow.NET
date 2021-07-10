@@ -19,7 +19,7 @@ namespace Tensorflow
     public partial class tensorflow
     {
         public Tensor reduce_logsumexp(Tensor input_tensor,
-                int[] axis = null,
+                Axis? axis = null,
                 bool keepdims = false,
                 string name = null) => math_ops.reduce_logsumexp(input_tensor, axis, keepdims, name);
 

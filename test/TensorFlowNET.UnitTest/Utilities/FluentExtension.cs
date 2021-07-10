@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Tensorflow;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -108,40 +109,15 @@ namespace TensorFlowNET.UnitTest
             return new AndConstraint<ShapeAssertions>(this);
         }
 
-        public AndConstraint<ShapeAssertions> BeSliced()
-        {
-            Subject.IsSliced.Should().BeTrue();
-            return new AndConstraint<ShapeAssertions>(this);
-        }
-
         public AndConstraint<ShapeAssertions> BeScalar()
         {
             Subject.IsScalar.Should().BeTrue();
             return new AndConstraint<ShapeAssertions>(this);
         }
 
-        public AndConstraint<ShapeAssertions> BeBroadcasted()
-        {
-            Subject.IsBroadcasted.Should().BeTrue();
-            return new AndConstraint<ShapeAssertions>(this);
-        }
-
-
-        public AndConstraint<ShapeAssertions> NotBeSliced()
-        {
-            Subject.IsSliced.Should().BeFalse();
-            return new AndConstraint<ShapeAssertions>(this);
-        }
-
         public AndConstraint<ShapeAssertions> NotBeScalar()
         {
             Subject.IsScalar.Should().BeFalse();
-            return new AndConstraint<ShapeAssertions>(this);
-        }
-
-        public AndConstraint<ShapeAssertions> NotBeBroadcasted()
-        {
-            Subject.IsBroadcasted.Should().BeFalse();
             return new AndConstraint<ShapeAssertions>(this);
         }
 
@@ -215,24 +191,6 @@ namespace TensorFlowNET.UnitTest
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
-        public AndConstraint<NDArrayAssertions> BeBroadcasted()
-        {
-            Subject.shape.IsBroadcasted.Should().BeTrue();
-            return new AndConstraint<NDArrayAssertions>(this);
-        }
-
-        public AndConstraint<NDArrayAssertions> NotBeBroadcasted()
-        {
-            Subject.shape.IsBroadcasted.Should().BeFalse();
-            return new AndConstraint<NDArrayAssertions>(this);
-        }
-
-        public AndConstraint<NDArrayAssertions> BeSliced()
-        {
-            Subject.shape.IsSliced.Should().BeTrue();
-            return new AndConstraint<NDArrayAssertions>(this);
-        }
-
         public AndConstraint<NDArrayAssertions> BeScalar()
         {
             Subject.shape.IsScalar.Should().BeTrue();
@@ -261,12 +219,6 @@ namespace TensorFlowNET.UnitTest
         public AndConstraint<NDArrayAssertions> BeOfType<T>()
         {
             Subject.dtype.Should().Be(InfoOf<T>.NPTypeCode);
-            return new AndConstraint<NDArrayAssertions>(this);
-        }
-
-        public AndConstraint<NDArrayAssertions> NotBeSliced()
-        {
-            Subject.shape.IsSliced.Should().BeFalse();
             return new AndConstraint<NDArrayAssertions>(this);
         }
 

@@ -142,7 +142,7 @@ namespace Tensorflow.Keras
         {
             if (x.dtype.as_base_dtype() == TF_DataType.TF_BOOL)
                 x = math_ops.cast(x, TF_DataType.TF_FLOAT);
-            return math_ops.reduce_mean(x, axis: new[] { axis }, keepdims: false);
+            return math_ops.reduce_mean(x, axis: axis, keepdims: false);
         }
 
         public GraphLearningPhase learning_phase()

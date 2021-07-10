@@ -79,7 +79,7 @@ namespace Tensorflow
         /// <param name="keep_dims"> Produce moments with the same dimensionality as the input.</param>
         /// <returns> Two `Tensor` objects: `mean` and `variance`.</returns>
         public static (Tensor, Tensor) moments(Tensor x,
-            int[] axes,
+            Axis axes,
             string name = null,
             bool keep_dims = false)
         {

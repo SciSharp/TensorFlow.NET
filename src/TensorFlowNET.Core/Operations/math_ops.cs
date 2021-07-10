@@ -305,20 +305,12 @@ namespace Tensorflow
         /// dimensions.Must be in the range `[-rank(input_tensor), rank(input_tensor))`.</param>
         /// <param name="keepdims"> If true, retains reduced dimensions with length 1.</param>
         /// <param name="name"> A name for the operation (optional).</param>
-        public static Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
+        public static Tensor reduce_mean(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             var axis_tensor = axis == null ? r : ops.convert_to_tensor(axis);
             var m = gen_math_ops.mean(input_tensor, axis_tensor, keepdims, name);
             return _may_reduce_to_scalar(keepdims, axis_tensor, m);
-        }
-
-        public static Tensor reduce_mean(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
-        {
-            var r = _ReductionDims(input_tensors, axis);
-            var axis_tensor = axis == null ? r : ops.convert_to_tensor(axis.Value);
-            var m = gen_math_ops.mean(input_tensors, axis_tensor, keepdims, name);
-            return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
         /// <summary>
@@ -329,7 +321,7 @@ namespace Tensorflow
         /// <param name="keepdims"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor reduce_prod(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_prod(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             if (axis == null)
@@ -344,7 +336,7 @@ namespace Tensorflow
             }
         }
 
-        public static Tensor reduce_std(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_std(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
         {
             if (name == null)
                 name = "reduce_std";
@@ -357,7 +349,7 @@ namespace Tensorflow
              });
         }
 
-        public static Tensor reduce_variance(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_variance(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
         {
             if (name == null)
                 name = "reduce_variance";
@@ -513,7 +505,7 @@ namespace Tensorflow
         /// <param name="keepdims"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor reduce_all(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_all(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
         {
             var all = gen_math_ops._all(input_tensor,
                     _ReductionDims(input_tensor, axis),
@@ -545,7 +537,7 @@ namespace Tensorflow
         /// dimensions.Must be in the range `[-rank(input_tensor), rank(input_tensor))`.</param>
         /// <param name="keepdims"></param>
         /// <returns> The reduced tensor.</returns>
-        public static Tensor reduce_logsumexp(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_logsumexp(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
         {
             return tf_with(ops.name_scope(name, "ReduceLogSumExp", new { input_tensor }), scope =>
             {
@@ -565,7 +557,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor reduce_any(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_any(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             var max = (axis != null) ? gen_math_ops._any(input_tensor, axis, keepdims, name) :
@@ -573,7 +565,7 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
-        public static Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_max(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             var max = (axis != null) ? gen_math_ops._max(input_tensor, axis, keepdims, name) :
@@ -588,7 +580,7 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
-        public static Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_min(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             var min = gen_math_ops._min(input_tensor, r, keepdims, name);
@@ -711,7 +703,7 @@ namespace Tensorflow
             return range(0, array_ops.rank(x));
         }
 
-        private static Tensor _ReductionDims(Tensor x, int[] axis)
+        private static Tensor _ReductionDims(Tensor x, Axis? axis)
         {
             if (axis != null)
             {

@@ -467,11 +467,8 @@ namespace Tensorflow
         /// <param name="keepdims">If true, retains reduced dimensions with length 1.</param>
         /// <param name="name"></param>
         /// <returns>The reduced tensor.</returns>
-        public Tensor reduce_any(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public Tensor reduce_any(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_any(input_tensor, axis: axis, keepdims: keepdims, name: name);
-
-        public Tensor reduce_any(Tensor input_tensor, int axis = 0, bool keepdims = false, string name = null)
-            => math_ops.reduce_any(input_tensor, axis: new[] { axis }, keepdims: keepdims, name: name);
 
         /// <summary>
         /// Computes the "logical and" of elements across dimensions of a tensor.
@@ -481,7 +478,7 @@ namespace Tensorflow
         /// <param name="keepdims"></param>
         /// <param name="name"></param>
         /// <returns>The reduced tensor.</returns>
-        public Tensor reduce_all(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public Tensor reduce_all(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_all(input_tensor, axis: axis, keepdims: keepdims, name: name);
 
         /// <summary>
@@ -492,7 +489,7 @@ namespace Tensorflow
         /// <param name="keepdims"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor reduce_prod(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public Tensor reduce_prod(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_prod(input_tensor, axis: axis, keepdims: keepdims, name: name);
 
         /// <summary>
@@ -537,19 +534,16 @@ namespace Tensorflow
         /// <param name="keepdims"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor reduce_max(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public Tensor reduce_max(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_max(input_tensor, axis, keepdims, name);
 
-        public Tensor reduce_max(Tensor input_tensor, int axis, bool keepdims = false, string name = null)
-            => math_ops.reduce_max(input_tensor, axis, keepdims, name);
-
-        public Tensor reduce_min(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public Tensor reduce_min(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_min(input_tensor, axis, keepdims, name);
 
-        public Tensor reduce_std(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public Tensor reduce_std(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_std(input_tensor, axis, keepdims, name);
 
-        public Tensor reduce_variance(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null)
+        public Tensor reduce_variance(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
             => math_ops.reduce_variance(input_tensor, axis, keepdims, name);
 
         public Tensor sigmoid<T>(T x, string name = null)
@@ -558,14 +552,8 @@ namespace Tensorflow
         public Tensor sum(Tensor input, int axis, bool keep_dims = false, string name = null)
             => gen_math_ops._sum(input, axis, keep_dims: keep_dims, name: name);
 
-        public Tensor reduce_mean(Tensor input_tensors, int axis, bool keepdims = false, string name = null)
-            => math_ops.reduce_mean(input_tensors, axis: new[] { axis }, keepdims: keepdims, name: name);
-
-        public Tensor reduce_mean(Tensor input_tensor, int[] axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
+        public Tensor reduce_mean(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);
-
-        public Tensor reduce_mean(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
-            => math_ops.reduce_mean(input_tensors, axis: axis, keepdims: keepdims, name: name);
 
         public Tensor round(Tensor x, string name = null)
             => gen_math_ops.round(x, name: name);

@@ -156,6 +156,8 @@ namespace Tensorflow
                 Tensor[] tensors => array_ops._autopacking_helper(tensors, dtype, name == null ? "packed" : name),
                 RefVariable varVal => varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref),
                 ResourceVariable varVal => varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref),
+                Axis ts => constant_op.constant(ts.axis, dtype: dtype, name: name),
+                Shape ts => constant_op.constant(ts.dims, dtype: dtype, name: name),
                 TensorShape ts => constant_op.constant(ts.dims, dtype: dtype, name: name),
                 string str => constant_op.constant(str, dtype: tf.@string, name: name),
                 string[] str => constant_op.constant(str, dtype: tf.@string, name: name),
