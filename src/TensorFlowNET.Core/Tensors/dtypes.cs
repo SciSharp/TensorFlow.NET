@@ -182,6 +182,58 @@ namespace Tensorflow
             return dtype.Value;
         }
 
+        public static TF_DataType tf_dtype_from_name(string name)
+        {
+            TF_DataType dtype = TF_DataType.DtInvalid;
+            switch (name.ToLower())
+            {
+                case "char":
+                    dtype = TF_DataType.TF_UINT8;
+                    break;
+                case "boolean":
+                    dtype = TF_DataType.TF_BOOL;
+                    break;
+                case "sbyte":
+                    dtype = TF_DataType.TF_INT8;
+                    break;
+                case "byte":
+                    dtype = TF_DataType.TF_UINT8;
+                    break;
+                case "int16":
+                    dtype = TF_DataType.TF_INT16;
+                    break;
+                case "uint16":
+                    dtype = TF_DataType.TF_UINT16;
+                    break;
+                case "int32":
+                    dtype = TF_DataType.TF_INT32;
+                    break;
+                case "uint32":
+                    dtype = TF_DataType.TF_UINT32;
+                    break;
+                case "int64":
+                    dtype = TF_DataType.TF_INT64;
+                    break;
+                case "uint64":
+                    dtype = TF_DataType.TF_UINT64;
+                    break;
+                case "single":
+                    dtype = TF_DataType.TF_FLOAT;
+                    break;
+                case "double":
+                    dtype = TF_DataType.TF_DOUBLE;
+                    break;
+                case "complex":
+                    dtype = TF_DataType.TF_COMPLEX128;
+                    break;
+                case "string":
+                    dtype = TF_DataType.TF_STRING;
+                    break;
+            }
+
+            return dtype;
+        }
+
         public static DataType as_datatype_enum(this TF_DataType type)
         {
             return (DataType)type;

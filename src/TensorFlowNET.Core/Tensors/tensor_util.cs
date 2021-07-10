@@ -101,7 +101,7 @@ namespace Tensorflow
         /// <param name="verify_shape"></param>
         /// <param name="allow_broadcast"></param>
         /// <returns></returns>
-        public static TensorProto make_tensor_proto(object values, TF_DataType dtype = TF_DataType.DtInvalid, int[]? shape = null, bool verify_shape = false, bool allow_broadcast = false)
+        public static TensorProto make_tensor_proto(object values, TF_DataType dtype = TF_DataType.DtInvalid, Shape? shape = null, bool verify_shape = false, bool allow_broadcast = false)
         {
             if (allow_broadcast && verify_shape)
                 throw new ValueError("allow_broadcast and verify_shape are not both allowed.");
@@ -109,10 +109,11 @@ namespace Tensorflow
                 return tp;
 
             dtype = values.GetType().as_tf_dtype();
+            shape = shape ?? values.GetShape();
             var tensor_proto = new TensorProto
             {
                 Dtype = dtype.as_datatype_enum(),
-                TensorShape = values.GetShape().as_shape_proto()
+                TensorShape = shape.as_shape_proto()
             };
 
             // scalar
@@ -141,8 +142,6 @@ namespace Tensorflow
                     default:
                         throw new Exception("make_tensor_proto Not Implemented");
                 }
-
-                return tensor_proto;
             }
             else if (dtype == TF_DataType.TF_STRING && !(values is NDArray))
             {
@@ -154,15 +153,14 @@ namespace Tensorflow
                     tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
                 else if (values is byte[] byte_values)
                     tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(byte_values);
-
-                return tensor_proto;
             }
             else if(values is Array array)
             {
                 // array
-                /*byte[] bytes = array.ToByteArray();
-                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes.ToArray());
-                return tensor_proto;*/
+                var len = dtype.get_datatype_size() * (int)shape.size;
+                byte[] bytes = new byte[len];
+                System.Buffer.BlockCopy(array, 0, bytes, 0, len);
+                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
             }
 
             return tensor_proto;

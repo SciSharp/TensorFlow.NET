@@ -98,6 +98,7 @@ namespace Tensorflow
                 attrs: attrs,
                 name: name);
 
+            var o = op.outputs;
             return op.outputs[0];
         }
 

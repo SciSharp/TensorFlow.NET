@@ -104,8 +104,9 @@ namespace Tensorflow
             return c_api.TF_NewTensor(dataType, dims, num_dims, data, len, EmptyDeallocator, DeallocatorArgs.Empty);
         }
 
-        public static unsafe IntPtr TF_NewTensor(Shape shape, TF_DataType dtype, void* data, ulong length)
+        public static unsafe IntPtr TF_NewTensor(Shape shape, TF_DataType dtype, void* data)
         {
+            var length = shape.size * (ulong)dtype.get_datatype_size();
             var handle = TF_AllocateTensor(dtype, shape.dims, shape.ndim, length);
             var tensor = TF_TensorData(handle);
             System.Buffer.MemoryCopy(data, tensor.ToPointer(), length, length);

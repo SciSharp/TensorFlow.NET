@@ -64,6 +64,9 @@ namespace Tensorflow
 #endif
         }
 
+        unsafe internal Tensor(Shape shape, TF_DataType dtype)
+            => _handle = TF_NewTensor(shape, dtype, null);
+
         internal Tensor(Array array, Shape? shape = null)
             => InitTensor(array, shape);
 
@@ -71,41 +74,40 @@ namespace Tensorflow
         {
             shape = shape ?? array.GetShape();
             var dtype = array.GetType().GetElementType().as_tf_dtype();
-            var length = (ulong)(array.Length * dtype.get_datatype_size());
 
             switch (array)
             {
                 case bool[] val:
                     fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                        _handle = TF_NewTensor(shape, dtype, addr);
                     break;
                 case int[] val:
                     fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                        _handle = TF_NewTensor(shape, dtype, addr);
                     break;
                 case int[,] val:
                     fixed (void* addr = &val[0, 0])
-                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                        _handle = TF_NewTensor(shape, dtype, addr);
                     break;
                 case long[] val:
                     fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                        _handle = TF_NewTensor(shape, dtype, addr);
                     break;
                 case float[] val:
                     fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                        _handle = TF_NewTensor(shape, dtype, addr);
                     break;
                 case float[,] val:
                     fixed (void* addr = &val[0, 0])
-                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                        _handle = TF_NewTensor(shape, dtype, addr);
                     break;
                 case double[] val:
                     fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                        _handle = TF_NewTensor(shape, dtype, addr);
                     break;
                 case double[,] val:
                     fixed (void* addr = &val[0, 0])
-                        _handle = TF_NewTensor(shape, dtype, addr, length);
+                        _handle = TF_NewTensor(shape, dtype, addr);
                     break;
                 default:
                     throw new NotImplementedException("");
@@ -131,7 +133,7 @@ namespace Tensorflow
         }
 
         public unsafe Tensor(NDArray nd)
-            => _handle = TF_NewTensor(nd.shape, nd.dtype.as_tf_dtype(), nd.data.ToPointer(), nd.size * nd.dtypesize);
+            => _handle = TF_NewTensor(nd.shape, nd.dtype.as_tf_dtype(), nd.data.ToPointer());
 
         #region scala
         public Tensor(bool value) => _handle = TF_NewTensor(value);

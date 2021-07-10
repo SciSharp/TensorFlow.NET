@@ -17,63 +17,6 @@ namespace Tensorflow.NumPy
         public Shape shape => _tensor.shape;
         public IntPtr data => _tensor.TensorDataPointer;
 
-        public NDArray(bool value)
-        {
-            _tensor = ops.convert_to_tensor(value);
-        }
-
-        public NDArray(byte value)
-        {
-            _tensor = ops.convert_to_tensor(value);
-        }
-
-        public NDArray(int value)
-        {
-            _tensor = ops.convert_to_tensor(value);
-        }
-
-        public NDArray(float value)
-        {
-            _tensor = ops.convert_to_tensor(value);
-        }
-
-        public NDArray(double value)
-        {
-            _tensor = ops.convert_to_tensor(value);
-        }
-
-        public NDArray(Array value, Shape shape = null)
-        {
-            _tensor = ops.convert_to_tensor(value);
-        }
-
-        public NDArray(Type dtype, Shape shape)
-        {
-
-        }
-
-        public NDArray(Shape shape, NumpyDType dtype = NumpyDType.Float)
-        {
-            Initialize(shape, dtype: dtype);
-        }
-
-        public NDArray(Tensor value, Shape? shape = null)
-        {
-            if (shape is not null)
-                _tensor = tf.reshape(value, shape);
-            else
-                _tensor = value;
-        }
-
-        public static NDArray Scalar<T>(T value) where T : unmanaged
-        {
-            return value switch
-            {
-                bool b => new NDArray(b),
-                _ => throw new NotImplementedException("")
-            };
-        }
-
         public T GetValue<T>(int index) where T : unmanaged
             => _tensor.ToArray<T>()[index];
         public T GetAtIndex<T>(int index) where T : unmanaged

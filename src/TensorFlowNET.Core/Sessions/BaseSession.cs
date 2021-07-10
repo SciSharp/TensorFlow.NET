@@ -245,6 +245,31 @@ namespace Tensorflow
             return result;
         }
 
+        public unsafe Tensor eval(Tensor tensor)
+        {
+            var status = tf.Status;
+
+            var output_values = new IntPtr[1];
+            var fetch_list = new[] { tensor._as_tf_output() };
+
+            c_api.TF_SessionRun(_handle,
+                run_options: null,
+                inputs: new TF_Output[0],
+                input_values: new IntPtr[0],
+                ninputs: 0,
+                outputs: fetch_list,
+                output_values: output_values,
+                noutputs: 1,
+                target_opers: new IntPtr[0],
+                ntargets: 0,
+                run_metadata: IntPtr.Zero,
+                status: status.Handle);
+
+            status.Check(true);
+
+            return new Tensor(output_values[0]);
+        }
+
         private static unsafe NDArray fetchValue(IntPtr output)
         {
             var tensor = new Tensor(output);

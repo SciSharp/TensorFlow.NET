@@ -78,10 +78,7 @@ namespace Tensorflow
                 {
                     var value = tensor_values[j];
                     j += 1;
-                    if (value.ndim == 0)
-                        full_values.Add(value);
-                    else
-                        full_values.Add(value[np.arange(0, (int)value.dims[0])]);
+                    full_values.Add(value);
                 }
                 i += 1;
             }

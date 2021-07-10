@@ -11,7 +11,7 @@ namespace Tensorflow
         }
 
         public static implicit operator TensorShape(Shape shape) => new TensorShape((long[])shape.dims.Clone());
-        public static implicit operator Shape(TensorShape shape) => new Shape((long[])shape.dims.Clone());
+        public static implicit operator Shape(TensorShape shape) => shape == null ? null : new Shape((long[])shape.dims.Clone());
 
         public static implicit operator int[](TensorShape shape) => shape == null ? null : (int[])shape.dims.Clone(); //we clone to avoid any changes
         public static implicit operator TensorShape(int[] dims) => dims == null ? null : new TensorShape(dims);

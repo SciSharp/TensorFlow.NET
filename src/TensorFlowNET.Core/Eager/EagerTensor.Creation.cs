@@ -14,15 +14,41 @@ namespace Tensorflow.Eager
             Resolve();
         }
 
+        #region scalar eager tensor
+        public EagerTensor(bool value) : base(value)
+            => NewEagerTensorHandle(_handle);
+        public EagerTensor(byte value) : base(value)
+            => NewEagerTensorHandle(_handle);
+        public EagerTensor(sbyte value) : base(value)
+            => NewEagerTensorHandle(_handle);
+        public EagerTensor(short value) : base(value)
+            => NewEagerTensorHandle(_handle);
+        public EagerTensor(int value) : base(value)
+            => NewEagerTensorHandle(_handle);
+        public EagerTensor(uint value) : base(value)
+            => NewEagerTensorHandle(_handle);
+        public EagerTensor(long value) : base(value)
+            => NewEagerTensorHandle(_handle);
+        public EagerTensor(ulong value) : base(value)
+            => NewEagerTensorHandle(_handle);
+        public EagerTensor(float value) : base(value)
+            => NewEagerTensorHandle(_handle);
+        public EagerTensor(double value) : base(value)
+            => NewEagerTensorHandle(_handle); 
+        #endregion
+
         public EagerTensor(object value,string device_name, TF_DataType dtype = TF_DataType.TF_UINT8) : base((float[])value)
         {
             throw new NotImplementedException("");
         }
 
-        public EagerTensor(object value, Shape shape = null, string device_name = null, TF_DataType dtype = TF_DataType.TF_UINT8) : base((float[])value)
+        public EagerTensor(object value, Shape? shape = null, string device_name = null, TF_DataType dtype = TF_DataType.TF_UINT8) : base((float[])value)
         {
             NewEagerTensorHandle(_handle);
         }
+
+        public EagerTensor(Shape shape, TF_DataType dtype) : base(shape, dtype)
+            => NewEagerTensorHandle(_handle);
 
         internal unsafe EagerTensor(string value) : base(value)
             => NewEagerTensorHandle(_handle);

@@ -54,8 +54,8 @@ namespace Tensorflow.Keras
             if (value == null)
                 value = 0f;
 
-            var type = getNPType(dtype);
-            var nd = new NDArray(type, new Shape(length.Count(), maxlen.Value));
+            var type = dtypes.tf_dtype_from_name(dtype);
+            var nd = new NDArray((length.Count(), maxlen.Value), dtype: type.as_numpy_typecode());
 
             for (int i = 0; i < nd.dims[0]; i++)
             {
@@ -70,11 +70,6 @@ namespace Tensorflow.Keras
             }
 
             return nd;
-        }
-
-        private Type getNPType(string typeName)
-        {
-            return System.Type.GetType("NumSharp.np,NumSharp").GetField(typeName).GetValue(null) as Type;
         }
     }
 }
