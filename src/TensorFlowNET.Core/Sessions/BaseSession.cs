@@ -176,14 +176,35 @@ namespace Tensorflow
                             var tensor = new Tensor(v);
                             if (tensor.dtype != key.dtype)
                                 throw new ValueError($"Tensor {v} does not match the expected dtype {key.dtype}, actual dtype: {tensor.dtype}");
-
                             feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), tensor);
                             break;
-                        default:
-                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), constant_op.constant(x.Value));
+                        case bool v:
+                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v));
                             break;
+                        case byte v:
+                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v));
+                            break;
+                        case int v:
+                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v));
+                            break;
+                        case long v:
+                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v));
+                            break;
+                        case float v:
+                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v));
+                            break;
+                        case double v:
+                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v));
+                            break;
+                        case Array v:
+                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v, v.GetShape()));
+                            break;
+                        default:
+                            throw new NotImplementedException("");
                     }
                 }
+                else
+                    throw new NotImplementedException("");
             }
 
             var fetches = fetch_list.Select(x => x._as_tf_output()).ToArray();

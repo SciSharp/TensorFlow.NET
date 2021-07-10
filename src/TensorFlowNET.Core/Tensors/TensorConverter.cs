@@ -64,7 +64,7 @@ namespace Tensorflow
 
                 //is multidim or jagged, if so - use NDArrays constructor as it records shape.
                 if (array.Rank != 1 || array.GetType().GetElementType().IsArray)
-                    return new Tensor(new NDArray(array));
+                    return new Tensor(array, array.GetShape());
 
                 switch (arrtype.GetTypeCode())
                 {

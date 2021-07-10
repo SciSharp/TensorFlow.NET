@@ -923,7 +923,7 @@ new_height, new_width");
                      int p_height = (int)max_(0, math_ops.cast(f_padding_height, dtype: dtypes.int32));
                      int p_width = (int)max_(0, math_ops.cast(f_padding_width, dtype: dtypes.int32));
 
-                     var resized = resize_fn(image, new Tensor(new[] { resized_height, resized_width }));
+                     var resized = resize_fn(image, array_ops.concat(new[] { resized_height, resized_width }, 0));
 
                      var padded = pad_to_bounding_box(resized, p_height, p_width, target_height,
                                                      target_width);

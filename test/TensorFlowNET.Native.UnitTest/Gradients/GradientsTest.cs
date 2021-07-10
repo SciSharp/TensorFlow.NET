@@ -226,7 +226,7 @@ namespace Tensorflow.Native.UnitTest
             //long[] dims = { 2, 2 };
             //Tensor t = c_api.TF_AllocateTensor(TF_FLOAT, dims, 2, sizeof(float) * 4);
             //Marshal.Copy(values, 0, t, 4);
-            Tensor t = new Tensor(new NDArray(values).reshape((2, 2)));
+            Tensor t = np.array(values).reshape((2, 2));
             return t;
         }
 

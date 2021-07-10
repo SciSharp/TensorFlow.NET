@@ -112,6 +112,15 @@ namespace Tensorflow
             return handle;
         }
 
+        public static unsafe IntPtr TF_NewTensor<T>(T value)
+            where T : unmanaged
+        {
+            var dtype = value.GetType().as_tf_dtype();
+            var handle = TF_AllocateTensor(dtype, new long[0], 0, (ulong)dtype.get_datatype_size());
+            *(T*)TF_TensorData(handle) = value;
+            return handle;
+        }
+
         /// <summary>
         /// Return a new tensor that holds the bytes data[0,len-1]
         /// </summary>

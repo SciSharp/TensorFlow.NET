@@ -182,16 +182,10 @@ namespace Tensorflow
                 case double val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
                 case Array val:
-                    return new EagerTensor(val, GetArrayDims(val));
+                    return new EagerTensor(val, val.GetShape());
                 default:
                     throw new NotImplementedException($"convert_to_eager_tensor {value.GetType()}");
             }
-        }
-
-        static Shape GetArrayDims(Array array)
-        {
-            var dims = range(array.Rank).Select(x => (long)array.GetLength(x)).ToArray();
-            return new Shape(dims);
         }
 
         /// <summary>

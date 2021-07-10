@@ -14,7 +14,8 @@ namespace Tensorflow.NumPy
         public ulong dtypesize => _tensor.itemsize;
         public int ndim => _tensor.NDims;
         public long[] dims => _tensor.dims.Select(x => Convert.ToInt64(x)).ToArray();
-        public Shape shape => _tensor.shape; 
+        public Shape shape => _tensor.shape;
+        public IntPtr data => _tensor.TensorDataPointer;
 
         public NDArray(bool value)
         {

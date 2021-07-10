@@ -27,13 +27,6 @@ namespace Tensorflow
 {
     public static class tensor_util
     {
-        public static TF_DataType[] _TENSOR_CONTENT_TYPES =
-        {
-            TF_DataType.TF_FLOAT, TF_DataType.TF_DOUBLE, TF_DataType.TF_INT32, TF_DataType.TF_UINT8, TF_DataType.TF_INT16,
-            TF_DataType.TF_INT8, TF_DataType.TF_INT64, TF_DataType.TF_QINT8, TF_DataType.TF_QUINT8, TF_DataType.TF_QINT16,
-            TF_DataType.TF_QUINT16, TF_DataType.TF_QINT32, TF_DataType.TF_UINT32, TF_DataType.TF_UINT64
-        };
-
         /// <summary>
         /// Returns the constant value of the given tensor, if efficiently calculable.
         /// </summary>
@@ -119,13 +112,12 @@ namespace Tensorflow
             var tensor_proto = new TensorProto
             {
                 Dtype = dtype.as_datatype_enum(),
+                TensorShape = values.GetShape().as_shape_proto()
             };
 
             // scalar
             if (!values.GetType().IsArray)
             {
-                tensor_proto.TensorShape = tensor_util.as_shape(new int[0]);
-
                 switch (values)
                 {
                     case bool val:
@@ -157,7 +149,6 @@ namespace Tensorflow
                 if (values is string str)
                 {
                     tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFromUtf8(str));
-                    tensor_proto.TensorShape = tensor_util.as_shape(new int[0]);
                 }
                 else if (values is string[] str_values)
                     tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
@@ -166,18 +157,12 @@ namespace Tensorflow
 
                 return tensor_proto;
             }
-            else
+            else if(values is Array array)
             {
-                tensor_proto.TensorShape = tensor_util.as_shape(shape);
-
                 // array
-                if (_TENSOR_CONTENT_TYPES.Contains(dtype))
-                {
-                    throw new NotImplementedException("");
-                    /*byte[] bytes = nparray.ToByteArray();
-                    tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes.ToArray());
-                    return tensor_proto;*/
-                }
+                /*byte[] bytes = array.ToByteArray();
+                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes.ToArray());
+                return tensor_proto;*/
             }
 
             return tensor_proto;
@@ -415,6 +400,22 @@ would not be rank 1.", tensor.op.get_attr("axis")));
         public static TensorShape as_shape(this Shape shape)
         {
             return new TensorShape(shape.dims);
+        }
+
+        public static TensorShapeProto as_shape_proto(this Shape tshape)
+        {
+            TensorShapeProto shape = new TensorShapeProto();
+
+            for (int i = 0; i < tshape.ndim; i++)
+            {
+                var dim = new TensorShapeProto.Types.Dim();
+                dim.Size = tshape.dims[i];
+                //dim.Name = $"dim_{i}";
+
+                shape.Dim.Add(dim);
+            }
+
+            return shape;
         }
 
         public static TensorShape reshape(this Shape shape, int[] dims)

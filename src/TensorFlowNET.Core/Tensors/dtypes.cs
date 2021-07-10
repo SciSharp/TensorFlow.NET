@@ -128,6 +128,9 @@ namespace Tensorflow
         /// <exception cref="ArgumentException">When <paramref name="type"/> has no equivalent <see cref="TF_DataType"/></exception>
         public static TF_DataType as_tf_dtype(this Type type, TF_DataType? dtype = null)
         {
+            while (type.IsArray)
+                type = type.GetElementType();
+
             switch (type.Name)
             {
                 case "Char":

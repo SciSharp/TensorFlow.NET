@@ -505,5 +505,40 @@ namespace Tensorflow
 
             return defaultValue;
         }
+
+        public static Shape GetShape(this object data)
+        {
+            if (!data.GetType().IsArray)
+                return Shape.Scalar;
+
+            switch (data)
+            {
+                case Array array:
+                    var dims = range(array.Rank).Select(x => (long)array.GetLength(x)).ToArray();
+                    return new Shape(dims);
+                default:
+                    throw new NotImplementedException("");
+            }
+        }
+
+        public static unsafe byte[] ToByteArray(Array array)
+        {
+            /*var size = array.GetShape().size;
+            byte[]? bytes = null;
+            switch (array)
+            {
+                case float[] arr:
+                    var len = new byte[size * sizeof(float)];
+                    fixed (void* addr = &arr[0])
+                        System.Buffer.MemoryCopy(addr, dst, bytesize, bytesize);
+                    tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(array.ToArray());
+                    break;
+                default:
+                    throw new NotImplementedException("");
+            }
+
+            return bytes;*/
+            throw new NotImplementedException("");
+        }
     }
 }

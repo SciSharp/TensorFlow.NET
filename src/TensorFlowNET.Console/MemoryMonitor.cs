@@ -15,6 +15,7 @@ namespace Tensorflow
             while (true)
             {
                 var ones = np.ones((128, 128));
+                Thread.Sleep(1);
             }
 
             TensorShape shape = (1, 32, 32, 3);
